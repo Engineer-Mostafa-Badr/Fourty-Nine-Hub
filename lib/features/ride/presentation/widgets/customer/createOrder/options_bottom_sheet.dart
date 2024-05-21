@@ -1,0 +1,273 @@
+import 'package:flutter/material.dart';
+
+import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/const.dart';
+import '../../../../../../res/style/styles.dart';
+import 'giveOffer.dart';
+import 'ride_options.dart';
+import 'selectDropOffPoints.dart';
+
+class RideOptionsBottomSheet extends StatelessWidget {
+  const RideOptionsBottomSheet({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(10),
+      decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+          )),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Sizer(),
+          SizedBox(
+            height: kTextTabBarHeight * 1,
+            child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {},
+                    onDoubleTap: () {},
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: index == 0
+                              ? AppColors.PRIMARY_COLOR
+                              : AppColors.DARK_GRAY_COLOR,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                  child: Image.network(
+                                UIConst.imagePlaceHolder,
+                                fit: BoxFit.cover,
+                              )),
+                              Label(
+                                  text: 'Private', style: Styles.mediumText()),
+                            ],
+                          ),
+                          if (index == 0)
+                            const Icon(
+                              Icons.info_outline,
+                              color: AppColors.PRIMARY_COLOR,
+                              size: 15,
+                            )
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) => const Sizer(
+                      height: 15,
+                      width: 15,
+                    ),
+                itemCount: 4),
+          ),
+          const Sizer(),
+          InkWell(
+            onTap: () {
+              bottomSheet(
+                widget: const SelectDropOffPoints(),
+                isScrollControlled: true,
+                context: context,
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              height: kToolbarHeight * .7,
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: AppColors.PRIMARY_COLOR,
+                    radius: 8,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 4,
+                    ),
+                  ),
+                  Sizer(),
+                  Expanded(
+                      child: Text(
+                    'Bn Khalifa Str.',
+                    maxLines: 1,
+                  )),
+                ],
+              ),
+            ),
+          ),
+          const Sizer(),
+          InkWell(
+            onTap: () {
+              bottomSheet(
+                widget: const SelectDropOffPoints(),
+                isScrollControlled: true,
+                context: context,
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              height: kTextTabBarHeight * .7,
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.search,
+                    color: Colors.grey,
+                  ),
+                  Expanded(
+                      child: Label(
+                    text: 'Orman St.',
+                    style: Styles.mediumText(),
+                    maxLines: 1,
+                  )),
+                ],
+              ),
+            ),
+          ),
+          const Sizer(),
+          InkWell(
+            onTap: () {
+              bottomSheet(
+                  widget: GiveOffer(),
+                  isScrollControlled: true,
+                  context: context);
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              height: kTextTabBarHeight * .7,
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                children: [
+                  Label(
+                      text: 'EGP',
+                      style: Styles.mediumText(fontWeight: FontWeight.bold)),
+                  const Sizer(
+                    width: 20,
+                  ),
+                  Label(
+                    text: 'Offer Your Fare',
+                    style: Styles.mediumText(color: Colors.grey),
+                  ),
+                  const Spacer(),
+                  const Icon(
+                    Icons.money,
+                    color: Colors.green,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              const Icon(
+                Icons.rocket_launch,
+                size: 14,
+              ),
+              const Sizer(),
+              Expanded(
+                  child: Label(
+                      text: 'Auto Accept offer of EGP',
+                      style: Styles.mediumText(color: Colors.grey))),
+              Switch(value: false, onChanged: (v) {})
+            ],
+          ),
+          Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: AppColors.PRIMARY_COLOR.withOpacity(.1),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.info_outline,
+                  color: AppColors.PRIMARY_COLOR,
+                ),
+                const Sizer(),
+                Label(text: 'Travel time ~', style: Styles.mediumText()),
+              ],
+            ),
+          ),
+          const Sizer(),
+          Row(
+            children: [
+              Expanded(
+                  child: Container(
+                height: kToolbarHeight * .7,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10), color: Colors.red),
+                child: Center(
+                    child: Label(
+                  text: 'Premium Request',
+                  style: Styles.mediumText(color: Colors.white),
+                )),
+              )),
+              const Sizer(),
+              Expanded(
+                  child: InkWell(
+                onTap: () {},
+                child: Container(
+                  height: kToolbarHeight * .7,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColors.PRIMARY_COLOR),
+                  child: Center(
+                      child: Label(
+                          text: 'Normal Request',
+                          style: Styles.mediumText(color: Colors.white))),
+                ),
+              )),
+              const Sizer(),
+              InkWell(
+                onTap: () {
+                  bottomSheet(
+                    widget: const RideOptions(),
+                    isScrollControlled: true,
+                    context: context,
+                  );
+                },
+                child: Container(
+                  height: kToolbarHeight * .7,
+                  width: kToolbarHeight * .7,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColors.PRIMARY_COLOR),
+                  child: const Icon(
+                    Icons.sort,
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}

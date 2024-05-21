@@ -1,0 +1,52 @@
+import 'package:flutter/material.dart';
+
+import '../../../../res/style/styles.dart';
+import '../labels/label.dart';
+
+class SocialImageViewer extends StatelessWidget {
+  final double? height, width;
+  final String image;
+  final int length, index;
+  final Function? onDoubleTap;
+  const SocialImageViewer(
+      {super.key,
+      this.height,
+      this.width,
+      this.onDoubleTap,
+      required this.image,
+      required this.length,
+      required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onDoubleTap: () => onDoubleTap != null ? onDoubleTap!() : null,
+      child: SizedBox(
+          height: height ?? kToolbarHeight * 3,
+          width: width ?? double.infinity,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Image(
+                  fit: BoxFit.cover,
+                  image: Image.network(image).image,
+                ),
+              ),
+              Positioned(
+                  top: 10,
+                  right: 10,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    // height: kToolbarHeight * .5,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.grey),
+                    child: Label(
+                        text: '$index/$length',
+                        style: Styles.mediumText(color: Colors.white)),
+                  ))
+            ],
+          )),
+    );
+  }
+}

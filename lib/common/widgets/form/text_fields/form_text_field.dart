@@ -1,0 +1,138 @@
+import 'package:email_validator/email_validator.dart';
+import 'package:flutter/material.dart';
+
+import '../../../../res/style/app_colors.dart';
+
+class FormTextField extends StatefulWidget {
+  final String? initialValue;
+  final bool? obsecure;
+  final bool? enabled;
+  final bool? required;
+  final Function(String) action;
+  final Widget? prefix, suffix;
+  final String? hint, label;
+  final TextInputType? type;
+  final TextEditingController? controller;
+  final Function? onTap;
+  final Iterable<String>? autofill;
+  final bool? isEmail;
+  final Function? onConfirm;
+  final bool? extraValidation;
+  final String? extraValidationMessage;
+  final TextAlignVertical? textAlignVertical;
+  final int? maxLines;
+  final double? height;
+  final TextStyle? style;
+
+  const FormTextField(
+      {super.key,
+      this.initialValue,
+      required this.action,
+      this.obsecure,
+      this.prefix,
+      this.hint,
+      this.label,
+      this.autofill,
+      this.suffix,
+      this.type,
+      this.isEmail,
+      this.enabled,
+      this.onConfirm,
+      this.textAlignVertical,
+      this.extraValidationMessage,
+      this.extraValidation,
+      this.onTap,
+      this.height,
+      this.maxLines,
+      this.style,
+      this.required,
+      this.controller});
+
+  @override
+  State<FormTextField> createState() => _FormTextFieldState();
+}
+
+class _FormTextFieldState extends State<FormTextField> {
+  bool validate = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: widget.maxLines != null
+          ? null
+          : validate
+              ? (widget.height ?? kToolbarHeight) * 1.5
+              : widget.height ?? kToolbarHeight,
+      child: TextFormField(
+        textAlignVertical: widget.textAlignVertical,
+        maxLines: widget.maxLines ?? 1,
+        onFieldSubmitted: (v) {
+          if (widget.onConfirm != null) {
+            widget.onConfirm!();
+          }
+        },
+        validator: (value) {
+          validate = true;
+
+          setState(() {});
+          if ((value == null || value.isEmpty) && (widget.required ?? true)) {
+            return 'Required';
+          } else if (widget.extraValidation ?? false) {
+            return widget.extraValidationMessage ?? '';
+          } else if (!EmailValidator.validate(value!.trim()) &&
+              (widget.isEmail ?? false)) {
+            return 'Enter correct email format';
+          } else {
+            validate = false;
+            setState(() {});
+            return null;
+          }
+        },
+        onTap: () {
+          if (widget.onTap != null) {
+            widget.onTap!();
+          }
+        },
+        enabled: widget.enabled ?? true,
+        controller: widget.controller,
+        autofillHints: widget.autofill,
+        keyboardType: widget.type,
+        initialValue: widget.initialValue,
+        obscureText: widget.obsecure ?? false,
+        onChanged: widget.action,
+        decoration: InputDecoration(
+          hintText: widget.hint,
+          labelText: widget.label,
+          hintStyle: widget.style??const TextStyle(fontSize: 12),
+          labelStyle:widget.style??  const TextStyle(fontSize: 12),
+          prefixIcon: widget.prefix,
+          suffixIcon: widget.suffix,
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: AppColors.LIGHT_GRAY_COLOR,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: AppColors.PRIMARY_COLOR,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: Colors.red,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: Colors.red,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      ),
+    );
+  }
+}

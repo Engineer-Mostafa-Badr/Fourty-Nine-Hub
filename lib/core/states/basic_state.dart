@@ -1,0 +1,40 @@
+import 'package:equatable/equatable.dart';
+
+import '../enums/base_status_enum.dart';
+import '../error/failure.dart';
+
+class BasicState<T> extends Equatable {
+  final T? data;
+  final StateStatus status;
+  final Failure? failure;
+
+  const BasicState({
+    this.data,
+    this.status = StateStatus.initial,
+    this.failure,
+  });
+
+  @override
+  String toString() {
+    return 'BasicState{ data: $data, status: $status, failure: $failure,}';
+  }
+
+  BasicState<T> copyWith({
+    T? data,
+    StateStatus? status,
+    Failure? failure,
+  }) {
+    return BasicState(
+      data: data ?? this.data,
+      status: status ?? this.status,
+      failure: failure ?? this.failure,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+        data,
+        status,
+        failure,
+      ];
+}

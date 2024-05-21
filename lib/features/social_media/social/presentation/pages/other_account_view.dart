@@ -1,0 +1,265 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../res/style/const.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
+import '../../../../../common/widgets/dynamic/drawer.dart';
+import '../../../../../common/widgets/dynamic/floating_button.dart';
+import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../widgets/account/high_lights_section.dart';
+import '../widgets/account/media_section.dart';
+import '../widgets/account/posts_section.dart';
+
+class OtherAccountView extends StatelessWidget {
+  const OtherAccountView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        // backgroundColor: Colors.,
+        // appBar: const HomeAppbar(),
+        drawer: const DrawerWidget(),
+        bottomNavigationBar: const BottomNavigator(
+          mainCategory: 0,
+          index: 2,
+        ),
+        floatingActionButton: const FloatingButton(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        body: NestedAppbar(
+          appBars: [
+            SliverAppBar(
+              floating: true,
+              expandedHeight: kToolbarHeight * 5,
+              automaticallyImplyLeading: false,
+              flexibleSpace: _buildAccountCounter(context: context),
+              iconTheme: const IconThemeData(color: Colors.white),
+              leading: IconButton(
+                  onPressed: () {}, icon: const Icon(Icons.arrow_back)),
+              actions: [
+                IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+                PopupMenuButton(
+                  icon: const Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                  ),
+                  itemBuilder: (context) {
+                    return  [
+                      PopupMenuItem<int>(
+                        value: 0,
+                        child: Text("Media, links, and docs"),
+                      ),
+                      PopupMenuItem<int>(
+                        value: 1,
+                        child: Text("Search"),
+                      ),
+                      PopupMenuItem<int>(
+                        value: 2,
+                        child: Text("Mute notifications"),
+                      ),
+                      PopupMenuItem<int>(
+                        value: 3,
+                        child: Text("Delete Chat"),
+                      ),
+                      PopupMenuItem<int>(
+                        value: 4,
+                        child: Text("Report"),
+                      ),
+                      PopupMenuItem<int>(
+                        value: 5,
+                        child: Text("Block"),
+                      ),
+                    ];
+                  },
+                ),
+              ],
+            ),
+            SliverAppBar(
+              automaticallyImplyLeading: false,
+              floating: false,
+              pinned: true,
+              title: TabBar(
+                  labelStyle: Styles.mediumText(),
+                  isScrollable: true,
+                  tabs: const [
+                    Tab(
+                      text: 'Posts',
+                    ),
+                    Tab(
+                      text: 'Highlights',
+                    ),
+                    Tab(
+                      text: 'Reels',
+                    ),
+                    Tab(
+                      text: 'Media',
+                    ),
+                  ]),
+            ),
+          ],
+          body: _buildAccountPages(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAccountCounter({
+    required BuildContext context,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+            child: Stack(
+          children: [
+            Positioned.fill(
+                child: Column(
+              children: [
+                Expanded(
+                    flex: 3,
+                    child: Image.network(
+                      UIConst.socialImagePlaceHolder,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    )),
+                Expanded(
+                    child: Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      AppButton(
+                          width: kToolbarHeight * 1.5,
+                          label: 'Chat',
+                          onPressed: () => context.push(Routes.CHAT)),
+                      const Sizer(),
+                      AppButton(
+                          width: kToolbarHeight * 1.5,
+                          label: 'Follow',
+                          onPressed: () {})
+                    ],
+                  ),
+                )),
+              ],
+            )),
+            const Positioned(
+                bottom: 20,
+                left: 10,
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundColor: AppColors.SECONDARY_COLOR,
+                  child: CircleAvatar(
+                    radius: 28,
+                    backgroundColor: Colors.white,
+                    backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+                  ),
+                ))
+          ],
+        )),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Label(
+                      text: 'Mohamed Gamal',
+                      style: Styles.headerText(fontWeight: FontWeight.w600)),
+                  const Sizer(
+                    width: 5,
+                  ),
+                  const Icon(
+                    Icons.verified,
+                    size: 20,
+                    color: AppColors.SECONDARY_COLOR,
+                  )
+                ],
+              ),
+              Label(
+                  text: '@mohamedgamal',
+                  style: Styles.mediumText(color: Colors.grey)),
+              const Sizer(),
+              Row(
+                children: [
+                  _buildCounter(
+                    value: '585 ',
+                    label: 'Following',
+                  ),
+                  const Sizer(),
+                  _buildCounter(
+                    value: '181M ',
+                    label: 'Followers',
+                  ),
+                  const Sizer(),
+                  _buildCounter(
+                    value: '151 ',
+                    label: 'Subscriptions',
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const CircleAvatar(
+                    radius: 9,
+                    backgroundColor: Colors.white,
+                    backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+                  ),
+                  const CircleAvatar(
+                    radius: 9,
+                    backgroundColor: Colors.white,
+                    backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+                  ),
+                  const CircleAvatar(
+                    radius: 9,
+                    backgroundColor: Colors.white,
+                    backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+                  ),
+                  Label(text: 'Shared followers', style: Styles.smallText())
+                ],
+              )
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildCounter({required String value, required String label}) {
+    return RichText(
+        text: TextSpan(children: [
+      TextSpan(
+          text: value,
+          style: Styles.mediumText(
+              color: Colors.black, fontWeight: FontWeight.w500)),
+      TextSpan(
+          text: label,
+          style: Styles.mediumText(
+            color: Colors.grey,
+          )),
+    ]));
+  }
+
+  Widget _buildAccountPages() {
+    return TabBarView(children: [
+      const PostsSection(),
+      const HighLightsSection(),
+      Center(
+        child: Label(text: 'Not Designed yet!', style: Styles.mediumText()),
+      ),
+      const MediaSection(),
+    ]);
+  }
+}

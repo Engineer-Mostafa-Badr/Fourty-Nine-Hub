@@ -1,0 +1,76 @@
+abstract class Routes {
+  Routes._();
+  static const HOME = '/';
+  static const LUCKYWHEEL = '/LuckyWheel';
+  static const COMPETITIONS = '/Competitions';
+  static const WINNERS = '/Winners';
+  static const WALLET = '/Wallet';
+  static const SOCIAL = '/Social';
+  static const OTHERSACCOUNT = '/Social/OthersAccount';
+  static const REELS = '/Social/REELS';
+  static const TWITTER = '/Social/Twitter';
+  static const CLUBHOUSE = '/Social/ClubHouse';
+  static const CLUBHOUSECHAT = '/Social/ClubHouse/ClubHouseChat';
+  static const CLUBHOUSEROOM = '/Social/ClubHouse/ClubHouseRoom';
+  static const CHAT = '/Chat';
+  static const CHATROOM = '/Chat/ChatRoom';
+  static const MAZADAT = '/Mazadat';
+  static const VISITA = '/Visita';
+  static const VISITADOCTORLIST = '/Visita/VisitaDoctorsList';
+  static const VISITADOCTORDETAILS = '/Visita/DoctorDetails';
+  static const VISITABOOKING = '/Visita/VisitaBooking';
+  static const FOOD = '/Food';
+  static const RIDE = '/Ride';
+  static const YOUTUBE = '/Youtube';
+  static const PLAYVIDEO = '/Youtube/PlayVideo';
+  static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
+  static const MAZADDETAILS = '/Mazadat/MazadDetails';
+  static const ZOOM = '/Zoom';
+  static const MEETINGROOM = '/Zoom/MeetingRoom';
+  static const INSTALLMENT = '/Installment';
+  static const INSTALLMENTDETAILS = '/Installment/Installment-details';
+  static const INSTALLMENTORDERDETAILS =
+      '/Installment/Installment-order-details';
+  static const INSTALLMENTORDERS = '/Installment/Installment-orders';
+  static const LOGIN = '/Login';
+  static const REGISTER = '/Register';
+  static const VERIFYMAIL = '/Register/verify-mail-register';
+}
+
+abstract class Paths {
+  Paths._();
+  static const HOME = '/';
+  static const LUCKYWHEEL = 'LuckyWheel';
+  static const COMPETITIONS = 'Competitions';
+  static const WINNERS = 'Winners';
+  static const WALLET = 'Wallet';
+  static const SOCIAL = 'Social';
+  static const OTHERSACCOUNT = 'OthersAccount';
+  static const MAZADAT = 'Mazadat';
+  static const MAZADDETAILS = 'MazadDetails';
+  static const CHAT = 'Chat';
+  static const CHATROOM = 'ChatRoom';
+  static const REELS = 'Reels';
+  static const TWITTER = 'Twitter';
+  static const CLUBHOUSE = 'ClubHouse';
+  static const CLUBHOUSECHAT = 'ClubHouseChat';
+  static const CLUBHOUSEROOM = 'ClubHouseRoom';
+  static const VISITA = 'Visita';
+  static const VISITADOCTORLIST = 'VisitaDoctorsList';
+  static const VISITADOCTORDETAILS = 'DoctorDetails';
+  static const VISITABOOKING = 'VisitaBooking';
+  static const FOOD = 'Food';
+  static const RIDE = 'Ride';
+  static const YOUTUBE = 'Youtube';
+  static const RESTAURANTDETAILS = 'RetaurantDetails';
+  static const PLAYVIDEO = 'PlayVideo';
+  static const ZOOM = 'Zoom';
+  static const MEETINGROOM = 'MeetingRoom';
+  static const INSTALLMENT = 'Installment';
+  static const INSTALLMENTDETAILS = 'Installment-details';
+  static const INSTALLMENTORDERDETAILS = 'Installment-order-details';
+  static const INSTALLMENTORDERS = 'Installment-orders';
+  static const LOGIN = 'Login';
+  static const REGISTER = 'Register';
+  static const VERIFYMAIL = 'verify-mail-register';
+}
