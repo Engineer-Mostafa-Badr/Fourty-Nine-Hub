@@ -4,6 +4,7 @@ export 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 AppLocalizations tr(BuildContext context) {
   return AppLocalizations.of(context)!;
+
 }
 
 String arEn(BuildContext context, String? ar, String en) {

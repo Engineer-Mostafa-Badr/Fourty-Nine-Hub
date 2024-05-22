@@ -5,11 +5,12 @@ import 'package:go_router/go_router.dart';
 
 import '../features/Food/presentation/pages/CustomerView/restaurant_details.dart';
 import '../features/Food/presentation/pages/food_view.dart';
+import '../features/RideRequest/presentation/pages/ride_request_view.dart';
 import '../features/health_care/presentation/pages/VisitaView.dart';
 import '../features/health_care/presentation/pages/customer_view/DoctorDetails.dart';
 import '../features/health_care/presentation/pages/customer_view/DoctorsList.dart';
 import '../features/health_care/presentation/pages/customer_view/visita_booking.dart';
-import '../features/Ride/presentation/pages/ride_home_view.dart';
+
 import '../features/authentication/presentation/pages/login_view.dart';
 import '../features/authentication/presentation/pages/register/register_verify_otp.dart';
 import '../features/authentication/presentation/pages/register/register_view.dart';
@@ -190,7 +191,7 @@ class AppPages {
         GoRoute(
             path: Paths.RIDE,
             name: Routes.RIDE,
-            builder: (context, state) => const RideHomeView(),
+            builder: (context, state) => const RideRequestView(),
             routes: []),
         GoRoute(
             path: Paths.YOUTUBE,

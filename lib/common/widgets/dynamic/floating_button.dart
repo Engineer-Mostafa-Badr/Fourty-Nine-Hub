@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:go_router/go_router.dart';
 
 import '../../../res/assets/assets.dart';
@@ -7,6 +8,7 @@ import '../../../routes/routes.dart';
 
 class FloatingButton extends StatelessWidget {
   final int changeView;
+
   final IconData? icon;
   final Function? onTap;
   const FloatingButton({super.key, this.changeView = 0, this.icon, this.onTap});
@@ -17,7 +19,7 @@ class FloatingButton extends StatelessWidget {
       onPressed: onTap != null
           ? () => onTap!()
           : () {
-              if (changeView == 1) {
+              if (changeView == 1 ) {
                 context.push(Routes.SOCIAL);
               } else if (changeView == 2) {
                 context.push(Routes.YOUTUBE);
