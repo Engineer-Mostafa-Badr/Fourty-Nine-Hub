@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:go_router/go_router.dart';
 
@@ -51,23 +53,31 @@ class AppPages {
         GoRoute(
           name: Routes.LOGIN,
           path: Paths.LOGIN,
-          builder: (context, state) => BlocProvider<LoginCubit>(
-            create: (context) => serviceLocator<LoginCubit>(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => serviceLocator<LoginCubit>(),
             child: const LoginView(),
           ),
         ),
         GoRoute(
-            name: Routes.REGISTER,
-            path: Paths.REGISTER,
-            builder: (context, state) => const RegisterView(),
-            routes: [
-              // RegisterVerifyOTP
-              GoRoute(
-                name: Routes.VERIFYMAIL,
-                path: Paths.VERIFYMAIL,
-                builder: (context, state) => const RegisterVerifyOTP(),
+          name: Routes.REGISTER,
+          path: Paths.REGISTER,
+          builder: (context, state) => BlocProvider(
+            create: (_) => serviceLocator<RegisterCubit>(),
+            child: const RegisterView(),
+          ),
+          routes: [
+            GoRoute(
+              name: Routes.VERIFYMAIL,
+              path: Paths.VERIFYMAIL,
+              builder: (context, state) => BlocProvider(
+                create: (_) => serviceLocator<VerifyOtpCubit>(),
+                child: RegisterVerifyOTP(
+                  email: state.extra as String,
+                ),
               ),
-            ]),
+            ),
+          ],
+        ),
         GoRoute(
           name: Routes.LUCKYWHEEL,
           path: Paths.LUCKYWHEEL,

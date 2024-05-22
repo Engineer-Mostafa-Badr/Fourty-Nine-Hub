@@ -37,7 +37,7 @@ class LoginCubit extends Cubit<LoginState> {
         result.fold(
           (failure) => LoginError(failure),
           (userToken) {
-            _attachToken(userToken.accessToken); // attach to dio
+            _attachToken(userToken); // attach to dio
             _saveTokens(userToken); // save to local storage
             return LoginSuccess();
           },

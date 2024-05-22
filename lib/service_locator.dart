@@ -12,7 +12,10 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/get_token
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_user_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/login_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
@@ -22,6 +25,7 @@ import 'features/authentication/data/data_sources/local_data_source/auth_local_d
 import 'features/authentication/data/data_sources/remote_data_source/auth_remote_data_source.dart';
 import 'features/authentication/data/repositories/auth_repository_impl.dart';
 import 'features/authentication/domain/repositories/auth_repository.dart';
+import 'features/authentication/domain/use_cases/register_use_case.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'firebase_options.dart';
 
@@ -48,7 +52,7 @@ class DI {
     );
 
     // dio
-    serviceLocator.registerLazySingleton(
+    serviceLocator.registerLazySingleton<Dio>(
       () => Dio(
         BaseOptions(
           baseUrl: kReleaseMode
@@ -79,7 +83,8 @@ class DI {
     // api consumer
     serviceLocator.registerLazySingleton<ApiConsumer>(
       () => BaseApiConsumer(
-        dio: serviceLocator(),
+        serviceLocator(),
+        //serviceLocator(),
       ),
     );
 
@@ -121,8 +126,20 @@ class DI {
         serviceLocator(),
       ),
     );
-    serviceLocator.registerFactory<UserCubit>(
+    serviceLocator.registerLazySingleton<UserCubit>(
       () => UserCubit(
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+      )..attachToken(),
+    );
+    serviceLocator.registerFactory<RegisterCubit>(
+      () => RegisterCubit(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerFactory<VerifyOtpCubit>(
+      () => VerifyOtpCubit(
         serviceLocator(),
       ),
     );
@@ -133,5 +150,7 @@ class DI {
     serviceLocator.registerFactory(() => AttachTokenUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => SaveTokensUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => GetTokensUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => RegisterUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => VerifyOTPUseCase(serviceLocator()));
   }
 }

@@ -5,6 +5,8 @@ import 'package:fourtyninehub/features/authentication/data/data_sources/remote_d
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/login_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_otp_use_case.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
@@ -31,8 +33,21 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  bool attachToken(String? token) {
-    _remoteDataSource.attachToken(token);
+  bool attachToken(UserTokensEntity? token) {
+    _remoteDataSource.attachToken(token?.toModel());
     return true;
   }
+
+  @override
+  Future<Either<Failure, void>> register(RegisterParams registerParams) {
+    return _remoteDataSource.register(registerParams);
+  }
+
+  @override
+  Future<Either<Failure, void>> verifyOTP(
+    VerifyOTPParams verifyOTPParams,
+  ) {
+    return _remoteDataSource.verifyOTP(verifyOTPParams);
+  }
 }
+//enum: ['google', 'facebook', 'local', 'apple']

@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
 
 import '../error/failure.dart';
 
@@ -30,24 +32,26 @@ abstract class ApiConsumer {
     Map<String, dynamic>? queryParameters,
   });
 
-  void attachToken(String? token);
+  void attachToken(UserTokensEntity? token);
 
   bool get isTokenAttached;
 }
 
 class BaseApiConsumer extends ApiConsumer {
-  final Dio dio;
+  final Dio _dio;
 
-  String? _token;
+  UserTokensEntity? _token;
 
-  BaseApiConsumer({
-    required this.dio,
-  });
+  BaseApiConsumer(
+    this._dio,
+  );
 
   @override
-  void attachToken(String? token) {
+  void attachToken(UserTokensEntity? token) {
     _token = token;
-    dio.options.headers['Authorization'] = 'Bearer $token';
+    if (token != null) {
+      _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
+    }
   }
 
   @override
@@ -57,7 +61,7 @@ class BaseApiConsumer extends ApiConsumer {
     Map<String, dynamic>? queryParameters,
   }) async {
     try {
-      final result = await dio.delete(
+      final result = await _dio.delete(
         url,
         data: data,
         queryParameters: queryParameters,
@@ -74,7 +78,7 @@ class BaseApiConsumer extends ApiConsumer {
     Map<String, dynamic>? queryParameters,
   }) async {
     try {
-      final result = await dio.get(
+      final result = await _dio.get(
         url,
         queryParameters: queryParameters,
       );
@@ -92,7 +96,7 @@ class BaseApiConsumer extends ApiConsumer {
     Map<String, dynamic>? queryParameters,
   }) async {
     try {
-      final result = await dio.post(
+      final result = await _dio.post(
         url,
         data: formData ?? data,
         queryParameters: queryParameters,
@@ -110,7 +114,7 @@ class BaseApiConsumer extends ApiConsumer {
     Map<String, dynamic>? queryParameters,
   }) async {
     try {
-      final result = await dio.put(
+      final result = await _dio.put(
         url,
         data: data,
         queryParameters: queryParameters,
@@ -148,6 +152,13 @@ class BaseApiConsumer extends ApiConsumer {
       }
     }
     return const UnknownFailure();
+  }
+
+  void refreshToken(UserTokensEntity? token) {
+    // _token = token;
+    // if (token != null) {
+    //   _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
+    // }
   }
 
   @override
