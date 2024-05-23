@@ -22,7 +22,7 @@ class DefaultTextFormField extends MainTextFormField {
     final List<TextInputFormatter>? inputFormatter,
     final int? maxLines,
     final bool? obscureText,
-    final Widget? suffixIcon,
+    final Widget? suffixIcon , prefixIcon,
     final String? Function(String?)? validator,
     final ValueChanged<String>? onChanged,
   }) : super(
@@ -43,6 +43,7 @@ class DefaultTextFormField extends MainTextFormField {
           borderColor: borderColor,
           obscureText: obscureText,
           suffixIcon: suffixIcon,
+          prefixIcon:prefixIcon,
           contentPadding: contentPadding,
           onChanged: onChanged,
           inputFormatters: inputFormatter,

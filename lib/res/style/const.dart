@@ -1,4 +1,6 @@
 class UIConst {
+  static const String googleMapAPIKey =
+      'AIzaSyCSzHt1y3RDKvC2D67mF-WJdyZKE9hBIxA';
   static const double radius = 10.0;
   static const String imageBaseUrl = '';
   static const String socialImagePlaceHolder =

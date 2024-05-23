@@ -1,5 +1,6 @@
 class RideRequestEntity {
   final int id;
+  final String categoryId;
   final String fromAddress;
   final String toAddress;
   final int? userId;
@@ -11,11 +12,12 @@ class RideRequestEntity {
   final bool autoAccept;
   final List<String> carTypes;
   final bool isAirConditioned;
+  final String phone;
   RideRequestEntity(
-      {
-        required this.id, 
-        required this.fromAddress,
+      {required this.id,
+      required this.fromAddress,
       required this.toAddress,
+      required this.categoryId,
       this.userId,
       this.driverId,
       required this.fromLat,
@@ -23,6 +25,7 @@ class RideRequestEntity {
       required this.toLat,
       required this.toLng,
       required this.autoAccept,
+      required this.phone,
       required this.carTypes,
       required this.isAirConditioned});
 }

@@ -38,12 +38,10 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   }
 
   void attachToken() async {
-    print('here');
     final result = await _getTokensUseCase(const NoParams());
     result.fold(
       (_) {},
       (tokens) {
-        print('here2');
         _attachTokenUseCase(tokens);
         _isTokenAttached = true;
         getUser();

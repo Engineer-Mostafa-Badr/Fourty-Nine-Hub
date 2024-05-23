@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
@@ -39,7 +40,7 @@ import '../features/youtube/presentation/pages/play_video.dart';
 import '../features/youtube/presentation/pages/youtube.dart';
 import '../features/zoom/presentation/pages/meeting_room.dart';
 import '../features/zoom/presentation/pages/zoom_view.dart';
-import '../service_locator.dart';
+import '../service_locator/service_locator.dart';
 import 'routes.dart';
 
 class AppPages {
@@ -61,19 +62,13 @@ class AppPages {
         GoRoute(
           name: Routes.REGISTER,
           path: Paths.REGISTER,
-          builder: (context, state) => BlocProvider(
-            create: (_) => serviceLocator<RegisterCubit>(),
-            child: const RegisterView(),
-          ),
+          builder: (context, state) => const RegisterView(),
           routes: [
             GoRoute(
               name: Routes.VERIFYMAIL,
               path: Paths.VERIFYMAIL,
-              builder: (context, state) => BlocProvider(
-                create: (_) => serviceLocator<VerifyOtpCubit>(),
-                child: RegisterVerifyOTP(
-                  email: state.extra as String,
-                ),
+              builder: (context, state) => RegisterVerifyOTP(
+                email: state.extra as String,
               ),
             ),
           ],
@@ -201,7 +196,10 @@ class AppPages {
         GoRoute(
             path: Paths.RIDE,
             name: Routes.RIDE,
-            builder: (context, state) => const RideRequestView(),
+            builder: (context, state) => BlocProvider(
+                  create: (_) => serviceLocator<RiderequestCubit>(),
+                  child: const RideRequestView(),
+                ),
             routes: []),
         GoRoute(
             path: Paths.YOUTUBE,

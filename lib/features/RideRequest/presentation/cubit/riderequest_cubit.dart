@@ -1,7 +1,14 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/RideRequest/data/models/address_search_params_model.dart';
+import 'package:fourtyninehub/features/RideRequest/data/models/params/expected_price_params.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/ride_request_model.dart';
+import 'package:fourtyninehub/features/RideRequest/domain/usecases/request/get_expected_price_use_case.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../data/models/google_search_results.dart';
+import '../../domain/entity/address_search_params_entity.dart';
 import '../../domain/usecases/request/get_near_by_places_usecase.dart';
 
 part 'riderequest_state.dart';
@@ -9,7 +16,90 @@ part 'riderequest_state.dart';
 class RiderequestCubit extends Cubit<RiderequestState> {
   final fromAddressTextController = TextEditingController();
   final toAddressTextController = TextEditingController();
+  final fromAddressFocusNode = FocusNode();
+  final toAddressFocusNode = FocusNode();
   final GetNearByPlacesUseCase _nearByPlacesUseCase;
+  final GetExpectedPriceUseCase _expectedPriceUseCase;
 
-  RiderequestCubit(this._nearByPlacesUseCase) : super(const RiderequestState());
+  RiderequestCubit(this._nearByPlacesUseCase, this._expectedPriceUseCase)
+      : super(const RiderequestState());
+
+// Select pickup location from the map
+  Future<void> selectPickUpLocation(
+      {required AddressSearchParamsEntity item}) async {
+    emit(state.copyWith(
+        status: RideRequestStatusesEnum.isCameraMoving, fromAddress: item));
+  }
+
+// search via google for near by addresses with string key
+  Future<void> loadNearByPlaces({required String key}) async {
+    emit(state.copyWith(status: RideRequestStatusesEnum.isNearByPlacesLoading));
+    try {
+      if (fromAddressTextController.text.isNotEmpty ||
+          toAddressTextController.text.isNotEmpty) {
+        final result = await _nearByPlacesUseCase
+            .call(AddressSearchParamsModel(address: key, lat: 0, lng: 0));
+        result.fold((failure) {
+          emit(state.copyWith(status: RideRequestStatusesEnum.error));
+        }, (nearByPlaces) {
+          emit(state.copyWith(
+              status: RideRequestStatusesEnum.isNearByPlacesLoaded,
+              nearByPlaces: nearByPlaces));
+        });
+      }
+    } catch (e) {
+      state.copyWith(
+          status: RideRequestStatusesEnum.error, errorMessage: e.toString());
+    }
+  }
+
+// select pickup and drop off points manually
+  void selectPlace(
+      {required GoogleSearchResultModel item,
+      required BuildContext context}) async {
+    if (fromAddressFocusNode.hasFocus || state.fromAddress == null) {
+      fromAddressTextController.text = item.formattedAddress ?? '';
+      toAddressFocusNode.nextFocus();
+      emit(state.copyWith(
+          fromAddress: AddressSearchParamsEntity(
+              address: item.formattedAddress!,
+              lat: item.geometry!.location!.lat!,
+              lng: item.geometry!.location!.lng!)));
+    } else {
+      toAddressTextController.text = item.formattedAddress ?? '';
+      context.pop();
+
+      emit(state.copyWith(
+          status: RideRequestStatusesEnum.isFromAndToLocationSelected,
+          toAddress: AddressSearchParamsEntity(
+              address: item.formattedAddress!,
+              lat: item.geometry!.location!.lat!,
+              lng: item.geometry!.location!.lng!)));
+      await getExpectedPrice();
+    }
+  }
+
+  Future<void> getExpectedPrice() async {
+    final from = state.fromAddress!;
+    final to = state.toAddress!;
+
+    final response = await _expectedPriceUseCase.call(ExpectedPriceParams(
+        fromLat: from.lat, fromLng: from.lng, toLat: to.lat, toLng: to.lng));
+
+    response.fold(
+        (failure) => emit(state.copyWith(
+            status: RideRequestStatusesEnum.error, failure: failure)),
+        (response) => emit(state.copyWith(
+            status: RideRequestStatusesEnum.isTimeAndDistanceLoaded,
+            minimumPrice: response.price.toDouble(),
+            offerPrice: response.price.toDouble(),
+            distance: response.distance,
+            time: response.duration)));
+  }
+
+  // change autoaccept status
+  void changeAutoAcceptStatus({required bool v}) {
+    emit(state.copyWith(
+        status: RideRequestStatusesEnum.isAutoAcceptChanged, autoAccept: !v));
+  }
 }

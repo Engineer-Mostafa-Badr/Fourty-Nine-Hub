@@ -7,7 +7,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../data/models/car_models_model.dart';
+import '../../data/models/expected_price_model.dart';
 import '../../data/models/google_search_results.dart';
+import '../../data/models/params/expected_price_params.dart';
 import '../../data/models/ride_request_model.dart';
 import '../../data/models/sub_category_model.dart';
 
@@ -17,7 +19,8 @@ abstract class RideRequestRepo {
       {required RideRequestModel request});
   Future<Either<Failure, List<CarModelsModel>>> getCarModels();
   Future<Either<Failure, List<GoogleSearchResultModel>>>
-      searchGoogleSearchNearByPlaces({required AddressSearchParamsModel params});
+      searchGoogleSearchNearByPlaces(
+          {required AddressSearchParamsModel params});
   Future<Either<Failure, RideRequestModel>> addNormalRequest(
       {required RideRequestModel request});
   Future<Either<Failure, RideRequestModel>> addPrimaryRequest(
@@ -36,4 +39,6 @@ abstract class RideRequestRepo {
       {required int paymentMethodId});
   Future<Either<Failure, bool>> rateTheDriver(
       {required DriverReviewModel review});
+  Future<Either<Failure, ExpectedPriceModel>> getExpectedPrice(
+      {required ExpectedPriceParams params});
 }

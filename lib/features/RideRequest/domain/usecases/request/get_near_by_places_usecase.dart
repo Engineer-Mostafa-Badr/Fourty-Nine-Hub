@@ -8,7 +8,7 @@ import '../../../data/models/address_search_params_model.dart';
 
 class GetNearByPlacesUseCase
     extends UseCase<List<GoogleSearchResultModel>, AddressSearchParamsModel> {
-  RideRequestRepo _repo;
+  final RideRequestRepo _repo;
   GetNearByPlacesUseCase(this._repo);
   @override
   Future<Either<Failure, List<GoogleSearchResultModel>>> call(

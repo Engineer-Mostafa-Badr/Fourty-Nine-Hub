@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:fourtyninehub/features/RideRequest/domain/entity/address_search_params_entity.dart';
 import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../helpers/BitmapDescriptor.dart';
@@ -13,10 +14,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../res/style/app_colors.dart';
+import '../../../../res/style/const.dart';
 
 class MapPicker extends StatefulWidget {
   final Function(CameraPosition)? onMoving;
-  final Function(String)? onAddressPicked;
+  final Function(AddressSearchParamsEntity)? onAddressPicked;
   final bool? showDoneButton;
   final double? lat, lng;
   final double? destLat, destLng;
@@ -44,7 +46,7 @@ class _MapPickerState extends State<MapPicker> {
   String address = '';
   bool isMoving = false;
   CameraPosition? _camera;
-  String mapKey = 'AIzaSyCSzHt1y3RDKvC2D67mF-WJdyZKE9hBIxA';
+  String mapKey = UIConst.googleMapAPIKey;
   Map<MarkerId, Marker> markers = {};
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
@@ -234,7 +236,10 @@ class _MapPickerState extends State<MapPicker> {
       }
       if (widget.onAddressPicked != null) {
         // ignore: prefer_null_aware_method_calls
-        widget.onAddressPicked!(address);
+        widget.onAddressPicked!(AddressSearchParamsEntity(
+            address: address,
+            lat: position.target.latitude,
+            lng: position.target.longitude));
       }
     }
 

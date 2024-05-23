@@ -2,7 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/address_search_params_model.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/car_models_model.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/driver_review_model.dart';
+import 'package:fourtyninehub/features/RideRequest/data/models/expected_price_model.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/google_search_results.dart';
+import 'package:fourtyninehub/features/RideRequest/data/models/params/expected_price_params.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/report_model.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/ride_offer_model.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/ride_request_model.dart';
@@ -45,8 +47,7 @@ class RideRequestRepoImpl implements RideRequestRepo {
   }
 
   @override
-  Future<Either<Failure, LatLng>> findDriverOnTheMap(
-      {required int driverId}) {
+  Future<Either<Failure, LatLng>> findDriverOnTheMap({required int driverId}) {
     return _remoteDataSource.getDriverLocation(driverId: driverId);
   }
 
@@ -112,5 +113,11 @@ class RideRequestRepoImpl implements RideRequestRepo {
   Future<Either<Failure, bool>> rateTheDriver(
       {required DriverReviewModel review}) {
     return _remoteDataSource.rateTheDriver(review: review);
+  }
+
+  @override
+  Future<Either<Failure, ExpectedPriceModel>> getExpectedPrice(
+      {required ExpectedPriceParams params}) {
+    return _remoteDataSource.getExpectedPrice(params: params);
   }
 }
