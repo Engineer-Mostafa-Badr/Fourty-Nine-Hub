@@ -3,6 +3,7 @@ import 'package:fourtyninehub/features/RideRequest/presentation/cubit/ridereques
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
+import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:go_router/go_router.dart';
 
@@ -113,7 +114,11 @@ class AppPages {
               GoRoute(
                   path: Paths.NOTIFICATIONS,
                   name: Routes.NOTIFICATIONS,
-                  builder: (context, state) => const NotificationView())
+                  builder: (context, state) => const NotificationView()),
+              GoRoute(
+                  path: Paths.SETTINGS,
+                  name: Routes.SETTINGS,
+                  builder: (context, state) => const SettingsView()),
             ]),
         GoRoute(
             path: Paths.SOCIAL,

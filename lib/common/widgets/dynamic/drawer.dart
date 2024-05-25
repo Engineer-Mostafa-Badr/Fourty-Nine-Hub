@@ -40,13 +40,20 @@ class DrawerWidget extends StatelessWidget {
               competitionSubscription(context: context),
               walletCircularProgress(context: context),
               _buildRegisterButton(context: context),
-              drawerListTile(icon: Icons.favorite, label: 'Favourite'),
-              drawerListTile(icon: Icons.ads_click, label: 'My Ads'),
-              drawerListTile(icon: Icons.list, label: 'Requests'),
-              drawerListTile(icon: Icons.settings, label: 'Settings'),
-              drawerListTile(icon: Icons.policy_outlined, label: 'Policies'),
-              drawerListTile(icon: Icons.share, label: 'Share App'),
-              drawerListTile(icon: Icons.logout, label: 'Logout'),
+              drawerListTile(
+                  icon: Icons.favorite, label: 'Favourite', onTap: () {}),
+              drawerListTile(
+                  icon: Icons.ads_click, label: 'My Ads', onTap: () {}),
+              drawerListTile(icon: Icons.list, label: 'Requests', onTap: () {}),
+              drawerListTile(
+                  icon: Icons.settings,
+                  label: 'Settings',
+                  onTap: () => context.push(Routes.SETTINGS)),
+              drawerListTile(
+                  icon: Icons.policy_outlined, label: 'Policies', onTap: () {}),
+              drawerListTile(
+                  icon: Icons.share, label: 'Share App', onTap: () {}),
+              drawerListTile(icon: Icons.logout, label: 'Logout', onTap: () {}),
             ],
           ),
         ),
@@ -237,12 +244,13 @@ class DrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget drawerListTile({
-    required IconData icon,
-    required String label,
-    String? description,
-  }) {
+  Widget drawerListTile(
+      {required IconData icon,
+      required String label,
+      String? description,
+      required Function onTap}) {
     return ListTile(
+      onTap: () => onTap(),
       leading: Icon(icon),
       title: Label(
           text: label, style: Styles.mediumText(fontWeight: FontWeight.w500)),

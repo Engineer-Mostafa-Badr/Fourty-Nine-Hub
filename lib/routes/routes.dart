@@ -38,6 +38,7 @@ abstract class Routes {
   static const REGISTERDRIVER = '/Register/register-driver';
   static const ACCOUNT = '/Account';
   static const NOTIFICATIONS = '/Account/Norifications';
+  static const SETTINGS = '/Account/Settings';
 }
 
 abstract class Paths {
@@ -79,4 +80,5 @@ abstract class Paths {
     static const REGISTERDRIVER = 'register-driver';
   static const ACCOUNT = 'Account';
   static const NOTIFICATIONS = 'Norifications';
+  static const SETTINGS = 'Settings';
 }
