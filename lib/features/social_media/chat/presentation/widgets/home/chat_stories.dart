@@ -7,10 +7,15 @@ import '../../../../../../res/style/const.dart';
 import '../../../../../../res/style/styles.dart';
 
 class ChatStories extends StatelessWidget {
+  const ChatStories({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: kToolbarHeight * 1.5,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+      ),
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [

@@ -27,6 +27,8 @@ import '../features/installments/presentation/pages/installment_view.dart';
 import '../features/lucky_wheel/presentation/pages/lucky_wheel.dart';
 import '../features/mazadat/presentation/pages/Mazad_details.dart';
 import '../features/mazadat/presentation/pages/Mazadat_view.dart';
+import '../features/notifications/presentation/pages/notification_view.dart';
+import '../features/register/driver_register/presentation/pages/driver_register_view.dart';
 import '../features/social_media/chat/presentation/pages/Chat_room.dart';
 import '../features/social_media/chat/presentation/pages/Chat_view.dart';
 import '../features/social_media/club_house/presentation/pages/club_house_home.dart';
@@ -71,8 +73,15 @@ class AppPages {
                 email: state.extra as String,
               ),
             ),
+            // DriverRegister
+            GoRoute(
+              name: Routes.REGISTERDRIVER,
+              path: Paths.REGISTERDRIVER,
+              builder: (context, state) => const DriverRegister(),
+            ),
           ],
         ),
+
         GoRoute(
           name: Routes.LUCKYWHEEL,
           path: Paths.LUCKYWHEEL,
@@ -96,6 +105,16 @@ class AppPages {
           name: Routes.WALLET,
           builder: (context, state) => WalletView(),
         ),
+        GoRoute(
+            path: Paths.ACCOUNT,
+            name: Routes.ACCOUNT,
+            builder: (context, state) => const NotificationView(),
+            routes: [
+              GoRoute(
+                  path: Paths.NOTIFICATIONS,
+                  name: Routes.NOTIFICATIONS,
+                  builder: (context, state) => const NotificationView())
+            ]),
         GoRoute(
             path: Paths.SOCIAL,
             name: Routes.SOCIAL,

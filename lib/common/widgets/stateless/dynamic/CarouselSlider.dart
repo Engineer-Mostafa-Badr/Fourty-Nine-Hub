@@ -2,28 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class CarouselSliderWidget extends StatelessWidget {
-  final List<String> images;
-
+  final List<Widget> widgets;
+  final double height;
   const CarouselSliderWidget({
     super.key,
-    required this.images,
+    required this.widgets,
+    this.height = 400,
   });
 
   @override
   Widget build(BuildContext context) {
     return CarouselSlider(
-      options: CarouselOptions(height: 400.0),
-      items: images.map((i) {
+      options: CarouselOptions(height: height),
+      items: widgets.map((i) {
         return Builder(
           builder: (BuildContext context) {
-            return Container(
-                width: MediaQuery.of(context).size.width,
-                margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                decoration: const BoxDecoration(color: Colors.white),
-                child: Image.network(
-                  i,
-                  fit: BoxFit.cover,
-                ));
+            return i;
           },
         );
       }).toList(),

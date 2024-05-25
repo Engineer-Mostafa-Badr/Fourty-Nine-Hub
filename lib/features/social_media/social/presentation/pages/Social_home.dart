@@ -8,6 +8,7 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../../res/style/app_colors.dart';
+import '../../../chat/presentation/widgets/home/chat_stories.dart';
 import '../widgets/posts/PostCard.dart';
 import '../widgets/posts/Stories.dart';
 import 'my_account_view.dart';
@@ -32,13 +33,6 @@ class SocialHomeView extends StatelessWidget {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: NestedAppbar(appBars: [
-          const SliverAppBar(
-            backgroundColor: Colors.white,
-            expandedHeight: kToolbarHeight * 2.5,
-            automaticallyImplyLeading: false,
-            floating: false,
-            flexibleSpace: Stories(),
-          ),
           SliverAppBar(
             backgroundColor: Colors.white,
             automaticallyImplyLeading: false,
@@ -67,21 +61,40 @@ class SocialHomeView extends StatelessWidget {
 
   Widget _buildBody() {
     return TabBarView(children: [
-      ListView.separated(
-          shrinkWrap: true,
-          physics: const BouncingScrollPhysics(),
-          itemBuilder: (context, index) => PostCard(),
-          separatorBuilder: (context, index) => const Sizer(),
-          itemCount: 30),
-      ListView.separated(
-          shrinkWrap: true,
-          physics: const BouncingScrollPhysics(),
-          itemBuilder: (context, index) => PostCard(
-                postType: PostType.Instagram,
-              ),
-          separatorBuilder: (context, index) => const Sizer(),
-          itemCount: 30),
+      _buildFacebookWidget(),
+      _buildInstagramWidget(),
       const MyAccountView(),
     ]);
+  }
+
+  Widget _buildFacebookWidget() {
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        const Stories(),
+        ListView.separated(
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (context, index) => PostCard(),
+            separatorBuilder: (context, index) => const Sizer(),
+            itemCount: 30),
+      ],
+    );
+  }
+
+  Widget _buildInstagramWidget() {
+    return ListView(
+      children: [
+        const ChatStories(),
+        ListView.separated(
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (context, index) => PostCard(
+                  postType: PostType.Instagram,
+                ),
+            separatorBuilder: (context, index) => const Sizer(),
+            itemCount: 30),
+      ],
+    );
   }
 }

@@ -8,10 +8,10 @@ class ExpectedPriceModel extends ExpectedPriceEntity {
       required super.duration});
   factory ExpectedPriceModel.fromJson(Map<String, dynamic> json) {
     return ExpectedPriceModel(
-        status: json['status'],
-        price: json['price'],
-        distance: json['distance'],
-        duration: json['time']);
+        status: json['status'] ?? true,
+        price: json['price'] ?? 80,
+        distance: json['distance'] ?? '',
+        duration: json['time'] ?? '');
   }
 
   Map<String, dynamic> toJson() {

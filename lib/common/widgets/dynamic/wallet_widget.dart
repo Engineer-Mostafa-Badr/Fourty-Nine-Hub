@@ -14,7 +14,7 @@ class WalletWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: margin ?? 0),
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -41,7 +41,7 @@ class WalletWidget extends StatelessWidget {
                   text: 'Balance',
                   style: Styles.mediumText(
                       fontWeight: FontWeight.bold, color: Colors.grey)),
-              const Sizer(),
+              // const Sizer(),
               Label(
                   text: '1200',
                   style: Styles.mediumText(
@@ -69,7 +69,6 @@ class WalletWidget extends StatelessWidget {
                   text: 'Gift Wallet',
                   style: Styles.mediumText(
                       fontWeight: FontWeight.bold, color: Colors.grey)),
-              const Sizer(),
               Label(
                   text: '300',
                   style: Styles.mediumText(
@@ -97,7 +96,6 @@ class WalletWidget extends StatelessWidget {
                   text: 'Wallet',
                   style: Styles.mediumText(
                       fontWeight: FontWeight.bold, color: Colors.grey)),
-              const Sizer(),
               Label(
                   text: '400',
                   style: Styles.mediumText(

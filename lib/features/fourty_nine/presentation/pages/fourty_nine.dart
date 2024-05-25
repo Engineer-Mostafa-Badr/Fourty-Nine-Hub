@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../common/widgets/dynamic/floating_button.dart';
+import '../../../../common/widgets/dynamic/google_ads_banner.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../res/style/const.dart';
@@ -13,6 +14,7 @@ import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/dynamic/wallet_widget.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../res/style/app_colors.dart';
+import '../widgets/announce_widget.dart';
 
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});
@@ -43,9 +45,13 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            const AnnounceWidget(),
+            const Sizer(),
             const WalletWidget(
-              margin: 10,
+              margin: 5,
             ),
+            const GoogleAddsBanner(),
+            const Sizer(),
             Container(
               padding: const EdgeInsets.all(10),
               decoration: const BoxDecoration(
@@ -64,12 +70,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildMazadatWidget(),
-                    ],
-                  ),
+                  _buildMazadatWidget(),
                   const Sizer(),
                   _buildHorizontalServices(),
                   _buildViewType(),
@@ -86,56 +87,60 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   Widget _buildMazadatWidget() {
     return Row(
       children: [
-        InkWell(
-          onTap: () => context.go(Routes.MAZADAT),
-          child: SizedBox(
-            height: kToolbarHeight * .5,
-            width: kToolbarHeight * 2,
-            child: Stack(
-              children: [
-                Positioned.fill(
-                    child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 5),
-                  child: AppButton(
-                      label: 'Auction',
-                      icon: Icons.group,
-                      onPressed: () => context.push(Routes.MAZADAT)),
-                )),
-                const Positioned(
-                    bottom: 5,
-                    left: 5,
-                    child: Icon(
-                      Icons.star,
-                      size: 10,
-                      color: AppColors.ACCENT_COLOR,
-                    )),
-                const Positioned(
-                    top: 0,
-                    left: 10,
-                    child: Icon(
-                      Icons.star,
-                      size: 10,
-                      color: AppColors.ACCENT_COLOR,
-                    )),
-                const Positioned(
-                    top: 15,
-                    right: 10,
-                    child: Icon(
-                      Icons.star,
-                      size: 10,
-                      color: AppColors.ACCENT_COLOR,
-                    ))
-              ],
+        Expanded(
+          child: InkWell(
+            onTap: () => context.go(Routes.MAZADAT),
+            child: SizedBox(
+              height: kToolbarHeight * .5,
+              width: kToolbarHeight * 2,
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                      child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    child: AppButton(
+                        label: 'Auction',
+                        icon: Icons.group,
+                        onPressed: () => context.push(Routes.MAZADAT)),
+                  )),
+                  const Positioned(
+                      bottom: 5,
+                      left: 5,
+                      child: Icon(
+                        Icons.star,
+                        size: 10,
+                        color: AppColors.ACCENT_COLOR,
+                      )),
+                  const Positioned(
+                      top: 0,
+                      left: 10,
+                      child: Icon(
+                        Icons.star,
+                        size: 10,
+                        color: AppColors.ACCENT_COLOR,
+                      )),
+                  const Positioned(
+                      top: 15,
+                      right: 10,
+                      child: Icon(
+                        Icons.star,
+                        size: 10,
+                        color: AppColors.ACCENT_COLOR,
+                      ))
+                ],
+              ),
             ),
           ),
         ),
         const Sizer(),
-        AppButton(
-            padding: 5,
-            height: kToolbarHeight * .5,
-            label: 'Installments',
-            icon: Icons.list,
-            onPressed: () => context.push(Routes.INSTALLMENT))
+        Expanded(
+          child: AppButton(
+              padding: 5,
+              height: kToolbarHeight * .5,
+              label: 'Installments',
+              icon: Icons.list,
+              onPressed: () => context.push(Routes.INSTALLMENT)),
+        )
       ],
     );
   }

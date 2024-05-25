@@ -40,14 +40,14 @@ class MazadDetails extends StatelessWidget {
               children: [
                 Expanded(
                     flex: 3,
-                    child: CarouselSliderWidget(
-                      images: [
-                        image,
-                        image,
-                        image,
-                        image,
-                      ],
-                    )),
+                    child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                        decoration: const BoxDecoration(color: Colors.white),
+                        child: Image.network(
+                          image,
+                          fit: BoxFit.cover,
+                        ))),
                 const Spacer(),
                 Expanded(flex: 2, child: _buildAuctionInfo()),
               ],

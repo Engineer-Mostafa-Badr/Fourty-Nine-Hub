@@ -35,6 +35,9 @@ abstract class Routes {
   static const LOGIN = '/Login';
   static const REGISTER = '/Register';
   static const VERIFYMAIL = '/Register/verify-mail-register';
+  static const REGISTERDRIVER = '/Register/register-driver';
+  static const ACCOUNT = '/Account';
+  static const NOTIFICATIONS = '/Account/Norifications';
 }
 
 abstract class Paths {
@@ -73,4 +76,7 @@ abstract class Paths {
   static const LOGIN = 'Login';
   static const REGISTER = 'Register';
   static const VERIFYMAIL = 'verify-mail-register';
+    static const REGISTERDRIVER = 'register-driver';
+  static const ACCOUNT = 'Account';
+  static const NOTIFICATIONS = 'Norifications';
 }

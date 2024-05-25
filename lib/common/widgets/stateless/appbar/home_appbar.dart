@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
@@ -50,11 +53,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
               ),
-            if (showLanguage)
-              TextButton(
-                onPressed: () {},
-                child: Label(text: 'EN', style: Styles.mediumText()),
-              ),
+            // if (showLanguage)
+
             if (isWithBackArrow) const SizedBox(width: 10),
             if (isWithBackArrow)
               IconButton(
@@ -102,6 +102,12 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               TextButton(
                   onPressed: () {},
                   child: Label(text: 'Register', style: Styles.mediumText())),
+            Container(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: TextAppButton(
+                    label: 'EN',
+                    style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
+                    onPressed: () {})),
             Stack(
               children: [
                 IconButton(
@@ -109,7 +115,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     Icons.notifications_none,
                     size: 26,
                   ),
-                  onPressed: () {},
+                  onPressed: () => context.push(Routes.NOTIFICATIONS),
                   color: inNotifications
                       ? AppColors.SPLASH_BLACK_COLOR
                       : isDetailsCardService
@@ -138,9 +144,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           ],
         ),
       ),
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       elevation: 0,
-      systemOverlayStyle: SystemUiOverlayStyle.dark,
+      systemOverlayStyle: SystemUiOverlayStyle.light,
       iconTheme: const IconThemeData(color: Colors.black),
       // automaticallyImplyLeading: false,
     );

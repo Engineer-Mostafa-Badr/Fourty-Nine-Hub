@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/RideRequest/presentation/cubit/riderequest_cubit.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -8,6 +9,7 @@ import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/const.dart';
 import '../../../../../../res/style/styles.dart';
+import '../../../../../../routes/routes.dart';
 import 'giveOffer.dart';
 import 'ride_options.dart';
 import 'selectDropOffPoints.dart';
@@ -22,6 +24,8 @@ class RideOptionsBottomSheet extends StatefulWidget {
 class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
   @override
   Widget build(BuildContext context) {
+    final rideCubit = context.read<RiderequestCubit>();
+
     return BlocConsumer<RiderequestCubit, RiderequestState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -168,7 +172,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                 ),
               ),
               const Sizer(),
-              if (state.isTimeAndDistanceLoaded || state.minimumPrice != null)
+              if (state.isTimeAndDistanceLoaded || state.time != null)
                 Column(
                   children: [
                     InkWell(
@@ -218,7 +222,10 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                             child: Label(
                                 text: 'Auto Accept offer of EGP',
                                 style: Styles.mediumText(color: Colors.grey))),
-                        Switch(value: state.autoAccept, onChanged: (v) {})
+                        Switch(
+                            value: state.autoAccept,
+                            onChanged: (v) =>
+                                rideCubit.changeAutoAcceptStatus(v: v))
                       ],
                     ),
                     Container(
@@ -247,21 +254,24 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
               Row(
                 children: [
                   Expanded(
-                      child: Container(
-                    height: kToolbarHeight * .7,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.red),
-                    child: Center(
-                        child: Label(
-                      text: 'Premium Request',
-                      style: Styles.mediumText(color: Colors.white),
-                    )),
+                      child: InkWell(
+                    onTap: () => context.push(Routes.REGISTERDRIVER),
+                    child: Container(
+                      height: kToolbarHeight * .7,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.red),
+                      child: Center(
+                          child: Label(
+                        text: 'Premium Request',
+                        style: Styles.mediumText(color: Colors.white),
+                      )),
+                    ),
                   )),
                   const Sizer(),
                   Expanded(
                       child: InkWell(
-                    onTap: () {},
+                    onTap: () => context.push(Routes.REGISTERDRIVER),
                     child: Container(
                       height: kToolbarHeight * .7,
                       decoration: BoxDecoration(

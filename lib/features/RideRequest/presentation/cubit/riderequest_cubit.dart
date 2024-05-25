@@ -100,6 +100,6 @@ class RiderequestCubit extends Cubit<RiderequestState> {
   // change autoaccept status
   void changeAutoAcceptStatus({required bool v}) {
     emit(state.copyWith(
-        status: RideRequestStatusesEnum.isAutoAcceptChanged, autoAccept: !v));
+        status: RideRequestStatusesEnum.isAutoAcceptChanged, autoAccept: v));
   }
 }

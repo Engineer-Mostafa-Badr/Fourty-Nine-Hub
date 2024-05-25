@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -38,6 +39,7 @@ class DrawerWidget extends StatelessWidget {
               ),
               competitionSubscription(context: context),
               walletCircularProgress(context: context),
+              _buildRegisterButton(context: context),
               drawerListTile(icon: Icons.favorite, label: 'Favourite'),
               drawerListTile(icon: Icons.ads_click, label: 'My Ads'),
               drawerListTile(icon: Icons.list, label: 'Requests'),
@@ -123,6 +125,55 @@ class DrawerWidget extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildRegisterButton({required BuildContext context}) {
+    return SizedBox(
+      // width: double.infinity,
+      child: DropdownButton<int>(
+        // value: dropdownValue,
+        icon: Container(
+          height: 35,
+          width: 35,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: AppColors.SECONDARY_COLOR),
+          child: const Icon(
+            Icons.arrow_drop_down,
+            color: Colors.white,
+          ),
+        ),
+        hint: AppButton(
+            margin: 5,
+            padding: 10,
+            width: 200,
+            label: 'Become our Partner',
+            onPressed: () {}),
+        style: const TextStyle(color: Colors.deepPurple),
+        underline: Container(),
+        onChanged: (int? value) {
+          context.push(Routes.REGISTERDRIVER);
+        },
+        items: [
+          DropdownMenuItem<int>(
+            value: 0,
+            child: Label(text: 'Driver'),
+          ),
+          DropdownMenuItem<int>(
+            value: 1,
+            child: Label(text: 'Restaurant'),
+          ),
+          DropdownMenuItem<int>(
+            value: 2,
+            child: Label(text: 'Doctor'),
+          ),
+          DropdownMenuItem<int>(
+            value: 3,
+            child: Label(text: 'ضيف اللي محتاجه'),
+          ),
+        ],
+      ),
     );
   }
 
