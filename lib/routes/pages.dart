@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/l
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:go_router/go_router.dart';
 
@@ -139,6 +140,7 @@ class AppPages {
                 name: Routes.REELS,
                 builder: (context, state) => ReelView(),
               ),
+              GoRoute(path: Paths.TINDER, name: Routes.Tinder, builder: (context, state)=>  TinderView()),
               // ClubHouseHome
               GoRoute(
                   path: Paths.CLUBHOUSE,

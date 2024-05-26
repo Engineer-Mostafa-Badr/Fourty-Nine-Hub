@@ -46,7 +46,8 @@ class OtherAccountView extends StatelessWidget {
               flexibleSpace: _buildAccountCounter(context: context),
               iconTheme: const IconThemeData(color: Colors.white),
               leading: IconButton(
-                  onPressed: () {}, icon: const Icon(Icons.arrow_back)),
+                  onPressed: () => context.pop(),
+                  icon: const Icon(Icons.arrow_back)),
               actions: [
                 IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
                 PopupMenuButton(
@@ -55,7 +56,7 @@ class OtherAccountView extends StatelessWidget {
                     color: Colors.white,
                   ),
                   itemBuilder: (context) {
-                    return  [
+                    return [
                       PopupMenuItem<int>(
                         value: 0,
                         child: Text("Media, links, and docs"),

@@ -85,6 +85,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_localization: ^0.2.0
+  flutter_card_swiper: ^7.0.1
 
 dev_dependencies:
   flutter_test:

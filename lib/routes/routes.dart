@@ -9,6 +9,7 @@ abstract class Routes {
   static const OTHERSACCOUNT = '/Social/OthersAccount';
   static const REELS = '/Social/REELS';
   static const TWITTER = '/Social/Twitter';
+  static const Tinder = '/Social/Tinder';
   static const CLUBHOUSE = '/Social/ClubHouse';
   static const CLUBHOUSECHAT = '/Social/ClubHouse/ClubHouseChat';
   static const CLUBHOUSEROOM = '/Social/ClubHouse/ClubHouseRoom';
@@ -56,6 +57,7 @@ abstract class Paths {
   static const CHATROOM = 'ChatRoom';
   static const REELS = 'Reels';
   static const TWITTER = 'Twitter';
+  static const TINDER = 'Tinder';
   static const CLUBHOUSE = 'ClubHouse';
   static const CLUBHOUSECHAT = 'ClubHouseChat';
   static const CLUBHOUSEROOM = 'ClubHouseRoom';

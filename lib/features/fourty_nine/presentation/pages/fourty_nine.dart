@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../common/widgets/dynamic/google_ads_banner.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -14,6 +14,7 @@ import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/dynamic/wallet_widget.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../res/style/app_colors.dart';
+import '../widgets/advertise_your_company.dart';
 import '../widgets/announce_widget.dart';
 
 class FourtyNineView extends StatefulWidget {
@@ -50,6 +51,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             const WalletWidget(
               margin: 5,
             ),
+            const AdvertiseYourCompany(),
             const GoogleAddsBanner(),
             const Sizer(),
             Container(

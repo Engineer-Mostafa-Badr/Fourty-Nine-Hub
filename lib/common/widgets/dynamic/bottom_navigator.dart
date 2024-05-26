@@ -46,7 +46,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
                 label: 'Tinder',
                 index: 4,
                 image: Assets.social,
-                action: () => context.push(Routes.SOCIAL)),
+                action: () => context.push(Routes.Tinder)),
           ]
         : mainCategory == 1
             ? <BottomItemModel>[
