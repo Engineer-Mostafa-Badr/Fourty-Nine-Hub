@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/features/authentication/domain/use_cases/get_welcome_gift_use_case.dart';
 import 'package:get_it/get_it.dart';
 import '../features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import '../features/authentication/data/data_sources/remote_data_source/auth_remote_data_source.dart';
@@ -19,7 +20,7 @@ import '../features/authentication/presentation/controllers/user_cubit/user_cubi
 import '../features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
 
 class AuthServiceLocator {
-   static Future<void> excute({required GetIt serviceLocator}) async {
+  static Future<void> execute({required GetIt serviceLocator}) async {
     // auth feature
     serviceLocator.registerLazySingleton<AuthRemoteDataSource>(
       () => AuthRemoteDataSourceImpl(
@@ -50,6 +51,17 @@ class AuthServiceLocator {
       ),
     );
 
+    // auth use cases
+    serviceLocator.registerFactory(() => LoginUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => GetUserUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => AttachTokenUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => SaveTokensUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => GetTokensUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => RegisterUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => VerifyOTPUseCase(serviceLocator()));
+    serviceLocator
+        .registerFactory(() => GetWelcomeGiftUseCase(serviceLocator()));
+
     // auth cubits
     serviceLocator.registerFactory<LoginCubit>(
       () => LoginCubit(
@@ -58,8 +70,8 @@ class AuthServiceLocator {
         serviceLocator(),
       ),
     );
-    serviceLocator.registerLazySingleton<UserCubit>(
-      () => UserCubit(
+    serviceLocator.registerSingleton(
+      UserCubit(
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
@@ -69,21 +81,13 @@ class AuthServiceLocator {
     serviceLocator.registerFactory<RegisterCubit>(
       () => RegisterCubit(
         serviceLocator(),
-      ),
+        serviceLocator(),
+      )..getWelcomeGift(),
     );
     serviceLocator.registerFactory<VerifyOtpCubit>(
       () => VerifyOtpCubit(
         serviceLocator(),
       ),
     );
-
-    // auth use cases
-    serviceLocator.registerFactory(() => LoginUseCase(serviceLocator()));
-    serviceLocator.registerFactory(() => GetUserUseCase(serviceLocator()));
-    serviceLocator.registerFactory(() => AttachTokenUseCase(serviceLocator()));
-    serviceLocator.registerFactory(() => SaveTokensUseCase(serviceLocator()));
-    serviceLocator.registerFactory(() => GetTokensUseCase(serviceLocator()));
-    serviceLocator.registerFactory(() => RegisterUseCase(serviceLocator()));
-    serviceLocator.registerFactory(() => VerifyOTPUseCase(serviceLocator()));
   }
 }

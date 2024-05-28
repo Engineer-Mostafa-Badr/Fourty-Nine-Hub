@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../../../../core/messages/messages.dart';
 import '../../../domain/use_cases/attach_token_use_case.dart';
 import '../../../domain/use_cases/login_use_case.dart';
 
@@ -43,6 +46,49 @@ class LoginCubit extends Cubit<LoginState> {
           },
         ),
       );
+    }
+  }
+
+  Future<void> _loginWithCredentials(OAuthCredential credential) async {
+    final user = await FirebaseAuth.instance.signInWithCredential(credential);
+    final idToken = await user.user!.getIdToken();
+    //debugPrint(idToken);
+    // try {
+    //   final result = await DioManager.dio.post(
+    //     'auth/social',
+    //     data: {
+    //       'idToken': await user.user!.getIdToken(),
+    //       'fcm': await getFcm(),
+    //       'deviceId': await UniqueIdentifier.serial,
+    //       'language': Get.locale?.languageCode,
+    //     },
+    //   );
+    //   final accessToken = result.data['accessToken'];
+    //   await writeStorage(
+    //     'token',
+    //     accessToken,
+    //   );
+    //   await DioManager.initDioOptions(token: accessToken);
+    //   Get.offAllNamed(Routes.HOME);
+    // } catch (e) {
+    //   showErrorMessage(e);
+    // }
+  }
+
+  Future<void> signInWithGoogle() async {
+    try {
+      final result = await GoogleSignIn().signIn();
+      if (result != null) {
+        final googleAuth = await result.authentication;
+        await _loginWithCredentials(
+          GoogleAuthProvider.credential(
+            accessToken: googleAuth.accessToken,
+            idToken: googleAuth.idToken,
+          ),
+        );
+      }
+    } catch (e) {
+      //showErrorMessage(e);
     }
   }
 

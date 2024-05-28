@@ -87,7 +87,7 @@ class LoginView extends StatelessWidget {
                             backColor: AppColors.LIGHT_GRAY_COLOR,
                             textColor: Colors.black,
                             icon: FontAwesomeIcons.google,
-                            onPressed: () {},
+                            onPressed: loginCubit.signInWithGoogle,
                           ),
                         ),
                         const Sizer(),

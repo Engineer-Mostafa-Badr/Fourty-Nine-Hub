@@ -4,7 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
-import 'package:fourtyninehub/features/RideRequest/domain/usecases/request/get_near_by_places_usecase.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
 
@@ -15,6 +14,7 @@ import '../core/api/api_consumer.dart';
 import '../core/local_storage/local_storage_consumer.dart';
 
 import '../firebase_options.dart';
+import 'fourty_nine_service_locator.dart';
 
 final serviceLocator = GetIt.instance;
 
@@ -70,15 +70,17 @@ class DI {
     serviceLocator.registerLazySingleton<ApiConsumer>(
       () => BaseApiConsumer(
         serviceLocator(),
-        //serviceLocator(),
+        serviceLocator(),
       ),
     );
 
     // auth service locator
-    await AuthServiceLocator.excute(serviceLocator: serviceLocator);
+    await AuthServiceLocator.execute(serviceLocator: serviceLocator);
 
     // Ride Customer
     await RideServiceLocator.execute(serviceLocator: serviceLocator);
-    
+
+    // Fourty-Nine
+    FourtyNineServiceLocator.execute(serviceLocator);
   }
 }

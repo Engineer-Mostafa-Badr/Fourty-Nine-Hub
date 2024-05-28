@@ -1,9 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
 
 import '../error/failure.dart';
+import 'end_points.dart';
 
 abstract class ApiConsumer {
   const ApiConsumer();
@@ -39,11 +41,13 @@ abstract class ApiConsumer {
 
 class BaseApiConsumer extends ApiConsumer {
   final Dio _dio;
+  final AuthLocalDataSource _authLocalDataSource;
 
   UserTokensEntity? _token;
 
   BaseApiConsumer(
     this._dio,
+    this._authLocalDataSource,
   );
 
   @override
@@ -68,7 +72,19 @@ class BaseApiConsumer extends ApiConsumer {
       );
       return Right(result.data as Map<String, dynamic>);
     } catch (e) {
-      return Left(_getFailure(e));
+      if (e is DioException &&
+          e.response?.statusCode == 401 &&
+          isTokenAttached) {
+        return refreshToken().then(
+          (_) => delete(
+            url,
+            queryParameters: queryParameters,
+            data: data,
+          ),
+        );
+      } else {
+        return Left(_getFailure(e));
+      }
     }
   }
 
@@ -84,7 +100,18 @@ class BaseApiConsumer extends ApiConsumer {
       );
       return Right(result.data as Map<String, dynamic>);
     } catch (e) {
-      return Left(_getFailure(e));
+      if (e is DioException &&
+          e.response?.statusCode == 401 &&
+          isTokenAttached) {
+        return refreshToken().then(
+          (_) => get(
+            url,
+            queryParameters: queryParameters,
+          ),
+        );
+      } else {
+        return Left(_getFailure(e));
+      }
     }
   }
 
@@ -103,7 +130,19 @@ class BaseApiConsumer extends ApiConsumer {
       );
       return Right(result.data as Map<String, dynamic>);
     } catch (e) {
-      return Left(_getFailure(e));
+      if (e is DioException &&
+          e.response?.statusCode == 401 &&
+          isTokenAttached) {
+        return refreshToken().then(
+          (_) => post(
+            url,
+            queryParameters: queryParameters,
+            data: data,
+          ),
+        );
+      } else {
+        return Left(_getFailure(e));
+      }
     }
   }
 
@@ -121,7 +160,19 @@ class BaseApiConsumer extends ApiConsumer {
       );
       return Right(result.data as Map<String, dynamic>);
     } catch (e) {
-      return Left(_getFailure(e));
+      if (e is DioException &&
+          e.response?.statusCode == 401 &&
+          isTokenAttached) {
+        return refreshToken().then(
+          (_) => put(
+            url,
+            queryParameters: queryParameters,
+            data: data,
+          ),
+        );
+      } else {
+        return Left(_getFailure(e));
+      }
     }
   }
 
@@ -154,11 +205,31 @@ class BaseApiConsumer extends ApiConsumer {
     return const UnknownFailure();
   }
 
-  void refreshToken(UserTokensEntity? token) {
-    // _token = token;
-    // if (token != null) {
-    //   _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
-    // }
+  Future<void> refreshToken() async {
+    if (_token == null) return;
+    try {
+      final result = await post(
+        EndPoints.refreshToken,
+        data: {
+          'refreshToken': _token!.refreshToken,
+        },
+      );
+      result.fold(
+        (_) {},
+        (response) {
+          final accessToken = response['data']['accessToken'] as String;
+          final newToken = _token!.copyWith(accessToken: accessToken);
+          attachToken(newToken);
+          _authLocalDataSource.saveUserTokens(newToken.toModel());
+        },
+      );
+    } catch (e) {
+      if (e is DioException && e.response?.statusCode == 401) {
+        _authLocalDataSource.saveUserTokens(null);
+        attachToken(null);
+      }
+      rethrow;
+    }
   }
 
   @override

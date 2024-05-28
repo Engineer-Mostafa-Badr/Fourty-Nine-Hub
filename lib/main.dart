@@ -4,6 +4,8 @@ import 'package:fourtyninehub/features/RideRequest/presentation/cubit/ridereques
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'features/fourty_nine/presentation/controllers/main_categories_cubit/parent_main_categories_cubit.dart';
+import 'features/fourty_nine/presentation/controllers/parent_main_categories_cubit/main_categories_cubit.dart';
 import 'res/style/app_colors.dart';
 import 'routes/pages.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -26,8 +28,14 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => serviceLocator<UserCubit>(),
         ),
-         BlocProvider(
+        BlocProvider(
           create: (context) => serviceLocator<RiderequestCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<ParentMainCategoriesCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<MainCategoriesCubit>(),
         ),
       ],
       child: GestureDetector(

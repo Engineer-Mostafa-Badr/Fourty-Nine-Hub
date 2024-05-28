@@ -49,5 +49,10 @@ class AuthRepositoryImpl extends AuthRepository {
   ) {
     return _remoteDataSource.verifyOTP(verifyOTPParams);
   }
+
+  @override
+  Future<Either<Failure, double>> getWelcomeGift() {
+    return _remoteDataSource.getWelcomeGift();
+  }
 }
 //enum: ['google', 'facebook', 'local', 'apple']

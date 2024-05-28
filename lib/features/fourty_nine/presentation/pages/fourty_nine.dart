@@ -1,4 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/localization/localization.dart';
+import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/parent_main_category_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/parent_main_categories_cubit/main_categories_cubit.dart';
 
 import '../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../common/widgets/dynamic/google_ads_banner.dart';
@@ -14,6 +22,7 @@ import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/dynamic/wallet_widget.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../res/style/app_colors.dart';
+import '../controllers/main_categories_cubit/parent_main_categories_cubit.dart';
 import '../widgets/advertise_your_company.dart';
 import '../widgets/announce_widget.dart';
 
@@ -25,8 +34,6 @@ class FourtyNineView extends StatefulWidget {
 }
 
 class _FourtyNineViewState extends State<FourtyNineView> {
-  List<int> services = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
   bool isList = true;
 
   @override
@@ -57,26 +64,60 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: const BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.GREY_LIGHT_COLOR,
-                      blurRadius: 10,
-                      spreadRadius: 5,
-                    )
-                  ],
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  )),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.GREY_LIGHT_COLOR,
+                    blurRadius: 10,
+                    spreadRadius: 5,
+                  )
+                ],
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   _buildMazadatWidget(),
                   const Sizer(),
-                  _buildHorizontalServices(),
+                  BlocBuilder<MainCategoriesCubit,
+                      BasicState<List<MainCategoryEntity>>>(
+                    builder: (context, state) {
+                      if (state.status == StateStatus.loading) {
+                        return const Center(
+                            child: CircularProgressIndicator.adaptive());
+                      }
+                      if (state.status != StateStatus.success) {
+                        return const SizedBox.shrink();
+                      }
+                      return _buildHorizontalServices(state.data!);
+                    },
+                  ),
                   _buildViewType(),
-                  _buildFourtyNineServices(),
+                  BlocBuilder<ParentMainCategoriesCubit,
+                      BasicState<List<ParentMainCategoryEntity>>>(
+                    builder: (context, state) {
+                      if (state.status == StateStatus.loading) {
+                        return const Center(
+                            child: CircularProgressIndicator.adaptive());
+                      }
+                      if (state.status != StateStatus.success) {
+                        return const SizedBox.shrink();
+                      }
+                      return Column(
+                        children: state.data!
+                            .map(
+                              (e) => _buildFourtyNineServices(
+                                e,
+                              ),
+                            )
+                            .toList(),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 50),
                 ],
               ),
             )
@@ -98,13 +139,14 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               child: Stack(
                 children: [
                   Positioned.fill(
-                      child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 5),
-                    child: AppButton(
-                        label: 'Auction',
-                        icon: Icons.group,
-                        onPressed: () => context.push(Routes.MAZADAT)),
-                  )),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 5),
+                      child: AppButton(
+                          label: 'Auction',
+                          icon: Icons.group,
+                          onPressed: () => context.push(Routes.MAZADAT)),
+                    ),
+                  ),
                   const Positioned(
                       bottom: 5,
                       left: 5,
@@ -167,30 +209,40 @@ class _FourtyNineViewState extends State<FourtyNineView> {
 
   Widget _buildViewItem({required IconData icon, required bool isSelected}) {
     return Container(
-        padding: const EdgeInsets.all(3),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: isSelected ? AppColors.PRIMARY_COLOR : Colors.white),
-        child: InkWell(
-            onTap: () {
-              isList = !isList;
-              setState(() {});
-            },
-            child: Icon(
-              icon,
-              size: 16,
-              color: isSelected ? Colors.white : AppColors.PRIMARY_COLOR,
-            )));
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: isSelected ? AppColors.PRIMARY_COLOR : Colors.white),
+      child: InkWell(
+        onTap: () {
+          isList = !isList;
+          setState(
+            () {},
+          );
+        },
+        child: Icon(
+          icon,
+          size: 16,
+          color: isSelected ? Colors.white : AppColors.PRIMARY_COLOR,
+        ),
+      ),
+    );
   }
 
-  Widget _buildFourtyNineServices() {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Label(
-        text: 'Cars',
-        style: Styles.headerText(),
-      ),
-      GridView.builder(
-          itemCount: 4,
+  Widget _buildFourtyNineServices(ParentMainCategoryEntity parentMainCategory) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Label(
+          text: arEn(
+            context,
+            parentMainCategory.nameAr,
+            parentMainCategory.nameEn,
+          ),
+          style: Styles.headerText(),
+        ),
+        GridView.builder(
+          itemCount: parentMainCategory.mainCategories.length,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -199,61 +251,42 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               crossAxisCount: isList ? 2 : 4,
               childAspectRatio: isList ? 2.5 : 1),
           itemBuilder: (context, index) {
-            return _buildServiceItem();
-          }),
-      Label(
-        text: 'Health',
-        style: Styles.headerText(),
-      ),
-      GridView.builder(
-          itemCount: 4,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisSpacing: isList ? 10 : 0,
-              mainAxisSpacing: isList ? 10 : 0,
-              crossAxisCount: isList ? 2 : 4,
-              childAspectRatio: isList ? 2.5 : 1),
-          itemBuilder: (context, index) {
-            return _buildServiceItem();
-          }),
-      Label(
-        text: 'Social',
-        style: Styles.headerText(),
-      ),
-      GridView.builder(
-          itemCount: 4,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisSpacing: isList ? 10 : 0,
-              mainAxisSpacing: isList ? 10 : 0,
-              crossAxisCount: isList ? 2 : 4,
-              childAspectRatio: isList ? 2.5 : 1),
-          itemBuilder: (context, index) {
-            return _buildServiceItem();
-          }),
-    ]);
+            return _buildServiceItem(
+              parentMainCategory.mainCategories[index],
+            );
+          },
+        ),
+      ],
+    );
   }
 
-  Widget _buildHorizontalServices() {
+  Widget _buildHorizontalServices(List<MainCategoryEntity> mainCategories) {
     return SizedBox(
       height: kToolbarHeight * .5,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: services.length,
+        itemCount: mainCategories.length,
         itemBuilder: (context, index) {
+          final mainCategory = mainCategories[index];
           return Container(
             margin: const EdgeInsets.only(left: 10),
             padding: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: AppColors.PRIMARY_COLOR),
+              borderRadius: BorderRadius.circular(5),
+              color: AppColors.PRIMARY_COLOR,
+            ),
             child: Center(
               child: Label(
-                  text: 'Ride',
-                  style: Styles.mediumText(
-                      color: Colors.white, fontWeight: FontWeight.bold)),
+                text: arEn(
+                  context,
+                  mainCategory.nameAr,
+                  mainCategory.nameEn,
+                ),
+                style: Styles.mediumText(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           );
         },
@@ -350,7 +383,10 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       ),
       child: Row(
         children: [
-          Label(text: 'Car', style: Styles.mediumText(color: Colors.white)),
+          Label(
+            text: 'Car',
+            style: Styles.mediumText(color: Colors.white),
+          ),
           const Sizer(
             width: 5,
           ),
@@ -364,7 +400,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     );
   }
 
-  Widget _buildServiceItem() {
+  Widget _buildServiceItem(MainCategoryEntity mainCategory) {
     return isList
         ? ClipRRect(
             borderRadius: BorderRadius.circular(10),
@@ -378,8 +414,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               child: Stack(
                 children: [
                   Positioned.fill(
-                    child: Image.network(
-                      UIConst.imagePlaceHolder,
+                    child: CachedNetworkImage(
+                      imageUrl: mainCategory.bannerUrl ?? '',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -394,20 +430,28 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Label(
-                                  text: 'Ride',
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Label(
+                                  text: arEn(
+                                    context,
+                                    mainCategory.nameAr,
+                                    mainCategory.nameEn,
+                                  ),
                                   style: Styles.headerText(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold)),
-                              Label(
-                                  text: '14 Ads',
-                                  style: Styles.mediumText(color: Colors.white))
-                            ],
-                          )),
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Label(
+                                  text: '${mainCategory.total} Ads',
+                                  style: Styles.mediumText(color: Colors.white),
+                                )
+                              ],
+                            ),
+                          ),
                           const Sizer(),
                           const CircleAvatar(
                             radius: 12,
@@ -434,15 +478,22 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 backgroundImage: NetworkImage(UIConst.imagePlaceHolder),
               ),
               RichText(
-                  text: TextSpan(children: [
-                TextSpan(
-                    text: 'Ride',
-                    style: Styles.mediumText(fontWeight: FontWeight.w700)),
-                TextSpan(
-                    text: ' /12 Ads',
-                    style: Styles.smallText(
-                        fontWeight: FontWeight.w700, color: Colors.grey)),
-              ])),
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: arEn(
+                          context,
+                          mainCategory.nameAr,
+                          mainCategory.nameEn,
+                        ),
+                        style: Styles.mediumText(fontWeight: FontWeight.w700)),
+                    TextSpan(
+                        text: ' /${mainCategory.total} Ads',
+                        style: Styles.smallText(
+                            fontWeight: FontWeight.w700, color: Colors.grey)),
+                  ],
+                ),
+              ),
             ],
           );
   }

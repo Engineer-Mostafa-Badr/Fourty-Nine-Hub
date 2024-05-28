@@ -18,6 +18,8 @@ abstract class AuthRemoteDataSource {
     VerifyOTPParams verifyOTPParams,
   );
 
+  Future<Either<Failure, double>> getWelcomeGift();
+
   void attachToken(UserTokensModel? token);
 }
 
@@ -75,5 +77,18 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   @override
   void attachToken(UserTokensModel? token) {
     _apiConsumer.attachToken(token);
+  }
+
+  @override
+  Future<Either<Failure, double>> getWelcomeGift() async {
+    final result = await _apiConsumer.get(
+      EndPoints.getWelcomeGift,
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) => Right(
+        double.parse(response['gift'].toString()),
+      ),
+    );
   }
 }
