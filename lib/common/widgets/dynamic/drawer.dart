@@ -32,14 +32,21 @@ class DrawerWidget extends StatelessWidget {
                   return context.read<UserCubit>().isLoggedIn
                       ? _buildAccountHeader(
                           context: context,
-                          user: state.data!,
+                          user: state.data,
                         )
                       : _buildLoginWidget(context: context);
                 },
               ),
               competitionSubscription(context: context),
               walletCircularProgress(context: context),
-              _buildRegisterButton(context: context),
+              drawerListTile(
+                  icon: FontAwesomeIcons.quran,
+                  label: 'Quraan',
+                  onTap: () => context.push(Routes.QURAAN)),
+              drawerListTile(
+                  icon: FontAwesomeIcons.book,
+                  label: 'Azkaar',
+                  onTap: () => context.push(Routes.QURAAN)),
               drawerListTile(
                   icon: Icons.favorite, label: 'Favourite', onTap: () {}),
               drawerListTile(
@@ -95,7 +102,7 @@ class DrawerWidget extends StatelessWidget {
 
   Widget _buildAccountHeader({
     required BuildContext context,
-    required UserEntity user,
+    required UserEntity? user,
   }) {
     return Column(
       children: [
@@ -132,55 +139,6 @@ class DrawerWidget extends StatelessWidget {
           ],
         ),
       ],
-    );
-  }
-
-  Widget _buildRegisterButton({required BuildContext context}) {
-    return SizedBox(
-      // width: double.infinity,
-      child: DropdownButton<int>(
-        // value: dropdownValue,
-        icon: Container(
-          height: 35,
-          width: 35,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: AppColors.SECONDARY_COLOR),
-          child: const Icon(
-            Icons.arrow_drop_down,
-            color: Colors.white,
-          ),
-        ),
-        hint: AppButton(
-            margin: 5,
-            padding: 10,
-            width: 200,
-            label: 'Become our Partner',
-            onPressed: () {}),
-        style: const TextStyle(color: Colors.deepPurple),
-        underline: Container(),
-        onChanged: (int? value) {
-          context.push(Routes.REGISTERDRIVER);
-        },
-        items: [
-          DropdownMenuItem<int>(
-            value: 0,
-            child: Label(text: 'Driver'),
-          ),
-          DropdownMenuItem<int>(
-            value: 1,
-            child: Label(text: 'Restaurant'),
-          ),
-          DropdownMenuItem<int>(
-            value: 2,
-            child: Label(text: 'Doctor'),
-          ),
-          DropdownMenuItem<int>(
-            value: 3,
-            child: Label(text: 'ضيف اللي محتاجه'),
-          ),
-        ],
-      ),
     );
   }
 
@@ -342,7 +300,7 @@ class DrawerWidget extends StatelessWidget {
 
   Widget accountWidget({
     required BuildContext context,
-    required UserEntity user,
+    required UserEntity? user,
   }) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -357,9 +315,7 @@ class DrawerWidget extends StatelessWidget {
                   child: CircleAvatar(
                     backgroundColor: Colors.white,
                     backgroundImage: NetworkImage(
-                      user.profilePicture?.isNotEmpty == true
-                          ? user.profilePicture!
-                          : UIConst.profilePlaceHolder,
+                      user?.profilePicture ?? UIConst.profilePlaceHolder,
                     ),
                   ),
                 ),
@@ -380,7 +336,7 @@ class DrawerWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Label(
-                text: user.fullName,
+                text: user?.fullName ?? '',
                 style: Styles.mediumText(fontWeight: FontWeight.bold),
               ),
               Label(
@@ -413,7 +369,34 @@ class DrawerWidget extends StatelessWidget {
                 ),
               )
             ],
-          ))
+          )),
+          PopupMenuButton(
+              icon: const Icon(Icons.more_vert),
+              itemBuilder: (context) {
+                return const [
+                  PopupMenuItem<int>(
+                    value: 0,
+                    child: Text("Register as Driver"),
+                  ),
+                  PopupMenuItem<int>(
+                    value: 1,
+                    child: Text("Register as Doctor"),
+                  ),
+                  PopupMenuItem<int>(
+                    value: 2,
+                    child: Text("Register as Restaurant"),
+                  ),
+                ];
+              },
+              onSelected: (value) {
+                if (value == 0) {
+                  context.push(Routes.REGISTERDRIVER);
+                } else if (value == 1) {
+                  context.push(Routes.REGISTERDRIVER);
+                } else if (value == 2) {
+                  context.push(Routes.REGISTERDRIVER);
+                }
+              })
         ],
       ),
     );

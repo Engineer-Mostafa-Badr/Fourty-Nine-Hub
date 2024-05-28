@@ -10,9 +10,13 @@ import '../../../../../../res/style/const.dart';
 import '../../../../../../res/style/styles.dart';
 import 'PostOptions.dart';
 
-class CommentCard extends StatelessWidget{
+class CommentCard extends StatelessWidget {
+  final Color textColor;
+  const CommentCard({super.key, this.textColor = Colors.black});
+
   @override
-  Widget build(BuildContext context) { return Column(
+  Widget build(BuildContext context) {
+    return Column(
       children: [
         Row(
           children: [
@@ -27,24 +31,35 @@ class CommentCard extends StatelessWidget{
               children: [
                 Label(
                     text: 'Farouk Shahin',
-                    style: Styles.mediumText(fontWeight: FontWeight.bold)),
-                Label(text: '9  min', style: Styles.mediumText()),
+                    style: Styles.mediumText(
+                        fontWeight: FontWeight.bold, color: textColor)),
+                Label(
+                    text: '9  min', style: Styles.mediumText(color: textColor)),
               ],
             )),
             IconButton(
                 onPressed: () {
                   bottomSheet(context: context, widget: const PostOptions());
                 },
-                icon: const Icon(Icons.more_vert)),
+                icon: Icon(
+                  Icons.more_vert,
+                  color: textColor,
+                )),
           ],
         ),
         const Sizer(),
-        const ReadMoreLabel(text: UIConst.placeholderText),
+        ReadMoreLabel(
+          text: UIConst.placeholderText,
+          style: Styles.mediumText(color: textColor),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            const Icon(Icons.favorite_border),
-            Label(text: '1,024', style: Styles.mediumText()),
+            Icon(
+              Icons.favorite_border,
+              color: textColor,
+            ),
+            Label(text: '1,024', style: Styles.mediumText(color: textColor)),
             const Sizer(),
             TextAppButton(
                 style: Styles.mediumText(), label: 'Reply', onPressed: () {})
@@ -52,7 +67,5 @@ class CommentCard extends StatelessWidget{
         ),
       ],
     );
- 
   }
-
 }

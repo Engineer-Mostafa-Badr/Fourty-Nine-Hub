@@ -91,7 +91,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
                     label: 'Live',
                     index: 1,
                     image: Assets.live,
-                    action: () {}),
+                    action: () => context.push(Routes.LIVE)),
                 // BottomItemModel(icon: FontAwesomeIcons.home, label: '', index: 2),
                 BottomItemModel(
                     icon: Icons.delivery_dining,

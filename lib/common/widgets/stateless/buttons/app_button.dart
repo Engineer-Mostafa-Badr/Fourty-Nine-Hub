@@ -6,7 +6,7 @@ import '../../dynamic/sizer.dart';
 import '../labels/label.dart';
 
 class AppButton extends StatelessWidget {
-  final double? height, margin, padding, radius, width;
+  final double? height, margin, padding, radius, width, iconSize;
   final Color? backColor, textColor;
   final String label;
   final Function onPressed;
@@ -24,6 +24,7 @@ class AppButton extends StatelessWidget {
       this.margin,
       this.widget,
       this.padding,
+      this.iconSize,
       this.textColor,
       this.style,
       this.icon,
@@ -50,7 +51,7 @@ class AppButton extends StatelessWidget {
                   if (icon != null)
                     Icon(
                       icon,
-                      // size: 18,
+                      size: iconSize ?? 16,
                       color: textColor ?? Colors.white,
                     ),
                   if (icon != null) const Sizer(),

@@ -1,9 +1,10 @@
-part of 'live_streaming_bloc.dart';
+part of 'live_streaming_cubit.dart';
 
 abstract class LiveStreamingState extends Equatable {
-  const LiveStreamingState();  
+  const LiveStreamingState();
 
   @override
   List<Object> get props => [];
 }
+
 class LiveStreamingInitial extends LiveStreamingState {}

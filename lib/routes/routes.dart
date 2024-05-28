@@ -8,8 +8,10 @@ abstract class Routes {
   static const SOCIAL = '/Social';
   static const OTHERSACCOUNT = '/Social/OthersAccount';
   static const REELS = '/Social/REELS';
+  static const MUSICREELS = '/Social/REELS/MUSICREELS';
   static const TWITTER = '/Social/Twitter';
   static const Tinder = '/Social/Tinder';
+  static const LIVE = '/Social/Live';
   static const CLUBHOUSE = '/Social/ClubHouse';
   static const CLUBHOUSECHAT = '/Social/ClubHouse/ClubHouseChat';
   static const CLUBHOUSEROOM = '/Social/ClubHouse/ClubHouseRoom';
@@ -23,6 +25,8 @@ abstract class Routes {
   static const FOOD = '/Food';
   static const RIDE = '/Ride';
   static const YOUTUBE = '/Youtube';
+  static const QURAAN = '/Quraan';
+  static const AZKAAR = '/Azkaar';
   static const PLAYVIDEO = '/Youtube/PlayVideo';
   static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
   static const MAZADDETAILS = '/Mazadat/MazadDetails';
@@ -56,8 +60,10 @@ abstract class Paths {
   static const CHAT = 'Chat';
   static const CHATROOM = 'ChatRoom';
   static const REELS = 'Reels';
+  static const MUSICREELS = 'MUSICREELS';
   static const TWITTER = 'Twitter';
   static const TINDER = 'Tinder';
+  static const LIVE = 'Live';
   static const CLUBHOUSE = 'ClubHouse';
   static const CLUBHOUSECHAT = 'ClubHouseChat';
   static const CLUBHOUSEROOM = 'ClubHouseRoom';
@@ -79,8 +85,10 @@ abstract class Paths {
   static const LOGIN = 'Login';
   static const REGISTER = 'Register';
   static const VERIFYMAIL = 'verify-mail-register';
-    static const REGISTERDRIVER = 'register-driver';
+  static const REGISTERDRIVER = 'register-driver';
   static const ACCOUNT = 'Account';
   static const NOTIFICATIONS = 'Norifications';
   static const SETTINGS = 'Settings';
+  static const QURAAN = 'Quraan';
+  static const AZKAAR = 'Azkaar';
 }

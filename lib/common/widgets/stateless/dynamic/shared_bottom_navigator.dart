@@ -8,19 +8,27 @@ import '../appbar/home_appbar.dart';
 class SharedCommonNavigator extends StatelessWidget {
   final int mainCategory;
   final Widget body;
+  final bool showBottomNavigator;
+  final bool showFloatingButton;
   const SharedCommonNavigator(
-      {super.key, required this.mainCategory, required this.body});
+      {super.key,
+      required this.mainCategory,
+      required this.body,
+      this.showBottomNavigator = true,
+      this.showFloatingButton = true});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const HomeAppbar(),
       drawer: const DrawerWidget(),
-      bottomNavigationBar: BottomNavigator(
-        mainCategory: mainCategory,
-        index: 1,
-      ),
-      floatingActionButton: const FloatingButton(),
+      bottomNavigationBar: showBottomNavigator
+          ? BottomNavigator(
+              mainCategory: mainCategory,
+              index: 1,
+            )
+          : null,
+      floatingActionButton: showFloatingButton ? const FloatingButton() : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: body,
     );

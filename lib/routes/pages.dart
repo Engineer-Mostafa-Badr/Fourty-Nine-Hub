@@ -4,6 +4,8 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/l
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:go_router/go_router.dart';
@@ -30,6 +32,7 @@ import '../features/lucky_wheel/presentation/pages/lucky_wheel.dart';
 import '../features/mazadat/presentation/pages/Mazad_details.dart';
 import '../features/mazadat/presentation/pages/Mazadat_view.dart';
 import '../features/notifications/presentation/pages/notification_view.dart';
+import '../features/quraan/presentation/pages/quraan_view.dart';
 import '../features/register/driver_register/presentation/pages/driver_register_view.dart';
 import '../features/social_media/chat/presentation/pages/Chat_room.dart';
 import '../features/social_media/chat/presentation/pages/Chat_view.dart';
@@ -101,6 +104,16 @@ class AppPages {
           name: Routes.WINNERS,
           builder: (context, state) => Winners(),
         ),
+        GoRoute(
+          path: Paths.QURAAN,
+          name: Routes.QURAAN,
+          builder: (context, state) => const QuraanView(),
+        ),
+        GoRoute(
+          path: Paths.AZKAAR,
+          name: Routes.AZKAAR,
+          builder: (context, state) => const QuraanView(),
+        ),
         // WalletView
         GoRoute(
           path: Paths.WALLET,
@@ -136,11 +149,24 @@ class AppPages {
                 builder: (context, state) => const OtherAccountView(),
               ),
               GoRoute(
-                path: Paths.REELS,
-                name: Routes.REELS,
-                builder: (context, state) => ReelView(),
-              ),
-              GoRoute(path: Paths.TINDER, name: Routes.Tinder, builder: (context, state)=>  TinderView()),
+                  path: Paths.REELS,
+                  name: Routes.REELS,
+                  builder: (context, state) => ReelView(),
+                  routes: [
+                    GoRoute(
+                      path: Paths.MUSICREELS,
+                      name: Routes.MUSICREELS,
+                      builder: (context, state) => const MusicReels(),
+                    ),
+                  ]),
+              GoRoute(
+                  path: Paths.TINDER,
+                  name: Routes.Tinder,
+                  builder: (context, state) => const TinderView()),
+              GoRoute(
+                  path: Paths.LIVE,
+                  name: Routes.LIVE,
+                  builder: (context, state) => const LiveStreamView()),
               // ClubHouseHome
               GoRoute(
                   path: Paths.CLUBHOUSE,

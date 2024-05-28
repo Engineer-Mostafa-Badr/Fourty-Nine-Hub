@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../social/presentation/widgets/posts/post_comments.dart';
 import '../../data/models/reel_model.dart';
@@ -57,6 +60,19 @@ class ReelActions extends StatelessWidget {
         Label(
             text: item.numberOfExplores.toString(),
             style: Styles.mediumText(color: Colors.white)),
+        const Sizer(),
+        InkWell(
+          onTap: () {
+            context.push(Routes.MUSICREELS);
+          },
+          child: CircleAvatar(
+            backgroundColor: Colors.blueGrey,
+            child: Image.asset(
+              Assets.coin,
+              height: 20,
+            ),
+          ),
+        ),
         const Sizer(),
       ],
     );

@@ -8,7 +8,10 @@ class TwitterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SharedCommonNavigator(mainCategory: 3, body: _buildGlobalPosts());
+    return SharedCommonNavigator(
+      mainCategory: 3,
+      body: _buildGlobalPosts(),
+    );
   }
 
   Widget _buildGlobalPosts() {

@@ -26,4 +26,6 @@ abstract class Assets {
   static String wow = 'assets/images/reactions/wow.png';
   static String sad = 'assets/images/reactions/sad.png';
   static String angry = 'assets/images/reactions/angry.png';
+  static String giftbox = 'assets/images/giftbox.png';
+  static String coin = 'assets/images/coin.png';
 }
