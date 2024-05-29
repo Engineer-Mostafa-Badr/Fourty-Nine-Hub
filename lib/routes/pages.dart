@@ -1,5 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/RideRequest/presentation/cubit/riderequest_cubit.dart';
+import 'package:fourtyninehub/features/account/presentation/pages/favourite_view.dart';
+import 'package:fourtyninehub/features/account/presentation/pages/my_adds.dart';
+import 'package:fourtyninehub/features/account/presentation/pages/share_the_app.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
@@ -133,6 +136,18 @@ class AppPages {
                   path: Paths.SETTINGS,
                   name: Routes.SETTINGS,
                   builder: (context, state) => const SettingsView()),
+              GoRoute(
+                  path: Paths.SHAREAPP,
+                  name: Routes.SHAREAPP,
+                  builder: (context, state) => const ShareTheApp()),
+              GoRoute(
+                  path: Paths.FAVOURITE,
+                  name: Routes.FAVOURITE,
+                  builder: (context, state) => const FavouriteView()),
+              GoRoute(
+                  path: Paths.MYADDS,
+                  name: Routes.MYADDS,
+                  builder: (context, state) => const MyAdds()),
             ]),
         GoRoute(
             path: Paths.SOCIAL,

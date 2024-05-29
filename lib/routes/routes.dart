@@ -42,6 +42,9 @@ abstract class Routes {
   static const VERIFYMAIL = '/Register/verify-mail-register';
   static const REGISTERDRIVER = '/Register/register-driver';
   static const ACCOUNT = '/Account';
+    static const FAVOURITE = '/Account/Favourite';
+    static const MYADDS = '/Account/Myadds';
+  static const SHAREAPP = '/Account/ShareApp';
   static const NOTIFICATIONS = '/Account/Norifications';
   static const SETTINGS = '/Account/Settings';
 }
@@ -87,6 +90,9 @@ abstract class Paths {
   static const VERIFYMAIL = 'verify-mail-register';
   static const REGISTERDRIVER = 'register-driver';
   static const ACCOUNT = 'Account';
+  static const FAVOURITE = 'Favourite';
+  static const MYADDS = 'Myadds';
+  static const SHAREAPP = 'ShareApp';
   static const NOTIFICATIONS = 'Norifications';
   static const SETTINGS = 'Settings';
   static const QURAAN = 'Quraan';

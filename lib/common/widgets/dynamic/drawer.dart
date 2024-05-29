@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/common/widgets/stateful/dynamic/webview.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:go_router/go_router.dart';
-
+import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/const.dart';
@@ -48,19 +49,34 @@ class DrawerWidget extends StatelessWidget {
                   label: 'Azkaar',
                   onTap: () => context.push(Routes.QURAAN)),
               drawerListTile(
-                  icon: Icons.favorite, label: 'Favourite', onTap: () {}),
+                  icon: Icons.favorite,
+                  label: 'Favourite',
+                  onTap: () => context.push(Routes.FAVOURITE)),
               drawerListTile(
-                  icon: Icons.ads_click, label: 'My Ads', onTap: () {}),
-              drawerListTile(icon: Icons.list, label: 'Requests', onTap: () {}),
+                  icon: Icons.ads_click,
+                  label: 'My Ads',
+                  onTap: () => context.push(Routes.MYADDS)),
+              // drawerListTile(icon: Icons.list, label: 'Requests', onTap: () {}),
               drawerListTile(
                   icon: Icons.settings,
                   label: 'Settings',
                   onTap: () => context.push(Routes.SETTINGS)),
               drawerListTile(
-                  icon: Icons.policy_outlined, label: 'Policies', onTap: () {}),
+                  icon: Icons.policy_outlined,
+                  label: 'Policies',
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const WebViewScaffold(
+                          url: UIConst.policyUrl, label: 'Policy')))),
               drawerListTile(
-                  icon: Icons.share, label: 'Share App', onTap: () {}),
-              drawerListTile(icon: Icons.logout, label: 'Logout', onTap: () {}),
+                  icon: Icons.share,
+                  label: 'Share App',
+                  onTap: () => context.push(Routes.SHAREAPP)),
+              drawerListTile(
+                  icon: Icons.logout,
+                  label: 'Logout',
+                  onTap: () {
+                    bottomSheet(context: context, widget: const LogoutWidget());
+                  }),
             ],
           ),
         ),

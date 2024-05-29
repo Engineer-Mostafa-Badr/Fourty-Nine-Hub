@@ -3,11 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/maps/map_picker.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/features/RideRequest/domain/entity/address_search_params_entity.dart';
-
-import '../../../../common/widgets/dynamic/bottom_navigator.dart';
-import '../../../../common/widgets/dynamic/drawer.dart';
-import '../../../../common/widgets/dynamic/floating_button.dart';
-import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../cubit/riderequest_cubit.dart';
 import '../widgets/customer/createOrder/options_bottom_sheet.dart';
 

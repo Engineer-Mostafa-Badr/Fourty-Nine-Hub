@@ -88,6 +88,8 @@ dependencies:
     sdk: flutter
   flutter_localization: ^0.2.0
   flutter_card_swiper: ^7.0.1
+  webview_flutter: ^4.8.0
+  # share_plus: ^9.0.0
 
 dev_dependencies:
   flutter_test:
