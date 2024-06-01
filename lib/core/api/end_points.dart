@@ -1,6 +1,6 @@
 class EndPoints {
-  static const developmentBaseUrl = 'https://www.49dev.com';
-  static const productionBaseUrl = 'https://www.49dev.com';
+  static const developmentBaseUrl = 'https://49dev.com/api/v1';
+  static const productionBaseUrl = 'https://49dev.com/api/v1';
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';
 
   static const login = '/auth/login';

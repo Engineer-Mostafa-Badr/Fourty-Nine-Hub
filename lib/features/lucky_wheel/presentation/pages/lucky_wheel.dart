@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-
 import '../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/elevated_button.dart';
 

@@ -1,6 +1,8 @@
 abstract class Routes {
   Routes._();
   static const HOME = '/';
+    static const SUBCATEGORIES='/Subcategories';
+    static const ADS='/Subcategories/ADS';
   static const LUCKYWHEEL = '/LuckyWheel';
   static const COMPETITIONS = '/Competitions';
   static const WINNERS = '/Winners';
@@ -52,6 +54,8 @@ abstract class Routes {
 abstract class Paths {
   Paths._();
   static const HOME = '/';
+  static const SUBCATEGORIES='Subcategories';
+  static const ADS='ADS';
   static const LUCKYWHEEL = 'LuckyWheel';
   static const COMPETITIONS = 'Competitions';
   static const WINNERS = 'Winners';
@@ -97,4 +101,5 @@ abstract class Paths {
   static const SETTINGS = 'Settings';
   static const QURAAN = 'Quraan';
   static const AZKAAR = 'Azkaar';
+  
 }

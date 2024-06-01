@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 abstract class Styles {
 // text
   static TextStyle smallText(
-      {double fontSize = 8,
+      {double fontSize = 10,
       Color color = Colors.black,
       TextDecoration? decoration,
       FontWeight fontWeight = FontWeight.w400}) {
@@ -33,8 +33,6 @@ abstract class Styles {
       TextAlign textAlign = TextAlign.center,
       Color color = Colors.black,
       FontWeight fontWeight = FontWeight.w600}) {
-    return TextStyle(fontSize: fontSize, 
-    
-    color: color, fontWeight: fontWeight);
+    return TextStyle(fontSize: fontSize, color: color, fontWeight: fontWeight);
   }
 }

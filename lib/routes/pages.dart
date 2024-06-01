@@ -3,14 +3,14 @@ import 'package:fourtyninehub/features/RideRequest/presentation/cubit/ridereques
 import 'package:fourtyninehub/features/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account/presentation/pages/my_adds.dart';
 import 'package:fourtyninehub/features/account/presentation/pages/share_the_app.dart';
+import 'package:fourtyninehub/features/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/Food/presentation/pages/CustomerView/restaurant_details.dart';
@@ -61,6 +61,16 @@ class AppPages {
       path: Routes.HOME,
       builder: (context, state) => const FourtyNineView(),
       routes: <RouteBase>[
+        GoRoute(
+            path: Paths.SUBCATEGORIES,
+            name: Routes.SUBCATEGORIES,
+            builder: (context, state) => const SubCategoriesView(),
+            routes: [
+              GoRoute(
+                  path: Paths.ADS,
+                  name: Routes.ADS,
+                  builder: (context, state) => const AdsView())
+            ]),
         GoRoute(
           name: Routes.LOGIN,
           path: Paths.LOGIN,

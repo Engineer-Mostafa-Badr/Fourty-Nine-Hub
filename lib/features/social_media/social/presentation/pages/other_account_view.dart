@@ -141,12 +141,38 @@ class OtherAccountView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      AppButton(
-                          width: kToolbarHeight * 1.5,
-                          label: 'Chat',
-                          onPressed: () => context.push(Routes.CHAT)),
+                      PopupMenuButton(
+                          icon: Container(
+                            width: kToolbarHeight * 1.5,
+                            height: kToolbarHeight * .7,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: AppColors.SECONDARY_COLOR,
+                            ),
+                            child: Center(
+                                child: Label(
+                              text: 'Chat',
+                              style: Styles.mediumText(color: Colors.white),
+                            )),
+                          ),
+                          itemBuilder: (context) {
+                            return const [
+                              PopupMenuItem<int>(
+                                value: 0,
+                                child: Text("Normal"),
+                              ),
+                              PopupMenuItem<int>(
+                                value: 1,
+                                child: Text("Anonymous"),
+                              ),
+                            ];
+                          },
+                          onSelected: (value) {
+                            context.push(Routes.CHAT);
+                          }),
                       const Sizer(),
                       AppButton(
+                          height: kToolbarHeight * .5,
                           width: kToolbarHeight * 1.5,
                           label: 'Follow',
                           onPressed: () {})

@@ -43,7 +43,7 @@ class DrawerWidget extends StatelessWidget {
               drawerListTile(
                   icon: FontAwesomeIcons.quran,
                   label: 'Quraan',
-                  onTap: () => context.push(Routes.QURAAN)),
+                  onTap: () => context.push(Routes.REGISTERDRIVER)),
               drawerListTile(
                   icon: FontAwesomeIcons.book,
                   label: 'Azkaar',

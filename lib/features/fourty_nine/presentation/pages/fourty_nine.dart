@@ -401,100 +401,106 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   }
 
   Widget _buildServiceItem(MainCategoryEntity mainCategory) {
-    return isList
-        ? ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              // padding: const EdgeInsets.all(5),
-              // margin: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                // border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: CachedNetworkImage(
-                      imageUrl: mainCategory.bannerUrl ?? '',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Positioned.fill(
-                      child: Container(
-                    color: Colors.black.withOpacity(.2),
-                  )),
-                  Positioned.fill(
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Label(
-                                  text: arEn(
-                                    context,
-                                    mainCategory.nameAr,
-                                    mainCategory.nameEn,
-                                  ),
-                                  style: Styles.headerText(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Label(
-                                  text: '${mainCategory.total} Ads',
-                                  style: Styles.mediumText(color: Colors.white),
-                                )
-                              ],
-                            ),
-                          ),
-                          const Sizer(),
-                          const CircleAvatar(
-                            radius: 12,
-                            backgroundColor: AppColors.LIGHT_GRAY_COLOR,
-                            child: Icon(
-                              Icons.favorite,
-                              color: Colors.red,
-                              size: 16,
-                            ),
-                          )
-                        ],
+    return InkWell(
+      onTap: () => context.push(Routes.SUBCATEGORIES),
+      child: isList
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                // padding: const EdgeInsets.all(5),
+                // margin: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  // border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: CachedNetworkImage(
+                        imageUrl: mainCategory.bannerUrl ?? '',
+                        fit: BoxFit.cover,
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          )
-        : Column(
-            children: [
-              const CircleAvatar(
-                radius: 35,
-                backgroundColor: AppColors.PRIMARY_COLOR,
-                backgroundImage: NetworkImage(UIConst.imagePlaceHolder),
-              ),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                        text: arEn(
-                          context,
-                          mainCategory.nameAr,
-                          mainCategory.nameEn,
+                    Positioned.fill(
+                        child: Container(
+                      color: Colors.black.withOpacity(.2),
+                    )),
+                    Positioned.fill(
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Label(
+                                    text: arEn(
+                                      context,
+                                      mainCategory.nameAr,
+                                      mainCategory.nameEn,
+                                    ),
+                                    style: Styles.headerText(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Label(
+                                    text: '${mainCategory.total} Ads',
+                                    style:
+                                        Styles.mediumText(color: Colors.white),
+                                  )
+                                ],
+                              ),
+                            ),
+                            const Sizer(),
+                            const CircleAvatar(
+                              radius: 12,
+                              backgroundColor: AppColors.LIGHT_GRAY_COLOR,
+                              child: Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                                size: 16,
+                              ),
+                            )
+                          ],
                         ),
-                        style: Styles.mediumText(fontWeight: FontWeight.w700)),
-                    TextSpan(
-                        text: ' /${mainCategory.total} Ads',
-                        style: Styles.smallText(
-                            fontWeight: FontWeight.w700, color: Colors.grey)),
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ],
-          );
+            )
+          : Column(
+              children: [
+                const CircleAvatar(
+                  radius: 35,
+                  backgroundColor: AppColors.PRIMARY_COLOR,
+                  backgroundImage: NetworkImage(UIConst.imagePlaceHolder),
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text: arEn(
+                            context,
+                            mainCategory.nameAr,
+                            mainCategory.nameEn,
+                          ),
+                          style:
+                              Styles.mediumText(fontWeight: FontWeight.w700)),
+                      TextSpan(
+                          text: ' /${mainCategory.total} Ads',
+                          style: Styles.smallText(
+                              fontWeight: FontWeight.w700, color: Colors.grey)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+    );
   }
 }

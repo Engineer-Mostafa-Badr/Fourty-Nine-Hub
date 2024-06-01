@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import '../../../res/style/app_colors.dart';
 
 class GoogleAddsBanner extends StatelessWidget {
-  const GoogleAddsBanner({super.key});
+  final double margin;
+  const GoogleAddsBanner({super.key, this.margin = 5});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: kToolbarHeight,
       width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 5),
+      margin:  EdgeInsets.symmetric(horizontal: margin),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(5),

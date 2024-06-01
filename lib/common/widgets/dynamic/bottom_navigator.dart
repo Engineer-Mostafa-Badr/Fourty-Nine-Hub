@@ -24,7 +24,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         ? <BottomItemModel>[
             BottomItemModel(
                 icon: FontAwesomeIcons.bowlFood,
-                label: 'BroadCast',
+                label: 'Voice',
                 index: 0,
                 image: Assets.radio,
                 action: () => context.push(Routes.CLUBHOUSE)),
@@ -43,7 +43,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
                 action: () => context.push(Routes.CHAT)),
             BottomItemModel(
                 icon: FontAwesomeIcons.car,
-                label: 'Tinder',
+                label: 'Find',
                 index: 4,
                 image: Assets.social,
                 action: () => context.push(Routes.Tinder)),
@@ -82,7 +82,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
             : <BottomItemModel>[
                 BottomItemModel(
                     icon: FontAwesomeIcons.bowlFood,
-                    label: 'Club House',
+                    label: 'BroadCast',
                     index: 0,
                     image: Assets.voiceLive,
                     action: () => context.push(Routes.CLUBHOUSE)),
@@ -95,27 +95,33 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
                 // BottomItemModel(icon: FontAwesomeIcons.home, label: '', index: 2),
                 BottomItemModel(
                     icon: Icons.delivery_dining,
-                    label: 'Zoom',
+                    label: 'Meeting',
                     index: 3,
                     image: Assets.zoomMeeting,
                     action: () => context.push(Routes.ZOOM)),
                 BottomItemModel(
                     icon: FontAwesomeIcons.car,
-                    label: 'Twitter',
+                    label: 'Tweet',
                     index: 4,
                     image: Assets.twitter,
                     action: () => context.push(Routes.TWITTER)),
               ];
     return AnimatedBottomNavigationBar.builder(
         itemCount: pages.length,
-        height: kToolbarHeight * .8,
+        height: kToolbarHeight * .9,
         tabBuilder: (int index, bool isActive) {
           final item = pages[index];
           return Center(
             child: InkWell(
               onTap: () => item.action(),
-              child: SvgPicture.asset(item.image,
-                  height: 20, semanticsLabel: item.label),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(item.image,
+                      height: 20, semanticsLabel: item.label),
+                  Label(text: item.label),
+                ],
+              ),
             ),
           );
         },
