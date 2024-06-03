@@ -21,7 +21,8 @@ enum RideRequestStatusesEnum {
   isTimeAndDistanceLoaded,
   isCarTypesLoading,
   isCarTypesLoaded,
-  isCarTypesSelectionChanged
+  isCarTypesSelectionChanged,
+  isRequestSentSuccessfully
 }
 
 extension RiderequestStateX on RiderequestState {
@@ -57,6 +58,8 @@ extension RiderequestStateX on RiderequestState {
       status == RideRequestStatusesEnum.isCarTypesLoaded;
   bool get isCarTypesSelectionChanged =>
       status == RideRequestStatusesEnum.isCarTypesSelectionChanged;
+  bool get isRequestSentSuccessfully =>
+      status == RideRequestStatusesEnum.isRequestSentSuccessfully;
 }
 
 @immutable
@@ -75,7 +78,8 @@ class RiderequestState {
   final String? time;
   final bool autoAccept;
   final bool isAirConditioned;
-  final List<String>? selectedCarTypes;
+  final List<CarTypeModel>? carTypes;
+  final List<CarTypeModel>? selectedCarTypes;
   final Failure? failure;
 
   const RiderequestState({
@@ -93,6 +97,7 @@ class RiderequestState {
     this.time,
     this.distance,
     this.selectedCarTypes,
+    this.carTypes,
     this.failure,
   });
 
@@ -110,8 +115,9 @@ class RiderequestState {
     String? time,
     bool? autoAccept,
     bool? isAirConditioned,
-    List<String>? selectedCarTypes,
-    Failure? failure, 
+    List<CarTypeModel>? carTypes,
+    List<CarTypeModel>? selectedCarTypes,
+    Failure? failure,
   }) {
     return RiderequestState(
       status: status ?? this.status,
@@ -127,8 +133,9 @@ class RiderequestState {
       time: time ?? this.time,
       autoAccept: autoAccept ?? this.autoAccept,
       isAirConditioned: isAirConditioned ?? this.isAirConditioned,
+      carTypes: carTypes ?? this.carTypes,
       selectedCarTypes: selectedCarTypes ?? this.selectedCarTypes,
-      failure: failure?? this.failure,
+      failure: failure ?? this.failure,
     );
   }
 }

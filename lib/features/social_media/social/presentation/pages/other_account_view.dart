@@ -223,7 +223,7 @@ class OtherAccountView extends StatelessWidget {
                 children: [
                   _buildCounter(
                     value: '585 ',
-                    label: 'Following',
+                    label: 'Friends',
                   ),
                   const Sizer(),
                   _buildCounter(

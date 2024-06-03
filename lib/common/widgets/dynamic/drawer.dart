@@ -43,15 +43,25 @@ class DrawerWidget extends StatelessWidget {
               drawerListTile(
                   icon: FontAwesomeIcons.quran,
                   label: 'Quraan',
-                  onTap: () => context.push(Routes.REGISTERDRIVER)),
+                  onTap: () => context.push(Routes.QURAAN)),
               drawerListTile(
                   icon: FontAwesomeIcons.book,
                   label: 'Azkaar',
                   onTap: () => context.push(Routes.QURAAN)),
               drawerListTile(
+                  icon: Icons.star_rounded,
+                  label: 'Favourite Categories',
+                  onTap: () => context.push(Routes.FAVOURITECATEGORIES)),
+
+              drawerListTile(
                   icon: Icons.favorite,
-                  label: 'Favourite',
+                  label: 'Favourite Sub Categories',
+                  onTap: () => context.push(Routes.FAVOURITESUBCATEGORIES)),
+              drawerListTile(
+                  icon: FontAwesomeIcons.adn,
+                  label: 'Favourite Ads',
                   onTap: () => context.push(Routes.FAVOURITE)),
+              drawerListTile(icon: Icons.list, label: 'Lists', onTap: () {}),
               drawerListTile(
                   icon: Icons.ads_click,
                   label: 'My Ads',
@@ -61,6 +71,9 @@ class DrawerWidget extends StatelessWidget {
                   icon: Icons.settings,
                   label: 'Settings',
                   onTap: () => context.push(Routes.SETTINGS)),
+              drawerListTile(
+                  icon: Icons.privacy_tip, label: 'Privacy', onTap: () {}),
+
               drawerListTile(
                   icon: Icons.policy_outlined,
                   label: 'Policies',
@@ -92,24 +105,39 @@ class DrawerWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Column(
-            children: [
-              IconAppButton(
-                isCircle: true,
-                icon: Icons.person,
-                onPressed: () => context.push(Routes.LOGIN),
-              ),
-              Label(text: 'Login', style: Styles.mediumText()),
-            ],
-          ),
-          Column(
-            children: [
-              IconAppButton(
+          Expanded(
+            child: Column(
+              children: [
+                IconAppButton(
                   isCircle: true,
-                  icon: Icons.person_add,
-                  onPressed: () => context.push(Routes.REGISTER)),
-              Label(text: 'Register', style: Styles.mediumText()),
-            ],
+                  icon: Icons.person,
+                  onPressed: () => context.push(Routes.LOGIN),
+                ),
+                Label(text: 'Login', style: Styles.mediumText()),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                IconAppButton(
+                    isCircle: true,
+                    icon: Icons.person_add,
+                    onPressed: () => context.push(Routes.REGISTER)),
+                Label(text: 'Register', style: Styles.mediumText()),
+              ],
+            ),
+          ),
+          Expanded(
+            child: _buildRegisterButton(
+              context: context,
+              icon: Column(
+                children: [
+                  const CircleAvatar(child: Icon(Icons.person_pin)),
+                  Label(text: 'Options', style: Styles.mediumText()),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -388,35 +416,41 @@ class DrawerWidget extends StatelessWidget {
               )
             ],
           )),
-          PopupMenuButton(
-              icon: const Icon(Icons.more_vert),
-              itemBuilder: (context) {
-                return const [
-                  PopupMenuItem<int>(
-                    value: 0,
-                    child: Text("Register as Driver"),
-                  ),
-                  PopupMenuItem<int>(
-                    value: 1,
-                    child: Text("Register as Doctor"),
-                  ),
-                  PopupMenuItem<int>(
-                    value: 2,
-                    child: Text("Register as Restaurant"),
-                  ),
-                ];
-              },
-              onSelected: (value) {
-                if (value == 0) {
-                  context.push(Routes.REGISTERDRIVER);
-                } else if (value == 1) {
-                  context.push(Routes.REGISTERDRIVER);
-                } else if (value == 2) {
-                  context.push(Routes.REGISTERDRIVER);
-                }
-              })
+          _buildRegisterButton(
+              icon: const Icon(Icons.more_vert), context: context),
         ],
       ),
     );
+  }
+
+  Widget _buildRegisterButton(
+      {required Widget icon, required BuildContext context}) {
+    return PopupMenuButton(
+        icon: icon,
+        itemBuilder: (context) {
+          return const [
+            PopupMenuItem<int>(
+              value: 0,
+              child: Text("Driver"),
+            ),
+            PopupMenuItem<int>(
+              value: 1,
+              child: Text("Doctor"),
+            ),
+            PopupMenuItem<int>(
+              value: 2,
+              child: Text("Restaurant"),
+            ),
+          ];
+        },
+        onSelected: (value) {
+          if (value == 0) {
+            context.push(Routes.REGISTERDRIVER);
+          } else if (value == 1) {
+            context.push(Routes.REGISTERDRIVER);
+          } else if (value == 2) {
+            context.push(Routes.REGISTERDRIVER);
+          }
+        });
   }
 }

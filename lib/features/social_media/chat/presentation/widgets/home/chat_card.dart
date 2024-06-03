@@ -9,7 +9,8 @@ import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
 
 class ChatCard extends StatelessWidget {
-  const ChatCard({super.key});
+  final bool isSecret;
+  const ChatCard({super.key, this.isSecret = false});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +20,34 @@ class ChatCard extends StatelessWidget {
         onTap: () => context.push(Routes.CHATROOM),
         child: Row(
           children: [
-            const CircleAvatar(
-              backgroundColor: Colors.white,
-              backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+            SizedBox(
+              height: kToolbarHeight * .7,
+              width: kToolbarHeight * .7,
+              child: isSecret
+                  ? const CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        FontAwesomeIcons.ghost,
+                        color: Colors.grey,
+                      ))
+                  : const Stack(
+                      children: [
+                        Positioned.fill(
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            backgroundImage:
+                                NetworkImage(UIConst.profilePlaceHolder),
+                          ),
+                        ),
+                        Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: CircleAvatar(
+                              radius: 5,
+                              backgroundColor: Colors.green,
+                            ))
+                      ],
+                    ),
             ),
             const Sizer(),
             Expanded(
@@ -29,7 +55,7 @@ class ChatCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Label(
-                      text: 'Mohamed Gamal',
+                      text: isSecret ? 'Mxxx xxxl' : 'Mohamed Gamal',
                       style: Styles.mediumText(fontWeight: FontWeight.bold)),
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
@@ -56,7 +82,26 @@ class ChatCard extends StatelessWidget {
                 ],
               ),
             ),
-            Label(text: '5:57 PM', style: Styles.mediumText(color: Colors.grey))
+            Column(
+              children: [
+                Label(
+                    text: '5:57 PM',
+                    style: Styles.mediumText(color: Colors.grey)),
+                Row(
+                  children: [
+                    Label(
+                        text: '12',
+                        style: Styles.smallText(color: Colors.grey)),
+                    const Sizer(),
+                    const Icon(
+                      FontAwesomeIcons.eye,
+                      color: Colors.grey,
+                      size: 10,
+                    ),
+                  ],
+                )
+              ],
+            )
           ],
         ),
       ),

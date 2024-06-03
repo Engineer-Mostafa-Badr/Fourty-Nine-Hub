@@ -7,8 +7,10 @@ import 'package:fourtyninehub/features/RideRequest/data/models/ride_request_mode
 import 'package:fourtyninehub/features/RideRequest/domain/usecases/request/get_expected_price_use_case.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../data/models/car_type_model.dart';
 import '../../data/models/google_search_results.dart';
 import '../../domain/entity/address_search_params_entity.dart';
+import '../../domain/usecases/request/get_car_types_use_case.dart';
 import '../../domain/usecases/request/get_near_by_places_usecase.dart';
 
 part 'riderequest_state.dart';
@@ -20,9 +22,28 @@ class RiderequestCubit extends Cubit<RiderequestState> {
   final toAddressFocusNode = FocusNode();
   final GetNearByPlacesUseCase _nearByPlacesUseCase;
   final GetExpectedPriceUseCase _expectedPriceUseCase;
-
-  RiderequestCubit(this._nearByPlacesUseCase, this._expectedPriceUseCase)
+  final GetCarTypesUseCase _getCarTypesUseCase;
+  RiderequestCubit(this._nearByPlacesUseCase, this._expectedPriceUseCase,
+      this._getCarTypesUseCase)
       : super(const RiderequestState());
+
+// get required initial data
+  Future<void> loadData() async {
+    emit(state.copyWith(status: RideRequestStatusesEnum.loading));
+    // print('loaded');
+    try {
+      final carTypes =
+          await _getCarTypesUseCase.call('62c8ba9e8e28a58a3edf57e9');
+      carTypes.fold(
+          (failure) => state.copyWith(
+              failure: failure, status: RideRequestStatusesEnum.error),
+          (response) => state.copyWith(
+              status: RideRequestStatusesEnum.initState, carTypes: response));
+    } catch (e) {
+      state.copyWith(
+          status: RideRequestStatusesEnum.error, errorMessage: e.toString());
+    }
+  }
 
 // Select pickup location from the map
   Future<void> selectPickUpLocation(
@@ -88,13 +109,15 @@ class RiderequestCubit extends Cubit<RiderequestState> {
 
     response.fold(
         (failure) => emit(state.copyWith(
-            status: RideRequestStatusesEnum.error, failure: failure)),
+            status: RideRequestStatusesEnum.error,
+            errorMessage: 'Unable to get expected price',
+            failure: failure)),
         (response) => emit(state.copyWith(
             status: RideRequestStatusesEnum.isTimeAndDistanceLoaded,
             minimumPrice: response.price.toDouble(),
             offerPrice: response.price.toDouble(),
-            distance: response.distance,
-            time: response.duration)));
+            distance: response.displayedDistance,
+            time: response.displayedTime)));
   }
 
   // change autoaccept status

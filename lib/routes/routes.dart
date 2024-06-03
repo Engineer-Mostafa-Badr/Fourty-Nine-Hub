@@ -7,6 +7,7 @@ abstract class Routes {
   static const COMPETITIONS = '/Competitions';
   static const WINNERS = '/Winners';
   static const WALLET = '/Wallet';
+  static const WALLETHISTORY = '/Wallet/WalletHistory';
   static const SOCIAL = '/Social';
   static const OTHERSACCOUNT = '/Social/OthersAccount';
   static const REELS = '/Social/REELS';
@@ -45,6 +46,8 @@ abstract class Routes {
   static const REGISTERDRIVER = '/Register/register-driver';
   static const ACCOUNT = '/Account';
     static const FAVOURITE = '/Account/Favourite';
+    static const FAVOURITECATEGORIES = '/Account/FavouriteCategories';
+    static const FAVOURITESUBCATEGORIES = '/Account/FavouriteSubCategories';
     static const MYADDS = '/Account/Myadds';
   static const SHAREAPP = '/Account/ShareApp';
   static const NOTIFICATIONS = '/Account/Norifications';
@@ -60,6 +63,8 @@ abstract class Paths {
   static const COMPETITIONS = 'Competitions';
   static const WINNERS = 'Winners';
   static const WALLET = 'Wallet';
+    static const WALLETHISTORY = 'WalletHistory';
+
   static const SOCIAL = 'Social';
   static const OTHERSACCOUNT = 'OthersAccount';
   static const MAZADAT = 'Mazadat';
@@ -95,6 +100,9 @@ abstract class Paths {
   static const REGISTERDRIVER = 'register-driver';
   static const ACCOUNT = 'Account';
   static const FAVOURITE = 'Favourite';
+   static const FAVOURITECATEGORIES = 'FavouriteCategories';
+    static const FAVOURITESUBCATEGORIES = 'FavouriteSubCategories';
+
   static const MYADDS = 'Myadds';
   static const SHAREAPP = 'ShareApp';
   static const NOTIFICATIONS = 'Norifications';

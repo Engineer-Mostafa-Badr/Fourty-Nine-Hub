@@ -9,6 +9,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:semicircle_indicator/semicircle_indicator.dart';
 
+import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 
 class ShareTheApp extends StatelessWidget {
@@ -77,21 +78,7 @@ class ShareTheApp extends StatelessWidget {
   }
 
   Widget _buildRefrenceNumberWidget() {
-    return const SemicircularIndicator(
-        color: AppColors.PRIMARY_COLOR,
-        progress: .3,
-        bottomPadding: 0,
-        child: Column(
-          children: [
-            ProfileImage(
-              accountId: 0,
-              size: 30,
-              withBorder: true,
-            ),
-            Sizer(),
-            BadgedLabel(label: 'Ref#1303003'),
-          ],
-        ));
+    return Image.asset(Assets.share);
   }
 
   Widget _buildLinkWidget() {

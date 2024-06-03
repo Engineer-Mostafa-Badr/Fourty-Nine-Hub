@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../widgets/home/chat_card.dart';
 import '../widgets/room/message_card.dart';
 
 import '../../../../../res/style/app_colors.dart';

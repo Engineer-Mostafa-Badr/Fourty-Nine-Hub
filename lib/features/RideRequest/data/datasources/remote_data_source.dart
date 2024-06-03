@@ -13,6 +13,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../core/api/api_consumer.dart';
 import '../../../../core/error/failure.dart';
+import '../models/car_type_model.dart';
 import '../models/driver_review_model.dart';
 import '../models/report_model.dart';
 
@@ -54,6 +55,9 @@ abstract class RideRemoteDataSource {
 
   Future<Either<Failure, ExpectedPriceModel>> getExpectedPrice(
       {required ExpectedPriceParams params});
+  Future<Either<Failure, List<CarTypeModel>>> getCarTypes({
+    required String subCategoryId,
+  });
 }
 
 class RideRemoteDataSourceImpl implements RideRemoteDataSource {
@@ -177,9 +181,28 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
   @override
   Future<Either<Failure, ExpectedPriceModel>> getExpectedPrice(
       {required ExpectedPriceParams params}) async {
-    final response = await _apiConsumer.get(EndPoints.expectedPrice,
-        queryParameters: params.toJson());
+    final response =
+        await _apiConsumer.post(EndPoints.expectedPrice, data: params.toJson());
     return response.fold((failure) => Left(failure),
-        (data) => Right(ExpectedPriceModel.fromJson(data)));
+        (data) => Right(ExpectedPriceModel.fromJson(data['data'])));
+  }
+
+  @override
+  Future<Either<Failure, List<CarTypeModel>>> getCarTypes({
+    required String subCategoryId,
+    int page = 1,
+    int limit = 1,
+  }) async {
+    final response = await _apiConsumer.get(EndPoints.carTypes,
+        queryParameters: {
+          "subCategoryId": subCategoryId,
+          "page": page,
+          "limit": limit
+        });
+    return response.fold(
+        (failure) => Left(failure),
+        (data) => Right((data['data']['cars'] as List)
+            .map((e) => CarTypeModel.fromJson(e))
+            .toList()));
   }
 }
