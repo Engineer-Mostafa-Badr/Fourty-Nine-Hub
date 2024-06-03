@@ -14,10 +14,12 @@ import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 
 class CompetitionView extends StatelessWidget {
+  const CompetitionView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BackAppBar(),
+      appBar: const BackAppBar(),
       body: ListView(children: [
         winnersBanner(context: context),
         competionBanner(),

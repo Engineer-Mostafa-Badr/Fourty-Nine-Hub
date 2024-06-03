@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/wallet_widget.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/notifications/data/models/notification_model.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_card.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 
+import '../../../../res/assets/assets.dart';
 import '../../../../res/style/styles.dart';
 
 class NotificationView extends StatelessWidget {
@@ -22,20 +26,42 @@ class NotificationView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Label(
-                  text: 'Notifications',
-                  style: Styles.headerText(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Label(
+                      text: 'Notifications',
+                      style: Styles.headerText(),
+                    ),
+                    TextAppButton(
+                        label: 'Clear All',
+                        onPressed: () {
+                          showAreYouSure(
+                              title: 'Alert',
+                              subTitle:
+                                  'Are you sure you want to clear all notifications?',
+                              action: () {},
+                              context: context);
+                        }),
+                  ],
                 ),
                 const WalletWidget(),
-                const TabBar(tabs: [
+                TabBar(tabs: [
                   Tab(
-                    text: 'Social',
+                    icon: SvgPicture.asset(Assets.social,
+                        height: 20, semanticsLabel: 'social'),
                   ),
                   Tab(
-                    text: 'Service',
+                    icon: Image.asset(
+                      Assets.hand,
+                      height: 20,
+                    ),
                   ),
                   Tab(
-                    text: '49',
+                    icon: Image.asset(
+                      Assets.logo,
+                      height: 20,
+                    ),
                   ),
                 ]),
                 Expanded(

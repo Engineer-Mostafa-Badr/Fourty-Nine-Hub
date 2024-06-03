@@ -89,10 +89,6 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                         child:
                             Label(text: 'Search', style: Styles.mediumText()),
                       ),
-                      const Icon(
-                        Icons.sort,
-                        size: 16,
-                      ),
                     ],
                   ),
                 ),

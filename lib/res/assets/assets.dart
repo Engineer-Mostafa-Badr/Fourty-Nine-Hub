@@ -6,6 +6,8 @@ abstract class Assets {
   static String logo = 'assets/images/logo_600.png';
   static String tinder = 'assets/images/tinder.svg';
   static String social = 'assets/images/social.svg';
+  static String hand = 'assets/images/hand.png';
+  static String share = 'assets/images/share.png';
   static String message = 'assets/images/message.svg';
   static String ride = 'assets/images/ride_icon.svg';
   static String food = 'assets/images/burger_icon.svg';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -16,48 +17,48 @@ class NotificationCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(5),
       decoration: const BoxDecoration(color: Colors.white),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+      child: Row(
         children: [
-          Row(
+          const SizedBox(
+            height: kToolbarHeight,
+            width: kToolbarHeight,
+            child: Stack(
+              children: [
+                Positioned(
+                    top: 0,
+                    left: 0,
+                    child: ProfileImage(size: 25, accountId: 0)),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.green,
+                    radius: 12,
+                    child: Icon(
+                      Icons.comment,
+                      size: 15,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          const Sizer(),
+          Expanded(
+              child: Label(
+            text: item.message,
+            maxLines: 2,
+          )),
+          Column(
             children: [
-              const SizedBox(
-                height: kToolbarHeight,
-                width: kToolbarHeight,
-                child: Stack(
-                  children: [
-                    Positioned(
-                        top: 0,
-                        left: 0,
-                        child: ProfileImage(size: 25, accountId: 0)),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.green,
-                        radius: 12,
-                        child: Icon(
-                          Icons.comment,
-                          size: 15,
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+              IconAppButton(icon: Icons.clear, onPressed: () {}),
+              Label(
+                text: '2 min',
+                style: Styles.mediumText(color: Colors.grey),
               ),
-              const Sizer(),
-              Expanded(
-                  child: Label(
-                text: item.message,
-                maxLines: 2,
-              )),
             ],
-          ),
-          Label(
-            text: '2 min',
-            style: Styles.mediumText(color: Colors.grey),
-          ),
+          )
         ],
       ),
     );

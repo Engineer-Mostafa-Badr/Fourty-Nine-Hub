@@ -116,8 +116,8 @@ class MyAccountView extends StatelessWidget {
                       _buildAccountCounterItem(label: 'posts', value: '34'),
                       _buildAccountCounterItem(
                           label: 'followers', value: '169'),
-                      _buildAccountCounterItem(
-                          label: 'following', value: '366'),
+                      _buildAccountCounterItem(label: 'Friends', value: '366'),
+                      _buildAccountCounterItem(label: 'Views', value: '10K'),
                     ],
                   )),
             ],

@@ -49,6 +49,15 @@ class MessageCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Label(
+                      text: '12', style: Styles.smallText(color: Colors.white)),
+                  const Sizer(),
+                  const Icon(
+                    FontAwesomeIcons.eye,
+                    color: Colors.white,
+                    size: 10,
+                  ),
+                  const Sizer(),
+                  Label(
                       text: '3:16 PM',
                       style: Styles.smallText(color: Colors.white)),
                   const Sizer(),
@@ -75,7 +84,9 @@ class MessageCard extends StatelessWidget {
           backgroundColor: Colors.white,
           backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
         ),
-        const Sizer(width: 5,),
+        const Sizer(
+          width: 5,
+        ),
         Container(
           width: width / 1.5,
           padding: const EdgeInsets.all(10),

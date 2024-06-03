@@ -16,6 +16,8 @@ import 'package:go_router/go_router.dart';
 import '../features/Food/presentation/pages/CustomerView/restaurant_details.dart';
 import '../features/Food/presentation/pages/food_view.dart';
 import '../features/RideRequest/presentation/pages/ride_request_view.dart';
+import '../features/account/presentation/pages/favourite_category_view.dart';
+import '../features/account/presentation/pages/favourite_subcategory_view.dart';
 import '../features/health_care/presentation/pages/VisitaView.dart';
 import '../features/health_care/presentation/pages/customer_view/DoctorDetails.dart';
 import '../features/health_care/presentation/pages/customer_view/DoctorsList.dart';
@@ -45,6 +47,7 @@ import '../features/social_media/club_house/presentation/widgets/clubHouseRoom.d
 import '../features/social_media/reels/presentation/pages/Reel_view.dart';
 import '../features/social_media/social/presentation/pages/Social_home.dart';
 import '../features/social_media/social/presentation/pages/other_account_view.dart';
+import '../features/wallet/presentation/pages/wallet_history.dart';
 import '../features/wallet/presentation/pages/wallet_view.dart';
 import '../features/youtube/presentation/pages/play_video.dart';
 import '../features/youtube/presentation/pages/youtube.dart';
@@ -129,10 +132,16 @@ class AppPages {
         ),
         // WalletView
         GoRoute(
-          path: Paths.WALLET,
-          name: Routes.WALLET,
-          builder: (context, state) => WalletView(),
-        ),
+            path: Paths.WALLET,
+            name: Routes.WALLET,
+            builder: (context, state) => const WalletView(),
+            routes: [
+              GoRoute(
+                path: Paths.WALLETHISTORY,
+                name: Routes.WALLETHISTORY,
+                builder: (context, state) => const WalletHistory(),
+              ),
+            ]),
         GoRoute(
             path: Paths.ACCOUNT,
             name: Routes.ACCOUNT,
@@ -154,6 +163,15 @@ class AppPages {
                   path: Paths.FAVOURITE,
                   name: Routes.FAVOURITE,
                   builder: (context, state) => const FavouriteView()),
+              GoRoute(
+                  path: Paths.FAVOURITECATEGORIES,
+                  name: Routes.FAVOURITECATEGORIES,
+                  builder: (context, state) => const FavouriteCategoryView()),
+              GoRoute(
+                  path: Paths.FAVOURITESUBCATEGORIES,
+                  name: Routes.FAVOURITESUBCATEGORIES,
+                  builder: (context, state) =>
+                      const FavouriteSubCategoryView()),
               GoRoute(
                   path: Paths.MYADDS,
                   name: Routes.MYADDS,
