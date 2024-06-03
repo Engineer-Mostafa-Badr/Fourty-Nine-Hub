@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_entity.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/buttons/text_button.dart';
@@ -13,7 +14,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../../routes/routes.dart';
 
 class ReelAccountInfo extends StatelessWidget {
-  final ReelModel item;
+  final ReelEntity item;
+
   const ReelAccountInfo({super.key, required this.item});
 
   @override
@@ -29,17 +31,18 @@ class ReelAccountInfo extends StatelessWidget {
             ),
             const Sizer(),
             TextAppButton(
-              label: item.userName,
+              label: item.user?.fullName ?? '',
               style: Styles.mediumText(
                   fontWeight: FontWeight.bold, color: Colors.white),
               onPressed: () => context.push(Routes.OTHERSACCOUNT),
             ),
             const Sizer(),
             AppButton(
-                height: kToolbarHeight * .4,
-                padding: 20,
-                label: 'Follow',
-                onPressed: () {})
+              height: kToolbarHeight * .4,
+              padding: 20,
+              label: 'Follow',
+              onPressed: () {},
+            )
           ],
         ),
         ReadMoreLabel(

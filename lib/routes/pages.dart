@@ -5,8 +5,12 @@ import 'package:fourtyninehub/features/account/presentation/pages/my_adds.dart';
 import 'package:fourtyninehub/features/account/presentation/pages/share_the_app.dart';
 import 'package:fourtyninehub/features/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
+import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
+import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
@@ -16,6 +20,7 @@ import 'package:go_router/go_router.dart';
 import '../features/Food/presentation/pages/CustomerView/restaurant_details.dart';
 import '../features/Food/presentation/pages/food_view.dart';
 import '../features/RideRequest/presentation/pages/ride_request_view.dart';
+import '../features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
 import '../features/account/presentation/pages/favourite_category_view.dart';
 import '../features/account/presentation/pages/favourite_subcategory_view.dart';
 import '../features/health_care/presentation/pages/VisitaView.dart';
@@ -33,6 +38,7 @@ import '../features/installments/presentation/pages/installment_details.dart';
 import '../features/installments/presentation/pages/installment_order_details.dart';
 import '../features/installments/presentation/pages/installment_orders_list.dart';
 import '../features/installments/presentation/pages/installment_view.dart';
+import '../features/lucky_wheel/presentation/controllers/wheel_cubit/wheel_cubit.dart';
 import '../features/lucky_wheel/presentation/pages/lucky_wheel.dart';
 import '../features/mazadat/presentation/pages/Mazad_details.dart';
 import '../features/mazadat/presentation/pages/Mazadat_view.dart';
@@ -85,13 +91,19 @@ class AppPages {
         GoRoute(
           name: Routes.REGISTER,
           path: Paths.REGISTER,
-          builder: (context, state) => const RegisterView(),
+          builder: (context, state) => BlocProvider<RegisterCubit>(
+            create: (_) => serviceLocator(),
+            child: const RegisterView(),
+          ),
           routes: [
             GoRoute(
               name: Routes.VERIFYMAIL,
               path: Paths.VERIFYMAIL,
-              builder: (context, state) => RegisterVerifyOTP(
-                email: state.extra as String,
+              builder: (context, state) => BlocProvider<VerifyOtpCubit>(
+                create: (context) => serviceLocator(),
+                child: RegisterVerifyOTP(
+                  email: state.extra as String,
+                ),
               ),
             ),
             // DriverRegister
@@ -106,7 +118,20 @@ class AppPages {
         GoRoute(
           name: Routes.LUCKYWHEEL,
           path: Paths.LUCKYWHEEL,
-          builder: (context, state) => LuckyWheelView(),
+          builder: (context, state) => MultiBlocProvider(
+            providers: [
+              BlocProvider<WheelCubit>(
+                create: (_) => serviceLocator(),
+              ),
+              BlocProvider<SpinWheelCubit>(
+                create: (_) => serviceLocator(),
+              ),
+              BlocProvider<WheelWalletCubit>(
+                create: (_) => serviceLocator(),
+              ),
+            ],
+            child: const LuckyWheelView(),
+          ),
         ),
         // CompetitionView
         GoRoute(
@@ -194,7 +219,14 @@ class AppPages {
               GoRoute(
                   path: Paths.REELS,
                   name: Routes.REELS,
-                  builder: (context, state) => ReelView(),
+                  builder: (context, state) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider<ExploreReelsCubit>(
+                            create: (_) => serviceLocator(),
+                          ),
+                        ],
+                        child: const ReelView(),
+                      ),
                   routes: [
                     GoRoute(
                       path: Paths.MUSICREELS,

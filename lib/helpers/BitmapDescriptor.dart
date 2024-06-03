@@ -33,7 +33,7 @@ Future<Uint8List> createImageFromWidget(Widget widget, {Size? logicalSize, requi
     view: view,
     child: RenderPositionedBox(alignment: Alignment.center, child: repaintBoundary),
     configuration: ViewConfiguration(
-      size: logicalSize,
+      //size: logicalSize,
       devicePixelRatio: 1.0,
     ),
   );

@@ -1,12 +1,16 @@
 import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/remote_data_source/auth_remote_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/login_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_otp_use_case.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
@@ -44,7 +48,7 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<Failure, void>> verifyOTP(
+  Future<Either<Failure, UserTokensEntity>> verifyOTP(
     VerifyOTPParams verifyOTPParams,
   ) {
     return _remoteDataSource.verifyOTP(verifyOTPParams);
@@ -53,6 +57,50 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either<Failure, double>> getWelcomeGift() {
     return _remoteDataSource.getWelcomeGift();
+  }
+
+  @override
+  Future<Either<Failure, UserTokensEntity>> signInWithFacebook() async {
+    // TODO: implement signInWithFacebook
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, UserTokensEntity>> signInWithGoogle() async {
+    try {
+      final result = await GoogleSignIn().signIn();
+      if (result != null) {
+        final googleAuth = await result.authentication;
+        final tokenResult = await _remoteDataSource.socialLogin(
+          await _loginWithCredentials(
+            GoogleAuthProvider.credential(
+              accessToken: googleAuth.accessToken,
+              idToken: googleAuth.idToken,
+            ),
+          ),
+        );
+        return tokenResult.fold(
+          (failure) => Left(failure),
+          (token) => Right(token),
+        );
+      }
+      return const Left(SocialLoginFailure('Google sign in failed'));
+    } catch (e) {
+      return Left(SocialLoginFailure(e));
+    }
+  }
+
+  Future<SocialLoginParams> _loginWithCredentials(
+    OAuthCredential credential,
+  ) async {
+    final user = await FirebaseAuth.instance.signInWithCredential(credential);
+    final idToken = await user.user!.getIdToken();
+    return SocialLoginParams(idToken!);
+  }
+
+  @override
+  Future<Either<Failure, void>> resendOTP(ResendOTPParams params) {
+    return _remoteDataSource.resendOTP(params);
   }
 }
 //enum: ['google', 'facebook', 'local', 'apple']

@@ -270,7 +270,9 @@ class DrawerWidget extends StatelessWidget {
 
   Widget competitionSubscription({required BuildContext context}) {
     return InkWell(
-      onTap: () => context.go(Routes.LUCKYWHEEL),
+      onTap: () => context.go(
+        context.read<UserCubit>().isLoggedIn ? Routes.LUCKYWHEEL : Routes.LOGIN,
+      ),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(10),

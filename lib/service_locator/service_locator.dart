@@ -5,7 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
+import 'package:fourtyninehub/service_locator/reels_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
+import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
 
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -82,5 +84,11 @@ class DI {
 
     // Fourty-Nine
     FourtyNineServiceLocator.execute(serviceLocator);
+
+    // Wheel
+    WheelServiceLocator.execute(serviceLocator);
+
+    // Reels
+    ReelsServiceLocator.execute(serviceLocator);
   }
 }

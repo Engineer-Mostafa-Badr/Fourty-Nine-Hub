@@ -21,6 +21,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
+import '../../controllers/user_cubit/user_cubit.dart';
 
 class RegisterView extends StatelessWidget {
   const RegisterView({super.key});
@@ -38,6 +39,9 @@ class RegisterView extends StatelessWidget {
             Routes.VERIFYMAIL,
             extra: registerCubit.emailTextController.text,
           );
+        } else if (state is RegisterSuccess) {
+          context.read<UserCubit>().getUser();
+          context.go(Routes.HOME);
         }
       },
       child: Scaffold(
@@ -97,7 +101,41 @@ class RegisterView extends StatelessWidget {
                       registerCubit.confirmPasswordTextController,
                   passwordController: registerCubit.passwordTextController,
                 ),
-                const Sizer(),
+                const Sizer(height: 20),
+                StatefulBuilder(
+                  builder: (context, setState) {
+                    return Row(
+                      children: [
+                        Sizer(width: 20),
+                        Text('Gender : ',
+                            style: Styles.headerText(fontSize: 14)),
+                        Expanded(
+                          child: CheckboxListTile(
+                            value: registerCubit.isMale,
+                            title: const Label(text: 'Male'),
+                            onChanged: (value) {
+                              setState(() {
+                                registerCubit.isMale = true;
+                              });
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: CheckboxListTile(
+                            value: !registerCubit.isMale,
+                            title: const Label(text: 'Female'),
+                            onChanged: (value) {
+                              setState(() {
+                                registerCubit.isMale = false;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                const Sizer(height: 30),
                 DefaultButton(
                   label: 'Register',
                   onPressed: registerCubit.register,
