@@ -1,4 +1,7 @@
+import 'package:fourtyninehub/features/authentication/domain/use_cases/facebook_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_welcome_gift_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_otp_use_case.dart';
 import 'package:get_it/get_it.dart';
 import '../features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import '../features/authentication/data/data_sources/remote_data_source/auth_remote_data_source.dart';
@@ -59,12 +62,18 @@ class AuthServiceLocator {
     serviceLocator.registerFactory(() => GetTokensUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => RegisterUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => VerifyOTPUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => ResendOTPUseCase(serviceLocator()));
     serviceLocator
         .registerFactory(() => GetWelcomeGiftUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => GoogleSignInUseCase(serviceLocator()));
+    serviceLocator
+        .registerFactory(() => FacebookSignInUseCase(serviceLocator()));
 
     // auth cubits
     serviceLocator.registerFactory<LoginCubit>(
       () => LoginCubit(
+        serviceLocator(),
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
@@ -82,10 +91,17 @@ class AuthServiceLocator {
       () => RegisterCubit(
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
       )..getWelcomeGift(),
     );
     serviceLocator.registerFactory<VerifyOtpCubit>(
       () => VerifyOtpCubit(
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
         serviceLocator(),
       ),
     );

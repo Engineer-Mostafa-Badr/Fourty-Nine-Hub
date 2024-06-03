@@ -103,12 +103,12 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         style: widget.style ??
             context
                 .sizeHelper(
-                    mobileLarge: Theme.of(context).textTheme.bodyText1!,
-                    tabletSmall: Theme.of(context).textTheme.bodyText2!,
-                    tabletNormal: Theme.of(context).textTheme.bodyText2!,
+                    mobileLarge: Theme.of(context).textTheme.bodySmall!,
+                    tabletSmall: Theme.of(context).textTheme.bodySmall!,
+                    tabletNormal: Theme.of(context).textTheme.bodySmall!,
                     desktopSmall: Theme.of(context)
                         .textTheme
-                        .bodyText2!
+                        .bodySmall!
                         .copyWith(fontSize: 21.0))
                 .copyWith(color: Colors.black),
         textCapitalization: widget.textCapitalization,
@@ -126,19 +126,19 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
               .sizeHelper(
                 mobileLarge: Theme.of(context)
                     .textTheme
-                    .bodyText1!
+                    .bodySmall!
                     .copyWith(fontSize: 10.0),
                 tabletSmall: Theme.of(context)
                     .textTheme
-                    .bodyText1!
+                    .bodySmall!
                     .copyWith(fontSize: 12.0),
                 tabletNormal: Theme.of(context)
                     .textTheme
-                    .bodyText1!
+                    .bodySmall!
                     .copyWith(fontSize: 12.0),
                 desktopSmall: Theme.of(context)
                     .textTheme
-                    .bodyText1!
+                    .bodySmall!
                     .copyWith(fontSize: 20.0),
               )
               .copyWith(

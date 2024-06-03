@@ -23,6 +23,7 @@ class RegisterParams extends Equatable {
   final String email;
   final String password;
   final String confirmPassword;
+  final bool isMale;
 
   const RegisterParams({
     required this.firstName,
@@ -30,14 +31,16 @@ class RegisterParams extends Equatable {
     required this.email,
     required this.password,
     required this.confirmPassword,
+    required this.isMale,
   });
 
   Future<Map<String, dynamic>> toJson() async => {
-        'first_name': firstName,
-        'last_name': lastName,
+        'firstName': firstName,
+        'lastName': lastName,
         'email': email,
         'password': password,
         'confirmPassword': confirmPassword,
+        'gender': isMale ? 'male' : 'female',
         'fcm': await getFcmToken(),
         'deviceId': await getDeviceId(),
       };

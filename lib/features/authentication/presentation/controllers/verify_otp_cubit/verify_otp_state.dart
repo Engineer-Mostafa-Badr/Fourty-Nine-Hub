@@ -14,3 +14,13 @@ final class VerifyOtpError extends VerifyOtpState {
 
   VerifyOtpError(this.failure);
 }
+
+final class ResendOtpLoading extends VerifyOtpState {}
+
+final class ResendOtpSuccess extends VerifyOtpState {}
+
+final class ResendOtpError extends VerifyOtpState {
+  final Failure failure;
+
+  ResendOtpError(this.failure);
+}

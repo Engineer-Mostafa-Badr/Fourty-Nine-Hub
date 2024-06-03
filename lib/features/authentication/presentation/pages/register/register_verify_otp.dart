@@ -11,6 +11,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../routes/routes.dart';
+import '../../controllers/user_cubit/user_cubit.dart';
 
 class RegisterVerifyOTP extends StatelessWidget {
   final String email;
@@ -27,9 +28,13 @@ class RegisterVerifyOTP extends StatelessWidget {
       listener: (context, state) {
         if (state is VerifyOtpError) {
           showErrorMessage(context, getFailureMessage(state.failure, context));
+        } else if (state is ResendOtpError) {
+          showErrorMessage(context, getFailureMessage(state.failure, context));
+        } else if (state is ResendOtpSuccess) {
+          showSuccessMessage(context, 'resend otp success');
         } else if (state is VerifyOtpSuccess) {
-          showSuccessMessage(context, 'OTP verified successfully');
-          context.go(Routes.LOGIN);
+          context.read<UserCubit>().getUser();
+          context.go(Routes.HOME);
         }
       },
       child: Scaffold(

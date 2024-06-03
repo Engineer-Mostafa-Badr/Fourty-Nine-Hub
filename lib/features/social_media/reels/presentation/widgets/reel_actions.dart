@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,10 +11,10 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../social/presentation/widgets/posts/post_comments.dart';
-import '../../data/models/reel_model.dart';
 
 class ReelActions extends StatelessWidget {
-  final ReelModel item;
+  final ReelEntity item;
+
   const ReelActions({super.key, required this.item});
 
   @override
@@ -27,8 +28,9 @@ class ReelActions extends StatelessWidget {
           color: Colors.white,
         ),
         Label(
-            text: item.numberOfLikes.toString(),
-            style: Styles.mediumText(color: Colors.white)),
+          text: item.numberOfLikes.toString(),
+          style: Styles.mediumText(color: Colors.white),
+        ),
         const Sizer(),
         IconAppButton(
           icon: Icons.comment,

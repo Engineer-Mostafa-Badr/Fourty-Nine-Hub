@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../data/models/reel_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_entity.dart';
 import 'reel_account_info.dart';
 import 'package:video_player/video_player.dart';
 
 import 'reel_actions.dart';
 
 class ReelCard extends StatefulWidget {
-  final ReelModel item;
+  final ReelEntity item;
 
   const ReelCard({super.key, required this.item});
 
@@ -15,76 +15,74 @@ class ReelCard extends StatefulWidget {
 }
 
 class _ReelCardState extends State<ReelCard> {
-  late VideoPlayerController _controller;
-
-  Future<ClosedCaptionFile> _loadCaptions() async {
-    final String fileContents = await DefaultAssetBundle.of(context)
-        .loadString('assets/bumble_bee_captions.vtt');
-    return WebVTTCaptionFile(
-        fileContents); // For vtt files, use WebVTTCaptionFile
-  }
+  VideoPlayerController? _controller;
 
   @override
   void initState() {
     super.initState();
     _controller = VideoPlayerController.networkUrl(
-      Uri.parse(widget.item.contentUrl),
-
-      // closedCaptionFile: _loadCaptions(),
+      Uri.parse(
+        widget.item.videoUrl,
+      ),
       videoPlayerOptions: VideoPlayerOptions(
         mixWithOthers: true,
       ),
     );
 
-    _controller.addListener(() {
+    _controller!.addListener(() {
       setState(() {});
     });
 
-    _controller.setLooping(true);
-    _controller.initialize();
-    _controller.play();
+    _controller!.setLooping(true);
+    _controller!.initialize();
+    _controller!.play();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
+      alignment: Alignment.bottomCenter,
       children: <Widget>[
-        Expanded(
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: <Widget>[
-              Positioned.fill(
-                  child: Center(
-                      child: AspectRatio(
-                          aspectRatio: _controller.value.aspectRatio,
-                          child: VideoPlayer(
-                            _controller,
-                          )))),
-              ClosedCaption(text: _controller.value.caption.text),
-              _ControlsOverlay(controller: _controller),
-              VideoProgressIndicator(_controller,
-                  colors: const VideoProgressColors(playedColor: Colors.white),
-                  allowScrubbing: true),
-              Positioned(
-                  bottom: 20,
-                  left: 10,
-                  right: kToolbarHeight,
-                  child: ReelAccountInfo(item: widget.item)),
-              Positioned(
-                  bottom: 10,
-                  right: 10,
-                  child: ReelActions(
-                    item: widget.item,
-                  ))
-            ],
+        Positioned.fill(
+          child: Center(
+            child: _controller == null
+                ? const SizedBox.shrink()
+                : AspectRatio(
+                    aspectRatio: _controller!.value.aspectRatio,
+                    child: VideoPlayer(
+                      _controller!,
+                    ),
+                  ),
           ),
         ),
+        if (_controller?.value.caption.text != null) ...[
+          ClosedCaption(text: _controller!.value.caption.text),
+          _ControlsOverlay(controller: _controller!),
+          VideoProgressIndicator(
+            _controller!,
+            colors: const VideoProgressColors(playedColor: Colors.white),
+            allowScrubbing: true,
+          ),
+        ],
+        Positioned(
+          bottom: 20,
+          left: 10,
+          right: kToolbarHeight,
+          child: ReelAccountInfo(item: widget.item),
+        ),
+        Positioned(
+          bottom: 10,
+          right: 10,
+          child: ReelActions(
+            item: widget.item,
+          ),
+        )
       ],
     );
   }

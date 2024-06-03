@@ -1,114 +1,85 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/features/lucky_wheel/domain/entities/wheel_entity.dart';
+import 'package:fourtyninehub/features/lucky_wheel/domain/entities/wheel_wallet_entity.dart';
+import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
+import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_cubit/wheel_cubit.dart';
+import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
+
 import '../../../../common/widgets/stateless/appbar/back_appbar.dart';
-import '../../../../common/widgets/stateless/buttons/elevated_button.dart';
+import '../../../../core/enums/wheel.dart';
+import '../../domain/entities/wheel_item_entity.dart';
 
-class LuckyWheelView extends StatefulWidget {
-  LuckyWheelView({super.key});
-
-  @override
-  State<LuckyWheelView> createState() => _LuckyWheelViewState();
-}
-
-class _LuckyWheelViewState extends State<LuckyWheelView> {
-  StreamController<int> controller = StreamController<int>();
-
-  var selectedIdea = "";
-
-  List<String> prizes = [
-    '1K Points',
-    '100 Point',
-    '300 Points',
-    '2k Points',
-    '500 Points'
-  ];
-
-  List<FortuneItem> fortunelist = [];
-
-  void setValue(value) {
-    selectedIdea = prizes[value];
-  }
-
-  @override
-  void initState() {
-    prizes.forEach((prize) {
-      fortunelist.add(
-        FortuneItem(
-          child: Text(prize),
-        ),
-      );
-    });
-    super.initState();
-  }
+class LuckyWheelView extends StatelessWidget {
+  const LuckyWheelView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final spinWheelCubit = BlocProvider.of<SpinWheelCubit>(context);
     return Scaffold(
-      appBar: BackAppBar(
-        label: 'lucky wheel',
+      appBar: const BackAppBar(
+        label: 'Lucky Wheel',
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: FortuneWheel(
-                selected: controller.stream,
-                animateFirst: false,
-                duration: const Duration(seconds: 3),
-                hapticImpact: HapticImpact.heavy,
-                onAnimationEnd: () {
-                  showDialog(
-                      barrierDismissible: true,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Center(
-                          child: AlertDialog(
-                            scrollable: false,
-                            title: const Center(child: Text("You Win!")),
-                            content: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  Text(
-                                    selectedIdea,
-                                    style: const TextStyle(fontSize: 22),
-                                  ),
-                                  ElevatedAppButton(
-                                    label: 'back',
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ],
-                              ),
+      body: BlocBuilder<WheelCubit, BasicState<WheelEntity>>(
+        builder: (context, state) {
+          if (state.status != StateStatus.success) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return BlocBuilder<SpinWheelCubit, BasicState<WheelItemEntity>>(
+            builder: (_, priceState) => Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                children: [
+                  BlocBuilder<WheelWalletCubit, BasicState<WheelWalletEntity>>(
+                    builder: (_, state) => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          'Balance: ${state.data?.amount ?? 0} L.E',
+                        ),
+                        Text(
+                          'Points: ${state.data?.points ?? 0}',
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: FortuneWheel(
+                      selected: spinWheelCubit.controller.stream,
+                      animateFirst: false,
+                      duration: const Duration(seconds: 3),
+                      hapticImpact: HapticImpact.heavy,
+                      onAnimationEnd: () {
+                        spinWheelCubit.showPrize(context);
+                        context.read<WheelWalletCubit>().getWheelWallet();
+                      },
+                      items: state.data!.items
+                          .map(
+                            (e) => FortuneItem(
+                              child: Text(e.type == WheelItemTypes.point
+                                  ? '${e.value} Points'
+                                  : '${e.value} L.E'),
                             ),
-                          ),
-                        );
-                      });
-                },
-
-                onFocusItemChanged: (value) {
-                  setValue(value);
-                },
-
-                // selected: controller.stream,
-                items: fortunelist,
+                          )
+                          .toList(),
+                    ),
+                  ),
+                  AppButton(
+                    height: 50,
+                    width: 300,
+                    label: 'Spin',
+                    onPressed: () => spinWheelCubit.spin(state.data!),
+                  ),
+                  const SizedBox(height: 30),
+                ],
               ),
             ),
-            AppButton(
-              height: 50,
-              width: 300,
-              label: 'Spin',
-              onPressed: () async {
-                controller.add(
-                  Fortune.randomInt(0, fortunelist.length),
-                );
-              },
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

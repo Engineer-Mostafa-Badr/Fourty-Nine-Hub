@@ -3,8 +3,10 @@ import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_tokens_model.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/login_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_otp_use_case.dart';
 
 abstract class AuthRemoteDataSource {
@@ -12,10 +14,17 @@ abstract class AuthRemoteDataSource {
 
   Future<Either<Failure, UserTokensModel>> login(LoginParams loginParams);
 
+  Future<Either<Failure, UserTokensModel>> socialLogin(
+      SocialLoginParams params);
+
   Future<Either<Failure, void>> register(RegisterParams registerParams);
 
-  Future<Either<Failure, void>> verifyOTP(
+  Future<Either<Failure, UserTokensModel>> verifyOTP(
     VerifyOTPParams verifyOTPParams,
+  );
+
+  Future<Either<Failure, void>> resendOTP(
+    ResendOTPParams params,
   );
 
   Future<Either<Failure, double>> getWelcomeGift();
@@ -34,7 +43,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   ) async {
     final result = await _apiConsumer.post(
       EndPoints.login,
-      data: loginParams.toJson(),
+      data: await loginParams.toJson(),
     );
     return result.fold(
       (failure) => Left(failure),
@@ -61,7 +70,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, void>> verifyOTP(
+  Future<Either<Failure, UserTokensModel>> verifyOTP(
     VerifyOTPParams verifyOTPParams,
   ) async {
     final result = await _apiConsumer.post(
@@ -70,7 +79,11 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     );
     return result.fold(
       (failure) => Left(failure),
-      (response) => const Right(null),
+      (response) => Right(
+        UserTokensModel.fromJson(
+          response['data'],
+        ),
+      ),
     );
   }
 
@@ -89,6 +102,35 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       (response) => Right(
         double.parse(response['gift'].toString()),
       ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, UserTokensModel>> socialLogin(
+      SocialLoginParams params) async {
+    final result = await _apiConsumer.post(
+      EndPoints.socialLogin,
+      data: await params.toJson(),
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) => Right(
+        UserTokensModel.fromJson(
+          response['data'],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> resendOTP(ResendOTPParams params) async {
+    final result = await _apiConsumer.put(
+      EndPoints.resendOTP,
+      data: params.toJson(),
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) => const Right(null),
     );
   }
 }

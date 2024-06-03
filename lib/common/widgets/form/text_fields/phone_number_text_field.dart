@@ -35,11 +35,11 @@ class PhoneTextFormField extends StatelessWidget {
     final textStyle = context
         .sizeHelper(
             mobileLarge:
-                Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0),
-            tabletSmall: Theme.of(context).textTheme.bodyText2!,
-            tabletNormal: Theme.of(context).textTheme.bodyText2!,
+                Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 14.0),
+            tabletSmall: Theme.of(context).textTheme.bodySmall!,
+            tabletNormal: Theme.of(context).textTheme.bodySmall!,
             desktopSmall:
-                Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 21.0))
+                Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 21.0))
         .copyWith(color: Colors.black);
     return Container(
       margin: margin,
@@ -62,19 +62,19 @@ class PhoneTextFormField extends StatelessWidget {
               .sizeHelper(
                 mobileLarge: Theme.of(context)
                     .textTheme
-                    .bodyText1!
+                    .bodySmall!
                     .copyWith(fontSize: 10.0),
                 tabletSmall: Theme.of(context)
                     .textTheme
-                    .bodyText1!
+                    .bodySmall!
                     .copyWith(fontSize: 12.0),
                 tabletNormal: Theme.of(context)
                     .textTheme
-                    .bodyText1!
+                    .bodySmall!
                     .copyWith(fontSize: 12.0),
                 desktopSmall: Theme.of(context)
                     .textTheme
-                    .bodyText1!
+                    .bodySmall!
                     .copyWith(fontSize: 20.0),
               )
               .copyWith(color: Colors.black),

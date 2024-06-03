@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
-import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
 
 import '../error/failure.dart';
 import 'end_points.dart';
@@ -189,12 +188,20 @@ class BaseApiConsumer extends ApiConsumer {
         return ServerFailure(
           message: e.response?.data['message'] as String,
         );
-      } else if (e.response?.data is Map &&
-          e.response?.data['error'] is String) {
-        final error = e.response?.data['error'] as String;
-        return error.toLowerCase().contains('otp')
-            ? InvalidOtpFailure(error)
-            : ServerFailure(message: error);
+      } else if (e.response?.data is Map && e.response?.data['error'] is Map) {
+        final error = e.response?.data['error'] as Map;
+        List<String>? errors;
+        if (error['data'] is List) {
+          final data = e.response?.data['error']['data'] as List;
+          errors = data
+              .map((e) => e['message'] as String)
+              .whereType<String>()
+              .toList();
+        }
+        return ServerFailure(
+          message: error['message'] as String,
+          errors: errors,
+        );
       } else if (e.response?.data is Map &&
           e.response?.data['data'] is String) {
         return ServerFailure(
@@ -207,29 +214,25 @@ class BaseApiConsumer extends ApiConsumer {
 
   Future<void> refreshToken() async {
     if (_token == null) return;
-    try {
-      final result = await post(
-        EndPoints.refreshToken,
-        data: {
-          'refreshToken': _token!.refreshToken,
-        },
-      );
-      result.fold(
-        (_) {},
-        (response) {
-          final accessToken = response['data']['accessToken'] as String;
-          final newToken = _token!.copyWith(accessToken: accessToken);
-          attachToken(newToken);
-          _authLocalDataSource.saveUserTokens(newToken.toModel());
-        },
-      );
-    } catch (e) {
-      if (e is DioException && e.response?.statusCode == 401) {
+
+    final result = await post(
+      EndPoints.refreshToken,
+      data: {
+        'refreshToken': _token!.refreshToken,
+      },
+    );
+    result.fold(
+      (_) {
         _authLocalDataSource.saveUserTokens(null);
         attachToken(null);
-      }
-      rethrow;
-    }
+      },
+      (response) {
+        final accessToken = response['data']['accessToken'] as String;
+        final newToken = _token!.copyWith(accessToken: accessToken);
+        attachToken(newToken);
+        _authLocalDataSource.saveUserTokens(newToken.toModel());
+      },
+    );
   }
 
   @override
