@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/address_search_params_model.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/car_models_model.dart';
+import 'package:fourtyninehub/features/RideRequest/data/models/car_type_model.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/driver_review_model.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/expected_price_model.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/google_search_results.dart';
@@ -119,5 +120,11 @@ class RideRequestRepoImpl implements RideRequestRepo {
   Future<Either<Failure, ExpectedPriceModel>> getExpectedPrice(
       {required ExpectedPriceParams params}) {
     return _remoteDataSource.getExpectedPrice(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<CarTypeModel>>> getCarTypes(
+      {required String subCategoryId}) {
+    return _remoteDataSource.getCarTypes(subCategoryId: subCategoryId);
   }
 }

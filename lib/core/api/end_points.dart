@@ -13,5 +13,6 @@ class EndPoints {
   static const getMainCategories = '/categories/main';
 
   // ride request
-  static const expectedPrice = '/services/ride/get-expected-price';
+  static const expectedPrice = '/ride/trips/expected/price';
+  static const carTypes = '/cars';
 }

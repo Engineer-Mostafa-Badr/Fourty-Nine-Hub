@@ -36,6 +36,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       EndPoints.login,
       data: loginParams.toJson(),
     );
+
     return result.fold(
       (failure) => Left(failure),
       (response) => Right(

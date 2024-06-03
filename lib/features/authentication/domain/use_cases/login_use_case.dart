@@ -28,6 +28,7 @@ class LoginParams extends Equatable {
   Map<String, dynamic> toJson() => {
         'email': email,
         'password': password,
+        'fcmToken': 'fcmToken',
       };
 
   @override

@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../../../../core/messages/messages.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/const.dart';
 import '../../../../../../res/style/styles.dart';
@@ -27,7 +29,17 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
     final rideCubit = context.read<RiderequestCubit>();
 
     return BlocConsumer<RiderequestCubit, RiderequestState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state.error) {
+          showErrorMessage(
+            context,
+            getFailureMessage(
+              state.failure!,
+              context,
+            ),
+          );
+        }
+      },
       builder: (context, state) {
         return Container(
           width: double.infinity,
@@ -98,15 +110,12 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
               if (state.isCameraMoving || state.fromAddress != null)
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const TestScreen()));
-                    // bottomSheet(
-                    //   widget: const SelectDropOffPoints(),
-                    //   isScrollControlled: true,
-                    //   context: context,
-                    // );
+                   
+                     bottomSheet(
+                      widget: const SelectDropOffPoints(),
+                      isScrollControlled: true,
+                      context: context,
+                    );
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -288,7 +297,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                     onTap: () {
                       bottomSheet(
                         widget: const RideOptions(),
-                        isScrollControlled: true,
+                        // isScrollControlled: true,
                         context: context,
                       );
                     },
@@ -314,18 +323,3 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
   }
 }
 
-class TestScreen extends StatelessWidget {
-  const TestScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<RiderequestCubit, RiderequestState>(
-        builder: (context, state) {
-      return Scaffold(
-        body: Center(
-          child: Text(state.fromAddress?.address ?? ''),
-        ),
-      );
-    });
-  }
-}

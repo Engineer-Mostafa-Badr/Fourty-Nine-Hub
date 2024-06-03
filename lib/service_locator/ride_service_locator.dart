@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/features/RideRequest/data/datasources/remote_data_source.dart';
 import 'package:fourtyninehub/features/RideRequest/data/repositories/ride_request_repo_impl.dart';
+import 'package:fourtyninehub/features/RideRequest/domain/usecases/request/get_car_types_use_case.dart';
 import 'package:fourtyninehub/features/RideRequest/domain/usecases/request/get_expected_price_use_case.dart';
 import 'package:fourtyninehub/features/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:get_it/get_it.dart';
@@ -18,11 +19,14 @@ class RideServiceLocator {
     serviceLocator.registerFactory<RiderequestCubit>(() => RiderequestCubit(
           serviceLocator(),
           serviceLocator(),
-        ));
+          serviceLocator(),
+        )..loadData());
 
     serviceLocator.registerFactory<GetNearByPlacesUseCase>(
         () => GetNearByPlacesUseCase(serviceLocator()));
     serviceLocator.registerFactory<GetExpectedPriceUseCase>(
         () => GetExpectedPriceUseCase(serviceLocator()));
+    serviceLocator.registerFactory<GetCarTypesUseCase>(
+        () => GetCarTypesUseCase(serviceLocator()));
   }
 }

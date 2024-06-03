@@ -100,18 +100,20 @@ class BaseApiConsumer extends ApiConsumer {
       );
       return Right(result.data as Map<String, dynamic>);
     } catch (e) {
-      if (e is DioException &&
-          e.response?.statusCode == 401 &&
-          isTokenAttached) {
-        return refreshToken().then(
-          (_) => get(
-            url,
-            queryParameters: queryParameters,
-          ),
-        );
-      } else {
+            // TODO reset condition after stable backend
+
+      // if (e is DioException &&
+      //     e.response?.statusCode == 401 &&
+      //     isTokenAttached) {
+      //   return refreshToken().then(
+      //     (_) => get(
+      //       url,
+      //       queryParameters: queryParameters,
+      //     ),
+      //   );
+      // } else {
         return Left(_getFailure(e));
-      }
+      // }
     }
   }
 
@@ -130,19 +132,22 @@ class BaseApiConsumer extends ApiConsumer {
       );
       return Right(result.data as Map<String, dynamic>);
     } catch (e) {
-      if (e is DioException &&
-          e.response?.statusCode == 401 &&
-          isTokenAttached) {
-        return refreshToken().then(
-          (_) => post(
-            url,
-            queryParameters: queryParameters,
-            data: data,
-          ),
-        );
-      } else {
-        return Left(_getFailure(e));
-      }
+      // TODO reset condition after stable backend
+      // if (e is DioException &&
+      //     e.response?.statusCode == 401 &&
+      //     isTokenAttached && false) {
+      //   return refreshToken().then(
+      //     (_) => post(
+      //       url,
+      //       queryParameters: queryParameters,
+      //       data: data,
+      //     ),
+      //   );
+      // } else {
+                      return Left(_getFailure(e));
+
+      // }
+
     }
   }
 
