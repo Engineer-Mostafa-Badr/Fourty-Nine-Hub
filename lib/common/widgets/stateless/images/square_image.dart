@@ -17,11 +17,13 @@ class SquareImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius ?? 0),
-      child: Image(
-        image: source,
-        fit: fit ?? BoxFit.cover,
+      child: SizedBox(
         height: height,
         width: width,
+        child: Image(
+          image: source,
+          fit: fit ?? BoxFit.cover,
+        ),
       ),
     );
   }

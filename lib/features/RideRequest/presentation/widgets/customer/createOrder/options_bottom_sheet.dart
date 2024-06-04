@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/features/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:go_router/go_router.dart';
 
@@ -54,64 +55,59 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Sizer(),
-              SizedBox(
-                height: kTextTabBarHeight * 1,
-                child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {},
-                        onDoubleTap: () {},
-                        child: Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: index == 0
-                                  ? AppColors.PRIMARY_COLOR
-                                  : AppColors.DARK_GRAY_COLOR,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                      child: Image.network(
-                                    UIConst.imagePlaceHolder,
-                                    fit: BoxFit.cover,
-                                  )),
-                                  Label(
-                                      text: 'Private',
-                                      style: Styles.mediumText()),
-                                ],
+              // Text('${state.subCategories?.length ?? 0}'),
+              if (state.subCategories?.isNotEmpty ?? false)
+                SizedBox(
+                  height: kTextTabBarHeight * 1,
+                  child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        final subCategory = state.subCategories![index];
+                        return InkWell(
+                          onTap: () => rideCubit.changeSubCategorySelection(
+                              item: subCategory),
+                          onDoubleTap: () {},
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: state.subCategory == subCategory
+                                    ? AppColors.PRIMARY_COLOR
+                                    : AppColors.DARK_GRAY_COLOR,
                               ),
-                              if (index == 0)
-                                const Icon(
-                                  Icons.info_outline,
-                                  color: AppColors.PRIMARY_COLOR,
-                                  size: 15,
-                                )
-                            ],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                        child: SquareImage(
+                                      fit: BoxFit.cover,
+                                      width: 50,
+                                      source: NetworkImage(subCategory.image),
+                                    )),
+                                    Label(
+                                        text: subCategory.nameEn,
+                                        style: Styles.mediumText()),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) => const Sizer(
-                          height: 15,
-                          width: 15,
-                        ),
-                    itemCount: 4),
-              ),
+                        );
+                      },
+                      separatorBuilder: (context, index) => const Sizer(),
+                      itemCount: state.subCategories?.length ?? 0),
+                ),
               const Sizer(),
               if (state.isCameraMoving || state.fromAddress != null)
                 InkWell(
                   onTap: () {
-                   
-                     bottomSheet(
+                    bottomSheet(
                       widget: const SelectDropOffPoints(),
                       isScrollControlled: true,
                       context: context,
@@ -322,4 +318,3 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
     );
   }
 }
-

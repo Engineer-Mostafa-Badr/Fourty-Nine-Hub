@@ -24,4 +24,9 @@ class EndPoints {
   // ride request
   static const expectedPrice = '/ride/trips/expected/price';
   static const carTypes = '/cars';
+  static String subCategories({required String mainCategoryId}) {
+    return '/categories/subcategories/$mainCategoryId';
+  }
+
+  static const riderInfoRegister = '/ride/riders/register';
 }

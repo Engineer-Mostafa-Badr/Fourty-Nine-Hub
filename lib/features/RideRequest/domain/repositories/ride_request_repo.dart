@@ -6,16 +6,17 @@ import 'package:fourtyninehub/features/RideRequest/data/models/ride_offer_model.
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../core/error/failure.dart';
+import '../../../subcategories/data/models/sub_category_model.dart';
 import '../../data/models/car_models_model.dart';
 import '../../data/models/car_type_model.dart';
 import '../../data/models/expected_price_model.dart';
 import '../../data/models/google_search_results.dart';
 import '../../data/models/params/expected_price_params.dart';
 import '../../data/models/ride_request_model.dart';
-import '../../data/models/sub_category_model.dart';
+
 
 abstract class RideRequestRepo {
-  Future<Either<Failure, SubCategoryModel>> getSubCategories();
+  Future<Either<Failure, List<SubCategoryModel>>> getSubCategories({required String mainCategoryId});
   Future<Either<Failure, double>> getTripPrice(
       {required RideRequestModel request});
   Future<Either<Failure, List<CarModelsModel>>> getCarModels();

@@ -11,6 +11,8 @@ class RideOptions extends StatelessWidget {
   const RideOptions({super.key});
   @override
   Widget build(BuildContext context) {
+    final rideCubit = context.read<RiderequestCubit>();
+
     return BlocBuilder<RiderequestCubit, RiderequestState>(
         builder: (context, state) {
       if (state.loading) {
@@ -35,7 +37,10 @@ class RideOptions extends StatelessWidget {
                     child: Label(
                         text: 'Air Conditioner',
                         style: Styles.mediumText(fontWeight: FontWeight.bold))),
-                Switch(value: false, onChanged: (v) {})
+                Switch(
+                    value: state.isAirConditioned,
+                    onChanged: (v) =>
+                        rideCubit.changeAirConditionValue(value: v))
               ],
             ),
             Label(
@@ -52,7 +57,11 @@ class RideOptions extends StatelessWidget {
                           child: Label(
                               text: carType?.brand ?? '',
                               style: Styles.mediumText())),
-                      Switch(value: true, onChanged: (v) {}),
+                      Switch(
+                          value: state.selectedCarTypes?.contains(carType!) ??
+                              false,
+                          onChanged: (v) =>
+                              rideCubit.selectCarType(item: carType!)),
                     ],
                   );
                 },

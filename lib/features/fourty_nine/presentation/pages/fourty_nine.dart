@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/localization/localization.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
@@ -22,6 +24,7 @@ import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/dynamic/wallet_widget.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../res/style/app_colors.dart';
+import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../controllers/main_categories_cubit/parent_main_categories_cubit.dart';
 import '../widgets/advertise_your_company.dart';
 import '../widgets/announce_widget.dart';
@@ -54,7 +57,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         child: Column(
           children: [
             const AnnounceWidget(),
-            const Sizer(),
+            _buildRegisterAsServiceProviderWidget(),
+            // const Sizer(),
             const WalletWidget(
               margin: 5,
             ),
@@ -204,6 +208,18 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   icon: Icons.grid_4x4_outlined, isSelected: !isList)),
         ],
       ),
+    );
+  }
+
+  Widget _buildRegisterAsServiceProviderWidget() {
+    return Container(
+      margin: const EdgeInsets.all(5),
+      child: AppButton(
+          label: 'Join Our Team, Register Now!',
+          icon: Icons.account_circle,
+          onPressed: () => context.push(context.read<UserCubit>().isLoggedIn
+              ? Routes.REGISTERDRIVER
+              : Routes.LOGIN)),
     );
   }
 

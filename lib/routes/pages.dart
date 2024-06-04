@@ -44,6 +44,7 @@ import '../features/mazadat/presentation/pages/Mazad_details.dart';
 import '../features/mazadat/presentation/pages/Mazadat_view.dart';
 import '../features/notifications/presentation/pages/notification_view.dart';
 import '../features/quraan/presentation/pages/quraan_view.dart';
+import '../features/register/driver_register/presentation/cubit/driver_register_cubit.dart';
 import '../features/register/driver_register/presentation/pages/driver_register_view.dart';
 import '../features/social_media/chat/presentation/pages/Chat_room.dart';
 import '../features/social_media/chat/presentation/pages/Chat_view.dart';
@@ -110,7 +111,10 @@ class AppPages {
             GoRoute(
               name: Routes.REGISTERDRIVER,
               path: Paths.REGISTERDRIVER,
-              builder: (context, state) => const DriverRegister(),
+              builder: (context, state) => BlocProvider<DriverRegisterCubit>(
+                create: (_) => serviceLocator(),
+                child: const DriverRegister(),
+              ),
             ),
           ],
         ),

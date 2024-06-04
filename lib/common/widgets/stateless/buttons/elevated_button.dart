@@ -9,21 +9,22 @@ class ElevatedAppButton extends StatelessWidget {
   final Function onPressed;
   final IconData? icon;
   final double? radius;
+  final Color? backColor;
 
-  const ElevatedAppButton({
-    super.key,
-    this.radius,
-    required this.label,
-    required this.onPressed,
-    this.icon,
-  });
+  const ElevatedAppButton(
+      {super.key,
+      this.radius,
+      required this.label,
+      required this.onPressed,
+      this.icon,
+      this.backColor = AppColors.PRIMARY_COLOR});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () => onPressed(),
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.PRIMARY_COLOR,
+        backgroundColor: backColor ?? AppColors.PRIMARY_COLOR,
       ),
       child: icon != null
           ? RichText(

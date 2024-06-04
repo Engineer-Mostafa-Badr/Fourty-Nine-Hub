@@ -8,17 +8,18 @@ import 'package:fourtyninehub/features/RideRequest/data/models/google_search_res
 import 'package:fourtyninehub/features/RideRequest/data/models/params/expected_price_params.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/ride_offer_model.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/ride_request_model.dart';
-import 'package:fourtyninehub/features/RideRequest/data/models/sub_category_model.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../core/api/api_consumer.dart';
 import '../../../../core/error/failure.dart';
+import '../../../subcategories/data/models/sub_category_model.dart';
 import '../models/car_type_model.dart';
 import '../models/driver_review_model.dart';
 import '../models/report_model.dart';
 
 abstract class RideRemoteDataSource {
-  Future<Either<Failure, SubCategoryModel>> getSubCategories();
+  Future<Either<Failure, List<SubCategoryModel>>> getSubCategories(
+      {required String mainCategoryId});
 
   Future<Either<Failure, double>> getTripPrice(
       {required RideRequestModel request});
@@ -139,9 +140,13 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, SubCategoryModel>> getSubCategories() {
-    // TODO: implement getSubCategories
-    throw UnimplementedError();
+  Future<Either<Failure, List<SubCategoryModel>>> getSubCategories(
+      {required String mainCategoryId}) async {
+    final response = await _apiConsumer
+        .get(EndPoints.subCategories(mainCategoryId: mainCategoryId) , queryParameters: {
+          'page':2,
+        });
+    return response.fold((failure) => Left(failure), (response) => Right((response['data']['subcategories'] as List).map((e) => SubCategoryModel.fromJson(e)).toList()));
   }
 
   @override

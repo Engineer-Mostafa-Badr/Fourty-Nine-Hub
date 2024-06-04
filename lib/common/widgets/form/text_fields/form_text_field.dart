@@ -11,7 +11,7 @@ class FormTextField extends StatefulWidget {
   final bool? obsecure;
   final bool? enabled;
   final bool? required;
-  final Function(String) action;
+  final Function(String)? action;
   final Widget? prefix, suffix;
   final String? hint, label, info;
   final TextInputType? type;
@@ -30,7 +30,7 @@ class FormTextField extends StatefulWidget {
   const FormTextField(
       {super.key,
       this.initialValue,
-      required this.action,
+       this.action,
       this.obsecure,
       this.prefix,
       this.hint,

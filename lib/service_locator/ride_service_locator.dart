@@ -2,11 +2,13 @@ import 'package:fourtyninehub/features/RideRequest/data/datasources/remote_data_
 import 'package:fourtyninehub/features/RideRequest/data/repositories/ride_request_repo_impl.dart';
 import 'package:fourtyninehub/features/RideRequest/domain/usecases/request/get_car_types_use_case.dart';
 import 'package:fourtyninehub/features/RideRequest/domain/usecases/request/get_expected_price_use_case.dart';
+import 'package:fourtyninehub/features/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
 import 'package:fourtyninehub/features/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/RideRequest/domain/repositories/ride_request_repo.dart';
 import '../features/RideRequest/domain/usecases/request/get_near_by_places_usecase.dart';
+import '../features/register/driver_register/presentation/cubit/driver_register_cubit.dart';
 
 class RideServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
@@ -20,7 +22,16 @@ class RideServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
         )..loadData());
+
+    serviceLocator
+        .registerFactory<DriverRegisterCubit>(() => DriverRegisterCubit(
+              serviceLocator(),
+              serviceLocator(),
+            )..loadData());
+
+    // DriverRegisterCubit
 
     serviceLocator.registerFactory<GetNearByPlacesUseCase>(
         () => GetNearByPlacesUseCase(serviceLocator()));
@@ -28,5 +39,7 @@ class RideServiceLocator {
         () => GetExpectedPriceUseCase(serviceLocator()));
     serviceLocator.registerFactory<GetCarTypesUseCase>(
         () => GetCarTypesUseCase(serviceLocator()));
+    serviceLocator.registerFactory<GetSubCategoriesUseCase>(
+        () => GetSubCategoriesUseCase(serviceLocator()));
   }
 }

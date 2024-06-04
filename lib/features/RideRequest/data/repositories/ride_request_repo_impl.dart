@@ -9,11 +9,12 @@ import 'package:fourtyninehub/features/RideRequest/data/models/params/expected_p
 import 'package:fourtyninehub/features/RideRequest/data/models/report_model.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/ride_offer_model.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/ride_request_model.dart';
-import 'package:fourtyninehub/features/RideRequest/data/models/sub_category_model.dart';
+
 import 'package:fourtyninehub/features/RideRequest/domain/repositories/ride_request_repo.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
 
 import '../../../../core/error/failure.dart';
+import '../../../subcategories/data/models/sub_category_model.dart';
 import '../datasources/remote_data_source.dart';
 
 class RideRequestRepoImpl implements RideRequestRepo {
@@ -100,8 +101,8 @@ class RideRequestRepoImpl implements RideRequestRepo {
   }
 
   @override
-  Future<Either<Failure, SubCategoryModel>> getSubCategories() {
-    return _remoteDataSource.getSubCategories();
+  Future<Either<Failure, List<SubCategoryModel>>> getSubCategories({required String mainCategoryId}) {
+    return _remoteDataSource.getSubCategories(mainCategoryId: mainCategoryId);
   }
 
   @override

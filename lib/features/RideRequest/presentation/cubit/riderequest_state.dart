@@ -66,7 +66,8 @@ extension RiderequestStateX on RiderequestState {
 class RiderequestState {
   final RideRequestStatusesEnum status;
   final bool? isPaymentRequired;
-
+  final List<SubCategoryModel>? subCategories;
+  final SubCategoryModel? subCategory;
   final RideRequestModel? request;
   final AddressSearchParamsEntity? fromAddress;
   final AddressSearchParamsEntity? toAddress;
@@ -99,6 +100,8 @@ class RiderequestState {
     this.selectedCarTypes,
     this.carTypes,
     this.failure,
+    this.subCategories,
+    this.subCategory
   });
 
   RiderequestState copyWith({
@@ -118,12 +121,15 @@ class RiderequestState {
     List<CarTypeModel>? carTypes,
     List<CarTypeModel>? selectedCarTypes,
     Failure? failure,
+    List<SubCategoryModel>? subCategories,
+    SubCategoryModel? subCategory,
   }) {
     return RiderequestState(
+      subCategories: subCategories ?? this.subCategories,
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       isPaymentRequired: isPaymentRequired ?? this.isPaymentRequired,
-      request: request ?? this.request,
+    request: request ?? this.request,
       fromAddress: fromAddress ?? this.fromAddress,
       toAddress: toAddress ?? this.toAddress,
       nearByPlaces: nearByPlaces ?? this.nearByPlaces,
@@ -136,6 +142,7 @@ class RiderequestState {
       carTypes: carTypes ?? this.carTypes,
       selectedCarTypes: selectedCarTypes ?? this.selectedCarTypes,
       failure: failure ?? this.failure,
+      subCategory: subCategory??this.subCategory,
     );
   }
 }
