@@ -1,0 +1,28 @@
+{
+    "status":true,
+    "message":null,
+    "data":{
+        "sub_categories":[
+            {
+                "id":1,
+                "name":"Taxi",
+                "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY61A56uaiLPMPRTANVI_mGgAlTGcQIuf4NF2dCdLTKw&s"
+            },
+            {
+                "id":2,
+                "name":"Women Only",
+                "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY61A56uaiLPMPRTANVI_mGgAlTGcQIuf4NF2dCdLTKw&s"
+            },
+            {
+                "id":2,
+                "name":"Come with me",
+                "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY61A56uaiLPMPRTANVI_mGgAlTGcQIuf4NF2dCdLTKw&s"
+            },
+            {
+                "id":3,
+                "name":"Pick Me",
+                "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY61A56uaiLPMPRTANVI_mGgAlTGcQIuf4NF2dCdLTKw&s"
+            }
+        ]
+    }
+}

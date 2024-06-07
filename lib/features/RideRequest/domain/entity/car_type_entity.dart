@@ -1,26 +1,22 @@
 class CarTypeEntity {
-  final String sId;
+  final int id;
   final  String brand;
   final  String model;
    final String year;
    final String type;
-   final String subCategory;
-   final String mainCategory;
-   final String createdAt;
-   final String updatedAt;
+   final int subCategory;
+
 
   CarTypeEntity(
       {
         
-       required this.sId,
+       required this.id,
       required  this.brand,
       required  this.model,
       required  this.year,
       required  this.type,
        required this.subCategory,
-      required  this.mainCategory,
-      required  this.createdAt,
-       required this.updatedAt});
+      });
 
  
 }

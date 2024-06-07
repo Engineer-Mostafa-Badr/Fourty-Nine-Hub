@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/address_search_params_model.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/car_models_model.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/expected_price_model.dart';
@@ -8,6 +9,7 @@ import 'package:fourtyninehub/features/RideRequest/data/models/google_search_res
 import 'package:fourtyninehub/features/RideRequest/data/models/params/expected_price_params.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/ride_offer_model.dart';
 import 'package:fourtyninehub/features/RideRequest/data/models/ride_request_model.dart';
+import 'package:fourtyninehub/res/assets/jsons.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../core/api/api_consumer.dart';
@@ -62,7 +64,7 @@ abstract class RideRemoteDataSource {
 }
 
 class RideRemoteDataSourceImpl implements RideRemoteDataSource {
-  final ApiConsumer _apiConsumer;
+  final JsonParser _apiConsumer;
 
   const RideRemoteDataSourceImpl(this._apiConsumer);
 
@@ -142,11 +144,13 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
   @override
   Future<Either<Failure, List<SubCategoryModel>>> getSubCategories(
       {required String mainCategoryId}) async {
-    final response = await _apiConsumer
-        .get(EndPoints.subCategories(mainCategoryId: mainCategoryId) , queryParameters: {
-          'page':2,
-        });
-    return response.fold((failure) => Left(failure), (response) => Right((response['data']['subcategories'] as List).map((e) => SubCategoryModel.fromJson(e)).toList()));
+    final response = await _apiConsumer.get(Jsons.subCategories);
+
+    return response.fold(
+        (failure) => Left(failure),
+        (data) => Right((data['data']['sub_categories'] as List)
+            .map((e) => SubCategoryModel.fromJson(e))
+            .toList()));
   }
 
   @override
@@ -198,7 +202,7 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
     int page = 1,
     int limit = 1,
   }) async {
-    final response = await _apiConsumer.get(EndPoints.carTypes,
+    final response = await _apiConsumer.get(Jsons.carTypes,
         queryParameters: {
           "subCategoryId": subCategoryId,
           "page": page,
@@ -206,7 +210,7 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
         });
     return response.fold(
         (failure) => Left(failure),
-        (data) => Right((data['data']['cars'] as List)
+        (data) => Right((data['data']['car_types'] as List)
             .map((e) => CarTypeModel.fromJson(e))
             .toList()));
   }

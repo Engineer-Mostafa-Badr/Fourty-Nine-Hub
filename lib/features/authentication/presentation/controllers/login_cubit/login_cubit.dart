@@ -6,6 +6,8 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/facebook_
 import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
 
+
+import '../../../domain/use_cases/apple_sign_in_usecase.dart';
 import '../../../domain/use_cases/attach_token_use_case.dart';
 import '../../../domain/use_cases/login_use_case.dart';
 
@@ -14,6 +16,7 @@ part 'login_state.dart';
 class LoginCubit extends Cubit<LoginState> {
   final LoginUseCase _loginUseCase;
   final GoogleSignInUseCase _googleSignInUseCase;
+  final AppleSignInUseCase _appleSignInUseCase;
   final FacebookSignInUseCase _facebookSignInUseCase;
   final SaveTokensUseCase _saveTokens;
   final AttachTokenUseCase _attachToken;
@@ -29,6 +32,7 @@ class LoginCubit extends Cubit<LoginState> {
     this._attachToken,
     this._googleSignInUseCase,
     this._facebookSignInUseCase,
+    this._appleSignInUseCase,
   ) : super(LoginInitial());
 
   Future<void> login() async {
@@ -57,6 +61,22 @@ class LoginCubit extends Cubit<LoginState> {
     if (state is LoginLoading) return;
     emit(LoginLoading());
     final result = await _googleSignInUseCase(const NoParams());
+    emit(
+      result.fold(
+        (failure) => LoginError(failure),
+        (userToken) {
+          _attachToken(userToken); // attach to dio
+          _saveTokens(userToken); // save to local storage
+          return LoginSuccess();
+        },
+      ),
+    );
+  }
+
+ Future<void> signInWithApple() async {
+    if (state is LoginLoading) return;
+    emit(LoginLoading());
+    final result = await _appleSignInUseCase(const NoParams());
     emit(
       result.fold(
         (failure) => LoginError(failure),

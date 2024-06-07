@@ -250,11 +250,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Label(
-          text: arEn(
-            context,
-            parentMainCategory.nameAr,
-            parentMainCategory.nameEn,
-          ),
+          text: parentMainCategory.name,
           style: Styles.headerText(),
         ),
         GridView.builder(
@@ -293,11 +289,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             ),
             child: Center(
               child: Label(
-                text: arEn(
-                  context,
-                  mainCategory.nameAr,
-                  mainCategory.nameEn,
-                ),
+                text: mainCategory.name,
                 style: Styles.mediumText(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -423,17 +415,14 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           ? ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Container(
-                // padding: const EdgeInsets.all(5),
-                // margin: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  // border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Stack(
                   children: [
                     Positioned.fill(
                       child: CachedNetworkImage(
-                        imageUrl: mainCategory.bannerUrl ?? '',
+                        imageUrl: mainCategory.image,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -454,11 +443,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                                     MainAxisAlignment.spaceAround,
                                 children: [
                                   Label(
-                                    text: arEn(
-                                      context,
-                                      mainCategory.nameAr,
-                                      mainCategory.nameEn,
-                                    ),
+                                    text: mainCategory.name,
                                     style: Styles.headerText(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
@@ -501,11 +486,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                          text: arEn(
-                            context,
-                            mainCategory.nameAr,
-                            mainCategory.nameEn,
-                          ),
+                          text: mainCategory.name,
                           style:
                               Styles.mediumText(fontWeight: FontWeight.w700)),
                       TextSpan(

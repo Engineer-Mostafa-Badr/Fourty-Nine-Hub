@@ -41,10 +41,11 @@ class RiderequestCubit extends Cubit<RiderequestState> {
           await _getSubCategoriesUseCase.call(service.value());
       subCategories.fold((failure) {
         emit(state.copyWith(
-            failure: failure,
-            status: RideRequestStatusesEnum.error,
-            errorMessage: 'error message'));
+          failure: failure,
+          status: RideRequestStatusesEnum.error,
+        ));
       }, (response) {
+
         emit(state.copyWith(
             status: RideRequestStatusesEnum.initState,
             subCategories: response));

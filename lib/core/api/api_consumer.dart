@@ -2,6 +2,8 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
 
 import '../error/failure.dart';
 import 'end_points.dart';
@@ -93,13 +95,16 @@ class BaseApiConsumer extends ApiConsumer {
     Map<String, dynamic>? queryParameters,
   }) async {
     try {
+
+
+
       final result = await _dio.get(
         url,
         queryParameters: queryParameters,
       );
-      return Right(result.data as Map<String, dynamic>);
+      return Right(result as Map<String, dynamic>);
     } catch (e) {
-            // TODO reset condition after stable backend
+      // TODO reset condition after stable backend
 
       // if (e is DioException &&
       //     e.response?.statusCode == 401 &&
@@ -111,7 +116,7 @@ class BaseApiConsumer extends ApiConsumer {
       //     ),
       //   );
       // } else {
-        return Left(_getFailure(e));
+      return Left(_getFailure(e));
       // }
     }
   }
@@ -143,10 +148,9 @@ class BaseApiConsumer extends ApiConsumer {
       //     ),
       //   );
       // } else {
-                      return Left(_getFailure(e));
+      return Left(_getFailure(e));
 
       // }
-
     }
   }
 

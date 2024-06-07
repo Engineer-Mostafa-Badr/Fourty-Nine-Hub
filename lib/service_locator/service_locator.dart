@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/reels_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
@@ -74,6 +75,10 @@ class DI {
         serviceLocator(),
         serviceLocator(),
       ),
+    );
+     // json parser
+    serviceLocator.registerLazySingleton<JsonParser>(
+      () => JsonParser(),
     );
 
     // auth service locator

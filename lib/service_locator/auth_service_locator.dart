@@ -10,6 +10,7 @@ import '../features/authentication/data/repositories/auth_repository_impl.dart';
 import '../features/authentication/data/repositories/user_repository_impl.dart';
 import '../features/authentication/domain/repositories/auth_repository.dart';
 import '../features/authentication/domain/repositories/user_repository.dart';
+import '../features/authentication/domain/use_cases/apple_sign_in_usecase.dart';
 import '../features/authentication/domain/use_cases/attach_token_use_case.dart';
 import '../features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import '../features/authentication/domain/use_cases/get_user_use_case.dart';
@@ -66,12 +67,14 @@ class AuthServiceLocator {
     serviceLocator
         .registerFactory(() => GetWelcomeGiftUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => GoogleSignInUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => AppleSignInUseCase(serviceLocator()));
     serviceLocator
         .registerFactory(() => FacebookSignInUseCase(serviceLocator()));
 
     // auth cubits
     serviceLocator.registerFactory<LoginCubit>(
       () => LoginCubit(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

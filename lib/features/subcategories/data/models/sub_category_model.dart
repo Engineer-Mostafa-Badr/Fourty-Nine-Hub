@@ -3,29 +3,31 @@ import '../../domain/entities/sub_category_entity.dart';
 
 class SubCategoryModel extends SubCategoryEntity {
   SubCategoryModel(
-      {required super.sId,
-      required super.nameAr,
-      required super.nameEn,
-      required super.parent,
-      required super.picture});
+      {required super.id,
+      required super.name,
+      required super.image,
+      required super.isFavourite
+
+     });
 
   factory SubCategoryModel.fromJson(Map<String, dynamic> json) {
     return SubCategoryModel(
-      sId: json['_id'],
-      nameAr: json['name_ar'],
-      nameEn: json['name_en'],
-      parent: json['parent'],
-      picture: json['picture'],
+      id: json['id'],
+      name: json['name'],
+      image: json['image'],
+      isFavourite: json['is_favourite']??false,
+     
+     
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['name_ar'] = nameAr;
-    data['name_en'] = nameEn;
-    data['parent'] = parent;
-    data['picture'] = picture;
+    data['id'] = id;
+    data['name'] = name;
+    data['image'] = image;
+    data['is_favourite'] = isFavourite;
+
     return data;
   }
 }

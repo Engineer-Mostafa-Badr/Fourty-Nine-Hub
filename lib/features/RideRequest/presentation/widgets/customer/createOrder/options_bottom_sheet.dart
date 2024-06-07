@@ -10,7 +10,7 @@ import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/error/failure.dart';
 import '../../../../../../core/messages/messages.dart';
 import '../../../../../../res/style/app_colors.dart';
-import '../../../../../../res/style/const.dart';
+
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
 import 'giveOffer.dart';
@@ -73,7 +73,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: state.subCategory == subCategory
-                                    ? AppColors.PRIMARY_COLOR
+                                    ? AppColors.SECONDARY_COLOR
                                     : AppColors.DARK_GRAY_COLOR,
                               ),
                               borderRadius: BorderRadius.circular(10),
@@ -91,7 +91,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                                       source: NetworkImage(subCategory.image),
                                     )),
                                     Label(
-                                        text: subCategory.nameEn,
+                                        text: subCategory.name,
                                         style: Styles.mediumText()),
                                   ],
                                 ),
@@ -104,7 +104,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                       itemCount: state.subCategories?.length ?? 0),
                 ),
               const Sizer(),
-              if (state.isCameraMoving || state.fromAddress != null)
+              if (state.fromAddress != null)
                 InkWell(
                   onTap: () {
                     bottomSheet(
@@ -177,7 +177,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                 ),
               ),
               const Sizer(),
-              if (state.isTimeAndDistanceLoaded || state.time != null)
+              if (state.time != null)
                 Column(
                   children: [
                     InkWell(

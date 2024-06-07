@@ -10,7 +10,10 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/login_use
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_otp_use_case.dart';
+
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+
 
 class AuthRepositoryImpl extends AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
@@ -59,16 +62,41 @@ class AuthRepositoryImpl extends AuthRepository {
     return _remoteDataSource.getWelcomeGift();
   }
 
+  
+  
+
   @override
   Future<Either<Failure, UserTokensEntity>> signInWithFacebook() async {
-    // TODO: implement signInWithFacebook
-    throw UnimplementedError();
+    try {
+      final LoginResult loginResult = await FacebookAuth.instance.login();
+
+      final OAuthCredential facebookAuthCredential =
+          FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+      final result = await FirebaseAuth.instance
+          .signInWithCredential(facebookAuthCredential);
+      final tokenResult = await _remoteDataSource.socialLogin(
+        await _loginWithCredentials(
+          GoogleAuthProvider.credential(
+            accessToken: result.credential?.accessToken,
+            idToken: await result.user?.getIdToken(),
+          ),
+        ),
+      );
+      return tokenResult.fold(
+        (failure) => Left(failure),
+        (token) => Right(token),
+      );
+    } catch (e) {
+      return Left(SocialLoginFailure(e));
+    }
   }
 
   @override
   Future<Either<Failure, UserTokensEntity>> signInWithGoogle() async {
     try {
       final result = await GoogleSignIn().signIn();
+
       if (result != null) {
         final googleAuth = await result.authentication;
         final tokenResult = await _remoteDataSource.socialLogin(
@@ -101,6 +129,12 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either<Failure, void>> resendOTP(ResendOTPParams params) {
     return _remoteDataSource.resendOTP(params);
+  }
+  
+  @override
+  Future<Either<Failure, UserTokensEntity>> signInWithApple() {
+    // TODO: implement signInWithApple
+    throw UnimplementedError();
   }
 }
 //enum: ['google', 'facebook', 'local', 'apple']

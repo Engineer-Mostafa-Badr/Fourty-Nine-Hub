@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,6 +40,14 @@ class LoginView extends StatelessWidget {
           context.read<UserCubit>().getUser();
           context.go(Routes.HOME);
           showSuccessMessage(context, 'welcome back');
+        } else if (state is LoginLoading) {
+          showAdaptiveDialog(
+              context: context,
+              builder: (context) => const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  ));
+        } else if (state is LoginError) {
+          context.pop();
         }
       },
       child: Scaffold(
@@ -100,6 +110,17 @@ class LoginView extends StatelessWidget {
                             onPressed: loginCubit.signInWithFacebook,
                           ),
                         ),
+                        if (Platform.isIOS) const Sizer(),
+                        if (Platform.isIOS)
+                          Expanded(
+                            child: AppButton(
+                              label: 'Apple',
+                              backColor: AppColors.LIGHT_GRAY_COLOR,
+                              textColor: Colors.black,
+                              icon: FontAwesomeIcons.apple,
+                              onPressed: loginCubit.signInWithApple,
+                            ),
+                          ),
                       ],
                     ),
                     const Sizer(),
