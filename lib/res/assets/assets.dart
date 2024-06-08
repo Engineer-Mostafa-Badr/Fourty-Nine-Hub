@@ -30,4 +30,12 @@ abstract class Assets {
   static String angry = 'assets/images/reactions/angry.png';
   static String giftbox = 'assets/images/giftbox.png';
   static String coin = 'assets/images/coin.png';
+
+  // images
+  static String driver = 'assets/images/driver.png';
+  static String driverWomen = 'assets/images/driverwoman.png';
+  static String courier = 'assets/images/courier.png';
+  static String scooter = 'assets/images/motorcycle.png';
+  static String restaurant = 'assets/images/restaurant.png';
+  static String doctor = 'assets/images/doctor.png';
 }

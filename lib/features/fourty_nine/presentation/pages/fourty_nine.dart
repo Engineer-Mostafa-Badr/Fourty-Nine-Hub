@@ -28,6 +28,7 @@ import '../../../authentication/presentation/controllers/user_cubit/user_cubit.d
 import '../controllers/main_categories_cubit/parent_main_categories_cubit.dart';
 import '../widgets/advertise_your_company.dart';
 import '../widgets/announce_widget.dart';
+import '../widgets/register_options.dart';
 
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});
@@ -57,11 +58,12 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         child: Column(
           children: [
             const AnnounceWidget(),
-            _buildRegisterAsServiceProviderWidget(),
-            // const Sizer(),
             const WalletWidget(
               margin: 5,
             ),
+            const RegisterOptions(),
+            // const Sizer(),
+
             const AdvertiseYourCompany(),
             const GoogleAddsBanner(),
             const Sizer(),
@@ -208,18 +210,6 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   icon: Icons.grid_4x4_outlined, isSelected: !isList)),
         ],
       ),
-    );
-  }
-
-  Widget _buildRegisterAsServiceProviderWidget() {
-    return Container(
-      margin: const EdgeInsets.all(5),
-      child: AppButton(
-          label: 'Join Our Team, Register Now!',
-          icon: Icons.account_circle,
-          onPressed: () => context.push(context.read<UserCubit>().isLoggedIn
-              ? Routes.REGISTERDRIVER
-              : Routes.LOGIN)),
     );
   }
 

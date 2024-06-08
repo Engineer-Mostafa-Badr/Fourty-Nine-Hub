@@ -1,17 +1,13 @@
 class ExpectedPriceEntity {
   final bool status;
-  final int price;
-  final int distance;
-  final int duration;
+  final num price;
+  final String distance;
+  final String duration;
 
 
-  String get displayedDistance => '${distance/1000} km';
-  String get displayedTime =>'${duration/60} hr';
   ExpectedPriceEntity(
-      { this.status = true,
+      {this.status = true,
       required this.price,
       required this.distance,
       required this.duration});
-
-  
 }

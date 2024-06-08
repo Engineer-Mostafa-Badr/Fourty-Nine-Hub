@@ -6,6 +6,8 @@ import 'package:fourtyninehub/features/register/driver_register/presentation/pag
 import 'package:fourtyninehub/features/register/driver_register/presentation/pages/taps/upload_car_license_images.dart';
 import 'package:fourtyninehub/features/register/driver_register/presentation/pages/taps/upload_national_id.dart';
 
+import 'taps/enter_personal_info.dart';
+
 class DriverRegister extends StatelessWidget {
   const DriverRegister({super.key});
 
@@ -39,6 +41,12 @@ class DriverRegister extends StatelessWidget {
             Expanded(
               child: PageView(
                 children: [
+                  // EnterPersonalInfo
+                  EnterPersonalInfo(
+                    length: 4,
+                    index: 1,
+                    label: 'Enter Personal Info',
+                  ),
                   EnterCarInfo(
                     length: 4,
                     index: 1,
@@ -57,7 +65,8 @@ class DriverRegister extends StatelessWidget {
                   const ThankYou(
                       label: 'Finished',
                       title: 'Thank you for your registeration!',
-                      subTitle: 'We will contact you once your form is accepted!'),
+                      subTitle:
+                          'We will contact you once your form is accepted!'),
                 ],
               ),
             ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
@@ -9,11 +9,11 @@ import '../../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../cubit/driver_register_cubit.dart';
 
-class EnterCarInfo extends StatelessWidget {
+class EnterPersonalInfo extends StatelessWidget {
   final int length, index;
   final String label;
 
-  EnterCarInfo(
+  const EnterPersonalInfo(
       {super.key,
       required this.length,
       required this.index,
@@ -40,68 +40,38 @@ class EnterCarInfo extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 const Sizer(),
-                Row(
-                  children: [
-                    const Expanded(child: Label(text: 'Car Module')),
-                    const Sizer(),
-                    Expanded(
-                        child: FormTextField(
-                      action: (v) {},
-                      label: 'Mark',
-                    )),
-                    const Sizer(),
-                    Expanded(
-                        child: FormTextField(
-                      action: (v) {},
-                      label: 'Type',
-                    )),
-                  ],
+                FormTextField(
+                  // prefix: ,
+                  controller: controller.driverNameTextController,
+                  label: 'Name',
+                  prefix: const Icon(Icons.person),
+                  info: 'This name will appear to clients',
+                ),
+                const Sizer(),
+                FormTextField(
+                  // prefix: ,
+                  controller: controller.driverPhoneTextController,
+
+                  label: 'Phone Number',
+                  prefix: const Icon(Icons.phone_android_rounded),
                 ),
                 const Sizer(),
                 Row(
                   children: [
-                    const Expanded(child: Label(text: 'Metal Plate')),
-                    const Sizer(),
+                    const Expanded(child: Label(text: 'KM Price')),
                     Expanded(
+                        flex: 2,
                         child: FormTextField(
-                      action: (v) {},
-                      label: 'Chars',
-                      type: TextInputType.text,
-                    )),
-                    const Sizer(),
-                    Expanded(
-                        child: FormTextField(
-                      action: (v) {},
-                      label: 'Numbers',
-                      type: TextInputType.number,
-                    )),
+                            controller: controller.kmPriceTextController,
+                            hint: 'xx',
+                            label: 'Price',
+                            type: TextInputType.number,
+                            action: (v) {}))
                   ],
                 ),
                 const Sizer(),
-                Row(
-                  children: [
-                    const Expanded(child: Label(text: 'Air Conditioner')),
-                    Switch(value: false, onChanged: (v) {})
-                  ],
-                ),
-                const Label(text: 'Car Images'),
-                Row(
-                  children: [
-                    Expanded(
-                        child:
-                            UploadImageWidget(action: () {}, label: 'Front')),
-                    // const Sizer(),
-                    Expanded(
-                        child: UploadImageWidget(action: () {}, label: 'Back')),
-                    // const Sizer(),
-                    Expanded(
-                        child:
-                            UploadImageWidget(action: () {}, label: 'Right')),
-                    // const Sizer(),
-                    Expanded(
-                        child: UploadImageWidget(action: () {}, label: 'Left')),
-                  ],
-                )
+                _buildCategoriesWidget(context: context),
+                _buildCarTypesWidget(context: context),
               ],
             ),
           ),

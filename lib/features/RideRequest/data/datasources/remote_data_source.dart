@@ -191,7 +191,7 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
   Future<Either<Failure, ExpectedPriceModel>> getExpectedPrice(
       {required ExpectedPriceParams params}) async {
     final response =
-        await _apiConsumer.post(EndPoints.expectedPrice, data: params.toJson());
+        await _apiConsumer.get(Jsons.exptectedPrice, queryParameters: params.toJson());
     return response.fold((failure) => Left(failure),
         (data) => Right(ExpectedPriceModel.fromJson(data['data'])));
   }

@@ -1,0 +1,43 @@
+{
+    "status":true,
+    "message":"",
+    "data": {
+        "trips":[
+            {
+                "id":2,
+                "from_coordinates":[30.0516385 , 31.2027563],
+                "to_coordinates":[30.044504, 31.193388],
+                "from_address":"13 شارع الشيخ صالح موسى، الدقي، قسم الدقي، محافظة الجيزة 11213",
+                "to_address":"17 شارع نادي الصيد، الدقي، قسم الدقي، محافظة الجيزة 3751062",
+                "driver": null,
+                "category":{
+                    "id":1,
+                    "name":"Taxi",
+                    "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY61A56uaiLPMPRTANVI_mGgAlTGcQIuf4NF2dCdLTKw&s"
+                }
+            },
+            {
+                "id":2,
+                "from_coordinates":[30.0516385 , 31.2027563],
+                "to_coordinates":[30.044504, 31.193388],
+                "from_address":"13 شارع الشيخ صالح موسى، الدقي، قسم الدقي، محافظة الجيزة 11213",
+                "to_address":"17 شارع نادي الصيد، الدقي، قسم الدقي، محافظة الجيزة 3751062",
+                "driver":{
+                    "id":1,
+                    "name":"Ahmed Zaky",
+                    "phone":"+201010727610",
+                    "email":"faroukshahin30@gmail.com",
+                    "car_sign":"1324 egp",
+                    "car_image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY61A56uaiLPMPRTANVI_mGgAlTGcQIuf4NF2dCdLTKw&s",
+                    "rate":5.0,
+                    "number_of_reviews":18
+                },
+                "category":{
+                    "id":1,
+                    "name":"Taxi",
+                    "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY61A56uaiLPMPRTANVI_mGgAlTGcQIuf4NF2dCdLTKw&s"
+                }
+            }
+        ]
+    }
+}

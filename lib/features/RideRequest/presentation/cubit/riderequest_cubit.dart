@@ -45,7 +45,6 @@ class RiderequestCubit extends Cubit<RiderequestState> {
           status: RideRequestStatusesEnum.error,
         ));
       }, (response) {
-
         emit(state.copyWith(
             status: RideRequestStatusesEnum.initState,
             subCategories: response));
@@ -156,8 +155,8 @@ class RiderequestCubit extends Cubit<RiderequestState> {
             status: RideRequestStatusesEnum.isTimeAndDistanceLoaded,
             minimumPrice: response.price.toDouble(),
             offerPrice: response.price.toDouble(),
-            distance: response.displayedDistance,
-            time: response.displayedTime)));
+            distance: response.distance,
+            time: response.duration)));
   }
 
   // change autoaccept status
