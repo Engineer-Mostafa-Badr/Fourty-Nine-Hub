@@ -1,0 +1,173 @@
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_static_maps_controller/google_static_maps_controller.dart';
+
+import '../../../../../common/functions/helper/launch_url.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateful/maps/static_map.dart';
+import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
+import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../history_ride/data/models/driver_model.dart';
+import '../../../history_ride/data/models/trip_model.dart';
+
+class StartedTripWidget extends StatelessWidget {
+  final TripModel trip;
+  const StartedTripWidget({super.key, required this.trip});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: const BackAppBar(
+        label: 'Trip Details',
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
+          children: [
+            if (trip.driver != null) _buildDriverWidget(driver: trip.driver!),
+            const Divider(),
+            _buildTripInfoWidget(trip: trip),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDriverWidget({required DriverModel driver}) {
+    return Row(
+      children: [
+        CircleAvatar(
+          backgroundColor: Colors.white,
+          backgroundImage: NetworkImage(driver.profileImage),
+        ),
+        const Sizer(),
+        Expanded(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Label(text: driver.name),
+            Row(
+              children: [
+                const Icon(Icons.star_rounded, color: AppColors.ACCENT_COLOR),
+                Label(
+                  text: ' ${driver.rate} . ${driver.numberOfReviews} Reviews',
+                  style: Styles.mediumText(color: AppColors.ACCENT_COLOR),
+                ),
+              ],
+            )
+          ],
+        )),
+        IconAppButton(icon: Icons.call, isCircle: true, onPressed: () {}),
+        IconAppButton(
+            icon: Icons.directions,
+            isCircle: true,
+            onPressed: () => LaunchURLHelper().openLocation(
+                lat: driver.location[0], lng: driver.location[1])),
+      ],
+    );
+  }
+
+  Widget _buildTripInfoWidget({required TripModel trip}) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Row(
+          children: [
+            const Icon(FontAwesomeIcons.car, color: AppColors.PRIMARY_COLOR),
+            const Sizer(),
+            Label(
+              text: trip.category.name,
+              style: Styles.mediumText(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        InkWell(
+          onTap: () => LaunchURLHelper().openLocation(
+              lat: trip.fromCoordinates[0], lng: trip.fromCoordinates[1]),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.location_searching,
+                color: AppColors.PRIMARY_COLOR,
+              ),
+              const Sizer(),
+              Expanded(child: Label(text: trip.fromAddress)),
+              IconAppButton(
+                  icon: Icons.directions,
+                  color: Colors.green,
+                  onPressed: () => LaunchURLHelper().openLocation(
+                      lat: trip.fromCoordinates[0],
+                      lng: trip.fromCoordinates[1]))
+            ],
+          ),
+        ),
+        InkWell(
+          onTap: () => LaunchURLHelper().openLocation(
+              lat: trip.toCoordinates[0], lng: trip.toCoordinates[1]),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.location_on,
+                color: AppColors.SECONDARY_COLOR,
+              ),
+              const Sizer(),
+              Expanded(child: Label(text: trip.toAddress)),
+              IconAppButton(
+                  icon: Icons.directions,
+                  color: Colors.green,
+                  onPressed: () => LaunchURLHelper().openLocation(
+                      lat: trip.toCoordinates[0], lng: trip.toCoordinates[1]))
+            ],
+          ),
+        ),
+        const Divider(),
+        Row(
+          children: [
+            Expanded(
+                child: Row(
+              children: [
+                const Icon(Icons.monetization_on_rounded),
+                const Sizer(),
+                Label(text: '${trip.price} L.E')
+              ],
+            )),
+            Expanded(
+                child: Row(
+              children: [
+                const Icon(Icons.timer),
+                const Sizer(),
+                Label(text: trip.time)
+              ],
+            )),
+            Expanded(
+                child: Row(
+              children: [
+                const Icon(Icons.add_road),
+                const Sizer(),
+                Label(text: trip.distance)
+              ],
+            )),
+          ],
+        ),
+        const Divider(),
+        StaticMapWidget(
+          height: kToolbarHeight * 1.5,
+          radius: 10,
+          markers: [
+            Marker(locations: [
+              Location(trip.fromCoordinates[0], trip.fromCoordinates[1]),
+              Location(trip.toCoordinates[0], trip.toCoordinates[1]),
+            ])
+          ],
+          paths: [
+            Location(trip.fromCoordinates[0], trip.fromCoordinates[1]),
+            Location(trip.toCoordinates[0], trip.toCoordinates[1]),
+          ],
+        )
+      ],
+    );
+  }
+}

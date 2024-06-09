@@ -61,7 +61,11 @@ class DrawerWidget extends StatelessWidget {
                   icon: FontAwesomeIcons.adn,
                   label: 'Favourite Ads',
                   onTap: () => context.push(Routes.FAVOURITE)),
-              drawerListTile(icon: Icons.list, label: 'Lists', onTap: () {}),
+
+              drawerListTile(
+                  icon: Icons.list,
+                  label: 'Lists',
+                  onTap: () => context.push(Routes.Lists)),
               drawerListTile(
                   icon: Icons.ads_click,
                   label: 'My Ads',
@@ -72,7 +76,9 @@ class DrawerWidget extends StatelessWidget {
                   label: 'Settings',
                   onTap: () => context.push(Routes.SETTINGS)),
               drawerListTile(
-                  icon: Icons.privacy_tip, label: 'Privacy', onTap: () {}),
+                  icon: Icons.privacy_tip,
+                  label: 'Privacy',
+                  onTap: () => context.push(Routes.PRIVACY)),
 
               drawerListTile(
                   icon: Icons.policy_outlined,
@@ -126,17 +132,6 @@ class DrawerWidget extends StatelessWidget {
                     onPressed: () => context.push(Routes.REGISTER)),
                 Label(text: 'Register', style: Styles.mediumText()),
               ],
-            ),
-          ),
-          Expanded(
-            child: _buildRegisterButton(
-              context: context,
-              icon: Column(
-                children: [
-                  const CircleAvatar(child: Icon(Icons.person_pin)),
-                  Label(text: 'Options', style: Styles.mediumText()),
-                ],
-              ),
             ),
           ),
         ],

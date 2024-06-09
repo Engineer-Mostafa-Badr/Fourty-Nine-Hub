@@ -27,6 +27,8 @@ abstract class Routes {
   static const VISITABOOKING = '/Visita/VisitaBooking';
   static const FOOD = '/Food';
   static const RIDE = '/Ride';
+  static const TRIPDETAILS = '/Ride/TripDetails';
+  static const HISTORYRIDE = '/Ride/HistoryRide';
   static const YOUTUBE = '/Youtube';
   static const QURAAN = '/Quraan';
   static const AZKAAR = '/Azkaar';
@@ -45,6 +47,9 @@ abstract class Routes {
   static const VERIFYMAIL = '/Register/verify-mail-register';
   static const REGISTERDRIVER = '/Register/register-driver';
   static const ACCOUNT = '/Account';
+   static const PRIVACY = '/Account/Privacy';
+
+  static const Lists = '/Account/Lists';
     static const FAVOURITE = '/Account/Favourite';
     static const FAVOURITECATEGORIES = '/Account/FavouriteCategories';
     static const FAVOURITESUBCATEGORIES = '/Account/FavouriteSubCategories';
@@ -85,6 +90,9 @@ abstract class Paths {
   static const VISITABOOKING = 'VisitaBooking';
   static const FOOD = 'Food';
   static const RIDE = 'Ride';
+  static const HISTORYRIDE = 'HistoryRide';
+  static const TRIPDETAILS = 'TripDetails';
+
   static const YOUTUBE = 'Youtube';
   static const RESTAURANTDETAILS = 'RetaurantDetails';
   static const PLAYVIDEO = 'PlayVideo';
@@ -99,6 +107,9 @@ abstract class Paths {
   static const VERIFYMAIL = 'verify-mail-register';
   static const REGISTERDRIVER = 'register-driver';
   static const ACCOUNT = 'Account';
+  static const PRIVACY = 'Privacy';
+
+  static const Lists = 'Lists';
   static const FAVOURITE = 'Favourite';
    static const FAVOURITECATEGORIES = 'FavouriteCategories';
     static const FAVOURITESUBCATEGORIES = 'FavouriteSubCategories';

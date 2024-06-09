@@ -1,13 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/RideRequest/presentation/cubit/riderequest_cubit.dart';
-import 'package:fourtyninehub/features/account/presentation/pages/favourite_view.dart';
-import 'package:fourtyninehub/features/account/presentation/pages/my_adds.dart';
-import 'package:fourtyninehub/features/account/presentation/pages/share_the_app.dart';
+
+import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
+import 'package:fourtyninehub/features/account_taps/account/presentation/pages/my_adds.dart';
+import 'package:fourtyninehub/features/account_taps/account/presentation/pages/share_the_app.dart';
+import 'package:fourtyninehub/features/account_taps/lists/presentation/pages/lists_view.dart';
+import 'package:fourtyninehub/features/account_taps/privacy/presentation/pages/privacy_view.dart';
 import 'package:fourtyninehub/features/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
+import 'package:fourtyninehub/features/ride/history_ride/presentation/pages/history_ride_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
@@ -16,18 +19,16 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/ti
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:go_router/go_router.dart';
-
 import '../features/Food/presentation/pages/CustomerView/restaurant_details.dart';
 import '../features/Food/presentation/pages/food_view.dart';
-import '../features/RideRequest/presentation/pages/ride_request_view.dart';
+import '../features/ride/RideRequest/presentation/pages/ride_request_view.dart';
 import '../features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
-import '../features/account/presentation/pages/favourite_category_view.dart';
-import '../features/account/presentation/pages/favourite_subcategory_view.dart';
+import '../features/account_taps/account/presentation/pages/favourite_category_view.dart';
+import '../features/account_taps/account/presentation/pages/favourite_subcategory_view.dart';
 import '../features/health_care/presentation/pages/VisitaView.dart';
 import '../features/health_care/presentation/pages/customer_view/DoctorDetails.dart';
 import '../features/health_care/presentation/pages/customer_view/DoctorsList.dart';
 import '../features/health_care/presentation/pages/customer_view/visita_booking.dart';
-
 import '../features/authentication/presentation/pages/login_view.dart';
 import '../features/authentication/presentation/pages/register/register_verify_otp.dart';
 import '../features/authentication/presentation/pages/register/register_view.dart';
@@ -46,6 +47,9 @@ import '../features/notifications/presentation/pages/notification_view.dart';
 import '../features/quraan/presentation/pages/quraan_view.dart';
 import '../features/register/driver_register/presentation/cubit/driver_register_cubit.dart';
 import '../features/register/driver_register/presentation/pages/driver_register_view.dart';
+import '../features/ride/history_ride/presentation/cubit/history_ride_cubit.dart';
+import '../features/ride/trip_details/presentation/cubit/trip_details_cubit.dart';
+import '../features/ride/trip_details/presentation/pages/trip_details_view.dart';
 import '../features/social_media/chat/presentation/pages/Chat_room.dart';
 import '../features/social_media/chat/presentation/pages/Chat_view.dart';
 import '../features/social_media/club_house/presentation/pages/club_house_home.dart';
@@ -142,7 +146,9 @@ class AppPages {
           name: Routes.COMPETITIONS,
           path: Paths.COMPETITIONS,
           builder: (context, state) => CompetitionView(),
-          routes: [],
+          routes: [
+            
+          ],
         ),
         GoRoute(
           path: Paths.WINNERS,
@@ -184,7 +190,17 @@ class AppPages {
                   path: Paths.SETTINGS,
                   name: Routes.SETTINGS,
                   builder: (context, state) => const SettingsView()),
+             GoRoute(
+                  path: Paths.PRIVACY,
+                  name: Routes.PRIVACY,
+                  builder: (context, state) => const PrivacyView()),
               GoRoute(
+                  path: Paths.Lists,
+                  name: Routes.Lists,
+                  builder: (context, state) => const ListsView()),
+             
+              GoRoute(
+             
                   path: Paths.SHAREAPP,
                   name: Routes.SHAREAPP,
                   builder: (context, state) => const ShareTheApp()),
@@ -327,11 +343,23 @@ class AppPages {
         GoRoute(
             path: Paths.RIDE,
             name: Routes.RIDE,
-            builder: (context, state) => BlocProvider(
-                  create: (_) => serviceLocator<RiderequestCubit>(),
-                  child: const RideRequestView(),
-                ),
-            routes: []),
+            builder: (context, state) => const RideRequestView(),
+            routes: [
+              GoRoute(
+                  path: Paths.HISTORYRIDE,
+                  name: Routes.HISTORYRIDE,
+                  builder: (context, state) => BlocProvider<HistoryRideCubit>(
+                        create: (_) => serviceLocator(),
+                        child: const HistoryRideView(),
+                      )),
+              GoRoute(
+                  path: Paths.TRIPDETAILS,
+                  name: Routes.TRIPDETAILS,
+                  builder: (context, state) => BlocProvider<TripDetailsCubit>(
+                        create: (_) => serviceLocator(),
+                        child: const TripDetailsView(),
+                      ))
+            ]),
         GoRoute(
             path: Paths.YOUTUBE,
             name: Routes.YOUTUBE,

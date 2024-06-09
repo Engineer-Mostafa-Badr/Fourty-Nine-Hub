@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:fourtyninehub/features/RideRequest/domain/entity/address_search_params_entity.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/address_search_params_entity.dart';
 import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../helpers/BitmapDescriptor.dart';

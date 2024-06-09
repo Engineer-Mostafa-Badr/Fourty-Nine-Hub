@@ -7,7 +7,7 @@ import '../../../../res/style/const.dart';
 import '../../../../routes/routes.dart';
 
 class ProfileImage extends StatelessWidget {
-  final String imageURL;
+  final String? imageURL;
   final double size;
   final Color borderColor;
   final bool withBorder;
@@ -18,7 +18,7 @@ class ProfileImage extends StatelessWidget {
       required this.accountId,
       this.size = 15,
       this.withBorder = false,
-      this.imageURL = UIConst.profilePlaceHolder,
+      this.imageURL,
       this.borderColor = AppColors.SECONDARY_COLOR});
 
   @override
@@ -31,7 +31,7 @@ class ProfileImage extends StatelessWidget {
         child: CircleAvatar(
           radius: size,
           backgroundColor: Colors.white,
-          backgroundImage: CachedNetworkImageProvider(imageURL),
+          backgroundImage: CachedNetworkImageProvider(imageURL?? UIConst.profilePlaceHolder),
         ),
       ),
     );

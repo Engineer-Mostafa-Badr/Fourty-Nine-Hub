@@ -56,6 +56,27 @@ extension RideServicesEnumExtension on RideServicesEnum {
         return 'Premium';
     }
   }
+  String route() {
+    switch (this) {
+      case RideServicesEnum.tripJoin:
+        return '62c8b5779332225799fe3304';
+      case RideServicesEnum.pickMe:
+        return 'Pick Me';
+      case RideServicesEnum.womenOnly:
+        return 'Women Only';
+      case RideServicesEnum.captain:
+        return 'Captain';
+      case RideServicesEnum.taxi:
+        return 'Taxi';
+      case RideServicesEnum.scooter:
+        return 'Scooter';
+      case RideServicesEnum.intercity:
+        return 'Intercity';
+      case RideServicesEnum.premium:
+        return 'Premium';
+    }
+  }
+  
 }
 
 RideServicesEnum getRideServiceEnum({

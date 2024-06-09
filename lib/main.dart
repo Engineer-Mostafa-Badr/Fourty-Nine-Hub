@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/RideRequest/presentation/cubit/riderequest_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';

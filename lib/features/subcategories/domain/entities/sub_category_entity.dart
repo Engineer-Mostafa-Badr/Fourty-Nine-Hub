@@ -1,4 +1,3 @@
-import '../../../../res/style/const.dart';
 
 class SubCategoryEntity {
   final int id;

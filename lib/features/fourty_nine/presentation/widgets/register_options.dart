@@ -13,35 +13,38 @@ class RegisterOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(
-          text: 'Join Us As',
-          style: Styles.mediumText(fontWeight: FontWeight.w700),
-        ),
-        const Sizer(
-          height: 3,
-        ),
-        SizedBox(
-          height: kToolbarHeight,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              _buildRegisterOptionItem(context,
-                  label: 'Driver', image: Assets.driver),
-              _buildRegisterOptionItem(context,
-                  label: 'Women Only', image: Assets.driverWomen),
-              _buildRegisterOptionItem(context,
-                  label: 'Scooter', image: Assets.scooter),
-              _buildRegisterOptionItem(context,
-                  label: 'Restaurant', image: Assets.restaurant),
-              _buildRegisterOptionItem(context,
-                  label: 'Doctor', image: Assets.doctor),
-            ],
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Label(
+            text: 'Join Us As',
+            style: Styles.mediumText(fontWeight: FontWeight.w700),
           ),
-        ),
-      ],
+          const Sizer(
+            height: 3,
+          ),
+          SizedBox(
+            height: kToolbarHeight,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                _buildRegisterOptionItem(context,
+                    label: 'Driver', image: Assets.driver),
+                _buildRegisterOptionItem(context,
+                    label: 'Women Only', image: Assets.driverWomen),
+                _buildRegisterOptionItem(context,
+                    label: 'Scooter', image: Assets.scooter),
+                _buildRegisterOptionItem(context,
+                    label: 'Restaurant', image: Assets.restaurant),
+                _buildRegisterOptionItem(context,
+                    label: 'Doctor', image: Assets.doctor),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 

@@ -789,6 +789,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.12.4"
+  google_static_maps_controller:
+    dependency: "direct main"
+    description:
+      name: google_static_maps_controller
+      sha256: "6ed8831664eecb3869b3144a90236d5d46acafd8aabf9ac2f8dee5fa374f493e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   html:
     dependency: transitive
     description:

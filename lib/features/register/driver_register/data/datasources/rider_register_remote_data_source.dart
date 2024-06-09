@@ -3,7 +3,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../../core/api/api_consumer.dart';
 import '../../../../../core/api/end_points.dart';
 import '../../../../../core/error/failure.dart';
-import '../../../../RideRequest/data/models/car_type_model.dart';
+import '../../../../ride/RideRequest/data/models/car_type_model.dart';
 import '../../../../subcategories/data/models/sub_category_model.dart';
 import '../models/rider_info_model.dart';
 

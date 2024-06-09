@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter/foundation.dart';
-import 'package:fourtyninehub/features/RideRequest/data/models/car_type_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/car_type_model.dart';
 import 'package:fourtyninehub/features/register/driver_register/data/models/rider_info_model.dart';
 
 import '../../../../../core/enums/main_services_enum.dart';
 import '../../../../../core/error/failure.dart';
-import '../../../../RideRequest/domain/usecases/request/get_car_types_use_case.dart';
-import '../../../../RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
+import '../../../../ride/RideRequest/domain/usecases/request/get_car_types_use_case.dart';
+import '../../../../ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
 import '../../../../subcategories/data/models/sub_category_model.dart';
 
 part 'driver_register_state.dart';
