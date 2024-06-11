@@ -65,6 +65,12 @@
                     "id":2,
                     "name":"Come With Me",
                     "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY61A56uaiLPMPRTANVI_mGgAlTGcQIuf4NF2dCdLTKw&s"
+                },
+
+                "payment_method":{
+                    "id":1,
+                    "name":"Visa",
+                    "image":"https://www.freepnglogos.com/uploads/visa-card-logo-9.png"
                 }
             },
             {
@@ -138,6 +144,11 @@
                     "id":1,
                     "name":"Taxi",
                     "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY61A56uaiLPMPRTANVI_mGgAlTGcQIuf4NF2dCdLTKw&s"
+                },
+                "payment_method":{
+                    "id":1,
+                    "name":"Visa",
+                    "image":"https://www.freepnglogos.com/uploads/visa-card-logo-9.png"
                 }
             }
         ]

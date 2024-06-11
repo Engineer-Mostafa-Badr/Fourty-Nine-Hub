@@ -21,6 +21,7 @@ import 'package:fourtyninehub/features/subcategories/presentation/pages/subcateg
 import 'package:go_router/go_router.dart';
 import '../features/Food/presentation/pages/CustomerView/restaurant_details.dart';
 import '../features/Food/presentation/pages/food_view.dart';
+import '../features/food/restaurants_list/presentation/pages/restaurants_lists_view.dart';
 import '../features/ride/RideRequest/presentation/pages/ride_request_view.dart';
 import '../features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
 import '../features/account_taps/account/presentation/pages/favourite_category_view.dart';
@@ -47,6 +48,8 @@ import '../features/notifications/presentation/pages/notification_view.dart';
 import '../features/quraan/presentation/pages/quraan_view.dart';
 import '../features/register/driver_register/presentation/cubit/driver_register_cubit.dart';
 import '../features/register/driver_register/presentation/pages/driver_register_view.dart';
+import '../features/ride/driver_dashboard/presentation/cubit/driver_dashboard_cubit.dart';
+import '../features/ride/driver_dashboard/presentation/pages/driver_dashboard_view.dart';
 import '../features/ride/history_ride/presentation/cubit/history_ride_cubit.dart';
 import '../features/ride/trip_details/presentation/cubit/trip_details_cubit.dart';
 import '../features/ride/trip_details/presentation/pages/trip_details_view.dart';
@@ -331,7 +334,7 @@ class AppPages {
         GoRoute(
             path: Paths.FOOD,
             name: Routes.FOOD,
-            builder: (context, state) => const FoodView(),
+            builder: (context, state) => const RestaurantsListsView(),
             routes: [
               GoRoute(
                 path: Paths.RESTAURANTDETAILS,
@@ -358,6 +361,14 @@ class AppPages {
                   builder: (context, state) => BlocProvider<TripDetailsCubit>(
                         create: (_) => serviceLocator(),
                         child: const TripDetailsView(),
+                      )),
+
+                      GoRoute(
+                  path: Paths.RIDERDASHBOARD,
+                  name: Routes.RIDERDASHBOARD,
+                  builder: (context, state) => BlocProvider<DriverDashboardCubit>(
+                        create: (_) => serviceLocator(),
+                        child: const DriverDashboardView(),
                       ))
             ]),
         GoRoute(

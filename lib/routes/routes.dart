@@ -1,8 +1,8 @@
 abstract class Routes {
   Routes._();
   static const HOME = '/';
-    static const SUBCATEGORIES='/Subcategories';
-    static const ADS='/Subcategories/ADS';
+  static const SUBCATEGORIES = '/Subcategories';
+  static const ADS = '/Subcategories/ADS';
   static const LUCKYWHEEL = '/LuckyWheel';
   static const COMPETITIONS = '/Competitions';
   static const WINNERS = '/Winners';
@@ -27,6 +27,8 @@ abstract class Routes {
   static const VISITABOOKING = '/Visita/VisitaBooking';
   static const FOOD = '/Food';
   static const RIDE = '/Ride';
+  static const RIDERDASHBOARD ='/Ride/RiderDashboard';
+
   static const TRIPDETAILS = '/Ride/TripDetails';
   static const HISTORYRIDE = '/Ride/HistoryRide';
   static const YOUTUBE = '/Youtube';
@@ -47,13 +49,13 @@ abstract class Routes {
   static const VERIFYMAIL = '/Register/verify-mail-register';
   static const REGISTERDRIVER = '/Register/register-driver';
   static const ACCOUNT = '/Account';
-   static const PRIVACY = '/Account/Privacy';
+  static const PRIVACY = '/Account/Privacy';
 
   static const Lists = '/Account/Lists';
-    static const FAVOURITE = '/Account/Favourite';
-    static const FAVOURITECATEGORIES = '/Account/FavouriteCategories';
-    static const FAVOURITESUBCATEGORIES = '/Account/FavouriteSubCategories';
-    static const MYADDS = '/Account/Myadds';
+  static const FAVOURITE = '/Account/Favourite';
+  static const FAVOURITECATEGORIES = '/Account/FavouriteCategories';
+  static const FAVOURITESUBCATEGORIES = '/Account/FavouriteSubCategories';
+  static const MYADDS = '/Account/Myadds';
   static const SHAREAPP = '/Account/ShareApp';
   static const NOTIFICATIONS = '/Account/Norifications';
   static const SETTINGS = '/Account/Settings';
@@ -62,13 +64,13 @@ abstract class Routes {
 abstract class Paths {
   Paths._();
   static const HOME = '/';
-  static const SUBCATEGORIES='Subcategories';
-  static const ADS='ADS';
+  static const SUBCATEGORIES = 'Subcategories';
+  static const ADS = 'ADS';
   static const LUCKYWHEEL = 'LuckyWheel';
   static const COMPETITIONS = 'Competitions';
   static const WINNERS = 'Winners';
   static const WALLET = 'Wallet';
-    static const WALLETHISTORY = 'WalletHistory';
+  static const WALLETHISTORY = 'WalletHistory';
 
   static const SOCIAL = 'Social';
   static const OTHERSACCOUNT = 'OthersAccount';
@@ -90,6 +92,7 @@ abstract class Paths {
   static const VISITABOOKING = 'VisitaBooking';
   static const FOOD = 'Food';
   static const RIDE = 'Ride';
+  static const RIDERDASHBOARD = 'RiderDashboard';
   static const HISTORYRIDE = 'HistoryRide';
   static const TRIPDETAILS = 'TripDetails';
 
@@ -111,8 +114,8 @@ abstract class Paths {
 
   static const Lists = 'Lists';
   static const FAVOURITE = 'Favourite';
-   static const FAVOURITECATEGORIES = 'FavouriteCategories';
-    static const FAVOURITESUBCATEGORIES = 'FavouriteSubCategories';
+  static const FAVOURITECATEGORIES = 'FavouriteCategories';
+  static const FAVOURITESUBCATEGORIES = 'FavouriteSubCategories';
 
   static const MYADDS = 'Myadds';
   static const SHAREAPP = 'ShareApp';
@@ -120,5 +123,4 @@ abstract class Paths {
   static const SETTINGS = 'Settings';
   static const QURAAN = 'Quraan';
   static const AZKAAR = 'Azkaar';
-  
 }

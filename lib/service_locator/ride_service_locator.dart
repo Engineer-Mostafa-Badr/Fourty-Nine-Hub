@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_expected_price_use_case.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
+import 'package:fourtyninehub/features/ride/driver_dashboard/data/datasources/driver_dashboard_remote_data_source.dart';
 import 'package:fourtyninehub/features/ride/history_ride/data/datasources/remote_data_source.dart';
 import 'package:fourtyninehub/features/ride/history_ride/data/repositories/history_ride_repo_impl.dart';
 import 'package:fourtyninehub/features/ride/history_ride/domain/usecases/get_history_ride_use_case.dart';
@@ -11,10 +12,15 @@ import 'package:fourtyninehub/features/ride/trip_details/data/datasources/remote
 import 'package:fourtyninehub/features/ride/trip_details/domain/usecases/get_cancel_reason_use_case.dart';
 import 'package:fourtyninehub/features/ride/trip_details/domain/usecases/get_trip_details_use_case.dart';
 import 'package:get_it/get_it.dart';
-
 import '../features/ride/RideRequest/domain/repositories/ride_request_repo.dart';
 import '../features/ride/RideRequest/domain/usecases/request/get_near_by_places_usecase.dart';
 import '../features/register/driver_register/presentation/cubit/driver_register_cubit.dart';
+
+import '../features/ride/driver_dashboard/data/repositories/driver_dashboard_repo_impl.dart';
+import '../features/ride/driver_dashboard/domain/repositories/driver_dashboard_repo.dart';
+import '../features/ride/driver_dashboard/domain/usecases/get_driver_new_trips_usecase.dart';
+import '../features/ride/driver_dashboard/domain/usecases/get_driver_statistics_usecase.dart';
+import '../features/ride/driver_dashboard/presentation/cubit/driver_dashboard_cubit.dart';
 import '../features/ride/history_ride/domain/repositories/history_ride_repo.dart';
 import '../features/ride/history_ride/presentation/cubit/history_ride_cubit.dart';
 import '../features/ride/trip_details/data/repositories/trip_details_repo_impl.dart';
@@ -31,6 +37,9 @@ class RideServiceLocator {
 
 serviceLocator.registerLazySingleton<TripDetailsRemoteDataSource>(
         () => TripDetailsRemoteDataSourceImpl(serviceLocator()));
+ serviceLocator.registerLazySingleton<DriverDashboardRemoteDataSource>(
+        () => DriverDashboardRemoteDataSourceImpl(serviceLocator()));
+ 
     // repo
     serviceLocator.registerLazySingleton<RideRequestRepo>(
         () => RideRequestRepoImpl(serviceLocator()));
@@ -39,6 +48,9 @@ serviceLocator.registerLazySingleton<TripDetailsRemoteDataSource>(
 
  serviceLocator.registerLazySingleton<TripDetailsRepo>(
         () => TripDetailsRepoImpl(serviceLocator()));
+ serviceLocator.registerLazySingleton<DriverDashboardRepo>(
+        () => DriverDashboardRepoImpl(serviceLocator()));
+   
     // cubit
     serviceLocator.registerFactory<RiderequestCubit>(() => RiderequestCubit(
           serviceLocator(),
@@ -58,9 +70,18 @@ serviceLocator.registerLazySingleton<TripDetailsRemoteDataSource>(
               serviceLocator(),
               serviceLocator(),
             )..loadData());
+    
+    serviceLocator.registerFactory<DriverDashboardCubit>(() => DriverDashboardCubit(
+      serviceLocator(),
+      serviceLocator(),
+    )..loadData());
 
-    // usecases
- serviceLocator.registerFactory<GetTripDetailsUseCase>(
+    serviceLocator.registerFactory<GetDriverStatisticsUseCase>(
+        () => GetDriverStatisticsUseCase(serviceLocator()));
+     serviceLocator.registerFactory<GetDriverNewTripsUseCase>(
+        () => GetDriverNewTripsUseCase(serviceLocator()));
+    
+    serviceLocator.registerFactory<GetTripDetailsUseCase>(
         () => GetTripDetailsUseCase(serviceLocator()));
      serviceLocator.registerFactory<GetCancelReasonUseCase>(
         () => GetCancelReasonUseCase(serviceLocator()));

@@ -1,4 +1,4 @@
-package com.fourtyninehub.fourtynine
+package com.app.fourtynine
 
 import io.flutter.embedding.android.FlutterActivity
 

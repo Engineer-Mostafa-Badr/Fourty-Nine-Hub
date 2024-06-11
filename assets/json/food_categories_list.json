@@ -1,0 +1,23 @@
+{
+    "status":true,
+    "message":null,
+    "data":{
+        "categories":[
+            {
+                "id":1,
+                "name":"Fried Chicken",
+                "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_Bja5yFPe_wFZUnSoOE31-dPZNDdszWSGng&s"
+            },
+            {
+                "id":2,
+                "name":"Pizza",
+                "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIibPbOeDQQscm9g-fDNdCvROokQJukg8nYQ&s"
+            },
+            {
+                "id":3,
+                "name":"Healthy food",
+                "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZZei9DRpme7qKWnqUiaa62Lw6L2Mhzjx-AA&s"
+            }
+        ]
+    }
+}

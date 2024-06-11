@@ -7,6 +7,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:872417805780:android:94641dc7b1e1c719850241",
+        "android_client_info": {
+          "package_name": "com.app.fourtynine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1QP6tPVIeH617TLobf0Cj56yYBIE7ZcA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "872417805780-3ngvvf5k56fddj7bf4vca83eckb86fjc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fourtynineDashboard"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:872417805780:android:d377b8e02e51d719850241",
         "android_client_info": {
           "package_name": "com.example.fourtynine_dashboard"

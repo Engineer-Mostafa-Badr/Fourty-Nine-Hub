@@ -5,8 +5,8 @@ import '../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../core/localization/localization.dart';
-import 'CustomerView/FoodCustomerView.dart';
-import 'RestaurantView/RestaurantView.dart';
+
+
 
 class FoodView extends StatelessWidget {
   const FoodView({super.key});

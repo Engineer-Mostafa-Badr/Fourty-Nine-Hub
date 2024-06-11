@@ -7,5 +7,10 @@ abstract class Jsons {
   static String trips = 'assets/json/trips.json';
   static String tripDetails = 'assets/json/trip_details.json';
   static String cancelReasons = 'assets/json/cancel_reasons.json';
-
+  static String driverNewTrips = 'assets/json/driver_new_trips.json';
+  static String driverStatistics = 'assets/json/driver_statistics.json';
+  static String restaurantsList = 'assets/json/restaurants_list.json';
+  static String foodCategoriesList = 'assets/json/food_categories_list.json';
+  static String restaurantDetails = 'assets/json/restaurant_details.json';
+  static String restaurantMeals = 'assets/json/restaurant_meals.json';
 }
