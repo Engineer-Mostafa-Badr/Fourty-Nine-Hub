@@ -1,8 +1,14 @@
-class DriverReviewEntity {
-  final String review;
-  final double rate;
-  final int userId;
-  final int driverId;
+class ReviewEntity {
   final int id;
-  DriverReviewEntity({required this.review,required this.rate,required this.userId,required this.driverId,required this.id});
+  final String name;
+  final String comment;
+  final num rate;
+  final String createdAt;
+
+  ReviewEntity(
+      {required this.id,
+      required this.name,
+      required this.comment,
+      required this.rate,
+      required this.createdAt});
 }

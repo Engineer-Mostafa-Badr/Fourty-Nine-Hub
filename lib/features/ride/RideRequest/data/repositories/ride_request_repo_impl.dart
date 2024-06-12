@@ -113,7 +113,7 @@ class RideRequestRepoImpl implements RideRequestRepo {
 
   @override
   Future<Either<Failure, bool>> rateTheDriver(
-      {required DriverReviewModel review}) {
+      {required ReviewModel review}) {
     return _remoteDataSource.rateTheDriver(review: review);
   }
 

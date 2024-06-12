@@ -54,7 +54,7 @@ abstract class RideRemoteDataSource {
       {required int paymentMethodId});
 
   Future<Either<Failure, bool>> rateTheDriver(
-      {required DriverReviewModel review});
+      {required ReviewModel review});
 
   Future<Either<Failure, ExpectedPriceModel>> getExpectedPrice(
       {required ExpectedPriceParams params});
@@ -182,7 +182,7 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
 
   @override
   Future<Either<Failure, bool>> rateTheDriver(
-      {required DriverReviewModel review}) {
+      {required ReviewModel review}) {
     // TODO: implement rateTheDriver
     throw UnimplementedError();
   }

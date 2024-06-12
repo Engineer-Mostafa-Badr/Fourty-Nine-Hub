@@ -19,9 +19,10 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/ti
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:go_router/go_router.dart';
-import '../features/Food/presentation/pages/CustomerView/restaurant_details.dart';
-import '../features/Food/presentation/pages/food_view.dart';
-import '../features/food/restaurants_list/presentation/pages/restaurants_lists_view.dart';
+import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
+import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
+import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
+import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
 import '../features/ride/RideRequest/presentation/pages/ride_request_view.dart';
 import '../features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
 import '../features/account_taps/account/presentation/pages/favourite_category_view.dart';
@@ -149,9 +150,7 @@ class AppPages {
           name: Routes.COMPETITIONS,
           path: Paths.COMPETITIONS,
           builder: (context, state) => CompetitionView(),
-          routes: [
-            
-          ],
+          routes: [],
         ),
         GoRoute(
           path: Paths.WINNERS,
@@ -193,7 +192,7 @@ class AppPages {
                   path: Paths.SETTINGS,
                   name: Routes.SETTINGS,
                   builder: (context, state) => const SettingsView()),
-             GoRoute(
+              GoRoute(
                   path: Paths.PRIVACY,
                   name: Routes.PRIVACY,
                   builder: (context, state) => const PrivacyView()),
@@ -201,9 +200,7 @@ class AppPages {
                   path: Paths.Lists,
                   name: Routes.Lists,
                   builder: (context, state) => const ListsView()),
-             
               GoRoute(
-             
                   path: Paths.SHAREAPP,
                   name: Routes.SHAREAPP,
                   builder: (context, state) => const ShareTheApp()),
@@ -334,12 +331,19 @@ class AppPages {
         GoRoute(
             path: Paths.FOOD,
             name: Routes.FOOD,
-            builder: (context, state) => const RestaurantsListsView(),
+            builder: (context, state) => BlocProvider<RestaurantsListCubit>(
+                  create: (_) => serviceLocator(),
+                  child: const RestaurantsListsView(),
+                ),
             routes: [
               GoRoute(
                 path: Paths.RESTAURANTDETAILS,
                 name: Routes.RESTAURANTDETAILS,
-                builder: (context, state) => const RestaurantDetails(),
+                builder: (context, state) =>
+                    BlocProvider<RestaurantDetailsCubit>(
+                  create: (_) => serviceLocator(),
+                  child: const RestaurantDetailsView(),
+                ),
               )
             ]),
 
@@ -362,11 +366,11 @@ class AppPages {
                         create: (_) => serviceLocator(),
                         child: const TripDetailsView(),
                       )),
-
-                      GoRoute(
+              GoRoute(
                   path: Paths.RIDERDASHBOARD,
                   name: Routes.RIDERDASHBOARD,
-                  builder: (context, state) => BlocProvider<DriverDashboardCubit>(
+                  builder: (context, state) =>
+                      BlocProvider<DriverDashboardCubit>(
                         create: (_) => serviceLocator(),
                         child: const DriverDashboardView(),
                       ))

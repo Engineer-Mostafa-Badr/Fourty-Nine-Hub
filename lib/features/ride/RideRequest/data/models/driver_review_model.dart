@@ -1,10 +1,15 @@
 import '../../domain/entity/driver_review_entity.dart';
 
-class DriverReviewModel extends DriverReviewEntity {
-  DriverReviewModel(
-      {required super.review,
-      required super.rate,
-      required super.userId,
-      required super.driverId,
-      required super.id});
+class ReviewModel extends ReviewEntity {
+  ReviewModel({required super.id, required super.name, required super.comment, required super.rate, required super.createdAt});
+  
+  factory ReviewModel.fromJson(Map<String, dynamic> json) {
+    return ReviewModel(
+      id: json['id'],
+      name: json['name'],
+      comment: json['comment'],
+      rate: json['rate'],
+      createdAt: json['created_at'],
+    );
+  }
 }

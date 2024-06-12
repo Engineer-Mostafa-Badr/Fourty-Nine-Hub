@@ -40,7 +40,7 @@ abstract class RideRequestRepo {
   Future<Either<Failure, bool>> updatePaymentMethod(
       {required int paymentMethodId});
   Future<Either<Failure, bool>> rateTheDriver(
-      {required DriverReviewModel review});
+      {required ReviewModel review});
   Future<Either<Failure, ExpectedPriceModel>> getExpectedPrice(
       {required ExpectedPriceParams params});
   Future<Either<Failure, List<CarTypeModel>>> getCarTypes({required String subCategoryId});

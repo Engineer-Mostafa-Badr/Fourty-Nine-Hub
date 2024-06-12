@@ -17,6 +17,7 @@ import '../core/api/api_consumer.dart';
 import '../core/local_storage/local_storage_consumer.dart';
 
 import '../firebase_options.dart';
+import 'food_service_locator.dart';
 import 'fourty_nine_service_locator.dart';
 
 final serviceLocator = GetIt.instance;
@@ -76,7 +77,7 @@ class DI {
         serviceLocator(),
       ),
     );
-     // json parser
+    // json parser
     serviceLocator.registerLazySingleton<JsonParser>(
       () => JsonParser(),
     );
@@ -86,7 +87,6 @@ class DI {
 
     // Ride Customer
     await RideServiceLocator.execute(serviceLocator: serviceLocator);
-
     // Fourty-Nine
     FourtyNineServiceLocator.execute(serviceLocator);
 
@@ -95,5 +95,9 @@ class DI {
 
     // Reels
     ReelsServiceLocator.execute(serviceLocator);
+    // food
+     FoodServiceLocator.execute(serviceLocator: serviceLocator);
+    
+    
   }
 }
