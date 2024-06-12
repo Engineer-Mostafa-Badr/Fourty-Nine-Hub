@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => serviceLocator<RiderequestCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<RestaurantDetailsCubit>(),
         ),
         BlocProvider(
           create: (context) => serviceLocator<ParentMainCategoriesCubit>(),

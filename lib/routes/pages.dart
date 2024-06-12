@@ -10,7 +10,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/l
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
-import 'package:fourtyninehub/features/ride/history_ride/presentation/pages/history_ride_view.dart';
+import 'package:fourtyninehub/features/ride/history_ride/presentation/pages/requests_history_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
@@ -20,6 +20,7 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/t
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:go_router/go_router.dart';
 import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
+import '../features/food_feature/restaurant_details/presentation/pages/cart_view.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
@@ -340,10 +341,12 @@ class AppPages {
                 path: Paths.RESTAURANTDETAILS,
                 name: Routes.RESTAURANTDETAILS,
                 builder: (context, state) =>
-                    BlocProvider<RestaurantDetailsCubit>(
-                  create: (_) => serviceLocator(),
-                  child: const RestaurantDetailsView(),
-                ),
+                    const RestaurantDetailsView(),
+                routes: [
+                  GoRoute(path: Paths.FOODCART, name: Routes.FOODCART, 
+                  builder: (context, state)=> const FoodCartView()
+                  )
+                ]
               )
             ]),
 
@@ -353,11 +356,11 @@ class AppPages {
             builder: (context, state) => const RideRequestView(),
             routes: [
               GoRoute(
-                  path: Paths.HISTORYRIDE,
-                  name: Routes.HISTORYRIDE,
+                  path: Paths.REQUESTSHISTORY,
+                  name: Routes.REQUESTSHISTORY,
                   builder: (context, state) => BlocProvider<HistoryRideCubit>(
                         create: (_) => serviceLocator(),
-                        child: const HistoryRideView(),
+                        child: const HistoryRequestsView(),
                       )),
               GoRoute(
                   path: Paths.TRIPDETAILS,

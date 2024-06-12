@@ -45,7 +45,14 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
       {required BuildContext context,
       required SelectedMealModel selectedMeal}) {
     List<SelectedMealModel> selectedMeals = state.selectedMeals ?? [];
-     selectedMeals.add(selectedMeal);
+    selectedMeals.add(selectedMeal);
+    emit(state.copyWith(selectedMeals: selectedMeals));
+    Navigator.pop(context);
+  }
+
+  void removeFromCart({required int index}) {
+    List<SelectedMealModel> selectedMeals = state.selectedMeals ?? [];
+    selectedMeals.removeAt(index);
     emit(state.copyWith(selectedMeals: selectedMeals));
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:go_router/go_router.dart';
@@ -97,10 +98,18 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                 currentFocusNode: rideCubit.toAddressFocusNode,
                 currentController: rideCubit.toAddressTextController,
                 prefixIcon: const Icon(Icons.location_on),
-                suffixIcon: IconAppButton(
-                    icon: Icons.search,
-                    onPressed: () => rideCubit.loadNearByPlaces(
-                        key: rideCubit.toAddressTextController.text)),
+                suffixIcon: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppButton(
+                        margin: 5,
+                        label: 'Search',
+                        width: kToolbarHeight,
+                        height: 30,
+                        onPressed: () => rideCubit.loadNearByPlaces(
+                            key: rideCubit.toAddressTextController.text)),
+                  ],
+                ),
                 hint: 'To',
               ),
               const Sizer(),

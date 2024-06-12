@@ -8,6 +8,7 @@ import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../res/style/app_colors.dart';
+import '../../../../../routes/routes.dart';
 import '../../../restaurant_details/presentation/widgets/meal_card.dart';
 import '../../../restaurant_details/presentation/widgets/restaurant_header.dart';
 import '../../data/models/selected_meal_model.dart';
@@ -61,18 +62,23 @@ class RestaurantDetailsView extends StatelessWidget {
   }
 
   Widget _buildBuscketButton() {
-    return Container(
-        margin: const EdgeInsets.all(10),
-        child: AppButton(label: 'View Basket', onPressed: () {}));
+    return BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
+        builder: (context, state) {
+      return Container(
+          margin: const EdgeInsets.all(10),
+          child: AppButton(
+              backColor: state.selectedMeals?.isNotEmpty ?? false
+                  ? AppColors.SECONDARY_COLOR
+                  : AppColors.SECONDARY_COLOR.withOpacity(.7),
+              label: 'View Cart - ${state.selectedMeals?.length ?? 0} Items',
+              onPressed: () => context.push(Routes.FOODCART)));
+    });
   }
 
-  Widget _buildFoodList({
-    required BuildContext context
-  }) {
+  Widget _buildFoodList({required BuildContext context}) {
     final controller = context.read<RestaurantDetailsCubit>();
     return BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
         builder: (context, state) {
-          
       return state.meals?.isNotEmpty ?? false
           ? Padding(
               padding: const EdgeInsets.all(10.0),
@@ -86,7 +92,8 @@ class RestaurantDetailsView extends StatelessWidget {
                       crossAxisCount: 2),
                   itemBuilder: (context, index) {
                     return MealCard(
-                      addToCart:(SelectedMealModel v)=> controller.addToCart(context: context, selectedMeal: v),
+                      addToCart: (SelectedMealModel v) => controller.addToCart(
+                          context: context, selectedMeal: v),
                       item: state.meals![index],
                     );
                   }))

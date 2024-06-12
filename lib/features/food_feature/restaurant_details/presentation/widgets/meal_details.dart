@@ -14,7 +14,8 @@ import '../../domain/entities/variation_entity.dart';
 class MealDetailsWidget extends StatefulWidget {
   final SelectedMealModel item;
   final Function(SelectedMealModel) addToCart;
-  const MealDetailsWidget({super.key, required this.item, required this.addToCart});
+  const MealDetailsWidget(
+      {super.key, required this.item, required this.addToCart});
 
   @override
   State<MealDetailsWidget> createState() => _MealDetailsWidgetState();
@@ -91,17 +92,20 @@ class _MealDetailsWidgetState extends State<MealDetailsWidget> {
   Widget build(BuildContext context) {
     return Column(children: [
       Expanded(
-        child: ListView(
-          children: [
-            IconAppButton(
-              icon: Icons.clear,
-              onPressed: () {},
-            ),
-            _buildMealInfo(meal: widget.item.meal),
-            const Sizer(),
-            _buildCountWidget(),
-            const Sizer(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              IconAppButton(
+                icon: Icons.clear,
+                onPressed: () => Navigator.pop(context),
+              ),
+              _buildMealInfo(meal: widget.item.meal),
+              const Sizer(),
+              _buildCountWidget(),
+              const Sizer(),
+            ],
+          ),
         ),
       ),
       AppButton(

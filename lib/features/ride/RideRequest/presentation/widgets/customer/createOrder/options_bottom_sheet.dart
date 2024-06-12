@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:go_router/go_router.dart';
@@ -55,16 +56,11 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Sizer(),
-              InkWell(
-                onTap: () => context.go(Routes.HISTORYRIDE),
-                child: const Row(
-                  children: [
-                    Icon(Icons.history),
-                    Sizer(),
-                    Label(text: 'Requests History'),
-                  ],
-                ),
-              ),
+              AppButton(
+                  label: 'Requests History',
+                  icon: Icons.history,
+                  onPressed: () => context.go(Routes.REQUESTSHISTORY)),
+
               const Sizer(),
 
               // Text('${state.subCategories?.length ?? 0}'),

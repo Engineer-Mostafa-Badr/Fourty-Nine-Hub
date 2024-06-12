@@ -8,7 +8,7 @@ class BadgedLabel extends StatelessWidget {
   final Color color, textColor;
   final String label;
   final double radius;
-  final double? height, width;
+  final double? height, width, margin;
 
   const BadgedLabel(
       {super.key,
@@ -16,6 +16,7 @@ class BadgedLabel extends StatelessWidget {
       required this.label,
       this.height,
       this.width,
+      this.margin,
       this.radius = 10,
       this.textColor = Colors.white});
 
@@ -24,6 +25,8 @@ class BadgedLabel extends StatelessWidget {
     return Container(
       height: height,
       width: width,
+
+      margin:  EdgeInsets.all(margin??0),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
       decoration: BoxDecoration(
           color: color, borderRadius: BorderRadius.circular(radius)),

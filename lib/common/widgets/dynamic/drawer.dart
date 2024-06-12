@@ -61,6 +61,10 @@ class DrawerWidget extends StatelessWidget {
                   icon: FontAwesomeIcons.adn,
                   label: 'Favourite Ads',
                   onTap: () => context.push(Routes.FAVOURITE)),
+              drawerListTile(
+                  icon: Icons.history,
+                  label: 'Requests History',
+                  onTap: () => context.push(Routes.REQUESTSHISTORY)),
 
               drawerListTile(
                   icon: Icons.list,

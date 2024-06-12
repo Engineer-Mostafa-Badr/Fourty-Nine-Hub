@@ -26,16 +26,20 @@ abstract class Routes {
   static const VISITADOCTORDETAILS = '/Visita/DoctorDetails';
   static const VISITABOOKING = '/Visita/VisitaBooking';
   static const FOOD = '/Food';
+
+  static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
+
+  static const FOODCART = '/Food/RetaurantDetails/FoodCart';
   static const RIDE = '/Ride';
-  static const RIDERDASHBOARD ='/Ride/RiderDashboard';
+  static const RIDERDASHBOARD = '/Ride/RiderDashboard';
 
   static const TRIPDETAILS = '/Ride/TripDetails';
-  static const HISTORYRIDE = '/Ride/HistoryRide';
+  static const REQUESTSHISTORY = '/Ride/RequestsHistory';
   static const YOUTUBE = '/Youtube';
   static const QURAAN = '/Quraan';
   static const AZKAAR = '/Azkaar';
   static const PLAYVIDEO = '/Youtube/PlayVideo';
-  static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
+
   static const MAZADDETAILS = '/Mazadat/MazadDetails';
   static const ZOOM = '/Zoom';
   static const MEETINGROOM = '/Zoom/MeetingRoom';
@@ -93,11 +97,13 @@ abstract class Paths {
   static const FOOD = 'Food';
   static const RIDE = 'Ride';
   static const RIDERDASHBOARD = 'RiderDashboard';
-  static const HISTORYRIDE = 'HistoryRide';
+  static const REQUESTSHISTORY = 'RequestsHistory';
   static const TRIPDETAILS = 'TripDetails';
 
   static const YOUTUBE = 'Youtube';
   static const RESTAURANTDETAILS = 'RetaurantDetails';
+  static const FOODCART = 'FoodCart';
+
   static const PLAYVIDEO = 'PlayVideo';
   static const ZOOM = 'Zoom';
   static const MEETINGROOM = 'MeetingRoom';
