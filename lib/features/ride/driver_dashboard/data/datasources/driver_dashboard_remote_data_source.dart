@@ -5,7 +5,7 @@ import '../../../../../core/data/datasources/json_parser.dart';
 import '../../../../../core/error/failure.dart';
 
 import '../../../../../res/assets/jsons.dart';
-import '../../../history_ride/data/models/trip_model.dart';
+import '../../../../requests_history/data/models/trip_model.dart';
 
 abstract class DriverDashboardRemoteDataSource {
   Future<Either<Failure, List<TripModel>>> getNewTrips();

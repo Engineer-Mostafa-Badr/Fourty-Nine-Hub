@@ -13,4 +13,5 @@ abstract class Jsons {
   static String foodCategoriesList = 'assets/json/food_categories_list.json';
   static String restaurantDetails = 'assets/json/restaurant_details.json';
   static String restaurantMeals = 'assets/json/restaurant_meals.json';
+  static String foodOrders = 'assets/json/food_orders.json';
 }

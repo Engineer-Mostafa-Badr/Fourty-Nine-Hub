@@ -10,8 +10,10 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/l
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
-import 'package:fourtyninehub/features/ride/history_ride/presentation/pages/requests_history_view.dart';
+import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
@@ -52,7 +54,7 @@ import '../features/register/driver_register/presentation/cubit/driver_register_
 import '../features/register/driver_register/presentation/pages/driver_register_view.dart';
 import '../features/ride/driver_dashboard/presentation/cubit/driver_dashboard_cubit.dart';
 import '../features/ride/driver_dashboard/presentation/pages/driver_dashboard_view.dart';
-import '../features/ride/history_ride/presentation/cubit/history_ride_cubit.dart';
+import '../features/requests_history/presentation/cubit/request_history_cubit.dart';
 import '../features/ride/trip_details/presentation/cubit/trip_details_cubit.dart';
 import '../features/ride/trip_details/presentation/pages/trip_details_view.dart';
 import '../features/social_media/chat/presentation/pages/Chat_room.dart';
@@ -338,18 +340,19 @@ class AppPages {
                 ),
             routes: [
               GoRoute(
-                path: Paths.RESTAURANTDETAILS,
-                name: Routes.RESTAURANTDETAILS,
-                builder: (context, state) =>
-                    const RestaurantDetailsView(),
-                routes: [
-                  GoRoute(path: Paths.FOODCART, name: Routes.FOODCART, 
-                  builder: (context, state)=> const FoodCartView()
-                  )
-                ]
-              )
+                  path: Paths.RESTAURANTDETAILS,
+                  name: Routes.RESTAURANTDETAILS,
+                  builder: (context, state) => const RestaurantDetailsView(),
+                  routes: [
+                    GoRoute(
+                        path: Paths.FOODCART,
+                        name: Routes.FOODCART,
+                        builder: (context, state) => const FoodCartView())
+                  ])
             ]),
-
+        GoRoute(
+            path: Paths.SHIPPING, name: Routes.SHIPPING, 
+            builder: (context, state) => const CreateShippingView(),),
         GoRoute(
             path: Paths.RIDE,
             name: Routes.RIDE,
@@ -358,7 +361,8 @@ class AppPages {
               GoRoute(
                   path: Paths.REQUESTSHISTORY,
                   name: Routes.REQUESTSHISTORY,
-                  builder: (context, state) => BlocProvider<HistoryRideCubit>(
+                  builder: (context, state) =>
+                      BlocProvider<RequestHistoryCubit>(
                         create: (_) => serviceLocator(),
                         child: const HistoryRequestsView(),
                       )),

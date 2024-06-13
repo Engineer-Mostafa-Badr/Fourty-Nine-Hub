@@ -4,7 +4,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 
 import 'package:fourtyninehub/features/ride/driver_dashboard/data/models/driver_statistics_model.dart';
 
-import 'package:fourtyninehub/features/ride/history_ride/data/models/trip_model.dart';
+import 'package:fourtyninehub/features/requests_history/data/models/trip_model.dart';
 
 import '../../domain/repositories/driver_dashboard_repo.dart';
 import '../datasources/driver_dashboard_remote_data_source.dart';

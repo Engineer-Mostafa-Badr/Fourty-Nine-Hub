@@ -68,11 +68,11 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
                     label: 'Shipping',
                     index: 3,
                     image: Assets.shipping,
-                    action: () {}),
+                    action: () => context.push(Routes.SHIPPING)),
                 BottomItemModel(
                     icon: FontAwesomeIcons.car,
                     label: 'Ride',
-                    index: 4,
+                  index: 4,
                     image: Assets.ride,
                     action: () => Navigator.push(
                         context,

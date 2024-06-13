@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 
 import '../../../../../core/error/failure.dart';
-import '../../../history_ride/data/models/trip_model.dart';
+import '../../../../requests_history/data/models/trip_model.dart';
 import '../../data/models/driver_statistics_model.dart';
 import '../../domain/usecases/get_driver_new_trips_usecase.dart';
 import '../../domain/usecases/get_driver_statistics_usecase.dart';

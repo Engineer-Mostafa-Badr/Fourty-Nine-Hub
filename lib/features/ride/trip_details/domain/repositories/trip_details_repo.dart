@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../../core/error/failure.dart';
-import '../../../history_ride/data/models/trip_model.dart';
+import '../../../../requests_history/data/models/trip_model.dart';
 import '../../data/models/cancel_reason_model.dart';
 
 abstract class TripDetailsRepo {

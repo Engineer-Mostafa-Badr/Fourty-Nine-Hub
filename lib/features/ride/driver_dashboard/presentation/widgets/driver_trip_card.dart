@@ -11,7 +11,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
-import '../../../history_ride/data/models/trip_model.dart';
+import '../../../../requests_history/data/models/trip_model.dart';
 import 'driver_trip_details.dart';
 
 class DriverTripCard extends StatelessWidget {

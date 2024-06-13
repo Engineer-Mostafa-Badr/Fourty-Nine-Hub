@@ -10,8 +10,8 @@ import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../history_ride/data/models/driver_model.dart';
-import '../../../history_ride/data/models/trip_model.dart';
+import '../../../../requests_history/data/models/driver_model.dart';
+import '../../../../requests_history/data/models/trip_model.dart';
 
 class StartedTripWidget extends StatelessWidget {
   final TripModel trip;

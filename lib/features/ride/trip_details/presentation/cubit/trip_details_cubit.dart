@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 
-import '../../../history_ride/data/models/trip_model.dart';
+import '../../../../requests_history/data/models/trip_model.dart';
 import '../../data/models/cancel_reason_model.dart';
 import '../../domain/usecases/get_cancel_reason_use_case.dart';
 import '../../domain/usecases/get_trip_details_use_case.dart';
