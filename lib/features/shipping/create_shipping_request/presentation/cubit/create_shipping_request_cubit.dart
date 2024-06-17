@@ -2,8 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/error/failure.dart';
+import '../../../../../routes/routes.dart';
 import '../../../../ride/RideRequest/data/models/address_search_params_model.dart';
 import '../../../../ride/RideRequest/data/models/car_type_model.dart';
 import '../../../../ride/RideRequest/data/models/google_search_results.dart';
@@ -20,6 +22,12 @@ part 'create_shipping_request_state.dart';
 class CreateShippingRequestCubit extends Cubit<CreateShippingRequestState> {
   final fromAddressTextController = TextEditingController();
   final toAddressTextController = TextEditingController();
+  final fromEntranceTextController = TextEditingController();
+  final toEntranceTextController = TextEditingController();
+  final fromPhoneTextController = TextEditingController();
+  final toPhoneTextController = TextEditingController();
+  final notesTextController = TextEditingController();
+  final offerTextController = TextEditingController();
   final fromAddressFocusNode = FocusNode();
   final toAddressFocusNode = FocusNode();
   final GetNearByPlacesUseCase _getNearByPlacesUseCase;
@@ -37,8 +45,7 @@ class CreateShippingRequestCubit extends Cubit<CreateShippingRequestState> {
 
 // ---- get subcategories
   Future<void> getSubCategories() async {
-    final subCategories =
-        await _getShippingSubCategoriesUseCase.call('');
+    final subCategories = await _getShippingSubCategoriesUseCase.call('');
     subCategories.fold((failure) {
       emit(state.copyWith(
         failure: failure,
@@ -52,9 +59,12 @@ class CreateShippingRequestCubit extends Cubit<CreateShippingRequestState> {
     });
   }
 
-  void selectPickUpLocation({required AddressSearchParamsEntity item}) =>
-      emit(state.copyWith(
-          status: CreateShippingRequestStates.loading, fromAddress: item));
+  void selectPickUpLocation({required AddressSearchParamsEntity item}) {
+    fromAddressTextController.text = item.address;
+    emit(state.copyWith(
+        status: CreateShippingRequestStates.loading, fromAddress: item));
+  }
+
   // change subCategory selection
   void changeSubCategorySelection({
     required SubCategoryModel item,
@@ -132,5 +142,8 @@ class CreateShippingRequestCubit extends Cubit<CreateShippingRequestState> {
             distance: response.distance,
             time: response.duration)));
   }
-  
+
+  void addNormalRequest({required BuildContext context}) {
+    context.push(Routes.TRIPDETAILS);
+  }
 }

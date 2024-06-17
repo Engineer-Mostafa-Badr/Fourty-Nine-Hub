@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/requests_history/domain/usecases/get_food_history_usecase.dart';
+import 'package:fourtyninehub/features/requests_history/domain/usecases/get_shipping_requests_usecase.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/cubit/request_history_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/datasources/remote_data_source.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/repositories/ride_request_repo_impl.dart';
@@ -70,6 +71,7 @@ class RideServiceLocator {
         .registerFactory<RequestHistoryCubit>(() => RequestHistoryCubit(
               serviceLocator(),
               serviceLocator(),
+              serviceLocator(),
             )..loadData());
     serviceLocator.registerFactory<TripDetailsCubit>(() => TripDetailsCubit(
           serviceLocator(),
@@ -104,6 +106,8 @@ class RideServiceLocator {
         () => GetTripDetailsUseCase(serviceLocator()));
     serviceLocator.registerFactory<GetCancelReasonUseCase>(
         () => GetCancelReasonUseCase(serviceLocator()));
+ serviceLocator.registerFactory<GetShippingRequestsUseCase>(
+        () => GetShippingRequestsUseCase(serviceLocator()));
 
     serviceLocator.registerLazySingleton<GetFoodHistoryUseCase>(
         () => GetFoodHistoryUseCase(serviceLocator()));

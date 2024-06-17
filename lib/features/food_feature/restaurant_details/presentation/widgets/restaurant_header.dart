@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -17,6 +19,7 @@ class RestaurantHeader extends StatelessWidget {
       width: double.infinity,
       child: Stack(
         children: [
+          
           Positioned.fill(
               child: Column(
             children: [
@@ -27,6 +30,14 @@ class RestaurantHeader extends StatelessWidget {
               const Spacer(),
             ],
           )),
+          Positioned(
+            top: 10,
+            left: 10,
+            child: IconAppButton(
+            icon: Icons.arrow_back,
+            onPressed: () => context.pop(),
+            isCircle: true,
+          ),),
           Positioned(
               bottom: 10,
               left: 10,

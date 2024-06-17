@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/requests_history/presentation/widgets/tri
 
 import '../../../../res/assets/assets.dart';
 import '../widgets/food_order_card.dart';
+import '../widgets/shipping_request_card.dart';
 
 class HistoryRequestsView extends StatelessWidget {
   const HistoryRequestsView({super.key});
@@ -62,7 +63,7 @@ class HistoryRequestsView extends StatelessWidget {
                           Expanded(
                               child: TabBarView(children: [
                             _buildRideRequests(),
-                            _buildEmptyList(),
+                            _buildShippingRequests(),
                             _buildEmptyList(),
                             _buildFoodOrders(),
                             _buildEmptyList(),
@@ -81,6 +82,18 @@ class HistoryRequestsView extends StatelessWidget {
         text: "There is no items",
       ),
     );
+  }
+
+  Widget _buildShippingRequests() {
+    return BlocBuilder<RequestHistoryCubit, RequestHistoryState>(
+        builder: (context, state) {
+      return ListView.separated(
+          itemCount: state.shippingRequests?.length ?? 0,
+          separatorBuilder: (context, index) => const Sizer(),
+          itemBuilder: (context, index) {
+            return ShippingRequestCard(trip: state.shippingRequests![index]);
+          });
+    });
   }
 
   Widget _buildRideRequests() {

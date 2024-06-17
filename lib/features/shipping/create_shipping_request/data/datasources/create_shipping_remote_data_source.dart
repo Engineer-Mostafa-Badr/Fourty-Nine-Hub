@@ -74,7 +74,7 @@ class CreateShippingRemoteDataSourceImpl
   @override
   Future<Either<Failure, List<SubCategoryModel>>> getSubCategories(
       {required String mainCategoryId}) async {
-    final response = await _apiConsumer.get(Jsons.subCategories);
+    final response = await _apiConsumer.get(Jsons.shippingSubCategories);
 
     return response.fold(
         (failure) => Left(failure),

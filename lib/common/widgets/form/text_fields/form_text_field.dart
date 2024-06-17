@@ -30,7 +30,7 @@ class FormTextField extends StatefulWidget {
   const FormTextField(
       {super.key,
       this.initialValue,
-       this.action,
+      this.action,
       this.obsecure,
       this.prefix,
       this.hint,
@@ -70,6 +70,7 @@ class _FormTextFieldState extends State<FormTextField> {
                   ? (widget.height ?? kToolbarHeight) * 1.5
                   : widget.height ?? kToolbarHeight,
           child: TextFormField(
+            style: Styles.mediumText(),
             textAlignVertical: widget.textAlignVertical,
             maxLines: widget.maxLines ?? 1,
             onFieldSubmitted: (v) {

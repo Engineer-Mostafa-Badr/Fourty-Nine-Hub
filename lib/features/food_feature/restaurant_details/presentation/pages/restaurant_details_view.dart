@@ -22,29 +22,6 @@ class RestaurantDetailsView extends StatelessWidget {
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        leading: Center(
-          child: IconAppButton(
-            icon: Icons.arrow_back,
-            onPressed: () => context.pop(),
-            isCircle: true,
-          ),
-        ),
-        actions: [
-          IconAppButton(
-            icon: Icons.share,
-            onPressed: () {},
-            isCircle: true,
-          ),
-          IconAppButton(
-            icon: Icons.search,
-            onPressed: () {},
-            isCircle: true,
-          ),
-        ],
-      ),
       bottomNavigationBar: _buildBuscketButton(),
       body: BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
           builder: (context, state) {
@@ -71,7 +48,11 @@ class RestaurantDetailsView extends StatelessWidget {
                   ? AppColors.SECONDARY_COLOR
                   : AppColors.SECONDARY_COLOR.withOpacity(.7),
               label: 'View Cart - ${state.selectedMeals?.length ?? 0} Items',
-              onPressed: () => context.push(Routes.FOODCART)));
+              onPressed: () {
+                if (state.selectedMeals?.isNotEmpty ?? false) {
+                  context.push(Routes.FOODCART);
+                }
+              }));
     });
   }
 

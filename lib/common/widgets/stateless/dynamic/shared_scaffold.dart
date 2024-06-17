@@ -9,16 +9,21 @@ class SharedScaffold extends StatelessWidget {
   final int mainCategoryId;
   final Widget body;
   final bool extendBody;
+  final bool isWithBackArrow;
   const SharedScaffold(
-      {super.key, required this.mainCategoryId, 
+      {super.key,
+      required this.mainCategoryId,
       this.extendBody = false,
+      this.isWithBackArrow = true,
       required this.body});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: extendBody,
-      appBar: const HomeAppbar(),
+      appBar:  HomeAppbar(
+        isWithBackArrow: isWithBackArrow,
+      ),
       drawer: const DrawerWidget(),
       bottomNavigationBar: BottomNavigator(
         mainCategory: mainCategoryId,

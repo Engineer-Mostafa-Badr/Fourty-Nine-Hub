@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import '../buttons/iconAppButton.dart';
 import '../labels/label.dart';
 
 class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
@@ -57,15 +58,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
 
             if (isWithBackArrow) const SizedBox(width: 10),
             if (isWithBackArrow)
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: isDetailsCardService
-                      ? AppColors.PRIMARY_COLOR
-                      : AppColors.PRIMARY_COLOR,
-                  size: 22,
-                ),
+              IconAppButton(
+                onPressed: () => context.pop(),
+                icon: Icons.arrow_back_ios,
               ),
             Expanded(
               child: Container(

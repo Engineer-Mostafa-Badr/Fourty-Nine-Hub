@@ -1,10 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/localization/localization.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/parent_main_category_entity.dart';
@@ -18,13 +16,9 @@ import '../../../../res/style/const.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../common/widgets/dynamic/bottom_navigator.dart';
-import '../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/dynamic/wallet_widget.dart';
-import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../res/style/app_colors.dart';
-import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../controllers/main_categories_cubit/parent_main_categories_cubit.dart';
 import '../widgets/advertise_your_company.dart';
 import '../widgets/announce_widget.dart';
@@ -42,18 +36,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      appBar: const HomeAppbar(),
-      drawer: const DrawerWidget(),
-      bottomNavigationBar: const BottomNavigator(
-        mainCategory: 1,
-        index: 2,
-      ),
-      floatingActionButton: const FloatingButton(
-        changeView: 1,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    return SharedScaffold(
+      mainCategoryId: 1,
+      isWithBackArrow: false,
       body: SingleChildScrollView(
         child: Column(
           children: [

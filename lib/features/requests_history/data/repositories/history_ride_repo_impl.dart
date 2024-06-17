@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/requests_history/data/datasources/request_history_remote_data_source.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/food_order_model.dart';
+import 'package:fourtyninehub/features/requests_history/data/models/shipping_request_model.dart';
 
 import 'package:fourtyninehub/features/requests_history/data/models/trip_model.dart';
 
@@ -21,6 +22,13 @@ class RequestHistoryRepoImpl extends RequestHistoryRepo {
   Future<Either<Failure, List<FoodOrderModel>>> getFoodHistory() async {
    
    return await _remoteDataSource.getFoodHistory();
+   
+  }
+
+  @override
+  Future<Either<Failure, List<ShippingRequestModel>>> getShippingRequests()async {
+   
+   return  await _remoteDataSource.getShippingRequests();
    
   }
 }

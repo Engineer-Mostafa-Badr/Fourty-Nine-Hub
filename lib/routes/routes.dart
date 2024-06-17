@@ -3,6 +3,8 @@ abstract class Routes {
   static const HOME = '/';
   static const SUBCATEGORIES = '/Subcategories';
   static const ADS = '/Subcategories/ADS';
+  static const ADdetails = '/Subcategories/ADS/AD-Details';
+
   static const LUCKYWHEEL = '/LuckyWheel';
   static const COMPETITIONS = '/Competitions';
   static const WINNERS = '/Winners';
@@ -71,6 +73,7 @@ abstract class Paths {
   static const HOME = '/';
   static const SUBCATEGORIES = 'Subcategories';
   static const ADS = 'ADS';
+  static const ADdetails = 'AD-Details';
   static const LUCKYWHEEL = 'LuckyWheel';
   static const COMPETITIONS = 'Competitions';
   static const WINNERS = 'Winners';

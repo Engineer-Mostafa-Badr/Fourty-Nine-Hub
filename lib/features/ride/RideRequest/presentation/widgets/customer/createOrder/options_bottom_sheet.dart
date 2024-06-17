@@ -55,11 +55,11 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Sizer(),
-              AppButton(
-                  label: 'Requests History',
-                  icon: Icons.history,
-                  onPressed: () => context.go(Routes.REQUESTSHISTORY)),
+              // const Sizer(),
+              // AppButton(
+              //     label: 'Requests History',
+              //     icon: Icons.history,
+              //     onPressed: () => context.go(Routes.REQUESTSHISTORY)),
 
               const Sizer(),
 
@@ -269,7 +269,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                   children: [
                     Expanded(
                         child: InkWell(
-                      onTap: () => context.push(Routes.REGISTERDRIVER),
+                      onTap: () {},
                       child: Container(
                         height: kToolbarHeight * .7,
                         decoration: BoxDecoration(

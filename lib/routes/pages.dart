@@ -5,7 +5,10 @@ import 'package:fourtyninehub/features/account_taps/account/presentation/pages/m
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/share_the_app.dart';
 import 'package:fourtyninehub/features/account_taps/lists/presentation/pages/lists_view.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/pages/privacy_view.dart';
-import 'package:fourtyninehub/features/ads/presentation/pages/ads_view.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
@@ -90,7 +93,18 @@ class AppPages {
               GoRoute(
                   path: Paths.ADS,
                   name: Routes.ADS,
-                  builder: (context, state) => const AdsView())
+                  builder: (context, state) => BlocProvider<AdsCubit>(
+                        create: (_) => serviceLocator(),
+                        child: const AdsView(),
+                      ),
+                  routes: [
+                    GoRoute(
+                        path: Paths.ADdetails,
+                        name: Routes.ADdetails,
+                        builder: (context, state) => BlocProvider<AdDetailsCubit>(create: (_)=> serviceLocator(), 
+                        child: const AdDetailsView(),
+                        ))
+                  ]),
             ]),
         GoRoute(
           name: Routes.LOGIN,
@@ -351,8 +365,10 @@ class AppPages {
                   ])
             ]),
         GoRoute(
-            path: Paths.SHIPPING, name: Routes.SHIPPING, 
-            builder: (context, state) => const CreateShippingView(),),
+          path: Paths.SHIPPING,
+          name: Routes.SHIPPING,
+          builder: (context, state) => const CreateShippingView(),
+        ),
         GoRoute(
             path: Paths.RIDE,
             name: Routes.RIDE,

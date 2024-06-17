@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 
-
-
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../data/models/food_category_model.dart';
-
 
 class FoodOfferCard extends StatelessWidget {
   final FoodCategoryModel item;
@@ -25,12 +22,14 @@ class FoodOfferCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SquareImage(source: NetworkImage(item.image)),
+          const Sizer(),
+          Expanded(child: SquareImage(source: NetworkImage(item.image))),
           const Sizer(),
           Label(
               textAlign: TextAlign.center,
               text: item.name,
-              style: Styles.mediumText())
+              style: Styles.mediumText()),
+          const Sizer(),
         ],
       ),
     );

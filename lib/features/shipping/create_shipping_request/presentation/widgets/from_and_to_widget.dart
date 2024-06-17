@@ -27,6 +27,7 @@ class FromAndToWidget extends StatelessWidget {
           ),
           color: Colors.white),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildSubcategoriesWidget(context: context),
           const Sizer(),
@@ -51,7 +52,6 @@ class FromAndToWidget extends StatelessWidget {
   }
 
   Widget _buildToWidget({required BuildContext context}) {
-    final controller = context.read<CreateShippingRequestCubit>();
     return BlocBuilder<CreateShippingRequestCubit, CreateShippingRequestState>(
         builder: (context, state) {
       return InkWell(
@@ -87,7 +87,6 @@ class FromAndToWidget extends StatelessWidget {
   }
 
   Widget _buildFromWidget({required BuildContext context}) {
-    final controller = context.read<CreateShippingRequestCubit>();
     return BlocBuilder<CreateShippingRequestCubit, CreateShippingRequestState>(
         builder: (context, state) {
       return state.fromAddress != null

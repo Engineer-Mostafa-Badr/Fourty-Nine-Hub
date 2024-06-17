@@ -17,7 +17,7 @@ class CreateShippingView extends StatelessWidget {
         body: Column(
           children: [
             Expanded(child: _buildMapWidget(context: context)),
-            FromAndToWidget(),
+            const FromAndToWidget(),
           ],
         ));
   }
