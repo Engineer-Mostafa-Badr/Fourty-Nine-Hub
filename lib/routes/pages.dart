@@ -1,14 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
-import 'package:fourtyninehub/features/account_taps/account/presentation/pages/my_adds.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/share_the_app.dart';
 import 'package:fourtyninehub/features/account_taps/lists/presentation/pages/lists_view.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/pages/privacy_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/create_ad.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
@@ -24,6 +26,7 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/ti
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:go_router/go_router.dart';
+import '../features/account_taps/my_adds/presentation/pages/my_adds.dart';
 import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/cart_view.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
@@ -101,9 +104,16 @@ class AppPages {
                     GoRoute(
                         path: Paths.ADdetails,
                         name: Routes.ADdetails,
-                        builder: (context, state) => BlocProvider<AdDetailsCubit>(create: (_)=> serviceLocator(), 
-                        child: const AdDetailsView(),
-                        ))
+                        builder: (context, state) =>
+                            BlocProvider<AdDetailsCubit>(
+                              create: (_) => serviceLocator(),
+                              child: const AdDetailsView(),
+                            )),
+                    GoRoute(
+                      path: Paths.CREATEAD,
+                      name: Routes.CREATEAD,
+                      builder: (context, state) => const CreateAdView(),
+                    )
                   ]),
             ]),
         GoRoute(
@@ -237,7 +247,10 @@ class AppPages {
               GoRoute(
                   path: Paths.MYADDS,
                   name: Routes.MYADDS,
-                  builder: (context, state) => const MyAdds()),
+                  builder: (context, state) => BlocProvider<MyAddsCubit>(
+                        create: (_) => serviceLocator(),
+                        child: const MyAddsView(),
+                      )),
             ]),
         GoRoute(
             path: Paths.SOCIAL,

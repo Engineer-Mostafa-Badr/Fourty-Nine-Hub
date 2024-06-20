@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/features/ads_feature/ads/data/models/ad_statistics_model.dart';
+
 import '../../../../requests_history/data/models/address_model.dart';
 import '../../domain/entities/ad_entity.dart';
 import 'detail_model.dart';
@@ -12,6 +14,8 @@ class AdModel extends AdEntity {
       required super.price,
       required super.address,
       required super.user,
+      super.statistics,
+      required super.active,
       required super.createdAt,
       required super.details});
   factory AdModel.fromJson(Map<String, dynamic> json) {
@@ -21,6 +25,8 @@ class AdModel extends AdEntity {
         description: json['description'],
         images: json['images'].cast<String>(),
         price: json['price'],
+        active: json['active'] ?? true,
+        statistics: json['statistics']==null?null: AdStatisticsModel.fromJson(json['statistics']),
         address: AddressModel.fromJson(json['address']),
         user: PublisherModel.fromJson(json['user']),
         details: json['details'] == null

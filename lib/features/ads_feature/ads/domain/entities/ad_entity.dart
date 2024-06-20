@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_statistics_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/publisher_entity.dart';
 import 'package:intl/intl.dart';
 
@@ -10,6 +11,8 @@ class AdEntity {
   final String description;
   final List<String> images;
   final int price;
+  final bool active;
+  final AdStatisticsEntity? statistics;
   final AddressEntity address;
   final PublisherEntity user;
   List<DetailEntiy> details;
@@ -23,7 +26,9 @@ class AdEntity {
       required this.images,
       required this.price,
       required this.address,
+      this.statistics, 
       required this.user,
+      required this.active,
       required this.details,
       required this.createdAt});
 }

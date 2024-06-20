@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import 'features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'features/fourty_nine/presentation/controllers/main_categories_cubit/parent_main_categories_cubit.dart';
 import 'features/fourty_nine/presentation/controllers/parent_main_categories_cubit/main_categories_cubit.dart';
@@ -49,6 +50,10 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => serviceLocator<CreateShippingRequestCubit>(),
+        ),
+        // CreateAdCubit
+         BlocProvider(
+          create: (context) => serviceLocator<CreateAdCubit>(),
         ),
       ],
       child: GestureDetector(

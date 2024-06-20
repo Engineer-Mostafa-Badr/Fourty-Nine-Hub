@@ -36,10 +36,10 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
 
   @override
   Future<Either<Failure, List<MainCategoryModel>>> getMainCategories() async {
-    final result = await _apiConsumer.get(EndPoints.getMainCategories);
+    final result = await _apiConsumer.get(Jsons.mainCategories);
     return result.fold(
       (failure) => Left(failure),
-      (response) => Right((response['data'] as List)
+      (response) => Right((response['data']['categories'] as List)
           .map((e) => MainCategoryModel.fromJson(e))
           .toList()),
     );
