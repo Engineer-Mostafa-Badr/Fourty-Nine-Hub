@@ -30,6 +30,7 @@ abstract class Routes {
   static const FOOD = '/Food';
 
   static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
+  static const CusineRestaurants = '/Food/Cusine-Restaurants';
 
   static const FOODCART = '/Food/RetaurantDetails/FoodCart';
   static const SHIPPING = '/Shipping';
@@ -53,6 +54,7 @@ abstract class Routes {
   static const INSTALLMENTORDERS = '/Installment/Installment-orders';
   static const LOGIN = '/Login';
   static const REGISTER = '/Register';
+  static const FORGOTPASSWORD = '/ForgotPassword';
   static const VERIFYMAIL = '/Register/verify-mail-register';
   static const REGISTERDRIVER = '/Register/register-driver';
   static const ACCOUNT = '/Account';
@@ -100,6 +102,7 @@ abstract class Paths {
   static const VISITADOCTORDETAILS = 'DoctorDetails';
   static const VISITABOOKING = 'VisitaBooking';
   static const FOOD = 'Food';
+  static const CusineRestaurants = 'Cusine-Restaurants';
   static const SHIPPING ='Shipping';
   static const RIDE = 'Ride';
   static const RIDERDASHBOARD = 'RiderDashboard';
@@ -119,6 +122,8 @@ abstract class Paths {
   static const INSTALLMENTORDERS = 'Installment-orders';
   static const LOGIN = 'Login';
   static const REGISTER = 'Register';
+    static const FORGOTPASSWORD = 'ForgotPassword';
+
   static const VERIFYMAIL = 'verify-mail-register';
   static const REGISTERDRIVER = 'register-driver';
   static const ACCOUNT = 'Account';

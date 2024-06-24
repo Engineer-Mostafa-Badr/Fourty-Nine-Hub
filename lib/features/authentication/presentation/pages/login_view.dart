@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -74,6 +75,15 @@ class LoginView extends StatelessWidget {
                   obsecure: true,
                   prefix: const Icon(Icons.password),
                   action: (v) {},
+                ),
+                const Sizer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextAppButton(
+                        label: 'Forgot Password?',
+                        onPressed: () => context.push(Routes.FORGOTPASSWORD)),
+                  ],
                 ),
                 const Sizer(),
                 DefaultButton(

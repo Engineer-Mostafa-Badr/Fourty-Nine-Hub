@@ -1,11 +1,12 @@
 part of 'ad_details_cubit.dart';
 
-enum AdDetailsStates { loading, initState, error }
+enum AdDetailsStates { loading, initState, error , success}
 
 extension AdDetailsStateX on AdDetailsState {
   bool get isInitial => status == AdDetailsStates.initState;
   bool get isLoading => status == AdDetailsStates.loading;
   bool get isError => status == AdDetailsStates.error;
+  bool get isSuccess => status == AdDetailsStates.success;
 }
 
 class AdDetailsState {

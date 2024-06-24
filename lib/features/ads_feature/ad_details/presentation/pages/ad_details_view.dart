@@ -8,13 +8,16 @@ import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart'
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
 import 'package:fourtyninehub/features/requests_history/domain/entities/address_entity.dart';
 import 'package:fourtyninehub/res/style/const.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../common/widgets/stateless/dynamic/CarouselSlider.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 
 class AdDetailsView extends StatelessWidget {
   const AdDetailsView({super.key});
@@ -22,9 +25,7 @@ class AdDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BackAppBar(
-          label: 'Ad Details',
-        ),
+        appBar: const BackAppBar(),
         bottomNavigationBar: _buildActionsWidget(),
         body: BlocBuilder<AdDetailsCubit, AdDetailsState>(
             builder: (context, state) {
@@ -45,33 +46,68 @@ class AdDetailsView extends StatelessWidget {
                 const Sizer(),
                 _buildDetailsWidget(ad: state.ad!),
                 _buildLocationWidget(address: state.ad!.address),
+                const Sizer(),
+                _buildRelevantAdsWidget(),
               ],
             ),
           );
         }));
   }
 
-  Widget _buildActionsWidget() {
-    return Container(
-      margin: const EdgeInsets.all(10),
-      child: Row(
+  Widget _buildRelevantAdsWidget() {
+    return BlocBuilder<AdDetailsCubit, AdDetailsState>(
+        builder: (context, state) {
+      if (state.relevantAds?.isEmpty ?? true) {
+        return const SizedBox();
+      }
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-              child: AppButton(
-                  label: 'Chat',
-                  icon: Icons.chat_bubble_outline,
-                  onPressed: () {})),
-          const Sizer(),
-          Expanded(
-              child:
-                  AppButton(label: 'Call', icon: Icons.call, onPressed: () {})),
-          const Sizer(),
-          Expanded(
-              child: AppButton(
-                  label: 'Request', icon: Icons.bookmark, onPressed: () {})),
+          Label(
+            text: 'Relevant Ads',
+            style: Styles.mediumText(fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: kToolbarHeight * 3.5,
+            child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) =>
+                    AdCard(item: state.relevantAds![index]),
+                separatorBuilder: (context, index) => const Sizer(),
+                itemCount: state.relevantAds?.length ?? 0),
+          ),
         ],
-      ),
-    );
+      );
+    });
+  }
+
+  Widget _buildActionsWidget() {
+    return BlocBuilder<AdDetailsCubit, AdDetailsState>(
+        builder: (context, state) {
+      return Container(
+        margin: const EdgeInsets.all(10),
+        child: Row(
+          children: [
+            Expanded(
+                child: AppButton(
+                    label: 'Chat',
+                    icon: Icons.chat_bubble_outline,
+                    onPressed: () => context.push(Routes.CHATROOM))),
+            const Sizer(),
+            Expanded(
+                child: AppButton(
+                    label: 'Call',
+                    icon: Icons.call,
+                    onPressed: () => LaunchURLHelper()
+                        .call(phone: state.ad?.user.phone ?? ''))),
+            const Sizer(),
+            Expanded(
+                child: AppButton(
+                    label: 'Request', icon: Icons.bookmark, onPressed: () {})),
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildLocationWidget({required AddressEntity address}) {
@@ -137,10 +173,6 @@ class AdDetailsView extends StatelessWidget {
         Label(
           text: ad.title,
           style: Styles.mediumText(fontWeight: FontWeight.bold),
-        ),
-        Label(
-          text: ad.description,
-          style: Styles.mediumText(),
         ),
         InkWell(
           onTap: () => LaunchURLHelper().openLocation(

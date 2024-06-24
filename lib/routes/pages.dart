@@ -9,15 +9,17 @@ import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
-import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/create_ad.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/registable_sub_categories_cubit/registable_subcategories_cubit.dart';
+import 'package:fourtyninehub/features/installment_feature/installment_details/presentation/cubit/installment_details_cubit.dart';
+import 'package:fourtyninehub/features/installment_feature/installment_list/presentation/cubit/installment_list_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
@@ -27,11 +29,17 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/t
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:go_router/go_router.dart';
 import '../features/account_taps/my_adds/presentation/pages/my_adds.dart';
-import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
+import '../features/authentication/presentation/pages/forgot_password/enter_email_forgot_password_view.dart';
+import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_restaurants_view.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/cart_view.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
+import '../features/fourty_nine/presentation/controllers/main_categories_cubit/parent_main_categories_cubit.dart';
+import '../features/fourty_nine/presentation/controllers/parent_main_categories_cubit/main_categories_cubit.dart';
+import '../features/mazadat_feature/auction_details/presentation/cubit/auction_details_cubit.dart';
+import '../features/mazadat_feature/auction_details/presentation/pages/Mazad_details.dart';
+import '../features/mazadat_feature/auction_list/presentation/cubit/auction_list_cubit.dart';
 import '../features/ride/RideRequest/presentation/pages/ride_request_view.dart';
 import '../features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
 import '../features/account_taps/account/presentation/pages/favourite_category_view.dart';
@@ -46,14 +54,13 @@ import '../features/authentication/presentation/pages/register/register_view.dar
 import '../features/competition/presentation/pages/competition_view.dart';
 import '../features/competition/presentation/pages/winners.dart';
 import '../features/fourty_nine/presentation/pages/fourty_nine.dart';
-import '../features/installments/presentation/pages/installment_details.dart';
-import '../features/installments/presentation/pages/installment_order_details.dart';
-import '../features/installments/presentation/pages/installment_orders_list.dart';
-import '../features/installments/presentation/pages/installment_view.dart';
+import '../features/installment_feature/installment_details/presentation/pages/installment_details.dart';
+import '../features/installment_feature/installments/presentation/pages/installment_order_details.dart';
+import '../features/installment_feature/installments/presentation/pages/installment_orders_list.dart';
+import '../features/installment_feature/installment_list/presentation/pages/installment_view.dart';
 import '../features/lucky_wheel/presentation/controllers/wheel_cubit/wheel_cubit.dart';
 import '../features/lucky_wheel/presentation/pages/lucky_wheel.dart';
-import '../features/mazadat/presentation/pages/Mazad_details.dart';
-import '../features/mazadat/presentation/pages/Mazadat_view.dart';
+import '../features/mazadat_feature/auction_list/presentation/pages/Mazadat_view.dart';
 import '../features/notifications/presentation/pages/notification_view.dart';
 import '../features/quraan/presentation/pages/quraan_view.dart';
 import '../features/register/driver_register/presentation/cubit/driver_register_cubit.dart';
@@ -71,6 +78,7 @@ import '../features/social_media/club_house/presentation/widgets/clubHouseRoom.d
 import '../features/social_media/reels/presentation/pages/Reel_view.dart';
 import '../features/social_media/social/presentation/pages/Social_home.dart';
 import '../features/social_media/social/presentation/pages/other_account_view.dart';
+import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/wallet/presentation/pages/wallet_history.dart';
 import '../features/wallet/presentation/pages/wallet_view.dart';
 import '../features/youtube/presentation/pages/play_video.dart';
@@ -86,12 +94,28 @@ class AppPages {
   static final router = GoRouter(routes: <RouteBase>[
     GoRoute(
       path: Routes.HOME,
-      builder: (context, state) => const FourtyNineView(),
+      builder: (context, state) => MultiBlocProvider(providers: [
+       BlocProvider<RegistableSubCategoriesCubit>(
+                create: (_) => serviceLocator(),
+              ), 
+               BlocProvider(
+          create: (context) => serviceLocator<ParentMainCategoriesCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<MainCategoriesCubit>(),
+        ),
+      ],
+      child: const FourtyNineView(),
+      ),
+      
       routes: <RouteBase>[
         GoRoute(
             path: Paths.SUBCATEGORIES,
             name: Routes.SUBCATEGORIES,
-            builder: (context, state) => const SubCategoriesView(),
+            builder: (context, state) => BlocProvider<SubcategoriesCubit>(create: (_)=> serviceLocator(), 
+            child: const SubCategoriesView(),
+            ),
+            
             routes: [
               GoRoute(
                   path: Paths.ADS,
@@ -124,6 +148,7 @@ class AppPages {
             child: const LoginView(),
           ),
         ),
+        GoRoute(path: Paths.FORGOTPASSWORD, name: Routes.FORGOTPASSWORD, builder: (context, state)=> const EnterEmailForgotPasswordView() ),
         GoRoute(
           name: Routes.REGISTER,
           path: Paths.REGISTER,
@@ -315,12 +340,17 @@ class AppPages {
         GoRoute(
             path: Paths.MAZADAT,
             name: Routes.MAZADAT,
-            builder: (context, state) => const MazadatView(),
+            builder: (context, state) => BlocProvider<AuctionListCubit>(
+                child: const MazadatView(), create: (_) => serviceLocator()),
             routes: [
               GoRoute(
                 path: Paths.MAZADDETAILS,
                 name: Routes.MAZADDETAILS,
-                builder: (context, state) => const MazadDetails(),
+
+                builder: (context, state) => BlocProvider<AuctionDetailsCubit>(
+                  create: (_) => serviceLocator(),
+                  child: const MazadDetails(),
+                ),
               ),
               // OtherAccountView
             ]),
@@ -366,6 +396,14 @@ class AppPages {
                   child: const RestaurantsListsView(),
                 ),
             routes: [
+              // CusineRestaurantsView
+              GoRoute(
+            path: Paths.CusineRestaurants,
+            name: Routes.CusineRestaurants,
+            builder: (context, state) => BlocProvider<CusineRestaurantsCubit>(
+                  create: (_) => serviceLocator(),
+                  child: const CusineRestaurantsView(),
+                ),),
               GoRoute(
                   path: Paths.RESTAURANTDETAILS,
                   name: Routes.RESTAURANTDETAILS,
@@ -438,12 +476,16 @@ class AppPages {
         GoRoute(
             path: Paths.INSTALLMENT,
             name: Routes.INSTALLMENT,
-            builder: (context, state) => const InstallmentView(),
+            builder: (context, state) => BlocProvider<InstallmentListCubit>(create: (_)=> serviceLocator(), 
+            child: const InstallmentView()
+            ),
             routes: [
               GoRoute(
                 path: Paths.INSTALLMENTDETAILS,
                 name: Routes.INSTALLMENTDETAILS,
-                builder: (context, state) => const InstallmentsDetails(),
+                builder: (context, state) => BlocProvider<InstallmentDetailsCubit>(
+                  create: (_)=> serviceLocator(),
+                 child: const InstallmentsDetails()),
               ),
               GoRoute(
                 path: Paths.INSTALLMENTORDERDETAILS,

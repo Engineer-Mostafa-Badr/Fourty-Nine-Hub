@@ -20,18 +20,21 @@ class AdsView extends StatelessWidget {
       ),
       body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: BlocBuilder<AdsCubit, AdsState>(builder: (context, state) {
-            return GridView.builder(
-                itemBuilder: (context, index) => AdCard(
-                      item: state.ads![index],
-                    ),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: .8,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    crossAxisCount: 2),
-                itemCount: state.ads?.length ?? 0);
-          })),
+          child: BlocBuilder<AdsCubit, AdsState>(
+            
+              builder: (context, state) {
+                return GridView.builder(
+                    itemBuilder: (context, index) => AdCard(
+                          item: state.ads![index],
+                        ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: .8,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                            crossAxisCount: 2),
+                    itemCount: state.ads?.length ?? 0);
+              })),
     );
   }
 }

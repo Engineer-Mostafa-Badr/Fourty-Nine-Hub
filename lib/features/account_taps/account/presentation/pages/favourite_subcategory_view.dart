@@ -28,16 +28,16 @@ class _FavouriteSubCategoryViewState extends State<FavouriteSubCategoryView> {
         iconColor: Colors.white,
         backColor: AppColors.PRIMARY_COLOR,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: GridView.builder(
-            itemCount: 40,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 10),
-            itemBuilder: (context, index) => const SubCategoryCard()),
-      ),
+      // body: Padding(
+      //   padding: const EdgeInsets.all(10.0),
+      //   child: GridView.builder(
+      //       itemCount: 40,
+      //       shrinkWrap: true,
+      //       physics: const NeverScrollableScrollPhysics(),
+      //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      //           crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 10),
+      //       itemBuilder: (context, index) => const SubCategoryCard()),
+      // ),
     );
   }
 

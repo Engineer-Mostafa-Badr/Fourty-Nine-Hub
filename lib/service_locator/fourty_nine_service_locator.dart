@@ -6,7 +6,6 @@ import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/m
 import 'package:fourtyninehub/features/ads_feature/ad_details/data/datasources/ad_details_remote_data_source.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/repositories/ad_details_repo.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_ad_details_usecase.dart';
-
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_relevant_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/datasources/ads_remote_data_source.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/repositories/ads_repo.dart';
@@ -28,6 +27,8 @@ import '../features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dar
 import '../features/fourty_nine/domain/use_cases/get_parent_main_categories_use_case.dart';
 import '../features/fourty_nine/presentation/controllers/main_categories_cubit/parent_main_categories_cubit.dart';
 import '../features/fourty_nine/presentation/controllers/parent_main_categories_cubit/main_categories_cubit.dart';
+import '../features/fourty_nine/presentation/controllers/registable_sub_categories_cubit/registable_subcategories_cubit.dart';
+import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 
 class FourtyNineServiceLocator {
   static void execute(GetIt serviceLocator) {
@@ -90,6 +91,7 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+
     serviceLocator.registerLazySingleton<GetMainCategoriesUseCase>(
       () => GetMainCategoriesUseCase(
         serviceLocator(),
@@ -128,6 +130,12 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       )..getParentMainCategories(),
     );
+        
+serviceLocator.registerSingleton(
+      RegistableSubCategoriesCubit(
+        serviceLocator(),
+      )..loadData(),
+    );
     serviceLocator.registerSingleton(
       MyAddsCubit(
         serviceLocator(),
@@ -139,7 +147,12 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       )..getMainCategories(),
     );
-
+    
+serviceLocator.registerSingleton(
+      SubcategoriesCubit(
+        serviceLocator(),
+      )..loadData(),
+    );
     serviceLocator.registerFactory<AdsCubit>(
       () => AdsCubit(
         serviceLocator(),

@@ -10,9 +10,11 @@ import 'package:go_router/go_router.dart';
 import '../../../../res/style/const.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
+import '../../domain/entities/sub_category_entity.dart';
 
 class SubCategoryCard extends StatelessWidget {
-  const SubCategoryCard({super.key});
+  final SubCategoryEntity item;
+  const SubCategoryCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +29,14 @@ class SubCategoryCard extends StatelessWidget {
               width: double.infinity,
               child: Stack(
                 children: [
-                  const Positioned.fill(
+                  Positioned.fill(
                     child: SquareImage(
+                        fit: BoxFit.fitWidth,
                         radius: 10,
-                        source: NetworkImage(UIConst.imagePlaceHolder)),
+                        source: NetworkImage(item.image)),
                   ),
                   Positioned(
                       top: 5,
-                    
                       right: 5,
                       child: IconAppButton(
                           size: 20,
@@ -52,14 +54,17 @@ class SubCategoryCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Label(
-                        text: 'Ride Sub',
+                        text: item.name,
                         style: Styles.mediumText(fontWeight: FontWeight.bold),
                       ),
-                      const Label(text: '14 Ads')
+                      const Label(text: '0 Ads')
                     ],
                   ),
                 ),
-                IconAppButton(icon: Icons.add, isCircle: true, onPressed: () {})
+                IconAppButton(
+                    icon: Icons.add,
+                    isCircle: true,
+                    onPressed: () => context.push(Routes.CREATEAD))
               ],
             ),
           ],

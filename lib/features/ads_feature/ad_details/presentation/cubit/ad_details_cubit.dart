@@ -28,7 +28,7 @@ class AdDetailsCubit extends Cubit<AdDetailsState> {
         (failure) => emit(
             state.copyWith(failure: failure, status: AdDetailsStates.error)),
         (data) {
-      print('emitted');
+
       emit(state.copyWith(ad: data, status: AdDetailsStates.initState));
     });
   }

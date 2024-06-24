@@ -1,10 +1,32 @@
 part of 'subcategories_cubit.dart';
 
-abstract class SubcategoriesState extends Equatable {
-  const SubcategoriesState();
+class SubcategoriesState {
+  final Failure? failure;
+  final SubcategoriesStates status;
+  final List<SubCategoryEntity>? subCategories;
+  const SubcategoriesState(
+      {this.failure,
+      this.subCategories,
+      this.status = SubcategoriesStates.loading});
 
-  @override
-  List<Object> get props => [];
+  SubcategoriesState copyWith({
+       Failure? failure,
+   SubcategoriesStates? status,
+   List<SubCategoryEntity>? subCategories,
+
+  }) {
+    return SubcategoriesState(
+      failure: failure?? this.failure,
+      status: status?? this.status,
+      subCategories: subCategories?? this.subCategories,
+    );
+  }
 }
 
-class SubcategoriesInitial extends SubcategoriesState {}
+enum SubcategoriesStates { loading, initState, error }
+
+extension SubcategoriesStateX on SubcategoriesState {
+  bool get isLoading => status == SubcategoriesStates.loading;
+  bool get isInitState => status == SubcategoriesStates.initState;
+  bool get isError => status == SubcategoriesStates.error;
+}

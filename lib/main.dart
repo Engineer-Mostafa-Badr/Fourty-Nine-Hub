@@ -42,12 +42,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => serviceLocator<RestaurantDetailsCubit>(),
         ),
-        BlocProvider(
-          create: (context) => serviceLocator<ParentMainCategoriesCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => serviceLocator<MainCategoriesCubit>(),
-        ),
+       
         BlocProvider(
           create: (context) => serviceLocator<CreateShippingRequestCubit>(),
         ),

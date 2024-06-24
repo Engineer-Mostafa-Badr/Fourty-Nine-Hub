@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 
+import '../features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
 import '../features/food_feature/restaurant_details/data/datasources/restaurant_details_remote_data_source.dart';
 import '../features/food_feature/restaurant_details/data/repositories/restaurant_details_repo_impl.dart';
 import '../features/food_feature/restaurant_details/domain/repositories/restaurant_details_repo.dart';
@@ -34,6 +35,11 @@ class FoodServiceLocator {
               serviceLocator(),
               serviceLocator(),
             )..loadData());
+            serviceLocator
+        .registerFactory<CusineRestaurantsCubit>(() => CusineRestaurantsCubit(
+              serviceLocator(),
+
+            )..loadData());
     serviceLocator.registerLazySingleton<GetRestaurantDetailsUseCase>(
         () => GetRestaurantDetailsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetMealsUseCase>(
@@ -53,6 +59,7 @@ class FoodServiceLocator {
         serviceLocator(),
       ),
     );
+    //CusineRestaurantsCubit
  
   }
 }

@@ -2,7 +2,8 @@ abstract class Jsons {
   static String parentCategories = 'assets/json/parent_categories.json';
   static String mainCategories = 'assets/json/main_categories.json';
   static String subCategories = 'assets/json/sub_categories.json';
-  static String shippingSubCategories = 'assets/json/shipping_sub_categories.json';
+  static String shippingSubCategories =
+      'assets/json/shipping_sub_categories.json';
   static String adProperties = 'assets/json/ad_properties.json';
   // ride
   static String exptectedPrice = 'assets/json/expected_price.json';
@@ -21,4 +22,11 @@ abstract class Jsons {
   static String adsList = 'assets/json/ads_list.json';
   static String adDetails = 'assets/json/ad_details.json';
   static String userAdsList = 'assets/json/user_ads.json';
+  // auction
+  static String auctionList = 'assets/json/auction_list.json';
+  static String auctionSubCategories = 'assets/json/auction_categories.json';
+  static String auctionDetails = 'assets/json/auction_details.json';
+  // installment
+  static String installmentsList = 'assets/json/installments_list.json';
+  static String installment_details = 'assets/json/installment_details.json';
 }

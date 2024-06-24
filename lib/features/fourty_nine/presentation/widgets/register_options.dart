@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/registable_sub_categories_cubit/registable_subcategories_cubit.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/states/basic_state.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/styles.dart';
+import '../controllers/parent_main_categories_cubit/main_categories_cubit.dart';
 
 class RegisterOptions extends StatelessWidget {
   const RegisterOptions({super.key});
@@ -25,34 +31,37 @@ class RegisterOptions extends StatelessWidget {
           const Sizer(
             height: 3,
           ),
-          SizedBox(
-            height: kToolbarHeight,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                _buildRegisterOptionItem(context,
-                    label: 'Driver', image: Assets.driver),
-                _buildRegisterOptionItem(context,
-                    label: 'Women Only', image: Assets.driverWomen),
-                _buildRegisterOptionItem(context,
-                    label: 'Scooter', image: Assets.scooter),
-                _buildRegisterOptionItem(context,
-                    label: 'Restaurant', image: Assets.restaurant),
-                _buildRegisterOptionItem(context,
-                    label: 'Doctor', image: Assets.doctor),
-              ],
-            ),
-          ),
+          BlocBuilder<RegistableSubCategoriesCubit,
+              BasicState<List<SubCategoryEntity>>>(builder: (context, state) {
+            return SizedBox(
+              height: kToolbarHeight,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  ...state.data?.map((e) {
+                        return _buildRegisterOptionItem(context,
+                            label: e.name, image: e.image);
+                      }).toList() ??
+                      [],
+                   _buildRegisterOptionItem(context,
+                      isSvg: true, label: 'Restaurant', image: Assets.food),
+                  _buildRegisterOptionItem(context,
+                      isSvg: true, label: 'Doctor', image: Assets.health),
+                ],
+              ),
+            );
+          }),
         ],
       ),
     );
   }
 
   Widget _buildRegisterOptionItem(BuildContext context,
-      {required String label, required String image}) {
+      {required String label, bool isSvg = false, required String image}) {
     return InkWell(
       onTap: () => context.go(Routes.REGISTERDRIVER),
       child: Container(
+        width: kToolbarHeight,
         padding: const EdgeInsets.all(5),
         margin: const EdgeInsets.symmetric(horizontal: 5),
         decoration: BoxDecoration(
@@ -61,8 +70,12 @@ class RegisterOptions extends StatelessWidget {
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(child: Image.asset(image)),
-            Label(text: label),
+            Expanded(
+                child: isSvg ? SvgPicture.asset(image) : Image.network(image)),
+            Label(
+              text: label,
+              maxLines: 1,
+            ),
           ],
         ),
       ),

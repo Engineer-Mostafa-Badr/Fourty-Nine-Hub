@@ -31,7 +31,11 @@ class BadgedLabel extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
       decoration: BoxDecoration(
           color: color, borderRadius: BorderRadius.circular(radius)),
-      child: Label(text: label, style: style?? Styles.mediumText(color: textColor)),
+      child: Label(
+        text: label,
+        style: style ?? Styles.mediumText(color: textColor),
+        textAlign: TextAlign.center,
+      ),
     );
   }
 }
