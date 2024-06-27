@@ -7,7 +7,16 @@
         "id":1,
         "status":"confirmed",
       "created_at":"2012-10-15T21:26:17Z",
-        "doctor":{
+      "user":{
+                    "id":10,
+                    "name":"Ahmed Mohamed",
+                    "phone":"+201010727610",
+                    "type":"user",
+                    "ads_count":3,
+                    "email":"faroukshahin30@gmail.com",
+                    "image":"https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg"
+                },  
+      "doctor":{
           "id":1,
           "name":"Dr Kamel El Masry",
           "phone":"+201010727610",

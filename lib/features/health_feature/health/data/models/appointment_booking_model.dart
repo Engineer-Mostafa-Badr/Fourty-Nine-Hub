@@ -10,17 +10,19 @@ class AppointmentBookingModel extends AppointmentBookingEntity {
       required super.status,
       required super.createdAt,
       required super.doctor,
-      required super.appointment, 
-      
+      required super.type,
+      required super.appointment,
       super.user});
   factory AppointmentBookingModel.fromJson(Map<String, dynamic> json) {
     return AppointmentBookingModel(
-      id: json['id'],
-      status: json['status'],
-      createdAt: DateTime.parse(json['created_at']),
-      doctor: DoctorModel.fromJson(json['doctor']),
-      appointment: AppointmentModel.fromJson(json['appointment']),
-      user: json['user']==null? null: PublisherModel.fromJson(json['user'])
-    );
+        id: json['id'],
+        status: json['status'],
+        type: json['type'] ?? 'clinic',
+        createdAt: DateTime.parse(json['created_at']),
+        doctor: DoctorModel.fromJson(json['doctor']),
+        appointment: AppointmentModel.fromJson(json['appointment']),
+        user: json['user'] == null
+            ? null
+            : PublisherModel.fromJson(json['user']));
   }
 }

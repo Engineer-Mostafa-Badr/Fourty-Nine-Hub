@@ -48,7 +48,13 @@ class AreYouSure extends StatelessWidget {
       const Sizer(),
       Row(
         children: [
-          Expanded(child: AppButton(label: 'Ok', onPressed: () => action())),
+          Expanded(
+              child: AppButton(
+                  label: 'Ok',
+                  onPressed: () {
+                    action();
+                    context.pop();
+                  })),
           const Sizer(),
           Expanded(
               child: AppButton(

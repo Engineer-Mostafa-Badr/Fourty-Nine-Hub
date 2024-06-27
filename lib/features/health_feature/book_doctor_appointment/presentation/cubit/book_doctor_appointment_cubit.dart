@@ -8,6 +8,7 @@ import '../../../../../routes/routes.dart';
 import '../../../doctor_details/domain/entities/appointment_entity.dart';
 import '../../../doctor_details/domain/entities/doctor_entity.dart';
 import '../../../doctor_details/domain/usecases/get_doctor_details_usecase.dart';
+import '../../../health/domain/entities/appointment_booking_entity.dart';
 import '../../domain/usecases/get_doctor_appointment_usecase.dart';
 
 part 'book_doctor_appointment_state.dart';

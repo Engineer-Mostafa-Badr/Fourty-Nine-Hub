@@ -2,7 +2,7 @@ part of 'book_doctor_appointment_cubit.dart';
 
 enum BookDoctorAppointmentStates { loading, error, initState }
 
-enum BookingTypes { online, clinic }
+
 
 extension BookDoctorAppointmentStateX on BookDoctorAppointmentState {
   bool get isLoading => status == BookDoctorAppointmentStates.loading;
@@ -40,7 +40,7 @@ class BookDoctorAppointmentState {
         failure: failure ?? this.failure,
         doctor: doctor ?? this.doctor,
         date: date ?? this.date,
-        bookingType: bookingType?? this.bookingType,
+        bookingType: bookingType ?? this.bookingType,
         appointments: appointments ?? this.appointments,
         selectedAppointment: selectedAppointment ?? this.selectedAppointment);
   }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/common/dashboard_banner.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import '../cubit/restaurants_list_cubit.dart';
 import '../widgets/offer_card.dart';
 import '../widgets/restaurant_card.dart';
@@ -33,6 +35,13 @@ class RestaurantsListsView extends StatelessWidget {
                   if (state.trendingRestaurants?.isNotEmpty ?? false)
                     _buildHorizontalRestaurants(),
                   const Sizer(),
+                  const DashboardBanner(
+                      subTitle:
+                          'New Bookings are waiting you, go to doctor dashboard and explore more!',
+                      title: 'Restaurant Dashboard\n',
+                      route: Routes.RestaurantDashboard),
+                  const Sizer(),
+                  const Sizer(),
                   if (state.nearByRestaurants?.isNotEmpty ?? false)
                     Label(text: 'All Restaurants', style: Styles.headerText()),
                   if (state.nearByRestaurants?.isNotEmpty ?? false)
@@ -55,7 +64,7 @@ class RestaurantsListsView extends StatelessWidget {
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) => FoodOfferCard(
-                    item: state.categories![index] ,
+                    item: state.categories![index],
                   ),
               separatorBuilder: (context, index) => const Sizer(),
               itemCount: state.categories?.length ?? 0));
@@ -70,7 +79,8 @@ class RestaurantsListsView extends StatelessWidget {
           child: ListView.separated(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) =>  RestaurantCard(item:state.trendingRestaurants![index]),
+              itemBuilder: (context, index) =>
+                  RestaurantCard(item: state.trendingRestaurants![index]),
               separatorBuilder: (context, index) => const Sizer(),
               itemCount: state.trendingRestaurants?.length ?? 0));
     });
@@ -82,7 +92,7 @@ class RestaurantsListsView extends StatelessWidget {
       return ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) =>  RestaurantCard(
+          itemBuilder: (context, index) => RestaurantCard(
                 isVert: false,
                 item: state.nearByRestaurants![index],
               ),

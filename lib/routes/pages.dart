@@ -13,7 +13,11 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/registable_sub_categories_cubit/registable_subcategories_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/cubit/doctor_dashboard_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_dashboard_view.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_details/presentation/cubit/installment_details_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_list/presentation/cubit/installment_list_cubit.dart';
@@ -404,10 +408,18 @@ class AppPages {
                   path: Paths.VISITABOOKING,
                   name: Routes.VISITABOOKING,
                   // BookDoctorAppointmentCubit
-                  builder: (context, state) => BlocProvider<BookDoctorAppointmentCubit>(create: (_)=> serviceLocator(), 
-                  
-                  child:  const VisitaBooking()
-                  )),
+                  builder: (context, state) =>
+                      BlocProvider<BookDoctorAppointmentCubit>(
+                          create: (_) => serviceLocator(),
+                          child: const VisitaBooking())),
+              GoRoute(
+                  path: Paths.DOCTORDASHBOARD,
+                  name: Routes.DOCTORDASHBOARD,
+                  // BookDoctorAppointmentCubit
+                  builder: (context, state) =>
+                      BlocProvider<DoctorDashboardCubit>(
+                          create: (_) => serviceLocator(),
+                          child: const DoctorDashboardView())),
             ]),
         GoRoute(
             path: Paths.FOOD,
@@ -418,6 +430,15 @@ class AppPages {
                 ),
             routes: [
               // CusineRestaurantsView
+              GoRoute(
+                path: Paths.RestaurantDashboard,
+                name: Routes.RestaurantDashboard,
+                builder: (context, state) =>
+                    BlocProvider<RestaurantDashboardCubit>(
+                  create: (_) => serviceLocator(),
+                  child: const RestaurantDashboardView(),
+                ),
+              ),
               GoRoute(
                 path: Paths.CusineRestaurants,
                 name: Routes.CusineRestaurants,

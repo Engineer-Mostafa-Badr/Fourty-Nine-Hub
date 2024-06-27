@@ -16,6 +16,15 @@
                     "last_name":"Shahin",
                     "phone":"+201010727610"
                 },
+                "user":{
+                    "id":10,
+                    "name":"Ahmed Mohamed",
+                    "phone":"+201010727610",
+                    "type":"user",
+                    "ads_count":3,
+                    "email":"faroukshahin30@gmail.com",
+                    "image":"https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg"
+                }, 
                 "meals":[
                     {
                         "qty":3,

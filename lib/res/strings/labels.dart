@@ -36,5 +36,10 @@ abstract class Labels {
   static const book =  'Book';
   static const availableTimes =  'Available Times';
   static const requestsHistory =  'Requests History';
+    static const bookingApproved = 'Booking Approved Successfully!';
+    static const bookingRejected = 'Booking Rejected!';
+    static const connected = 'Connected';
+    static const notConnected = 'Not Connected';
+
   
 }

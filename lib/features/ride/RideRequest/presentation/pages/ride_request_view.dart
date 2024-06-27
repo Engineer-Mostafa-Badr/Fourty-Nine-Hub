@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/maps/map_picker.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/address_search_params_entity.dart';
+import '../../../../../routes/routes.dart';
 import '../cubit/riderequest_cubit.dart';
-import '../widgets/common/driver_dashboard_banner.dart';
+import '../widgets/common/dashboard_banner.dart';
 import '../widgets/customer/createOrder/options_bottom_sheet.dart';
 
 class RideRequestView extends StatelessWidget {
@@ -44,7 +45,12 @@ class RideRequestView extends StatelessWidget {
                   bottom: 10,
                   right: 10,
                   left: 10,
-                  child: DriverDashboardBanner()),
+                  child: DashboardBanner(
+                    title: 'Driver Dashboard\n',
+                    subTitle:
+                        'New trips are waiting you, go to driver dashboard and explore more!',
+                    route: Routes.RIDERDASHBOARD,
+                  )),
             ],
           )),
           const RideOptionsBottomSheet(),

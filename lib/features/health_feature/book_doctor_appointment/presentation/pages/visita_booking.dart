@@ -11,10 +11,8 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/utils/date_helper.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
-import 'package:go_router/go_router.dart';
-
 import '../../../../../res/style/app_colors.dart';
+import '../../../health/domain/entities/appointment_booking_entity.dart';
 import '../cubit/book_doctor_appointment_cubit.dart';
 
 class VisitaBooking extends StatelessWidget {

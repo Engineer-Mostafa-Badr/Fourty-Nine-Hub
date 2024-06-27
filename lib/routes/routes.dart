@@ -27,10 +27,13 @@ abstract class Routes {
   static const VISITADOCTORLIST = '/Visita/VisitaDoctorsList';
   static const VISITADOCTORDETAILS = '/Visita/DoctorDetails';
   static const VISITABOOKING = '/Visita/VisitaBooking';
+    static const DOCTORDASHBOARD = '/Visita/DoctorDashboard';
+
   static const FOOD = '/Food';
 
   static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
   static const CusineRestaurants = '/Food/Cusine-Restaurants';
+  static const RestaurantDashboard = '/Food/RestaurantDashboard';
 
   static const FOODCART = '/Food/RetaurantDetails/FoodCart';
   static const SHIPPING = '/Shipping';
@@ -101,8 +104,10 @@ abstract class Paths {
   static const VISITADOCTORLIST = 'VisitaDoctorsList';
   static const VISITADOCTORDETAILS = 'DoctorDetails';
   static const VISITABOOKING = 'VisitaBooking';
+  static const DOCTORDASHBOARD = 'DoctorDashboard';
   static const FOOD = 'Food';
   static const CusineRestaurants = 'Cusine-Restaurants';
+  static const RestaurantDashboard = 'RestaurantDashboard';
   static const SHIPPING ='Shipping';
   static const RIDE = 'Ride';
   static const RIDERDASHBOARD = 'RiderDashboard';
