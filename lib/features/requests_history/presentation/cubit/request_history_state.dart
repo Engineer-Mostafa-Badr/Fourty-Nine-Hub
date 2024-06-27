@@ -15,24 +15,27 @@ class RequestHistoryState {
   final List<TripModel>? trips;
   final List<FoodOrderModel>? foodOrders;
   final List<ShippingRequestModel>? shippingRequests;
-
+  final List<AppointmentBookingEntity>? healthBookings;
   const RequestHistoryState(
       {this.status,
       this.trips,
       this.failure,
       this.foodOrders,
+      this.healthBookings,
       this.shippingRequests});
   RequestHistoryState copyWith({
     RequestHistoryStates? status,
     List<TripModel>? trips,
     List<FoodOrderModel>? foodOrders,
     Failure? failure,
+    List<AppointmentBookingEntity>? healthBookings,
     List<ShippingRequestModel>? shippingRequests,
   }) {
     return RequestHistoryState(
         status: status ?? this.status,
         trips: trips ?? this.trips,
         foodOrders: foodOrders ?? this.foodOrders,
+        healthBookings: healthBookings?? this.healthBookings,
         shippingRequests: shippingRequests ?? this.shippingRequests,
         failure: failure ?? this.failure);
   }

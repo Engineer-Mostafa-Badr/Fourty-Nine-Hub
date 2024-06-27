@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-
 void bottomSheet(
     {required BuildContext context,
     required Widget widget,
-    Color backColor = Colors.white, 
+    Color backColor = Colors.white,
     bool isFloating = false,
     bool isScrollControlled = false}) {
   showModalBottomSheet(
@@ -15,8 +14,8 @@ void bottomSheet(
           width: double.infinity,
           padding: const EdgeInsets.all(10),
           // margin: const EdgeInsets.all(kToolbarHeight),
-          decoration:  BoxDecoration(
-              borderRadius:  const BorderRadius.only(
+          decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10),
                 topRight: Radius.circular(10),
               ),

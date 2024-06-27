@@ -20,4 +20,9 @@ class DateHelper {
     final formatter = DateFormat('hh:mm aa');
     return formatter.format(date);
   }
+
+  bool isSameDate(DateTime date1, DateTime date2) {
+    
+    return date1.year == date2.year && date1.month == date2.month && date1.day == date2.day;
+  }
 }

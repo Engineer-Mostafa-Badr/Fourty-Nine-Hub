@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/l
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/registable_sub_categories_cubit/registable_subcategories_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_details/presentation/cubit/installment_details_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_list/presentation/cubit/installment_list_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
@@ -37,6 +38,9 @@ import '../features/food_feature/restaurants_list/presentation/cubit/restaurants
 import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
 import '../features/fourty_nine/presentation/controllers/main_categories_cubit/parent_main_categories_cubit.dart';
 import '../features/fourty_nine/presentation/controllers/parent_main_categories_cubit/main_categories_cubit.dart';
+import '../features/health_feature/book_doctor_appointment/presentation/cubit/book_doctor_appointment_cubit.dart';
+import '../features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
+import '../features/health_feature/health/presentation/pages/health_view.dart';
 import '../features/mazadat_feature/auction_details/presentation/cubit/auction_details_cubit.dart';
 import '../features/mazadat_feature/auction_details/presentation/pages/Mazad_details.dart';
 import '../features/mazadat_feature/auction_list/presentation/cubit/auction_list_cubit.dart';
@@ -44,10 +48,9 @@ import '../features/ride/RideRequest/presentation/pages/ride_request_view.dart';
 import '../features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
 import '../features/account_taps/account/presentation/pages/favourite_category_view.dart';
 import '../features/account_taps/account/presentation/pages/favourite_subcategory_view.dart';
-import '../features/health_care/presentation/pages/VisitaView.dart';
-import '../features/health_care/presentation/pages/customer_view/DoctorDetails.dart';
-import '../features/health_care/presentation/pages/customer_view/DoctorsList.dart';
-import '../features/health_care/presentation/pages/customer_view/visita_booking.dart';
+import '../features/health_feature/doctor_details/presentation/pages/DoctorDetails.dart';
+import '../features/health_feature/doctors_list/presentation/pages/doctors_list.dart';
+import '../features/health_feature/book_doctor_appointment/presentation/pages/visita_booking.dart';
 import '../features/authentication/presentation/pages/login_view.dart';
 import '../features/authentication/presentation/pages/register/register_verify_otp.dart';
 import '../features/authentication/presentation/pages/register/register_view.dart';
@@ -94,28 +97,28 @@ class AppPages {
   static final router = GoRouter(routes: <RouteBase>[
     GoRoute(
       path: Routes.HOME,
-      builder: (context, state) => MultiBlocProvider(providers: [
-       BlocProvider<RegistableSubCategoriesCubit>(
-                create: (_) => serviceLocator(),
-              ), 
-               BlocProvider(
-          create: (context) => serviceLocator<ParentMainCategoriesCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => serviceLocator<MainCategoriesCubit>(),
-        ),
-      ],
-      child: const FourtyNineView(),
+      builder: (context, state) => MultiBlocProvider(
+        providers: [
+          BlocProvider<RegistableSubCategoriesCubit>(
+            create: (_) => serviceLocator(),
+          ),
+          BlocProvider(
+            create: (context) => serviceLocator<ParentMainCategoriesCubit>(),
+          ),
+          BlocProvider(
+            create: (context) => serviceLocator<MainCategoriesCubit>(),
+          ),
+        ],
+        child: const FourtyNineView(),
       ),
-      
       routes: <RouteBase>[
         GoRoute(
             path: Paths.SUBCATEGORIES,
             name: Routes.SUBCATEGORIES,
-            builder: (context, state) => BlocProvider<SubcategoriesCubit>(create: (_)=> serviceLocator(), 
-            child: const SubCategoriesView(),
-            ),
-            
+            builder: (context, state) => BlocProvider<SubcategoriesCubit>(
+                  create: (_) => serviceLocator(),
+                  child: const SubCategoriesView(),
+                ),
             routes: [
               GoRoute(
                   path: Paths.ADS,
@@ -148,7 +151,10 @@ class AppPages {
             child: const LoginView(),
           ),
         ),
-        GoRoute(path: Paths.FORGOTPASSWORD, name: Routes.FORGOTPASSWORD, builder: (context, state)=> const EnterEmailForgotPasswordView() ),
+        GoRoute(
+            path: Paths.FORGOTPASSWORD,
+            name: Routes.FORGOTPASSWORD,
+            builder: (context, state) => const EnterEmailForgotPasswordView()),
         GoRoute(
           name: Routes.REGISTER,
           path: Paths.REGISTER,
@@ -346,7 +352,6 @@ class AppPages {
               GoRoute(
                 path: Paths.MAZADDETAILS,
                 name: Routes.MAZADDETAILS,
-
                 builder: (context, state) => BlocProvider<AuctionDetailsCubit>(
                   create: (_) => serviceLocator(),
                   child: const MazadDetails(),
@@ -373,20 +378,36 @@ class AppPages {
         GoRoute(
             path: Paths.VISITA,
             name: Routes.VISITA,
-            builder: (context, state) => const VisitaView(),
+            builder: (context, state) => BlocProvider<HealthCubit>(
+                  create: (_) => serviceLocator(),
+                  child: const HealthView(),
+                ),
             routes: [
               GoRoute(
-                  path: Paths.VISITADOCTORLIST,
-                  name: Routes.VISITADOCTORLIST,
-                  builder: (context, state) => const DoctorsList()),
+                path: Paths.VISITADOCTORLIST,
+                name: Routes.VISITADOCTORLIST,
+                builder: (context, state) => const DoctorsList(),
+              ),
               GoRoute(
                   path: Paths.VISITADOCTORDETAILS,
                   name: Routes.VISITADOCTORDETAILS,
-                  builder: (context, state) => const DoctorDetails()),
+                  builder: (context, state) {
+                    final id = state.extra;
+
+                    return BlocProvider<DoctorDetailsCubit>(
+                        child: DoctorDetails(
+                          id: id as int,
+                        ),
+                        create: (_) => serviceLocator());
+                  }),
               GoRoute(
                   path: Paths.VISITABOOKING,
                   name: Routes.VISITABOOKING,
-                  builder: (context, state) => const VisitaBooking()),
+                  // BookDoctorAppointmentCubit
+                  builder: (context, state) => BlocProvider<BookDoctorAppointmentCubit>(create: (_)=> serviceLocator(), 
+                  
+                  child:  const VisitaBooking()
+                  )),
             ]),
         GoRoute(
             path: Paths.FOOD,
@@ -398,12 +419,14 @@ class AppPages {
             routes: [
               // CusineRestaurantsView
               GoRoute(
-            path: Paths.CusineRestaurants,
-            name: Routes.CusineRestaurants,
-            builder: (context, state) => BlocProvider<CusineRestaurantsCubit>(
+                path: Paths.CusineRestaurants,
+                name: Routes.CusineRestaurants,
+                builder: (context, state) =>
+                    BlocProvider<CusineRestaurantsCubit>(
                   create: (_) => serviceLocator(),
                   child: const CusineRestaurantsView(),
-                ),),
+                ),
+              ),
               GoRoute(
                   path: Paths.RESTAURANTDETAILS,
                   name: Routes.RESTAURANTDETAILS,
@@ -476,16 +499,17 @@ class AppPages {
         GoRoute(
             path: Paths.INSTALLMENT,
             name: Routes.INSTALLMENT,
-            builder: (context, state) => BlocProvider<InstallmentListCubit>(create: (_)=> serviceLocator(), 
-            child: const InstallmentView()
-            ),
+            builder: (context, state) => BlocProvider<InstallmentListCubit>(
+                create: (_) => serviceLocator(),
+                child: const InstallmentView()),
             routes: [
               GoRoute(
                 path: Paths.INSTALLMENTDETAILS,
                 name: Routes.INSTALLMENTDETAILS,
-                builder: (context, state) => BlocProvider<InstallmentDetailsCubit>(
-                  create: (_)=> serviceLocator(),
-                 child: const InstallmentsDetails()),
+                builder: (context, state) =>
+                    BlocProvider<InstallmentDetailsCubit>(
+                        create: (_) => serviceLocator(),
+                        child: const InstallmentsDetails()),
               ),
               GoRoute(
                 path: Paths.INSTALLMENTORDERDETAILS,

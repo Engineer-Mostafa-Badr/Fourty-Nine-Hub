@@ -10,6 +10,7 @@ class BadgedLabel extends StatelessWidget {
   final double radius;
   final TextStyle? style;
   final double? height, width, margin;
+  final Function? onTap;
 
   const BadgedLabel(
       {super.key,
@@ -18,23 +19,31 @@ class BadgedLabel extends StatelessWidget {
       this.height,
       this.width,
       this.style,
+      this.onTap,
       this.margin,
       this.radius = 10,
       this.textColor = Colors.white});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      margin: EdgeInsets.all(margin ?? 0),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-      decoration: BoxDecoration(
-          color: color, borderRadius: BorderRadius.circular(radius)),
-      child: Label(
-        text: label,
-        style: style ?? Styles.mediumText(color: textColor),
-        textAlign: TextAlign.center,
+    return InkWell(
+      onTap: () {
+        if (onTap != null) {
+          onTap!();
+        }
+      },
+      child: Container(
+        height: height,
+        width: width,
+        margin: EdgeInsets.all(margin ?? 0),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+        decoration: BoxDecoration(
+            color: color, borderRadius: BorderRadius.circular(radius)),
+        child: Label(
+          text: label,
+          style: style ?? Styles.mediumText(color: textColor),
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }

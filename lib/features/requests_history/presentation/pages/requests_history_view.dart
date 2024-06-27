@@ -8,6 +8,8 @@ import 'package:fourtyninehub/features/requests_history/presentation/cubit/reque
 import 'package:fourtyninehub/features/requests_history/presentation/widgets/trip_card.dart';
 
 import '../../../../res/assets/assets.dart';
+import '../../../../res/strings/labels.dart';
+import '../../../health_feature/health/presentation/widgets/customer/booking_card.dart';
 import '../widgets/food_order_card.dart';
 import '../widgets/shipping_request_card.dart';
 
@@ -24,7 +26,7 @@ class HistoryRequestsView extends StatelessWidget {
         initialIndex: 0,
         child: Scaffold(
           appBar: const BackAppBar(
-            label: 'Requests History',
+            label: Labels.requestsHistory,
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -64,7 +66,7 @@ class HistoryRequestsView extends StatelessWidget {
                               child: TabBarView(children: [
                             _buildRideRequests(),
                             _buildShippingRequests(),
-                            _buildEmptyList(),
+                            _buildHealthBooking(),
                             _buildFoodOrders(),
                             _buildEmptyList(),
                           ])),
@@ -93,6 +95,18 @@ class HistoryRequestsView extends StatelessWidget {
           itemBuilder: (context, index) {
             return ShippingRequestCard(trip: state.shippingRequests![index]);
           });
+    });
+  }
+   Widget _buildHealthBooking() {
+    return BlocBuilder<RequestHistoryCubit, RequestHistoryState>(builder: (context, state) {
+      return ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) => VisitaBookingCard(
+                appointment: state.healthBookings![index],
+              ),
+          separatorBuilder: (context, index) => const Sizer(),
+          itemCount: state.healthBookings?.length ?? 0);
     });
   }
 

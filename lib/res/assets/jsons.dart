@@ -29,4 +29,12 @@ abstract class Jsons {
   // installment
   static String installmentsList = 'assets/json/installments_list.json';
   static String installment_details = 'assets/json/installment_details.json';
+  // doctors
+  static String doctorsList = 'assets/json/doctor_list.json';
+  static String doctorDetails = 'assets/json/doctor_details.json';
+  static String doctorBookingsList = 'assets/json/doctor_bookings_list.json';
+  static String statesList = 'assets/json/states_list.json';
+  static String citiesList = 'assets/json/cities_list.json';
+  static String doctorAppointments = 'assets/json/doctor_appointments.json';
+
 }

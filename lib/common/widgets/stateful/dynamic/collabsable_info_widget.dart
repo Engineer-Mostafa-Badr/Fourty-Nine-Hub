@@ -23,6 +23,7 @@ class _CollabsableInfoWidgetState extends State<CollabsableInfoWidget> {
         setState(() {});
       },
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
             height: kToolbarHeight * .7,

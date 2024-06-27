@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../res/style/app_colors.dart';
 
 class RatingStars extends StatelessWidget {
-  final int rating;
+  final num rating;
   final int maxRating;
   final double iconSize;
   final Color? color;

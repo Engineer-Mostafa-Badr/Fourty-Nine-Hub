@@ -20,6 +20,7 @@ import '../firebase_options.dart';
 import 'auction_service_locator.dart';
 import 'food_service_locator.dart';
 import 'fourty_nine_service_locator.dart';
+import 'health_service_locator.dart';
 import 'installment_service_locator.dart';
 
 final serviceLocator = GetIt.instance;
@@ -99,5 +100,8 @@ class DI {
     AuctionServiceLocator.execute(serviceLocator: serviceLocator);
     // installments
     InstallmentServiceLocator.execute(serviceLocator: serviceLocator);
+    // health
+    HealthServiceLocator.execute(serviceLocator: serviceLocator);
+    
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/driver_review_entity.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/const.dart';
@@ -10,7 +11,8 @@ import '../labels/label.dart';
 import 'rating_stars.dart';
 
 class ReviewCard extends StatelessWidget {
-  const ReviewCard({super.key});
+  final ReviewEntity review;
+  const ReviewCard({super.key, required this.review});
 
   @override
   Widget build(BuildContext context) {
@@ -19,24 +21,27 @@ class ReviewCard extends StatelessWidget {
       children: [
         Row(
           children: [
-            const ProfileImage(accountId: 0),
+            ProfileImage(
+              accountId: 0,
+              imageURL: review.image ?? UIConst.profilePlaceHolder,
+            ),
             const Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Label(text: 'Farouk Shahin', style: Styles.mediumText()),
-                const RatingStars(
-                  rating: 5,
+                Label(text: review.name, style: Styles.mediumText()),
+                RatingStars(
+                  rating: review.rate,
                   color: AppColors.ACCENT_COLOR,
                 ),
               ],
             )),
           ],
         ),
-        const ReadMoreLabel(text: UIConst.placeholderText),
+        ReadMoreLabel(text: review.comment),
         Label(
-            text: '02 March 2024, 3:15 pm',
+            text: review.createdAt,
             style: Styles.mediumText(fontWeight: FontWeight.w400)),
       ],
     );

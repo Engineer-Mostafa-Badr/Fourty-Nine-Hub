@@ -18,4 +18,23 @@ abstract class Labels {
   static const details = 'Details';
   static const description = 'Description';
   static const buyWithInstallment = 'Buy with installment';
+  // doctors
+  static const languages = 'Languages';
+  static const price = 'Price';
+  static const startPrice = 'Start price';
+  static const notSelected = 'Not Selected';
+  static const city = 'City';
+  static const state = 'State';
+  static const doctorsList = 'Doctors List';
+  static const numberOfReviews = 'Number of reviews';
+  static const waitingTime = 'Waiting Time';
+  static const minutes = 'Minutes';
+  static const clinic =  'Clinic';
+  static const reviews =  'Reviews';
+  static const chooseBookingTime =  'Choose Booking Time';
+  static const noAvailableTimes =  'There is no available times';
+  static const book =  'Book';
+  static const availableTimes =  'Available Times';
+  static const requestsHistory =  'Requests History';
+  
 }

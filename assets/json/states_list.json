@@ -1,0 +1,28 @@
+{
+    "status":true,
+    "message":null, 
+    "data":{
+        "states":[
+            {
+                "id":1,
+                "name":"Cairo"
+            },
+            {
+                "id":2,
+                "name":"Giza"
+            },
+            {
+                "id":3,
+                "name":"Gharbia"
+            },
+            {
+                "id":4,
+                "name":"Sharqiya"
+            },
+            {
+                "id":5,
+                "name":"Aswan"
+            }
+        ]
+    }
+}
