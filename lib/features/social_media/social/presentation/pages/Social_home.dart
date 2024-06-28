@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/enums/post_type_enum.dart';
-
-import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
-import '../../../../../common/widgets/dynamic/drawer.dart';
-import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../../../chat/presentation/widgets/home/chat_stories.dart';
 import '../widgets/posts/PostCard.dart';
 import '../widgets/posts/Stories.dart';
+import '../widgets/posts/create_post_banner.dart';
 import 'my_account_view.dart';
 
 class SocialHomeView extends StatelessWidget {
@@ -20,23 +16,20 @@ class SocialHomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
-      child: Scaffold(
-        backgroundColor: AppColors.GRAY_LIGHT_COLOR3,
-        appBar: const HomeAppbar(),
-        drawer: const DrawerWidget(),
-        bottomNavigationBar: const BottomNavigator(
-          mainCategory: 0,
-          index: 2,
-        ),
-        floatingActionButton: const FloatingButton(
-          changeView: 2,
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      child: SharedScaffold(
+        mainCategoryId: 2,
         body: NestedAppbar(appBars: [
-          SliverAppBar(
+          const SliverAppBar(
             backgroundColor: Colors.white,
             automaticallyImplyLeading: false,
             floating: true,
+            // pinned: true,
+            flexibleSpace: CreatePostBanner(),
+          ),
+          SliverAppBar(
+            backgroundColor: Colors.white,
+            automaticallyImplyLeading: false,
+            // floating: true,
             pinned: true,
             flexibleSpace: _buildTabBar(),
           )

@@ -20,14 +20,14 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<BottomItemModel> pages = mainCategory == 0
+    List<BottomItemModel> pages = mainCategory == 2
         ? <BottomItemModel>[
             BottomItemModel(
-                icon: FontAwesomeIcons.bowlFood,
-                label: 'Voice',
+                icon: FontAwesomeIcons.twitter,
+                label: 'Twitter',
                 index: 0,
-                image: Assets.radio,
-                action: () => context.push(Routes.CLUBHOUSE)),
+                image: Assets.twitter,
+                action: () => context.push(Routes.TWITTER)),
             BottomItemModel(
                 icon: FontAwesomeIcons.list,
                 label: 'Reels',
@@ -48,64 +48,36 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
                 image: Assets.social,
                 action: () => context.push(Routes.Tinder)),
           ]
-        : mainCategory == 1
-            ? <BottomItemModel>[
-                BottomItemModel(
-                    icon: FontAwesomeIcons.bowlFood,
-                    label: 'Meal',
-                    index: 0,
-                    image: Assets.food,
-                    action: () => context.push(Routes.FOOD)),
-                BottomItemModel(
-                    icon: FontAwesomeIcons.kitMedical,
-                    label: 'Health',
-                    index: 1,
-                    image: Assets.health,
-                    action: () => context.push(Routes.VISITA)),
-                // BottomItemModel(icon: FontAwesomeIcons.home, label: '', index: 2),
-                BottomItemModel(
-                    icon: Icons.delivery_dining,
-                    label: 'Shipping',
-                    index: 3,
-                    image: Assets.shipping,
-                    action: () => context.push(Routes.SHIPPING)),
-                BottomItemModel(
-                    icon: FontAwesomeIcons.car,
-                    label: 'Ride',
-                  index: 4,
-                    image: Assets.ride,
-                    action: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RideRequestView()))),
-              ]
-            : <BottomItemModel>[
-                BottomItemModel(
-                    icon: FontAwesomeIcons.bowlFood,
-                    label: 'BroadCast',
-                    index: 0,
-                    image: Assets.voiceLive,
-                    action: () => context.push(Routes.CLUBHOUSE)),
-                BottomItemModel(
-                    icon: FontAwesomeIcons.kitMedical,
-                    label: 'Live',
-                    index: 1,
-                    image: Assets.live,
-                    action: () => context.push(Routes.LIVE)),
-                // BottomItemModel(icon: FontAwesomeIcons.home, label: '', index: 2),
-                BottomItemModel(
-                    icon: Icons.delivery_dining,
-                    label: 'Meeting',
-                    index: 3,
-                    image: Assets.zoomMeeting,
-                    action: () => context.push(Routes.ZOOM)),
-                BottomItemModel(
-                    icon: FontAwesomeIcons.car,
-                    label: 'Tweet',
-                    index: 4,
-                    image: Assets.twitter,
-                    action: () => context.push(Routes.TWITTER)),
-              ];
+        : <BottomItemModel>[
+            BottomItemModel(
+                icon: FontAwesomeIcons.bowlFood,
+                label: 'Meal',
+                index: 0,
+                image: Assets.food,
+                action: () => context.push(Routes.FOOD)),
+            BottomItemModel(
+                icon: FontAwesomeIcons.kitMedical,
+                label: 'Health',
+                index: 1,
+                image: Assets.health,
+                action: () => context.push(Routes.VISITA)),
+            // BottomItemModel(icon: FontAwesomeIcons.home, label: '', index: 2),
+            BottomItemModel(
+                icon: Icons.delivery_dining,
+                label: 'Shipping',
+                index: 3,
+                image: Assets.shipping,
+                action: () => context.push(Routes.SHIPPING)),
+            BottomItemModel(
+                icon: FontAwesomeIcons.car,
+                label: 'Ride',
+                index: 4,
+                image: Assets.ride,
+                action: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RideRequestView()))),
+          ];
     return AnimatedBottomNavigationBar.builder(
         itemCount: pages.length,
         height: kToolbarHeight * .9,

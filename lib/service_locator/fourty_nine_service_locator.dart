@@ -25,9 +25,11 @@ import '../features/ads_feature/ads/data/repositories/ads_repo_impl.dart';
 import '../features/ads_feature/create_ad/domain/repositories/create_ad_repo.dart';
 import '../features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import '../features/fourty_nine/domain/use_cases/get_parent_main_categories_use_case.dart';
+import '../features/fourty_nine/domain/use_cases/get_slider_items_usecase.dart';
 import '../features/fourty_nine/presentation/controllers/main_categories_cubit/parent_main_categories_cubit.dart';
 import '../features/fourty_nine/presentation/controllers/parent_main_categories_cubit/main_categories_cubit.dart';
 import '../features/fourty_nine/presentation/controllers/registable_sub_categories_cubit/registable_subcategories_cubit.dart';
+import '../features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 
 class FourtyNineServiceLocator {
@@ -123,6 +125,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+     serviceLocator.registerLazySingleton<GetSliderItemsUseCase>(
+      () => GetSliderItemsUseCase(
+        serviceLocator(),
+      ),
+    );
 
     // cubits
     serviceLocator.registerSingleton(
@@ -130,7 +137,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       )..getParentMainCategories(),
     );
-        
+     serviceLocator.registerSingleton(
+      SliderCubit(
+        serviceLocator(),
+      )..loadData(),
+    );
 serviceLocator.registerSingleton(
       RegistableSubCategoriesCubit(
         serviceLocator(),

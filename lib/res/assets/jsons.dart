@@ -2,6 +2,7 @@ abstract class Jsons {
   static String parentCategories = 'assets/json/parent_categories.json';
   static String mainCategories = 'assets/json/main_categories.json';
   static String subCategories = 'assets/json/sub_categories.json';
+  static String sliderItems = 'assets/json/slider_items.json';
   static String shippingSubCategories =
       'assets/json/shipping_sub_categories.json';
   static String adProperties = 'assets/json/ad_properties.json';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_bottom_navigator.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/enums/post_type_enum.dart';
 import 'package:fourtyninehub/features/social_media/social/presentation/widgets/posts/PostCard.dart';
 
@@ -8,8 +9,8 @@ class TwitterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SharedCommonNavigator(
-      mainCategory: 3,
+    return SharedScaffold(
+      mainCategoryId: 2,
       body: _buildGlobalPosts(),
     );
   }

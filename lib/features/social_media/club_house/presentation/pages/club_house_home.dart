@@ -14,35 +14,19 @@ class ClubHouseHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const HomeAppbar(),
-      drawer: const DrawerWidget(),
-      bottomNavigationBar: const BottomNavigator(
-        mainCategory: 0,
-        index: 2,
-      ),
-      floatingActionButton: FloatingButton(
-        icon: Icons.add,
-        onTap: () {
-          bottomSheet(context: context, widget: RoomTypeWidget());
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: ListView.separated(
+        itemCount: 12,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return AudioRoomCard();
         },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      // bottomSheet: AppButton(label: 'Start Chatting Room', onPressed: () {}),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: ListView.separated(
-          itemCount: 12,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return AudioRoomCard();
-          },
-          separatorBuilder: (context, index) {
-            return const SizedBox(
-              height: 10,
-            );
-          },
-        ),
+        separatorBuilder: (context, index) {
+          return const SizedBox(
+            height: 10,
+          );
+        },
       ),
     );
   }

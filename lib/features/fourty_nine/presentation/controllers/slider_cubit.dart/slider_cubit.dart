@@ -1,22 +1,23 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_slider_items_usecase.dart';
 
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/states/basic_state.dart';
 
-class RegistableSubCategoriesCubit
-    extends Cubit<BasicState<List<SubCategoryEntity>>> {
-  final GetSubCategoriesUseCase _getSubCategoriesUseCase;
+class SliderCubit
+    extends Cubit<BasicState<List<SliderItemEntity>>> {
+  final GetSliderItemsUseCase _getSliderItemsUseCase;
 
-  RegistableSubCategoriesCubit(this._getSubCategoriesUseCase)
+  SliderCubit(this._getSliderItemsUseCase)
       : super(
           const BasicState(),
         );
 
   void loadData() async {
     emit(state.copyWith(status: StateStatus.loading));
-    final result = await _getSubCategoriesUseCase.call('');
+    final result = await _getSliderItemsUseCase.call(const NoParams());
     emit(
       result.fold(
         (failure) => state.copyWith(

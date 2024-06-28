@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../routes/routes.dart';
@@ -16,18 +17,8 @@ class ZoomView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.GRAY_LIGHT_COLOR3,
-      appBar: const HomeAppbar(),
-      drawer: const DrawerWidget(),
-      bottomNavigationBar: const BottomNavigator(
-        mainCategory: 2,
-        index: 2,
-      ),
-      floatingActionButton: const FloatingButton(
-        changeView: 2,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    return SharedScaffold(
+      mainCategoryId: 2,
       body: GridView(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             childAspectRatio: 1, crossAxisCount: 3),

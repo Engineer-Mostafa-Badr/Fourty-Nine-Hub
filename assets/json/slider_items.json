@@ -1,0 +1,23 @@
+{
+    "status":true,
+    "message":null, 
+    "data":{
+        "items":[
+            {
+                "id":1,
+                "route":"/Wallet",
+                "title":"Cash Back",
+                "sub_title":"Get Cash back up to 4,000L.E per week by using 49 hub",
+                "image":"https://www.shutterstock.com/image-vector/cash-back-50-off-banner-260nw-1870877113.jpg"
+            },
+            {
+                "id":1,
+                "route":"/Competitions",
+                "title":"Competitions",
+                "sub_title":"Get Cash back up to 4,000L.E per week by using 49 hub",
+                "image":"https://cdn.wedevs.com/uploads/2022/12/Blog-banner-of-How-to-do-a-giveaway.png"
+            }
+
+        ]
+    }
+}

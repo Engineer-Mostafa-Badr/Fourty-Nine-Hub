@@ -1,22 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/CarouselSlider.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../core/states/basic_state.dart';
 
 class AnnounceWidget extends StatelessWidget {
   const AnnounceWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return CarouselSliderWidget(height: kToolbarHeight * 2, widgets: [
-      _buildAnnounceItem(),
-      _buildAnnounceItem(),
-      _buildAnnounceItem(),
-    ]);
+    return BlocBuilder<SliderCubit, BasicState<List<SliderItemEntity>>>(
+        builder: (context, state) {
+      if (state.data?.isEmpty ?? true) {
+        return const SizedBox();
+      }
+      return CarouselSliderWidget(
+          height: kToolbarHeight * 2,
+          autoPlay: true,
+          widgets: state.data?.map((e) {
+                return _buildAnnounceItem(item: e);
+              }).toList() ??
+              []);
+    });
   }
 
-  Widget _buildAnnounceItem() {
+  Widget _buildAnnounceItem({required SliderItemEntity item}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: ClipRRect(
@@ -25,7 +36,7 @@ class AnnounceWidget extends StatelessWidget {
           children: [
             Positioned.fill(
                 child: Image.network(
-              UIConst.imagePlaceHolder,
+              item.image,
               fit: BoxFit.cover,
             )),
             Positioned.fill(
@@ -42,12 +53,21 @@ class AnnounceWidget extends StatelessWidget {
             )),
             Positioned.fill(
                 child: Center(
-              child: Label(
-                  style: Styles.mediumText(
-                      fontWeight: FontWeight.bold, color: Colors.white),
-                  textAlign: TextAlign.center,
-                  text:
-                      'Get 20 L.E Cashback when you use Ride Service for the first Time'),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Label(
+                      style: Styles.headerText(
+                          fontWeight: FontWeight.bold, color: Colors.white),
+                      textAlign: TextAlign.center,
+                      text: item.title),
+                  Label(
+                      style: Styles.mediumText(
+                          fontWeight: FontWeight.bold, color: Colors.white),
+                      textAlign: TextAlign.center,
+                      text: item.subTitle),
+                ],
+              ),
             )),
           ],
         ),

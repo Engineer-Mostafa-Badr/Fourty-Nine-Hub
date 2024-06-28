@@ -30,7 +30,7 @@ class _TinderViewState extends State<TinderView> {
   @override
   Widget build(BuildContext context) {
     return SharedScaffold(
-        mainCategoryId: 0,
+        mainCategoryId: 2,
         body: Stack(
           children: [
             Positioned.fill(bottom: 30, child: _buildCardSwipper()),

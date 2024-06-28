@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
 
 import '../../../../core/error/failure.dart';
 import '../entities/parent_main_category_entity.dart';
@@ -9,4 +10,5 @@ abstract class FourtyNineRepository {
       getParentMainCategories();
 
   Future<Either<Failure, List<MainCategoryEntity>>> getMainCategories();
+  Future<Either<Failure, List<SliderItemEntity>>> getSliderItems();
 }

@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-
-import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
-import '../../../../../common/widgets/dynamic/drawer.dart';
-import '../../../../../common/widgets/dynamic/floating_button.dart';
-import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
-import '../../../../../res/assets/assets.dart';
+import '../../../club_house/presentation/pages/club_house_home.dart';
 import '../widgets/home/calling_card.dart';
 import '../widgets/home/chat_card.dart';
 import '../widgets/home/chat_stories.dart';
@@ -14,6 +9,7 @@ import '../widgets/home/chat_stories.dart';
 class ChatView extends StatelessWidget {
   final List<String> groups = [
     'Social',
+    'Broadcast',
     'Services',
     'Call (Social)',
     'Video (Social)',
@@ -30,18 +26,8 @@ class ChatView extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: groups.length,
-      child: Scaffold(
-          appBar: const HomeAppbar(),
-          drawer: const DrawerWidget(),
-          bottomNavigationBar: const BottomNavigator(
-            mainCategory: 0,
-            index: 2,
-          ),
-          floatingActionButton: const FloatingButton(
-            changeView: 2,
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+      child: SharedScaffold(
+          mainCategoryId: 2,
           body: NestedAppbar(appBars: [
             const SliverAppBar(
               expandedHeight: kToolbarHeight * 1.5,
@@ -72,6 +58,7 @@ class ChatView extends StatelessWidget {
   Widget _buildCategoriesViews() {
     return TabBarView(children: [
       _buildCategoryChats(),
+      const ClubHouseHome(),
       _buildCategoryChats(),
       _buildCallingHistory(isVideo: false),
       _buildCallingHistory(isVideo: true),

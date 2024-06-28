@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentat
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/registable_sub_categories_cubit/registable_subcategories_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/cubit/doctor_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_dashboard_view.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/cubit/health_cubit.dart';
@@ -111,6 +112,9 @@ class AppPages {
           ),
           BlocProvider(
             create: (context) => serviceLocator<MainCategoriesCubit>(),
+          ),
+          BlocProvider(
+            create: (context) => serviceLocator<SliderCubit>(),
           ),
         ],
         child: const FourtyNineView(),

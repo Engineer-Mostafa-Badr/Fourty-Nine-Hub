@@ -8,14 +8,17 @@ import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/main_category_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/parent_main_category_model.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
 
 import '../../../../../res/assets/jsons.dart';
+import '../../models/slider_item_model.dart';
 
 abstract class FourtyNineRemoteDataSource {
   Future<Either<Failure, List<ParentMainCategoryModel>>>
       getParentMainCategories();
 
   Future<Either<Failure, List<MainCategoryModel>>> getMainCategories();
+  Future<Either<Failure, List<SliderItemEntity>>> getSliderItems();
 }
 
 class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
@@ -41,6 +44,17 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
       (failure) => Left(failure),
       (response) => Right((response['data']['categories'] as List)
           .map((e) => MainCategoryModel.fromJson(e))
+          .toList()),
+    );
+  }
+  
+  @override
+  Future<Either<Failure, List<SliderItemEntity>>> getSliderItems() async{
+    final result = await _apiConsumer.get(Jsons.sliderItems);
+    return result.fold(
+      (failure) => Left(failure),
+      (response) => Right((response['data']['items'] as List)
+          .map((e) => SliderItemModel.fromJson(e))
           .toList()),
     );
   }

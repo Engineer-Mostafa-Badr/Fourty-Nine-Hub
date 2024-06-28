@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../domain/entities/parent_main_category_entity.dart';
@@ -20,5 +21,11 @@ class FourtyNineRepositoryImpl implements FourtyNineRepository {
   @override
   Future<Either<Failure, List<MainCategoryEntity>>> getMainCategories() {
     return _fourtyNineRemoteDataSource.getMainCategories();
+  }
+
+  @override
+  Future<Either<Failure, List<SliderItemEntity>>> getSliderItems() {
+        return _fourtyNineRemoteDataSource.getSliderItems();
+
   }
 }
