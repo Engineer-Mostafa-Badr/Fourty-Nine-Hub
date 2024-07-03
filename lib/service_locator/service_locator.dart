@@ -17,6 +17,7 @@ import '../core/api/api_consumer.dart';
 import '../core/local_storage/local_storage_consumer.dart';
 
 import '../firebase_options.dart';
+import 'account_service_locator.dart';
 import 'auction_service_locator.dart';
 import 'food_service_locator.dart';
 import 'fourty_nine_service_locator.dart';
@@ -102,6 +103,7 @@ class DI {
     InstallmentServiceLocator.execute(serviceLocator: serviceLocator);
     // health
     HealthServiceLocator.execute(serviceLocator: serviceLocator);
-    
+    // account
+    AccountServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

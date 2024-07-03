@@ -28,6 +28,7 @@ class JsonParser implements ApiConsumer {
       print(response);
       return Right(response as Map<String, dynamic>);
     } catch (e) {
+      print(e);
       return Left(_getFailure(e));
     }
   }

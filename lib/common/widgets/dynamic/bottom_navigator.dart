@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/ride_request_view.dart';
 import 'sizer.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';

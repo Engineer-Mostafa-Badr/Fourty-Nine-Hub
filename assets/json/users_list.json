@@ -1,0 +1,44 @@
+{
+    "status":true,
+    "message":null,
+    "data":{
+        "items":[
+            {
+                "id":1,
+                "user":{
+                    "id":10,
+                    "name":"Ahmed Mohamed",
+                    "phone":"+201010727610",
+                    "type":"user",
+                    "ads_count":3,
+                    "email":"faroukshahin30@gmail.com",
+                    "image":"https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg"
+                }
+            },
+            {
+                "id":2,
+                "user":{
+                    "id":11,
+                    "name":"Jasser Mohamed",
+                    "phone":"+201010727610",
+                    "type":"user",
+                    "ads_count":3,
+                    "email":"jasser.mohamed@gmail.com",
+                    "image":"https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg"
+                }
+            },
+            {
+                "id":3,
+                "user":{
+                    "id":12,
+                    "name":"Ibrahim Khalid",
+                    "phone":"+201010727610",
+                    "type":"user",
+                    "ads_count":3,
+                    "email":"Ibrahim.khalid@gmail.com",
+                    "image":"https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg"
+                }
+            }
+        ]
+    }
+}

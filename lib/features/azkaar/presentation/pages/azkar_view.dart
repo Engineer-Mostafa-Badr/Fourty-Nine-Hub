@@ -4,11 +4,11 @@ import 'package:fourtyninehub/res/style/const.dart';
 
 import '../../../../res/strings/labels.dart';
 
-class QuraanView extends StatelessWidget {
-  const QuraanView({super.key});
+class AzkarView extends StatelessWidget {
+  const AzkarView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const WebViewScaffold(label: Labels.quraan, url: UIConst.quraanWeb);
+    return const WebViewScaffold(label: Labels.azkar, url: UIConst.azkar);
   }
 }

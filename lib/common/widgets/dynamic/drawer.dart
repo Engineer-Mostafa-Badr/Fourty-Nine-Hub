@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateful/dynamic/webview.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:go_router/go_router.dart';
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
 import '../../../res/assets/assets.dart';
@@ -42,12 +43,12 @@ class DrawerWidget extends StatelessWidget {
               walletCircularProgress(context: context),
               drawerListTile(
                   icon: FontAwesomeIcons.quran,
-                  label: 'Quraan',
+                  label: Labels.quraan,
                   onTap: () => context.push(Routes.QURAAN)),
               drawerListTile(
                   icon: FontAwesomeIcons.book,
-                  label: 'Azkaar',
-                  onTap: () => context.push(Routes.QURAAN)),
+                  label: Labels.azkar,
+                  onTap: () => context.push(Routes.AZKAAR)),
               drawerListTile(
                   icon: Icons.star_rounded,
                   label: 'Favourite Categories',

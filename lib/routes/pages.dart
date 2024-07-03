@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/share_the_app.dart';
@@ -34,8 +35,12 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/ti
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:go_router/go_router.dart';
+import '../features/account_taps/account/presentation/cubit/managers/favourite_ads_cubit.dart';
+import '../features/account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
+import '../features/account_taps/lists/presentation/cubit/lists_cubit.dart';
 import '../features/account_taps/my_adds/presentation/pages/my_adds.dart';
 import '../features/authentication/presentation/pages/forgot_password/enter_email_forgot_password_view.dart';
+import '../features/azkaar/presentation/pages/azkar_view.dart';
 import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_restaurants_view.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/cart_view.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
@@ -215,7 +220,7 @@ class AppPages {
         GoRoute(
           name: Routes.COMPETITIONS,
           path: Paths.COMPETITIONS,
-          builder: (context, state) => CompetitionView(),
+          builder: (context, state) => const CompetitionView(),
           routes: [],
         ),
         GoRoute(
@@ -231,7 +236,7 @@ class AppPages {
         GoRoute(
           path: Paths.AZKAAR,
           name: Routes.AZKAAR,
-          builder: (context, state) => const QuraanView(),
+          builder: (context, state) => const AzkarView(),
         ),
         // WalletView
         GoRoute(
@@ -265,7 +270,10 @@ class AppPages {
               GoRoute(
                   path: Paths.Lists,
                   name: Routes.Lists,
-                  builder: (context, state) => const ListsView()),
+                  builder: (context, state) => BlocProvider<ListsCubit>(
+                        create: (_) => serviceLocator(),
+                        child: const ListsView(),
+                      )),
               GoRoute(
                   path: Paths.SHAREAPP,
                   name: Routes.SHAREAPP,
@@ -273,16 +281,25 @@ class AppPages {
               GoRoute(
                   path: Paths.FAVOURITE,
                   name: Routes.FAVOURITE,
-                  builder: (context, state) => const FavouriteView()),
+                  builder: (context, state) => BlocProvider<FavouriteAdsCubit>(
+                      create: (_) => serviceLocator(),
+                      child: const FavouriteView())),
               GoRoute(
                   path: Paths.FAVOURITECATEGORIES,
                   name: Routes.FAVOURITECATEGORIES,
-                  builder: (context, state) => const FavouriteCategoryView()),
+                  builder: (context, state) =>
+                      BlocProvider<FavouriteCategoryCubit>(
+                        create: (_) => serviceLocator(),
+                        child: const FavouriteCategoryView(),
+                      )),
               GoRoute(
                   path: Paths.FAVOURITESUBCATEGORIES,
                   name: Routes.FAVOURITESUBCATEGORIES,
                   builder: (context, state) =>
-                      const FavouriteSubCategoryView()),
+                      BlocProvider<FavouriteSubCategoryCubit>(
+                        create: (_) => serviceLocator(),
+                        child: const FavouriteSubCategoryView(),
+                      )),
               GoRoute(
                   path: Paths.MYADDS,
                   name: Routes.MYADDS,

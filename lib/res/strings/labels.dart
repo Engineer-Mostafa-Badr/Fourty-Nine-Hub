@@ -29,17 +29,26 @@ abstract class Labels {
   static const numberOfReviews = 'Number of reviews';
   static const waitingTime = 'Waiting Time';
   static const minutes = 'Minutes';
-  static const clinic =  'Clinic';
-  static const reviews =  'Reviews';
-  static const chooseBookingTime =  'Choose Booking Time';
-  static const noAvailableTimes =  'There is no available times';
-  static const book =  'Book';
-  static const availableTimes =  'Available Times';
-  static const requestsHistory =  'Requests History';
-    static const bookingApproved = 'Booking Approved Successfully!';
-    static const bookingRejected = 'Booking Rejected!';
-    static const connected = 'Connected';
-    static const notConnected = 'Not Connected';
+  static const clinic = 'Clinic';
+  static const reviews = 'Reviews';
+  static const chooseBookingTime = 'Choose Booking Time';
+  static const noAvailableTimes = 'There is no available times';
+  static const book = 'Book';
+  static const availableTimes = 'Available Times';
+  static const requestsHistory = 'Requests History';
+  static const bookingApproved = 'Booking Approved Successfully!';
+  static const bookingRejected = 'Booking Rejected!';
+  static const connected = 'Connected';
+  static const notConnected = 'Not Connected';
+  static const quraan = 'Quraan';
+  static const azkar = 'Azkar';
+  static const favouriteCategories = 'Favourite Categories';
+  static const favouriteSubcategories = 'Favourite Sub Categories';
+  static const favouriteAds = 'Favourite ADs';
+  static const friends = 'Friends';
+  static const followers = 'Followers';
+  static const friendRequests = 'Requests';
+  static const blocked = 'Blocked';
+  static const lists = 'Lists';
 
-  
 }

@@ -24,4 +24,6 @@ class UIConst {
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBxSZEqruWTMC6Kuq6Ia0ZRe5s2VAxdQPU_3jTP5X3as0YTVTZ6mqW6uhwD1QHyxv5dA4&usqp=CAU';
 
   static const String policyUrl = 'https://google.com';
+  static const String quraanWeb = 'https://surahquran.com/';
+  static const String azkar = 'https://surahquran.com/';
 }

@@ -38,3 +38,10 @@ class BasicState<T> extends Equatable {
         failure,
       ];
 }
+
+extension BasicStateX on BasicState {
+  bool get isLoading => StateStatus.loading == status;
+  bool get isInitial => StateStatus.initial == status;
+  bool get isError => StateStatus.error == status;
+  bool get isSuccess => StateStatus.success == status;
+}
