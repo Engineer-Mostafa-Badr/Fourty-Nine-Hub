@@ -50,5 +50,10 @@ abstract class Labels {
   static const friendRequests = 'Requests';
   static const blocked = 'Blocked';
   static const lists = 'Lists';
+  static const policies = 'Policies';
+  static const copiedToClipboard = 'Copied to clipboard!';
+  static const policy = "Policy";
+  static const transferMoney = 'Transfer Money';
+  static const paymentAddress = 'Payment Address';
 
 }

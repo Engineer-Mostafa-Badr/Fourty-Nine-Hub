@@ -11,6 +11,7 @@ abstract class Styles {
         fontSize: fontSize,
         color: color,
         decoration: decoration,
+        decorationColor: color,
         fontWeight: fontWeight);
   }
 
@@ -24,6 +25,7 @@ abstract class Styles {
         color: color,
         // overflow: TextOverflow.ellipsis,
         decoration: decoration,
+        decorationColor: color,
         fontWeight: fontWeight);
   }
 

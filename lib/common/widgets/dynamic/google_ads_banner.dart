@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 
 import '../../../res/style/app_colors.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 
 class GoogleAddsBanner extends StatelessWidget {
   final double margin;
@@ -22,9 +24,11 @@ class GoogleAddsBanner extends StatelessWidget {
               spreadRadius: 5,
             )
           ]),
-      child: const Center(
-        child: Text('Google Adds'),
-      ),
+      child: AdmobBanner(
+              adUnitId: UIConst.adHomeUnitId,
+              adSize: AdmobBannerSize.BANNER,
+              listener: (AdmobAdEvent event, Map<String, dynamic>? args) {},
+            )
     );
   }
 }

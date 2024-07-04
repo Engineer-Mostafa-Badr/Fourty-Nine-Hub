@@ -10,6 +10,7 @@ abstract class Routes {
   static const WINNERS = '/Winners';
   static const WALLET = '/Wallet';
   static const WALLETHISTORY = '/Wallet/WalletHistory';
+  static const TRANSFERMONEY = '/Wallet/TransferMoney';
   static const SOCIAL = '/Social';
   static const OTHERSACCOUNT = '/Social/OthersAccount';
   static const REELS = '/Social/REELS';
@@ -62,6 +63,7 @@ abstract class Routes {
   static const REGISTERDRIVER = '/Register/register-driver';
   static const ACCOUNT = '/Account';
   static const PRIVACY = '/Account/Privacy';
+  static const POLICY = '/Account/POLICY';
 
   static const Lists = '/Account/Lists';
   static const FAVOURITE = '/Account/Favourite';
@@ -85,6 +87,7 @@ abstract class Paths {
   static const WINNERS = 'Winners';
   static const WALLET = 'Wallet';
   static const WALLETHISTORY = 'WalletHistory';
+  static const TRANSFERMONEY = 'TransferMoney';
 
   static const SOCIAL = 'Social';
   static const OTHERSACCOUNT = 'OthersAccount';
@@ -133,6 +136,7 @@ abstract class Paths {
   static const REGISTERDRIVER = 'register-driver';
   static const ACCOUNT = 'Account';
   static const PRIVACY = 'Privacy';
+  static const POLICY = 'Policy';
 
   static const Lists = 'Lists';
   static const FAVOURITE = 'Favourite';

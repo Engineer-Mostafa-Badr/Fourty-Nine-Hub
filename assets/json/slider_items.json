@@ -16,6 +16,13 @@
                 "title":"Competitions",
                 "sub_title":"Get Cash back up to 4,000L.E per week by using 49 hub",
                 "image":"https://cdn.wedevs.com/uploads/2022/12/Blog-banner-of-How-to-do-a-giveaway.png"
+            },
+            {
+                "id":1,
+                "route":"/Wallet",
+                "title":"Yellow Card",
+                "sub_title":"Get Yellow card from fawry branch if you got 300 L.E",
+                "image":"https://techbuild.africa/wp-content/uploads/2023/07/Untitled-design-48.png"
             }
 
         ]

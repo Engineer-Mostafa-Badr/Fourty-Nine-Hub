@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../../common/widgets/stateless/appbar/back_appbar.dart';
-import '../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/styles.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 
 class WalletHistory extends StatelessWidget {
   const WalletHistory({
@@ -15,7 +16,26 @@ class WalletHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const BackAppBar(),
-      body: _buildHistoryWidget(),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.info_outline,
+                color: Colors.grey,
+              ),
+              const Sizer(),
+              Expanded(
+                  child: Label(
+                text: 'Minimum 1002 EGP for personal transaction',
+                style: Styles.mediumText(color: Colors.grey),
+              )),
+            ],
+          ),
+          const Sizer(),
+          Expanded(child: _buildHistoryWidget()),
+        ],
+      ),
     );
   }
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/stateful/dynamic/webview.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -88,9 +87,7 @@ class DrawerWidget extends StatelessWidget {
               drawerListTile(
                   icon: Icons.policy_outlined,
                   label: 'Policies',
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const WebViewScaffold(
-                          url: UIConst.policyUrl, label: 'Policy')))),
+                  onTap: () => context.push(Routes.POLICY)),
               drawerListTile(
                   icon: Icons.share,
                   label: 'Share App',

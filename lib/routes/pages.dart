@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
-import 'package:fourtyninehub/features/account_taps/account/presentation/pages/share_the_app.dart';
+import 'package:fourtyninehub/features/account_taps/share_app/presentation/pages/share_the_app.dart';
 import 'package:fourtyninehub/features/account_taps/lists/presentation/pages/lists_view.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/pages/privacy_view.dart';
@@ -39,6 +39,9 @@ import '../features/account_taps/account/presentation/cubit/managers/favourite_a
 import '../features/account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
 import '../features/account_taps/lists/presentation/cubit/lists_cubit.dart';
 import '../features/account_taps/my_adds/presentation/pages/my_adds.dart';
+import '../features/account_taps/policies/presentation/pages/policy_view.dart';
+import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
+import '../features/account_taps/transfer_money/presentation/pages/transfer_money_view.dart';
 import '../features/authentication/presentation/pages/forgot_password/enter_email_forgot_password_view.dart';
 import '../features/azkaar/presentation/pages/azkar_view.dart';
 import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_restaurants_view.dart';
@@ -92,8 +95,8 @@ import '../features/social_media/reels/presentation/pages/Reel_view.dart';
 import '../features/social_media/social/presentation/pages/Social_home.dart';
 import '../features/social_media/social/presentation/pages/other_account_view.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
-import '../features/wallet/presentation/pages/wallet_history.dart';
-import '../features/wallet/presentation/pages/wallet_view.dart';
+import '../features/account_taps/wallet/presentation/pages/wallet_history.dart';
+import '../features/account_taps/wallet/presentation/pages/wallet_view.dart';
 import '../features/youtube/presentation/pages/play_video.dart';
 import '../features/youtube/presentation/pages/youtube.dart';
 import '../features/zoom/presentation/pages/meeting_room.dart';
@@ -249,6 +252,11 @@ class AppPages {
                 name: Routes.WALLETHISTORY,
                 builder: (context, state) => const WalletHistory(),
               ),
+              GoRoute(
+                path: Paths.TRANSFERMONEY,
+                name: Routes.TRANSFERMONEY,
+                builder: (context, state) => const TransferMoneyView(),
+              ),
             ]),
         GoRoute(
             path: Paths.ACCOUNT,
@@ -267,6 +275,12 @@ class AppPages {
                   path: Paths.PRIVACY,
                   name: Routes.PRIVACY,
                   builder: (context, state) => const PrivacyView()),
+
+           GoRoute(
+                  path: Paths.POLICY,
+                  name: Routes.POLICY,
+                  builder: (context, state) => const PolicyView()),
+                  
               GoRoute(
                   path: Paths.Lists,
                   name: Routes.Lists,
@@ -277,7 +291,11 @@ class AppPages {
               GoRoute(
                   path: Paths.SHAREAPP,
                   name: Routes.SHAREAPP,
-                  builder: (context, state) => const ShareTheApp()),
+                  // 
+                  builder: (context, state) => BlocProvider<ShareAppCubit>(
+                    create: (_)=> serviceLocator(), 
+                    child: const ShareTheApp(),
+                  )),
               GoRoute(
                   path: Paths.FAVOURITE,
                   name: Routes.FAVOURITE,

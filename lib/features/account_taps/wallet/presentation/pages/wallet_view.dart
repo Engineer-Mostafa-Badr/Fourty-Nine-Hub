@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/common/functions/helper/local_auth.dart';
+import 'package:fourtyninehub/features/competition/presentation/pages/competition_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/wallet_history.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../common/widgets/stateless/appbar/back_appbar.dart';
-import '../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/styles.dart';
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../res/strings/labels.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 import 'package:semicircle_indicator/semicircle_indicator.dart';
 
-import '../../../../routes/routes.dart';
+import '../../../../../routes/routes.dart';
 
 class WalletView extends StatelessWidget {
   const WalletView({super.key});
@@ -28,17 +31,26 @@ class WalletView extends StatelessWidget {
           children: [
             walletInfoCell(
                 icon: Icons.wallet,
-                context: context,
+                onTap: () => bottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    widget: const WalletHistory()),
                 label: 'Balance',
                 value: '${100}'),
             walletInfoCell(
                 icon: Icons.mobile_friendly_sharp,
                 label: 'Gift Wallet',
-                context: context,
+                onTap: () => bottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    widget: const CompetitionView()),
                 value: '${50}'),
             walletInfoCell(
                 icon: Icons.refresh,
-                context: context,
+                onTap: () => bottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    widget: const WalletHistory()),
                 label: 'Wallet',
                 value: '${2000}')
           ],
@@ -52,7 +64,7 @@ class WalletView extends StatelessWidget {
   }) {
     return ListTile(
       title: Label(text: label),
-      subtitle: Label(text: subTitle  ),
+      subtitle: Label(text: subTitle),
       trailing: MaterialButton(
         onPressed: () {},
         color: Colors.red,
@@ -70,10 +82,10 @@ class WalletView extends StatelessWidget {
       {required IconData icon,
       required String label,
       required String value,
-      required BuildContext context}) {
+      required Function onTap}) {
     return Expanded(
       child: InkWell(
-        onTap: () => context.push(Routes.WALLETHISTORY),
+        onTap: () => onTap(),
         child: Column(
           children: [
             Icon(
@@ -82,7 +94,10 @@ class WalletView extends StatelessWidget {
             ),
             Label(
                 text: label,
-                style: Styles.mediumText(color: Colors.white, fontSize: 10)),
+                style: Styles.mediumText(
+                    color: Colors.white,
+                    fontSize: 10,
+                    decoration: TextDecoration.underline)),
             Label(
                 text: value,
                 style: Styles.headerText(
@@ -123,35 +138,36 @@ class WalletView extends StatelessWidget {
                 ),
                 walletInfo(context: context),
                 MaterialButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    if (await LocalAuth().checkBiometrics()) {
+                      context.push(Routes.TRANSFERMONEY);
+                    }
+                  },
                   color: Colors.red,
                   textColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                   minWidth: double.infinity,
-                  child: Label(
-                      text: 'Withdrawal',
-                      style: Styles.mediumText(color: Colors.white)),
-                ),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.info_outline,
-                      color: Colors.grey,
-                    ),
-                    const Sizer(),
-                    Expanded(
-                        child: Label(
-                      text: 'Minimum 1002 EGP for personal transaction',
-                      style: Styles.mediumText(color: Colors.grey),
-                    )),
-                  ],
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.send_to_mobile_rounded),
+                      const Sizer(),
+                      Label(
+                          text: Labels.transferMoney,
+                          style: Styles.mediumText(color: Colors.white)),
+                    ],
+                  ),
                 ),
                 _buildWalletActionItem(
-                    label: 'Gift / 5 years', subTitle: '0 L.E . 3 years last', ontap: () {}),
+                    label: 'Gift / 5 years',
+                    subTitle: '0 L.E . 3 years last',
+                    ontap: () {}),
                 _buildWalletActionItem(
-                    label: 'Gift / 10 years', subTitle: '0 L.E . 8 years last', ontap: () {}),
+                    label: 'Gift / 10 years',
+                    subTitle: '0 L.E . 8 years last',
+                    ontap: () {}),
               ],
             ),
           ),

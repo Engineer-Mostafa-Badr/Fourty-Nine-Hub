@@ -8,13 +8,11 @@ import '../widgets/home/chat_stories.dart';
 
 class ChatView extends StatelessWidget {
   final List<String> groups = [
-    'Social',
     'Broadcast',
+    'Social',
     'Services',
-    'Call (Social)',
-    'Video (Social)',
-    'Call (Services)',
-    'Video (Services)',
+    'Call & Video (Social)',
+    'Call & Video(Services)',
     'Anonymous',
     'Archive',
     'Lock Chat',
@@ -26,6 +24,7 @@ class ChatView extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: groups.length,
+      initialIndex: 1,
       child: SharedScaffold(
           mainCategoryId: 2,
           body: NestedAppbar(appBars: [

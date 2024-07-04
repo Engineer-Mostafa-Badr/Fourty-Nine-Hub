@@ -11,18 +11,25 @@ import 'package:fourtyninehub/features/account_taps/lists/domain/usecases/get_fo
 import 'package:fourtyninehub/features/account_taps/lists/domain/usecases/get_friend_requests_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/lists/domain/usecases/get_friends_usecase.dart';
 import 'package:get_it/get_it.dart';
+import '../features/account_taps/account/data/repositories/account_repo_impl.dart';
+import '../features/account_taps/account/domain/repositories/account_repo.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_ads_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import '../features/account_taps/lists/presentation/cubit/lists_cubit.dart';
+import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
 
 class AccountServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     serviceLocator.registerLazySingleton<AccountRemoteDataSource>(
         () => AccountRemoteDataSourceImpl(serviceLocator()));
+
     serviceLocator.registerLazySingleton<ListsRemoteDataSource>(
         () => ListsRemoteDataSourceImpl(serviceLocator()));
+        // AccountRepo
     serviceLocator.registerLazySingleton<ListsRepo>(
         () => ListsRepoImpl(serviceLocator()));
+        serviceLocator.registerLazySingleton<AccountRepo>(
+        () => AccountRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<GetFavouriteAdsUsecase>(
         () => GetFavouriteAdsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetFavouriteCategoriesUseCase>(
@@ -43,6 +50,8 @@ class AccountServiceLocator {
         () => FavouriteSubCategoryCubit(serviceLocator())..loadData());
     serviceLocator.registerFactory<FavouriteCategoryCubit>(
         () => FavouriteCategoryCubit(serviceLocator())..loadData());
+ serviceLocator.registerFactory<ShareAppCubit>(
+        () => ShareAppCubit());
 
     serviceLocator.registerFactory<ListsCubit>(() => ListsCubit(
           serviceLocator(),
@@ -51,6 +60,5 @@ class AccountServiceLocator {
           serviceLocator(),
         )..loadData());
 
-    // ListsCubit
   }
 }

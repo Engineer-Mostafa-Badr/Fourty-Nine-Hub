@@ -46,8 +46,8 @@ class AnnounceWidget extends StatelessWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                    Colors.black.withOpacity(.1),
-                    Colors.black.withOpacity(.3),
+                    Colors.black.withOpacity(.2),
+                    Colors.black.withOpacity(.4),
                     Colors.black.withOpacity(.6),
                   ])),
             )),

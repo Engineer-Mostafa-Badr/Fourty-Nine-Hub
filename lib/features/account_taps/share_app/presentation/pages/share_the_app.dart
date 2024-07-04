@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
@@ -7,10 +10,12 @@ import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:semicircle_indicator/semicircle_indicator.dart';
-
+import 'package:go_router/go_router.dart';
 import '../../../../../res/assets/assets.dart';
+import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
+import '../../../../../routes/routes.dart';
+import '../cubit/share_app_cubit.dart';
 
 class ShareTheApp extends StatelessWidget {
   const ShareTheApp({super.key});
@@ -58,18 +63,14 @@ class ShareTheApp extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildRefrenceNumberWidget(),
+                        Image.asset(Assets.share),
                         const Sizer(),
-                        _buildLinkWidget(),
+                        _buildLinkWidget(context: context),
                         const Sizer(),
-                        _buildStatisticsWidget(),
+                        _buildStatisticsWidget(context: context),
                       ],
                     ),
                   ),
-                  const Sizer(
-                    height: 20,
-                  ),
-                  _buildShareChannelsWidget(),
                 ],
               ),
             ))
@@ -77,39 +78,43 @@ class ShareTheApp extends StatelessWidget {
         ));
   }
 
-  Widget _buildRefrenceNumberWidget() {
-    return Image.asset(Assets.share);
-  }
-
-  Widget _buildLinkWidget() {
+  Widget _buildLinkWidget({required BuildContext context}) {
+    final controller = context.read<ShareAppCubit>();
     return Column(
       children: [
-        const BadgedLabel(
-            // height: kToolbarHeight,
-            width: double.infinity,
-            color: AppColors.GREY_NORMAL_COLOR,
-            label: 'https://49hub.com/register?reference=300404004'),
+        InkWell(
+          onLongPress: () => controller.copyToClipboard(context),
+          child: BadgedLabel(
+              // height: kToolbarHeight,
+              width: double.infinity,
+              color: AppColors.GREY_NORMAL_COLOR,
+              label: controller.link),
+        ),
         const Sizer(),
-        AppButton(label: 'Share The App', onPressed: () {}),
+        AppButton(
+            label: 'Share The App', onPressed: () => controller.shareTheApp()),
       ],
     );
   }
 
-  Widget _buildStatisticsWidget() {
-    return Row(
-      children: [
-        Expanded(
-            child: _buildStatisticsItem(
-                color: AppColors.PRIMARY_COLOR,
-                title: 'Users',
-                subTitle: '240 user')),
-        const Sizer(),
-        Expanded(
-            child: _buildStatisticsItem(
-                color: AppColors.PRIMARY_COLOR,
-                title: 'Balance',
-                subTitle: '40 EGP')),
-      ],
+  Widget _buildStatisticsWidget({required BuildContext context}) {
+    return InkWell(
+      onTap: () => context.push(Routes.WALLET),
+      child: Row(
+        children: [
+          Expanded(
+              child: _buildStatisticsItem(
+                  color: AppColors.PRIMARY_COLOR,
+                  title: 'Users',
+                  subTitle: '30 user')),
+          const Sizer(),
+          Expanded(
+              child: _buildStatisticsItem(
+                  color: AppColors.PRIMARY_COLOR,
+                  title: 'Balance',
+                  subTitle: '1500 ${Labels.currency}')),
+        ],
+      ),
     );
   }
 
