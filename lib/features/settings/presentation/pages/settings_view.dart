@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-
-import '../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../res/style/app_colors.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
@@ -11,29 +13,43 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BackAppBar(label: 'Settings',),
+        appBar: const BackAppBar(
+          label: 'Settings',
+        ),
         body: Column(
           children: [
             listTileWidget(
                 icon: Icons.notifications_active_outlined,
-                trailing: Switch(value: true, onChanged: (v) {}),
+                trailing:
+                    FutureBuilder(future: Permission.notification.isGranted, builder: (context, snap) {
+                      final isGranted = snap.data?? false;
+                      return Switch(value: isGranted, onChanged: (v)async => await Permission.notification.request());
+                    }),
                 label: 'Enable Notifications',
-                onTap: () {}),
+                onTap: ()async=> await Permission.notification.request()),
             listTileWidget(
                 icon: Icons.password,
                 trailing: const Icon(Icons.arrow_forward_ios_outlined),
                 label: 'Change Password',
-                onTap: () {}),
+                onTap: () => context.push(Routes.FORGOTPASSWORD)),
             listTileWidget(
                 icon: Icons.no_accounts,
                 trailing: const Icon(Icons.arrow_forward_ios_outlined),
                 label: 'Disable Account',
-                onTap: () {}),
+                onTap: () => showAreYouSure(
+                    title: 'Alert!',
+                    subTitle: 'Are you sure you want to disable your account?',
+                    action: () => context.go(Routes.LOGIN),
+                    context: context)),
             listTileWidget(
                 icon: Icons.account_circle_outlined,
                 trailing: const Icon(Icons.arrow_forward_ios_outlined),
                 label: 'Delete Account',
-                onTap: () => bottomSheet(context: context, widget: Column())),
+                onTap: () => showAreYouSure(
+                    title: 'Alert!',
+                    subTitle: 'Are you sure you want to delete your account?',
+                    action: () => context.go(Routes.LOGIN),
+                    context: context)),
           ],
         ));
   }

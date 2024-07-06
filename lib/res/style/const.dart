@@ -30,9 +30,9 @@ class UIConst {
 
   static const String policyUrl = 'https://google.com';
   static const String quraanWeb = 'https://surahquran.com/';
-  static const String azkar = 'https://surahquran.com/';
+  static const String azkar = 'https://www.islambook.com/azkar/';
 
-   static final adHomeUnitId = kDebugMode
+  static final adHomeUnitId = kDebugMode
       ? AdmobBanner.testAdUnitId
       : Platform.isIOS // MEDIUM_RECTANGLE
           ? 'ca-app-pub-2061374259497727/6752068738'

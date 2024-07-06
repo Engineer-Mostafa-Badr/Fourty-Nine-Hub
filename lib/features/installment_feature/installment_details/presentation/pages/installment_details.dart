@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_details/presentation/cubit/installment_details_cubit.dart';
@@ -16,8 +17,6 @@ import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/const.dart';
-import '../../../../../routes/routes.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
@@ -29,7 +28,7 @@ class InstallmentsDetails extends StatelessWidget {
     final controller = context.read<InstallmentDetailsCubit>();
     return BlocConsumer<InstallmentDetailsCubit, InstallmentDetailsState>(
       listener: (context, state) {
-         if (state.isError && state.failure != null) {
+        if (state.isError && state.failure != null) {
           showErrorMessage(
             context,
             getFailureMessage(
@@ -55,9 +54,9 @@ class InstallmentsDetails extends StatelessWidget {
                       _buildAdInfoWidget(ad: state.installment!.ad),
                       _buildPlansWidget(context: context),
                       AppButton(
-                          label: '${Labels.buyWithInstallment} ${state.selectedPlan?.installment} ${Labels.currency} / ${Labels.month}',
-                          onPressed: () =>
-                              controller.buyWithInstallment()),
+                          label:
+                              '${Labels.buyWithInstallment} ${NumbersHelper.formatThousands(number: state.selectedPlan?.installment ?? 0)} ${Labels.currency} / ${Labels.month}',
+                          onPressed: () => controller.buyWithInstallment()),
                       _buildDetailsWidget(ad: state.installment!.ad),
                     ],
                   ),

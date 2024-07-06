@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/functions/helper/local_auth.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/balance_wallet_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/normal_wallet_view.dart';
 import 'package:fourtyninehub/features/competition/presentation/pages/competition_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/wallet_history.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
-import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import 'package:semicircle_indicator/semicircle_indicator.dart';
 
-import '../../../../../routes/routes.dart';
+import '../../domain/entities/wallet_entity.dart';
 
 class WalletView extends StatelessWidget {
-  const WalletView({super.key});
+  final WalletTypes type;
+  const WalletView({super.key, required this.type});
 
   Widget walletInfo({
     required BuildContext context,
@@ -34,7 +32,9 @@ class WalletView extends StatelessWidget {
                 onTap: () => bottomSheet(
                     context: context,
                     isScrollControlled: true,
-                    widget: const WalletHistory()),
+                    widget: const WalletHistory(
+                      list: [],
+                    )),
                 label: 'Balance',
                 value: '${100}'),
             walletInfoCell(
@@ -43,14 +43,18 @@ class WalletView extends StatelessWidget {
                 onTap: () => bottomSheet(
                     isScrollControlled: true,
                     context: context,
-                    widget: const CompetitionView()),
+                    widget: const CompetitionView(
+                      list: [],
+                    )),
                 value: '${50}'),
             walletInfoCell(
                 icon: Icons.refresh,
                 onTap: () => bottomSheet(
                     context: context,
                     isScrollControlled: true,
-                    widget: const WalletHistory()),
+                    widget: const WalletHistory(
+                      list: [],
+                    )),
                 label: 'Wallet',
                 value: '${2000}')
           ],
@@ -110,69 +114,78 @@ class WalletView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: const BackAppBar(),
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Sizer(
-                  height: 20,
-                ),
-                SemicircularIndicator(
-                  color: AppColors.PRIMARY_COLOR,
-                  progress: .3,
-                  bottomPadding: 0,
-                  child: Text(
-                    '${(.3 * 100).toStringAsFixed(2)} %',
-                    style: const TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.PRIMARY_COLOR),
-                  ),
-                ),
-                walletInfo(context: context),
-                MaterialButton(
-                  onPressed: () async {
-                    if (await LocalAuth().checkBiometrics()) {
-                      context.push(Routes.TRANSFERMONEY);
-                    }
-                  },
-                  color: Colors.red,
-                  textColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  minWidth: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.send_to_mobile_rounded),
-                      const Sizer(),
-                      Label(
-                          text: Labels.transferMoney,
-                          style: Styles.mediumText(color: Colors.white)),
-                    ],
-                  ),
-                ),
-                _buildWalletActionItem(
-                    label: 'Gift / 5 years',
-                    subTitle: '0 L.E . 3 years last',
-                    ontap: () {}),
-                _buildWalletActionItem(
-                    label: 'Gift / 10 years',
-                    subTitle: '0 L.E . 8 years last',
-                    ontap: () {}),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+    // final controller = context.read<WalletCubit>();
+    if (type == WalletTypes.balance) {
+      return const BalanceWalletView();
+    } else if (type == WalletTypes.gift) {
+      return const GiftWalletView();
+    } else {
+      return const NormalWalletView();
+    }
+    //   return DefaultTabController(
+    //     length: 3,
+    //     child: Scaffold(
+    //       appBar: const BackAppBar(),
+    //       body: SingleChildScrollView(
+    //         physics: const BouncingScrollPhysics(),
+    //         child: Padding(
+    //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
+    //           child: Column(
+    //             crossAxisAlignment: CrossAxisAlignment.center,
+    //             children: [
+    //               const Sizer(
+    //                 height: 20,
+    //               ),
+    //               SemicircularIndicator(
+    //                 color: AppColors.SECONDARY_COLOR,
+    //                 progress: 900 / 1002,
+    //                 bottomPadding: 0,
+    //                 child: Text(
+    //                   '${((900 / 1002) * 100).toStringAsFixed(0)} %',
+    //                   style: const TextStyle(
+    //                       fontSize: 32,
+    //                       fontWeight: FontWeight.w600,
+    //                       color: AppColors.PRIMARY_COLOR),
+    //                 ),
+    //               ),
+    //               const Sizer(),
+
+    //               // MaterialButton(
+    //               //   onPressed: () async {
+    //               //     if (await LocalAuth().checkBiometrics()) {
+    //               //       context.push(Routes.TRANSFERMONEY);
+    //               //     }
+    //               //   },
+    //               //   color: Colors.red,
+    //               //   textColor: Colors.white,
+    //               //   shape: RoundedRectangleBorder(
+    //               //     borderRadius: BorderRadius.circular(10),
+    //               //   ),
+    //               //   minWidth: double.infinity,
+    //               //   child: Row(
+    //               //     mainAxisAlignment: MainAxisAlignment.center,
+    //               //     children: [
+    //               //       const Icon(Icons.send_to_mobile_rounded),
+    //               //       const Sizer(),
+    //               //       Label(
+    //               //           text: Labels.transferMoney,
+    //               //           style: Styles.mediumText(color: Colors.white)),
+    //               //     ],
+    //               //   ),
+    //               // ),
+    //               // _buildWalletActionItem(
+    //               //     label: 'Gift / 5 years',
+    //               //     subTitle: '0 L.E . 3 years last',
+    //               //     ontap: () {}),
+    //               // _buildWalletActionItem(
+    //               //     label: 'Gift / 10 years',
+    //               //     subTitle: '0 L.E . 8 years last',
+    //               //     ontap: () {}),
+    //             ],
+    //           ),
+    //         ),
+    //       ),
+    //     ),
+    //   );
   }
 }

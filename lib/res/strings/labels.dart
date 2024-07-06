@@ -50,10 +50,16 @@ abstract class Labels {
   static const friendRequests = 'Requests';
   static const blocked = 'Blocked';
   static const lists = 'Lists';
+  static const privacy = 'Privacy';
   static const policies = 'Policies';
   static const copiedToClipboard = 'Copied to clipboard!';
   static const policy = "Policy";
   static const transferMoney = 'Transfer Money';
+  static const withDrawel = 'Withdrawel';
   static const paymentAddress = 'Payment Address';
-
+  static const appCompetitions = '49Hub Competition';
+  static const history = 'History';
+  static const normalWallet = 'Wallet';
+  static const balanceWallet = 'Balance';
+  static const giftWallet = 'Gift Wallet';
 }

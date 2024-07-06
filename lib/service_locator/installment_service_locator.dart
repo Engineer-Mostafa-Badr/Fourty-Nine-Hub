@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/features/installment_feature/create_installment/presentation/cubit/create_installment_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_details/data/datasources/installment_details_remote_datasource.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_details/domain/repositories/installment_details_repo.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_details/domain/usecases/buy_installment_usecase.dart';
@@ -36,13 +37,15 @@ class InstallmentServiceLocator {
         () => BuyWithInstallmentUseCase(serviceLocator()));
     serviceLocator
         .registerFactory<InstallmentListCubit>(() => InstallmentListCubit(
-          serviceLocator(),
-          serviceLocator(),
-        )..loadData());
-         serviceLocator
+              serviceLocator(),
+              serviceLocator(),
+            )..loadData());
+    serviceLocator
         .registerFactory<InstallmentDetailsCubit>(() => InstallmentDetailsCubit(
-          serviceLocator(),
-          serviceLocator(),
-        )..loadData());
+              serviceLocator(),
+              serviceLocator(),
+            )..loadData());
+    serviceLocator.registerFactory<CreateInstallmentCubit>(
+        () => CreateInstallmentCubit());
   }
 }

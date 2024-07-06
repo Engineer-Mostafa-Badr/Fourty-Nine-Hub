@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/account_taps/lists/presentation/cubit/lists_cubit.dart';
@@ -52,6 +54,7 @@ class ListsView extends StatelessWidget {
                       ],
                     ),
                   ),
+                  _buildSortingWidget(context: context),
                   Expanded(
                       child: state.isLoading
                           ? const Center(
@@ -75,6 +78,51 @@ class ListsView extends StatelessWidget {
                 ],
               );
             }));
+  }
+
+  Widget _buildSortingWidget({required BuildContext context}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          const Expanded(
+              child: FormTextField(
+            hint: 'Search with name',
+            height: kToolbarHeight * .9,
+            textAlignVertical: TextAlignVertical.bottom,
+          )),
+          const Sizer(),
+          Container(
+              decoration: BoxDecoration(
+                  color: AppColors.PRIMARY_COLOR,
+                  borderRadius: BorderRadius.circular(5)),
+              child: IconButton(
+                  onPressed: () {
+                    bottomSheet(
+                        context: context,
+                        widget: ListView(
+                          shrinkWrap: true,
+                          children: const [
+                            ListTile(
+                              leading: Icon(Icons.sort_by_alpha_rounded),
+                              title: Label(text: 'Sort alphabetically'),
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.sort),
+                              title: Label(text: 'Lately added '),
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.short_text_rounded),
+                              title: Label(text: 'Old first'),
+                            ),
+                          ],
+                        ));
+                  },
+                  color: Colors.white,
+                  icon: const Icon(Icons.sort)))
+        ],
+      ),
+    );
   }
 
   Widget _buildListUsersWidet({

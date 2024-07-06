@@ -57,7 +57,7 @@ class HistoryRequestsView extends StatelessWidget {
                               icon: SvgPicture.asset(height: 20, Assets.food),
                             ),
                             Tab(
-                              text: 'Other',
+                              text: 'Requests',
                               icon: Image.asset(height: 20, Assets.hand),
                             )
                           ]),
@@ -97,8 +97,10 @@ class HistoryRequestsView extends StatelessWidget {
           });
     });
   }
-   Widget _buildHealthBooking() {
-    return BlocBuilder<RequestHistoryCubit, RequestHistoryState>(builder: (context, state) {
+
+  Widget _buildHealthBooking() {
+    return BlocBuilder<RequestHistoryCubit, RequestHistoryState>(
+        builder: (context, state) {
       return ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,36 +10,48 @@ import 'sizer.dart';
 
 class WalletWidget extends StatelessWidget {
   final double? margin;
+  final bool details;
+  final Function(BuildContext context)? onBalanceClicked;
+  final Function(BuildContext context)? onWalletClicked;
+  final Function(BuildContext context)? onGiftClicked;
 
-  const WalletWidget({super.key, this.margin});
+  const WalletWidget(
+      {super.key,
+      this.margin,
+      this.details = false,
+      this.onBalanceClicked,
+      this.onGiftClicked,
+      this.onWalletClicked});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => context.push(Routes.WALLET),
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 10, horizontal: margin ?? 0),
-        padding: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: const [
-              BoxShadow(
-                color: AppColors.GRAY_LIGHT_COLOR3,
-                blurRadius: 5,
-                spreadRadius: 5,
-              )
-            ]),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const CircleAvatar(
-              radius: 3,
-              backgroundColor: AppColors.SECONDARY_COLOR,
-            ),
-            const Sizer(),
-            Expanded(
-                child: Column(
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: margin ?? 0),
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: const [
+            BoxShadow(
+              color: AppColors.GRAY_LIGHT_COLOR3,
+              blurRadius: 5,
+              spreadRadius: 5,
+            )
+          ]),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const CircleAvatar(
+            radius: 3,
+            backgroundColor: AppColors.SECONDARY_COLOR,
+          ),
+          const Sizer(),
+          Expanded(
+              child: InkWell(
+            onTap: () {
+              context.push(Routes.WALLET, extra: WalletTypes.balance);
+            },
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
@@ -47,26 +60,31 @@ class WalletWidget extends StatelessWidget {
                         fontWeight: FontWeight.bold, color: Colors.grey)),
                 // const Sizer(),
                 Label(
-                    text: '1200',
+                    text: '900',
                     style: Styles.mediumText(
                         color: AppColors.PRIMARY_COLOR,
                         fontWeight: FontWeight.bold,
                         fontSize: 18)),
               ],
-            )),
-            Container(
-              width: .5,
-              margin: const EdgeInsets.symmetric(horizontal: 5),
-              color: Colors.grey,
-              height: kToolbarHeight * .6,
             ),
-            const CircleAvatar(
-              radius: 3,
-              backgroundColor: AppColors.SECONDARY_COLOR,
-            ),
-            const Sizer(),
-            Expanded(
-                child: Column(
+          )),
+          Container(
+            width: .5,
+            margin: const EdgeInsets.symmetric(horizontal: 5),
+            color: Colors.grey,
+            height: kToolbarHeight * .6,
+          ),
+          const CircleAvatar(
+            radius: 3,
+            backgroundColor: AppColors.SECONDARY_COLOR,
+          ),
+          const Sizer(),
+          Expanded(
+              child: InkWell(
+            onTap: () {
+              context.push(Routes.WALLET, extra: WalletTypes.gift);
+            },
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
@@ -80,20 +98,25 @@ class WalletWidget extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 18)),
               ],
-            )),
-            Container(
-              width: .5,
-              margin: const EdgeInsets.symmetric(horizontal: 5),
-              color: Colors.grey,
-              height: kToolbarHeight * .6,
             ),
-            const CircleAvatar(
-              radius: 3,
-              backgroundColor: AppColors.SECONDARY_COLOR,
-            ),
-            const Sizer(),
-            Expanded(
-                child: Column(
+          )),
+          Container(
+            width: .5,
+            margin: const EdgeInsets.symmetric(horizontal: 5),
+            color: Colors.grey,
+            height: kToolbarHeight * .6,
+          ),
+          const CircleAvatar(
+            radius: 3,
+            backgroundColor: AppColors.SECONDARY_COLOR,
+          ),
+          const Sizer(),
+          Expanded(
+              child: InkWell(
+            onTap: () {
+              context.push(Routes.WALLET, extra: WalletTypes.normal);
+            },
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
@@ -107,9 +130,9 @@ class WalletWidget extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 18)),
               ],
-            )),
-          ],
-        ),
+            ),
+          )),
+        ],
       ),
     );
   }

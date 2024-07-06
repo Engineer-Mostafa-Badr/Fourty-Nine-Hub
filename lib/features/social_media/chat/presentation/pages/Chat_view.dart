@@ -16,7 +16,7 @@ class ChatView extends StatelessWidget {
     'Anonymous',
     'Archive',
     'Lock Chat',
-    'Un Read',
+    'Unread',
   ];
 
   ChatView({super.key});

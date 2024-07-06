@@ -5,6 +5,8 @@ abstract class Routes {
   static const ADS = '/Subcategories/ADS';
   static const ADdetails = '/Subcategories/ADS/AD-Details';
   static const CREATEAD = '/Subcategories/ADS/CreateAd';
+    static const CREATECOMPANYAD = '/Subcategories/ADS/CreateCompanyAd';
+
   static const LUCKYWHEEL = '/LuckyWheel';
   static const COMPETITIONS = '/Competitions';
   static const WINNERS = '/Winners';
@@ -28,7 +30,7 @@ abstract class Routes {
   static const VISITADOCTORLIST = '/Visita/VisitaDoctorsList';
   static const VISITADOCTORDETAILS = '/Visita/DoctorDetails';
   static const VISITABOOKING = '/Visita/VisitaBooking';
-    static const DOCTORDASHBOARD = '/Visita/DoctorDashboard';
+  static const DOCTORDASHBOARD = '/Visita/DoctorDashboard';
 
   static const FOOD = '/Food';
 
@@ -39,6 +41,8 @@ abstract class Routes {
   static const FOODCART = '/Food/RetaurantDetails/FoodCart';
   static const SHIPPING = '/Shipping';
   static const RIDE = '/Ride';
+    static const CONTACTUS = '/ContactUs';
+
   static const RIDERDASHBOARD = '/Ride/RiderDashboard';
 
   static const TRIPDETAILS = '/Ride/TripDetails';
@@ -49,9 +53,12 @@ abstract class Routes {
   static const PLAYVIDEO = '/Youtube/PlayVideo';
 
   static const MAZADDETAILS = '/Mazadat/MazadDetails';
+    static const CREATEAUCTION = '/Mazadat/CreateAuction';
+
   static const ZOOM = '/Zoom';
   static const MEETINGROOM = '/Zoom/MeetingRoom';
   static const INSTALLMENT = '/Installment';
+  static const CREATEINSTALLMENT = '/Installment/CreateInstallment';
   static const INSTALLMENTDETAILS = '/Installment/Installment-details';
   static const INSTALLMENTORDERDETAILS =
       '/Installment/Installment-order-details';
@@ -73,6 +80,7 @@ abstract class Routes {
   static const SHAREAPP = '/Account/ShareApp';
   static const NOTIFICATIONS = '/Account/Norifications';
   static const SETTINGS = '/Account/Settings';
+  static const PAYMENT = '/Payment';
 }
 
 abstract class Paths {
@@ -82,6 +90,7 @@ abstract class Paths {
   static const ADS = 'ADS';
   static const ADdetails = 'AD-Details';
   static const CREATEAD = 'CreateAd';
+  static const CREATECOMPANYAD = 'CreateCompanyAd';
   static const LUCKYWHEEL = 'LuckyWheel';
   static const COMPETITIONS = 'Competitions';
   static const WINNERS = 'Winners';
@@ -93,6 +102,7 @@ abstract class Paths {
   static const OTHERSACCOUNT = 'OthersAccount';
   static const MAZADAT = 'Mazadat';
   static const MAZADDETAILS = 'MazadDetails';
+  static const CREATEAUCTION = 'CreateAuction';
   static const CHAT = 'Chat';
   static const CHATROOM = 'ChatRoom';
   static const REELS = 'Reels';
@@ -111,8 +121,9 @@ abstract class Paths {
   static const FOOD = 'Food';
   static const CusineRestaurants = 'Cusine-Restaurants';
   static const RestaurantDashboard = 'RestaurantDashboard';
-  static const SHIPPING ='Shipping';
+  static const SHIPPING = 'Shipping';
   static const RIDE = 'Ride';
+  static const CONTACTUS = 'ContactUs';
   static const RIDERDASHBOARD = 'RiderDashboard';
   static const REQUESTSHISTORY = 'RequestsHistory';
   static const TRIPDETAILS = 'TripDetails';
@@ -125,12 +136,13 @@ abstract class Paths {
   static const ZOOM = 'Zoom';
   static const MEETINGROOM = 'MeetingRoom';
   static const INSTALLMENT = 'Installment';
+  static const CREATEINSTALLMENT = 'CreateInstallment';
   static const INSTALLMENTDETAILS = 'Installment-details';
   static const INSTALLMENTORDERDETAILS = 'Installment-order-details';
   static const INSTALLMENTORDERS = 'Installment-orders';
   static const LOGIN = 'Login';
   static const REGISTER = 'Register';
-    static const FORGOTPASSWORD = 'ForgotPassword';
+  static const FORGOTPASSWORD = 'ForgotPassword';
 
   static const VERIFYMAIL = 'verify-mail-register';
   static const REGISTERDRIVER = 'register-driver';
@@ -149,4 +161,5 @@ abstract class Paths {
   static const SETTINGS = 'Settings';
   static const QURAAN = 'Quraan';
   static const AZKAAR = 'Azkaar';
+  static const PAYMENT = 'Payment';
 }

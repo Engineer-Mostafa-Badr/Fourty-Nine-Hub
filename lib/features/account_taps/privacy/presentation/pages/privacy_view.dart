@@ -14,7 +14,7 @@ class PrivacyView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: const BackAppBar(
-          label: Labels.policies,
+          label: Labels.privacy,
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),

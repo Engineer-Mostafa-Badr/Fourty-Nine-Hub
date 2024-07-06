@@ -1,40 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../../common/functions/helper/local_auth.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
+import '../../domain/entities/wallet_history_entity.dart';
 
 class WalletHistory extends StatelessWidget {
+  final List<WalletHistoryEntity> list;
   const WalletHistory({
     super.key,
+    required this.list,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              const Icon(
-                Icons.info_outline,
-                color: Colors.grey,
+      appBar: const BackAppBar(
+        label: Labels.history,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Expanded(child: _buildHistoryWidget()),
+            Row(
+              children: [
+                const Icon(
+                  Icons.info_outline,
+                  color: Colors.grey,
+                ),
+                const Sizer(),
+                Expanded(
+                    child: Label(
+                  text: 'Minimum 1002 EGP for personal transaction',
+                  style: Styles.mediumText(color: Colors.grey),
+                )),
+              ],
+            ),
+            MaterialButton(
+              onPressed: () async {
+                if (await LocalAuth().checkBiometrics()) {
+                  context.push(Routes.PAYMENT);
+                }
+              },
+              color: Colors.red,
+              textColor: Colors.white,
+              shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
               ),
-              const Sizer(),
-              Expanded(
-                  child: Label(
-                text: 'Minimum 1002 EGP for personal transaction',
-                style: Styles.mediumText(color: Colors.grey),
-              )),
-            ],
-          ),
-          const Sizer(),
-          Expanded(child: _buildHistoryWidget()),
-        ],
+              minWidth: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.send_to_mobile_rounded),
+                  const Sizer(),
+                  Label(
+                      text: Labels.withDrawel,
+                      style: Styles.mediumText(color: Colors.white)),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -44,14 +78,15 @@ class WalletHistory extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemBuilder: (context, index) {
+          final item = list[index];
           return walletActionRow(
-              title: '-10 L.E',
-              subTitle: 'Canceled ride request',
+              title: '${item.amount} ${Labels.currency}',
+              subTitle: item.description,
               onTap: () {},
-              icon: FontAwesomeIcons.car);
+              icon: FontAwesomeIcons.check);
         },
         separatorBuilder: (context, index) => Container(),
-        itemCount: 4);
+        itemCount: list.length);
   }
 
   Widget walletActionRow(

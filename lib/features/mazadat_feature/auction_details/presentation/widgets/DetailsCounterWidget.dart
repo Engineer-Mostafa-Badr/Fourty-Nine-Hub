@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
+import '../../../../../common/functions/helper/numbers_helper.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -39,7 +40,8 @@ class DetailsCounterWidget extends StatelessWidget {
                       text: Labels.highestBid,
                       style: Styles.mediumText(color: Colors.grey)),
                   Label(
-                      text: '${auction.currentPrice} ${Labels.currency}',
+                      text:
+                          '${NumbersHelper.formatThousands(number: auction.currentPrice)} L.E',
                       style: Styles.headerText(fontWeight: FontWeight.bold)),
                   Row(
                     children: [

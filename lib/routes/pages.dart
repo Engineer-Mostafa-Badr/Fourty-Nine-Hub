@@ -2,10 +2,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
+import 'package:fourtyninehub/features/account_taps/contact_us/presentation/pages/contact_us_view.dart';
 import 'package:fourtyninehub/features/account_taps/share_app/presentation/pages/share_the_app.dart';
 import 'package:fourtyninehub/features/account_taps/lists/presentation/pages/lists_view.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/pages/privacy_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_history_entity.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
@@ -21,6 +24,7 @@ import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slid
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/cubit/doctor_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_dashboard_view.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/cubit/health_cubit.dart';
+import 'package:fourtyninehub/features/installment_feature/create_installment/presentation/cubit/create_installment_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_details/presentation/cubit/installment_details_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_list/presentation/cubit/installment_list_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
@@ -42,6 +46,8 @@ import '../features/account_taps/my_adds/presentation/pages/my_adds.dart';
 import '../features/account_taps/policies/presentation/pages/policy_view.dart';
 import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
 import '../features/account_taps/transfer_money/presentation/pages/transfer_money_view.dart';
+import '../features/account_taps/wallet/domain/entities/wallet_entity.dart';
+import '../features/ads_feature/create_company_ad/presentation/pages/create_company_ad.dart';
 import '../features/authentication/presentation/pages/forgot_password/enter_email_forgot_password_view.dart';
 import '../features/azkaar/presentation/pages/azkar_view.dart';
 import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_restaurants_view.dart';
@@ -54,9 +60,12 @@ import '../features/fourty_nine/presentation/controllers/parent_main_categories_
 import '../features/health_feature/book_doctor_appointment/presentation/cubit/book_doctor_appointment_cubit.dart';
 import '../features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import '../features/health_feature/health/presentation/pages/health_view.dart';
+import '../features/installment_feature/create_installment/presentation/pages/create_installment_view.dart';
 import '../features/mazadat_feature/auction_details/presentation/cubit/auction_details_cubit.dart';
 import '../features/mazadat_feature/auction_details/presentation/pages/Mazad_details.dart';
 import '../features/mazadat_feature/auction_list/presentation/cubit/auction_list_cubit.dart';
+import '../features/mazadat_feature/create_auction/presentation/pages/create_auction_view.dart';
+import '../features/payment/presentation/pages/payment_view.dart';
 import '../features/ride/RideRequest/presentation/pages/ride_request_view.dart';
 import '../features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
 import '../features/account_taps/account/presentation/pages/favourite_category_view.dart';
@@ -156,7 +165,13 @@ class AppPages {
                       path: Paths.CREATEAD,
                       name: Routes.CREATEAD,
                       builder: (context, state) => const CreateAdView(),
-                    )
+                    ),
+                    // CreateCompanyAdView
+                    GoRoute(
+                      path: Paths.CREATECOMPANYAD,
+                      name: Routes.CREATECOMPANYAD,
+                      builder: (context, state) => const CreateCompanyAdView(),
+                    ),
                   ]),
             ]),
         GoRoute(
@@ -223,7 +238,16 @@ class AppPages {
         GoRoute(
           name: Routes.COMPETITIONS,
           path: Paths.COMPETITIONS,
-          builder: (context, state) => const CompetitionView(),
+          builder: (context, state) => const CompetitionView(
+            list: [],
+          ),
+          routes: [],
+        ),
+        // PaymentView
+        GoRoute(
+          name: Routes.PAYMENT,
+          path: Paths.PAYMENT,
+          builder: (context, state) => const PaymentView(),
           routes: [],
         ),
         GoRoute(
@@ -245,13 +269,22 @@ class AppPages {
         GoRoute(
             path: Paths.WALLET,
             name: Routes.WALLET,
-            builder: (context, state) => const WalletView(),
+            builder: (context, state) => BlocProvider<WalletCubit>(
+                  create: (_) => serviceLocator(),
+                  child: WalletView(
+                    type: state.extra as WalletTypes,
+                  ),
+                ),
             routes: [
               GoRoute(
-                path: Paths.WALLETHISTORY,
-                name: Routes.WALLETHISTORY,
-                builder: (context, state) => const WalletHistory(),
-              ),
+                  path: Paths.WALLETHISTORY,
+                  name: Routes.WALLETHISTORY,
+                  builder: (context, state) {
+                    final item = state.extra as List<WalletHistoryEntity>;
+                    return WalletHistory(
+                      list: item,
+                    );
+                  }),
               GoRoute(
                 path: Paths.TRANSFERMONEY,
                 name: Routes.TRANSFERMONEY,
@@ -275,12 +308,10 @@ class AppPages {
                   path: Paths.PRIVACY,
                   name: Routes.PRIVACY,
                   builder: (context, state) => const PrivacyView()),
-
-           GoRoute(
+              GoRoute(
                   path: Paths.POLICY,
                   name: Routes.POLICY,
                   builder: (context, state) => const PolicyView()),
-                  
               GoRoute(
                   path: Paths.Lists,
                   name: Routes.Lists,
@@ -291,11 +322,11 @@ class AppPages {
               GoRoute(
                   path: Paths.SHAREAPP,
                   name: Routes.SHAREAPP,
-                  // 
+                  //
                   builder: (context, state) => BlocProvider<ShareAppCubit>(
-                    create: (_)=> serviceLocator(), 
-                    child: const ShareTheApp(),
-                  )),
+                        create: (_) => serviceLocator(),
+                        child: const ShareTheApp(),
+                      )),
               GoRoute(
                   path: Paths.FAVOURITE,
                   name: Routes.FAVOURITE,
@@ -400,6 +431,11 @@ class AppPages {
                   child: const MazadDetails(),
                 ),
               ),
+              // CreateAuctionView
+              GoRoute(
+                  path: Paths.CREATEAUCTION,
+                  name: Routes.CREATEAUCTION,
+                  builder: (context, state) => const CreateAuctionView()),
               // OtherAccountView
             ]),
 
@@ -499,6 +535,11 @@ class AppPages {
                   ])
             ]),
         GoRoute(
+          path: Paths.CONTACTUS,
+          name: Routes.CONTACTUS,
+          builder: (context, state) => const ContactUsView(),
+        ),
+        GoRoute(
           path: Paths.SHIPPING,
           name: Routes.SHIPPING,
           builder: (context, state) => const CreateShippingView(),
@@ -570,6 +611,15 @@ class AppPages {
                     BlocProvider<InstallmentDetailsCubit>(
                         create: (_) => serviceLocator(),
                         child: const InstallmentsDetails()),
+              ),
+              // CreateInstallmentView
+              GoRoute(
+                path: Paths.CREATEINSTALLMENT,
+                name: Routes.CREATEINSTALLMENT,
+                builder: (context, state) =>
+                    BlocProvider<CreateInstallmentCubit>(
+                        create: (_) => serviceLocator(),
+                        child: const CreateInstallmentView()),
               ),
               GoRoute(
                 path: Paths.INSTALLMENTORDERDETAILS,

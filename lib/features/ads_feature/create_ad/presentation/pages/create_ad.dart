@@ -13,23 +13,24 @@ class CreateAdView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = context.read<CreateAdCubit>();
     return BlocBuilder<CreateAdCubit, CreateAdState>(builder: (context, state) {
-      if (state.selectedCategory == null &&
-          (state.mainCategories?.isNotEmpty ?? false)) {
-        return SelectMainCategory(
-          mainCategories: state.mainCategories ?? [],
-          onSelected: (category) => controller.onMainCategorySelected(
-              category: category, context: context),
-        );
-      } else if (state.selectedSubCategory == null &&
-          (state.subCategories?.isNotEmpty ?? false)) {
-        return SelectSubCategory(
-            subCategories: state.subCategories ?? [],
-            onSelected: (category) =>
-                controller.onSubCategorySelected(category: category));
-      } else if (state.selectedCategory != null &&
-          state.selectedSubCategory != null) {
-        return const EnterAdDetails();
-      }
+      return const EnterAdDetails();
+      // if (state.selectedCategory == null &&
+      //     (state.mainCategories?.isNotEmpty ?? false)) {
+      //   return SelectMainCategory(
+      //     mainCategories: state.mainCategories ?? [],
+      //     onSelected: (category) => controller.onMainCategorySelected(
+      //         category: category, context: context),
+      //   );
+      // } else if (state.selectedSubCategory == null &&
+      //     (state.subCategories?.isNotEmpty ?? false)) {
+      //   return SelectSubCategory(
+      //       subCategories: state.subCategories ?? [],
+      //       onSelected: (category) =>
+      //           controller.onSubCategorySelected(category: category));
+      // } else if (state.selectedCategory != null &&
+      //     state.selectedSubCategory != null) {
+      //   return const EnterAdDetails();
+      // }
 
       return const Scaffold(
         body: Center(

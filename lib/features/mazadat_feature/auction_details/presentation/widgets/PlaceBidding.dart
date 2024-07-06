@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/domain/entities/auction_entity.dart';
 import 'package:go_router/go_router.dart';
 
@@ -74,14 +75,15 @@ class _PlaceBiddingState extends State<PlaceBidding> {
                       text: Labels.yourbid,
                       style: Styles.headerText(color: AppColors.PRIMARY_COLOR)),
                   Label(
-                      text: '${Labels.currency} $bidding',
+                      text:
+                          '${Labels.currency} ${NumbersHelper.formatThousands(number: bidding)}',
                       style: Styles.headerText(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
                           color: AppColors.PRIMARY_COLOR)),
                   Label(
                       text:
-                          ' ${Labels.currency} ${widget.auction.currentPrice}',
+                          ' ${Labels.currency} ${NumbersHelper.formatThousands(number: widget.auction.currentPrice)}',
                       style: Styles.mediumText()),
                 ],
               )),

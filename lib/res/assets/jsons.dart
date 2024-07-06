@@ -41,5 +41,9 @@ abstract class Jsons {
   static String favouriteSubcategoriesList = 'assets/json/favourite_subcategories_list.json';
   static String favouriteAdsList = 'assets/json/favourite_ads_list.json';
   static String usersList = 'assets/json/users_list.json';
+  static String walletHistoryList = 'assets/json/wallet_history_list.json';
+  static String balanceHistoryList = 'assets/json/balance_history_list.json';
+  static String giftHistoryList = 'assets/json/gift_history_list.json';
+  static String competitionList = 'assets/json/competitions_list.json';
 
 }

@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart'
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/domain/entities/auction_entity.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../common/functions/helper/numbers_helper.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -60,17 +61,18 @@ class AuctionCard extends StatelessWidget {
                       size: 20, icon: Icons.favorite_border, onPressed: () {}),
                 ],
               ),
-               Label(
-                        text: item.ad.address.address,
-                        style: Styles.mediumText(),
-                        maxLines: 1,
-                      ),
+              Label(
+                text: item.ad.address.address,
+                style: Styles.mediumText(),
+                maxLines: 1,
+              ),
               const Sizer(),
               Row(
                 children: [
                   Expanded(
                     child: Label(
-                      text: '${item.currentPrice} L.E',
+                      text:
+                          '${NumbersHelper.formatThousands(number: item.currentPrice)} L.E',
                       style: Styles.mediumText(
                           fontWeight: FontWeight.bold,
                           color: AppColors.SECONDARY_COLOR),
@@ -105,8 +107,9 @@ class AuctionCard extends StatelessWidget {
           children: [
             Expanded(
               child: Label(
-                text: '${item.currentPrice} L.E',
-                style: Styles.mediumText(
+                text:
+                    '${NumbersHelper.formatThousands(number: item.currentPrice)} L.E',
+              style: Styles.mediumText(
                     fontWeight: FontWeight.bold,
                     color: AppColors.SECONDARY_COLOR),
                 maxLines: 1,

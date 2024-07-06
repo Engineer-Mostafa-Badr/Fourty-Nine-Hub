@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
@@ -70,7 +71,8 @@ class InstallmentAdCard extends StatelessWidget {
                 maxLines: 1,
               ),
               Label(
-                text: '${item.ad.price} ${Labels.currency}',
+                text:
+                    '${NumbersHelper.formatThousands(number: item.ad.price)} ${Labels.currency}',
                 style: Styles.mediumText(
                     fontWeight: FontWeight.bold,
                     color: AppColors.SECONDARY_COLOR),
@@ -104,7 +106,8 @@ class InstallmentAdCard extends StatelessWidget {
           children: [
             Expanded(
               child: Label(
-                text: '${item.ad.price} ${Labels.currency}',
+                text:
+                    '${NumbersHelper.formatThousands(number: item.ad.price)} ${Labels.currency}',
                 style: Styles.mediumText(
                     fontWeight: FontWeight.bold,
                     color: AppColors.SECONDARY_COLOR),

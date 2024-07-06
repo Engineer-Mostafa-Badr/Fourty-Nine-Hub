@@ -80,7 +80,7 @@ class TransferMoneyView extends StatelessWidget {
             ),
           ),
           const Sizer(),
-          AppButton(label: 'Confirm', onPressed: () {}),
+          AppButton(label: 'Confirm', onPressed: () => context.push(Routes.PAYMENT)),
         ],
       ),
     );

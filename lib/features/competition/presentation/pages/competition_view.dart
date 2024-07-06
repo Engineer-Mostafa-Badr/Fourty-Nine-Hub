@@ -8,20 +8,27 @@ import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/elevated_button.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../res/strings/labels.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/const.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
+import '../../../account_taps/wallet/domain/entities/competition_entity.dart';
 
 class CompetitionView extends StatelessWidget {
-  const CompetitionView({super.key});
+  final List<CompetitionEntity> list;
+  final Function(BuildContext context)? onCompetitionClicked;
+  const CompetitionView(
+      {super.key, required this.list, this.onCompetitionClicked});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(),
+      appBar: const BackAppBar(
+        label: Labels.appCompetitions,
+      ),
       body: ListView(children: [
-        winnersBanner(context: context),
+        // winnersBanner(context: context),
         competionBanner(),
       ]),
     );
@@ -82,23 +89,25 @@ class CompetitionView extends StatelessWidget {
             blurRadius: 5, spreadRadius: 5, color: AppColors.GRAY_LIGHT_COLOR3)
       ]),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Label(text: '49Hub Competition', style: Styles.headerText()),
-          timeFrame(),
+          // timeFrame(),
+          const Sizer(),
           GridView.builder(
-              itemCount: 12,
+              itemCount: list.length,
               shrinkWrap: true,
               physics: const BouncingScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   childAspectRatio: .7, crossAxisCount: 4),
-              itemBuilder: (context, insdex) {
+              itemBuilder: (context, index) {
+                final item = list[index];
                 return compeitionCounter(
-                    title: 'Special Ads',
-                    description: UIConst.placeholderText,
+                    title: item.name,
+                    description: item.target.toString(),
                     subTitle: 'Slef-Earn',
-                    target: 10,
+                    target: item.target,
                     context: context,
-                    value: 3);
+                    value: item.value);
               }),
         ],
       ),
@@ -143,24 +152,15 @@ class CompetitionView extends StatelessWidget {
     required String title,
     required String subTitle,
     required String description,
-    required int target,
-    required int value,
+    required num target,
+    required num value,
     required BuildContext context,
   }) {
     return InkWell(
       onTap: () {
-        bottomSheet(
-            context: context,
-            widget: Column(
-              children: [
-                Expanded(
-                    child:
-                        Label(text: description, style: Styles.mediumText())),
-                ElevatedAppButton(
-                    label: 'Join Competition',
-                    onPressed: () => context.go(Routes.HOME))
-              ],
-            ));
+        if (onCompetitionClicked != null) {
+          onCompetitionClicked!(context);
+        }
       },
       child: Container(
         padding: const EdgeInsets.all(3),
@@ -184,7 +184,7 @@ class CompetitionView extends StatelessWidget {
                       child: Center(
                           child: RichText(
                               text: TextSpan(children: [
-                    TextSpan(text: '30 ', style: Styles.mediumText()),
+                    TextSpan(text: '$value', style: Styles.mediumText()),
                     const WidgetSpan(
                         child: Icon(
                       Icons.arrow_upward_rounded,
@@ -196,22 +196,17 @@ class CompetitionView extends StatelessWidget {
               ),
             ),
             const Sizer(),
-            RichText(
-                text: TextSpan(children: [
-              TextSpan(
-                  text: '$subTitle ',
-                  style: Styles.mediumText(color: Colors.grey)),
-              const WidgetSpan(
-                child: Icon(
-                  Icons.info_outline_rounded,
-                  size: 12,
-                  color: AppColors.DARK_GRAY_COLOR,
-                ),
-              ),
-            ])),
             Label(
                 text: title,
+                maxLines: 1,
+                textAlign: TextAlign.center,
                 style: Styles.mediumText(fontWeight: FontWeight.w600)),
+            Label(
+                text: 'Target: $target',
+                maxLines: 1,
+                textAlign: TextAlign.center,
+                style: Styles.mediumText(
+                    fontWeight: FontWeight.w600, color: Colors.grey)),
           ],
         ),
       ),
