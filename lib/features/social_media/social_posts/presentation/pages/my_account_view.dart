@@ -1,56 +1,78 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/enums/base_status_enum.dart';
+import '../../../../../core/error/failure.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
+import '../cubit/social_posts_cubit.dart';
 
 class MyAccountView extends StatelessWidget {
   const MyAccountView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Container(
-        decoration: const BoxDecoration(color: Colors.white),
-        child: ListView(
-          children: [
-            _buildAccountHeaderView(),
-            // TODO build content
-            TabBar(tabs: [
-              Tab(
-                icon: Icon(Icons.grid_view_rounded),
-              ),
-              Tab(
-                icon: Icon(Icons.video_library),
-              ),
-              Tab(
-                icon: Icon(Icons.account_box),
-              ),
-            ]),
-            SizedBox(
-              height: kToolbarHeight * 4,
-              child: TabBarView(children: [
-                Center(
-                  child: Label(
-                      text: 'There is no items', style: Styles.mediumText()),
-                ),
-                Center(
-                  child: Label(
-                      text: 'There is no items', style: Styles.mediumText()),
-                ),
-                Center(
-                  child: Label(
-                      text: 'There is no items', style: Styles.mediumText()),
-                ),
-              ]),
-            )
-          ],
-        ),
-      ),
+    return BlocConsumer<SocialPostsCubit, SocialPostsState>(
+      listener: (context, state) {
+        if (state.status == StateStatus.error) {
+          showErrorMessage(
+            context,
+            getFailureMessage(
+              state.failure!,
+              context,
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        return DefaultTabController(
+          length: 3,
+          child: Container(
+            decoration: const BoxDecoration(color: Colors.white),
+            child: ListView(
+              children: [
+                _buildAccountHeaderView(),
+                // TODO build content
+                TabBar(tabs: [
+                  Tab(
+                    icon: Icon(Icons.grid_view_rounded),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.video_library),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.account_box),
+                  ),
+                ]),
+                SizedBox(
+                  height: kToolbarHeight * 4,
+                  child: TabBarView(children: [
+                    Center(
+                      child: Label(
+                          text: 'There is no items',
+                          style: Styles.mediumText()),
+                    ),
+                    Center(
+                      child: Label(
+                          text: 'There is no items',
+                          style: Styles.mediumText()),
+                    ),
+                    Center(
+                      child: Label(
+                          text: 'There is no items',
+                          style: Styles.mediumText()),
+                    ),
+                  ]),
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

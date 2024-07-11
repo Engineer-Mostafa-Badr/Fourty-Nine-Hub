@@ -4,13 +4,13 @@ import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../social/presentation/widgets/posts/post_comments.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../res/style/app_colors.dart';
 
+import '../../../social_posts/presentation/widgets/posts/post_comments.dart';
 import 'comment.dart';
 import 'report.dart';
 
@@ -41,7 +41,8 @@ class ClubHouseRoom extends StatelessWidget {
                   bottomSheet(
                     context: context,
                     isScrollControlled: true,
-                    widget: const PostComments(),
+                    widget:  Container(),
+                    // widget: const PostComments(),
                   );
                 },
                 icon: const Icon(

@@ -6,13 +6,15 @@ import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/ReadMoreLabel.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../../res/style/const.dart';
+
 import '../../../../../../res/style/styles.dart';
+import '../../../domain/entities/comment_entity.dart';
 import 'PostOptions.dart';
 
 class CommentCard extends StatelessWidget {
   final Color textColor;
-  const CommentCard({super.key, this.textColor = Colors.black});
+  final CommentEntity comment;
+  const CommentCard({super.key, this.textColor = Colors.black, required this.comment});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,7 @@ class CommentCard extends StatelessWidget {
         ),
         const Sizer(),
         ReadMoreLabel(
-          text: UIConst.placeholderText,
+          text: comment.content,
           style: Styles.mediumText(color: textColor),
         ),
         Row(
@@ -59,7 +61,7 @@ class CommentCard extends StatelessWidget {
               Icons.favorite_border,
               color: textColor,
             ),
-            Label(text: '1,024', style: Styles.mediumText(color: textColor)),
+            Label(text: comment.repliesCount.toString(), style: Styles.mediumText(color: textColor)),
             const Sizer(),
             TextAppButton(
                 style: Styles.mediumText(), label: 'Reply', onPressed: () {})

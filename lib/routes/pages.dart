@@ -32,9 +32,11 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
@@ -100,9 +102,10 @@ import '../features/social_media/chat/presentation/pages/Chat_view.dart';
 import '../features/social_media/club_house/presentation/pages/club_house_home.dart';
 import '../features/social_media/club_house/presentation/widgets/clubHouseChat.dart';
 import '../features/social_media/club_house/presentation/widgets/clubHouseRoom.dart';
+import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/reels/presentation/pages/Reel_view.dart';
-import '../features/social_media/social/presentation/pages/Social_home.dart';
-import '../features/social_media/social/presentation/pages/other_account_view.dart';
+import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
+import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/account_taps/wallet/presentation/pages/wallet_history.dart';
 import '../features/account_taps/wallet/presentation/pages/wallet_view.dart';
@@ -360,8 +363,19 @@ class AppPages {
         GoRoute(
             path: Paths.SOCIAL,
             name: Routes.SOCIAL,
-            builder: (context, state) => const SocialHomeView(),
+            builder: (context, state) => BlocProvider<SocialPostsCubit>(
+                  create: (_) => serviceLocator(),
+                  child: const SocialHomeView(),
+                ),
             routes: [
+              GoRoute(
+                  path: Paths.CREATEPOST,
+                  name: Routes.CREATEPOST,
+                  builder: (context, state) => BlocProvider<CreatePostCubit>(
+                        create: (_) => serviceLocator(),
+                        child: const CreatePostView(),
+                      )),
+
               GoRoute(
                   path: Paths.TWITTER,
                   name: Routes.TWITTER,

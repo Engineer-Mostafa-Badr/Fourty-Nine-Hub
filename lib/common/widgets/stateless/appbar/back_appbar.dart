@@ -9,6 +9,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? label;
   final Color? backColor;
   final Color? iconColor;
+  final List<Widget>? actions;
 
   const BackAppBar({
     super.key,
@@ -16,12 +17,14 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.label,
     this.backColor,
     this.iconColor,
+    this.actions
   });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
+      
       centerTitle: true,
       backgroundColor: backColor ?? AppColors.LIGHT_COLOR,
       iconTheme: IconThemeData(color: iconColor ?? AppColors.PRIMARY_COLOR),
@@ -32,6 +35,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
               style: Styles.headerText(
                   color: iconColor ?? AppColors.PRIMARY_COLOR))
           : null,
+      actions: actions,
     );
   }
 

@@ -12,7 +12,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
-import '../../../../social/presentation/widgets/posts/comment_card.dart';
+import '../../../../social_posts/presentation/widgets/posts/comment_card.dart';
 import 'gifts_widget.dart';
 import 'recharge_coins.dart';
 
@@ -108,11 +108,12 @@ class _LiveCardState extends State<LiveCard> {
   }
 
   Widget _buildCommentsWidget() {
-    return ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) => const CommentCard(
-              textColor: Colors.white,
-            ));
+    return Container();
+    // return ListView.builder(
+    //     itemCount: 10,
+    //     itemBuilder: (context, index) => const CommentCard(
+    //           textColor: Colors.white,
+    //         ));
   }
 
   Widget _buildGiftsWidget() {

@@ -10,7 +10,7 @@ import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../social/presentation/widgets/posts/post_comments.dart';
+import '../../../social_posts/presentation/widgets/posts/post_comments.dart';
 
 class ReelActions extends StatelessWidget {
   final ReelEntity item;
@@ -34,8 +34,7 @@ class ReelActions extends StatelessWidget {
         const Sizer(),
         IconAppButton(
           icon: Icons.comment,
-          onPressed: () =>
-              bottomSheet(context: context, widget: const PostComments()),
+          onPressed: () {},
           size: 24,
           color: Colors.white,
         ),

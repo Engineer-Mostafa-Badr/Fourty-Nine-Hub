@@ -4,12 +4,12 @@ class UserEntity extends Equatable {
   final String id;
   final String firstName;
   final String lastName;
-  final String email;
+  final String? email;
   final String? profilePicture;
   final String? profileCover;
-  final int friendsCount;
-  final int followersCount;
-  final int followingCount;
+  final int? friendsCount;
+  final int? followersCount;
+  final int? followingCount;
 
   String get fullName => '$firstName $lastName';
 

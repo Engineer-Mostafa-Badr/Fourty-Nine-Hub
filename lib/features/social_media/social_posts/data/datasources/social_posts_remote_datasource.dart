@@ -1,0 +1,84 @@
+import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/api/api_consumer.dart';
+import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/data/models/post_model.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
+
+import '../../../../../core/error/failure.dart';
+import '../../domain/entities/post_entity.dart';
+import '../../domain/usecases/post_react_usecase.dart';
+import '../models/comment_model.dart';
+
+abstract class SocialPostsRemoteDataSource {
+  Future<Either<Failure, List<PostEntity>>> getFeed();
+  Future<Either<Failure, List<PostEntity>>> getUserPosts(
+      {required String userId});
+
+  Future<Either<Failure, bool>> reactOnPost({
+    required PostReactParams params
+  });
+   Future<Either<Failure, bool>> commentOnPost({
+    required PostCommentParams params
+  });
+   Future<Either<Failure, List<CommentEntity>>> getPostComments(
+      {required String postId});
+
+
+}
+
+class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
+  final ApiConsumer _apiConsumer;
+  SocialPostsRemoteDataSourceImpl(this._apiConsumer);
+  @override
+  Future<Either<Failure, List<PostEntity>>> getFeed() async {
+    final response = await _apiConsumer.get(EndPoints.getFeedPosts);
+
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+         final list =
+            (data['data'] as List).map((e) => PostModel.fromJson(e)).toList();
+        return Right(list);
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<PostEntity>>> getUserPosts(
+      {required String userId}) async {
+    final response = await _apiConsumer.get(EndPoints.userPosts(userId));
+    return response.fold(
+        (l) => Left(l),
+        (data) => Right(
+            (data['data'] as List).map((e) => PostModel.fromJson(e)).toList()));
+  }
+  
+  @override
+  Future<Either<Failure, bool>> reactOnPost({required PostReactParams params})async {
+   final response = await _apiConsumer.post(EndPoints.reactOnPost(params.postId), data: params.toJson());
+    return response.fold(
+        (l) => Left(l),
+        (data) => Right(
+            data['status']));
+
+  }
+  
+  @override
+  Future<Either<Failure, bool>> commentOnPost({required PostCommentParams params})async {
+     final response = await _apiConsumer.post(EndPoints.commentOnPost(params.postId), data: params.toJson());
+    return response.fold(
+        (l) => Left(l),
+        (data) => Right(
+            data['status']));
+  }
+  
+  @override
+  Future<Either<Failure, List<CommentEntity>>> getPostComments({required String postId}) async{
+     final response = await _apiConsumer.get(EndPoints.getPostComments(postId));
+    return response.fold(
+        (l) => Left(l),
+        (data) => Right(
+            (data['data'] as List).map((e) => CommentModel.fromJson(e)).toList()));
+
+  }
+}

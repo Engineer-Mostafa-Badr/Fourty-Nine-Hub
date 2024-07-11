@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import '../enums/base_status_enum.dart';
 import '../error/failure.dart';
 
-class BasicState<T> extends Equatable {
+class BasicState<T> {
   final T? data;
   final StateStatus status;
   final Failure? failure;
@@ -30,13 +30,6 @@ class BasicState<T> extends Equatable {
       failure: failure ?? this.failure,
     );
   }
-
-  @override
-  List<Object?> get props => [
-        data,
-        status,
-        failure,
-      ];
 }
 
 extension BasicStateX on BasicState {

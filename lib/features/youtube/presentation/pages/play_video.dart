@@ -9,7 +9,8 @@ import '../../../../res/style/const.dart';
 import '../../../../common/widgets/stateful/videos/video_player.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import '../../../social_media/social/presentation/widgets/posts/comment_card.dart';
+
+import '../../../social_media/social_posts/presentation/widgets/posts/comment_card.dart';
 import '../widgets/youtube_video_card.dart';
 
 class PlayVideo extends StatelessWidget {
@@ -120,7 +121,8 @@ class PlayVideo extends StatelessWidget {
             context: context,
             isScrollControlled: true,
             widget: ListView.separated(
-                itemBuilder: (context, index) => CommentCard(),
+                // itemBuilder: (context, index) => CommentCard(),
+                itemBuilder: (context, index) => Container(),
                 separatorBuilder: (context, index) => const Divider(),
                 itemCount: 10));
       },
@@ -131,7 +133,8 @@ class PlayVideo extends StatelessWidget {
           color: AppColors.GREY_LIGHT_COLOR,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: CommentCard(),
+        // child: CommentCard(),
+        child: Container(),
       ),
     );
   }

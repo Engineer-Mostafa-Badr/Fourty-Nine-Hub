@@ -95,29 +95,24 @@ class BaseApiConsumer extends ApiConsumer {
     Map<String, dynamic>? queryParameters,
   }) async {
     try {
-
-
-
       final result = await _dio.get(
         url,
         queryParameters: queryParameters,
       );
-      return Right(result as Map<String, dynamic>);
+      return Right(result.data as Map<String, dynamic>);
     } catch (e) {
-      // TODO reset condition after stable backend
-
-      // if (e is DioException &&
-      //     e.response?.statusCode == 401 &&
-      //     isTokenAttached) {
-      //   return refreshToken().then(
-      //     (_) => get(
-      //       url,
-      //       queryParameters: queryParameters,
-      //     ),
-      //   );
-      // } else {
-      return Left(_getFailure(e));
-      // }
+      if (e is DioException &&
+          e.response?.statusCode == 401 &&
+          isTokenAttached) {
+        return refreshToken().then(
+          (_) => get(
+            url,
+            queryParameters: queryParameters,
+          ),
+        );
+      } else {
+        return Left(_getFailure(e));
+      }
     }
   }
 

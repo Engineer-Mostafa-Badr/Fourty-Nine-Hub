@@ -3,7 +3,6 @@ class EndPoints {
   static const developmentBaseUrl = 'https://49dev.com/api/v1';
   static const productionBaseUrl = 'https://49dev.com/api/v1';
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';
-
   static const login = '/auth/login';
   static const getProfile = '/users/profile';
   static const register = '/auth/register';
@@ -29,4 +28,23 @@ class EndPoints {
   }
 
   static const riderInfoRegister = '/ride/riders/register';
+
+  // social
+
+  static const createFacebookPost = '/facebook/post';
+  static const getFeedPosts = '/facebook/feed';
+  static String userPosts(String userId) {
+    return '/facebook/post/user/$userId?limit=20&page=1&type=1';
+  }
+
+  static String reactOnPost(String postId) {
+    return '/facebook/post/react/$postId';
+  }
+  static String commentOnPost(String postId) {
+    return '/facebook/comment/react/$postId';
+  }
+  static String getPostComments(String postId) {
+    return '/facebook/comment/get-post-comments/$postId';
+  }
+  
 }

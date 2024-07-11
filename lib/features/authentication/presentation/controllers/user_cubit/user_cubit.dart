@@ -28,11 +28,15 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     final result = await _getUserUseCase(const NoParams());
     emit(
       result.fold(
-        (failure) => state.copyWith(
-          status: StateStatus.error,
-          failure: failure,
-        ),
-        (user) => state.copyWith(status: StateStatus.success, data: user),
+        (failure) {
+          return state.copyWith(
+            status: StateStatus.error,
+            failure: failure,
+          );
+        },
+        (user) {
+          return state.copyWith(status: StateStatus.success, data: user);
+        },
       ),
     );
   }

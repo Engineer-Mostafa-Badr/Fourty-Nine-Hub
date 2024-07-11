@@ -7,9 +7,10 @@ class HighLightsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-        itemBuilder: (context, index) =>  PostCard(),
-        separatorBuilder: (context, index) => const Sizer(),
-        itemCount: 6);
+    return Container();
+    // return ListView.separated(
+    //     itemBuilder: (context, index) => PostCard(),
+    //     separatorBuilder: (context, index) => const Sizer(),
+    //     itemCount: 6);
   }
 }

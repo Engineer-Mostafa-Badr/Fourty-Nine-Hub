@@ -12,7 +12,7 @@ void bottomSheet(
       builder: (context) {
         return Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(20),
           // margin: const EdgeInsets.all(kToolbarHeight),
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
