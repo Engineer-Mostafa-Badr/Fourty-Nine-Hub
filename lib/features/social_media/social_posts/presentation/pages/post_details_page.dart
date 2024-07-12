@@ -1,32 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/data/models/comment_model.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_card.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../../common/widgets/form/text_fields/form_text_field.dart';
-import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
-import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
-import '../../../../../../common/widgets/stateless/images/profile_image.dart';
-import '../../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../../res/style/styles.dart';
-import '../../../domain/entities/comment_entity.dart';
-import '../../../domain/usecases/post_comment_usecase.dart';
-import 'comment_card.dart';
 
-class PostComments extends StatefulWidget {
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
+import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../common/widgets/stateless/buttons/text_button.dart';
+import '../../../../../common/widgets/stateless/images/profile_image.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../res/style/styles.dart';
+import '../../data/models/comment_model.dart';
+import '../../domain/entities/comment_entity.dart';
+import '../../domain/usecases/post_comment_usecase.dart';
+import '../../domain/usecases/post_react_usecase.dart';
+import '../widgets/posts/comment_card.dart';
+
+class PostDetailsPage extends StatefulWidget {
   final List<CommentEntity> comments;
-  final String postId;
+  final PostEntity post;
   final Function(PostCommentParams) onAddComment;
-  const PostComments(
-      {super.key,
-      required this.postId,
-      required this.comments,
-      required this.onAddComment});
+  final Function(PostReactParams) onReact;
+  final Function(String) showPostComments;
+  final Function(PostEntity) showPostDetails;
+  final Function(String) deletePost;
+  final Function(String) hidePost;
+  const PostDetailsPage({
+    super.key,
+    required this.post,
+    required this.onAddComment,
+    required this.onReact,
+    required this.showPostComments,
+    required this.showPostDetails,
+    required this.comments,
+    required this.deletePost,
+    required this.hidePost,
+  });
 
   @override
-  State<PostComments> createState() => _PostCommentsState();
+  State<PostDetailsPage> createState() => _PostDetailsPageState();
 }
 
-class _PostCommentsState extends State<PostComments> {
+class _PostDetailsPageState extends State<PostDetailsPage> {
   final commentTextController = TextEditingController();
 
   @override
@@ -36,15 +51,21 @@ class _PostCommentsState extends State<PostComments> {
         backgroundColor: Colors.white,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.grey),
-        title: Label(
-            text: '${widget.comments.length} Comments',
-            style: Styles.mediumText()),
+        title: Label(text: 'Post', style: Styles.mediumText()),
         leading: IconButton(
             onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
         centerTitle: true,
       ),
       body: Column(
         children: [
+          FacebookPostCard(
+              post: widget.post,
+              onReact: widget.onReact,
+              deletePost: widget.deletePost,
+              hidePost: widget.hidePost,
+              showPostDetails: widget.showPostDetails,
+              showPostComments: widget.showPostComments),
+          const Divider(),
           Expanded(
             child: ListView.separated(
                 itemBuilder: (context, index) =>
@@ -85,12 +106,12 @@ class _PostCommentsState extends State<PostComments> {
   void onCommentAdded() {
     widget.onAddComment(
       PostCommentParams(
-          postId: widget.postId, content: commentTextController.text),
+          postId: widget.post.id, content: commentTextController.text),
     );
     widget.comments.add(CommentModel(
         id: 'id',
         content: commentTextController.text,
-        post: widget.postId,
+        post: widget.post.id,
         createdAt: DateTime.now()));
     commentTextController.clear();
     setState(() {});

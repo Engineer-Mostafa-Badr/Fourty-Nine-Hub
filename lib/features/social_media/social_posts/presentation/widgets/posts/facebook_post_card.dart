@@ -15,15 +15,26 @@ import '../../../../../../res/style/const.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
 import '../../../domain/usecases/post_react_usecase.dart';
-import 'PostOptions.dart';
-
 
 class FacebookPostCard extends StatefulWidget {
   final PostEntity post;
   final Function(PostReactParams) onReact;
   final Function(String) showPostComments;
+  final Function(PostEntity) showPostDetails;
+  final Function(String) deletePost;
+  final Function(String) hidePost;
+  final bool showOptions;
+  final bool isMyPost;
   const FacebookPostCard(
-      {super.key, required this.post, required this.onReact, required this.showPostComments});
+      {super.key,
+      required this.post,
+      required this.onReact,
+      this.showOptions = true,
+      this.isMyPost = false,
+      required this.deletePost,
+      required this.hidePost,
+      required this.showPostDetails,
+      required this.showPostComments});
 
   @override
   State<FacebookPostCard> createState() => _FacebookPostCardState();
@@ -32,6 +43,7 @@ class FacebookPostCard extends StatefulWidget {
 class _FacebookPostCardState extends State<FacebookPostCard> {
   final pageController = PageController();
   bool isLiked = false;
+  bool hide = false;
 
   @override
   void initState() {
@@ -44,71 +56,136 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildAccountHeader(context: context, post: widget.post),
-        _buildContentWidget(post: widget.post),
-        Row(
+    if (hide) {
+      return Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(color: AppColors.LIGHT_GRAY_COLOR),
+        child: Column(
           children: [
-            if (widget.post.likesCount != 0)
-              _buildCounterWidget(
-                  value: widget.post.likesCount, image: Assets.like),
-            if (widget.post.loveCount != 0)
-              _buildCounterWidget(
-                  value: widget.post.loveCount, image: Assets.heart),
-            if (widget.post.wowCount != 0)
-              _buildCounterWidget(
-                  value: widget.post.wowCount, image: Assets.wow),
-            if (widget.post.sadCount != 0)
-              _buildCounterWidget(
-                  value: widget.post.sadCount, image: Assets.sad),
-            if (widget.post.angryCount != 0)
-              _buildCounterWidget(
-                  value: widget.post.angryCount, image: Assets.angry),
-            const Spacer(),
             Row(
               children: [
-                Label(
-                  text: widget.post.commentsCount.toString(),
-                  style: Styles.mediumText(),
-                ),
-                const Sizer(
-                  width: 5,
-                ),
-                Label(
-                  text: 'Comments',
-                  style: Styles.mediumText(),
-                )
+                const Icon(Icons.visibility_off),
+                const Sizer(),
+                const Label(text: 'Post is hidden'),
+                const Spacer(),
+                ElevatedButton(
+                    onPressed: () {
+                      hide = false;
+                      setState(() {});
+                    },
+                    child: const Label(text: 'Show'))
               ],
+            ),
+            const Divider(),
+            InkWell(
+              onTap: () {},
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.report,
+                    color: Colors.grey,
+                  ),
+                  const Sizer(),
+                  Label(
+                    text: 'Report the post',
+                    style: Styles.mediumText(color: Colors.grey),
+                  ),
+                ],
+              ),
+            ),
+            const Sizer(),
+            InkWell(
+              onTap: () {},
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.block,
+                    color: Colors.grey,
+                  ),
+                  const Sizer(),
+                  Label(
+                    text: 'Block the publisher',
+                    style: Styles.mediumText(color: Colors.grey),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    } else {
+      return InkWell(
+        onTap: () => widget.showPostDetails(widget.post),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildAccountHeader(context: context, post: widget.post),
+            _buildContentWidget(post: widget.post),
+            Row(
+              children: [
+                if (widget.post.likesCount != 0)
+                  _buildCounterWidget(
+                      value: widget.post.likesCount, image: Assets.like),
+                if (widget.post.loveCount != 0)
+                  _buildCounterWidget(
+                      value: widget.post.loveCount, image: Assets.heart),
+                if (widget.post.wowCount != 0)
+                  _buildCounterWidget(
+                      value: widget.post.wowCount, image: Assets.wow),
+                if (widget.post.sadCount != 0)
+                  _buildCounterWidget(
+                      value: widget.post.sadCount, image: Assets.sad),
+                if (widget.post.angryCount != 0)
+                  _buildCounterWidget(
+                      value: widget.post.angryCount, image: Assets.angry),
+                const Spacer(),
+                InkWell(
+                  onTap: () => widget.showPostComments(widget.post.id),
+                  child: Row(
+                    children: [
+                      Label(
+                        text: widget.post.commentsCount.toString(),
+                        style: Styles.mediumText(),
+                      ),
+                      const Sizer(
+                        width: 5,
+                      ),
+                      Label(
+                        text: 'Comments',
+                        style: Styles.mediumText(),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const Divider(
+              color: AppColors.LIGHT_GRAY_COLOR,
+            ),
+            SizedBox(
+              height: kToolbarHeight * .6,
+              child: Row(
+                children: [
+                  Expanded(child: _buildReactionsButton()),
+                  Expanded(
+                    child: _buildReactionPlaceHolder(
+                        icon: Icons.chat_bubble_outline_rounded,
+                        label: 'Comment',
+                        onTap: () => widget.showPostComments(widget.post.id)),
+                  ),
+                  Expanded(
+                    child: _buildReactionPlaceHolder(
+                        icon: Icons.chat_rounded,
+                        label: 'Message',
+                        onTap: () => context.push(Routes.CHAT)),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
-        const Divider(
-          color: AppColors.LIGHT_GRAY_COLOR,
-        ),
-        SizedBox(
-          height: kToolbarHeight * .6,
-          child: Row(
-            children: [
-              Expanded(child: _buildReactionsButton()),
-              Expanded(
-                child: _buildReactionPlaceHolder(
-                    icon: Icons.chat_bubble_outline_rounded,
-                    label: 'Comment',
-                    onTap: ()=> widget.showPostComments(widget.post.id)),
-              ),
-              Expanded(
-                child: _buildReactionPlaceHolder(
-                    icon: Icons.chat_rounded,
-                    label: 'Message',
-                    onTap: () => context.push(Routes.CHAT)),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+      );
+    }
   }
 
   Widget _buildCounterWidget({
@@ -129,6 +206,48 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           style: Styles.mediumText(),
         )
       ],
+    );
+  }
+
+  Widget _buildPostOptions() {
+    return Column(
+      children: [
+        if (widget.isMyPost)
+          listTile(
+              icon: Icons.delete,
+              title: 'Delete Post',
+              subTitle:
+                  'Your post will be deleted, and you cannot get it again',
+              onTap: () => widget.deletePost(widget.post.id)),
+        if (widget.isMyPost)
+          listTile(
+              icon: Icons.visibility_off,
+              title: 'Hide Post',
+              subTitle: 'Your post will be hidden, you can get it again',
+              onTap: () => widget.hidePost(widget.post.id)),
+      ],
+    );
+  }
+
+  Widget listTile(
+      {required IconData icon,
+      required String title,
+      required String subTitle,
+      required Function onTap}) {
+    return ListTile(
+      title: Label(text: title),
+      onTap: () {
+        onTap();
+        context.pop();
+      },
+      leading: Icon(
+        icon,
+        color: Colors.black,
+      ),
+      subtitle: Label(
+        text: subTitle,
+        style: Styles.mediumText(color: Colors.grey),
+      ),
     );
   }
 
@@ -159,7 +278,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               RichText(
                   text: TextSpan(children: [
                 TextSpan(
-                    text: '19 hr   ',
+                    text: post.sinceTime,
                     style: Styles.mediumText(color: Colors.grey)),
                 const WidgetSpan(
                     child: Icon(
@@ -171,13 +290,19 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             ],
           ),
         )),
-        if (showOptions)
+        if (widget.showOptions)
           IconButton(
               onPressed: () {
-                bottomSheet(context: context, widget: const PostOptions());
+                bottomSheet(context: context, widget: _buildPostOptions());
               },
               icon: const Icon(Icons.more_horiz)),
-        if (showOptions) IconAppButton(icon: Icons.clear, onPressed: () {})
+        if (showOptions)
+          IconAppButton(
+              icon: Icons.clear,
+              onPressed: () {
+                hide = true;
+                setState(() {});
+              })
       ],
     );
   }
@@ -232,13 +357,14 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       // boxColor: Colors.black.withOpacity(0.5),
       itemsSpacing: 10,
       itemSize: const Size(20, 20),
+
       reactions: <Reaction<String>>[
         Reaction<String>(
           value: 'like',
           icon: _buildReactionItem(item: Reactions.like),
         ),
         Reaction<String>(
-          value: 'heart',
+          value: 'love',
           icon: _buildReactionItem(item: Reactions.love),
         ),
         Reaction<String>(
@@ -256,7 +382,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       ],
       selectedReaction: Reaction<String>(
         value: 'like',
-        icon: _buildReactionItem(item: Reactions.like),
+        icon: _buildReactionWidget(item: Reactions.like),
       ),
     );
   }
@@ -297,6 +423,21 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   }
 
   Widget _buildReactionItem({
+    required Reactions item,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          item.image(),
+          height: 20,
+        ),
+        // Label(text: item.label()),
+      ],
+    );
+  }
+
+  Widget _buildReactionWidget({
     required Reactions item,
   }) {
     return Row(

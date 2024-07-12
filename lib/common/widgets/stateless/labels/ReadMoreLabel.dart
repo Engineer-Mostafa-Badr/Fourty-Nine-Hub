@@ -21,6 +21,7 @@ class ReadMoreLabel extends StatelessWidget {
     return ReadMoreText(
       text,
       style: style ?? Styles.mediumText(),
+      textAlign: textAlign,
       trimMode: TrimMode.Line,
       trimLines: trimLines ?? 3,
       colorClickableText: Colors.pink,

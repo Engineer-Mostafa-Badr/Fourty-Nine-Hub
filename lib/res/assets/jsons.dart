@@ -47,5 +47,6 @@ abstract class Jsons {
   static String competitionList = 'assets/json/competitions_list.json';
   static String activities = 'assets/json/activities.json';
   static String feelings = 'assets/json/feelings.json';
+  static String companyAds = 'assets/json/company_ads.json';
 
 }

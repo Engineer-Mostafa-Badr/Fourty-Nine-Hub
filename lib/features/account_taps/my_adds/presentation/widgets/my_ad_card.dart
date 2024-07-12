@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
@@ -46,69 +45,96 @@ class MyAdCard extends StatelessWidget {
               children: [
                 Expanded(
                     child: AppButton(
-                        label: 'Remove',
-                        icon: Icons.delete,
-                        onPressed: () {
-                          showAreYouSure(
-                              title: 'Alert',
-                              subTitle: 'Are you sure, you want to remove AD?',
-                              action: () {},
-                              context: context);
-                        })),
+                        label: 'Edit',
+                        onPressed: () => context.push(Routes.CREATEAD))),
                 const Sizer(),
-                Expanded(
-                    child: AppButton(
-                        label: 'Sold Out',
-                        icon: Icons.hourglass_empty_rounded,
-                        onPressed: () {
-                          showAreYouSure(
-                              title: 'Alert',
-                              subTitle:
-                                  'Are you sure, you want to set this AD as soldout?',
-                              action: () {},
-                              context: context);
-                        })),
-                const Sizer(),
-                Expanded(
-                    child: AppButton(
-                        label: 'Re publish',
-                        icon: Icons.refresh,
-                        onPressed: () {
-                          showAreYouSure(
-                              title: 'Alert',
-                              subTitle:
-                                  'Are you sure, you want to re publish AD?',
-                              action: () {},
-                              context: context);
-                        })),
+                AppButton(
+                    label: '',
+                    icon: Icons.more_horiz,
+                    onPressed: () {
+                      bottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          widget: ListView(
+                            shrinkWrap: true,
+                            children: [
+                              _buildOptionsWidget(
+                                label: 'Delete',
+                                onTap: () {
+                                  showAreYouSure(
+                                      title: 'Alert',
+                                      subTitle:
+                                          'Are you sure, you want to remove AD?',
+                                      action: () {},
+                                      context: context);
+                                },
+                                icon: Icons.delete,
+                              ),
+                              _buildOptionsWidget(
+                                label: 'Sold Out',
+                                onTap: () {
+                                  showAreYouSure(
+                                      title: 'Alert',
+                                      subTitle:
+                                          'Are you sure, you want to set this AD as soldout?',
+                                      action: () {},
+                                      context: context);
+                                },
+                                icon: Icons.hourglass_empty_rounded,
+                              ),
+                              _buildOptionsWidget(
+                                label: 'Re publish',
+                                onTap: () {
+                                  showAreYouSure(
+                                      title: 'Alert',
+                                      subTitle:
+                                          'Are you sure, you want to set this AD as soldout?',
+                                      action: () {},
+                                      context: context);
+                                },
+                                icon: Icons.refresh,
+                              ),
+                              _buildOptionsWidget(
+                                label: 'Installment',
+                                onTap: () =>
+                                    context.push(Routes.CREATEINSTALLMENT),
+                                icon: Icons.list,
+                              ),
+                              _buildOptionsWidget(
+                                label: 'Auction',
+                                onTap: () => context.push(Routes.CREATEAUCTION),
+                                icon: Icons.group,
+                              ),
+                              _buildOptionsWidget(
+                                  label: 'Subscribe',
+                                  icon: Icons.remove_red_eye_sharp,
+                                  onTap: () {}),
+                            ],
+                          ));
+                    })
               ],
-            ),
-            const Sizer(),
-            Row(
-              children: [
-                Expanded(
-                    child: AppButton(
-                        label: 'Installment',
-                        icon: Icons.list,
-                        onPressed: () =>
-                            context.push(Routes.CREATEINSTALLMENT))),
-                const Sizer(),
-                Expanded(
-                    child: AppButton(
-                        label: 'Auction',
-                        icon: Icons.group,
-                        onPressed: () => context.push(Routes.CREATEAUCTION))),
-                const Sizer(),
-                Expanded(
-                    child: AppButton(
-                        label: 'Subscribe',
-                        icon: Icons.remove_red_eye_sharp,
-                        onPressed: () {})),
-              ],
-            ),
+            )
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildOptionsWidget({
+    required String label,
+    required Function onTap,
+    required IconData icon,
+  }) {
+    return Column(
+      children: [
+        ListTile(
+          leading: Icon(icon),
+          title: Label(
+            text: label,
+          ),
+          onTap: () => onTap(),
+        ),
+      ],
     );
   }
 

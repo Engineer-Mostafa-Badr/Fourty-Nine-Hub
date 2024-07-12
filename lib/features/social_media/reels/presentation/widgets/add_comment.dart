@@ -1,29 +1,23 @@
-import 'package:flutter/material.dart';
-import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
-import '../../../../../common/widgets/stateless/images/profile_image.dart';
+// import 'package:flutter/material.dart';
+// import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+// import '../../../../../common/widgets/dynamic/sizer.dart';
+// import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
+// import '../../../../../common/widgets/stateless/images/profile_image.dart';
+// import '../../../social_posts/domain/usecases/post_comment_usecase.dart';
 
-class AddComment extends StatelessWidget {
-  const AddComment({super.key});
+// class AddComment extends StatefulWidget {
+//   final String postId;
+//   final Function(PostCommentParams) onAddComment;
+//   const AddComment({super.key, required this.postId, required this.onAddComment});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: kToolbarHeight,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-      ),
-      child: Row(
-        children: [
-          const ProfileImage(accountId: 0),
-          const Sizer(),
-          Expanded(
-              child: FormTextField(
-                  hint: 'Type your comment ....',
-                  height: kToolbarHeight * .7,
-                  action: (v) {}))
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   State<AddComment> createState() => _AddCommentState();
+// }
+
+// class _AddCommentState extends State<AddComment> {
+//   final commentTextController = TextEditingController();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return  }
+// }

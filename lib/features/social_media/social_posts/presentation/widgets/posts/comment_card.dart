@@ -14,11 +14,13 @@ import 'PostOptions.dart';
 class CommentCard extends StatelessWidget {
   final Color textColor;
   final CommentEntity comment;
-  const CommentCard({super.key, this.textColor = Colors.black, required this.comment});
+  const CommentCard(
+      {super.key, this.textColor = Colors.black, required this.comment});
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
@@ -36,7 +38,8 @@ class CommentCard extends StatelessWidget {
                     style: Styles.mediumText(
                         fontWeight: FontWeight.bold, color: textColor)),
                 Label(
-                    text: '9  min', style: Styles.mediumText(color: textColor)),
+                    text: comment.sinceTime,
+                    style: Styles.mediumText(color: textColor)),
               ],
             )),
             IconButton(
@@ -50,7 +53,8 @@ class CommentCard extends StatelessWidget {
           ],
         ),
         const Sizer(),
-        ReadMoreLabel(
+        Label(
+          textAlign: TextAlign.start,
           text: comment.content,
           style: Styles.mediumText(color: textColor),
         ),
@@ -61,7 +65,9 @@ class CommentCard extends StatelessWidget {
               Icons.favorite_border,
               color: textColor,
             ),
-            Label(text: comment.repliesCount.toString(), style: Styles.mediumText(color: textColor)),
+            Label(
+                text: comment.likesCount.toString(),
+                style: Styles.mediumText(color: textColor)),
             const Sizer(),
             TextAppButton(
                 style: Styles.mediumText(), label: 'Reply', onPressed: () {})

@@ -21,6 +21,7 @@ class Label extends StatelessWidget {
       text,
       style: style ?? Styles.mediumText(),
       textAlign: textAlign,
+      overflow: TextOverflow.ellipsis,
       maxLines: maxLines,
     );
   }

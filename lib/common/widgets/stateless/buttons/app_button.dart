@@ -54,7 +54,10 @@ class AppButton extends StatelessWidget {
                       size: iconSize ?? 16,
                       color: textColor ?? Colors.white,
                     ),
-                  if (icon != null) const Sizer(),
+                  if (icon != null)
+                    const Sizer(
+                      width: 3,
+                    ),
                   Label(
                       text: label,
                       style: style ??

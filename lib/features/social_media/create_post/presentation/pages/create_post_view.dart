@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/file_picker_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
@@ -10,8 +10,9 @@ import 'package:fourtyninehub/features/social_media/create_post/presentation/pag
 
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../core/error/failure.dart';
-import '../../../../../core/messages/messages.dart';
+import '../../../../../common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
+import '../../../../../common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
+import '../../../../account_taps/privacy/domain/entities/privacy_status_enum.dart';
 import '../cubit/create_post_cubit.dart';
 import 'select_feeling_view.dart';
 
@@ -24,13 +25,13 @@ class CreatePostView extends StatelessWidget {
     return BlocConsumer<CreatePostCubit, CreatePostState>(
       listener: (context, state) {
         if (state.status == CreatePostStates.error) {
-          showErrorMessage(
-            context,
-            getFailureMessage(
-              state.failure!,
-              context,
-            ),
-          );
+          // showErrorMessage(
+          //   context,
+          //   getFailureMessage(
+          //     state.failure!,
+          //     context,
+          //   ),
+          // );
         }
       },
       builder: (context, state) {
@@ -125,7 +126,7 @@ class CreatePostView extends StatelessWidget {
         builder: (context, state) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         IconButton(
-            onPressed: () {},
+            onPressed: () => FilePickerHelper().pickMedia(),
             icon: const Icon(
               Icons.image,
               color: Colors.green,
@@ -166,10 +167,39 @@ class CreatePostView extends StatelessWidget {
               size: 30,
             )),
         IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              final res =
+                  await CustomVerticalSheetItem.normal<PrivacyStatus>(context, [
+                CustomSheetModel(
+                  text: "Public",
+                  value: PrivacyStatus.public,
+                  iconData: Icons.language,
+                ),
+                CustomSheetModel(
+                  text: "Friends",
+                  value: PrivacyStatus.friends,
+                  iconData: Icons.family_restroom,
+                ),
+                CustomSheetModel(
+                  text: "Followers",
+                  value: PrivacyStatus.followers,
+                  iconData: Icons.accessibility_sharp,
+                ),
+                CustomSheetModel(
+                  text: "Friends / Followers",
+                  value: PrivacyStatus.friendsAndFollowers,
+                  iconData: Icons.supervised_user_circle_outlined,
+                ),
+                CustomSheetModel(
+                  text: "Only Me",
+                  value: PrivacyStatus.onlyMe,
+                  iconData: Icons.lock,
+                ),
+              ]);
+            },
             icon: const Icon(
-              Icons.location_on,
-              color: Colors.red,
+              Icons.privacy_tip,
+              color: Colors.grey,
               size: 30,
             )),
       ]);

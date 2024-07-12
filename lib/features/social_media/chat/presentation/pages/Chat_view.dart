@@ -56,8 +56,8 @@ class ChatView extends StatelessWidget {
 
   Widget _buildCategoriesViews() {
     return TabBarView(children: [
-      _buildCategoryChats(),
       const ClubHouseHome(),
+      _buildCategoryChats(),
       _buildCategoryChats(),
       _buildCallingHistory(isVideo: false),
       _buildCallingHistory(isVideo: true),

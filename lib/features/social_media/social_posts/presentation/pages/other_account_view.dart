@@ -228,12 +228,12 @@ class OtherAccountView extends StatelessWidget {
                   const Sizer(),
                   _buildCounter(
                     value: '181M ',
-                    label: 'Followers',
+                    label: 'Follower',
                   ),
                   const Sizer(),
                   _buildCounter(
                     value: '151 ',
-                    label: 'Subscriptions',
+                    label: 'Subscription',
                   ),
                 ],
               ),

@@ -6,8 +6,10 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/datasources/social_posts_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/repositories/social_posts_repo.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/hide_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:get_it/get_it.dart';
 
@@ -37,18 +39,26 @@ class SocialServiceLocator {
         () => GetActivitiesUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetFeelingsUseCase>(
         () => GetFeelingsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<DeletePostUseCase>(
+        () => DeletePostUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<HidePostUseCase>(
+        () => HidePostUseCase(serviceLocator()));
+
     serviceLocator.registerLazySingleton<GetFeedUseCase>(() => GetFeedUseCase(
           serviceLocator(),
         ));
-         serviceLocator.registerLazySingleton<PostReactUseCase>(() => PostReactUseCase(
-          serviceLocator(),
-        ));
-         serviceLocator.registerLazySingleton<GetPostCommentsUseCase>(() => GetPostCommentsUseCase(
-          serviceLocator(),
-        ));
-         serviceLocator.registerLazySingleton<PostCommentUseCase>(() => PostCommentUseCase(
-          serviceLocator(),
-        ));
+    serviceLocator
+        .registerLazySingleton<PostReactUseCase>(() => PostReactUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<GetPostCommentsUseCase>(
+        () => GetPostCommentsUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator
+        .registerLazySingleton<PostCommentUseCase>(() => PostCommentUseCase(
+              serviceLocator(),
+            ));
     serviceLocator
         .registerLazySingleton<GetUserPostsUseCase>(() => GetUserPostsUseCase(
               serviceLocator(),
@@ -59,6 +69,8 @@ class SocialServiceLocator {
           serviceLocator(),
         )..loadData());
     serviceLocator.registerFactory<SocialPostsCubit>(() => SocialPostsCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/create_ad.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
@@ -173,7 +174,10 @@ class AppPages {
                     GoRoute(
                       path: Paths.CREATECOMPANYAD,
                       name: Routes.CREATECOMPANYAD,
-                      builder: (context, state) => const CreateCompanyAdView(),
+                      builder: (context, state) =>
+                          BlocProvider<CreateCompanyAdCubit>(
+                              create: (_) => serviceLocator(),
+                              child: const CreateCompanyAdView()),
                     ),
                   ]),
             ]),
@@ -363,10 +367,14 @@ class AppPages {
         GoRoute(
             path: Paths.SOCIAL,
             name: Routes.SOCIAL,
-            builder: (context, state) => BlocProvider<SocialPostsCubit>(
-                  create: (_) => serviceLocator(),
-                  child: const SocialHomeView(),
-                ),
+            builder: (context, state) {
+              final userId = state.extra as String;
+
+              return BlocProvider<SocialPostsCubit>(
+                create: (_) => serviceLocator(),
+                child:  SocialHomeView(userId: userId,),
+              );
+            },
             routes: [
               GoRoute(
                   path: Paths.CREATEPOST,

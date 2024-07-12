@@ -15,16 +15,14 @@ abstract class SocialPostsRemoteDataSource {
   Future<Either<Failure, List<PostEntity>>> getUserPosts(
       {required String userId});
 
-  Future<Either<Failure, bool>> reactOnPost({
-    required PostReactParams params
-  });
-   Future<Either<Failure, bool>> commentOnPost({
-    required PostCommentParams params
-  });
-   Future<Either<Failure, List<CommentEntity>>> getPostComments(
+  Future<Either<Failure, bool>> reactOnPost({required PostReactParams params});
+  Future<Either<Failure, bool>> commentOnPost(
+      {required PostCommentParams params});
+  Future<Either<Failure, List<CommentEntity>>> getPostComments(
       {required String postId});
 
-
+  Future<Either<Failure, bool>> deletePost({required String postId});
+  Future<Either<Failure, bool>> hidePost({required String postId});
 }
 
 class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
@@ -37,9 +35,10 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
     return response.fold((l) {
       return Left(l);
     }, (data) {
-         final list =
-            (data['data'] as List).map((e) => PostModel.fromJson(e)).toList();
-        return Right(list);
+      final list = (data['data']['posts'] as List)
+          .map((e) => PostModel.fromJson(e))
+          .toList();
+      return Right(list);
     });
   }
 
@@ -52,33 +51,43 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
         (data) => Right(
             (data['data'] as List).map((e) => PostModel.fromJson(e)).toList()));
   }
-  
-  @override
-  Future<Either<Failure, bool>> reactOnPost({required PostReactParams params})async {
-   final response = await _apiConsumer.post(EndPoints.reactOnPost(params.postId), data: params.toJson());
-    return response.fold(
-        (l) => Left(l),
-        (data) => Right(
-            data['status']));
 
-  }
-  
   @override
-  Future<Either<Failure, bool>> commentOnPost({required PostCommentParams params})async {
-     final response = await _apiConsumer.post(EndPoints.commentOnPost(params.postId), data: params.toJson());
-    return response.fold(
-        (l) => Left(l),
-        (data) => Right(
-            data['status']));
+  Future<Either<Failure, bool>> reactOnPost(
+      {required PostReactParams params}) async {
+    final response = await _apiConsumer
+        .post(EndPoints.reactOnPost(params.postId), data: params.toJson());
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
-  
-  @override
-  Future<Either<Failure, List<CommentEntity>>> getPostComments({required String postId}) async{
-     final response = await _apiConsumer.get(EndPoints.getPostComments(postId));
-    return response.fold(
-        (l) => Left(l),
-        (data) => Right(
-            (data['data'] as List).map((e) => CommentModel.fromJson(e)).toList()));
 
+  @override
+  Future<Either<Failure, bool>> commentOnPost(
+      {required PostCommentParams params}) async {
+    final response = await _apiConsumer
+        .post(EndPoints.commentOnPost(params.postId), data: params.toJson());
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, List<CommentEntity>>> getPostComments(
+      {required String postId}) async {
+    final response = await _apiConsumer.get(EndPoints.getPostComments(postId));
+    return response.fold(
+        (l) => Left(l),
+        (data) => Right((data['data'] as List)
+            .map((e) => CommentModel.fromJson(e))
+            .toList()));
+  }
+
+  @override
+  Future<Either<Failure, bool>> deletePost({required String postId}) async {
+    final response = await _apiConsumer.delete(EndPoints.deletePost(postId));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> hidePost({required String postId}) async {
+    final response = await _apiConsumer.put(EndPoints.hidePost(postId));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 }

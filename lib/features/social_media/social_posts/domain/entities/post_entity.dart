@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 
+import '../../../../../core/utils/duration_helper.dart';
 import '../../../../../res/assets/assets.dart';
 
 class PostEntity {
@@ -19,6 +20,11 @@ class PostEntity {
   final num sadCount;
   final num angryCount;
   final DateTime createdAt;
+   Duration get publishedDuration => DateTime.now().difference(createdAt);
+
+  String get sinceTime =>
+      DurationHelper().sinceTime(duration: publishedDuration);
+ 
   PostEntity({
     required this.id,
     required this.content,

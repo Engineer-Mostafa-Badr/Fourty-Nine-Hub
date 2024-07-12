@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 
 import 'package:go_router/go_router.dart';
 
@@ -20,10 +22,15 @@ class FloatingButton extends StatelessWidget {
           ? () => onTap!()
           : () {
               if (changeView == 1) {
-                context.push(Routes.SOCIAL);
+                final controller = context.read<UserCubit>();
+                if (controller.isLoggedIn) {
+                  context.push(Routes.SOCIAL, extra: controller.state.data?.id);
+                } else {
+                  context.push(Routes.LOGIN);
+                }
               } else {
                 context.push(Routes.HOME);
-              } 
+              }
             },
       backgroundColor: changeView == 2 ? AppColors.PRIMARY_COLOR : Colors.white,
       shape: RoundedRectangleBorder(

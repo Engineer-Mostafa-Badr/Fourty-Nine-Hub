@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/helper/launch_url.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/google_ads_banner.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -93,14 +94,26 @@ class AdDetailsView extends StatelessWidget {
                     label: 'Chat',
                     icon: Icons.chat_bubble_outline,
                     onPressed: () => context.push(Routes.CHATROOM))),
-            const Sizer(),
+            const Sizer(
+              width: 5,
+            ),
             Expanded(
                 child: AppButton(
                     label: 'Call',
                     icon: Icons.call,
                     onPressed: () => LaunchURLHelper()
                         .call(phone: state.ad?.user.phone ?? ''))),
-            const Sizer(),
+            const Sizer(
+              width: 5,
+            ),
+            Expanded(
+                child: AppButton(
+                    label: 'Whatsapp',
+                    icon: FontAwesomeIcons.whatsapp,
+                    onPressed: () {})),
+            const Sizer(
+              width: 5,
+            ),
             Expanded(
                 child: AppButton(
                     label: 'Request', icon: Icons.bookmark, onPressed: () {})),

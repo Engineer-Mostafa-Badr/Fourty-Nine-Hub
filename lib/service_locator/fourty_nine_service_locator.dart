@@ -14,6 +14,11 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cu
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/datasources/create_ad_remote_datasource.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/repositories/create_ad_repo_impl.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/get_ad_properties_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/datasources/create_company_ad_remote_datasource.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/repositories/create_company_ad_repo_impl.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/repositories/create_company_ad_repo.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/usecases/get_company_ads_options_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/data_sources/remote_data_source/fourty_nine_remote_data_source.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/repositories/fourty_nine_repository_impl.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/repositories/fourty_nine_repository.dart';
@@ -50,12 +55,17 @@ class FourtyNineServiceLocator {
       ),
     );
 
-  serviceLocator.registerLazySingleton<CreateAdRemoteDatasource>(
+    serviceLocator.registerLazySingleton<CreateAdRemoteDatasource>(
       () => CreateAdRemoteDatasourceImpl(
         serviceLocator(),
       ),
     );
-     serviceLocator.registerLazySingleton<MyAdsRemoteDatasource>(
+    serviceLocator.registerLazySingleton<CreateCompanyAdRemoteDataSource>(
+      () => CreateCompanyAdRemoteDataSourceImpl(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<MyAdsRemoteDatasource>(
       () => MyAdsRemoteDatasourceImpl(
         serviceLocator(),
       ),
@@ -68,6 +78,11 @@ class FourtyNineServiceLocator {
     );
     serviceLocator.registerLazySingleton<AdsRepo>(
       () => AdsRepoImpl(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<CreateCompanyAdRepo>(
+      () => CreateCompanyAdRepoImpl(
         serviceLocator(),
       ),
     );
@@ -104,12 +119,17 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-      serviceLocator.registerLazySingleton<GetAdDetailsUseCase>(
+    serviceLocator.registerLazySingleton<GetAdDetailsUseCase>(
       () => GetAdDetailsUseCase(
         serviceLocator(),
       ),
     );
-    
+    serviceLocator.registerLazySingleton<GetCompanyAdsOptionsUseCase>(
+      () => GetCompanyAdsOptionsUseCase(
+        serviceLocator(),
+      ),
+    );
+
     serviceLocator.registerLazySingleton<GetAdPropertiesUsecase>(
       () => GetAdPropertiesUsecase(
         serviceLocator(),
@@ -125,7 +145,7 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-     serviceLocator.registerLazySingleton<GetSliderItemsUseCase>(
+    serviceLocator.registerLazySingleton<GetSliderItemsUseCase>(
       () => GetSliderItemsUseCase(
         serviceLocator(),
       ),
@@ -137,18 +157,23 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       )..getParentMainCategories(),
     );
-     serviceLocator.registerSingleton(
+    serviceLocator.registerSingleton(
       SliderCubit(
         serviceLocator(),
       )..loadData(),
     );
-serviceLocator.registerSingleton(
-      RegistableSubCategoriesCubit(
+    serviceLocator.registerFactory<CreateCompanyAdCubit>(
+      () => CreateCompanyAdCubit(
         serviceLocator(),
       )..loadData(),
     );
     serviceLocator.registerSingleton(
-      MyAddsCubit(
+      RegistableSubCategoriesCubit(
+        serviceLocator(),
+      )..loadData(),
+    );
+    serviceLocator.registerFactory<MyAddsCubit>(
+      () => MyAddsCubit(
         serviceLocator(),
       )..loadData(),
     );
@@ -158,8 +183,8 @@ serviceLocator.registerSingleton(
         serviceLocator(),
       )..getMainCategories(),
     );
-    
-serviceLocator.registerSingleton(
+
+    serviceLocator.registerSingleton(
       SubcategoriesCubit(
         serviceLocator(),
       )..loadData(),

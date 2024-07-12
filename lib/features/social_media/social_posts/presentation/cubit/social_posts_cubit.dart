@@ -4,11 +4,15 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/hide_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/post_details_page.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/post_comments.dart';
 
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../domain/entities/post_entity.dart';
-import '../../domain/repositories/social_posts_repo.dart';
+
 import '../../domain/usecases/get_feed_usecase.dart';
 import '../../domain/usecases/get_post_comments_usecase.dart';
 import '../../domain/usecases/get_user_posts_usecase.dart';
@@ -23,12 +27,16 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final PostReactUseCase _postReactUseCase;
   final GetPostCommentsUseCase _getPostCommentsUseCase;
   final PostCommentUseCase _postCommentUseCase;
+  final DeletePostUseCase _deletePostUseCase;
+  final HidePostUseCase _hidePostUseCase;
   SocialPostsCubit(
       this._getFeedUseCase,
       this._getUserPostsUseCase,
       this._postReactUseCase,
       this._getPostCommentsUseCase,
-      this._postCommentUseCase)
+      this._postCommentUseCase,
+      this._deletePostUseCase,
+      this._hidePostUseCase)
       : super(const SocialPostsState());
 
   void loadData() async {
@@ -42,6 +50,18 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) =>
             emit(state.copyWith(posts: data, status: StateStatus.initial)));
+  }
+
+  // get feed posts
+  Future<void> getMyPosts({required BuildContext context}) async {
+    final user = context.read<UserCubit>().state.data;
+    if (user != null) {
+      final response = await _getUserPostsUseCase(user.id);
+      response.fold(
+          (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+          (data) =>
+              emit(state.copyWith(myPosts: data, status: StateStatus.initial)));
+    }
   }
 
 // react on a post
@@ -64,9 +84,56 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
         (data) => bottomSheet(
             context: context,
+            isScrollControlled: true,
             widget: PostComments(
                 comments: data,
+                postId: postId,
                 onAddComment: (PostCommentParams params) =>
                     onPostComment(params: params))));
+  }
+
+  void showPostDetails(
+      {required BuildContext context, required PostEntity post}) async {
+    final response = await _getPostCommentsUseCase(post.id);
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: StateStatus.error)),
+        (data) => bottomSheet(
+            context: context,
+            isScrollControlled: true,
+            widget: PostDetailsPage(
+              comments: data,
+              post: post,
+              deletePost: (String postId) =>
+                  deletePost(context: context, postId: postId),
+              hidePost: (String postId) =>
+                  hidePost(context: context, postId: postId),
+              onAddComment: (PostCommentParams params) =>
+                  onPostComment(params: params),
+              onReact: (params) => onReact(params: params),
+              showPostComments: (postId) =>
+                  showPostComments(context: context, postId: postId),
+              showPostDetails: (PostEntity post) =>
+                  showPostDetails(context: context, post: post),
+            )));
+  }
+
+  void deletePost(
+      {required BuildContext context, required String postId}) async {
+    final response = await _deletePostUseCase(postId);
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+      getMyPosts(context: context);
+    });
+  }
+
+  void hidePost({required BuildContext context, required String postId}) async {
+    final response = await _hidePostUseCase(postId);
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+      getMyPosts(context: context);
+    });
   }
 }

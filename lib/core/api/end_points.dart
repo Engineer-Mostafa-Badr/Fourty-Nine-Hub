@@ -40,11 +40,20 @@ class EndPoints {
   static String reactOnPost(String postId) {
     return '/facebook/post/react/$postId';
   }
+
   static String commentOnPost(String postId) {
-    return '/facebook/comment/react/$postId';
+    return '/facebook/comment/create-comment/$postId';
   }
+
   static String getPostComments(String postId) {
     return '/facebook/comment/get-post-comments/$postId';
   }
-  
+
+  static String deletePost(String postId) {
+    return '/facebook/post/$postId';
+  }
+
+  static String hidePost(String postId) {
+    return '/facebook/post/hide/$postId';
+  }
 }

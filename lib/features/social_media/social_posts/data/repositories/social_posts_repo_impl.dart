@@ -40,4 +40,14 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
       {required String postId}) {
     return _remoteDataSource.getPostComments(postId: postId);
   }
+
+  @override
+  Future<Either<Failure, bool>> deletePost({required String postId}) {
+    return _remoteDataSource.deletePost(postId: postId);
+  }
+
+  @override
+  Future<Either<Failure, bool>> hidePost({required String postId}) {
+    return _remoteDataSource.hidePost(postId: postId);
+  }
 }
