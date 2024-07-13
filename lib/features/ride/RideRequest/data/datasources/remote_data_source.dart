@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/ride_request
 import 'package:fourtyninehub/res/assets/jsons.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../../../../core/api/api_consumer.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../subcategories/data/models/sub_category_model.dart';
 import '../models/car_type_model.dart';
@@ -63,7 +64,7 @@ abstract class RideRemoteDataSource {
 }
 
 class RideRemoteDataSourceImpl implements RideRemoteDataSource {
-  final JsonParser _apiConsumer;
+  final ApiConsumer _apiConsumer;
 
   const RideRemoteDataSourceImpl(this._apiConsumer);
 
@@ -143,11 +144,11 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
   @override
   Future<Either<Failure, List<SubCategoryModel>>> getSubCategories(
       {required String mainCategoryId}) async {
-    final response = await _apiConsumer.get(Jsons.subCategories);
+    final response = await _apiConsumer.get(EndPoints.subCategories(mainCategoryId: mainCategoryId));
 
     return response.fold(
         (failure) => Left(failure),
-        (data) => Right((data['data']['sub_categories'] as List)
+        (data) => Right((data['data']['subcategories'] as List)
             .map((e) => SubCategoryModel.fromJson(e))
             .toList()));
   }

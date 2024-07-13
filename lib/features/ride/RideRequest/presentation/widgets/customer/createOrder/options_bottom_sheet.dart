@@ -33,13 +33,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
     return BlocConsumer<RiderequestCubit, RiderequestState>(
       listener: (context, state) {
         if (state.error) {
-          showErrorMessage(
-            context,
-            getFailureMessage(
-              state.failure!,
-              context,
-            ),
-          );
+          showErrorMessage(context, '${state.failure}');
         }
       },
       builder: (context, state) {

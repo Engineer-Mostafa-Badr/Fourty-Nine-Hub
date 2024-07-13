@@ -17,6 +17,8 @@ class EndPoints {
   static const spinWheel = '/wheels/spin/';
   static const wheelWallet = '/wheel/wallets/my/wallet';
 
+  // ride
+
   // reels
   static const getExploreReels = '/reels/explore';
 
@@ -24,7 +26,7 @@ class EndPoints {
   static const expectedPrice = '/ride/trips/expected/price';
   static const carTypes = '/cars';
   static String subCategories({required String mainCategoryId}) {
-    return '/categories/subcategories/$mainCategoryId';
+    return '/categories/subcategories/$mainCategoryId?page=1&limit=30';
   }
 
   static const riderInfoRegister = '/ride/riders/register';
@@ -56,4 +58,9 @@ class EndPoints {
   static String hidePost(String postId) {
     return '/facebook/post/hide/$postId';
   }
+
+  // contact us 
+  static const helpMessages ='/help';
+
+
 }

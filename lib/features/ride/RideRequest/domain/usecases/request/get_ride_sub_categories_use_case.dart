@@ -10,8 +10,6 @@ class GetSubCategoriesUseCase extends UseCase<List<SubCategoryModel>, String> {
 
   @override
   Future<Either<Failure, List<SubCategoryModel>>> call(String params) {
-
-
     return  _repo.getSubCategories(mainCategoryId: params);
   }
 }

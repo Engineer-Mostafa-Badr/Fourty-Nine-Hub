@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
+import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/pages/contact_us_view.dart';
 import 'package:fourtyninehub/features/account_taps/share_app/presentation/pages/share_the_app.dart';
 import 'package:fourtyninehub/features/account_taps/lists/presentation/pages/lists_view.dart';
@@ -372,7 +373,9 @@ class AppPages {
 
               return BlocProvider<SocialPostsCubit>(
                 create: (_) => serviceLocator(),
-                child:  SocialHomeView(userId: userId,),
+                child: SocialHomeView(
+                  userId: userId,
+                ),
               );
             },
             routes: [
@@ -559,7 +562,10 @@ class AppPages {
         GoRoute(
           path: Paths.CONTACTUS,
           name: Routes.CONTACTUS,
-          builder: (context, state) => const ContactUsView(),
+          builder: (context, state) => BlocProvider<ContactUsCubit>(
+            create: (_) => serviceLocator(),
+            child: const ContactUsView(),
+          ),
         ),
         GoRoute(
           path: Paths.SHIPPING,

@@ -1,10 +1,10 @@
 class CarTypeEntity {
-  final int id;
+  final String id;
   final  String brand;
   final  String model;
    final String year;
    final String type;
-   final int subCategory;
+   final String subCategory;
 
 
   CarTypeEntity(

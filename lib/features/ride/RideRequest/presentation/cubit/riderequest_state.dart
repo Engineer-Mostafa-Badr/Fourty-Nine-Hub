@@ -62,7 +62,7 @@ extension RiderequestStateX on RiderequestState {
       status == RideRequestStatusesEnum.isRequestSentSuccessfully;
 }
 
-@immutable
+
 class RiderequestState {
   final RideRequestStatusesEnum status;
   final bool? isPaymentRequired;

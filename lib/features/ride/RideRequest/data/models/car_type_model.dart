@@ -13,12 +13,12 @@ class CarTypeModel extends CarTypeEntity {
 
   factory CarTypeModel.fromJson(Map<String, dynamic> json) {
     return CarTypeModel(
-      id: json['id'],
+      id: json['_id'],
       brand: json['brand']??'',
       model: json['model']??'',
       year: json['year']??'',
       type: json['type']??'',
-      subCategory: json['sub_category']??0,
+      subCategory: json['sub_category']??'0',
 
 
 

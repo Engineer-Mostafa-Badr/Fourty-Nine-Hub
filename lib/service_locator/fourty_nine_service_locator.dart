@@ -1,3 +1,7 @@
+import 'package:fourtyninehub/features/account_taps/contact_us/data/datasources/contact_us_remote_datasource.dart';
+import 'package:fourtyninehub/features/account_taps/contact_us/data/repositories/contact_us_repo_impl.dart';
+import 'package:fourtyninehub/features/account_taps/contact_us/domain/usecases/create_contact_us_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/contact_us/domain/usecases/get_contact_us_messages.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/data/datasources/my_add_remote_datasource.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/data/repositories/my_ads_repo_impl.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/repositories/my_ads_repo.dart';
@@ -24,6 +28,8 @@ import 'package:fourtyninehub/features/fourty_nine/data/repositories/fourty_nine
 import 'package:fourtyninehub/features/fourty_nine/domain/repositories/fourty_nine_repository.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:get_it/get_it.dart';
+import '../features/account_taps/contact_us/domain/repositories/contact_us_repo.dart';
+import '../features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
 import '../features/ads_feature/ad_details/data/repositories/ad_details_repo_impl.dart';
 import '../features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import '../features/ads_feature/ads/data/repositories/ads_repo_impl.dart';
@@ -70,6 +76,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<ContactUsRemoteDataSource>(
+      () => ContactUsRemoteDataSourceImpl(
+        serviceLocator(),
+      ),
+    );
 
     serviceLocator.registerLazySingleton<FourtyNineRepository>(
       () => FourtyNineRepositoryImpl(
@@ -83,6 +94,11 @@ class FourtyNineServiceLocator {
     );
     serviceLocator.registerLazySingleton<CreateCompanyAdRepo>(
       () => CreateCompanyAdRepoImpl(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<ContactUsRepo>(
+      () => ContactUsRepoImpl(
         serviceLocator(),
       ),
     );
@@ -116,6 +132,16 @@ class FourtyNineServiceLocator {
     );
     serviceLocator.registerLazySingleton<GetAdsUseCase>(
       () => GetAdsUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<GetContactUsMessages>(
+      () => GetContactUsMessages(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<CreateContactUsUseCase>(
+      () => CreateContactUsUseCase(
         serviceLocator(),
       ),
     );
@@ -207,6 +233,13 @@ class FourtyNineServiceLocator {
         serviceLocator(),
         serviceLocator(),
       )..loadData(),
+    );
+    // ContactUsCubit
+    serviceLocator.registerFactory<ContactUsCubit>(
+      () => ContactUsCubit(
+        serviceLocator(),
+        serviceLocator(),
+      ),
     );
   }
 }

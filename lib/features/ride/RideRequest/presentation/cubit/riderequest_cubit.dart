@@ -36,36 +36,31 @@ class RiderequestCubit extends Cubit<RiderequestState> {
 // get required initial data
   Future<void> loadData() async {
     emit(state.copyWith(status: RideRequestStatusesEnum.loading));
-    try {
-      // -------------------------------load subcategories ---------------------------
-      final subCategories =
-          await _getSubCategoriesUseCase.call(service.value());
-      subCategories.fold((failure) {
-        emit(state.copyWith(
-          failure: failure,
-          status: RideRequestStatusesEnum.error,
-        ));
-      }, (response) {
-        emit(state.copyWith(
-            status: RideRequestStatusesEnum.initState,
-            subCategories: response));
-        changeSubCategorySelection(item: response.first);
-      });
-
-      // ---------------------------- load car types -------------------------
-      final carTypes =
-          await _getCarTypesUseCase.call('62c8ba9e8e28a58a3edf57e9');
-      carTypes.fold(
-          (failure) => emit(state.copyWith(
-              failure: failure, status: RideRequestStatusesEnum.error)),
-          (response) => emit(state.copyWith(
-              status: RideRequestStatusesEnum.initState,
-              carTypes: response,
-              selectedCarTypes: response)));
-    } catch (e) {
+    // -------------------------------load subcategories ---------------------------
+    final subCategories = await _getSubCategoriesUseCase.call(service.value());
+    subCategories.fold((failure) {
       emit(state.copyWith(
-          status: RideRequestStatusesEnum.error, errorMessage: e.toString()));
-    }
+        failure: failure,
+        status: RideRequestStatusesEnum.error,
+      ));
+    }, (response) {
+      emit(state.copyWith(
+          status: RideRequestStatusesEnum.initState, subCategories: response));
+      changeSubCategorySelection(item: response.first);
+    });
+
+    // ---------------------------- load car types -------------------------
+  }
+
+  Future<void> getCarTypes() async {
+    final carTypes = await _getCarTypesUseCase.call('62c8ba9e8e28a58a3edf57e9');
+    carTypes.fold(
+        (failure) => emit(state.copyWith(
+            failure: failure, status: RideRequestStatusesEnum.error)),
+        (response) => emit(state.copyWith(
+            status: RideRequestStatusesEnum.initState,
+            carTypes: response,
+            selectedCarTypes: response)));
   }
 
   // change subCategory selection
