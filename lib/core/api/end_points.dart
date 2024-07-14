@@ -30,7 +30,19 @@ class EndPoints {
   }
 
   static const riderInfoRegister = '/ride/riders/register';
+  static const sendComeWithYou = '/ride/come-with-you';
+  static const sendPickMe = '/ride/pick-me';
+  static const sendRideRequest = '/ride/trips/new';
+  static const getMyPickMeTrips = '/ride/pick-me/trip/requests';
+  static String deletePickMeTrips(String id) {
+    return '/ride/pick-me/Delete/$id';
+  }
 
+  static String deleteComeWithYouTrips(String id) {
+    return '/ride/come-with-you/Delete/$id';
+  }
+
+  static const getMyComeWithYouTrips = '/ride/come-with-you/trip/requests';
   // social
 
   static const createFacebookPost = '/facebook/post';
@@ -59,8 +71,6 @@ class EndPoints {
     return '/facebook/post/hide/$postId';
   }
 
-  // contact us 
-  static const helpMessages ='/help';
-
-
+  // contact us
+  static const helpMessages = '/help';
 }

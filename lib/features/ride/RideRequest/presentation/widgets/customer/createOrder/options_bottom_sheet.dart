@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
+import 'package:fourtyninehub/core/enums/main_services_enum.dart';
+import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../core/error/failure.dart';
 import '../../../../../../../core/messages/messages.dart';
+import '../../../../../../../res/strings/labels.dart';
 import '../../../../../../../res/style/app_colors.dart';
-
 import '../../../../../../../res/style/styles.dart';
-import '../../../../../../../routes/routes.dart';
+import 'changePhoneNumber.dart';
 import 'giveOffer.dart';
 import 'ride_options.dart';
 import 'selectDropOffPoints.dart';
@@ -33,7 +34,16 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
     return BlocConsumer<RiderequestCubit, RiderequestState>(
       listener: (context, state) {
         if (state.error) {
-          showErrorMessage(context, '${state.failure}');
+          showErrorMessage(
+            context,
+            getFailureMessage(
+              state.failure ?? const UnknownFailure(),
+              context,
+            ),
+          );
+        } else if (state.isRequestSent) {
+         
+          showSuccessMessage(context, Labels.success);
         }
       },
       builder: (context, state) {
@@ -178,10 +188,41 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                   ),
                 ),
               ),
+
               const Sizer(),
               if (state.time != null)
                 Column(
                   children: [
+                    InkWell(
+                      onTap: () {
+                        bottomSheet(
+                            widget: RideContactPhoneNumber(),
+                            isScrollControlled: true,
+                            context: context);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        height: kTextTabBarHeight * .7,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          children: [
+                            Label(
+                              text: state.phone ?? 'Phone',
+                              style: Styles.mediumText(color: Colors.grey),
+                            ),
+                            const Spacer(),
+                            const Icon(
+                              Icons.phone,
+                              color: Colors.grey,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const Sizer(),
                     InkWell(
                       onTap: () {
                         bottomSheet(
@@ -263,7 +304,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                   children: [
                     Expanded(
                         child: InkWell(
-                      onTap: () {},
+                      onTap: () => rideCubit.addNormalRequest(context: context),
                       child: Container(
                         height: kToolbarHeight * .7,
                         decoration: BoxDecoration(
@@ -274,21 +315,6 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                           text: 'Premium Request',
                           style: Styles.mediumText(color: Colors.white),
                         )),
-                      ),
-                    )),
-                    const Sizer(),
-                    Expanded(
-                        child: InkWell(
-                      onTap: () => rideCubit.addNormalRequest(context: context),
-                      child: Container(
-                        height: kToolbarHeight * .7,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: AppColors.PRIMARY_COLOR),
-                        child: Center(
-                            child: Label(
-                                text: 'Normal Request',
-                                style: Styles.mediumText(color: Colors.white))),
                       ),
                     )),
                     const Sizer(),

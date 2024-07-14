@@ -3,8 +3,9 @@
 import 'package:flutter/foundation.dart' show describeEnum;
 
 enum RideServicesEnum {
-  tripJoin,
+
   pickMe,
+  comeWithYou,
   womenOnly,
   captain,
   taxi,
@@ -15,37 +16,17 @@ enum RideServicesEnum {
 
 extension RideServicesEnumExtension on RideServicesEnum {
   String get name => describeEnum(this);
-  String get displayTitle {
-    switch (this) {
-      case RideServicesEnum.tripJoin:
-        return 'Trip Join';
-      case RideServicesEnum.pickMe:
-        return 'Pick Me';
-      case RideServicesEnum.womenOnly:
-        return 'Women Only';
-      case RideServicesEnum.captain:
-        return 'Captain';
-      case RideServicesEnum.taxi:
-        return 'Taxi';
-      case RideServicesEnum.scooter:
-        return 'Scooter';
-      case RideServicesEnum.intercity:
-        return 'Intercity';
-      case RideServicesEnum.premium:
-        return 'Premium';
-    }
-  }
 
   String value() {
     switch (this) {
-      case RideServicesEnum.tripJoin:
-        return '62c8b5779332225799fe3304';
+     
+     
       case RideServicesEnum.pickMe:
-        return 'Pick Me';
+        return '62ea008d69ea29c91dfc3908';
       case RideServicesEnum.womenOnly:
         return 'Women Only';
       case RideServicesEnum.captain:
-        return 'Captain';
+        return '62c8ba9f8e28a58a3edf57eb';
       case RideServicesEnum.taxi:
         return 'Taxi';
       case RideServicesEnum.scooter:
@@ -54,42 +35,22 @@ extension RideServicesEnumExtension on RideServicesEnum {
         return 'Intercity';
       case RideServicesEnum.premium:
         return 'Premium';
-    }
-  }
-  String route() {
-    switch (this) {
-      case RideServicesEnum.tripJoin:
+      case RideServicesEnum.comeWithYou:
         return '62c8b5779332225799fe3304';
-      case RideServicesEnum.pickMe:
-        return 'Pick Me';
-      case RideServicesEnum.womenOnly:
-        return 'Women Only';
-      case RideServicesEnum.captain:
-        return 'Captain';
-      case RideServicesEnum.taxi:
-        return 'Taxi';
-      case RideServicesEnum.scooter:
-        return 'Scooter';
-      case RideServicesEnum.intercity:
-        return 'Intercity';
-      case RideServicesEnum.premium:
-        return 'Premium';
     }
   }
-  
 }
 
 RideServicesEnum getRideServiceEnum({
   required String value,
 }) {
   switch (value) {
-    case 'Trip Join':
-      return RideServicesEnum.tripJoin;
-    case 'Trip Join':
+   
+    case '62ea008d69ea29c91dfc3908':
       return RideServicesEnum.pickMe;
     case 'Trip Join':
       return RideServicesEnum.womenOnly;
-    case 'Trip Join':
+    case '62c8ba9f8e28a58a3edf57eb':
       return RideServicesEnum.captain;
     case 'Trip Join':
       return RideServicesEnum.taxi;
@@ -99,6 +60,8 @@ RideServicesEnum getRideServiceEnum({
       return RideServicesEnum.intercity;
     case 'Trip Join':
       return RideServicesEnum.premium;
+    case '62ea00e269ea29c91dfc390c':
+      return RideServicesEnum.comeWithYou;
   }
   return RideServicesEnum.premium;
 }

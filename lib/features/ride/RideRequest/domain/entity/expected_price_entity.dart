@@ -1,8 +1,8 @@
 class ExpectedPriceEntity {
   final bool status;
   final num price;
-  final String distance;
-  final String duration;
+  final num distance;
+  final num duration;
 
 
   ExpectedPriceEntity(

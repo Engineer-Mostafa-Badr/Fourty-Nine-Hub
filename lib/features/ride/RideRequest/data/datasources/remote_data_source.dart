@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
-import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
+import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
+
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/address_search_params_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/car_models_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/expected_price_model.dart';
@@ -32,7 +33,7 @@ abstract class RideRemoteDataSource {
       {required AddressSearchParamsModel params});
   Future<Either<Failure, bool>> reportTheDriver(
       {required RideReportModel report});
-  Future<Either<Failure, RideRequestModel>> addRideRequest(
+  Future<Either<Failure, String>> addRideRequest(
       {required RideRequestModel request});
 
   Future<Either<Failure, List<RideRequestModel>>> getRideRequests();
@@ -53,8 +54,7 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, bool>> updatePaymentMethod(
       {required int paymentMethodId});
 
-  Future<Either<Failure, bool>> rateTheDriver(
-      {required ReviewModel review});
+  Future<Either<Failure, bool>> rateTheDriver({required ReviewModel review});
 
   Future<Either<Failure, ExpectedPriceModel>> getExpectedPrice(
       {required ExpectedPriceParams params});
@@ -75,10 +75,51 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, RideRequestModel>> addRideRequest(
-      {required RideRequestModel request}) {
-    // TODO: implement addRideRequest
-    throw UnimplementedError();
+  Future<Either<Failure, String>> addRideRequest(
+      {required RideRequestModel request}) async {
+    if (request.service == RideServicesEnum.comeWithYou) {
+      final response = await _apiConsumer.post(EndPoints.sendComeWithYou,
+          data: request.toJson());
+      return response.fold((l) => Left(l), (data) {
+        if (data['status']) {
+          if (data['data'] != null) {
+            return Right(data['data']['_id'] ?? '');
+          } else {
+            return Right('');
+          }
+        } else {
+          return Left(ValidationFailure(data['message']));
+        }
+      });
+    } else if (request.service == RideServicesEnum.pickMe) {
+      final response =
+          await _apiConsumer.post(EndPoints.sendPickMe, data: request.toJson());
+      return response.fold((l) => Left(l), (data) {
+        if (data['status']) {
+          if (data['data'] != null) {
+            return Right(data['data']['_id'] ?? '');
+          } else {
+            return Right('');
+          }
+        } else {
+          return Left(ValidationFailure(data['message']));
+        }
+      });
+    } else {
+      final response = await _apiConsumer.post(EndPoints.sendRideRequest,
+          data: request.toJson());
+      return response.fold((l) => Left(l), (data) {
+        if (data['status']) {
+          if (data['data'] != null) {
+            return Right(data['data']['_id'] ?? '');
+          } else {
+            return Right('');
+          }
+        } else {
+          return Left(ValidationFailure(data['message']));
+        }
+      });
+    }
   }
 
   @override
@@ -144,7 +185,8 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
   @override
   Future<Either<Failure, List<SubCategoryModel>>> getSubCategories(
       {required String mainCategoryId}) async {
-    final response = await _apiConsumer.get(EndPoints.subCategories(mainCategoryId: mainCategoryId));
+    final response = await _apiConsumer
+        .get(EndPoints.subCategories(mainCategoryId: mainCategoryId));
 
     return response.fold(
         (failure) => Left(failure),
@@ -181,8 +223,7 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> rateTheDriver(
-      {required ReviewModel review}) {
+  Future<Either<Failure, bool>> rateTheDriver({required ReviewModel review}) {
     // TODO: implement rateTheDriver
     throw UnimplementedError();
   }
@@ -190,8 +231,10 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
   @override
   Future<Either<Failure, ExpectedPriceModel>> getExpectedPrice(
       {required ExpectedPriceParams params}) async {
-    final response =
-        await _apiConsumer.get(Jsons.exptectedPrice, queryParameters: params.toJson());
+    final response = await _apiConsumer
+        .post(EndPoints.expectedPrice, data: params.toJson(), queryParameters: {
+      'subCategory': params.subCategoryId,
+    });
     return response.fold((failure) => Left(failure),
         (data) => Right(ExpectedPriceModel.fromJson(data['data'])));
   }
@@ -202,12 +245,11 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
     int page = 1,
     int limit = 1,
   }) async {
-    final response = await _apiConsumer.get(Jsons.carTypes,
-        queryParameters: {
-          "subCategoryId": subCategoryId,
-          "page": page,
-          "limit": limit
-        });
+    final response = await _apiConsumer.get(Jsons.carTypes, queryParameters: {
+      "subCategoryId": subCategoryId,
+      "page": page,
+      "limit": limit
+    });
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data']['car_types'] as List)

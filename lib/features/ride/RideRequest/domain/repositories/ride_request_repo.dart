@@ -23,10 +23,10 @@ abstract class RideRequestRepo {
   Future<Either<Failure, List<GoogleSearchResultModel>>>
       searchGoogleSearchNearByPlaces(
           {required AddressSearchParamsModel params});
-  Future<Either<Failure, RideRequestModel>> addNormalRequest(
+  Future<Either<Failure, String>> addNormalRequest(
       {required RideRequestModel request});
-  Future<Either<Failure, RideRequestModel>> addPrimaryRequest(
-      {required RideRequestModel request});
+      
+ 
   Future<Either<Failure, bool>> cancelTrip({required int requestId});
   Future<Either<Failure, bool>> reportTheDriver(
       {required RideReportModel report});

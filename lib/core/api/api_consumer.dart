@@ -99,7 +99,11 @@ class BaseApiConsumer extends ApiConsumer {
         url,
         queryParameters: queryParameters,
       );
-      return Right(result.data as Map<String, dynamic>);
+      if (result.data['status']) {
+        return Right(result.data as Map<String, dynamic>);
+      } else {
+        return Left(ValidationFailure(result.data['message']));
+      }
     } catch (e) {
       if (e is DioException &&
           e.response?.statusCode == 401 &&
@@ -129,23 +133,22 @@ class BaseApiConsumer extends ApiConsumer {
         data: formData ?? data,
         queryParameters: queryParameters,
       );
+
       return Right(result.data as Map<String, dynamic>);
     } catch (e) {
-      // TODO reset condition after stable backend
-      // if (e is DioException &&
-      //     e.response?.statusCode == 401 &&
-      //     isTokenAttached && false) {
-      //   return refreshToken().then(
-      //     (_) => post(
-      //       url,
-      //       queryParameters: queryParameters,
-      //       data: data,
-      //     ),
-      //   );
-      // } else {
-      return Left(_getFailure(e));
-
-      // }
+      if (e is DioException &&
+          e.response?.statusCode == 401 &&
+          isTokenAttached) {
+        return refreshToken().then(
+          (_) => post(
+            url,
+            queryParameters: queryParameters,
+            data: data,
+          ),
+        );
+      } else {
+        return Left(_getFailure(e));
+      }
     }
   }
 

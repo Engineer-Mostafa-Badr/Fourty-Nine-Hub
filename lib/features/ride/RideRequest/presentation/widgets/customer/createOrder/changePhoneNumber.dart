@@ -8,12 +8,11 @@ import '../../../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../../../res/style/app_colors.dart';
 
-class GiveOffer extends StatelessWidget {
+class RideContactPhoneNumber extends StatelessWidget {
   final formState = GlobalKey<FormState>();
 
-  GiveOffer({super.key});
+  RideContactPhoneNumber({super.key});
   @override
   Widget build(BuildContext context) {
     final controller = context.read<RiderequestCubit>();
@@ -31,47 +30,18 @@ class GiveOffer extends StatelessWidget {
             shrinkWrap: true,
             children: [
               Label(
-                  text: 'Offer your fare',
+                  text: 'Contact Phone',
                   style: Styles.mediumText(fontWeight: FontWeight.bold)),
               const Sizer(),
               FormTextField(
-                  hint: 'EGP',
+                  hint: 'Phone',
                   type: TextInputType.number,
-                  initialValue: state.offerPrice.toString(),
+                  initialValue: state.phone ?? '',
                   style: const TextStyle(
                       fontSize: 20,
                       color: Colors.grey,
                       fontWeight: FontWeight.bold),
-                  action: (v) => controller.changeExpectedPrice(v)),
-              const Sizer(),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.money,
-                    color: Colors.green,
-                  ),
-                  const Sizer(),
-                  Label(text: 'Cash', style: Styles.mediumText())
-                ],
-              ),
-              const Sizer(),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.rocket_launch,
-                    color: AppColors.PRIMARY_COLOR,
-                  ),
-                  const Sizer(),
-                  Expanded(
-                      child: Label(
-                          text:
-                              'Automatically accept the nearest driver for your fare',
-                          style: Styles.mediumText())),
-                  Switch(
-                      value: state.autoAccept,
-                      onChanged: (v) => controller.changeAutoAcceptStatus(v: v))
-                ],
-              ),
+                  action: (v) => controller.changePhoneNumber(v)),
               const Sizer(),
               AppButton(
                   label: 'Done',

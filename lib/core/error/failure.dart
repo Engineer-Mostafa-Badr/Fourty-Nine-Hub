@@ -33,10 +33,18 @@ class InvalidOtpFailure extends Failure {
   const InvalidOtpFailure(this.message);
 }
 
+class ValidationFailure extends Failure {
+  final String message;
+
+  const ValidationFailure(this.message);
+}
+
 class SocialLoginFailure extends Failure {
   final dynamic exception;
 
-  const SocialLoginFailure(this.exception,);
+  const SocialLoginFailure(
+    this.exception,
+  );
 }
 
 String getFailureMessage(Failure failure, BuildContext context) {
@@ -58,6 +66,8 @@ String getFailureMessage(Failure failure, BuildContext context) {
     return failure.exception.toString();
   } else if (failure is CacheFailure) {
     return 'Cache Failure';
+  } else if (failure is ValidationFailure) {
+    return failure.message;
   } else if (failure is UnknownFailure) {
     return 'Unknown Failure';
   } else {

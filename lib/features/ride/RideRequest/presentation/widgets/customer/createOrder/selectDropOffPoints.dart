@@ -113,9 +113,9 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                 hint: 'To',
               ),
               const Sizer(),
-              if (state.isNearByPlacesLoading)
+              if (state.loading)
                 const CircularProgressIndicator.adaptive(),
-              if (state.isNearByPlacesLoaded)
+              if (state.nearByPlaces.isNotEmpty)
                 Expanded(
                   child: ListView.separated(
                       itemBuilder: (context, index) {

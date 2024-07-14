@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/features/requests_history/domain/entities/trip_entity.dart';
 import 'package:google_static_maps_controller/google_static_maps_controller.dart';
 
 import '../../../../../common/functions/helper/launch_url.dart';
@@ -14,7 +15,7 @@ import '../../../../requests_history/data/models/driver_model.dart';
 import '../../../../requests_history/data/models/trip_model.dart';
 
 class StartedTripWidget extends StatelessWidget {
-  final TripModel trip;
+  final TripEntity trip;
   const StartedTripWidget({super.key, required this.trip});
 
   @override
@@ -70,7 +71,7 @@ class StartedTripWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildTripInfoWidget({required TripModel trip}) {
+  Widget _buildTripInfoWidget({required TripEntity trip}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -79,7 +80,7 @@ class StartedTripWidget extends StatelessWidget {
             const Icon(FontAwesomeIcons.car, color: AppColors.PRIMARY_COLOR),
             const Sizer(),
             Label(
-              text: trip.category.name,
+              text: trip.category?.name??"",
               style: Styles.mediumText(fontWeight: FontWeight.bold),
             ),
           ],
@@ -139,7 +140,7 @@ class StartedTripWidget extends StatelessWidget {
               children: [
                 const Icon(Icons.timer),
                 const Sizer(),
-                Label(text: trip.time)
+                Label(text: trip.time.toString())
               ],
             )),
             Expanded(
@@ -147,7 +148,7 @@ class StartedTripWidget extends StatelessWidget {
               children: [
                 const Icon(Icons.add_road),
                 const Sizer(),
-                Label(text: trip.distance)
+                Label(text: trip.distance.toString())
               ],
             )),
           ],

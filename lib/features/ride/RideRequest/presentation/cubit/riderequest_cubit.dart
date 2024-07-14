@@ -9,11 +9,13 @@ import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/enums/ride_services_enum.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../subcategories/data/models/sub_category_model.dart';
 import '../../data/models/car_type_model.dart';
 import '../../data/models/google_search_results.dart';
 import '../../domain/entity/address_search_params_entity.dart';
+import '../../domain/usecases/request/add_ride_request_usecase.dart';
 import '../../domain/usecases/request/get_car_types_use_case.dart';
 import '../../domain/usecases/request/get_near_by_places_usecase.dart';
 
@@ -29,8 +31,14 @@ class RiderequestCubit extends Cubit<RiderequestState> {
   final GetExpectedPriceUseCase _expectedPriceUseCase;
   final GetCarTypesUseCase _getCarTypesUseCase;
   final GetSubCategoriesUseCase _getSubCategoriesUseCase;
-  RiderequestCubit(this._nearByPlacesUseCase, this._expectedPriceUseCase,
-      this._getCarTypesUseCase, this._getSubCategoriesUseCase)
+  final AddRideRequestUseCase _addNormalRequest;
+
+  RiderequestCubit(
+      this._nearByPlacesUseCase,
+      this._expectedPriceUseCase,
+      this._getCarTypesUseCase,
+      this._getSubCategoriesUseCase,
+      this._addNormalRequest)
       : super(const RiderequestState());
 
 // get required initial data
@@ -53,14 +61,14 @@ class RiderequestCubit extends Cubit<RiderequestState> {
   }
 
   Future<void> getCarTypes() async {
-    final carTypes = await _getCarTypesUseCase.call('62c8ba9e8e28a58a3edf57e9');
-    carTypes.fold(
-        (failure) => emit(state.copyWith(
-            failure: failure, status: RideRequestStatusesEnum.error)),
-        (response) => emit(state.copyWith(
-            status: RideRequestStatusesEnum.initState,
-            carTypes: response,
-            selectedCarTypes: response)));
+    // final carTypes = await _getCarTypesUseCase.call('62c8ba9e8e28a58a3edf57e9');
+    // carTypes.fold(
+    //     (failure) => emit(state.copyWith(
+    //         failure: failure, status: RideRequestStatusesEnum.error)),
+    //     (response) => emit(state.copyWith(
+    //         status: RideRequestStatusesEnum.initState,
+    //         carTypes: response,
+    //         selectedCarTypes: response)));
   }
 
   // change subCategory selection
@@ -72,7 +80,7 @@ class RiderequestCubit extends Cubit<RiderequestState> {
 // Select pickup location from the map
   void selectPickUpLocation({required AddressSearchParamsEntity item}) =>
       emit(state.copyWith(
-          status: RideRequestStatusesEnum.isCameraMoving, fromAddress: item));
+          status: RideRequestStatusesEnum.success, fromAddress: item));
 // change selectedCarTypes
   void selectCarType({required CarTypeModel item}) {
     var carList = state.selectedCarTypes;
@@ -89,7 +97,7 @@ class RiderequestCubit extends Cubit<RiderequestState> {
       emit(state.copyWith(isAirConditioned: value));
 // search via google for near by addresses with string key
   Future<void> loadNearByPlaces({required String key}) async {
-    emit(state.copyWith(status: RideRequestStatusesEnum.isNearByPlacesLoading));
+    emit(state.copyWith(status: RideRequestStatusesEnum.loading));
     try {
       if (fromAddressTextController.text.isNotEmpty ||
           toAddressTextController.text.isNotEmpty) {
@@ -99,7 +107,7 @@ class RiderequestCubit extends Cubit<RiderequestState> {
           emit(state.copyWith(status: RideRequestStatusesEnum.error));
         }, (nearByPlaces) {
           emit(state.copyWith(
-              status: RideRequestStatusesEnum.isNearByPlacesLoaded,
+              status: RideRequestStatusesEnum.success,
               nearByPlaces: nearByPlaces));
         });
       }
@@ -107,6 +115,16 @@ class RiderequestCubit extends Cubit<RiderequestState> {
       state.copyWith(
           status: RideRequestStatusesEnum.error, errorMessage: e.toString());
     }
+  }
+
+  // change expected price
+  void changeExpectedPrice(String v) {
+    emit(state.copyWith(offerPrice: double.tryParse(v) ?? state.offerPrice));
+  }
+
+  // change change phone number
+  void changePhoneNumber(String v) {
+    emit(state.copyWith(phone: v));
   }
 
 // select pickup and drop off points manually
@@ -126,7 +144,7 @@ class RiderequestCubit extends Cubit<RiderequestState> {
       context.pop();
 
       emit(state.copyWith(
-          status: RideRequestStatusesEnum.isFromAndToLocationSelected,
+          status: RideRequestStatusesEnum.success,
           toAddress: AddressSearchParamsEntity(
               address: item.formattedAddress!,
               lat: item.geometry!.location!.lat!,
@@ -140,7 +158,11 @@ class RiderequestCubit extends Cubit<RiderequestState> {
     final to = state.toAddress!;
 
     final response = await _expectedPriceUseCase.call(ExpectedPriceParams(
-        fromLat: from.lat, fromLng: from.lng, toLat: to.lat, toLng: to.lng));
+        subCategoryId: state.subCategory?.id ?? '',
+        fromLat: from.lat,
+        fromLng: from.lng,
+        toLat: to.lat,
+        toLng: to.lng));
 
     response.fold(
         (failure) => emit(state.copyWith(
@@ -148,7 +170,7 @@ class RiderequestCubit extends Cubit<RiderequestState> {
             errorMessage: 'Unable to get expected price',
             failure: failure)),
         (response) => emit(state.copyWith(
-            status: RideRequestStatusesEnum.isTimeAndDistanceLoaded,
+            status: RideRequestStatusesEnum.success,
             minimumPrice: response.price.toDouble(),
             offerPrice: response.price.toDouble(),
             distance: response.distance,
@@ -157,13 +179,42 @@ class RiderequestCubit extends Cubit<RiderequestState> {
 
   // change autoaccept status
   void changeAutoAcceptStatus({required bool v}) {
-    emit(state.copyWith(
-        status: RideRequestStatusesEnum.isAutoAcceptChanged, autoAccept: v));
+    emit(
+        state.copyWith(status: RideRequestStatusesEnum.success, autoAccept: v));
   }
 
   // add normal request
 
-  void addNormalRequest({required BuildContext context}) {
-    context.push(Routes.TRIPDETAILS);
+  void addNormalRequest({required BuildContext context}) async {
+    final item = RideRequestModel(
+        fromAddress: state.fromAddress?.address ?? '',
+        toAddress: state.toAddress?.address ?? '',
+        fromLat: state.fromAddress?.lat ?? 0,
+        fromLng: state.fromAddress?.lng ?? 0,
+        toLat: state.toAddress?.lat ?? 0,
+        toLng: state.toAddress?.lng ?? 0,
+        autoAccept: state.autoAccept,
+        carTypes: [],
+        categoryId: state.subCategory?.id ?? '',
+        isAirConditioned: state.isAirConditioned,
+        id: 'id',
+        price: state.offerPrice,
+        passengers: state.passengers ?? 1,
+        phone: state.phone ?? '');
+    final response = await _addNormalRequest(item);
+    response.fold(
+        (l) => emit(
+            state.copyWith(status: RideRequestStatusesEnum.error, failure: l)),
+        (data) {
+      final service = item.service;
+
+      if (service == RideServicesEnum.pickMe ||
+          service == RideServicesEnum.comeWithYou) {
+        context.push(Routes.MYADDS);
+      } else {
+        context.push(Routes.TRIPDETAILS);
+      }
+      emit(state.copyWith(status: RideRequestStatusesEnum.requestSent));
+    });
   }
 }

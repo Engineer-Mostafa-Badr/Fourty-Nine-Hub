@@ -30,6 +30,10 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_cat
 import 'package:get_it/get_it.dart';
 import '../features/account_taps/contact_us/domain/repositories/contact_us_repo.dart';
 import '../features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
+import '../features/account_taps/my_adds/domain/usecases/delete_come_with_me_usecase.dart';
+import '../features/account_taps/my_adds/domain/usecases/delete_pick_me_usecase.dart';
+import '../features/account_taps/my_adds/domain/usecases/get_my_come_with_you_usecase.dart';
+import '../features/account_taps/my_adds/domain/usecases/get_my_pick_me_usecase.dart';
 import '../features/ads_feature/ad_details/data/repositories/ad_details_repo_impl.dart';
 import '../features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import '../features/ads_feature/ads/data/repositories/ads_repo_impl.dart';
@@ -176,6 +180,27 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+      serviceLocator.registerLazySingleton<GetMyPickMeAdsUseCase>(
+      () => GetMyPickMeAdsUseCase(
+        serviceLocator(),
+      ),
+    );
+      serviceLocator.registerLazySingleton<GetMyComeWithMeUseCase>(
+      () => GetMyComeWithMeUseCase(
+        serviceLocator(),
+      ),
+    );
+      serviceLocator.registerLazySingleton<DeletePickMeUseCase>(
+      () => DeletePickMeUseCase(
+        serviceLocator(),
+      ),
+    );
+      serviceLocator.registerLazySingleton<DeleteComeWithMeUseCase>(
+      () => DeleteComeWithMeUseCase(
+        serviceLocator(),
+      ),
+    );
+
 
     // cubits
     serviceLocator.registerSingleton(
@@ -200,6 +225,10 @@ class FourtyNineServiceLocator {
     );
     serviceLocator.registerFactory<MyAddsCubit>(
       () => MyAddsCubit(
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
         serviceLocator(),
       )..loadData(),
     );

@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateful/maps/map_picker.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/requests_history/domain/entities/trip_entity.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/widgets/offer_ride_card.dart';
 
 import '../../../../../common/functions/helper/launch_url.dart';
@@ -16,7 +17,7 @@ import 'started_trip_widget.dart';
 import 'trip_offers_widget.dart';
 
 class TripDetailsWidget extends StatelessWidget {
-  final TripModel trip;
+  final TripEntity trip;
   const TripDetailsWidget({super.key, required this.trip});
 
   @override

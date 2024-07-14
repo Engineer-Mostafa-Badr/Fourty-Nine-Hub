@@ -26,16 +26,12 @@ class RideRequestRepoImpl implements RideRequestRepo {
   }
 
   @override
-  Future<Either<Failure, RideRequestModel>> addNormalRequest(
+  Future<Either<Failure, String>> addNormalRequest(
       {required RideRequestModel request}) {
     return _remoteDataSource.addRideRequest(request: request);
   }
 
-  @override
-  Future<Either<Failure, RideRequestModel>> addPrimaryRequest(
-      {required RideRequestModel request}) {
-    return _remoteDataSource.addRideRequest(request: request);
-  }
+ 
 
   @override
   Future<Either<Failure, bool>> callTheDriver() {

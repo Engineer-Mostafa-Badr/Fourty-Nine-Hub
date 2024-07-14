@@ -6,19 +6,17 @@ import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/requests_history/domain/entities/trip_entity.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/widgets/offer_ride_card.dart';
 
 import '../../../../../common/functions/helper/launch_url.dart';
 
-import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../requests_history/data/models/trip_model.dart';
-import 'cancel_reasons.dart';
 
 class TripOffersWidget extends StatelessWidget {
-  final TripModel trip;
+  final TripEntity trip;
   const TripOffersWidget({super.key, required this.trip});
 
   @override
@@ -48,7 +46,7 @@ class TripOffersWidget extends StatelessWidget {
                     color: AppColors.PRIMARY_COLOR),
                 const Sizer(),
                 Label(
-                  text: trip.category.name,
+                  text: trip.category?.name ?? '',
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
                 ),
               ],
@@ -109,7 +107,7 @@ class TripOffersWidget extends StatelessWidget {
                   children: [
                     const Icon(Icons.timer),
                     const Sizer(),
-                    Label(text: trip.time)
+                    Label(text: trip.time.toString())
                   ],
                 )),
                 Expanded(
@@ -117,20 +115,18 @@ class TripOffersWidget extends StatelessWidget {
                   children: [
                     const Icon(Icons.add_road),
                     const Sizer(),
-                    Label(text: trip.distance)
+                    Label(text: trip.distance.toString())
                   ],
                 )),
               ],
             ),
             const Sizer(),
-            AppButton(label: 'Cancel Trip',
-            icon: Icons.clear,
-             onPressed: () {
-              showErrorMessage(
-            context,
-           'TODO'
-          );
-             }),
+            AppButton(
+                label: 'Cancel Trip',
+                icon: Icons.clear,
+                onPressed: () {
+                  showErrorMessage(context, 'TODO');
+                }),
           ],
         ),
       ),

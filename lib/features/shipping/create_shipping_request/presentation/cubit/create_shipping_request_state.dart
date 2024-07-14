@@ -3,10 +3,9 @@ part of 'create_shipping_request_cubit.dart';
 enum CreateShippingRequestStates { loading, error, initState }
 
 extension CreateShippingRequestStateX on CreateShippingRequestState {
-    bool get isInitial => status == CreateShippingRequestStates.initState;
-    bool get isError => status == CreateShippingRequestStates.error;
-    bool get isLoading => status == CreateShippingRequestStates.loading;
-
+  bool get isInitial => status == CreateShippingRequestStates.initState;
+  bool get isError => status == CreateShippingRequestStates.error;
+  bool get isLoading => status == CreateShippingRequestStates.loading;
 }
 
 @immutable
@@ -22,8 +21,8 @@ class CreateShippingRequestState {
   final String? errorMessage;
   final double? minimumPrice;
   final double? offerPrice;
-  final String? distance;
-  final String? time;
+  final num? distance;
+  final num? time;
   final bool autoAccept;
   final bool isAirConditioned;
   final List<CarTypeModel>? carTypes;
@@ -63,8 +62,8 @@ class CreateShippingRequestState {
     RideRequestModel? request,
     double? minimumPrice,
     double? offerPrice,
-    String? distance,
-    String? time,
+    num? distance,
+    num? time,
     bool? autoAccept,
     bool? isAirConditioned,
     List<CarTypeModel>? carTypes,

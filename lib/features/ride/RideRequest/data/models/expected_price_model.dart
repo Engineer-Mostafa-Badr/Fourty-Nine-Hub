@@ -12,7 +12,7 @@ class ExpectedPriceModel extends ExpectedPriceEntity {
         status: json['status'] ?? true,
         price: json['price'] ?? 80,
         distance: json['distance'],
-        duration: json['time']);
+        duration: json['duration'] ?? 0);
   }
 
   Map<String, dynamic> toJson() {

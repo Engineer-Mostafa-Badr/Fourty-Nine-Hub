@@ -4,64 +4,18 @@ enum RideRequestStatusesEnum {
   initState,
   loading,
   error,
-  isSubscriptionRequired,
-  isNearByPlacesLoading,
-  isNearByPlacesLoaded,
-  isCameraMoving,
-  isNearByPlaceSelected,
-  isFromAndToLocationSelected,
-  isPaymentError,
-  isRequestSent,
-  isWaitingOfferAcceptance,
-  isOfferAccepted,
-  isWaitingDriver,
-  isTripStarted,
-  isAutoAcceptChanged,
-  isAirConiditionedChanged,
-  isTimeAndDistanceLoaded,
-  isCarTypesLoading,
-  isCarTypesLoaded,
-  isCarTypesSelectionChanged,
-  isRequestSentSuccessfully
+  success,
+  requestSent
+  
 }
 
 extension RiderequestStateX on RiderequestState {
   bool get isInitial => status == RideRequestStatusesEnum.initState;
   bool get loading => status == RideRequestStatusesEnum.loading;
   bool get error => status == RideRequestStatusesEnum.error;
-  bool get isNearByPlacesLoading =>
-      status == RideRequestStatusesEnum.isNearByPlacesLoading;
-  bool get isNearByPlacesLoaded =>
-      status == RideRequestStatusesEnum.isNearByPlacesLoaded;
-
-  bool get isNearByPlaceSelected =>
-      status == RideRequestStatusesEnum.isNearByPlaceSelected;
-  bool get isFromAndToLocationSelected =>
-      status == RideRequestStatusesEnum.isFromAndToLocationSelected;
-  bool get isPaymentError => status == RideRequestStatusesEnum.isPaymentError;
-  bool get isCameraMoving => status == RideRequestStatusesEnum.isCameraMoving;
-  bool get isRequestSent => status == RideRequestStatusesEnum.isRequestSent;
-  bool get isWaitingOfferAcceptance =>
-      status == RideRequestStatusesEnum.isWaitingOfferAcceptance;
-  bool get isOfferAccepted => status == RideRequestStatusesEnum.isOfferAccepted;
-  bool get isWaitingDriver => status == RideRequestStatusesEnum.isWaitingDriver;
-  bool get isTripStarted => status == RideRequestStatusesEnum.isTripStarted;
-  bool get isAutoAcceptChanged =>
-      status == RideRequestStatusesEnum.isAutoAcceptChanged;
-  bool get isAirConiditionedChanged =>
-      status == RideRequestStatusesEnum.isAirConiditionedChanged;
-  bool get isTimeAndDistanceLoaded =>
-      status == RideRequestStatusesEnum.isTimeAndDistanceLoaded;
-  bool get isCarTypesLoading =>
-      status == RideRequestStatusesEnum.isCarTypesLoading;
-  bool get isCarTypesLoaded =>
-      status == RideRequestStatusesEnum.isCarTypesLoaded;
-  bool get isCarTypesSelectionChanged =>
-      status == RideRequestStatusesEnum.isCarTypesSelectionChanged;
-  bool get isRequestSentSuccessfully =>
-      status == RideRequestStatusesEnum.isRequestSentSuccessfully;
+  bool get isSuccess => status == RideRequestStatusesEnum.success;
+  bool get isRequestSent => status == RideRequestStatusesEnum.requestSent;
 }
-
 
 class RiderequestState {
   final RideRequestStatusesEnum status;
@@ -75,8 +29,10 @@ class RiderequestState {
   final String? errorMessage;
   final double? minimumPrice;
   final double? offerPrice;
-  final String? distance;
-  final String? time;
+  final num? distance;
+  final String? phone;
+  final num? time;
+  final int? passengers;
   final bool autoAccept;
   final bool isAirConditioned;
   final List<CarTypeModel>? carTypes;
@@ -96,8 +52,10 @@ class RiderequestState {
       this.toAddress,
       this.minimumPrice = 0,
       this.offerPrice = 0,
+      this.passengers = 1,
       this.autoAccept = false,
       this.isAirConditioned = false,
+      this.phone,
       this.time,
       this.distance,
       this.selectedCarTypes,
@@ -116,13 +74,15 @@ class RiderequestState {
     RideRequestModel? request,
     double? minimumPrice,
     double? offerPrice,
-    String? distance,
-    String? time,
+    num? distance,
+    num? time,
     bool? autoAccept,
     bool? isAirConditioned,
     List<CarTypeModel>? carTypes,
     List<CarTypeModel>? selectedCarTypes,
     Failure? failure,
+    String? phone,
+    int? passengers,
     List<SubCategoryModel>? subCategories,
     SubCategoryModel? subCategory,
   }) {
@@ -142,10 +102,11 @@ class RiderequestState {
       autoAccept: autoAccept ?? this.autoAccept,
       isAirConditioned: isAirConditioned ?? this.isAirConditioned,
       carTypes: carTypes ?? this.carTypes,
+      phone: phone ?? this.phone,
       selectedCarTypes: selectedCarTypes ?? this.selectedCarTypes,
       failure: failure ?? this.failure,
       subCategory: subCategory ?? this.subCategory,
-
+      passengers: passengers ?? this.passengers,
     );
   }
 }

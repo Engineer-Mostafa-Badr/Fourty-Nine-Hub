@@ -24,12 +24,13 @@ class JsonParser implements ApiConsumer {
       {Map<String, dynamic>? queryParameters}) async {
     try {
       final response = jsonDecode(await rootBundle.loadString(url));
-      print('-----------------------------------------');
-      print(response);
+      
       return Right(response as Map<String, dynamic>);
+
     } catch (e) {
-      print(e);
+      
       return Left(_getFailure(e));
+    
     }
   }
 

@@ -20,30 +20,37 @@ class TripModel extends TripEntity {
       required super.driver,
       required super.category,
       required super.started,
+      required super.passengers,
       required super.ended,
       required super.canceled});
 
   factory TripModel.fromJson(Map<String, dynamic> json) {
     return TripModel(
-      id: json['id'],
-      fromCoordinates: json['from_coordinates'].cast<double>(),
-      toCoordinates: json['to_coordinates'].cast<double>(),
-      fromAddress: json['from_address'],
-      toAddress: json['to_address'],
+      id: json['id'] ?? json['_id'],
+      fromCoordinates: json['startLocation']['coordinates'].cast<double>(),
+      toCoordinates: json['targetLocation']['coordinates'].cast<double>(),
+      fromAddress: json['from'],
+      toAddress: json['to'],
       price: json['price'],
-      time: json['time'],
+      time: json['duration'],
       distance: json['distance'],
-      started: json['started'],
-      ended: json['ended'],
+      started: json['started'] ?? false,
+      ended: json['ended'] ?? false,
       canceled: json['canceled'] = false,
+      passengers: json['passengers'] ?? 0,
       calls: json['calls'] != null
           ? (json['calls'] as List).map((e) => CallModel.fromJson(e)).toList()
           : [],
-      offers:
-          (json['offers'] as List).map((e) => OfferModel.fromJson(e)).toList(),
+      offers: json['offers'] == null
+          ? []
+          : (json['offers'] as List)
+              .map((e) => OfferModel.fromJson(e))
+              .toList(),
       driver:
           json['driver'] != null ? DriverModel.fromJson(json['driver']) : null,
-      category: SubCategoryModel.fromJson(json['category']),
+      category: json['category'] == null
+          ? null
+          : SubCategoryModel.fromJson(json['category']),
     );
   }
 

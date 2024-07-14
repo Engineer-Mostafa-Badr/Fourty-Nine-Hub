@@ -28,15 +28,4 @@ extension MainServicesEnumExtention on MainServicesEnum {
   }
 }
 
-MainServicesEnum getRideServiceEnum({
-  required String value,
-}) {
-  switch (value) {
-    case '62c8b5779332225799fe3302':
-      return MainServicesEnum.shipping;
-    case '62c8b5779332225799fe3304':
-      return MainServicesEnum.ride;
-    
-  }
-  return MainServicesEnum.ride;
-}
+

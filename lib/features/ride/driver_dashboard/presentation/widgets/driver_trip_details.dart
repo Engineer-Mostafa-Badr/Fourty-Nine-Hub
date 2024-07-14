@@ -43,7 +43,7 @@ class DriverTripDetails extends StatelessWidget {
               const Icon(FontAwesomeIcons.car, color: AppColors.PRIMARY_COLOR),
               const Sizer(),
               Label(
-                text: trip.category.name,
+                text: trip.category?.name??"",
                 style: Styles.mediumText(fontWeight: FontWeight.bold),
               ),
             ],
@@ -103,7 +103,7 @@ class DriverTripDetails extends StatelessWidget {
                 children: [
                   const Icon(Icons.timer),
                   const Sizer(),
-                  Label(text: trip.time)
+                  Label(text: trip.time.toString())
                 ],
               )),
               Expanded(
@@ -111,7 +111,7 @@ class DriverTripDetails extends StatelessWidget {
                 children: [
                   const Icon(Icons.add_road),
                   const Sizer(),
-                  Label(text: trip.distance)
+                  Label(text: trip.distance.toString())
                 ],
               )),
             ],

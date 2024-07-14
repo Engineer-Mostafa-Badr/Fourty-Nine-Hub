@@ -2,10 +2,15 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
+import '../../../../requests_history/domain/entities/trip_entity.dart';
+import '../../../../ride/trip_details/domain/entities/trip_and_request_entity.dart';
 
 abstract class MyAdsRepo {
-   Future<Either<Failure, List<AdEntity>>> getAds();
+  Future<Either<Failure, List<AdEntity>>> getAds();
   Future<Either<Failure, bool>> cancelAd({required int id});
   Future<Either<Failure, bool>> deactivateAd({required int id});
+  Future<Either<Failure, List<TripAndRequestEntity>>> getComeWithMeAds();
+  Future<Either<Failure, List<TripAndRequestEntity>>> getPickMeAds();
+  Future<Either<Failure, bool>> deleteComeWithMeAd({required String id});
+  Future<Either<Failure, bool>> deletePickMeAd({required String id});
 }
-

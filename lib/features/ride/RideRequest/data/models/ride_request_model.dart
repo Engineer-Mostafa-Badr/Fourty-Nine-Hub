@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
+
 import '../../domain/entity/ride_request_entity.dart';
 
 class RideRequestModel extends RideRequestEntity {
@@ -13,23 +15,47 @@ class RideRequestModel extends RideRequestEntity {
       required super.categoryId,
       super.driverId,
       super.userId,
+      super.vechileId,
+      super.price,
+      super.passengers,
       required super.isAirConditioned,
       required super.id,
       required super.phone});
 
-  Map<String, dynamic> toJson() => {
-        "category_id": categoryId,
-        "air_conditioner": isAirConditioned,
-        "car_model_year": carTypes,
-        "destination_lng": toLng,
-        "destination_lat": toLat,
-        "user_lng": fromLat,
-        "user_lat": fromLng,
-        "phone": phone,
-        "price": 20,
-        "passengers": 1,
-        "from": fromAddress,
-        "to": toAddress,
-        "auto_accept": autoAccept
-      };
+  Map<String, dynamic> toJson() => service == RideServicesEnum.pickMe ||
+          service == RideServicesEnum.comeWithYou
+      ? {
+          if (service == RideServicesEnum.comeWithYou)
+            "vehicleId": vechileId ?? "6655b7fca0e144a679df98be",
+          "categoryId": categoryId,
+          "startLocation": [fromLat, fromLng],
+          "targetLocation": [toLat, toLng],
+          "from": fromAddress,
+          "to": toAddress,
+          "passengers": passengers ?? 1,
+          "price": price,
+          "phone": phone,
+          "time": DateTime.now().millisecondsSinceEpoch, // timestamp utc
+          "isRepeat": false,
+          "note": "optional", // optional
+          "distance": 4499484,
+          "duration": 147270
+        }
+      : {
+          "vehicleId": vechileId ?? "6655b7fca0e144a679df98be",
+          "categoryId": categoryId,
+          "startLocation": [fromLat, fromLng],
+          "targetLocation": [toLat, toLng],
+          "fromTitle": fromAddress,
+          "toTitle": toAddress,
+          "passengers": passengers ?? 1,
+          "autoAccept": autoAccept,
+          "price": price,
+          "phone": phone,
+          "time": DateTime.timestamp(), // timestamp utc
+          "isRepeat": false,
+          "note": "optional", // optional
+          "distance": 4499484,
+          "duration": 147270
+        };
 }

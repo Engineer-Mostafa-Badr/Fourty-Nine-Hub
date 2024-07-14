@@ -1,11 +1,17 @@
+import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
+
 class RideRequestEntity {
-  final int id;
+  final String id;
+  RideServicesEnum get service => getRideServiceEnum(value: categoryId);
   final String categoryId;
   final String fromAddress;
   final String toAddress;
   final int? userId;
   final int? driverId;
   final double fromLat;
+  final double? price;
+  final int? passengers;
+  final String? vechileId;
   final double fromLng;
   final double toLat;
   final double toLng;
@@ -18,8 +24,11 @@ class RideRequestEntity {
       required this.fromAddress,
       required this.toAddress,
       required this.categoryId,
+      required this.vechileId,
       this.userId,
       this.driverId,
+      this.price,
+      this.passengers,
       required this.fromLat,
       required this.fromLng,
       required this.toLat,
