@@ -3,10 +3,8 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
-import 'package:fourtyninehub/features/requests_history/domain/entities/trip_entity.dart';
 import 'package:fourtyninehub/features/ride/trip_details/domain/entities/trip_and_request_entity.dart';
 
-import '../../../../ride/trip_details/data/models/trip_and_request_model.dart';
 import '../../domain/repositories/my_ads_repo.dart';
 import '../datasources/my_add_remote_datasource.dart';
 
@@ -48,5 +46,27 @@ class MyAdsRepoImpl implements MyAdsRepo {
   @override
   Future<Either<Failure, List<TripAndRequestEntity>>> getPickMeAds() {
     return _remoteDatasource.getPickMeAds();
+  }
+
+  @override
+  Future<Either<Failure, bool>> acceptComeWithYouRequests(
+      {required String id}) {
+    return _remoteDatasource.acceptComeWithYouRequests(id: id);
+  }
+
+  @override
+  Future<Either<Failure, bool>> acceptPickMeRequest({required String id}) {
+    return _remoteDatasource.acceptPickMeRequest(id: id);
+  }
+
+  @override
+  Future<Either<Failure, bool>> rejectComeWithYouRequests(
+      {required String id}) {
+    return _remoteDatasource.rejectComeWithYouRequests(id: id);
+  }
+
+  @override
+  Future<Either<Failure, bool>> rejectPickMeRequest({required String id}) {
+    return _remoteDatasource.rejectPickMeRequest(id: id);
   }
 }

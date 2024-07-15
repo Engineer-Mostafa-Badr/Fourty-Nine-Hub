@@ -16,6 +16,10 @@ abstract class MyAdsRemoteDatasource {
   Future<Either<Failure, List<TripAndRequestModel>>> getPickMeAds();
   Future<Either<Failure, bool>> deleteComeWithMeAd({required String id});
   Future<Either<Failure, bool>> deletePickMeAd({required String id});
+  Future<Either<Failure, bool>> acceptPickMeRequest({required String id});
+  Future<Either<Failure, bool>> rejectPickMeRequest({required String id});
+  Future<Either<Failure, bool>> acceptComeWithYouRequests({required String id});
+  Future<Either<Failure, bool>> rejectComeWithYouRequests({required String id});
   Future<Either<Failure, bool>> cancelAd({required int id});
   Future<Either<Failure, bool>> deactivateAd({required int id});
 }
@@ -76,5 +80,35 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
         (data) => Right((data['data'] as List)
             .map((e) => TripAndRequestModel.fromJson(e))
             .toList()));
+  }
+
+  @override
+  Future<Either<Failure, bool>> acceptComeWithYouRequests(
+      {required String id}) async {
+    final response =
+        await _apiConsumer.put(EndPoints.acceptComeWithYouRequest(id));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> acceptPickMeRequest(
+      {required String id}) async {
+    final response = await _apiConsumer.put(EndPoints.acceptPickMeRequest(id));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> rejectComeWithYouRequests(
+      {required String id}) async {
+    final response =
+        await _apiConsumer.put(EndPoints.rejectComeWithYouRequest(id));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> rejectPickMeRequest(
+      {required String id}) async {
+    final response = await _apiConsumer.put(EndPoints.rejectPickMeRequest(id));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 }

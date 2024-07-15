@@ -1,3 +1,6 @@
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
+
+import '../../../../res/style/const.dart';
 import '../../domain/entities/main_category_entity.dart';
 
 class MainCategoryModel extends MainCategoryEntity {
@@ -13,12 +16,12 @@ class MainCategoryModel extends MainCategoryEntity {
 
   factory MainCategoryModel.fromJson(Map<String, dynamic> json) =>
       MainCategoryModel(
-        id: json['id'],
-        name: json['name'],
-        image: json['image'],
-        banner: json['banner'],
-        cover: json['cover'],
-        isFavorite: json['is_favorite'] == true,
+        id: json['_id'],
+        name: getLang()=='ar'?json['nameAr']:json['nameEn'],
+        image: json['image']??UIConst.imagePlaceHolder,
+        banner: json['banner']??'',
+        cover: json['cover']??'',
+        isFavorite: json['is_favorite']??false,
         total: json['total'] ?? 0,
       );
 }

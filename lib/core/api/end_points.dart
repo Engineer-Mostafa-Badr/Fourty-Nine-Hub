@@ -11,7 +11,7 @@ class EndPoints {
   static const socialLogin = '/auth/social/login';
   static const resendOTP = '/auth/resend-reset-code';
   static const refreshToken = '/auth/refresh/token';
-  static const getParentMainCategories = '/categories/get-parent-category';
+  static const getParentMainCategories = '/category/parent';
   static const getMainCategories = '/categories/main';
   static const getWheel = '/wheels/random';
   static const spinWheel = '/wheels/spin/';
@@ -32,10 +32,36 @@ class EndPoints {
   static const riderInfoRegister = '/ride/riders/register';
   static const sendComeWithYou = '/ride/come-with-you';
   static const sendPickMe = '/ride/pick-me';
+  static String acceptPickMeRequest(String id) {
+    return '/ride/pick-me/$id/accept';
+  }
+
+  static String rejectPickMeRequest(String id) {
+    return '/ride/pick-me/$id/reject';
+  }
+
+  static String acceptComeWithYouRequest(String id) {
+    return '/ride/come-with-you/$id/accept';
+  }
+
+  static String rejectComeWithYouRequest(String id) {
+    return '/ride/come-with-you/$id/reject';
+  }
+
   static const sendRideRequest = '/ride/trips/new';
   static const getMyPickMeTrips = '/ride/pick-me/trip/requests';
+  static const getAllComeWithMeAds = '/ride/come-with-you/get-all';
+  static const getAllPickMeAds = '/ride/pick-me/get-all';
   static String deletePickMeTrips(String id) {
     return '/ride/pick-me/Delete/$id';
+  }
+
+  static String requestPickMe(String id) {
+    return '/ride/pick-me/request/$id';
+  }
+
+  static String requestComeWithMe(String id) {
+    return '/ride/come-with-you/request/$id';
   }
 
   static String deleteComeWithYouTrips(String id) {
@@ -43,12 +69,53 @@ class EndPoints {
   }
 
   static const getMyComeWithYouTrips = '/ride/come-with-you/trip/requests';
+  static const getRiderNewTrips = '/ride/trips/rider?limit=20&page=1';
   // social
 
   static const createFacebookPost = '/facebook/post';
   static const getFeedPosts = '/facebook/feed';
   static String userPosts(String userId) {
     return '/facebook/post/user/$userId?limit=20&page=1&type=1';
+  }
+
+  static String acceptTripRider(String id) {
+    return '/ride/trips/accept/$id';
+  }
+
+  static String riderInStartLocation(String id) {
+    return '/ride/trips/in-start-location/$id';
+  }
+
+  static String startTripRider(String id) {
+    return '/ride/trips/start/$id';
+  }
+
+  static String completedTripRider(String id) {
+    return '/ride/trips/complete/$id';
+  }
+
+  static String cancelTripRider(String id) {
+    return '/ride/trips/cancel-by-rider/$id';
+  }
+
+  static String cancelTripClient(String id) {
+    return '/ride/trips/cancel-by-client/$id';
+  }
+
+  static String createOffer(String id) {
+    return '/ride/offers/new/offer/$id';
+  }
+
+  static String acceptOffer(String id) {
+    return '/ride/offers/accept/offer/$id';
+  }
+
+  static String rejectOffer(String id) {
+    return '/ride/offers/decline/offer/$id';
+  }
+
+  static String getTripOffers(String id) {
+    return '/ride/offers/trip/$id';
   }
 
   static String reactOnPost(String postId) {

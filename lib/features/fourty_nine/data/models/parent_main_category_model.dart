@@ -1,5 +1,7 @@
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/main_category_model.dart';
 
+import '../../../../res/style/const.dart';
 import '../../domain/entities/parent_main_category_entity.dart';
 
 class ParentMainCategoryModel extends ParentMainCategoryEntity {
@@ -12,10 +14,10 @@ class ParentMainCategoryModel extends ParentMainCategoryEntity {
 
   factory ParentMainCategoryModel.fromJson(Map<String, dynamic> json) =>
       ParentMainCategoryModel(
-        id: json['id'],
-        name: json['name'],
-        image: json['image'],
-        mainCategories: (json['main_categories'] as List)
+        id: json['_id'],
+        name: getLang()=='ar'? json['name_ar']:json['name_en'],
+        image: json['image']??UIConst.imagePlaceHolder,
+        mainCategories: (json['mainCategories'] as List)
             .map((e) => MainCategoryModel.fromJson(e))
             .toList(),
       );

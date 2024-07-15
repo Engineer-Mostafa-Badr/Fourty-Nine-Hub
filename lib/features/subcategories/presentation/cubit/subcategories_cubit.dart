@@ -12,13 +12,13 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   SubcategoriesCubit(this._getSubcategoriesUsecase)
       : super(const SubcategoriesState());
 
-  void loadData() async {
-    final response = await _getSubcategoriesUsecase.call('params');
+  void loadData({required String mainCategoryId}) async {
+    emit(state.copyWith(status: SubcategoriesStates.loading));
+    final response = await _getSubcategoriesUsecase(mainCategoryId);
     response.fold(
         (failure) => emit(state.copyWith(
             failure: failure, status: SubcategoriesStates.error)),
-        (data) => emit(state.copyWith(subCategories: data, 
-        status: SubcategoriesStates.initState
-        )));
+        (data) => emit(state.copyWith(
+            subCategories: data, status: SubcategoriesStates.initState)));
   }
 }

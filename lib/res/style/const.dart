@@ -15,7 +15,7 @@ class UIConst {
   static const String profilePlaceHolder =
       'https://st3.depositphotos.com/9998432/13335/v/450/depositphotos_133352010-stock-illustration-default-placeholder-man-and-woman.jpg';
   static const String imagePlaceHolder =
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY61A56uaiLPMPRTANVI_mGgAlTGcQIuf4NF2dCdLTKw&s';
+      'https://archive.org/download/placeholder-image/placeholder-image.jpg';
   static const String placeholderText =
       'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups. Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups. Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups. Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.';
   static const String mrbeast =

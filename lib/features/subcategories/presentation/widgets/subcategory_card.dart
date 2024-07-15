@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../res/style/const.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../domain/entities/sub_category_entity.dart';
@@ -19,7 +18,7 @@ class SubCategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.ADS),
+      onTap: () => context.push(Routes.ADS, extra: item.id),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: Column(
@@ -31,9 +30,10 @@ class SubCategoryCard extends StatelessWidget {
                 children: [
                   Positioned.fill(
                     child: SquareImage(
-                        fit: BoxFit.fitWidth,
-                        radius: 10,
-                        source: NetworkImage(item.image)),
+                      fit: BoxFit.fitWidth,
+                      radius: 10,
+                      url: item.image,
+                    ),
                   ),
                   Positioned(
                       top: 5,

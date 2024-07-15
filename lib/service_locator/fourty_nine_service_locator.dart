@@ -5,7 +5,11 @@ import 'package:fourtyninehub/features/account_taps/contact_us/domain/usecases/g
 import 'package:fourtyninehub/features/account_taps/my_adds/data/datasources/my_add_remote_datasource.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/data/repositories/my_ads_repo_impl.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/repositories/my_ads_repo.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/accept_come_with_me_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/accept_pick_me_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/get_my_ads_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/reject_come_with_me_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/reject_pick_me_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/data/datasources/ad_details_remote_data_source.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/repositories/ad_details_repo.dart';
@@ -14,6 +18,10 @@ import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/ge
 import 'package:fourtyninehub/features/ads_feature/ads/data/datasources/ads_remote_data_source.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/repositories/ads_repo.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_all_comewithme_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_all_pickme_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_come_with_me_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_pick_me_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/datasources/create_ad_remote_datasource.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/repositories/create_ad_repo_impl.dart';
@@ -159,6 +167,26 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+       serviceLocator.registerLazySingleton<GetAllPickMeUseCase>(
+      () => GetAllPickMeUseCase(
+        serviceLocator(),
+      ),
+    );
+     serviceLocator.registerLazySingleton<GetAllComeWithMeUseCase>(
+      () => GetAllComeWithMeUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<RequestPickMeUseCase>(
+      () => RequestPickMeUseCase(
+        serviceLocator(),
+      ),
+    );
+     serviceLocator.registerLazySingleton<RequestComeWithMeUseCase>(
+      () => RequestComeWithMeUseCase(
+        serviceLocator(),
+      ),
+    );
 
     serviceLocator.registerLazySingleton<GetAdPropertiesUsecase>(
       () => GetAdPropertiesUsecase(
@@ -200,7 +228,26 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-
+ serviceLocator.registerLazySingleton<AcceptComeWithMeUseCase>(
+      () => AcceptComeWithMeUseCase(
+        serviceLocator(),
+      ),
+    );
+     serviceLocator.registerLazySingleton<RejectComeWithMeUseCase>(
+      () => RejectComeWithMeUseCase(
+        serviceLocator(),
+      ),
+    );
+     serviceLocator.registerLazySingleton<AcceptPickMeUseCase>(
+      () => AcceptPickMeUseCase(
+        serviceLocator(),
+      ),
+    );
+     serviceLocator.registerLazySingleton<RejectPickMeUseCase>(
+      () => RejectPickMeUseCase(
+        serviceLocator(),
+      ),
+    );
 
     // cubits
     serviceLocator.registerSingleton(
@@ -230,6 +277,10 @@ class FourtyNineServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
       )..loadData(),
     );
 
@@ -242,12 +293,16 @@ class FourtyNineServiceLocator {
     serviceLocator.registerSingleton(
       SubcategoriesCubit(
         serviceLocator(),
-      )..loadData(),
+      )
     );
     serviceLocator.registerFactory<AdsCubit>(
       () => AdsCubit(
         serviceLocator(),
-      )..loadData(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+      ),
     );
     // CreateAdCubit
     serviceLocator.registerFactory<CreateAdCubit>(

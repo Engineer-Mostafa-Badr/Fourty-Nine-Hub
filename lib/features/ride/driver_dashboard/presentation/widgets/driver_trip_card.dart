@@ -12,11 +12,18 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../requests_history/data/models/trip_model.dart';
+import '../../domain/usecases/create_rider_offer_usecase.dart';
 import 'driver_trip_details.dart';
 
 class DriverTripCard extends StatelessWidget {
   final TripModel trip;
-  const DriverTripCard({super.key, required this.trip});
+  final Function(CreateRiderOfferParams) createOffer;
+  final Function(String) acceptRide;
+  const DriverTripCard(
+      {super.key,
+      required this.trip,
+      required this.acceptRide,
+      required this.createOffer});
   @override
   Widget build(BuildContext context) {
     return Dismissible(
@@ -27,6 +34,8 @@ class DriverTripCard extends StatelessWidget {
             isScrollControlled: true,
             widget: DriverTripDetails(
               trip: trip,
+              acceptRide: acceptRide,
+              createOffer: createOffer,
             )),
         child: Container(
           padding: const EdgeInsets.all(5),
@@ -41,7 +50,7 @@ class DriverTripCard extends StatelessWidget {
                       color: AppColors.PRIMARY_COLOR),
                   const Sizer(),
                   Label(
-                    text: trip.category?.name??'',
+                    text: trip.category?.name ?? '',
                     style: Styles.mediumText(fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -114,7 +123,7 @@ class DriverTripCard extends StatelessWidget {
               ProgressButton(
                 label: 'Accept',
                 width: double.infinity,
-                onPressed: () => context.push(Routes.TRIPDETAILS),
+                onPressed: ()=> acceptRide(trip.id),
               ),
             ],
           ),

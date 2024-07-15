@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 
 class MainCategoryEntity extends Equatable {
-  final int id;
+  final String id;
   final String name;
   final String image;
   @protected

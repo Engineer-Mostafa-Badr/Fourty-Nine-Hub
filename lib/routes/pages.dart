@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 
@@ -145,17 +146,19 @@ class AppPages {
         GoRoute(
             path: Paths.SUBCATEGORIES,
             name: Routes.SUBCATEGORIES,
-            builder: (context, state) => BlocProvider<SubcategoriesCubit>(
-                  create: (_) => serviceLocator(),
-                  child: const SubCategoriesView(),
+            builder: (context, state) => BlocProvider.value(
+                  value: serviceLocator<SubcategoriesCubit>(),
+                  child: SubCategoriesView(
+                    mainCategoryId: state.extra as String,
+                  ),
                 ),
             routes: [
               GoRoute(
                   path: Paths.ADS,
                   name: Routes.ADS,
-                  builder: (context, state) => BlocProvider<AdsCubit>(
-                        create: (_) => serviceLocator(),
-                        child: const AdsView(),
+                  builder: (context, state) => BlocProvider.value(
+                        value:  serviceLocator<AdsCubit>(),
+                        child:  AdsView(subCategoryId: state.extra as String,),
                       ),
                   routes: [
                     GoRoute(

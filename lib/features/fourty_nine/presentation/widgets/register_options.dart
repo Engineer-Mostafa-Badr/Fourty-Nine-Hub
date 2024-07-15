@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../core/states/basic_state.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/styles.dart';
@@ -43,7 +44,7 @@ class RegisterOptions extends StatelessWidget {
                             label: e.name, image: e.image);
                       }).toList() ??
                       [],
-                   _buildRegisterOptionItem(context,
+                  _buildRegisterOptionItem(context,
                       isSvg: true, label: 'Restaurant', image: Assets.food),
                   _buildRegisterOptionItem(context,
                       isSvg: true, label: 'Doctor', image: Assets.health),
@@ -71,7 +72,11 @@ class RegisterOptions extends StatelessWidget {
           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-                child: isSvg ? SvgPicture.asset(image) : Image.network(image)),
+                child: isSvg
+                    ? SvgPicture.asset(image)
+                    : SquareImage(
+                        url: image,
+                      )),
             Label(
               text: label,
               maxLines: 1,

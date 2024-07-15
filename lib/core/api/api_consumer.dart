@@ -102,7 +102,8 @@ class BaseApiConsumer extends ApiConsumer {
       if (result.data['status']) {
         return Right(result.data as Map<String, dynamic>);
       } else {
-        return Left(ValidationFailure(result.data['message']));
+        return Left(ValidationFailure(
+            result.data['message'] ?? result.data['error']['message']));
       }
     } catch (e) {
       if (e is DioException &&
@@ -134,7 +135,12 @@ class BaseApiConsumer extends ApiConsumer {
         queryParameters: queryParameters,
       );
 
-      return Right(result.data as Map<String, dynamic>);
+      if (result.data['status']) {
+        return Right(result.data as Map<String, dynamic>);
+      } else {
+        return Left(ValidationFailure(
+            result.data['message'] ?? result.data['error']['message']));
+      }
     } catch (e) {
       if (e is DioException &&
           e.response?.statusCode == 401 &&
@@ -164,7 +170,12 @@ class BaseApiConsumer extends ApiConsumer {
         data: data,
         queryParameters: queryParameters,
       );
-      return Right(result.data as Map<String, dynamic>);
+      if (result.data['status']) {
+        return Right(result.data as Map<String, dynamic>);
+      } else {
+        return Left(ValidationFailure(
+            result.data['message'] ?? result.data['error']['message']));
+      }
     } catch (e) {
       if (e is DioException &&
           e.response?.statusCode == 401 &&

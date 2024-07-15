@@ -1,15 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 
 class SquareImage extends StatelessWidget {
-  final ImageProvider source;
+  final ImageProvider? source;
+  final String? url;
   final double? height, width, radius;
   final BoxFit? fit;
 
   const SquareImage(
       {super.key,
-      required this.source,
+      this.source,
       this.height,
       this.width,
+      this.url,
       this.radius,
       this.fit});
 
@@ -20,10 +24,17 @@ class SquareImage extends StatelessWidget {
       child: SizedBox(
         height: height,
         width: width,
-        child: Image(
-          image: source,
-          fit: fit ?? BoxFit.cover,
-        ),
+        child: url == null
+            ? Image(
+                image: source!,
+              )
+            : CachedNetworkImage(
+                fit: fit ?? BoxFit.cover,
+                errorWidget: (context, i, v) {
+                  return Image.network(UIConst.imagePlaceHolder);
+                },
+                imageUrl: url!,
+              ),
       ),
     );
   }

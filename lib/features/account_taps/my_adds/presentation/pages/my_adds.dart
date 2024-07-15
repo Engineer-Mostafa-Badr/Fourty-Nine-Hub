@@ -46,7 +46,7 @@ class MyAddsView extends StatelessWidget {
                       text: 'Come With Me',
                     ),
                     Tab(
-                      text: 'My Ads',
+                      text: 'Other',
                     ),
                   ]),
                   Expanded(
@@ -82,6 +82,7 @@ class MyAddsView extends StatelessWidget {
 
   Widget _buildMyPickMeTripsWidget() {
     return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
+      final controller = context.read<MyAddsCubit>();
       return ListView.separated(
           itemCount: state.pickMeTrips?.length ?? 0,
           separatorBuilder: (context, index) => const Sizer(),
@@ -89,6 +90,10 @@ class MyAddsView extends StatelessWidget {
             return TripCard(
               requests: state.pickMeTrips![index].requests,
               trip: state.pickMeTrips![index].trip,
+              showDelete: true,
+              onAccept: (String id) => controller.acceptPickMeRequest(id: id),
+              onReject: (String id) => controller.rejectPickMeRequest(id: id),
+              onDelete: (String id) => controller.deletePickMeRequest(id: id),
             );
           });
     });
@@ -96,6 +101,8 @@ class MyAddsView extends StatelessWidget {
 
   Widget _buildMyComeWithmeWidget() {
     return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
+      final controller = context.read<MyAddsCubit>();
+
       return ListView.separated(
           itemCount: state.comeWithMeTrips?.length ?? 0,
           separatorBuilder: (context, index) => const Sizer(),
@@ -103,6 +110,12 @@ class MyAddsView extends StatelessWidget {
             return TripCard(
               requests: state.comeWithMeTrips![index].requests,
               trip: state.comeWithMeTrips![index].trip,
+              showDelete: true,
+              onAccept: (String id) =>
+                  controller.acceptComeWithMeRequest(id: id),
+              onReject: (String id) =>
+                  controller.rejectComeWithMeRequest(id: id),
+              onDelete: (String id) => controller.deleteComeWithMe(id: id),
             );
           });
     });

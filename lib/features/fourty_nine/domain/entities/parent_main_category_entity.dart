@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'main_category_entity.dart';
 
 class ParentMainCategoryEntity extends Equatable {
-  final int id;
+  final String id;
   final String name;
   final String image;
   final List<MainCategoryEntity> mainCategories;

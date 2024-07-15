@@ -1,15 +1,15 @@
 part of 'driver_dashboard_cubit.dart';
 
-enum DriverDashboardStates { loading, initState, error }
+enum DriverDashboardStates { loading, initState, error, success }
 
 extension DriverDashboardStateX on DriverDashboardState {
   bool get isLoading => status == DriverDashboardStates.loading;
   bool get isInitState => status == DriverDashboardStates.initState;
   bool get isError => status == DriverDashboardStates.error;
+  bool get isSuccess => status == DriverDashboardStates.success;
 }
 
-@immutable
-class DriverDashboardState extends Equatable {
+class DriverDashboardState {
   final Failure? failure;
   final DriverDashboardStates? status;
   final DriverStatisticsModel? statistics;
@@ -38,7 +38,4 @@ class DriverDashboardState extends Equatable {
         statistics: statistics ?? this.statistics,
         trips: trips ?? this.trips);
   }
-
-  @override
-  List<Object> get props => [];
 }

@@ -13,4 +13,8 @@ abstract class MyAdsRepo {
   Future<Either<Failure, List<TripAndRequestEntity>>> getPickMeAds();
   Future<Either<Failure, bool>> deleteComeWithMeAd({required String id});
   Future<Either<Failure, bool>> deletePickMeAd({required String id});
+    Future<Either<Failure, bool>> acceptPickMeRequest({required String id});
+  Future<Either<Failure, bool>> rejectPickMeRequest({required String id});
+  Future<Either<Failure, bool>> acceptComeWithYouRequests({required String id});
+  Future<Either<Failure, bool>> rejectComeWithYouRequests({required String id});
 }

@@ -42,7 +42,6 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
             ),
           );
         } else if (state.isRequestSent) {
-         
           showSuccessMessage(context, Labels.success);
         }
       },
@@ -100,7 +99,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                                         child: SquareImage(
                                       fit: BoxFit.fitHeight,
                                       width: 50,
-                                      source: NetworkImage(subCategory.image),
+                                      url: subCategory.image,
                                     )),
                                     Label(
                                         text: subCategory.name,

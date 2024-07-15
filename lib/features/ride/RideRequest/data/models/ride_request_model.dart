@@ -42,20 +42,17 @@ class RideRequestModel extends RideRequestEntity {
           "duration": 147270
         }
       : {
-          "vehicleId": vechileId ?? "6655b7fca0e144a679df98be",
-          "categoryId": categoryId,
+          "subCategory": categoryId,
           "startLocation": [fromLat, fromLng],
           "targetLocation": [toLat, toLng],
-          "fromTitle": fromAddress,
-          "toTitle": toAddress,
+
           "passengers": passengers ?? 1,
           "autoAccept": autoAccept,
           "price": price,
           "phone": phone,
-          "time": DateTime.timestamp(), // timestamp utc
-          "isRepeat": false,
+          "scheduleTime":
+              DateTime.now().millisecondsSinceEpoch, // timestamp utc
+          "paymentMethod": "cash",
           "note": "optional", // optional
-          "distance": 4499484,
-          "duration": 147270
         };
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateful/maps/map_picker.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/ride/driver_dashboard/domain/usecases/create_rider_offer_usecase.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/functions/helper/launch_url.dart';
@@ -16,7 +17,13 @@ import '../../../../requests_history/data/models/trip_model.dart';
 
 class DriverTripDetails extends StatelessWidget {
   final TripModel trip;
-  const DriverTripDetails({super.key, required this.trip});
+  final Function(CreateRiderOfferParams) createOffer;
+  final Function(String) acceptRide;
+  const DriverTripDetails(
+      {super.key,
+      required this.trip,
+      required this.acceptRide,
+      required this.createOffer});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +50,7 @@ class DriverTripDetails extends StatelessWidget {
               const Icon(FontAwesomeIcons.car, color: AppColors.PRIMARY_COLOR),
               const Sizer(),
               Label(
-                text: trip.category?.name??"",
+                text: trip.category?.name ?? "",
                 style: Styles.mediumText(fontWeight: FontWeight.bold),
               ),
             ],
@@ -120,7 +127,7 @@ class DriverTripDetails extends StatelessWidget {
           ProgressButton(
             label: 'Accept',
             width: double.infinity,
-            onPressed: () => context.push(Routes.TRIPDETAILS),
+            onPressed: () => acceptRide(trip.id),
           ),
           const Sizer(),
           const Label(text: 'Offer your price'),
@@ -131,19 +138,40 @@ class DriverTripDetails extends StatelessWidget {
                   child: AppButton(
                       label:
                           '${(trip.price) + offerIncreaseValue(price: trip.price)} L.E',
-                      onPressed: () {})),
+                      onPressed: () {
+                        createOffer(CreateRiderOfferParams(
+                            tripId: trip.id,
+                            price: (trip.price) +
+                                offerIncreaseValue(price: trip.price),
+                            lat: 50.00,
+                            lng: 30.450));
+                      })),
               const Sizer(),
               Expanded(
                   child: AppButton(
                       label:
                           '${(trip.price) + offerIncreaseValue(price: trip.price) * 2} L.E',
-                      onPressed: () {})),
+                      onPressed: () {
+                        createOffer(CreateRiderOfferParams(
+                            tripId: trip.id,
+                            price: (trip.price) +
+                                offerIncreaseValue(price: trip.price * 2),
+                            lat: 50.00,
+                            lng: 30.450));
+                      })),
               const Sizer(),
               Expanded(
                   child: AppButton(
                       label:
                           '${(trip.price) + offerIncreaseValue(price: trip.price) * 3} L.E',
-                      onPressed: () {})),
+                      onPressed: () {
+                        createOffer(CreateRiderOfferParams(
+                            tripId: trip.id,
+                            price: (trip.price) +
+                                offerIncreaseValue(price: trip.price * 3),
+                            lat: 50.00,
+                            lng: 30.450));
+                      })),
             ],
           ),
           const Sizer(),
