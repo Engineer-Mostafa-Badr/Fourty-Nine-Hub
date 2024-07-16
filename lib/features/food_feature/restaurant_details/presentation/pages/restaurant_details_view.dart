@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
-import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
@@ -14,8 +14,20 @@ import '../../../restaurant_details/presentation/widgets/restaurant_header.dart'
 import '../../data/models/selected_meal_model.dart';
 import '../cubit/restaurant_details_cubit.dart';
 
-class RestaurantDetailsView extends StatelessWidget {
-  const RestaurantDetailsView({super.key});
+class RestaurantDetailsView extends StatefulWidget {
+  final String id;
+  const RestaurantDetailsView({super.key, required this.id});
+
+  @override
+  State<RestaurantDetailsView> createState() => _RestaurantDetailsViewState();
+}
+
+class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
+  @override
+  void initState() {
+    context.read<RestaurantDetailsCubit>().loadData(id: widget.id);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +85,7 @@ class RestaurantDetailsView extends StatelessWidget {
                       crossAxisCount: 2),
                   itemBuilder: (context, index) {
                     return MealCard(
+                      restaurantId: widget.id,
                       addToCart: (SelectedMealModel v) => controller.addToCart(
                           context: context, selectedMeal: v),
                       item: state.meals![index],

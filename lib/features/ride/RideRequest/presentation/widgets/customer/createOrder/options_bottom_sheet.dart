@@ -48,7 +48,8 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
       builder: (context, state) {
         return Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(10),
+          padding:
+              const EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 20),
           decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(

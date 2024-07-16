@@ -1,7 +1,10 @@
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_location_model.dart';
+
+import '../../../../../res/style/const.dart';
 import '../../../../ride/RideRequest/data/models/driver_review_model.dart';
 import '../../domain/entities/restaurant_entity.dart';
 import 'cuisine_model.dart';
-
 
 class RestaurantModel extends RestaurantEntity {
   RestaurantModel(
@@ -10,26 +13,34 @@ class RestaurantModel extends RestaurantEntity {
       super.reviews,
       required super.description,
       required super.image,
-      required super.banner,
       required super.available,
       required super.deliveryTime,
       required super.deliveryFee,
       required super.rate,
       required super.numberOfReviews,
-      super.cuisine});
+      super.cuisine,
+      required super.locations});
 
   factory RestaurantModel.fromJson(Map<String, dynamic> json) {
     return RestaurantModel(
-        id: json['id'],
-        name: json['name'],
-        description: json['description'],
-        image: json['image'],
-        banner: json['banner'],
-        available: json['available'],
-        deliveryTime: json['delivery_time'],
-        deliveryFee: json['delivery_fee'],
-        rate: json['rate'],
-        numberOfReviews: json['number_of_reviews'],
+        id: json['_id'],
+        name: getLang() == 'ar' ? json['name_en'] : json['name_en'],
+        description: json['desc'],
+        image: json['media'] != null
+            ? (json['media'] as List)
+                .map((e) => e['mediaKey'] as String)
+                .toList()
+            : [UIConst.imagePlaceHolder],
+        locations: json['location'] == null
+            ? []
+            : (json['location'] as List)
+                .map((e) => RestaurantLocationModel.fromJson(e))
+                .toList(),
+        available: json['available'] ?? false,
+        deliveryTime: json['delivery_time'] ?? '0',
+        deliveryFee: json['delivery_fee'] ?? '0',
+        rate: json['totalRating'] ?? 5,
+        numberOfReviews: json['numberOfReviews'] ?? 0,
         cuisine: json['cuisine'] != null
             ? CuisineModel.fromJson(json['cuisine'])
             : null,
@@ -46,7 +57,7 @@ class RestaurantModel extends RestaurantEntity {
     data['name'] = name;
     data['description'] = description;
     data['image'] = image;
-    data['banner'] = banner;
+
     data['available'] = available;
     data['delivery_time'] = deliveryTime;
     data['delivery_fee'] = deliveryFee;

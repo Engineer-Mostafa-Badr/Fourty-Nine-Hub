@@ -121,10 +121,11 @@ class _MealDetailsWidgetState extends State<MealDetailsWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SquareImage(
-            radius: 10,
-            width: double.infinity,
-            height: kToolbarHeight * 2,
-            source: NetworkImage(meal.image)),
+          radius: 10,
+          width: double.infinity,
+          height: kToolbarHeight * 2,
+          url: meal.image,
+        ),
         Label(
           text: meal.name,
           style: Styles.mediumText(fontWeight: FontWeight.bold),

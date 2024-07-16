@@ -1,11 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/data/models/driver_statistics_model.dart';
-
 import '../../../../../core/api/api_consumer.dart';
-import '../../../../../core/data/datasources/json_parser.dart';
 import '../../../../../core/error/failure.dart';
-
 import '../../../../../res/assets/jsons.dart';
 import '../../../../requests_history/data/models/trip_model.dart';
 import '../../domain/usecases/create_rider_offer_usecase.dart';
@@ -29,8 +26,8 @@ class DriverDashboardRemoteDataSourceImpl
     final response = await _apiConsumer.get(EndPoints.getRiderNewTrips);
     return response.fold(
         (l) => Left(l),
-        (r) => Right(((r['data']['trips'] as List)
-            .map((e) => TripModel.fromJson(e))
+        (r) => Right(((r['data'] as List)
+            .map((e) => TripModel.fromJson(e['ride'] as Map<String, dynamic>))
             .toList())));
   }
 

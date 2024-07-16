@@ -10,13 +10,13 @@ extension RestaurantsListStateX on RestaurantsListState {
 
 @immutable
 class RestaurantsListState {
-  final RestaurantsListStates? status;
+  final RestaurantsListStates status;
   final Failure? failure;
-  final List<RestaurantModel>? nearByRestaurants;
-  final List<RestaurantModel>? trendingRestaurants;
-  final List<FoodCategoryModel>? categories;
+  final List<RestaurantEntity>? nearByRestaurants;
+  final List<RestaurantEntity>? trendingRestaurants;
+  final List<SubCategoryEntity>? categories;
   const RestaurantsListState({
-    this.status,
+    this.status = RestaurantsListStates.loading,
     this.failure,
     this.nearByRestaurants,
     this.trendingRestaurants,
@@ -25,9 +25,9 @@ class RestaurantsListState {
   RestaurantsListState copyWith({
     RestaurantsListStates? status,
     Failure? failure,
-    List<RestaurantModel>? nearByRestaurants,
-    List<RestaurantModel>? trendingRestaurants,
-    List<FoodCategoryModel>? categories,
+    List<RestaurantEntity>? nearByRestaurants,
+    List<RestaurantEntity>? trendingRestaurants,
+    List<SubCategoryEntity>? categories,
   }) {
     return RestaurantsListState(
       status: status ?? this.status,

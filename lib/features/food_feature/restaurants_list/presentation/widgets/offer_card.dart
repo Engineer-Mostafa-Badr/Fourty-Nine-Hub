@@ -7,16 +7,19 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
-import '../../data/models/food_category_model.dart';
+import '../../../../subcategories/domain/entities/sub_category_entity.dart';
 
 class FoodOfferCard extends StatelessWidget {
-  final FoodCategoryModel item;
-  const FoodOfferCard({super.key, required this.item});
+  final SubCategoryEntity item;
+  final Function(String) onTap;
+  const FoodOfferCard({super.key, 
+  required this.onTap,
+  required this.item});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap:()=> context.push(Routes.CusineRestaurants),
+      onTap: () => onTap(item.id),
       child: Container(
         height: kToolbarHeight * 2,
         width: kToolbarHeight * 1.5,
@@ -27,7 +30,10 @@ class FoodOfferCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Sizer(),
-            Expanded(child: SquareImage(source: NetworkImage(item.image))),
+            Expanded(
+                child: SquareImage(
+              url: item.image,
+            )),
             const Sizer(),
             Label(
                 textAlign: TextAlign.center,

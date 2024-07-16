@@ -20,6 +20,7 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentatio
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit/food_cart_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/registable_sub_categories_cubit/registable_subcategories_cubit.dart';
@@ -56,7 +57,8 @@ import '../features/ads_feature/create_company_ad/presentation/pages/create_comp
 import '../features/authentication/presentation/pages/forgot_password/enter_email_forgot_password_view.dart';
 import '../features/azkaar/presentation/pages/azkar_view.dart';
 import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_restaurants_view.dart';
-import '../features/food_feature/restaurant_details/presentation/pages/cart_view.dart';
+import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
+import '../features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
@@ -157,8 +159,10 @@ class AppPages {
                   path: Paths.ADS,
                   name: Routes.ADS,
                   builder: (context, state) => BlocProvider.value(
-                        value:  serviceLocator<AdsCubit>(),
-                        child:  AdsView(subCategoryId: state.extra as String,),
+                        value: serviceLocator<AdsCubit>(),
+                        child: AdsView(
+                          subCategoryId: state.extra as String,
+                        ),
                       ),
                   routes: [
                     GoRoute(
@@ -554,12 +558,19 @@ class AppPages {
               GoRoute(
                   path: Paths.RESTAURANTDETAILS,
                   name: Routes.RESTAURANTDETAILS,
-                  builder: (context, state) => const RestaurantDetailsView(),
+                  builder: (context, state) => BlocProvider.value(
+                        value: serviceLocator<RestaurantDetailsCubit>(),
+                        child: RestaurantDetailsView(
+                          id: state.extra as String,
+                        ),
+                      ),
                   routes: [
                     GoRoute(
                         path: Paths.FOODCART,
                         name: Routes.FOODCART,
-                        builder: (context, state) => const FoodCartView())
+                        builder: (context, state) => BlocProvider.value(value: serviceLocator<FoodCartCubit>(), 
+                        child: const FoodCartView(),
+                        ))
                   ])
             ]),
         GoRoute(

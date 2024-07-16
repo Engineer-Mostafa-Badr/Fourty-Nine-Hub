@@ -7,7 +7,7 @@ class VariationModel extends VariationEntity {
       {required super.id, required super.name, required super.options});
   factory VariationModel.fromJson(Map<String, dynamic> json) {
     return VariationModel(
-      id: json['id'],
+      id: json['_id'],
       name: json['name'],
       options: (json['options'] as List).map((e) => OptionModel.fromJson(e)).toList(),
     );

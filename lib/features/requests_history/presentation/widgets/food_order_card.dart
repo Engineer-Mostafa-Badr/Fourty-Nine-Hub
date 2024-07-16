@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
-import 'package:fourtyninehub/features/requests_history/data/models/food_order_model.dart';
 import 'package:fourtyninehub/features/requests_history/domain/entities/food_order_entity.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -96,7 +94,7 @@ class FoodOrderCard extends StatelessWidget {
             height: kToolbarHeight,
             width: kToolbarHeight,
             radius: 10,
-            source: NetworkImage(item.restaurant.image)),
+            source: NetworkImage(item.restaurant.image.first)),
         const Sizer(),
         Expanded(
             child: Column(

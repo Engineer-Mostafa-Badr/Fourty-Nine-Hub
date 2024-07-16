@@ -9,20 +9,19 @@ class SelectedMealModel extends SelectedMealEntity {
       {required super.qty,
       required super.price,
       required super.meal,
+      required super.restaurantId,
       required super.selectedAddOn,
       required super.selectedVariations});
 
-  factory SelectedMealModel.fromJson(Map<String, dynamic> json) {
-    return SelectedMealModel(
-      qty: json['qty'],
-      price: json['price'],
-      meal: MealModel.fromJson(json['meal']),
-      selectedAddOn: (json['selected_addon'] as List)
-          .map((e) => OptionModel.fromJson(e))
-          .toList(),
-      selectedVariations: (json['selected_variation'] as List)
-          .map((e) => SelectedVariationModel.fromJson(e))
-          .toList(),
-    );
-  }
+  
+  Map<String, dynamic> toJson() => {
+        "restuarantId": restaurantId,
+        "restaurantItems": [
+          {
+            "foodId": meal.id,
+            "quantity": qty,
+            "option":selectedVariations.first.selectedOption.id
+          }
+        ]
+      };
 }

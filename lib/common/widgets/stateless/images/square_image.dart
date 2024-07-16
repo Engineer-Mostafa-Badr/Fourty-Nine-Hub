@@ -26,7 +26,7 @@ class SquareImage extends StatelessWidget {
         width: width,
         child: url == null
             ? Image(
-                image: source!,
+                image: NetworkImage(url!),
               )
             : CachedNetworkImage(
                 fit: fit ?? BoxFit.cover,
