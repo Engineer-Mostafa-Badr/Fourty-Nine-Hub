@@ -50,7 +50,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             // const Sizer(),
 
             const AdvertiseYourCompany(),
-            const GoogleAddsBanner(),
+           // const GoogleAddsBanner(),
             const Sizer(),
             Container(
               padding: const EdgeInsets.all(10),

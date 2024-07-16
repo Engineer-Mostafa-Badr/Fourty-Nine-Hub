@@ -5,12 +5,14 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/attach_token_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
 
 import '../../../domain/use_cases/get_user_use_case.dart';
 
 class UserCubit extends Cubit<BasicState<UserEntity>> {
   final GetUserUseCase _getUserUseCase;
   final GetTokensUseCase _getTokensUseCase;
+  final SaveTokensUseCase _saveTokensUseCase;
   final AttachTokenUseCase _attachTokenUseCase;
 
   bool _isTokenAttached = false;
@@ -19,6 +21,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     this._getUserUseCase,
     this._getTokensUseCase,
     this._attachTokenUseCase,
+    this._saveTokensUseCase,
   ) : super(const BasicState());
 
   bool get isLoggedIn => state.data != null;
@@ -51,5 +54,12 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
         getUser();
       },
     );
+  }
+
+  void logout() {
+    _attachTokenUseCase(null);
+    _saveTokensUseCase(null);
+    _isTokenAttached = false;
+    emit(const BasicState());
   }
 }

@@ -1,70 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import 'package:mtwstat/app/core/localization.dart';
-import 'package:mtwstat/app/modules/forget_password/controllers/forget_password_controller.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../../../core/widgets/custom_app_bar.dart';
-import '../../../core/widgets/primary_button.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
+import '../../../../../common/widgets/stateless/buttons/default_button.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../routes/routes.dart';
+import '../../controllers/verify_forgot_password_otp/verify_forgot_password_otp_cubit.dart';
 
-class ForgetPasswordOtpVerificationView
-    extends GetView<ForgetPasswordController> {
-  const ForgetPasswordOtpVerificationView({super.key});
+class ForgetPasswordOtpVerificationView extends StatelessWidget {
+  final String email;
+
+  const ForgetPasswordOtpVerificationView({
+    super.key,
+    required this.email,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      onPopInvoked: (_) {
-        controller.isVerifying = false;
+    final cubit = context.read<VerifyForgotPasswordOtpCubit>();
+    return BlocConsumer<VerifyForgotPasswordOtpCubit,
+        VerifyForgotPasswordOtpState>(
+      listener: (context, state) {
+        if (state is VerifyForgotPasswordOtpSuccess) {
+          context.pushReplacementNamed(
+            Routes.CREATENEWFORGOTPASSWORD,
+            extra: email,
+          );
+        } else if (state is VerifyForgotPasswordOtpFailure) {
+          showErrorMessage(context, getFailureMessage(state.failure, context));
+        }
       },
-      child: Scaffold(
-        appBar: CustomAppbar(
-          title: tr(context).checkVerificationCode,
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      builder: (context, state) {
+        return Scaffold(
+          appBar: const BackAppBar(),
+          bottomSheet: SizedBox(
+            height: 110,
+            child: DefaultButton(
+              margin: const EdgeInsets.all(30),
+              width: double.infinity,
+              label: 'Verify',
+              onPressed: () => cubit.verifyOtp(email),
+            ),
+          ),
+          body: Column(
             children: [
-              Center(
-                child: SvgPicture.asset(
-                  'assets/icons/otp_icon.svg',
-                  height: 250,
-                  width: double.infinity,
-                ),
+              const Label(
+                text: 'Email OTP\nVerification',
               ),
-              const SizedBox(height: 40),
-              Text(
-                tr(context).checkVerificationCode,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20,
-                  color: Colors.black.withOpacity(.8),
-                ),
+              Label(
+                text:
+                    'Please check your email to see the verification\ncode ($email)',
               ),
-              const SizedBox(height: 20),
-              Text(
-                tr(context).checkVerificationCodeHint,
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16,
-                  color: Colors.black.withOpacity(.7),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                controller.emailController.text,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 30),
+              const Sizer(),
               PinCodeTextField(
                 appContext: context,
-                enabled: !controller.isLoading.value,
                 pastedTextStyle: TextStyle(
                   color: Colors.green.shade600,
                   fontWeight: FontWeight.bold,
@@ -97,11 +92,8 @@ class ForgetPasswordOtpVerificationView
                 cursorColor: Colors.black,
                 animationDuration: const Duration(milliseconds: 300),
                 enableActiveFill: true,
-                onChanged: (v) => controller.otp = v,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                  signed: true,
-                ),
+                onChanged: (v) => cubit.otp = v,
+                keyboardType: TextInputType.number,
                 boxShadows: const [
                   BoxShadow(
                     offset: Offset(0, 1),
@@ -109,63 +101,16 @@ class ForgetPasswordOtpVerificationView
                     blurRadius: 10,
                   )
                 ],
-                onCompleted: (v) => controller.verifyOtp(),
-              ),
-              StreamBuilder(
-                stream: controller.stopWatchTimer.secondTime,
-                initialData: 0,
-                builder: (context, snapshot) {
-                  final value = snapshot.data as int;
-                  final isTimerRunning = value != 0;
-                  final seconds = value % 60;
-                  final minutes = value ~/ 60;
-                  return Row(
-                    children: [
-                      Text(
-                        tr(context).messageNotReceived,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black.withOpacity(.8),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: isTimerRunning ? null : controller.senOtp,
-                        child: Text(
-                          tr(context).resend,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                            color: isTimerRunning
-                                ? Colors.grey
-                                : Theme.of(context).primaryColor,
-                          ),
-                        ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        '${minutes < 10 ? '0$minutes' : minutes}:${seconds < 10 ? '0$seconds' : seconds}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black.withOpacity(.8),
-                        ),
-                      )
-                    ],
-                  );
+                onCompleted: (v) => cubit.verifyOtp(email),
+                beforeTextPaste: (text) {
+                  return true;
                 },
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30),
-                child: PrimaryButton(
-                  text: tr(context).confirm,
-                  onPressed: controller.verifyOtp,
-                ),
-              ),
+              const Sizer(),
             ],
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

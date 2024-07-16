@@ -41,9 +41,9 @@ class AdDetailsView extends StatelessWidget {
               children: [
                 _buildAdInfoWidget(ad: state.ad!),
                 const Sizer(),
-                const GoogleAddsBanner(
-                  margin: 0,
-                ),
+                // const GoogleAddsBanner(
+                //   margin: 0,
+                // ),
                 const Sizer(),
                 _buildDetailsWidget(ad: state.ad!),
                 _buildLocationWidget(address: state.ad!.address),

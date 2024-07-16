@@ -129,20 +129,23 @@ class RegisterView extends StatelessWidget {
                                               : Colors.black,
                                           label: 'Male'))),
                               Expanded(
-                                  child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          registerCubit.isMale = false;
-                                        });
-                                      },
-                                      child: BadgedLabel(
-                                          textColor: registerCubit.isMale
-                                              ? Colors.black
-                                              : Colors.white,
-                                          color: registerCubit.isMale
-                                              ? Colors.white
-                                              : AppColors.PRIMARY_COLOR,
-                                          label: 'Female'))),
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      registerCubit.isMale = false;
+                                    });
+                                  },
+                                  child: BadgedLabel(
+                                    textColor: registerCubit.isMale
+                                        ? Colors.black
+                                        : Colors.white,
+                                    color: registerCubit.isMale
+                                        ? Colors.white
+                                        : AppColors.PRIMARY_COLOR,
+                                    label: 'Female',
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ],

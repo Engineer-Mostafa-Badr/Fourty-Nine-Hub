@@ -16,7 +16,9 @@ class EndPoints {
   static const getWheel = '/wheels/random';
   static const spinWheel = '/wheels/spin/';
   static const wheelWallet = '/wheel/wallets/my/wallet';
-
+  static const sendForgetPasswordOTP = '/auth/forgot-password';
+  static const verifyForgetPasswordOTP = '/auth/verify/otp';
+  static const createNewForgetPassword = '/auth/reset-password';
   // ride
 
   // reels

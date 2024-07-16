@@ -4,21 +4,21 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
 
-class ResendOTPUseCase extends UseCase<void, ResendOTPParams> {
+class SendForgetPasswordOTPUseCase extends UseCase<void, SendForgetOTPParams> {
   final AuthRepository _repository;
 
-  ResendOTPUseCase(this._repository);
+  SendForgetPasswordOTPUseCase(this._repository);
 
   @override
-  Future<Either<Failure, void>> call(ResendOTPParams params) {
-    return _repository.resendOTP(params);
+  Future<Either<Failure, void>> call(SendForgetOTPParams params) {
+    return _repository.sendForgetPasswordOTP(params);
   }
 }
 
-class ResendOTPParams extends Equatable {
+class SendForgetOTPParams extends Equatable {
   final String email;
 
-  const ResendOTPParams({required this.email});
+  const SendForgetOTPParams({required this.email});
 
   Map<String, dynamic> toJson() => {
         'email': email,

@@ -54,7 +54,12 @@ import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.da
 import '../features/account_taps/transfer_money/presentation/pages/transfer_money_view.dart';
 import '../features/account_taps/wallet/domain/entities/wallet_entity.dart';
 import '../features/ads_feature/create_company_ad/presentation/pages/create_company_ad.dart';
+import '../features/authentication/presentation/controllers/create_new_forgot_password_cubit/create_new_forgot_password_cubit.dart';
+import '../features/authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
+import '../features/authentication/presentation/controllers/verify_forgot_password_otp/verify_forgot_password_otp_cubit.dart';
+import '../features/authentication/presentation/pages/forgot_password/create_new_forget_password_view.dart';
 import '../features/authentication/presentation/pages/forgot_password/enter_email_forgot_password_view.dart';
+import '../features/authentication/presentation/pages/forgot_password/forget_password_otp_verification_view.dart';
 import '../features/azkaar/presentation/pages/azkar_view.dart';
 import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_restaurants_view.dart';
 import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
@@ -198,9 +203,35 @@ class AppPages {
           ),
         ),
         GoRoute(
-            path: Paths.FORGOTPASSWORD,
-            name: Routes.FORGOTPASSWORD,
-            builder: (context, state) => const EnterEmailForgotPasswordView()),
+          path: Paths.FORGOTPASSWORD,
+          name: Routes.FORGOTPASSWORD,
+          builder: (context, state) => BlocProvider<ForgotPasswordCubit>(
+            create: (_) => serviceLocator(),
+            child: const EnterEmailForgotPasswordView(),
+          ),
+        ),
+        GoRoute(
+          path: Paths.FORGOTPASSWORDOTP,
+          name: Routes.FORGOTPASSWORDOTP,
+          builder: (context, state) =>
+              BlocProvider<VerifyForgotPasswordOtpCubit>(
+                create: (_) => serviceLocator(),
+                child: ForgetPasswordOtpVerificationView(
+                  email: state.extra as String,
+                ),
+              ),
+        ),
+        GoRoute(
+          path: Paths.CREATENEWFORGOTPASSWORD,
+          name: Routes.CREATENEWFORGOTPASSWORD,
+          builder: (context, state) =>
+              BlocProvider<CreateNewForgotPasswordCubit>(
+                create: (_) => serviceLocator(),
+                child: CreateNewForgetPasswordView(
+                  email: state.extra as String,
+                ),
+              ),
+        ),
         GoRoute(
           name: Routes.REGISTER,
           path: Paths.REGISTER,

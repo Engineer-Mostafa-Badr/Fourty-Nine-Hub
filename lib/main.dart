@@ -12,13 +12,13 @@ import 'routes/pages.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:admob_flutter/admob_flutter.dart';
+//import 'package:admob_flutter/admob_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DI.execute();
   
-   Admob.initialize();
+   //Admob.initialize();
 
   runApp(
     const MyApp(),

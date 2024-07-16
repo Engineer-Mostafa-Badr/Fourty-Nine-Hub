@@ -1,8 +1,39 @@
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
+
+import '../../../../../core/error/failure.dart';
+import '../../../domain/use_cases/create_new_forget_password_use_case.dart';
 
 part 'create_new_forgot_password_state.dart';
 
 class CreateNewForgotPasswordCubit extends Cubit<CreateNewForgotPasswordState> {
-  CreateNewForgotPasswordCubit() : super(CreateNewForgotPasswordInitial());
+  final CreateNewForgetPasswordUseCase _createNewForgetPasswordUseCase;
+  final formKey = GlobalKey<FormState>();
+  final newPasswordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+
+  CreateNewForgotPasswordCubit(
+    this._createNewForgetPasswordUseCase,
+  ) : super(CreateNewForgotPasswordInitial());
+
+  Future<void> createPassword(String email) async {
+    if (formKey.currentState!.validate()) {
+      emit(CreateNewForgotPasswordLoading());
+      final result = await _createNewForgetPasswordUseCase.call(
+        CreateNewForgetParams(
+          email: email,
+          newPassword: newPasswordController.text,
+          newPasswordConfirmation: confirmPasswordController.text,
+        ),
+      );
+      result.fold(
+        (failure) {
+          emit(CreateNewForgotPasswordFailure(failure));
+        },
+        (success) {
+          emit(CreateNewForgotPasswordSuccess());
+        },
+      );
+    }
+  }
 }
