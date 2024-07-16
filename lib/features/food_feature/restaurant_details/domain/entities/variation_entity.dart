@@ -2,7 +2,7 @@ import '../../data/models/option_model.dart';
 import 'option_entity.dart';
 
 class VariationEntity {
-  final int id;
+  final String id;
   final String name;
   final List<OptionModel> options;
   VariationEntity({

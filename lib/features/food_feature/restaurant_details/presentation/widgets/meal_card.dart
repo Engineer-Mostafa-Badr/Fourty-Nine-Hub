@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/entities/meal_entity.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../data/models/meal_model.dart';
+
 import '../../data/models/selected_meal_model.dart';
 import 'meal_details.dart';
 
 class MealCard extends StatelessWidget {
-  final MealModel item;
-    final Function(SelectedMealModel) addToCart;
-  const MealCard({super.key, required this.item, required this.addToCart});
+  final MealEntity item;
+  final String restaurantId;
+  final Function(SelectedMealModel) addToCart;
+  const MealCard({super.key,
+  required this.restaurantId,
+   required this.item, required this.addToCart});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +28,7 @@ class MealCard extends StatelessWidget {
             item: SelectedMealModel(
                 qty: 1,
                 price: item.price,
+                restaurantId: restaurantId,
                 meal: item,
                 selectedAddOn: [],
                 selectedVariations: []),
@@ -36,7 +41,10 @@ class MealCard extends StatelessWidget {
           children: [
             Expanded(
               flex: 2,
-              child: SquareImage(radius: 5, source: NetworkImage(item.image)),
+              child: SquareImage(
+                radius: 5,
+                url: item.image,
+              ),
             ),
             Expanded(
                 child: Column(

@@ -17,9 +17,7 @@ import 'package:admob_flutter/admob_flutter.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DI.execute();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  
    Admob.initialize();
 
   runApp(
@@ -40,9 +38,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => serviceLocator<RiderequestCubit>(),
         ),
-        BlocProvider(
-          create: (context) => serviceLocator<RestaurantDetailsCubit>(),
-        ),
+
        
         BlocProvider(
           create: (context) => serviceLocator<CreateShippingRequestCubit>(),

@@ -6,27 +6,26 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../restaurants_list/data/models/restaurant_model.dart';
+
+import '../../../restaurants_list/domain/entities/restaurant_entity.dart';
 
 class RestaurantHeader extends StatelessWidget {
-  final RestaurantModel restaurant;
+  final RestaurantEntity restaurant;
   const RestaurantHeader({super.key, required this.restaurant});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: kToolbarHeight * 4.5,
+      height: kToolbarHeight * 4,
       width: double.infinity,
       child: Stack(
         children: [
-          
           Positioned.fill(
               child: Column(
             children: [
               Expanded(
                   child: SquareImage(
-                      width: double.infinity,
-                      source: NetworkImage(restaurant.banner))),
+                      width: double.infinity, url: restaurant.image.first)),
               const Spacer(),
             ],
           )),
@@ -34,20 +33,25 @@ class RestaurantHeader extends StatelessWidget {
             top: 10,
             left: 10,
             child: IconAppButton(
-            icon: Icons.arrow_back,
-            onPressed: () => context.pop(),
-            isCircle: true,
-          ),),
+              icon: Icons.arrow_back,
+              onPressed: () => context.pop(),
+              isCircle: true,
+            ),
+          ),
           Positioned(
-              bottom: 10,
+              bottom: 0,
               left: 10,
               right: 10,
-              top: kToolbarHeight * 1,
+              height: kToolbarHeight * 2,
               child: Container(
                 margin: const EdgeInsets.all(15),
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                          color: Colors.grey, spreadRadius: 6, blurRadius: 10)
+                    ],
                     color: Colors.white),
                 child: Column(
                   children: [
@@ -58,8 +62,7 @@ class RestaurantHeader extends StatelessWidget {
                           height: kToolbarHeight,
                           width: kToolbarHeight,
                           child: SquareImage(
-                              radius: 5,
-                              source: NetworkImage(restaurant.image)),
+                              radius: 5, url: restaurant.image.first),
                         ),
                         const Sizer(),
                         Expanded(
@@ -90,67 +93,10 @@ class RestaurantHeader extends StatelessWidget {
                                     style: Styles.mediumText()),
                               ],
                             ),
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.access_time,
-                                  color: Colors.grey,
-                                ),
-                                const Sizer(
-                                  width: 5,
-                                ),
-                                Label(
-                                    text: restaurant.deliveryTime,
-                                    style: Styles.mediumText()),
-                                const Sizer(),
-                                const Icon(
-                                  Icons.delivery_dining,
-                                  color: Colors.grey,
-                                ),
-                                const Sizer(
-                                  width: 5,
-                                ),
-                                Label(
-                                    text:
-                                        '${restaurant.deliveryFee != 0 ? restaurant.deliveryFee : "Free"}',
-                                    style: Styles.mediumText())
-                              ],
-                            ),
                           ],
                         ))
                       ],
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: _buildInfoItem(
-                                label: 'Delivery Fee',
-                                value:
-                                    '${restaurant.deliveryFee != 0 ? restaurant.deliveryFee : "Free"}')),
-                        Expanded(
-                            child: _buildInfoItem(
-                                label: 'Delivery time',
-                                value: restaurant.deliveryTime)),
-                        Expanded(
-                            child: _buildInfoItem(
-                                label: 'Certified', value: 'by 49Hub')),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.local_offer_outlined,
-                          color: AppColors.SECONDARY_COLOR,
-                        ),
-                        const Sizer(
-                          width: 5,
-                        ),
-                        Label(
-                            text: '20% off some items',
-                            style: Styles.mediumText(
-                                color: AppColors.SECONDARY_COLOR))
-                      ],
-                    )
                   ],
                 ),
               ))

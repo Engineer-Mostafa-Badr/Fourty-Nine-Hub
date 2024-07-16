@@ -1,5 +1,5 @@
 class OptionEntity {
-  final int id;
+  final String id;
   final String name;
   final num price;
   OptionEntity({

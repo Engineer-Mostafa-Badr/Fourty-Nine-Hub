@@ -8,12 +8,12 @@ extension RestaurantDetailsStateX on RestaurantDetailsState {
   bool get isError => status == RestaurantDetailsStates.error;
 }
 
-@immutable
+
 class RestaurantDetailsState {
   final RestaurantDetailsStates? status;
   final Failure? failure;
-  final List<MealModel>? meals;
-  final RestaurantModel? restaurant;
+  final List<MealEntity>? meals;
+  final RestaurantEntity? restaurant;
   final List<SelectedMealModel>? selectedMeals;
   const RestaurantDetailsState(
       {this.status,
@@ -25,8 +25,8 @@ class RestaurantDetailsState {
   RestaurantDetailsState copyWith({
     RestaurantDetailsStates? status,
     Failure? failure,
-    List<MealModel>? meals,
-    RestaurantModel? restaurant,
+    List<MealEntity>? meals,
+    RestaurantEntity? restaurant,
     List<SelectedMealModel>? selectedMeals,
   }) {
     return RestaurantDetailsState(

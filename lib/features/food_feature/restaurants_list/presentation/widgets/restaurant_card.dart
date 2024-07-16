@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -6,17 +7,17 @@ import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
-import '../../data/models/restaurant_model.dart';
+import '../../domain/entities/restaurant_entity.dart';
 
 class RestaurantCard extends StatelessWidget {
-  final RestaurantModel item;
+  final RestaurantEntity item;
   final bool isVert;
   const RestaurantCard({super.key, this.isVert = true, required this.item});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () => context.push(Routes.RESTAURANTDETAILS),
+        onTap: () => context.push(Routes.RESTAURANTDETAILS, extra: item.id),
         child: isVert ? _buildVerticalCard() : _buildHorizontalCard());
   }
 
@@ -33,7 +34,9 @@ class RestaurantCard extends StatelessWidget {
                 children: [
                   Positioned.fill(
                     child: SquareImage(
-                        radius: 5, source: NetworkImage(item.image)),
+                      radius: 5,
+                      url: item.image.first,
+                    ),
                   ),
                   Positioned(
                       top: 10,
@@ -95,7 +98,10 @@ class RestaurantCard extends StatelessWidget {
         SizedBox(
           height: kToolbarHeight,
           width: kToolbarHeight,
-          child: SquareImage(radius: 5, source: NetworkImage(item.image)),
+          child: SquareImage(
+            radius: 5,
+            url: item.image.first,
+          ),
         ),
         const Sizer(),
         Expanded(
@@ -124,44 +130,6 @@ class RestaurantCard extends StatelessWidget {
                     style: Styles.mediumText()),
               ],
             ),
-            Row(
-              children: [
-                const Icon(
-                  Icons.access_time,
-                  color: Colors.grey,
-                ),
-                const Sizer(
-                  width: 5,
-                ),
-                Label(text: item.deliveryTime, style: Styles.mediumText()),
-                const Sizer(),
-                const Icon(
-                  Icons.delivery_dining,
-                  color: Colors.grey,
-                ),
-                const Sizer(
-                  width: 5,
-                ),
-                Label(
-                    text:
-                        '${item.deliveryFee != 0 ? item.deliveryFee : "Free"}',
-                    style: Styles.mediumText())
-              ],
-            ),
-            Row(
-              children: [
-                const Icon(
-                  Icons.local_offer_outlined,
-                  color: AppColors.SECONDARY_COLOR,
-                ),
-                const Sizer(
-                  width: 5,
-                ),
-                Label(
-                    text: '20% off some items',
-                    style: Styles.mediumText(color: AppColors.SECONDARY_COLOR))
-              ],
-            )
           ],
         ))
       ],

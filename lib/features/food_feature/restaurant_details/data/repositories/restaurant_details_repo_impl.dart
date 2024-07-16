@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_entity.dart';
 
-
-import '../../../restaurants_list/data/models/restaurant_model.dart';
+import '../../domain/entities/meal_entity.dart';
 import '../../domain/repositories/restaurant_details_repo.dart';
 import '../datasources/restaurant_details_remote_data_source.dart';
 import '../models/meal_model.dart';
@@ -18,14 +18,14 @@ class RestaurantDetailsRepoImpl implements RestaurantDetailsRepo {
   }
 
   @override
-  Future<Either<Failure, List<MealModel>>> getMeals(
-      {required int restaurantId}) {
+  Future<Either<Failure, List<MealEntity>>> getMeals(
+      {required String restaurantId}) {
     return _remoteDataSource.getMeals(restaurantId: restaurantId);
   }
 
   @override
-  Future<Either<Failure, RestaurantModel>> getRestaurantDetails(
-      {required int restaurantId}) {
+  Future<Either<Failure, RestaurantEntity>> getRestaurantDetails(
+      {required String restaurantId}) {
     return _remoteDataSource.getRestaurantDetails(restaurantId: restaurantId);
   }
 }

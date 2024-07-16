@@ -22,6 +22,11 @@ class RestaurantsListsView extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
             builder: (context, state) {
+              if (state.isLoading) {
+                return const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                );
+              }
               return ListView(
                 children: [
                   if (state.categories?.isNotEmpty ?? false)
@@ -58,6 +63,7 @@ class RestaurantsListsView extends StatelessWidget {
   Widget _buildOffersWidget() {
     return BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
         builder: (context, state) {
+      final controller = context.read<RestaurantsListCubit>();
       return SizedBox(
           height: kToolbarHeight * 2,
           child: ListView.separated(
@@ -65,6 +71,8 @@ class RestaurantsListsView extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) => FoodOfferCard(
                     item: state.categories![index],
+                    onTap: (String id) =>
+                        controller.getSubCategoryRestaurants(id: id),
                   ),
               separatorBuilder: (context, index) => const Sizer(),
               itemCount: state.categories?.length ?? 0));

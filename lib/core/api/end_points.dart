@@ -69,7 +69,7 @@ class EndPoints {
   }
 
   static const getMyComeWithYouTrips = '/ride/come-with-you/trip/requests';
-  static const getRiderNewTrips = '/ride/trips/rider?limit=20&page=1';
+  static const getRiderNewTrips = '/ride/trips/rider/newTrip';
   // social
 
   static const createFacebookPost = '/facebook/post';
@@ -138,6 +138,23 @@ class EndPoints {
     return '/facebook/post/hide/$postId';
   }
 
+  // food
+  static String subCategoryRestaurants(String id) {
+    return '/restaurants/subcategory/$id';
+  }
+
+  static String restaurantDetails(String id) {
+    return '/restaurants/$id';
+  }
+
+  static String restaurantMeals(String id) {
+    return '/food/food-items/$id';
+  }
+
+  static String addToCart = '/food/addToCart';
+  static String getCart = '/food/getCart';
+  static String deleteFromCart = '/food/deleteFromCart';
+  static String placeOrder = '/food/make-order';
   // contact us
   static const helpMessages = '/help';
 }
