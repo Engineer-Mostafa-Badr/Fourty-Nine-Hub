@@ -150,8 +150,8 @@ abstract class Paths {
   static const LOGIN = 'Login';
   static const REGISTER = 'Register';
   static const FORGOTPASSWORD = 'ForgotPassword';
-  static const FORGOTPASSWORDOTP = '/ForgotPassword/OTP';
-  static const CREATENEWFORGOTPASSWORD = '/ForgotPassword/CreateNewPassword';
+  static const FORGOTPASSWORDOTP = 'ForgotPasswordOTP';
+  static const CREATENEWFORGOTPASSWORD = 'CreateNewPassword';
   static const VERIFYMAIL = 'verify-mail-register';
   static const REGISTERDRIVER = 'register-driver';
   static const ACCOUNT = 'Account';
