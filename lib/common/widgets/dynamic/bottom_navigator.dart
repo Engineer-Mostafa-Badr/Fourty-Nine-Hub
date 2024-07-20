@@ -19,64 +19,91 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<BottomItemModel> pages = mainCategory == 2
+    List<BottomItemModel> pages = mainCategory == 3
         ? <BottomItemModel>[
             BottomItemModel(
-                icon: FontAwesomeIcons.twitter,
-                label: 'Twitter',
+                icon: FontAwesomeIcons.microphone,
+                label: 'Voice',
                 index: 0,
-                image: Assets.twitter,
-                action: () => context.push(Routes.TWITTER)),
+                image: Assets.voiceLive,
+                action: () => context.push(Routes.CLUBHOUSE)),
             BottomItemModel(
-                icon: FontAwesomeIcons.list,
-                label: 'Reels',
-                index: 1,
-                image: Assets.reels,
-                action: () => context.push(Routes.REELS)),
-            // BottomItemModel(icon: FontAwesomeIcons.home, label: '', index: 2),
+                icon: FontAwesomeIcons.stream,
+                label: 'Live',
+                index: 0,
+                image: Assets.live,
+                action: () => context.push(Routes.LIVE)),
             BottomItemModel(
-                icon: Icons.chat,
-                label: 'Chat',
-                index: 3,
-                image: Assets.message,
-                action: () => context.push(Routes.CHAT)),
+                icon: Icons.video_call,
+                label: 'Meet',
+                index: 0,
+                image: Assets.zoom,
+                action: () => context.push(Routes.MEETINGROOM)),
             BottomItemModel(
-                icon: FontAwesomeIcons.car,
-                label: 'Find',
-                index: 4,
-                image: Assets.social,
-                action: () => context.push(Routes.Tinder)),
+                icon: Icons.video_call,
+                label: 'Broadcast',
+                index: 0,
+                image: Assets.radio,
+                action: () => context.push(Routes.CLUBHOUSE)),
           ]
-        : <BottomItemModel>[
-            BottomItemModel(
-                icon: FontAwesomeIcons.bowlFood,
-                label: 'Meal',
-                index: 0,
-                image: Assets.food,
-                action: () => context.push(Routes.FOOD)),
-            BottomItemModel(
-                icon: FontAwesomeIcons.kitMedical,
-                label: 'Health',
-                index: 1,
-                image: Assets.health,
-                action: () => context.push(Routes.VISITA)),
-            // BottomItemModel(icon: FontAwesomeIcons.home, label: '', index: 2),
-            BottomItemModel(
-                icon: Icons.delivery_dining,
-                label: 'Shipping',
-                index: 3,
-                image: Assets.shipping,
-                action: () => context.push(Routes.SHIPPING)),
-            BottomItemModel(
-                icon: FontAwesomeIcons.car,
-                label: 'Ride',
-                index: 4,
-                image: Assets.ride,
-                action: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const RideRequestView()))),
-          ];
+        : mainCategory == 2
+            ? <BottomItemModel>[
+                BottomItemModel(
+                    icon: FontAwesomeIcons.twitter,
+                    label: 'Twitter',
+                    index: 0,
+                    image: Assets.twitter,
+                    action: () => context.push(Routes.TWITTER)),
+                BottomItemModel(
+                    icon: FontAwesomeIcons.list,
+                    label: 'Reels',
+                    index: 1,
+                    image: Assets.reels,
+                    action: () => context.push(Routes.REELS)),
+                // BottomItemModel(icon: FontAwesomeIcons.home, label: '', index: 2),
+                BottomItemModel(
+                    icon: Icons.chat,
+                    label: 'Chat',
+                    index: 3,
+                    image: Assets.message,
+                    action: () => context.push(Routes.CHAT)),
+                BottomItemModel(
+                    icon: FontAwesomeIcons.car,
+                    label: 'Find',
+                    index: 4,
+                    image: Assets.social,
+                    action: () => context.push(Routes.Tinder)),
+              ]
+            : <BottomItemModel>[
+                BottomItemModel(
+                    icon: FontAwesomeIcons.bowlFood,
+                    label: 'Meal',
+                    index: 0,
+                    image: Assets.food,
+                    action: () => context.push(Routes.FOOD)),
+                BottomItemModel(
+                    icon: FontAwesomeIcons.kitMedical,
+                    label: 'Health',
+                    index: 1,
+                    image: Assets.health,
+                    action: () => context.push(Routes.VISITA)),
+                // BottomItemModel(icon: FontAwesomeIcons.home, label: '', index: 2),
+                BottomItemModel(
+                    icon: Icons.delivery_dining,
+                    label: 'Shipping',
+                    index: 3,
+                    image: Assets.shipping,
+                    action: () => context.push(Routes.SHIPPING)),
+                BottomItemModel(
+                    icon: FontAwesomeIcons.car,
+                    label: 'Ride',
+                    index: 4,
+                    image: Assets.ride,
+                    action: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const RideRequestView()))),
+              ];
     return AnimatedBottomNavigationBar.builder(
         itemCount: pages.length,
         height: kToolbarHeight * .9,

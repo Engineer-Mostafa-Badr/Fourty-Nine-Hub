@@ -136,6 +136,7 @@ class LoginView extends StatelessWidget {
                     ),
                     const Sizer(),
                     RichText(
+                      
                       text: TextSpan(
                         children: [
                           TextSpan(

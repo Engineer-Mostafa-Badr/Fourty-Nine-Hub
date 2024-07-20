@@ -23,10 +23,10 @@ abstract class FourtyNineRemoteDataSource {
 }
 
 class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
-
+  final JsonParser _jsonParser;
   final ApiConsumer _apiConsumer;
 
-  FourtyNineRemoteDataSourceImpl(this._apiConsumer);
+  FourtyNineRemoteDataSourceImpl(this._apiConsumer, this._jsonParser);
 
   @override
   Future<Either<Failure, List<ParentMainCategoryEntity>>>
@@ -52,7 +52,7 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
 
   @override
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems() async {
-    final result = await _apiConsumer.get(Jsons.sliderItems);
+    final result = await _jsonParser.get(Jsons.sliderItems);
     return result.fold(
       (failure) => Left(failure),
       (response) => Right((response['data']['items'] as List)

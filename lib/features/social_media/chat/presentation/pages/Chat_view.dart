@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../club_house/presentation/pages/club_house_home.dart';
 import '../widgets/home/calling_card.dart';
@@ -8,11 +10,12 @@ import '../widgets/home/chat_stories.dart';
 
 class ChatView extends StatelessWidget {
   final List<String> groups = [
-    'Broadcast',
     'Social',
     'Services',
     'Call & Video (Social)',
     'Call & Video(Services)',
+    'Chat',
+    'Groups',
     'Anonymous',
     'Archive',
     'Lock Chat',
@@ -24,7 +27,7 @@ class ChatView extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: groups.length,
-      initialIndex: 1,
+      initialIndex: 0,
       child: SharedScaffold(
           mainCategoryId: 2,
           body: NestedAppbar(appBars: [
@@ -38,7 +41,8 @@ class ChatView extends StatelessWidget {
               automaticallyImplyLeading: false,
               floating: true,
               pinned: true,
-              flexibleSpace: _buildCategoriesLabels(),
+              titleSpacing: 0,
+              title: _buildCategoriesLabels(),
             )
           ], body: _buildCategoriesViews())),
     );
@@ -56,7 +60,6 @@ class ChatView extends StatelessWidget {
 
   Widget _buildCategoriesViews() {
     return TabBarView(children: [
-      const ClubHouseHome(),
       _buildCategoryChats(),
       _buildCategoryChats(),
       _buildCallingHistory(isVideo: false),
@@ -64,6 +67,8 @@ class ChatView extends StatelessWidget {
       _buildCallingHistory(isVideo: false),
       _buildCallingHistory(isVideo: true),
       _buildCategoryChats(isSecret: true),
+      _buildCategoryChats(),
+      _buildCategoryChats(),
       _buildCategoryChats(),
       _buildCategoryChats(),
       _buildCategoryChats(),

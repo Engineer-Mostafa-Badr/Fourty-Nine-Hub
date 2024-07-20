@@ -25,9 +25,11 @@ class SquareImage extends StatelessWidget {
         height: height,
         width: width,
         child: url == null
-            ? Image(
-                image: NetworkImage(url!),
-              )
+            ? source != null
+                ? Image(
+                    image: source!,
+                  )
+                : const SizedBox()
             : CachedNetworkImage(
                 fit: fit ?? BoxFit.cover,
                 errorWidget: (context, i, v) {

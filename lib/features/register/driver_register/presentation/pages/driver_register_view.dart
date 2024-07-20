@@ -1,21 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
-import 'package:fourtyninehub/features/register/driver_register/presentation/pages/taps/enter_car_info.dart';
-import 'package:fourtyninehub/features/register/driver_register/presentation/pages/taps/thank_you.dart';
-import 'package:fourtyninehub/features/register/driver_register/presentation/pages/taps/upload_car_license_images.dart';
-import 'package:fourtyninehub/features/register/driver_register/presentation/pages/taps/upload_national_id.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/register/driver_register/presentation/cubit/driver_register_cubit.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
+import 'taps/choose_register_subcategories.dart';
 import 'taps/enter_personal_info.dart';
 
-class DriverRegister extends StatelessWidget {
-  const DriverRegister({super.key});
+class DriverRegister extends StatefulWidget {
+  final String subCategoryId;
+
+  const DriverRegister({super.key, required this.subCategoryId});
+
+  @override
+  State<DriverRegister> createState() => _DriverRegisterState();
+}
+
+class _DriverRegisterState extends State<DriverRegister> {
+  @override
+  void initState() {
+    context.read<DriverRegisterCubit>().loadData(id: widget.subCategoryId);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final controller = context.read<DriverRegisterCubit>();
+    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
-        // TODO prevent from pop up show error state
         return (await showDialog(
               context: context,
               builder: (context) => AlertDialog(
@@ -35,49 +47,23 @@ class DriverRegister extends StatelessWidget {
             )) ??
             false;
       },
-      child: Scaffold(
-        body: Column(
-          children: [
-            Expanded(
-              child: PageView(
-                children: [
-                  // EnterPersonalInfo
-                  EnterPersonalInfo(
-                    length: 4,
-                    index: 1,
-                    label: 'Enter Personal Info',
-                  ),
-                  EnterCarInfo(
-                    length: 4,
-                    index: 1,
-                    label: 'Enter Car Info',
-                  ),
-                  const UploadCarLicenseImages(
-                    length: 4,
-                    index: 2,
-                    label: 'Upload License Images',
-                  ),
-                  const UploadNationalID(
-                    length: 4,
-                    index: 3,
-                    label: 'Upload National ID',
-                  ),
-                  const ThankYou(
-                      label: 'Finished',
-                      title: 'Thank you for your registeration!',
-                      subTitle:
-                          'We will contact you once your form is accepted!'),
-                ],
-              ),
-            ),
-            DefaultButton(
-              width: double.infinity,
-              margin: const EdgeInsets.all(10),
-              onPressed: () {},
-              label: 'Next',
-            ),
-          ],
-        ),
+      child: BlocBuilder<DriverRegisterCubit, DriverRegisterState>(
+        builder: (context, state) {
+          if (state.subCategory == null) {
+            return ChooseRegisterSubcategories(
+              subCategories: state.subCategories ?? [],
+              onSelection: (SubCategoryEntity item) =>
+                  controller.changeSubCategorySelection(item: item),
+            );
+          } else if (state.riderInfo == null) {
+            return EnterPersonalInfo(
+              length: 5,
+              index: 0,
+              label: 'Enter Personal Info',
+            );
+          }
+          return Scaffold();
+        },
       ),
     );
   }

@@ -22,12 +22,9 @@ class FloatingButton extends StatelessWidget {
           ? () => onTap!()
           : () {
               if (changeView == 1) {
-                final controller = context.read<UserCubit>();
-                if (controller.isLoggedIn) {
-                  context.push(Routes.SOCIAL, extra: controller.state.data?.id);
-                } else {
-                  context.push(Routes.LOGIN);
-                }
+                context.push(Routes.SOCIAL);
+              } else if (changeView == 2) {
+                context.push(Routes.INSTAGRAM);
               } else {
                 context.push(Routes.HOME);
               }

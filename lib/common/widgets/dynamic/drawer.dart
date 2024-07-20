@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/wallet_widget.dart';
+
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -43,6 +43,11 @@ class DrawerWidget extends StatelessWidget {
 
               // walletCircularProgress(context: context),
               drawerListTile(
+                  icon: FontAwesomeIcons.bullhorn,
+                  label: 'Advertise Your Company',
+                  onTap: () => context.push(Routes.CREATECOMPANYAD)),
+
+              drawerListTile(
                   icon: FontAwesomeIcons.quran,
                   label: Labels.quraan,
                   onTap: () => context.push(Routes.QURAAN)),
@@ -50,6 +55,7 @@ class DrawerWidget extends StatelessWidget {
                   icon: FontAwesomeIcons.book,
                   label: Labels.azkar,
                   onTap: () => context.push(Routes.AZKAAR)),
+
               drawerListTile(
                   icon: Icons.star_rounded,
                   label: 'Favourite Categories',

@@ -1,0 +1,41 @@
+import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+
+import '../../../../../subcategories/domain/entities/sub_category_entity.dart';
+
+class ChooseRegisterSubcategories extends StatelessWidget {
+  final List<SubCategoryEntity> subCategories;
+  final Function(SubCategoryEntity) onSelection;
+  const ChooseRegisterSubcategories({super.key, required this.subCategories, required this.onSelection});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: BackAppBar(
+        label: 'Choose Options',
+      ),
+      body: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 5,
+          ),
+          itemCount: subCategories.length,
+          itemBuilder: (context, index) {
+            final item = subCategories[index];
+            return InkWell(
+              onTap: ()=>onSelection(item),
+              child: Column(
+                children: [
+                  Expanded(
+                      child: SquareImage(
+                    url: item.image,
+                  )),
+                  Label(text: item.name)
+                ],
+              ),
+            );
+          }),
+    );
+  }
+}

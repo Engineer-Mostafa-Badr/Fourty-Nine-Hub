@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
 import 'package:fourtyninehub/features/register/driver_register/presentation/widgets/upload_image.dart';
 import '../../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../cubit/driver_register_cubit.dart';
+import 'enter_car_info.dart';
 
 class EnterPersonalInfo extends StatelessWidget {
   final int length, index;
@@ -40,12 +42,28 @@ class EnterPersonalInfo extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 const Sizer(),
-                FormTextField(
-                  // prefix: ,
-                  controller: controller.driverNameTextController,
-                  label: 'Name',
-                  prefix: const Icon(Icons.person),
-                  info: 'This name will appear to clients',
+                Row(
+                  children: [
+                    Expanded(
+                      child: FormTextField(
+                        // prefix: ,
+                        controller: controller.driverNameTextController,
+                        label: 'First Name',
+                        prefix: const Icon(Icons.person),
+                        info: 'This name will appear to clients',
+                      ),
+                    ),
+                    const Sizer(),
+                    Expanded(
+                      child: FormTextField(
+                        // prefix: ,
+                        controller: controller.driverNameTextController,
+                        label: 'Last Name',
+                        prefix: const Icon(Icons.person),
+                        info: 'This name will appear to clients',
+                      ),
+                    ),
+                  ],
                 ),
                 const Sizer(),
                 FormTextField(
@@ -56,22 +74,23 @@ class EnterPersonalInfo extends StatelessWidget {
                   prefix: const Icon(Icons.phone_android_rounded),
                 ),
                 const Sizer(),
-                Row(
-                  children: [
-                    const Expanded(child: Label(text: 'KM Price')),
-                    Expanded(
-                        flex: 2,
-                        child: FormTextField(
-                            controller: controller.kmPriceTextController,
-                            hint: 'xx',
-                            label: 'Price',
-                            type: TextInputType.number,
-                            action: (v) {}))
-                  ],
-                ),
+                if (controller.enterPrice())
+                  Row(
+                    children: [
+                      const Expanded(child: Label(text: 'KM Price')),
+                      Expanded(
+                          flex: 2,
+                          child: FormTextField(
+                              controller: controller.kmPriceTextController,
+                              hint: 'xx',
+                              label: 'Price',
+                              type: TextInputType.number,
+                              action: (v) {}))
+                    ],
+                  ),
                 const Sizer(),
                 _buildCategoriesWidget(context: context),
-                _buildCarTypesWidget(context: context),
+              EnterCarInfo(),
               ],
             ),
           ),
@@ -85,6 +104,10 @@ class EnterPersonalInfo extends StatelessWidget {
 
     return BlocBuilder<DriverRegisterCubit, DriverRegisterState>(
         builder: (context, state) {
+      final controller = context.read<DriverRegisterCubit>();
+      if (controller.captainOptions.isEmpty) {
+        return const SizedBox();
+      }
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -93,20 +116,20 @@ class EnterPersonalInfo extends StatelessWidget {
             style: Styles.headerText(),
           ),
           GridView.builder(
-              itemCount: state.subCategories?.length ?? 0,
+              itemCount: controller.captainOptions.length,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, childAspectRatio: 4),
               itemBuilder: (context, index) {
-                final subCategory = state.subCategories![index];
+                final option = controller.captainOptions[index];
                 return Row(
                   children: [
                     Checkbox(
-                        value: subCategory == state.subCategory,
-                        onChanged: (v) => controller.changeSubCategorySelection(
-                            item: subCategory)),
-                    Expanded(child: Label(text: subCategory.name)),
+                        value: state.selectedOptions?.contains(option) ?? false,
+                        onChanged: (v) =>
+                            controller.changeOptions(item: option)),
+                    Expanded(child: Label(text: option.title())),
                   ],
                 );
               }),

@@ -58,6 +58,7 @@ abstract class Routes {
   static const MAZADDETAILS = '/Mazadat/MazadDetails';
   static const CREATEAUCTION = '/Mazadat/CreateAuction';
 
+  static const INSTAGRAM = '/Instagram';
   static const ZOOM = '/Zoom';
   static const MEETINGROOM = '/Zoom/MeetingRoom';
   static const INSTALLMENT = '/Installment';
@@ -103,7 +104,7 @@ abstract class Paths {
   static const WALLET = 'Wallet';
   static const WALLETHISTORY = 'WalletHistory';
   static const TRANSFERMONEY = 'TransferMoney';
-
+  static const INSTAGRAM = 'Instagram';
   static const SOCIAL = 'Social';
   static const OTHERSACCOUNT = 'OthersAccount';
   static const MAZADAT = 'Mazadat';
