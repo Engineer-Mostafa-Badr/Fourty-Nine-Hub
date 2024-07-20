@@ -60,6 +60,7 @@ class FourtyNineServiceLocator {
     serviceLocator.registerLazySingleton<FourtyNineRemoteDataSource>(
       () => FourtyNineRemoteDataSourceImpl(
         serviceLocator(),
+        serviceLocator(),
       ),
     );
     serviceLocator.registerLazySingleton<AdsRemoteDataSource>(

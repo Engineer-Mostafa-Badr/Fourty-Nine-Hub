@@ -86,7 +86,7 @@ class RideServiceLocator {
         .registerFactory<DriverRegisterCubit>(() => DriverRegisterCubit(
               serviceLocator(),
               serviceLocator(),
-            )..loadData());
+            ));
 
     serviceLocator
         .registerFactory<DriverDashboardCubit>(() => DriverDashboardCubit(

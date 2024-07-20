@@ -15,8 +15,9 @@ extension DriverRegisterStateX on DriverRegisterState {
 @immutable
 class DriverRegisterState {
   final List<SubCategoryModel>? subCategories;
-  final SubCategoryModel? subCategory;
+  final SubCategoryEntity? subCategory;
   final List<CarTypeModel>? carTypes;
+  final List<RideServicesEnum>? selectedOptions;
   final CarTypeModel? carType;
   final RiderInfoModel? riderInfo;
   final DriverRegisterStatuses status;
@@ -28,16 +29,18 @@ class DriverRegisterState {
     this.subCategories,
     this.carTypes,
     this.subCategory,
+    this.selectedOptions,
     this.carType,
     this.status = DriverRegisterStatuses.initState,
   });
   DriverRegisterState copyWith(
       {List<SubCategoryModel>? subCategories,
-      SubCategoryModel? subCategory,
+      SubCategoryEntity? subCategory,
       List<CarTypeModel>? carTypes,
       CarTypeModel? carType,
       DriverRegisterStatuses? status,
       Failure? failure,
+      List<RideServicesEnum>? selectedOptions,
       RiderInfoModel? riderInfo}) {
     return DriverRegisterState(
         subCategories: subCategories ?? this.subCategories,
@@ -46,6 +49,7 @@ class DriverRegisterState {
         carType: carType ?? this.carType,
         status: status ?? this.status,
         failure: failure ?? this.failure,
+        selectedOptions: selectedOptions??this.selectedOptions,
         riderInfo: riderInfo ?? this.riderInfo);
   }
 }

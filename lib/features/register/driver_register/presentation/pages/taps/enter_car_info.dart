@@ -5,108 +5,79 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/register/driver_register/presentation/widgets/upload_image.dart';
-import '../../../../../../common/widgets/stateless/appbar/back_appbar.dart';
+
 import '../../../../../../res/style/styles.dart';
 import '../../cubit/driver_register_cubit.dart';
 
 class EnterCarInfo extends StatelessWidget {
-  final int length, index;
-  final String label;
-
-  EnterCarInfo(
-      {super.key,
-      required this.length,
-      required this.index,
-      required this.label});
+  const EnterCarInfo({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     final controller = context.read<DriverRegisterCubit>();
-    return Scaffold(
-      appBar: BackAppBar(
-        label: label,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: controller.formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                LinearProgressIndicator(
-                  value: index / length,
-                  minHeight: 5,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                const Sizer(),
-                Row(
-                  children: [
-                    const Expanded(child: Label(text: 'Car Module')),
-                    const Sizer(),
-                    Expanded(
-                        child: FormTextField(
-                      action: (v) {},
-                      label: 'Mark',
-                    )),
-                    const Sizer(),
-                    Expanded(
-                        child: FormTextField(
-                      action: (v) {},
-                      label: 'Type',
-                    )),
-                  ],
-                ),
-                const Sizer(),
-                Row(
-                  children: [
-                    const Expanded(child: Label(text: 'Metal Plate')),
-                    const Sizer(),
-                    Expanded(
-                        child: FormTextField(
-                      action: (v) {},
-                      label: 'Chars',
-                      type: TextInputType.text,
-                    )),
-                    const Sizer(),
-                    Expanded(
-                        child: FormTextField(
-                      action: (v) {},
-                      label: 'Numbers',
-                      type: TextInputType.number,
-                    )),
-                  ],
-                ),
-                const Sizer(),
-                Row(
-                  children: [
-                    const Expanded(child: Label(text: 'Air Conditioner')),
-                    Switch(value: false, onChanged: (v) {})
-                  ],
-                ),
-                const Label(text: 'Car Images'),
-                Row(
-                  children: [
-                    Expanded(
-                        child:
-                            UploadImageWidget(action: () {}, label: 'Front')),
-                    // const Sizer(),
-                    Expanded(
-                        child: UploadImageWidget(action: () {}, label: 'Back')),
-                    // const Sizer(),
-                    Expanded(
-                        child:
-                            UploadImageWidget(action: () {}, label: 'Right')),
-                    // const Sizer(),
-                    Expanded(
-                        child: UploadImageWidget(action: () {}, label: 'Left')),
-                  ],
-                )
-              ],
-            ),
-          ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Sizer(),
+        Row(
+          children: [
+            const Expanded(child: Label(text: 'Car Module')),
+            const Sizer(),
+            Expanded(
+                child: FormTextField(
+              action: (v) {},
+              label: 'Mark',
+            )),
+            const Sizer(),
+            Expanded(
+                child: FormTextField(
+              action: (v) {},
+              label: 'Type',
+            )),
+          ],
         ),
-      ),
+        const Sizer(),
+        Row(
+          children: [
+            const Expanded(child: Label(text: 'Metal Plate')),
+            const Sizer(),
+            Expanded(
+                child: FormTextField(
+              action: (v) {},
+              label: 'Chars',
+              type: TextInputType.text,
+            )),
+            const Sizer(),
+            Expanded(
+                child: FormTextField(
+              action: (v) {},
+              label: 'Numbers',
+              type: TextInputType.number,
+            )),
+          ],
+        ),
+        const Sizer(),
+        Row(
+          children: [
+            const Expanded(child: Label(text: 'Air Conditioner')),
+            Switch(value: false, onChanged: (v) {})
+          ],
+        ),
+        const Label(text: 'Car Images'),
+        Row(
+          children: [
+            Expanded(child: UploadImageWidget(action: () {}, label: 'Front')),
+            // const Sizer(),
+            Expanded(child: UploadImageWidget(action: () {}, label: 'Back')),
+            // const Sizer(),
+            Expanded(child: UploadImageWidget(action: () {}, label: 'Right')),
+            // const Sizer(),
+            Expanded(child: UploadImageWidget(action: () {}, label: 'Left')),
+          ],
+        )
+      ],
     );
   }
 

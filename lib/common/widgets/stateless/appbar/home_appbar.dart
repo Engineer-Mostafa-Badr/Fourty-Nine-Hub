@@ -137,6 +137,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
       ),
       backgroundColor: Colors.white,
       elevation: 0,
+      titleSpacing: 0,
       systemOverlayStyle: SystemUiOverlayStyle.light,
       iconTheme: const IconThemeData(color: Colors.black),
       // automaticallyImplyLeading: false,
@@ -144,5 +145,5 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kTextTabBarHeight * 1.5);
+  Size get preferredSize => const Size.fromHeight(kTextTabBarHeight * 1);
 }

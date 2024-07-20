@@ -37,6 +37,7 @@ import 'package:fourtyninehub/features/requests_history/presentation/pages/reque
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
@@ -225,7 +226,9 @@ class AppPages {
               path: Paths.REGISTERDRIVER,
               builder: (context, state) => BlocProvider<DriverRegisterCubit>(
                 create: (_) => serviceLocator(),
-                child: const DriverRegister(),
+                child: DriverRegister(
+                  subCategoryId: state.extra as String,
+                ),
               ),
             ),
           ],
@@ -372,16 +375,21 @@ class AppPages {
                         child: const MyAddsView(),
                       )),
             ]),
+
+            GoRoute(
+                  path: Paths.INSTAGRAM,
+                  name: Routes.INSTAGRAM,
+                  builder: (context, state) =>const InstagramView(),),
         GoRoute(
             path: Paths.SOCIAL,
             name: Routes.SOCIAL,
             builder: (context, state) {
-              final userId = state.extra as String;
+              final userId = state.extra as String?;
 
               return BlocProvider<SocialPostsCubit>(
                 create: (_) => serviceLocator(),
                 child: SocialHomeView(
-                  userId: userId,
+                  userId: userId ?? '',
                 ),
               );
             },
@@ -568,9 +576,10 @@ class AppPages {
                     GoRoute(
                         path: Paths.FOODCART,
                         name: Routes.FOODCART,
-                        builder: (context, state) => BlocProvider.value(value: serviceLocator<FoodCartCubit>(), 
-                        child: const FoodCartView(),
-                        ))
+                        builder: (context, state) => BlocProvider.value(
+                              value: serviceLocator<FoodCartCubit>(),
+                              child: const FoodCartView(),
+                            ))
                   ])
             ]),
         GoRoute(

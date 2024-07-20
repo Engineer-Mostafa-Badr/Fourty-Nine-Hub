@@ -21,6 +21,8 @@ abstract class Assets {
   static String reels = 'assets/images/reel_icon.svg';
   static String lists = 'assets/images/lists_icon.svg';
   static String radio = 'assets/images/radio.svg';
+  static String movingCar = 'assets/images/movingcar.gif';
+  static String walking = 'assets/images/walking.gif';
 
   // reactions
   static String like = 'assets/images/reactions/like.png';

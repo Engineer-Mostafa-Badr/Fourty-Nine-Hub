@@ -12,7 +12,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/form/text_fields/password_text_form_field.dart';
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
@@ -23,6 +22,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../controllers/user_cubit/user_cubit.dart';
+
 
 class RegisterView extends StatelessWidget {
   const RegisterView({super.key});

@@ -41,24 +41,20 @@ class WalletWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CircleAvatar(
-            radius: 3,
-            backgroundColor: AppColors.SECONDARY_COLOR,
-          ),
-          const Sizer(),
+          
           Expanded(
               child: InkWell(
             onTap: () {
               context.push(Routes.WALLET, extra: WalletTypes.balance);
             },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Label(
                     text: 'Balance',
                     style: Styles.mediumText(
                         fontWeight: FontWeight.bold, color: Colors.grey)),
-                // const Sizer(),
+                const Sizer(),
                 Label(
                     text: '900',
                     style: Styles.mediumText(
@@ -74,23 +70,20 @@ class WalletWidget extends StatelessWidget {
             color: Colors.grey,
             height: kToolbarHeight * .6,
           ),
-          const CircleAvatar(
-            radius: 3,
-            backgroundColor: AppColors.SECONDARY_COLOR,
-          ),
-          const Sizer(),
+        
           Expanded(
               child: InkWell(
             onTap: () {
               context.push(Routes.WALLET, extra: WalletTypes.gift);
             },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Label(
-                    text: 'Gift Wallet',
+                    text: 'Gift',
                     style: Styles.mediumText(
                         fontWeight: FontWeight.bold, color: Colors.grey)),
+                const Sizer(),
                 Label(
                     text: '300',
                     style: Styles.mediumText(
@@ -106,23 +99,20 @@ class WalletWidget extends StatelessWidget {
             color: Colors.grey,
             height: kToolbarHeight * .6,
           ),
-          const CircleAvatar(
-            radius: 3,
-            backgroundColor: AppColors.SECONDARY_COLOR,
-          ),
-          const Sizer(),
+          
           Expanded(
               child: InkWell(
             onTap: () {
               context.push(Routes.WALLET, extra: WalletTypes.normal);
             },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Label(
                     text: 'Wallet',
                     style: Styles.mediumText(
                         fontWeight: FontWeight.bold, color: Colors.grey)),
+                const Sizer(),
                 Label(
                     text: '400',
                     style: Styles.mediumText(
