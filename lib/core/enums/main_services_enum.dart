@@ -41,7 +41,7 @@ extension MainServicesEnumExtention on MainServicesEnum {
       case MainServicesEnum.food:
         return 'https://49hub.s3.eu-central-1.amazonaws.com/DO/143555d5-d72d-47cd-a370-716866fa0f2e.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZI2LDRJFLQMKAMUH%2F20240720%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20240720T110314Z&X-Amz-Expires=3600&X-Amz-Signature=4fa24a63b54a393da324459a775181ac4f5a2008da874df74245308a385c0f5c&X-Amz-SignedHeaders=host&x-id=GetObject';
       case MainServicesEnum.health:
-        return 'https://49hub.s3.eu-central-1.amazonaws.com/DO/7143fb33-3a01-44b9-975a-71464a3cadde.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZI2LDRJFLQMKAMUH%2F20240720%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20240720T110314Z&X-Amz-Expires=3600&X-Amz-Signature=76b55b2cb6086833d10643c5c2e6bd2d6c9078f3ab357993329291313586249a&X-Amz-SignedHeaders=host&x-id=GetObject';
+        return 'https://49hub.s3.eu-central-1.amazonaws.com/DO/7143fb33-3a01-44b9-975a-71464a3cadde.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZI2LDRJFLQMKAMUH%2F20240720%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20240720T124939Z&X-Amz-Expires=3600&X-Amz-Signature=d277cbc9d94054fca1b7c4b6b8b5c4f2e6acaeabd45970f074b2f5260bf7a813&X-Amz-SignedHeaders=host&x-id=GetObject';
     }
   }
 

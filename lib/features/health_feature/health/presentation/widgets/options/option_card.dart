@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class HealthServiceCard extends StatelessWidget {
+class HealthOptionCard extends StatelessWidget {
   final String imagePath;
   final String name;
-  const HealthServiceCard(
+  const HealthOptionCard(
       {super.key, required this.imagePath, required this.name});
 
   @override

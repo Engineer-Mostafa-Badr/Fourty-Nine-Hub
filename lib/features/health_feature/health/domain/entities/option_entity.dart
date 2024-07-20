@@ -1,8 +1,8 @@
-class HealthServiceEntity {
+class HealthOptionEntity {
   final String name;
   final String image;
 
-  const HealthServiceEntity({
+  const HealthOptionEntity({
     required this.name,
     required this.image,
   });

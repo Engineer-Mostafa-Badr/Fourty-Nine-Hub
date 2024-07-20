@@ -18,22 +18,18 @@ class HealthBanner extends StatelessWidget {
             image: NetworkImage(MainServicesEnum.health.banner),
           )),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Spacer(),
+          const Icon(
+            Icons.favorite_border,
+            color: AppColors.SECONDARY_COLOR,
+          ),
           Text(
             'Health',
             style: Styles.headerText(color: AppColors.DARK_BLUE_COLOR),
           ),
-          const Spacer(),
-          Column(
-            children: [
-              const Icon(
-                Icons.favorite_border,
-                color: AppColors.SECONDARY_COLOR,
-              ),
-              Text('Register', style: Styles.smallText(color: AppColors.DARK_BLUE_COLOR)),
-            ],
-          )
+          Text('Register',
+              style: Styles.smallText(color: AppColors.DARK_BLUE_COLOR)),
         ],
       ),
     );
