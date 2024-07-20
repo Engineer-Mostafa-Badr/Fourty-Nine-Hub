@@ -1,11 +1,12 @@
 abstract class Routes {
   Routes._();
+
   static const HOME = '/';
   static const SUBCATEGORIES = '/Subcategories';
   static const ADS = '/Subcategories/ADS';
   static const ADdetails = '/Subcategories/ADS/AD-Details';
   static const CREATEAD = '/Subcategories/ADS/CreateAd';
-    static const CREATECOMPANYAD = '/Subcategories/ADS/CreateCompanyAd';
+  static const CREATECOMPANYAD = '/Subcategories/ADS/CreateCompanyAd';
 
   static const LUCKYWHEEL = '/LuckyWheel';
   static const COMPETITIONS = '/Competitions';
@@ -18,7 +19,7 @@ abstract class Routes {
   static const REELS = '/Social/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
   static const TWITTER = '/Social/Twitter';
-    static const CREATEPOST = '/Social/CreatePost';
+  static const CREATEPOST = '/Social/CreatePost';
 
   static const Tinder = '/Social/Tinder';
   static const LIVE = '/Social/Live';
@@ -43,7 +44,7 @@ abstract class Routes {
   static const FOODCART = '/Food/RetaurantDetails/FoodCart';
   static const SHIPPING = '/Shipping';
   static const RIDE = '/Ride';
-    static const CONTACTUS = '/ContactUs';
+  static const CONTACTUS = '/ContactUs';
 
   static const RIDERDASHBOARD = '/Ride/RiderDashboard';
 
@@ -55,7 +56,7 @@ abstract class Routes {
   static const PLAYVIDEO = '/Youtube/PlayVideo';
 
   static const MAZADDETAILS = '/Mazadat/MazadDetails';
-    static const CREATEAUCTION = '/Mazadat/CreateAuction';
+  static const CREATEAUCTION = '/Mazadat/CreateAuction';
 
   static const INSTAGRAM = '/Instagram';
   static const ZOOM = '/Zoom';
@@ -69,6 +70,8 @@ abstract class Routes {
   static const LOGIN = '/Login';
   static const REGISTER = '/Register';
   static const FORGOTPASSWORD = '/ForgotPassword';
+  static const FORGOTPASSWORDOTP = '/ForgotPassword/OTP';
+  static const CREATENEWFORGOTPASSWORD = '/ForgotPassword/CreateNewPassword';
   static const VERIFYMAIL = '/Register/verify-mail-register';
   static const REGISTERDRIVER = '/Register/register-driver';
   static const ACCOUNT = '/Account';
@@ -88,6 +91,7 @@ abstract class Routes {
 
 abstract class Paths {
   Paths._();
+
   static const HOME = '/';
   static const SUBCATEGORIES = 'Subcategories';
   static const ADS = 'ADS';
@@ -147,7 +151,8 @@ abstract class Paths {
   static const LOGIN = 'Login';
   static const REGISTER = 'Register';
   static const FORGOTPASSWORD = 'ForgotPassword';
-
+  static const FORGOTPASSWORDOTP = 'ForgotPasswordOTP';
+  static const CREATENEWFORGOTPASSWORD = 'CreateNewPassword';
   static const VERIFYMAIL = 'verify-mail-register';
   static const REGISTERDRIVER = 'register-driver';
   static const ACCOUNT = 'Account';

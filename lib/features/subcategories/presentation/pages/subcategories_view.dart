@@ -35,9 +35,9 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: [
-            const GoogleAddsBanner(
-              margin: 0,
-            ),
+            // const GoogleAddsBanner(
+            //   margin: 0,
+            // ),
             const Sizer(),
             const WalletWidget(),
             _buildSubCategories(),

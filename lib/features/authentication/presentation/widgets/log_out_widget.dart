@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -32,7 +34,12 @@ class LogoutWidget extends StatelessWidget {
               backColor: AppColors.DARK_GRAY_COLOR,
             )),
             const Sizer(),
-            Expanded(child: AppButton(label: 'Logout', onPressed: () {})),
+            Expanded(
+              child: AppButton(
+                label: 'Logout',
+                onPressed: ()=> context.read<UserCubit>().logout(),
+              ),
+            ),
           ],
         )
       ],

@@ -19,7 +19,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/dynamic/wallet_widget.dart';
 import '../../../../res/style/app_colors.dart';
-import '../controllers/main_categories_cubit/parent_main_categories_cubit.dart';
+
 
 import '../widgets/announce_widget.dart';
 import '../widgets/main_category_card.dart';
@@ -40,6 +40,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       mainCategoryId: 1,
       isWithBackArrow: false,
       body: SingleChildScrollView(
+
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Column(
@@ -47,7 +48,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             children: [
               const AnnounceWidget(),
               const WalletWidget(),
-              const GoogleAddsBanner(),
+
               _buildMazadatWidget(),
               BlocBuilder<MainCategoriesCubit,
                   BasicState<List<MainCategoryEntity>>>(
@@ -61,35 +62,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   }
                   return _buildHorizontalServices(state.data!);
                 },
-              ),
-              // _buildViewType(),
-              BlocBuilder<ParentMainCategoriesCubit,
-                  BasicState<List<ParentMainCategoryEntity>>>(
-                builder: (context, state) {
-                  if (state.status == StateStatus.loading) {
-                    return const Center(
-                        child: CircularProgressIndicator.adaptive());
-                  }
-                  if (state.status != StateStatus.success) {
-                    return const SizedBox.shrink();
-                  }
-                  return Column(
-                    children: state.data!
-                        .map(
-                          (e) => _buildFourtyNineServices(
-                            e,
-                          ),
-                        )
-                        .toList(),
-                  );
-                },
-              ),
-              const SizedBox(height: 50),
-            ],
-          ),
-        ),
-      ),
-    );
+       ),
+      ]),
+    )));
   }
 
   Widget _buildMazadatWidget() {

@@ -3,10 +3,13 @@ import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_tokens_model.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/create_new_forget_password_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/login_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_otp_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/send_forget_password_otp_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_forget_password_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_otp_use_case.dart';
 
 abstract class AuthRemoteDataSource {
@@ -25,6 +28,18 @@ abstract class AuthRemoteDataSource {
 
   Future<Either<Failure, void>> resendOTP(
     ResendOTPParams params,
+  );
+
+  Future<Either<Failure, void>> sendForgetPasswordOTP(
+    SendForgetOTPParams params,
+  );
+
+  Future<Either<Failure, void>> verifyForgetPasswordOTP(
+    VerifyForgetOTPParams params,
+  );
+
+  Future<Either<Failure, void>> createNewForgetPassword(
+    CreateNewForgetParams params,
   );
 
   Future<Either<Failure, double>> getWelcomeGift();
@@ -127,6 +142,48 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   Future<Either<Failure, void>> resendOTP(ResendOTPParams params) async {
     final result = await _apiConsumer.put(
       EndPoints.resendOTP,
+      data: params.toJson(),
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) => const Right(null),
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> sendForgetPasswordOTP(
+    SendForgetOTPParams params,
+  ) async {
+    final result = await _apiConsumer.post(
+      EndPoints.sendForgetPasswordOTP,
+      data: params.toJson(),
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) => const Right(null),
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> verifyForgetPasswordOTP(
+    VerifyForgetOTPParams params,
+  ) async {
+    final result = await _apiConsumer.post(
+      EndPoints.verifyForgetPasswordOTP,
+      data: params.toJson(),
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) => const Right(null),
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> createNewForgetPassword(
+    CreateNewForgetParams params,
+  ) async {
+    final result = await _apiConsumer.put(
+      EndPoints.createNewForgetPassword,
       data: params.toJson(),
     );
     return result.fold(

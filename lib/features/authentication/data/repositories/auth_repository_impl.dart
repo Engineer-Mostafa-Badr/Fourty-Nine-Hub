@@ -5,15 +5,17 @@ import 'package:fourtyninehub/features/authentication/data/data_sources/local_da
 import 'package:fourtyninehub/features/authentication/data/data_sources/remote_data_source/auth_remote_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/create_new_forget_password_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/login_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_otp_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/send_forget_password_otp_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_forget_password_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_otp_use_case.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-
 
 class AuthRepositoryImpl extends AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
@@ -61,9 +63,6 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<Either<Failure, double>> getWelcomeGift() {
     return _remoteDataSource.getWelcomeGift();
   }
-
-  
-  
 
   @override
   Future<Either<Failure, UserTokensEntity>> signInWithFacebook() async {
@@ -130,11 +129,32 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<Either<Failure, void>> resendOTP(ResendOTPParams params) {
     return _remoteDataSource.resendOTP(params);
   }
-  
+
   @override
   Future<Either<Failure, UserTokensEntity>> signInWithApple() {
     // TODO: implement signInWithApple
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, void>> sendForgetPasswordOTP(
+    SendForgetOTPParams params,
+  ) {
+    return _remoteDataSource.sendForgetPasswordOTP(params);
+  }
+
+  @override
+  Future<Either<Failure, void>> verifyForgetPasswordOTP(
+    VerifyForgetOTPParams params,
+  ) {
+    return _remoteDataSource.verifyForgetPasswordOTP(params);
+  }
+
+  @override
+  Future<Either<Failure, void>> createNewForgetPassword(
+    CreateNewForgetParams params,
+  ) {
+    return _remoteDataSource.createNewForgetPassword(params);
   }
 }
 //enum: ['google', 'facebook', 'local', 'apple']
