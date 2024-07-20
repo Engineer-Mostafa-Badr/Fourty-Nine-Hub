@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/common/models/public/city_model.dart';
 import 'package:fourtyninehub/common/models/public/state_model.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';

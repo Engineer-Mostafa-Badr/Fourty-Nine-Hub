@@ -9,7 +9,7 @@ import 'package:fourtyninehub/features/requests_history/presentation/widgets/tri
 
 import '../../../../res/assets/assets.dart';
 import '../../../../res/strings/labels.dart';
-import '../../../health_feature/health/presentation/widgets/customer/booking_card.dart';
+import '../../../health_feature/health/presentation/widgets/booking/booking_card.dart';
 import '../widgets/food_order_card.dart';
 import '../widgets/shipping_request_card.dart';
 
@@ -104,7 +104,7 @@ class HistoryRequestsView extends StatelessWidget {
       return ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) => VisitaBookingCard(
+          itemBuilder: (context, index) => HealthBookingCard(
                 appointment: state.healthBookings![index],
               ),
           separatorBuilder: (context, index) => const Sizer(),

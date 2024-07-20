@@ -8,9 +8,7 @@ import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
-import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../res/strings/labels.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../widgets/doctor_card.dart';
 import '../widgets/select_state.dart';

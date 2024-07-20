@@ -4,15 +4,14 @@ import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart'
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
-import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-class VisitaBookingCard extends StatelessWidget {
+class HealthBookingCard extends StatelessWidget {
   final AppointmentBookingEntity appointment;
-  const VisitaBookingCard({super.key, required this.appointment});
+  const HealthBookingCard({super.key, required this.appointment});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +43,7 @@ class VisitaBookingCard extends StatelessWidget {
                   radius: 10,
                   height: kToolbarHeight,
                   width: kToolbarHeight,
-                  source: NetworkImage(appointment.doctor.image),
+                  url: appointment.doctor.image,
                 ),
                 const Sizer(),
                 Expanded(

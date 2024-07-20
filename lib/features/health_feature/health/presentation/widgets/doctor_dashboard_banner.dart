@@ -1,0 +1,27 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/cubit/health_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/common/dashboard_banner.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+
+class DoctorDashboardBanner extends StatelessWidget {
+  const DoctorDashboardBanner({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HealthCubit, HealthState>(
+      builder: (context, state) {
+        if (state.isDoctor) {
+          return const DashboardBanner(
+            title: 'Doctor Dashboard\n',
+            subTitle:
+                'New Bookings are waiting you, go to doctor dashboard and explore more!',
+            route: Routes.DOCTORDASHBOARD,
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+    );
+  }
+}
