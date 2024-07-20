@@ -80,6 +80,7 @@ class RegisterView extends StatelessWidget {
                     currentFocusNode: registerCubit.emailFocusNode,
                     currentController: registerCubit.emailTextController,
                     nextFocusNode: registerCubit.passwordFocusNode,
+                    keyboardType: TextInputType.emailAddress,
                     suffixIcon: const Icon(Icons.email),
                     hint: 'Email',
                     validator: (v) {

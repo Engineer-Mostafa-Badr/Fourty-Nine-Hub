@@ -7,6 +7,7 @@ class HealthState {
   final Failure? failure;
   final List<AppointmentBookingEntity>? myBookings;
   final List<SubCategoryModel>? subCategories;
+  final isDoctor = false;
   const HealthState(
       {this.status = HealthStates.loading, this.failure, this.myBookings, this.subCategories});
   HealthState copyWith({
