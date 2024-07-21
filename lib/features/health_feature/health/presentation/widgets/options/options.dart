@@ -14,8 +14,8 @@ class HealthOptions extends StatelessWidget {
       itemCount: services.length,
       shrinkWrap: true,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        childAspectRatio: 2,
-        crossAxisCount: 2,
+        childAspectRatio: 1,
+        crossAxisCount: 3,
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,
       ),

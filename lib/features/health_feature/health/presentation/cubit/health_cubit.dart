@@ -23,7 +23,6 @@ class HealthCubit extends Cubit<HealthState> {
     HealthOptionEntity(name: 'Clinic Visit', image: Assets.doctor),
     HealthOptionEntity(name: 'Doctor Call', image: Assets.doctor),
     HealthOptionEntity(name: 'Home Visit', image: Assets.doctor),
-    HealthOptionEntity(name: 'Procedures', image: Assets.doctor),
   ];
 
   void loadData() async {
