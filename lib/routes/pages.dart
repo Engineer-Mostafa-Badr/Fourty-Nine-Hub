@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/models/public/sub_category_model.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
@@ -26,8 +27,8 @@ import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/regi
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/cubit/doctor_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_dashboard_view.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_login/presentation/cubit/doctor_login_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_login/presentation/pages/doctor_login_view.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/pages/create_doctor_view.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/create_installment/presentation/cubit/create_installment_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_details/presentation/cubit/installment_details_cubit.dart';
@@ -45,6 +46,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/pages/mus
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:go_router/go_router.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_ads_cubit.dart';
@@ -538,9 +540,11 @@ class AppPages {
               GoRoute(
                 path: Paths.DOCTORLOGIN,
                 name: Routes.DOCTORLOGIN,
-                builder: (context, state) => BlocProvider<DoctorLoginCubit>(
+                builder: (context, state) => BlocProvider<CreateDoctorCubit>(
                   create: (context) => serviceLocator(),
-                  child: const DoctorLoginView(),
+                  child: CreateDoctorView(
+                    subCategories: state.extra as List<SubCategoryEntity>?,
+                  ),
                 ),
               ),
               GoRoute(
