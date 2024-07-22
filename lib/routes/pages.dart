@@ -43,6 +43,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/controlle
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:go_router/go_router.dart';
@@ -436,7 +437,9 @@ class AppPages {
               GoRoute(
                   path: Paths.TWITTER,
                   name: Routes.TWITTER,
-                  builder: (context, state) => const TwitterView()),
+                  builder: (context, state) => BlocProvider<TwitterCubit>(
+                      create: (_)=>serviceLocator(),
+                      child: const TwitterView())),
               GoRoute(
                 path: Paths.OTHERSACCOUNT,
                 name: Routes.OTHERSACCOUNT,

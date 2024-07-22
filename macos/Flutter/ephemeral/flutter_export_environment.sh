@@ -1,11 +1,11 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/apple/Dev/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/apple/Projects/Flutter Projects/multiServiceApp"
+export "FLUTTER_ROOT=C:\src\3.22.2\flutter"
+export "FLUTTER_APPLICATION_PATH=D:\Studio Projects\49-mobile-app"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
-export "FLUTTER_BUILD_NAME=1.0.2"
-export "FLUTTER_BUILD_NUMBER=2"
+export "FLUTTER_BUILD_NAME=1.0.4"
+export "FLUTTER_BUILD_NUMBER=4"
 export "DART_OBFUSCATION=false"
 export "TRACK_WIDGET_CREATION=true"
 export "TREE_SHAKE_ICONS=false"

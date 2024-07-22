@@ -11,6 +11,15 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/hide_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
+import 'package:fourtyninehub/features/social_media/twitter/data/datasources/twitter_remote_datasource.dart';
+import 'package:fourtyninehub/features/social_media/twitter/data/repositories/twitter_repo_impl.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/repositories/twitter_repo.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_post_comments_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_react_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/share_twitter_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/social_media/create_post/data/repositories/create_post_repo_impl.dart';
@@ -27,11 +36,17 @@ class SocialServiceLocator {
         () => SocialPostsRemoteDataSourceImpl(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<TwitterRemoteDataSource>(
+            () => TwitterRemoteDataSourceImpl(
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<CreatePostRepo>(
         () => CreatePostRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<SocialPostsRepo>(
         () => SocialPostsRepoImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<TwitterRepo>(
+            () => TwitterRepoImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<CreatePostUseCase>(
         () => CreatePostUseCase(serviceLocator()));
@@ -63,6 +78,32 @@ class SocialServiceLocator {
         .registerLazySingleton<GetUserPostsUseCase>(() => GetUserPostsUseCase(
               serviceLocator(),
             ));
+
+    serviceLocator
+        .registerLazySingleton<GetTwitterFeedUseCase>(() => GetTwitterFeedUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<TwitterPostReactUseCase>(() => TwitterPostReactUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<GetTwitterPostCommentsUseCase>(() => GetTwitterPostCommentsUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<TwitterCommentReactUseCase>(() => TwitterCommentReactUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<TwitterSharePostUseCase>(() => TwitterSharePostUseCase(
+      serviceLocator(),
+    ));
+
     serviceLocator.registerFactory<CreatePostCubit>(() => CreatePostCubit(
           serviceLocator(),
           serviceLocator(),
@@ -77,5 +118,12 @@ class SocialServiceLocator {
           serviceLocator(),
           serviceLocator(),
         )..loadData());
+    serviceLocator.registerFactory<TwitterCubit>(() => TwitterCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+    )..loadData());
   }
 }
