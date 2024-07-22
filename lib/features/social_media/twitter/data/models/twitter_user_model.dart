@@ -1,4 +1,3 @@
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 
 

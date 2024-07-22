@@ -1,5 +1,3 @@
-import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 
 class TwitterPostCommentModel extends TwitterPostCommentEntity {
