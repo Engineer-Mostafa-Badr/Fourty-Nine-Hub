@@ -1,13 +1,13 @@
 // import 'package:flutter/material.dart';
 // import 'package:fourtyninehub/res/style/const.dart';
-//
+
 // import '../../../res/style/app_colors.dart';
 // import 'package:admob_flutter/admob_flutter.dart';
-//
+
 // class GoogleAddsBanner extends StatelessWidget {
 //   final double margin;
 //   const GoogleAddsBanner({super.key, this.margin = 5});
-//
+
 //   @override
 //   Widget build(BuildContext context) {
 //     return Container(

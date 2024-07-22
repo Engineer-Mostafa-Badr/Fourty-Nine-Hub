@@ -2,12 +2,10 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
-import 'package:fourtyninehub/features/requests_history/domain/entities/trip_entity.dart';
 import 'package:fourtyninehub/features/ride/trip_details/domain/entities/trip_and_request_entity.dart';
+import '../../../../../core/data/datasources/json_parser.dart';
 import '../../../../../core/error/failure.dart';
-import '../../../../../res/assets/jsons.dart';
 import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
-import '../../../../requests_history/data/models/trip_model.dart';
 import '../../../../ride/trip_details/data/models/trip_and_request_model.dart';
 
 abstract class MyAdsRemoteDatasource {
@@ -26,7 +24,8 @@ abstract class MyAdsRemoteDatasource {
 
 class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
   final ApiConsumer _apiConsumer;
-  MyAdsRemoteDatasourceImpl(this._apiConsumer);
+  final JsonParser _jsonParser;
+  MyAdsRemoteDatasourceImpl(this._apiConsumer, this._jsonParser);
   @override
   Future<Either<Failure, bool>> cancelAd({required int id}) {
     // TODO: implement cancelAd
@@ -41,10 +40,10 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
 
   @override
   Future<Either<Failure, List<AdEntity>>> getAds() async {
-    final response = await _apiConsumer.get(Jsons.adsList);
+    final response = await _apiConsumer.get(EndPoints.myAds);
     return response.fold(
         (failure) => Left(failure),
-        (data) => Right((data['data']['ads'] as List)
+        (data) => Right((data['data'] as List)
             .map((e) => AdModel.fromJson(e))
             .toList()));
   }

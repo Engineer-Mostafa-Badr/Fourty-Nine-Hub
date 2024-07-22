@@ -2,10 +2,13 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 
+import '../../../subcategories/domain/entities/sub_category_entity.dart';
+
 class MainCategoryEntity extends Equatable {
   final String id;
   final String name;
   final String image;
+  final List<SubCategoryEntity>? subcategories;
   @protected
   final String? banner;
   @protected
@@ -17,6 +20,7 @@ class MainCategoryEntity extends Equatable {
     required this.id,
     required this.name,
     required this.image,
+    this.subcategories,
     this.banner,
     this.cover,
     required this.isFavorite,

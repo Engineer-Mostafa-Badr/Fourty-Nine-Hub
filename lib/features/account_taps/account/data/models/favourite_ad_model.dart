@@ -7,8 +7,8 @@ class FavouriteAdModel extends FavouriteAdEntity{
 
   factory FavouriteAdModel.fromJson(Map<String, dynamic> json) {
     return FavouriteAdModel(
-      id: json['id'],
-      item: AdModel.fromJson(json['item']),
+      id: json['_id'],
+      item: AdModel.fromJson(json['adId']),
       // id: json['id'],
     );
   }

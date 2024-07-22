@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
-import 'package:fourtyninehub/core/enums/main_services_enum.dart';
-import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../common/widgets/stateless/labels/label.dart';
@@ -196,8 +192,11 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                     InkWell(
                       onTap: () {
                         bottomSheet(
-                            widget: RideContactPhoneNumber(),
+                            widget: RideContactPhoneNumber(
+                              onChanged: (String v)=>rideCubit.changePhoneNumber(v),
+                            ),
                             isScrollControlled: true,
+                            
                             context: context);
                       },
                       child: Container(

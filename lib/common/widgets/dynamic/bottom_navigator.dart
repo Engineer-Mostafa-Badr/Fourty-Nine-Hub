@@ -37,7 +37,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
                 icon: Icons.video_call,
                 label: 'Meet',
                 index: 0,
-                image: Assets.zoom,
+                image: Assets.zoomMeeting,
                 action: () => context.push(Routes.MEETINGROOM)),
             BottomItemModel(
                 icon: Icons.video_call,

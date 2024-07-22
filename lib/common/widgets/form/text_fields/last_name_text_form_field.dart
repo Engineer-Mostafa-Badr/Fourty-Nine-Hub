@@ -8,7 +8,7 @@ class LastNameTextFormField extends MainTextFormField {
   LastNameTextFormField(
       {super.key,
       required super.currentFocusNode,
-      required FocusNode super.nextFocusNode,
+      super.nextFocusNode,
       required super.currentController,
       super.margin = null,
       super.enabled,

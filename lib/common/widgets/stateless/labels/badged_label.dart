@@ -11,6 +11,7 @@ class BadgedLabel extends StatelessWidget {
   final TextStyle? style;
   final double? height, width, margin;
   final Function? onTap;
+  final bool isBordered;
 
   const BadgedLabel(
       {super.key,
@@ -22,6 +23,7 @@ class BadgedLabel extends StatelessWidget {
       this.onTap,
       this.margin,
       this.radius = 10,
+      this.isBordered = false,
       this.textColor = Colors.white});
 
   @override
@@ -38,7 +40,9 @@ class BadgedLabel extends StatelessWidget {
         margin: EdgeInsets.all(margin ?? 0),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
         decoration: BoxDecoration(
-            color: color, borderRadius: BorderRadius.circular(radius)),
+            color:isBordered ?Colors.white: color,
+            border: isBordered ? Border.all(color: color, width: .5) : null,
+            borderRadius: BorderRadius.circular(radius)),
         child: Label(
           text: label,
           style: style ?? Styles.mediumText(color: textColor),

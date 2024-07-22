@@ -23,6 +23,8 @@ abstract class Assets {
   static String radio = 'assets/images/radio.svg';
   static String movingCar = 'assets/images/movingcar.gif';
   static String walking = 'assets/images/walking.gif';
+  static String image = 'assets/images/image.png';
+  static String empty = 'assets/images/image.png';
 
   // reactions
   static String like = 'assets/images/reactions/like.png';

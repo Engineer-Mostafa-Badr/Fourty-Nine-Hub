@@ -42,9 +42,11 @@ class _FavouriteSubCategoryViewState extends State<FavouriteSubCategoryView> {
                     crossAxisCount: 2,
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 10),
-                itemBuilder: (context, index) => SubCategoryCard(
-                      item: state.data![index].item,
-                    )),
+                itemBuilder: (context, index) => Container()
+                //  SubCategoryCard(
+                //       item: state.data![index].item,
+                //     )
+                ),
           ),
         );
       }),

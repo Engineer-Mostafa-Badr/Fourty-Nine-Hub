@@ -25,8 +25,6 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
     super.initState();
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,8 +36,8 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
             // const GoogleAddsBanner(
             //   margin: 0,
             // ),
-            const Sizer(),
-            const WalletWidget(),
+            // const Sizer(),
+            // const WalletWidget(),
             _buildSubCategories(),
           ],
         ),
@@ -55,15 +53,16 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
               child: CircularProgressIndicator.adaptive(),
             );
           }
-          return GridView.builder(
-              itemCount: state.subCategories?.length ?? 0,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 10),
-              itemBuilder: (context, index) => SubCategoryCard(
-                    item: state.subCategories![index],
-                  ));
+          return Container();
+          // return SizedBox(
+          //   height: kToolbarHeight * 1.5,
+          //   child: ListView.builder(
+          //       scrollDirection: Axis.horizontal,
+          //       itemCount: state.subCategories?.length ?? 0,
+          //       itemBuilder: (context, index) => SubCategoryCard(
+          //             item: state.subCategories![index],
+          //           )),
+          // );
         },
         listener: (context, state) {});
   }

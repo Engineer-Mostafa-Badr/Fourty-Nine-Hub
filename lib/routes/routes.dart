@@ -31,6 +31,7 @@ abstract class Routes {
   static const MAZADAT = '/Mazadat';
   static const VISITA = '/Visita';
   static const VISITADOCTORLIST = '/Visita/VisitaDoctorsList';
+  static const DOCTORLOGIN = '/Visita/DoctorLogin';
   static const VISITADOCTORDETAILS = '/Visita/DoctorDetails';
   static const VISITABOOKING = '/Visita/VisitaBooking';
   static const DOCTORDASHBOARD = '/Visita/DoctorDashboard';
@@ -125,6 +126,7 @@ abstract class Paths {
   static const VISITADOCTORLIST = 'VisitaDoctorsList';
   static const VISITADOCTORDETAILS = 'DoctorDetails';
   static const VISITABOOKING = 'VisitaBooking';
+  static const DOCTORLOGIN = 'DoctorLogin';
   static const DOCTORDASHBOARD = 'DoctorDashboard';
   static const FOOD = 'Food';
   static const CusineRestaurants = 'Cusine-Restaurants';

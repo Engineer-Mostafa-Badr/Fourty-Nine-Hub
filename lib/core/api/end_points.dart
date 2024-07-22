@@ -12,7 +12,7 @@ class EndPoints {
   static const resendOTP = '/auth/resend-reset-code';
   static const refreshToken = '/auth/refresh/token';
   static const getParentMainCategories = '/category/parent';
-  static const getMainCategories = '/categories/main';
+  static const getMainCategories = '/category/parent/get-all-main';
   static const getWheel = '/wheels/random';
   static const spinWheel = '/wheels/spin/';
   static const wheelWallet = '/wheel/wallets/my/wallet';
@@ -170,10 +170,31 @@ class EndPoints {
     return '/food/food-items/$id';
   }
 
+  static String getSubcategoryAdProps(String id) {
+    return '/ads/PropsBySubCategoryId/$id';
+  }
+
+  static const createAd = '/ads/create-ads';
+  static const myAds = '/ads/allMyAds';
+  static const makeRequest = '/ads-requests/makeAdRequest';
+  static const favouriteAds = '/ads-favourites/allFavouriteAds';
+  static String subCategoryAds(String id) {
+    return '/ads/subCategoryAds/$id';
+  }
+
+
+  static String adDetails(String id) {
+    return '/ads/getAd/$id';
+  }
+
   static String addToCart = '/food/addToCart';
   static String getCart = '/food/getCart';
   static String deleteFromCart = '/food/deleteFromCart';
   static String placeOrder = '/food/make-order';
   // contact us
   static const helpMessages = '/help';
+  static String mediaUrl = '/media/signed-url';
+  static String confirmUpload(String mediaId) {
+    return '/media/confirm/$mediaId';
+  }
 }

@@ -1,3 +1,7 @@
+import 'package:fourtyninehub/features/social_media/chat/data/repositories/chat_repository_implement.dart';
+import 'package:fourtyninehub/features/social_media/chat/domain/repositories/chat_repository.dart';
+import 'package:fourtyninehub/features/social_media/chat/domain/usecases/getChatMessages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/datasources/create_post_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/repositories/create_post_repo.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/create_post_usecase.dart';
@@ -125,5 +129,18 @@ class SocialServiceLocator {
       serviceLocator(),
       serviceLocator(),
     )..loadData());
+
+    serviceLocator.registerLazySingleton<GetChatMessagesUseCase>(
+        () => GetChatMessagesUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<ChatRepository>(
+        () => ChatRepositoryImplementation());
+
+    serviceLocator.registerFactory<ChatCubit>(() => ChatCubit(
+          serviceLocator(),
+          serviceLocator(),
+        ));
   }
 }

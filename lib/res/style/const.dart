@@ -1,7 +1,5 @@
-import 'dart:io';
 
 //import 'package:admob_flutter/admob_flutter.dart';
-import 'package:flutter/foundation.dart';
 
 class UIConst {
   static const String googleMapAPIKey =

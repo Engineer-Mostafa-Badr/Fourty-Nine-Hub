@@ -13,7 +13,7 @@ class AdsRepoImpl implements AdsRepo {
 
   @override
   Future<Either<Failure, List<AdModel>>> getAds(
-      {required int subCategoryId}) async {
+      {required String subCategoryId}) async {
     return await _remoteDataSource.getAds(subCategoryId: subCategoryId);
   }
 

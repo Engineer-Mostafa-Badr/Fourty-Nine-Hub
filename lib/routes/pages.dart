@@ -26,6 +26,8 @@ import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/regi
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/cubit/doctor_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_dashboard_view.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_login/presentation/cubit/doctor_login_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_login/presentation/pages/doctor_login_view.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/create_installment/presentation/cubit/create_installment_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_details/presentation/cubit/installment_details_cubit.dart';
@@ -35,6 +37,7 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
@@ -54,6 +57,8 @@ import '../features/account_taps/policies/presentation/pages/policy_view.dart';
 import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
 import '../features/account_taps/transfer_money/presentation/pages/transfer_money_view.dart';
 import '../features/account_taps/wallet/domain/entities/wallet_entity.dart';
+import '../features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import '../features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import '../features/ads_feature/create_company_ad/presentation/pages/create_company_ad.dart';
 import '../features/authentication/presentation/controllers/create_new_forgot_password_cubit/create_new_forgot_password_cubit.dart';
 import '../features/authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
@@ -177,12 +182,16 @@ class AppPages {
                         builder: (context, state) =>
                             BlocProvider<AdDetailsCubit>(
                               create: (_) => serviceLocator(),
-                              child: const AdDetailsView(),
+                              child: AdDetailsView(id: state.extra as String),
                             )),
                     GoRoute(
                       path: Paths.CREATEAD,
                       name: Routes.CREATEAD,
-                      builder: (context, state) => const CreateAdView(),
+                      builder: (context, state) => BlocProvider.value(
+                          value: serviceLocator<CreateAdCubit>(),
+                          child: CreateAdView(
+                            categorization: state.extra as CategorizationEntity,
+                          )),
                     ),
                     // CreateCompanyAdView
                     GoRoute(
@@ -216,22 +225,22 @@ class AppPages {
           name: Routes.FORGOTPASSWORDOTP,
           builder: (context, state) =>
               BlocProvider<VerifyForgotPasswordOtpCubit>(
-                create: (_) => serviceLocator(),
-                child: ForgetPasswordOtpVerificationView(
-                  email: state.extra as String,
-                ),
-              ),
+            create: (_) => serviceLocator(),
+            child: ForgetPasswordOtpVerificationView(
+              email: state.extra as String,
+            ),
+          ),
         ),
         GoRoute(
           path: Paths.CREATENEWFORGOTPASSWORD,
           name: Routes.CREATENEWFORGOTPASSWORD,
           builder: (context, state) =>
               BlocProvider<CreateNewForgotPasswordCubit>(
-                create: (_) => serviceLocator(),
-                child: CreateNewForgetPasswordView(
-                  email: state.extra as String,
-                ),
-              ),
+            create: (_) => serviceLocator(),
+            child: CreateNewForgetPasswordView(
+              email: state.extra as String,
+            ),
+          ),
         ),
         GoRoute(
           name: Routes.REGISTER,
@@ -290,14 +299,14 @@ class AppPages {
           builder: (context, state) => const CompetitionView(
             list: [],
           ),
-          routes: [],
+          routes: const [],
         ),
         // PaymentView
         GoRoute(
           name: Routes.PAYMENT,
           path: Paths.PAYMENT,
           builder: (context, state) => const PaymentView(),
-          routes: [],
+          routes: const [],
         ),
         GoRoute(
           path: Paths.WINNERS,
@@ -379,8 +388,8 @@ class AppPages {
               GoRoute(
                   path: Paths.FAVOURITE,
                   name: Routes.FAVOURITE,
-                  builder: (context, state) => BlocProvider<FavouriteAdsCubit>(
-                      create: (_) => serviceLocator(),
+                  builder: (context, state) => BlocProvider.value(
+                      value: serviceLocator<FavouriteAdsCubit>(),
                       child: const FavouriteView())),
               GoRoute(
                   path: Paths.FAVOURITECATEGORIES,
@@ -407,10 +416,11 @@ class AppPages {
                       )),
             ]),
 
-            GoRoute(
-                  path: Paths.INSTAGRAM,
-                  name: Routes.INSTAGRAM,
-                  builder: (context, state) =>const InstagramView(),),
+        GoRoute(
+          path: Paths.INSTAGRAM,
+          name: Routes.INSTAGRAM,
+          builder: (context, state) => const InstagramView(),
+        ),
         GoRoute(
             path: Paths.SOCIAL,
             name: Routes.SOCIAL,
@@ -516,13 +526,19 @@ class AppPages {
         GoRoute(
             path: Paths.CHAT,
             name: Routes.CHAT,
-            builder: (context, state) => ChatView(),
+            builder: (context, state) => BlocProvider<ChatCubit>(
+                  create: (_) => serviceLocator(),
+                  child: ChatView(),
+                ),
             routes: [
               // ChatRoom
               GoRoute(
                 path: Paths.CHATROOM,
                 name: Routes.CHATROOM,
-                builder: (context, state) => const ChatRoom(),
+                builder: (context, state) => BlocProvider<ChatCubit>(
+                  create: (_) => serviceLocator(),
+                  child: const ChatRoom(),
+                ),
               ),
             ]),
 
@@ -535,6 +551,14 @@ class AppPages {
                   child: const HealthView(),
                 ),
             routes: [
+              GoRoute(
+                path: Paths.DOCTORLOGIN,
+                name: Routes.DOCTORLOGIN,
+                builder: (context, state) => BlocProvider<DoctorLoginCubit>(
+                  create: (context) => serviceLocator(),
+                  child: const DoctorLoginView(),
+                ),
+              ),
               GoRoute(
                 path: Paths.VISITADOCTORLIST,
                 name: Routes.VISITADOCTORLIST,
