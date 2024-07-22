@@ -2,31 +2,29 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_login/presentation/cubit/doctor_login_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_login/presentation/widgets/price_field.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_login/presentation/widgets/time_table.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_login/presentation/widgets/fields/price_field.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_login/presentation/widgets/time_tables/time_table.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class DoctorLoginHomeVisitTimeTable extends StatelessWidget {
-  const DoctorLoginHomeVisitTimeTable({super.key});
+class DoctorLoginCallTimeTable extends StatelessWidget {
+  const DoctorLoginCallTimeTable({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final doctorLoginCubit = context.read<DoctorLoginCubit>();
     return BlocBuilder<DoctorLoginCubit, DoctorLoginState>(
       builder: (context, state) {
-        if (state.hasHomeVisit) {
+        if (state.hasCall) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Home Visit', style: Styles.headerText()),
+              Text('Call', style: Styles.headerText()),
               const Sizer(),
-              TimeTable(times: context.read<DoctorLoginCubit>().homeVisitTimes),
+              TimeTable(times: context.read<DoctorLoginCubit>().callTimes),
               const Sizer(),
               DoctorLoginPriceField(
-                currentFocusNode:
-                    context.read<DoctorLoginCubit>().homeVisitPriceFocusNode,
-                currentController:
-                    context.read<DoctorLoginCubit>().homeVisitPriceController,
-              ),
+                  currentFocusNode: doctorLoginCubit.callPriceFocusNode,
+                  currentController: doctorLoginCubit.callPriceController),
             ],
           );
         } else {

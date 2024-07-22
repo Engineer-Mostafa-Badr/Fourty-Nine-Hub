@@ -15,7 +15,9 @@ class DoctorLoginCubit extends Cubit<DoctorLoginState> {
   final homeVisitPriceFocusNode = FocusNode();
   final clinicPriceFocusNode = FocusNode();
   final locationFocusNode = FocusNode();
+  final waitingTimeFocusNode = FocusNode();
 
+  final waitingTimeController = TextEditingController();
   final locationController = TextEditingController();
   final firstNameController = TextEditingController();
   final specialtyController = TextEditingController();
