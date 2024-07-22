@@ -9,28 +9,12 @@ import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 
-class AdDynamicInputs extends StatelessWidget {
-  final List<AdPropertiesEntity> properties;
-  const AdDynamicInputs({super.key, required this.properties});
 
-  @override
-  Widget build(BuildContext context) {
-    return ListView.separated(
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        final property = properties[index];
-        return AdDynamicInputWidget(property: property);
-      },
-      separatorBuilder: (context, index) => const Sizer(),
-      shrinkWrap: true,
-      itemCount: properties.length,
-    );
-  }
-}
 
 class AdDynamicInputWidget extends StatefulWidget {
   final AdPropertiesEntity property;
-  const AdDynamicInputWidget({super.key, required this.property});
+  final Function(String) onChanged;
+  const AdDynamicInputWidget({super.key, required this.property, required this.onChanged});
 
   @override
   State<AdDynamicInputWidget> createState() => _AdDynamicInputWidgetState();
@@ -51,14 +35,10 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (widget.property.adPropertyType == AdPropertyType.text)
-          _buildTextFieldWidget(),
-        if (widget.property.adPropertyType == AdPropertyType.select)
-          _buildSelectFieldWidget(),
-        if (widget.property.adPropertyType == AdPropertyType.number)
-          _buildNumberFieldWidget(),
-        if (widget.property.adPropertyType == AdPropertyType.dropdown)
-          _buildDropDownWidget(),
+        if (widget.property.adPropertyType.isText) _buildTextFieldWidget(),
+        if (widget.property.adPropertyType.isSelect) _buildSelectFieldWidget(),
+        if (widget.property.adPropertyType.isNumber) _buildNumberFieldWidget(),
+        if (widget.property.adPropertyType.isDropDown) _buildDropDownWidget(),
       ],
     );
   }

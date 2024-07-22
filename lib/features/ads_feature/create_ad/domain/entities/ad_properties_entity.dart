@@ -7,7 +7,16 @@ class AdPropertiesEntity {
       {required this.label, required this.type, required this.values});
 }
 
-enum AdPropertyType { select, dropdown, number, text }
+enum AdPropertyType { select, dropdown, number, text, image, file }
+
+extension AdPropertyTypeX on AdPropertyType {
+  bool get isSelect => this == AdPropertyType.select;
+  bool get isDropDown => this == AdPropertyType.dropdown;
+  bool get isNumber => this == AdPropertyType.number;
+  bool get isText => this == AdPropertyType.text;
+  bool get isImage => this == AdPropertyType.image;
+  bool get isFille => this == AdPropertyType.file;
+}
 
 AdPropertyType getAdPropertyTypeValue(String type) {
   switch (type) {
@@ -19,6 +28,10 @@ AdPropertyType getAdPropertyTypeValue(String type) {
       return AdPropertyType.dropdown;
     case 'text':
       return AdPropertyType.text;
+    case 'image':
+      return AdPropertyType.image;
+    case 'file':
+      return AdPropertyType.file;
   }
   return AdPropertyType.text;
 }

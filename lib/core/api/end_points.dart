@@ -153,10 +153,18 @@ class EndPoints {
     return '/food/food-items/$id';
   }
 
+  static String getSubcategoryAdProps(String id) {
+    return '/ads/PropsBySubCategoryId/$id';
+  }
+
   static String addToCart = '/food/addToCart';
   static String getCart = '/food/getCart';
   static String deleteFromCart = '/food/deleteFromCart';
   static String placeOrder = '/food/make-order';
   // contact us
   static const helpMessages = '/help';
+  static String mediaUrl = '/media/signed-url';
+  static String confirmUpload(String mediaId) {
+    return '/media/confirm/$mediaId';
+  }
 }

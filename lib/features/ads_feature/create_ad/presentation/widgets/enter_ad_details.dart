@@ -14,9 +14,15 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import 'ad_dynamic_inputs.dart';
 
-class EnterAdDetails extends StatelessWidget {
-  const EnterAdDetails({super.key});
+class EnterAdDetails extends StatefulWidget {
+  final String subCategoryId;
+  const EnterAdDetails({super.key, required this.subCategoryId});
 
+  @override
+  State<EnterAdDetails> createState() => _EnterAdDetailsState();
+}
+
+class _EnterAdDetailsState extends State<EnterAdDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,6 +31,7 @@ class EnterAdDetails extends StatelessWidget {
         ),
         body: BlocBuilder<CreateAdCubit, CreateAdState>(
             builder: (context, state) {
+          final controller = context.read<CreateAdCubit>();
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListView(
@@ -46,8 +53,19 @@ class EnterAdDetails extends StatelessWidget {
                   maxLines: 3,
                 ),
                 const Sizer(),
-                AdDynamicInputs(
-                  properties: state.adProperties ?? [],
+                ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final property = state.adProperties![index];
+                    return AdDynamicInputWidget(
+                      property: property,
+                      onChanged: (String v) =>
+                          controller.onChanged(v: v, index: index),
+                    );
+                  },
+                  separatorBuilder: (context, index) => const Sizer(),
+                  shrinkWrap: true,
+                  itemCount: state.adProperties?.length ?? 0,
                 ),
                 const Sizer(),
                 FormTextField(
@@ -76,32 +94,36 @@ class EnterAdDetails extends StatelessWidget {
   }
 
   Widget _buildImagePicker() {
-    return Container(
-      height: kToolbarHeight * 1.5,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(5)),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            const Icon(
-              Icons.image_aspect_ratio_outlined,
-              size: 25,
-            ),
-            BadgedLabel(
-              label: 'Add Images',
-              style: Styles.smallText(color: Colors.white),
-              color: AppColors.SECONDARY_COLOR,
-            ),
-            Label(
-              text:
-                  '5MB maximum file size accepted in the following formats: jpg, Jpeg, png, gif',
-              style: Styles.smallText(color: Colors.grey),
-              textAlign: TextAlign.center,
-            )
-          ],
+    final controller = context.read<CreateAdCubit>();
+    return InkWell(
+      onTap: () => controller.uploadImage(subCategoryId: widget.subCategoryId),
+      child: Container(
+        height: kToolbarHeight * 1.5,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(5)),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              const Icon(
+                Icons.image_aspect_ratio_outlined,
+                size: 25,
+              ),
+              BadgedLabel(
+                label: 'Add Images',
+                style: Styles.smallText(color: Colors.white),
+                color: AppColors.SECONDARY_COLOR,
+              ),
+              Label(
+                text:
+                    '5MB maximum file size accepted in the following formats: jpg, Jpeg, png, gif',
+                style: Styles.smallText(color: Colors.grey),
+                textAlign: TextAlign.center,
+              )
+            ],
+          ),
         ),
       ),
     );
