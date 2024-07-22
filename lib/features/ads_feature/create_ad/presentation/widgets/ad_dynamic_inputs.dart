@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
-
-
 
 class AdDynamicInputWidget extends StatefulWidget {
   final AdPropertiesEntity property;
   final Function(String) onChanged;
-  const AdDynamicInputWidget({super.key, required this.property, required this.onChanged});
+  const AdDynamicInputWidget(
+      {super.key, required this.property, required this.onChanged});
 
   @override
   State<AdDynamicInputWidget> createState() => _AdDynamicInputWidgetState();
@@ -48,7 +46,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
       label: widget.property.label,
       height: kToolbarHeight * .8,
       hint: 'Type here',
-      action: (v) => value = v,
+      action: (String v) => widget.onChanged(v),
     );
   }
 
@@ -64,8 +62,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
                 isScrollControlled: true,
                 widget: _buildOptionsSheet(
                     action: (String v) {
-                      value = v;
-                      setState(() {});
+                      widget.onChanged(v);
                       context.pop();
                     },
                     values: widget.property.values));
@@ -96,9 +93,14 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
       body: ListView.builder(
           itemCount: values.length,
           itemBuilder: (context, index) {
+            final v = values[index];
             return ListTile(
-              onTap: () => action(values[index]),
-              title: Label(text: values[index]),
+              onTap: () {
+                action(v);
+                value = v;
+                setState(() {});
+              },
+              title: Label(text: v),
             );
           }),
     );
@@ -110,7 +112,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
       type: TextInputType.number,
       height: kToolbarHeight * .8,
       hint: 'Type here',
-      action: (v) => value = v,
+      action: (String v) => widget.onChanged(v),
     );
   }
 
@@ -125,6 +127,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           return WidgetSpan(
               child: InkWell(
             onTap: () {
+              widget.onChanged(e);
               value = e;
               setState(() {});
             },

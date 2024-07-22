@@ -17,7 +17,7 @@ class AdCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.ADdetails),
+      onTap: () => context.push(Routes.ADdetails, extra: item.id),
       child: Container(
         width: kToolbarHeight * 2.5,
         // decoration: BoxDecoration(color: Colors.red),
@@ -70,7 +70,7 @@ class AdCard extends StatelessWidget {
                             )))
                         .toList())),
             Label(
-              text: item.address.street,
+              text: item.address?.street??'',
               style: Styles.mediumText(color: Colors.grey),
               maxLines: 1,
             ),

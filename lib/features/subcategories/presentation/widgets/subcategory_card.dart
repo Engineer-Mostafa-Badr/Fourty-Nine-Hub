@@ -16,7 +16,8 @@ import '../../domain/entities/sub_category_entity.dart';
 class SubCategoryCard extends StatelessWidget {
   final SubCategoryEntity item;
   final MainCategoryEntity mainCategory;
-  const SubCategoryCard({super.key, required this.item, required this.mainCategory});
+  const SubCategoryCard(
+      {super.key, required this.item, required this.mainCategory});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,7 @@ class SubCategoryCard extends StatelessWidget {
                   Positioned.fill(
                     child: SquareImage(
                       fit: BoxFit.cover,
-                      radius: 10,
+                      radius: 5,
                       url: item.image,
                     ),
                   ),
@@ -77,7 +78,9 @@ class SubCategoryCard extends StatelessWidget {
                   IconAppButton(
                       icon: Icons.add_box_rounded,
                       size: 20,
-                      onPressed: () => context.push(Routes.CREATEAD, extra: CategorizationEntity(mainCategory: mainCategory, subCategory: item)))
+                      onPressed: () => context.push(Routes.CREATEAD,
+                          extra: CategorizationEntity(
+                              mainCategory: mainCategory, subCategory: item)))
                 ],
               ),
             ),

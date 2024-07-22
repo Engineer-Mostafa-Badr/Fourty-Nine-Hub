@@ -7,7 +7,7 @@ import '../usecases/request_come_with_me_usecase.dart';
 
 abstract class AdsRepo {
   Future<Either<Failure, List<AdModel>>> getAds({
-    required int subCategoryId
+    required String subCategoryId
   });
     Future<Either<Failure, List<TripEntity>>> getComeWithMeAds();
   Future<Either<Failure, List<TripEntity>>> getPickMeAds();

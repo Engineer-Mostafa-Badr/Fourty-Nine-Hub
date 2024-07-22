@@ -157,6 +157,19 @@ class EndPoints {
     return '/ads/PropsBySubCategoryId/$id';
   }
 
+  static const createAd = '/ads/create-ads';
+  static const myAds = '/ads/allMyAds';
+  static const makeRequest = '/ads-requests/makeAdRequest';
+  static const favouriteAds = '/ads-favourites/allFavouriteAds';
+  static String subCategoryAds(String id) {
+    return '/ads/subCategoryAds/$id';
+  }
+
+
+  static String adDetails(String id) {
+    return '/ads/getAd/$id';
+  }
+
   static String addToCart = '/food/addToCart';
   static String getCart = '/food/getCart';
   static String deleteFromCart = '/food/deleteFromCart';

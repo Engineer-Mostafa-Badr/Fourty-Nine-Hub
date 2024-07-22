@@ -1,9 +1,13 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
+
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_ad_entity.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_subcategory_entity.dart';
 import 'package:fourtyninehub/res/assets/jsons.dart';
+import '../../../../../core/api/api_consumer.dart';
+import '../../../../../core/api/end_points.dart';
+import '../../../../ads_feature/ads/data/models/Ad_model.dart';
+import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
 import '../../domain/entities/favourite_category_entity.dart';
 import '../models/favourite_ad_model.dart';
 import '../models/favourite_category_model.dart';
@@ -20,7 +24,7 @@ abstract class AccountRemoteDataSource {
 }
 
 class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
-  final JsonParser _apiConsumer;
+  final ApiConsumer _apiConsumer;
   AccountRemoteDataSourceImpl(this._apiConsumer);
 
   @override
@@ -36,10 +40,10 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
 
   @override
   Future<Either<Failure, List<FavouriteAdEntity>>> getFavouriteAds() async {
-    final response = await _apiConsumer.get(Jsons.favouriteAdsList);
+    final response = await _apiConsumer.get(EndPoints.favouriteAds);
     return response.fold(
         (failure) => Left(failure),
-        (data) => Right((data['data']['items'] as List)
+        (data) => Right((data['data'] as List)
             .map((e) => FavouriteAdModel.fromJson(e))
             .toList()));
   }

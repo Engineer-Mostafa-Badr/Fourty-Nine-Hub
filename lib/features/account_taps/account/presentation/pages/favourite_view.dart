@@ -25,7 +25,7 @@ class _FavouriteViewState extends State<FavouriteView> {
       body: BlocBuilder<FavouriteAdsCubit, BasicState<List<FavouriteAdEntity>>>(
           builder: (context, state) {
         if (state.isLoading) {
-          return const CircularProgressIndicator.adaptive();
+          return const Center(child: CircularProgressIndicator.adaptive());
         }
         return Padding(
           padding: const EdgeInsets.all(10.0),

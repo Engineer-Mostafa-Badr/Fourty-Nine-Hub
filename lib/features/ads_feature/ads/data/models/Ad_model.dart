@@ -1,9 +1,10 @@
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/ad_statistics_model.dart';
 
+import '../../../../authentication/data/models/user_model.dart';
 import '../../../../requests_history/data/models/address_model.dart';
 import '../../domain/entities/ad_entity.dart';
 import 'detail_model.dart';
-import 'publisher_model.dart';
+
 
 class AdModel extends AdEntity {
   AdModel(
@@ -12,28 +13,44 @@ class AdModel extends AdEntity {
       required super.description,
       required super.images,
       required super.price,
-      required super.address,
-      required super.user,
+       super.address,
+       super.user,
       super.statistics,
       required super.active,
       required super.createdAt,
-      required super.details});
+      required super.details,
+       super.subCategoryId, required super.phone});
   factory AdModel.fromJson(Map<String, dynamic> json) {
     return AdModel(
-        id: json['id'],
+        id: json['_id'],
         title: json['title'],
-        description: json['description'],
-        images: json['images'].cast<String>(),
+        description: json['desc'],
+        images: (json['images'] as List).map((e)=> e['mediaKey'] as String).toList(),
         price: json['price'],
+        subCategoryId: json['subCategoryId'],
         active: json['active'] ?? true,
-        statistics: json['statistics']==null?null: AdStatisticsModel.fromJson(json['statistics']),
+        phone: json['phone'],
+        statistics: json['statistics'] == null
+            ? null
+            : AdStatisticsModel.fromJson(json['statistics']),
         address: AddressModel.fromJson(json['address']),
-        user: PublisherModel.fromJson(json['user']),
-        details: json['details'] == null
+        user: UserModel.fromJson(json['userId']),
+        details: json['props'] == null
             ? []
-            : (json['details'] as List)
+            : (json['props'] as List)
                 .map((e) => DetailModel.fromJson(e))
                 .toList(),
-        createdAt: DateTime.parse(json['created_at']));
+        createdAt: DateTime.parse(json['createdAt']));
   }
+  Map<String, dynamic> toJson() => {
+        "desc": description,
+        "phone": phone,
+        "title": title,
+        "subCategoryId": subCategoryId,
+        "searchText": "testPropsAndAds",
+        "images": images,
+        "props": details.map((e) {
+          return {"label": e.label, "value": e.value, "type": e.type};
+        }).toList()
+      };
 }

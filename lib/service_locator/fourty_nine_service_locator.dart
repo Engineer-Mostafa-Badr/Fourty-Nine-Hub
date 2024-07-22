@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/ads_feature/ad_details/data/datasources/a
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/repositories/ad_details_repo.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_ad_details_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_relevant_ads_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/make_ad_request_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/datasources/ads_remote_data_source.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/repositories/ads_repo.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
@@ -25,6 +26,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_p
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/datasources/create_ad_remote_datasource.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/repositories/create_ad_repo_impl.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/create_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/get_ad_properties_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/datasources/create_company_ad_remote_datasource.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/repositories/create_company_ad_repo_impl.dart';
@@ -66,7 +68,7 @@ class FourtyNineServiceLocator {
     serviceLocator.registerLazySingleton<AdsRemoteDataSource>(
       () => AdsRemoteDataSourceImpl(
         serviceLocator(),
-        serviceLocator(),
+
       ),
     );
     serviceLocator.registerLazySingleton<AdDetailsRemoteDataSource>(
@@ -196,6 +198,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<CreateAdUseCase>(
+      () => CreateAdUseCase(
+        serviceLocator(),
+      ),
+    );
     serviceLocator.registerLazySingleton<GetRelevantAdsUseCase>(
       () => GetRelevantAdsUseCase(
         serviceLocator(),
@@ -248,6 +255,11 @@ class FourtyNineServiceLocator {
     );
     serviceLocator.registerLazySingleton<RejectPickMeUseCase>(
       () => RejectPickMeUseCase(
+        serviceLocator(),
+      ),
+    );
+     serviceLocator.registerLazySingleton<MakeAdRequestUsecase>(
+      () => MakeAdRequestUsecase(
         serviceLocator(),
       ),
     );
@@ -309,14 +321,15 @@ class FourtyNineServiceLocator {
     serviceLocator.registerFactory<CreateAdCubit>(
       () => CreateAdCubit(
         serviceLocator(),
-        
+        serviceLocator(),
       ),
     );
     serviceLocator.registerFactory<AdDetailsCubit>(
       () => AdDetailsCubit(
         serviceLocator(),
         serviceLocator(),
-      )..loadData(),
+        serviceLocator(),
+      ),
     );
     // ContactUsCubit
     serviceLocator.registerFactory<ContactUsCubit>(

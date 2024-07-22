@@ -12,4 +12,9 @@ class LaunchURLHelper {
   Future<void> call({required String phone}) async {
     await launchUrlString('tel: $phone');
   }
+  // https://wa.me/15551234567
+
+  Future<void> openWhatsapp({required String phone}) async {
+    await launchUrlString('https://wa.me/$phone');
+  }
 }

@@ -16,6 +16,7 @@ class CreateAdState {
   final List<AdPropertiesEntity>? adProperties;
   final MainCategoryEntity? selectedCategory;
   final SubCategoryEntity? selectedSubCategory;
+  final List<UploadFileEntity>? images;
 
   const CreateAdState(
       {this.failure,
@@ -24,25 +25,28 @@ class CreateAdState {
       this.selectedCategory,
       this.selectedSubCategory,
       this.status,
+      this.images,
       this.subCategories});
 
   CreateAdState copyWith({
-     CreateAdStates? status,
-   Failure? failure,
-   List<MainCategoryEntity>? mainCategories,
-   List<SubCategoryEntity>? subCategories,
-   List<AdPropertiesEntity>? adProperties,
-   MainCategoryEntity? selectedCategory,
-   SubCategoryEntity? selectedSubCategory,
+    CreateAdStates? status,
+    Failure? failure,
+    List<MainCategoryEntity>? mainCategories,
+    List<SubCategoryEntity>? subCategories,
+    List<AdPropertiesEntity>? adProperties,
+    MainCategoryEntity? selectedCategory,
+    SubCategoryEntity? selectedSubCategory,
+    List<UploadFileEntity>? images,
   }) {
     return CreateAdState(
-      status: status?? this.status,
-      failure: failure?? this.failure,
-      adProperties: adProperties?? this.adProperties,
-      mainCategories: mainCategories?? this.mainCategories,
-      subCategories: subCategories?? this.subCategories,
-      selectedCategory: selectedCategory?? this.selectedCategory,
-      selectedSubCategory: selectedSubCategory?? this.selectedSubCategory,
+      status: status ?? this.status,
+      failure: failure ?? this.failure,
+      adProperties: adProperties ?? this.adProperties,
+      mainCategories: mainCategories ?? this.mainCategories,
+      subCategories: subCategories ?? this.subCategories,
+      selectedCategory: selectedCategory ?? this.selectedCategory,
+      selectedSubCategory: selectedSubCategory ?? this.selectedSubCategory,
+      images: images?? this.images,
     );
   }
 }

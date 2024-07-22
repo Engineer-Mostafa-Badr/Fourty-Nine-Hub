@@ -24,11 +24,11 @@ AdPropertyType getAdPropertyTypeValue(String type) {
       return AdPropertyType.number;
     case 'select':
       return AdPropertyType.select;
-    case 'dropdown':
+    case 'dropDown':
       return AdPropertyType.dropdown;
-    case 'text':
+    case 'textField':
       return AdPropertyType.text;
-    case 'image':
+    case 'pictures':
       return AdPropertyType.image;
     case 'file':
       return AdPropertyType.file;

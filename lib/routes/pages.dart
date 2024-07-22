@@ -181,14 +181,16 @@ class AppPages {
                         builder: (context, state) =>
                             BlocProvider<AdDetailsCubit>(
                               create: (_) => serviceLocator(),
-                              child: const AdDetailsView(),
+                              child: AdDetailsView(id: state.extra as String),
                             )),
                     GoRoute(
                       path: Paths.CREATEAD,
                       name: Routes.CREATEAD,
-                      builder: (context, state) => BlocProvider.value(value: serviceLocator<CreateAdCubit>(), 
-                      child:  CreateAdView(categorization: state.extra as CategorizationEntity,)
-                      ),
+                      builder: (context, state) => BlocProvider.value(
+                          value: serviceLocator<CreateAdCubit>(),
+                          child: CreateAdView(
+                            categorization: state.extra as CategorizationEntity,
+                          )),
                     ),
                     // CreateCompanyAdView
                     GoRoute(
@@ -385,8 +387,8 @@ class AppPages {
               GoRoute(
                   path: Paths.FAVOURITE,
                   name: Routes.FAVOURITE,
-                  builder: (context, state) => BlocProvider<FavouriteAdsCubit>(
-                      create: (_) => serviceLocator(),
+                  builder: (context, state) => BlocProvider.value(
+                      value: serviceLocator<FavouriteAdsCubit>(),
                       child: const FavouriteView())),
               GoRoute(
                   path: Paths.FAVOURITECATEGORIES,
@@ -522,9 +524,9 @@ class AppPages {
             path: Paths.CHAT,
             name: Routes.CHAT,
             builder: (context, state) => BlocProvider<ChatCubit>(
-              create: (_) => serviceLocator(),
-              child: ChatView(),
-            ),
+                  create: (_) => serviceLocator(),
+                  child: ChatView(),
+                ),
             routes: [
               // ChatRoom
               GoRoute(

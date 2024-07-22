@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/widgets/trip_card.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -69,7 +70,6 @@ class _AdsViewState extends State<AdsView> {
           ),
         );
       } else if (state.isSuccess) {
-
         showSuccessMessage(context, Labels.success);
       }
     });
@@ -80,6 +80,10 @@ class _AdsViewState extends State<AdsView> {
       if (state.isLoading) {
         return const Center(
           child: CircularProgressIndicator.adaptive(),
+        );
+      } else if (state.ads?.isEmpty ?? true) {
+        return const EmptyPage(
+          label: 'There is no ADs',
         );
       }
       return GridView.builder(

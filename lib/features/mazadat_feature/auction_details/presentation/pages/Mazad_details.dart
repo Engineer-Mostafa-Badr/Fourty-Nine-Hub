@@ -151,7 +151,7 @@ class MazadDetails extends StatelessWidget {
           CircleAvatar(
             radius: 25,
             backgroundColor: Colors.white,
-            backgroundImage: NetworkImage(ad.user.image),
+            backgroundImage: NetworkImage(ad.user?.profilePicture??''),
           ),
           const Sizer(),
           Expanded(
@@ -159,10 +159,10 @@ class MazadDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Label(
-                  text: ad.user.name,
+                  text: ad.user?.fullName??'',
                   style: Styles.mediumText(color: Colors.black)),
               Label(
-                  text: ad.user.email,
+                  text: ad.user?.email??'',
                   style: Styles.mediumText(color: Colors.grey)),
             ],
           )),

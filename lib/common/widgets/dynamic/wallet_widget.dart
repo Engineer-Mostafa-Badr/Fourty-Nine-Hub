@@ -41,13 +41,18 @@ class WalletWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const CircleAvatar(
+            radius: 3,
+            backgroundColor: AppColors.SECONDARY_COLOR,
+          ),
+          const Sizer(),
           Expanded(
               child: InkWell(
             onTap: () {
               context.push(Routes.WALLET, extra: WalletTypes.balance);
             },
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
                     text: 'Balance',
@@ -68,13 +73,18 @@ class WalletWidget extends StatelessWidget {
             color: Colors.grey,
             height: kToolbarHeight * .6,
           ),
+          const CircleAvatar(
+            radius: 3,
+            backgroundColor: AppColors.SECONDARY_COLOR,
+          ),
+          const Sizer(),
           Expanded(
               child: InkWell(
             onTap: () {
               context.push(Routes.WALLET, extra: WalletTypes.gift);
             },
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
                     text: 'Gift',
@@ -95,13 +105,18 @@ class WalletWidget extends StatelessWidget {
             color: Colors.grey,
             height: kToolbarHeight * .6,
           ),
+          const CircleAvatar(
+            radius: 3,
+            backgroundColor: AppColors.SECONDARY_COLOR,
+          ),
+          const Sizer(),
           Expanded(
               child: InkWell(
             onTap: () {
               context.push(Routes.WALLET, extra: WalletTypes.normal);
             },
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
                     text: 'Wallet',

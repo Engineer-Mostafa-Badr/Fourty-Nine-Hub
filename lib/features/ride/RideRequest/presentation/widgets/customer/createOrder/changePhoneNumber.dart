@@ -11,8 +11,9 @@ import '../../../../../../../common/widgets/dynamic/sizer.dart';
 
 class RideContactPhoneNumber extends StatelessWidget {
   final formState = GlobalKey<FormState>();
-
-  RideContactPhoneNumber({super.key});
+  final Function(String) onChanged;
+  final Function? onSubmit;
+  RideContactPhoneNumber({super.key, required this.onChanged, this.onSubmit});
   @override
   Widget build(BuildContext context) {
     final controller = context.read<RiderequestCubit>();
@@ -41,12 +42,15 @@ class RideContactPhoneNumber extends StatelessWidget {
                       fontSize: 20,
                       color: Colors.grey,
                       fontWeight: FontWeight.bold),
-                  action: (v) => controller.changePhoneNumber(v)),
+                  action: (v) => onChanged(v)),
               const Sizer(),
               AppButton(
                   label: 'Done',
                   onPressed: () {
                     if (formState.currentState!.validate()) {
+                      if (onSubmit != null) {
+                        onSubmit!();
+                      }
                       context.pop();
                     }
                   }),
