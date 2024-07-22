@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/data/reposi
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/repositories/doctor_details_repo.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_login/presentation/cubit/doctor_login_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctors_list/data/datasources/doctor_list_remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/doctors_list/data/repositories/doctor_list_repo_impl.dart';
 import 'package:fourtyninehub/features/health_feature/doctors_list/domain/repositories/doctor_list_repo.dart';
@@ -133,6 +134,9 @@ class HealthServiceLocator {
           serviceLocator(),
           serviceLocator(),
         )..loadData());
+    serviceLocator.registerFactory<DoctorLoginCubit>(
+      () => DoctorLoginCubit(),
+    );
     serviceLocator.registerFactory<BookDoctorAppointmentCubit>(
         () => BookDoctorAppointmentCubit(
               serviceLocator(),

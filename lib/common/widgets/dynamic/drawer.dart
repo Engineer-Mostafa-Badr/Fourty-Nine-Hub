@@ -87,10 +87,6 @@ class DrawerWidget extends StatelessWidget {
                   icon: Icons.settings,
                   label: 'Settings',
                   onTap: () => context.push(Routes.SETTINGS)),
-              drawerListTile(
-                  icon: Icons.message,
-                  label: 'Contact Us',
-                  onTap: () => context.push(Routes.CONTACTUS)),
 
               drawerListTile(
                   icon: Icons.privacy_tip,
@@ -105,6 +101,10 @@ class DrawerWidget extends StatelessWidget {
                   icon: Icons.share,
                   label: 'Share App',
                   onTap: () => context.push(Routes.SHAREAPP)),
+              drawerListTile(
+                  icon: Icons.message,
+                  label: 'Contact Us',
+                  onTap: () => context.push(Routes.CONTACTUS)),
               drawerListTile(
                   icon: Icons.logout,
                   label: 'Logout',

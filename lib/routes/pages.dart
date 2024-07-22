@@ -26,6 +26,8 @@ import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/regi
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/cubit/doctor_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_dashboard_view.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_login/presentation/cubit/doctor_login_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_login/presentation/pages/doctor_login_view.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/create_installment/presentation/cubit/create_installment_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_details/presentation/cubit/installment_details_cubit.dart';
@@ -216,22 +218,22 @@ class AppPages {
           name: Routes.FORGOTPASSWORDOTP,
           builder: (context, state) =>
               BlocProvider<VerifyForgotPasswordOtpCubit>(
-                create: (_) => serviceLocator(),
-                child: ForgetPasswordOtpVerificationView(
-                  email: state.extra as String,
-                ),
-              ),
+            create: (_) => serviceLocator(),
+            child: ForgetPasswordOtpVerificationView(
+              email: state.extra as String,
+            ),
+          ),
         ),
         GoRoute(
           path: Paths.CREATENEWFORGOTPASSWORD,
           name: Routes.CREATENEWFORGOTPASSWORD,
           builder: (context, state) =>
               BlocProvider<CreateNewForgotPasswordCubit>(
-                create: (_) => serviceLocator(),
-                child: CreateNewForgetPasswordView(
-                  email: state.extra as String,
-                ),
-              ),
+            create: (_) => serviceLocator(),
+            child: CreateNewForgetPasswordView(
+              email: state.extra as String,
+            ),
+          ),
         ),
         GoRoute(
           name: Routes.REGISTER,
@@ -290,14 +292,14 @@ class AppPages {
           builder: (context, state) => const CompetitionView(
             list: [],
           ),
-          routes: [],
+          routes: const [],
         ),
         // PaymentView
         GoRoute(
           name: Routes.PAYMENT,
           path: Paths.PAYMENT,
           builder: (context, state) => const PaymentView(),
-          routes: [],
+          routes: const [],
         ),
         GoRoute(
           path: Paths.WINNERS,
@@ -407,10 +409,11 @@ class AppPages {
                       )),
             ]),
 
-            GoRoute(
-                  path: Paths.INSTAGRAM,
-                  name: Routes.INSTAGRAM,
-                  builder: (context, state) =>const InstagramView(),),
+        GoRoute(
+          path: Paths.INSTAGRAM,
+          name: Routes.INSTAGRAM,
+          builder: (context, state) => const InstagramView(),
+        ),
         GoRoute(
             path: Paths.SOCIAL,
             name: Routes.SOCIAL,
@@ -539,6 +542,14 @@ class AppPages {
                   child: const HealthView(),
                 ),
             routes: [
+              GoRoute(
+                path: Paths.DOCTORLOGIN,
+                name: Routes.DOCTORLOGIN,
+                builder: (context, state) => BlocProvider<DoctorLoginCubit>(
+                  create: (context) => serviceLocator(),
+                  child: const DoctorLoginView(),
+                ),
+              ),
               GoRoute(
                 path: Paths.VISITADOCTORLIST,
                 name: Routes.VISITADOCTORLIST,
