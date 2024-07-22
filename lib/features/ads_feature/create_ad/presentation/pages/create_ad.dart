@@ -4,10 +4,12 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/widgets/select_main_category.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/widgets/select_sub_category.dart';
 
+import '../../domain/entities/categorization_entity.dart';
 import '../widgets/enter_ad_details.dart';
 
 class CreateAdView extends StatelessWidget {
-  const CreateAdView({super.key});
+ final  CategorizationEntity categorization;
+  const CreateAdView({super.key, required this.categorization});
 
   @override
   Widget build(BuildContext context) {

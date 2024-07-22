@@ -12,7 +12,7 @@ class EndPoints {
   static const resendOTP = '/auth/resend-reset-code';
   static const refreshToken = '/auth/refresh/token';
   static const getParentMainCategories = '/category/parent';
-  static const getMainCategories = '/categories/main';
+  static const getMainCategories = '/category/parent/get-all-main';
   static const getWheel = '/wheels/random';
   static const spinWheel = '/wheels/spin/';
   static const wheelWallet = '/wheel/wallets/my/wallet';

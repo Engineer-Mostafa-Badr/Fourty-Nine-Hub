@@ -12,7 +12,7 @@ class SubCategoryModel extends SubCategoryEntity {
     return SubCategoryModel(
       id: json['_id'],
       name: getLang() == 'ar' ? json['nameAr'] : json['nameEn'],
-      image: json['picture'],
+      image: json['picture']??'',
       isFavourite: json['is_favourite'] ?? false,
     );
   }

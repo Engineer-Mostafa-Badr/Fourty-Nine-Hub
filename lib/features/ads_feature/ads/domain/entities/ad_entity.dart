@@ -2,6 +2,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_statis
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/publisher_entity.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../core/utils/duration_helper.dart';
 import '../../../../requests_history/domain/entities/address_entity.dart';
 import 'detail_entity.dart';
 
@@ -18,6 +19,10 @@ class AdEntity {
   List<DetailEntiy> details;
   DateTime createdAt;
   String get formatedDate => DateFormat('yyyy-MM-dd').format(createdAt);
+  Duration get restTimeDuration => DateTime.now().difference(createdAt);
+
+  String get formattedRestTime =>
+      DurationHelper().sinceTime(duration: restTimeDuration);
 
   AdEntity(
       {required this.id,
@@ -26,7 +31,7 @@ class AdEntity {
       required this.images,
       required this.price,
       required this.address,
-      this.statistics, 
+      this.statistics,
       required this.user,
       required this.active,
       required this.details,

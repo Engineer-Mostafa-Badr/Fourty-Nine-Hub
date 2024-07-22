@@ -54,6 +54,8 @@ import '../features/account_taps/policies/presentation/pages/policy_view.dart';
 import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
 import '../features/account_taps/transfer_money/presentation/pages/transfer_money_view.dart';
 import '../features/account_taps/wallet/domain/entities/wallet_entity.dart';
+import '../features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import '../features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import '../features/ads_feature/create_company_ad/presentation/pages/create_company_ad.dart';
 import '../features/authentication/presentation/controllers/create_new_forgot_password_cubit/create_new_forgot_password_cubit.dart';
 import '../features/authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
@@ -182,7 +184,9 @@ class AppPages {
                     GoRoute(
                       path: Paths.CREATEAD,
                       name: Routes.CREATEAD,
-                      builder: (context, state) => const CreateAdView(),
+                      builder: (context, state) => BlocProvider.value(value: serviceLocator<CreateAdCubit>(), 
+                      child:  CreateAdView(categorization: state.extra as CategorizationEntity,)
+                      ),
                     ),
                     // CreateCompanyAdView
                     GoRoute(

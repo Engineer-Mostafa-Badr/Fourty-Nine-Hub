@@ -105,10 +105,6 @@ class MyAdCard extends StatelessWidget {
                                 onTap: () => context.push(Routes.CREATEAUCTION),
                                 icon: Icons.group,
                               ),
-                              _buildOptionsWidget(
-                                  label: 'Subscribe',
-                                  icon: Icons.remove_red_eye_sharp,
-                                  onTap: () {}),
                             ],
                           ));
                     })

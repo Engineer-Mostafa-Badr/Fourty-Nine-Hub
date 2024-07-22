@@ -66,6 +66,7 @@ class FourtyNineServiceLocator {
     serviceLocator.registerLazySingleton<AdsRemoteDataSource>(
       () => AdsRemoteDataSourceImpl(
         serviceLocator(),
+        serviceLocator(),
       ),
     );
     serviceLocator.registerLazySingleton<AdDetailsRemoteDataSource>(
@@ -86,6 +87,7 @@ class FourtyNineServiceLocator {
     );
     serviceLocator.registerLazySingleton<MyAdsRemoteDatasource>(
       () => MyAdsRemoteDatasourceImpl(
+        serviceLocator(),
         serviceLocator(),
       ),
     );
@@ -168,12 +170,12 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-       serviceLocator.registerLazySingleton<GetAllPickMeUseCase>(
+    serviceLocator.registerLazySingleton<GetAllPickMeUseCase>(
       () => GetAllPickMeUseCase(
         serviceLocator(),
       ),
     );
-     serviceLocator.registerLazySingleton<GetAllComeWithMeUseCase>(
+    serviceLocator.registerLazySingleton<GetAllComeWithMeUseCase>(
       () => GetAllComeWithMeUseCase(
         serviceLocator(),
       ),
@@ -183,7 +185,7 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-     serviceLocator.registerLazySingleton<RequestComeWithMeUseCase>(
+    serviceLocator.registerLazySingleton<RequestComeWithMeUseCase>(
       () => RequestComeWithMeUseCase(
         serviceLocator(),
       ),
@@ -209,42 +211,42 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-      serviceLocator.registerLazySingleton<GetMyPickMeAdsUseCase>(
+    serviceLocator.registerLazySingleton<GetMyPickMeAdsUseCase>(
       () => GetMyPickMeAdsUseCase(
         serviceLocator(),
       ),
     );
-      serviceLocator.registerLazySingleton<GetMyComeWithMeUseCase>(
+    serviceLocator.registerLazySingleton<GetMyComeWithMeUseCase>(
       () => GetMyComeWithMeUseCase(
         serviceLocator(),
       ),
     );
-      serviceLocator.registerLazySingleton<DeletePickMeUseCase>(
+    serviceLocator.registerLazySingleton<DeletePickMeUseCase>(
       () => DeletePickMeUseCase(
         serviceLocator(),
       ),
     );
-      serviceLocator.registerLazySingleton<DeleteComeWithMeUseCase>(
+    serviceLocator.registerLazySingleton<DeleteComeWithMeUseCase>(
       () => DeleteComeWithMeUseCase(
         serviceLocator(),
       ),
     );
- serviceLocator.registerLazySingleton<AcceptComeWithMeUseCase>(
+    serviceLocator.registerLazySingleton<AcceptComeWithMeUseCase>(
       () => AcceptComeWithMeUseCase(
         serviceLocator(),
       ),
     );
-     serviceLocator.registerLazySingleton<RejectComeWithMeUseCase>(
+    serviceLocator.registerLazySingleton<RejectComeWithMeUseCase>(
       () => RejectComeWithMeUseCase(
         serviceLocator(),
       ),
     );
-     serviceLocator.registerLazySingleton<AcceptPickMeUseCase>(
+    serviceLocator.registerLazySingleton<AcceptPickMeUseCase>(
       () => AcceptPickMeUseCase(
         serviceLocator(),
       ),
     );
-     serviceLocator.registerLazySingleton<RejectPickMeUseCase>(
+    serviceLocator.registerLazySingleton<RejectPickMeUseCase>(
       () => RejectPickMeUseCase(
         serviceLocator(),
       ),
@@ -285,17 +287,15 @@ class FourtyNineServiceLocator {
       )..loadData(),
     );
 
-    serviceLocator.registerSingleton(
-      MainCategoriesCubit(
+    serviceLocator.registerFactory<MainCategoriesCubit>(
+      () => MainCategoriesCubit(
         serviceLocator(),
       )..getMainCategories(),
     );
 
-    serviceLocator.registerSingleton(
-      SubcategoriesCubit(
-        serviceLocator(),
-      )
-    );
+    serviceLocator.registerSingleton(SubcategoriesCubit(
+      serviceLocator(),
+    ));
     serviceLocator.registerFactory<AdsCubit>(
       () => AdsCubit(
         serviceLocator(),

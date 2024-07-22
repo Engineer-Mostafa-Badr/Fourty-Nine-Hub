@@ -46,12 +46,12 @@ class MyAddsCubit extends Cubit<MyAddsState> {
   }
 
   Future<void> getMyAds() async {
-    // TODO 
-    // final response = await _getMyAdsUseCase.call(const NoParams());
-    // response.fold(
-    //     (failure) =>
-    //         emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-    //     (r) => emit(state.copyWith(myAds: r, status: MyAddsStates.initState)));
+
+    final response = await _getMyAdsUseCase.call(const NoParams());
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+        (r) => emit(state.copyWith(myAds: r, status: MyAddsStates.initState)));
   }
 
   Future<void> getPickMeTrips() async {

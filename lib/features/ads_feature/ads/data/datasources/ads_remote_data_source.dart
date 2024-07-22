@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
@@ -20,11 +21,12 @@ abstract class AdsRemoteDataSource {
 
 class AdsRemoteDataSourceImpl implements AdsRemoteDataSource {
   final ApiConsumer _apiConsumer;
-  AdsRemoteDataSourceImpl(this._apiConsumer);
+  final JsonParser _jsonParser;
+  AdsRemoteDataSourceImpl(this._apiConsumer, this._jsonParser);
   @override
   Future<Either<Failure, List<AdModel>>> getAds(
       {required int subCategoryId}) async {
-    final response = await _apiConsumer.get(Jsons.adsList);
+    final response = await _jsonParser.get(Jsons.adsList);
     return response.fold(
         (failure) => Left(failure),
         (response) => Right((response['data']['ads'] as List)
