@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 
@@ -36,6 +35,7 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
@@ -514,13 +514,19 @@ class AppPages {
         GoRoute(
             path: Paths.CHAT,
             name: Routes.CHAT,
-            builder: (context, state) => ChatView(),
+            builder: (context, state) => BlocProvider<ChatCubit>(
+              create: (_) => serviceLocator(),
+              child: ChatView(),
+            ),
             routes: [
               // ChatRoom
               GoRoute(
                 path: Paths.CHATROOM,
                 name: Routes.CHATROOM,
-                builder: (context, state) => const ChatRoom(),
+                builder: (context, state) => BlocProvider<ChatCubit>(
+                  create: (_) => serviceLocator(),
+                  child: const ChatRoom(),
+                ),
               ),
             ]),
 
