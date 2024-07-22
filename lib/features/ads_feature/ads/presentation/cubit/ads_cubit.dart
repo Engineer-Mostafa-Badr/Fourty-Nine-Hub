@@ -30,18 +30,19 @@ class AdsCubit extends Cubit<AdsState> {
       : super(const AdsState());
 
   void loadData({required String subCategoryId}) async {
+    emit(state.copyWith(status: AdsStates.loading));
     if (getRideServiceEnum(value: subCategoryId) == RideServicesEnum.pickMe) {
       await getPickMeAds();
     } else if (getRideServiceEnum(value: subCategoryId) ==
         RideServicesEnum.comeWithYou) {
       await getComeWithMeAds();
     } else {
-      await getAds();
+      await getAds(subCategoryId: subCategoryId);
     }
   }
 
-  Future<void> getAds() async {
-    final response = await _getAdsUseCase.call(0);
+  Future<void> getAds({required String subCategoryId}) async {
+    final response = await _getAdsUseCase(subCategoryId);
     response.fold(
         (failure) =>
             emit(state.copyWith(failure: failure, status: AdsStates.error)),

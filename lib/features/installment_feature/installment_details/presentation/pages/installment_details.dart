@@ -85,13 +85,13 @@ class InstallmentsDetails extends StatelessWidget {
         ),
         InkWell(
           onTap: () => LaunchURLHelper().openLocation(
-              lat: ad.address.coordinates[0], lng: ad.address.coordinates[1]),
+              lat: ad.address?.coordinates[0]??0, lng: ad.address?.coordinates[1]??0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Icon(Icons.location_on_outlined),
               const Sizer(),
-              Expanded(child: Label(text: ad.address.address)),
+              Expanded(child: Label(text: ad.address?.address??'')),
               const Sizer(),
               Label(text: ad.formatedDate)
             ],

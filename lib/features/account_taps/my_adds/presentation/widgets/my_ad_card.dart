@@ -20,7 +20,7 @@ class MyAdCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.ADdetails),
+      onTap: () => context.push(Routes.ADdetails, extra: item.id),
       child: Container(
         padding: const EdgeInsets.all(5),
         margin: const EdgeInsets.all(5),
@@ -105,10 +105,6 @@ class MyAdCard extends StatelessWidget {
                                 onTap: () => context.push(Routes.CREATEAUCTION),
                                 icon: Icons.group,
                               ),
-                              _buildOptionsWidget(
-                                  label: 'Subscribe',
-                                  icon: Icons.remove_red_eye_sharp,
-                                  onTap: () {}),
                             ],
                           ));
                     })

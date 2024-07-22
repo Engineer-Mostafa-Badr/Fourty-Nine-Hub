@@ -12,19 +12,26 @@ class ChatRoom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.GREY_LIGHT_COLOR,
-        appBar: const ChatRoomAppBar(),
-        bottomNavigationBar: const SendMessageWidget(),
-        body: ListView.separated(
-            reverse: true,
-            itemBuilder: (context, index) => MessageCard(
-                  isMine: index.isEven,
-                ),
-            separatorBuilder: (context, index) => const Sizer(
-                  height: 3,
-                ),
-            itemCount: 10),
+      child: GestureDetector(
+        onTap: ()=> FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
+          backgroundColor: AppColors.GREY_LIGHT_COLOR,
+          appBar: const ChatRoomAppBar(),
+          bottomNavigationBar: Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: const SendMessageWidget(),
+          ),
+          body: ListView.separated(
+              reverse: true,
+              itemBuilder: (context, index) => MessageCard(
+                    isMine: index.isEven,
+                  ),
+              separatorBuilder: (context, index) => const Sizer(
+                    height: 3,
+                  ),
+              itemCount: 10,
+          ),
+        ),
       ),
     );
   }

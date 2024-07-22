@@ -132,10 +132,11 @@ class ListsView extends StatelessWidget {
     return ListView.builder(
         itemCount: list.length,
         itemBuilder: (context, index) {
-          return ListItemCard(
-            user: list[index].user,
-            type: type,
-          );
+          return Container();
+          // return ListItemCard(
+          //   user: list[index].user,
+          //   type: type,
+          // );
         });
   }
 

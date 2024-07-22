@@ -7,12 +7,12 @@ import '../../../../../core/error/failure.dart';
 
 
 class GetAdDetailsUseCase
-    extends UseCase<AdModel, int> {
+    extends UseCase<AdModel, String> {
   final AdDetailsRepo _repo;
   GetAdDetailsUseCase(this._repo);
 
   @override
-  Future<Either<Failure, AdModel>> call(int params) {
+  Future<Either<Failure, AdModel>> call(String params) {
     return _repo.getAdDetails(id: params);
   }
 }

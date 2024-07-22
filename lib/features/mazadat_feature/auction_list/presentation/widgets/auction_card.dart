@@ -62,7 +62,7 @@ class AuctionCard extends StatelessWidget {
                 ],
               ),
               Label(
-                text: item.ad.address.address,
+                text: item.ad.address?.address??'',
                 style: Styles.mediumText(),
                 maxLines: 1,
               ),

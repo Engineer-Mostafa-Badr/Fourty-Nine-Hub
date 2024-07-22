@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/ads_feature/ad_details/data/datasources/a
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/repositories/ad_details_repo.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_ad_details_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_relevant_ads_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/make_ad_request_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/datasources/ads_remote_data_source.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/repositories/ads_repo.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
@@ -25,6 +26,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_p
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/datasources/create_ad_remote_datasource.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/repositories/create_ad_repo_impl.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/create_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/get_ad_properties_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/datasources/create_company_ad_remote_datasource.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/repositories/create_company_ad_repo_impl.dart';
@@ -66,6 +68,7 @@ class FourtyNineServiceLocator {
     serviceLocator.registerLazySingleton<AdsRemoteDataSource>(
       () => AdsRemoteDataSourceImpl(
         serviceLocator(),
+
       ),
     );
     serviceLocator.registerLazySingleton<AdDetailsRemoteDataSource>(
@@ -86,6 +89,7 @@ class FourtyNineServiceLocator {
     );
     serviceLocator.registerLazySingleton<MyAdsRemoteDatasource>(
       () => MyAdsRemoteDatasourceImpl(
+        serviceLocator(),
         serviceLocator(),
       ),
     );
@@ -168,12 +172,12 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-       serviceLocator.registerLazySingleton<GetAllPickMeUseCase>(
+    serviceLocator.registerLazySingleton<GetAllPickMeUseCase>(
       () => GetAllPickMeUseCase(
         serviceLocator(),
       ),
     );
-     serviceLocator.registerLazySingleton<GetAllComeWithMeUseCase>(
+    serviceLocator.registerLazySingleton<GetAllComeWithMeUseCase>(
       () => GetAllComeWithMeUseCase(
         serviceLocator(),
       ),
@@ -183,7 +187,7 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-     serviceLocator.registerLazySingleton<RequestComeWithMeUseCase>(
+    serviceLocator.registerLazySingleton<RequestComeWithMeUseCase>(
       () => RequestComeWithMeUseCase(
         serviceLocator(),
       ),
@@ -191,6 +195,11 @@ class FourtyNineServiceLocator {
 
     serviceLocator.registerLazySingleton<GetAdPropertiesUsecase>(
       () => GetAdPropertiesUsecase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<CreateAdUseCase>(
+      () => CreateAdUseCase(
         serviceLocator(),
       ),
     );
@@ -209,43 +218,48 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-      serviceLocator.registerLazySingleton<GetMyPickMeAdsUseCase>(
+    serviceLocator.registerLazySingleton<GetMyPickMeAdsUseCase>(
       () => GetMyPickMeAdsUseCase(
         serviceLocator(),
       ),
     );
-      serviceLocator.registerLazySingleton<GetMyComeWithMeUseCase>(
+    serviceLocator.registerLazySingleton<GetMyComeWithMeUseCase>(
       () => GetMyComeWithMeUseCase(
         serviceLocator(),
       ),
     );
-      serviceLocator.registerLazySingleton<DeletePickMeUseCase>(
+    serviceLocator.registerLazySingleton<DeletePickMeUseCase>(
       () => DeletePickMeUseCase(
         serviceLocator(),
       ),
     );
-      serviceLocator.registerLazySingleton<DeleteComeWithMeUseCase>(
+    serviceLocator.registerLazySingleton<DeleteComeWithMeUseCase>(
       () => DeleteComeWithMeUseCase(
         serviceLocator(),
       ),
     );
- serviceLocator.registerLazySingleton<AcceptComeWithMeUseCase>(
+    serviceLocator.registerLazySingleton<AcceptComeWithMeUseCase>(
       () => AcceptComeWithMeUseCase(
         serviceLocator(),
       ),
     );
-     serviceLocator.registerLazySingleton<RejectComeWithMeUseCase>(
+    serviceLocator.registerLazySingleton<RejectComeWithMeUseCase>(
       () => RejectComeWithMeUseCase(
         serviceLocator(),
       ),
     );
-     serviceLocator.registerLazySingleton<AcceptPickMeUseCase>(
+    serviceLocator.registerLazySingleton<AcceptPickMeUseCase>(
       () => AcceptPickMeUseCase(
         serviceLocator(),
       ),
     );
-     serviceLocator.registerLazySingleton<RejectPickMeUseCase>(
+    serviceLocator.registerLazySingleton<RejectPickMeUseCase>(
       () => RejectPickMeUseCase(
+        serviceLocator(),
+      ),
+    );
+     serviceLocator.registerLazySingleton<MakeAdRequestUsecase>(
+      () => MakeAdRequestUsecase(
         serviceLocator(),
       ),
     );
@@ -285,17 +299,15 @@ class FourtyNineServiceLocator {
       )..loadData(),
     );
 
-    serviceLocator.registerSingleton(
-      MainCategoriesCubit(
+    serviceLocator.registerFactory<MainCategoriesCubit>(
+      () => MainCategoriesCubit(
         serviceLocator(),
       )..getMainCategories(),
     );
 
-    serviceLocator.registerSingleton(
-      SubcategoriesCubit(
-        serviceLocator(),
-      )
-    );
+    serviceLocator.registerSingleton(SubcategoriesCubit(
+      serviceLocator(),
+    ));
     serviceLocator.registerFactory<AdsCubit>(
       () => AdsCubit(
         serviceLocator(),
@@ -310,14 +322,14 @@ class FourtyNineServiceLocator {
       () => CreateAdCubit(
         serviceLocator(),
         serviceLocator(),
-        serviceLocator(),
-      )..loadData(),
+      ),
     );
     serviceLocator.registerFactory<AdDetailsCubit>(
       () => AdDetailsCubit(
         serviceLocator(),
         serviceLocator(),
-      )..loadData(),
+        serviceLocator(),
+      ),
     );
     // ContactUsCubit
     serviceLocator.registerFactory<ContactUsCubit>(

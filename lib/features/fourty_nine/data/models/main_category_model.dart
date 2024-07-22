@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
+import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
 
 import '../../../../res/style/const.dart';
 import '../../domain/entities/main_category_entity.dart';
@@ -12,6 +13,7 @@ class MainCategoryModel extends MainCategoryEntity {
     required super.cover,
     required super.isFavorite,
     required super.total,
+    super.subcategories,
   });
 
   factory MainCategoryModel.fromJson(Map<String, dynamic> json) =>
@@ -23,5 +25,8 @@ class MainCategoryModel extends MainCategoryEntity {
         cover: json['cover']??'',
         isFavorite: json['is_favorite']??false,
         total: json['total'] ?? 0,
+        subcategories: 
+        json['subCategories']==null?[]:
+        (json['subCategories'] as List).map((e) => SubCategoryModel.fromJson(e)).toList()
       );
 }

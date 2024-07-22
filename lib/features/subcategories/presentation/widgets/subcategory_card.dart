@@ -5,6 +5,8 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../res/style/styles.dart';
@@ -13,25 +15,38 @@ import '../../domain/entities/sub_category_entity.dart';
 
 class SubCategoryCard extends StatelessWidget {
   final SubCategoryEntity item;
-  const SubCategoryCard({super.key, required this.item});
+  final MainCategoryEntity mainCategory;
+  const SubCategoryCard(
+      {super.key, required this.item, required this.mainCategory});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => context.push(Routes.ADS, extra: item.id),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
+      child: Container(
+        width: kToolbarHeight * 2.5,
+        height: kToolbarHeight * 3,
+        margin: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+            boxShadow: const [
+              BoxShadow(
+                  color: Colors.grey,
+                  spreadRadius: 1,
+                  offset: Offset(-1, 1),
+                  blurRadius: 5)
+            ]),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
-                child: SizedBox(
-              width: double.infinity,
               child: Stack(
                 children: [
                   Positioned.fill(
                     child: SquareImage(
-                      fit: BoxFit.fitWidth,
-                      radius: 10,
+                      fit: BoxFit.cover,
+                      radius: 5,
                       url: item.image,
                     ),
                   ),
@@ -39,33 +54,35 @@ class SubCategoryCard extends StatelessWidget {
                       top: 5,
                       right: 5,
                       child: IconAppButton(
-                          size: 20,
-                          icon: Icons.favorite_border,
-                          color: Colors.red,
-                          onPressed: () {}))
+                          icon: Icons.favorite_outline, onPressed: () {}))
                 ],
               ),
-            )),
+            ),
             const Sizer(),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Label(
-                        text: item.name,
-                        style: Styles.mediumText(fontWeight: FontWeight.bold),
-                      ),
-                      const Label(text: '0 Ads')
-                    ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Label(
+                          text: item.name,
+                          style: Styles.mediumText(fontWeight: FontWeight.bold),
+                        ),
+                        const Label(text: '0 Ads')
+                      ],
+                    ),
                   ),
-                ),
-                IconAppButton(
-                    icon: Icons.add,
-                    isCircle: true,
-                    onPressed: () => context.push(Routes.CREATEAD))
-              ],
+                  IconAppButton(
+                      icon: Icons.add_box_rounded,
+                      size: 20,
+                      onPressed: () => context.push(Routes.CREATEAD,
+                          extra: CategorizationEntity(
+                              mainCategory: mainCategory, subCategory: item)))
+                ],
+              ),
             ),
           ],
         ),

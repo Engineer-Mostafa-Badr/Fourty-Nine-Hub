@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
-import '../../../../../../common/widgets/dynamic/sizer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/features/social_media/chat/presentation/chat_cubit/chat_cubit.dart';
 import 'package:social_media_recorder/audio_encoder_type.dart';
 import 'package:social_media_recorder/screen/social_media_recorder.dart';
 import 'package:flutter/foundation.dart' as foundation;
@@ -25,6 +27,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   final bool isApple = [TargetPlatform.iOS, TargetPlatform.macOS]
       .contains(foundation.defaultTargetPlatform);
   bool _emojiShowing = false;
+  late ChatCubit chatCubit;
 
   @override
   void initState() {
@@ -43,6 +46,8 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final chatCubit = context.read<ChatCubit>();
+
     return ListView(
       shrinkWrap: true,
       children: [
@@ -58,7 +63,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20)),
                 child: TextField(
-                  controller: _controller,
+                  controller: chatCubit.messageTextController,
                   scrollController: _scrollController,
                   focusNode: _focusNode,
                   textAlignVertical: TextAlignVertical.bottom,

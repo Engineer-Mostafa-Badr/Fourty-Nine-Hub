@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/helper/launch_url.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/google_ads_banner.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
@@ -16,20 +17,48 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../common/widgets/stateless/dynamic/CarouselSlider.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
+import '../../../../ride/RideRequest/presentation/widgets/customer/createOrder/changePhoneNumber.dart';
 
-class AdDetailsView extends StatelessWidget {
-  const AdDetailsView({super.key});
+class AdDetailsView extends StatefulWidget {
+  final String id;
+  const AdDetailsView({super.key, required this.id});
+
+  @override
+  State<AdDetailsView> createState() => _AdDetailsViewState();
+}
+
+class _AdDetailsViewState extends State<AdDetailsView> {
+  @override
+  void initState() {
+    context.read<AdDetailsCubit>().loadData(adId: widget.id);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: const BackAppBar(),
         bottomNavigationBar: _buildActionsWidget(),
-        body: BlocBuilder<AdDetailsCubit, AdDetailsState>(
-            builder: (context, state) {
+        body: BlocConsumer<AdDetailsCubit, AdDetailsState>(
+            listener: (contex, state) {
+          if (state.isError) {
+            showErrorMessage(
+              context,
+              getFailureMessage(
+                state.failure!,
+                context,
+              ),
+            );
+          } else if (state.isSuccess) {
+            showSuccessMessage(context, Labels.success);
+          }
+        }, builder: (context, state) {
           if (state.ad == null) {
             return const Center(
               child: CircularProgressIndicator.adaptive(),
@@ -46,7 +75,7 @@ class AdDetailsView extends StatelessWidget {
                 // ),
                 const Sizer(),
                 _buildDetailsWidget(ad: state.ad!),
-                _buildLocationWidget(address: state.ad!.address),
+                _buildLocationWidget(address: state.ad!.address!),
                 const Sizer(),
                 _buildRelevantAdsWidget(),
               ],
@@ -85,6 +114,7 @@ class AdDetailsView extends StatelessWidget {
   Widget _buildActionsWidget() {
     return BlocBuilder<AdDetailsCubit, AdDetailsState>(
         builder: (context, state) {
+      final controller = context.read<AdDetailsCubit>();
       return Container(
         margin: const EdgeInsets.all(10),
         child: Row(
@@ -101,8 +131,8 @@ class AdDetailsView extends StatelessWidget {
                 child: AppButton(
                     label: 'Call',
                     icon: Icons.call,
-                    onPressed: () => LaunchURLHelper()
-                        .call(phone: state.ad?.user.phone ?? ''))),
+                    onPressed: () =>
+                        LaunchURLHelper().call(phone: state.ad?.phone ?? ''))),
             const Sizer(
               width: 5,
             ),
@@ -110,13 +140,29 @@ class AdDetailsView extends StatelessWidget {
                 child: AppButton(
                     label: 'Whatsapp',
                     icon: FontAwesomeIcons.whatsapp,
-                    onPressed: () {})),
+                    onPressed: () => LaunchURLHelper()
+                        .openWhatsapp(phone: state.ad?.phone ?? ''))),
             const Sizer(
               width: 5,
             ),
             Expanded(
                 child: AppButton(
-                    label: 'Request', icon: Icons.bookmark, onPressed: () {})),
+                    label: 'Request',
+                    icon: Icons.bookmark,
+                    onPressed: () {
+                      if (controller.phone == null) {
+                        bottomSheet(
+                            context: context,
+                            widget: RideContactPhoneNumber(
+                              onChanged: (String v) =>
+                                  controller.changePhone(v: v),
+                              onSubmit: () =>
+                                  controller.makeAdRequest(id: widget.id),
+                            ));
+                      } else {
+                        controller.makeAdRequest(id: widget.id);
+                      }
+                    })),
           ],
         ),
       );
@@ -189,13 +235,13 @@ class AdDetailsView extends StatelessWidget {
         ),
         InkWell(
           onTap: () => LaunchURLHelper().openLocation(
-              lat: ad.address.coordinates[0], lng: ad.address.coordinates[1]),
+              lat: ad.address!.coordinates[0], lng: ad.address!.coordinates[1]),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Icon(Icons.location_on_outlined),
               const Sizer(),
-              Expanded(child: Label(text: ad.address.address)),
+              Expanded(child: Label(text: ad.address?.address ?? "")),
               const Sizer(),
               Label(text: ad.formatedDate)
             ],

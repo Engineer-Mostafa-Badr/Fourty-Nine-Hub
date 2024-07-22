@@ -28,6 +28,7 @@ class SquareImage extends StatelessWidget {
             ? source != null
                 ? Image(
                     image: source!,
+                    fit: fit ?? BoxFit.cover,
                   )
                 : const SizedBox()
             : CachedNetworkImage(

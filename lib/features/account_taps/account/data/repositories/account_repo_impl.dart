@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/account_taps/account/domain/entities/favo
 
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_subcategory_entity.dart';
 
+import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
 import '../../domain/repositories/account_repo.dart';
 import '../datasources/account_remote_datasource.dart';
 
