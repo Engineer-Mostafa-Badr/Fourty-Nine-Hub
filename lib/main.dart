@@ -38,8 +38,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => serviceLocator<RiderequestCubit>(),
         ),
-
-       
         BlocProvider(
           create: (context) => serviceLocator<CreateShippingRequestCubit>(),
         ),
@@ -51,7 +49,6 @@ class MyApp extends StatelessWidget {
          BlocProvider(
           create: (context) => serviceLocator<DoctorsListCubit>(),
         ),
-       
       ],
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,

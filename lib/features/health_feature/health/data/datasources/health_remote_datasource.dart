@@ -16,8 +16,10 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
   Future<Either<Failure, List<AppointmentBookingEntity>>>
       getMyBookings() async {
     final response = await _apiConsumer.get(Jsons.doctorBookingsList);
-    return response.fold((failure) => Left(failure), (data) => Right(
-      (data['data']['bookings'] as List).map((e) => AppointmentBookingModel.fromJson(e)).toList()
-    ));
+    return response.fold(
+        (failure) => Left(failure),
+        (data) => Right((data['data']['bookings'] as List)
+            .map((e) => AppointmentBookingModel.fromJson(e))
+            .toList()));
   }
 }

@@ -41,25 +41,7 @@ class CreatePostBanner extends StatelessWidget {
           const Sizer(
             width: 10,
           ),
-          InkWell(
-            onTap: () => context.push(Routes.ZOOM),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  Assets.zoomMeeting,
-                  height: 25,
-                ),
-                Label(
-                  text: 'Meeting',
-                  style: Styles.smallText(),
-                ),
-              ],
-            ),
-          ),
-          const Sizer(
-            width: 10,
-          ),
+         
           InkWell(
             onTap: () => context.push(Routes.QURAAN),
             child: Column(

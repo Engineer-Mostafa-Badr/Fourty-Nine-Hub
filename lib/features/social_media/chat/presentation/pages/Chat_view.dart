@@ -1,14 +1,41 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/nested_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
-import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
-import '../../../club_house/presentation/pages/club_house_home.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/presentation/chat_cubit/chat_cubit.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import '../widgets/home/calling_card.dart';
 import '../widgets/home/chat_card.dart';
 import '../widgets/home/chat_stories.dart';
 
-class ChatView extends StatelessWidget {
+class ChatView extends StatefulWidget {
+  const ChatView({super.key});
+
+  @override
+  State<ChatView> createState() => _ChatViewState();
+}
+
+class _ChatViewState extends State<ChatView> {
+  late ChatCubit chatCubit;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initSocketConnection();
+  }
+
+  initSocketConnection() {
+    chatCubit = context.read<ChatCubit>()..initSocketConnection();
+  }
+
   final List<String> groups = [
     'Social',
     'Services',
@@ -22,15 +49,15 @@ class ChatView extends StatelessWidget {
     'Unread',
   ];
 
-  ChatView({super.key});
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: groups.length,
       initialIndex: 0,
       child: SharedScaffold(
-          mainCategoryId: 2,
-          body: NestedAppbar(appBars: [
+        mainCategoryId: 2,
+        body: NestedAppbar(
+          appBars: [
             const SliverAppBar(
               expandedHeight: kToolbarHeight * 1.5,
               automaticallyImplyLeading: false,
@@ -44,12 +71,35 @@ class ChatView extends StatelessWidget {
               titleSpacing: 0,
               title: _buildCategoriesLabels(),
             )
-          ], body: _buildCategoriesViews())),
+          ],
+          body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
+            builder: (context, state) {
+              return context.read<UserCubit>().isLoggedIn
+                  ? _buildCategoriesViews()
+                  : Center(
+                      child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                            onTap: () => context.push(Routes.LOGIN),
+                            child: Label(
+                                text: 'Login',
+                                style: Styles.headerText(color: Colors.blue))),
+                        Label(
+                            text: ', To continue in using chat services',
+                            style: Styles.headerText()),
+                      ],
+                    ));
+            },
+          ),
+        ),
+      ),
     );
   }
 
   Widget _buildCategoriesLabels() {
     return TabBar(
+        tabAlignment: TabAlignment.start,
         isScrollable: true,
         tabs: groups.map((e) {
           return Tab(
@@ -70,8 +120,8 @@ class ChatView extends StatelessWidget {
       _buildCategoryChats(),
       _buildCategoryChats(),
       _buildCategoryChats(),
-      _buildCategoryChats(),
-      _buildCategoryChats(),
+      // _buildCategoryChats(),
+      // _buildCategoryChats(),
     ]);
   }
 
