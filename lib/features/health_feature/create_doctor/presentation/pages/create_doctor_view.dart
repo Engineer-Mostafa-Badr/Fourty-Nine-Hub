@@ -30,10 +30,19 @@ class CreateDoctorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<CreateDoctorCubit, CreateDoctorState>(
-      listenWhen: (previous, current) => current is CreateDoctorError,
       listener: (context, state) {
-        if (state is CreateDoctorError) {
-          showErrorMessage(context, state.message);
+        switch (state) {
+          case CreateDoctorLoading _:
+            showLoadingDialog(context);
+            break;
+          case CreateDoctorCloseLoading _:
+            Navigator.pop(context);
+            break;
+          case CreateDoctorError _:
+            showErrorMessage(context, state.message);
+            break;
+          default:
+            break;
         }
       },
       child: Scaffold(

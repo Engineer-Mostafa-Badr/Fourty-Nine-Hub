@@ -22,7 +22,7 @@ class CreateDoctorSubcategoryDropdown extends StatelessWidget {
               .toList(),
           onSelected: (value) {
             if (value != null) {
-              // createDoctorCubit.selectSubGategory(value);
+              createDoctorCubit.selectSubcategory(value);
             }
           });
     } else {

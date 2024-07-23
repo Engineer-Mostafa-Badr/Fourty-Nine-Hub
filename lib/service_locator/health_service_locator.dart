@@ -9,6 +9,9 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/domain/repo
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/area_filtercubit/doctor_area_filter_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/city_filter_cubit/doctor_city_filter_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/subcategory_filter_cubit/doctor_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctors_list/data/datasources/doctor_list_remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/doctors_list/data/repositories/doctor_list_repo_impl.dart';
 import 'package:fourtyninehub/features/health_feature/doctors_list/domain/repositories/doctor_list_repo.dart';
@@ -16,11 +19,13 @@ import 'package:fourtyninehub/features/health_feature/doctors_list/domain/usecas
 import 'package:fourtyninehub/features/health_feature/doctors_list/domain/usecases/get_doctor_list_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctors_list/domain/usecases/get_states_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctors_list/presentation/cubit/doctors_list_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/emergency/presentation/cubit/emergency_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/datasources/health_remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/repositories/health_repo_impl.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/repositories/health_repo.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_my_appointment_bookings_usecase.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/cubit/health_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_cubit/health_share_cubit_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/health_feature/book_doctor_appointment/data/repositories/book_doctor_appointment_repo_impl.dart';
@@ -123,6 +128,7 @@ class HealthServiceLocator {
     );
 
     // -------------------------- cubits --------------------------
+    serviceLocator.registerSingleton<HealthShareCubit>(HealthShareCubit());
     serviceLocator.registerFactory<DoctorDetailsCubit>(
         () => DoctorDetailsCubit(serviceLocator())..loadData());
     serviceLocator.registerFactory<DoctorsListCubit>(() => DoctorsListCubit(
@@ -135,8 +141,23 @@ class HealthServiceLocator {
           serviceLocator(),
         )..loadData());
     serviceLocator.registerFactory<CreateDoctorCubit>(
-      () => CreateDoctorCubit(),
+      () => CreateDoctorCubit()..load(),
     );
+
+    serviceLocator.registerFactory<DoctorSubcategoryFilterCubit>(
+        () => DoctorSubcategoryFilterCubit(
+              serviceLocator(),
+              serviceLocator(),
+            )..load());
+
+    serviceLocator.registerFactory<EmergencyCubit>(
+        () => EmergencyCubit(serviceLocator(), serviceLocator())..load());
+
+    serviceLocator
+        .registerFactory(() => DoctorAreaFilterCubit(serviceLocator())..load());
+    serviceLocator
+        .registerFactory(() => DoctorCityFilterCubit(serviceLocator())..load());
+
     serviceLocator.registerFactory<BookDoctorAppointmentCubit>(
         () => BookDoctorAppointmentCubit(
               serviceLocator(),

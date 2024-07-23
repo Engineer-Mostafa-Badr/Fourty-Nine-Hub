@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/cubit/health_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -33,7 +34,14 @@ class HealthBanner extends StatelessWidget {
             style: Styles.headerText(color: AppColors.DARK_BLUE_COLOR),
           ),
           InkWell(
-            onTap: () => context.push(Routes.DOCTORLOGIN,extra: context.read<HealthCubit>().state.subCategories),
+            onTap: () {
+              if (context.read<UserCubit>().isLoggedIn) {
+                context.push(Routes.CREATEDOCTOR,
+                    extra: context.read<HealthCubit>().state.subCategories);
+              } else {
+                context.push(Routes.REGISTER);
+              }
+            },
             child: Text('Register',
                 style: Styles.mediumText(color: AppColors.DARK_BLUE_COLOR)),
           ),

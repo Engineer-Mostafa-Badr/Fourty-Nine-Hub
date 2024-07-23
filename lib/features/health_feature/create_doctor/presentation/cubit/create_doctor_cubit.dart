@@ -1,12 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/doctor_location.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/work_day_model.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/work_day_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/create_doctor.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/address_search_params_model.dart';
 import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:image_picker/image_picker.dart';
 
 part 'create_doctor_state.dart';
@@ -15,10 +18,6 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   CreateDoctorCubit() : super(CreateDoctorInitial());
 
   void load() {}
-
-  void selectSubCategory(SubCategoryModel subCategoryModel) {
-    _createDoctorParams.subCategoryId = subCategoryModel.id;
-  }
 
   CreateDoctorParams _createDoctorParams = CreateDoctorParams(
     firstName: '',
@@ -53,12 +52,14 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   // DoctorLocationModel _location =
   //     DoctorLocationModel(governorate: '', city: '', address: '');
 
-  void selectGovernorate(String value) {
-    // _location.governorate = value;
+  // dropdowns
+
+  void selectSubcategory(SubCategoryEntity subCategoryModel) {
+    _createDoctorParams.subCategoryId = subCategoryModel.id;
   }
 
-  void selectSubGategory(String value) {
-    // _subCategoryModel = value;
+  void selectGovernorate(String value) {
+    // _location.governorate = value;
   }
 
   void selectCity(String value) {
@@ -66,61 +67,55 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   }
 
   // upload images
-  Future<UploadFileEntity?> _uploadImage() async {
-    UploadFileEntity? media;
+  Future<void> _uploadImage(
+      {required dynamic Function(UploadFileEntity) onUploaded}) async {
     if (_createDoctorParams.subCategoryId.isNotEmpty) {
-      await UploadFile().uploadImage(
+      emit(CreateDoctorLoading("Uploading Image..."));
+      UploadFile().uploadImage(
         subCategoryId: _createDoctorParams.subCategoryId,
         onUploaded: (value) {
-          media = value;
+          onUploaded(value);
         },
       );
+      emit(CreateDoctorCloseLoading());
     } else {
       emit(CreateDoctorError("Select Subcategory First"));
     }
-
-    return media;
   }
 
-  Future<XFile?> uploadProfileImage() async {
-    final media = await _uploadImage();
-
-    if (media != null) {
+  Future<void> uploadProfileImage() async {
+    await _uploadImage(onUploaded: (media) {
       _createDoctorParams.mediaId = media.mediaId;
-    }
-    return media?.file;
+      emit(CreateDoctorUploadProfileImage(media.file));
+    });
   }
 
-  Future<XFile?> uploadIdFrontImage() async {
-    final media = await _uploadImage();
-    if (media != null) {
+  Future<void> uploadIdFrontImage() async {
+    await _uploadImage(onUploaded: (media) {
       _createDoctorParams.idFrontKey = media.mediaId;
-    }
-    return media?.file;
+      emit(CreateDoctorUploadIdFrontImage(media.file));
+    });
   }
 
-  Future<XFile?> uploadIdBehindImage() async {
-    final media = await _uploadImage();
-    if (media != null) {
+  Future<void> uploadIdBehindImage() async {
+    await _uploadImage(onUploaded: (media) {
       _createDoctorParams.idBehindKey = media.mediaId;
-    }
-    return media?.file;
+      emit(CreateDoctorUploadIdBehindImage(media.file));
+    });
   }
 
-  Future<XFile?> uploadPracticingFrontImage() async {
-    final media = await _uploadImage();
-    if (media != null) {
+  Future<void> uploadPracticingFrontImage() async {
+    await _uploadImage(onUploaded: (media) {
       _createDoctorParams.practicingFront = media.mediaId;
-    }
-    return media?.file;
+      emit(CreateDoctorUploadPracticingFrontImage(media.file));
+    });
   }
 
-  Future<XFile?> uploadPracticingBehindImage() async {
-    final media = await _uploadImage();
-    if (media != null) {
+  Future<void> uploadPracticingBehindImage() async {
+    await _uploadImage(onUploaded: (media) {
       _createDoctorParams.practicingBehind = media.mediaId;
-    }
-    return media?.file;
+      emit(CreateDoctorUploadPracticingBehindImage(media.file));
+    });
   }
 
   // text controllers

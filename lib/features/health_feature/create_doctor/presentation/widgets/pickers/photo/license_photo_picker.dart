@@ -1,7 +1,9 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/picker/image_picker.dart';
+import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class CreateDoctorLicensePhotoPicker extends StatelessWidget {
@@ -9,6 +11,7 @@ class CreateDoctorLicensePhotoPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final createDoctorCubit = context.read<CreateDoctorCubit>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -19,9 +22,47 @@ class CreateDoctorLicensePhotoPicker extends StatelessWidget {
         const Sizer(),
         Row(
           children: [
-            ImagePickerWidget(onImagePicked: (value) {}, tilte: "Front"),
+            InkWell(
+              onTap: () async {
+                await createDoctorCubit.uploadPracticingFrontImage();
+              },
+              child: BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
+                buildWhen: (previous, current) =>
+                    current is CreateDoctorUploadPracticingFrontImage ||
+                    current is CreateDoctorInitial,
+                builder: (context, state) {
+                  if (state is CreateDoctorUploadPracticingFrontImage) {
+                    return ImagePickerPlaceholder(
+                      image: state.file,
+                    );
+                  }
+                  return const ImagePickerPlaceholder(
+                    tilte: 'Front',
+                  );
+                },
+              ),
+            ),
             const Sizer(),
-            ImagePickerWidget(onImagePicked: (value) {}, tilte: "Back"),
+            InkWell(
+              onTap: () async {
+                await createDoctorCubit.uploadPracticingBehindImage();
+              },
+              child: BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
+                buildWhen: (previous, current) =>
+                    current is CreateDoctorUploadPracticingBehindImage ||
+                    current is CreateDoctorInitial,
+                builder: (context, state) {
+                  if (state is CreateDoctorUploadPracticingBehindImage) {
+                    return ImagePickerPlaceholder(
+                      image: state.file,
+                    );
+                  }
+                  return const ImagePickerPlaceholder(
+                    tilte: 'Behind',
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ],

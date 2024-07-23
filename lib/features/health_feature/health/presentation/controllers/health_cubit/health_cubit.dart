@@ -1,14 +1,16 @@
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/enums/doctor_services.dart';
 import 'package:fourtyninehub/core/enums/main_services_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/health_feature/health/domain/entities/option_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/data/models/filter_option_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 
-import '../../domain/entities/appointment_booking_entity.dart';
-import '../../domain/usecases/get_my_appointment_bookings_usecase.dart';
+import '../../../domain/entities/appointment_booking_entity.dart';
+import '../../../domain/usecases/get_my_appointment_bookings_usecase.dart';
 
 part 'health_state.dart';
 
@@ -19,10 +21,23 @@ class HealthCubit extends Cubit<HealthState> {
       this._getMyAppointmentBookingsUseCase, this._getSubCategoriesUseCase)
       : super(const HealthState());
 
-  final List<HealthOptionEntity> services = [
-    HealthOptionEntity(name: 'Clinic Visit', image: Assets.doctor),
-    HealthOptionEntity(name: 'Doctor Call', image: Assets.doctor),
-    HealthOptionEntity(name: 'Home Visit', image: Assets.doctor),
+  final List<HealthFilterOptionModel> services = [
+    HealthFilterOptionModel(
+        route: Routes.FILTERDOCTORSUBCATEGORY,
+        service: DoctorServices.CLINICVIST,
+        image: Assets.doctorClinicVisit),
+    HealthFilterOptionModel(
+        service: DoctorServices.CALL,
+        image: Assets.doctorCall,
+        route: Routes.FILTERDOCTORSUBCATEGORY),
+    HealthFilterOptionModel(
+        service: DoctorServices.HOMEVISIT,
+        image: Assets.doctorHomeVisit,
+        route: Routes.FILTERDOCTORSUBCATEGORY),
+    HealthFilterOptionModel(
+        service: DoctorServices.EMERGENCY,
+        image: Assets.emergency,
+        route: Routes.VISITAEMERGENCY),
   ];
 
   void loadData() async {

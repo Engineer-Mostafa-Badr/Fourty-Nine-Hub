@@ -5,7 +5,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ImagePickerPlaceholder extends StatefulWidget {
+class ImagePickerPlaceholder extends StatelessWidget {
   final String? tilte;
   final double height;
   final double width;
@@ -18,17 +18,10 @@ class ImagePickerPlaceholder extends StatefulWidget {
       this.width = 100});
 
   @override
-  State<ImagePickerPlaceholder> createState() => _ImagePickerPlaceholderState();
-}
-
-class _ImagePickerPlaceholderState extends State<ImagePickerPlaceholder> {
-  
-
-  @override
   Widget build(BuildContext context) {
     return Container(
-      width: widget.height,
-      height: widget.width,
+      width: height,
+      height: width,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black),
         borderRadius: BorderRadius.circular(UIConst.radius),
@@ -38,7 +31,7 @@ class _ImagePickerPlaceholderState extends State<ImagePickerPlaceholder> {
   }
 
   Widget _buildImage() {
-    if (widget.image == null) {
+    if (image == null) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -51,13 +44,13 @@ class _ImagePickerPlaceholderState extends State<ImagePickerPlaceholder> {
         ],
       );
     }
-    return Image.file(File(widget.image!.path));
+    return Image.file(File(image!.path));
   }
 
   Widget _buildTitle() {
-    if (widget.tilte == null || widget.tilte!.isEmpty) {
+    if (tilte == null || tilte!.isEmpty) {
       return const SizedBox.shrink();
     }
-    return Text(widget.tilte!);
+    return Text(tilte!);
   }
 }

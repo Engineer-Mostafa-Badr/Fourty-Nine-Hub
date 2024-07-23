@@ -5,7 +5,6 @@ import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_place
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:image_picker/image_picker.dart';
 
 class CreateDoctorProfilePhotoPicker extends StatefulWidget {
   const CreateDoctorProfilePhotoPicker({super.key});
@@ -17,8 +16,6 @@ class CreateDoctorProfilePhotoPicker extends StatefulWidget {
 
 class _CreateDoctorProfilePhotoPickerState
     extends State<CreateDoctorProfilePhotoPicker> {
-  XFile? image;
-
   @override
   Widget build(BuildContext context) {
     final createDoctorCubit = context.read<CreateDoctorCubit>();
@@ -32,10 +29,20 @@ class _CreateDoctorProfilePhotoPickerState
         const Sizer(),
         InkWell(
           onTap: () async {
-            image = await createDoctorCubit.uploadProfileImage();
+            await createDoctorCubit.uploadProfileImage();
           },
-          child: ImagePickerPlaceholder(
-            image: image,
+          child: BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
+            buildWhen: (previous, current) =>
+                current is CreateDoctorUploadProfileImage ||
+                current is CreateDoctorInitial,
+            builder: (context, state) {
+              if (state is CreateDoctorUploadProfileImage) {
+                return ImagePickerPlaceholder(
+                  image: state.file,
+                );
+              }
+              return const ImagePickerPlaceholder();
+            },
           ),
         ),
       ],
