@@ -3,6 +3,14 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 class DoctorWorkDayModel extends DoctorWorkDayEntity {
   DoctorWorkDayModel({required super.day, super.from, super.to});
 
+  factory DoctorWorkDayModel.fromEntity(DoctorWorkDayEntity entity) {
+    return DoctorWorkDayModel(
+      day: entity.day,
+      from: entity.from,
+      to: entity.to,
+    );
+  }
+
   factory DoctorWorkDayModel.fromJson(Map<String, dynamic> json) {
     return DoctorWorkDayModel(
       day: json['day'],

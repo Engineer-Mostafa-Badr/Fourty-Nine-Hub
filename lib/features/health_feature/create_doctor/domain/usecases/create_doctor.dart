@@ -22,8 +22,8 @@ class CreateDoctorParams {
   String email;
   AddressSearchParamsModel address;
   List<DoctorWorkDayModel> clinicWorkDays;
-  List<DoctorWorkDayModel>? callsWorkDays;
-  List<DoctorWorkDayModel>? homeVisitWorkDays;
+  List<DoctorWorkDayModel> callsWorkDays;
+  List<DoctorWorkDayModel> homeVisitWorkDays;
   String mediaId;
   String clinicPrice;
   String waitingTime;
@@ -43,8 +43,8 @@ class CreateDoctorParams {
       required this.phone,
       required this.email,
       required this.address,
-      this.callsWorkDays,
-      this.homeVisitWorkDays,
+      required this.callsWorkDays,
+      required this.homeVisitWorkDays,
       required this.clinicWorkDays,
       required this.mediaId,
       required this.clinicPrice,
@@ -69,11 +69,11 @@ class CreateDoctorParams {
       clinicWorkDays: (json['clinic'] as List)
           .map((e) => DoctorWorkDayModel.fromJson(e))
           .toList(),
-      callsWorkDays: (json['calls'] as List?)
-          ?.map((e) => DoctorWorkDayModel.fromJson(e))
+      callsWorkDays: (json['calls'] as List)
+          .map((e) => DoctorWorkDayModel.fromJson(e))
           .toList(),
-      homeVisitWorkDays: (json['homeVisit'] as List?)
-          ?.map((e) => DoctorWorkDayModel.fromJson(e))
+      homeVisitWorkDays: (json['homeVisit'] as List)
+          .map((e) => DoctorWorkDayModel.fromJson(e))
           .toList(),
       mediaId: json['mediaId'],
       clinicPrice: json['clinicPrice'],
@@ -97,12 +97,14 @@ class CreateDoctorParams {
     data['phone'] = phone;
     data['email'] = email;
     data['address'] = address.toJson();
-    data['clinic'] = clinicWorkDays.map((e) => e.toJson()).toList();
-    if (callsWorkDays != null) {
-      data['calls'] = callsWorkDays!.map((e) => e.toJson()).toList();
+    if (clinicWorkDays.isNotEmpty) {
+      data['clinic'] = clinicWorkDays.map((e) => e.toJson()).toList();
     }
-    if (homeVisitWorkDays != null) {
-      data['homeVisit'] = homeVisitWorkDays!.map((e) => e.toJson()).toList();
+    if (callsWorkDays.isNotEmpty) {
+      data['calls'] = callsWorkDays.map((e) => e.toJson()).toList();
+    }
+    if (homeVisitWorkDays.isNotEmpty) {
+      data['homeVisit'] = homeVisitWorkDays.map((e) => e.toJson()).toList();
     }
     data['mediaId'] = mediaId;
     data['clinicPrice'] = clinicPrice;

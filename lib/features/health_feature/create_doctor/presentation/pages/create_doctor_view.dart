@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/subcategory.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/info.dart';
@@ -28,71 +29,79 @@ class CreateDoctorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const HomeAppbar(),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(15.0),
-        child: Form(
-          key: context.read<CreateDoctorCubit>().formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CreateDoctorSubcategoryDropdown(subCategories: subCategories),
-              const Sizer(height: 20),
-              const CreateDoctorOptionsCheckbox(),
-              const Sizer(height: 20),
-              const CreateDoctorNameField(),
-              const Sizer(height: 20),
-              const CreateDoctorPhotoPicker(),
-              const Sizer(height: 20),
-              const CreateDoctorIDPhotoPicker(),
-              const Sizer(height: 20),
-              const CreateDoctorIDExpiryDatePicker(),
-              const Sizer(height: 20),
-              const CreateDoctorLicensePhotoPicker(),
-              const Sizer(height: 20),
-              const CreateDoctorLicenseExpiryDatePicker(),
-              const Sizer(height: 20),
-              DefaultTextFormField(
-                hint: 'Specialty',
-                keyboardType: TextInputType.text,
-                isRequired: true,
-                currentFocusNode:
-                    context.read<CreateDoctorCubit>().specialtyFocusNode,
-                currentController:
-                    context.read<CreateDoctorCubit>().specialtyController,
-              ),
-              const Sizer(height: 20),
-              const CreateDoctorGovernorateDropdown(),
-              const Sizer(height: 20),
-              const CreateDoctorCitiesDropdowns(),
-              const Sizer(height: 20),
-              DefaultTextFormField(
-                 hint: 'Address',
-                keyboardType: TextInputType.text,
-                isRequired: true,
-                currentFocusNode:
-                    context.read<CreateDoctorCubit>().addressFocusNode,
-                currentController:
-                    context.read<CreateDoctorCubit>().addressController,
-              ),
-              const Sizer(height: 20),
-              const CreateDoctorClinicTimeTable(),
-              const Sizer(height: 20),
-              const CreateDoctorCallTimeTable(),
-              const Sizer(height: 20),
-              const CreateDoctorHomeVisitTimeTable(),
-              const Sizer(height: 20),
-              const CreateDoctorInfoText(
-                  text:
-                      "The application does not deduct any percentage from the service provider."),
-              const Sizer(height: 20),
-              const CreateDoctorInfoText(
-                  text:
-                      'You will get EGP 3,650 per year if you subscribe daily.'),
-              const Sizer(height: 20),
-              const CreateDoctorSubmitButton(),
-            ],
+    return BlocListener<CreateDoctorCubit, CreateDoctorState>(
+      listenWhen: (previous, current) => current is CreateDoctorError,
+      listener: (context, state) {
+        if (state is CreateDoctorError) {
+          showErrorMessage(context, state.message);
+        }
+      },
+      child: Scaffold(
+        appBar: const HomeAppbar(),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(15.0),
+          child: Form(
+            key: context.read<CreateDoctorCubit>().formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CreateDoctorSubcategoryDropdown(subCategories: subCategories),
+                const Sizer(height: 20),
+                CreateDoctorOptionsCheckbox(),
+                const Sizer(height: 20),
+                const CreateDoctorNameField(),
+                const Sizer(height: 20),
+                const CreateDoctorProfilePhotoPicker(),
+                const Sizer(height: 20),
+                const CreateDoctorIDPhotoPicker(),
+                const Sizer(height: 20),
+                const CreateDoctorIDExpiryDatePicker(),
+                const Sizer(height: 20),
+                const CreateDoctorLicensePhotoPicker(),
+                const Sizer(height: 20),
+                const CreateDoctorLicenseExpiryDatePicker(),
+                const Sizer(height: 20),
+                DefaultTextFormField(
+                  hint: 'Specialty',
+                  keyboardType: TextInputType.text,
+                  isRequired: true,
+                  currentFocusNode:
+                      context.read<CreateDoctorCubit>().specialtyFocusNode,
+                  currentController:
+                      context.read<CreateDoctorCubit>().specialtyController,
+                ),
+                const Sizer(height: 20),
+                const CreateDoctorGovernorateDropdown(),
+                const Sizer(height: 20),
+                const CreateDoctorCitiesDropdowns(),
+                const Sizer(height: 20),
+                DefaultTextFormField(
+                  hint: 'Address',
+                  keyboardType: TextInputType.text,
+                  isRequired: true,
+                  currentFocusNode:
+                      context.read<CreateDoctorCubit>().addressFocusNode,
+                  currentController:
+                      context.read<CreateDoctorCubit>().addressController,
+                ),
+                const Sizer(height: 20),
+                const CreateDoctorClinicTimeTable(),
+                const Sizer(height: 20),
+                const CreateDoctorCallTimeTable(),
+                const Sizer(height: 20),
+                const CreateDoctorHomeVisitTimeTable(),
+                const Sizer(height: 20),
+                const CreateDoctorInfoText(
+                    text:
+                        "The application does not deduct any percentage from the service provider."),
+                const Sizer(height: 20),
+                const CreateDoctorInfoText(
+                    text:
+                        'You will get EGP 3,650 per year if you subscribe daily.'),
+                const Sizer(height: 20),
+                const CreateDoctorSubmitButton(),
+              ],
+            ),
           ),
         ),
       ),

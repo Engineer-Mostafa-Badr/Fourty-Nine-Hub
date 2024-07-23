@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/time_of_day_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/enums/week_days.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/work_day_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -71,7 +72,7 @@ class _WeekWidgetState extends State<WeekWidget> {
             onChanged: (v) => widget.onChanged?.call(v??false, time),
           ),
           Text(
-            time.day,
+            time.day.name,
             style: Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
           ),
           const Spacer(flex: 1),
@@ -140,12 +141,12 @@ class _WeekWidgetState extends State<WeekWidget> {
   }
 
   final List<DoctorWorkDayEntity> _week = [
-    DoctorWorkDayEntity(day: "Saturday"),
-    DoctorWorkDayEntity(day: "Sunday"),
-    DoctorWorkDayEntity(day: "Monday"),
-    DoctorWorkDayEntity(day: "Tuesday"),
-    DoctorWorkDayEntity(day: "Wednesday"),
-    DoctorWorkDayEntity(day: "Thursday"),
-    DoctorWorkDayEntity(day: "Friday"),
+    DoctorWorkDayEntity(day: WeekDays.saturday),
+    DoctorWorkDayEntity(day: WeekDays.sunday),
+    DoctorWorkDayEntity(day: WeekDays.monday),
+    DoctorWorkDayEntity(day: WeekDays.tuesday),
+    DoctorWorkDayEntity(day: WeekDays.wednesday),
+    DoctorWorkDayEntity(day: WeekDays.thursday),
+    DoctorWorkDayEntity(day: WeekDays.friday),
   ];
 }

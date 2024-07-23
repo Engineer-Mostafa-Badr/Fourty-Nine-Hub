@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/enums/main_services_enum.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/cubit/health_cubit.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -19,7 +19,7 @@ class HealthBanner extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: NetworkImage(MainServicesEnum.health.banner),
+            image: AssetImage(Assets.healthBanner),
           )),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

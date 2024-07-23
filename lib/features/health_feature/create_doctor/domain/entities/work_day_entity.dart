@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/enums/week_days.dart';
 
 class DoctorWorkDayEntity {
-  final String day;
+  final WeekDays day;
   TimeOfDay from;
   TimeOfDay to;
 

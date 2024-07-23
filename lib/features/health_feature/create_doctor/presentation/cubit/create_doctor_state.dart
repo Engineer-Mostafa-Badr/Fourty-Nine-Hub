@@ -1,53 +1,39 @@
 part of 'create_doctor_cubit.dart';
 
-enum CreateDoctorStates { loading, initState, error }
+sealed class CreateDoctorState {}
 
-class CreateDoctorState {
-  final CreateDoctorStates status;
-  final Failure? failure;
-  final bool hasCall;
-  final bool hasHomeVisit;
-  final bool hasClinic;
-  CreateDoctorState({
-    this.status = CreateDoctorStates.loading,
-    this.failure,
-    this.hasCall = false,
-    this.hasHomeVisit = false,
-    this.hasClinic = false,
-  });
-  CreateDoctorState copyWith({
-    CreateDoctorStates? status,
-    Failure? failure,
-    bool? hasCall,
-    bool? hasHomeVisit,
-    bool? hasClinic,
-  }) {
-    return CreateDoctorState(
-      status: status ?? this.status,
-      failure: failure ?? this.failure,
-      hasCall: hasCall ?? this.hasCall,
-      hasHomeVisit: hasHomeVisit ?? this.hasHomeVisit,
-      hasClinic: hasClinic ?? this.hasClinic,
-    );
-  }
+final class CreateDoctorInitial extends CreateDoctorState {}
 
-  final List<String> governorates = [
-    'Alexandria',
-    'Cairo',
-    'Giza',
-    'Aswan',
-    'Asyut',
-    'Beheira',
-    'Beni Suef'
-  ];
+final class CreateDoctorLoading extends CreateDoctorState {}
 
-  final List<String> cities = [
-    'Alexandria',
-    'Cairo',
-    'Giza',
-    'Aswan',
-    'Asyut',
-    'Beheira',
-    'Beni Suef'
-  ];
+final class CreateDoctorLoaded extends CreateDoctorState {}
+
+final class CreateDoctorError extends CreateDoctorState {
+  final String message;
+  CreateDoctorError(this.message);
+}
+
+final class CreateDoctorCityLoaded extends CreateDoctorState {
+  final List<String> cities;
+  CreateDoctorCityLoaded(this.cities);
+}
+
+final class CreateDoctorGovernorateLoaded extends CreateDoctorState {
+  final List<String> governorates;
+  CreateDoctorGovernorateLoaded(this.governorates);
+}
+
+final class CreateDoctorShowClinic extends CreateDoctorState {
+  final bool check;
+  CreateDoctorShowClinic(this.check);
+}
+
+final class CreateDoctorShowCall extends CreateDoctorState {
+  final bool check;
+  CreateDoctorShowCall(this.check);
+}
+
+final class CreateDoctorShowHomeVisit extends CreateDoctorState {
+  final bool check;
+  CreateDoctorShowHomeVisit(this.check);
 }

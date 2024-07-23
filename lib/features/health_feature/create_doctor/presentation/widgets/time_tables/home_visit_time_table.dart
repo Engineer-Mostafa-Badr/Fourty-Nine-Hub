@@ -11,18 +11,17 @@ class CreateDoctorHomeVisitTimeTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
+      buildWhen: (previous, current) => current is CreateDoctorShowHomeVisit,
       builder: (context, state) {
-        if (state.hasHomeVisit) {
+        if (state is CreateDoctorShowHomeVisit && state.check) {
           return TimeTable(
               title: 'Home Visit',
               onChanged: (check, day) {
                 if (check) {
-                  context.read<CreateDoctorCubit>().homeVisitWorkDays.add(day);
+                  context.read<CreateDoctorCubit>().addHomeVisitWorkDay(day);
                 } else {
                   context
-                      .read<CreateDoctorCubit>()
-                      .homeVisitWorkDays
-                      .removeWhere((element) => element.day == day.day);
+                      .read<CreateDoctorCubit>().deleteHomeVisitWorkDay(day);
                 }
               },
               child: Column(

@@ -4,26 +4,26 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class CreateDoctorOptionsCheckbox extends StatefulWidget {
-  const CreateDoctorOptionsCheckbox({super.key});
+// ignore: must_be_immutable
+class CreateDoctorOptionsCheckbox extends StatelessWidget {
+  CreateDoctorOptionsCheckbox({super.key});
 
-  @override
-  State<CreateDoctorOptionsCheckbox> createState() =>
-      _CreateDoctorOptionsCheckboxState();
-}
+  bool _clinic = false;
+  bool _call = false;
+  bool _homeVisit = false;
 
-class _CreateDoctorOptionsCheckboxState
-    extends State<CreateDoctorOptionsCheckbox> {
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
+          buildWhen: (previous, current) => current is CreateDoctorShowClinic ||  current is CreateDoctorInitial,
           builder: (context, state) {
             return Checkbox(
-              value: state.hasClinic,
+              value: _clinic,
               onChanged: (value) {
-                context.read<CreateDoctorCubit>().toggleClinic(value!);
+                _clinic = value!;
+                context.read<CreateDoctorCubit>().toggleClinic(value);
               },
             );
           },
@@ -34,11 +34,13 @@ class _CreateDoctorOptionsCheckboxState
         ),
         const Sizer(),
         BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
+          buildWhen: (previous, current) => current is CreateDoctorShowCall ||  current is CreateDoctorInitial,
           builder: (context, state) {
             return Checkbox(
-              value: state.hasCall,
+              value: _call,
               onChanged: (value) {
-                context.read<CreateDoctorCubit>().toggleCallCheck(value!);
+                _call = value!;
+                context.read<CreateDoctorCubit>().toggleCallCheck(value);
               },
             );
           },
@@ -49,11 +51,13 @@ class _CreateDoctorOptionsCheckboxState
         ),
         const Sizer(),
         BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
+          buildWhen: (previous, current) => current is CreateDoctorShowHomeVisit ||  current is CreateDoctorInitial,
           builder: (context, state) {
             return Checkbox(
-              value: state.hasHomeVisit,
+              value: _homeVisit,
               onChanged: (value) {
-                context.read<CreateDoctorCubit>().toggleHomeVisit(value!);
+                _homeVisit = value!;
+                context.read<CreateDoctorCubit>().toggleHomeVisit(value);
               },
             );
           },

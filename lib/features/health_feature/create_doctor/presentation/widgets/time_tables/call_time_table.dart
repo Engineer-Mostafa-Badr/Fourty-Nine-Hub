@@ -12,18 +12,16 @@ class CreateDoctorCallTimeTable extends StatelessWidget {
   Widget build(BuildContext context) {
     final doctorLoginCubit = context.read<CreateDoctorCubit>();
     return BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
+      buildWhen: (previous, current) => current is CreateDoctorShowCall,
       builder: (context, state) {
-        if (state.hasCall) {
+        if (state is CreateDoctorShowCall && state.check) {
           return TimeTable(
             title: 'Call',
             onChanged: (check, day) {
               if (check) {
-                context.read<CreateDoctorCubit>().callWorkDays.add(day);
+                context.read<CreateDoctorCubit>().addCallWorkDay(day);
               } else {
-                context
-                    .read<CreateDoctorCubit>()
-                    .callWorkDays
-                    .removeWhere((element) => element.day == day.day);
+                context.read<CreateDoctorCubit>().deleteCallWorkDay(day);
               }
             },
             child: Column(

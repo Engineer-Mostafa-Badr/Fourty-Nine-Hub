@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class HealthOptionCard extends StatelessWidget {
   final String imagePath;
@@ -8,23 +10,28 @@ class HealthOptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 10,
-              offset: Offset(0, 10),
-            ),
-          ]),
-      child: Column(
-        children: [
-          Expanded(child: Image.asset(imagePath)),
-          Text(name),
-        ],
+    return InkWell(
+      onTap: () {
+        context.push(Routes.VISITADOCTORLIST);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 5),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 10,
+                offset: Offset(0, 10),
+              ),
+            ]),
+        child: Column(
+          children: [
+            Expanded(child: Image.asset(imagePath)),
+            Text(name),
+          ],
+        ),
       ),
     );
   }
