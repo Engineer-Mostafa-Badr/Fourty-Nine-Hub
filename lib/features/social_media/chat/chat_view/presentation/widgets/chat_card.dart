@@ -68,21 +68,28 @@ class ChatCard extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 8.0),
                     child: Row(
                       children: [
-                        const Icon(
-                          FontAwesomeIcons.checkDouble,
-                          color: Colors.blue,
-                          size: 10,
-                        ),
+                        chatItemModel!.seen!
+                            ? const Icon(
+                                FontAwesomeIcons.checkDouble,
+                                color: Colors.blue,
+                                size: 10,
+                              )
+                            : const SizedBox(),
                         Expanded(
                           child: Label(
                               text: '${chatItemModel?.lastMessageText}',
-                              style: Styles.mediumText(color: Colors.grey)),
+                              style: Styles.mediumText(
+                                  color: chatItemModel!.seen!
+                                      ? Colors.grey
+                                      : Colors.black)),
                         ),
-                        const Icon(
-                          Icons.volume_off,
-                          color: Colors.grey,
-                          size: 14,
-                        ),
+                        chatItemModel!.muted!
+                            ? const Icon(
+                                Icons.volume_off,
+                                color: Colors.grey,
+                                size: 14,
+                              )
+                            : const SizedBox(),
                       ],
                     ),
                   )
@@ -97,7 +104,7 @@ class ChatCard extends StatelessWidget {
                 Row(
                   children: [
                     Label(
-                        text: '12',
+                        text: '${chatItemModel?.lastSeenCount}',
                         style: Styles.smallText(color: Colors.grey)),
                     const Sizer(),
                     const Icon(

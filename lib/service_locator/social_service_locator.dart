@@ -98,9 +98,11 @@ class SocialServiceLocator {
     serviceLocator.registerFactory<ChatsCubit>(() => ChatsCubit(
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
         ));
 
     serviceLocator.registerFactory<ChatRoomCubit>(() => ChatRoomCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

@@ -5,6 +5,8 @@ abstract class SocketServiceContract {
   Socket get socket;
 
   initSocketConnection(String userToken);
+
+  sendMessage({required String message, required String chatId});
 }
 
 class SocketServiceImplementation extends SocketServiceContract {
@@ -81,5 +83,18 @@ class SocketServiceImplementation extends SocketServiceContract {
     } catch (e) {
       debugPrint('Connection established$e');
     }
+  }
+
+  @override
+  sendMessage({required String message, required String chatId}) {
+    if (message.isEmpty) return;
+    Map messageMap = {
+      "chatId": chatId,
+      "type": 1,
+      "mediaIds": [],
+      "text": "Welcome 12",
+      "groupId": null
+    };
+    socket.emit('Message:Send', messageMap);
   }
 }

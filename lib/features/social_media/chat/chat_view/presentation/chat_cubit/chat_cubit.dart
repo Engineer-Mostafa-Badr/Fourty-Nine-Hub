@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/service/socket_service.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/chats_request.dart';
@@ -13,6 +14,7 @@ part 'chats_state.dart';
 class ChatsCubit extends Cubit<ChatsState> {
   final GetTokensUseCase _getTokensUseCase;
   final GetChatsUseCase _getChatsUseCase;
+  final SocketServiceContract _socketService;
   String? userToken;
   late Socket socket;
   final messageTextController = TextEditingController();
@@ -20,80 +22,12 @@ class ChatsCubit extends Cubit<ChatsState> {
   ChatsCubit(
     this._getTokensUseCase,
     this._getChatsUseCase,
+    this._socketService,
   ) : super(const ChatsState());
 
   initSocketConnection() async {
-    try {
-      String? userToken = await getUserToken();
-
-      debugPrint("Toke=> ${userToken}");
-
-      socket = io(
-          'https://49dev.com',
-          OptionBuilder()
-              .setTransports(['websocket']) // for Flutter or Dart VM
-               // disable auto-connection
-              .setExtraHeaders(
-                  {'foo': 'bar', 'authorization': '$userToken'}) // optional
-              .build());
-
-      socket.connect();
-
-      socket.onConnect((_) {
-        debugPrint('Connect to Socket successfully');
-        // socket.emit('msg', 'test');
-      });
-
-      // socket.one;
-      socket.on('event', (data) => debugPrint(data));
-      socket.on('message', (data) {
-        print("Delivered ${data}");
-        final dataList = data as List;
-        final ack = dataList.last as Function;
-        ack(null);
-      });
-
-      socket.on('user:message', (data) {
-        print("Delivered ${data}");
-        final dataList = data as List;
-        final ack = dataList.last as Function;
-        ack(null);
-      });
-
-      socket.on('Message:Send', (data) {
-        print("Delivered ${data}");
-        final dataList = data as List;
-        final ack = dataList.last as Function;
-        ack(null);
-      });
-
-      socket.on('Send', (data) {
-        print("Delivered ${data}");
-        final dataList = data as List;
-        final ack = dataList.last as Function;
-        ack(null);
-      });
-
-      socket.on('Delivered', (data) {
-        print("Delivered ${data}");
-        final dataList = data as List;
-        final ack = dataList.last as Function;
-        ack(null);
-      });
-
-      socket.on('Message:Delivered', (data) {
-        print("Delivered ${data}");
-        final dataList = data as List;
-        final ack = dataList.last as Function;
-        ack(null);
-      });
-      socket.onDisconnect((_) => debugPrint('disconnect'));
-      socket.onerror((e) => debugPrint('onError $e'));
-      socket.on(
-          'fromServer', (_) => debugPrint("Connect from server successfully"));
-    } catch (e) {
-      debugPrint('Connection established$e');
-    }
+    String? userToken = await getUserToken();
+    _socketService.initSocketConnection(userToken!);
   }
 
   Future<String?> getUserToken() async {

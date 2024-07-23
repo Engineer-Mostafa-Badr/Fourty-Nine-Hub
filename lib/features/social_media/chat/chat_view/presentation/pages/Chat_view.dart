@@ -127,14 +127,23 @@ class _ChatViewState extends State<ChatView> {
 
   Widget _buildCategoryChats({bool isSecret = false}) {
     return BlocBuilder<ChatsCubit, ChatsState>(builder: (context, state) {
-      return ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) =>
-            ChatCard(isSecret: isSecret, chatItemModel: state.chats?[index]),
-        separatorBuilder: (context, index) => const SizedBox(),
-        itemCount: state.chats?.length ?? 0,
-      );
+      return state.chats!.isEmpty
+          ? Center(
+              child: Label(
+                  text: 'No Chats until now',
+                  style: Styles.mediumText(
+                      color: const Color.fromARGB(255, 87, 87, 87),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18)),
+            )
+          : ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) => ChatCard(
+                  isSecret: isSecret, chatItemModel: state.chats?[index]),
+              separatorBuilder: (context, index) => const SizedBox(),
+              itemCount: state.chats?.length ?? 0,
+            );
     });
   }
 

@@ -22,6 +22,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   final _utils = EmojiPickerUtils();
   late final EmojiTextEditingController _controller;
   late final ScrollController _scrollController;
+  late final TextEditingController _messageTextController;
   late final FocusNode _focusNode;
   late final TextStyle _textStyle;
   final bool isApple = [TargetPlatform.iOS, TargetPlatform.macOS]
@@ -63,7 +64,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20)),
                 child: TextField(
-                  controller: chatCubit.messageTextController,
+                  controller: _messageTextController,
                   scrollController: _scrollController,
                   focusNode: _focusNode,
                   textAlignVertical: TextAlignVertical.bottom,
@@ -99,24 +100,27 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                         borderSide:
                             const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
                         borderRadius: BorderRadius.circular(20)),
-                    suffixIcon: SizedBox(
-                      width: kToolbarHeight * 1.5,
-                      child: Row(
-                        children: [
-                          IconAppButton(
-                              icon: Icons.attach_file,
-                              onPressed: () {
-                                bottomSheet(
-                                    context: context,
-                                    widget: AttachmentTypes());
-                              },
-                              color: Colors.grey),
-                          const Sizer(),
-                          const Icon(Icons.camera_alt_rounded,
-                              color: Colors.grey),
-                        ],
-                      ),
-                    ),
+                    suffixIcon:
+                        _messageTextController.text.trim().isEmpty
+                            ? const SizedBox()
+                            : SizedBox(
+                                width: kToolbarHeight * 1.5,
+                                child: Row(
+                                  children: [
+                                    IconAppButton(
+                                        icon: Icons.attach_file,
+                                        onPressed: () {
+                                          bottomSheet(
+                                              context: context,
+                                              widget: AttachmentTypes());
+                                        },
+                                        color: Colors.grey),
+                                    const Sizer(),
+                                    const Icon(Icons.camera_alt_rounded,
+                                        color: Colors.grey),
+                                  ],
+                                ),
+                              ),
                   ),
                 ),
               )),

@@ -1,6 +1,8 @@
 class ChatItemModel {
   String? sId;
   String? lastMessageText;
+  bool? muted;
+  bool? seen;
   User? user;
   int? lastSeenCount;
 
@@ -9,6 +11,8 @@ class ChatItemModel {
 
   ChatItemModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
+    muted = json['muted'];
+    seen = json['seen'];
     lastMessageText = json['lastMessageText'];
     user = json['user'] != null ? User.fromJson(json['user']) : null;
     lastSeenCount = json['lastSeenCount'];

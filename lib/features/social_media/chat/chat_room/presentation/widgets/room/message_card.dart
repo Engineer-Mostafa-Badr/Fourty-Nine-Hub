@@ -40,6 +40,7 @@ class MessageCard extends StatelessWidget {
                   topRight: Radius.circular(10),
                   bottomLeft: Radius.circular(10))),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ReadMoreLabel(
                 trimLines: 5,
@@ -48,7 +49,7 @@ class MessageCard extends StatelessWidget {
                 textAlign: TextAlign.left,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                // mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Label(
                       text: '12', style: Styles.smallText(color: Colors.white)),
@@ -100,6 +101,7 @@ class MessageCard extends StatelessWidget {
                   topRight: Radius.circular(10),
                   bottomRight: Radius.circular(10))),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ReadMoreLabel(
                 trimLines: 5,
