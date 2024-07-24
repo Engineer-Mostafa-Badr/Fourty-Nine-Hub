@@ -16,13 +16,8 @@ class CreateDoctorHomeVisitTimeTable extends StatelessWidget {
         if (state is CreateDoctorShowHomeVisit && state.check) {
           return TimeTable(
               title: 'Home Visit',
-              onChanged: (check, day) {
-                if (check) {
-                  context.read<CreateDoctorCubit>().addHomeVisitWorkDay(day);
-                } else {
-                  context
-                      .read<CreateDoctorCubit>().deleteHomeVisitWorkDay(day);
-                }
+              onChanged: (timeTable) {
+               
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

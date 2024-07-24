@@ -12,11 +12,11 @@ import '../../../doctor_details/domain/entities/doctor_entity.dart';
 part 'doctors_list_state.dart';
 
 class DoctorsListCubit extends Cubit<DoctorsListState> {
-  final GetCitiesUseCase _getCitiesUseCase;
+  final GetFakeCitiesUseCase _GetFakeCitiesUseCase;
   final GetStatesUseCase _getStatesUseCase;
   final GetDoctorListUseCase _getDoctorListUseCase;
 
-  DoctorsListCubit(this._getCitiesUseCase, this._getDoctorListUseCase,
+  DoctorsListCubit(this._GetFakeCitiesUseCase, this._getDoctorListUseCase,
       this._getStatesUseCase)
       : super(const DoctorsListState());
 
@@ -37,7 +37,7 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
   }
 
   Future<void> getCities() async {
-    final response = await _getCitiesUseCase.call(state.selectedState?.id ?? 0);
+    final response = await _GetFakeCitiesUseCase.call(state.selectedState?.id ?? 0);
     response.fold(
         (failure) => emit(
             state.copyWith(failure: failure, status: DoctorsListStates.error)),

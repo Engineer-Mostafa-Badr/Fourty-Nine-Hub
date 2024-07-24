@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/city_filter_cubit/doctor_city_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/widgets/city_list_title.dart';
 
 class DoctorCityFilterView extends StatelessWidget {
-  const DoctorCityFilterView({super.key});
+  final GovernorateEntity governorate;
+  const DoctorCityFilterView({super.key, required this.governorate});
 
   @override
   Widget build(BuildContext context) {
-    final doctorCityFilter = context.read<DoctorCityFilterCubit>();
+    final doctorCityFilter = context.read<DoctorCityFilterCubit>()
+      ..loadData(governorateId: governorate.id);
     return Scaffold(
       appBar: AppBar(
         title: const Text('City Filter'),

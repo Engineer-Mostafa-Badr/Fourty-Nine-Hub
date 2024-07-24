@@ -18,14 +18,21 @@ final class CreateDoctorError extends CreateDoctorState {
   CreateDoctorError(this.message);
 }
 
-final class CreateDoctorCityLoaded extends CreateDoctorState {
-  final List<String> cities;
-  CreateDoctorCityLoaded(this.cities);
+final class CreateDoctorCitiesLoaded extends CreateDoctorState {
+  final List<CityEntity> cities;
+  CreateDoctorCitiesLoaded(this.cities);
 }
 
-final class CreateDoctorGovernorateLoaded extends CreateDoctorState {
-  final List<String> governorates;
-  CreateDoctorGovernorateLoaded(this.governorates);
+final class CreateDoctorCitiesLoading extends CreateDoctorState {}
+
+final class CreateDoctorGovernoratesLoaded extends CreateDoctorState {
+  final List<GovernorateEntity> governorates;
+  CreateDoctorGovernoratesLoaded(this.governorates);
+}
+
+final class CreateDoctorSubCategoriesLoaded extends CreateDoctorState {
+  final List<SubCategoryEntity> subCategories;
+  CreateDoctorSubCategoriesLoaded(this.subCategories);
 }
 
 final class CreateDoctorUploadProfileImage extends CreateDoctorState {

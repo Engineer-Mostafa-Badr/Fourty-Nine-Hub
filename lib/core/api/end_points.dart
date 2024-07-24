@@ -21,6 +21,12 @@ class EndPoints {
   static const createNewForgetPassword = '/auth/reset-password';
   // ride
 
+  // health
+  static String getCities({required String governorateId}) =>
+      '/health/cities/$governorateId';
+  static const getGovernorates = '/health/governorate';
+  static const createDoctor = '/health/doctor';
+
   // reels
   static const getExploreReels = '/reels/explore';
 
@@ -164,7 +170,6 @@ class EndPoints {
   static String subCategoryAds(String id) {
     return '/ads/subCategoryAds/$id';
   }
-
 
   static String adDetails(String id) {
     return '/ads/getAd/$id';

@@ -36,8 +36,7 @@ class HealthBanner extends StatelessWidget {
           InkWell(
             onTap: () {
               if (context.read<UserCubit>().isLoggedIn) {
-                context.push(Routes.CREATEDOCTOR,
-                    extra: context.read<HealthCubit>().state.subCategories);
+                context.push(Routes.CREATEDOCTOR);
               } else {
                 context.push(Routes.REGISTER);
               }

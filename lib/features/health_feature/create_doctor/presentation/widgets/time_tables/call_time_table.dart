@@ -17,13 +17,7 @@ class CreateDoctorCallTimeTable extends StatelessWidget {
         if (state is CreateDoctorShowCall && state.check) {
           return TimeTable(
             title: 'Call',
-            onChanged: (check, day) {
-              if (check) {
-                context.read<CreateDoctorCubit>().addCallWorkDay(day);
-              } else {
-                context.read<CreateDoctorCubit>().deleteCallWorkDay(day);
-              }
-            },
+            onChanged: (timeTable) {},
             child: Column(
               children: [
                 DefaultTextFormField(

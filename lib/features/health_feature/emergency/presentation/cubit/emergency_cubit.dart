@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_cubit/health_share_cubit_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
@@ -10,10 +10,10 @@ class EmergencyCubit extends Cubit<EmergencyState> {
   EmergencyCubit(this._shareCubit, this._getSubCategoriesUseCase)
       : super(EmergencyInitial());
 
-  final HealthShareCubit _shareCubit;
+  final HealthSharedData _shareCubit;
   final GetSubCategoriesUseCase _getSubCategoriesUseCase;
 
-  Future<void> load() async {
+  Future<void> loadData() async {
     _getSubCategories();
   }
 

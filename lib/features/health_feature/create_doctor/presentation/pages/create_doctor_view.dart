@@ -20,12 +20,9 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/presentation
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/name_filed.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/options_checkbox.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/pickers/photo/doctor_photo_picker.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
-// ignore: must_be_immutable
 class CreateDoctorView extends StatelessWidget {
-  List<SubCategoryEntity>? subCategories;
-  CreateDoctorView({super.key, this.subCategories});
+  const CreateDoctorView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +51,7 @@ class CreateDoctorView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CreateDoctorSubcategoryDropdown(subCategories: subCategories),
+                const CreateDoctorSubcategoryDropdown(),
                 const Sizer(height: 20),
                 CreateDoctorOptionsCheckbox(),
                 const Sizer(height: 20),
@@ -71,13 +68,13 @@ class CreateDoctorView extends StatelessWidget {
                 const CreateDoctorLicenseExpiryDatePicker(),
                 const Sizer(height: 20),
                 DefaultTextFormField(
-                  hint: 'Specialty',
+                  hint: 'Desciption',
                   keyboardType: TextInputType.text,
                   isRequired: true,
                   currentFocusNode:
-                      context.read<CreateDoctorCubit>().specialtyFocusNode,
+                      context.read<CreateDoctorCubit>().descriptionFocusNode,
                   currentController:
-                      context.read<CreateDoctorCubit>().specialtyController,
+                      context.read<CreateDoctorCubit>().descriptionController,
                 ),
                 const Sizer(height: 20),
                 const CreateDoctorGovernorateDropdown(),

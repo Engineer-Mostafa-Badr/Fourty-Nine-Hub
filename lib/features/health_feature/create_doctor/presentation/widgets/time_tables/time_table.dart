@@ -11,7 +11,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 class TimeTable extends StatelessWidget {
   final String title;
   final Widget child;
-  final void Function(bool,DoctorWorkDayEntity)? onChanged;
+  final void Function(List<DoctorDayEntity>)? onChanged;
   const TimeTable(
       {super.key, required this.title, required this.child, this.onChanged});
 
@@ -28,7 +28,7 @@ class TimeTable extends StatelessWidget {
         children: [
           Text(title, style: Styles.headerText(color: AppColors.BARRIER_COLOR)),
           const Sizer(),
-          WeekWidget(
+          _WeekWidget(
             onChanged: onChanged,
           ),
           const Sizer(),
@@ -39,19 +39,18 @@ class TimeTable extends StatelessWidget {
   }
 }
 
-class WeekWidget extends StatefulWidget {
-  final void Function(bool,DoctorWorkDayEntity)? onChanged;
+class _WeekWidget extends StatefulWidget {
+  final void Function(List<DoctorDayEntity>)? onChanged;
 
-  const WeekWidget({
-    super.key,
+  const _WeekWidget({
     required this.onChanged,
   });
 
   @override
-  State<WeekWidget> createState() => _WeekWidgetState();
+  State<_WeekWidget> createState() => _WeekWidgetState();
 }
 
-class _WeekWidgetState extends State<WeekWidget> {
+class _WeekWidgetState extends State<_WeekWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -61,16 +60,19 @@ class _WeekWidgetState extends State<WeekWidget> {
     );
   }
 
-  Widget _buildDayWidget(DoctorWorkDayEntity time) {
-    bool add = false;
+  Widget _buildDayWidget(DoctorDayEntity time) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Row(
         children: [
-          Checkbox.adaptive(
-            value: add,
-            onChanged: (v) => widget.onChanged?.call(v??false, time),
-          ),
+          Checkbox(
+              value: time.isAvailable,
+              onChanged: (v) {
+                setState(() {
+                  time.isAvailable = v!;
+                });
+                widget.onChanged?.call(_week);
+              }),
           Text(
             time.day.name,
             style: Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
@@ -82,13 +84,15 @@ class _WeekWidgetState extends State<WeekWidget> {
                 context: context,
                 initialTime: const TimeOfDay(hour: 10, minute: 0),
               ).then((value) {
-                if (value!.isBefore(time.to)) {
-                  setState(() {
-                    time.from = value;
-                  });
-                } else {
-                  showErrorMessage(
-                      context, "Start Time Cannot be after the End Time");
+                if (value != null) {
+                  if (value.isBefore(time.to)) {
+                    setState(() {
+                      time.from = value;
+                    });
+                  } else {
+                    showErrorMessage(
+                        context, "Start Time Cannot be after the End Time");
+                  }
                 }
               });
             },
@@ -112,13 +116,15 @@ class _WeekWidgetState extends State<WeekWidget> {
                 context: context,
                 initialTime: const TimeOfDay(hour: 10, minute: 0),
               ).then((value) {
-                if (value!.isAfter(time.from)) {
-                  setState(() {
-                    time.to = value;
-                  });
-                } else {
-                  showErrorMessage(
-                      context, "End Time Cannot be before the Start Time");
+                if (value != null) {
+                  if (value.isAfter(time.from)) {
+                    setState(() {
+                      time.to = value;
+                    });
+                  } else {
+                    showErrorMessage(
+                        context, "End Time Cannot be before the Start Time");
+                  }
                 }
               });
             },
@@ -140,13 +146,13 @@ class _WeekWidgetState extends State<WeekWidget> {
     );
   }
 
-  final List<DoctorWorkDayEntity> _week = [
-    DoctorWorkDayEntity(day: WeekDays.saturday),
-    DoctorWorkDayEntity(day: WeekDays.sunday),
-    DoctorWorkDayEntity(day: WeekDays.monday),
-    DoctorWorkDayEntity(day: WeekDays.tuesday),
-    DoctorWorkDayEntity(day: WeekDays.wednesday),
-    DoctorWorkDayEntity(day: WeekDays.thursday),
-    DoctorWorkDayEntity(day: WeekDays.friday),
+  final List<DoctorDayEntity> _week = [
+    DoctorDayEntity(day: WeekDays.saturday),
+    DoctorDayEntity(day: WeekDays.sunday),
+    DoctorDayEntity(day: WeekDays.monday),
+    DoctorDayEntity(day: WeekDays.tuesday),
+    DoctorDayEntity(day: WeekDays.wednesday),
+    DoctorDayEntity(day: WeekDays.thursday),
+    DoctorDayEntity(day: WeekDays.friday),
   ];
 }

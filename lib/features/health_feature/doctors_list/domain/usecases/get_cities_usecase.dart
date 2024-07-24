@@ -4,9 +4,9 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/doctor_list_repo.dart';
 
-class GetCitiesUseCase extends UseCase<List<CityModel>, int> {
+class GetFakeCitiesUseCase extends UseCase<List<CityModel>, int> {
   final DoctorListRepo _repo;
-  GetCitiesUseCase(this._repo);
+  GetFakeCitiesUseCase(this._repo);
   @override
   Future<Either<Failure, List<CityModel>>> call(int params) {
     return _repo.getCities(stateId: params);

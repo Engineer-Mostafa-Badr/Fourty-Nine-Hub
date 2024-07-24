@@ -21,7 +21,7 @@ class SubcategoryListTitle extends StatelessWidget {
         if (service == DoctorServices.CALL) {
           context.push(Routes.VISITADOCTORLISTBYCALL);
         } else {
-          context.push(Routes.FILTERDOCTORCITY);
+          context.push(Routes.FILTERDOCTORGOVERNORATE);
         }
       },
     );
