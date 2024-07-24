@@ -19,7 +19,7 @@ class CreateInstallmentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: BackAppBar(
+        appBar: const BackAppBar(
           label: 'Create Installment',
         ),
         body: BlocConsumer<CreateInstallmentCubit, CreateInstallmentState>(

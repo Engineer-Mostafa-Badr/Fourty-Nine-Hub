@@ -44,6 +44,7 @@ import 'package:fourtyninehub/features/installment_feature/installment_details/p
 import 'package:fourtyninehub/features/installment_feature/installment_list/presentation/cubit/installment_list_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
+import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
@@ -520,37 +521,43 @@ class AppPages {
                 name: Routes.MAZADDETAILS,
                 builder: (context, state) => BlocProvider<AuctionDetailsCubit>(
                   create: (_) => serviceLocator(),
-                  child: const MazadDetails(),
+                  child:  MazadDetails(id: state.extra as String),
                 ),
               ),
               // CreateAuctionView
               GoRoute(
                   path: Paths.CREATEAUCTION,
                   name: Routes.CREATEAUCTION,
-                  builder: (context, state) => const CreateAuctionView()),
+                  builder: (context, state) => BlocProvider.value(
+                        value: serviceLocator<CreateAuctionCubit>(),
+                        child: CreateAuctionView(
+                          adId: state.extra as String,
+                        ),
+                      )),
               // OtherAccountView
             ]),
 
         // ChatView
         GoRoute(
-            path: Paths.CHAT,
-            name: Routes.CHAT,
-            builder: (context, state) => BlocProvider<ChatsCubit>(
-                  create: (_) => serviceLocator(),
-                  child: const ChatView(),
-                ),
-           ),
-
+          path: Paths.CHAT,
+          name: Routes.CHAT,
+          builder: (context, state) => BlocProvider<ChatsCubit>(
+            create: (_) => serviceLocator(),
+            child: const ChatView(),
+          ),
+        ),
 
         // Chat Room
         GoRoute(
-            path: Paths.CHATROOM,
-            name: Routes.CHATROOM,
-            builder: (context, state) => BlocProvider<ChatRoomCubit>(
-                  create: (_) => serviceLocator(),
-                  child: ChatRoom(chatId: state.extra as String,),
-                ),
-           ),
+          path: Paths.CHATROOM,
+          name: Routes.CHATROOM,
+          builder: (context, state) => BlocProvider<ChatRoomCubit>(
+            create: (_) => serviceLocator(),
+            child: ChatRoom(
+              chatId: state.extra as String,
+            ),
+          ),
+        ),
 
         // _________________ services ____________
         GoRoute(

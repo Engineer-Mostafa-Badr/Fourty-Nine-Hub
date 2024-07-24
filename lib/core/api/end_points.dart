@@ -165,6 +165,14 @@ class EndPoints {
     return '/ads/subCategoryAds/$id';
   }
 
+  static String createAuction(String id) {
+    return '/auction/$id';
+  }
+
+  static const auctionsList = '/auction';
+  static String auctionDetails (String id){
+    return  '/auction/$id';
+  }
 
   static String adDetails(String id) {
     return '/ads/getAd/$id';
@@ -183,9 +191,7 @@ class EndPoints {
 
   // chat_room
   static String getChats = '/chat/get-chats';
-  static String getChatMessages (String chatId) {
+  static String getChatMessages(String chatId) {
     return '/chat/get-chat/$chatId';
   }
-
-
 }
