@@ -47,7 +47,10 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
-import 'package:fourtyninehub/features/social_media/chat/presentation/chat_cubit/chat_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/chat_cubit/chat_room_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/Chat_view.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
@@ -123,8 +126,6 @@ import '../features/ride/driver_dashboard/presentation/pages/driver_dashboard_vi
 import '../features/requests_history/presentation/cubit/request_history_cubit.dart';
 import '../features/ride/trip_details/presentation/cubit/trip_details_cubit.dart';
 import '../features/ride/trip_details/presentation/pages/trip_details_view.dart';
-import '../features/social_media/chat/presentation/pages/Chat_room.dart';
-import '../features/social_media/chat/presentation/pages/Chat_view.dart';
 import '../features/social_media/club_house/presentation/pages/club_house_home.dart';
 import '../features/social_media/club_house/presentation/widgets/clubHouseChat.dart';
 import '../features/social_media/club_house/presentation/widgets/clubHouseRoom.dart';
@@ -534,21 +535,22 @@ class AppPages {
         GoRoute(
             path: Paths.CHAT,
             name: Routes.CHAT,
-            builder: (context, state) => BlocProvider<ChatCubit>(
+            builder: (context, state) => BlocProvider<ChatsCubit>(
                   create: (_) => serviceLocator(),
-                  child: ChatView(),
+                  child: const ChatView(),
                 ),
-            routes: [
-              // ChatRoom
-              GoRoute(
-                path: Paths.CHATROOM,
-                name: Routes.CHATROOM,
-                builder: (context, state) => BlocProvider<ChatCubit>(
+           ),
+
+
+        // Chat Room
+        GoRoute(
+            path: Paths.CHATROOM,
+            name: Routes.CHATROOM,
+            builder: (context, state) => BlocProvider<ChatRoomCubit>(
                   create: (_) => serviceLocator(),
-                  child: const ChatRoom(),
+                  child: ChatRoom(chatId: state.extra as String,),
                 ),
-              ),
-            ]),
+           ),
 
         // _________________ services ____________
         GoRoute(

@@ -49,4 +49,7 @@ abstract class Jsons {
   static String feelings = 'assets/json/feelings.json';
   static String companyAds = 'assets/json/company_ads.json';
 
+
+
+
 }

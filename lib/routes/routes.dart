@@ -27,7 +27,7 @@ abstract class Routes {
   static const CLUBHOUSECHAT = '/Social/ClubHouse/ClubHouseChat';
   static const CLUBHOUSEROOM = '/Social/ClubHouse/ClubHouseRoom';
   static const CHAT = '/Chat';
-  static const CHATROOM = '/Chat/ChatRoom';
+  static const CHATROOM = '/ChatRoom';
   static const MAZADAT = '/Mazadat';
   static const VISITA = '/Visita';
   static const VISITAEMERGENCY = '/Visita/VisitaEmergency';

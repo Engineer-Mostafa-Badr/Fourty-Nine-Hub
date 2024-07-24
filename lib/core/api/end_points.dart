@@ -180,4 +180,12 @@ class EndPoints {
   static String confirmUpload(String mediaId) {
     return '/media/confirm/$mediaId';
   }
+
+  // chat_room
+  static String getChats = '/chat/get-chats';
+  static String getChatMessages (String chatId) {
+    return '/chat/get-chat/$chatId';
+  }
+
+
 }
