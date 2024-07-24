@@ -17,16 +17,20 @@ class AuctionModel extends AuctionEntity {
       required super.ad});
   factory AuctionModel.fromJson(Map<String, dynamic> json) {
     return AuctionModel(
-      id: json['id'],
+      id: json['_id'],
       startDate: json['start_date'],
-      startTime: json['start_time'],
-      endDate: json['end_date'],
-      endTime: json['end_time'],
-      minPrice: json['min_price'],
-      currentPrice: json['current_price'] ?? json['min_price'],
-      rate: json['rate'],
-      biddings: json['biddings']==null?null:(json['biddings'] as List).map((e) => BiddingModel.fromJson(e)).toList(),
-      ad: AdModel.fromJson(json['ad']),
+      startTime: json['start_time'] ?? '',
+      endDate: json['end_date'] ?? '',
+      endTime: json['end_time'] ?? '',
+      minPrice: json['small_price'],
+      currentPrice: json['current_price'] ?? json['start_price'],
+      rate: json['rate'] ?? 0,
+      biddings: json['biddings'] == null
+          ? null
+          : (json['biddings'] as List)
+              .map((e) => BiddingModel.fromJson(e))
+              .toList(),
+      ad: AdModel.fromJson(json['ads']),
     );
   }
 }

@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/domain/entities/auction_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -20,12 +20,13 @@ class AuctionDetailsCubit extends Cubit<AuctionDetailsState> {
     this._sendBiddingUseCase,
   ) : super(const AuctionDetailsState());
 
-  void loadData() async {
-    await getAuctionDetails();
+  void loadData({required String id}) async {
+    await getAuctionDetails(id: id);
   }
 
-  Future<void> getAuctionDetails() async {
-    final response = await _getAuctionDetailsUseCase.call(0);
+  Future<void> getAuctionDetails({required String id}) async {
+    emit(state.copyWith(status: AuctionDetailsStates.loading));
+    final response = await _getAuctionDetailsUseCase(id);
     response.fold(
         (failure) => emit(state.copyWith(
             failure: failure, status: AuctionDetailsStates.error)),
@@ -33,23 +34,23 @@ class AuctionDetailsCubit extends Cubit<AuctionDetailsState> {
             auction: data, status: AuctionDetailsStates.initState)));
   }
 
-  Future<void> sendBidding({
-    required num bidding
-  }) async {
+  Future<void> sendBidding({required num bidding}) async {
     final response = await _followUsersAuctionUseCase.call(0);
     response.fold(
         (failure) => emit(state.copyWith(
-            status: AuctionDetailsStates.error,
-            failure: failure)),
-        (done) =>emit(state.copyWith(status:AuctionDetailsStates.success, successMessage: Labels.biddingPlacedSuccess )));
- 
+            status: AuctionDetailsStates.error, failure: failure)),
+        (done) => emit(state.copyWith(
+            status: AuctionDetailsStates.success,
+            successMessage: Labels.biddingPlacedSuccess)));
   }
+
   Future<void> followUser() async {
     final response = await _sendBiddingUseCase.call(0);
     response.fold(
         (failure) => emit(state.copyWith(
-            status: AuctionDetailsStates.error,
-            failure: failure)),
-        (done) =>emit(state.copyWith(status:AuctionDetailsStates.success, successMessage: Labels.followedSuccess )));
+            status: AuctionDetailsStates.error, failure: failure)),
+        (done) => emit(state.copyWith(
+            status: AuctionDetailsStates.success,
+            successMessage: Labels.followedSuccess)));
   }
 }

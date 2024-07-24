@@ -102,7 +102,7 @@ class MyAdCard extends StatelessWidget {
                               ),
                               _buildOptionsWidget(
                                 label: 'Auction',
-                                onTap: () => context.push(Routes.CREATEAUCTION),
+                                onTap: () => context.push(Routes.CREATEAUCTION, extra: item.id),
                                 icon: Icons.group,
                               ),
                             ],

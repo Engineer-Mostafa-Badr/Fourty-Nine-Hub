@@ -27,6 +27,7 @@ abstract class AuthRepository {
   Future<Either<Failure, UserTokensEntity?>> getUserTokens();
 
   Future<Either<Failure, bool>> saveUserTokens(UserTokensEntity? userTokens);
+  // Future<Either<Failure, bool>> saveUserId (UserTokensEntity? userTokens);
   Future<Either<Failure, double>> getWelcomeGift();
 
   bool attachToken(UserTokensEntity? token);

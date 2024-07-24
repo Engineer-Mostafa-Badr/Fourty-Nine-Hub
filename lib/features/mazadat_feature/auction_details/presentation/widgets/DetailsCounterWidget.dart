@@ -78,34 +78,6 @@ class DetailsCounterWidget extends StatelessWidget {
                   )
                 ],
               )),
-          SizedBox(
-            height: kTextTabBarHeight * 2,
-            width: kTextTabBarHeight * 2,
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 10,
-                    value: auction.restTimeRatio,
-                  ),
-                ),
-                Positioned.fill(
-                    child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Label(
-                          text: 'Ends At',
-                          style: Styles.mediumText(color: Colors.grey)),
-                      Label(
-                          text: auction.formattedRestTime,
-                          style: Styles.headerText())
-                    ],
-                  ),
-                ))
-              ],
-            ),
-          ),
         ],
       ),
     );

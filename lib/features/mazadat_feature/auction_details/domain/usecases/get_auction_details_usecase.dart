@@ -7,12 +7,12 @@ import '../../../../../core/error/failure.dart';
 
 
 class GetAuctionDetailsUseCase
-    extends UseCase<AuctionEntity, int> {
+    extends UseCase<AuctionEntity, String> {
   final AuctionDetailsRepo _repo;
   GetAuctionDetailsUseCase(this._repo);
 
   @override
-  Future<Either<Failure, AuctionEntity>> call(int params) {
+  Future<Either<Failure, AuctionEntity>> call(String params) {
     return _repo.getAuctionDetails(id: params);
   }
 }
