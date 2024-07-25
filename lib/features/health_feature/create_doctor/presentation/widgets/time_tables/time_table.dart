@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/time_of_day_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/enums/week_days.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/work_day_entity.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_day_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class TimeTable extends StatelessWidget {
+class Timetable extends StatelessWidget {
   final String title;
   final Widget child;
-  final void Function(List<DoctorDayEntity>)? onChanged;
-  const TimeTable(
-      {super.key, required this.title, required this.child, this.onChanged});
+  final List<DoctorDayEntity> timetale;
+  const Timetable(
+      {super.key, required this.title, required this.child, required this.timetale});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,7 @@ class TimeTable extends StatelessWidget {
           Text(title, style: Styles.headerText(color: AppColors.BARRIER_COLOR)),
           const Sizer(),
           _WeekWidget(
-            onChanged: onChanged,
+            timetale: timetale,
           ),
           const Sizer(),
           child,
@@ -40,10 +39,10 @@ class TimeTable extends StatelessWidget {
 }
 
 class _WeekWidget extends StatefulWidget {
-  final void Function(List<DoctorDayEntity>)? onChanged;
+  final List<DoctorDayEntity> timetale;
 
   const _WeekWidget({
-    required this.onChanged,
+    required this.timetale,
   });
 
   @override
@@ -54,7 +53,7 @@ class _WeekWidgetState extends State<_WeekWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: _week.map<Widget>((e) {
+      children: widget.timetale.map<Widget>((e) {
         return _buildDayWidget(e);
       }).toList(),
     );
@@ -71,7 +70,6 @@ class _WeekWidgetState extends State<_WeekWidget> {
                 setState(() {
                   time.isAvailable = v!;
                 });
-                widget.onChanged?.call(_week);
               }),
           Text(
             time.day.name,
@@ -114,7 +112,7 @@ class _WeekWidgetState extends State<_WeekWidget> {
             onTap: () {
               showTimePicker(
                 context: context,
-                initialTime: const TimeOfDay(hour: 10, minute: 0),
+                initialTime: const TimeOfDay(hour: 11, minute: 0),
               ).then((value) {
                 if (value != null) {
                   if (value.isAfter(time.from)) {
@@ -145,14 +143,4 @@ class _WeekWidgetState extends State<_WeekWidget> {
       ),
     );
   }
-
-  final List<DoctorDayEntity> _week = [
-    DoctorDayEntity(day: WeekDays.saturday),
-    DoctorDayEntity(day: WeekDays.sunday),
-    DoctorDayEntity(day: WeekDays.monday),
-    DoctorDayEntity(day: WeekDays.tuesday),
-    DoctorDayEntity(day: WeekDays.wednesday),
-    DoctorDayEntity(day: WeekDays.thursday),
-    DoctorDayEntity(day: WeekDays.friday),
-  ];
 }

@@ -616,7 +616,7 @@ class AppPages {
                                   BlocProvider<DoctorCityFilterCubit>(
                                     create: (context) => serviceLocator(),
                                     child: DoctorCityFilterView(
-                                      governorate: (state as GovernorateEntity),
+                                      governorate: (state.extra as GovernorateEntity),
                                     ),
                                   ),
                               routes: [

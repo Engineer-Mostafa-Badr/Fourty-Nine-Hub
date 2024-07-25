@@ -6,14 +6,26 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/city_filter_cubit/doctor_city_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/widgets/city_list_title.dart';
 
-class DoctorCityFilterView extends StatelessWidget {
+class DoctorCityFilterView extends StatefulWidget {
   final GovernorateEntity governorate;
   const DoctorCityFilterView({super.key, required this.governorate});
 
   @override
+  State<DoctorCityFilterView> createState() => _DoctorCityFilterViewState();
+}
+
+class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
+  @override
+  void initState() {
+    context
+        .read<DoctorCityFilterCubit>()
+        .loadData(governorateId: widget.governorate.id);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final doctorCityFilter = context.read<DoctorCityFilterCubit>()
-      ..loadData(governorateId: governorate.id);
+    final doctorCityFilter = context.read<DoctorCityFilterCubit>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('City Filter'),

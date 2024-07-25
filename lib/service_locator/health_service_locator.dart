@@ -162,6 +162,7 @@ class HealthServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
       )..loadData(),
     );
 

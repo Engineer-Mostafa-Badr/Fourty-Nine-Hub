@@ -2,9 +2,12 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/enums/week_days.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/doctor_address.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/doctor_day_model.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/work_day_entity.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_day_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/create_doctor.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_cities.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
@@ -20,13 +23,37 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   final GetSubCategoriesUseCase _getSubCategoriesUseCase;
   final GetGovernoratesUseCase _getGovernoratesUseCase;
   final GetCitiesUseCase _getCitiesUseCase;
-  CreateDoctorCubit(this._shareCubit, this._getSubCategoriesUseCase,
-      this._getGovernoratesUseCase, this._getCitiesUseCase)
+  final CreateDoctorUseCase _createDoctorUseCase;
+  CreateDoctorCubit(
+      this._shareCubit,
+      this._getSubCategoriesUseCase,
+      this._getGovernoratesUseCase,
+      this._getCitiesUseCase,
+      this._createDoctorUseCase)
       : super(CreateDoctorInitial());
 
   Future<void> loadData() async {
     await _getSubCategories();
     await _getGovernorates();
+  }
+
+  Future<void> submit() async {
+    if (formKey.currentState!.validate()) {
+      _saveTextEditingControllers();
+      _saveWorkDays();
+      String? checkFilledMessage = _createDoctorParams.isFilled();
+      if (checkFilledMessage == null) {
+        emit(CreateDoctorLoading("Creating Account..."));
+        final response = await _createDoctorUseCase.call(_createDoctorParams);
+        emit(CreateDoctorCloseLoading());
+        response.fold(
+            (failure) => emit(CreateDoctorError("Can't Create Doctor")),
+            (data) => emit(CreateDoctorSuccess(
+                "Done!, We will reveiw your request soon")));
+      } else {
+        emit(CreateDoctorError(checkFilledMessage));
+      }
+    }
   }
 
   Future<void> _getSubCategories() async {
@@ -58,7 +85,7 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
     }
   }
 
-  Future<void> getCities(String governorateId) async {
+  Future<void> _getCities(String governorateId) async {
     emit(CreateDoctorCitiesLoading());
     final response = await _getCitiesUseCase.call(governorateId);
 
@@ -68,34 +95,83 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
     );
   }
 
-  late CreateDoctorParams _createDoctorParams;
+  final CreateDoctorParams _createDoctorParams = CreateDoctorParams();
 
-  // SubCategoryModel _subCategoryModel =
-  //     SubCategoryModel(id: '', name: '', image: '', isFavourite: false);
+  // =============================== Timetables ===============================
+  List<DoctorDayEntity> clinicTimetable = [
+    DoctorDayEntity(day: WeekDays.saturday),
+    DoctorDayEntity(day: WeekDays.sunday),
+    DoctorDayEntity(day: WeekDays.monday),
+    DoctorDayEntity(day: WeekDays.tuesday),
+    DoctorDayEntity(day: WeekDays.wednesday),
+    DoctorDayEntity(day: WeekDays.thursday),
+    DoctorDayEntity(day: WeekDays.friday),
+  ];
 
-  // List<DoctorWorkDayEntity> clinicWorkDays = [];
-  // List<DoctorWorkDayEntity> callWorkDays = [];
-  // List<DoctorWorkDayEntity> homeVisitWorkDays = [];
+  List<DoctorDayEntity> callTimetable = [
+    DoctorDayEntity(day: WeekDays.saturday),
+    DoctorDayEntity(day: WeekDays.sunday),
+    DoctorDayEntity(day: WeekDays.monday),
+    DoctorDayEntity(day: WeekDays.tuesday),
+    DoctorDayEntity(day: WeekDays.wednesday),
+    DoctorDayEntity(day: WeekDays.thursday),
+    DoctorDayEntity(day: WeekDays.friday),
+  ];
 
-  // DoctorLocationModel _location =
-  //     DoctorLocationModel(governorate: '', city: '', address: '');
+  List<DoctorDayEntity> homeVisitTimetable = [
+    DoctorDayEntity(day: WeekDays.saturday),
+    DoctorDayEntity(day: WeekDays.sunday),
+    DoctorDayEntity(day: WeekDays.monday),
+    DoctorDayEntity(day: WeekDays.tuesday),
+    DoctorDayEntity(day: WeekDays.wednesday),
+    DoctorDayEntity(day: WeekDays.thursday),
+    DoctorDayEntity(day: WeekDays.friday),
+  ];
 
-  // dropdowns
+  void _saveWorkDays() {
+    for (var element in clinicTimetable) {
+      if (element.isAvailable) {
+        _createDoctorParams.clinic?.workDays
+            .add(DoctorDayModel.fromEntity(element));
+      }
+    }
 
-  void selectSubcategory(SubCategoryEntity subCategoryModel) {
-    // _createDoctorParams.subCategoryId = subCategoryModel.id;
+    for (var element in callTimetable) {
+      if (element.isAvailable) {
+        _createDoctorParams.calls?.workDays
+            .add(DoctorDayModel.fromEntity(element));
+      }
+    }
+
+    for (var element in homeVisitTimetable) {
+      if (element.isAvailable) {
+        _createDoctorParams.visitHome?.workDays
+            .add(DoctorDayModel.fromEntity(element));
+      }
+    }
   }
 
-  // ================================ location ===============================
+  // ================================ DatePickers ===============================
+  void pickIDExpiryDate(DateTime value) {
+    _createDoctorParams.idExpiryDate = value.toIso8601String();
+  }
+
+  void pickPracticingExpiryDate(DateTime value) {
+    _createDoctorParams.practicingExpiryDate = value.toIso8601String();
+  }
+
+  // ================================ dropdowns ===============================
   Future<void> selectGovernorate(GovernorateEntity value) async {
-    // _createDoctorParams.governorateId = value.id;
-    // _createDoctorParams.cityId = '';
-    await getCities(value.id);
-    // _location.governorate = value;
+    _createDoctorParams.address.governorateId = value.id;
+    await _getCities(value.id);
   }
 
   void selectCity(CityEntity value) {
-    // _location.city = value;
+    _createDoctorParams.address.cityId = value.id;
+  }
+
+  void selectSubcategory(SubCategoryEntity subCategoryModel) {
+    _createDoctorParams.subCategoryId = subCategoryModel.id;
   }
 
   // ================================= upload images =================================
@@ -153,74 +229,66 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   // ================================= toggles =================================
 
   void toggleClinic(bool value) {
+    _createDoctorParams.hasClinic = value;
     emit(CreateDoctorShowClinic(value));
   }
 
   void toggleCallCheck(bool value) {
+    _createDoctorParams.hasCalls = value;
     emit(CreateDoctorShowCall(value));
   }
 
   void toggleHomeVisit(bool value) {
+    _createDoctorParams.hasHomeVisit = value;
     emit(CreateDoctorShowHomeVisit(value));
   }
 
-  // ================================= work days =================================
-  void addClinicWorkDay(DoctorDayEntity value) {
-    // _createDoctorParams.clinicWorkDays
-    //     .add(DoctorWorkDayModel.fromEntity(value));
-  }
-
-  void addCallWorkDay(DoctorDayEntity value) {
-    // _createDoctorParams.callsWorkDays.add(DoctorWorkDayModel.fromEntity(value));
-  }
-
-  void addHomeVisitWorkDay(DoctorDayEntity value) {
-    // _createDoctorParams.homeVisitWorkDays
-    //     .add(DoctorWorkDayModel.fromEntity(value));
-  }
-
-  void deleteClinicWorkDay(DoctorDayEntity value) {
-    // _createDoctorParams.clinicWorkDays
-    //     .removeWhere((element) => element.day == value.day);
-  }
-
-  void deleteCallWorkDay(DoctorDayEntity value) {
-    // _createDoctorParams.callsWorkDays
-    //     .removeWhere((element) => element.day == value.day);
-  }
-
-  void deleteHomeVisitWorkDay(DoctorDayEntity value) {
-    // _createDoctorParams.homeVisitWorkDays
-    //     .removeWhere((element) => element.day == value.day);
-  }
-
   // ================================= TextEditingControllers =================================
+
+  void _saveTextEditingControllers() {
+    _createDoctorParams.firstName = firstNameController.text;
+    _createDoctorParams.lastName = lastNameController.text;
+    _createDoctorParams.phone = phoneController.text;
+    _createDoctorParams.address.address = addressController.text;
+    _createDoctorParams.detectionPeriodClinic =
+        clinicExamineDurationController.text;
+    _createDoctorParams.detectionPeriodCalls =
+        callExamineDurationController.text;
+    _createDoctorParams.detectionPeriodvisitHome =
+        homeVisitExamineDurationController.text;
+    _createDoctorParams.callsPrice = callPriceController.text;
+    _createDoctorParams.visitHomePrice = homeVisitPriceController.text;
+    _createDoctorParams.clinicPrice = clinicPriceController.text;
+    _createDoctorParams.waitingTime = waitingTimeController.text;
+    _createDoctorParams.description = descriptionController.text;
+  }
+
   final firstNameFocusNode = FocusNode();
   final lastNameFocusNode = FocusNode();
   final descriptionFocusNode = FocusNode();
   final callPriceFocusNode = FocusNode();
   final homeVisitPriceFocusNode = FocusNode();
   final clinicPriceFocusNode = FocusNode();
-  final locationFocusNode = FocusNode();
   final waitingTimeFocusNode = FocusNode();
   final clinicExamineDurationFocusNode = FocusNode();
   final callExamineDurationFocusNode = FocusNode();
   final homeVisitExamineDurationFocusNode = FocusNode();
   final homeVisitDurationFocusNode = FocusNode();
   final addressFocusNode = FocusNode();
+  final phoneFocusNode = FocusNode();
 
   final homeVisitExamineDurationController = TextEditingController();
   final addressController = TextEditingController();
   final callExamineDurationController = TextEditingController();
   final waitingTimeController = TextEditingController();
   final clinicExamineDurationController = TextEditingController();
-  final locationController = TextEditingController();
   final firstNameController = TextEditingController();
   final descriptionController = TextEditingController();
   final lastNameController = TextEditingController();
   final callPriceController = TextEditingController();
   final homeVisitPriceController = TextEditingController();
   final clinicPriceController = TextEditingController();
+  final phoneController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
 
@@ -232,25 +300,25 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
     callPriceFocusNode.dispose();
     homeVisitPriceFocusNode.dispose();
     clinicPriceFocusNode.dispose();
-    locationFocusNode.dispose();
     waitingTimeFocusNode.dispose();
     clinicExamineDurationFocusNode.dispose();
     callExamineDurationFocusNode.dispose();
     homeVisitExamineDurationFocusNode.dispose();
     homeVisitDurationFocusNode.dispose();
     addressFocusNode.dispose();
+    phoneFocusNode.dispose();
     homeVisitExamineDurationController.dispose();
     addressController.dispose();
     callExamineDurationController.dispose();
     waitingTimeController.dispose();
     clinicExamineDurationController.dispose();
-    locationController.dispose();
     firstNameController.dispose();
     descriptionController.dispose();
     lastNameController.dispose();
     callPriceController.dispose();
     homeVisitPriceController.dispose();
     clinicPriceController.dispose();
+    phoneController.dispose();
     return super.close();
   }
 }

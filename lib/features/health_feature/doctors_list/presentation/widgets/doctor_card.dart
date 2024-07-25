@@ -136,6 +136,21 @@ class DoctorCard extends StatelessWidget {
                 ])))
               ],
             ),
+             Row(
+              children: [
+                const Icon(
+                  Icons.timer,
+                ),
+                const Sizer(),
+                Expanded(
+                  child: Label(
+                    text:
+                        '${Labels.waitingTime}: ${doctor.waitingTime} ${Labels.minutes}',
+                    style: Styles.mediumText(),
+                  ),
+                )
+              ],
+            ),
             const Sizer(),
             Row(
               children: [

@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dar
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class HealthMedicalServiceCard extends StatelessWidget {
@@ -56,13 +57,23 @@ class HealthMedicalServiceCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Label(
-                  text: subCategory.name,
-                  style: Styles.mediumText(fontWeight: FontWeight.bold),
+                Column(
+                  children: [
+                    Label(
+                      text: subCategory.name,
+                      style: Styles.mediumText(fontWeight: FontWeight.bold),
+                    ),
+                    Label(
+                      text: '99 ads',
+                      style: Styles.mediumText(),
+                    ),
+                  ],
                 ),
                 IconAppButton(
                   icon: Icons.add,
                   isCircle: true,
+                  color: Colors.white,
+                  backColor: AppColors.PRIMARY_COLOR,
                   onPressed: () {},
                 )
               ],

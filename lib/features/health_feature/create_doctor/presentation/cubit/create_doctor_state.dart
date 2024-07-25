@@ -13,6 +13,11 @@ final class CreateDoctorCloseLoading extends CreateDoctorState {}
 
 final class CreateDoctorLoaded extends CreateDoctorState {}
 
+final class CreateDoctorSuccess extends CreateDoctorState {
+  final String message;
+  CreateDoctorSuccess(this.message);
+}
+
 final class CreateDoctorError extends CreateDoctorState {
   final String message;
   CreateDoctorError(this.message);

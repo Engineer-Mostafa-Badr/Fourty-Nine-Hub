@@ -26,6 +26,7 @@ class CreateDoctorNameField extends StatelessWidget {
           child: LastNameTextFormField(
             currentFocusNode: doctorLoginCubit.lastNameFocusNode,
             currentController: doctorLoginCubit.lastNameController,
+            nextFocusNode: doctorLoginCubit.phoneFocusNode,
           ),
         ),
       ],

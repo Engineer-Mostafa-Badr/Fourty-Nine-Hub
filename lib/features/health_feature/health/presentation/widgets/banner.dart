@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -25,9 +24,17 @@ class HealthBanner extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Icon(
-            Icons.favorite_border,
-            color: AppColors.SECONDARY_COLOR,
+          Column(
+            children: [
+              const Icon(
+                Icons.favorite_border,
+                color: AppColors.SECONDARY_COLOR,
+              ),
+              Text(
+                '99 ads',
+                style: Styles.mediumText(),
+              )
+            ],
           ),
           Text(
             'Health',

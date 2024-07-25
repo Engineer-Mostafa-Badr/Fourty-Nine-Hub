@@ -10,20 +10,22 @@ class CreateDoctorClinicTimeTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final createDoctorCubit = context.read<CreateDoctorCubit>();
     return BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
       buildWhen: (previous, current) => current is CreateDoctorShowClinic,
       builder: (context, state) {
         if (state is CreateDoctorShowClinic && state.check) {
-          return TimeTable(
+          return Timetable(
               title: 'Clinic',
-               onChanged: (timeTable) {},
+              timetale: createDoctorCubit.clinicTimetable,
               child: Column(
                 children: [
                   DefaultTextFormField(
                     currentFocusNode:
-                        context.read<CreateDoctorCubit>().clinicPriceFocusNode,
+                        createDoctorCubit.clinicPriceFocusNode,
                     currentController:
-                        context.read<CreateDoctorCubit>().clinicPriceController,
+                        createDoctorCubit.clinicPriceController,
+                    nextFocusNode: createDoctorCubit.clinicExamineDurationFocusNode,
                     keyboardType: TextInputType.number,
                     isRequired: true,
                     hint: 'Clinic Price',
@@ -33,11 +35,10 @@ class CreateDoctorClinicTimeTable extends StatelessWidget {
                     hint: 'Clinic Examine Duration (in minutes)',
                     keyboardType: TextInputType.number,
                     isRequired: true,
-                    currentFocusNode: context
-                        .read<CreateDoctorCubit>()
+                    nextFocusNode: createDoctorCubit.waitingTimeFocusNode,
+                    currentFocusNode: createDoctorCubit
                         .clinicExamineDurationFocusNode,
-                    currentController: context
-                        .read<CreateDoctorCubit>()
+                    currentController: createDoctorCubit
                         .clinicExamineDurationController,
                   ),
                   const Sizer(),
@@ -46,9 +47,9 @@ class CreateDoctorClinicTimeTable extends StatelessWidget {
                     keyboardType: TextInputType.number,
                     isRequired: true,
                     currentFocusNode:
-                        context.read<CreateDoctorCubit>().waitingTimeFocusNode,
+                        createDoctorCubit.waitingTimeFocusNode,
                     currentController:
-                        context.read<CreateDoctorCubit>().waitingTimeController,
+                        createDoctorCubit.waitingTimeController,
                   ),
                 ],
               ));
