@@ -1,7 +1,7 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
@@ -23,6 +23,9 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   CreatePostCubit(this._createPostUseCase, this._getActivitiesUseCase,
       this._getFeelingsUseCase, this._createTwitterPostUseCase)
       : super(const CreatePostState());
+
+
+  UploadFileEntity? fileEntity;
 
   void loadData() async {
     await getActivities();

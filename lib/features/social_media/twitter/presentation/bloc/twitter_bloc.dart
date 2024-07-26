@@ -171,7 +171,7 @@ class TwitterCubit extends Cubit<TwitterState> {
             getCommentReplies(
               context: context,
               commentId: id,
-              comment: comment,
+              comment: comment, postId: postId,
             );
           },
         ),
@@ -183,6 +183,7 @@ class TwitterCubit extends Cubit<TwitterState> {
   getCommentReplies(
       {required BuildContext context,
       required String commentId,
+      required String postId,
       required TwitterPostCommentEntity comment}) async {
     final response = await _twitterCommentRepliesUseCase(commentId);
     response.fold(
@@ -196,7 +197,7 @@ class TwitterCubit extends Cubit<TwitterState> {
           onAddReply: (TwitterCommentReplyParams params) {
             onCommentReply(params: params);
           },
-          commentId: commentId,
+          commentId: commentId, postId: postId,
         ),
       ),
     );

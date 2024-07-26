@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/common/functions/helper/file_picker_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -45,24 +44,25 @@ class CreatePostView extends StatelessWidget {
           ]),
           body: Column(
             children: [
-              if(social!='twitter')Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Row(
-                  children: [
-                    if (state.selectedFeeling != null)
-                      BadgedLabel(label: state.selectedFeeling!.name),
-                    const Sizer(),
-                    if (state.selectedActivity != null)
-                      BadgedLabel(label: state.selectedActivity!.name),
-                  ],
+              if (social != 'twitter')
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Row(
+                    children: [
+                      if (state.selectedFeeling != null)
+                        BadgedLabel(label: state.selectedFeeling!.name),
+                      const Sizer(),
+                      if (state.selectedActivity != null)
+                        BadgedLabel(label: state.selectedActivity!.name),
+                    ],
+                  ),
                 ),
-              ),
               const Sizer(),
               Expanded(child: _buildCreatePost()),
               const Sizer(),
-              if(social!='twitter')_buildColorsBallet(context: context),
+              if (social != 'twitter') _buildColorsBallet(context: context),
               const Sizer(),
-              _buildOptions(),
+              _buildOptions(controller),
               const Sizer(),
             ],
           ),
@@ -124,58 +124,64 @@ class CreatePostView extends StatelessWidget {
     );
   }
 
-  Widget _buildOptions() {
+  Widget _buildOptions(CreatePostCubit controller) {
     return BlocBuilder<CreatePostCubit, CreatePostState>(
         builder: (context, state) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         IconButton(
             // onPressed: () => FilePickerHelper().pickMedia(),
-          onPressed: () {
-            final UploadFile upload = UploadFile();
-            upload.uploadImage(subCategoryId: 'twitter', onUploaded: (UploadFileEntity data) {
-              print("file name ${data.file}");
-              print("mediaId: ${data.mediaId}");
-            });
-          },
+            onPressed: () {
+              final UploadFile upload = UploadFile();
+              upload.uploadImage(
+                  subCategoryId: '66a3583454e6e337915514db',
+                  onUploaded: (UploadFileEntity data) {
+                    print("file name ${data.file}");
+                    print("mediaId: ${data.mediaId}");
+                    controller.fileEntity = data;
+                    print(controller.fileEntity?.mediaId);
+                  });
+            },
             icon: const Icon(
               Icons.image,
               color: Colors.green,
               size: 30,
             )),
-        if(social!='twitter')IconButton(
-            onPressed: () {
-              bottomSheet(
-                  isScrollControlled: true,
-                  context: context,
-                  widget: SelectActivity(
-                    activities: state.activities ?? [],
-                    onSelected: (ActivityEntity item) => context
-                        .read<CreatePostCubit>()
-                        .selectActivity(item: item),
-                  ));
-            },
-            icon: const Icon(
-              Icons.local_activity,
-              color: Colors.blue,
-              size: 30,
-            )),
-        if(social!='twitter')IconButton(
-            onPressed: () {
-              bottomSheet(
-                  isScrollControlled: true,
-                  context: context,
-                  widget: SelectFeelingView(
-                    feelings: state.feelings ?? [],
-                    onSelected: (FeelingEntity item) => context
-                        .read<CreatePostCubit>()
-                        .selectedFeeling(item: item),
-                  ));
-            },
-            icon: const Icon(
-              Icons.emoji_emotions_outlined,
-              color: Colors.orangeAccent,
-              size: 30,
-            )),
+        if (social != 'twitter')
+          IconButton(
+              onPressed: () {
+                bottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    widget: SelectActivity(
+                      activities: state.activities ?? [],
+                      onSelected: (ActivityEntity item) => context
+                          .read<CreatePostCubit>()
+                          .selectActivity(item: item),
+                    ));
+              },
+              icon: const Icon(
+                Icons.local_activity,
+                color: Colors.blue,
+                size: 30,
+              )),
+        if (social != 'twitter')
+          IconButton(
+              onPressed: () {
+                bottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    widget: SelectFeelingView(
+                      feelings: state.feelings ?? [],
+                      onSelected: (FeelingEntity item) => context
+                          .read<CreatePostCubit>()
+                          .selectedFeeling(item: item),
+                    ));
+              },
+              icon: const Icon(
+                Icons.emoji_emotions_outlined,
+                color: Colors.orangeAccent,
+                size: 30,
+              )),
         IconButton(
             onPressed: () async {
               final res =

@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_post_comment_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_comment_card.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_reply_card.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
-import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
@@ -21,10 +16,11 @@ import '../../../../../../res/style/styles.dart';
 class TwitterCommentReplies extends StatefulWidget {
   final List<TwitterCommentReplyEntity> replies;
   final String commentId;
+  final String postId;
   final GestureTapCallback? onReplyReact;
   final Function(TwitterCommentReplyParams) onAddReply;
   const TwitterCommentReplies(
-      {super.key, required this.replies, this.onReplyReact, required this.onAddReply, required this.commentId,
+      {super.key, required this.replies, this.onReplyReact, required this.onAddReply, required this.commentId, required this.postId,
       });
 
   @override
@@ -98,7 +94,7 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
 
   void onReplyAdded() async {
     await widget.onAddReply(
-      TwitterCommentReplyParams(postId: widget.replies[0].post,reply: widget.commentId,content: replyTextController.text),
+      TwitterCommentReplyParams(postId: widget.postId,reply: widget.commentId,content: replyTextController.text),
     );
     replyTextController.clear();
     setState(() {
