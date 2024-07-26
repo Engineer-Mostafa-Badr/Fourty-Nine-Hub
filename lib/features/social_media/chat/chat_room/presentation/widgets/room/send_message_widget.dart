@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:social_media_recorder/audio_encoder_type.dart';
 import 'package:social_media_recorder/screen/social_media_recorder.dart';
 import 'package:flutter/foundation.dart' as foundation;
@@ -22,7 +24,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   final _utils = EmojiPickerUtils();
   late final EmojiTextEditingController _controller;
   late final ScrollController _scrollController;
-  late final TextEditingController _messageTextController;
+  final TextEditingController? _messageTextController = TextEditingController();
   late final FocusNode _focusNode;
   late final TextStyle _textStyle;
   final bool isApple = [TargetPlatform.iOS, TargetPlatform.macOS]
@@ -67,6 +69,11 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                   controller: _messageTextController,
                   scrollController: _scrollController,
                   focusNode: _focusNode,
+                  onChanged: (value) {
+                    setState(() {
+                      _messageTextController.text = value;
+                    });
+                  },
                   textAlignVertical: TextAlignVertical.bottom,
                   decoration: InputDecoration(
                     hintText: 'Message',
@@ -100,38 +107,50 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                         borderSide:
                             const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
                         borderRadius: BorderRadius.circular(20)),
-                    suffixIcon:
-                        _messageTextController.text.trim().isEmpty
-                            ? const SizedBox()
-                            : SizedBox(
-                                width: kToolbarHeight * 1.5,
-                                child: Row(
-                                  children: [
-                                    IconAppButton(
-                                        icon: Icons.attach_file,
-                                        onPressed: () {
-                                          bottomSheet(
-                                              context: context,
-                                              widget: AttachmentTypes());
-                                        },
-                                        color: Colors.grey),
-                                    const Sizer(),
-                                    const Icon(Icons.camera_alt_rounded,
-                                        color: Colors.grey),
-                                  ],
-                                ),
-                              ),
+                    suffixIcon: _messageTextController!.text.trim().length != 0
+                        ? const SizedBox()
+                        : SizedBox(
+                            width: kToolbarHeight * 1.5,
+                            child: Row(
+                              children: [
+                                IconAppButton(
+                                    icon: Icons.attach_file,
+                                    onPressed: () {
+                                      bottomSheet(
+                                          context: context,
+                                          widget: AttachmentTypes());
+                                    },
+                                    color: Colors.grey),
+                                const Sizer(),
+                                const Icon(Icons.camera_alt_rounded,
+                                    color: Colors.grey),
+                              ],
+                            ),
+                          ),
                   ),
                 ),
               )),
               const Sizer(),
-              SocialMediaRecorder(
-                recordIconBackGroundColor: AppColors.PRIMARY_COLOR,
-                startRecording: () {},
-                stopRecording: (_time) {},
-                sendRequestFunction: (soundFile, _time) {},
-                encode: AudioEncoderType.AAC,
-              ),
+              _messageTextController.text.trim().length > 0
+                  ? AppButton(
+                      backColor: Colors.green,
+                      label: '',
+                      iconSize: 30,
+                      padding: 15,
+                      icon: Icons.send_sharp,
+                      onPressed: (){
+                        chatCubit.sendMessage(_messageTextController.text.trim());
+
+                        _messageTextController.text = '';
+                      },
+                    )
+                  : SocialMediaRecorder(
+                      recordIconBackGroundColor: AppColors.PRIMARY_COLOR,
+                      startRecording: () {},
+                      stopRecording: (_time) {},
+                      sendRequestFunction: (soundFile, _time) {},
+                      encode: AudioEncoderType.AAC,
+                    ),
             ],
           ),
         ),

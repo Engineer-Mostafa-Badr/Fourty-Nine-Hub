@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -18,7 +17,6 @@ class ChatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ChatsCubit chatCubit = context.read<ChatsCubit>();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
@@ -60,9 +58,7 @@ class ChatCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Label(
-                      text: isSecret
-                          ? 'Mxxx xxxl'
-                          : '${chatItemModel?.user?.name}',
+                      text: isSecret ? 'Mxxx xxxl' : '${chatItemModel?.name}',
                       style: Styles.mediumText(fontWeight: FontWeight.bold)),
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
@@ -71,17 +67,20 @@ class ChatCard extends StatelessWidget {
                         chatItemModel!.seen!
                             ? const Icon(
                                 FontAwesomeIcons.checkDouble,
-                                color: Colors.blue,
+                                color: AppColors.PRIMARY_COLOR,
                                 size: 10,
                               )
                             : const SizedBox(),
                         Expanded(
                           child: Label(
-                              text: '${chatItemModel?.lastMessageText}',
+                              text: chatItemModel?.lastMessageText == null
+                                  ? "No messages until now"
+                                  : '${chatItemModel?.lastMessageText}',
                               style: Styles.mediumText(
-                                  color: chatItemModel!.seen!
-                                      ? Colors.grey
-                                      : Colors.black)),
+                                color: chatItemModel!.seen!
+                                    ? AppColors.GREY_DARK_COLOR
+                                    : AppColors.SPLASH_BLACK_COLOR,
+                              )),
                         ),
                         chatItemModel!.muted!
                             ? const Icon(

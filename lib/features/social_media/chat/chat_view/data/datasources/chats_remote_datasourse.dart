@@ -8,6 +8,12 @@ abstract class ChatsRemoteDataSource {
   Future<Either<Failure, List<ChatItemModel>>> getChats({
     required String privacy,
     required String categoryId,
+    required bool archived,
+    required bool isLocked,
+  });
+
+  Future<Either<Failure, bool>> changeChatMuteState({
+    required String chatId,
   });
 }
 
@@ -18,12 +24,27 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
 
   @override
   Future<Either<Failure, List<ChatItemModel>>> getChats(
-      {required String privacy, required String categoryId}) async {
-    final response = await _apiConsumer.get(EndPoints.getChats);
+      {required String privacy, required String categoryId, required bool archived, required bool isLocked}) async {
+    var data = {
+      "privacy": "normal",
+      "categoryId": "668e7dc4e8cfec5bcc752afc",
+      "archived": archived,
+      "isLocked": isLocked
+    };
+    final response = await _apiConsumer.post(EndPoints.getChats, data: data);
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data'] as List)
             .map((e) => ChatItemModel.fromJson(e))
             .toList()));
+  }
+
+  @override
+  Future<Either<Failure, bool>> changeChatMuteState(
+      {required String chatId}) async {
+    final response =
+        await _apiConsumer.put(EndPoints.changeChatMuteState(chatId));
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
   }
 }
