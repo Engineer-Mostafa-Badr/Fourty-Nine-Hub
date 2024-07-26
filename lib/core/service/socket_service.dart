@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/socket_model.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 abstract class SocketServiceContract {
@@ -7,79 +11,80 @@ abstract class SocketServiceContract {
   initSocketConnection(String userToken);
 
   sendMessage({required String message, required String chatId});
+
+  // listen to new message
+  Stream<SocketMessageModel> get socketMessageStream;
 }
 
 class SocketServiceImplementation extends SocketServiceContract {
   @override
   late Socket socket;
 
+  final BehaviorSubject<SocketMessageModel> _socketMessageStream =
+      BehaviorSubject<SocketMessageModel>();
+
   @override
   initSocketConnection(userToken) async {
     try {
-      debugPrint("Toke=> ${userToken}");
-
       socket = io(
           'https://49dev.com',
-          OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
-              // disable auto-connection
-              .setExtraHeaders(
-                  {'foo': 'bar', 'authorization': '$userToken'}) // optional
+          OptionBuilder()
+              .setTransports(['websocket'])
+              .disableAutoConnect()
+              .setExtraHeaders({'authorization': userToken}) // optional
               .build());
 
       socket.connect();
 
       socket.onConnect((_) {
         debugPrint('Connect to Socket successfully');
-        // socket.emit('msg', 'test');
+        var jsonString = json.encode({"chatId": "669cfa3626193cb9dde709f7"});
+
+        socket.emit("Chat:joinRoom", jsonString);
+
+        // to receive new messages
+        socket.on('user:message', (data) {
+          debugPrint("Delivered ${data}");
+          final dataList = data as List;
+          debugPrint("dataList ${dataList[0]}");
+
+          SocketMessageModel socketMessageModel =
+              SocketMessageModel.fromJson(dataList[0]);
+
+          try {
+            _socketMessageStream.add(socketMessageModel);
+            debugPrint(
+                "socketMessageModel ${socketMessageModel.messageItem?.text}");
+          } catch (e) {
+            debugPrint(
+                "socketMessageModelerrrrrrrroooooe ${e}");
+          }
+          debugPrint(
+              "socketMessageModel ${socketMessageModel.messageItem?.text}");
+
+
+        });
+
+        socket.on('messageTyping', (data) {
+          debugPrint("Delivered ${data}");
+          final dataList = data as List;
+          debugPrint("dataList ${dataList[0]}");
+
+          SocketMessageModel socketMessageModel =
+              SocketMessageModel.fromJson(dataList[0]);
+
+          debugPrint(
+              "socketMessageModel ${socketMessageModel.messageItem?.text}");
+        });
       });
 
-      // socket.one;
-      socket.on('event', (data) => debugPrint(data));
-      socket.on('message', (data) {
-        print("Delivered ${data}");
-        final dataList = data as List;
-        final ack = dataList.last as Function;
-        ack(null);
+      socket.on('error', (data) {
+        debugPrint("error ${data}");
+        debugPrint(data);
       });
 
-      socket.on('user:message', (data) {
-        print("Delivered ${data}");
-        final dataList = data as List;
-        final ack = dataList.last as Function;
-        ack(null);
-      });
-
-      socket.on('Message:Send', (data) {
-        print("Delivered ${data}");
-        final dataList = data as List;
-        final ack = dataList.last as Function;
-        ack(null);
-      });
-
-      socket.on('Send', (data) {
-        print("Delivered ${data}");
-        final dataList = data as List;
-        final ack = dataList.last as Function;
-        ack(null);
-      });
-
-      socket.on('Delivered', (data) {
-        print("Delivered ${data}");
-        final dataList = data as List;
-        final ack = dataList.last as Function;
-        ack(null);
-      });
-
-      socket.on('Message:Delivered', (data) {
-        print("Delivered ${data}");
-        final dataList = data as List;
-        final ack = dataList.last as Function;
-        ack(null);
-      });
       socket.onDisconnect((_) => debugPrint('disconnect'));
       socket.onerror((e) => debugPrint('onError $e'));
-      socket.on(
-          'fromServer', (_) => debugPrint("Connect from server successfully"));
     } catch (e) {
       debugPrint('Connection established$e');
     }
@@ -97,4 +102,8 @@ class SocketServiceImplementation extends SocketServiceContract {
     };
     socket.emit('Message:Send', messageMap);
   }
+
+  @override
+  Stream<SocketMessageModel> get socketMessageStream =>
+      _socketMessageStream.stream;
 }

@@ -18,6 +18,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   String? userToken;
   late Socket socket;
   final messageTextController = TextEditingController();
+  final Map<String, ChatItemModel> _chats = {};
 
   ChatsCubit(
     this._getTokensUseCase,
@@ -28,6 +29,9 @@ class ChatsCubit extends Cubit<ChatsState> {
   initSocketConnection() async {
     String? userToken = await getUserToken();
     _socketService.initSocketConnection(userToken!);
+
+    // listen to new messages
+    listenToNewMessages();
   }
 
   Future<String?> getUserToken() async {
@@ -37,15 +41,25 @@ class ChatsCubit extends Cubit<ChatsState> {
   }
 
   getChats() async {
-    final response = await _getChatsUseCase.call(ChatsRequestParams(privacyId: 'normal', categoryId: '668e7dc4e8cfec5bcc752afc'));
+    final response = await _getChatsUseCase.call(ChatsRequestParams(
+        privacyId: 'normal', categoryId: '668e7dc4e8cfec5bcc752afc'));
     response.fold(
-        (failure) => emit.call(
-            state.copyWith(failure: failure, status: ChatsStates.error)),
+        (failure) => emit
+            .call(state.copyWith(failure: failure, status: ChatsStates.error)),
         (data) {
-          return emit.call(state.copyWith(
-              chats: data, status: ChatsStates.initState));
-        });
+      data.map((e) => _chats.update(e.sId!, (value) => e,ifAbsent:()=>e)).toList();
+      return emit
+          .call(state.copyWith(chats: data, status: ChatsStates.initState));
+    });
+  }
 
+  listenToNewMessages() {
+    _socketService.socketMessageStream.listen((event) {
+      print("hellllo from listen $event");
+      _chats[event.chatRoomId]?.lastMessageText = event.messageItem?.text;
+      emit
+          .call(state.copyWith(chats: _chats.values.toList(), status: ChatsStates.initState));
+    });
   }
 
   @override

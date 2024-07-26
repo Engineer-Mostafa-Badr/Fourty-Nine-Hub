@@ -19,7 +19,13 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
   @override
   Future<Either<Failure, List<ChatItemModel>>> getChats(
       {required String privacy, required String categoryId}) async {
-    final response = await _apiConsumer.get(EndPoints.getChats);
+    var data = {
+      "privacy":"normal",
+      "categoryId":"668e7dc4e8cfec5bcc752afc",
+      "archived":false,
+      "isLocked":false
+    };
+    final response = await _apiConsumer.post(EndPoints.getChats,data: data);
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data'] as List)

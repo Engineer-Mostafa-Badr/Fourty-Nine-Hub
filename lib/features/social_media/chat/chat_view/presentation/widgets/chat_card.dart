@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -77,7 +75,9 @@ class ChatCard extends StatelessWidget {
                             : const SizedBox(),
                         Expanded(
                           child: Label(
-                              text: '${chatItemModel?.lastMessageText}',
+                              text: chatItemModel?.lastMessageText == null ?
+                                  "No messages until now":
+                              '${chatItemModel?.lastMessageText}',
                               style: Styles.mediumText(
                                   color: chatItemModel!.seen!
                                       ? Colors.grey
