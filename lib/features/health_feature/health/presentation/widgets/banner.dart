@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -34,13 +35,13 @@ class HealthBanner extends StatelessWidget {
               ),
               const Sizer(height: 20,),
               Text(
-                '${9999.toShortScale} ads',
+                '${9999.toShortScale} ${Labels.ads}',
                 style: Styles.mediumText(),
               )
             ],
           ),
           Text(
-            'Health',
+            Labels.health,
             style: Styles.headerText(color: AppColors.DARK_BLUE_COLOR),
           ),
           InkWell(
@@ -51,7 +52,7 @@ class HealthBanner extends StatelessWidget {
                 context.push(Routes.REGISTER);
               }
             },
-            child: Text('Register',
+            child: Text(Labels.register,
                 style: Styles.mediumText(color: AppColors.DARK_BLUE_COLOR)),
           ),
         ],

@@ -61,7 +61,7 @@ class DoctorCard extends StatelessWidget {
                         ),
                         Label(
                             text:
-                                'Reviews from ${doctor.numberOfReviews} visitors',
+                                '${Labels.reviews} ${Labels.from} ${doctor.numberOfReviews} ${Labels.visitors}',
                             style: Styles.mediumText())
                       ],
                     ),
@@ -161,14 +161,14 @@ class DoctorCard extends StatelessWidget {
                         ? Colors.green
                         : AppColors.LIGHT_GRAY_COLOR,
                     textColor: doctor.available ? Colors.white : Colors.black,
-                    label: 'Available',
+                    label: Labels.availableTimes,
                     onPressed: () {},
                   ),
                 ),
                 const Sizer(),
                 Expanded(
                   child: AppButton(
-                    label: 'Book now',
+                    label: Labels.bookNow,
                     onPressed: () => context.push(Routes.VISITADOCTORDETAILS,
                         extra: doctor.id),
                   ),

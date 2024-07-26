@@ -61,7 +61,7 @@ class DoctorBookingCard extends StatelessWidget {
                         text: appointment.user?.phone ?? '',
                         style: Styles.mediumText(color: Colors.grey)),
                     const Sizer(),
-                    BadgedLabel(label: appointment.bookingType.title)
+                    BadgedLabel(label: appointment.bookingType.translatedName)
                   ],
                 ),
               ),

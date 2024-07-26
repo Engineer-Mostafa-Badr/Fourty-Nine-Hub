@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
-import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../doctor_details/data/models/doctor_model.dart';
@@ -20,7 +19,6 @@ class DoctorListRemoteDataSourceImpl implements DoctorListRemoteDataSource {
   @override
   Future<Either<Failure, List<DoctorEntity>>> getDoctorsList(
       {required DoctorSearchParams params}) async {
-        CliLogger.info("params: ${params.toJson()}");
     final response = await _apiConsumer.get(EndPoints.doctorSearch,data: params.toJson());
 
     return response.fold(

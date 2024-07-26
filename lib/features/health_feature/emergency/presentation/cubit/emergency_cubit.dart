@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/health_feature/emergency/domain/usecases/
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
 
 part 'emergency_state.dart';
 
@@ -28,7 +29,7 @@ class HealthEmergencyCubit extends Cubit<HealthEmergencyState> {
           await _getSubCategoriesUseCase.call('62c8b57c9332225799fe3306');
       response.fold(
           (failure) =>
-              emit(HealthEmergencyError(message: 'Can\'t Load Specialities')),
+              emit(HealthEmergencyError(message: Labels.errorHappened)),
           (data) {
         _healthShare.subCategories = data;
         emit(HealthEmergencySubCategoriesLoaded(subCategories: data));
@@ -43,12 +44,12 @@ class HealthEmergencyCubit extends Cubit<HealthEmergencyState> {
     if (formKey.currentState!.validate()) {
       _saveTextEditing();
       if (_params.subCategoryId.isEmpty) {
-        emit(HealthEmergencyError(message: 'select specialty'));
+        emit(HealthEmergencyError(message: Labels.selectSpeciality));
       } else {
         final response = await _bookHealthEmergencyUseCase.call(_params);
         response.fold(
             (failure) =>
-                emit(HealthEmergencyError(message: "Something went wrong")),
+                emit(HealthEmergencyError(message: Labels.errorHappened)),
             (data) => emit(HealthEmergencySuccess()));
       }
     }

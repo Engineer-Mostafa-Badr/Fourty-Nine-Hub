@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_cities.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
 
 part 'doctor_city_filter_state.dart';
 
@@ -24,7 +25,7 @@ class DoctorCityFilterCubit extends Cubit<DoctorCityFilterState> {
     final response = await _getCitiesUseCase.call(governorateId);
 
     response.fold(
-      (failure) => emit(DoctorCityFilterError("Can't Load Cities")),
+      (failure) => emit(DoctorCityFilterError(Labels.errorHappened)),
       (data) {
         _cities = data;
         emit(DoctorCityFilterLoaded(data));

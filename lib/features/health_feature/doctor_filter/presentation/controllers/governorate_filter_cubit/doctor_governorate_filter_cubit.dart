@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
 
 part 'doctor_governorate_filter_state.dart';
 
@@ -25,7 +26,7 @@ class DoctorGovernorateFilterCubit extends Cubit<DoctorGovernorateFilterState> {
       final response = await _getGovernoratesUseCase.call(const NoParams());
       response.fold(
           (failure) =>
-              emit(DoctorGovernorateFilterError("Can't Load Governorates")),
+              emit(DoctorGovernorateFilterError(Labels.errorHappened)),
           (data) {
         _shareCubit.governorates = data;
         emit(DoctorGovernorateFilterLoaded(data));

@@ -22,7 +22,6 @@ class HealthMedicalServices extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) => HealthMedicalServiceCard(
                 subCategory: state.medicalServices![index]),
-            // Text("fsa"),
             itemCount: state.medicalServices!.length,
           ),
         );

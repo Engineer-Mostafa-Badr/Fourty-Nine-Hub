@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/governorate_filter_cubit/doctor_governorate_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/widgets/governorate_list_title.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
 
 class DoctorGovernorateFilterView extends StatelessWidget {
   const DoctorGovernorateFilterView({super.key});
@@ -13,7 +14,7 @@ class DoctorGovernorateFilterView extends StatelessWidget {
     final doctorGovernorateFilter = context.read<DoctorGovernorateFilterCubit>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Governorate Filter'),
+        title: const Text(Labels.governorate),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(
@@ -26,7 +27,7 @@ class DoctorGovernorateFilterView extends StatelessWidget {
             DefaultTextFormField(
               currentFocusNode: doctorGovernorateFilter.searchFocusNode,
               currentController: doctorGovernorateFilter.searchController,
-              hint: 'Search For Speciality',
+              hint: Labels.search,
               prefixIcon: const Icon(Icons.search),
               onChanged: (value) => doctorGovernorateFilter.search(value),
             ),
