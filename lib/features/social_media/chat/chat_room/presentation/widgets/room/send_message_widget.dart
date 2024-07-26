@@ -22,7 +22,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   final _utils = EmojiPickerUtils();
   late final EmojiTextEditingController _controller;
   late final ScrollController _scrollController;
-a  final TextEditingController? _messageTextController = TextEditingController();
+  final TextEditingController? _messageTextController = TextEditingController();
   late final FocusNode _focusNode;
   late final TextStyle _textStyle;
   final bool isApple = [TargetPlatform.iOS, TargetPlatform.macOS]
