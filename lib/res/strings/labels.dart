@@ -34,7 +34,9 @@ abstract class Labels {
   static const chooseBookingTime = 'Choose Booking Time';
   static const noAvailableTimes = 'There is no available times';
   static const book = 'Book';
+  static const bookNow = 'Book Now';
   static const availableTimes = 'Available Times';
+  static const available = 'Available';
   static const requestsHistory = 'Requests History';
   static const bookingApproved = 'Booking Approved Successfully!';
   static const success = 'Done Successfully!';
@@ -64,4 +66,23 @@ abstract class Labels {
   static const balanceWallet = 'Balance';
   static const giftWallet = 'Gift';
   static const adDetails = 'AD Details';
+  static const health = 'Health';
+  static const ads = 'Ads';
+  static const register = 'Register';
+  static const doctorDashboard = 'Doctor Dashboard';
+  static const doctorDashboardBannerDiscription =
+      'New Bookings are waiting you, go to doctor dashboard and explore more!';
+  static const homeVist = 'Home Vist';
+  static const clinicVist = 'Clinic Vist';
+  static const call = 'Call';
+  static const emergency = 'Emergency';
+  static const address = 'Address';
+  static const confirm = 'Confirm';
+  static const speciality = 'Speciality';
+  static const doctorWillCallSoon = 'Doctor will call soon';
+  static const selectSpeciality = 'Select Speciality';
+  static const search = 'Search';
+  static const governorate = 'Governorate';
+  static const from = 'from';
+  static const visitors = 'visitors';
 }

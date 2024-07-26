@@ -1,6 +1,16 @@
 // This is a generated file; do not edit or check into version control.
+<<<<<<< HEAD
+<<<<<<< HEAD
+FLUTTER_ROOT=C:\flutter
+FLUTTER_APPLICATION_PATH=C:\Users\mohamed allam\Desktop\49-mobile-app
+=======
+FLUTTER_ROOT=/Users/ahmedabdelsattar/src/flutter
+FLUTTER_APPLICATION_PATH=/Users/ahmedabdelsattar/Documents/49-mobile-app
+>>>>>>> 5d7ddfafec647bd1256401cf7422404b31623b36
+=======
 FLUTTER_ROOT=C:\src\flutter
 FLUTTER_APPLICATION_PATH=D:\applications\49-mobile-app
+>>>>>>> 1c2c85fdc594e8443cdf29b83a035a717c44364c
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.4

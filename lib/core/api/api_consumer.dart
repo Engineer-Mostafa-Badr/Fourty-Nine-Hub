@@ -14,6 +14,7 @@ abstract class ApiConsumer {
   Future<Either<Failure, Map<String, dynamic>>> get(
     String url, {
     Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? data,
   });
 
   Future<Either<Failure, Map<String, dynamic>>> post(
@@ -93,10 +94,12 @@ class BaseApiConsumer extends ApiConsumer {
   Future<Either<Failure, Map<String, dynamic>>> get(
     String url, {
     Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? data,
   }) async {
     try {
       final result = await _dio.get(
         url,
+        data: data,
         queryParameters: queryParameters,
       );
       if (result.data['status']) {

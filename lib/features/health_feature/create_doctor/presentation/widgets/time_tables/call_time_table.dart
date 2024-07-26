@@ -15,15 +15,9 @@ class CreateDoctorCallTimeTable extends StatelessWidget {
       buildWhen: (previous, current) => current is CreateDoctorShowCall,
       builder: (context, state) {
         if (state is CreateDoctorShowCall && state.check) {
-          return TimeTable(
+          return Timetable(
             title: 'Call',
-            onChanged: (check, day) {
-              if (check) {
-                context.read<CreateDoctorCubit>().addCallWorkDay(day);
-              } else {
-                context.read<CreateDoctorCubit>().deleteCallWorkDay(day);
-              }
-            },
+            timetale: doctorLoginCubit.callTimetable,
             child: Column(
               children: [
                 DefaultTextFormField(
@@ -31,6 +25,7 @@ class CreateDoctorCallTimeTable extends StatelessWidget {
                     keyboardType: TextInputType.number,
                     isRequired: true,
                     currentFocusNode: doctorLoginCubit.callPriceFocusNode,
+                    nextFocusNode: doctorLoginCubit.callExamineDurationFocusNode,
                     currentController: doctorLoginCubit.callPriceController),
                 const Sizer(),
                 DefaultTextFormField(

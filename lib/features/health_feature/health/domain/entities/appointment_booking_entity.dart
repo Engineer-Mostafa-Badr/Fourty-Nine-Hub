@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/res/strings/labels.dart';
+
 import '../../../../ads_feature/ads/domain/entities/publisher_entity.dart';
 import '../../../doctor_details/domain/entities/appointment_entity.dart';
 import '../../../doctor_details/domain/entities/doctor_entity.dart';
@@ -10,7 +12,7 @@ class AppointmentBookingEntity {
   final AppointmentEntity appointment;
   final PublisherEntity? user;
   final String type;
-   BookingTypes get bookingType => getBookingType(type);
+  BookingTypes get bookingType => getBookingType(type);
   AppointmentBookingEntity({
     required this.id,
     required this.status,
@@ -22,33 +24,29 @@ class AppointmentBookingEntity {
   });
 }
 
+enum BookingTypes { call, clinic, home }
 
-enum BookingTypes { online, clinic }
-
-extension BookingTypesExtension  on  BookingTypes{
-  String get value{
-    switch(this){
-      case BookingTypes.online:
-      return 'online';
+extension BookingTypesExtension on BookingTypes {
+  String get translatedName {
+    switch (this) {
+      case BookingTypes.call:
+        return Labels.call;
       case BookingTypes.clinic:
-      return 'clinic';
-    }
-  }
-  String get title{
-    switch(this){
-      case BookingTypes.online:
-      return 'Online';
-      case BookingTypes.clinic:
-      return 'Clinic';
+        return Labels.clinicVist;
+      case BookingTypes.home:
+        return Labels.homeVist;
     }
   }
 }
+
 BookingTypes getBookingType(value) {
-  switch (value) {
-    case 'online':
-    return BookingTypes.online;
+  switch (value.toString()) {
+    case 'call':
+      return BookingTypes.call;
     case 'clinic':
-    return BookingTypes.clinic;
+      return BookingTypes.clinic;
+    case 'home':
+      return BookingTypes.home;
   }
   return BookingTypes.clinic;
 }

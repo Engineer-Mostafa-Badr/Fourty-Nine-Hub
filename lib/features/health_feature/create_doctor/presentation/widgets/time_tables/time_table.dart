@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/time_of_day_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/enums/week_days.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/work_day_entity.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_day_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class TimeTable extends StatelessWidget {
+class Timetable extends StatelessWidget {
   final String title;
   final Widget child;
-  final void Function(bool,DoctorWorkDayEntity)? onChanged;
-  const TimeTable(
-      {super.key, required this.title, required this.child, this.onChanged});
+  final List<DoctorDayEntity> timetale;
+  const Timetable(
+      {super.key, required this.title, required this.child, required this.timetale});
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +27,8 @@ class TimeTable extends StatelessWidget {
         children: [
           Text(title, style: Styles.headerText(color: AppColors.BARRIER_COLOR)),
           const Sizer(),
-          WeekWidget(
-            onChanged: onChanged,
+          _WeekWidget(
+            timetale: timetale,
           ),
           const Sizer(),
           child,
@@ -39,38 +38,39 @@ class TimeTable extends StatelessWidget {
   }
 }
 
-class WeekWidget extends StatefulWidget {
-  final void Function(bool,DoctorWorkDayEntity)? onChanged;
+class _WeekWidget extends StatefulWidget {
+  final List<DoctorDayEntity> timetale;
 
-  const WeekWidget({
-    super.key,
-    required this.onChanged,
+  const _WeekWidget({
+    required this.timetale,
   });
 
   @override
-  State<WeekWidget> createState() => _WeekWidgetState();
+  State<_WeekWidget> createState() => _WeekWidgetState();
 }
 
-class _WeekWidgetState extends State<WeekWidget> {
+class _WeekWidgetState extends State<_WeekWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: _week.map<Widget>((e) {
+      children: widget.timetale.map<Widget>((e) {
         return _buildDayWidget(e);
       }).toList(),
     );
   }
 
-  Widget _buildDayWidget(DoctorWorkDayEntity time) {
-    bool add = false;
+  Widget _buildDayWidget(DoctorDayEntity time) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Row(
         children: [
-          Checkbox.adaptive(
-            value: add,
-            onChanged: (v) => widget.onChanged?.call(v??false, time),
-          ),
+          Checkbox(
+              value: time.isAvailable,
+              onChanged: (v) {
+                setState(() {
+                  time.isAvailable = v!;
+                });
+              }),
           Text(
             time.day.name,
             style: Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
@@ -82,13 +82,15 @@ class _WeekWidgetState extends State<WeekWidget> {
                 context: context,
                 initialTime: const TimeOfDay(hour: 10, minute: 0),
               ).then((value) {
-                if (value!.isBefore(time.to)) {
-                  setState(() {
-                    time.from = value;
-                  });
-                } else {
-                  showErrorMessage(
-                      context, "Start Time Cannot be after the End Time");
+                if (value != null) {
+                  if (value.isBefore(time.to)) {
+                    setState(() {
+                      time.from = value;
+                    });
+                  } else {
+                    showErrorMessage(
+                        context, "Start Time Cannot be after the End Time");
+                  }
                 }
               });
             },
@@ -110,15 +112,17 @@ class _WeekWidgetState extends State<WeekWidget> {
             onTap: () {
               showTimePicker(
                 context: context,
-                initialTime: const TimeOfDay(hour: 10, minute: 0),
+                initialTime: const TimeOfDay(hour: 11, minute: 0),
               ).then((value) {
-                if (value!.isAfter(time.from)) {
-                  setState(() {
-                    time.to = value;
-                  });
-                } else {
-                  showErrorMessage(
-                      context, "End Time Cannot be before the Start Time");
+                if (value != null) {
+                  if (value.isAfter(time.from)) {
+                    setState(() {
+                      time.to = value;
+                    });
+                  } else {
+                    showErrorMessage(
+                        context, "End Time Cannot be before the Start Time");
+                  }
                 }
               });
             },
@@ -139,14 +143,4 @@ class _WeekWidgetState extends State<WeekWidget> {
       ),
     );
   }
-
-  final List<DoctorWorkDayEntity> _week = [
-    DoctorWorkDayEntity(day: WeekDays.saturday),
-    DoctorWorkDayEntity(day: WeekDays.sunday),
-    DoctorWorkDayEntity(day: WeekDays.monday),
-    DoctorWorkDayEntity(day: WeekDays.tuesday),
-    DoctorWorkDayEntity(day: WeekDays.wednesday),
-    DoctorWorkDayEntity(day: WeekDays.thursday),
-    DoctorWorkDayEntity(day: WeekDays.friday),
-  ];
 }
