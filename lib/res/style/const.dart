@@ -53,4 +53,6 @@ class UIConst {
   //     : Platform.isIOS // LARGE_BANNER
   //         ? 'ca-app-pub-2061374259497727/2688662652'
   //         : 'ca-app-pub-2061374259497727/4471204534';
+  static const String appSign = '45ecafc4787be753f178d5cc03f93eccb8167c6280d3697bf3909dbe53b86c54';
+  static const int appId = 2045827723;
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/zego_audio_room_widget.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/images/profile_image.dart';
@@ -10,8 +11,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../res/style/app_colors.dart';
 
-import '../../../social_posts/presentation/widgets/posts/post_comments.dart';
-import 'comment.dart';
 import 'report.dart';
 
 class ClubHouseRoom extends StatelessWidget {
@@ -22,16 +21,16 @@ class ClubHouseRoom extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: const Color(0xfff3f3f3),
-          onPressed: () {
-            context.push(Routes.CHAT);
-          },
-          child: const Icon(
-            Icons.send_outlined,
-            color: Colors.grey,
-          ),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   backgroundColor: const Color(0xfff3f3f3),
+        //   onPressed: () {
+        //     context.push(Routes.CHAT);
+        //   },
+        //   child: const Icon(
+        //     Icons.send_outlined,
+        //     color: Colors.grey,
+        //   ),
+        // ),
         bottomNavigationBar: SizedBox(
           height: kToolbarHeight,
           child: Row(
@@ -41,7 +40,7 @@ class ClubHouseRoom extends StatelessWidget {
                   bottomSheet(
                     context: context,
                     isScrollControlled: true,
-                    widget:  Container(),
+                    widget: Container(),
                     // widget: const PostComments(),
                   );
                 },
@@ -251,12 +250,15 @@ class ClubHouseRoom extends StatelessWidget {
                 ),
               ),
               const Sizer(),
-              _buildGroupOfPeople(title: 'Speakers', speaking: true),
-              const Sizer(),
-              _buildGroupOfPeople(
-                  title: 'Followed by the speakers', speaking: false),
-              const Sizer(),
-              _buildGroupOfPeople(title: 'In The room', speaking: false),
+              const ZegoAudioRoomWidget(
+                isHost: true,
+              ),
+              // _buildGroupOfPeople(title: 'Speakers', speaking: true),
+              // const Sizer(),
+              // _buildGroupOfPeople(
+              //     title: 'Followed by the speakers', speaking: false),
+              // const Sizer(),
+              // _buildGroupOfPeople(title: 'In The room', speaking: false),
             ],
           ),
         ),
