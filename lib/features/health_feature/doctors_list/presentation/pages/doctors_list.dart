@@ -13,8 +13,8 @@ import '../../../../../res/style/styles.dart';
 import '../widgets/doctor_card.dart';
 import '../widgets/select_state.dart';
 
-class DoctorsList extends StatelessWidget {
-  const DoctorsList({super.key});
+class DoctorsListView extends StatelessWidget {
+  const DoctorsListView({super.key});
 
   @override
   Widget build(BuildContext context) {

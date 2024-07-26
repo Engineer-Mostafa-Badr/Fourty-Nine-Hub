@@ -18,7 +18,7 @@ class AuctionDetailsRepoImpl implements AuctionDetailsRepo {
 
   @override
   Future<Either<Failure, AuctionEntity>> getAuctionDetails(
-      {required int id}) async {
+      {required String id}) async {
     return await _remoteDataSource.getAuctionDetails(id: id);
   }
 

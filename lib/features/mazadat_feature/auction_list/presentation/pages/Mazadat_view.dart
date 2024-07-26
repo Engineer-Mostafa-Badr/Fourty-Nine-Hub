@@ -14,39 +14,47 @@ class MazadatView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = context.read<AuctionListCubit>();
     return SharedScaffold(
         mainCategoryId: 1,
         body: BlocBuilder<AuctionListCubit, AuctionListState>(
           builder: (context, state) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                _buildHorizontalCategories(context: context),
-                _buildViewType(context: context),
-                Expanded(
-                    child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: state.isGrid
-                      ? GridView.builder(
-                          itemBuilder: (context, index) => AuctionCard(
-                                item: state.auctionList![index],
-                              ),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  childAspectRatio: .8,
-                                  mainAxisSpacing: 10,
-                                  crossAxisSpacing: 10,
-                                  crossAxisCount: 2),
-                          itemCount: state.auctionList?.length ?? 0)
-                      : ListView.separated(
-                          itemBuilder: (context, index) => AuctionCard(
-                                item: state.auctionList![index],
-                                isVertical: false,
-                              ),
-                          separatorBuilder: (context, index) => const Sizer(),
-                          itemCount: state.auctionList?.length ?? 0),
-                )),
-              ],
+            return RefreshIndicator(
+              onRefresh: ()async=>controller.loadData(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  // _buildHorizontalCategories(context: context),
+                  _buildViewType(context: context),
+                  Expanded(
+                      child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: state.isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator.adaptive())
+                        : state.isGrid
+                            ? GridView.builder(
+                                itemBuilder: (context, index) => AuctionCard(
+                                      item: state.auctionList![index],
+                                    ),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                        childAspectRatio: .8,
+                                        mainAxisSpacing: 10,
+                                        crossAxisSpacing: 10,
+                                        crossAxisCount: 2),
+                                itemCount: state.auctionList?.length ?? 0)
+                            : ListView.separated(
+                                itemBuilder: (context, index) => AuctionCard(
+                                      item: state.auctionList![index],
+                                      isVertical: false,
+                                    ),
+                                separatorBuilder: (context, index) =>
+                                    const Sizer(),
+                                itemCount: state.auctionList?.length ?? 0),
+                  )),
+                ],
+              ),
             );
           },
         ));
