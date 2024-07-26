@@ -1,30 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/enums/doctor_services.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/health/data/models/filter_option_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 
 class HealthOptionCard extends StatelessWidget {
-  final String imagePath;
-  final String name;
-  const HealthOptionCard(
-      {super.key, required this.imagePath, required this.name});
+  final HealthFilterOptionModel option;
+  const HealthOptionCard({super.key, required this.option});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 10,
-              offset: Offset(0, 10),
-            ),
-          ]),
-      child: Column(
-        children: [
-          Expanded(child: Image.asset(imagePath)),
-          Text(name),
-        ],
+    return InkWell(
+      onTap: () {
+        if (context.read<UserCubit>().isLoggedIn) {
+          serviceLocator<HealthSharedData>().doctorSearchParams.doctorService =
+              option.service;
+          context.push(option.route);
+        } else {
+          context.push(Routes.REGISTER);
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 5),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 10,
+                offset: Offset(0, 10),
+              ),
+            ]),
+        child: Column(
+          children: [
+            Expanded(child: Image.asset(option.image)),
+            Text(option.service.translatedName),
+          ],
+        ),
       ),
     );
   }

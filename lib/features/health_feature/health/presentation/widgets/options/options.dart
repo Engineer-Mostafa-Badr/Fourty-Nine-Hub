@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/cubit/health_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/options/option_card.dart';
 
 class HealthOptions extends StatelessWidget {
@@ -14,14 +14,13 @@ class HealthOptions extends StatelessWidget {
       itemCount: services.length,
       shrinkWrap: true,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        childAspectRatio: 1,
-        crossAxisCount: 3,
+        childAspectRatio: 2,
+        crossAxisCount: 2,
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,
       ),
       itemBuilder: (context, index) => HealthOptionCard(
-        imagePath: services[index].image,
-        name: services[index].name,
+        option: services[index],
       ),
     );
   }

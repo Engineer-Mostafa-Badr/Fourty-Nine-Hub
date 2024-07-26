@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../../../core/utils/duration_helper.dart';
 
 class AuctionEntity {
-  final int id;
+  final String id;
   final String startDate;
   final String startTime;
   final String endDate;
@@ -15,15 +15,8 @@ class AuctionEntity {
   final num rate;
   final AdEntity ad;
   final List<BiddingEntity>? biddings;
-  DateTime get startDateTime =>
-      DateFormat('yyyy-MM-dd hh:mm:ss').parse('$startDate $startTime');
-  DateTime get endDateTime =>
-      DateFormat('yyyy-MM-dd hh:mm:ss').parse('$endDate $endTime');
-  Duration get restTimeDuration => endDateTime.difference(DateTime.now());
-  double get restTimeRatio =>
-      restTimeDuration.inHours / endDateTime.difference(startDateTime).inHours;
-  String get formattedRestTime =>
-      DurationHelper().sinceTime(duration: restTimeDuration);
+
+
   AuctionEntity({
     required this.id,
     required this.startDate,

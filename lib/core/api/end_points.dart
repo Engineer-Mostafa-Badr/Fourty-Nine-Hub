@@ -21,6 +21,14 @@ class EndPoints {
   static const createNewForgetPassword = '/auth/reset-password';
   // ride
 
+  // health
+  static String getCities({required String governorateId}) =>
+      '/health/cities/$governorateId';
+  static const getGovernorates = '/health/governorate';
+  static const createDoctor = '/health/doctor';
+  static const doctorSearch = '/health/doctor-search';
+  static const bookEmergency = '/health/book-emergency';
+
   // reels
   static const getExploreReels = '/reels/explore';
 
@@ -190,6 +198,14 @@ class EndPoints {
     return '/ads/subCategoryAds/$id';
   }
 
+  static String createAuction(String id) {
+    return '/auction/$id';
+  }
+
+  static const auctionsList = '/auction';
+  static String auctionDetails (String id){
+    return  '/auction/$id';
+  }
 
   static String adDetails(String id) {
     return '/ads/getAd/$id';
@@ -204,5 +220,14 @@ class EndPoints {
   static String mediaUrl = '/media/signed-url';
   static String confirmUpload(String mediaId) {
     return '/media/confirm/$mediaId';
+  }
+
+  // chat_room
+  static String getChats = '/chat/get-chats';
+  static String getChatMessages(String chatId) {
+    return '/chat/get-chat/$chatId';
+  }
+  static String changeChatMuteState(String chatId) {
+    return '/chat/mute-chat/$chatId';
   }
 }

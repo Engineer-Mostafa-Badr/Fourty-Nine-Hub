@@ -220,7 +220,7 @@ class _mapPickerState extends State<MapPicker> {
     isMoving = true;
     setState(() {});
     if (markers.isEmpty) {
-      if (widget.showAddress ?? true) {
+      if (widget.showAddress) {
         final DioRequest = Dio(BaseOptions(
             baseUrl: 'https://maps.googleapis.com/maps/api/geocode',
             followRedirects: false));

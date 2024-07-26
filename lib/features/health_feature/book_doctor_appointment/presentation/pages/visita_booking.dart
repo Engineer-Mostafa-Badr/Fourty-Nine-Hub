@@ -234,8 +234,8 @@ class VisitaBooking extends StatelessWidget {
                   const Sizer(),
                   BadgedLabel(
                       onTap: () =>
-                          controller.changeBookingType(v: BookingTypes.online),
-                      color: state.bookingType == BookingTypes.online
+                          controller.changeBookingType(v: BookingTypes.call),
+                      color: state.bookingType == BookingTypes.call
                           ? AppColors.PRIMARY_COLOR
                           : AppColors.LIGHT_GRAY_COLOR,
                       label: 'Online'),

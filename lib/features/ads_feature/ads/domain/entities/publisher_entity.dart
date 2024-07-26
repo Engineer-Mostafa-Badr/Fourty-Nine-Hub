@@ -1,5 +1,5 @@
 class PublisherEntity {
-final String id;
+final int id;
   final String name;
  final  String phone;
  final  String type;

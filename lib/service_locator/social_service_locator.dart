@@ -1,7 +1,14 @@
-import 'package:fourtyninehub/features/social_media/chat/data/repositories/chat_repository_implement.dart';
-import 'package:fourtyninehub/features/social_media/chat/domain/repositories/chat_repository.dart';
-import 'package:fourtyninehub/features/social_media/chat/domain/usecases/getChatMessages_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/presentation/chat_cubit/chat_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasources/chat_message_remote_datasourse.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/repositories/chat_room_repository_implement.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/getChatMessages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/chat_cubit/chat_room_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/data/datasources/chats_remote_datasourse.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/data/repositories/chats_repository_implement.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/repositories/chats_repository.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatMuteState_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getChats_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/datasources/create_post_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/repositories/create_post_repo.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
@@ -30,7 +37,6 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/share_twitter_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:get_it/get_it.dart';
-
 import '../features/social_media/create_post/data/repositories/create_post_repo_impl.dart';
 import '../features/social_media/social_posts/data/repositories/social_posts_repo_impl.dart';
 import '../features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
@@ -165,17 +171,44 @@ class SocialServiceLocator {
       serviceLocator(),
     )..loadData());
 
+    // chats
+
+    serviceLocator.registerLazySingleton<ChatsRemoteDataSource>(
+        () => ChatsRemoteDataSourceImplementation(serviceLocator()));
+
+    serviceLocator.registerLazySingleton<ChatsRepository>(
+        () => ChatsRepositoryImplementation(serviceLocator()));
+
+    serviceLocator.registerFactory<ChatsCubit>(() => ChatsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
+
+    serviceLocator.registerFactory<ChatRoomCubit>(() => ChatRoomCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
+
+    serviceLocator.registerLazySingleton<GetChatsUseCase>(() => GetChatsUseCase(
+          serviceLocator(),
+        ));
+
+    serviceLocator.registerLazySingleton<ChangeChatMuteStateUseCase>(() => ChangeChatMuteStateUseCase(
+          serviceLocator(),
+        ));
+
+    serviceLocator.registerLazySingleton<ChatRoomRepository>(
+        () => ChatRoomRepositoryImplementation(serviceLocator()));
+
+    serviceLocator.registerLazySingleton<ChatRemoteDataSource>(
+        () => ChatRemoteDataSourceImplementation(serviceLocator()));
     serviceLocator.registerLazySingleton<GetChatMessagesUseCase>(
         () => GetChatMessagesUseCase(
               serviceLocator(),
             ));
-
-    serviceLocator.registerLazySingleton<ChatRepository>(
-        () => ChatRepositoryImplementation());
-
-    serviceLocator.registerFactory<ChatCubit>(() => ChatCubit(
-          serviceLocator(),
-          serviceLocator(),
-        ));
   }
 }

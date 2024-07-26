@@ -18,8 +18,20 @@ import '../../../auction_list/domain/entities/auction_entity.dart';
 import '../widgets/DetailsCounterWidget.dart';
 import '../widgets/PlaceBidding.dart';
 
-class MazadDetails extends StatelessWidget {
-  const MazadDetails({super.key});
+class MazadDetails extends StatefulWidget {
+  final String id;
+  const MazadDetails({super.key, required this.id});
+
+  @override
+  State<MazadDetails> createState() => _MazadDetailsState();
+}
+
+class _MazadDetailsState extends State<MazadDetails> {
+  @override
+  void initState() {
+    context.read<AuctionDetailsCubit>().loadData(id: widget.id);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +64,7 @@ class MazadDetails extends StatelessWidget {
                       onPlaced: (num v) => controller.sendBidding(bidding: v),
                     ));
               }),
-          body: state.status == AuctionDetailsStates.loading
+          body: state.isLoading
               ? const Center(
                   child: CircularProgressIndicator.adaptive(),
                 )
@@ -151,7 +163,7 @@ class MazadDetails extends StatelessWidget {
           CircleAvatar(
             radius: 25,
             backgroundColor: Colors.white,
-            backgroundImage: NetworkImage(ad.user?.profilePicture??''),
+            backgroundImage: NetworkImage(ad.user?.profilePicture ?? ''),
           ),
           const Sizer(),
           Expanded(
@@ -159,10 +171,10 @@ class MazadDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Label(
-                  text: ad.user?.fullName??'',
+                  text: ad.user?.fullName ?? '',
                   style: Styles.mediumText(color: Colors.black)),
               Label(
-                  text: ad.user?.email??'',
+                  text: ad.user?.email ?? '',
                   style: Styles.mediumText(color: Colors.grey)),
             ],
           )),

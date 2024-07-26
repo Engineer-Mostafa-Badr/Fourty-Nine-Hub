@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctors_list/presentation/cubit/doctors_list_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/liveview/gifts/gift_manager.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'features/social_media/live_streaming/presentation/widgets/liveview/gifts/gift_sheet.dart';
 import 'res/style/app_colors.dart';
 import 'routes/pages.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 //import 'package:admob_flutter/admob_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DI.execute();
-  
-   //Admob.initialize();
+  //to cache gift items
+  ZegoGiftManager().cache.cache(giftItemList);
+
+  //Admob.initialize();
 
   runApp(
     const MyApp(),
@@ -42,12 +42,8 @@ class MyApp extends StatelessWidget {
           create: (context) => serviceLocator<CreateShippingRequestCubit>(),
         ),
         // CreateAdCubit
-         BlocProvider(
+        BlocProvider(
           create: (context) => serviceLocator<CreateAdCubit>(),
-        ),
-        // health 
-         BlocProvider(
-          create: (context) => serviceLocator<DoctorsListCubit>(),
         ),
       ],
       child: GestureDetector(
