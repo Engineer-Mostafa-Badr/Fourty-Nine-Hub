@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
@@ -54,7 +55,7 @@ class HealthSubCategoryCard extends StatelessWidget {
                     top: 5,
                     left: 5,
                     child: Label(
-                      text: '99 ads',
+                      text: '${9999.toShortScale} ads',
                       style: Styles.mediumText(
                         color: Colors.white,
                         shadows: [
@@ -78,7 +79,7 @@ class HealthSubCategoryCard extends StatelessWidget {
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
                 ),
                 Label(
-                    text: '99 doctors',
+                    text: '${9999.toShortScale} doctors',
                     style: Styles.mediumText(color: AppColors.GREY_DARK_COLOR)),
               ],
             ),

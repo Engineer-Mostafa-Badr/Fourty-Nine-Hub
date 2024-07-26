@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -13,7 +15,7 @@ class HealthBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 5),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       decoration: BoxDecoration(
           color: AppColors.YELLOW_COLOR,
           borderRadius: BorderRadius.circular(5),
@@ -30,8 +32,9 @@ class HealthBanner extends StatelessWidget {
                 Icons.favorite_border,
                 color: AppColors.SECONDARY_COLOR,
               ),
+              const Sizer(height: 20,),
               Text(
-                '99 ads',
+                '${9999.toShortScale} ads',
                 style: Styles.mediumText(),
               )
             ],

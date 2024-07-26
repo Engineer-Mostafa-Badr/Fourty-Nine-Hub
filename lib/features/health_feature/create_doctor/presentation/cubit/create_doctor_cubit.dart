@@ -48,7 +48,7 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
         response.fold(
             (failure) => emit(CreateDoctorError("Can't Create Doctor")),
             (data) => emit(CreateDoctorSuccess(
-                "Done!, We will reveiw your request soon")));
+                "You are submit sccessfuly. Please wait admin approve and abroval.")));
       } else {
         emit(CreateDoctorError(checkFilledMessage));
       }

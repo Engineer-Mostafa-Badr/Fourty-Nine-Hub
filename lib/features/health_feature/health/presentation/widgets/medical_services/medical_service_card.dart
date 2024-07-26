@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
@@ -64,7 +65,7 @@ class HealthMedicalServiceCard extends StatelessWidget {
                       style: Styles.mediumText(fontWeight: FontWeight.bold),
                     ),
                     Label(
-                      text: '99 ads',
+                      text: '${9355.toShortScale} ads',
                       style: Styles.mediumText(),
                     ),
                   ],
