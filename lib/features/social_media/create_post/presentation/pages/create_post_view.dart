@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/functions/helper/file_picker_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
@@ -17,7 +18,8 @@ import '../cubit/create_post_cubit.dart';
 import 'select_feeling_view.dart';
 
 class CreatePostView extends StatelessWidget {
-  const CreatePostView({super.key});
+  const CreatePostView({super.key, required this.social});
+  final String social;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,7 @@ class CreatePostView extends StatelessWidget {
           ]),
           body: Column(
             children: [
-              Padding(
+              if(social!='twitter')Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Row(
                   children: [
@@ -58,7 +60,7 @@ class CreatePostView extends StatelessWidget {
               const Sizer(),
               Expanded(child: _buildCreatePost()),
               const Sizer(),
-              _buildColorsBallet(context: context),
+              if(social!='twitter')_buildColorsBallet(context: context),
               const Sizer(),
               _buildOptions(),
               const Sizer(),
@@ -76,7 +78,8 @@ class CreatePostView extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(color: state.backColor),
           child: TextField(
-            maxLines: 40,
+            maxLines: 4,
+            maxLength: 150,
             controller:
                 context.read<CreatePostCubit>().postContentTextController,
             decoration: const InputDecoration(hintText: 'Type Here ... '),
@@ -126,13 +129,20 @@ class CreatePostView extends StatelessWidget {
         builder: (context, state) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         IconButton(
-            onPressed: () => FilePickerHelper().pickMedia(),
+            // onPressed: () => FilePickerHelper().pickMedia(),
+          onPressed: () {
+            final UploadFile upload = UploadFile();
+            upload.uploadImage(subCategoryId: 'twitter', onUploaded: (UploadFileEntity data) {
+              print("file name ${data.file}");
+              print("mediaId: ${data.mediaId}");
+            });
+          },
             icon: const Icon(
               Icons.image,
               color: Colors.green,
               size: 30,
             )),
-        IconButton(
+        if(social!='twitter')IconButton(
             onPressed: () {
               bottomSheet(
                   isScrollControlled: true,
@@ -149,7 +159,7 @@ class CreatePostView extends StatelessWidget {
               color: Colors.blue,
               size: 30,
             )),
-        IconButton(
+        if(social!='twitter')IconButton(
             onPressed: () {
               bottomSheet(
                   isScrollControlled: true,

@@ -12,14 +12,15 @@ class TwitterPostEntity {
   final List<String>? images;
   final List<String>? shares;
   final List<TwitterUserModel>? love;
-  final TwitterMainPostEntity? mainPost;
-  final bool isShared;
-  final TwitterUserEntity user;
-  final List<TwitterCommentEntity> comments;
+  final dynamic mainPost;
+  bool? isShared;
+  final dynamic user;
+  final List<String> comments;
   final int commentPrivacy;
   final num commentsCount;
-  final num sharesCount;
-  final num loveCount;
+  num? sharesCount;
+  num? loveCount;
+  bool? isReact;
   final DateTime createdAt;
    Duration get publishedDuration => DateTime.now().difference(createdAt);
 
@@ -32,6 +33,7 @@ class TwitterPostEntity {
     this.images,
     this.shares,
     this.love,
+    this.isReact=false,
     required this.user,
     this.commentPrivacy = 1,
     this.isShared = false,

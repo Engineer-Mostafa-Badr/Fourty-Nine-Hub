@@ -4,8 +4,9 @@ class TwitterUserEntity {
   final String id;
   final String firstName;
   final String lastName;
-  // final dynamic profilePicture;
-  final num loveCount;
+  final String image;
+  final String email;
+  final bool isDocumented;
   final DateTime createdAt;
   Duration get publishedDuration => DateTime.now().difference(createdAt);
 
@@ -16,7 +17,8 @@ class TwitterUserEntity {
     required this.firstName,
     required this.lastName,
     required this.createdAt,
-    // required this.profilePicture,
-    this.loveCount = 0,
+    required this.image,
+    required this.email,
+    required this.isDocumented,
   });
 }

@@ -7,9 +7,10 @@ class TwitterUserModel extends TwitterUserEntity {
     required super.id,
     required super.firstName,
     required super.lastName,
-    // required super.profilePicture,
-        super.loveCount,
     required super.createdAt,
+        required super.image,
+        required super.email,
+        required super.isDocumented,
 
       });
   factory TwitterUserModel.fromJson(Map<String, dynamic> json) {
@@ -17,8 +18,10 @@ class TwitterUserModel extends TwitterUserEntity {
       id: json['_id']??'',
       firstName: json['firstName']??'',
       lastName: json['lastName']??'',
-      // profilePicture: json['USER_PROFILE']['profilePictureKey'],
-      loveCount: json['loveCount']??0,
+      image: json['image']??'',
+      email: json['email']??'',
+      isDocumented: json['twitter_documentation']??false,
+
       createdAt: json['createdAt'] is String
           ? DateTime.parse(json['createdAt'])
           : DateTime.now(),    );

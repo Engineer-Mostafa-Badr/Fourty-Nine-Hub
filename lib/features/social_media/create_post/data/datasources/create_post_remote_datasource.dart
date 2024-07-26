@@ -4,6 +4,9 @@ import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/models/activity_model.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_post_model.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/res/assets/jsons.dart';
 import '../../../../../core/api/end_points.dart';
 import '../../../../../core/error/failure.dart';
@@ -13,6 +16,7 @@ abstract class CreatePostRemoteDataSource {
   Future<Either<Failure, List<FeelingEntity>>> getFeelingsList();
   Future<Either<Failure, List<ActivityEntity>>> getActivitiesList();
   Future<Either<Failure, bool>> postData({required Map<String, dynamic> data});
+  Future<Either<Failure, TwitterPostEntity>> createTwitterPost({required CreateTwitterPostParams params});
 }
 
 class CreatePostRemoteDataSourceImpl implements CreatePostRemoteDataSource {
@@ -47,5 +51,15 @@ class CreatePostRemoteDataSourceImpl implements CreatePostRemoteDataSource {
         await _apiConsumer.post(EndPoints.createFacebookPost, data: data);
     return response.fold(
         (l) => Left(l), (data) => Right(data['status'] as bool));
+  }
+
+  @override
+  Future<Either<Failure, TwitterPostEntity>> createTwitterPost({required CreateTwitterPostParams params}) async{
+    final response =
+        await _apiConsumer.post(EndPoints.createTwitterPost, data: {
+          'content':params.content
+        });
+    return response.fold(
+            (l) => Left(l), (data) => Right(TwitterPostModel.fromJson(data['data'])));
   }
 }

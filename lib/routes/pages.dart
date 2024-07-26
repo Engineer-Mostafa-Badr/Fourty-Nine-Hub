@@ -46,6 +46,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/pages/mus
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:go_router/go_router.dart';
@@ -438,10 +439,15 @@ class AppPages {
               GoRoute(
                   path: Paths.CREATEPOST,
                   name: Routes.CREATEPOST,
-                  builder: (context, state) => BlocProvider<CreatePostCubit>(
+                  builder: (context, state) {
+                    final social = state.extra as String?;
+
+                    return BlocProvider<CreatePostCubit>(
                         create: (_) => serviceLocator(),
-                        child: const CreatePostView(),
-                      )),
+                        child: CreatePostView(social: social??'social',),
+                      );
+                  },
+              ),
 
               GoRoute(
                   path: Paths.TWITTER,

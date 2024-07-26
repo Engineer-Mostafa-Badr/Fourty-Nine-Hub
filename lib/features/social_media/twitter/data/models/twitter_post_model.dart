@@ -14,6 +14,7 @@ class TwitterPostModel extends TwitterPostEntity {
       super.love,
       super.shares,
       super.isShared,
+      super.isReact,
       required super.mainPost,
       super.loveCount,
       super.commentPrivacy,
@@ -30,18 +31,20 @@ class TwitterPostModel extends TwitterPostEntity {
           .map((e) => TwitterUserModel.fromJson(e))
           .toList(),
       isShared: json['isShared'] ?? false,
+      isReact: json['isReact'] ?? false,
       mainPost: json['mainPost'] != null
-          ? TwitterMainPostModel.fromJson(json['mainPost'] )
+          ?json['mainPost'] is String ?json['mainPost']: TwitterMainPostModel.fromJson(json['mainPost'] )
           : null,
-      user: TwitterUserModel.fromJson(json['user']),
+      user: json['user'] is String? json['user']:TwitterUserModel.fromJson(json['user']),
       commentPrivacy: json['commentPrivacy'],
       sharesCount: json['sharesCount']??0,
       loveCount: json['loveCount']??0,
       createdAt: DateTime.parse(json['createdAt']),
       commentsCount: json['commentsCount']??0,
-      comments: (json['comments'] as List<dynamic>?)
-          ?.map((item) => TwitterCommentModel.fromJson(item as Map<String, dynamic>))
-          .toList() ?? [],
+      comments: json['comments'] != null ? List<String>.from(json['comments']) : [],
+      // comments: (json['comments'] as List<dynamic>?)
+      //     ?.map((item) => TwitterCommentModel.fromJson(item as Map<String, dynamic>))
+      //     .toList() ?? [],
     );
   }
 }

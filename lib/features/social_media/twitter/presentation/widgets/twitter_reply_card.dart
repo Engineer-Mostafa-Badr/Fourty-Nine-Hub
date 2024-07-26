@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/PostOptions.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
@@ -10,19 +11,19 @@ import '../../../../../../common/widgets/stateless/labels/label.dart';
 
 import '../../../../../../res/style/styles.dart';
 
-class TwitterCommentCard extends StatefulWidget {
+class TwitterReplyCard extends StatefulWidget {
   final Color textColor;
-  final TwitterPostCommentEntity comment;
+  final TwitterCommentReplyEntity reply;
   final GestureTapCallback? onCommentReact;
-  final Function onCommentReply;
-  const TwitterCommentCard(
-      {super.key, this.textColor = Colors.black, required this.comment, this.onCommentReact, required this.onCommentReply});
+
+  const TwitterReplyCard(
+      {super.key, this.textColor = Colors.black, required this.reply, this.onCommentReact,});
 
   @override
-  State<TwitterCommentCard> createState() => _TwitterCommentCardState();
+  State<TwitterReplyCard> createState() => _TwitterReplyCardState();
 }
 
-class _TwitterCommentCardState extends State<TwitterCommentCard> {
+class _TwitterReplyCardState extends State<TwitterReplyCard> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -40,11 +41,11 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                    text: widget.comment.user,
+                    text: 'Farouk Shahin',
                     style: Styles.mediumText(
                         fontWeight: FontWeight.bold, color: widget.textColor)),
                 Label(
-                    text: widget.comment.sinceTime,
+                    text: widget.reply.sinceTime,
                     style: Styles.mediumText(color: widget.textColor)),
               ],
             )),
@@ -61,7 +62,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
         const Sizer(),
         Label(
           textAlign: TextAlign.start,
-          text: widget.comment.content,
+          text: widget.reply.content,
           style: Styles.mediumText(color: widget.textColor),
         ),
         Row(
@@ -75,11 +76,8 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
               ),
             ),
             Label(
-                text: widget.comment.loveCount.toString(),
-                style: Styles.mediumText(color: widget.textColor)),
-            const Sizer(),
-            TextAppButton(
-                style: Styles.mediumText(), label: 'Reply', onPressed: widget.onCommentReply)
+                text: "${widget.reply.love.length}",
+                style: Styles.mediumText(color: widget.textColor,),),
           ],
         ),
       ],

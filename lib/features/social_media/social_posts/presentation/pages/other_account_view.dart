@@ -98,7 +98,7 @@ class OtherAccountView extends StatelessWidget {
                       text: 'Posts',
                     ),
                     Tab(
-                      text: 'Highlights',
+                      text: 'Tweets',
                     ),
                     Tab(
                       text: 'Reels',

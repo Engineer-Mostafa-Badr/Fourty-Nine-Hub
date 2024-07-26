@@ -1,7 +1,8 @@
+import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 
-class TwitterPostCommentModel extends TwitterPostCommentEntity {
-  TwitterPostCommentModel({
+class TwitterCommentReplyModel extends TwitterCommentReplyEntity {
+  TwitterCommentReplyModel({
     required super.id,
     required super.user,
     required super.content,
@@ -9,15 +10,11 @@ class TwitterPostCommentModel extends TwitterPostCommentEntity {
     required super.createdAt,
     super.loveCount,
     super.repliesCount,
-    super.showReplies,
-    super.addReply,
-    required super.adminIgnore,
-    // required super.image,
+    required super.image,
     required super.love,
-    super.replies,
   });
-  factory TwitterPostCommentModel.fromJson(Map<String, dynamic> json) {
-    return TwitterPostCommentModel(
+  factory TwitterCommentReplyModel.fromJson(Map<String, dynamic> json) {
+    return TwitterCommentReplyModel(
       id: json['_id'],
       user: json['user'][0]['firstName'],
       content: json['content'] ?? '',
@@ -26,8 +23,7 @@ class TwitterPostCommentModel extends TwitterPostCommentEntity {
       repliesCount: json['repliesCount']??0,
       createdAt: DateTime.parse(json['createdAt']),
       love: json['love'] != null ? List<String>.from(json['love']) : [],
-      adminIgnore: json['adminIgnore']??false,
-      // image: json['image'],
+      image: json['image']??'',
     );
   }
 }

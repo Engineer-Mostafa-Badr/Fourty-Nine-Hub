@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/social_media/chat/domain/usecases/getChat
 import 'package:fourtyninehub/features/social_media/chat/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/datasources/create_post_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/repositories/create_post_repo.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/create_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_activities_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_feelings_usecase.dart';
@@ -19,8 +20,12 @@ import 'package:fourtyninehub/features/social_media/twitter/data/datasources/twi
 import 'package:fourtyninehub/features/social_media/twitter/data/repositories/twitter_repo_impl.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/repositories/twitter_repo.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_post_comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_post_comments_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_twitter_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/share_twitter_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
@@ -99,7 +104,17 @@ class SocialServiceLocator {
     ));
 
     serviceLocator
+        .registerLazySingleton<CreateTwitterPostUseCase>(() => CreateTwitterPostUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
         .registerLazySingleton<TwitterCommentReactUseCase>(() => TwitterCommentReactUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<GetTwitterPostUseCase>(() => GetTwitterPostUseCase(
       serviceLocator(),
     ));
 
@@ -108,7 +123,23 @@ class SocialServiceLocator {
       serviceLocator(),
     ));
 
+    serviceLocator
+        .registerLazySingleton<TwitterPostCommentUseCase>(() => TwitterPostCommentUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<TwitterCommentReplyUseCase>(() => TwitterCommentReplyUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<GetTwitterCommentRepliesUseCase>(() => GetTwitterCommentRepliesUseCase(
+      serviceLocator(),
+    ));
+
     serviceLocator.registerFactory<CreatePostCubit>(() => CreatePostCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
@@ -123,6 +154,10 @@ class SocialServiceLocator {
           serviceLocator(),
         )..loadData());
     serviceLocator.registerFactory<TwitterCubit>(() => TwitterCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
