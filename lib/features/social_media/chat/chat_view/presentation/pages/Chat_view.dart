@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fourtyninehub/common/functions/global/loading_custom.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/nested_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -35,7 +36,7 @@ class _ChatViewState extends State<ChatView> {
 
   initSocketConnection() {
     chatCubit = context.read<ChatsCubit>()..initSocketConnection();
-    chatCubit.getChats();
+    chatCubit.getChats(0);
   }
 
   final List<String> groups = [
@@ -101,6 +102,9 @@ class _ChatViewState extends State<ChatView> {
 
   Widget _buildCategoriesLabels() {
     return TabBar(
+        onTap: (index) {
+          context.read<ChatsCubit>().getChats(index);
+        },
         tabAlignment: TabAlignment.start,
         isScrollable: true,
         tabs: groups.map((e) {
@@ -129,8 +133,8 @@ class _ChatViewState extends State<ChatView> {
 
   Widget _buildCategoryChats({bool isSecret = false}) {
     return BlocBuilder<ChatsCubit, ChatsState>(builder: (context, state) {
-      return state.chats == null
-          ? const SizedBox()
+      return state.chats == null || state.isLoading
+          ? LoadingCustom.customThreeBounce(context)
           : state.chats?.length == 0
               ? Center(
                   child: Label(
@@ -144,7 +148,7 @@ class _ChatViewState extends State<ChatView> {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) => Slidable(
-                    key:  ValueKey(index),
+                    key: ValueKey(index),
                     // All actions are defined in the children parameter.
 
                     closeOnScroll: false,
@@ -153,7 +157,10 @@ class _ChatViewState extends State<ChatView> {
                       dismissible: DismissiblePane(onDismissed: () {}),
                       children: [
                         SlidableAction(
-                          onPressed: (value) {},
+                          onPressed: (value) {
+                            chatCubit
+                                .changeChatMuteState(state.chats![index].sId!);
+                          },
                           backgroundColor:
                               const Color.fromARGB(255, 191, 191, 191),
                           foregroundColor: Colors.white,

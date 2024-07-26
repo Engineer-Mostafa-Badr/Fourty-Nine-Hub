@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_user_use_case.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/chat_messgaes_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/getChatMessages_usecase.dart';
@@ -19,15 +20,18 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   final GetUserUseCase _getUserUseCase;
   final SocketServiceContract _socketService;
   List<MessageEntity> chatMessages = [];
+  ChatMessagesModel chatMessagesModel = ChatMessagesModel();
 
   String? userToken;
   String? userId;
   String? chatId;
+
   ChatRoomCubit(
     this._getTokensUseCase,
     this._getChatMessagesUseCase,
     this._getUserUseCase,
     this._socketService,
+    // this.chatMessagesModel,
   ) : super(const ChatRoomState());
 
   Future<String?> getUserToken() async {
@@ -43,25 +47,29 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         (failure) => emit(
             state.copyWith(failure: failure, status: ChatRoomStates.error)),
         (data) {
-          chatMessages = data;
-          emit(state.copyWith(
-              chatMessages: data.reversed.toList(), status: ChatRoomStates.initState));
-        });
+      chatMessages = data.messages ?? [];
+      chatMessagesModel = data;
+
+      emit(state.copyWith(
+          chatData: data,
+          chatMessages: data.messages!.reversed.toList(),
+          status: ChatRoomStates.initState));
+    });
 
     // to listen new message
     listenToNewMessages();
   }
 
   sendMessage(String message) {
-    if(chatId != null){
+    if (chatId != null) {
+      _socketService.sendMessage(message: message, chatId: chatId!);
+      chatMessages.add(MessageModel(text: message, byMe: true));
 
-      _socketService.sendMessage(
-          message: message, chatId: chatId!);
-      chatMessages.add(MessageModel(text: message,byMe: true));
-
-      emit
-          .call(state.copyWith(chatMessages: chatMessages.reversed.toList(), status: ChatRoomStates.initState));
-    }else{
+      emit.call(state.copyWith(
+          chatData: chatMessagesModel,
+          chatMessages: chatMessages.reversed.toList(),
+          status: ChatRoomStates.initState));
+    } else {
       debugPrint("Error chat id not found");
     }
   }
@@ -78,12 +86,14 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     );
   }
 
-
   listenToNewMessages() {
     _socketService.socketMessageStream.listen((event) {
-      chatMessages.add(MessageModel(text: event.messageItem?.text,byMe: false));
-      emit
-          .call(state.copyWith(chatMessages: chatMessages.reversed.toList(), status: ChatRoomStates.initState));
+      chatMessages
+          .add(MessageModel(text: event.messageItem?.text, byMe: false));
+      emit.call(state.copyWith(
+          chatData: chatMessagesModel,
+          chatMessages: chatMessages.reversed.toList(),
+          status: ChatRoomStates.initState));
     });
   }
 

@@ -194,4 +194,7 @@ class EndPoints {
   static String getChatMessages(String chatId) {
     return '/chat/get-chat/$chatId';
   }
+  static String changeChatMuteState(String chatId) {
+    return '/chat/mute-chat/$chatId';
+  }
 }

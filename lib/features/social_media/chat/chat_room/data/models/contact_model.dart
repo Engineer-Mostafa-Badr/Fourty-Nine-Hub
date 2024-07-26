@@ -1,12 +1,13 @@
 
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/contact_entity.dart';
 
-class Contacts extends ContactEntity {
-  Contacts({super.sId, super.name});
+class Contact extends ContactEntity {
+  Contact({super.sId, super.avatar, super.name});
 
-  factory Contacts.fromJson(Map<String, dynamic> json) {
-    return Contacts(
-      sId: json['_id'],
+  factory Contact.fromJson(Map<String, dynamic> json) {
+    return Contact(
+      sId: json['sId'],
+      avatar: json['avatar'],
       name: json['name'],
     );
   }
