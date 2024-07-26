@@ -61,7 +61,7 @@ class HealthSubCategoryCard extends StatelessWidget {
                           const Shadow(
                             blurRadius: 6.0,
                             color: Colors.black,
-                                                      ),
+                          ),
                         ],
                       ),
                     ),

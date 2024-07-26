@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/week_days.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/doctor_address.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/doctor_day_model.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';

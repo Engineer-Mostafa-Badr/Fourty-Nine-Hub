@@ -31,7 +31,6 @@ abstract class Routes {
   static const MAZADAT = '/Mazadat';
   static const VISITA = '/Visita';
   static const VISITAEMERGENCY = '/Visita/VisitaEmergency';
-  static const VISITADOCTORLIST = '/Visita/VisitaDoctorsList';
   static const CREATEDOCTOR = '/Visita/CreateDoctor';
   static const FILTERDOCTORSUBCATEGORY = '/Visita/FilterDoctorSubcategory';
   static const FILTERDOCTORGOVERNORATE =

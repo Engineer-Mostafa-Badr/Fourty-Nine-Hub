@@ -30,6 +30,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_dashboard_view.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/pages/create_doctor_view.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/governorate_filter_cubit/doctor_governorate_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/city_filter_cubit/doctor_city_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/subcategory_filter_cubit/doctor_filter_cubit.dart';
@@ -104,7 +105,7 @@ import '../features/authentication/presentation/controllers/verify_otp_cubit/ver
 import '../features/account_taps/account/presentation/pages/favourite_category_view.dart';
 import '../features/account_taps/account/presentation/pages/favourite_subcategory_view.dart';
 import '../features/health_feature/doctor_details/presentation/pages/DoctorDetails.dart';
-import '../features/health_feature/doctors_list/presentation/pages/doctors_list.dart';
+import '../features/health_feature/doctor_filter/presentation/pages/doctors_list.dart';
 import '../features/health_feature/book_doctor_appointment/presentation/pages/visita_booking.dart';
 import '../features/authentication/presentation/pages/login_view.dart';
 import '../features/authentication/presentation/pages/register/register_verify_otp.dart';
@@ -522,7 +523,7 @@ class AppPages {
                 name: Routes.MAZADDETAILS,
                 builder: (context, state) => BlocProvider<AuctionDetailsCubit>(
                   create: (_) => serviceLocator(),
-                  child:  MazadDetails(id: state.extra as String),
+                  child: MazadDetails(id: state.extra as String),
                 ),
               ),
               // CreateAuctionView
@@ -561,18 +562,21 @@ class AppPages {
         ),
 
         // _________________ services ____________
+
         GoRoute(
             path: Paths.VISITA,
             name: Routes.VISITA,
-            builder: (context, state) => BlocProvider<HealthCubit>(
-                  create: (_) => serviceLocator<HealthCubit>(),
-                  child: const HealthView(),
-                ),
+            builder: (context, state) {
+              return BlocProvider<HealthCubit>(
+                create: (_) => serviceLocator(),
+                child: const HealthView(),
+              );
+            },
             routes: [
               GoRoute(
                 path: Paths.VISITAEMERGENCY,
                 name: Routes.VISITAEMERGENCY,
-                builder: (context, state) => BlocProvider<EmergencyCubit>(
+                builder: (context, state) => BlocProvider<HealthEmergencyCubit>(
                   create: (context) => serviceLocator(),
                   child: const HealthEmergencyView(),
                 ),
@@ -591,14 +595,17 @@ class AppPages {
                   builder: (context, state) =>
                       BlocProvider<DoctorSubcategoryFilterCubit>(
                         create: (context) => serviceLocator(),
-                        child: DoctorSubcategoryFilterView(
-                            doctorService: (state.extra) as DoctorServices),
+                        child: const DoctorSubcategoryFilterView(),
                       ),
                   routes: [
                     GoRoute(
                       path: Paths.VISITADOCTORLIST,
                       name: Routes.VISITADOCTORLISTBYCALL,
-                      builder: (context, state) => const DoctorsListView(),
+                      builder: (context, state) =>
+                          BlocProvider<DoctorsListCubit>(
+                        create: (context) => serviceLocator(),
+                        child: const DoctorsListView(),
+                      ),
                     ),
                     GoRoute(
                         path: Paths.FILTERDOCTORGOVERNORATE,
@@ -615,25 +622,21 @@ class AppPages {
                               builder: (context, state) =>
                                   BlocProvider<DoctorCityFilterCubit>(
                                     create: (context) => serviceLocator(),
-                                    child: DoctorCityFilterView(
-                                      governorate: (state.extra as GovernorateEntity),
-                                    ),
+                                    child: const DoctorCityFilterView(),
                                   ),
                               routes: [
                                 GoRoute(
                                   path: Paths.VISITADOCTORLIST,
                                   name: Routes.VISITADOCTORLISTBYLOCATION,
                                   builder: (context, state) =>
-                                      const DoctorsListView(),
+                                      BlocProvider<DoctorsListCubit>(
+                                    create: (context) => serviceLocator(),
+                                    child: const DoctorsListView(),
+                                  ),
                                 ),
                               ]),
                         ]),
                   ]),
-              GoRoute(
-                path: Paths.VISITADOCTORLIST,
-                name: Routes.VISITADOCTORLIST,
-                builder: (context, state) => const DoctorsListView(),
-              ),
               GoRoute(
                   path: Paths.VISITADOCTORDETAILS,
                   name: Routes.VISITADOCTORDETAILS,

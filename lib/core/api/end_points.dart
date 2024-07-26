@@ -26,6 +26,8 @@ class EndPoints {
       '/health/cities/$governorateId';
   static const getGovernorates = '/health/governorate';
   static const createDoctor = '/health/doctor';
+  static const doctorSearch = '/health/doctor-search';
+  static const bookEmergency = '/health/book-emergency';
 
   // reels
   static const getExploreReels = '/reels/explore';

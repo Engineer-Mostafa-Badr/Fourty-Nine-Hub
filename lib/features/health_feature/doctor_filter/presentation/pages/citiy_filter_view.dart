@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/city_filter_cubit/doctor_city_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/widgets/city_list_title.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class DoctorCityFilterView extends StatefulWidget {
-  final GovernorateEntity governorate;
-  const DoctorCityFilterView({super.key, required this.governorate});
+  const DoctorCityFilterView({
+    super.key,
+  });
 
   @override
   State<DoctorCityFilterView> createState() => _DoctorCityFilterViewState();
@@ -17,9 +19,10 @@ class DoctorCityFilterView extends StatefulWidget {
 class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
   @override
   void initState() {
-    context
-        .read<DoctorCityFilterCubit>()
-        .loadData(governorateId: widget.governorate.id);
+    context.read<DoctorCityFilterCubit>().loadData(
+        governorateId: serviceLocator<HealthSharedData>()
+            .doctorSearchParams
+            .governorateId);
     super.initState();
   }
 
