@@ -55,7 +55,6 @@ class ChatsCubit extends Cubit<ChatsState> {
 
   listenToNewMessages() {
     _socketService.socketMessageStream.listen((event) {
-      print("hellllo from listen $event");
       _chats[event.chatRoomId]?.lastMessageText = event.messageItem?.text;
       emit
           .call(state.copyWith(chats: _chats.values.toList(), status: ChatsStates.initState));

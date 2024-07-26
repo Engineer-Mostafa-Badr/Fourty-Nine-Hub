@@ -40,9 +40,8 @@ class _ChatRoomState extends State<ChatRoom> {
           ),
           body: BlocBuilder<ChatRoomCubit, ChatRoomState>(
               builder: (context, state) {
-                print("state.chatMessages?.length ${state.chatMessages?.length}");
             return ListView.separated(
-              // reverse: true,
+              reverse: true,
               // physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) => MessageCard(
                messageEntity: state.chatMessages![index],

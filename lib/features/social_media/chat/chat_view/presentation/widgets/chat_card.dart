@@ -60,7 +60,7 @@ class ChatCard extends StatelessWidget {
                   Label(
                       text: isSecret
                           ? 'Mxxx xxxl'
-                          : '${chatItemModel?.user?.name}',
+                          : '${chatItemModel?.name}',
                       style: Styles.mediumText(fontWeight: FontWeight.bold)),
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),

@@ -93,13 +93,14 @@ class SocketServiceImplementation extends SocketServiceContract {
   @override
   sendMessage({required String message, required String chatId}) {
     if (message.isEmpty) return;
-    Map messageMap = {
+
+    var messageMap = json.encode({
       "chatId": chatId,
       "type": 1,
       "mediaIds": [],
-      "text": "Welcome 12",
+      "text": message,
       "groupId": null
-    };
+    });
     socket.emit('Message:Send', messageMap);
   }
 
