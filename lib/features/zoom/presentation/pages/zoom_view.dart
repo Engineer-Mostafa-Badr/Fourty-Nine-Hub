@@ -1,11 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-=======
 import 'package:fourtyninehub/features/zoom/presentation/bloc/signal_service.dart';
->>>>>>> aed5cc1379a9aa9bdd57090b2180fdcb37021337
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../routes/routes.dart';
@@ -30,10 +27,6 @@ class ZoomView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return SharedScaffold(
-      mainCategoryId: 2,
-=======
     // init signalling service
     SignallingService.instance.init(
       websocketUrl: websocketUrl,
@@ -51,7 +44,6 @@ class ZoomView extends StatelessWidget {
         changeView: 2,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
->>>>>>> aed5cc1379a9aa9bdd57090b2180fdcb37021337
       body: GridView(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             childAspectRatio: 1, crossAxisCount: 3),

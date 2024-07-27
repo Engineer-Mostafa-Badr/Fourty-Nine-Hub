@@ -1,4 +1,3 @@
-import 'package:fourtyninehub/features/zoom/presentation/pages/call_screen.dart';
 
 abstract class Routes {
   Routes._();
@@ -146,11 +145,8 @@ abstract class Paths {
   static const FILTERDOCTORAREA = 'FilterDoctorArea';
   static const DOCTORDASHBOARD = 'DoctorDashboard';
   static const FOOD = 'Food';
-<<<<<<< HEAD
   static const CusineRestaurants = 'Cusine-Restaurants';
   static const RestaurantDashboard = 'RestaurantDashboard';
-=======
->>>>>>> aed5cc1379a9aa9bdd57090b2180fdcb37021337
   static const SHIPPING = 'Shipping';
   static const RIDE = 'Ride';
   static const CONTACTUS = 'ContactUs';

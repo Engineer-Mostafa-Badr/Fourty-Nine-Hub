@@ -241,14 +241,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.6"
-  dart_webrtc:
-    dependency: transitive
-    description:
-      name: dart_webrtc
-      sha256: d663abfe6ed95afadcb64083e364aa16dbeaadead193bb03047cf6913e57b65e
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.6+hotfix.1"
   dartz:
     dependency: "direct main"
     description:
@@ -715,6 +707,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
+  flutter_slidable:
+    dependency: "direct main"
+    description:
+      name: flutter_slidable
+      sha256: "2c5611c0b44e20d180e4342318e1bbc28b0a44ad2c442f5df16962606fd3e8e3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
+  flutter_spinkit:
+    dependency: "direct main"
+    description:
+      name: flutter_spinkit
+      sha256: d2696eed13732831414595b98863260e33e8882fc069ee80ec35d4ac9ddb0472
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.2.1"
   flutter_staggered_grid_view:
     dependency: "direct main"
     description:
@@ -749,14 +757,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_webrtc:
-    dependency: "direct main"
-    description:
-      name: flutter_webrtc
-      sha256: a09adf01e8b760a9ca6418323786f51417fb75986f210513e83d4753686795f0
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.11.1"
   font_awesome_flutter:
     dependency: "direct main"
     description:
@@ -1389,14 +1389,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.4"
-  platform_detect:
-    dependency: transitive
-    description:
-      name: platform_detect
-      sha256: "08f4ee79c0e1c4858d37e06b22352a3ebdef5466b613749a3adb03e703d4f5b0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.11"
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -1502,7 +1494,7 @@ packages:
     source: hosted
     version: "0.7.1"
   rxdart:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: rxdart
       sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
@@ -1605,6 +1597,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  skeletons:
+    dependency: "direct main"
+    description:
+      name: skeletons
+      sha256: "5b2d08ae7f908ee1f7007ca99f8dcebb4bfc1d3cb2143dec8d112a5be5a45c8f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -1970,14 +1970,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
-  webrtc_interface:
-    dependency: transitive
-    description:
-      name: webrtc_interface
-      sha256: abec3ab7956bd5ac539cf34a42fa0c82ea26675847c0966bb85160400eea9388
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.0"
   webview_flutter:
     dependency: "direct main"
     description:
