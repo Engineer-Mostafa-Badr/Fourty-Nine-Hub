@@ -3,10 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
-import 'package:go_router/go_router.dart';
+
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -19,7 +20,7 @@ import '../../../../../res/assets/assets.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
+
 import '../../domain/entities/categorization_entity.dart';
 import '../widgets/ad_dynamic_inputs.dart';
 
@@ -144,9 +145,13 @@ class _CreateAdViewState extends State<CreateAdView> {
                   action: (v) => controller.price = v,
                 ),
                 const Sizer(),
-                AppButton(
+                DefaultButton(
                     label: 'Publish',
-                    onPressed: () =>controller.createAd(categorize: widget.categorization, context: context)),
+                   
+                    onPressed: () {
+                      controller.createAd(
+                          categorize: widget.categorization, context: context);
+                    }),
               ],
             ),
           ),
@@ -174,16 +179,20 @@ class _CreateAdViewState extends State<CreateAdView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Image.asset(
-                      Assets.image,
-                      height: kToolbarHeight * .8,
-                    ),
-                    BadgedLabel(
-                      label: 'Add Images',
-                      isBordered: true,
-                      style: Styles.smallText(color: Colors.black),
-                      color: AppColors.SECONDARY_COLOR,
-                    ),
+                    if (state.isImageUploading)
+                      const CircularProgressIndicator.adaptive(),
+                    if (!state.isImageUploading)
+                      Image.asset(
+                        Assets.image,
+                        height: kToolbarHeight * .8,
+                      ),
+                    if (!state.isImageUploading)
+                      BadgedLabel(
+                        label: 'Add Images',
+                        isBordered: true,
+                        style: Styles.smallText(color: Colors.black),
+                        color: AppColors.SECONDARY_COLOR,
+                      ),
                     Label(
                       text:
                           '5MB maximum file size accepted in the following formats: jpg, Jpeg, png, gif',

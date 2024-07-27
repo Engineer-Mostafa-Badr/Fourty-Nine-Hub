@@ -37,14 +37,14 @@ class Biddings extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: Colors.white,
-            backgroundImage: NetworkImage(item.user.image),
+            backgroundImage: NetworkImage(item.user.profilePicture??UIConst.profilePlaceHolder),
           ),
           const Sizer(),
           Expanded(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextAppButton(label: item.user.name, onPressed: () {}),
+              TextAppButton(label: item.user.fullName, onPressed: () {}),
               Label(
                   text: item.formatedSinceTime,
                   style: Styles.mediumText(color: Colors.grey))

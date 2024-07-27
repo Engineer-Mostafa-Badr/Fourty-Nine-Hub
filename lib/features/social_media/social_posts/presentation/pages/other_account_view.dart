@@ -1,20 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
-import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
-import '../../../../../common/widgets/dynamic/drawer.dart';
-import '../../../../../common/widgets/dynamic/floating_button.dart';
-import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../widgets/account/high_lights_section.dart';
 import '../widgets/account/media_section.dart';
@@ -27,90 +22,79 @@ class OtherAccountView extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 4,
-      child: Scaffold(
-        // backgroundColor: Colors.,
-        // appBar: const HomeAppbar(),
-        drawer: const DrawerWidget(),
-        bottomNavigationBar: const BottomNavigator(
-          mainCategory: 0,
-          index: 2,
-        ),
-        floatingActionButton: const FloatingButton(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        body: NestedAppbar(
-          appBars: [
-            SliverAppBar(
-              floating: true,
-              expandedHeight: kToolbarHeight * 5,
-              automaticallyImplyLeading: false,
-              flexibleSpace: _buildAccountCounter(context: context),
-              iconTheme: const IconThemeData(color: Colors.white),
-              leading: IconButton(
-                  onPressed: () => context.pop(),
-                  icon: const Icon(Icons.arrow_back)),
-              actions: [
-                IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-                PopupMenuButton(
-                  icon: const Icon(
-                    Icons.more_vert,
-                    color: Colors.white,
-                  ),
-                  itemBuilder: (context) {
-                    return [
-                      PopupMenuItem<int>(
-                        value: 0,
-                        child: Text("Media, links, and docs"),
-                      ),
-                      PopupMenuItem<int>(
-                        value: 1,
-                        child: Text("Search"),
-                      ),
-                      PopupMenuItem<int>(
-                        value: 2,
-                        child: Text("Mute notifications"),
-                      ),
-                      PopupMenuItem<int>(
-                        value: 3,
-                        child: Text("Delete Chat"),
-                      ),
-                      PopupMenuItem<int>(
-                        value: 4,
-                        child: Text("Report"),
-                      ),
-                      PopupMenuItem<int>(
-                        value: 5,
-                        child: Text("Block"),
-                      ),
-                    ];
-                  },
+      child: NestedAppbar(
+        appBars: [
+          SliverAppBar(
+            floating: true,
+            expandedHeight: kToolbarHeight * 5,
+            automaticallyImplyLeading: false,
+            flexibleSpace: _buildAccountCounter(context: context),
+            iconTheme: const IconThemeData(color: Colors.white),
+            leading: IconButton(
+                onPressed: () => context.pop(),
+                icon: const Icon(Icons.arrow_back)),
+            actions: [
+              IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+              PopupMenuButton(
+                icon: const Icon(
+                  Icons.more_vert,
+                  color: Colors.white,
                 ),
-              ],
-            ),
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              floating: false,
-              pinned: true,
-              title: TabBar(
-                  labelStyle: Styles.mediumText(),
-                  isScrollable: true,
-                  tabs: const [
-                    Tab(
-                      text: 'Posts',
+                itemBuilder: (context) {
+                  return [
+                    PopupMenuItem<int>(
+                      value: 0,
+                      child: Text("Media, links, and docs"),
                     ),
-                    Tab(
-                      text: 'Highlights',
+                    PopupMenuItem<int>(
+                      value: 1,
+                      child: Text("Search"),
                     ),
-                    Tab(
-                      text: 'Reels',
+                    PopupMenuItem<int>(
+                      value: 2,
+                      child: Text("Mute notifications"),
                     ),
-                    Tab(
-                      text: 'Media',
+                    PopupMenuItem<int>(
+                      value: 3,
+                      child: Text("Delete Chat"),
                     ),
-                  ]),
-            ),
-          ],
-          body: _buildAccountPages(),
-        ),
+                    PopupMenuItem<int>(
+                      value: 4,
+                      child: Text("Report"),
+                    ),
+                    PopupMenuItem<int>(
+                      value: 5,
+                      child: Text("Block"),
+                    ),
+                  ];
+                },
+              ),
+            ],
+          ),
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            floating: false,
+            pinned: true,
+            title: TabBar(
+                labelStyle: Styles.mediumText(),
+                isScrollable: true,
+                tabs: const [
+                  Tab(
+                    text: 'Posts',
+                  ),
+                  Tab(
+                    text: 'Highlights',
+                  ),
+                  Tab(
+                    text: 'Reels',
+                  ),
+                  Tab(
+                    text: 'Media',
+                  ),
+                ]),
+          ),
+        ],
+        body: _buildAccountPages(),
       ),
     );
   }

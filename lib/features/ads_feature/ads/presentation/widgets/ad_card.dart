@@ -18,7 +18,7 @@ class AdCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => context.push(Routes.ADdetails, extra: item.id),
-      child: Container(
+      child: SizedBox(
         width: kToolbarHeight * 2.5,
         // decoration: BoxDecoration(color: Colors.red),
         child: Column(

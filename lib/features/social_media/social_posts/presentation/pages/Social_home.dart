@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import 'package:get_it/get_it.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -34,7 +35,7 @@ class _SocialHomeViewState extends State<SocialHomeView> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 3,
       child: SharedScaffold(
         mainCategoryId: 2,
         body: NestedAppbar(appBars: [
@@ -66,9 +67,6 @@ class _SocialHomeViewState extends State<SocialHomeView> {
         icon: Icon(Icons.add_home_outlined),
       ),
       Tab(
-        icon: Icon(Icons.grid_4x4_outlined),
-      ),
-      Tab(
         icon: Icon(Icons.person),
       ),
     ]);
@@ -78,8 +76,7 @@ class _SocialHomeViewState extends State<SocialHomeView> {
     return TabBarView(children: [
       _buildFacebookWidget(),
       _buildMyPostsWidget(),
-      _buildInstagramWidget(),
-      const MyAccountView(),
+      const OtherAccountView(),
     ]);
   }
 

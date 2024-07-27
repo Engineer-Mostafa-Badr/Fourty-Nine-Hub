@@ -109,18 +109,19 @@ class BaseApiConsumer extends ApiConsumer {
             result.data['message'] ?? result.data['error']['message']));
       }
     } catch (e) {
-      if (e is DioException &&
-          e.response?.statusCode == 401 &&
-          isTokenAttached) {
-        return refreshToken().then(
-          (_) => get(
-            url,
-            queryParameters: queryParameters,
-          ),
-        );
-      } else {
-        return Left(_getFailure(e));
-      }
+      // if (e is DioException &&
+      //     e.response?.statusCode == 401 &&
+      //     isTokenAttached) {
+      //   return refreshToken().then(
+      //     (_) => get(
+      //       url,
+      //       queryParameters: queryParameters,
+      //     ),
+      //   );
+      // } else {
+      //   return Left(_getFailure(e));
+      // }
+      return Left(_getFailure(e));
     }
   }
 

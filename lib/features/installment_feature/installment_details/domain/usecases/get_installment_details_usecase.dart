@@ -8,12 +8,12 @@ import '../repositories/installment_details_repo.dart';
 
 
 class GetInstallmentDetailsUseCase
-    extends UseCase<InstallmentEntity, int> {
+    extends UseCase<InstallmentEntity, String> {
   final InstallmentDetailsRepo _repo;
   GetInstallmentDetailsUseCase(this._repo);
 
   @override
-  Future<Either<Failure, InstallmentEntity>> call(int params) {
+  Future<Either<Failure, InstallmentEntity>> call(String params) {
     return _repo.getInstallmentDetails(id: params);
   }
 }

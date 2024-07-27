@@ -26,21 +26,29 @@ class AdModel extends AdEntity {
       images =
           (json['images'] as List).map((e) => e['mediaKey'] as String).toList();
     } catch (e) {}
+    UserModel? user;
+    try {
+      if (json['userId'] != null) {
+        user = UserModel.fromJson(json['userId']);
+      }
+      if (json['user'] != null) {
+        user = UserModel.fromJson(json['user']);
+      }
+    } catch (e) {}
     return AdModel(
-        id: json['_id'],
-        title: json['title'],
-        description: json['desc'],
+        id: json['_id'] ?? '',
+        title: json['title'] ?? '',
+        description: json['desc'] ?? json['description'],
         images: images,
-        price: json['price'],
+        price: json['price'] ?? 0,
         subCategoryId: json['subCategoryId'],
         active: json['active'] ?? true,
-        phone: json['phone'],
+        phone: json['phone'] ?? '',
         statistics: json['statistics'] == null
             ? null
             : AdStatisticsModel.fromJson(json['statistics']),
         address: AddressModel.fromJson(json['address']),
-        user:
-            json['userId'] != null ? null : UserModel.fromJson(json['userId']),
+        user: user,
         details: json['props'] == null
             ? []
             : (json['props'] as List)
