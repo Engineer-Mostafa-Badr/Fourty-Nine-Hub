@@ -1,15 +1,17 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasources/chat_message_remote_datasourse.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
+
+import '../models/chat_messgaes_model.dart';
 
 class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   final ChatRemoteDataSource _chatRemoteDataSource;
+
   ChatRoomRepositoryImplementation(this._chatRemoteDataSource);
 
   @override
-  Future<Either<Failure, List<MessageEntity>>> getChatMessages(String chatId) {
+  Future<Either<Failure, ChatMessagesModel>> getChatMessages(String chatId) {
     return _chatRemoteDataSource.getChatMessages(chatId: chatId);
   }
 }

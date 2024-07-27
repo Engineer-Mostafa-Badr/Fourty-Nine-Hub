@@ -21,6 +21,14 @@ class EndPoints {
   static const createNewForgetPassword = '/auth/reset-password';
   // ride
 
+  // health
+  static String getCities({required String governorateId}) =>
+      '/health/cities/$governorateId';
+  static const getGovernorates = '/health/governorate';
+  static const createDoctor = '/health/doctor';
+  static const doctorSearch = '/health/doctor-search';
+  static const bookEmergency = '/health/book-emergency';
+
   // reels
   static const getExploreReels = '/reels/explore';
 
@@ -233,5 +241,12 @@ class EndPoints {
   static String getChats = '/chat/get-chats';
   static String getChatMessages(String chatId) {
     return '/chat/get-chat/$chatId';
+  }
+  static String changeChatMuteState(String chatId) {
+    return '/chat/mute-chat/$chatId';
+  }
+
+  static String changeChatToArchiveOrNormal(String chatId) {
+    return '/chat/archive-chat/$chatId';
   }
 }

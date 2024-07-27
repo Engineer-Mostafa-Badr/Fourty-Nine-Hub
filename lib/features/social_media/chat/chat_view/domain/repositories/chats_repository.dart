@@ -5,4 +5,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 
 abstract class ChatsRepository {
   Future<Either<Failure, List<ChatItemModel>>> getChats(ChatsRequestParams chatsRequestParams);
+  Future<Either<Failure, bool>> changeChatMuteState(String chatId);
+  Future<Either<Failure, bool>> changeChatToArchiveNormal(String chatId);
 }

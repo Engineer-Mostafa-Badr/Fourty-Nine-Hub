@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/global/loading_custom.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -40,18 +41,19 @@ class _ChatRoomState extends State<ChatRoom> {
           ),
           body: BlocBuilder<ChatRoomCubit, ChatRoomState>(
               builder: (context, state) {
-                print("state.chatMessages?.length ${state.chatMessages?.length}");
-            return ListView.separated(
-              reverse: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) => MessageCard(
-               messageEntity: state.chatMessages![index],
-              ),
-              separatorBuilder: (context, index) => const Sizer(
-                height: 3,
-              ),
-              itemCount: state.chatMessages?.length ?? 0,
-            );
+            return state.isLoading
+                ? LoadingCustom.customThreeBounce(context)
+                : ListView.separated(
+                    reverse: true,
+                    // physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) => MessageCard(
+                      messageEntity: state.chatMessages![index],
+                    ),
+                    separatorBuilder: (context, index) => const Sizer(
+                      height: 3,
+                    ),
+                    itemCount: state.chatMessages?.length ?? 0,
+                  );
           }),
         ),
       ),

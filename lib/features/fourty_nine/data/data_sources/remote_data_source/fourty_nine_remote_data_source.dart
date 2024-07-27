@@ -50,7 +50,7 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
     final result = await _apiConsumer.get(EndPoints.getMainCategories, queryParameters: params.toJson());
     return result.fold(
       (failure) => Left(failure),
-      (response) => Right((response['data']['categories'] as List)
+      (response) => Right((response['data']['docs'] as List)
           .map((e) => MainCategoryModel.fromJson(e))
           .toList()),
     );
