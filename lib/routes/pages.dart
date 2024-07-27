@@ -772,14 +772,14 @@ class AppPages {
         GoRoute(
             path: Paths.ZOOM,
             name: Routes.ZOOM,
-            builder: (context, state) => const ZoomView(),
+            builder: (context, state) => ZoomView(),
             routes: [
               // PlayVideo
               GoRoute(
                 path: Paths.MEETINGROOM,
                 name: Routes.MEETINGROOM,
                 builder: (context, state) => const MeetingRoom(),
-              )
+              ),
             ]),
         GoRoute(
             path: Paths.INSTALLMENT,

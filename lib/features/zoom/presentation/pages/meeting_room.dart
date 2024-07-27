@@ -5,7 +5,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
 class MeetingRoom extends StatelessWidget {
-  const MeetingRoom({super.key, this.liveID = '123', this.isHost = true});
+  const MeetingRoom({super.key, this.liveID = '12356456466', this.isHost = true});
 
   final String liveID;
   final bool isHost;
@@ -45,14 +45,18 @@ class MeetingRoom extends StatelessWidget {
                   showNewScreenSharingViewInFullscreenMode:
                       false) // Set the layout to gallery mode. and configure the [showNewScreenSharingViewInFullscreenMode] and [showScreenSharingFullscreenModeToggleButtonRules].
               ..bottomMenuBar = ZegoLiveStreamingBottomMenuBarConfig(
-                hostButtons: [
+                audienceButtons: [
                   ZegoLiveStreamingMenuBarButtonName.toggleScreenSharingButton,
-                  ZegoLiveStreamingMenuBarButtonName.coHostControlButton,
-                  ZegoLiveStreamingMenuBarButtonName.minimizingButton,
+                  ZegoLiveStreamingMenuBarButtonName.toggleMicrophoneButton,
+                  ZegoLiveStreamingMenuBarButtonName.toggleCameraButton,
+                  ZegoLiveStreamingMenuBarButtonName.switchCameraButton,
+                  // ZegoLiveStreamingMenuBarButtonName.coHostControlButton,
+                  // ZegoLiveStreamingMenuBarButtonName.minimizingButton,
                 ],
               )
               ..topMenuBar = ZegoLiveStreamingTopMenuBarConfig(buttons: [
                 ZegoLiveStreamingMenuBarButtonName.minimizingButton,
+
                 // ZegoLiveStreamingMenuBarButtonName.beautyEffectButton
               ]) // Add a screen sharing toggle button.
             ),
