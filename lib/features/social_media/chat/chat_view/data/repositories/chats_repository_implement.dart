@@ -24,4 +24,9 @@ class ChatsRepositoryImplementation extends ChatsRepository {
   Future<Either<Failure, bool>> changeChatMuteState(String chatId) {
     return _chatsRemoteDataSource.changeChatMuteState(chatId: chatId);
   }
+
+  @override
+  Future<Either<Failure, bool>> changeChatToArchiveNormal(String chatId) {
+    return _chatsRemoteDataSource.changeChatToArchiveOrToNormal(chatId: chatId);
+  }
 }

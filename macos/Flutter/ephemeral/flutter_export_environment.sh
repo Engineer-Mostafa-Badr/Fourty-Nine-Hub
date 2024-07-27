@@ -9,8 +9,8 @@ export "FLUTTER_ROOT=/Users/ahmedabdelsattar/src/flutter"
 export "FLUTTER_APPLICATION_PATH=/Users/ahmedabdelsattar/Documents/49-mobile-app"
 >>>>>>> 5d7ddfafec647bd1256401cf7422404b31623b36
 =======
-export "FLUTTER_ROOT=C:\src\flutter"
-export "FLUTTER_APPLICATION_PATH=D:\applications\49-mobile-app"
+export "FLUTTER_ROOT=/Users/ahmedabdelsattar/src/flutter"
+export "FLUTTER_APPLICATION_PATH=/Users/ahmedabdelsattar/Documents/49-mobile-app"
 >>>>>>> 1c2c85fdc594e8443cdf29b83a035a717c44364c
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"

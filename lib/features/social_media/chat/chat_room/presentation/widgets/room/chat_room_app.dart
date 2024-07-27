@@ -94,14 +94,6 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             itemBuilder: (context) {
               return [
-                // const PopupMenuItem<int>(
-                //   value: 0,
-                //   child: Text("Media, links, and docs"),
-                // ),
-                // const PopupMenuItem<int>(
-                //   value: 1,
-                //   child: Text("Search"),
-                // ),
                 const PopupMenuItem<int>(
                   value: 0,
                   child: Text("Mute notifications"),
