@@ -62,6 +62,7 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/ti
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
+import 'package:fourtyninehub/features/zoom/presentation/widgets/meeting_dialogue.dart';
 import 'package:go_router/go_router.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_ads_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
@@ -521,7 +522,7 @@ class AppPages {
                 name: Routes.MAZADDETAILS,
                 builder: (context, state) => BlocProvider<AuctionDetailsCubit>(
                   create: (_) => serviceLocator(),
-                  child:  MazadDetails(id: state.extra as String),
+                  child: MazadDetails(id: state.extra as String),
                 ),
               ),
               // CreateAuctionView
@@ -774,7 +775,12 @@ class AppPages {
               GoRoute(
                 path: Paths.MEETINGROOM,
                 name: Routes.MEETINGROOM,
-                builder: (context, state) => const MeetingRoom(),
+                builder: (context, state) {
+                  final extras = state.extra as DetailArgs;
+
+                  return MeetingRoom(
+                      liveID: extras.liveId, isHost: extras.isHost);
+                },
               ),
             ]),
         GoRoute(
