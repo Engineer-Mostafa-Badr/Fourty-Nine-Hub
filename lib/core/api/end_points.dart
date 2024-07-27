@@ -205,4 +205,8 @@ class EndPoints {
   static String changeChatMuteState(String chatId) {
     return '/chat/mute-chat/$chatId';
   }
+
+  static String changeChatToArchiveOrNormal(String chatId) {
+    return '/chat/archive-chat/$chatId';
+  }
 }

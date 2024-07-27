@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fourtyninehub/common/functions/global/loading_custom.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/nested_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -11,10 +12,12 @@ import 'package:fourtyninehub/features/authentication/domain/entities/user_entit
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/more_icon_bottom_sheet_body.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:skeletons/skeletons.dart';
 import '../widgets/calling_card.dart';
 import '../widgets/chat_card.dart';
 
@@ -42,9 +45,9 @@ class _ChatViewState extends State<ChatView> {
   final List<String> groups = [
     'Social',
     'Services',
-    'Call & Video (Social)',
+    'Call & Video(Social)',
     'Call & Video(Services)',
-    'Chat',
+    'Greet',
     'Groups',
     'Anonymous',
     'Archive',
@@ -158,28 +161,32 @@ class _ChatViewState extends State<ChatView> {
                       children: [
                         SlidableAction(
                           onPressed: (value) {
-                            chatCubit
-                                .changeChatMuteState(state.chats![index].sId!);
+                            bottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                widget: MoreIconBottomSheet(
+                                  chatItemModel: state.chats![index],
+                                  chatsCubit: chatCubit,
+                                ));
                           },
                           backgroundColor:
                               const Color.fromARGB(255, 191, 191, 191),
                           foregroundColor: Colors.white,
-                          icon: state.chats![index].muted!
-                              ? Icons.volume_down
-                              : Icons.volume_off,
-                          label: state.chats![index].muted! ? 'unMute' : 'mute',
+                          icon: Icons.more_horiz,
+                          label: 'More',
                           padding: EdgeInsets.zero,
                         ),
                         SlidableAction(
                           onPressed: (value) async {
-                            bool confirmDeleted = false;
-                            confirmDeleted = await showDialogConfirmDeleted();
-                            print("confirmDeleted ${confirmDeleted}");
+                            chatCubit.changeChatToArchiveOrNormalUseCase(
+                                state.chats![index].sId!);
                           },
-                          backgroundColor: const Color(0xFFFE4A49),
+                          backgroundColor: AppColors.PRIMARY_COLOR,
                           foregroundColor: Colors.white,
-                          icon: Icons.delete,
-                          label: 'Delete',
+                          icon: Icons.delete_outlined,
+                          label: state.chats![index].archived!
+                              ? 'Unarchive'
+                              : 'Archive',
                           padding: EdgeInsets.zero,
                         ),
                       ],
@@ -204,72 +211,5 @@ class _ChatViewState extends State<ChatView> {
             ),
         separatorBuilder: (context, index) => const SizedBox(),
         itemCount: 8);
-  }
-
-  Future<bool> showDialogConfirmDeleted() async {
-    return await showDialog(
-      context: context,
-      builder: ((context) => AlertDialog(
-            title: const Text('Are you sure?'),
-            content: const Text('Do you want to remove this chat'),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                  child: const Text('No')),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                  child: const Text('Yes'))
-            ],
-          )),
-    );
-  }
-
-  Widget skeletonWidget() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: SkeletonTheme(
-        shimmerGradient: const LinearGradient(
-          colors: [
-            Color(0xFF153971),
-            Color(0xFF3A548B),
-            Color(0xFF153971),
-          ],
-          stops: [
-            0.3,
-            0.5,
-            0.7,
-          ],
-          begin: Alignment(-2.4, -0.0),
-          end: Alignment(2.4, 0.0),
-          tileMode: TileMode.clamp,
-        ),
-        darkShimmerGradient: const LinearGradient(
-          colors: [
-            Color(0xFF153971),
-            Color(0xFF3A548B),
-            Color(0xFF153971),
-          ],
-          stops: [
-            0.3,
-            0.5,
-            0.7,
-          ],
-          begin: Alignment(-2.4, -0.0),
-          end: Alignment(2.4, 0.0),
-          tileMode: TileMode.clamp,
-        ),
-        child: SkeletonLine(
-          style: SkeletonLineStyle(
-            height: kToolbarHeight * .7,
-            width: kToolbarHeight * .7,
-            borderRadius: BorderRadius.circular(5!),
-          ),
-        ),
-      ),
-    );
   }
 }

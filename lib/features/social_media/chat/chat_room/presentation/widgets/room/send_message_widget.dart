@@ -138,10 +138,12 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                       iconSize: 30,
                       padding: 15,
                       icon: Icons.send_sharp,
-                      onPressed: (){
-                        chatCubit.sendMessage(_messageTextController.text.trim());
-
-                        _messageTextController.text = '';
+                      onPressed: () {
+                        chatCubit
+                            .sendMessage(_messageTextController.text.trim());
+                        setState(() {
+                          _messageTextController.text = '';
+                        });
                       },
                     )
                   : SocialMediaRecorder(
