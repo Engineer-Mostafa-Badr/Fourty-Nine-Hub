@@ -62,6 +62,8 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/ti
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
+import 'package:fourtyninehub/features/zoom/presentation/pages/call_screen.dart';
+import 'package:fourtyninehub/features/zoom/presentation/pages/join_screen.dart';
 import 'package:go_router/go_router.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_ads_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
@@ -768,14 +770,32 @@ class AppPages {
         GoRoute(
             path: Paths.ZOOM,
             name: Routes.ZOOM,
-            builder: (context, state) => const ZoomView(),
+            builder: (context, state) => ZoomView(),
             routes: [
               // PlayVideo
               GoRoute(
                 path: Paths.MEETINGROOM,
                 name: Routes.MEETINGROOM,
                 builder: (context, state) => const MeetingRoom(),
-              )
+              ),
+              GoRoute(
+                  path: Paths.CALLSCREEN,
+                  name: Routes.CALLSCREEN,
+                  builder: (context, state) {
+                    var args = state.extra as Map<String, dynamic>;
+                    return CallScreen(
+                      offer: args['offer'],
+                      calleeId: args['calleeId'],
+                      callerId: args['callerId'],
+                    );
+                  }),
+              GoRoute(
+                path: Paths.JOINSCREEN,
+                name: Routes.JOINSCREEN,
+                builder: (context, state) => JoinScreen(
+                  selfCallerId: state.extra as String,
+                ),
+              ),
             ]),
         GoRoute(
             path: Paths.INSTALLMENT,

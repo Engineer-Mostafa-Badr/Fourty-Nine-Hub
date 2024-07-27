@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/features/zoom/presentation/pages/call_screen.dart';
+
 abstract class Routes {
   Routes._();
 
@@ -71,6 +73,8 @@ abstract class Routes {
   static const INSTAGRAM = '/Instagram';
   static const ZOOM = '/Zoom';
   static const MEETINGROOM = '/Zoom/MeetingRoom';
+  static const CALLSCREEN = '/Zoom/CallScreen';
+  static const JOINSCREEN = '/Zoom/JoinScreen';
   static const INSTALLMENT = '/Installment';
   static const CREATEINSTALLMENT = '/Installment/CreateInstallment';
   static const INSTALLMENTDETAILS = '/Installment/Installment-details';
@@ -142,8 +146,11 @@ abstract class Paths {
   static const FILTERDOCTORAREA = 'FilterDoctorArea';
   static const DOCTORDASHBOARD = 'DoctorDashboard';
   static const FOOD = 'Food';
+<<<<<<< HEAD
   static const CusineRestaurants = 'Cusine-Restaurants';
   static const RestaurantDashboard = 'RestaurantDashboard';
+=======
+>>>>>>> aed5cc1379a9aa9bdd57090b2180fdcb37021337
   static const SHIPPING = 'Shipping';
   static const RIDE = 'Ride';
   static const CONTACTUS = 'ContactUs';
@@ -158,6 +165,8 @@ abstract class Paths {
   static const PLAYVIDEO = 'PlayVideo';
   static const ZOOM = 'Zoom';
   static const MEETINGROOM = 'MeetingRoom';
+  static const CALLSCREEN = 'CallScreen';
+  static const JOINSCREEN = 'joinScreen';
   static const INSTALLMENT = 'Installment';
   static const CREATEINSTALLMENT = 'CreateInstallment';
   static const INSTALLMENTDETAILS = 'Installment-details';

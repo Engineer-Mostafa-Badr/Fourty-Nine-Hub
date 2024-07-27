@@ -1,5 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+=======
+import 'package:fourtyninehub/features/zoom/presentation/bloc/signal_service.dart';
+>>>>>>> aed5cc1379a9aa9bdd57090b2180fdcb37021337
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../routes/routes.dart';
@@ -13,12 +19,39 @@ import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
 class ZoomView extends StatelessWidget {
-  const ZoomView({super.key});
+  ZoomView({super.key});
+
+  // signalling server url
+  final String websocketUrl = "http://localhost:5050";
+
+  // generate callerID of local user
+  final String selfCallerID =
+      Random().nextInt(999999).toString().padLeft(6, '0');
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     return SharedScaffold(
       mainCategoryId: 2,
+=======
+    // init signalling service
+    SignallingService.instance.init(
+      websocketUrl: websocketUrl,
+      selfCallerID: selfCallerID,
+    );
+    return Scaffold(
+      backgroundColor: AppColors.GRAY_LIGHT_COLOR3,
+      appBar: const HomeAppbar(),
+      drawer: const DrawerWidget(),
+      bottomNavigationBar: const BottomNavigator(
+        mainCategory: 2,
+        index: 2,
+      ),
+      floatingActionButton: const FloatingButton(
+        changeView: 2,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+>>>>>>> aed5cc1379a9aa9bdd57090b2180fdcb37021337
       body: GridView(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             childAspectRatio: 1, crossAxisCount: 3),
@@ -27,7 +60,8 @@ class ZoomView extends StatelessWidget {
               color: AppColors.ACCENT_COLOR,
               label: 'New Meeting',
               icon: Icons.video_call,
-              onTap: () => context.push(Routes.MEETINGROOM)),
+              onTap: () =>
+                  context.push(Routes.JOINSCREEN, extra: selfCallerID)),
           _buildMeetingItem(
               color: AppColors.PRIMARY_COLOR,
               label: 'Join',
