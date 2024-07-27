@@ -53,16 +53,20 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   }
 
   void uploadImage({required String subCategoryId}) async {
+    emit(state.copyWith(status: CreateAdStates.imageUploading));
     final mediaResponse = await UploadFile().uploadImage(
         subCategoryId: subCategoryId,
         onUploaded: (UploadFileEntity media) {
           final images = state.images ?? [];
           images.add(media);
-          emit(state.copyWith(images: images));
+          emit(
+              state.copyWith(images: images, status: CreateAdStates.initState));
         });
     mediaResponse?.fold(
         (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
-        (r) {});
+        (r) {
+      emit(state.copyWith(status: CreateAdStates.initState));
+    });
   }
 
   void removeImage({required UploadFileEntity image}) {
@@ -87,7 +91,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
           id: 'id',
           title: title ?? '',
           description: description ?? '',
-          phone: phone??'',
+          phone: phone ?? '',
           images: state.images?.map((e) => e.mediaId).toList() ?? [],
           price: num.parse(price ?? ''),
           active: true,
@@ -98,7 +102,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       response.fold(
           (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
           (r) {
-        context.push(Routes.MYADDS);
+        context.go(Routes.MYADDS);
       });
     }
   }

@@ -1,3 +1,6 @@
+import 'package:fourtyninehub/features/installment_feature/create_installment/data/datasources/create_installment_remote_datasource.dart';
+import 'package:fourtyninehub/features/installment_feature/create_installment/domain/repositories/create_installment_repo.dart';
+import 'package:fourtyninehub/features/installment_feature/create_installment/domain/usecases/create_installment_usecase.dart';
 import 'package:fourtyninehub/features/installment_feature/create_installment/presentation/cubit/create_installment_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_details/data/datasources/installment_details_remote_datasource.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_details/domain/repositories/installment_details_repo.dart';
@@ -12,6 +15,7 @@ import 'package:fourtyninehub/features/installment_feature/installment_list/pres
 
 import 'package:get_it/get_it.dart';
 
+import '../features/installment_feature/create_installment/data/repositories/create_installment_repo_impl.dart';
 import '../features/installment_feature/installment_details/data/repositories/installment_details_repo_impl.dart';
 import '../features/installment_feature/installment_list/data/repositories/installment_list_repo_impl.dart';
 
@@ -25,16 +29,25 @@ class InstallmentServiceLocator {
         () => InstallmentDetailsRemoteDataSourceImpl(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<CreateInstallmentRemoteDataSource>(
+        () => CreateInstallmentRemoteDataSourceImpl(
+              serviceLocator(),
+            ));
     serviceLocator.registerLazySingleton<InstallmentListRepo>(
         () => InstallmentListRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<InstallmentDetailsRepo>(
         () => InstallmentDetailsRepoImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<CreateInstallmentRepo>(
+        () => CreateInstallmentRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<GetInstallmentListUseCase>(
         () => GetInstallmentListUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetInstallmentDetailsUseCase>(
         () => GetInstallmentDetailsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<BuyWithInstallmentUseCase>(
         () => BuyWithInstallmentUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<CreateInstallmentUseCase>(
+        () => CreateInstallmentUseCase(serviceLocator()));
+
     serviceLocator
         .registerFactory<InstallmentListCubit>(() => InstallmentListCubit(
               serviceLocator(),
@@ -44,8 +57,10 @@ class InstallmentServiceLocator {
         .registerFactory<InstallmentDetailsCubit>(() => InstallmentDetailsCubit(
               serviceLocator(),
               serviceLocator(),
-            )..loadData());
-    serviceLocator.registerFactory<CreateInstallmentCubit>(
-        () => CreateInstallmentCubit());
+            ));
+    serviceLocator
+        .registerFactory<CreateInstallmentCubit>(() => CreateInstallmentCubit(
+              serviceLocator(),
+            ));
   }
 }

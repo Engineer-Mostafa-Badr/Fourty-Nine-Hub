@@ -64,4 +64,8 @@ abstract class Labels {
   static const balanceWallet = 'Balance';
   static const giftWallet = 'Gift';
   static const adDetails = 'AD Details';
+  static const endAuction = 'End Auction';
+  static const addPlan = 'Add Plan';
+  static const edit = 'Edit';
+  static const delete = 'Delete';
 }

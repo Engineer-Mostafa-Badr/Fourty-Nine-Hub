@@ -53,6 +53,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/Chat_view.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
@@ -431,7 +432,9 @@ class AppPages {
         GoRoute(
           path: Paths.INSTAGRAM,
           name: Routes.INSTAGRAM,
-          builder: (context, state) => const InstagramView(),
+          builder: (context, state) => BlocProvider<InstagramCubit>(create: (_)=>serviceLocator(), 
+          child: const InstagramView(),
+          ),
         ),
         GoRoute(
             path: Paths.SOCIAL,
@@ -521,7 +524,7 @@ class AppPages {
                 name: Routes.MAZADDETAILS,
                 builder: (context, state) => BlocProvider<AuctionDetailsCubit>(
                   create: (_) => serviceLocator(),
-                  child:  MazadDetails(id: state.extra as String),
+                  child: MazadDetails(id: state.extra as String),
                 ),
               ),
               // CreateAuctionView
@@ -790,7 +793,9 @@ class AppPages {
                 builder: (context, state) =>
                     BlocProvider<InstallmentDetailsCubit>(
                         create: (_) => serviceLocator(),
-                        child: const InstallmentsDetails()),
+                        child: InstallmentsDetails(
+                          installmentId: state.extra as String,
+                        )),
               ),
               // CreateInstallmentView
               GoRoute(
@@ -799,7 +804,9 @@ class AppPages {
                 builder: (context, state) =>
                     BlocProvider<CreateInstallmentCubit>(
                         create: (_) => serviceLocator(),
-                        child: const CreateInstallmentView()),
+                        child: CreateInstallmentView(
+                          adId: state.extra as String,
+                        )),
               ),
               GoRoute(
                 path: Paths.INSTALLMENTORDERDETAILS,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -16,18 +17,8 @@ class MyAccountView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SocialPostsCubit, SocialPostsState>(
-      listener: (context, state) {
-        if (state.status == StateStatus.error) {
-          showErrorMessage(
-            context,
-            getFailureMessage(
-              state.failure!,
-              context,
-            ),
-          );
-        }
-      },
+    return BlocConsumer<InstagramCubit, InstagramState>(
+      listener: (context, state) {},
       builder: (context, state) {
         return DefaultTabController(
           length: 3,
@@ -136,8 +127,7 @@ class MyAccountView extends StatelessWidget {
                   child: Row(
                     children: [
                       _buildAccountCounterItem(label: 'posts', value: '34'),
-                      _buildAccountCounterItem(
-                          label: 'follower', value: '169'),
+                      _buildAccountCounterItem(label: 'follower', value: '169'),
                       _buildAccountCounterItem(label: 'Friend', value: '366'),
                       _buildAccountCounterItem(label: 'View', value: '10K'),
                     ],

@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/fourty_nine/data/models/parent_main_categ
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/parent_main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
 
+import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../res/assets/jsons.dart';
 import '../../models/slider_item_model.dart';
 
@@ -18,7 +19,9 @@ abstract class FourtyNineRemoteDataSource {
   Future<Either<Failure, List<ParentMainCategoryEntity>>>
       getParentMainCategories();
 
-  Future<Either<Failure, List<MainCategoryModel>>> getMainCategories();
+  Future<Either<Failure, List<MainCategoryModel>>> getMainCategories({
+    required PaginationParams params
+  });
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems();
 }
 
@@ -34,14 +37,17 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
     final response = await _apiConsumer.get(EndPoints.getParentMainCategories);
     return response.fold(
         (failure) => Left(failure),
-        (response) => Right((response['data']['parentCategories'] as List)
+        (response) => Right((response['data']['categories'] as List)
             .map((e) => ParentMainCategoryModel.fromJson(e))
             .toList()));
   }
 
   @override
-  Future<Either<Failure, List<MainCategoryModel>>> getMainCategories() async {
-    final result = await _apiConsumer.get(EndPoints.getMainCategories);
+  Future<Either<Failure, List<MainCategoryModel>>> getMainCategories(
+  {
+  required PaginationParams params
+  }) async {
+    final result = await _apiConsumer.get(EndPoints.getMainCategories, queryParameters: params.toJson());
     return result.fold(
       (failure) => Left(failure),
       (response) => Right((response['data']['categories'] as List)

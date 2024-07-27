@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -22,7 +23,10 @@ class InstallmentAdCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () => context.push(Routes.INSTALLMENTDETAILS),
+        onTap: () {
+          print(item.id);
+          context.push(Routes.INSTALLMENTDETAILS, extra: item.id);
+        },
         child: isVertical
             ? _buildVerticalView(context: context)
             : _buildHorizontalView(context: context));
@@ -34,9 +38,12 @@ class InstallmentAdCard extends StatelessWidget {
       children: [
         Expanded(
             child: SquareImage(
-                width: double.infinity,
-                radius: 10,
-                source: NetworkImage(item.ad.images.first))),
+          width: double.infinity,
+          radius: 10,
+          url: item.ad?.images.isEmpty ?? false
+              ? UIConst.imagePlaceHolder
+              : item.ad?.images.first,
+        )),
         const Sizer(),
         Expanded(
           flex: 2,
@@ -47,32 +54,33 @@ class InstallmentAdCard extends StatelessWidget {
                 children: [
                   Expanded(
                       child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Label(
-                        text: item.ad.title,
+                        text: item.ad?.title ?? '',
                         style: Styles.mediumText(fontWeight: FontWeight.bold),
                         maxLines: 1,
                       ),
                       Label(
-                        text: item.ad.description,
+                        text: item.ad?.description ?? '',
                         style: Styles.mediumText(),
                         maxLines: 2,
                       ),
                     ],
                   )),
                   const Sizer(),
-                  IconAppButton(
-                      size: 20, icon: Icons.favorite_border, onPressed: () {}),
+                  // IconAppButton(
+                  //     size: 20, icon: Icons.favorite_border, onPressed: () {}),
                 ],
               ),
               Label(
-                text: item.ad.address?.address??'',
+                text: item.ad?.address?.address ?? '',
                 style: Styles.mediumText(),
                 maxLines: 1,
               ),
               Label(
                 text:
-                    '${NumbersHelper.formatThousands(number: item.ad.price)} ${Labels.currency}',
+                    '${NumbersHelper.formatThousands(number: item.ad?.price ?? 0)} ${Labels.currency}',
                 style: Styles.mediumText(
                     fontWeight: FontWeight.bold,
                     color: AppColors.SECONDARY_COLOR),
@@ -101,13 +109,15 @@ class InstallmentAdCard extends StatelessWidget {
             child: SquareImage(
                 width: double.infinity,
                 radius: 10,
-                source: NetworkImage(item.ad.images.first))),
+                url: item.ad?.images.isEmpty ?? true
+                    ? UIConst.imagePlaceHolder
+                    : item.ad!.images.first)),
         Row(
           children: [
             Expanded(
               child: Label(
                 text:
-                    '${NumbersHelper.formatThousands(number: item.ad.price)} ${Labels.currency}',
+                    '${NumbersHelper.formatThousands(number: item.ad?.price ?? 0)} ${Labels.currency}',
                 style: Styles.mediumText(
                     fontWeight: FontWeight.bold,
                     color: AppColors.SECONDARY_COLOR),
@@ -115,17 +125,17 @@ class InstallmentAdCard extends StatelessWidget {
               ),
             ),
             const Sizer(),
-            IconAppButton(
-                size: 20, icon: Icons.favorite_border, onPressed: () {}),
+            // IconAppButton(
+            //     size: 20, icon: Icons.favorite_border, onPressed: () {}),
           ],
         ),
         Label(
-          text: item.ad.title,
+          text: item.ad?.title ?? '',
           style: Styles.mediumText(fontWeight: FontWeight.bold),
           maxLines: 1,
         ),
         Label(
-          text: item.ad.description,
+          text: item.ad?.description ?? '',
           style: Styles.mediumText(),
           maxLines: 2,
         ),

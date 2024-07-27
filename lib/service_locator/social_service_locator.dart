@@ -23,6 +23,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:get_it/get_it.dart';
 import '../features/social_media/create_post/data/repositories/create_post_repo_impl.dart';
+import '../features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import '../features/social_media/social_posts/data/repositories/social_posts_repo_impl.dart';
 import '../features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import '../features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
@@ -77,6 +78,8 @@ class SocialServiceLocator {
           serviceLocator(),
           serviceLocator(),
         )..loadData());
+
+    serviceLocator.registerFactory<InstagramCubit>(() => InstagramCubit());
     serviceLocator.registerFactory<SocialPostsCubit>(() => SocialPostsCubit(
           serviceLocator(),
           serviceLocator(),

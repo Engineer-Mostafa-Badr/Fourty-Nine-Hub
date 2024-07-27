@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import '../../../../../common/functions/helper/numbers_helper.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/stateless/buttons/text_button.dart';
@@ -58,7 +59,7 @@ class DetailsCounterWidget extends StatelessWidget {
                               child: CircleAvatar(
                                 radius: 12,
                                 backgroundColor: Colors.white,
-                                backgroundImage: NetworkImage(e.user.image),
+                                backgroundImage: NetworkImage(e.user.profilePicture?? UIConst.profilePlaceHolder),
                               ),
                             );
                           }).toList() ??

@@ -161,6 +161,10 @@ class EndPoints {
   static const myAds = '/ads/allMyAds';
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const favouriteAds = '/ads-favourites/allFavouriteAds';
+  static String deleteAd(String id) {
+    return '/ads/deleteAd/$id';
+  }
+
   static String subCategoryAds(String id) {
     return '/ads/subCategoryAds/$id';
   }
@@ -170,18 +174,54 @@ class EndPoints {
   }
 
   static const auctionsList = '/auction';
-  static String auctionDetails (String id){
-    return  '/auction/$id';
+  static const myAuctions = '/auction/my-auction';
+  static String auctionDetails(String id) {
+    return '/auction/$id';
+  }
+  static String getAuctionRequests(String id){
+    return '/auction/all-auction-request/$id';
+  }
+
+  static String sendAuctionRequest(String id) {
+    return '/auction/add-auction-request/$id';
+  }
+
+  static String followUserAuctions(String userId) {
+    return '/auction/follow-user-auction/$userId';
+  }
+
+  static String getAllAuctionRequests(String id) {
+    return '/auction/all-auction-request/$id';
+  }
+
+  static String endAuction(String id) {
+    return '/auction/end-auction/$id';
   }
 
   static String adDetails(String id) {
     return '/ads/getAd/$id';
   }
 
+  // /installment
+  static String installment = '/installment';
+  // static String installment = '/installment';
+  static String createInstallment(String id) {
+    return '/installment/$id';
+  }
+
+  static String installmentDetails(String id) {
+    return '/installment/$id';
+  }
+
+  static String addInstallmentRequest(String id) {
+    return '/installment/add-installments-request/$id';
+  }
+
   static String addToCart = '/food/addToCart';
   static String getCart = '/food/getCart';
   static String deleteFromCart = '/food/deleteFromCart';
   static String placeOrder = '/food/make-order';
+
   // contact us
   static const helpMessages = '/help';
   static String mediaUrl = '/media/signed-url';
