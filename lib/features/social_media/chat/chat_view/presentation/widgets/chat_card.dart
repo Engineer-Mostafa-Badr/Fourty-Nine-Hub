@@ -68,7 +68,7 @@ class ChatCard extends StatelessWidget {
                             ? const Icon(
                                 FontAwesomeIcons.checkDouble,
                                 color: AppColors.PRIMARY_COLOR,
-                                size: 10,
+                                size: 14,
                               )
                             : const SizedBox(),
                         Expanded(
@@ -86,7 +86,7 @@ class ChatCard extends StatelessWidget {
                             ? const Icon(
                                 Icons.volume_off,
                                 color: Colors.grey,
-                                size: 14,
+                                size: 17,
                               )
                             : const SizedBox(),
                       ],
@@ -104,12 +104,12 @@ class ChatCard extends StatelessWidget {
                   children: [
                     Label(
                         text: '${chatItemModel?.lastSeenCount}',
-                        style: Styles.smallText(color: Colors.grey)),
-                    const Sizer(),
+                        style: Styles.mediumText(color: Colors.grey)),
+                    const SizedBox(height: 15,width: 10,),
                     const Icon(
                       FontAwesomeIcons.eye,
                       color: Colors.grey,
-                      size: 10,
+                      size: 14,
                     ),
                   ],
                 )

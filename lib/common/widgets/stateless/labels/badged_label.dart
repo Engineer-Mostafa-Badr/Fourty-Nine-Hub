@@ -12,6 +12,7 @@ class BadgedLabel extends StatelessWidget {
   final double? height, width, margin;
   final Function? onTap;
   final bool isBordered;
+  final bool isCentered;
 
   const BadgedLabel(
       {super.key,
@@ -24,6 +25,7 @@ class BadgedLabel extends StatelessWidget {
       this.margin,
       this.radius = 10,
       this.isBordered = false,
+      this.isCentered = false,
       this.textColor = Colors.white});
 
   @override
@@ -35,20 +37,27 @@ class BadgedLabel extends StatelessWidget {
         }
       },
       child: Container(
-        height: height,
-        width: width,
-        margin: EdgeInsets.all(margin ?? 0),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-        decoration: BoxDecoration(
-            color:isBordered ?Colors.white: color,
-            border: isBordered ? Border.all(color: color, width: .5) : null,
-            borderRadius: BorderRadius.circular(radius)),
-        child: Label(
-          text: label,
-          style: style ?? Styles.mediumText(color: textColor),
-          textAlign: TextAlign.center,
-        ),
-      ),
+          height: height,
+          width: width,
+          margin: EdgeInsets.all(margin ?? 0),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+          decoration: BoxDecoration(
+              color: isBordered ? Colors.white : color,
+              border: isBordered ? Border.all(color: color, width: .5) : null,
+              borderRadius: BorderRadius.circular(radius)),
+          child: isCentered
+              ? Center(
+                  child: _buildLabelWidget(),
+                )
+              : _buildLabelWidget()),
+    );
+  }
+
+  Widget _buildLabelWidget() {
+    return Label(
+      text: label,
+      style: style ?? Styles.mediumText(color: textColor),
+      textAlign: TextAlign.center,
     );
   }
 }

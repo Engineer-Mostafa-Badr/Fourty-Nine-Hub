@@ -83,7 +83,9 @@ class EndPoints {
   // social
 
   static const createFacebookPost = '/facebook/post';
+  static const createTwitterPost = '/twitter/post';
   static const getFeedPosts = '/facebook/feed';
+  static const getTwitterFeedPosts = '/twitter/feed';
   static String userPosts(String userId) {
     return '/facebook/post/user/$userId?limit=20&page=1&type=1';
   }
@@ -132,12 +134,35 @@ class EndPoints {
     return '/facebook/post/react/$postId';
   }
 
+  static String reactOnTwitterPost(String postId) {
+    return '/twitter/post/react/$postId';
+  }
+
+  static String reactOnTwitterComment(String commentId) {
+    return '/twitter/comment/react/$commentId';
+  }
+
+  static String shareTwitterPost(String postId) {
+    return '/twitter/post/share/$postId';
+  }
+
   static String commentOnPost(String postId) {
     return '/facebook/comment/create-comment/$postId';
   }
+  static String commentOnTwitterPost(String postId) {
+      return '/twitter/comment/create-comment/$postId';
+    }
 
   static String getPostComments(String postId) {
     return '/facebook/comment/get-post-comments/$postId';
+  }
+
+  static String getTwitterPostComments(String postId) {
+    return '/twitter/comment/get-post-comments/$postId';
+  }
+
+  static String getTwitterCommentReplies(String commentId) {
+    return '/twitter/comment/get-comment-replies/$commentId';
   }
 
   static String deletePost(String postId) {
@@ -169,6 +194,10 @@ class EndPoints {
   static const myAds = '/ads/allMyAds';
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const favouriteAds = '/ads-favourites/allFavouriteAds';
+  static String deleteAd(String id) {
+    return '/ads/deleteAd/$id';
+  }
+
   static String subCategoryAds(String id) {
     return '/ads/subCategoryAds/$id';
   }
@@ -178,18 +207,54 @@ class EndPoints {
   }
 
   static const auctionsList = '/auction';
-  static String auctionDetails (String id){
-    return  '/auction/$id';
+  static const myAuctions = '/auction/my-auction';
+  static String auctionDetails(String id) {
+    return '/auction/$id';
+  }
+  static String getAuctionRequests(String id){
+    return '/auction/all-auction-request/$id';
+  }
+
+  static String sendAuctionRequest(String id) {
+    return '/auction/add-auction-request/$id';
+  }
+
+  static String followUserAuctions(String userId) {
+    return '/auction/follow-user-auction/$userId';
+  }
+
+  static String getAllAuctionRequests(String id) {
+    return '/auction/all-auction-request/$id';
+  }
+
+  static String endAuction(String id) {
+    return '/auction/end-auction/$id';
   }
 
   static String adDetails(String id) {
     return '/ads/getAd/$id';
   }
 
+  // /installment
+  static String installment = '/installment';
+  // static String installment = '/installment';
+  static String createInstallment(String id) {
+    return '/installment/$id';
+  }
+
+  static String installmentDetails(String id) {
+    return '/installment/$id';
+  }
+
+  static String addInstallmentRequest(String id) {
+    return '/installment/add-installments-request/$id';
+  }
+
   static String addToCart = '/food/addToCart';
   static String getCart = '/food/getCart';
   static String deleteFromCart = '/food/deleteFromCart';
   static String placeOrder = '/food/make-order';
+
   // contact us
   static const helpMessages = '/help';
   static String mediaUrl = '/media/signed-url';
@@ -204,5 +269,9 @@ class EndPoints {
   }
   static String changeChatMuteState(String chatId) {
     return '/chat/mute-chat/$chatId';
+  }
+
+  static String changeChatToArchiveOrNormal(String chatId) {
+    return '/chat/archive-chat/$chatId';
   }
 }

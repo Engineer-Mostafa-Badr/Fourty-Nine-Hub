@@ -8,23 +8,27 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/get_token
 import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
 
 import '../../../domain/use_cases/get_user_use_case.dart';
+import '../../../domain/use_cases/sign_out_usecase.dart';
 
 class UserCubit extends Cubit<BasicState<UserEntity>> {
   final GetUserUseCase _getUserUseCase;
   final GetTokensUseCase _getTokensUseCase;
   final SaveTokensUseCase _saveTokensUseCase;
   final AttachTokenUseCase _attachTokenUseCase;
-
+  final SignOutUseCase _signOutUseCase;
   bool _isTokenAttached = false;
 
-  UserCubit(
-    this._getUserUseCase,
-    this._getTokensUseCase,
-    this._attachTokenUseCase,
-    this._saveTokensUseCase,
-  ) : super(const BasicState());
+  UserCubit(this._getUserUseCase, this._getTokensUseCase,
+      this._attachTokenUseCase, this._saveTokensUseCase, this._signOutUseCase)
+      : super(const BasicState());
 
   bool get isLoggedIn => state.data != null;
+  bool isSameAccount(String anotherId) {
+    if (isLoggedIn) {
+      return state.data?.id == anotherId;
+    }
+    return false;
+  }
 
   Future<void> getUser() async {
     if (!_isTokenAttached) return;
@@ -56,10 +60,12 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     );
   }
 
-  void logout() {
+  void logout() async {
     _attachTokenUseCase(null);
     _saveTokensUseCase(null);
     _isTokenAttached = false;
+    await _signOutUseCase(const NoParams());
+
     emit(const BasicState());
   }
 }

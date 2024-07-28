@@ -10,6 +10,8 @@ abstract class SocketServiceContract {
 
   initSocketConnection(String userToken);
 
+  joinRoom(String chatId);
+
   sendMessage({required String message, required String chatId});
 
   // listen to new message
@@ -37,11 +39,6 @@ class SocketServiceImplementation extends SocketServiceContract {
       socket.connect();
 
       socket.onConnect((_) {
-        debugPrint('Connect to Socket successfully');
-        var jsonString = json.encode({"chatId": "669cfa3626193cb9dde709f7"});
-
-        socket.emit("Chat:joinRoom", jsonString);
-
         // to receive new messages
         socket.on('user:message', (data) {
           debugPrint("Delivered ${data}");
@@ -56,13 +53,10 @@ class SocketServiceImplementation extends SocketServiceContract {
             debugPrint(
                 "socketMessageModel ${socketMessageModel.messageItem?.text}");
           } catch (e) {
-            debugPrint(
-                "socketMessageModelerrrrrrrroooooe ${e}");
+            debugPrint("socketMessageModelerrrrrrrroooooe ${e}");
           }
           debugPrint(
               "socketMessageModel ${socketMessageModel.messageItem?.text}");
-
-
         });
 
         socket.on('messageTyping', (data) {
@@ -107,4 +101,12 @@ class SocketServiceImplementation extends SocketServiceContract {
   @override
   Stream<SocketMessageModel> get socketMessageStream =>
       _socketMessageStream.stream;
+
+  @override
+  joinRoom(String chatId) {
+    debugPrint('Connect to Socket successfully');
+    var jsonString = json.encode({"chatId": chatId});
+
+    socket.emit("Chat:joinRoom", jsonString);
+  }
 }

@@ -18,7 +18,7 @@ class Validator {
   String? validatePassword(String? password) {
     if (password == null || password.isEmpty) {
       return "Empty Field Not Valid";
-    } else if (password.length < 8) {
+    } else if (password.isEmpty) {
       return "Invalid Password Less Than 8 Characters";
     }
     return null;

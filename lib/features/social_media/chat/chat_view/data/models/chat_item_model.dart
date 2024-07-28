@@ -5,14 +5,23 @@ class ChatItemModel {
   String? avatar;
   bool? muted;
   bool? seen;
+  bool? archived;
   int? lastSeenCount;
 
   ChatItemModel(
-      {this.sId, this.lastMessageText, this.name,this.avatar, this.lastSeenCount});
+      {this.sId,
+      this.lastMessageText,
+      this.muted,
+      this.archived,
+      this.seen,
+      this.name,
+      this.avatar,
+      this.lastSeenCount});
 
   ChatItemModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     muted = json['muted'];
+    archived = json['archived'];
     seen = json['seen'];
     name = json['name'];
     avatar = json['avatar'];

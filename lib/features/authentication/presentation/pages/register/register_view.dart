@@ -13,6 +13,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
+
 import '../../../../../common/widgets/form/text_fields/password_text_form_field.dart';
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -23,10 +24,14 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../controllers/user_cubit/user_cubit.dart';
 
-
-class RegisterView extends StatelessWidget {
+class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
+  @override
+  State<RegisterView> createState() => _RegisterViewState();
+}
+
+class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     final registerCubit = context.read<RegisterCubit>();
@@ -94,8 +99,6 @@ class RegisterView extends StatelessWidget {
                   PasswordTextFormField(
                     currentFocusNode: registerCubit.passwordFocusNode,
                     currentController: registerCubit.passwordTextController,
-                    nextFocusNode: registerCubit.confirmPasswordFocusNode,
-                    hint: 'Password',
                   ),
                   const Sizer(),
                   ConfirmPasswordTextFormField(
@@ -105,53 +108,49 @@ class RegisterView extends StatelessWidget {
                     passwordController: registerCubit.passwordTextController,
                   ),
                   const Sizer(),
-                  StatefulBuilder(
-                    builder: (context, setState) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Gender : ', style: Styles.headerText(fontSize: 14)),
+                      Row(
                         children: [
-                          Text('Gender : ',
-                              style: Styles.headerText(fontSize: 14)),
-                          Row(
-                            children: [
-                              Expanded(
-                                  child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          registerCubit.isMale = true;
-                                        });
-                                      },
-                                      child: BadgedLabel(
-                                          color: registerCubit.isMale
-                                              ? AppColors.PRIMARY_COLOR
-                                              : Colors.white,
-                                          textColor: registerCubit.isMale
-                                              ? Colors.white
-                                              : Colors.black,
-                                          label: 'Male'))),
-                              Expanded(
-                                child: InkWell(
+                          Expanded(
+                              child: BadgedLabel(
                                   onTap: () {
-                                    setState(() {
-                                      registerCubit.isMale = false;
-                                    });
+                                    registerCubit.isMale = true;
+
+                                    setState(() {});
                                   },
-                                  child: BadgedLabel(
-                                    textColor: registerCubit.isMale
-                                        ? Colors.black
-                                        : Colors.white,
-                                    color: registerCubit.isMale
-                                        ? Colors.white
-                                        : AppColors.PRIMARY_COLOR,
-                                    label: 'Female',
-                                  ),
-                                ),
-                              ),
-                            ],
+                                  height: kToolbarHeight * .7,
+                                  isCentered: true,
+                                  color: registerCubit.isMale
+                                      ? AppColors.PRIMARY_COLOR
+                                      : Colors.white,
+                                  textColor: registerCubit.isMale
+                                      ? Colors.white
+                                      : Colors.black,
+                                  label: 'Male')),
+                          Expanded(
+                            child: BadgedLabel(
+                              onTap: () {
+                                registerCubit.isMale = false;
+
+                                setState(() {});
+                              },
+                              height: kToolbarHeight * .7,
+                              isCentered: true,
+                              textColor: registerCubit.isMale
+                                  ? Colors.black
+                                  : Colors.white,
+                              color: registerCubit.isMale
+                                  ? Colors.white
+                                  : AppColors.PRIMARY_COLOR,
+                              label: 'Female',
+                            ),
                           ),
                         ],
-                      );
-                    },
+                      ),
+                    ],
                   ),
                   const Sizer(height: 30),
                   DefaultButton(
@@ -195,7 +194,7 @@ class RegisterView extends StatelessWidget {
                       children: [
                         TextSpan(
                           text: "Does have account? ",
-                          style: Styles.mediumText(
+                          style: Styles.headerText(
                             color: Colors.grey,
                           ),
                         ),
@@ -203,7 +202,7 @@ class RegisterView extends StatelessWidget {
                           text: "Login",
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => context.push(Routes.LOGIN),
-                          style: Styles.mediumText(
+                          style: Styles.headerText(
                             color: Colors.black,
                           ),
                         ),

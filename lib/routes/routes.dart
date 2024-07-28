@@ -1,3 +1,4 @@
+
 abstract class Routes {
   Routes._();
 
@@ -19,6 +20,7 @@ abstract class Routes {
   static const REELS = '/Social/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
   static const TWITTER = '/Social/Twitter';
+  static const TWITTERPOSTDETAILS = 'TwitterPostDetails';
   static const CREATEPOST = '/Social/CreatePost';
 
   static const Tinder = '/Social/Tinder';
@@ -68,6 +70,8 @@ abstract class Routes {
   static const INSTAGRAM = '/Instagram';
   static const ZOOM = '/Zoom';
   static const MEETINGROOM = '/Zoom/MeetingRoom';
+  static const CALLSCREEN = '/Zoom/CallScreen';
+  static const JOINSCREEN = '/Zoom/JoinScreen';
   static const INSTALLMENT = '/Installment';
   static const CREATEINSTALLMENT = '/Installment/CreateInstallment';
   static const INSTALLMENTDETAILS = '/Installment/Installment-details';
@@ -122,6 +126,7 @@ abstract class Paths {
   static const REELS = 'Reels';
   static const MUSICREELS = 'MUSICREELS';
   static const TWITTER = 'Twitter';
+  static const TWITTERPOSTDETAILS = 'TwitterPostDetails';
   static const CREATEPOST = 'CreatePost';
   static const TINDER = 'Tinder';
   static const LIVE = 'Live';
@@ -155,6 +160,8 @@ abstract class Paths {
   static const PLAYVIDEO = 'PlayVideo';
   static const ZOOM = 'Zoom';
   static const MEETINGROOM = 'MeetingRoom';
+  static const CALLSCREEN = 'CallScreen';
+  static const JOINSCREEN = 'joinScreen';
   static const INSTALLMENT = 'Installment';
   static const CREATEINSTALLMENT = 'CreateInstallment';
   static const INSTALLMENTDETAILS = 'Installment-details';

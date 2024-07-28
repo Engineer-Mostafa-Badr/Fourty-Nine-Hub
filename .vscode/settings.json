@@ -89,4 +89,9 @@
         "withfirstproductpicture"
     ],
     "dart.flutterSdkPath": "~/Desktop/flutterSDK3.19.6/flutter",
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#452708",
+        "titleBar.activeBackground": "#60360C",
+        "titleBar.activeForeground": "#FEFAF6"
+    },
 }

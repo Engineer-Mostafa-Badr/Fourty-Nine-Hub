@@ -1,5 +1,5 @@
 class AddressEntity {
- final int id;
+ final String id;
  final  List<double> coordinates;
  final  String address;
   final String street;

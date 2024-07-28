@@ -6,12 +6,12 @@ import '../../../../../core/error/failure.dart';
 
 
 class FollowUsersAuctionUseCase
-    extends UseCase<bool, int> {
+    extends UseCase<bool, String> {
   final AuctionDetailsRepo _repo;
   FollowUsersAuctionUseCase(this._repo);
 
   @override
-  Future<Either<Failure, bool>> call(int params) {
+  Future<Either<Failure, bool>> call(String params) {
     return _repo.followUserAuctions(userId: params);
   }
 }

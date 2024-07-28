@@ -54,12 +54,15 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/Chat_view.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:go_router/go_router.dart';
@@ -431,7 +434,9 @@ class AppPages {
         GoRoute(
           path: Paths.INSTAGRAM,
           name: Routes.INSTAGRAM,
-          builder: (context, state) => const InstagramView(),
+          builder: (context, state) => BlocProvider<InstagramCubit>(create: (_)=>serviceLocator(), 
+          child: const InstagramView(),
+          ),
         ),
         GoRoute(
             path: Paths.SOCIAL,
@@ -450,15 +455,22 @@ class AppPages {
               GoRoute(
                   path: Paths.CREATEPOST,
                   name: Routes.CREATEPOST,
-                  builder: (context, state) => BlocProvider<CreatePostCubit>(
+                  builder: (context, state) {
+                    final social = state.extra as String?;
+
+                    return BlocProvider<CreatePostCubit>(
                         create: (_) => serviceLocator(),
-                        child: const CreatePostView(),
-                      )),
+                        child: CreatePostView(social: social??'social',),
+                      );
+                  },
+              ),
 
               GoRoute(
                   path: Paths.TWITTER,
                   name: Routes.TWITTER,
-                  builder: (context, state) => const TwitterView()),
+                  builder: (context, state) => BlocProvider<TwitterCubit>(
+                      create: (_)=>serviceLocator(),
+                      child: const TwitterView())),
               GoRoute(
                 path: Paths.OTHERSACCOUNT,
                 name: Routes.OTHERSACCOUNT,
@@ -755,14 +767,14 @@ class AppPages {
         GoRoute(
             path: Paths.ZOOM,
             name: Routes.ZOOM,
-            builder: (context, state) => const ZoomView(),
+            builder: (context, state) => ZoomView(),
             routes: [
               // PlayVideo
               GoRoute(
                 path: Paths.MEETINGROOM,
                 name: Routes.MEETINGROOM,
                 builder: (context, state) => const MeetingRoom(),
-              )
+              ),
             ]),
         GoRoute(
             path: Paths.INSTALLMENT,
@@ -777,7 +789,9 @@ class AppPages {
                 builder: (context, state) =>
                     BlocProvider<InstallmentDetailsCubit>(
                         create: (_) => serviceLocator(),
-                        child: const InstallmentsDetails()),
+                        child: InstallmentsDetails(
+                          installmentId: state.extra as String,
+                        )),
               ),
               // CreateInstallmentView
               GoRoute(
@@ -786,7 +800,9 @@ class AppPages {
                 builder: (context, state) =>
                     BlocProvider<CreateInstallmentCubit>(
                         create: (_) => serviceLocator(),
-                        child: const CreateInstallmentView()),
+                        child: CreateInstallmentView(
+                          adId: state.extra as String,
+                        )),
               ),
               GoRoute(
                 path: Paths.INSTALLMENTORDERDETAILS,

@@ -1,9 +1,10 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
 
 import '../../domain/entities/activity_entity.dart';
 import '../../domain/entities/feeling_entity.dart';
@@ -15,12 +16,16 @@ part 'create_post_state.dart';
 
 class CreatePostCubit extends Cubit<CreatePostState> {
   final CreatePostUseCase _createPostUseCase;
+  final CreateTwitterPostUseCase _createTwitterPostUseCase;
   final GetActivitiesUseCase _getActivitiesUseCase;
   final GetFeelingsUseCase _getFeelingsUseCase;
   final postContentTextController = TextEditingController();
   CreatePostCubit(this._createPostUseCase, this._getActivitiesUseCase,
-      this._getFeelingsUseCase)
+      this._getFeelingsUseCase, this._createTwitterPostUseCase)
       : super(const CreatePostState());
+
+
+  UploadFileEntity? fileEntity;
 
   void loadData() async {
     await getActivities();
@@ -41,8 +46,8 @@ class CreatePostCubit extends Cubit<CreatePostState> {
 
   void createPost({required BuildContext context}) async {
     if (postContentTextController.text.isNotEmpty) {
-      final response = await _createPostUseCase(
-          PostParams(content: postContentTextController.text));
+      final response = await _createTwitterPostUseCase(
+          CreateTwitterPostParams(content: postContentTextController.text));
       response.fold(
           (l) =>
               emit(state.copyWith(failure: l, status: CreatePostStates.error)),
