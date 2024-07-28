@@ -29,4 +29,14 @@ class ChatsRepositoryImplementation extends ChatsRepository {
   Future<Either<Failure, bool>> changeChatToArchiveNormal(String chatId) {
     return _chatsRemoteDataSource.changeChatToArchiveOrToNormal(chatId: chatId);
   }
+
+  @override
+  Future<Either<Failure, bool>> lockChat(String chatId) {
+    return _chatsRemoteDataSource.lockChat(chatId: chatId);
+  }
+
+  @override
+  Future<Either<Failure, bool>> unLockChat(String chatId) {
+    return _chatsRemoteDataSource.unLockChat(chatId: chatId);
+  }
 }

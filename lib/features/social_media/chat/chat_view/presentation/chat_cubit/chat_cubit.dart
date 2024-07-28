@@ -9,17 +9,22 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatToArchiveNormal_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/chats_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getChats_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unlock_chat_usecase.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 part 'chats_state.dart';
 
 class ChatsCubit extends Cubit<ChatsState> {
+  final SocketServiceContract _socketService;
   final GetTokensUseCase _getTokensUseCase;
   final GetChatsUseCase _getChatsUseCase;
   final ChangeChatMuteStateUseCase _changeChatMuteStateUseCase;
   final ChangeChatToArchiveOrNormalUseCase _changeChatToArchiveOrNormalUseCase;
-  final SocketServiceContract _socketService;
+  final LockChatUseCase _lockChatUseCase;
+  final UnLockChatUseCase _unLockChatUseCase;
+
   String? userToken;
   late Socket socket;
   late int selectedTabIndex;
@@ -32,6 +37,8 @@ class ChatsCubit extends Cubit<ChatsState> {
     this._socketService,
     this._changeChatMuteStateUseCase,
     this._changeChatToArchiveOrNormalUseCase,
+    this._lockChatUseCase,
+    this._unLockChatUseCase,
   ) : super(const ChatsState());
 
   initSocketConnection() async {
@@ -130,6 +137,26 @@ class ChatsCubit extends Cubit<ChatsState> {
     } else {
       return ChatsRequestParams();
     }
+  }
+
+  lockChat(String chatId) async {
+    final response = await _lockChatUseCase.call(chatId);
+    response.fold((failure) {
+      return emit
+          .call(state.copyWith(failure: failure, status: ChatsStates.error));
+    }, (data) {
+      getChats(selectedTabIndex);
+    });
+  }
+
+  unLockChat(String chatId) async {
+    final response = await _unLockChatUseCase.call(chatId);
+    response.fold(
+        (failure) => emit
+            .call(state.copyWith(failure: failure, status: ChatsStates.error)),
+        (data) {
+      getChats(selectedTabIndex);
+    });
   }
 
   @override

@@ -249,4 +249,12 @@ class EndPoints {
   static String changeChatToArchiveOrNormal(String chatId) {
     return '/chat/archive-chat/$chatId';
   }
+
+  static String lockChat(String chatId) {
+    return '/chat/lock-chat/$chatId';
+  }
+
+  static String unLockChat(String chatId) {
+    return '/chat/unlock-chat/$chatId';
+  }
 }

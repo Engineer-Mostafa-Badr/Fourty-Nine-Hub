@@ -20,6 +20,14 @@ abstract class ChatsRemoteDataSource {
   Future<Either<Failure, bool>> changeChatToArchiveOrToNormal({
     required String chatId,
   });
+
+  Future<Either<Failure, bool>> lockChat({
+    required String chatId,
+  });
+
+  Future<Either<Failure, bool>> unLockChat({
+    required String chatId,
+  });
 }
 
 class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
@@ -29,7 +37,10 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
 
   @override
   Future<Either<Failure, List<ChatItemModel>>> getChats(
-      {required String privacy, required String categoryId, required bool archived, required bool isLocked}) async {
+      {required String privacy,
+      required String categoryId,
+      required bool archived,
+      required bool isLocked}) async {
     var data = {
       "privacy": "normal",
       "categoryId": UIConst.chatNormalId,
@@ -54,10 +65,25 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> changeChatToArchiveOrToNormal({required String chatId}) async {
+  Future<Either<Failure, bool>> changeChatToArchiveOrToNormal(
+      {required String chatId}) async {
     final response =
         await _apiConsumer.put(EndPoints.changeChatToArchiveOrNormal(chatId));
     return response.fold(
-            (failure) => Left(failure), (data) => Right(data['status']));
+        (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> lockChat({required String chatId}) async {
+    final response = await _apiConsumer.put(EndPoints.lockChat(chatId));
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> unLockChat({required String chatId}) async {
+    final response = await _apiConsumer.put(EndPoints.unLockChat(chatId));
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
   }
 }

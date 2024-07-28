@@ -7,4 +7,6 @@ abstract class ChatsRepository {
   Future<Either<Failure, List<ChatItemModel>>> getChats(ChatsRequestParams chatsRequestParams);
   Future<Either<Failure, bool>> changeChatMuteState(String chatId);
   Future<Either<Failure, bool>> changeChatToArchiveNormal(String chatId);
+  Future<Either<Failure, bool>> lockChat(String chatId);
+  Future<Either<Failure, bool>> unLockChat(String chatId);
 }

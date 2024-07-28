@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
@@ -29,9 +28,15 @@ class MoreIconBottomSheet extends StatelessWidget {
           ),
           bottomSheetItem(
             context: context,
-            title: "Lock chat",
+            title: chatItemModel.locked! ? "Unlock chat": "Lock chat" ,
             icon: Icons.lock,
-            function: () {},
+            function: () {
+              if(chatItemModel.locked!){
+                chatsCubit.unLockChat(chatItemModel.sId!);
+              }else{
+                chatsCubit.lockChat(chatItemModel.sId!);
+              }
+            },
           ),
           bottomSheetItem(
             context: context,

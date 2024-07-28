@@ -9,6 +9,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/reposi
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatMuteState_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatToArchiveNormal_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getChats_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unlock_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/datasources/create_post_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/repositories/create_post_repo.dart';
@@ -106,6 +108,8 @@ class SocialServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
         ));
 
     serviceLocator.registerFactory<ChatRoomCubit>(() => ChatRoomCubit(
@@ -128,6 +132,15 @@ class SocialServiceLocator {
         () => ChangeChatToArchiveOrNormalUseCase(
               serviceLocator(),
             ));
+
+    serviceLocator
+        .registerLazySingleton<UnLockChatUseCase>(() => UnLockChatUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<LockChatUseCase>(() => LockChatUseCase(
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<ChatRoomRepository>(
         () => ChatRoomRepositoryImplementation(serviceLocator()));
