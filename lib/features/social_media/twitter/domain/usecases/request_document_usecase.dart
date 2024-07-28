@@ -7,13 +7,12 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/twitter_repo.dart';
 
-class TwitterPostCommentUseCase extends UseCase<TwitterPostCommentEntity, PostCommentParams> {
+class RequestDocumentUseCase extends UseCase<bool, List<String>> {
   final TwitterRepo _repo;
-  TwitterPostCommentUseCase(this._repo);
+  RequestDocumentUseCase(this._repo);
   @override
-  Future<Either<Failure, TwitterPostCommentEntity>> call(PostCommentParams params) async {
-    return await _repo.commentOnTwitterPost(params: params);
+  Future<Either<Failure, bool>> call(List<String> params) async {
+    return await _repo.requestDocument(params: params);
   }
 }
-
 

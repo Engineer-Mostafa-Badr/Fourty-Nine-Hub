@@ -10,6 +10,7 @@ class ElevatedAppButton extends StatelessWidget {
   final IconData? icon;
   final double? radius;
   final Color? backColor;
+  final TextStyle? textStyle;
 
   const ElevatedAppButton(
       {super.key,
@@ -17,7 +18,7 @@ class ElevatedAppButton extends StatelessWidget {
       required this.label,
       required this.onPressed,
       this.icon,
-      this.backColor = AppColors.PRIMARY_COLOR});
+      this.backColor = AppColors.PRIMARY_COLOR, this.textStyle});
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +36,10 @@ class ElevatedAppButton extends StatelessWidget {
                   color: Colors.white,
                 )),
                 TextSpan(
-                    text: label, style: Styles.mediumText(color: Colors.white))
+                    text: label, style: textStyle??Styles.mediumText(color: Colors.white))
               ]),
             )
-          : Label(text: label, style: Styles.mediumText(color: Colors.white)),
+          : Label(text: label, style: textStyle??Styles.mediumText(color: Colors.white)),
     );
   }
 }

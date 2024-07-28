@@ -42,4 +42,5 @@ abstract class Assets {
   static String scooter = 'assets/images/motorcycle.png';
   static String restaurant = 'assets/images/restaurant.png';
   static String doctor = 'assets/images/doctor.png';
+  static String metaVerified = 'assets/images/meta-verified.jpeg';
 }

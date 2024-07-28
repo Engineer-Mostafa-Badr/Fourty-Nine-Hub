@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
@@ -58,7 +60,9 @@ class CreatePostView extends StatelessWidget {
                   ),
                 ),
               const Sizer(),
-              Expanded(child: _buildCreatePost()),
+              _buildCreatePost(),
+              if (controller.fileEntity != null)
+                Expanded(child: _buildMediaCard()),
               const Sizer(),
               if (social != 'twitter') _buildColorsBallet(context: context),
               const Sizer(),
@@ -84,6 +88,25 @@ class CreatePostView extends StatelessWidget {
                 context.read<CreatePostCubit>().postContentTextController,
             decoration: const InputDecoration(hintText: 'Type Here ... '),
           ));
+    });
+  }
+
+  Widget _buildMediaCard() {
+    return BlocBuilder<CreatePostCubit, CreatePostState>(
+        builder: (context, state) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(color: state.backColor,),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(25.0),
+          child: Image.file(
+            File(
+              context.read<CreatePostCubit>().fileEntity?.file.path ?? '',
+            ),
+          ),
+        ),
+      );
     });
   }
 
@@ -129,18 +152,7 @@ class CreatePostView extends StatelessWidget {
         builder: (context, state) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         IconButton(
-            // onPressed: () => FilePickerHelper().pickMedia(),
-            onPressed: () {
-              final UploadFile upload = UploadFile();
-              upload.uploadImage(
-                  subCategoryId: '66a3583454e6e337915514db',
-                  onUploaded: (UploadFileEntity data) {
-                    print("file name ${data.file}");
-                    print("mediaId: ${data.mediaId}");
-                    controller.fileEntity = data;
-                    print(controller.fileEntity?.mediaId);
-                  });
-            },
+            onPressed: () => controller.uploadPhoto(),
             icon: const Icon(
               Icons.image,
               color: Colors.green,

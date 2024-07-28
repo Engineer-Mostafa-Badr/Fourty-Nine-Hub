@@ -21,6 +21,7 @@ class TwitterPostEntity {
   num? sharesCount;
   num? loveCount;
   bool? isReact;
+  String? photo;
   final DateTime createdAt;
    Duration get publishedDuration => DateTime.now().difference(createdAt);
 
@@ -41,6 +42,7 @@ class TwitterPostEntity {
     this.sharesCount = 0,
     this.loveCount = 0,
     this.mainPost,
+    this.photo,
     required this.createdAt,
     required this.comments
   });

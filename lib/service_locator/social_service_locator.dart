@@ -27,7 +27,9 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_twitter_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_react_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/request_document_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/share_twitter_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -138,6 +140,16 @@ class SocialServiceLocator {
       serviceLocator(),
     ));
 
+    serviceLocator
+        .registerLazySingleton<TwitterReportUseCase>(() => TwitterReportUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<RequestDocumentUseCase>(() => RequestDocumentUseCase(
+      serviceLocator(),
+    ));
+
     serviceLocator.registerFactory<CreatePostCubit>(() => CreatePostCubit(
           serviceLocator(),
           serviceLocator(),
@@ -154,6 +166,8 @@ class SocialServiceLocator {
           serviceLocator(),
         )..loadData());
     serviceLocator.registerFactory<TwitterCubit>(() => TwitterCubit(
+      serviceLocator(),
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),

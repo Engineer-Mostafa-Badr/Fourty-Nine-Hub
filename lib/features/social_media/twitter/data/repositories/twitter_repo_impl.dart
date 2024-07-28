@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comm
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_react_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 
 import '../../domain/repositories/twitter_repo.dart';
 import '../datasources/twitter_remote_datasource.dart';
@@ -46,13 +47,13 @@ class TwitterRepoImpl implements TwitterRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> commentOnTwitterPost(
+  Future<Either<Failure, TwitterPostCommentEntity>> commentOnTwitterPost(
       {required PostCommentParams params}) {
     return _remoteDataSource.commentOnTwitterPost(params: params);
   }
 
   @override
-  Future<Either<Failure, bool>> replyOnComment(
+  Future<Either<Failure, TwitterCommentReplyEntity>> replyOnComment(
       {required TwitterCommentReplyParams params}) {
     return _remoteDataSource.replyOnComment(params: params);
   }
@@ -77,6 +78,17 @@ class TwitterRepoImpl implements TwitterRepo {
   @override
   Future<Either<Failure, List<TwitterCommentReplyEntity>>> getCommentReplies({required String commentId}) {
     return _remoteDataSource.getCommentReplies(commentId: commentId);
+  }
+
+  @override
+  Future<Either<Failure, bool>> addReport({required TwitterReportParams params}) {
+    return _remoteDataSource.addReport(params: params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> requestDocument({required List<String> params}) {
+    return _remoteDataSource.requestDocument(params: params);
+
   }
 
 

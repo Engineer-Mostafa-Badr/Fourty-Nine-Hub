@@ -19,6 +19,8 @@ class EndPoints {
   static const sendForgetPasswordOTP = '/auth/forgot-password';
   static const verifyForgetPasswordOTP = '/auth/verify/otp';
   static const createNewForgetPassword = '/auth/reset-password';
+  static const report = '/report';
+  static const documentRequest = '/twitter/document-request';
   // ride
 
   // reels

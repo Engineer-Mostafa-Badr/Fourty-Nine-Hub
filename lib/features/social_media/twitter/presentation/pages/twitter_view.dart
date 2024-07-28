@@ -12,7 +12,10 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_react_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/build_twitter_document_card.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_global_posts.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_post_card.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -39,10 +42,16 @@ class _TwitterViewState extends State<TwitterView> {
         SharedScaffold(
           mainCategoryId: 2,
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
-            builder: (context,state) {
-              return context.read<UserCubit>().isLoggedIn
-                  ?_buildGlobalPosts(): Center(
-                  child: Row(
+              builder: (context, state) {
+            return context.read<UserCubit>().isLoggedIn
+                ? const Column(
+                  children: [
+                    BuildTwitterDocumentCard(),
+                    Expanded(child: TwitterGlobalPosts()),
+                  ],
+                )
+                : Center(
+                    child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
@@ -55,15 +64,14 @@ class _TwitterViewState extends State<TwitterView> {
                           style: Styles.headerText()),
                     ],
                   ));
-            }
-          ),
+          }),
         ),
         PositionedDirectional(
           bottom: 70,
           end: 10,
           child: FloatingActionButton(
             backgroundColor: Colors.red,
-            onPressed: () => context.push(Routes.CREATEPOST,extra: 'twitter'),
+            onPressed: () => context.push(Routes.CREATEPOST, extra: 'twitter'),
             shape: const CircleBorder(),
             child: const Icon(
               Icons.add,
@@ -76,17 +84,17 @@ class _TwitterViewState extends State<TwitterView> {
   }
 
   Widget _buildGlobalPosts() {
-    return BlocConsumer<TwitterCubit, TwitterState>(
-      listener: (context,state){
-        if(state.status == StateStatus.error) {
-
-          showErrorMessage(context, getFailureMessage(
+    return BlocConsumer<TwitterCubit, TwitterState>(listener: (context, state) {
+      if (state.status == StateStatus.error) {
+        showErrorMessage(
+          context,
+          getFailureMessage(
             state.failure ?? const UnknownFailure(),
             context,
-          ),);
-        }
-      },
-        builder: (context, state) {
+          ),
+        );
+      }
+    }, builder: (context, state) {
       final controller = context.read<TwitterCubit>();
       return PagedListView<int, TwitterPostEntity>(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
@@ -115,32 +123,44 @@ class _TwitterViewState extends State<TwitterView> {
                 onReact: () {
                   controller.onReact(
                       params: TwitterPostReactParams(
-                          postId: controller.postsPagingController
-                                  .itemList![index].id,
+                          postId: controller
+                              .postsPagingController.itemList![index].id,
                           react: 'love'));
-                  controller.postsPagingController.itemList?[index].isReact=!controller.postsPagingController.itemList![index].isReact!;
+                  controller.postsPagingController.itemList?[index].isReact =
+                      !controller
+                          .postsPagingController.itemList![index].isReact!;
                 },
                 shareSuccess: state.shareSuccess,
                 onShare: () {
                   controller.onShare(
-                    postId: controller.postsPagingController
-                        .itemList![index].id,
+                    postId:
+                        controller.postsPagingController.itemList![index].id,
                   );
-                  setState(() {
-                  });
+                  setState(() {});
                 },
                 showPostComments: (String v) {
-                  print("mainId ${controller.postsPagingController
-                      .itemList![index].id}");
+                  print(
+                      "mainId ${controller.postsPagingController.itemList![index].id}");
                   controller.showPostComments(
                     context: context,
-                    postId: controller.postsPagingController
-                        .itemList![index].id,);
-                }, getPost: (){
-                controller.getTwitterPost(context,controller.postsPagingController
-                    .itemList![index].mainPost.id);
-              },
-                );
+                    postId:
+                        controller.postsPagingController.itemList![index].id,
+                    newCommentId: state.newCommentId ?? '',
+                    user:
+                        controller.postsPagingController.itemList![index].user,
+                  );
+                },
+                getPost: () {
+                  controller.getTwitterPost(
+                      context,
+                      controller
+                          .postsPagingController.itemList![index].mainPost.id,
+                      state.newCommentId ?? '');
+                },
+                onReport: (TwitterReportParams params) {
+                  controller.onReport(params);
+                },
+              );
             },
             noMoreItemsIndicatorBuilder: (context) => Container(),
             firstPageProgressIndicatorBuilder: (context) => Container(

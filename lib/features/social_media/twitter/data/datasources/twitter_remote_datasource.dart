@@ -22,9 +22,10 @@ abstract class TwitterRemoteDataSource {
   Future<Either<Failure, bool>> reactOnPost({required  params});
   Future<Either<Failure, bool>> reactOnComment({required  params});
   Future<Either<Failure, bool>> sharePost({required  params});
-  Future<Either<Failure, bool>> commentOnTwitterPost(
+  Future<Either<Failure, bool>> addReport({required  params});
+  Future<Either<Failure, TwitterPostCommentEntity>> commentOnTwitterPost(
       {required PostCommentParams params});
-  Future<Either<Failure, bool>> replyOnComment(
+  Future<Either<Failure, TwitterCommentReplyEntity>> replyOnComment(
       {required TwitterCommentReplyParams params});
   Future<Either<Failure, List<TwitterPostCommentEntity>>> getPostComments(
       {required String postId});
@@ -33,6 +34,7 @@ abstract class TwitterRemoteDataSource {
 
   Future<Either<Failure, bool>> deletePost({required String postId});
   Future<Either<Failure, bool>> hidePost({required String postId});
+  Future<Either<Failure, bool>> requestDocument({required List<String> params});
 }
 
 class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
@@ -99,21 +101,21 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> commentOnTwitterPost(
+  Future<Either<Failure, TwitterPostCommentEntity>> commentOnTwitterPost(
       {required PostCommentParams params}) async {
     final response = await _apiConsumer
         .post(EndPoints.commentOnTwitterPost(params.postId), data: params.toJson());
-    return response.fold((l) => Left(l), (data) => Right(data['status']));
+    return response.fold((l) => Left(l), (data) => Right(TwitterPostCommentModel.fromJson(data['data'])));
   }
   @override
-  Future<Either<Failure, bool>> replyOnComment(
+  Future<Either<Failure, TwitterCommentReplyEntity>> replyOnComment(
       {required TwitterCommentReplyParams params}) async {
     final response = await _apiConsumer
         .post(EndPoints.commentOnTwitterPost(params.postId), data: {
           'content':params.content,
       'reply':params.reply
     });
-    return response.fold((l) => Left(l), (data) => Right(data['status']));
+    return response.fold((l) => Left(l), (data) => Right(TwitterCommentReplyModel.fromJson(data['data'])));
   }
 
   @override
@@ -149,6 +151,22 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   @override
   Future<Either<Failure, bool>> hidePost({required String postId}) async {
     final response = await _apiConsumer.put(EndPoints.hidePost(postId));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> addReport({required params}) async{
+    final response = await _apiConsumer
+        .post(EndPoints.report, data: params.toJson());
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> requestDocument({required List<String> params}) async{
+    final response = await _apiConsumer
+        .post(EndPoints.documentRequest, data: {
+          'mediaIds':params
+    });
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 

@@ -7,8 +7,9 @@ class TwitterCommentReplyEntity {
   final String user;
   final String post;
   final String image;
-  final num loveCount;
+  num? loveCount;
   final num repliesCount;
+  bool? isReact;
   final List<String> love;
   final DateTime createdAt;
   Duration get publishedDuration => DateTime.now().difference(createdAt);
@@ -23,6 +24,7 @@ class TwitterCommentReplyEntity {
     required this.image,
     required this.createdAt,
     this.loveCount = 0,
+    this.isReact = false,
     required this.love,
     this.repliesCount = 0,
   });

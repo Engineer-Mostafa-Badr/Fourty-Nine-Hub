@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/PostOptions.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -13,10 +16,16 @@ import '../../../../../../res/style/styles.dart';
 class TwitterCommentCard extends StatefulWidget {
   final Color textColor;
   final TwitterPostCommentEntity comment;
-  final GestureTapCallback? onCommentReact;
+  final Function onCommentReact;
   final Function onCommentReply;
+  final Function(TwitterReportParams) onReport;
   const TwitterCommentCard(
-      {super.key, this.textColor = Colors.black, required this.comment, this.onCommentReact, required this.onCommentReply});
+      {super.key,
+      this.textColor = Colors.black,
+      required this.comment,
+      required this.onCommentReact,
+      required this.onCommentReply,
+      required this.onReport});
 
   @override
   State<TwitterCommentCard> createState() => _TwitterCommentCardState();
@@ -50,7 +59,16 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
             )),
             IconButton(
                 onPressed: () {
-                  bottomSheet(context: context, widget: const PostOptions());
+                  bottomSheet(
+                      context: context,
+                      widget: PostOptions(
+                        id: widget.comment.id,
+                        onReport: (TwitterReportParams params) async{
+                         await widget.onReport(params);
+                         showSuccessMessage(context, "Report sent successfully");
+                         context.pop();
+                        },
+                      ));
                 },
                 icon: Icon(
                   Icons.more_vert,
@@ -68,10 +86,36 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             InkWell(
-              onTap: widget.onCommentReact,
+              onTap: () {
+                if (widget.comment.isReact == true) {
+                  widget.onCommentReact();
+                  widget.comment.loveCount = (widget.comment.loveCount! - 1);
+                  setState(() {});
+                } else {
+                  widget.onCommentReact();
+                  widget.comment.loveCount = widget.comment.loveCount! + 1;
+                  setState(() {});
+                }
+                // if(widget.comment.isReact=true){
+                //   widget.onCommentReact();
+                //   widget.comment.loveCount-1;
+                //   setState(() {
+                //
+                //   });
+                // }else{
+                //   widget.onCommentReact();
+                //   widget.comment.loveCount+1;
+                //   setState(() {
+                //
+                //   });
+                // }
+              },
               child: Icon(
-                Icons.favorite_border,
-                color: widget.textColor,
+                widget.comment.isReact == false
+                    ? Icons.favorite_border
+                    : Icons.favorite,
+                color:
+                    widget.comment.isReact == false ? Colors.grey : Colors.red,
               ),
             ),
             Label(
@@ -79,7 +123,9 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                 style: Styles.mediumText(color: widget.textColor)),
             const Sizer(),
             TextAppButton(
-                style: Styles.mediumText(), label: 'Reply', onPressed: widget.onCommentReply)
+                style: Styles.mediumText(),
+                label: 'Reply',
+                onPressed: widget.onCommentReply)
           ],
         ),
       ],

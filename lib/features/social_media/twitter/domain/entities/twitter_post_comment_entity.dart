@@ -8,10 +8,11 @@ class TwitterPostCommentEntity {
   final String post;
   // final String image;
   final bool adminIgnore;
-  final num loveCount;
+  num? loveCount;
   final num repliesCount;
   bool showReplies;
   bool addReply;
+  bool? isReact;
   final List<String> love;
   List<TwitterCommentReplyEntity>? replies;
   final DateTime createdAt;
@@ -32,6 +33,7 @@ class TwitterPostCommentEntity {
     this.repliesCount = 0,
     this.showReplies=false,
     this.addReply=false,
+    this.isReact=false,
     this.replies
   });
 }

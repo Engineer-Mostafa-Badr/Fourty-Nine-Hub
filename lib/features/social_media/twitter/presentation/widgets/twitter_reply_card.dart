@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/PostOptions.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -14,10 +17,15 @@ import '../../../../../../res/style/styles.dart';
 class TwitterReplyCard extends StatefulWidget {
   final Color textColor;
   final TwitterCommentReplyEntity reply;
-  final GestureTapCallback? onCommentReact;
-
-  const TwitterReplyCard(
-      {super.key, this.textColor = Colors.black, required this.reply, this.onCommentReact,});
+  final Function(String) onReplyReact;
+  final Function(TwitterReportParams) onReport;
+  const TwitterReplyCard({
+    super.key,
+    this.textColor = Colors.black,
+    required this.reply,
+    required this.onReplyReact,
+    required this.onReport,
+  });
 
   @override
   State<TwitterReplyCard> createState() => _TwitterReplyCardState();
@@ -51,7 +59,16 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
             )),
             IconButton(
                 onPressed: () {
-                  bottomSheet(context: context, widget: const PostOptions());
+                  bottomSheet(
+                      context: context,
+                      widget: PostOptions(
+                        id: widget.reply.id,
+                        onReport: (TwitterReportParams params) async{
+                          await widget.onReport(params);
+                          showSuccessMessage(context, "Report sent successfully");
+                          context.pop();
+                        },
+                      ));
                 },
                 icon: Icon(
                   Icons.more_vert,
@@ -69,15 +86,30 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             InkWell(
-              onTap: widget.onCommentReact,
+              onTap: () {
+                if (widget.reply.isReact == true) {
+                  widget.onReplyReact(widget.reply.id);
+                  widget.reply.loveCount = (widget.reply.loveCount! - 1);
+                  setState(() {});
+                } else {
+                  widget.onReplyReact(widget.reply.id);
+                  widget.reply.loveCount = (widget.reply.loveCount! + 1);
+                  setState(() {});
+                }
+              },
               child: Icon(
-                Icons.favorite_border,
-                color: widget.textColor,
+                widget.reply.isReact == false
+                    ? Icons.favorite_border
+                    : Icons.favorite,
+                color: widget.reply.isReact == false ? Colors.grey : Colors.red,
               ),
             ),
             Label(
-                text: "${widget.reply.love.length}",
-                style: Styles.mediumText(color: widget.textColor,),),
+              text: "${widget.reply.loveCount}",
+              style: Styles.mediumText(
+                color: widget.textColor,
+              ),
+            ),
           ],
         ),
       ],

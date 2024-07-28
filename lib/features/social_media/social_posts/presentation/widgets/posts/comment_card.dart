@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -44,7 +45,7 @@ class CommentCard extends StatelessWidget {
             )),
             IconButton(
                 onPressed: () {
-                  bottomSheet(context: context, widget: const PostOptions());
+                  bottomSheet(context: context, widget:  PostOptions(id: comment.id, onReport: (TwitterReportParams params) {  },));
                 },
                 icon: Icon(
                   Icons.more_vert,

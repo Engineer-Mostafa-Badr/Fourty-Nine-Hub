@@ -15,10 +15,13 @@ class CreateTwitterPostUseCase extends UseCase<TwitterPostEntity, CreateTwitterP
 
 class CreateTwitterPostParams {
   final String content;
+  final List<String> mediaIds;
   CreateTwitterPostParams({
     required this.content,
+    required this.mediaIds,
   });
   Map<String, dynamic> toJson() => {
     'content': content,
+    'mediaIds': mediaIds,
   };
 }
