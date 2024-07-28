@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/request_document_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 
 import '../../../../../core/error/failure.dart';
@@ -30,5 +31,5 @@ abstract class TwitterRepo {
   Future<Either<Failure, bool>> deletePost({required String postId});
   Future<Either<Failure, bool>> hidePost({required String postId});
   Future<Either<Failure, bool>> addReport({required TwitterReportParams params});
-  Future<Either<Failure, bool>> requestDocument({required List<String> params});
+  Future<Either<Failure, bool>> requestDocument({required TwitterDocumentationParams params});
 }

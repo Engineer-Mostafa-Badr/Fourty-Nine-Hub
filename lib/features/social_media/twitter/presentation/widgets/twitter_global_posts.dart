@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
@@ -12,8 +13,8 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class TwitterGlobalPosts extends StatefulWidget {
-  const TwitterGlobalPosts({super.key});
-
+  const TwitterGlobalPosts({super.key, required this.userData});
+  final UserEntity userData;
   @override
   State<TwitterGlobalPosts> createState() => _TwitterGlobalPostsState();
 }

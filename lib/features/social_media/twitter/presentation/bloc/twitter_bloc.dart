@@ -165,7 +165,7 @@ class TwitterCubit extends Cubit<TwitterState> {
   }
 
   // request verification
-  onRequestVerification({required List<String> params}) async {
+  onRequestVerification({required TwitterDocumentationParams params}) async {
     var response = await _requestDocumentUseCase(params);
     response.fold(
       (l) => emit(

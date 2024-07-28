@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/request_document_usecase.dart';
 
 import '../../../../../core/error/failure.dart';
 
@@ -34,7 +35,7 @@ abstract class TwitterRemoteDataSource {
 
   Future<Either<Failure, bool>> deletePost({required String postId});
   Future<Either<Failure, bool>> hidePost({required String postId});
-  Future<Either<Failure, bool>> requestDocument({required List<String> params});
+  Future<Either<Failure, bool>> requestDocument({required TwitterDocumentationParams params});
 }
 
 class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
@@ -162,11 +163,9 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> requestDocument({required List<String> params}) async{
+  Future<Either<Failure, bool>> requestDocument({required TwitterDocumentationParams params}) async{
     final response = await _apiConsumer
-        .post(EndPoints.documentRequest, data: {
-          'mediaIds':params
-    });
+        .post(EndPoints.documentRequest, data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 

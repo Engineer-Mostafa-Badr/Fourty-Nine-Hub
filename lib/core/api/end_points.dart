@@ -84,6 +84,10 @@ class EndPoints {
     return '/facebook/post/user/$userId?limit=20&page=1&type=1';
   }
 
+  static String userTweets(String userId) {
+    return '/twitter/post/user/$userId?limit=20&page=1&type=1';
+  }
+
   static String acceptTripRider(String id) {
     return '/ride/trips/accept/$id';
   }

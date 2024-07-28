@@ -255,7 +255,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
   }) {
     return Row(
       children: [
-        const ProfileImage(accountId: 0),
+        post.user.image!=''? Image.network(post.user.image):ProfileImage(accountId: 0),
         const Sizer(),
         Label(
             text: post.mainPost?.user.firstName ?? "",
@@ -285,7 +285,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
         Expanded(
           child: Row(
             children: [
-              const ProfileImage(accountId: 0),
+              post.user.image!=''? ProfileImage(accountId: 0,imageURL:post.user.image):ProfileImage(accountId: 0),
               const Sizer(),
               Label(
                   text: post.user.firstName,

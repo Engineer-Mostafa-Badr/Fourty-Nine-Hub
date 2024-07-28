@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/select_activity_view.dart';
@@ -84,6 +85,11 @@ class CreatePostView extends StatelessWidget {
           child: TextField(
             maxLines: 4,
             maxLength: 150,
+            onChanged: (c){
+              if (c.length == 150) {
+                showErrorMessage(context, "You can't type more than 150 character");
+              }
+            },
             controller:
                 context.read<CreatePostCubit>().postContentTextController,
             decoration: const InputDecoration(hintText: 'Type Here ... '),
@@ -194,7 +200,7 @@ class CreatePostView extends StatelessWidget {
                 color: Colors.orangeAccent,
                 size: 30,
               )),
-        IconButton(
+        if (social != 'twitter')IconButton(
             onPressed: () async {
               final res =
                   await CustomVerticalSheetItem.normal<PrivacyStatus>(context, [

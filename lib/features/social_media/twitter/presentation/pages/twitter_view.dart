@@ -43,11 +43,12 @@ class _TwitterViewState extends State<TwitterView> {
           mainCategoryId: 2,
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
               builder: (context, state) {
+                UserEntity? userData = state.data;
             return context.read<UserCubit>().isLoggedIn
-                ? const Column(
+                ? Column(
                   children: [
-                    BuildTwitterDocumentCard(),
-                    Expanded(child: TwitterGlobalPosts()),
+                    const BuildTwitterDocumentCard(),
+                    Expanded(child: TwitterGlobalPosts(userData: userData!,)),
                   ],
                 )
                 : Center(

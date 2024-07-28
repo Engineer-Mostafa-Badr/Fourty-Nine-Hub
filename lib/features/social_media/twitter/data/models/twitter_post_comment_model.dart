@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 
 class TwitterPostCommentModel extends TwitterPostCommentEntity {
@@ -20,7 +21,7 @@ class TwitterPostCommentModel extends TwitterPostCommentEntity {
   factory TwitterPostCommentModel.fromJson(Map<String, dynamic> json) {
     return TwitterPostCommentModel(
       id: json['_id'],
-      user: json['user'] is String?json['user']:json["user"][0]['firstName'],
+      user:json['user'] is String? json['user']:TwitterUserModel.fromJson(json['user']),
       content: json['content'] ?? '',
       post: json['post'] ?? '',
       loveCount: json['loveCount']??0,

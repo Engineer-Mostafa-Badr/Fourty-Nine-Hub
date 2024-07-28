@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/request_document_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -14,10 +16,16 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
-class BuildMetaVerified extends StatelessWidget {
+class BuildMetaVerified extends StatefulWidget {
   const BuildMetaVerified({super.key,});
 
+  @override
+  State<BuildMetaVerified> createState() => _BuildMetaVerifiedState();
+}
 
+class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
+  TextEditingController nameTextController = TextEditingController();
+  var formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,14 +50,43 @@ class BuildMetaVerified extends StatelessWidget {
             final controller = context.read<TwitterCubit>();
             return Padding(
               padding: const EdgeInsets.only(top: 15.0),
-              child: Column(
+              child: ListView(
+                shrinkWrap: true,
+                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Label(text: "User name",style: Styles.headerText(
+                      fontSize: 20, color: AppColors.GREY_DARK_COLOR),),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Form(
+                    key: formKey,
+                    child: FormTextField(
+                        hint: 'Type your name ....',
+                        height: kToolbarHeight * .7,
+                        action: (v) {
+                          setState(() {});
+                        },
+
+                        controller: nameTextController),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Label(
+                          text: "Personal Photo",
+                          style: Styles.headerText(
+                              fontSize: 20, color: AppColors.GREY_DARK_COLOR),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
                         _buildImageCard(
-                          label: 'Personal Photo',
+                          label: '',
                           onTap: (){
                             controller.uploadPersonalPhoto();
                           },
@@ -96,24 +133,32 @@ class BuildMetaVerified extends StatelessWidget {
                       ],
                     ),
                   ),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   _buildButton(onTap:()async{
-                    if(state.personalPhoto==null){
-                      showErrorMessage(context, "Select Personal Photo");
-                    }else if(state.frontId==null){
-                      showErrorMessage(context, "Select Front ID");
-                    }else if(state.backId==null){
-                      showErrorMessage(context, "Select Back ID");
-                    }else{
-                      List<String> mediaIds =[];
-                      mediaIds.add(state.personalPhoto!.mediaId);
-                      mediaIds.add(state.frontId!.mediaId);
-                      mediaIds.add(state.backId!.mediaId);
+                    if(formKey.currentState!.validate()){
+                      if(state.personalPhoto==null){
+                        showErrorMessage(context, "Select Personal Photo");
+                      }else if(state.frontId==null){
+                        showErrorMessage(context, "Select Front ID");
+                      }else if(state.backId==null){
+                        showErrorMessage(context, "Select Back ID");
+                      }else{
+                        List<String> mediaIds =[];
+                        mediaIds.add(state.personalPhoto!.mediaId);
+                        mediaIds.add(state.frontId!.mediaId);
+                        mediaIds.add(state.backId!.mediaId);
 
-                      await controller.onRequestVerification(params: mediaIds);
-                     if(state.reportSuccess==true){
-                       showSuccessMessage(context, "Success");
-                       context.pop();
-                     }
+                        await controller.onRequestVerification(params: TwitterDocumentationParams(
+                          mediaIds: mediaIds,
+                          name: nameTextController.text
+                        ));
+
+                          showSuccessMessage(context, "Success");
+                          context.pop();
+
+                      }
                     }
                     // onSendRequest();
                   } ),

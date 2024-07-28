@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comm
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_react_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/request_document_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 
 import '../../domain/repositories/twitter_repo.dart';
@@ -21,6 +22,7 @@ class TwitterRepoImpl implements TwitterRepo {
     return _remoteDataSource.getFeed(params: params);
   }
 
+  @override
   Future<Either<Failure, TwitterPostEntity>> getTwitterPost({required String postId}) {
     return _remoteDataSource.getTwitterPost(postId: postId);
   }
@@ -86,7 +88,7 @@ class TwitterRepoImpl implements TwitterRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> requestDocument({required List<String> params}) {
+  Future<Either<Failure, bool>> requestDocument({required TwitterDocumentationParams params}) {
     return _remoteDataSource.requestDocument(params: params);
 
   }

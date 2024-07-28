@@ -3,7 +3,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 
 class TwitterPostCommentEntity {
   final String id;
-  final String user;
+  dynamic user;
   final String content;
   final String post;
   // final String image;

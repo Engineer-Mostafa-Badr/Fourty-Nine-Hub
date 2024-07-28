@@ -32,6 +32,9 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
     }, builder: (context, state) {
       final controller = context.read<TwitterCubit>();
       return InkWell(
+        splashColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        highlightColor: Colors.transparent,
         onTap: () {
           bottomSheet(
             context: context,
@@ -40,7 +43,8 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
           );
         },
         child: Container(
-          height: 200,
+          height: 120,
+          width: double.infinity,
           margin: const EdgeInsets.all(10),
           // color: Colors.orange,
           decoration: BoxDecoration(
@@ -48,6 +52,7 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
               image: AssetImage(
                 Assets.metaVerified,
               ),
+              fit: BoxFit.fill,
             ),
           ),
         ),
