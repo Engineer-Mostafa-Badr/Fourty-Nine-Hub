@@ -28,6 +28,8 @@ class EndPoints {
   static const createDoctor = '/health/doctor';
   static const doctorSearch = '/health/doctor-search';
   static const bookEmergency = '/health/book-emergency';
+  static String bookAppointment(String appointmentId) =>
+      'api/v1/health/book-appointment/$appointmentId';
 
   // reels
   static const getExploreReels = '/reels/explore';
@@ -149,9 +151,10 @@ class EndPoints {
   static String commentOnPost(String postId) {
     return '/facebook/comment/create-comment/$postId';
   }
+
   static String commentOnTwitterPost(String postId) {
-      return '/twitter/comment/create-comment/$postId';
-    }
+    return '/twitter/comment/create-comment/$postId';
+  }
 
   static String getPostComments(String postId) {
     return '/facebook/comment/get-post-comments/$postId';
@@ -211,7 +214,8 @@ class EndPoints {
   static String auctionDetails(String id) {
     return '/auction/$id';
   }
-  static String getAuctionRequests(String id){
+
+  static String getAuctionRequests(String id) {
     return '/auction/all-auction-request/$id';
   }
 
@@ -267,6 +271,7 @@ class EndPoints {
   static String getChatMessages(String chatId) {
     return '/chat/get-chat/$chatId';
   }
+
   static String changeChatMuteState(String chatId) {
     return '/chat/mute-chat/$chatId';
   }

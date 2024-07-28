@@ -1,4 +1,5 @@
-import 'package:fourtyninehub/features/health_feature/book_doctor_appointment/data/datasources/book_doctor_appointment_remote_datasource.dart';
+import 'package:fourtyninehub/features/health_feature/booking/data/datasources/book_doctor_appointment_remote_datasource.dart';
+import 'package:fourtyninehub/features/health_feature/booking/domain/usecases/book_appointment.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/datasources/create_doctor_remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/repositories/create_repo_doctor_imp.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/repositories/create_doctor_repo.dart';
@@ -36,10 +37,9 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/contro
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:get_it/get_it.dart';
 
-import '../features/health_feature/book_doctor_appointment/data/repositories/book_doctor_appointment_repo_impl.dart';
-import '../features/health_feature/book_doctor_appointment/domain/repositories/book_doctor_appointment_repo.dart';
-import '../features/health_feature/book_doctor_appointment/domain/usecases/get_doctor_appointment_usecase.dart';
-import '../features/health_feature/book_doctor_appointment/presentation/cubit/book_doctor_appointment_cubit.dart';
+import '../features/health_feature/booking/data/repositories/book_doctor_appointment_repo_impl.dart';
+import '../features/health_feature/booking/domain/repositories/book_doctor_appointment_repo.dart';
+import '../features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
 import '../features/health_feature/doctor_dashboard/presentation/cubit/doctor_dashboard_cubit.dart';
 
 class HealthServiceLocator {
@@ -61,11 +61,6 @@ class HealthServiceLocator {
       ),
     );
 
-    serviceLocator.registerLazySingleton<BookAppointmentRemoteDataSource>(
-      () => BookAppointmentRemoteDataSourceImpl(
-        serviceLocator(),
-      ),
-    );
     serviceLocator.registerLazySingleton<DoctorDashboardRemoteDataSource>(
       () => DoctorDashboardRemoteDataSourceImpl(
         serviceLocator(),
@@ -75,6 +70,8 @@ class HealthServiceLocator {
         () => CreateDoctorRemoteDataSourceImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<HealthEmergencyRemoteDataSource>(
         () => HealthEmergencyRemoteDataSourceImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<BookAppointmentRemoteDataSource>(
+        () => BookAppointmentRemoteDataSourceImpl(serviceLocator()));
     // -------------------Repository ----------------------
     serviceLocator.registerLazySingleton<DoctorDetailsRepo>(
       () => DoctorDetailsRepoImpl(
@@ -91,11 +88,7 @@ class HealthServiceLocator {
         serviceLocator(),
       ),
     );
-    serviceLocator.registerLazySingleton<BookAppointmentRepo>(
-      () => BookAppointmentRepoImpl(
-        serviceLocator(),
-      ),
-    );
+
     serviceLocator.registerLazySingleton<DoctorDashboardRepo>(
       () => DoctorDashboardRepoImpl(
         serviceLocator(),
@@ -106,6 +99,8 @@ class HealthServiceLocator {
 
     serviceLocator.registerLazySingleton<HealthEmergencyRepo>(
         () => HealthEmergencyRepoImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<BookAppointmentRepo>(
+        () => BookAppointmentRepoImpl(serviceLocator()));
     // -------------------UseCases ----------------------
     serviceLocator.registerLazySingleton<GetDoctorDetailsUseCase>(
       () => GetDoctorDetailsUseCase(
@@ -123,11 +118,7 @@ class HealthServiceLocator {
         serviceLocator(),
       ),
     );
-    serviceLocator.registerLazySingleton<GetDoctorAppointmentsUseCase>(
-      () => GetDoctorAppointmentsUseCase(
-        serviceLocator(),
-      ),
-    );
+
     serviceLocator.registerLazySingleton<GetDoctorBookingsUseCase>(
       () => GetDoctorBookingsUseCase(
         serviceLocator(),
@@ -141,11 +132,13 @@ class HealthServiceLocator {
         () => GetGovernoratesUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<BookHealthEmergencyUseCase>(
         () => BookHealthEmergencyUseCase(serviceLocator()));
+    serviceLocator
+        .registerLazySingleton(() => BookAppointmentUseCase(serviceLocator()));
 
     // -------------------------- cubits --------------------------
     serviceLocator.registerSingleton<HealthSharedData>(HealthSharedData());
-    serviceLocator.registerFactory<DoctorDetailsCubit>(
-        () => DoctorDetailsCubit());
+    serviceLocator
+        .registerFactory<DoctorDetailsCubit>(() => DoctorDetailsCubit());
     serviceLocator.registerFactory<DoctorsListCubit>(() => DoctorsListCubit(
           serviceLocator(),
           serviceLocator(),
@@ -183,10 +176,7 @@ class HealthServiceLocator {
         .registerFactory(() => DoctorCityFilterCubit(serviceLocator()));
 
     serviceLocator.registerFactory<BookDoctorAppointmentCubit>(
-        () => BookDoctorAppointmentCubit(
-              serviceLocator(),
-              serviceLocator(),
-            )..loadData());
+        () => BookDoctorAppointmentCubit(serviceLocator()));
     serviceLocator
         .registerFactory<DoctorDashboardCubit>(() => DoctorDashboardCubit(
               serviceLocator(),

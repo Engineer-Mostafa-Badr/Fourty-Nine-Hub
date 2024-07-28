@@ -3,7 +3,6 @@ import 'package:fourtyninehub/features/health_feature/health/domain/entities/app
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
-import '../../../../ride/RideRequest/domain/entity/driver_review_entity.dart';
 import 'appointment_entity.dart';
 
 class DoctorEntity {
@@ -74,4 +73,6 @@ class DoctorEntity {
     }
     return price;
   }
+
+  String get fullName => '$firstName $lastName';
 }

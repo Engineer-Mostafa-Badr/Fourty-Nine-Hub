@@ -66,7 +66,7 @@ abstract class Labels {
   static const balanceWallet = 'Balance';
   static const giftWallet = 'Gift';
   static const adDetails = 'AD Details';
-   static const health = 'Health';
+  static const health = 'Health';
   static const ads = 'Ads';
   static const register = 'Register';
   static const doctorDashboard = 'Doctor Dashboard';
@@ -95,4 +95,11 @@ abstract class Labels {
   static const addPlan = 'Add Plan';
   static const edit = 'Edit';
   static const delete = 'Delete';
+  static const doctor = 'Doctor';
+  static const confirmBooking = 'Confirm Booking';
+  static const gender = 'Gender';
+  static const male = 'Male';
+  static const female = 'Female';
+  static const age = 'Age';
+  static const notes = 'Notes';
 }

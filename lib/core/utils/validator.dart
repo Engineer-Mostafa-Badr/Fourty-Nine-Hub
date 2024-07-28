@@ -81,4 +81,11 @@ class Validator {
 
   String? validateEmptyValue(String? value) =>
       value == null ? "Empty Field Not Valid" : null;
+
+  String? doesNotContainNumbers(String? text) {
+    if (text != null && text.contains(RegExp(r'[0-9]'))) {
+      return "Can't Contain Numbers";
+    }
+    return null;
+  }
 }

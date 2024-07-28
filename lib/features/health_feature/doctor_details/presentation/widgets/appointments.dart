@@ -85,7 +85,9 @@ class _DayScheduleWidget extends StatelessWidget {
                   : AppColors.LIGHT_GRAY_COLOR,
               onPressed: () {
                 if (item.isAvailable) {
-                  context.push(Routes.VISITABOOKING,extra: item);
+                  context.read<DoctorDetailsCubit>().selectedAppointment = item;
+                  context.push(Routes.VISITABOOKING,
+                      extra: context.read<DoctorDetailsCubit>());
                 }
               })
         ],

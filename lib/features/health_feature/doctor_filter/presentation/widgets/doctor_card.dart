@@ -50,7 +50,7 @@ class DoctorCard extends StatelessWidget {
                       RichText(
                           text: TextSpan(children: [
                         TextSpan(
-                            text: '${doctor.firstName} ${doctor.lastName}\n',
+                            text: doctor.fullName,
                             style:
                                 Styles.mediumText(fontWeight: FontWeight.bold)),
                         TextSpan(
@@ -60,10 +60,7 @@ class DoctorCard extends StatelessWidget {
                       RatingStars(
                         rating: doctor.rating.toDouble(),
                       ),
-                      // Label(
-                      //     text:
-                      //         '${Labels.reviews} ${Labels.from} ${doctor.numberOfReviews} ${Labels.visitors}',
-                      //     style: Styles.mediumText())
+                      
                     ],
                   ),
                 ],
@@ -118,24 +115,7 @@ class DoctorCard extends StatelessWidget {
               )
             ],
           ),
-          // Row(
-          //   children: [
-          //     const Icon(
-          //       Icons.chat,
-          //     ),
-          //     const Sizer(),
-          //     Expanded(
-          //         child: RichText(
-          //             text: TextSpan(children: [
-          //       TextSpan(
-          //           text: '${Labels.languages}: ', style: Styles.mediumText()),
-          //       const TextSpan(text: ' '),
-          //       ...doctor.languages.map((e) {
-          //         return TextSpan(text: '$e - ', style: Styles.mediumText());
-          //       })
-          //     ])))
-          //   ],
-          // ),
+      
           _buildWaitingTime,
           const Sizer(),
           Row(

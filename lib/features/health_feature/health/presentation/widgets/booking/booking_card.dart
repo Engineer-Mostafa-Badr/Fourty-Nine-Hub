@@ -6,8 +6,6 @@ import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
-import '../../../../../../routes/routes.dart';
-import 'package:go_router/go_router.dart';
 
 class HealthBookingCard extends StatelessWidget {
   final AppointmentBookingEntity appointment;

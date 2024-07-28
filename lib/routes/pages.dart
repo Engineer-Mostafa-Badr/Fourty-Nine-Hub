@@ -92,7 +92,7 @@ import '../features/food_feature/restaurants_list/presentation/cubit/restaurants
 import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
 import '../features/fourty_nine/presentation/controllers/main_categories_cubit/parent_main_categories_cubit.dart';
 import '../features/fourty_nine/presentation/controllers/parent_main_categories_cubit/main_categories_cubit.dart';
-import '../features/health_feature/book_doctor_appointment/presentation/cubit/book_doctor_appointment_cubit.dart';
+import '../features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
 import '../features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import '../features/health_feature/health/presentation/pages/health_view.dart';
 import '../features/installment_feature/create_installment/presentation/pages/create_installment_view.dart';
@@ -107,7 +107,7 @@ import '../features/account_taps/account/presentation/pages/favourite_category_v
 import '../features/account_taps/account/presentation/pages/favourite_subcategory_view.dart';
 import '../features/health_feature/doctor_details/presentation/pages/DoctorDetails.dart';
 import '../features/health_feature/doctor_filter/presentation/pages/doctors_list.dart';
-import '../features/health_feature/book_doctor_appointment/presentation/pages/visita_booking.dart';
+import '../features/health_feature/booking/presentation/pages/visita_booking.dart';
 import '../features/authentication/presentation/pages/login_view.dart';
 import '../features/authentication/presentation/pages/register/register_verify_otp.dart';
 import '../features/authentication/presentation/pages/register/register_view.dart';
@@ -434,8 +434,9 @@ class AppPages {
         GoRoute(
           path: Paths.INSTAGRAM,
           name: Routes.INSTAGRAM,
-          builder: (context, state) => BlocProvider<InstagramCubit>(create: (_)=>serviceLocator(), 
-          child: const InstagramView(),
+          builder: (context, state) => BlocProvider<InstagramCubit>(
+            create: (_) => serviceLocator(),
+            child: const InstagramView(),
           ),
         ),
         GoRoute(
@@ -453,23 +454,25 @@ class AppPages {
             },
             routes: [
               GoRoute(
-                  path: Paths.CREATEPOST,
-                  name: Routes.CREATEPOST,
-                  builder: (context, state) {
-                    final social = state.extra as String?;
+                path: Paths.CREATEPOST,
+                name: Routes.CREATEPOST,
+                builder: (context, state) {
+                  final social = state.extra as String?;
 
-                    return BlocProvider<CreatePostCubit>(
-                        create: (_) => serviceLocator(),
-                        child: CreatePostView(social: social??'social',),
-                      );
-                  },
+                  return BlocProvider<CreatePostCubit>(
+                    create: (_) => serviceLocator(),
+                    child: CreatePostView(
+                      social: social ?? 'social',
+                    ),
+                  );
+                },
               ),
 
               GoRoute(
                   path: Paths.TWITTER,
                   name: Routes.TWITTER,
                   builder: (context, state) => BlocProvider<TwitterCubit>(
-                      create: (_)=>serviceLocator(),
+                      create: (_) => serviceLocator(),
                       child: const TwitterView())),
               GoRoute(
                 path: Paths.OTHERSACCOUNT,
@@ -652,8 +655,7 @@ class AppPages {
                       BlocProvider<BookDoctorAppointmentCubit>(
                           create: (_) => serviceLocator(),
                           child: VisitaBooking(
-                            appointmentEntity:
-                                (state.extra) as AppointmentEntity,
+                            doctorDetailsCubit: (state.extra) as DoctorDetailsCubit,
                           ))),
               GoRoute(
                   path: Paths.DOCTORDASHBOARD,
