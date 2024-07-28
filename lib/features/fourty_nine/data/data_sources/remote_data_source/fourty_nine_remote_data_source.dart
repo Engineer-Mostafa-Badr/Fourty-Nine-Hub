@@ -1,7 +1,5 @@
-import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
-import 'package:flutter/services.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
@@ -50,7 +48,7 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
     final result = await _apiConsumer.get(EndPoints.getMainCategories, queryParameters: params.toJson());
     return result.fold(
       (failure) => Left(failure),
-      (response) => Right((response['data']['docs'] as List)
+      (response) => Right((response['data']['categories'] as List)
           .map((e) => MainCategoryModel.fromJson(e))
           .toList()),
     );

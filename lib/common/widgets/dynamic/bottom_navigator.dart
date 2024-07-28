@@ -50,7 +50,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
             ? <BottomItemModel>[
                 BottomItemModel(
                     icon: FontAwesomeIcons.twitter,
-                    label: 'Twitter',
+                    label: 'Tweet',
                     index: 0,
                     image: Assets.twitter,
                     action: () => context.push(Routes.TWITTER)),

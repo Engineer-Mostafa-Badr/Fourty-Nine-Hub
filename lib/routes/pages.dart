@@ -62,6 +62,8 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/controlle
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
@@ -455,15 +457,22 @@ class AppPages {
               GoRoute(
                   path: Paths.CREATEPOST,
                   name: Routes.CREATEPOST,
-                  builder: (context, state) => BlocProvider<CreatePostCubit>(
+                  builder: (context, state) {
+                    final social = state.extra as String?;
+
+                    return BlocProvider<CreatePostCubit>(
                         create: (_) => serviceLocator(),
-                        child: const CreatePostView(),
-                      )),
+                        child: CreatePostView(social: social??'social',),
+                      );
+                  },
+              ),
 
               GoRoute(
                   path: Paths.TWITTER,
                   name: Routes.TWITTER,
-                  builder: (context, state) => const TwitterView()),
+                  builder: (context, state) => BlocProvider<TwitterCubit>(
+                      create: (_)=>serviceLocator(),
+                      child: const TwitterView())),
               GoRoute(
                 path: Paths.OTHERSACCOUNT,
                 name: Routes.OTHERSACCOUNT,

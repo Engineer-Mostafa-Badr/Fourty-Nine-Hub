@@ -1,0 +1,29 @@
+import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
+
+
+class TwitterUserModel extends TwitterUserEntity {
+  TwitterUserModel(
+      {
+    required super.id,
+    required super.firstName,
+    required super.lastName,
+    required super.createdAt,
+        required super.image,
+        required super.email,
+        required super.isDocumented,
+
+      });
+  factory TwitterUserModel.fromJson(Map<String, dynamic> json) {
+    return TwitterUserModel(
+      id: json['_id']??'',
+      firstName: json['firstName']??'',
+      lastName: json['lastName']??'',
+      image: json['image']??'',
+      email: json['email']??'',
+      isDocumented: json['twitter_documentation']??false,
+
+      createdAt: json['createdAt'] is String
+          ? DateTime.parse(json['createdAt'])
+          : DateTime.now(),    );
+  }
+}
