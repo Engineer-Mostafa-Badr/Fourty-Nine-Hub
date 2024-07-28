@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/options/option_card.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/booking_types/booking_type_card.dart';
 
-class HealthOptions extends StatelessWidget {
-  const HealthOptions({super.key});
+class HealthBookingTypesWidgt extends StatelessWidget {
+  const HealthBookingTypesWidgt({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +19,8 @@ class HealthOptions extends StatelessWidget {
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,
       ),
-      itemBuilder: (context, index) => HealthOptionCard(
-        option: services[index],
+      itemBuilder: (context, index) => HealthBookingTypeCard(
+        bookingFilterModel: services[index],
       ),
     );
   }

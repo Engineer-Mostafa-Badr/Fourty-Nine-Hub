@@ -85,4 +85,10 @@ abstract class Labels {
   static const governorate = 'Governorate';
   static const from = 'from';
   static const visitors = 'visitors';
+  static const pending = 'Pending';
+  static const completed = 'Completed';
+  static const youWillEarn = "You'll earn 400 points after booking";
+  static const patientsReviews = "Patient's Reviews";
+  static const viewMore = 'view more';
+  static const noDoctors = 'No doctors found';
 }

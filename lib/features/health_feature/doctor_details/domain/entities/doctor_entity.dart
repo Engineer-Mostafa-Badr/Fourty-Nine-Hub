@@ -1,43 +1,77 @@
-import '../../../../requests_history/domain/entities/address_entity.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_address.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+
 import '../../../../ride/RideRequest/domain/entity/driver_review_entity.dart';
 import 'appointment_entity.dart';
-import 'doctor_detail_entity.dart';
 
 class DoctorEntity {
-  final int id;
-  final String name;
+  final String id;
+  final String lastName;
+  final String firstName;
+  final String subCategoryId;
+  final String photo;
   final String phone;
   final String email;
-  final String bio;
-  final num rate;
-  final num numberOfReviews;
-  final num startPrice;
-  final num waitingTime;
-  final String image;
-  final bool available;
-  final List<String> clinicImages;
-  final List<String> languages;
-  final AddressEntity address;
-  final List<AppointmentEntity>? appointments;
-  final List<ReviewEntity>? reviews;
-  final List<DoctorDetailEntity>? details;
+  final DoctorAddressEntity address;
+  final bool clinic;
+  final bool calls;
+  final bool visitHome;
+  final String clinicPrice;
+  final String detectionPeriodClinic;
+  final String detectionPeriodCalls;
+  final String detectionPeriodvisitHome;
+  final String callsPrice;
+  final String visitHomePrice;
+  final String waitingTime;
+  final bool isActive;
+  final bool isPremium;
+  final String description;
+  final int rating;
+  final String createdAt;
+  final String updatedAt;
+  final List<AppointmentEntity> appointments;
 
-  DoctorEntity(
-      {required this.id,
-      required this.name,
-      required this.phone,
-      required this.email,
-      required this.bio,
-      required this.rate,
-      required this.waitingTime,
-      required this.available,
-      required this.numberOfReviews,
-      required this.startPrice,
-      required this.image,
-      required this.clinicImages,
-      required this.languages,
-      required this.address,
-      required this.appointments,
-      required this.reviews,
-      required this.details});
+  DoctorEntity({
+    required this.id,
+    required this.lastName,
+    required this.firstName,
+    required this.subCategoryId,
+    required this.photo,
+    required this.phone,
+    required this.email,
+    required this.address,
+    required this.clinic,
+    required this.calls,
+    required this.visitHome,
+    required this.clinicPrice,
+    required this.detectionPeriodClinic,
+    required this.detectionPeriodCalls,
+    required this.detectionPeriodvisitHome,
+    required this.callsPrice,
+    required this.visitHomePrice,
+    required this.waitingTime,
+    required this.isActive,
+    required this.isPremium,
+    required this.description,
+    required this.rating,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.appointments,
+  });
+
+  String get priceToShow {
+    String price = '';
+    final bookingType =
+        serviceLocator<HealthSharedData>().doctorSearchParams.bookingType;
+    if (bookingType == BookingTypes.call) {
+      price = callsPrice;
+    } else if (bookingType == BookingTypes.clinic) {
+      price = clinicPrice;
+    } else {
+      price = visitHomePrice;
+    }
+    return price;
+  }
 }

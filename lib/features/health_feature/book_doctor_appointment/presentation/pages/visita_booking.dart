@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/appointment_entity.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
@@ -16,7 +17,8 @@ import '../../../health/domain/entities/appointment_booking_entity.dart';
 import '../cubit/book_doctor_appointment_cubit.dart';
 
 class VisitaBooking extends StatelessWidget {
-  const VisitaBooking({super.key});
+  final AppointmentEntity appointmentEntity;
+  const VisitaBooking({super.key, required this.appointmentEntity});
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +37,8 @@ class VisitaBooking extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: ListView(
                 children: [
-                  // _buildHeaderWidget(),
-                  _buildBookingTime(context: context),
+                  _buildHeaderWidget(),
+                  // _buildBookingTime(context: context),
                   _buildInfoWidget(
                       widget: Column(
                         children: [
@@ -64,10 +66,10 @@ class VisitaBooking extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Label(text: Labels.price, style: Styles.mediumText()),
-                          Label(
-                              text:
-                                  '${state.doctor?.startPrice ?? 0} ${Labels.currency}',
-                              style: Styles.mediumText()),
+                          // Label(
+                          //     text:
+                          //         '${state.doctor?.startPrice ?? 0} ${Labels.currency}',
+                          //     style: Styles.mediumText()),
                         ],
                       ),
                       icon: Icons.attach_money,
@@ -258,10 +260,10 @@ class VisitaBooking extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10),
                                   color: AppColors.LIGHT_GRAY_COLOR),
                               child: Label(
-                                  text: e.fromTime,
+                                  text: e.time,
                                   style: Styles.mediumText(
                                       fontWeight: FontWeight.w300,
-                                      decoration: !e.available
+                                      decoration: !e.isAvailable
                                           ? TextDecoration.lineThrough
                                           : null)),
                             ));

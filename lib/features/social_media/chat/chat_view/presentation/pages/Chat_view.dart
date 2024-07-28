@@ -14,7 +14,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:skeletons/skeletons.dart';
+// import 'package:skeletons/skeletons.dart';
 import '../widgets/calling_card.dart';
 import '../widgets/chat_card.dart';
 
@@ -228,48 +228,48 @@ class _ChatViewState extends State<ChatView> {
     );
   }
 
-  Widget skeletonWidget() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: SkeletonTheme(
-        shimmerGradient: const LinearGradient(
-          colors: [
-            Color(0xFF153971),
-            Color(0xFF3A548B),
-            Color(0xFF153971),
-          ],
-          stops: [
-            0.3,
-            0.5,
-            0.7,
-          ],
-          begin: Alignment(-2.4, -0.0),
-          end: Alignment(2.4, 0.0),
-          tileMode: TileMode.clamp,
-        ),
-        darkShimmerGradient: const LinearGradient(
-          colors: [
-            Color(0xFF153971),
-            Color(0xFF3A548B),
-            Color(0xFF153971),
-          ],
-          stops: [
-            0.3,
-            0.5,
-            0.7,
-          ],
-          begin: Alignment(-2.4, -0.0),
-          end: Alignment(2.4, 0.0),
-          tileMode: TileMode.clamp,
-        ),
-        child: SkeletonLine(
-          style: SkeletonLineStyle(
-            height: kToolbarHeight * .7,
-            width: kToolbarHeight * .7,
-            borderRadius: BorderRadius.circular(5!),
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget skeletonWidget() {
+  //   return Padding(
+  //     padding: EdgeInsets.symmetric(horizontal: 10),
+  //     child: SkeletonTheme(
+  //       shimmerGradient: const LinearGradient(
+  //         colors: [
+  //           Color(0xFF153971),
+  //           Color(0xFF3A548B),
+  //           Color(0xFF153971),
+  //         ],
+  //         stops: [
+  //           0.3,
+  //           0.5,
+  //           0.7,
+  //         ],
+  //         begin: Alignment(-2.4, -0.0),
+  //         end: Alignment(2.4, 0.0),
+  //         tileMode: TileMode.clamp,
+  //       ),
+  //       darkShimmerGradient: const LinearGradient(
+  //         colors: [
+  //           Color(0xFF153971),
+  //           Color(0xFF3A548B),
+  //           Color(0xFF153971),
+  //         ],
+  //         stops: [
+  //           0.3,
+  //           0.5,
+  //           0.7,
+  //         ],
+  //         begin: Alignment(-2.4, -0.0),
+  //         end: Alignment(2.4, 0.0),
+  //         tileMode: TileMode.clamp,
+  //       ),
+  //       child: SkeletonLine(
+  //         style: SkeletonLineStyle(
+  //           height: kToolbarHeight * .7,
+  //           width: kToolbarHeight * .7,
+  //           borderRadius: BorderRadius.circular(5!),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

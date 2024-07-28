@@ -16,8 +16,9 @@ class HealthBookingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.VISITADOCTORDETAILS,
-          extra: appointment.doctor.id),
+      // onTap: () => context.push(Routes.VISITADOCTORDETAILS,
+      //     extra: appointment.doctor.id),
+      onTap: () {},
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -31,7 +32,7 @@ class HealthBookingCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 5),
               child: Label(
                   text:
-                      'Clinic Booking: ${appointment.appointment.date} - ${appointment.appointment.fromTime}:${appointment.appointment.toTime}',
+                      'Clinic Booking: ${appointment.appointment.day} - ${appointment.appointment.time}',
                   style: Styles.mediumText()),
             ),
             const Divider(
@@ -43,7 +44,7 @@ class HealthBookingCard extends StatelessWidget {
                   radius: 10,
                   height: kToolbarHeight,
                   width: kToolbarHeight,
-                  url: appointment.doctor.image,
+                  url: appointment.doctor.photo,
                 ),
                 const Sizer(),
                 Expanded(
@@ -51,10 +52,10 @@ class HealthBookingCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Label(
-                          text: appointment.doctor.name,
+                          text: appointment.doctor.firstName,
                           style: Styles.mediumText()),
                       Label(
-                          text: appointment.doctor.bio,
+                          text: appointment.doctor.description,
                           style: Styles.mediumText(color: Colors.grey)),
                       Label(
                           text: appointment.doctor.address.address,
@@ -67,14 +68,14 @@ class HealthBookingCard extends StatelessWidget {
             const Sizer(),
             Row(
               children: [
-                Expanded(
-                    child: AppButton(
-                        icon: Icons.location_on_rounded,
-                        label: 'Map',
-                        onPressed: () => LaunchURLHelper().openLocation(
-                            lat: appointment.doctor.address.coordinates[0],
-                            lng: appointment.doctor.address.coordinates[1]))),
-                const Sizer(),
+                // Expanded(
+                //     child: AppButton(
+                //         icon: Icons.location_on_rounded,
+                //         label: 'Map',
+                //         onPressed: () => LaunchURLHelper().openLocation(
+                //             lat: appointment.doctor.address.coordinates[0],
+                //             lng: appointment.doctor.address.coordinates[1]))),
+                // const Sizer(),
                 Expanded(
                     child: AppButton(
                         icon: Icons.clear, label: 'Cancel', onPressed: () {})),

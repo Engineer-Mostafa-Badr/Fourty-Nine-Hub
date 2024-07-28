@@ -24,7 +24,7 @@ class AppointmentBookingEntity {
   });
 }
 
-enum BookingTypes { call, clinic, home }
+enum BookingTypes { call, clinic, home, emergency }
 
 extension BookingTypesExtension on BookingTypes {
   String get translatedName {
@@ -35,6 +35,8 @@ extension BookingTypesExtension on BookingTypes {
         return Labels.clinicVist;
       case BookingTypes.home:
         return Labels.homeVist;
+      case BookingTypes.emergency:
+        return Labels.emergency;
     }
   }
 }
@@ -47,6 +49,8 @@ BookingTypes getBookingType(value) {
       return BookingTypes.clinic;
     case 'home':
       return BookingTypes.home;
+    case 'emergency':
+      return BookingTypes.emergency;
   }
   return BookingTypes.clinic;
 }

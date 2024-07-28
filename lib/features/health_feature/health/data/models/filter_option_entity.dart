@@ -1,13 +1,13 @@
-import 'package:fourtyninehub/core/enums/doctor_services.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 
-class HealthFilterOptionModel {
-  final DoctorServices service;
+class HealthBookingFilterModel {
+  final BookingTypes bookingType;
   final String image;
   final String route;
 
-  const HealthFilterOptionModel({
+  const HealthBookingFilterModel({
     required this.route,
-    required this.service,
+    required this.bookingType,
     required this.image,
   });
 }

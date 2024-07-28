@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/enums/doctor_services.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/repositories/doctor_list_repo.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import '../../../../../../core/abstract/use_case.dart';
 
 class GetDoctorListUseCase
@@ -20,7 +20,7 @@ class DoctorSearchParams {
   String governorateId = "";
   String cityId = "";
   String subCategoryId = "";
-  DoctorServices? doctorService;
+  BookingTypes bookingType = BookingTypes.call;
   DoctorSearchParams();
 
   Map<String, dynamic> toJson() {
@@ -28,6 +28,7 @@ class DoctorSearchParams {
     data['governorateId'] = governorateId;
     data['cityId'] = cityId;
     data['subCategoryId'] = subCategoryId;
+    data['type'] = bookingType.name;
     return data;
   }
 
@@ -35,6 +36,6 @@ class DoctorSearchParams {
     governorateId = "";
     cityId = "";
     subCategoryId = "";
-    doctorService = null;
+    bookingType = BookingTypes.call;
   }
 }

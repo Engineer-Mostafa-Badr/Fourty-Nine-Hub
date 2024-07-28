@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/enums/doctor_services.dart';
 import 'package:fourtyninehub/core/enums/main_services_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/models/filter_option_entity.dart';
@@ -23,27 +22,27 @@ class HealthCubit extends Cubit<HealthState> {
       this._getSubCategoriesUseCase, this._healthShare)
       : super(const HealthState());
 
-  final List<HealthFilterOptionModel> services = [
-    HealthFilterOptionModel(
+  final List<HealthBookingFilterModel> services = [
+    HealthBookingFilterModel(
         route: Routes.FILTERDOCTORSUBCATEGORY,
-        service: DoctorServices.CLINICVIST,
+        bookingType: BookingTypes.clinic,
         image: Assets.doctorClinicVisit),
-    HealthFilterOptionModel(
-        service: DoctorServices.CALL,
+    HealthBookingFilterModel(
+        bookingType: BookingTypes.call,
         image: Assets.doctorCall,
         route: Routes.FILTERDOCTORSUBCATEGORY),
-    HealthFilterOptionModel(
-        service: DoctorServices.HOMEVISIT,
+    HealthBookingFilterModel(
+        bookingType: BookingTypes.home,
         image: Assets.doctorHomeVisit,
         route: Routes.FILTERDOCTORSUBCATEGORY),
-    HealthFilterOptionModel(
-        service: DoctorServices.EMERGENCY,
+    HealthBookingFilterModel(
+        bookingType: BookingTypes.emergency,
         image: Assets.emergency,
         route: Routes.VISITAEMERGENCY),
   ];
 
   void loadData() async {
-    await getMyBookings();
+    // await getMyBookings();
     await getServices();
     await getSubCategories();
   }

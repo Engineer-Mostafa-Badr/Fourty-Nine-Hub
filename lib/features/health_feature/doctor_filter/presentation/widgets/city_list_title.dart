@@ -16,7 +16,7 @@ class CityListTitle extends StatelessWidget {
       onTap: () {
         serviceLocator<HealthSharedData>().doctorSearchParams.cityId = city.id;
 
-        context.push(Routes.VISITADOCTORLISTBYLOCATION);
+        context.push(Routes.VISITADOCTORLIST);
       },
     );
   }

@@ -145,7 +145,7 @@ class HealthServiceLocator {
     // -------------------------- cubits --------------------------
     serviceLocator.registerSingleton<HealthSharedData>(HealthSharedData());
     serviceLocator.registerFactory<DoctorDetailsCubit>(
-        () => DoctorDetailsCubit(serviceLocator())..loadData());
+        () => DoctorDetailsCubit());
     serviceLocator.registerFactory<DoctorsListCubit>(() => DoctorsListCubit(
           serviceLocator(),
           serviceLocator(),

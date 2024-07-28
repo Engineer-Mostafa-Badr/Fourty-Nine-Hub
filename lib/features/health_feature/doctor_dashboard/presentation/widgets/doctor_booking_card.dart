@@ -34,7 +34,7 @@ class DoctorBookingCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Label(
                 text:
-                    'Clinic Booking: ${appointment.appointment.date} - ${appointment.appointment.fromTime} to ${appointment.appointment.toTime}',
+                    'Clinic Booking: ${appointment.appointment.day} - ${appointment.appointment.time}',
                 style: Styles.mediumText()),
           ),
           const Divider(
