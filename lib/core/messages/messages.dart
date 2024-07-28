@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 
 import '../../common/widgets/stateless/buttons/default_button.dart';
 import '../../common/widgets/stateless/buttons/elevated_button.dart';
@@ -104,6 +105,39 @@ void showSuccessDialog(BuildContext context, String text) => showDialog(
           left: 20,
           top: 20,
           bottom: 40,
+        ),
+      ),
+    );
+
+void showLoadingDialog(BuildContext context, {String? message}) => showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => PopScope(
+        canPop: false,
+        child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CircularProgressIndicator.adaptive(),
+              const Sizer(height: 20),
+              Text(
+                message ?? "Loading...",
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          contentPadding: const EdgeInsets.only(
+            right: 20,
+            left: 20,
+            top: 20,
+            bottom: 40,
+          ),
         ),
       ),
     );

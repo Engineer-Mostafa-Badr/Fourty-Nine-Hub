@@ -18,16 +18,22 @@ abstract class AuthRepository {
   Future<Either<Failure, UserTokensEntity>> signInWithFacebook();
   Future<Either<Failure, UserTokensEntity>> signInWithApple();
   Future<Either<Failure, void>> register(RegisterParams registerParams);
-  Future<Either<Failure, UserTokensEntity>> verifyOTP(VerifyOTPParams verifyOTPParams);
+  Future<Either<Failure, UserTokensEntity>> verifyOTP(
+      VerifyOTPParams verifyOTPParams);
   Future<Either<Failure, void>> resendOTP(ResendOTPParams params);
-  Future<Either<Failure, void>> sendForgetPasswordOTP(SendForgetOTPParams params);
-  Future<Either<Failure, void>> verifyForgetPasswordOTP(VerifyForgetOTPParams params);
-  Future<Either<Failure, void>> createNewForgetPassword(CreateNewForgetParams params);
+  Future<Either<Failure, void>> sendForgetPasswordOTP(
+      SendForgetOTPParams params);
+  Future<Either<Failure, void>> verifyForgetPasswordOTP(
+      VerifyForgetOTPParams params);
+  Future<Either<Failure, void>> createNewForgetPassword(
+      CreateNewForgetParams params);
 
   Future<Either<Failure, UserTokensEntity?>> getUserTokens();
 
   Future<Either<Failure, bool>> saveUserTokens(UserTokensEntity? userTokens);
+  // Future<Either<Failure, bool>> saveUserId (UserTokensEntity? userTokens);
   Future<Either<Failure, double>> getWelcomeGift();
+  Future<Either<Failure, bool>> signOut();
 
   bool attachToken(UserTokensEntity? token);
 }

@@ -23,6 +23,14 @@ class EndPoints {
   static const documentRequest = '/twitter/document-request';
   // ride
 
+  // health
+  static String getCities({required String governorateId}) =>
+      '/health/cities/$governorateId';
+  static const getGovernorates = '/health/governorate';
+  static const createDoctor = '/health/doctor';
+  static const doctorSearch = '/health/doctor-search';
+  static const bookEmergency = '/health/book-emergency';
+
   // reels
   static const getExploreReels = '/reels/explore';
 
@@ -192,23 +200,84 @@ class EndPoints {
   static const myAds = '/ads/allMyAds';
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const favouriteAds = '/ads-favourites/allFavouriteAds';
+  static String deleteAd(String id) {
+    return '/ads/deleteAd/$id';
+  }
+
   static String subCategoryAds(String id) {
     return '/ads/subCategoryAds/$id';
   }
 
+  static String createAuction(String id) {
+    return '/auction/$id';
+  }
+
+  static const auctionsList = '/auction';
+  static const myAuctions = '/auction/my-auction';
+  static String auctionDetails(String id) {
+    return '/auction/$id';
+  }
+  static String getAuctionRequests(String id){
+    return '/auction/all-auction-request/$id';
+  }
+
+  static String sendAuctionRequest(String id) {
+    return '/auction/add-auction-request/$id';
+  }
+
+  static String followUserAuctions(String userId) {
+    return '/auction/follow-user-auction/$userId';
+  }
+
+  static String getAllAuctionRequests(String id) {
+    return '/auction/all-auction-request/$id';
+  }
+
+  static String endAuction(String id) {
+    return '/auction/end-auction/$id';
+  }
 
   static String adDetails(String id) {
     return '/ads/getAd/$id';
+  }
+
+  // /installment
+  static String installment = '/installment';
+  // static String installment = '/installment';
+  static String createInstallment(String id) {
+    return '/installment/$id';
+  }
+
+  static String installmentDetails(String id) {
+    return '/installment/$id';
+  }
+
+  static String addInstallmentRequest(String id) {
+    return '/installment/add-installments-request/$id';
   }
 
   static String addToCart = '/food/addToCart';
   static String getCart = '/food/getCart';
   static String deleteFromCart = '/food/deleteFromCart';
   static String placeOrder = '/food/make-order';
+
   // contact us
   static const helpMessages = '/help';
   static String mediaUrl = '/media/signed-url';
   static String confirmUpload(String mediaId) {
     return '/media/confirm/$mediaId';
+  }
+
+  // chat_room
+  static String getChats = '/chat/get-chats';
+  static String getChatMessages(String chatId) {
+    return '/chat/get-chat/$chatId';
+  }
+  static String changeChatMuteState(String chatId) {
+    return '/chat/mute-chat/$chatId';
+  }
+
+  static String changeChatToArchiveOrNormal(String chatId) {
+    return '/chat/archive-chat/$chatId';
   }
 }

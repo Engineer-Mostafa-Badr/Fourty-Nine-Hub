@@ -141,13 +141,13 @@ class LoginView extends StatelessWidget {
                         children: [
                           TextSpan(
                             text: "Doesn't have account? ",
-                            style: Styles.mediumText(color: Colors.grey),
+                            style: Styles.headerText(color: Colors.grey),
                           ),
                           TextSpan(
                             text: "Register",
                             recognizer: TapGestureRecognizer()
                               ..onTap = () => context.push(Routes.REGISTER),
-                            style: Styles.mediumText(color: Colors.black),
+                            style: Styles.headerText(color: Colors.black),
                           ),
                         ],
                       ),

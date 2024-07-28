@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 
@@ -78,9 +79,16 @@ class SubCategoryCard extends StatelessWidget {
                   IconAppButton(
                       icon: Icons.add_box_rounded,
                       size: 20,
-                      onPressed: () => context.push(Routes.CREATEAD,
-                          extra: CategorizationEntity(
-                              mainCategory: mainCategory, subCategory: item)))
+                      onPressed: () {
+                        if (AuthHelper().isLoggedIn()) {
+                          context.push(Routes.CREATEAD,
+                              extra: CategorizationEntity(
+                                  mainCategory: mainCategory,
+                                  subCategory: item));
+                        } else {
+                          context.push(Routes.LOGIN);
+                        }
+                      })
                 ],
               ),
             ),

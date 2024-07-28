@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 
 import 'package:fourtyninehub/core/states/basic_state.dart';
@@ -23,98 +24,108 @@ class DrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      backgroundColor: Colors.white,
-      child: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              BlocBuilder<UserCubit, BasicState<UserEntity>>(
-                builder: (context, state) {
-                  return context.read<UserCubit>().isLoggedIn
+    return BlocBuilder<UserCubit, BasicState<UserEntity>>(
+      builder: (context, state) {
+        return Drawer(
+          backgroundColor: Colors.white,
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  context.read<UserCubit>().isLoggedIn
                       ? _buildAccountHeader(
                           context: context,
                           user: state.data,
                         )
-                      : _buildLoginWidget(context: context);
-                },
+                      : _buildLoginWidget(context: context),
+
+                  competitionSubscription(context: context),
+
+                  // walletCircularProgress(context: context),
+                  drawerListTile(
+                      icon: FontAwesomeIcons.bullhorn,
+                      label: 'Advertise Your Company',
+                      onTap: () => context.push(Routes.CREATECOMPANYAD)),
+
+                  drawerListTile(
+                      icon: FontAwesomeIcons.quran,
+                      label: Labels.quraan,
+                      onTap: () => context.push(Routes.QURAAN)),
+                  drawerListTile(
+                      icon: FontAwesomeIcons.book,
+                      label: Labels.azkar,
+                      onTap: () => context.push(Routes.AZKAAR)),
+
+                  drawerListTile(
+                      icon: Icons.star_rounded,
+                      label: 'Favourite Categories',
+                      requireLogin: true,
+                      onTap: () => context.push(Routes.FAVOURITECATEGORIES)),
+
+                  drawerListTile(
+                      icon: Icons.favorite,
+                      label: 'Favourite Sub Categories',
+                      requireLogin: true,
+                      onTap: () => context.push(Routes.FAVOURITESUBCATEGORIES)),
+                  drawerListTile(
+                      icon: FontAwesomeIcons.adn,
+                      label: 'Favourite Ads',
+                      requireLogin: true,
+                      onTap: () => context.push(Routes.FAVOURITE)),
+                  drawerListTile(
+                      icon: Icons.history,
+                      label: 'Requests History',
+                      requireLogin: true,
+                      onTap: () => context.push(Routes.REQUESTSHISTORY)),
+
+                  drawerListTile(
+                      icon: Icons.list,
+                      label: 'Lists',
+                      requireLogin: true,
+                      onTap: () => context.push(Routes.Lists)),
+                  drawerListTile(
+                      icon: Icons.ads_click,
+                      label: 'My Ads',
+                      requireLogin: true,
+                      onTap: () => context.push(Routes.MYADDS)),
+                  // drawerListTile(icon: Icons.list, label: 'Requests', onTap: () {}),
+                  drawerListTile(
+                      icon: Icons.settings,
+                      label: 'Settings',
+                      onTap: () => context.push(Routes.SETTINGS)),
+
+                  drawerListTile(
+                      icon: Icons.privacy_tip,
+                      label: 'Privacy',
+                      onTap: () => context.push(Routes.PRIVACY)),
+
+                  drawerListTile(
+                      icon: Icons.policy_outlined,
+                      label: 'Policies',
+                      onTap: () => context.push(Routes.POLICY)),
+                  drawerListTile(
+                      icon: Icons.share,
+                      label: 'Share App',
+                      onTap: () => context.push(Routes.SHAREAPP)),
+                  drawerListTile(
+                      icon: Icons.message,
+                      label: 'Contact Us',
+                      onTap: () => context.push(Routes.CONTACTUS)),
+
+                  drawerListTile(
+                      icon: Icons.logout,
+                      requireLogin: true,
+                      label: 'Logout',
+                      onTap: () {
+                        bottomSheet(
+                            context: context, widget: const LogoutWidget());
+                      }),
+                ],
               ),
-              competitionSubscription(context: context),
-
-              // walletCircularProgress(context: context),
-              drawerListTile(
-                  icon: FontAwesomeIcons.bullhorn,
-                  label: 'Advertise Your Company',
-                  onTap: () => context.push(Routes.CREATECOMPANYAD)),
-
-              drawerListTile(
-                  icon: FontAwesomeIcons.quran,
-                  label: Labels.quraan,
-                  onTap: () => context.push(Routes.QURAAN)),
-              drawerListTile(
-                  icon: FontAwesomeIcons.book,
-                  label: Labels.azkar,
-                  onTap: () => context.push(Routes.AZKAAR)),
-
-              drawerListTile(
-                  icon: Icons.star_rounded,
-                  label: 'Favourite Categories',
-                  onTap: () => context.push(Routes.FAVOURITECATEGORIES)),
-
-              drawerListTile(
-                  icon: Icons.favorite,
-                  label: 'Favourite Sub Categories',
-                  onTap: () => context.push(Routes.FAVOURITESUBCATEGORIES)),
-              drawerListTile(
-                  icon: FontAwesomeIcons.adn,
-                  label: 'Favourite Ads',
-                  onTap: () => context.push(Routes.FAVOURITE)),
-              drawerListTile(
-                  icon: Icons.history,
-                  label: 'Requests History',
-                  onTap: () => context.push(Routes.REQUESTSHISTORY)),
-
-              drawerListTile(
-                  icon: Icons.list,
-                  label: 'Lists',
-                  onTap: () => context.push(Routes.Lists)),
-              drawerListTile(
-                  icon: Icons.ads_click,
-                  label: 'My Ads',
-                  onTap: () => context.push(Routes.MYADDS)),
-              // drawerListTile(icon: Icons.list, label: 'Requests', onTap: () {}),
-              drawerListTile(
-                  icon: Icons.settings,
-                  label: 'Settings',
-                  onTap: () => context.push(Routes.SETTINGS)),
-
-              drawerListTile(
-                  icon: Icons.privacy_tip,
-                  label: 'Privacy',
-                  onTap: () => context.push(Routes.PRIVACY)),
-
-              drawerListTile(
-                  icon: Icons.policy_outlined,
-                  label: 'Policies',
-                  onTap: () => context.push(Routes.POLICY)),
-              drawerListTile(
-                  icon: Icons.share,
-                  label: 'Share App',
-                  onTap: () => context.push(Routes.SHAREAPP)),
-              drawerListTile(
-                  icon: Icons.message,
-                  label: 'Contact Us',
-                  onTap: () => context.push(Routes.CONTACTUS)),
-              drawerListTile(
-                  icon: Icons.logout,
-                  label: 'Logout',
-                  onTap: () {
-                    bottomSheet(context: context, widget: const LogoutWidget());
-                  }),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -260,7 +271,11 @@ class DrawerWidget extends StatelessWidget {
       {required IconData icon,
       required String label,
       String? description,
+      bool requireLogin = false,
       required Function onTap}) {
+    if (requireLogin && !AuthHelper().isLoggedIn()) {
+      return const SizedBox();
+    }
     return ListTile(
       onTap: () => onTap(),
       leading: Icon(icon),
@@ -426,41 +441,14 @@ class DrawerWidget extends StatelessWidget {
               )
             ],
           )),
-          _buildRegisterButton(
-              icon: const Icon(Icons.more_vert), context: context),
+          
+          
         ],
       ),
     );
   }
 
-  Widget _buildRegisterButton(
-      {required Widget icon, required BuildContext context}) {
-    return PopupMenuButton(
-        icon: icon,
-        itemBuilder: (context) {
-          return const [
-            PopupMenuItem<int>(
-              value: 0,
-              child: Text("Driver"),
-            ),
-            PopupMenuItem<int>(
-              value: 1,
-              child: Text("Doctor"),
-            ),
-            PopupMenuItem<int>(
-              value: 2,
-              child: Text("Restaurant"),
-            ),
-          ];
-        },
-        onSelected: (value) {
-          if (value == 0) {
-            context.push(Routes.REGISTERDRIVER);
-          } else if (value == 1) {
-            context.push(Routes.REGISTERDRIVER);
-          } else if (value == 2) {
-            context.push(Routes.REGISTERDRIVER);
-          }
-        });
-  }
+
+
+
 }

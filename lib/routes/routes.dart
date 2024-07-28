@@ -1,3 +1,4 @@
+
 abstract class Routes {
   Routes._();
 
@@ -28,11 +29,20 @@ abstract class Routes {
   static const CLUBHOUSECHAT = '/Social/ClubHouse/ClubHouseChat';
   static const CLUBHOUSEROOM = '/Social/ClubHouse/ClubHouseRoom';
   static const CHAT = '/Chat';
-  static const CHATROOM = '/Chat/ChatRoom';
+  static const CHATROOM = '/ChatRoom';
   static const MAZADAT = '/Mazadat';
   static const VISITA = '/Visita';
-  static const VISITADOCTORLIST = '/Visita/VisitaDoctorsList';
-  static const DOCTORLOGIN = '/Visita/DoctorLogin';
+  static const VISITAEMERGENCY = '/Visita/VisitaEmergency';
+  static const CREATEDOCTOR = '/Visita/CreateDoctor';
+  static const FILTERDOCTORSUBCATEGORY = '/Visita/FilterDoctorSubcategory';
+  static const FILTERDOCTORGOVERNORATE =
+      '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate';
+  static const FILTERDOCTORCITY =
+      '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate/FilterDoctorCity';
+  static const VISITADOCTORLISTBYLOCATION =
+      '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate/FilterDoctorCity/VisitaDoctorsList';
+  static const VISITADOCTORLISTBYCALL =
+      '/Visita/FilterDoctorSubcategory/VisitaDoctorsList';
   static const VISITADOCTORDETAILS = '/Visita/DoctorDetails';
   static const VISITABOOKING = '/Visita/VisitaBooking';
   static const DOCTORDASHBOARD = '/Visita/DoctorDashboard';
@@ -63,6 +73,8 @@ abstract class Routes {
   static const INSTAGRAM = '/Instagram';
   static const ZOOM = '/Zoom';
   static const MEETINGROOM = '/Zoom/MeetingRoom';
+  static const CALLSCREEN = '/Zoom/CallScreen';
+  static const JOINSCREEN = '/Zoom/JoinScreen';
   static const INSTALLMENT = '/Installment';
   static const CREATEINSTALLMENT = '/Installment/CreateInstallment';
   static const INSTALLMENTDETAILS = '/Installment/Installment-details';
@@ -126,9 +138,13 @@ abstract class Paths {
   static const CLUBHOUSEROOM = 'ClubHouseRoom';
   static const VISITA = 'Visita';
   static const VISITADOCTORLIST = 'VisitaDoctorsList';
+  static const VISITAEMERGENCY = 'VisitaEmergency';
   static const VISITADOCTORDETAILS = 'DoctorDetails';
   static const VISITABOOKING = 'VisitaBooking';
-  static const DOCTORLOGIN = 'DoctorLogin';
+  static const CREATEDOCTOR = 'CreateDoctor';
+  static const FILTERDOCTORSUBCATEGORY = 'FilterDoctorSubcategory';
+  static const FILTERDOCTORGOVERNORATE = 'FilterDoctorGovernorate';
+  static const FILTERDOCTORCITY = 'FilterDoctorCity';
   static const DOCTORDASHBOARD = 'DoctorDashboard';
   static const FOOD = 'Food';
   static const CusineRestaurants = 'Cusine-Restaurants';
@@ -147,6 +163,8 @@ abstract class Paths {
   static const PLAYVIDEO = 'PlayVideo';
   static const ZOOM = 'Zoom';
   static const MEETINGROOM = 'MeetingRoom';
+  static const CALLSCREEN = 'CallScreen';
+  static const JOINSCREEN = 'joinScreen';
   static const INSTALLMENT = 'Installment';
   static const CREATEINSTALLMENT = 'CreateInstallment';
   static const INSTALLMENTDETAILS = 'Installment-details';

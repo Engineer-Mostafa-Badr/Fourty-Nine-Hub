@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
+import 'package:fourtyninehub/features/mazadat_feature/auction_list/domain/entities/auction_entity.dart';
 import 'package:fourtyninehub/features/ride/trip_details/domain/entities/trip_and_request_entity.dart';
 
 import '../../domain/repositories/my_ads_repo.dart';
@@ -12,9 +13,8 @@ class MyAdsRepoImpl implements MyAdsRepo {
   final MyAdsRemoteDatasource _remoteDatasource;
   MyAdsRepoImpl(this._remoteDatasource);
   @override
-  Future<Either<Failure, bool>> cancelAd({required int id}) {
-    // TODO: implement cancelAd
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> cancelAd({required String id}) {
+    return _remoteDatasource.cancelAd(id: id);
   }
 
   @override
@@ -68,5 +68,10 @@ class MyAdsRepoImpl implements MyAdsRepo {
   @override
   Future<Either<Failure, bool>> rejectPickMeRequest({required String id}) {
     return _remoteDatasource.rejectPickMeRequest(id: id);
+  }
+
+  @override
+  Future<Either<Failure, List<AuctionEntity>>> getMyAuctions() {
+    return _remoteDatasource.getMyAuctions();
   }
 }

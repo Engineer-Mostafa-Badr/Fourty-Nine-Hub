@@ -20,17 +20,17 @@ class JsonParser implements ApiConsumer {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> get(String url,
-      {Map<String, dynamic>? queryParameters}) async {
+  Future<Either<Failure, Map<String, dynamic>>> get(
+    String url, {
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? data,
+  }) async {
     try {
       final response = jsonDecode(await rootBundle.loadString(url));
-      
-      return Right(response as Map<String, dynamic>);
 
+      return Right(response as Map<String, dynamic>);
     } catch (e) {
-      
       return Left(_getFailure(e));
-    
     }
   }
 

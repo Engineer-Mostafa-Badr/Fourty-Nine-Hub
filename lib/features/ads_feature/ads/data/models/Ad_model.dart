@@ -5,7 +5,6 @@ import '../../../../requests_history/data/models/address_model.dart';
 import '../../domain/entities/ad_entity.dart';
 import 'detail_model.dart';
 
-
 class AdModel extends AdEntity {
   AdModel(
       {required super.id,
@@ -13,28 +12,43 @@ class AdModel extends AdEntity {
       required super.description,
       required super.images,
       required super.price,
-       super.address,
-       super.user,
+      super.address,
+      super.user,
       super.statistics,
       required super.active,
       required super.createdAt,
       required super.details,
-       super.subCategoryId, required super.phone});
+      super.subCategoryId,
+      required super.phone});
   factory AdModel.fromJson(Map<String, dynamic> json) {
+    List<String> images = [];
+    try {
+      images =
+          (json['images'] as List).map((e) => e['mediaKey'] as String).toList();
+    } catch (e) {}
+    UserModel? user;
+    try {
+      if (json['userId'] != null) {
+        user = UserModel.fromJson(json['userId']);
+      }
+      if (json['user'] != null) {
+        user = UserModel.fromJson(json['user']);
+      }
+    } catch (e) {}
     return AdModel(
-        id: json['_id'],
-        title: json['title'],
-        description: json['desc'],
-        images: (json['images'] as List).map((e)=> e['mediaKey'] as String).toList(),
-        price: json['price'],
+        id: json['_id'] ?? '',
+        title: json['title'] ?? '',
+        description: json['desc'] ?? json['description'],
+        images: images,
+        price: json['price'] ?? 0,
         subCategoryId: json['subCategoryId'],
         active: json['active'] ?? true,
-        phone: json['phone'],
+        phone: json['phone'] ?? '',
         statistics: json['statistics'] == null
             ? null
             : AdStatisticsModel.fromJson(json['statistics']),
         address: AddressModel.fromJson(json['address']),
-        user: UserModel.fromJson(json['userId']),
+        user: user,
         details: json['props'] == null
             ? []
             : (json['props'] as List)

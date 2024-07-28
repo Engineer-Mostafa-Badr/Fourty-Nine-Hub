@@ -14,6 +14,7 @@ abstract class ApiConsumer {
   Future<Either<Failure, Map<String, dynamic>>> get(
     String url, {
     Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? data,
   });
 
   Future<Either<Failure, Map<String, dynamic>>> post(
@@ -93,10 +94,12 @@ class BaseApiConsumer extends ApiConsumer {
   Future<Either<Failure, Map<String, dynamic>>> get(
     String url, {
     Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? data,
   }) async {
     try {
       final result = await _dio.get(
         url,
+        data: data,
         queryParameters: queryParameters,
       );
       if (result.data['status']) {
@@ -106,18 +109,19 @@ class BaseApiConsumer extends ApiConsumer {
             result.data['message'] ?? result.data['error']['message']));
       }
     } catch (e) {
-      if (e is DioException &&
-          e.response?.statusCode == 401 &&
-          isTokenAttached) {
-        return refreshToken().then(
-          (_) => get(
-            url,
-            queryParameters: queryParameters,
-          ),
-        );
-      } else {
-        return Left(_getFailure(e));
-      }
+      // if (e is DioException &&
+      //     e.response?.statusCode == 401 &&
+      //     isTokenAttached) {
+      //   return refreshToken().then(
+      //     (_) => get(
+      //       url,
+      //       queryParameters: queryParameters,
+      //     ),
+      //   );
+      // } else {
+      //   return Left(_getFailure(e));
+      // }
+      return Left(_getFailure(e));
     }
   }
 

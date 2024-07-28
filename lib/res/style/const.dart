@@ -30,27 +30,13 @@ class UIConst {
   static const String quraanWeb = 'https://surahquran.com/';
   static const String azkar = 'https://www.islambook.com/azkar/';
 
-  // static final adHomeUnitId = kDebugMode
-  //     ? AdmobBanner.testAdUnitId
-  //     : Platform.isIOS // MEDIUM_RECTANGLE
-  //         ? 'ca-app-pub-2061374259497727/6752068738'
-  //         : 'ca-app-pub-2061374259497727/5327786987';
-  //
-  // static final adPostUnitId = kDebugMode
-  //     ? AdmobBanner.testAdUnitId
-  //     : Platform.isIOS // MEDIUM_RECTANGLE
-  //         ? 'ca-app-pub-2061374259497727/8639865476'
-  //         : 'ca-app-pub-2061374259497727/6898057322';
-  //
-  // static final adAppRadioUnitId = kDebugMode
-  //     ? AdmobBanner.testAdUnitId
-  //     : Platform.isIOS // MEDIUM_RECTANGLE
-  //         ? 'ca-app-pub-2061374259497727/3112206629'
-  //         : 'ca-app-pub-2061374259497727/2767240624';
-  //
-  // static final adDynamicUnitId = kDebugMode
-  //     ? AdmobBanner.testAdUnitId
-  //     : Platform.isIOS // LARGE_BANNER
-  //         ? 'ca-app-pub-2061374259497727/2688662652'
-  //         : 'ca-app-pub-2061374259497727/4471204534';
+
+  static const String appSign = '45ecafc4787be753f178d5cc03f93eccb8167c6280d3697bf3909dbe53b86c54';
+  static const int appId = 2045827723;
+
+
+
+  //Chat
+  static const String chatNormalId = '668e7dc4e8cfec5bcc752afc';
+
 }

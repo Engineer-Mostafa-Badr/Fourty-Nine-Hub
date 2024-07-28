@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/domain/entities/auction_entity.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/functions/helper/auth_helper.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -129,9 +131,13 @@ class _PlaceBiddingState extends State<PlaceBidding> {
               label: Labels.placeBidding,
               onPressed: () {
                 if (bidding > widget.auction.currentPrice) {
-                  context.pop();
+                  if (AuthHelper().isLoggedIn()) {
+                    widget.onPlaced(bidding);
 
-                  widget.onPlaced(bidding);
+                    context.pop();
+                  } else {
+                    context.push(Routes.LOGIN);
+                  }
                 }
               }),
         ],

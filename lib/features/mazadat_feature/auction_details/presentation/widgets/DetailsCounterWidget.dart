@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import '../../../../../common/functions/helper/numbers_helper.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/stateless/buttons/text_button.dart';
@@ -58,7 +59,7 @@ class DetailsCounterWidget extends StatelessWidget {
                               child: CircleAvatar(
                                 radius: 12,
                                 backgroundColor: Colors.white,
-                                backgroundImage: NetworkImage(e.user.image),
+                                backgroundImage: NetworkImage(e.user.profilePicture?? UIConst.profilePlaceHolder),
                               ),
                             );
                           }).toList() ??
@@ -78,34 +79,6 @@ class DetailsCounterWidget extends StatelessWidget {
                   )
                 ],
               )),
-          SizedBox(
-            height: kTextTabBarHeight * 2,
-            width: kTextTabBarHeight * 2,
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 10,
-                    value: auction.restTimeRatio,
-                  ),
-                ),
-                Positioned.fill(
-                    child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Label(
-                          text: 'Ends At',
-                          style: Styles.mediumText(color: Colors.grey)),
-                      Label(
-                          text: auction.formattedRestTime,
-                          style: Styles.headerText())
-                    ],
-                  ),
-                ))
-              ],
-            ),
-          ),
         ],
       ),
     );

@@ -11,6 +11,8 @@ import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 class AudioRoomCard extends StatelessWidget {
+  const AudioRoomCard({super.key});
+
   @override
   Widget build(BuildContext context) {
     return InkWell(

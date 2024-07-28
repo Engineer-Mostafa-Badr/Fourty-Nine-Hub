@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
+
+import 'package:fourtyninehub/features/mazadat_feature/auction_details/domain/usecases/send_bidding_usecase.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_details/presentation/cubit/auction_details_cubit.dart';
+
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/dynamic/CarouselSlider.dart';
@@ -18,8 +21,20 @@ import '../../../auction_list/domain/entities/auction_entity.dart';
 import '../widgets/DetailsCounterWidget.dart';
 import '../widgets/PlaceBidding.dart';
 
-class MazadDetails extends StatelessWidget {
-  const MazadDetails({super.key});
+class MazadDetails extends StatefulWidget {
+  final String id;
+  const MazadDetails({super.key, required this.id});
+
+  @override
+  State<MazadDetails> createState() => _MazadDetailsState();
+}
+
+class _MazadDetailsState extends State<MazadDetails> {
+  @override
+  void initState() {
+    context.read<AuctionDetailsCubit>().loadData(id: widget.id);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,18 +56,36 @@ class MazadDetails extends StatelessWidget {
         final controller = context.read<AuctionDetailsCubit>();
         return Scaffold(
           appBar: const BackAppBar(),
-          bottomNavigationBar: AppButton(
-              margin: 10,
-              label: Labels.placeBidding,
-              onPressed: () {
-                bottomSheet(
-                    context: context,
-                    widget: PlaceBidding(
-                      auction: state.auction!,
-                      onPlaced: (num v) => controller.sendBidding(bidding: v),
-                    ));
-              }),
-          body: state.status == AuctionDetailsStates.loading
+          bottomNavigationBar: ((state.auction?.isMine ?? false) &&
+                  !(state.auction?.isFinished ?? false))
+              ? AppButton(
+                  margin: 10,
+                  label: Labels.endAuction,
+                  onPressed: () => controller.endAuction(id: widget.id))
+              : ((state.auction?.isMine ?? false) &&
+                      (state.auction?.isFinished ?? false))
+                  ? AppButton(
+                      margin: 10,
+                      label: Labels.biddings,
+                      onPressed: () {
+                        controller.showAuctionRequests(
+                            id: widget.id, context: context);
+                      })
+                  : AppButton(
+                      margin: 10,
+                      label: Labels.placeBidding,
+                      onPressed: () {
+                        bottomSheet(
+                            context: context,
+                            widget: PlaceBidding(
+                              auction: state.auction!,
+                              onPlaced: (num v) async =>
+                                  await controller.sendBidding(
+                                      params: SendBiddingParams(
+                                          auctionId: widget.id, price: v)),
+                            ));
+                      }),
+          body: state.isLoading
               ? const Center(
                   child: CircularProgressIndicator.adaptive(),
                 )
@@ -137,13 +170,19 @@ class MazadDetails extends StatelessWidget {
           style: Styles.mediumText(fontWeight: FontWeight.bold),
         ),
         Label(text: ad.description),
-        _buildUserInfo(ad: ad, context: context),
+        _buildUserInfo(ad: ad, auction: auction, context: context),
       ],
     );
   }
 
-  Widget _buildUserInfo({required AdEntity ad, required BuildContext context}) {
+  Widget _buildUserInfo(
+      {required AdEntity ad,
+      AuctionEntity? auction,
+      required BuildContext context}) {
     final controller = context.read<AuctionDetailsCubit>();
+    if ((auction?.isMine ?? false)) {
+      return const SizedBox();
+    }
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
@@ -151,7 +190,7 @@ class MazadDetails extends StatelessWidget {
           CircleAvatar(
             radius: 25,
             backgroundColor: Colors.white,
-            backgroundImage: NetworkImage(ad.user?.profilePicture??''),
+            backgroundImage: NetworkImage(auction?.user?.profilePicture ?? ''),
           ),
           const Sizer(),
           Expanded(
@@ -159,10 +198,10 @@ class MazadDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Label(
-                  text: ad.user?.fullName??'',
+                  text: auction?.user?.fullName ?? '',
                   style: Styles.mediumText(color: Colors.black)),
               Label(
-                  text: ad.user?.email??'',
+                  text: auction?.user?.email ?? '',
                   style: Styles.mediumText(color: Colors.grey)),
             ],
           )),
@@ -171,7 +210,7 @@ class MazadDetails extends StatelessWidget {
               padding: 3,
               height: 30,
               label: 'Follow',
-              onPressed: () => controller.followUser())
+              onPressed: () => controller.followUser(userId: auction?.id ?? ''))
         ],
       ),
     );

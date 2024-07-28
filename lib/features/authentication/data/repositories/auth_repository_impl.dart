@@ -156,5 +156,10 @@ class AuthRepositoryImpl extends AuthRepository {
   ) {
     return _remoteDataSource.createNewForgetPassword(params);
   }
+
+  @override
+  Future<Either<Failure, bool>> signOut() {
+    return _localDataSource.deleteTokens();
+  }
 }
 //enum: ['google', 'facebook', 'local', 'apple']

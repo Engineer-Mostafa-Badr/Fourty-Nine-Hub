@@ -8,10 +8,10 @@ class AdStatisticsModel extends AdStatisticsEntity {
       required super.views});
   factory AdStatisticsModel.fromJson(Map<String, dynamic> json) {
     return AdStatisticsModel(
-      calls: json['calls'],
-      chats: json['chats'],
-      requests: json['requests'],
-      views: json['views'],
+      calls: json['calls'] ?? 0,
+      chats: json['chat_room'] ?? 0,
+      requests: json['requests'] ?? 0,
+      views: json['views'] ?? 0,
     );
   }
 }

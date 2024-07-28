@@ -17,12 +17,13 @@ class InstallmentListCubit extends Cubit<InstallmentListState> {
       : super(const InstallmentListState());
 
   void loadData() async {
+    emit(state.copyWith(status: InstallmentListStates.loading));
     await getInstallmentsList();
-    await getSubCategories();
+    // await getSubCategories();
   }
 
   Future<void> getInstallmentsList() async {
-    final response = await _getInstallmentListUseCase.call(0);
+    final response = await _getInstallmentListUseCase('');
     response.fold(
         (failure) => emit(state.copyWith(
             failure: failure, status: InstallmentListStates.error)),
@@ -38,7 +39,8 @@ class InstallmentListCubit extends Cubit<InstallmentListState> {
         (data) => emit(state.copyWith(
             subCategories: data, status: InstallmentListStates.initState)));
   }
-   void changeSubCategory({required SubCategoryEntity v}) {
+
+  void changeSubCategory({required SubCategoryEntity v}) {
     emit(state.copyWith(selectedSubCategory: v));
   }
 

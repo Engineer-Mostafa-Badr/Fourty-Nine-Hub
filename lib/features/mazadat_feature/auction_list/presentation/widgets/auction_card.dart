@@ -8,6 +8,7 @@ import '../../../../../common/functions/helper/numbers_helper.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 
@@ -19,7 +20,7 @@ class AuctionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () => context.push(Routes.MAZADDETAILS),
+        onTap: () => context.push(Routes.MAZADDETAILS, extra: item.id),
         child: isVertical
             ? _buildVerticalView(context: context)
             : _buildHorizontalView(context: context));
@@ -31,18 +32,23 @@ class AuctionCard extends StatelessWidget {
       children: [
         Expanded(
             child: SquareImage(
-                width: double.infinity,
-                radius: 10,
-                source: NetworkImage(item.ad.images.first))),
+          width: double.infinity,
+          radius: 10,
+          url: item.ad.images.isNotEmpty
+              ? item.ad.images.first
+              : UIConst.imagePlaceHolder,
+        )),
         const Sizer(),
         Expanded(
           flex: 2,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Expanded(
                       child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Label(
                         text: item.ad.title,
@@ -57,12 +63,12 @@ class AuctionCard extends StatelessWidget {
                     ],
                   )),
                   const Sizer(),
-                  IconAppButton(
-                      size: 20, icon: Icons.favorite_border, onPressed: () {}),
+                  // IconAppButton(
+                  //     size: 20, icon: Icons.favorite_border, onPressed: () {}),
                 ],
               ),
               Label(
-                text: item.ad.address?.address??'',
+                text: item.ad.address?.address ?? '',
                 style: Styles.mediumText(),
                 maxLines: 1,
               ),
@@ -81,9 +87,15 @@ class AuctionCard extends StatelessWidget {
                   ),
                   const Sizer(),
                   Expanded(
-                    child: AppButton(
-                        label: 'Bidding',
-                        onPressed: () => context.push(Routes.MAZADDETAILS)),
+                    child: item.isMine
+                        ? AppButton(
+                            label: 'Details',
+                            onPressed: () => context.push(Routes.MAZADDETAILS,
+                                extra: item.id))
+                        : AppButton(
+                            label: 'Bidding',
+                            onPressed: () => context.push(Routes.MAZADDETAILS,
+                                extra: item.id)),
                   ),
                 ],
               ),
@@ -99,25 +111,29 @@ class AuctionCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-            child: SquareImage(
-                width: double.infinity,
-                radius: 10,
-                source: NetworkImage(item.ad.images.first))),
+          child: SquareImage(
+            width: double.infinity,
+            radius: 10,
+            url: item.ad.images.isNotEmpty
+                ? item.ad.images.first
+                : UIConst.imagePlaceHolder,
+          ),
+        ),
         Row(
           children: [
             Expanded(
               child: Label(
                 text:
                     '${NumbersHelper.formatThousands(number: item.currentPrice)} L.E',
-              style: Styles.mediumText(
+                style: Styles.mediumText(
                     fontWeight: FontWeight.bold,
                     color: AppColors.SECONDARY_COLOR),
                 maxLines: 1,
               ),
             ),
             const Sizer(),
-            IconAppButton(
-                size: 20, icon: Icons.favorite_border, onPressed: () {}),
+            // IconAppButton(
+            //     size: 20, icon: Icons.favorite_border, onPressed: () {}),
           ],
         ),
         Label(

@@ -16,17 +16,21 @@ class InstallmentView extends StatelessWidget {
     return BlocConsumer<InstallmentListCubit, InstallmentListState>(
       listener: (context, state) {},
       builder: (context, state) {
+        final controller = context.read<InstallmentListCubit>();
         return SharedScaffold(
             mainCategoryId: 1,
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                _buildHorizontalCategories(
-                  context: context,
-                ),
-                _buildViewType(context: context),
-                Expanded(child: _buildProductsWidget()),
-              ],
+            body: RefreshIndicator(
+              onRefresh: () async => controller.loadData(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  // _buildHorizontalCategories(
+                  //   context: context,
+                  // ),
+                  _buildViewType(context: context),
+                  Expanded(child: _buildProductsWidget()),
+                ],
+              ),
             ));
       },
     );
@@ -158,7 +162,13 @@ class InstallmentView extends StatelessWidget {
         builder: (context, state) {
       return Padding(
         padding: const EdgeInsets.all(8.0),
-        child: state.isGrid
+        child: 
+        state.isLoading ?
+
+        const Center(
+          child: CircularProgressIndicator.adaptive(),
+        ):
+        state.isGrid
             ? GridView.builder(
                 itemBuilder: (context, index) => InstallmentAdCard(
                       item: state.installments![index],

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class HealthSubCategoryCard extends StatelessWidget {
@@ -48,14 +50,38 @@ class HealthSubCategoryCard extends StatelessWidget {
                           size: 20,
                           icon: Icons.favorite_border,
                           color: Colors.red,
-                          onPressed: () {}))
+                          onPressed: () {})),
+                  Positioned(
+                    top: 5,
+                    left: 5,
+                    child: Label(
+                      text: '${9999.toShortScale} ads',
+                      style: Styles.mediumText(
+                        color: Colors.white,
+                        shadows: [
+                          const Shadow(
+                            blurRadius: 6.0,
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             )),
             const Sizer(),
-            Label(
-              text: subCategory.name,
-              style: Styles.mediumText(fontWeight: FontWeight.bold),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Label(
+                  text: subCategory.name,
+                  style: Styles.mediumText(fontWeight: FontWeight.bold),
+                ),
+                Label(
+                    text: '${9999.toShortScale} doctors',
+                    style: Styles.mediumText(color: AppColors.GREY_DARK_COLOR)),
+              ],
             ),
           ],
         ),
