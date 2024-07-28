@@ -1,5 +1,4 @@
 import 'package:fourtyninehub/core/utils/duration_helper.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 
 class TwitterCommentReplyEntity {
   final String id;

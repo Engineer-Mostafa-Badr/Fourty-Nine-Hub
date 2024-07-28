@@ -146,13 +146,11 @@ class TwitterCubit extends Cubit<TwitterState> {
   Future<bool> onReport(TwitterReportParams params) async {
     var response = await _twitterReportUseCase(params);
 
-    bool? reported;
     response.fold(
         (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
         (data) {
       emit(state.copyWith(reported: data, status: StateStatus.success));
-      reported = data;
       print(data);
     });
 

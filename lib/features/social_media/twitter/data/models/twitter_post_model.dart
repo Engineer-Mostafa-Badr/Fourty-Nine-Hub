@@ -1,4 +1,3 @@
-import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_comment_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_main_post_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
 

@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_post_comment_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
@@ -10,12 +7,10 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comm
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_comment_card.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
-import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';

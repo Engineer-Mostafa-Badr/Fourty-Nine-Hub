@@ -1,5 +1,4 @@
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 
 class TwitterCommentReplyModel extends TwitterCommentReplyEntity {
   TwitterCommentReplyModel({

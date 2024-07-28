@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -10,7 +8,6 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/select_activity_view.dart';
-
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
