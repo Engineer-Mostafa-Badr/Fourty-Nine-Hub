@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
+import '../../../../../common/widgets/dynamic/drawer.dart';
+import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -22,79 +25,90 @@ class OtherAccountView extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 4,
-      child: NestedAppbar(
-        appBars: [
-          SliverAppBar(
-            floating: true,
-            expandedHeight: kToolbarHeight * 5,
-            automaticallyImplyLeading: false,
-            flexibleSpace: _buildAccountCounter(context: context),
-            iconTheme: const IconThemeData(color: Colors.white),
-            leading: IconButton(
-                onPressed: () => context.pop(),
-                icon: const Icon(Icons.arrow_back)),
-            actions: [
-              IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-              PopupMenuButton(
-                icon: const Icon(
-                  Icons.more_vert,
-                  color: Colors.white,
+      child: Scaffold(
+        // backgroundColor: Colors.,
+        // appBar: const HomeAppbar(),
+        drawer: const DrawerWidget(),
+        bottomNavigationBar: const BottomNavigator(
+          mainCategory: 0,
+          index: 2,
+        ),
+        floatingActionButton: const FloatingButton(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        body: NestedAppbar(
+          appBars: [
+            SliverAppBar(
+              floating: true,
+              expandedHeight: kToolbarHeight * 5,
+              automaticallyImplyLeading: false,
+              flexibleSpace: _buildAccountCounter(context: context),
+              iconTheme: const IconThemeData(color: Colors.white),
+              leading: IconButton(
+                  onPressed: () => context.pop(),
+                  icon: const Icon(Icons.arrow_back)),
+              actions: [
+                IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+                PopupMenuButton(
+                  icon: const Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                  ),
+                  itemBuilder: (context) {
+                    return [
+                      PopupMenuItem<int>(
+                        value: 0,
+                        child: Text("Media, links, and docs"),
+                      ),
+                      PopupMenuItem<int>(
+                        value: 1,
+                        child: Text("Search"),
+                      ),
+                      PopupMenuItem<int>(
+                        value: 2,
+                        child: Text("Mute notifications"),
+                      ),
+                      PopupMenuItem<int>(
+                        value: 3,
+                        child: Text("Delete Chat"),
+                      ),
+                      PopupMenuItem<int>(
+                        value: 4,
+                        child: Text("Report"),
+                      ),
+                      PopupMenuItem<int>(
+                        value: 5,
+                        child: Text("Block"),
+                      ),
+                    ];
+                  },
                 ),
-                itemBuilder: (context) {
-                  return [
-                    PopupMenuItem<int>(
-                      value: 0,
-                      child: Text("Media, links, and docs"),
+              ],
+            ),
+            SliverAppBar(
+              automaticallyImplyLeading: false,
+              floating: false,
+              pinned: true,
+              title: TabBar(
+                  labelStyle: Styles.mediumText(),
+                  isScrollable: true,
+                  tabs: const [
+                    Tab(
+                      text: 'Posts',
                     ),
-                    PopupMenuItem<int>(
-                      value: 1,
-                      child: Text("Search"),
+                    Tab(
+                      text: 'Tweets',
                     ),
-                    PopupMenuItem<int>(
-                      value: 2,
-                      child: Text("Mute notifications"),
+                    Tab(
+                      text: 'Reels',
                     ),
-                    PopupMenuItem<int>(
-                      value: 3,
-                      child: Text("Delete Chat"),
+                    Tab(
+                      text: 'Media',
                     ),
-                    PopupMenuItem<int>(
-                      value: 4,
-                      child: Text("Report"),
-                    ),
-                    PopupMenuItem<int>(
-                      value: 5,
-                      child: Text("Block"),
-                    ),
-                  ];
-                },
-              ),
-            ],
-          ),
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            floating: false,
-            pinned: true,
-            title: TabBar(
-                labelStyle: Styles.mediumText(),
-                isScrollable: true,
-                tabs: const [
-                  Tab(
-                    text: 'Posts',
-                  ),
-                  Tab(
-                    text: 'Highlights',
-                  ),
-                  Tab(
-                    text: 'Reels',
-                  ),
-                  Tab(
-                    text: 'Media',
-                  ),
-                ]),
-          ),
-        ],
-        body: _buildAccountPages(),
+                  ]),
+            ),
+          ],
+          body: _buildAccountPages(),
+        ),
       ),
     );
   }
