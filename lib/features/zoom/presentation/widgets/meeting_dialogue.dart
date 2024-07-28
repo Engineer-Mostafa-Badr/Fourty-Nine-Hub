@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
@@ -86,7 +85,7 @@ void showMeetingDialog(BuildContext context) {
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              String meetingId = meetingIdController.text;
+              String meetingId = meetingIdController.text.trim();
               // Implement the logic to join the meeting using the provided meeting ID.
               // For now, just display the meeting ID.
               if (meetingId.isEmpty) {

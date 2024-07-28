@@ -68,6 +68,7 @@ class MeetingRoom extends StatelessWidget {
           ..innerText.userLeave = 'Left'
           ..video = ZegoUIKitVideoConfig.preset1080P()
           ..showBackgroundTips = true;
+          print('live id is $liveID');
     return SafeArea(
       child: ZegoUIKitPrebuiltLiveStreaming(
         appID: UIConst.appId,
