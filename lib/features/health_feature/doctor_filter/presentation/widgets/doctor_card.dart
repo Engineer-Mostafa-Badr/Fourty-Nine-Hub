@@ -37,7 +37,7 @@ class DoctorCard extends StatelessWidget {
               ProfileImage(
                 accountId: 0,
                 size: 25,
-                imageURL: doctor.photo,
+                imageURL: doctor.image,
               ),
               const Sizer(),
               Expanded(
@@ -60,7 +60,6 @@ class DoctorCard extends StatelessWidget {
                       RatingStars(
                         rating: doctor.rating.toDouble(),
                       ),
-                      
                     ],
                   ),
                 ],
@@ -115,7 +114,6 @@ class DoctorCard extends StatelessWidget {
               )
             ],
           ),
-      
           _buildWaitingTime,
           const Sizer(),
           Row(

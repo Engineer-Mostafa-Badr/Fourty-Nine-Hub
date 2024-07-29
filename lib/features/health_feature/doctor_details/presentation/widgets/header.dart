@@ -19,7 +19,7 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
       children: [
         SquareImage(
           source: NetworkImage(
-            doctor.photo,
+            doctor.image,
           ),
           radius: 10,
           height: kToolbarHeight * 1.5,

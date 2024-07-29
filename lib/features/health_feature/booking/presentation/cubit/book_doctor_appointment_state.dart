@@ -13,5 +13,8 @@ final class BookDoctorAppointmentErrorState extends BookDoctorAppointmentState {
   BookDoctorAppointmentErrorState(this.message);
 }
 
-final class BookDoctorAppointmentLoadingState
+final class BookDoctorAppointmentStartLoadingState
+    extends BookDoctorAppointmentState {}
+
+final class BookDoctorAppointmentEndLoadingState
     extends BookDoctorAppointmentState {}

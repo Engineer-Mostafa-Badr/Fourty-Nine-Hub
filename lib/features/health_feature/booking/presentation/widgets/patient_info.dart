@@ -63,7 +63,7 @@ class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
                       currentController: controller.notesController,
                       keyboardType: TextInputType.text,
                       validator: (value) =>
-                          Validator().doesNotContainNumbers(value),
+                          Validator().shouldNotContainNumbers(value),
                       hint: Labels.notes),
                 ],
               ),

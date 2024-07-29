@@ -10,7 +10,7 @@ class DoctorEntity {
   final String lastName;
   final String firstName;
   final String subCategoryId;
-  final String photo;
+  final String image;
   final String phone;
   final String email;
   final DoctorAddressEntity address;
@@ -37,7 +37,7 @@ class DoctorEntity {
     required this.lastName,
     required this.firstName,
     required this.subCategoryId,
-    required this.photo,
+    required this.image,
     required this.phone,
     required this.email,
     required this.address,

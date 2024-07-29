@@ -102,4 +102,7 @@ abstract class Labels {
   static const female = 'Female';
   static const age = 'Age';
   static const notes = 'Notes';
+  static const bookingSuccess = 'Booking Success';
+  static const loading = 'Loading...';
+  static const cantLoadReviews = "Can't load reviews";
 }

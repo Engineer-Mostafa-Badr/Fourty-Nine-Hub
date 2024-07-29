@@ -2,6 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/enums/gender_type.dart';
 import 'package:fourtyninehub/features/health_feature/booking/domain/usecases/book_appointment.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/appointment_entity.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 
 part 'book_doctor_appointment_state.dart';
@@ -19,6 +22,15 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
 
   final BookAppointmentParams _params = BookAppointmentParams();
 
+  late DoctorEntity _doctor;
+  late AppointmentEntity _appointment;
+
+  void init(DoctorDetailsCubit doctorDetailsCubit) {
+    _doctor = doctorDetailsCubit.doctor;
+    _appointment = doctorDetailsCubit.selectedAppointment;
+    _params.appointmentId = _appointment.id;
+  }
+
   BookDoctorAppointmentCubit(this.bookAppointmentUseCase)
       : super(BookDoctorAppointmentInitialState());
 
@@ -35,10 +47,13 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
 
   Future<void> confirmBooking() async {
     if (formKey.currentState!.validate()) {
+      emit(BookDoctorAppointmentStartLoadingState());
       _saveText();
-      emit(BookDoctorAppointmentLoadingState());
       final response = await bookAppointmentUseCase.call(_params);
-      response.fold((failure) => emit(BookDoctorAppointmentErrorState(Labels.errorHappened)),
+      emit(BookDoctorAppointmentEndLoadingState());
+      response.fold(
+          (failure) =>
+              emit(BookDoctorAppointmentErrorState(Labels.errorHappened)),
           (data) => emit(BookDoctorAppointmentSuccessState()));
     }
   }
@@ -52,4 +67,8 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
   void selectGender(GenderType gender) {
     _params.gender = gender;
   }
+
+  DoctorEntity get doctor => _doctor;
+
+  AppointmentEntity get appointment => _appointment;
 }

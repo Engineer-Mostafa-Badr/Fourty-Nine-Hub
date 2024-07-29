@@ -29,7 +29,8 @@ class EndPoints {
   static const doctorSearch = '/health/doctor-search';
   static const bookEmergency = '/health/book-emergency';
   static String bookAppointment(String appointmentId) =>
-      'api/v1/health/book-appointment/$appointmentId';
+      '/health/book-appointment/$appointmentId';
+  static String getDoctorReviewsForUsers(String doctorId) => '/health/doctor/rate/$doctorId';
 
   // reels
   static const getExploreReels = '/reels/explore';

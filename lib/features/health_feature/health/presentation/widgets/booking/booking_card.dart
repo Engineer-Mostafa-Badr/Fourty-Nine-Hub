@@ -42,7 +42,7 @@ class HealthBookingCard extends StatelessWidget {
                   radius: 10,
                   height: kToolbarHeight,
                   width: kToolbarHeight,
-                  url: appointment.doctor.photo,
+                  url: appointment.doctor.image,
                 ),
                 const Sizer(),
                 Expanded(

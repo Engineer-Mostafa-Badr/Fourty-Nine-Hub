@@ -24,6 +24,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
   @override
   void initState() {
     context.read<DoctorDetailsCubit>().doctor = widget.doctor;
+    context.read<DoctorDetailsCubit>().loadData();
     super.initState();
   }
 

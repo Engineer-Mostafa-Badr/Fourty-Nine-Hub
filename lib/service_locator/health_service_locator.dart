@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/data/dataso
 import 'package:fourtyninehub/features/health_feature/doctor_details/data/repositories/doctor_details_repo_impl.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/repositories/doctor_details_repo.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_reviews.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/governorate_filter_cubit/doctor_governorate_filter_cubit.dart';
@@ -132,13 +133,15 @@ class HealthServiceLocator {
         () => GetGovernoratesUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<BookHealthEmergencyUseCase>(
         () => BookHealthEmergencyUseCase(serviceLocator()));
-    serviceLocator
-        .registerLazySingleton(() => BookAppointmentUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<BookAppointmentUseCase>(
+        () => BookAppointmentUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetUserDoctorRatessUseCase>(
+        () => GetUserDoctorRatessUseCase(serviceLocator()));
 
     // -------------------------- cubits --------------------------
     serviceLocator.registerSingleton<HealthSharedData>(HealthSharedData());
-    serviceLocator
-        .registerFactory<DoctorDetailsCubit>(() => DoctorDetailsCubit());
+    serviceLocator.registerFactory<DoctorDetailsCubit>(
+        () => DoctorDetailsCubit(serviceLocator()));
     serviceLocator.registerFactory<DoctorsListCubit>(() => DoctorsListCubit(
           serviceLocator(),
           serviceLocator(),
