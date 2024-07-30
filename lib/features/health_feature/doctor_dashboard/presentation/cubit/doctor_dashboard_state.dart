@@ -13,7 +13,7 @@ class DoctorDashboardState {
   final DoctorDashboardStates status;
   final Failure? failure;
   final String? successMessage;
-  final List<AppointmentBookingEntity>? bookings;
+  final List<BookedAppointmentEntity>? bookings;
   final DateTime? date;
   const DoctorDashboardState(
       {this.status = DoctorDashboardStates.loading,
@@ -26,13 +26,13 @@ class DoctorDashboardState {
     Failure? failure,
     String? successMessage,
     DateTime? date,
-    List<AppointmentBookingEntity>? bookings,
+    List<BookedAppointmentEntity>? bookings,
   }) {
     return DoctorDashboardState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
       bookings: bookings ?? this.bookings,
-      date: date?? this.date,
+      date: date ?? this.date,
       successMessage: successMessage ?? this.successMessage,
     );
   }

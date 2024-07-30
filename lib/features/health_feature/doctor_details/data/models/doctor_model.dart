@@ -1,6 +1,7 @@
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/doctor_address.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_address.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 import 'appointment_model.dart';
 
@@ -34,35 +35,36 @@ class DoctorModel extends DoctorEntity {
 
   factory DoctorModel.fromJson(Map<String, dynamic> json) {
     return DoctorModel(
-      id: json['_id'],
-      lastName: json['lastName'],
-      firstName: json['firstName'],
-      subCategoryId: json['subCategoryId'],
-      image: json['mediaId']['mediaKey'],
-      phone: json['phone'],
-      email: json['email'],
-      address: json['address'] != null
-          ? DoctorAddressModel.fromJson(json['address'])
-          : DoctorAddressEntity(governorateId: '', cityId: '', address: ''),
-      clinic: json['clinic'],
-      calls: json['calls'],
-      visitHome: json['visitHome'],
-      clinicPrice: json['clinicPrice'] ?? '',
-      detectionPeriodClinic: json['detectionPeriodClinic'] ?? '',
-      detectionPeriodCalls: json['detectionPeriodCalls'] ?? '',
-      detectionPeriodvisitHome: json['detectionPeriodvisitHome'] ?? '',
-      callsPrice: json['callsPrice'] ?? '',
-      visitHomePrice: json['visitHomePrice'] ?? '',
-      waitingTime: json['waitingTime'] ?? '',
-      isActive: json['isActive'],
-      isPremium: json['isPremium'],
-      description: json['description'],
-      rating: json['rating'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
-      appointments: List<AppointmentModel>.from(
-        json['appointments'].map((x) => AppointmentModel.fromJson(x)),
-      ),
-    );
+        id: json['_id'] ?? '',
+        lastName: json['lastName'] ?? '',
+        firstName: json['firstName'] ?? '',
+        subCategoryId: json['subCategoryId']['_id'] ?? '',
+        image: json['mediaId']['mediaKey'] ?? '',
+        phone: json['phone'] ?? '',
+        email: json['email'] ?? '',
+        address: json['address'] != null
+            ? DoctorAddressModel.fromJson(json['address'])
+            : DoctorAddressEntity(governorateId: '', cityId: '', address: ''),
+        clinic: json['clinic'] ?? false,
+        calls: json['calls'] ?? false,
+        visitHome: json['visitHome'] ?? false,
+        clinicPrice: json['clinicPrice'] ?? '',
+        detectionPeriodClinic: json['detectionPeriodClinic'] ?? '',
+        detectionPeriodCalls: json['detectionPeriodCalls'] ?? '',
+        detectionPeriodvisitHome: json['detectionPeriodvisitHome'] ?? '',
+        callsPrice: json['callsPrice'] ?? '',
+        visitHomePrice: json['visitHomePrice'] ?? '',
+        waitingTime: json['waitingTime'] ?? '',
+        isActive: json['isActive'] ?? false,
+        isPremium: json['isPremium'] ?? false,
+        description: json['description'] ?? '',
+        rating: json['rating'] ?? 1,
+        createdAt: json['createdAt'] ?? '',
+        updatedAt: json['updatedAt'] ?? '',
+        appointments: json['appointments'] != null
+            ? List<AppointmentModel>.from(
+                json['appointments'].map((x) => AppointmentModel.fromJson(x)),
+              )
+            : []);
   }
 }

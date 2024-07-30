@@ -115,4 +115,5 @@ abstract class Labels {
   static const fees = 'Fees';
   static const report = 'Report';
   static const message = 'Message';
+  static const booking = 'Booking';
 }

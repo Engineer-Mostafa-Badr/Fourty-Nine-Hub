@@ -35,6 +35,7 @@ import 'package:fourtyninehub/features/health_feature/health/data/datasources/he
 import 'package:fourtyninehub/features/health_feature/health/data/repositories/health_repo_impl.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/repositories/health_repo.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_my_appointment_bookings_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_user_upcoming_appointments.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:get_it/get_it.dart';
@@ -115,8 +116,9 @@ class HealthServiceLocator {
       ),
     );
 
-    serviceLocator.registerLazySingleton<GetMyAppointmentBookingsUseCase>(
-      () => GetMyAppointmentBookingsUseCase(
+    serviceLocator
+        .registerLazySingleton<GetMyAppointmentBookingsHistoryUseCase>(
+      () => GetMyAppointmentBookingsHistoryUseCase(
         serviceLocator(),
       ),
     );
@@ -140,6 +142,8 @@ class HealthServiceLocator {
         () => GetUserDoctorRatessUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<CheckSubCategorySubscriptionUseCase>(
         () => CheckSubCategorySubscriptionUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetUserUpcomingAppointmentsUseCase>(
+        () => GetUserUpcomingAppointmentsUseCase(serviceLocator()));
 
     // -------------------------- cubits --------------------------
     serviceLocator.registerSingleton<HealthSharedData>(HealthSharedData());

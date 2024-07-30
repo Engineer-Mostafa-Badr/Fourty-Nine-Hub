@@ -5,7 +5,7 @@ enum HealthStates { loading, initState, error }
 class HealthState {
   final HealthStates status;
   final Failure? failure;
-  final List<AppointmentBookingEntity>? myBookings;
+  final List<BookedAppointmentEntity>? myBookings;
   final List<SubCategoryModel>? subCategories;
   final List<SubCategoryModel>? medicalServices;
   final isDoctor = false;
@@ -18,7 +18,7 @@ class HealthState {
   HealthState copyWith({
     HealthStates? status,
     Failure? failure,
-    List<AppointmentBookingEntity>? myBookings,
+    List<BookedAppointmentEntity>? myBookings,
     List<SubCategoryModel>? subCategories,
     List<SubCategoryModel>? medicalServices,
   }) {

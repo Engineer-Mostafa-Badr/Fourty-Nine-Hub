@@ -7,7 +7,7 @@ import '../../../health/data/models/appointment_booking_model.dart';
 import '../../../health/domain/entities/appointment_booking_entity.dart';
 
 abstract class DoctorDashboardRemoteDataSource {
-  Future<Either<Failure, List<AppointmentBookingEntity>>> getDoctorBookings();
+  Future<Either<Failure, List<BookedAppointmentEntity>>> getDoctorBookings();
   Future<Either<Failure, bool>> changeActiveStatus({required bool status});
   Future<Either<Failure, bool>> cancelBooking({required int id});
   Future<Either<Failure, bool>> confirmBooking({required int id});
@@ -34,13 +34,13 @@ class DoctorDashboardRemoteDataSourceImpl
   }
 
   @override
-  Future<Either<Failure, List<AppointmentBookingEntity>>>
+  Future<Either<Failure, List<BookedAppointmentEntity>>>
       getDoctorBookings() async {
     final response = await _apiConsumer.get(Jsons.doctorBookingsList);
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data']['bookings'] as List)
-            .map((e) => AppointmentBookingModel.fromJson(e))
+            .map((e) => BookedAppointmentModel.fromJson(e))
             .toList()));
   }
 }

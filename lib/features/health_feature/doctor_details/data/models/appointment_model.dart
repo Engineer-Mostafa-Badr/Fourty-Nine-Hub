@@ -8,10 +8,10 @@ class AppointmentModel extends AppointmentEntity {
       required super.status});
   factory AppointmentModel.fromJson(Map<String, dynamic> json) {
     return AppointmentModel(
-      id: json['_id'],
-      day: json['day'],
-      time: json['time'],
-      status: (json['status'] as String).toAppointmentStatus,
+      id: json['_id'] ?? '',
+      day: json['day'] ?? '',
+      time: json['time'] ?? '',
+      status: ((json['status'] ?? '') as String).toAppointmentStatus,
     );
   }
 }

@@ -12,8 +12,13 @@ class HealthRepoImpl implements HealthRepo {
   HealthRepoImpl(this._remoteDataSource);
 
   @override
-  Future<Either<Failure, List<AppointmentBookingEntity>>>
-      getMyBookings() async {
-    return await _remoteDataSource.getMyBookings();
+  Future<Either<Failure, List<BookedAppointmentEntity>>>
+      getMyBookingsHistory() async {
+    return await _remoteDataSource.getMyBookingsHistory();
+  }
+  
+  @override
+  Future<Either<Failure, List<BookedAppointmentEntity>>> getUpcomingBookings() {
+    return _remoteDataSource.getUpcomingBookings();
   }
 }

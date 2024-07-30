@@ -27,7 +27,7 @@ class DoctorDashboardRepoImpl implements DoctorDashboardRepo {
   }
 
   @override
-  Future<Either<Failure, List<AppointmentBookingEntity>>>
+  Future<Either<Failure, List<BookedAppointmentEntity>>>
       getDoctorBookings() async {
     return await _remoteDataSource.getDoctorBookings();
   }

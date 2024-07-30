@@ -4,15 +4,13 @@ import 'package:fourtyninehub/features/health_feature/health/domain/entities/app
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
-
 class GetDoctorBookingsUseCase
-    extends UseCase<List<AppointmentBookingEntity>, NoParams> {
+    extends UseCase<List<BookedAppointmentEntity>, NoParams> {
   final DoctorDashboardRepo _repo;
   GetDoctorBookingsUseCase(this._repo);
 
   @override
-  Future<Either<Failure, List<AppointmentBookingEntity>>> call(
-      NoParams params) {
+  Future<Either<Failure, List<BookedAppointmentEntity>>> call(NoParams params) {
     return _repo.getDoctorBookings();
   }
 }

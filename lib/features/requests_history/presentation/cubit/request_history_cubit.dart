@@ -1,6 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:dartz/dartz.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/trip_model.dart';
@@ -20,17 +18,17 @@ class RequestHistoryCubit extends Cubit<RequestHistoryState> {
   final GetShippingRequestsUseCase _getShippingRequestsUseCase;
   final GetHistoryRideUseCase _getHistoryRideUseCase;
   final GetFoodHistoryUseCase _getFoodHistoryUseCase;
-  final GetMyAppointmentBookingsUseCase _getMyAppointmentBookingsUseCase;
+  final GetMyAppointmentBookingsHistoryUseCase _getMyAppointmentBookingsUseCase;
 
   RequestHistoryCubit(this._getHistoryRideUseCase, this._getFoodHistoryUseCase,
       this._getShippingRequestsUseCase, this._getMyAppointmentBookingsUseCase)
       : super(const RequestHistoryState());
 
   void loadData() async {
+    await getHealthBookings();
     await getRideTrips();
     await getFoodOrders();
     await getShippingRequests();
-    await getHealthBookings();
   }
 
   Future<void> getRideTrips() async {

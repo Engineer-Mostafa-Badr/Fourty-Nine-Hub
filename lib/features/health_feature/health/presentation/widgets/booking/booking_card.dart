@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/launch_url.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 
 class HealthBookingCard extends StatelessWidget {
-  final AppointmentBookingEntity appointment;
+  final BookedAppointmentEntity appointment;
   const HealthBookingCard({super.key, required this.appointment});
 
   @override
@@ -30,7 +31,7 @@ class HealthBookingCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 5),
               child: Label(
                   text:
-                      'Clinic Booking: ${appointment.appointment.day} - ${appointment.appointment.time}',
+                      '${appointment.bookingType.translatedName} ${Labels.booking}: ${appointment.day} - ${appointment.time}',
                   style: Styles.mediumText()),
             ),
             const Divider(

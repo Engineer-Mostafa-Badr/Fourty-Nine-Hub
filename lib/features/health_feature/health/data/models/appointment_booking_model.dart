@@ -1,28 +1,29 @@
 import 'package:fourtyninehub/features/health_feature/doctor_details/data/models/doctor_model.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 
-import '../../../../ads_feature/ads/data/models/publisher_model.dart';
-import '../../../doctor_details/data/models/appointment_model.dart';
-
-class AppointmentBookingModel extends AppointmentBookingEntity {
-  AppointmentBookingModel(
+class BookedAppointmentModel extends BookedAppointmentEntity {
+  BookedAppointmentModel(
       {required super.id,
-      required super.status,
-      required super.createdAt,
+      required super.bookedPremium,
       required super.doctor,
-      required super.type,
-      required super.appointment,
-      super.user});
-  factory AppointmentBookingModel.fromJson(Map<String, dynamic> json) {
-    return AppointmentBookingModel(
-        id: json['id'],
-        status: json['status'],
-        type: json['type'] ?? 'clinic',
-        createdAt: DateTime.parse(json['created_at']),
-        doctor: DoctorModel.fromJson(json['doctor']),
-        appointment: AppointmentModel.fromJson(json['appointment']),
-        user: json['user'] == null
-            ? null
-            : PublisherModel.fromJson(json['user']));
+      required super.userId,
+      required super.bookingType,
+      required super.day,
+      required super.time,
+      required super.bookingId,
+      required super.expired});
+
+  factory BookedAppointmentModel.fromJson(Map<String, dynamic> json) {
+    return BookedAppointmentModel(
+      id: json['_id'],
+      bookedPremium: json['bookedPremium'],
+      doctor: DoctorModel.fromJson(json['doctorId']),
+      userId: json['userId'],
+      bookingType: (json['appointmentType'] as String).toBookingType,
+      day: json['day'],
+      time: json['time'],
+      bookingId: json['bookingId'],
+      expired: json['expired'],
+    );
   }
 }
