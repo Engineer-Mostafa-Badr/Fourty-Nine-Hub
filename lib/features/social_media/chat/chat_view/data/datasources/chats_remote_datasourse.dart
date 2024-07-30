@@ -11,6 +11,7 @@ abstract class ChatsRemoteDataSource {
     required String categoryId,
     required bool archived,
     required bool isLocked,
+    String? password,
   });
 
   Future<Either<Failure, bool>> changeChatMuteState({
@@ -23,10 +24,16 @@ abstract class ChatsRemoteDataSource {
 
   Future<Either<Failure, bool>> lockChat({
     required String chatId,
+    String? lockChatPassword,
   });
 
   Future<Either<Failure, bool>> unLockChat({
     required String chatId,
+    required String password,
+  });
+
+  Future<Either<Failure, String>> updateLockChatPassword({
+    required String password,
   });
 }
 
@@ -40,12 +47,14 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
       {required String privacy,
       required String categoryId,
       required bool archived,
-      required bool isLocked}) async {
+      required bool isLocked,
+      String? password}) async {
     var data = {
       "privacy": "normal",
       "categoryId": UIConst.chatNormalId,
       "archived": archived,
-      "isLocked": isLocked
+      "isLocked": isLocked,
+      if (password != null) "password": password
     };
     final response = await _apiConsumer.post(EndPoints.getChats, data: data);
     return response.fold(
@@ -74,15 +83,41 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> lockChat({required String chatId}) async {
-    final response = await _apiConsumer.put(EndPoints.lockChat(chatId));
+  Future<Either<Failure, bool>> lockChat(
+      {required String chatId, String? lockChatPassword}) async {
+    Map<String, dynamic>? dataParams;
+    if (lockChatPassword != null) {
+      dataParams = {
+        'password': lockChatPassword,
+      };
+    }
+    final response = await _apiConsumer.put(
+        EndPoints.lockChat(
+          chatId,
+        ),
+        data: dataParams);
     return response.fold(
         (failure) => Left(failure), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, bool>> unLockChat({required String chatId}) async {
-    final response = await _apiConsumer.put(EndPoints.unLockChat(chatId));
+  Future<Either<Failure, bool>> unLockChat(
+      {required String chatId, required String? password}) async {
+    Map<String, dynamic> data = {'password': password};
+    final response =
+        await _apiConsumer.put(EndPoints.unLockChat(chatId), data: data);
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, String>> updateLockChatPassword(
+      {required String password}) async {
+    Map<String, dynamic>? dataParams = {
+      'password': password,
+    };
+    final response = await _apiConsumer
+        .put(EndPoints.updateUnLockChatPassword(), data: dataParams);
     return response.fold(
         (failure) => Left(failure), (data) => Right(data['status']));
   }

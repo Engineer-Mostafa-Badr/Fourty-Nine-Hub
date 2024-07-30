@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fourtyninehub/common/functions/global/loading_custom.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/nested_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -39,7 +40,7 @@ class _ChatViewState extends State<ChatView> {
 
   initSocketConnection() {
     chatCubit = context.read<ChatsCubit>()..initSocketConnection();
-    chatCubit.getChats(0);
+    chatCubit.getChats(index: 0);
   }
 
   final List<String> groups = [
@@ -106,7 +107,12 @@ class _ChatViewState extends State<ChatView> {
   Widget _buildCategoriesLabels() {
     return TabBar(
         onTap: (index) {
-          context.read<ChatsCubit>().getChats(index);
+          context.read<ChatsCubit>().getChats(index: index);
+
+          // if this locked chat we request password
+          if (index == 8) {
+            showDialogToConfirmChatLockPassword(context);
+          }
         },
         tabAlignment: TabAlignment.start,
         isScrollable: true,
@@ -211,5 +217,51 @@ class _ChatViewState extends State<ChatView> {
             ),
         separatorBuilder: (context, index) => const SizedBox(),
         itemCount: 8);
+  }
+
+  Future<bool?> showDialogToConfirmChatLockPassword(
+      BuildContext context) async {
+    TextEditingController passwordController = TextEditingController(text: '');
+    return await showDialog(
+      context: context,
+      builder: ((context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            title: Label(
+                text: 'Lock chats password please',
+                style: Styles.headerText(
+                    fontWeight: FontWeight.bold, color: Colors.black)),
+            content: Material(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 100.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    FormTextField(
+                        controller: passwordController,
+                        hint: 'password',
+                        type: TextInputType.number,
+                        // initialValue: '',
+                        style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold),
+                        action: (v) => () {}),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () async {
+                    chatCubit.getChats(
+                        index: 8, password: passwordController.text.trim());
+                    Navigator.of(context).pop(false);
+                  },
+                  child: const Text('Confirm password')),
+            ],
+          )),
+    );
   }
 }

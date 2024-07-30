@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatToArchiveNormal_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/chats_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getChats_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unlock_chat_usecase.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -28,6 +29,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   String? userToken;
   late Socket socket;
   late int selectedTabIndex;
+  late String lockChatPassword;
   final messageTextController = TextEditingController();
   final Map<String, ChatItemModel> _chats = {};
 
@@ -59,9 +61,16 @@ class ChatsCubit extends Cubit<ChatsState> {
     });
   }
 
-  getChats(int index) async {
+  getChats({required int index, String? password}) async {
     selectedTabIndex = index;
-    ChatsRequestParams chatsRequestParams = getTabParams(index);
+
+    // if this locked chat tab & password null return empty list
+    if (index == 8 && password == null) {
+      return emit
+          .call(state.copyWith(chats: [], status: ChatsStates.initState));
+    }
+    ChatsRequestParams chatsRequestParams =
+        getTabParams(index: index, password: password);
     if (chatsRequestParams.categoryId == null) {
       return emit
           .call(state.copyWith(chats: [], status: ChatsStates.initState));
@@ -114,12 +123,12 @@ class ChatsCubit extends Cubit<ChatsState> {
         (failure) => emit
             .call(state.copyWith(failure: failure, status: ChatsStates.error)),
         (data) {
-      getChats(selectedTabIndex);
+      getChats(index: selectedTabIndex);
       return;
     });
   }
 
-  ChatsRequestParams getTabParams(int index) {
+  ChatsRequestParams getTabParams({required int index, String? password}) {
     if (index == 0) {
       return ChatsRequestParams(
         privacyId: 'normal',
@@ -134,28 +143,51 @@ class ChatsCubit extends Cubit<ChatsState> {
         isLocked: false,
         archived: true,
       );
+    } else if (index == 8) {
+      return ChatsRequestParams(
+          privacyId: 'normal',
+          categoryId: UIConst.chatNormalId,
+          isLocked: true,
+          archived: false,
+          lockChatPassword: password);
     } else {
       return ChatsRequestParams();
     }
   }
 
-  lockChat(String chatId) async {
-    final response = await _lockChatUseCase.call(chatId);
+  Future<bool> lockChat(
+      {required String chatId, String? lockChatPassword}) async {
+    bool result = true;
+    LockChatParams lockChatParams =
+        LockChatParams(chatId: chatId, lockChatPassword: lockChatPassword);
+    final response = await _lockChatUseCase.call(lockChatParams);
     response.fold((failure) {
-      return emit
-          .call(state.copyWith(failure: failure, status: ChatsStates.error));
+      ServerFailure failureBackend = failure as ServerFailure;
+      if (failureBackend.errors != null) {
+        if (failureBackend.errors!.contains('password is required')) {
+          result = false;
+        } else {
+          result = true;
+        }
+      } else {
+        result = true;
+      }
     }, (data) {
-      getChats(selectedTabIndex);
+      getChats(index: selectedTabIndex);
+      result = true;
     });
+    return result;
   }
 
-  unLockChat(String chatId) async {
-    final response = await _unLockChatUseCase.call(chatId);
+  unLockChat({required String chatId, String? lockChatPassword}) async {
+    LockChatParams lockChatParams =
+        LockChatParams(chatId: chatId, lockChatPassword: lockChatPassword);
+    final response = await _unLockChatUseCase.call(lockChatParams);
     response.fold(
         (failure) => emit
             .call(state.copyWith(failure: failure, status: ChatsStates.error)),
         (data) {
-      getChats(selectedTabIndex);
+      getChats(index: selectedTabIndex, password: lockChatPassword);
     });
   }
 

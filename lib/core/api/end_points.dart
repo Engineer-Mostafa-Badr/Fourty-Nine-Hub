@@ -282,4 +282,8 @@ class EndPoints {
   static String unLockChat(String chatId) {
     return '/chat/unlock-chat/$chatId';
   }
+
+  static String updateUnLockChatPassword() {
+    return '/chat/update-lock-chat';
+  }
 }
