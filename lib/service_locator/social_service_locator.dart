@@ -20,9 +20,14 @@ import 'package:fourtyninehub/features/social_media/create_post/presentation/cub
 import 'package:fourtyninehub/features/social_media/social_posts/data/datasources/social_posts_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/repositories/social_posts_repo.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/follow_user_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/friend_request_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/hide_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/remove_suggest_user_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/send_greet_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/datasources/twitter_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/repositories/twitter_repo_impl.dart';
@@ -33,6 +38,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_post_comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_twitter_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/request_document_usecase.dart';
@@ -158,6 +164,36 @@ class SocialServiceLocator {
       serviceLocator(),
     ));
 
+    serviceLocator
+        .registerLazySingleton<GetUserTweetsUseCase>(() => GetUserTweetsUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<SuggestedFriendsUseCase>(() => SuggestedFriendsUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<FriedRequestUseCase>(() => FriedRequestUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<FollowUserUseCase>(() => FollowUserUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<RemoveSuggestUserUseCase>(() => RemoveSuggestUserUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<SendGreetMessageUseCase>(() => SendGreetMessageUseCase(
+      serviceLocator(),
+    ));
+
     serviceLocator.registerFactory<CreatePostCubit>(() => CreatePostCubit(
           serviceLocator(),
           serviceLocator(),
@@ -167,6 +203,11 @@ class SocialServiceLocator {
 
     serviceLocator.registerFactory<InstagramCubit>(() => InstagramCubit());
     serviceLocator.registerFactory<SocialPostsCubit>(() => SocialPostsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
@@ -187,7 +228,8 @@ class SocialServiceLocator {
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
-    )..loadData());
+      serviceLocator(),
+    ));
 
     // chats
 

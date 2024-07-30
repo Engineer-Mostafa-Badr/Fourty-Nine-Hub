@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/request_document_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
@@ -29,8 +30,8 @@ class TwitterRepoImpl implements TwitterRepo {
 
   @override
   Future<Either<Failure, List<TwitterPostEntity>>> getUserPosts(
-      {required String userId}) {
-    return _remoteDataSource.getUserPosts(userId: userId);
+      {required GetUserTweetsParams params}) {
+    return _remoteDataSource.getUserPosts(params: params);
   }
 
   @override

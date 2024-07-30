@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/request_document_usecase.dart';
 
 import '../../../../../core/error/failure.dart';
@@ -18,7 +19,7 @@ abstract class TwitterRemoteDataSource {
   Future<Either<Failure, List<TwitterPostEntity>>> getFeed({required TwitterFeedParams params});
   Future<Either<Failure, TwitterPostEntity>> getTwitterPost({required String postId});
   Future<Either<Failure, List<TwitterPostEntity>>> getUserPosts(
-      {required String userId});
+      {required GetUserTweetsParams params});
 
   Future<Either<Failure, bool>> reactOnPost({required  params});
   Future<Either<Failure, bool>> reactOnComment({required  params});
@@ -69,8 +70,9 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
 
   @override
   Future<Either<Failure, List<TwitterPostEntity>>> getUserPosts(
-      {required String userId}) async {
-    final response = await _apiConsumer.get(EndPoints.userPosts(userId));
+      {required GetUserTweetsParams params}) async {
+    print("object");
+    final response = await _apiConsumer.get(EndPoints.userTweets(params));
     return response.fold(
         (l) => Left(l),
         (data) => Right(

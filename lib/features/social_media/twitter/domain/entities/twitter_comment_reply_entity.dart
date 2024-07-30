@@ -3,7 +3,7 @@ import 'package:fourtyninehub/core/utils/duration_helper.dart';
 class TwitterCommentReplyEntity {
   final String id;
   final String content;
-  final String user;
+  dynamic user;
   final String post;
   final String image;
   num? loveCount;

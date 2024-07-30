@@ -1,25 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_react_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/build_twitter_document_card.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_global_posts.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_post_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class TwitterView extends StatefulWidget {
   const TwitterView({super.key});
@@ -30,6 +21,7 @@ class TwitterView extends StatefulWidget {
 class _TwitterViewState extends State<TwitterView> {
   @override
   void initState() {
+    context.read<TwitterCubit>().loadData();
     super.initState();
   }
 
@@ -44,7 +36,9 @@ class _TwitterViewState extends State<TwitterView> {
                 UserEntity? userData = state.data;
             return context.read<UserCubit>().isLoggedIn
                 ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    _buildTwitterTitle(),
                     const BuildTwitterDocumentCard(),
                     Expanded(child: TwitterGlobalPosts(userData: userData!,)),
                   ],
@@ -79,6 +73,17 @@ class _TwitterViewState extends State<TwitterView> {
           ),
         ),
       ],
+    );
+  }
+
+
+  Widget _buildTwitterTitle(){
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Label(
+        text: 'Tweets',
+        style: Styles.headerText(),
+      ),
     );
   }
 

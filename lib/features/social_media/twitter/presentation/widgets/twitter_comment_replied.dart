@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_comment_reply_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
@@ -22,8 +24,9 @@ class TwitterCommentReplies extends StatefulWidget {
   final Function(String) onReplyReact;
   final Function(TwitterCommentReplyParams) onAddReply;
   final Function(TwitterReportParams) onReport;
+  final UserEntity userData;
   const TwitterCommentReplies(
-      {super.key, required this.replies, required this.onReplyReact, required this.onAddReply, required this.commentId, required this.postId, required this.onReport,
+      {super.key, required this.replies, required this.onReplyReact, required this.onAddReply, required this.commentId, required this.postId, required this.onReport, required this.userData,
       });
 
   @override
@@ -95,10 +98,9 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                                         id: data.id,
                                         content: replyTextController.text,
                                         post: widget.postId,
-                                        createdAt: DateTime.now(),
-                                        user: '',
-                                        // image: '',
-                                        love: [], isReact: false, image: ''));
+                                        createdAt: data.createdAt,
+                                        user: TwitterUserEntity(id: widget.userData.id, firstName: widget.userData.firstName, lastName: widget.userData.lastName, createdAt: DateTime.now(), image: widget.userData.profilePicture??'', email: widget.userData.email??'', isDocumented: false),
+                                        love: data.love, isReact: data.isReact, image: data.image));
                                 replyTextController.clear();
                                 print(widget.replies.length);
                                 setState(() {});

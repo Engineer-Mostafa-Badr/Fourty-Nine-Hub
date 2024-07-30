@@ -2,8 +2,11 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/post_model.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/data/models/suggest_user_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../domain/entities/post_entity.dart';
@@ -23,6 +26,11 @@ abstract class SocialPostsRemoteDataSource {
 
   Future<Either<Failure, bool>> deletePost({required String postId});
   Future<Either<Failure, bool>> hidePost({required String postId});
+  Future<Either<Failure, bool>> friendRequest({required String userId});
+  Future<Either<Failure, bool>> followRequest({required String userId});
+  Future<Either<Failure, bool>> sendGreetMessage({required String userId});
+  Future<Either<Failure, bool>> removeSuggestUser({required String userId});
+  Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends({required SuggestedFriendsParams params});
 }
 
 class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
@@ -88,6 +96,41 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   @override
   Future<Either<Failure, bool>> hidePost({required String postId}) async {
     final response = await _apiConsumer.put(EndPoints.hidePost(postId));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends({required SuggestedFriendsParams params}) async{
+    final response = await _apiConsumer.get(EndPoints.userSuggests(params));
+    return response.fold(
+            (l) => Left(l),
+            (data) => Right((data['data'] as List)
+            .map((e) => SuggestUserModel.fromJson(e))
+            .toList()));
+  }
+
+  @override
+  Future<Either<Failure, bool>> friendRequest({required String userId}) async{
+    final response = await _apiConsumer.post(EndPoints.friendRequest(userId));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> followRequest({required String userId}) async{
+    final response = await _apiConsumer.post(EndPoints.followRequest(userId));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+  @override
+  Future<Either<Failure, bool>> sendGreetMessage({required String userId}) async{
+    final response = await _apiConsumer.post(EndPoints.greetMessage(userId),data: {
+      "message":"Greet"
+    });
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> removeSuggestUser({required String userId}) async{
+    final response = await _apiConsumer.post(EndPoints.removeSuggestUser(userId));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 }

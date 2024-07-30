@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
@@ -43,17 +44,31 @@ class CreatePostCubit extends Cubit<CreatePostState> {
         (data) => emit(state.copyWith(feelings: data)));
   }
 
-  void createPost({required BuildContext context}) async {
+  void createPost({required BuildContext context,required String type}) async {
     if (postContentTextController.text.isNotEmpty) {
       print("test media ${fileEntity?.mediaId}");
-      final response = await _createTwitterPostUseCase(
-          CreateTwitterPostParams(content: postContentTextController.text, mediaIds: fileEntity==null?[]:[fileEntity?.mediaId??'']));
-      response.fold(
-          (l) =>
-              emit(state.copyWith(failure: l, status: CreatePostStates.error)),
-          (r) {
-        Navigator.pop(context);
-      });
+      if(type=='twitter'){
+        final response = await _createTwitterPostUseCase(
+            CreateTwitterPostParams(
+                content: postContentTextController.text,
+                mediaIds:
+                    fileEntity == null ? [] : [fileEntity?.mediaId ?? '']));
+        response.fold(
+            (l) => emit(
+                state.copyWith(failure: l, status: CreatePostStates.error)),
+            (r) {
+          Navigator.pop(context);
+        });
+      }else if(type == "facebook"){
+        final response = await _createPostUseCase(
+            PostParams(content: postContentTextController.text));
+        response.fold(
+                (l) =>
+                emit(state.copyWith(failure: l, status: CreatePostStates.error)),
+                (r) {
+              Navigator.pop(context);
+            });
+      }
     }
   }
 

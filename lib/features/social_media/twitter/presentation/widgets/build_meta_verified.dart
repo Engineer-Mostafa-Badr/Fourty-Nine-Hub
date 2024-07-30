@@ -31,7 +31,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
     return Scaffold(
       appBar: AppBar(
         title: Label(
-          text: "Meta Verification",
+          text: "Documentation",
           style: Styles.headerText(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -155,7 +155,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                           name: nameTextController.text
                         ));
 
-                          showSuccessMessage(context, "Success");
+                          showSuccessMessage(context, "You have successfully uploaded your document. It is now awaiting administration review and approval.");
                           context.pop();
 
                       }

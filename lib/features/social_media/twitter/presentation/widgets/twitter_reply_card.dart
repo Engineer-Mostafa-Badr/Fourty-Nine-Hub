@@ -47,7 +47,7 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                    text: 'Farouk Shahin',
+                    text: widget.reply.user.firstName,
                     style: Styles.mediumText(
                         fontWeight: FontWeight.bold, color: widget.textColor)),
                 Label(

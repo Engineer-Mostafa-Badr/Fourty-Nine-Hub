@@ -40,7 +40,7 @@ class CreatePostView extends StatelessWidget {
           appBar: BackAppBar(label: 'Create Post', actions: [
             TextButton(
                 child: const Label(text: 'Post'),
-                onPressed: () => controller.createPost(context: context)),
+                onPressed: () => controller.createPost(context: context, type: social)),
           ]),
           body: Column(
             children: [

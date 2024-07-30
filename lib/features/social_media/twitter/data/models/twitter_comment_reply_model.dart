@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
 
 class TwitterCommentReplyModel extends TwitterCommentReplyEntity {
@@ -16,7 +17,7 @@ class TwitterCommentReplyModel extends TwitterCommentReplyEntity {
   factory TwitterCommentReplyModel.fromJson(Map<String, dynamic> json) {
     return TwitterCommentReplyModel(
       id: json['_id'],
-      user: json['user'] is String? json['user']:json['user'][0]['firstName'],
+      user: json['user'] is String? json['user']:TwitterUserModel.fromJson(json['user']),
       content: json['content'] ?? '',
       post: json['post'] ?? '',
       loveCount: json['loveCount']??0,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_post_comment_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
@@ -26,12 +27,13 @@ class TwitterPostComments extends StatefulWidget {
   final TwitterState state;
   final String newCommentId;
   final dynamic user;
+  final UserEntity userData;
   const TwitterPostComments(
       {super.key,
       required this.postId,
       required this.comments,
       required this.onAddComment,
-      required this.onCommentReact, required this.onAddReply, required this.onGetReplies, required this.newCommentId, required this.state, this.user, required this.onReport});
+      required this.onCommentReact, required this.onAddReply, required this.onGetReplies, required this.newCommentId, required this.state, this.user, required this.onReport, required this.userData});
 
   @override
   State<TwitterPostComments> createState() => _TwitterPostCommentsState();
@@ -94,7 +96,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                         icon: Icons.send,
                         isCircle: true,
                         onPressed: () async{
-                          final data = await widget.onAddComment(
+                          TwitterPostCommentModel data = await widget.onAddComment(
                             PostCommentParams(
                                 postId: widget.postId, content: commentTextController.text),
                           );
@@ -104,9 +106,9 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                                   id: data.id,
                                   content: commentTextController.text,
                                   post: widget.postId,
-                                  createdAt: DateTime.now(),
-                                  adminIgnore: false,
-                                  user: widget.user.firstName,
+                                  createdAt: data.createdAt,
+                                  adminIgnore: data.adminIgnore,
+                                  user: widget.user,
                                   love: data.love,loveCount: data.loveCount, isReact: data.isReact));
                           commentTextController.clear();
                           setState(() {});

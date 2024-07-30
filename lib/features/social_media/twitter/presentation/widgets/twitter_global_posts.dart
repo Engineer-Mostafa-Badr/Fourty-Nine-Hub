@@ -87,7 +87,7 @@ class _TwitterGlobalPostsState extends State<TwitterGlobalPosts> {
                       controller.postsPagingController.itemList![index].id,
                       newCommentId: state.newCommentId ?? '',
                       user:
-                      controller.postsPagingController.itemList![index].user,
+                      controller.postsPagingController.itemList![index].user, userData: widget.userData,
                     );
                   },
                   getPost: () {
@@ -95,7 +95,7 @@ class _TwitterGlobalPostsState extends State<TwitterGlobalPosts> {
                         context,
                         controller
                             .postsPagingController.itemList![index].mainPost.id,
-                        state.newCommentId ?? '');
+                        state.newCommentId ?? '',widget.userData);
                   },
                   onReport: (TwitterReportParams params) {
                     controller.onReport(params);

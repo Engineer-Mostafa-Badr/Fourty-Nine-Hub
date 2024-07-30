@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
@@ -14,6 +15,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_post_comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_twitter_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/request_document_usecase.dart';
@@ -38,6 +40,7 @@ class TwitterCubit extends Cubit<TwitterState> {
   final GetTwitterPostUseCase _getTwitterPostUseCase;
   final TwitterReportUseCase _twitterReportUseCase;
   final RequestDocumentUseCase _requestDocumentUseCase;
+  final GetUserTweetsUseCase _getUserTweetsUseCase;
 
   TwitterCubit(
     this._getFeedUseCase,
@@ -50,7 +53,7 @@ class TwitterCubit extends Cubit<TwitterState> {
     this._twitterCommentRepliesUseCase,
     this._getTwitterPostUseCase,
     this._twitterReportUseCase,
-    this._requestDocumentUseCase,
+    this._requestDocumentUseCase, this._getUserTweetsUseCase,
   ) : super(const TwitterState());
 
   void loadData() async {
@@ -62,10 +65,23 @@ class TwitterCubit extends Cubit<TwitterState> {
     });
   }
 
+  void loadUserTweets(String userId) async {
+    //   await getFeed(1);
+    getUserTweets(1,userId);
+    userTweetsPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getUserTweets(pageKey,userId);
+    });
+  }
+
   final int reactCount = 0;
 
   final int pageSize = 10;
   final PagingController<int, TwitterPostEntity> postsPagingController =
+      PagingController(firstPageKey: 1);
+
+
+  final PagingController<int, TwitterPostEntity> userTweetsPagingController =
       PagingController(firstPageKey: 1);
 // get feed posts
   Future<void> getFeed(int page) async {
@@ -90,9 +106,34 @@ class TwitterCubit extends Cubit<TwitterState> {
       emit(state.copyWith(posts: data, status: StateStatus.success));
     });
   }
+  Future<void> getUserTweets(int page,String userId) async {
+    final response =
+        await _getUserTweetsUseCase(GetUserTweetsParams(
+          page: page,
+          userId: userId
+        ));
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) {
+      final isLastPage = data.length < pageSize;
+      if (page == 1) {
+        print("page == 1 $page");
+        userTweetsPagingController.itemList = [];
+      }
+      if (isLastPage) {
+        print("isLastPage = $isLastPage");
+        userTweetsPagingController.appendLastPage(data);
+      } else {
+        print("isNotLastPage = $isLastPage");
+        final nextPageKey = page + 1;
+        userTweetsPagingController.appendPage(data, nextPageKey);
+      }
+      emit(state.copyWith(userTweets: data, status: StateStatus.success));
+    });
+  }
 
   Future<void> getTwitterPost(
-      BuildContext context, String postId, String newCommentId) async {
+      BuildContext context, String postId, String newCommentId,UserEntity? userData) async {
     final response = await _getTwitterPostUseCase(postId);
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
@@ -118,7 +159,7 @@ class TwitterCubit extends Cubit<TwitterState> {
                   context: context,
                   postId: postId,
                   newCommentId: newCommentId,
-                  user: '');
+                  user: '', userData: userData!);
             },
             onReport: (TwitterReportParams params) {
               onReport(params);
@@ -185,7 +226,8 @@ class TwitterCubit extends Cubit<TwitterState> {
       {required BuildContext context,
       required String postId,
       required String newCommentId,
-      required dynamic user}) async {
+      required dynamic user,
+      required UserEntity userData}) async {
     final response = await _getTwitterPostCommentsUseCase(postId);
     response.fold(
       (failure) =>
@@ -210,14 +252,14 @@ class TwitterCubit extends Cubit<TwitterState> {
               context: context,
               commentId: id,
               comment: comment,
-              postId: postId,
+              postId: postId, userData: userData,
             );
           },
           newCommentId: newCommentId,
           state: state,
           onReport: (TwitterReportParams params) {
             onReport(params);
-          },
+          }, userData: userData,
         ),
       ),
     );
@@ -228,7 +270,7 @@ class TwitterCubit extends Cubit<TwitterState> {
       {required BuildContext context,
       required String commentId,
       required String postId,
-      required TwitterPostCommentEntity comment}) async {
+      required TwitterPostCommentEntity comment,required UserEntity userData}) async {
     final response = await _twitterCommentRepliesUseCase(commentId);
     response.fold(
       (failure) =>
@@ -252,7 +294,7 @@ class TwitterCubit extends Cubit<TwitterState> {
           },
           onReport: (TwitterReportParams params) {
             onReport(params);
-          },
+          }, userData: userData,
         ),
       );
       },
