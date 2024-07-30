@@ -1,4 +1,3 @@
-
 abstract class Routes {
   Routes._();
 
@@ -98,6 +97,7 @@ abstract class Routes {
   static const NOTIFICATIONS = '/Account/Norifications';
   static const SETTINGS = '/Account/Settings';
   static const PAYMENT = '/Payment';
+  static const SUBSCRIPTIONPLANS = '/SubscriptionPlans';
 }
 
 abstract class Paths {
@@ -190,4 +190,5 @@ abstract class Paths {
   static const QURAAN = 'Quraan';
   static const AZKAAR = 'Azkaar';
   static const PAYMENT = 'Payment';
+  static const SUBSCRIPTIONPLANS = 'SubscriptionPlans';
 }

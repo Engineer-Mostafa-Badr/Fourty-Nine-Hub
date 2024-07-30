@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/doctor_address.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_address.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 
 import 'appointment_model.dart';
@@ -40,7 +41,9 @@ class DoctorModel extends DoctorEntity {
       image: json['mediaId']['mediaKey'],
       phone: json['phone'],
       email: json['email'],
-      address: DoctorAddressModel.fromJson(json['address']),
+      address: json['address'] != null
+          ? DoctorAddressModel.fromJson(json['address'])
+          : DoctorAddressEntity(governorateId: '', cityId: '', address: ''),
       clinic: json['clinic'],
       calls: json['calls'],
       visitHome: json['visitHome'],

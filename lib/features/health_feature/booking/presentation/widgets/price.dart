@@ -6,8 +6,8 @@ import 'package:fourtyninehub/features/health_feature/booking/presentation/widge
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class BookDoctorAppointmentPriceCard extends StatelessWidget {
-  const BookDoctorAppointmentPriceCard({super.key});
+class BookDoctorAppointmentFeesCard extends StatelessWidget {
+  const BookDoctorAppointmentFeesCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +16,8 @@ class BookDoctorAppointmentPriceCard extends StatelessWidget {
         widget: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Label(text: Labels.price, style: Styles.mediumText()),
-            Label(
-                text: '${doctor.priceToShow} ${Labels.currency}',
-                style: Styles.mediumText()),
+            Label(text: Labels.fees, style: Styles.mediumText()),
+            Label(text: doctor.priceToShow, style: Styles.mediumText()),
           ],
         ),
         icon: Icons.attach_money,

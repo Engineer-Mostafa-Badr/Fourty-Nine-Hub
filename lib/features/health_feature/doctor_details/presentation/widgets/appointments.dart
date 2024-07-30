@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/divider.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -36,6 +37,7 @@ class DoctorDetailsAppointmentsCard extends StatelessWidget {
               separatorBuilder: (BuildContext context, int index) =>
                   const Sizer(),
             )),
+        const DoctorDetailsDivider(),
       ],
     );
   }

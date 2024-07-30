@@ -105,4 +105,14 @@ abstract class Labels {
   static const bookingSuccess = 'Booking Success';
   static const loading = 'Loading...';
   static const cantLoadReviews = "Can't load reviews";
+  static const subscriptionPlans = 'Subscription Plans';
+  static const regular = 'Regular';
+  static const monthly = 'Monthly';
+  static const yearly = 'Yearly';
+  static const daily = 'Daily';
+  static const weekly = 'Weekly';
+  static const premium = 'Premium';
+  static const fees = 'Fees';
+  static const report = 'Report';
+  static const message = 'Message';
 }

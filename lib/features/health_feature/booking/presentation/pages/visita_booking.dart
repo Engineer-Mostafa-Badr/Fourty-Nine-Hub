@@ -76,7 +76,7 @@ class _VisitaBookingState extends State<VisitaBooking> {
                     const BookDoctorAppointmentPatientInfoCard(),
                     const BookDoctorAppointmentTimeCard(),
                     const BookDoctorAppointmentLocationInfoCard(),
-                    const BookDoctorAppointmentPriceCard(),
+                    const BookDoctorAppointmentFeesCard(),
                     const Sizer(),
                     AppButton(
                         label: Labels.book,

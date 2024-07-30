@@ -10,6 +10,9 @@ import '../../domain/usecases/get_doctor_list_usecase.dart';
 abstract class DoctorListRemoteDataSource {
   Future<Either<Failure, List<DoctorEntity>>> getDoctorsList(
       {required DoctorSearchParams params});
+
+  Future<Either<Failure, bool>> checkSubCategorySubscription(
+      String subCategoryId);
 }
 
 class DoctorListRemoteDataSourceImpl implements DoctorListRemoteDataSource {
@@ -27,5 +30,15 @@ class DoctorListRemoteDataSourceImpl implements DoctorListRemoteDataSource {
         (data) => Right((data['data'] as List)
             .map((e) => DoctorModel.fromJson(e))
             .toList()));
+  }
+
+  @override
+  Future<Either<Failure, bool>> checkSubCategorySubscription(
+      String subCategoryId) async {
+    final response = await _apiConsumer
+        .get(EndPoints.checkSubCategorySubscription(subCategoryId));
+
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['data']));
   }
 }

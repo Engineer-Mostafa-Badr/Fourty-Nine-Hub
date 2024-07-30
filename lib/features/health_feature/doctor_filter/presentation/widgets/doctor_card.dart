@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -12,7 +14,6 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/dynamic/rating_stars.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -23,6 +24,7 @@ class DoctorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasSubscription = context.read<DoctorsListCubit>().hasSubscription;
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -47,16 +49,7 @@ class DoctorCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                            text: doctor.fullName,
-                            style:
-                                Styles.mediumText(fontWeight: FontWeight.bold)),
-                        TextSpan(
-                            text: doctor.description,
-                            style: Styles.mediumText(color: Colors.grey)),
-                      ])),
+                      Text(doctor.fullName, style: Styles.mediumText()),
                       RatingStars(
                         rating: doctor.rating.toDouble(),
                       ),
@@ -64,25 +57,6 @@ class DoctorCard extends StatelessWidget {
                   ),
                 ],
               )),
-              Row(
-                children: [
-                  IconAppButton(
-                    onPressed: () {},
-                    isCircle: true,
-                    backColor: AppColors.PRIMARY_COLOR,
-                    color: Colors.white,
-                    icon: Icons.call,
-                  ),
-                  const Sizer(),
-                  IconAppButton(
-                    onPressed: () {},
-                    isCircle: true,
-                    backColor: AppColors.PRIMARY_COLOR,
-                    color: Colors.white,
-                    icon: Icons.video_camera_front_outlined,
-                  ),
-                ],
-              )
             ],
           ),
           Row(
@@ -107,8 +81,7 @@ class DoctorCard extends StatelessWidget {
               const Sizer(),
               Expanded(
                 child: Label(
-                  text:
-                      '${Labels.price}: ${doctor.priceToShow} ${Labels.currency}',
+                  text: '${Labels.fees}: ${doctor.priceToShow}',
                   style: Styles.mediumText(),
                 ),
               )
@@ -119,27 +92,58 @@ class DoctorCard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                flex: 2,
                 child: AppButton(
-                  backColor: doctor.isActive
-                      ? Colors.green
-                      : AppColors.LIGHT_GRAY_COLOR,
-                  textColor: doctor.isActive ? Colors.white : Colors.black,
-                  label: Labels.availableTimes,
+                  label: Labels.call,
+                  icon: Icons.call,
+                  backColor: AppColors.PRIMARY_COLOR,
                   onPressed: () {},
                 ),
               ),
               const Sizer(),
               Expanded(
                 child: AppButton(
-                  label: Labels.bookNow,
+                  label: Labels.message,
+                  icon: Icons.message,
+                  backColor: AppColors.PRIMARY_COLOR,
+                  onPressed: () {},
+                ),
+              ),
+              const Sizer(),
+              Expanded(
+                child: AppButton(
+                  label: Labels.report,
+                  icon: Icons.report,
+                  onPressed: () {},
+                ),
+              ),
+            ],
+          ),
+          const Sizer(),
+          Row(
+            children: [
+              Expanded(
+                child: AppButton(
+                  label: '${Labels.premium} ${Labels.book}',
+                  backColor: AppColors.ACCENT_COLOR,
+                  onPressed: () {
+                    if (hasSubscription) {
+                      context.push(Routes.VISITADOCTORDETAILS, extra: doctor);
+                    }
+                  },
+                ),
+              ),
+              const Sizer(),
+              Expanded(
+                child: AppButton(
+                  label: Labels.book,
+                  backColor: AppColors.PRIMARY_COLOR,
                   onPressed: () {
                     context.push(Routes.VISITADOCTORDETAILS, extra: doctor);
                   },
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

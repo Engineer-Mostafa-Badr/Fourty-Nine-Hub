@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usec
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_reviews.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/usecases/check_subcategory_subscription.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/governorate_filter_cubit/doctor_governorate_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/city_filter_cubit/doctor_city_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/subcategory_filter_cubit/doctor_filter_cubit.dart';
@@ -137,12 +138,15 @@ class HealthServiceLocator {
         () => BookAppointmentUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetUserDoctorRatessUseCase>(
         () => GetUserDoctorRatessUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<CheckSubCategorySubscriptionUseCase>(
+        () => CheckSubCategorySubscriptionUseCase(serviceLocator()));
 
     // -------------------------- cubits --------------------------
     serviceLocator.registerSingleton<HealthSharedData>(HealthSharedData());
     serviceLocator.registerFactory<DoctorDetailsCubit>(
         () => DoctorDetailsCubit(serviceLocator()));
     serviceLocator.registerFactory<DoctorsListCubit>(() => DoctorsListCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
         ));

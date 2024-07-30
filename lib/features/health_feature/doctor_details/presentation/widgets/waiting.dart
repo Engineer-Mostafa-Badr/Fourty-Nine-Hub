@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/divider.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/info.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
@@ -15,10 +16,15 @@ class DoctorDetailsWaitingTimeCard extends StatelessWidget {
     final doctorDetailsCubit = context.read<DoctorDetailsCubit>();
     if (serviceLocator<HealthSharedData>().doctorSearchParams.bookingType ==
         BookingTypes.clinic) {
-      return DoctorDetailsInfoCard(
-          icon: Icons.access_time,
-          label:
-              '${Labels.waitingTime}: ${doctorDetailsCubit.doctor.waitingTime} ${Labels.minutes}');
+      return Column(
+        children: [
+          DoctorDetailsInfoCard(
+              icon: Icons.access_time,
+              label:
+                  '${Labels.waitingTime}: ${doctorDetailsCubit.doctor.waitingTime} ${Labels.minutes}'),
+          const DoctorDetailsDivider(),
+        ],
+      );
     } else {
       return const SizedBox.shrink();
     }

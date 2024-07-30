@@ -4,8 +4,6 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/domain/enti
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/address.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/appointments.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/divider.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/earn.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/fees_card.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/header.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/reviews.dart';
@@ -39,17 +37,10 @@ class _DoctorDetailsState extends State<DoctorDetails> {
         child: ListView(
           children: const [
             DoctorDetailsAccountHeader(),
-            DoctorDetailsDivider(),
             DoctorDetailsFeesCard(),
-            DoctorDetailsDivider(),
             DoctorDetailsWaitingTimeCard(),
-            DoctorDetailsDivider(),
             DoctorDetailsAddressCard(),
-            DoctorDetailsDivider(),
             DoctorDetailsAppointmentsCard(),
-            DoctorDetailsDivider(),
-            DoctoDetailsEarnCard(),
-            DoctorDetailsDivider(),
             DoctorDetailsReviewsWidget(),
           ],
         ),

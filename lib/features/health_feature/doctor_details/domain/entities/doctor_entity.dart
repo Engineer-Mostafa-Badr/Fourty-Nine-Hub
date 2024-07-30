@@ -23,7 +23,7 @@ class DoctorEntity {
   final String detectionPeriodvisitHome;
   final String callsPrice;
   final String visitHomePrice;
-  final String waitingTime;
+  final String _waitingTime;
   final bool isActive;
   final bool isPremium;
   final String description;
@@ -50,7 +50,7 @@ class DoctorEntity {
     required this.detectionPeriodvisitHome,
     required this.callsPrice,
     required this.visitHomePrice,
-    required this.waitingTime,
+    required String waitingTime,
     required this.isActive,
     required this.isPremium,
     required this.description,
@@ -58,7 +58,7 @@ class DoctorEntity {
     required this.createdAt,
     required this.updatedAt,
     required this.appointments,
-  });
+  }) : _waitingTime = waitingTime;
 
   String get priceToShow {
     String price = '';
@@ -71,8 +71,10 @@ class DoctorEntity {
     } else {
       price = visitHomePrice;
     }
+    price = price.replaceAll(RegExp(r'[^0-9.]'), '');
     return price;
   }
 
+  String get waitingTime => _waitingTime.replaceAll(RegExp(r'[^0-9]'), '');
   String get fullName => '$firstName $lastName';
 }

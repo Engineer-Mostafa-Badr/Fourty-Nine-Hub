@@ -30,7 +30,12 @@ class EndPoints {
   static const bookEmergency = '/health/book-emergency';
   static String bookAppointment(String appointmentId) =>
       '/health/book-appointment/$appointmentId';
-  static String getDoctorReviewsForUsers(String doctorId) => '/health/doctor/rate/$doctorId';
+  static String getDoctorReviewsForUsers(String doctorId) =>
+      '/health/doctor/rate/$doctorId';
+
+  // subscriptions
+  static String checkSubCategorySubscription(String subCategoryId) =>
+      '/subscription/subcategory/$subCategoryId';
 
   // reels
   static const getExploreReels = '/reels/explore';

@@ -18,8 +18,8 @@ class SubcategoryListTitle extends StatelessWidget {
       ),
       title: Text(specialty.name),
       onTap: () {
-        serviceLocator<HealthSharedData>().doctorSearchParams.subCategoryId =
-            specialty.id;
+        serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
+            specialty;
         if (serviceLocator<HealthSharedData>().doctorSearchParams.bookingType ==
             BookingTypes.call) {
           context.push(Routes.VISITADOCTORLIST);

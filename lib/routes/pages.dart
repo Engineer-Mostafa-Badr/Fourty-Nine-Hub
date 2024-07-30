@@ -62,6 +62,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/cu
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:go_router/go_router.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_ads_cubit.dart';
@@ -653,7 +654,8 @@ class AppPages {
                       BlocProvider<BookDoctorAppointmentCubit>(
                           create: (_) => serviceLocator(),
                           child: VisitaBooking(
-                            doctorDetailsCubit: (state.extra) as DoctorDetailsCubit,
+                            doctorDetailsCubit:
+                                (state.extra) as DoctorDetailsCubit,
                           ))),
               GoRoute(
                   path: Paths.DOCTORDASHBOARD,
