@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../domain/entities/wallet_entity.dart';

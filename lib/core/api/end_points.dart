@@ -288,4 +288,12 @@ class EndPoints {
   static String changeChatToArchiveOrNormal(String chatId) {
     return '/chat/archive-chat/$chatId';
   }
+
+  static String buttonAvailable = '/global/click';
+  static String getSubscribtionPlans = '/subscription/plans';
+  static String checkUserSubscribtion(String id) {
+    return '/subscription/subcategory/$id';
+  }
+  static String subscribe ='/subscription/subscribe';
+  
 }
