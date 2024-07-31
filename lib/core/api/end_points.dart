@@ -162,9 +162,10 @@ class EndPoints {
   static String commentOnPost(String postId) {
     return '/facebook/comment/create-comment/$postId';
   }
+
   static String commentOnTwitterPost(String postId) {
-      return '/twitter/comment/create-comment/$postId';
-    }
+    return '/twitter/comment/create-comment/$postId';
+  }
 
   static String getPostComments(String postId) {
     return '/facebook/comment/get-post-comments/$postId';
@@ -240,7 +241,8 @@ class EndPoints {
   static String auctionDetails(String id) {
     return '/auction/$id';
   }
-  static String getAuctionRequests(String id){
+
+  static String getAuctionRequests(String id) {
     return '/auction/all-auction-request/$id';
   }
 
@@ -296,6 +298,7 @@ class EndPoints {
   static String getChatMessages(String chatId) {
     return '/chat/get-chat/$chatId';
   }
+
   static String changeChatMuteState(String chatId) {
     return '/chat/mute-chat/$chatId';
   }
@@ -303,4 +306,12 @@ class EndPoints {
   static String changeChatToArchiveOrNormal(String chatId) {
     return '/chat/archive-chat/$chatId';
   }
+
+  static String buttonAvailable = '/global/click';
+  static String getSubscribtionPlans = '/subscription/plans';
+  static String checkUserSubscribtion(String id) {
+    return '/subscription/subcategory/$id';
+  }
+  static String subscribe ='/subscription/subscribe';
+  
 }
