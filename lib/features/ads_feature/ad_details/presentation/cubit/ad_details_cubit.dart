@@ -1,27 +1,23 @@
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
-
 import '../../../../../core/error/failure.dart';
+import '../../../ads/domain/usecases/get_ads_usecase.dart';
 import '../../domain/usecases/get_ad_details_usecase.dart';
-import '../../domain/usecases/get_relevant_ads_usecase.dart';
 import '../../domain/usecases/make_ad_request_usecase.dart';
-
 part 'ad_details_state.dart';
 
 class AdDetailsCubit extends Cubit<AdDetailsState> {
   final GetAdDetailsUseCase _getAdDetailsUseCase;
-  final GetRelevantAdsUseCase _getRelevantAdsUseCase;
+  final GetAdsUseCase _getAdsUseCase;
 
   final MakeAdRequestUsecase _makeAdRequestUsecase;
   String? phone;
-  AdDetailsCubit(this._getAdDetailsUseCase, this._getRelevantAdsUseCase,
+  AdDetailsCubit(this._getAdDetailsUseCase, this._getAdsUseCase,
       this._makeAdRequestUsecase)
       : super(const AdDetailsState());
 
   void loadData({required String adId}) async {
     await getAdDetails(adId: adId);
-    await getRelevantAds();
   }
 
   Future<void> getAdDetails({required String adId}) async {
@@ -31,12 +27,13 @@ class AdDetailsCubit extends Cubit<AdDetailsState> {
         (failure) => emit(
             state.copyWith(failure: failure, status: AdDetailsStates.error)),
         (data) {
+      getRelevantAds();
       emit(state.copyWith(ad: data, status: AdDetailsStates.initState));
     });
   }
 
   Future<void> getRelevantAds() async {
-    final response = await _getRelevantAdsUseCase.call(0);
+    final response = await _getAdsUseCase(state.ad?.subCategoryId??'');
     response.fold(
         (failure) => emit(
             state.copyWith(failure: failure, status: AdDetailsStates.error)),
@@ -65,3 +62,7 @@ class AdDetailsCubit extends Cubit<AdDetailsState> {
     }
   }
 }
+
+
+ 
+ 

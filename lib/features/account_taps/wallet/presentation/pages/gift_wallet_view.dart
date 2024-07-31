@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/styles.dart';
 import '../cubit/wallet_cubit.dart';
@@ -30,7 +31,7 @@ class GiftWalletView extends StatelessWidget {
                 children: [
                   const WalletCardWidget(
                     balance: 300,
-                    type: WalletTypes.gift,
+                    type: WalletTypes.giftWallet,
                   ),
                   
                   const Sizer(),

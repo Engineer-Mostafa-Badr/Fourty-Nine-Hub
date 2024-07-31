@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_entity.dart';
+
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/enums/wallet_types_enums.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/styles.dart';
 import '../stateless/labels/label.dart';
@@ -81,7 +82,7 @@ class WalletWidget extends StatelessWidget {
           Expanded(
               child: InkWell(
             onTap: () {
-              context.push(Routes.WALLET, extra: WalletTypes.gift);
+              context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,7 +114,7 @@ class WalletWidget extends StatelessWidget {
           Expanded(
               child: InkWell(
             onTap: () {
-              context.push(Routes.WALLET, extra: WalletTypes.normal);
+              context.push(Routes.WALLET, extra: WalletTypes.mainWallet);
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
