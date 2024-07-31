@@ -3,6 +3,8 @@ import '../../../../../res/style/app_colors.dart';
 
 
 class ReportWidget extends StatelessWidget {
+  const ReportWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Directionality(

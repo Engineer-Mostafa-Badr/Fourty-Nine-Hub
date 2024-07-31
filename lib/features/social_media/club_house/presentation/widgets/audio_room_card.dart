@@ -10,6 +10,8 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../pages/audio_stream_screen.dart';
+
 class AudioRoomCard extends StatelessWidget {
   const AudioRoomCard({super.key});
 
@@ -17,7 +19,13 @@ class AudioRoomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.push(Routes.CLUBHOUSEROOM);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (ctx) => AudioStreamScreen(
+                liveId: '93314', roomSubject: 'Hiring Manager On-Hire', isHost: false),
+          ),
+        );
       },
       child: Container(
         padding:
@@ -94,19 +102,6 @@ class AudioRoomCard extends StatelessWidget {
                             ],
                           ),
                           const Sizer(),
-                          Row(
-                            children: [
-                              const Icon(
-                                FontAwesomeIcons.comment,
-                                color: Colors.grey,
-                                size: 14,
-                              ),
-                              const Sizer(),
-                              Label(
-                                  text: '144',
-                                  style: Styles.mediumText(color: Colors.grey))
-                            ],
-                          ),
                         ],
                       ),
                     ],

@@ -6,7 +6,7 @@ import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_stre
 
 import '../../../../routes/routes.dart';
 
-void showMeetingDialog(BuildContext context) {
+void showMeetingDialogue(BuildContext context) {
   TextEditingController meetingIdController = TextEditingController();
   final String liveId = Random().nextInt(100000).toString();
   showDialog(

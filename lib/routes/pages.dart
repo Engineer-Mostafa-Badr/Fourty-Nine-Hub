@@ -52,6 +52,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/Chat_view.dart';
+import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_dialogue.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
@@ -128,9 +129,8 @@ import '../features/ride/driver_dashboard/presentation/pages/driver_dashboard_vi
 import '../features/requests_history/presentation/cubit/request_history_cubit.dart';
 import '../features/ride/trip_details/presentation/cubit/trip_details_cubit.dart';
 import '../features/ride/trip_details/presentation/pages/trip_details_view.dart';
-import '../features/social_media/club_house/presentation/pages/club_house_home.dart';
-import '../features/social_media/club_house/presentation/widgets/clubHouseChat.dart';
-import '../features/social_media/club_house/presentation/widgets/clubHouseRoom.dart';
+import '../features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
+import '../features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/reels/presentation/pages/Reel_view.dart';
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
@@ -498,18 +498,21 @@ class AppPages {
                   builder: (context, state) => const ClubHouseHome(),
                   routes: [
                     GoRoute(
-                      path: Paths.CLUBHOUSECHAT,
-                      name: Routes.CLUBHOUSECHAT,
-                      builder: (context, state) => const ClubHouseChat(),
-                    ),
-                    // ClubHouseRoom
-                    GoRoute(
                       path: Paths.CLUBHOUSEROOM,
-                      name: Routes.CLUBHOUSEROOM,
-                      builder: (context, state) => const ClubHouseRoom(),
+                      name: Routes.AUDIOSTREAMSCREEN,
+                      builder: (context, state) {
+                        final extras = state.extra as RoomArgs;
+                        return AudioStreamScreen(
+                          liveId: extras.liveId,
+                          roomSubject: extras.subject,
+                          isHost: extras.isHost,
+                        );
+                      },
+                      routes: [],
                     ),
                   ]),
             ]),
+
         // MazadatView
         GoRoute(
             path: Paths.MAZADAT,

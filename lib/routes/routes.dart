@@ -1,4 +1,3 @@
-
 abstract class Routes {
   Routes._();
 
@@ -26,7 +25,7 @@ abstract class Routes {
   static const LIVE = '/Social/Live';
   static const CLUBHOUSE = '/Social/ClubHouse';
   static const CLUBHOUSECHAT = '/Social/ClubHouse/ClubHouseChat';
-  static const CLUBHOUSEROOM = '/Social/ClubHouse/ClubHouseRoom';
+  static const AUDIOSTREAMSCREEN = '/Social/ClubHouse/ClubHouseRoom';
   static const CHAT = '/Chat';
   static const CHATROOM = '/ChatRoom';
   static const MAZADAT = '/Mazadat';
@@ -41,7 +40,8 @@ abstract class Routes {
       '/Visita/FilterDoctorSubcategory/FilterDoctorCity/FilterDoctorArea';
   static const VISITADOCTORLISTBYLOCATION =
       '/Visita/FilterDoctorSubcategory/FilterDoctorCity/FilterDoctorArea/VisitaDoctorsList';
-  static const VISITADOCTORLISTBYCALL = '/Visita/FilterDoctorSubcategory/VisitaDoctorsList';
+  static const VISITADOCTORLISTBYCALL =
+      '/Visita/FilterDoctorSubcategory/VisitaDoctorsList';
   static const VISITADOCTORDETAILS = '/Visita/DoctorDetails';
   static const VISITABOOKING = '/Visita/VisitaBooking';
   static const DOCTORDASHBOARD = '/Visita/DoctorDashboard';
