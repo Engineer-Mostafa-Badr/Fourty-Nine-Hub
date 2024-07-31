@@ -1,3 +1,6 @@
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
+
 class EndPoints {
   static const pageSize = 20;
   static const developmentBaseUrl = 'https://49dev.com/api/v1';
@@ -19,6 +22,8 @@ class EndPoints {
   static const sendForgetPasswordOTP = '/auth/forgot-password';
   static const verifyForgetPasswordOTP = '/auth/verify/otp';
   static const createNewForgetPassword = '/auth/reset-password';
+  static const report = '/report';
+  static const documentRequest = '/twitter/document-request';
   // ride
 
   // health
@@ -88,6 +93,14 @@ class EndPoints {
   static const getTwitterFeedPosts = '/twitter/feed';
   static String userPosts(String userId) {
     return '/facebook/post/user/$userId?limit=20&page=1&type=1';
+  }
+
+  static String userSuggests(SuggestedFriendsParams params) {
+    return '/users/suggest?limit=${params.limit}&page=${params.page}';
+  }
+
+  static String userTweets(GetUserTweetsParams params) {
+    return '/twitter/post/user/${params.userId}?limit=10&page=${params.page}&type=1';
   }
 
   static String acceptTripRider(String id) {
@@ -172,6 +185,22 @@ class EndPoints {
 
   static String hidePost(String postId) {
     return '/facebook/post/hide/$postId';
+  }
+
+  static String friendRequest(String userId) {
+    return '/friends/sendFriendRequest/$userId';
+  }
+
+  static String followRequest(String userId) {
+    return '/follow/make-follow/$userId';
+  }
+
+  static String greetMessage(String userId) {
+    return '/users/greet/$userId';
+  }
+
+  static String removeSuggestUser(String userId) {
+    return '/friends/remove-user-suggest/$userId';
   }
 
   // food

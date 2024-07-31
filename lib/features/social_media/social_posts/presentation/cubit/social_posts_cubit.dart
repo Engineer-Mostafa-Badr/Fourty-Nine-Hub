@@ -5,10 +5,18 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/follow_user_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/friend_request_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/hide_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/remove_suggest_user_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/send_greet_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/post_details_page.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/post_comments.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../domain/entities/post_entity.dart';
@@ -29,6 +37,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final PostCommentUseCase _postCommentUseCase;
   final DeletePostUseCase _deletePostUseCase;
   final HidePostUseCase _hidePostUseCase;
+  final SuggestedFriendsUseCase _suggestedFriendsUseCase;
+  final FriedRequestUseCase _friedRequestUseCase;
+  final FollowUserUseCase _followUserUseCase;
+  final SendGreetMessageUseCase _sendGreetMessageUseCase;
+  final RemoveSuggestUserUseCase _removeSuggestUserUseCase;
   SocialPostsCubit(
       this._getFeedUseCase,
       this._getUserPostsUseCase,
@@ -36,20 +49,71 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       this._getPostCommentsUseCase,
       this._postCommentUseCase,
       this._deletePostUseCase,
-      this._hidePostUseCase)
+      this._hidePostUseCase, this._suggestedFriendsUseCase, this._friedRequestUseCase, this._followUserUseCase, this._sendGreetMessageUseCase, this._removeSuggestUserUseCase,)
       : super(const SocialPostsState());
 
   void loadData() async {
-    await getFeed();
+    await getFeed(1);
+    feedPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getFeed(pageKey);
+    });
+    await getSuggestedFriends(1);
+    suggestUserPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getSuggestedFriends(pageKey);
+    });
   }
 
 // get feed posts
-  Future<void> getFeed() async {
+  Future<void> getFeed(int page) async {
     final response = await _getFeedUseCase(const NoParams());
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-        (data) =>
-            emit(state.copyWith(posts: data, status: StateStatus.initial)));
+        (data) {
+          final isLastPage = data.length < pageSize;
+          if (page == 1) {
+            print("page == 1 $page");
+            feedPagingController.itemList = [];
+          }
+          if (isLastPage) {
+            print("isLastPage = $isLastPage");
+            feedPagingController.appendLastPage(data);
+          } else {
+            print("isNotLastPage = $isLastPage");
+            final nextPageKey = page + 1;
+            feedPagingController.appendPage(data, nextPageKey);
+          }
+          emit(state.copyWith(posts: data, status: StateStatus.initial));
+        });
+  }
+
+  final int pageSize = 10;
+  final PagingController<int, SuggestUserEntity> suggestUserPagingController =
+  PagingController(firstPageKey: 1);
+  final PagingController<int, PostEntity> feedPagingController =
+  PagingController(firstPageKey: 1);
+  // get suggested friends
+  Future<void> getSuggestedFriends(int page) async {
+    final response = await _suggestedFriendsUseCase(SuggestedFriendsParams(limit: pageSize, page: page));
+    response.fold(
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (data) {
+              final isLastPage = data.length < pageSize;
+              if (page == 1) {
+                print("page == 1 $page");
+                suggestUserPagingController.itemList = [];
+              }
+              if (isLastPage) {
+                print("isLastPage = $isLastPage");
+                suggestUserPagingController.appendLastPage(data);
+              } else {
+                print("isNotLastPage = $isLastPage");
+                final nextPageKey = page + 1;
+                suggestUserPagingController.appendPage(data, nextPageKey);
+              }
+              emit(state.copyWith(suggestedFriends: data, status: StateStatus.initial));
+            });
   }
 
   // get feed posts
@@ -135,5 +199,62 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         (r) {
       getMyPosts(context: context);
     });
+  }
+
+  Future<bool> friendRequest({required BuildContext context, required String userId}) async {
+    final response = await _friedRequestUseCase(userId);
+    bool isAdd = false;
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+      // getMyPosts(context: context);
+          print("object $r}");
+          isAdd=r;
+          emit(state.copyWith(friendRequest: r, status: StateStatus.success));
+    });
+    print(isAdd);
+    return isAdd;
+  }
+
+  Future<bool> followRequest({required BuildContext context, required String userId}) async {
+    final response = await _followUserUseCase(userId);
+    bool isAdd = false;
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+          print("object $r}");
+          isAdd=r;
+          emit(state.copyWith(friendRequest: r, status: StateStatus.success));
+    });
+    print(isAdd);
+    return isAdd;
+  }
+
+  Future<bool> sendGreetMessage({required BuildContext context, required String userId}) async {
+    final response = await _sendGreetMessageUseCase(userId);
+    bool isAdd = false;
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+          print("object $r}");
+          isAdd=r;
+          emit(state.copyWith(friendRequest: r, status: StateStatus.success));
+    });
+    print(isAdd);
+    return isAdd;
+  }
+
+  Future<bool> removeSuggestUser({required BuildContext context, required String userId}) async {
+    final response = await _removeSuggestUserUseCase(userId);
+    bool isAdd = false;
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+          print("object $r}");
+          isAdd=r;
+          emit(state.copyWith(status: StateStatus.success));
+    });
+    print(isAdd);
+    return isAdd;
   }
 }

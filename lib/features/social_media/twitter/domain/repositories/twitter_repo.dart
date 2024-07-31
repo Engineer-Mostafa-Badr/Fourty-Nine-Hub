@@ -5,6 +5,9 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/request_document_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../entities/twitter_post_entity.dart';
@@ -14,13 +17,13 @@ abstract class TwitterRepo {
   Future<Either<Failure, List<TwitterPostEntity>>> getFeed({required TwitterFeedParams params});
   Future<Either<Failure, TwitterPostEntity>> getTwitterPost({required String postId});
   Future<Either<Failure, List<TwitterPostEntity>>> getUserPosts(
-      {required String userId});
+      {required GetUserTweetsParams params});
   Future<Either<Failure, bool>> reactOnPost({required TwitterPostReactParams params});
   Future<Either<Failure, bool>> sharePost({required String postId});
   Future<Either<Failure, bool>> reactOnComment({required TwitterCommentReactParams params});
-  Future<Either<Failure, bool>> commentOnTwitterPost(
+  Future<Either<Failure, TwitterPostCommentEntity>> commentOnTwitterPost(
       {required PostCommentParams params});
-  Future<Either<Failure, bool>> replyOnComment(
+  Future<Either<Failure, TwitterCommentReplyEntity>> replyOnComment(
       {required TwitterCommentReplyParams params});
   Future<Either<Failure, List<TwitterPostCommentEntity>>> getPostComments(
       {required String postId});
@@ -28,4 +31,6 @@ abstract class TwitterRepo {
       {required String commentId});
   Future<Either<Failure, bool>> deletePost({required String postId});
   Future<Either<Failure, bool>> hidePost({required String postId});
+  Future<Either<Failure, bool>> addReport({required TwitterReportParams params});
+  Future<Either<Failure, bool>> requestDocument({required TwitterDocumentationParams params});
 }

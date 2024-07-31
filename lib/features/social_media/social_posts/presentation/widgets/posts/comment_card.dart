@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
-import '../../../../../../common/widgets/stateless/labels/ReadMoreLabel.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
-
 import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/comment_entity.dart';
-import 'PostOptions.dart';
 
 class CommentCard extends StatelessWidget {
   final Color textColor;
@@ -44,7 +41,7 @@ class CommentCard extends StatelessWidget {
             )),
             IconButton(
                 onPressed: () {
-                  bottomSheet(context: context, widget: const PostOptions());
+                  bottomSheet(context: context, widget:  ReportView(id: comment.id, ));
                 },
                 icon: Icon(
                   Icons.more_vert,

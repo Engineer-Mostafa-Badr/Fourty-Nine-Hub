@@ -3,10 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/animations/moving_widget_hr.dart';
-
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 
@@ -191,7 +187,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Label(text: service.title(), style: Styles.headerText()),
-            MovingWidgetHr(asset: image, label: service.title())
+            // MovingWidgetHr(asset: image, label: service.title())
           ],
         ),
       ),

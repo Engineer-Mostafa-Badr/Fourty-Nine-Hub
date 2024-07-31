@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/PostOptions.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
-
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
-
 import '../../../../../../res/style/styles.dart';
 
 class TwitterCommentCard extends StatefulWidget {
   final Color textColor;
   final TwitterPostCommentEntity comment;
-  final GestureTapCallback? onCommentReact;
+  final Function onCommentReact;
   final Function onCommentReply;
+  final Function(TwitterReportParams) onReport;
   const TwitterCommentCard(
-      {super.key, this.textColor = Colors.black, required this.comment, this.onCommentReact, required this.onCommentReply});
+      {super.key,
+      this.textColor = Colors.black,
+      required this.comment,
+      required this.onCommentReact,
+      required this.onCommentReply,
+      required this.onReport});
 
   @override
   State<TwitterCommentCard> createState() => _TwitterCommentCardState();
@@ -30,9 +35,12 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
       children: [
         Row(
           children: [
-            const ProfileImage(
+            widget.comment.user.image==''? const ProfileImage(
               accountId: 0,
               withBorder: false,
+            ):ProfileImage(
+              accountId: 0,
+              imageURL: widget.comment.user.image,
             ),
             const Sizer(),
             Expanded(
@@ -40,7 +48,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                    text: widget.comment.user,
+                    text: widget.comment.user.firstName,
                     style: Styles.mediumText(
                         fontWeight: FontWeight.bold, color: widget.textColor)),
                 Label(
@@ -50,7 +58,11 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
             )),
             IconButton(
                 onPressed: () {
-                  bottomSheet(context: context, widget: const PostOptions());
+                  bottomSheet(
+                      context: context,
+                      widget: ReportView(
+                        id: widget.comment.id,
+                      ));
                 },
                 icon: Icon(
                   Icons.more_vert,
@@ -68,10 +80,36 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             InkWell(
-              onTap: widget.onCommentReact,
+              onTap: () {
+                if (widget.comment.isReact == true) {
+                  widget.onCommentReact();
+                  widget.comment.loveCount = (widget.comment.loveCount! - 1);
+                  setState(() {});
+                } else {
+                  widget.onCommentReact();
+                  widget.comment.loveCount = widget.comment.loveCount! + 1;
+                  setState(() {});
+                }
+                // if(widget.comment.isReact=true){
+                //   widget.onCommentReact();
+                //   widget.comment.loveCount-1;
+                //   setState(() {
+                //
+                //   });
+                // }else{
+                //   widget.onCommentReact();
+                //   widget.comment.loveCount+1;
+                //   setState(() {
+                //
+                //   });
+                // }
+              },
               child: Icon(
-                Icons.favorite_border,
-                color: widget.textColor,
+                widget.comment.isReact == false
+                    ? Icons.favorite_border
+                    : Icons.favorite,
+                color:
+                    widget.comment.isReact == false ? Colors.grey : Colors.red,
               ),
             ),
             Label(
@@ -79,7 +117,9 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                 style: Styles.mediumText(color: widget.textColor)),
             const Sizer(),
             TextAppButton(
-                style: Styles.mediumText(), label: 'Reply', onPressed: widget.onCommentReply)
+                style: Styles.mediumText(),
+                label: 'Reply',
+                onPressed: widget.onCommentReply)
           ],
         ),
       ],

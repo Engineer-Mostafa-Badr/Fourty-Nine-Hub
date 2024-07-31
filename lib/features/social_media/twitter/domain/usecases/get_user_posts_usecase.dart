@@ -4,11 +4,23 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/twitter_repo.dart';
 
-class GetUserPostsUseCase extends UseCase<List<TwitterPostEntity>, String> {
+class GetUserTweetsUseCase extends UseCase<List<TwitterPostEntity>, GetUserTweetsParams> {
   final TwitterRepo _repo;
-  GetUserPostsUseCase(this._repo);
+  GetUserTweetsUseCase(this._repo);
   @override
-  Future<Either<Failure, List<TwitterPostEntity>>> call(String params) async {
-    return await _repo.getUserPosts(userId: params);
+  Future<Either<Failure, List<TwitterPostEntity>>> call(GetUserTweetsParams params) async {
+    return await _repo.getUserPosts(params: params);
   }
+}
+
+
+class GetUserTweetsParams{
+  final int page;
+  final String userId;
+
+  GetUserTweetsParams({required this.page, required this.userId});
+  Map<String, dynamic> toJson() => {
+    'page': page,
+    'userId': userId,
+  };
 }

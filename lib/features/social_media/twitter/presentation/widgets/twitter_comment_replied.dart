@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
+import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_comment_reply_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_reply_card.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -17,10 +21,12 @@ class TwitterCommentReplies extends StatefulWidget {
   final List<TwitterCommentReplyEntity> replies;
   final String commentId;
   final String postId;
-  final GestureTapCallback? onReplyReact;
+  final Function(String) onReplyReact;
   final Function(TwitterCommentReplyParams) onAddReply;
+  final Function(TwitterReportParams) onReport;
+  final UserEntity userData;
   const TwitterCommentReplies(
-      {super.key, required this.replies, this.onReplyReact, required this.onAddReply, required this.commentId, required this.postId,
+      {super.key, required this.replies, required this.onReplyReact, required this.onAddReply, required this.commentId, required this.postId, required this.onReport, required this.userData,
       });
 
   @override
@@ -48,6 +54,7 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
         create: (_)=>serviceLocator(),
         child: BlocBuilder<TwitterCubit,TwitterState>(
           builder: (context,state) {
+            final controller = context.read<TwitterCubit>();
             return Column(
               children: [
                 Expanded(
@@ -80,7 +87,24 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                           IconAppButton(
                               icon: Icons.send,
                               isCircle: true,
-                              onPressed: () => onReplyAdded(),
+                              onPressed: () async{
+                                TwitterCommentReplyEntity data = await controller.onCommentReply(
+                                  params:TwitterCommentReplyParams(postId: widget.postId,reply: widget.commentId,content: replyTextController.text),
+                                );
+                                print("state.newReply?.id${state.newReply?.id}");
+                                widget.replies.insert(
+                                    0,
+                                    TwitterCommentReplyModel(
+                                        id: data.id,
+                                        content: replyTextController.text,
+                                        post: widget.postId,
+                                        createdAt: data.createdAt,
+                                        user: TwitterUserEntity(id: widget.userData.id, firstName: widget.userData.firstName, lastName: widget.userData.lastName, createdAt: DateTime.now(), image: widget.userData.profilePicture??'', email: widget.userData.email??'', isDocumented: false),
+                                        love: data.love, isReact: data.isReact, image: data.image));
+                                replyTextController.clear();
+                                print(widget.replies.length);
+                                setState(() {});
+                              },
                           )
                       ],
                     )),
@@ -93,9 +117,19 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
   }
 
   void onReplyAdded() async {
-    await widget.onAddReply(
+    var newReply = await widget.onAddReply(
       TwitterCommentReplyParams(postId: widget.postId,reply: widget.commentId,content: replyTextController.text),
     );
+    widget.replies.insert(
+        0,
+        TwitterCommentReplyEntity(
+            id: newReply.id,
+            content: replyTextController.text,
+            post: widget.postId,
+            createdAt: DateTime.now(),
+            user: '',
+            // image: '',
+            love: [], isReact: false, image: ''));
     replyTextController.clear();
     setState(() {
 
@@ -109,7 +143,12 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TwitterReplyCard(reply: reply,),
+        TwitterReplyCard(reply: reply, onReplyReact: (String id) {
+          widget.onReplyReact(id);
+          reply.isReact=!reply.isReact!;
+        }, onReport: (TwitterReportParams params) {
+          widget.onReport(params);
+        },),
        ],
     );
   }
