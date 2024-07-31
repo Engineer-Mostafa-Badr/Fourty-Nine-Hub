@@ -360,7 +360,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
 
       reactions: <Reaction<String>>[
         Reaction<String>(
-          value: 'like',
+          value: 'likes',
           icon: _buildReactionItem(item: Reactions.like),
         ),
         Reaction<String>(

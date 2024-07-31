@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/divider.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/rate_card.dart';
@@ -22,10 +23,14 @@ class DoctorDetailsReviewsWidget extends StatelessWidget {
               Labels.patientsReviews,
               style: Styles.headerText(),
             ),
+            const Sizer(),
             BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
+              buildWhen: (previous, current) =>
+                  current is DoctorDetailsReviewsLoaded ||
+                  current is DoctorDetailsInitial,
               builder: (context, state) {
                 switch (state) {
-                  case DoctorDetailsLoaded _:
+                  case DoctorDetailsReviewsLoaded _:
                     return ListView.separated(
                       shrinkWrap: true,
                       itemCount: state.rates.length,
@@ -34,11 +39,9 @@ class DoctorDetailsReviewsWidget extends StatelessWidget {
                       itemBuilder: (context, index) =>
                           UserDoctorRateCard(rate: state.rates[index]),
                     );
-                  case DoctorDetailsError _:
-                    return Center(child: Text(state.message));
 
                   default:
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: Text(Labels.noReviews));
                 }
               },
             ),

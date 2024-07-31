@@ -5,6 +5,7 @@ import '../../../../../core/error/failure.dart';
 import '../entities/doctor_entity.dart';
 
 abstract class DoctorDetailsRepo {
-  Future<Either<Failure, DoctorEntity>> getDoctorDetails({required int id});
-  Future<Either<Failure,List<UserDoctorRateEntity>>> getDoctorReviews(String doctorId);
+  Future<Either<Failure, DoctorEntity>> getDoctorDetails(String doctorId);
+  Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorReviews(
+      String doctorId);
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/address.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/appointments.dart';
@@ -10,19 +9,18 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/presentatio
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/waiting.dart';
 import '../../../../../res/strings/labels.dart';
 
-class DoctorDetails extends StatefulWidget {
-  final DoctorEntity doctor;
-  const DoctorDetails({super.key, required this.doctor});
+class DoctorDetailsView extends StatefulWidget {
+  final String doctorId;
+  const DoctorDetailsView({super.key, required this.doctorId});
 
   @override
-  State<DoctorDetails> createState() => _DoctorDetailsState();
+  State<DoctorDetailsView> createState() => _DoctorDetailsViewState();
 }
 
-class _DoctorDetailsState extends State<DoctorDetails> {
+class _DoctorDetailsViewState extends State<DoctorDetailsView> {
   @override
   void initState() {
-    context.read<DoctorDetailsCubit>().doctor = widget.doctor;
-    context.read<DoctorDetailsCubit>().loadData();
+    context.read<DoctorDetailsCubit>().loadData(widget.doctorId);
     super.initState();
   }
 
@@ -34,15 +32,23 @@ class _DoctorDetailsState extends State<DoctorDetails> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: ListView(
-          children: const [
-            DoctorDetailsAccountHeader(),
-            DoctorDetailsFeesCard(),
-            DoctorDetailsWaitingTimeCard(),
-            DoctorDetailsAddressCard(),
-            DoctorDetailsAppointmentsCard(),
-            DoctorDetailsReviewsWidget(),
-          ],
+        child: BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
+          builder: (context, state) {
+            if (state is DoctorDetailsLoaded) {
+              return ListView(
+                children: const [
+                  DoctorDetailsAccountHeader(),
+                  DoctorDetailsFeesCard(),
+                  DoctorDetailsWaitingTimeCard(),
+                  DoctorDetailsAddressCard(),
+                  DoctorDetailsAppointmentsCard(),
+                  DoctorDetailsReviewsWidget(),
+                ],
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
         ),
       ),
     );

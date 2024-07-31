@@ -1,6 +1,7 @@
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/doctor_address.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_address.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
+import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 import 'appointment_model.dart';
@@ -10,7 +11,7 @@ class DoctorModel extends DoctorEntity {
       {required super.id,
       required super.lastName,
       required super.firstName,
-      required super.subCategoryId,
+      required super.subCategory,
       required super.image,
       required super.phone,
       required super.email,
@@ -38,7 +39,10 @@ class DoctorModel extends DoctorEntity {
         id: json['_id'] ?? '',
         lastName: json['lastName'] ?? '',
         firstName: json['firstName'] ?? '',
-        subCategoryId: json['subCategoryId'] ?? '',
+        subCategory: json['subCategory'] != null
+            ? SubCategoryModel.fromJson(json['subCategory'])
+            : SubCategoryEntity(
+                id: '', name: '', image: '', isFavourite: false),
         image: json['mediaId']['mediaKey'] ?? '',
         phone: json['phone'] ?? '',
         email: json['email'] ?? '',

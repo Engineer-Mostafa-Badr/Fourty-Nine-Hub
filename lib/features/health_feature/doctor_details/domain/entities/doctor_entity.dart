@@ -1,6 +1,7 @@
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_address.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import 'appointment_entity.dart';
@@ -9,7 +10,7 @@ class DoctorEntity {
   final String id;
   final String lastName;
   final String firstName;
-  final String subCategoryId;
+  final SubCategoryEntity subCategory;
   final String image;
   final String phone;
   final String email;
@@ -36,7 +37,7 @@ class DoctorEntity {
     required this.id,
     required this.lastName,
     required this.firstName,
-    required this.subCategoryId,
+    required this.subCategory,
     required this.image,
     required this.phone,
     required this.email,

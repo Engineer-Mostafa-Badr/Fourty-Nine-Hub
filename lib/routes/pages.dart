@@ -28,7 +28,6 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_dashboard_view.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/pages/create_doctor_view.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/governorate_filter_cubit/doctor_governorate_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/city_filter_cubit/doctor_city_filter_cubit.dart';
@@ -62,7 +61,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/cu
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:go_router/go_router.dart';
 import '../core/enums/wallet_types_enums.dart';
@@ -73,7 +71,6 @@ import '../features/account_taps/my_adds/presentation/pages/my_adds.dart';
 import '../features/account_taps/policies/presentation/pages/policy_view.dart';
 import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
 import '../features/account_taps/transfer_money/presentation/pages/transfer_money_view.dart';
-import '../features/account_taps/wallet/domain/entities/wallet_entity.dart';
 import '../features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import '../features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import '../features/ads_feature/create_company_ad/presentation/pages/create_company_ad.dart';
@@ -581,7 +578,7 @@ class AppPages {
             name: Routes.VISITA,
             builder: (context, state) {
               return BlocProvider<HealthCubit>(
-                create: (_) => serviceLocator(),
+                create: (_) => serviceLocator<HealthCubit>(),
                 child: const HealthView(),
               );
             },
@@ -642,8 +639,8 @@ class AppPages {
                   name: Routes.VISITADOCTORDETAILS,
                   builder: (context, state) {
                     return BlocProvider<DoctorDetailsCubit>(
-                        child: DoctorDetails(
-                          doctor: (state.extra) as DoctorEntity,
+                        child: DoctorDetailsView(
+                          doctorId: (state.extra) as String,
                         ),
                         create: (_) => serviceLocator());
                   }),

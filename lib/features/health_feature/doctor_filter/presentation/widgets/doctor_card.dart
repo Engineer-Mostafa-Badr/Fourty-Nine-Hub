@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../common/widgets/stateless/labels/ReadMoreLabel.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -24,10 +21,9 @@ class DoctorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final doctorListCubit = context.read<DoctorsListCubit>();
     return InkWell(
-      onTap:(){
-        context.push(Routes.VISITADOCTORDETAILS, extra: doctor);
+      onTap: () {
+        context.push(Routes.VISITADOCTORDETAILS, extra: doctor.id);
       },
       child: Container(
         padding: const EdgeInsets.all(10),
@@ -93,66 +89,6 @@ class DoctorCard extends StatelessWidget {
             ),
             _buildWaitingTime,
             const Sizer(),
-            // Row(
-            //   children: [
-            //     Expanded(
-            //       flex:3,
-            //       child: AppButton(
-            //         label: Labels.call,
-            //         icon: Icons.call,
-            //         backColor: AppColors.PRIMARY_COLOR,
-            //         onPressed: () {
-            //         },
-            //       ),
-            //     ),
-            //     const Sizer(),
-            //     Expanded(
-            //       flex: 3,
-            //       child: AppButton(
-            //         label: Labels.message,
-            //         icon: Icons.message,
-            //         backColor: AppColors.PRIMARY_COLOR,
-            //         onPressed: () {
-            //         },
-            //       ),
-            //     ),
-            //     const Sizer(),
-            //     Expanded(
-            //       child: InkWell(
-            //         onTap: () {},
-            //         child: const Icon(
-            //           Icons.report,
-            //           color: AppColors.SECONDARY_COLOR,
-            //         size: 30,
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            // const Sizer(),
-            // Row(
-            //   children: [
-            //     Expanded(
-            //       child: AppButton(
-            //         label: '${Labels.premium} ${Labels.book}',
-            //         onPressed: () {
-            //           // doctorListCubit.bookPremium();
-            //           context.push(Routes.VISITADOCTORDETAILS, extra: doctor);
-            //         },
-            //       ),
-            //     ),
-            //     const Sizer(),
-            //     Expanded(
-            //       child: AppButton(
-            //         label: Labels.book,
-            //         backColor: AppColors.PRIMARY_COLOR,
-            //         onPressed: () {
-            //           context.push(Routes.VISITADOCTORDETAILS, extra: doctor);
-            //         },
-            //       ),
-            //     ),
-            //   ],
-            // ),
           ],
         ),
       ),

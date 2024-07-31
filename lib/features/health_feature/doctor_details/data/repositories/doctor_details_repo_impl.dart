@@ -13,8 +13,8 @@ class DoctorDetailsRepoImpl implements DoctorDetailsRepo {
   DoctorDetailsRepoImpl(this._remoteDataSource);
   @override
   Future<Either<Failure, DoctorEntity>> getDoctorDetails(
-      {required int id}) async {
-    return await _remoteDataSource.getDoctorDetails(id: id);
+      String doctorId) async {
+    return await _remoteDataSource.getDoctorDetails(doctorId);
   }
 
   @override

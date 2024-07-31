@@ -7,10 +7,9 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/domain/enti
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/user_doctor_rate.dart';
 
 import '../../../../../core/error/failure.dart';
-import '../../../../../res/assets/jsons.dart';
 
 abstract class DoctorDetailsRemoteDataSource {
-  Future<Either<Failure, DoctorEntity>> getDoctorDetails({required int id});
+  Future<Either<Failure, DoctorEntity>> getDoctorDetails(String doctorId);
   Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorReviews(
       String doctorId);
 }
@@ -22,8 +21,9 @@ class DoctorDetailsRemoteDataSourceImpl
 
   @override
   Future<Either<Failure, DoctorEntity>> getDoctorDetails(
-      {required int id}) async {
-    final response = await _apiConsumer.get(Jsons.doctorDetails);
+      String doctorId) async {
+    final response =
+        await _apiConsumer.get(EndPoints.getDoctorDetails(doctorId));
     return response.fold((failure) => Left(failure),
         (data) => Right(DoctorModel.fromJson(data['data'])));
   }

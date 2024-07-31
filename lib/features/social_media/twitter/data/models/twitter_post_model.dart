@@ -1,4 +1,3 @@
-import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_comment_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_main_post_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
 
@@ -15,6 +14,7 @@ class TwitterPostModel extends TwitterPostEntity {
       super.shares,
       super.isShared,
       super.isReact,
+      super.photo,
       required super.mainPost,
       super.loveCount,
       super.commentPrivacy,
@@ -32,6 +32,7 @@ class TwitterPostModel extends TwitterPostEntity {
           .toList(),
       isShared: json['isShared'] ?? false,
       isReact: json['isReact'] ?? false,
+      photo: json['photo'] ?? '',
       mainPost: json['mainPost'] != null
           ?json['mainPost'] is String ?json['mainPost']: TwitterMainPostModel.fromJson(json['mainPost'] )
           : null,

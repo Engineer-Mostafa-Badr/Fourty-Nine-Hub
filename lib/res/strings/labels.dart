@@ -116,4 +116,6 @@ abstract class Labels {
   static const report = 'Report';
   static const message = 'Message';
   static const booking = 'Booking';
+  static const cantLoadDoctorDetails = "Can't load doctor details";
+  static const noReviews = 'No Reviews';
 }
