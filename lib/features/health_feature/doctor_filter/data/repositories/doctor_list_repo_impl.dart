@@ -18,9 +18,5 @@ class DoctorListRepoImpl implements DoctorListRepo {
     return await _remoteDataSource.getDoctorsList(params: params);
   }
 
-  @override
-  Future<Either<Failure, bool>> checkSubCategorySubscription(
-      String subCategoryId) {
-    return _remoteDataSource.checkSubCategorySubscription(subCategoryId);
-  }
+
 }

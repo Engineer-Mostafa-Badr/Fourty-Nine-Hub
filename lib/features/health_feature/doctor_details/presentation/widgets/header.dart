@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/rating_stars.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/divider.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -41,21 +43,46 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                   color: AppColors.ACCENT_COLOR,
                   iconSize: 18,
                 ),
-                // TextAppButton(
-                //     label: ' ${doctor.numberOfReviews}',
-                //     style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
-                //     onPressed: () {
-                //       bottomSheet(
-                //           context: context,
-                //           isScrollControlled: true,
-                //           widget: AllReviews(
-                //             reviews: doctor.reviews ?? [],
-                //           ));
-                //     }),
                 Label(
                     text: doctor.description,
                     maxLines: 1,
                     style: Styles.mediumText()),
+                const Sizer(height: 30,),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: AppButton(
+                        label: Labels.call,
+                        icon: Icons.call,
+                        backColor: AppColors.PRIMARY_COLOR,
+                        onPressed: () {},
+                      ),
+                    ),
+                    const Sizer(),
+                    Expanded(
+                      flex: 3,
+                      child: AppButton(
+                        label: Labels.message,
+                        icon: Icons.message,
+                        backColor: AppColors.PRIMARY_COLOR,
+                        onPressed: () {},
+                      ),
+                    ),
+                    const Sizer(),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {},
+                        child: const Icon(
+                          Icons.report,
+                          color: AppColors.SECONDARY_COLOR,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const Sizer(),
               ],
             ))
           ],

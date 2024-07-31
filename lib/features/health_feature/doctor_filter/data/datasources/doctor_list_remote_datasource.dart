@@ -11,8 +11,6 @@ abstract class DoctorListRemoteDataSource {
   Future<Either<Failure, List<DoctorEntity>>> getDoctorsList(
       {required DoctorSearchParams params});
 
-  Future<Either<Failure, bool>> checkSubCategorySubscription(
-      String subCategoryId);
 }
 
 class DoctorListRemoteDataSourceImpl implements DoctorListRemoteDataSource {
@@ -32,13 +30,4 @@ class DoctorListRemoteDataSourceImpl implements DoctorListRemoteDataSource {
             .toList()));
   }
 
-  @override
-  Future<Either<Failure, bool>> checkSubCategorySubscription(
-      String subCategoryId) async {
-    final response = await _apiConsumer
-        .get(EndPoints.checkSubCategorySubscription(subCategoryId));
-
-    return response.fold(
-        (failure) => Left(failure), (data) => Right(data['data']));
-  }
 }

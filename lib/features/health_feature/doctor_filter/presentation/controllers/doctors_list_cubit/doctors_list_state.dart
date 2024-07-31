@@ -12,6 +12,10 @@ class DoctorsListLoaded extends DoctorsListState {
   DoctorsListLoaded(this.doctors);
 }
 
+class DoctorsListBookPremium extends DoctorsListState {}
+
+class DoctorsListShowSubscriptoinPlans extends DoctorsListState {}
+
 class DoctorsListError extends DoctorsListState {
   final String message;
 

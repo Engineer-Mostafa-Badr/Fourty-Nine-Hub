@@ -24,127 +24,137 @@ class DoctorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasSubscription = context.read<DoctorsListCubit>().hasSubscription;
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          color: AppColors.LIGHT_COLOR,
-          border: Border.all(color: AppColors.LIGHT_GRAY_COLOR),
-          borderRadius: BorderRadius.circular(10)),
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ProfileImage(
-                accountId: 0,
-                size: 25,
-                imageURL: doctor.image,
-              ),
-              const Sizer(),
-              Expanded(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(doctor.fullName, style: Styles.mediumText()),
-                      RatingStars(
-                        rating: doctor.rating.toDouble(),
-                      ),
-                    ],
+    final doctorListCubit = context.read<DoctorsListCubit>();
+    return InkWell(
+      onTap:(){
+        context.push(Routes.VISITADOCTORDETAILS, extra: doctor);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: AppColors.LIGHT_COLOR,
+            border: Border.all(color: AppColors.LIGHT_GRAY_COLOR),
+            borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ProfileImage(
+                  accountId: 0,
+                  size: 25,
+                  imageURL: doctor.image,
+                ),
+                const Sizer(),
+                Expanded(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(doctor.fullName, style: Styles.mediumText()),
+                        RatingStars(
+                          rating: doctor.rating.toDouble(),
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(
+                  FontAwesomeIcons.userDoctor,
+                ),
+                const Sizer(),
+                Expanded(
+                    child: ReadMoreLabel(
+                  text: doctor.description,
+                  trimLines: 1,
+                ))
+              ],
+            ),
+            Row(
+              children: [
+                const Icon(
+                  Icons.attach_money_sharp,
+                ),
+                const Sizer(),
+                Expanded(
+                  child: Label(
+                    text: '${Labels.fees}: ${doctor.priceToShow}',
+                    style: Styles.mediumText(),
                   ),
-                ],
-              )),
-            ],
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(
-                FontAwesomeIcons.userDoctor,
-              ),
-              const Sizer(),
-              Expanded(
-                  child: ReadMoreLabel(
-                text: doctor.description,
-                trimLines: 1,
-              ))
-            ],
-          ),
-          Row(
-            children: [
-              const Icon(
-                Icons.attach_money_sharp,
-              ),
-              const Sizer(),
-              Expanded(
-                child: Label(
-                  text: '${Labels.fees}: ${doctor.priceToShow}',
-                  style: Styles.mediumText(),
-                ),
-              )
-            ],
-          ),
-          _buildWaitingTime,
-          const Sizer(),
-          Row(
-            children: [
-              Expanded(
-                child: AppButton(
-                  label: Labels.call,
-                  icon: Icons.call,
-                  backColor: AppColors.PRIMARY_COLOR,
-                  onPressed: () {},
-                ),
-              ),
-              const Sizer(),
-              Expanded(
-                child: AppButton(
-                  label: Labels.message,
-                  icon: Icons.message,
-                  backColor: AppColors.PRIMARY_COLOR,
-                  onPressed: () {},
-                ),
-              ),
-              const Sizer(),
-              Expanded(
-                child: AppButton(
-                  label: Labels.report,
-                  icon: Icons.report,
-                  onPressed: () {},
-                ),
-              ),
-            ],
-          ),
-          const Sizer(),
-          Row(
-            children: [
-              Expanded(
-                child: AppButton(
-                  label: '${Labels.premium} ${Labels.book}',
-                  backColor: AppColors.ACCENT_COLOR,
-                  onPressed: () {
-                    if (hasSubscription) {
-                      context.push(Routes.VISITADOCTORDETAILS, extra: doctor);
-                    }
-                  },
-                ),
-              ),
-              const Sizer(),
-              Expanded(
-                child: AppButton(
-                  label: Labels.book,
-                  backColor: AppColors.PRIMARY_COLOR,
-                  onPressed: () {
-                    context.push(Routes.VISITADOCTORDETAILS, extra: doctor);
-                  },
-                ),
-              ),
-            ],
-          ),
-        ],
+                )
+              ],
+            ),
+            _buildWaitingTime,
+            const Sizer(),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       flex:3,
+            //       child: AppButton(
+            //         label: Labels.call,
+            //         icon: Icons.call,
+            //         backColor: AppColors.PRIMARY_COLOR,
+            //         onPressed: () {
+            //         },
+            //       ),
+            //     ),
+            //     const Sizer(),
+            //     Expanded(
+            //       flex: 3,
+            //       child: AppButton(
+            //         label: Labels.message,
+            //         icon: Icons.message,
+            //         backColor: AppColors.PRIMARY_COLOR,
+            //         onPressed: () {
+            //         },
+            //       ),
+            //     ),
+            //     const Sizer(),
+            //     Expanded(
+            //       child: InkWell(
+            //         onTap: () {},
+            //         child: const Icon(
+            //           Icons.report,
+            //           color: AppColors.SECONDARY_COLOR,
+            //         size: 30,
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // const Sizer(),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       child: AppButton(
+            //         label: '${Labels.premium} ${Labels.book}',
+            //         onPressed: () {
+            //           // doctorListCubit.bookPremium();
+            //           context.push(Routes.VISITADOCTORDETAILS, extra: doctor);
+            //         },
+            //       ),
+            //     ),
+            //     const Sizer(),
+            //     Expanded(
+            //       child: AppButton(
+            //         label: Labels.book,
+            //         backColor: AppColors.PRIMARY_COLOR,
+            //         onPressed: () {
+            //           context.push(Routes.VISITADOCTORDETAILS, extra: doctor);
+            //         },
+            //       ),
+            //     ),
+            //   ],
+            // ),
+          ],
+        ),
       ),
     );
   }

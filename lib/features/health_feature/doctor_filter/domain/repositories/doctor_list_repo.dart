@@ -8,6 +8,5 @@ abstract class DoctorListRepo {
   Future<Either<Failure, List<DoctorEntity>>> getDoctorsList(
       {required DoctorSearchParams params});
 
-  Future<Either<Failure, bool>> checkSubCategorySubscription(
-      String subCategoryId);
+
 }

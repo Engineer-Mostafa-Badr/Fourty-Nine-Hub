@@ -38,7 +38,7 @@ class DoctorModel extends DoctorEntity {
         id: json['_id'] ?? '',
         lastName: json['lastName'] ?? '',
         firstName: json['firstName'] ?? '',
-        subCategoryId: json['subCategoryId']['_id'] ?? '',
+        subCategoryId: json['subCategoryId'] ?? '',
         image: json['mediaId']['mediaKey'] ?? '',
         phone: json['phone'] ?? '',
         email: json['email'] ?? '',

@@ -36,9 +36,6 @@ class EndPoints {
   static const String getUpcomingUserAppointments = '/health/book-appointment?page=1&limit=20';
   static const String getHealthRequestsHistory = '/health/history-patient-booking?page=1&limit=20';
 
-  // subscriptions
-  static String checkSubCategorySubscription(String subCategoryId) =>
-      '/subscription/subcategory/$subCategoryId';
 
   // reels
   static const getExploreReels = '/reels/explore';
