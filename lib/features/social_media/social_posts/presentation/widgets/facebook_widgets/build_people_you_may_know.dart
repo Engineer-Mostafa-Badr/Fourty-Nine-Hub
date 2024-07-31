@@ -285,16 +285,6 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Label(
-                      text: "See all",
-                      style: Styles.mediumText(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold),
-                    ),
                   ],
                 ),
               ),

@@ -14,11 +14,11 @@ class SuggestUserModel extends SuggestUserEntity {
       });
   factory SuggestUserModel.fromJson(Map<String, dynamic> json) {
     return SuggestUserModel(
-      id: json['_id'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      mutualFriendsCount: json['mutualFriendsCount'],
-        profilePicture: json['profilePicture']
+      id: json['_id']??'',
+      firstName: json['firstName']??'',
+      lastName: json['lastName']??'',
+      mutualFriendsCount: json['mutualFriendsCount']??0,
+        profilePicture: json['profilePicture']??''
     );
   }
 }
