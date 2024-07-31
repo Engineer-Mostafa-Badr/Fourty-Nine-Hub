@@ -41,7 +41,7 @@ class CommentCard extends StatelessWidget {
             )),
             IconButton(
                 onPressed: () {
-                  bottomSheet(context: context, widget:  ReportView(id: comment.id, ));
+                  bottomSheet(context: context, widget:  ReportView(id: comment.id, categoryId:'66a3583454e6e337915514db', ));
                 },
                 icon: Icon(
                   Icons.more_vert,

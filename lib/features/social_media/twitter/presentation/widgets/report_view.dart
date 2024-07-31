@@ -14,8 +14,9 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 class ReportView extends StatefulWidget {
-  const ReportView({super.key, required this.id,});
+  const ReportView({super.key, required this.id, required this.categoryId,});
   final String id;
+  final String categoryId;
 
   @override
   State<ReportView> createState() => _ReportViewState();
@@ -60,19 +61,25 @@ class _ReportViewState extends State<ReportView> {
                     height: 10,
                   ),
                   Expanded(
-                    child: ListView.builder(
+                    child: ListView.separated(
                       shrinkWrap: true,
                       itemCount: reports.length,
+                      separatorBuilder: (context,i)=>const SizedBox(
+                        height: 10,
+                      ),
                       itemBuilder: (context, i) {
                         return Row(
                           children: [
-                            Label(
-                              text: reports[i].displayTitle,
-                              style: Styles.headerText(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.DARK_GRAY_COLOR),
+                            Expanded(
+                              child: Label(
+                                text: reports[i].displayTitleEn,
+                                style: Styles.headerText(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.DARK_GRAY_COLOR),
+                                maxLines: 3,
+                              ),
                             ),
-                            const Spacer(),
+                            // const Spacer(),
                             Checkbox(
                               value: selectedReport == reports[i],
                               onChanged: (v) {
