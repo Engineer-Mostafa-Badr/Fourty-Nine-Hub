@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/PostOptions.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
-import 'package:go_router/go_router.dart';
-
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
-
 import '../../../../../../res/style/styles.dart';
 
 class TwitterReplyCard extends StatefulWidget {
@@ -59,13 +55,9 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                 onPressed: () {
                   bottomSheet(
                       context: context,
-                      widget: PostOptions(
+                      widget: ReportView(
                         id: widget.reply.id,
-                        onReport: (TwitterReportParams params) async{
-                          await widget.onReport(params);
-                          showSuccessMessage(context, "Report sent successfully");
-                          context.pop();
-                        },
+
                       ));
                 },
                 icon: Icon(
