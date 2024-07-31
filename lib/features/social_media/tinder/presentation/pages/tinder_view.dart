@@ -33,7 +33,7 @@ class _TinderViewState extends State<TinderView> {
         mainCategoryId: 2,
         body: Stack(
           children: [
-            Positioned.fill(bottom: 30, child: _buildCardSwipper()),
+            Positioned.fill(bottom: 30, child: _buildCardSwiper()),
             Positioned(
                 bottom: kToolbarHeight * .5,
                 right: 20,
@@ -43,7 +43,7 @@ class _TinderViewState extends State<TinderView> {
         ));
   }
 
-  Widget _buildCardSwipper() {
+  Widget _buildCardSwiper() {
     return CardSwiper(
       cardsCount: 10,
       controller: cardSwipperController,
