@@ -18,3 +18,6 @@ final class BookDoctorAppointmentStartLoadingState
 
 final class BookDoctorAppointmentEndLoadingState
     extends BookDoctorAppointmentState {}
+
+final class BookDoctorAppointmentShowSubscriptionPlansState
+    extends BookDoctorAppointmentState {}

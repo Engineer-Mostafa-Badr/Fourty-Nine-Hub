@@ -23,8 +23,8 @@ class DoctorDetailsCubit extends Cubit<DoctorDetailsState> {
 
   Future<void> loadData(String doctorId) async {
     await _getDoctorDetails(doctorId);
-    // await _checkCallAndChatButtons(doctorId);
-    // await _getReviews(doctorId);
+    await _checkCallAndChatButtons(doctorId);
+    await _getReviews(doctorId);
   }
 
   Future<void> _getDoctorDetails(String doctorId) async {

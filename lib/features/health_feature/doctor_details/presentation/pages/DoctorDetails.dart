@@ -33,6 +33,8 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
+          buildWhen: (previous, current) =>
+              current is DoctorDetailsLoaded || current is DoctorDetailsInitial,
           builder: (context, state) {
             if (state is DoctorDetailsLoaded) {
               return ListView(

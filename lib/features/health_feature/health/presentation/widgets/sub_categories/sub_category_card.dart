@@ -4,11 +4,12 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class HealthSubCategoryCard extends StatelessWidget {
-  final SubCategoryEntity subCategory;
+  final HealthSubcategoryEntity subCategory;
   const HealthSubCategoryCard({super.key, required this.subCategory});
 
   @override
@@ -21,13 +22,7 @@ class HealthSubCategoryCard extends StatelessWidget {
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 10,
-                offset: Offset(0, 10),
-              ),
-            ]),
+            boxShadow: AppColors.SHADOW),
         child: Column(
           children: [
             Expanded(
@@ -71,7 +66,7 @@ class HealthSubCategoryCard extends StatelessWidget {
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
                 ),
                 Label(
-                  text: '${9355.toShortScale} doctors',
+                  text: '${subCategory.numberOfDoctors.toShortScale} doctors',
                   style: Styles.mediumText(),
                 ),
               ],

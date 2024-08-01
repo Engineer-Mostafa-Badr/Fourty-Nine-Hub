@@ -8,10 +8,12 @@ import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart'
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/divider.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class DoctorDetailsAccountHeader extends StatelessWidget {
   const DoctorDetailsAccountHeader({super.key});
@@ -52,62 +54,67 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                 const Sizer(
                   height: 30,
                 ),
+                BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
+                  buildWhen: (previous, current) =>
+                      current is DoctorDetailsCheckCallAndMessage ||
+                      current is DoctorDetailsInitial,
+                  builder: (context, state) {
+                    if (state is DoctorDetailsCheckCallAndMessage &&
+                        state.enabled) {
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: AppButton(
+                              label: Labels.call,
+                              icon: Icons.call,
+                              backColor: AppColors.PRIMARY_COLOR,
+                              onPressed: () {},
+                            ),
+                          ),
+                          const Sizer(),
+                          Expanded(
+                            child: AppButton(
+                              label: Labels.message,
+                              icon: Icons.message,
+                              backColor: AppColors.PRIMARY_COLOR,
+                              onPressed: () {},
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: AppButton(
+                              label: Labels.call,
+                              icon: Icons.call,
+                              backColor: AppColors.DARK_GRAY_COLOR,
+                              onPressed: () {},
+                            ),
+                          ),
+                          const Sizer(),
+                          Expanded(
+                            child: AppButton(
+                              label: Labels.message,
+                              icon: Icons.message,
+                              backColor: AppColors.DARK_GRAY_COLOR,
+                              onPressed: () {},
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                  },
+                ),
+                const Sizer(height: 15,),
                 Row(
                   children: [
                     Expanded(
                       flex: 4,
-                      child: BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
-                        buildWhen: (previous, current) =>
-                            current is DoctorDetailsCheckCallAndMessage ||
-                            current is DoctorDetailsInitial,
-                        builder: (context, state) {
-                          if (state is DoctorDetailsCheckCallAndMessage &&
-                              state.enabled) {
-                            return Row(
-                              children: [
-                                Expanded(
-                                  child: AppButton(
-                                    label: Labels.call,
-                                    icon: Icons.call,
-                                    backColor: AppColors.PRIMARY_COLOR,
-                                    onPressed: () {},
-                                  ),
-                                ),
-                                const Sizer(),
-                                Expanded(
-                                  child: AppButton(
-                                    label: Labels.message,
-                                    icon: Icons.message,
-                                    backColor: AppColors.PRIMARY_COLOR,
-                                    onPressed: () {},
-                                  ),
-                                ),
-                              ],
-                            );
-                          } else {
-                            return Row(
-                              children: [
-                                Expanded(
-                                  child: AppButton(
-                                    label: Labels.call,
-                                    icon: Icons.call,
-                                    backColor: AppColors.DARK_GRAY_COLOR,
-                                    onPressed: () {},
-                                  ),
-                                ),
-                                const Sizer(),
-                                Expanded(
-                                  child: AppButton(
-                                    label: Labels.message,
-                                    icon: Icons.message,
-                                    backColor: AppColors.DARK_GRAY_COLOR,
-                                    onPressed: () {},
-                                  ),
-                                ),
-                              ],
-                            );
-                          }
-                        },
+                      child: AppButton(
+                        label: Labels.onlineSession,
+                        onPressed: () {},
                       ),
                     ),
                     const Sizer(),
@@ -117,6 +124,10 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                           bottomSheet(
                               context: context,
                               widget: ReportView(
+                                categoryId: serviceLocator<HealthSharedData>()
+                                    .doctorSearchParams
+                                    .subCategory
+                                    .id,
                                 id: doctor.id,
                               ));
                         },

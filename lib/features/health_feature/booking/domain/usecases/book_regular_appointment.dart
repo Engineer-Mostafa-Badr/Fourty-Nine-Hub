@@ -4,13 +4,14 @@ import 'package:fourtyninehub/core/enums/gender_type.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/booking/domain/repositories/book_doctor_appointment_repo.dart';
 
-class BookAppointmentUseCase extends UseCase<bool, BookAppointmentParams> {
+class BookRegularAppointmentUseCase
+    extends UseCase<bool, BookAppointmentParams> {
   final BookAppointmentRepo repo;
 
-  BookAppointmentUseCase(this.repo);
+  BookRegularAppointmentUseCase(this.repo);
   @override
   Future<Either<Failure, bool>> call(params) {
-    return repo.bookAppointment(params);
+    return repo.bookRegularAppointment(params);
   }
 }
 

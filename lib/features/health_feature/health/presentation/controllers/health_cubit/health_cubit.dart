@@ -3,6 +3,8 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/main_services_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/models/filter_option_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_health_subcategories.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_user_upcoming_appointments.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
@@ -18,8 +20,12 @@ class HealthCubit extends Cubit<HealthState> {
   final HealthSharedData _healthShare;
   final GetUserUpcomingAppointmentsUseCase _getUserUpcomingAppointmentsUseCase;
   final GetSubCategoriesUseCase _getSubCategoriesUseCase;
-  HealthCubit(this._getUserUpcomingAppointmentsUseCase,
-      this._getSubCategoriesUseCase, this._healthShare)
+  final GetHealthSubcategoriesUseCase _getHealthSubcategoriesUseCase;
+  HealthCubit(
+      this._getUserUpcomingAppointmentsUseCase,
+      this._getSubCategoriesUseCase,
+      this._healthShare,
+      this._getHealthSubcategoriesUseCase)
       : super(const HealthState());
 
   final List<HealthBookingFilterModel> services = [
@@ -70,7 +76,7 @@ class HealthCubit extends Cubit<HealthState> {
   Future<void> getSubCategories() async {
     if (_healthShare.subCategories.isEmpty) {
       final response =
-          await _getSubCategoriesUseCase.call('62c8b57c9332225799fe3306');
+          await _getHealthSubcategoriesUseCase.call(const NoParams());
       response.fold(
           (failure) => emit(
               state.copyWith(failure: failure, status: HealthStates.error)),

@@ -10,12 +10,20 @@ class BookDoctorAppointmentLocationInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return BookDoctorAppointmentCardInfo(
-        widget: Label(
-            text: context.read<BookDoctorAppointmentCubit>().doctor.address.address,
-            style: Styles.mediumText()),
-        icon: Icons.location_on,
-        height: kToolbarHeight);
+    final doctor = context.read<BookDoctorAppointmentCubit>().doctor;
+    if (doctor.address.address.isNotEmpty) {
+      return BookDoctorAppointmentCardInfo(
+          widget: Label(
+              text: context
+                  .read<BookDoctorAppointmentCubit>()
+                  .doctor
+                  .address
+                  .address,
+              style: Styles.mediumText()),
+          icon: Icons.location_on,
+          height: kToolbarHeight);
+    } else {
+      return const SizedBox.shrink();
+    }
   }
 }

@@ -1,10 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/enums/gender_type.dart';
-import 'package:fourtyninehub/features/health_feature/booking/domain/usecases/book_appointment.dart';
+import 'package:fourtyninehub/features/health_feature/booking/domain/usecases/book_premium_appointment.dart';
+import 'package:fourtyninehub/features/health_feature/booking/domain/usecases/book_regular_appointment.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
+import 'package:fourtyninehub/features/subscribe/domain/usecases/check_if_user_subscribed_usecase.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 
 part 'book_doctor_appointment_state.dart';
@@ -18,7 +21,10 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
   final notesController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  final BookAppointmentUseCase bookAppointmentUseCase;
+  final BookRegularAppointmentUseCase _bookRegularAppointmentUseCase;
+  final BookPremiumAppointmentUseCase _bookPremiumAppointmentUseCase;
+  final CheckIfUserSubscribedUseCase _checkIfUserSubscribedUseCase;
+  final HealthSharedData _healthSharedData;
 
   final BookAppointmentParams _params = BookAppointmentParams();
 
@@ -31,7 +37,11 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
     _params.appointmentId = _appointment.id;
   }
 
-  BookDoctorAppointmentCubit(this.bookAppointmentUseCase)
+  BookDoctorAppointmentCubit(
+      this._bookRegularAppointmentUseCase,
+      this._bookPremiumAppointmentUseCase,
+      this._checkIfUserSubscribedUseCase,
+      this._healthSharedData)
       : super(BookDoctorAppointmentInitialState());
 
   @override
@@ -45,16 +55,49 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
     return super.close();
   }
 
-  Future<void> confirmBooking() async {
-    if (formKey.currentState!.validate()) {
+  Future<void> regularBooking() async {
+    _validate(afterValidation: () async {
       emit(BookDoctorAppointmentStartLoadingState());
-      _saveText();
-      final response = await bookAppointmentUseCase.call(_params);
+      final response = await _bookRegularAppointmentUseCase.call(_params);
       emit(BookDoctorAppointmentEndLoadingState());
       response.fold(
           (failure) =>
               emit(BookDoctorAppointmentErrorState(Labels.errorHappened)),
           (data) => emit(BookDoctorAppointmentSuccessState()));
+    });
+  }
+
+  Future<void> premiumBook() async {
+    _validate(afterValidation: () async {
+      emit(BookDoctorAppointmentStartLoadingState());
+      final isSubscribed = await _checkIfUserSubscribedUseCase
+          .call(_healthSharedData.doctorSearchParams.subCategory.id);
+      isSubscribed.fold(
+        (failure) {
+          emit(BookDoctorAppointmentEndLoadingState());
+          emit(BookDoctorAppointmentErrorState(Labels.errorHappened));
+        },
+        (data) async {
+          if (data) {
+            final response = await _bookPremiumAppointmentUseCase.call(_params);
+            emit(BookDoctorAppointmentEndLoadingState());
+            response.fold(
+                (failure) =>
+                    emit(BookDoctorAppointmentErrorState(Labels.errorHappened)),
+                (data) => emit(BookDoctorAppointmentSuccessState()));
+          } else {
+            emit(BookDoctorAppointmentEndLoadingState());
+            emit(BookDoctorAppointmentShowSubscriptionPlansState());
+          }
+        },
+      );
+    });
+  }
+
+  void _validate({required void Function() afterValidation}) {
+    if (formKey.currentState!.validate()) {
+      _saveText();
+      afterValidation();
     }
   }
 

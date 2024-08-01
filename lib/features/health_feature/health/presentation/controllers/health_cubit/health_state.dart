@@ -6,7 +6,7 @@ class HealthState {
   final HealthStates status;
   final Failure? failure;
   final List<BookedAppointmentEntity>? myBookings;
-  final List<SubCategoryModel>? subCategories;
+  final List<HealthSubcategoryEntity>? subCategories;
   final List<SubCategoryModel>? medicalServices;
   final isDoctor = false;
   const HealthState(
@@ -19,7 +19,7 @@ class HealthState {
     HealthStates? status,
     Failure? failure,
     List<BookedAppointmentEntity>? myBookings,
-    List<SubCategoryModel>? subCategories,
+    List<HealthSubcategoryEntity>? subCategories,
     List<SubCategoryModel>? medicalServices,
   }) {
     return HealthState(

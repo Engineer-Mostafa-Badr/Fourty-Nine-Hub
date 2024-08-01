@@ -3,11 +3,15 @@ import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/models/appointment_booking_model.dart';
+import 'package:fourtyninehub/features/health_feature/health/data/models/health_subcategory_model.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 
 abstract class HealthRemoteDataSource {
   Future<Either<Failure, List<BookedAppointmentEntity>>> getMyBookingsHistory();
   Future<Either<Failure, List<BookedAppointmentEntity>>> getUpcomingBookings();
+  Future<Either<Failure, List<HealthSubcategoryEntity>>>
+      getHealthSubcategories();
 }
 
 class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
@@ -33,6 +37,17 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
         (failure) => Left(failure),
         (data) => Right((data['data'] as List)
             .map((e) => BookedAppointmentModel.fromJson(e))
+            .toList()));
+  }
+  
+  @override
+  Future<Either<Failure, List<HealthSubcategoryEntity>>> getHealthSubcategories() async {
+    final response =
+        await _apiConsumer.get(EndPoints.getHealthSubcategories);
+    return response.fold(
+        (failure) => Left(failure),
+        (data) => Right((data['data']['subcategories'] as List)
+            .map((e) => HealthSubcategoryModel.fromJson(e))
             .toList()));
   }
 }

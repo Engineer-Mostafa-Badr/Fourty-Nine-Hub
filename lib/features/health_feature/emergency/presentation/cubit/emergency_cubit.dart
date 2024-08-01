@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/domain/usecases/book_emergency.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_health_subcategories.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 
@@ -10,10 +11,10 @@ part 'emergency_state.dart';
 
 class HealthEmergencyCubit extends Cubit<HealthEmergencyState> {
   HealthEmergencyCubit(this._bookHealthEmergencyUseCase, this._healthShare,
-      this._getSubCategoriesUseCase)
+      this._getHealthSubcategoriesUseCase)
       : super(HealthEmergencyInitial());
   final HealthSharedData _healthShare;
-  final GetSubCategoriesUseCase _getSubCategoriesUseCase;
+  final GetHealthSubcategoriesUseCase _getHealthSubcategoriesUseCase;
 
   final BookHealthEmergencyUseCase _bookHealthEmergencyUseCase;
 
@@ -26,7 +27,7 @@ class HealthEmergencyCubit extends Cubit<HealthEmergencyState> {
   Future<void> _getSubCategories() async {
     if (_healthShare.subCategories.isEmpty) {
       final response =
-          await _getSubCategoriesUseCase.call('62c8b57c9332225799fe3306');
+          await _getHealthSubcategoriesUseCase.call(const NoParams());
       response.fold(
           (failure) =>
               emit(HealthEmergencyError(message: Labels.errorHappened)),

@@ -33,12 +33,15 @@ class EndPoints {
   static const createDoctor = '/health/doctor';
   static const doctorSearch = '/health/doctor-search';
   static const bookEmergency = '/health/book-emergency';
-  static String bookAppointment(String appointmentId) =>
+  static String bookRegularAppointment(String appointmentId) =>
       '/health/book-appointment/$appointmentId';
+
+  static String bookPremiumAppointment(String appointmentId) =>
+      '/health/book-appointment-premium/$appointmentId';
   static String getDoctorReviewsForUsers(String doctorId) =>
       '/health/doctor/rate/$doctorId';
   static String getDoctorDetails(String doctorId) => '/health/doctor/$doctorId';
-
+  static const getHealthSubcategories = '/health/subCategories-health-with-ads';
   static const String getUpcomingUserAppointments =
       '/health/book-appointment?page=1&limit=20';
   static const String getHealthRequestsHistory =

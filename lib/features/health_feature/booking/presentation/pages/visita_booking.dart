@@ -79,8 +79,15 @@ class _VisitaBookingState extends State<VisitaBooking> {
                     const BookDoctorAppointmentFeesCard(),
                     const Sizer(),
                     AppButton(
+                        height: 50,
                         label: Labels.book,
-                        onPressed: () => controller.confirmBooking()),
+                        backColor: AppColors.PRIMARY_COLOR,
+                        onPressed: () => controller.regularBooking()),
+                    const Sizer(),
+                    AppButton(
+                        height: 50,
+                        label: "${Labels.premium} ${Labels.book}",
+                        onPressed: () => controller.premiumBook()),
                     const Sizer(),
                   ],
                 ),
