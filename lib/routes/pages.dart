@@ -52,6 +52,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/Chat_view.dart';
+import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_dialogue.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
@@ -495,7 +496,10 @@ class AppPages {
               GoRoute(
                   path: Paths.CLUBHOUSE,
                   name: Routes.CLUBHOUSE,
-                  builder: (context, state) => const ClubHouseHome(),
+                  builder: (context, state) => BlocProvider<ClubVoiceCubit>(
+                        create: (context) => serviceLocator()..getAllRooms(),
+                        child: const ClubHouseHome(),
+                      ),
                   routes: [
                     GoRoute(
                       path: Paths.CLUBHOUSEROOM,

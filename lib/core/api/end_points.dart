@@ -170,8 +170,8 @@ class EndPoints {
   }
 
   static const auctionsList = '/auction';
-  static String auctionDetails (String id){
-    return  '/auction/$id';
+  static String auctionDetails(String id) {
+    return '/auction/$id';
   }
 
   static String adDetails(String id) {
@@ -194,4 +194,13 @@ class EndPoints {
   static String getChatMessages(String chatId) {
     return '/chat/get-chat/$chatId';
   }
+
+  //club voice
+  static String allClubVoiceRooms = '/clubvoice';
+  static String createClubVoiceRoom = '/club/voice/create';
+  static String endVoiceRoom(String id) => '/club/voice/end/$id';
+  static String joinVoiceRoom(String id) => 'clubvoice/join/$id';
+  static String leaveVoiceRoom(String id) => 'clubvoice/leave/$id';
+  static String searchVoiceRooms(String subject) =>
+      '/clubvoice?search=$subject';
 }

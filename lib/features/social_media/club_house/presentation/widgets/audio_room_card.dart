@@ -1,31 +1,36 @@
-import 'package:cached_network_image/cached_network_image.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/features/social_media/club_house/domain/entities/club_voice_room_entity.dart';
+import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
+
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../common/widgets/stateless/labels/ReadMoreLabel.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
-import 'package:go_router/go_router.dart';
-
 import '../pages/audio_stream_screen.dart';
 
 class AudioRoomCard extends StatelessWidget {
-  const AudioRoomCard({super.key});
+  final ClubVoiceRoomEntity room;
+  const AudioRoomCard({
+    super.key,
+    required this.room,
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (ctx) => AudioStreamScreen(
-                liveId: '93314', roomSubject: 'Hiring Manager On-Hire', isHost: false),
-          ),
-        );
+        context.read<ClubVoiceCubit>().joinRoom(room.id);
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (ctx) => AudioStreamScreen(
+        //         liveId: room.id, roomSubject: room.subject, isHost: false),
+        //   ),
+        // );
       },
       child: Container(
         padding:
@@ -36,8 +41,8 @@ class AudioRoomCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            const ReadMoreLabel(
-              text: UIConst.placeholderText,
+            ReadMoreLabel(
+              text: room.subject,
               trimLines: 2,
             ),
             Row(
@@ -65,13 +70,14 @@ class AudioRoomCard extends StatelessWidget {
                   child: Column(
                     children: [
                       ListView.separated(
-                        itemCount: 2,
+                        itemCount: room.users.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
+                          final user = room.users[index];
                           return Row(
                             children: [
                               Label(
-                                  text: 'Sara Ahmed',
+                                  text: room.hostname,
                                   style: Styles.mediumText()),
                               const Sizer(),
                               const Icon(
