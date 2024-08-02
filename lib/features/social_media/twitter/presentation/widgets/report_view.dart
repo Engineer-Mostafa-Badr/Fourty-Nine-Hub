@@ -14,7 +14,11 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 class ReportView extends StatefulWidget {
-  const ReportView({super.key, required this.id,});
+  const ReportView({
+    super.key,
+    required this.id,
+  });
+
   final String id;
 
   @override
@@ -29,114 +33,114 @@ class _ReportViewState extends State<ReportView> {
   Widget build(BuildContext context) {
     List<ReportsEnum> reports = ReportsEnum.values;
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: BlocProvider<TwitterCubit>(
-        create: (_)=>serviceLocator(),
-        child: BlocBuilder<TwitterCubit,TwitterState>(
-            builder: (context,state) {
-              final controller = context.read<TwitterCubit>();
-              return Column(
+        create: (_) => serviceLocator(),
+        child:
+            BlocBuilder<TwitterCubit, TwitterState>(builder: (context, state) {
+          final controller = context.read<TwitterCubit>();
+          return Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Label(
-                        text: "Report",
-                        style: Styles.headerText(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Icon(
-                        Icons.report_gmailerrorred_rounded,
-                        color: AppColors.SECONDARY_COLOR,
-                        size: 30,
-                      )
-                    ],
+                  Label(
+                    text: "Report",
+                    style: Styles.headerText(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
                   const SizedBox(
-                    height: 10,
+                    width: 10,
                   ),
+                  const Icon(
+                    Icons.report_gmailerrorred_rounded,
+                    color: AppColors.SECONDARY_COLOR,
+                    size: 30,
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: reports.length,
+                  itemBuilder: (context, i) {
+                    return Row(
+                      children: [
+                        Label(
+                          text: reports[i].displayTitle,
+                          style: Styles.headerText(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.DARK_GRAY_COLOR),
+                        ),
+                        const Spacer(),
+                        Checkbox(
+                          value: selectedReport == reports[i],
+                          onChanged: (v) {
+                            setState(() {
+                              selectedReport = v! ? reports[i] : null;
+                            });
+                          },
+                          activeColor: AppColors.SECONDARY_COLOR,
+                        )
+                      ],
+                    );
+                  },
+                ),
+              ),
+              Row(
+                children: [
                   Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: reports.length,
-                      itemBuilder: (context, i) {
-                        return Row(
-                          children: [
-                            Label(
-                              text: reports[i].displayTitle,
-                              style: Styles.headerText(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.DARK_GRAY_COLOR),
-                            ),
-                            const Spacer(),
-                            Checkbox(
-                              value: selectedReport == reports[i],
-                              onChanged: (v) {
-                                setState(() {
-                                  selectedReport = v! ? reports[i] : null;
-                                });
-                              },
-                              activeColor: AppColors.SECONDARY_COLOR,
-                            )
-                          ],
-                        );
+                    child: FormTextField(
+                      hint: 'Type report reason ....',
+                      height: kToolbarHeight * .7,
+                      action: (v) {
+                        setState(() {});
                       },
+                      controller: reportTextController,
                     ),
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: FormTextField(
-                          hint: 'Type report reason ....',
-                          height: kToolbarHeight * .7,
-                          action: (v) {
-                            setState(() {});
-                          },
-                          controller: reportTextController,
-                        ),
-                      ),
-                      if(reportTextController.text.isNotEmpty)IconAppButton(
-                          icon: Icons.send,
-                          isCircle: true,
-                          onPressed: () async{
-                            if(selectedReport==null){
-                              showErrorMessage(context, "Please select reason!");
-                            }else{
-                              var response =await controller.onReport(
-                                  TwitterReportParams(
-                                    userId: widget.id,
-                                    category: selectedReport!.name,
-                                    content: reportTextController.text,
-                                    categoryId: '66a3583454e6e337915514db',
-                                    reason: selectedReport!.name,
-                                  )
-                              );
+                  if (reportTextController.text.isNotEmpty)
+                    IconAppButton(
+                        icon: Icons.send,
+                        isCircle: true,
+                        onPressed: () async {
+                          if (selectedReport == null) {
+                            showErrorMessage(context, "Please select reason!");
+                          } else {
+                            var response =
+                                await controller.onReport(TwitterReportParams(
+                              userId: widget.id,
+                              category: selectedReport!.name,
+                              content: reportTextController.text,
+                              categoryId: '66a3583454e6e337915514db',
+                              reason: selectedReport!.name,
+                            ));
 
-                              if(response == true){
-                                showSuccessMessage(context, "Report send successfully");
-                                context.pop();
-                              }else{
-                                showErrorMessage(
+                            if (response == true) {
+                              showSuccessMessage(
+                                  context, "Report send successfully");
+                              context.pop();
+                            } else {
+                              showErrorMessage(
+                                context,
+                                getFailureMessage(
+                                  state.failure ?? const UnknownFailure(),
                                   context,
-                                  getFailureMessage(
-                                    state.failure ?? const UnknownFailure(),
-                                    context,
-                                  ),
-                                );
-                              }
-
+                                ),
+                              );
                             }
-                          })
-                    ],
-                  ),
+                          }
+                        })
                 ],
-              );
-            }
-        ),
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
