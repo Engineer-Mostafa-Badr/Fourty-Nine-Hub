@@ -164,7 +164,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         label: 'Premium Request',
                         icon: Icons.bookmark,
                         onPressed: () {
-                          serviceLocator<SubscribeCubit>()
+                          serviceLocator<SubscribeLogic>()
                               .checkIfUserSubscribed(
                                   // context: context,
                                   onSubscribed: () {

@@ -89,7 +89,7 @@ class _VisitaBookingState extends State<VisitaBooking> {
                       height: 50,
                       label: "${Labels.premium} ${Labels.book}",
                       onPressed: () {
-                        context.read<SubscribeCubit>().checkIfUserSubscribed(
+                        context.read<SubscribeLogic>().checkIfUserSubscribed(
                               onSubscribed: () async {
                                 await controller.premiumBook();
                               },

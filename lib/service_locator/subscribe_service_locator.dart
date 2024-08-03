@@ -3,7 +3,7 @@ import 'package:fourtyninehub/features/subscripe/data/repositories/subscribtion_
 import 'package:fourtyninehub/features/subscripe/domain/usecases/check_if_user_subscribed_usecase.dart';
 import 'package:fourtyninehub/features/subscripe/domain/usecases/get_active_subscription_amounts.dart';
 import 'package:fourtyninehub/features/subscripe/domain/usecases/get_subscription_plans_usecase.dart';
-import 'package:fourtyninehub/features/subscripe/presentation/cubit/subscribe_cubit.dart';
+import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/subscripe/domain/repositories/subscription_plans_repo.dart';
@@ -39,7 +39,7 @@ class SubscriptionServiceLocator {
               serviceLocator(),
             ));
     // ================================== cubits =============================
-    serviceLocator.registerFactory<SubscribeCubit>(() => SubscribeCubit(
+    serviceLocator.registerLazySingleton<SubscriptionController>(() => SubscriptionController(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

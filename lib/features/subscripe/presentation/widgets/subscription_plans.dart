@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/wallet_widget.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
@@ -7,9 +6,10 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/subscripe/domain/usecases/subscribe_usecase.dart';
-import 'package:fourtyninehub/features/subscripe/presentation/cubit/subscribe_cubit.dart';
+import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/subscription_plans_entity.dart';
@@ -101,14 +101,14 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               if (widget.paymentMenthods == null ||
                   widget.paymentMenthods!.isEmpty) {
                 showLoadingDialog(context);
-                await context.read<SubscribeCubit>().subscribe(
-                      subscribeParams: SubscribeParams(
-                        subCategoryId: widget.subCategoryId,
-                        isPremium: _isPremium,
-                        walletType: WalletTypes.mainWallet,
-                        days: _groupValue,
-                      ),
-                    );
+                await serviceLocator<SubscriptionController>().subscribe(
+                  subscribeParams: SubscribeParams(
+                    subCategoryId: widget.subCategoryId,
+                    isPremium: _isPremium,
+                    walletType: WalletTypes.mainWallet,
+                    days: _groupValue,
+                  ),
+                );
                 if (context.mounted) {
                   context.pop();
                 }

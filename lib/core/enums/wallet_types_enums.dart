@@ -14,7 +14,7 @@ extension WalletTypesX on WalletTypes {
     }
   }
 
-  String get translatedName{
+  String get translatedName {
     switch (this) {
       case WalletTypes.mainWallet:
         return Labels.mainWallet;
@@ -29,9 +29,9 @@ extension WalletTypesX on WalletTypes {
 extension WalletTypesXString on String {
   WalletTypes get toWalletType {
     switch (toLowerCase()) {
-      case 'mainWallet':
+      case 'mainwallet':
         return WalletTypes.mainWallet;
-      case 'giftWallet':
+      case 'giftwallet':
         return WalletTypes.giftWallet;
       case 'balance':
         return WalletTypes.balance;
