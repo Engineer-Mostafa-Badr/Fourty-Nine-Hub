@@ -197,10 +197,10 @@ class EndPoints {
 
   //club voice
   static String allClubVoiceRooms = '/clubvoice';
-  static String createClubVoiceRoom = '/club/voice/create';
-  static String endVoiceRoom(String id) => '/club/voice/end/$id';
-  static String joinVoiceRoom(String id) => 'clubvoice/join/$id';
-  static String leaveVoiceRoom(String id) => 'clubvoice/leave/$id';
+  static String createClubVoiceRoom = '/clubvoice';
+  static String joinVoiceRoom(String id) => '/clubvoice/join/$id';
+  static String endVoiceRoom(String id) => '/clubvoice/$id';
+  static String leaveVoiceRoom(String id) => '/clubvoice/leave/$id';
   static String searchVoiceRooms(String subject) =>
       '/clubvoice?search=$subject';
 }

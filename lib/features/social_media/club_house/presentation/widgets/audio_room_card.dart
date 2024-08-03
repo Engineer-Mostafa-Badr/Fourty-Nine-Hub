@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/entities/club_voice_room_entity.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/images/profile_image.dart';
@@ -24,13 +25,16 @@ class AudioRoomCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         context.read<ClubVoiceCubit>().joinRoom(room.id);
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (ctx) => AudioStreamScreen(
-        //         liveId: room.id, roomSubject: room.subject, isHost: false),
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (ctx) => BlocProvider.value(
+              value: serviceLocator<ClubVoiceCubit>(),
+              child: AudioStreamScreen(
+                  liveId: room.id, roomSubject: room.subject, isHost: false),
+            ),
+          ),
+        );
       },
       child: Container(
         padding:

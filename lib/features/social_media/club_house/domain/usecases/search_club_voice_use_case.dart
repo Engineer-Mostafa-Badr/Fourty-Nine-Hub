@@ -6,13 +6,14 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/repositories/club_voice_repository.dart';
 
 import '../../../../../core/abstract/use_case.dart';
+import '../entities/club_voice_room_entity.dart';
 
 class SearchClubVoiceUseCase extends UseCase<void, SearchParams> {
   final ClubVoiceRepository clubVoiceRepository;
 
   SearchClubVoiceUseCase(this.clubVoiceRepository);
   @override
-  Future<Either<Failure, void>> call(SearchParams params) {
+  Future<Either<Failure, List<ClubVoiceRoomEntity>>> call(SearchParams params) {
     return clubVoiceRepository.search(params);
   }
 }

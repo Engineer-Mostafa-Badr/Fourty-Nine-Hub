@@ -3,7 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/club_house/data/model/club_voice_room_model.dart';
+import 'package:fourtyninehub/features/social_media/club_house/data/model/create_voice_room_model.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/entities/club_voice_room_entity.dart';
+import 'package:fourtyninehub/features/social_media/club_house/domain/entities/create_room_response_entity.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/add_club_voice_use_case.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/join_club_voice_use_case.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/search_club_voice_use_case.dart';
@@ -11,13 +13,15 @@ import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/s
 import '../../../../../core/api/api_consumer.dart';
 
 abstract class ClubVoiceDataSource {
-  Future<Either<Failure, void>> addRoom(AddRoomParams params);
+  Future<Either<Failure, CreateClubVoiceRoomResponseModel>> addRoom(
+      AddRoomParams params);
   Future<Either<Failure, List<ClubVoiceRoomEntity>>> getRooms();
   Future<Either<Failure, void>> join(RoomMetaParams params);
   Future<Either<Failure, void>> leave(RoomMetaParams params);
 
   Future<Either<Failure, void>> end(RoomMetaParams params);
-  Future<Either<Failure, void>> search(SearchParams subject);
+  Future<Either<Failure, List<ClubVoiceRoomEntity>>> search(
+      SearchParams subject);
 }
 
 class ClubVoiceDataSourceImpl extends ClubVoiceDataSource {
@@ -26,10 +30,12 @@ class ClubVoiceDataSourceImpl extends ClubVoiceDataSource {
   ClubVoiceDataSourceImpl(this.apiConsumer);
 
   @override
-  Future<Either<Failure, void>> addRoom(AddRoomParams params) async {
+  Future<Either<Failure, CreateClubVoiceRoomResponseModel>> addRoom(
+      AddRoomParams params) async {
     final result = await apiConsumer.post(EndPoints.createClubVoiceRoom,
         data: params.toJson());
-    return result.fold((l) => Left(l), (r) => result);
+    return result.fold((l) => Left(l),
+        (r) => Right(CreateClubVoiceRoomResponseModel.fromJson(r)));
   }
 
   @override
@@ -46,13 +52,7 @@ class ClubVoiceDataSourceImpl extends ClubVoiceDataSource {
         EndPoints.allClubVoiceRooms,
       );
       // print('list is  ${rooms.toString()}');
-      return result.fold((l) => Left(l), (r) {
-        final List<ClubVoiceRoomModel> list =
-            List.from(r['data']['docs'] as List)
-                .map((e) => ClubVoiceRoomModel.fromJson(e))
-                .toList();
-        return Right(list);
-      });
+      return result.fold((l) => Left(l), (r) => Right(_returnListOfRooms(r)));
     } catch (e) {
       return const Left(UnknownFailure());
     }
@@ -61,21 +61,29 @@ class ClubVoiceDataSourceImpl extends ClubVoiceDataSource {
   @override
   Future<Either<Failure, void>> join(RoomMetaParams params) async {
     final result =
-        await apiConsumer.delete(EndPoints.joinVoiceRoom(params.roomId));
+        await apiConsumer.put(EndPoints.joinVoiceRoom(params.roomId));
     return result.fold((l) => Left(l), (r) => result);
   }
 
   @override
   Future<Either<Failure, void>> leave(RoomMetaParams params) async {
     final result =
-        await apiConsumer.delete(EndPoints.leaveVoiceRoom(params.roomId));
+        await apiConsumer.put(EndPoints.leaveVoiceRoom(params.roomId));
     return result.fold((l) => Left(l), (r) => result);
   }
 
   @override
-  Future<Either<Failure, void>> search(SearchParams params) async {
+  Future<Either<Failure, List<ClubVoiceRoomEntity>>> search(
+      SearchParams params) async {
     final result =
         await apiConsumer.get(EndPoints.searchVoiceRooms(params.roomSubject));
-    return result.fold((l) => Left(l), (r) => result);
+    return result.fold((l) => Left(l), (r) => Right(_returnListOfRooms(r)));
+  }
+
+  List<ClubVoiceRoomModel> _returnListOfRooms(Map<String, dynamic> r) {
+    var list = List.from(r['data']['docs'] as List)
+        .map((e) => ClubVoiceRoomModel.fromJson(e))
+        .toList();
+    return list;
   }
 }

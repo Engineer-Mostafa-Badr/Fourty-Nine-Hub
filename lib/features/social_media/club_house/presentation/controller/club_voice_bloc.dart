@@ -25,14 +25,28 @@ class ClubVoiceCubit extends Cubit<ClubVoiceState> {
     this.joinClubVoiceUseCase,
     this.searchClubVoiceUseCase,
   ) : super(const InitialClubVoiceState());
+  @override
+  void onChange(Change<ClubVoiceState> change) {
+    print('change ${change.currentState.toString()}');
+    super.onChange(change);
+  }
 
-  void addRoom(String subject) {
+  String roomId = '';
+  Future<void> addRoom(String subject) async {
     emit(const AddRoomState(requestState: ZegoRequestState.loading));
-    addClubVoiceUseCase(AddRoomParams(subject: subject))
-        .then((value) =>
-            emit(const AddRoomState(requestState: ZegoRequestState.success)))
-        .catchError((onError) =>
-            emit(const AddRoomState(requestState: ZegoRequestState.failure)));
+    if (!isClosed) {
+      await addClubVoiceUseCase(AddRoomParams(subject: subject)).then((value) {
+        value.fold((l) {
+          emit(const AddRoomState(requestState: ZegoRequestState.failure));
+        }, (r) {
+          roomId = r.roomId;
+          emit(const AddRoomState(requestState: ZegoRequestState.success));
+        });
+      }).catchError((onError) {
+        print('error $onError');
+        emit(const AddRoomState(requestState: ZegoRequestState.failure));
+      });
+    }
   }
 
   void joinRoom(String roomId) {
@@ -59,14 +73,19 @@ class ClubVoiceCubit extends Cubit<ClubVoiceState> {
         .catchError((onError) => emit(
             const RehashRoomState(requestState: ZegoRequestState.failure)));
   }
-
+  List<ClubVoiceRoomEntity> searchedRooms = [];
   void searchRoom(String roomSubject) {
     searchClubVoiceUseCase(SearchParams(roomSubject: roomSubject))
-        .then((value) =>
-            emit(const RehashRoomState(requestState: ZegoRequestState.success)))
-        .catchError((onError) => emit(
-            const RehashRoomState(requestState: ZegoRequestState.failure)));
+        .then((value) {
+          
+          emit(const RehashRoomState(requestState: ZegoRequestState.success));
+        })
+        .catchError((onError) {
+          emit(
+            const RehashRoomState(requestState: ZegoRequestState.failure));
+        });
   }
+
   int roomsLength = 0;
   List<ClubVoiceRoomEntity> rooms = [];
   void getAllRooms() {
@@ -75,15 +94,14 @@ class ClubVoiceCubit extends Cubit<ClubVoiceState> {
       value.fold(
           (l) => emit(const GetRoomState(
                 requestState: ZegoRequestState.failure,
-              )),
-          (r) {
-            rooms = r;
-            roomsLength = r.length;
-            emit(
-                const GetRoomState(requestState: ZegoRequestState.success)
-                    .copyWith(roomsList: r),
-              );
-          });
+              )), (r) {
+        rooms = r;
+        roomsLength = r.length;
+        emit(
+          const GetRoomState(requestState: ZegoRequestState.success)
+              .copyWith(roomsList: r),
+        );
+      });
     }).catchError((onError) {});
   }
 }
