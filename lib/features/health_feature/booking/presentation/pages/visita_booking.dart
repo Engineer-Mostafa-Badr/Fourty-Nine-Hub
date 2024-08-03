@@ -9,7 +9,7 @@ import 'package:fourtyninehub/features/health_feature/booking/presentation/widge
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/time.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
-import 'package:fourtyninehub/features/subscripe/presentation/cubit/subscribe_cubit.dart';
+import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -89,7 +89,7 @@ class _VisitaBookingState extends State<VisitaBooking> {
                       height: 50,
                       label: "${Labels.premium} ${Labels.book}",
                       onPressed: () {
-                        context.read<SubscribeLogic>().checkIfUserSubscribed(
+                        serviceLocator<SubscriptionController>().checkIfUserSubscribed(
                               onSubscribed: () async {
                                 await controller.premiumBook();
                               },
