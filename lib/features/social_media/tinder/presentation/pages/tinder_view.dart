@@ -311,11 +311,13 @@ class TinderView extends StatelessWidget {
                     text: user.user.first.email,
                     style: Styles.mediumText(color: Colors.black),
                   ),
+
                   // leading: Icon(
                   //   user.user.first.gender == 'male'
                   //       ? Icons.male
                   //       : Icons.female,
-                  //   color: Colors.black,
+                  //   color: Colors.black
+                  // ,
                   //   size: 28,
                   // ),
                 ),
