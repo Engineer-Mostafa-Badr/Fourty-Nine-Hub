@@ -16,7 +16,7 @@ class WalletsWedgit extends StatelessWidget {
           child: ListTile(
             title: Text(wallets[index].translatedName),
             onTap: () {
-              context.read<SubscribeCubit>().showActiveSubscriptionAmounts();
+              context.read<SubscribeCubit>().showActiveSubscriptionAmounts(walletType: wallets[index]);
             },
           ),
         );
