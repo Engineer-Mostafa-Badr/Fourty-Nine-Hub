@@ -6,14 +6,13 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/other_account_view.dart';
-import 'package:get_it/get_it.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_people_you_may_know.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../domain/entities/post_entity.dart';
 import '../widgets/posts/Stories.dart';
 import '../widgets/posts/create_post_banner.dart';
 import '../widgets/posts/facebook_post_card.dart';
-import 'my_account_view.dart';
 
 class SocialHomeView extends StatefulWidget {
   final String userId;
@@ -90,6 +89,7 @@ class _SocialHomeViewState extends State<SocialHomeView> {
           shrinkWrap: true,
           children: [
             const Stories(),
+            const BuildPeopleYouMayKnow(),
             // render posts
             ListView.separated(
                 shrinkWrap: true,
@@ -127,6 +127,8 @@ class _SocialHomeViewState extends State<SocialHomeView> {
       );
     });
   }
+
+
 
   Widget _buildMyPostsWidget() {
     return BlocBuilder<SocialPostsCubit, SocialPostsState>(

@@ -3,9 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/ReadMoreLabel.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -21,6 +20,7 @@ class TwitterPostCard extends StatefulWidget {
   final Function getPost;
   final Function onShare;
   final Function(String) showPostComments;
+  final Function(TwitterReportParams) onReport;
   bool? shareSuccess;
   TwitterPostCard({
     super.key,
@@ -29,7 +29,9 @@ class TwitterPostCard extends StatefulWidget {
     required this.post,
     required this.onReact,
     required this.showPostComments,
-    required this.onShare, required this.getPost,
+    required this.onShare,
+    required this.getPost,
+    required this.onReport,
   });
 
   @override
@@ -100,9 +102,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                         ),
                         _buildContent(
                             label: widget.post.content,
-                            image: widget.post.images!.isEmpty
-                                ? ''
-                                : widget.post.images?.first),
+                            image: widget.post.photo),
                       ],
                     ),
                   ),
@@ -140,17 +140,17 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
           ),
           Expanded(
             child: _buildTwitterItem(
-                icon: FontAwesomeIcons.retweet,
-                label: "${widget.post.sharesCount}",
-                onTap: () {
-                  widget.onShare();
-                  if (widget.shareSuccess == true &&
-                      widget.post.shares?.length == widget.post.sharesCount) {
-                    widget.post.sharesCount = widget.post.sharesCount! + 1;
-                  }
-                  setState(() {});
-                },
-                ),
+              icon: FontAwesomeIcons.retweet,
+              label: "${widget.post.sharesCount}",
+              onTap: () {
+                widget.onShare();
+                if (widget.shareSuccess == true &&
+                    widget.post.shares?.length == widget.post.sharesCount) {
+                  widget.post.sharesCount = widget.post.sharesCount! + 1;
+                }
+                setState(() {});
+              },
+            ),
           ),
           Expanded(
             child: _buildTwitterItem(
@@ -221,12 +221,22 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
       children: [
         if (label != null) ReadMoreLabel(text: label),
         const Sizer(),
-        // if (image !='')
-        //   Image.network(
-        //     image!,
-        //     width: double.infinity,
-        //     fit: BoxFit.cover,
-        //   ),
+        if (image != '')
+          Container(
+            height: 200,
+            width: double.infinity,
+            decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    spreadRadius: 12,
+                    blurRadius: 8,
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(25),
+                image: DecorationImage(
+                    image: NetworkImage(image!), fit: BoxFit.fill)),
+          ),
       ],
     );
   }
@@ -240,7 +250,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
   }) {
     return Row(
       children: [
-        const ProfileImage(accountId: 0),
+        post.user.image!=''? Image.network(post.user.image):ProfileImage(accountId: 0),
         const Sizer(),
         Label(
             text: post.mainPost?.user.firstName ?? "",
@@ -267,22 +277,46 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
   }) {
     return Row(
       children: [
-        const ProfileImage(accountId: 0),
-        const Sizer(),
-        Label(
-            text: post.user.firstName,
-            style: Styles.mediumText(fontWeight: FontWeight.w500)),
-        const Sizer(),
-        if (post.user.isDocumented == true)
-          const Icon(
-            Icons.verified,
-            color: AppColors.PRIMARY_COLOR,
+        Expanded(
+          child: Row(
+            children: [
+              post.user.image!=''? ProfileImage(accountId: 0,imageURL:post.user.image):ProfileImage(accountId: 0),
+              const Sizer(),
+              Label(
+                  text: post.user.firstName,
+                  style: Styles.mediumText(fontWeight: FontWeight.w500)),
+              const Sizer(),
+              if (post.user.isDocumented == true)
+                const Icon(
+                  Icons.verified,
+                  color: AppColors.PRIMARY_COLOR,
+                ),
+              const Sizer(),
+              SizedBox(
+                width: 100,
+                child: Label(
+                    text: '@${post.user.email.split('@')[0]} . $date',
+                    maxLines: 1,
+                    style: Styles.mediumText(color: Colors.grey)),
+              ),
+              const Sizer(),
+            ],
           ),
-        const Sizer(),
-        Label(
-            text: '@${post.user.email.split('@')[0]} . $date',
-            maxLines: 1,
-            style: Styles.mediumText(color: Colors.grey)),
+        ),
+        IconButton(
+          onPressed: () {
+            bottomSheet(
+                context: context,
+                widget: ReportView(
+                  id: widget.post.id, categoryId: '66a3583454e6e337915514db',
+
+                ));
+          },
+          icon: const Icon(
+            Icons.report,
+            color: AppColors.SECONDARY_COLOR,
+          ),
+        ),
       ],
     );
   }

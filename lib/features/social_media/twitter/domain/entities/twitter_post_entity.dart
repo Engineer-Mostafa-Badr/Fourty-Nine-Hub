@@ -1,8 +1,4 @@
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_main_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
-
 import '../../../../../core/utils/duration_helper.dart';
 import '../../../../../res/assets/assets.dart';
 
@@ -21,6 +17,7 @@ class TwitterPostEntity {
   num? sharesCount;
   num? loveCount;
   bool? isReact;
+  String? photo;
   final DateTime createdAt;
    Duration get publishedDuration => DateTime.now().difference(createdAt);
 
@@ -41,6 +38,7 @@ class TwitterPostEntity {
     this.sharesCount = 0,
     this.loveCount = 0,
     this.mainPost,
+    this.photo,
     required this.createdAt,
     required this.comments
   });

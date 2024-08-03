@@ -68,6 +68,7 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/t
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:go_router/go_router.dart';
+import '../core/enums/wallet_types_enums.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_ads_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
 import '../features/account_taps/lists/presentation/cubit/lists_cubit.dart';

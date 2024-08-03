@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/walle
 
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_history_entity.dart';
 
+import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../domain/repositories/wallet_repo.dart';
 import '../datasources/wallet_remote_datasource.dart';
 

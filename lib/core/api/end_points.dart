@@ -1,3 +1,6 @@
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
+
 class EndPoints {
   static const pageSize = 20;
   static const developmentBaseUrl = 'https://49dev.com/api/v1';
@@ -19,6 +22,8 @@ class EndPoints {
   static const sendForgetPasswordOTP = '/auth/forgot-password';
   static const verifyForgetPasswordOTP = '/auth/verify/otp';
   static const createNewForgetPassword = '/auth/reset-password';
+  static const report = '/report';
+  static const documentRequest = '/twitter/document-request';
   // ride
 
   // health
@@ -90,6 +95,14 @@ class EndPoints {
     return '/facebook/post/user/$userId?limit=20&page=1&type=1';
   }
 
+  static String userSuggests(SuggestedFriendsParams params) {
+    return '/users/suggest?limit=${params.limit}&page=${params.page}';
+  }
+
+  static String userTweets(GetUserTweetsParams params) {
+    return '/twitter/post/user/${params.userId}?limit=10&page=${params.page}&type=1';
+  }
+
   static String acceptTripRider(String id) {
     return '/ride/trips/accept/$id';
   }
@@ -149,9 +162,10 @@ class EndPoints {
   static String commentOnPost(String postId) {
     return '/facebook/comment/create-comment/$postId';
   }
+
   static String commentOnTwitterPost(String postId) {
-      return '/twitter/comment/create-comment/$postId';
-    }
+    return '/twitter/comment/create-comment/$postId';
+  }
 
   static String getPostComments(String postId) {
     return '/facebook/comment/get-post-comments/$postId';
@@ -171,6 +185,22 @@ class EndPoints {
 
   static String hidePost(String postId) {
     return '/facebook/post/hide/$postId';
+  }
+
+  static String friendRequest(String userId) {
+    return '/friends/sendFriendRequest/$userId';
+  }
+
+  static String followRequest(String userId) {
+    return '/follow/make-follow/$userId';
+  }
+
+  static String greetMessage(String userId) {
+    return '/users/greet/$userId';
+  }
+
+  static String removeSuggestUser(String userId) {
+    return '/friends/remove-user-suggest/$userId';
   }
 
   // food
@@ -211,7 +241,8 @@ class EndPoints {
   static String auctionDetails(String id) {
     return '/auction/$id';
   }
-  static String getAuctionRequests(String id){
+
+  static String getAuctionRequests(String id) {
     return '/auction/all-auction-request/$id';
   }
 
@@ -267,6 +298,7 @@ class EndPoints {
   static String getChatMessages(String chatId) {
     return '/chat/get-chat/$chatId';
   }
+
   static String changeChatMuteState(String chatId) {
     return '/chat/mute-chat/$chatId';
   }
@@ -274,6 +306,14 @@ class EndPoints {
   static String changeChatToArchiveOrNormal(String chatId) {
     return '/chat/archive-chat/$chatId';
   }
+
+  static String buttonAvailable = '/global/click';
+  static String getSubscribtionPlans = '/subscription/plans';
+  static String checkUserSubscribtion(String id) {
+    return '/subscription/subcategory/$id';
+  }
+  static String subscribe ='/subscription/subscribe';
+
 
   static String lockChat(String chatId) {
     return '/chat/lock-chat/$chatId';
