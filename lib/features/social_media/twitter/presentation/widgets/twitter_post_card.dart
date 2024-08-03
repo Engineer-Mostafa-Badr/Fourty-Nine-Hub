@@ -308,7 +308,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             bottomSheet(
                 context: context,
                 widget: ReportView(
-                  id: widget.post.id,
+                  id: widget.post.id, categoryId: '',
 
                 ));
           },

@@ -61,7 +61,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                   bottomSheet(
                       context: context,
                       widget: ReportView(
-                        id: widget.comment.id,
+                        id: widget.comment.id, categoryId: '',
                       ));
                 },
                 icon: Icon(

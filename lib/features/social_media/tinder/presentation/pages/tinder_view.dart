@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -115,7 +116,15 @@ class TinderView extends StatelessWidget {
                         end: 10,
                         child: FloatingActionButton(
                           backgroundColor: Colors.red,
-                          onPressed: () {},
+                          onPressed: () {
+                            state.userData.first.user.first.gender == 'male'
+                                ? context
+                                    .read<TinderViewCubit>()
+                                    .fetchUserData(gender: 'female')
+                                : context
+                                    .read<TinderViewCubit>()
+                                    .fetchUserData(gender: 'male');
+                          },
                           shape: const CircleBorder(),
                           child: const Icon(
                             Icons.add_photo_alternate_outlined,
@@ -216,6 +225,25 @@ class TinderView extends StatelessWidget {
                 height: double.infinity,
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 12.0, right: 8),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  onPressed: () {
+                    // context.read<TinderViewCubit>().fetchUserData(
+                    //     gender: state.userData.first.user.first.gender == 'male'
+                    //         ? 'female'
+                    //         : 'male');
+                  },
+                  iconSize: 30,
+                  icon: Icon(
+                    Icons.change_circle,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
             Positioned(
               top: 10,
               left: 10,
@@ -275,7 +303,7 @@ class TinderView extends StatelessWidget {
                 Label(
                   text:
                       "${user.user.first.firstName} ${user.user.first.lastName}",
-                  style: Styles.headerText(color: Colors.white, fontSize: 26),
+                  style: Styles.headerText(color: Colors.black, fontSize: 26),
                 ),
                 Row(
                   children: [
@@ -283,7 +311,7 @@ class TinderView extends StatelessWidget {
                       user.user.first.gender == 'male'
                           ? Icons.male
                           : Icons.female,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                     const Sizer(),
                     Label(
@@ -320,7 +348,10 @@ class TinderView extends StatelessWidget {
               height: MediaQuery.of(context).size.height / 1.5,
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
-                child: ReportView(id: '2', categoryId: '',),
+                child: ReportView(
+                  id: '2',
+                  categoryId: '',
+                ),
               ),
             ),
           );
@@ -343,4 +374,4 @@ class TinderView extends StatelessWidget {
     );
   }
 }
-//rommana1.1
+//rommana1

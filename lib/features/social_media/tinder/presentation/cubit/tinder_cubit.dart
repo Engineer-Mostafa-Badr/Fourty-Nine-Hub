@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,11 +36,12 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     }
   }
 
-  Future<void> fetchUserData() async {
-    const url = 'https://49dev.com/api/v1/tinder/?gender=female';
-    const token =
+Future<void> fetchUserData({String gender = 'female'}) async {
+  final url = 'https://49dev.com/api/v1/tinder/?gender=$gender';
+  const token =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjAyYTlkZGY3LWI2NzItNGE1NC04NmJmLTE3MzQzM2M5NjYwZiIsImlhdCI6MTcyMjA5NjI5OSwiZXhwIjo1NTcyMjA5NjI5OSwic3ViIjoiNjZhNGUwNDQ1MzVlMThlNWMxZDcyMGM4In0.-xgk-lnnQP3t19LrwsNwBQN_TleJYPyX0N-soJeQA6c';
 
+  try {
     final response = await http.get(
       Uri.parse(url),
       headers: {
@@ -56,9 +58,39 @@ class TinderViewCubit extends Cubit<TinderViewState> {
           .toList();
       emit(state.updated(userData: userData));
     } else {
+      log('Failed to load data: ${response.statusCode}');
       throw Exception('Failed to load data');
     }
+  } catch (e) {
+    log('Error fetching data: $e');
+    throw Exception('Failed to load data');
   }
+}
+
+  // Future<void> fetchUserData() async {
+  //   const url = 'https://49dev.com/api/v1/tinder/?gender=female';
+  //   const token =
+  //       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjAyYTlkZGY3LWI2NzItNGE1NC04NmJmLTE3MzQzM2M5NjYwZiIsImlhdCI6MTcyMjA5NjI5OSwiZXhwIjo1NTcyMjA5NjI5OSwic3ViIjoiNjZhNGUwNDQ1MzVlMThlNWMxZDcyMGM4In0.-xgk-lnnQP3t19LrwsNwBQN_TleJYPyX0N-soJeQA6c';
+
+  //   final response = await http.get(
+  //     Uri.parse(url),
+  //     headers: {
+  //       'Authorization': 'Bearer $token',
+  //     },
+  //   );
+
+  //   if (response.statusCode == 200) {
+  //     final Map<String, dynamic> jsonResponse = json.decode(response.body);
+
+  //     final List<dynamic> responseData = jsonResponse['data'];
+  //     final userData = responseData
+  //         .map<UserData>((data) => UserData.fromJson(data))
+  //         .toList();
+  //     emit(state.updated(userData: userData));
+  //   } else {
+  //     throw Exception('Failed to load data');
+  //   }
+  // }
 
   void updatePanStart(Offset startDragOffset) {
     emit(state.updated(startDragOffset: startDragOffset));
