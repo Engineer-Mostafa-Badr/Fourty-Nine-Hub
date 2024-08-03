@@ -90,6 +90,8 @@ class EndPoints {
   static const createFacebookPost = '/facebook/post';
   static const createTwitterPost = '/twitter/post';
   static const getFeedPosts = '/facebook/feed';
+  static const activities = '/facebook/post/activities';
+  static const feelings = '/facebook/post/feelings';
   static const getTwitterFeedPosts = '/twitter/feed';
   static String userPosts(String userId) {
     return '/facebook/post/user/$userId?limit=20&page=1&type=1';
@@ -147,6 +149,10 @@ class EndPoints {
     return '/facebook/post/react/$postId';
   }
 
+  static String reactOnComment(String postId) {
+    return '/facebook/comment/react/$postId';
+  }
+
   static String reactOnTwitterPost(String postId) {
     return '/twitter/post/react/$postId';
   }
@@ -159,6 +165,10 @@ class EndPoints {
     return '/twitter/post/share/$postId';
   }
 
+  static String shareFacebookPost(String postId) {
+    return '/facebook/post/share/$postId';
+  }
+
   static String commentOnPost(String postId) {
     return '/facebook/comment/create-comment/$postId';
   }
@@ -169,6 +179,10 @@ class EndPoints {
 
   static String getPostComments(String postId) {
     return '/facebook/comment/get-post-comments/$postId';
+  }
+
+  static String getPostCommentReplies(String commentId) {
+    return '/facebook/comment/get-comment-replies/$commentId';
   }
 
   static String getTwitterPostComments(String postId) {

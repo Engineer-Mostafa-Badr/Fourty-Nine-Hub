@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_reaction_button/flutter_reaction_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/ReadMoreLabel.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -18,13 +19,16 @@ import '../../../domain/usecases/post_react_usecase.dart';
 
 class FacebookPostCard extends StatefulWidget {
   final PostEntity post;
+  final String from;
   final Function(PostReactParams) onReact;
+  final Function(String id) onShare;
   final Function(String) showPostComments;
   final Function(PostEntity) showPostDetails;
   final Function(String) deletePost;
   final Function(String) hidePost;
   final bool showOptions;
   final bool isMyPost;
+
   const FacebookPostCard(
       {super.key,
       required this.post,
@@ -34,7 +38,8 @@ class FacebookPostCard extends StatefulWidget {
       required this.deletePost,
       required this.hidePost,
       required this.showPostDetails,
-      required this.showPostComments});
+      required this.showPostComments,
+      required this.onShare, required this.from});
 
   @override
   State<FacebookPostCard> createState() => _FacebookPostCardState();
@@ -44,13 +49,16 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   final pageController = PageController();
   bool isLiked = false;
   bool hide = false;
-
+  Reaction<String>? _selectedReaction;
   @override
   void initState() {
     pageController.addListener(() {
       setState(() {});
     });
-
+    _selectedReaction = Reaction<String>(
+      value: 'like',
+      icon: _buildReactionWidget(item: Reactions.like),
+    );
     super.initState();
   }
 
@@ -115,7 +123,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       );
     } else {
       return InkWell(
-        onTap: () => widget.showPostDetails(widget.post),
+        onTap: widget.from=='posts'?() => widget.showPostDetails(widget.post):null,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -125,19 +133,19 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               children: [
                 if (widget.post.likesCount != 0)
                   _buildCounterWidget(
-                      value: widget.post.likesCount, image: Assets.like),
+                      value: widget.post.likesCount!, image: Assets.like),
                 if (widget.post.loveCount != 0)
                   _buildCounterWidget(
-                      value: widget.post.loveCount, image: Assets.heart),
+                      value: widget.post.loveCount!, image: Assets.heart),
                 if (widget.post.wowCount != 0)
                   _buildCounterWidget(
-                      value: widget.post.wowCount, image: Assets.wow),
+                      value: widget.post.wowCount!, image: Assets.wow),
                 if (widget.post.sadCount != 0)
                   _buildCounterWidget(
-                      value: widget.post.sadCount, image: Assets.sad),
+                      value: widget.post.sadCount!, image: Assets.sad),
                 if (widget.post.angryCount != 0)
                   _buildCounterWidget(
-                      value: widget.post.angryCount, image: Assets.angry),
+                      value: widget.post.angryCount!, image: Assets.angry),
                 const Spacer(),
                 InkWell(
                   onTap: () => widget.showPostComments(widget.post.id),
@@ -166,8 +174,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               height: kToolbarHeight * .6,
               child: Row(
                 children: [
-                  Expanded(child: _buildReactionsButton()),
-                  Expanded(
+                  Expanded(child: BuildReactionsButtons(post: widget.post, from: 'posts',)),
+                  if(widget.from=='posts')Expanded(
                     child: _buildReactionPlaceHolder(
                         icon: Icons.chat_bubble_outline_rounded,
                         label: 'Comment',
@@ -176,8 +184,10 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   Expanded(
                     child: _buildReactionPlaceHolder(
                         icon: Icons.chat_rounded,
-                        label: 'Message',
-                        onTap: () => context.push(Routes.CHAT)),
+                        label: 'Share',
+                        onTap: () {
+                          widget.onShare(widget.post.id);
+                        }),
                   ),
                 ],
               ),
@@ -260,9 +270,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       children: [
         InkWell(
           onTap: () => context.push(Routes.OTHERSACCOUNT),
-          child: const CircleAvatar(
+          child: CircleAvatar(
             backgroundColor: Colors.white,
-            backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+            backgroundImage: NetworkImage(post.user.image.isNotEmpty?post.user.image:UIConst.profilePlaceHolder),
           ),
         ),
         const Sizer(),
@@ -338,55 +348,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
     );
   }
 
-  Widget _buildReactionsButton() {
-    return ReactionButton<String>(
-      boxColor: Colors.white,
-      boxRadius: 10,
-
-      onReactionChanged: (Reaction<String>? reaction) {
-        widget.onReact(PostReactParams(
-            postId: widget.post.id, react: reaction?.value ?? 'like'));
-      },
-      toggle: false,
-      direction: ReactionsBoxAlignment.rtl,
-      placeholder: Reaction<String>(
-        value: null,
-        icon: _buildReactionPlaceHolder(
-            icon: Icons.thumb_up_alt_outlined, label: 'Like'),
-      ),
-      // boxColor: Colors.black.withOpacity(0.5),
-      itemsSpacing: 10,
-      itemSize: const Size(20, 20),
-
-      reactions: <Reaction<String>>[
-        Reaction<String>(
-          value: 'likes',
-          icon: _buildReactionItem(item: Reactions.like),
-        ),
-        Reaction<String>(
-          value: 'love',
-          icon: _buildReactionItem(item: Reactions.love),
-        ),
-        Reaction<String>(
-          value: 'wow',
-          icon: _buildReactionItem(item: Reactions.wow),
-        ),
-        Reaction<String>(
-          value: 'sad',
-          icon: _buildReactionItem(item: Reactions.sad),
-        ),
-        Reaction<String>(
-          value: 'angry',
-          icon: _buildReactionItem(item: Reactions.angry),
-        ),
-      ],
-      selectedReaction: Reaction<String>(
-        value: 'like',
-        icon: _buildReactionWidget(item: Reactions.like),
-      ),
-    );
-  }
-
+ 
   Widget _buildReactionPlaceHolder({
     required IconData icon,
     required String label,

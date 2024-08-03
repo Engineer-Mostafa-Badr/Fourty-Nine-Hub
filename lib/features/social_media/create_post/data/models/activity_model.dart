@@ -4,9 +4,9 @@ class ActivityModel extends ActivityEntity {
   ActivityModel({required super.id, required super.name, required super.image});
   factory ActivityModel.fromJson(Map<String, dynamic> json) {
     return ActivityModel(
-      id: json['id'],
-      name: json['name'],
-      image: json['image'],
+      id: json['_id']??'',
+      name: json['nameEn']??'',
+      image: json['picture']??'',
     );
   }
 }

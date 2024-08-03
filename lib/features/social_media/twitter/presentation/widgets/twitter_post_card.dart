@@ -250,7 +250,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
   }) {
     return Row(
       children: [
-        post.user.image!=''? Image.network(post.user.image):ProfileImage(accountId: 0),
+        post.user.image!=''? ProfileImage(accountId: 0,imageURL: post.user.image,):const ProfileImage(accountId: 0),
         const Sizer(),
         Label(
             text: post.mainPost?.user.firstName ?? "",

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
@@ -80,7 +82,18 @@ class _SocialHomeViewState extends State<SocialHomeView> {
   }
 
   Widget _buildFacebookWidget() {
-    return BlocBuilder<SocialPostsCubit, SocialPostsState>(
+    return BlocConsumer<SocialPostsCubit, SocialPostsState>(
+        listener: (context,state){
+          if (state.status == StateStatus.error) {
+            showErrorMessage(
+              context,
+              getFailureMessage(
+                state.failure!,
+                context,
+              ),
+            );
+          }
+        },
         builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
       return RefreshIndicator(
@@ -106,6 +119,11 @@ class _SocialHomeViewState extends State<SocialHomeView> {
                           .showPostComments(context: context, postId: v),
                       showPostDetails: (PostEntity post) => controller
                           .showPostDetails(context: context, post: post),
+                      onShare: (String id) {
+                        controller.onShare(
+                          postId: id,
+                        );
+                      }, from: 'posts',
                     ),
                 separatorBuilder: (context, index) {
                   if (index == 4) {}
@@ -128,10 +146,19 @@ class _SocialHomeViewState extends State<SocialHomeView> {
     });
   }
 
-
-
   Widget _buildMyPostsWidget() {
-    return BlocBuilder<SocialPostsCubit, SocialPostsState>(
+    return BlocConsumer<SocialPostsCubit, SocialPostsState>(
+      listener: (context,state){
+        if (state.status == StateStatus.error) {
+          showErrorMessage(
+            context,
+            getFailureMessage(
+              state.failure!,
+              context,
+            ),
+          );
+        }
+      },
         builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
       return RefreshIndicator(
@@ -151,7 +178,9 @@ class _SocialHomeViewState extends State<SocialHomeView> {
                   showPostComments: (String v) =>
                       controller.showPostComments(context: context, postId: v),
                   showPostDetails: (PostEntity post) =>
-                      controller.showPostDetails(context: context, post: post),
+                      controller.showPostDetails(context: context, post: post), onShare: (String id) {
+                    controller.onShare(postId: id);
+            }, from: 'posts',
                 ),
             separatorBuilder: (context, index) {
               if (index == 4) {}

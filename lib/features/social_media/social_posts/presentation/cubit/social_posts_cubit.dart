@@ -5,15 +5,21 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/follow_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/friend_request_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comment_replies_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/hide_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/remove_suggest_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/send_greet_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/share_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/post_details_page.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/comment_replies.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/post_comments.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -42,6 +48,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final FollowUserUseCase _followUserUseCase;
   final SendGreetMessageUseCase _sendGreetMessageUseCase;
   final RemoveSuggestUserUseCase _removeSuggestUserUseCase;
+  final SharePostUseCase _sharePostUseCase;
+  final CommentReactUseCase _commentReactUseCase;
+  final GetPostCommentRepliesUseCase _getPostCommentRepliesUseCase;
+  final ReplyOnCommentUseCase _replyOnCommentUseCase;
+
   SocialPostsCubit(
       this._getFeedUseCase,
       this._getUserPostsUseCase,
@@ -49,7 +60,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       this._getPostCommentsUseCase,
       this._postCommentUseCase,
       this._deletePostUseCase,
-      this._hidePostUseCase, this._suggestedFriendsUseCase, this._friedRequestUseCase, this._followUserUseCase, this._sendGreetMessageUseCase, this._removeSuggestUserUseCase,)
+      this._hidePostUseCase, this._suggestedFriendsUseCase, this._friedRequestUseCase, this._followUserUseCase, this._sendGreetMessageUseCase, this._removeSuggestUserUseCase, this._sharePostUseCase, this._commentReactUseCase, this._getPostCommentRepliesUseCase, this._replyOnCommentUseCase,)
       : super(const SocialPostsState());
 
   void loadData() async {
@@ -129,13 +140,59 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   }
 
 // react on a post
-  void onReact({required PostReactParams params}) async {
-    await _postReactUseCase(params);
+  Future<bool> onReact({required PostReactParams params}) async {
+    var response =await _postReactUseCase(params);
+    bool value = false;
+    response.fold(
+          (failure) =>
+          emit(state.copyWith(failure: failure, status: StateStatus.error)),
+        (r){
+          value=r;
+        }
+    );
+    return value;
+
+  }
+
+  // react on a comment
+  Future<bool> onCommentReact({required PostReactParams params}) async {
+    var response =await _commentReactUseCase(params);
+    bool value = false;
+    response.fold(
+          (failure) =>
+          emit(state.copyWith(failure: failure, status: StateStatus.error)),
+        (r){
+          value=r;
+        }
+    );
+    return value;
+
   }
 
 // add comment usecase
-  void onPostComment({required PostCommentParams params}) async {
-    await _postCommentUseCase(params);
+  Future<CommentEntity> onPostComment({required PostCommentParams params}) async {
+    var response = await _postCommentUseCase(params);
+    CommentEntity? model;
+    response.fold((failure)=>emit(state.copyWith(failure: failure,status: StateStatus.error),),
+        (data){
+      model=data;
+      emit(state.copyWith(newComment: data,status: StateStatus.success));
+        }
+    );
+    return model!;
+  }
+
+  // add comment usecase
+  Future<CommentEntity> replyOnComment({required ReplyOnCommentParams params}) async {
+    var response = await _replyOnCommentUseCase(params);
+    CommentEntity? model;
+    response.fold((failure)=>emit(state.copyWith(failure: failure,status: StateStatus.error),),
+        (data){
+      model=data;
+      emit(state.copyWith(newComment: data,status: StateStatus.success));
+        }
+    );
+    return model!;
   }
 
   // show comments with rendered data
@@ -154,6 +211,26 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
                 postId: postId,
                 onAddComment: (PostCommentParams params) =>
                     onPostComment(params: params))));
+  }
+
+
+  // show comments with rendered data
+
+  void showPostCommentReplies(
+      {required BuildContext context, required String commentId,required String postId}) async {
+    final response = await _getPostCommentRepliesUseCase(commentId);
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: StateStatus.error)),
+        (data) => bottomSheet(
+            context: context,
+            isScrollControlled: true,
+            widget: CommentReplies(
+                replies: data,
+                postId: postId, commentId: commentId, onAddReply: (ReplyOnCommentParams params) {
+                  replyOnComment(params: params);
+            },
+                )));
   }
 
   void showPostDetails(
@@ -257,4 +334,19 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     print(isAdd);
     return isAdd;
   }
+
+  // share post
+  Future<bool> onShare({required String postId}) async {
+    var response = await _sharePostUseCase(postId);
+    var value = false;
+    response.fold(
+            (failure) => emit(state.copyWith(failure: failure, status: StateStatus.error)),
+            (data) {
+              value=data;
+              emit(
+            state.copyWith(status: StateStatus.success));
+            });
+    return value;
+  }
+
 }

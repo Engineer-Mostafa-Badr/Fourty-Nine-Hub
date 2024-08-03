@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
@@ -24,7 +23,6 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       this._getFeelingsUseCase, this._createTwitterPostUseCase)
       : super(const CreatePostState());
 
-
   UploadFileEntity? fileEntity;
 
   void loadData() async {
@@ -34,20 +32,24 @@ class CreatePostCubit extends Cubit<CreatePostState> {
 
   Future<void> getActivities() async {
     final response = await _getActivitiesUseCase(const NoParams());
-    response.fold((l) => emit(state.copyWith(failure: l)),
-        (data) => emit(state.copyWith(activities: data)));
+    response.fold((l) => emit(state.copyWith(failure: l)), (data) {
+      print(data.length);
+      emit(state.copyWith(activities: data));
+    });
   }
 
   Future<void> getFeelings() async {
     final response = await _getFeelingsUseCase(const NoParams());
-    response.fold((l) => emit(state.copyWith(failure: l)),
-        (data) => emit(state.copyWith(feelings: data)));
+    response.fold((l) => emit(state.copyWith(failure: l)), (data) {
+      print("feel ${data.length}");
+      emit(state.copyWith(feelings: data));
+    });
   }
 
-  void createPost({required BuildContext context,required String type}) async {
+  void createPost({required BuildContext context, required String type}) async {
     if (postContentTextController.text.isNotEmpty) {
       print("test media ${fileEntity?.mediaId}");
-      if(type=='twitter'){
+      if (type == 'twitter') {
         final response = await _createTwitterPostUseCase(
             CreateTwitterPostParams(
                 content: postContentTextController.text,
@@ -59,20 +61,27 @@ class CreatePostCubit extends Cubit<CreatePostState> {
             (r) {
           Navigator.pop(context);
         });
-      }else if(type == "facebook"){
+      } else if (type == "facebook") {
         final response = await _createPostUseCase(
-            PostParams(content: postContentTextController.text));
+          PostParams(
+            content: postContentTextController.text,
+            mediaId: fileEntity == null ? [] : [fileEntity?.mediaId ?? ''],
+            color: state.backColor,
+            activity: state.selectedActivity?.id,
+            feeling: state.selectedFeeling?.id,
+          ),
+        );
         response.fold(
-                (l) =>
-                emit(state.copyWith(failure: l, status: CreatePostStates.error)),
-                (r) {
-              Navigator.pop(context);
-            });
+            (l) => emit(
+                state.copyWith(failure: l, status: CreatePostStates.error)),
+            (r) {
+          Navigator.pop(context);
+        });
       }
     }
   }
 
-  void selectColor({required Color color}) {
+  void selectColor({required String color}) {
     emit(state.copyWith(backColor: color));
   }
 
@@ -84,8 +93,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     emit(state.copyWith(selectedActivity: item));
   }
 
-
-  uploadPhoto(){
+  uploadPhoto() {
     final UploadFile upload = UploadFile();
     upload.uploadImage(
         subCategoryId: '66a3583454e6e337915514db',
@@ -94,12 +102,12 @@ class CreatePostCubit extends Cubit<CreatePostState> {
           print("mediaId: ${data.mediaId}");
           fileEntity = data;
           print(fileEntity?.mediaId);
-          emit(state.copyWith(fileEntity: data,status: CreatePostStates.success));
+          emit(state.copyWith(
+              fileEntity: data, status: CreatePostStates.success));
         });
   }
 
-  removePhoto(){
-    emit(state.copyWith(fileEntity: null,status: CreatePostStates.success));
+  removePhoto() {
+    emit(state.copyWith(fileEntity: null, status: CreatePostStates.success));
   }
-
 }
