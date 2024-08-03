@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/liveview/gifts/gift_manager.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+
 import 'features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'features/social_media/live_streaming/presentation/widgets/liveview/gifts/gift_sheet.dart';
 import 'features/subscribe/presentation/cubit/subscribe_cubit.dart';
 import 'res/style/app_colors.dart';
 import 'routes/pages.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'service_locator/tinder_service_locator.dart';
 //import 'package:admob_flutter/admob_flutter.dart';
 
 void main() async {
@@ -50,6 +53,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => serviceLocator<CreateAdCubit>(),
         ),
+
       ],
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
