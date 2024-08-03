@@ -40,7 +40,14 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     });
   }
 
+  _joinRoom(String chatId) async {
+    _socketService.joinRoom(chatId);
+  }
+
   getChatMessages(String chatID) async {
+    // join chat room , socket
+    // _joinRoom(chatID);
+
     chatId = chatID;
     final response = await _getChatMessagesUseCase.call(chatID);
     response.fold(
@@ -74,6 +81,10 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     }
   }
 
+  typingMessage() {
+    _socketService.typingMessage(chatId: chatId!);
+  }
+
   Future<void> getUser() async {
     final result = await _getUserUseCase(const NoParams());
     result.fold(
@@ -94,6 +105,23 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
           chatData: chatMessagesModel,
           chatMessages: chatMessages.reversed.toList(),
           status: ChatRoomStates.initState));
+    });
+  }
+
+  listenToMessageTyping() {
+    _socketService.socketChatTypingStream.listen((event) {
+
+      debugPrint("chatListen ${event}");
+
+      List<String> chatsIds = event ?? [];
+      chatsIds.map((e) {
+
+      }).toList();
+
+      emit.call(state.copyWith(
+          chatData: chatMessagesModel,
+          chatMessages: chatMessages.reversed.toList(),
+          status: ChatRoomStates.typing));
     });
   }
 

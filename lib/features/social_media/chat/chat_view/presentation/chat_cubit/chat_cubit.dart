@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unlock_chat_usecase.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
 part 'chats_state.dart';
 
@@ -27,7 +28,6 @@ class ChatsCubit extends Cubit<ChatsState> {
   final UnLockChatUseCase _unLockChatUseCase;
 
   String? userToken;
-  late Socket socket;
   late int selectedTabIndex;
   late String lockChatPassword;
   final messageTextController = TextEditingController();
@@ -49,9 +49,10 @@ class ChatsCubit extends Cubit<ChatsState> {
 
     // listen to new messages
     listenToNewMessages();
+    listenToMessageTyping();
   }
 
-  joinRoom(String chatId) async {
+  _joinRoom(String chatId) async {
     _socketService.joinRoom(chatId);
   }
 
@@ -81,15 +82,25 @@ class ChatsCubit extends Cubit<ChatsState> {
       response.fold(
           (failure) => emit.call(
               state.copyWith(failure: failure, status: ChatsStates.error)),
-          (data) {
+          (data) async {
         data
             .map((e) => _chats.update(e.sId!, (value) => e, ifAbsent: () => e))
             .toList();
 
         // to can listen or start chat , should to join room id
-        if (data.isNotEmpty) {
-          joinRoom(data[0].sId!);
+        // data.map((e) => _joinRoom(e.sId!).toList());
+        // _joinRoom(data[0].sId!);
+
+        // to listen typing and online emit event status
+        List<UserStatusParams> userStatusParams = [];
+        for (var item in _chats.values) {
+          userStatusParams
+              .add(UserStatusParams(chatId: item.sId!, userId: item.userId!));
         }
+
+        await Future.delayed(Duration(seconds: 1));
+        _socketService.sendUserStatus(userStatusParams);
+        _socketService.listenToUserStatus();
 
         return emit
             .call(state.copyWith(chats: data, status: ChatsStates.initState));
@@ -129,11 +140,17 @@ class ChatsCubit extends Cubit<ChatsState> {
   }
 
   ChatsRequestParams getTabParams({required int index, String? password}) {
+    // 0 => Normal
+    // 7 => Archived
+    // 8 => Locked
+    // 9 => unRead
+
     if (index == 0) {
       return ChatsRequestParams(
         privacyId: 'normal',
         categoryId: UIConst.chatNormalId,
         isLocked: false,
+        isUnread: false,
         archived: false,
       );
     } else if (index == 7) {
@@ -141,6 +158,7 @@ class ChatsCubit extends Cubit<ChatsState> {
         privacyId: 'normal',
         categoryId: UIConst.chatNormalId,
         isLocked: false,
+        isUnread: false,
         archived: true,
       );
     } else if (index == 8) {
@@ -149,6 +167,15 @@ class ChatsCubit extends Cubit<ChatsState> {
           categoryId: UIConst.chatNormalId,
           isLocked: true,
           archived: false,
+          isUnread: false,
+          lockChatPassword: password);
+    } else if (index == 9) {
+      return ChatsRequestParams(
+          privacyId: 'normal',
+          categoryId: UIConst.chatNormalId,
+          isLocked: false,
+          archived: false,
+          isUnread: true,
           lockChatPassword: password);
     } else {
       return ChatsRequestParams();
@@ -191,10 +218,38 @@ class ChatsCubit extends Cubit<ChatsState> {
     });
   }
 
+  // listenToMessageTyping() {
+  //   _socketService.socketChatTypingStream.listen((event) {
+  //     print("Event typing $event");
+  //     emit.call(state.copyWith(
+  //         chats: _chats.values.toList(), status: ChatsStates.typing));
+  //   });
+  // }
+
+  listenToMessageTyping() {
+    _socketService.socketChatTypingStream.listen((event) {
+      List<String> chatsIds = event ?? [];
+
+      // set all chats typing false then update only new chats with typing
+      for (var item in _chats.keys) {
+        _chats[item]!.typing = false;
+      }
+
+      for (var key in chatsIds) {
+        if (_chats.containsKey(key)) {
+          _chats[key]!.typing = true;
+        }
+      }
+
+      emit.call(state.copyWith(
+          chats: _chats.values.toList(), status: ChatsStates.typing));
+    });
+  }
+
   @override
   Future<void> close() {
-    socket.disconnect();
-    socket.dispose();
+    print("Close Socket");
+    _socketService.disposeSocket();
     return super.close();
   }
 }

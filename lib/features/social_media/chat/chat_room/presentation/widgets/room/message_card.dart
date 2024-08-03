@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -18,8 +20,9 @@ class MessageCard extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
 
     return messageEntity.byMe!
-        ? _buildMineMessage(width: width,messageEntity: messageEntity)
-        : _buildOtherMessage(width: width,messageEntity: messageEntity);
+        ? _buildMineMessage(width: width, messageEntity: messageEntity)
+        : _buildOtherMessage(
+            width: width, messageEntity: messageEntity, context: context);
   }
 
   Widget _buildMineMessage({
@@ -78,41 +81,147 @@ class MessageCard extends StatelessWidget {
     );
   }
 
-  Widget _buildOtherMessage({required double width,required MessageEntity messageEntity,}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        const CircleAvatar(
-          radius: 15,
-          backgroundColor: Colors.white,
-          backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
-        ),
-        const Sizer(
-          width: 5,
-        ),
-        Container(
-          width: width / 1.5,
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.all(10),
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                  bottomRight: Radius.circular(10))),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ReadMoreLabel(
-                trimLines: 5,
-                text: messageEntity.text!,
-                style: Styles.mediumText(),
-                textAlign: TextAlign.left,
-              ),
-            ],
+  Widget _buildOtherMessage({
+    required double width,
+    required MessageEntity messageEntity,
+    required BuildContext context,
+  }) {
+    return GestureDetector(
+      onLongPress: () {
+        _showReplyDialog(context, messageEntity.text ?? '');
+      },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const CircleAvatar(
+            radius: 15,
+            backgroundColor: Colors.white,
+            backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
           ),
-        ),
-      ],
+          const Sizer(
+            width: 5,
+          ),
+          Container(
+            width: width / 1.5,
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                    bottomRight: Radius.circular(10))),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ReadMoreLabel(
+                  trimLines: 5,
+                  text: messageEntity.text!,
+                  style: Styles.mediumText(),
+                  textAlign: TextAlign.left,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showReplyDialog(BuildContext context, String lastMessage) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Dialog(
+            insetPadding: const EdgeInsets.all(10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            backgroundColor: Colors.transparent,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(5),
+                    ),
+                    color: AppColors.PRIMARY_COLOR.withOpacity(.8),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Label(
+                      text: "${lastMessage}",
+                      style: Styles.headerText(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Container(
+                    margin: const EdgeInsets.only(right: 50),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(5),
+                      ),
+                      color: AppColors.PRIMARY_COLOR.withOpacity(.8),
+                    ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Label(
+                                text: "Replay",
+                                style: Styles.headerText(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                              const Icon(
+                                Icons.replay,
+                                size: 30,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Divider(),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Label(
+                                text: "Delete",
+                                style: Styles.headerText(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                              const Icon(
+                                Icons.delete,
+                                size: 30,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

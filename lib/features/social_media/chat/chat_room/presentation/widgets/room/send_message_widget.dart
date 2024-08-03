@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
@@ -5,7 +7,9 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/chat_cubit/chat_room_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/room/replay_message_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:social_media_recorder/audio_encoder_type.dart';
@@ -14,7 +18,15 @@ import 'package:flutter/foundation.dart' as foundation;
 import 'Attachment_types.dart';
 
 class SendMessageWidget extends StatefulWidget {
-  const SendMessageWidget({super.key});
+  MessageEntity? replayMessage;
+  final VoidCallback? onCancelReplay;
+  FocusNode focusNode;
+
+  SendMessageWidget(
+      {super.key,
+      required this.focusNode,
+      this.replayMessage,
+      this.onCancelReplay});
 
   @override
   State<SendMessageWidget> createState() => _SendMessageWidgetState();
@@ -25,12 +37,13 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   late final EmojiTextEditingController _controller;
   late final ScrollController _scrollController;
   final TextEditingController? _messageTextController = TextEditingController();
-  late final FocusNode _focusNode;
   late final TextStyle _textStyle;
   final bool isApple = [TargetPlatform.iOS, TargetPlatform.macOS]
       .contains(foundation.defaultTargetPlatform);
   bool _emojiShowing = false;
   late ChatRoomCubit chatRoomCubit;
+  static final inputTopRadius = const Radius.circular(12);
+  static final inputBottomRadius = const Radius.circular(24);
 
   @override
   void initState() {
@@ -42,7 +55,6 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
 
     _controller = EmojiTextEditingController(emojiTextStyle: _textStyle);
     _scrollController = ScrollController();
-    _focusNode = FocusNode();
 
     super.initState();
   }
@@ -50,29 +62,34 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   @override
   Widget build(BuildContext context) {
     final chatCubit = context.read<ChatRoomCubit>();
+    final isReplaying = widget.replayMessage != null;
 
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8.0),
-          height: kToolbarHeight * 1.3,
-          child: Row(
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      height: isReplaying ? 170 : 90,
+      child: Row(
+        children: [
+          Expanded(
+              child: Column(
             children: [
-              Expanded(
-                  child: Container(
-                height: kToolbarHeight,
+              if (isReplaying) buildReplay(),
+              Container(
+                height: 70,
                 decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 child: TextField(
+                  maxLines: 2,
                   controller: _messageTextController,
                   scrollController: _scrollController,
-                  focusNode: _focusNode,
-                  onChanged: (value) {
+                  focusNode: widget.focusNode,
+                  onChanged: (value) async {
                     setState(() {
                       _messageTextController.text = value;
                     });
+                    await Future.delayed(const Duration(milliseconds: 500));
+                    // emit event typing
+                    chatCubit.typingMessage();
                   },
                   textAlignVertical: TextAlignVertical.bottom,
                   decoration: InputDecoration(
@@ -83,10 +100,10 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                           _emojiShowing = !_emojiShowing;
                           if (!_emojiShowing) {
                             WidgetsBinding.instance.addPostFrameCallback((_) {
-                              _focusNode.requestFocus();
+                              widget.focusNode.requestFocus();
                             });
                           } else {
-                            _focusNode.unfocus();
+                            widget.focusNode.unfocus();
                           }
                         });
                       },
@@ -102,11 +119,11 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                     border: OutlineInputBorder(
                         borderSide:
                             const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(8)),
                     focusedBorder: OutlineInputBorder(
                         borderSide:
                             const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(8)),
                     suffixIcon: _messageTextController!.text.trim().length != 0
                         ? const SizedBox()
                         : SizedBox(
@@ -129,101 +146,48 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                           ),
                   ),
                 ),
-              )),
-              const Sizer(),
-              _messageTextController.text.trim().length > 0
-                  ? AppButton(
-                      backColor: Colors.green,
-                      label: '',
-                      iconSize: 30,
-                      padding: 15,
-                      icon: Icons.send_sharp,
-                      onPressed: () {
-                        chatCubit
-                            .sendMessage(_messageTextController.text.trim());
-                        setState(() {
-                          _messageTextController.text = '';
-                        });
-                      },
-                    )
-                  : SocialMediaRecorder(
-                      recordIconBackGroundColor: AppColors.PRIMARY_COLOR,
-                      startRecording: () {},
-                      stopRecording: (_time) {},
-                      sendRequestFunction: (soundFile, _time) {},
-                      encode: AudioEncoderType.AAC,
-                    ),
+              ),
             ],
-          ),
-        ),
-        if (_emojiShowing)
-          EmojiPicker(
-            textEditingController: _controller,
-            scrollController: _scrollController,
-            config: Config(
-              height: 256,
-              checkPlatformCompatibility: true,
-              emojiTextStyle: _textStyle,
-              emojiViewConfig: const EmojiViewConfig(
-                backgroundColor: Colors.white,
-              ),
-              swapCategoryAndBottomBar: true,
-              skinToneConfig: const SkinToneConfig(),
-              categoryViewConfig: CategoryViewConfig(
-                backgroundColor: Colors.white,
-                dividerColor: Colors.white,
-                indicatorColor: Colors.grey,
-                iconColorSelected: Colors.black,
-                iconColor: Colors.grey,
-                customCategoryView: (
-                  config,
-                  state,
-                  tabController,
-                  pageController,
-                ) {
-                  return WhatsAppCategoryView(
-                    config,
-                    state,
-                    tabController,
-                    pageController,
-                  );
-                },
-                categoryIcons: const CategoryIcons(
-                  recentIcon: Icons.access_time_outlined,
-                  smileyIcon: Icons.emoji_emotions_outlined,
-                  animalIcon: Icons.cruelty_free_outlined,
-                  foodIcon: Icons.coffee_outlined,
-                  activityIcon: Icons.sports_soccer_outlined,
-                  travelIcon: Icons.directions_car_filled_outlined,
-                  objectIcon: Icons.lightbulb_outline,
-                  symbolIcon: Icons.emoji_symbols_outlined,
-                  flagIcon: Icons.flag_outlined,
+          )),
+          const Sizer(),
+          _messageTextController.text.trim().length > 0
+              ? AppButton(
+                  backColor: Colors.green,
+                  label: '',
+                  iconSize: 25,
+                  radius: 50,
+                  padding: 8,
+                  icon: Icons.send_sharp,
+                  onPressed: () {
+                    chatCubit.sendMessage(_messageTextController.text.trim());
+                    setState(() {
+                      _messageTextController.text = '';
+                    });
+                  },
+                )
+              : SocialMediaRecorder(
+                  recordIconBackGroundColor: AppColors.PRIMARY_COLOR,
+                  startRecording: () {},
+                  stopRecording: (_time) {},
+                  sendRequestFunction: (soundFile, _time) {},
+                  encode: AudioEncoderType.AAC,
                 ),
-              ),
-              bottomActionBarConfig: const BottomActionBarConfig(
-                backgroundColor: Colors.white,
-                buttonColor: Colors.white,
-                buttonIconColor: Colors.grey,
-              ),
-              searchViewConfig: SearchViewConfig(
-                backgroundColor: Colors.white,
-                customSearchView: (
-                  config,
-                  state,
-                  showEmojiView,
-                ) {
-                  return WhatsAppSearchView(
-                    config,
-                    state,
-                    showEmojiView,
-                  );
-                },
-              ),
-            ),
-          ),
-      ],
+        ],
+      ),
     );
   }
+
+  Widget buildReplay() => Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+            color: Colors.grey.withOpacity(.2),
+            borderRadius: BorderRadius.only(
+                topLeft: inputTopRadius, topRight: inputTopRadius)),
+        child: ReplayMessageWidget(
+          messageEntity: widget.replayMessage!,
+          onCancelReplay: widget.onCancelReplay,
+        ),
+      );
 }
 
 class WhatsAppCategoryView extends CategoryView {

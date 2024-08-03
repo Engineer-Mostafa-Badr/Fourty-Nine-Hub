@@ -7,7 +7,10 @@ class ChatItemModel {
   bool? seen;
   bool? archived;
   bool? locked;
+  bool? typing;
   int? lastSeenCount;
+  int? unreadCount;
+  String? userId;
 
   ChatItemModel({
     this.sId,
@@ -18,7 +21,10 @@ class ChatItemModel {
     this.name,
     this.locked,
     this.avatar,
+    this.typing,
     this.lastSeenCount,
+    this.unreadCount,
+    this.userId,
   });
 
   ChatItemModel.fromJson(Map<String, dynamic> json) {
@@ -31,5 +37,8 @@ class ChatItemModel {
     lastMessageText = json['lastMessageText'];
     lastSeenCount = json['lastSeenCount'];
     locked = json['locked'];
+    unreadCount = json['unreadCount'];
+    userId = json['userId'];
+    typing = false;
   }
 }

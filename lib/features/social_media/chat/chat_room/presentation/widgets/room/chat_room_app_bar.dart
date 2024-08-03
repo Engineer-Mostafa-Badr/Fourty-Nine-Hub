@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -45,13 +46,21 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       children: [
                         state.chatData?.chat?.contact?.name == null
                             ? const SizedBox()
-                            : Label(
-                                text: '${state.chatData?.chat?.contact?.name}',
-                                style: Styles.headerText(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w400,
+                            : Row(
+                              children: [
+                                Expanded(
+                                  child: Label(
+                                      text: '${state.chatData?.chat?.contact?.name}',
+                                      style: Styles.headerText(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
                                 ),
-                              ),
+
+                                Icon(Icons.edit)
+                              ],
+                            ),
                         // Row(
                         //   children: [
                         //     const CircleAvatar(

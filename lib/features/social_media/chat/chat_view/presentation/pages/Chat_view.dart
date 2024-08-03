@@ -200,7 +200,10 @@ class _ChatViewState extends State<ChatView> {
 
                     // onDismissed: ,
                     child: ChatCard(
-                        isSecret: isSecret, chatItemModel: state.chats?[index]),
+                      isSecret: isSecret,
+                      chatItemModel: state.chats?[index],
+                      chatsCubit: chatCubit,
+                    ),
                   ),
                   separatorBuilder: (context, index) => const SizedBox(),
                   itemCount: state.chats?.length ?? 0,

@@ -11,6 +11,7 @@ abstract class ChatsRemoteDataSource {
     required String categoryId,
     required bool archived,
     required bool isLocked,
+    required bool unRead,
     String? password,
   });
 
@@ -48,12 +49,14 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
       required String categoryId,
       required bool archived,
       required bool isLocked,
+      required bool unRead,
       String? password}) async {
     var data = {
       "privacy": "normal",
       "categoryId": UIConst.chatNormalId,
       "archived": archived,
       "isLocked": isLocked,
+      "isUnread": unRead,
       if (password != null) "password": password
     };
     final response = await _apiConsumer.post(EndPoints.getChats, data: data);
