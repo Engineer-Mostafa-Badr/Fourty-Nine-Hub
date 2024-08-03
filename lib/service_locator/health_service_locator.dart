@@ -35,8 +35,10 @@ import 'package:fourtyninehub/features/health_feature/health/data/datasources/he
 import 'package:fourtyninehub/features/health_feature/health/data/repositories/health_repo_impl.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/repositories/health_repo.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_health_subcategories.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_medical_services.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_my_appointment_bookings_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_user_upcoming_appointments.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/toggle_favorite_subcategory.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:get_it/get_it.dart';
@@ -148,6 +150,11 @@ class HealthServiceLocator {
         () => BookPremiumAppointmentUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetHealthSubcategoriesUseCase>(
         () => GetHealthSubcategoriesUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetMedicalServicesUseCase>(
+      () => GetMedicalServicesUseCase(serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<ToggleFavoriteSubcategoryUseCase>(
+        () => ToggleFavoriteSubcategoryUseCase(serviceLocator()));
 
     // -------------------------- cubits --------------------------
     serviceLocator.registerSingleton<HealthSharedData>(HealthSharedData());
@@ -158,6 +165,7 @@ class HealthServiceLocator {
           serviceLocator(),
         ));
     serviceLocator.registerFactory<HealthCubit>(() => HealthCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

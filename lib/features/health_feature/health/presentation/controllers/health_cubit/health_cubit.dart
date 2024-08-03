@@ -1,14 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/enums/main_services_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/models/filter_option_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_health_subcategories.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_medical_services.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_user_upcoming_appointments.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/toggle_favorite_subcategory.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
-import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 
@@ -19,13 +18,15 @@ part 'health_state.dart';
 class HealthCubit extends Cubit<HealthState> {
   final HealthSharedData _healthShare;
   final GetUserUpcomingAppointmentsUseCase _getUserUpcomingAppointmentsUseCase;
-  final GetSubCategoriesUseCase _getSubCategoriesUseCase;
   final GetHealthSubcategoriesUseCase _getHealthSubcategoriesUseCase;
+  final GetMedicalServicesUseCase _getMedicalServicesUseCase;
+  final ToggleFavoriteSubcategoryUseCase _toggleFavoriteSubcategoryUseCase;
   HealthCubit(
       this._getUserUpcomingAppointmentsUseCase,
-      this._getSubCategoriesUseCase,
       this._healthShare,
-      this._getHealthSubcategoriesUseCase)
+      this._getHealthSubcategoriesUseCase,
+      this._getMedicalServicesUseCase,
+      this._toggleFavoriteSubcategoryUseCase)
       : super(const HealthState());
 
   final List<HealthBookingFilterModel> services = [
@@ -64,8 +65,7 @@ class HealthCubit extends Cubit<HealthState> {
   }
 
   Future<void> getServices() async {
-    final response =
-        await _getSubCategoriesUseCase.call(MainServicesEnum.health.value());
+    final response = await _getMedicalServicesUseCase.call(const NoParams());
     response.fold(
         (failure) =>
             emit(state.copyWith(failure: failure, status: HealthStates.error)),
@@ -73,8 +73,8 @@ class HealthCubit extends Cubit<HealthState> {
             status: HealthStates.initState, medicalServices: data)));
   }
 
-  Future<void> getSubCategories() async {
-    if (_healthShare.subCategories.isEmpty) {
+  Future<void> getSubCategories({bool reload = false}) async {
+    if (_healthShare.subCategories.isEmpty || reload) {
       final response =
           await _getHealthSubcategoriesUseCase.call(const NoParams());
       response.fold(
@@ -88,5 +88,21 @@ class HealthCubit extends Cubit<HealthState> {
     } else {
       emit(state.copyWith(subCategories: _healthShare.subCategories));
     }
+  }
+
+  Future<void> toggleFavoriteSubcategory(String subcategoryId) async {
+    final response = await _toggleFavoriteSubcategoryUseCase(subcategoryId);
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) => getSubCategories(reload: true));
+  }
+
+  Future<void> toggleFavoriteMedicalService(String subcategoryId) async {
+    final response = await _toggleFavoriteSubcategoryUseCase(subcategoryId);
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) => getServices());
   }
 }

@@ -6,15 +6,15 @@ class HealthSubcategoryModel extends HealthSubcategoryEntity {
       {required super.id,
       required super.name,
       required super.image,
-      required super.isFavourite,
-      required super.numberOfDoctors});
+      required super.isFavorite,
+      required super.numberOfContent});
 
   factory HealthSubcategoryModel.fromJson(Map<String, dynamic> json) {
     return HealthSubcategoryModel(
         id: json['_id'],
         name: getLang() == 'ar' ? json['nameAr'] : json['nameEn'],
         image: json['picture'] ?? '',
-        isFavourite: json['is_favourite'] ?? false,
-        numberOfDoctors: json['numberOfAds']);
+        isFavorite: json['isFavorite'] ?? false,
+        numberOfContent: json['numberOfAds']);
   }
 }

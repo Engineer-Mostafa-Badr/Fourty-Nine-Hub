@@ -7,8 +7,9 @@ class SubscriptionInterceptor extends Interceptor {
   @override
   Future<void> onResponse(
       Response response, ResponseInterceptorHandler handler) async {
-    if (response.data['endPointSubscription'] &&
-        !(response.data['userSubscription'])) {
+    if (response.data['endPointSubscription'] != null &&
+        response.data['endPointSubscription'] == true &&
+        response.data['userSubscription'] == false) {
       List<WalletTypes> wallets = (response.data['paymentMethod'] as List)
           .map((e) => (e as String).toWalletType)
           .toList();

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -42,9 +44,15 @@ class HealthSubCategoryCard extends StatelessWidget {
                       right: 5,
                       child: IconAppButton(
                           size: 20,
-                          icon: Icons.favorite_border,
+                          icon: subCategory.isFavorite
+                              ? Icons.favorite
+                              : Icons.favorite_border,
                           color: Colors.red,
-                          onPressed: () {})),
+                          onPressed: () {
+                            context
+                                .read<HealthCubit>()
+                                .toggleFavoriteSubcategory(subCategory.id);
+                          })),
                 ],
               ),
             )),
@@ -66,7 +74,7 @@ class HealthSubCategoryCard extends StatelessWidget {
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
                 ),
                 Label(
-                  text: '${subCategory.numberOfDoctors.toShortScale} doctors',
+                  text: '${subCategory.numberOfContent.toShortScale} doctors',
                   style: Styles.mediumText(),
                 ),
               ],

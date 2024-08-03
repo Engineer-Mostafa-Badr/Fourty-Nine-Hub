@@ -27,4 +27,16 @@ class HealthRepoImpl implements HealthRepo {
   Future<Either<Failure, List<HealthSubcategoryEntity>>> getHealthSubcategories() {
     return _remoteDataSource.getHealthSubcategories();
   }
+
+  @override
+  Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices(){
+    return _remoteDataSource.getMedicalServices();
+  }
+  
+  @override
+  Future<Either<Failure, bool>> toggleFavoriteSubcategory(String sucategoryId) {
+    return _remoteDataSource.toggleFavoriteSubcategory(sucategoryId);
+  }
+
+  
 }

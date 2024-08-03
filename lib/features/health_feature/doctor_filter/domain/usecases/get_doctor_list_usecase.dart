@@ -24,7 +24,7 @@ class DoctorSearchParams {
       GovernorateEntity(id: '', nameAr: '', nameEn: '');
   CityEntity city = CityEntity(id: '', nameAr: '', nameEn: '');
   SubCategoryEntity subCategory =
-      SubCategoryEntity(id: '', name: '', image: '', isFavourite: false);
+      SubCategoryEntity(id: '', name: '', image: '', isFavorite: false);
   BookingTypes bookingType = BookingTypes.call;
   DoctorSearchParams();
 
@@ -41,7 +41,7 @@ class DoctorSearchParams {
     governorate = GovernorateEntity(id: '', nameAr: '', nameEn: '');
     city = CityEntity(id: '', nameAr: '', nameEn: '');
     subCategory =
-        SubCategoryEntity(id: '', name: '', image: '', isFavourite: false);
+        SubCategoryEntity(id: '', name: '', image: '', isFavorite: false);
     bookingType = BookingTypes.call;
   }
 }

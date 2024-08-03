@@ -11,4 +11,8 @@ abstract class HealthRepo {
 
   Future<Either<Failure, List<HealthSubcategoryEntity>>>
       getHealthSubcategories();
+
+  Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices();
+
+  Future<Either<Failure, bool>> toggleFavoriteSubcategory(String sucategoryId);
 }

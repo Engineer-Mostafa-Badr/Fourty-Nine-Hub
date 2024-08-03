@@ -12,6 +12,8 @@ abstract class HealthRemoteDataSource {
   Future<Either<Failure, List<BookedAppointmentEntity>>> getUpcomingBookings();
   Future<Either<Failure, List<HealthSubcategoryEntity>>>
       getHealthSubcategories();
+  Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices();
+  Future<Either<Failure, bool>> toggleFavoriteSubcategory(String sucategoryId);
 }
 
 class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
@@ -39,15 +41,34 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
             .map((e) => BookedAppointmentModel.fromJson(e))
             .toList()));
   }
-  
+
   @override
-  Future<Either<Failure, List<HealthSubcategoryEntity>>> getHealthSubcategories() async {
-    final response =
-        await _apiConsumer.get(EndPoints.getHealthSubcategories);
+  Future<Either<Failure, List<HealthSubcategoryEntity>>>
+      getHealthSubcategories() async {
+    final response = await _apiConsumer.get(EndPoints.getHealthSubcategories);
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data']['subcategories'] as List)
             .map((e) => HealthSubcategoryModel.fromJson(e))
             .toList()));
+  }
+
+  @override
+  Future<Either<Failure, List<HealthSubcategoryEntity>>>
+      getMedicalServices() async {
+    final response = await _apiConsumer.get(EndPoints.getMedicalServices);
+    return response.fold(
+        (failure) => Left(failure),
+        (data) => Right((data['data']['subcategories'] as List)
+            .map((e) => HealthSubcategoryModel.fromJson(e))
+            .toList()));
+  }
+
+  @override
+  Future<Either<Failure, bool>> toggleFavoriteSubcategory(String sucategoryId) async {
+    final response = await _apiConsumer
+        .post(EndPoints.toggleFavoriteSubcategory(sucategoryId));
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
   }
 }
