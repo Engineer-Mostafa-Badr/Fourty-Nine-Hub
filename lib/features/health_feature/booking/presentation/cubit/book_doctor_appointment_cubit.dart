@@ -6,8 +6,6 @@ import 'package:fourtyninehub/features/health_feature/booking/domain/usecases/bo
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
-import 'package:fourtyninehub/features/subscribe/domain/usecases/check_if_user_subscribed_usecase.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 
 part 'book_doctor_appointment_state.dart';
@@ -23,8 +21,6 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
 
   final BookRegularAppointmentUseCase _bookRegularAppointmentUseCase;
   final BookPremiumAppointmentUseCase _bookPremiumAppointmentUseCase;
-  final CheckIfUserSubscribedUseCase _checkIfUserSubscribedUseCase;
-  final HealthSharedData _healthSharedData;
 
   final BookAppointmentParams _params = BookAppointmentParams();
 
@@ -38,11 +34,9 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
   }
 
   BookDoctorAppointmentCubit(
-      this._bookRegularAppointmentUseCase,
-      this._bookPremiumAppointmentUseCase,
-      this._checkIfUserSubscribedUseCase,
-      this._healthSharedData)
-      : super(BookDoctorAppointmentInitialState());
+    this._bookRegularAppointmentUseCase,
+    this._bookPremiumAppointmentUseCase,
+  ) : super(BookDoctorAppointmentInitialState());
 
   @override
   Future<void> close() {
@@ -70,27 +64,12 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
   Future<void> premiumBook() async {
     _validate(afterValidation: () async {
       emit(BookDoctorAppointmentStartLoadingState());
-      final isSubscribed = await _checkIfUserSubscribedUseCase
-          .call(_healthSharedData.doctorSearchParams.subCategory.id);
-      isSubscribed.fold(
-        (failure) {
-          emit(BookDoctorAppointmentEndLoadingState());
-          emit(BookDoctorAppointmentErrorState(Labels.errorHappened));
-        },
-        (data) async {
-          if (data) {
-            final response = await _bookPremiumAppointmentUseCase.call(_params);
-            emit(BookDoctorAppointmentEndLoadingState());
-            response.fold(
-                (failure) =>
-                    emit(BookDoctorAppointmentErrorState(Labels.errorHappened)),
-                (data) => emit(BookDoctorAppointmentSuccessState()));
-          } else {
-            emit(BookDoctorAppointmentEndLoadingState());
-            emit(BookDoctorAppointmentShowSubscriptionPlansState());
-          }
-        },
-      );
+      final response = await _bookPremiumAppointmentUseCase.call(_params);
+      emit(BookDoctorAppointmentEndLoadingState());
+      response.fold(
+          (failure) =>
+              emit(BookDoctorAppointmentErrorState(Labels.errorHappened)),
+          (data) => emit(BookDoctorAppointmentSuccessState()));
     });
   }
 

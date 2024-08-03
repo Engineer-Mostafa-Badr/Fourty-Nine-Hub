@@ -26,7 +26,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../ride/RideRequest/presentation/widgets/customer/createOrder/changePhoneNumber.dart';
-import '../../../../subscribe/presentation/cubit/subscribe_cubit.dart';
+import '../../../../subscripe/presentation/cubit/subscribe_cubit.dart';
 
 class AdDetailsView extends StatefulWidget {
   final String id;
@@ -166,7 +166,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         onPressed: () {
                           serviceLocator<SubscribeCubit>()
                               .checkIfUserSubscribed(
-                                  context: context,
+                                  // context: context,
                                   onSubscribed: () {
                                     if (controller.phone == null) {
                                       bottomSheet(

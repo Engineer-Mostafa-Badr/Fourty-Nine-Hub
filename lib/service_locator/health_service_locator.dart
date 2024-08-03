@@ -190,9 +190,11 @@ class HealthServiceLocator {
     serviceLocator
         .registerFactory(() => DoctorCityFilterCubit(serviceLocator()));
 
-    serviceLocator.registerFactory<BookDoctorAppointmentCubit>(() =>
-        BookDoctorAppointmentCubit(serviceLocator(), serviceLocator(),
-            serviceLocator(), serviceLocator()));
+    serviceLocator.registerFactory<BookDoctorAppointmentCubit>(
+        () => BookDoctorAppointmentCubit(
+              serviceLocator(),
+              serviceLocator(),
+            ));
     serviceLocator
         .registerFactory<DoctorDashboardCubit>(() => DoctorDashboardCubit(
               serviceLocator(),

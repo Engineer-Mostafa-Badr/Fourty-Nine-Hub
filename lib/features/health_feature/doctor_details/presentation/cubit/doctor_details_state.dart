@@ -16,9 +16,7 @@ final class DoctorDetailsCheckCallAndMessage extends DoctorDetailsState {
   DoctorDetailsCheckCallAndMessage(this.enabled);
 }
 
-final class DoctorDetailsLoaded extends DoctorDetailsState {
-  DoctorDetailsLoaded();
-}
+final class DoctorDetailsLoaded extends DoctorDetailsState {}
 
 final class DoctorDetailsError extends DoctorDetailsState {
   final String message;

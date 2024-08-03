@@ -1,39 +1,49 @@
-import 'package:fourtyninehub/features/subscribe/data/datasources/subscribe_remote_datasource.dart';
-import 'package:fourtyninehub/features/subscribe/domain/usecases/check_if_user_subscribed_usecase.dart';
-import 'package:fourtyninehub/features/subscribe/domain/usecases/get_subscribtion_plans_usecase.dart';
-import 'package:fourtyninehub/features/subscribe/presentation/cubit/subscribe_cubit.dart';
+import 'package:fourtyninehub/features/subscripe/data/datasources/subscribe_remote_datasource.dart';
+import 'package:fourtyninehub/features/subscripe/data/repositories/subscribtion_plans_repo_impl.dart';
+import 'package:fourtyninehub/features/subscripe/domain/usecases/check_if_user_subscribed_usecase.dart';
+import 'package:fourtyninehub/features/subscripe/domain/usecases/get_active_subscription_amounts.dart';
+import 'package:fourtyninehub/features/subscripe/domain/usecases/get_subscription_plans_usecase.dart';
+import 'package:fourtyninehub/features/subscripe/presentation/cubit/subscribe_cubit.dart';
 import 'package:get_it/get_it.dart';
 
-import '../features/subscribe/data/repositories/subscribtion_plans_repo_impl.dart';
-import '../features/subscribe/domain/repositories/subscribtion_plans_repo.dart';
-import '../features/subscribe/domain/usecases/subscribe_usecase.dart';
+import '../features/subscripe/domain/repositories/subscription_plans_repo.dart';
+import '../features/subscripe/domain/usecases/subscribe_usecase.dart';
 
-class SubscribtionServiceLocator {
+class SubscriptionServiceLocator {
   static void execute({required GetIt serviceLocator}) async {
+    // ================================== datasource =============================
     serviceLocator.registerLazySingleton<SubscribeRemoteDataSource>(
         () => SubscribeRemoteDataSourceImpl(
               serviceLocator(),
             ));
-             serviceLocator.registerLazySingleton<SubscribtionPlansRepo>(
-        () => SubscribtionPlansRepoImpl(
+    // ================================== repo =============================
+    serviceLocator.registerLazySingleton<SubscriptionPlansRepo>(
+        () => SubscriptionPlansRepoImpl(
               serviceLocator(),
             ));
-    serviceLocator.registerLazySingleton<GetSubscribtionPlansUseCase>(
-        () => GetSubscribtionPlansUseCase(
+    // ================================== usecases =============================
+    serviceLocator.registerLazySingleton<GetSubscriptionPlansUseCase>(
+        () => GetSubscriptionPlansUseCase(
               serviceLocator(),
             ));
-            serviceLocator.registerLazySingleton<CheckIfUserSubscribedUseCase>(
+    serviceLocator.registerLazySingleton<CheckIfUserSubscribedUseCase>(
         () => CheckIfUserSubscribedUseCase(
               serviceLocator(),
             ));
-            serviceLocator.registerLazySingleton<SubscribeUseCase>(
-        () => SubscribeUseCase(
+    serviceLocator
+        .registerLazySingleton<SubscribeUseCase>(() => SubscribeUseCase(
               serviceLocator(),
             ));
-            serviceLocator.registerFactory<SubscribeCubit>(()=>SubscribeCubit(
-              serviceLocator(),
-              serviceLocator(),
+    serviceLocator.registerLazySingleton<GetActiveSubscriptionAmountsUseCase>(
+        () => GetActiveSubscriptionAmountsUseCase(
               serviceLocator(),
             ));
+    // ================================== cubits =============================
+    serviceLocator.registerFactory<SubscribeCubit>(() => SubscribeCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
   }
 }

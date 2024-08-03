@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart'
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/divider.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -107,16 +108,23 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                     }
                   },
                 ),
-                const Sizer(height: 15,),
+                const Sizer(
+                  height: 15,
+                ),
                 Row(
                   children: [
-                    Expanded(
-                      flex: 4,
-                      child: AppButton(
-                        label: Labels.onlineSession,
-                        onPressed: () {},
-                      ),
-                    ),
+                    serviceLocator<HealthSharedData>()
+                                .doctorSearchParams
+                                .bookingType ==
+                            BookingTypes.call
+                        ? Expanded(
+                            flex: 4,
+                            child: AppButton(
+                              label: Labels.onlineSession,
+                              onPressed: () {},
+                            ),
+                          )
+                        : const Spacer(flex: 4),
                     const Sizer(),
                     Expanded(
                       child: InkWell(

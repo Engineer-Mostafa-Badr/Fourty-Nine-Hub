@@ -39,8 +39,8 @@ class DoctorModel extends DoctorEntity {
         id: json['_id'] ?? '',
         lastName: json['lastName'] ?? '',
         firstName: json['firstName'] ?? '',
-        subCategory: json['subCategory'] != null
-            ? SubCategoryModel.fromJson(json['subCategory'])
+        subCategory: json['subCategoryId'] != null
+            ? SubCategoryModel.fromJson(json['subCategoryId'])
             : SubCategoryEntity(
                 id: '', name: '', image: '', isFavourite: false),
         image: json['mediaId']['mediaKey'] ?? '',

@@ -5,11 +5,13 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/data/models
 import 'package:fourtyninehub/features/health_feature/doctor_details/data/models/user_doctor_rate.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/user_doctor_rate.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_usecase.dart';
 
 import '../../../../../core/error/failure.dart';
 
 abstract class DoctorDetailsRemoteDataSource {
-  Future<Either<Failure, DoctorEntity>> getDoctorDetails(String doctorId);
+  Future<Either<Failure, DoctorEntity>> getDoctorDetails(
+      GetDoctorDetailsParams params);
   Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorReviews(
       String doctorId);
 }
@@ -21,9 +23,10 @@ class DoctorDetailsRemoteDataSourceImpl
 
   @override
   Future<Either<Failure, DoctorEntity>> getDoctorDetails(
-      String doctorId) async {
-    final response =
-        await _apiConsumer.get(EndPoints.getDoctorDetails(doctorId));
+      GetDoctorDetailsParams params) async {
+    final response = await _apiConsumer.get(
+        EndPoints.getDoctorDetails(params.doctorId),
+        data: params.toJson());
     return response.fold((failure) => Left(failure),
         (data) => Right(DoctorModel.fromJson(data['data'])));
   }

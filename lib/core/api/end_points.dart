@@ -321,10 +321,13 @@ class EndPoints {
   }
 
   static String buttonAvailable = '/global/click';
-  static String getSubscribtionPlans = '/subscription/plans';
-  static String checkUserSubscribtion(String id) {
+  static String getSubscriptionPlans(String subcategoryId) =>
+      '/subscription/plans/$subcategoryId';
+  static String checkUserSubscription(String id) {
     return '/subscription/subcategory/$id';
   }
 
   static String subscribe = '/subscription/subscribe';
+
+  static String getActiveSubscriptionAmounts = '/payment-amount/active';
 }

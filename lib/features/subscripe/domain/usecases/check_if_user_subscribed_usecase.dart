@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import '../../../../../../core/abstract/use_case.dart';
-import '../repositories/subscribtion_plans_repo.dart';
+import '../repositories/subscription_plans_repo.dart';
 
 class CheckIfUserSubscribedUseCase extends UseCase<bool, String> {
-  final SubscribtionPlansRepo _repo;
+  final SubscriptionPlansRepo _repo;
   CheckIfUserSubscribedUseCase(this._repo);
   @override
   Future<Either<Failure, bool>> call(String params) {

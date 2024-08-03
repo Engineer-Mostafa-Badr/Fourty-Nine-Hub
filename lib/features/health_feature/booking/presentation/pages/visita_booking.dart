@@ -8,7 +8,10 @@ import 'package:fourtyninehub/features/health_feature/booking/presentation/widge
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/price.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/time.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
+import 'package:fourtyninehub/features/subscripe/presentation/cubit/subscribe_cubit.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
@@ -36,64 +39,71 @@ class _VisitaBookingState extends State<VisitaBooking> {
   Widget build(BuildContext context) {
     final controller = context.read<BookDoctorAppointmentCubit>();
 
-    return BlocListener<BookDoctorAppointmentCubit, BookDoctorAppointmentState>(
-      listener: (context, state) {
-        switch (state) {
-          case BookDoctorAppointmentSuccessState _:
-            showSuccessMessage(context, Labels.bookingSuccess);
-            Future.delayed(const Duration(seconds: 1));
-            context.pushAndRemoveUntil(Routes.VISITA);
-            break;
+    return Scaffold(
+        backgroundColor: AppColors.BACKGROUND_COLOR,
+        appBar: const BackAppBar(
+          label: Labels.confirmBooking,
+        ),
+        body: BlocConsumer<BookDoctorAppointmentCubit,
+            BookDoctorAppointmentState>(
+          listener: (context, state) {
+            switch (state) {
+              case BookDoctorAppointmentSuccessState _:
+                showSuccessMessage(context, Labels.bookingSuccess);
+                Future.delayed(const Duration(seconds: 1));
+                context.pushAndRemoveUntil(Routes.VISITA);
+                break;
 
-          case BookDoctorAppointmentStartLoadingState _:
-            showLoadingDialog(context);
-            break;
-          case BookDoctorAppointmentEndLoadingState _:
-            context.pop();
-            break;
+              case BookDoctorAppointmentStartLoadingState _:
+                showLoadingDialog(context);
+                break;
+              case BookDoctorAppointmentEndLoadingState _:
+                context.pop();
+                break;
 
-          case BookDoctorAppointmentErrorState _:
-            showErrorMessage(context, state.message);
-            break;
-          default:
-            break;
-        }
-      },
-      child: Scaffold(
-          backgroundColor: AppColors.BACKGROUND_COLOR,
-          appBar: const BackAppBar(
-            label: Labels.confirmBooking,
-          ),
-          body: BlocConsumer<BookDoctorAppointmentCubit,
-              BookDoctorAppointmentState>(
-            listener: (context, state) {},
-            builder: (context, state) {
-              return Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ListView(
-                  children: [
-                    const BookingDoctorProfileWidget(),
-                    const BookDoctorAppointmentPatientInfoCard(),
-                    const BookDoctorAppointmentTimeCard(),
-                    const BookDoctorAppointmentLocationInfoCard(),
-                    const BookDoctorAppointmentFeesCard(),
-                    const Sizer(),
-                    AppButton(
-                        height: 50,
-                        label: Labels.book,
-                        backColor: AppColors.PRIMARY_COLOR,
-                        onPressed: () => controller.regularBooking()),
-                    const Sizer(),
-                    AppButton(
-                        height: 50,
-                        label: "${Labels.premium} ${Labels.book}",
-                        onPressed: () => controller.premiumBook()),
-                    const Sizer(),
-                  ],
-                ),
-              );
-            },
-          )),
-    );
+              case BookDoctorAppointmentErrorState _:
+                showErrorMessage(context, state.message);
+                break;
+              default:
+                break;
+            }
+          },
+          builder: (context, state) {
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: ListView(
+                children: [
+                  const BookingDoctorProfileWidget(),
+                  const BookDoctorAppointmentPatientInfoCard(),
+                  const BookDoctorAppointmentTimeCard(),
+                  const BookDoctorAppointmentLocationInfoCard(),
+                  const BookDoctorAppointmentFeesCard(),
+                  const Sizer(),
+                  AppButton(
+                      height: 50,
+                      label: Labels.book,
+                      backColor: AppColors.PRIMARY_COLOR,
+                      onPressed: () => controller.regularBooking()),
+                  const Sizer(),
+                  AppButton(
+                      height: 50,
+                      label: "${Labels.premium} ${Labels.book}",
+                      onPressed: () {
+                        context.read<SubscribeCubit>().checkIfUserSubscribed(
+                              onSubscribed: () async {
+                                await controller.premiumBook();
+                              },
+                              subCategoryId: serviceLocator<HealthSharedData>()
+                                  .doctorSearchParams
+                                  .subCategory
+                                  .id,
+                            );
+                      }),
+                  const Sizer(),
+                ],
+              ),
+            );
+          },
+        ));
   }
 }

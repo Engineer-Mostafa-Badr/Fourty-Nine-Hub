@@ -113,7 +113,7 @@ class DI {
     AccountServiceLocator.execute(serviceLocator: serviceLocator);
     // social
     SocialServiceLocator.execute(serviceLocator: serviceLocator);
-    // subscribtions
-    SubscribtionServiceLocator.execute(serviceLocator: serviceLocator);
+    // subscriptions
+    SubscriptionServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

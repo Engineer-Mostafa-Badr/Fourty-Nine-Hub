@@ -29,13 +29,17 @@ class DoctorDetailsCubit extends Cubit<DoctorDetailsState> {
 
   Future<void> _getDoctorDetails(String doctorId) async {
     emit(DoctorDetailsStartLoading());
-    final response = await _getDoctorDetailsUseCase.call(doctorId);
+    final response = await _getDoctorDetailsUseCase.call(GetDoctorDetailsParams(
+      bookingType: _healthSharedData.doctorSearchParams.bookingType,
+      doctorId: doctorId,
+      subCategoryId: _healthSharedData.doctorSearchParams.subCategory.id,
+    ));
     response.fold(
-      (failure) => emit(DoctorDetailsError(Labels.cantLoadDoctorDetails)),
-      (data) {
-        doctor = data;
-        emit(DoctorDetailsLoaded());}
-    );
+        (failure) => emit(DoctorDetailsError(Labels.cantLoadDoctorDetails)),
+        (data) {
+      doctor = data;
+      emit(DoctorDetailsLoaded());
+    });
   }
 
   Future<void> _getReviews(String doctorId) async {

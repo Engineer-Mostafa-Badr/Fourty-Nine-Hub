@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class CreateDoctorInfoText extends StatelessWidget {
+class AppInfoText extends StatelessWidget {
   final String text;
-  const CreateDoctorInfoText({super.key, required this.text});
+  final TextStyle? textStyle;
+  final double? iconHeight;
+  const AppInfoText({super.key, required this.text, this.textStyle, this.iconHeight});
 
   @override
   Widget build(BuildContext context) {
@@ -12,12 +14,12 @@ class CreateDoctorInfoText extends StatelessWidget {
       children: [
         Image.asset(
           Assets.icon,
-          height: 30,
+          height:iconHeight?? 30,
         ),
         Expanded(
           child: Text(
             text,
-            style: Styles.mediumText(),
+            style: textStyle?? Styles.mediumText(),
           ),
         )
       ],
