@@ -28,7 +28,10 @@ class TinderView extends StatelessWidget {
         builder: (context, state) {
           return SharedScaffold(
             body: state.userData.isEmpty
-                ? const Center(child: CircularProgressIndicator())
+                ? Builder(builder: (context) {
+                    // context.read<TinderViewCubit>().fetchUserData();
+                    return const Center(child: CircularProgressIndicator());
+                  })
                 : Stack(
                     children: [
                       SingleChildScrollView(
@@ -116,15 +119,7 @@ class TinderView extends StatelessWidget {
                         end: 10,
                         child: FloatingActionButton(
                           backgroundColor: Colors.red,
-                          onPressed: () {
-                            state.userData.first.user.first.gender == 'male'
-                                ? context
-                                    .read<TinderViewCubit>()
-                                    .fetchUserData(gender: 'female')
-                                : context
-                                    .read<TinderViewCubit>()
-                                    .fetchUserData(gender: 'male');
-                          },
+                          onPressed: () {},
                           shape: const CircleBorder(),
                           child: const Icon(
                             Icons.add_photo_alternate_outlined,
@@ -139,6 +134,12 @@ class TinderView extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void switchDisplayGander(TinderViewState state, BuildContext context) {
+    state.userData.first.user.first.gender.toString() == 'female' //persons
+        ? context.read<TinderViewCubit>().fetchUserData(gender: 'female') //user
+        : context.read<TinderViewCubit>().fetchUserData(gender: 'male');
   }
 
   Widget _buildCard(
@@ -231,10 +232,7 @@ class TinderView extends StatelessWidget {
                 alignment: Alignment.topRight,
                 child: IconButton(
                   onPressed: () {
-                    // context.read<TinderViewCubit>().fetchUserData(
-                    //     gender: state.userData.first.user.first.gender == 'male'
-                    //         ? 'female'
-                    //         : 'male');
+                    switchDisplayGander(state, context);
                   },
                   iconSize: 30,
                   icon: Icon(
@@ -300,26 +298,31 @@ class TinderView extends StatelessWidget {
                   color: AppColors.SECONDARY_COLOR,
                   label: 'Nearby',
                 ),
-                Label(
-                  text:
-                      "${user.user.first.firstName} ${user.user.first.lastName}",
-                  style: Styles.headerText(color: Colors.black, fontSize: 26),
+                ListTile(
+                  onTap: null,
+                  selected: false,
+                  enabled: false,
+                  title: Label(
+                    text:
+                        "${user.user.first.firstName} ${user.user.first.lastName}",
+                    style: Styles.headerText(color: Colors.black, fontSize: 26),
+                  ),
+                  subtitle: Label(
+                    text: user.user.first.email,
+                    style: Styles.mediumText(color: Colors.black),
+                  ),
+                  // leading: Icon(
+                  //   user.user.first.gender == 'male'
+                  //       ? Icons.male
+                  //       : Icons.female,
+                  //   color: Colors.black,
+                  //   size: 28,
+                  // ),
                 ),
-                Row(
-                  children: [
-                    Icon(
-                      user.user.first.gender == 'male'
-                          ? Icons.male
-                          : Icons.female,
-                      color: Colors.black,
-                    ),
-                    const Sizer(),
-                    Label(
-                      text: user.user.first.birthday ?? '',
-                      style: Styles.mediumText(color: Colors.white),
-                    ),
-                  ],
-                )
+                // Label(
+                //   text: user.user.first.birthday ?? '',
+                //   style: Styles.smallText(color: Colors.white),
+                // )
               ],
             ),
           ),
