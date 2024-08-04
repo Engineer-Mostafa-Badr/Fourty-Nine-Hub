@@ -1,10 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 
-class CreateRoomResponseEntity extends Equatable {
+class ZegoResponseEntity extends Equatable {
   final String roomId;
   final bool status;
-  const CreateRoomResponseEntity({
+  const ZegoResponseEntity({
     required this.roomId,
     required this.status,
   });

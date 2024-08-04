@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/signal_service.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
@@ -15,8 +14,8 @@ import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
-class ZoomView extends StatelessWidget {
-  ZoomView({super.key});
+class MeetingView extends StatelessWidget {
+  MeetingView({super.key});
 
   // signalling server url
   final String websocketUrl = "http://localhost:5050";

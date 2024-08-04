@@ -14,7 +14,7 @@ class ClubVoiceRepositoryImpl extends ClubVoiceRepository {
   ClubVoiceRepositoryImpl({required this.clubVoiceDataSource});
 
   @override
-  Future<Either<Failure, CreateClubVoiceRoomResponseModel>> addRoom(AddRoomParams params) {
+  Future<Either<Failure, ZegoResponseModel>> addRoom(AddRoomParams params) {
     return clubVoiceDataSource.addRoom(params);
   }
 
@@ -39,7 +39,8 @@ class ClubVoiceRepositoryImpl extends ClubVoiceRepository {
   }
 
   @override
-  Future<Either<Failure, List<ClubVoiceRoomEntity>>> search(SearchParams params) {
+  Future<Either<Failure, List<ClubVoiceRoomEntity>>> search(
+      SearchParams params) {
     return clubVoiceDataSource.search(params);
   }
 }

@@ -203,4 +203,10 @@ class EndPoints {
   static String leaveVoiceRoom(String id) => '/clubvoice/leave/$id';
   static String searchVoiceRooms(String subject) =>
       '/clubvoice?search=$subject';
+
+
+  //meeting
+  static String createMeeting = '/room-id';
+  static String joinMeeting(String id) => '/room-id/join/$id';
+  static String endMeeting(String id) => '/room-id/finish/$id';
 }

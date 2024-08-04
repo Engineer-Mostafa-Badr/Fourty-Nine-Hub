@@ -13,8 +13,7 @@ import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/s
 import '../../../../../core/api/api_consumer.dart';
 
 abstract class ClubVoiceDataSource {
-  Future<Either<Failure, CreateClubVoiceRoomResponseModel>> addRoom(
-      AddRoomParams params);
+  Future<Either<Failure, ZegoResponseModel>> addRoom(AddRoomParams params);
   Future<Either<Failure, List<ClubVoiceRoomEntity>>> getRooms();
   Future<Either<Failure, void>> join(RoomMetaParams params);
   Future<Either<Failure, void>> leave(RoomMetaParams params);
@@ -30,12 +29,12 @@ class ClubVoiceDataSourceImpl extends ClubVoiceDataSource {
   ClubVoiceDataSourceImpl(this.apiConsumer);
 
   @override
-  Future<Either<Failure, CreateClubVoiceRoomResponseModel>> addRoom(
+  Future<Either<Failure, ZegoResponseModel>> addRoom(
       AddRoomParams params) async {
     final result = await apiConsumer.post(EndPoints.createClubVoiceRoom,
         data: params.toJson());
-    return result.fold((l) => Left(l),
-        (r) => Right(CreateClubVoiceRoomResponseModel.fromJson(r)));
+    return result.fold(
+        (l) => Left(l), (r) => Right(ZegoResponseModel.fromJson(r)));
   }
 
   @override

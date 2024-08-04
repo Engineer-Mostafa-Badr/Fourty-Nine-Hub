@@ -8,11 +8,11 @@ import '../../data/model/create_voice_room_model.dart';
 import '../usecases/add_club_voice_use_case.dart';
 
 abstract class ClubVoiceRepository {
-  Future<Either<Failure, CreateClubVoiceRoomResponseModel>> addRoom(
-      AddRoomParams params);
+  Future<Either<Failure, ZegoResponseModel>> addRoom(AddRoomParams params);
   Future<Either<Failure, List<ClubVoiceRoomEntity>>> getRooms();
   Future<Either<Failure, void>> join(RoomMetaParams params);
   Future<Either<Failure, void>> leave(RoomMetaParams params);
   Future<Either<Failure, void>> end(RoomMetaParams params);
-  Future<Either<Failure, List<ClubVoiceRoomEntity>>> search(SearchParams params);
+  Future<Either<Failure, List<ClubVoiceRoomEntity>>> search(
+      SearchParams params);
 }

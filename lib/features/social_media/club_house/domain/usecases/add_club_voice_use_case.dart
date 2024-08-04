@@ -8,14 +8,13 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../data/model/create_voice_room_model.dart';
 import '../repositories/club_voice_repository.dart';
 
-class AddClubVoiceUseCase extends UseCase<void, AddRoomParams> {
+class AddClubVoiceUseCase extends UseCase<ZegoResponseModel, AddRoomParams> {
   final ClubVoiceRepository clubVoiceRepository;
 
   AddClubVoiceUseCase(this.clubVoiceRepository);
 
   @override
-  Future<Either<Failure, CreateClubVoiceRoomResponseModel>> call(
-      AddRoomParams params) {
+  Future<Either<Failure, ZegoResponseModel>> call(AddRoomParams params) {
     return clubVoiceRepository.addRoom(params);
   }
 }
