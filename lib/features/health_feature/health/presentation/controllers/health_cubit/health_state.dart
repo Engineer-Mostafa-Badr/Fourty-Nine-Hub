@@ -8,7 +8,7 @@ class HealthState {
   final List<BookedAppointmentEntity>? myBookings;
   final List<HealthSubcategoryEntity>? subCategories;
   final List<HealthSubcategoryEntity>? medicalServices;
-  final isDoctor = false;
+  final isDoctor = true;
   const HealthState(
       {this.status = HealthStates.loading,
       this.failure,

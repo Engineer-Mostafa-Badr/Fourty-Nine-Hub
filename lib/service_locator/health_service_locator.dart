@@ -7,10 +7,6 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/repos
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/create_doctor.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_cities.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/datasources/doctor_dashboard_remote_datasource.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/repositories/doctor_dashboard_repo_impl.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/repositories/doctor_dashboard_repo.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_bookings_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/data/datasources/doctor_detail_remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/data/repositories/doctor_details_repo_impl.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/repositories/doctor_details_repo.dart';
@@ -46,7 +42,6 @@ import 'package:get_it/get_it.dart';
 import '../features/health_feature/booking/data/repositories/book_doctor_appointment_repo_impl.dart';
 import '../features/health_feature/booking/domain/repositories/book_doctor_appointment_repo.dart';
 import '../features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
-import '../features/health_feature/doctor_dashboard/presentation/cubit/doctor_dashboard_cubit.dart';
 
 class HealthServiceLocator {
   static void execute({required GetIt serviceLocator}) async {
@@ -67,11 +62,6 @@ class HealthServiceLocator {
       ),
     );
 
-    serviceLocator.registerLazySingleton<DoctorDashboardRemoteDataSource>(
-      () => DoctorDashboardRemoteDataSourceImpl(
-        serviceLocator(),
-      ),
-    );
     serviceLocator.registerLazySingleton<CreateDoctorRemoteDataSource>(
         () => CreateDoctorRemoteDataSourceImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<HealthEmergencyRemoteDataSource>(
@@ -95,11 +85,6 @@ class HealthServiceLocator {
       ),
     );
 
-    serviceLocator.registerLazySingleton<DoctorDashboardRepo>(
-      () => DoctorDashboardRepoImpl(
-        serviceLocator(),
-      ),
-    );
     serviceLocator.registerLazySingleton<CreateDoctorRepo>(
         () => CreateDoctorRepoImpl(serviceLocator()));
 
@@ -126,11 +111,6 @@ class HealthServiceLocator {
       ),
     );
 
-    serviceLocator.registerLazySingleton<GetDoctorBookingsUseCase>(
-      () => GetDoctorBookingsUseCase(
-        serviceLocator(),
-      ),
-    );
     serviceLocator.registerLazySingleton<GetCitiesUseCase>(
         () => GetCitiesUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<CreateDoctorUseCase>(
@@ -203,9 +183,5 @@ class HealthServiceLocator {
               serviceLocator(),
               serviceLocator(),
             ));
-    serviceLocator
-        .registerFactory<DoctorDashboardCubit>(() => DoctorDashboardCubit(
-              serviceLocator(),
-            )..loadData());
   }
 }

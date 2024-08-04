@@ -39,7 +39,6 @@ abstract class Routes {
   static const VISITADOCTORLIST = '/Visita/VisitaDoctorsList';
 
   static const VISITADOCTORDETAILS = '/Visita/DoctorDetails';
-
   static const VISITABOOKING = '/Visita/VisitaBooking';
   static const DOCTORDASHBOARD = '/Visita/DoctorDashboard';
 

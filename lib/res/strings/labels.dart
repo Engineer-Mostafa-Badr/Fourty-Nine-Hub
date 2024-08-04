@@ -121,6 +121,15 @@ abstract class Labels {
   static const onlineSession = 'Online Session';
   static const mainWallet = 'Main Wallet';
   static const balance = 'Balance';
-
+  static const tillEnd = 'Days till end of';
   static const subscribedSuccessfully = 'Subscribed Successfully';
+  static const deadline = 'Deadline';
+  static const practiceCertification = 'Practice Certification';
+  static const id = 'ID';
+  static const subscription = 'Subscription';
+  static const todayAppointments = 'Today Appointments';
+  static const unhandledAppointments = 'Unhandled Appointments';
+  static const accept = 'Accept';
+  static const reject = 'Reject';
+  static const editProfile = 'Edit Profile';
 }
