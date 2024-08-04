@@ -8,6 +8,7 @@ class ChatItemModel {
   bool? archived;
   bool? locked;
   bool? typing;
+  bool? online;
   int? lastSeenCount;
   int? unreadCount;
   String? userId;
@@ -21,7 +22,7 @@ class ChatItemModel {
     this.name,
     this.locked,
     this.avatar,
-    this.typing,
+    this.online,
     this.lastSeenCount,
     this.unreadCount,
     this.userId,
@@ -40,5 +41,6 @@ class ChatItemModel {
     unreadCount = json['unreadCount'];
     userId = json['userId'];
     typing = false;
+    online = false;
   }
 }

@@ -142,7 +142,14 @@ class ChatCard extends StatelessWidget {
                 chatItemModel?.unreadCount == 0
                     ? const SizedBox()
                     : CircleAvatar(
-                        child: Label(text: '${chatItemModel?.unreadCount}'),
+                        maxRadius: 15,
+                        backgroundColor: AppColors.PRIMARY_COLOR,
+                        child: Label(
+                            text: '${chatItemModel?.unreadCount}',
+                            style: Styles.mediumText(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16)),
                       ),
 
                 const SizedBox(

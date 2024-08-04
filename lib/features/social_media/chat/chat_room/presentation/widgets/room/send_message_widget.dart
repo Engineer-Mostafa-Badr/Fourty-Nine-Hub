@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
@@ -11,7 +10,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entiti
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/room/replay_message_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:social_media_recorder/audio_encoder_type.dart';
 import 'package:social_media_recorder/screen/social_media_recorder.dart';
 import 'package:flutter/foundation.dart' as foundation;
@@ -21,10 +19,12 @@ class SendMessageWidget extends StatefulWidget {
   MessageEntity? replayMessage;
   final VoidCallback? onCancelReplay;
   FocusNode focusNode;
+  String anotherUserName;
 
   SendMessageWidget(
       {super.key,
       required this.focusNode,
+      required this.anotherUserName,
       this.replayMessage,
       this.onCancelReplay});
 
@@ -43,7 +43,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   bool _emojiShowing = false;
   late ChatRoomCubit chatRoomCubit;
   static final inputTopRadius = const Radius.circular(12);
-  static final inputBottomRadius = const Radius.circular(24);
+  static final inputBottomRadius = const Radius.circular(12);
 
   @override
   void initState() {
@@ -76,8 +76,14 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
               Container(
                 height: 70,
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5)),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topRight: isReplaying ? Radius.zero : inputTopRadius,
+                    topLeft: isReplaying ? Radius.zero : inputTopRadius,
+                    bottomLeft: inputBottomRadius,
+                    bottomRight: inputBottomRadius,
+                  ),
+                ),
                 child: TextField(
                   maxLines: 2,
                   controller: _messageTextController,
@@ -117,13 +123,27 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                     fillColor: Colors.white,
                     focusColor: Colors.white,
                     border: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
-                        borderRadius: BorderRadius.circular(8)),
+                      borderSide: BorderSide.none,
+                      // const BorderSide(color: AppColors.LIGHT_GRAY_COLOR,
+                      // ),
+                      borderRadius: BorderRadius.only(
+                        topRight: isReplaying ? Radius.zero : inputTopRadius,
+                        topLeft: isReplaying ? Radius.zero : inputTopRadius,
+                        bottomLeft: inputBottomRadius,
+                        bottomRight: inputBottomRadius,
+                      ),
+                    ),
                     focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
-                        borderRadius: BorderRadius.circular(8)),
+                      borderSide: const BorderSide(
+                        color: AppColors.LIGHT_GRAY_COLOR,
+                      ),
+                      borderRadius: BorderRadius.only(
+                        topRight: isReplaying ? Radius.zero : inputTopRadius,
+                        topLeft: isReplaying ? Radius.zero : inputTopRadius,
+                        bottomLeft: inputBottomRadius,
+                        bottomRight: inputBottomRadius,
+                      ),
+                    ),
                     suffixIcon: _messageTextController!.text.trim().length != 0
                         ? const SizedBox()
                         : SizedBox(
@@ -159,7 +179,9 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                   padding: 8,
                   icon: Icons.send_sharp,
                   onPressed: () {
-                    chatCubit.sendMessage(_messageTextController.text.trim());
+                    chatCubit.sendMessage(
+                        message: _messageTextController.text.trim(),
+                        replyMessageId: widget.replayMessage?.sId);
                     setState(() {
                       _messageTextController.text = '';
                     });
@@ -186,6 +208,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
         child: ReplayMessageWidget(
           messageEntity: widget.replayMessage!,
           onCancelReplay: widget.onCancelReplay,
+          anotherUserName: widget.anotherUserName,
         ),
       );
 }

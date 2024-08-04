@@ -4,22 +4,27 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entiti
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class ReplayMessageWidget extends StatelessWidget {
-  final MessageEntity messageEntity;
+  final MessageEntity? messageEntity;
+  final ReplyMessage? replyMessage;
   final VoidCallback? onCancelReplay;
+  final String? anotherUserName;
 
   const ReplayMessageWidget(
-      {required this.messageEntity, this.onCancelReplay, super.key});
+      {this.messageEntity,this.replyMessage,required this.anotherUserName, this.onCancelReplay, super.key});
 
   @override
-  Widget build(BuildContext context) => Row(
-        children: [
-          Container(
-            width: 4,
-            color: AppColors.PRIMARY_COLOR,
-          ),
-          Expanded(child: buildReplayMessage()),
-        ],
-      );
+  Widget build(BuildContext context) => IntrinsicHeight(
+    child: Row(
+          children: [
+            Container(
+              width: 4,
+              color: AppColors.PRIMARY_COLOR,
+            ),
+            const SizedBox(width: 8,),
+            Expanded(child: buildReplayMessage()),
+          ],
+        ),
+  );
 
   Widget buildReplayMessage() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,7 +33,7 @@ class ReplayMessageWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Label(
-                text: messageEntity.chatId ?? '',
+                text: anotherUserName ?? '',
               ),
               if (onCancelReplay != null)
                 GestureDetector(
@@ -44,7 +49,7 @@ class ReplayMessageWidget extends StatelessWidget {
             height: 8,
           ),
           Label(
-            text: messageEntity.text ?? '',
+            text: messageEntity?.text ?? replyMessage?.text ?? '',
           ),
         ],
       );

@@ -45,6 +45,9 @@ class _ChatRoomState extends State<ChatRoom> {
               focusNode: focusNode,
               replayMessage: _replayMessage,
               onCancelReplay: cancelReplay,
+              anotherUserName:
+                  chatRoomCubit.chatMessagesModel.chat?.contact?.name ??
+                      'No name',
             ),
           ),
           body: BlocBuilder<ChatRoomCubit, ChatRoomState>(
@@ -63,6 +66,8 @@ class _ChatRoomState extends State<ChatRoom> {
                       },
                       child: MessageCard(
                         messageEntity: state.chatMessages![index],
+                        anotherUserName:
+                            state.chatData?.chat?.contact?.name ?? 'No name',
                       ),
                     ),
                     separatorBuilder: (context, index) => const Sizer(

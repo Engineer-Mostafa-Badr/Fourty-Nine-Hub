@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/typing_and_online_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/socket_model.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -14,32 +16,35 @@ abstract class SocketServiceContract {
 
   getRoomUsersJoined();
 
-  sendMessage({required String message, required String chatId});
-
+  sendMessage({
+    required String message,
+    required String chatId,
+    String? replyMessageId,
+  });
 
   sendUserStatus(List<UserStatusParams> params);
+
   listenToUserStatus();
 
   typingMessage({required String chatId});
 
   // listen to new message
-  Stream<SocketMessageModel> get socketMessageStream;
+  Stream<MessageModel> get socketMessageStream;
 
-  Stream<List<String>?> get socketChatTypingStream;
+  Stream<List<TypingAndOnlineModel>?> get socketChatTypingStream;
 
   disposeSocket();
-
 }
 
 class SocketServiceImplementation extends SocketServiceContract {
   @override
   late Socket socket;
 
-  final BehaviorSubject<SocketMessageModel> _socketMessageStream =
-      BehaviorSubject<SocketMessageModel>();
+  final BehaviorSubject<MessageModel> _socketMessageStream =
+      BehaviorSubject<MessageModel>();
 
-  final BehaviorSubject<List<String>> _socketChatTyping =
-      BehaviorSubject<List<String>>();
+  final BehaviorSubject<List<TypingAndOnlineModel>> _socketChatTyping =
+      BehaviorSubject<List<TypingAndOnlineModel>>();
 
   @override
   initSocketConnection(userToken) async {
@@ -63,57 +68,24 @@ class SocketServiceImplementation extends SocketServiceContract {
         // to receive new messages
         socket.on('user:message', (data) {
           debugPrint("user:message ${data}");
-          final dataList = data as List;
 
-          SocketMessageModel socketMessageModel =
-              SocketMessageModel.fromJson(dataList[0]);
+          MessageModel messageModel = MessageModel.fromJson(data);
 
-          try {
-            _socketMessageStream.add(socketMessageModel);
-            debugPrint(
-                "socketMessageModel ${socketMessageModel.messageItem?.text}");
-          } catch (e) {
-            debugPrint("socketMessageModelerrrrrrrroooooe ${e}");
-          }
-          debugPrint(
-              "socketMessageModel ${socketMessageModel.messageItem?.text}");
+          _socketMessageStream.add(messageModel);
+          debugPrint("socketMessageModel ${messageModel.text}");
         });
 
         // listen to messages that sent from current user
         socket.on('messageSent', (data) {
           debugPrint("messageSent ${data}");
-          final dataList = data as List;
 
-          SocketMessageModel socketMessageModel =
-          SocketMessageModel.fromJson(dataList[0]);
+          MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
 
-          try {
-            _socketMessageStream.add(socketMessageModel);
-            debugPrint(
-                "socketMessageModel ${socketMessageModel.messageItem?.text}");
-          } catch (e) {
-            debugPrint("socketMessageModelerrrrrrrroooooe ${e}");
-          }
-          debugPrint(
-              "socketMessageModel ${socketMessageModel.messageItem?.text}");
+          _socketMessageStream.add(messageModel);
+
+          debugPrint("socketMessageModel ${messageModel.text}");
         });
-
-
-
-
-
-        // socket.on('messageTyping', (data) {
-        //   // debugPrint("data ${data}");
-        //   var dataList = json.decode(data);
-        //   debugPrint("messageTyping ${dataList}");
-        //   List<String> chatIdsTyping = dataList as List<String>;
-        //   debugPrint("chatIdsTyping ${chatIdsTyping}");
-        //   _socketChatTyping.add(chatIdsTyping);
-        // });
       });
-
-
-
 
       socket.on('error', (data) {
         debugPrint("error ${data}");
@@ -128,7 +100,11 @@ class SocketServiceImplementation extends SocketServiceContract {
   }
 
   @override
-  sendMessage({required String message, required String chatId}) {
+  sendMessage({
+    required String message,
+    required String chatId,
+    String? replyMessageId,
+  }) {
     if (message.isEmpty) return;
 
     var messageMap = json.encode({
@@ -136,16 +112,14 @@ class SocketServiceImplementation extends SocketServiceContract {
       "type": 1,
       "mediaIds": [],
       "text": message,
-      "groupId": null
+      "groupId": null,
+      if (replyMessageId != null) "replyMessageId": replyMessageId
     });
     socket.emit('Message:Send', messageMap);
   }
 
-
-
   @override
-  Stream<SocketMessageModel> get socketMessageStream =>
-      _socketMessageStream.stream;
+  Stream<MessageModel> get socketMessageStream => _socketMessageStream.stream;
 
   @override
   joinRoom(String chatId) {
@@ -170,18 +144,18 @@ class SocketServiceImplementation extends SocketServiceContract {
   }
 
   @override
-  Stream<List<String>> get socketChatTypingStream => _socketChatTyping.stream;
+  Stream<List<TypingAndOnlineModel>> get socketChatTypingStream =>
+      _socketChatTyping.stream;
 
   @override
   getRoomUsersJoined() {
     var messageMap = json.encode({
-        "privacy": "normal",
-        "categoryId": "668e7dc4e8cfec5bcc752afc",
-        "archived": false,
-        "isLocked": false,
-        "password": 123,
-        "isUnread": false
-
+      "privacy": "normal",
+      "categoryId": "668e7dc4e8cfec5bcc752afc",
+      "archived": false,
+      "isLocked": false,
+      "password": 123,
+      "isUnread": false
     });
 
     socket.emit('Chat:getRooms', messageMap);
@@ -195,42 +169,37 @@ class SocketServiceImplementation extends SocketServiceContract {
 
   @override
   sendUserStatus(List<UserStatusParams> params) {
-    Map<String ,dynamic> paramaters = {};
-    List<Map<String ,dynamic>> ids = [];
+    Map<String, dynamic> paramaters = {};
+    List<Map<String, dynamic>> ids = [];
 
-    for(int i = 0; i < params.length; i++){
-      paramaters['_id'] =  params[i].chatId;
-      paramaters['userId'] =  params[i].userId;
+    for (int i = 0; i < params.length; i++) {
+      paramaters['_id'] = params[i].chatId;
+      paramaters['userId'] = params[i].userId;
       ids.add(paramaters);
     }
 
-
-    print("paramaters ${ids}");
-
-
-
     var messageMap = json.encode(ids);
 
-    socket.emit('Chat:getRooms', messageMap);
+    socket.emit('Chat:usersStatus', messageMap);
   }
 
   @override
   listenToUserStatus() {
     socket.on('usersStatus', (data) {
+      List<TypingAndOnlineModel> chatIdsTyping = [];
       debugPrint("usersStatus ${data}");
-      var dataList = json.decode(data);
-      debugPrint("usersStatus ${dataList}");
-      List<String> chatIdsTyping = dataList as List<String>;
-      debugPrint("chatIdsTyping ${chatIdsTyping}");
+
+      chatIdsTyping.addAll(List<TypingAndOnlineModel>.from(
+          json.decode(data).map((x) => TypingAndOnlineModel.fromJson(x))));
+
       _socketChatTyping.add(chatIdsTyping);
     });
-
   }
 }
-
 
 class UserStatusParams {
   String chatId;
   String userId;
-  UserStatusParams({required this.chatId,required this.userId});
+
+  UserStatusParams({required this.chatId, required this.userId});
 }

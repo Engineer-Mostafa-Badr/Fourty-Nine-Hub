@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/typing_and_online_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatMuteState_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatToArchiveNormal_usecase.dart';
@@ -99,7 +102,8 @@ class ChatsCubit extends Cubit<ChatsState> {
         }
 
         await Future.delayed(Duration(seconds: 1));
-        _socketService.sendUserStatus(userStatusParams);
+        sendUserStatus(userStatusParams);
+
         _socketService.listenToUserStatus();
 
         return emit
@@ -110,7 +114,8 @@ class ChatsCubit extends Cubit<ChatsState> {
 
   listenToNewMessages() {
     _socketService.socketMessageStream.listen((event) {
-      _chats[event.chatRoomId]?.lastMessageText = event.messageItem?.text;
+      debugPrint("Last message chat cubit ${event.text}");
+      _chats[event.chatId]?.lastMessageText = event.text;
       emit.call(state.copyWith(
           chats: _chats.values.toList(), status: ChatsStates.initState));
     });
@@ -218,31 +223,25 @@ class ChatsCubit extends Cubit<ChatsState> {
     });
   }
 
-  // listenToMessageTyping() {
-  //   _socketService.socketChatTypingStream.listen((event) {
-  //     print("Event typing $event");
-  //     emit.call(state.copyWith(
-  //         chats: _chats.values.toList(), status: ChatsStates.typing));
-  //   });
-  // }
-
   listenToMessageTyping() {
     _socketService.socketChatTypingStream.listen((event) {
-      List<String> chatsIds = event ?? [];
-
-      // set all chats typing false then update only new chats with typing
-      for (var item in _chats.keys) {
-        _chats[item]!.typing = false;
-      }
+      List<TypingAndOnlineModel> chatsIds = event ?? [];
 
       for (var key in chatsIds) {
-        if (_chats.containsKey(key)) {
-          _chats[key]!.typing = true;
-        }
+        // print("event22 ${key.chatId}");
+        _chats[key.chatId]!.typing = key.typing;
+        _chats[key.chatId]!.online = key.online;
       }
 
       emit.call(state.copyWith(
           chats: _chats.values.toList(), status: ChatsStates.typing));
+    });
+  }
+
+  sendUserStatus(List<UserStatusParams> params) {
+    Timer? timer;
+    timer = Timer.periodic(const Duration(seconds: 5), (Timer t) {
+      _socketService.sendUserStatus(params);
     });
   }
 

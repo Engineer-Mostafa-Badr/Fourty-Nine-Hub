@@ -1,16 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_user_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/chat_messgaes_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/typing_and_online_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/getChatMessages_usecase.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 
 part 'chat_view_state.dart';
 
@@ -67,10 +65,10 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     listenToNewMessages();
   }
 
-  sendMessage(String message) {
+  sendMessage({required String message, String? replyMessageId}) {
     if (chatId != null) {
-      _socketService.sendMessage(message: message, chatId: chatId!);
-      chatMessages.add(MessageModel(text: message, byMe: true));
+      _socketService.sendMessage(
+          message: message, chatId: chatId!, replyMessageId: replyMessageId);
 
       emit.call(state.copyWith(
           chatData: chatMessagesModel,
@@ -99,8 +97,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   listenToNewMessages() {
     _socketService.socketMessageStream.listen((event) {
-      chatMessages
-          .add(MessageModel(text: event.messageItem?.text, byMe: false));
+      chatMessages.add(event);
       emit.call(state.copyWith(
           chatData: chatMessagesModel,
           chatMessages: chatMessages.reversed.toList(),
@@ -110,13 +107,10 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   listenToMessageTyping() {
     _socketService.socketChatTypingStream.listen((event) {
-
       debugPrint("chatListen ${event}");
 
-      List<String> chatsIds = event ?? [];
-      chatsIds.map((e) {
-
-      }).toList();
+      List<TypingAndOnlineModel> chatsIds = event ?? [];
+      chatsIds.map((e) {}).toList();
 
       emit.call(state.copyWith(
           chatData: chatMessagesModel,
