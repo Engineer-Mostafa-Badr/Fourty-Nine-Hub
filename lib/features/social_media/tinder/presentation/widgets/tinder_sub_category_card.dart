@@ -4,13 +4,14 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_subcategory_model.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class HealthMedicalServiceCard extends StatelessWidget {
-  final SubCategoryEntity subCategory;
-  const HealthMedicalServiceCard({super.key, required this.subCategory});
+class TinderSubCategoryCard extends StatelessWidget {
+  final SubCategoryData subCategory;
+  const TinderSubCategoryCard({super.key, required this.subCategory});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class HealthMedicalServiceCard extends StatelessWidget {
                     child: SquareImage(
                       fit: BoxFit.fitWidth,
                       radius: 10,
-                      url: subCategory.image,
+                      url: subCategory.picture,
                     ),
                   ),
                   Positioned(
@@ -61,8 +62,8 @@ class HealthMedicalServiceCard extends StatelessWidget {
                 Column(
                   children: [
                     Label(
-                      text: subCategory.name,
-                      style: Styles.mediumText(fontWeight: FontWeight.bold),
+                      text: subCategory.nameEn ?? '',
+                      style: Styles.headerText(fontWeight: FontWeight.bold),
                     ),
                     Label(
                       text: '${9355.toShortScale} ads',
@@ -83,6 +84,5 @@ class HealthMedicalServiceCard extends StatelessWidget {
         ),
       ),
     );
- 
   }
 }

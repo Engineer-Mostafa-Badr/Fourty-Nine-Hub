@@ -1,11 +1,11 @@
 class UserData {
   String id;
   String userId;
-  List<String> pictures;
+  List<Picture> pictures;
   List<Like> likes;
   List<Friend> friends;
   List<Gift> gifts;
-  List<User> user;
+  List<User> users;
   String createdAt;
   String updatedAt;
 
@@ -16,7 +16,7 @@ class UserData {
     required this.likes,
     required this.friends,
     required this.gifts,
-    required this.user,
+    required this.users,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -25,17 +25,32 @@ class UserData {
     return UserData(
       id: json['_id'],
       userId: json['userId'],
-      pictures: List<String>.from(json['pictures']),
+      pictures: (json['pictures'] as List).map((i) => Picture.fromJson(i)).toList(),
       likes: (json['likes'] as List).map((i) => Like.fromJson(i)).toList(),
       friends: (json['friends'] as List).map((i) => Friend.fromJson(i)).toList(),
       gifts: (json['gifts'] as List).map((i) => Gift.fromJson(i)).toList(),
-      user: (json['user'] as List).map((i) => User.fromJson(i)).toList(),
-      createdAt: (json['createdAt']??''),
-      updatedAt: (json['updatedAt']??''),
+      users: (json['user'] as List).map((i) => User.fromJson(i)).toList(),
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
     );
   }
 }
+class Picture {
+  String id;
+  String mediaKey;
 
+  Picture({
+    required this.id,
+    required this.mediaKey,
+  });
+
+  factory Picture.fromJson(Map<String, dynamic> json) {
+    return Picture(
+      id: json['_id'],
+      mediaKey: json['mediaKey'],
+    );
+  }
+}
 class Like {
   String id;
   String socketId;
@@ -69,6 +84,8 @@ class Like {
   String username;
   String createdAt;
   String updatedAt;
+  String? chatPassword;
+  int? phone;
 
   Like({
     required this.id,
@@ -103,6 +120,8 @@ class Like {
     required this.username,
     required this.createdAt,
     required this.updatedAt,
+    this.chatPassword,
+    this.phone,
   });
 
   factory Like.fromJson(Map<String, dynamic> json) {
@@ -137,26 +156,13 @@ class Like {
       installmentsUsers: List<dynamic>.from(json['installments_users']),
       twitterDocumentation: json['twitter_documentation'],
       username: json['username'],
-      createdAt: (json['createdAt']),
-      updatedAt: (json['updatedAt']),
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+      chatPassword: json['chatPassword'],
+      phone: json['phone'],
     );
   }
 }
-
-class LocationData {
-  String type;
-  List<int> coordinates;
-
-  LocationData({required this.type, required this.coordinates});
-
-  factory LocationData.fromJson(Map<String, dynamic> json) {
-    return LocationData(
-      type: json['type'],
-      coordinates: List<int>.from(json['coordinates']),
-    );
-  }
-}
-
 class Friend {
   String id;
   String socketId;
@@ -190,6 +196,8 @@ class Friend {
   String username;
   String createdAt;
   String updatedAt;
+  String? chatPassword;
+  int? phone;
 
   Friend({
     required this.id,
@@ -224,6 +232,8 @@ class Friend {
     required this.username,
     required this.createdAt,
     required this.updatedAt,
+    this.chatPassword,
+    this.phone,
   });
 
   factory Friend.fromJson(Map<String, dynamic> json) {
@@ -258,12 +268,13 @@ class Friend {
       installmentsUsers: List<dynamic>.from(json['installments_users']),
       twitterDocumentation: json['twitter_documentation'],
       username: json['username'],
-      createdAt: (json['createdAt'])??'',
-      updatedAt: (json['updatedAt'])??'',
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+      chatPassword: json['chatPassword'],
+      phone: json['phone'],
     );
   }
 }
-
 class Gift {
   String id;
   String nameAr;
@@ -286,21 +297,6 @@ class Gift {
     );
   }
 }
-
-class Picture {
-  int index;
-  String url;
-
-  Picture({required this.index, required this.url});
-
-  factory Picture.fromJson(Map<String, dynamic> json) {
-    return Picture(
-      index: json['index'],
-      url: json['url'],
-    );
-  }
-}
-
 class User {
   String id;
   String socketId;
@@ -335,6 +331,7 @@ class User {
   String createdAt;
   String updatedAt;
   String? chatPassword;
+  int? phone;
 
   User({
     required this.id,
@@ -370,6 +367,7 @@ class User {
     required this.createdAt,
     required this.updatedAt,
     this.chatPassword,
+    this.phone,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -404,9 +402,26 @@ class User {
       installmentsUsers: List<dynamic>.from(json['installments_users']),
       twitterDocumentation: json['twitter_documentation'],
       username: json['username'],
-      createdAt: (json['createdAt'])??'',
-      updatedAt: (json['updatedAt'])??'',
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
       chatPassword: json['chatPassword'],
+      phone: json['phone'],
+    );
+  }
+}
+class LocationData {
+  String type;
+  List<int> coordinates;
+
+  LocationData({
+    required this.type,
+    required this.coordinates,
+  });
+
+  factory LocationData.fromJson(Map<String, dynamic> json) {
+    return LocationData(
+      type: json['type'],
+      coordinates: List<int>.from(json['coordinates']),
     );
   }
 }
