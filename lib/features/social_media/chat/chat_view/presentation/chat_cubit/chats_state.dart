@@ -15,7 +15,7 @@ extension ChatMessagesStateX on ChatsState {
 class ChatsState {
   final ChatsStates status;
   final Failure? failure;
-  final List<ChatItemModel>? chats;
+  final List<ChatModel>? chats;
 
   const ChatsState({
     this.status = ChatsStates.loading,
@@ -26,7 +26,7 @@ class ChatsState {
   ChatsState copyWith({
     ChatsStates? status,
     Failure? failure,
-    List<ChatItemModel>? chats,
+    List<ChatModel>? chats,
   }) {
     return ChatsState(
       status: status ?? this.status,

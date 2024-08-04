@@ -12,7 +12,7 @@ class ChatsRepositoryImplementation extends ChatsRepository {
   ChatsRepositoryImplementation(this._chatsRemoteDataSource);
 
   @override
-  Future<Either<Failure, List<ChatItemModel>>> getChats(
+  Future<Either<Failure, ChatItemModel>> getChats(
       ChatsRequestParams chatsRequestParams) {
     return _chatsRemoteDataSource.getChats(
       privacy: chatsRequestParams.privacyId!,

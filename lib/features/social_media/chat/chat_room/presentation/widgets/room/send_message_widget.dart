@@ -180,19 +180,27 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                   icon: Icons.send_sharp,
                   onPressed: () {
                     chatCubit.sendMessage(
-                        message: _messageTextController.text.trim(),
-                        replyMessageId: widget.replayMessage?.sId);
+                      message: _messageTextController.text.trim(),
+                      replyMessageId: widget.replayMessage?.sId,
+                    );
                     setState(() {
                       _messageTextController.text = '';
                     });
+
+                    if (widget.onCancelReplay != null) {
+                      widget.onCancelReplay!();
+                    }
                   },
                 )
-              : SocialMediaRecorder(
-                  recordIconBackGroundColor: AppColors.PRIMARY_COLOR,
-                  startRecording: () {},
-                  stopRecording: (_time) {},
-                  sendRequestFunction: (soundFile, _time) {},
-                  encode: AudioEncoderType.AAC,
+              : Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: SocialMediaRecorder(
+                    recordIconBackGroundColor: AppColors.PRIMARY_COLOR,
+                    startRecording: () {},
+                    stopRecording: (_time) {},
+                    sendRequestFunction: (soundFile, _time) {},
+                    encode: AudioEncoderType.AAC,
+                  ),
                 ),
         ],
       ),

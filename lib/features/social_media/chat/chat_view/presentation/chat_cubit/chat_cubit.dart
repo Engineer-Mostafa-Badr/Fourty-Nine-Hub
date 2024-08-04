@@ -34,7 +34,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   late int selectedTabIndex;
   late String lockChatPassword;
   final messageTextController = TextEditingController();
-  final Map<String, ChatItemModel> _chats = {};
+  final Map<String, ChatModel> _chats = {};
 
   ChatsCubit(
     this._getTokensUseCase,
@@ -86,7 +86,7 @@ class ChatsCubit extends Cubit<ChatsState> {
           (failure) => emit.call(
               state.copyWith(failure: failure, status: ChatsStates.error)),
           (data) async {
-        data
+        data.chats!
             .map((e) => _chats.update(e.sId!, (value) => e, ifAbsent: () => e))
             .toList();
 
@@ -107,7 +107,7 @@ class ChatsCubit extends Cubit<ChatsState> {
         _socketService.listenToUserStatus();
 
         return emit
-            .call(state.copyWith(chats: data, status: ChatsStates.initState));
+            .call(state.copyWith(chats: data.chats, status: ChatsStates.initState));
       });
     }
   }
@@ -228,7 +228,6 @@ class ChatsCubit extends Cubit<ChatsState> {
       List<TypingAndOnlineModel> chatsIds = event ?? [];
 
       for (var key in chatsIds) {
-        // print("event22 ${key.chatId}");
         _chats[key.chatId]!.typing = key.typing;
         _chats[key.chatId]!.online = key.online;
       }
@@ -240,7 +239,7 @@ class ChatsCubit extends Cubit<ChatsState> {
 
   sendUserStatus(List<UserStatusParams> params) {
     Timer? timer;
-    timer = Timer.periodic(const Duration(seconds: 5), (Timer t) {
+    timer = Timer.periodic(const Duration(seconds: 7), (Timer t) {
       _socketService.sendUserStatus(params);
     });
   }

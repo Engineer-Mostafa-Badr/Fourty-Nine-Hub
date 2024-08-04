@@ -9,7 +9,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class MoreIconBottomSheet extends StatefulWidget {
-  final ChatItemModel chatItemModel;
+  final ChatModel chatItemModel;
   final ChatsCubit chatsCubit;
 
   const MoreIconBottomSheet(

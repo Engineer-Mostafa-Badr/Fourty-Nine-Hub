@@ -17,7 +17,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Container(
       height: kToolbarHeight,
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       decoration: const BoxDecoration(
         color: AppColors.PRIMARY_COLOR,
       ),
@@ -47,20 +47,27 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         state.chatData?.chat?.contact?.name == null
                             ? const SizedBox()
                             : Row(
-                              children: [
-                                Expanded(
-                                  child: Label(
-                                      text: '${state.chatData?.chat?.contact?.name}',
+                                children: [
+                                  Expanded(
+                                    child: Label(
+                                      text:
+                                          '${state.chatData?.chat?.contact?.name}',
                                       style: Styles.headerText(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                ),
-
-                                Icon(Icons.edit)
-                              ],
-                            ),
+                                  ),
+                                  const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    child: SizedBox(
+                                      width: 5,
+                                      height: 5,
+                                    ),
+                                  )
+                                ],
+                              ),
                         // Row(
                         //   children: [
                         //     const CircleAvatar(
@@ -81,6 +88,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     );
             }),
           ),
+          // video call
           IconAppButton(
             icon: Icons.videocam,
             size: 24,
@@ -90,12 +98,14 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
           const Sizer(
             width: 15,
           ),
+          // call
           IconAppButton(
             icon: Icons.call,
             size: 20,
             onPressed: () {},
             color: Colors.white,
           ),
+          // menu icon
           PopupMenuButton(
             icon: const Icon(
               Icons.more_vert,
@@ -118,6 +128,10 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 const PopupMenuItem<int>(
                   value: 3,
                   child: Text("Block"),
+                ),
+                const PopupMenuItem<int>(
+                  value: 4,
+                  child: Text("Edit name"),
                 ),
               ];
             },

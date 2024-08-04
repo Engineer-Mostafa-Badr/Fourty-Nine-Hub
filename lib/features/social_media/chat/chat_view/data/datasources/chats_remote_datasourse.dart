@@ -6,7 +6,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/c
 import 'package:fourtyninehub/res/style/const.dart';
 
 abstract class ChatsRemoteDataSource {
-  Future<Either<Failure, List<ChatItemModel>>> getChats({
+  Future<Either<Failure, ChatItemModel>> getChats({
     required String privacy,
     required String categoryId,
     required bool archived,
@@ -44,7 +44,7 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
   ChatsRemoteDataSourceImplementation(this._apiConsumer);
 
   @override
-  Future<Either<Failure, List<ChatItemModel>>> getChats(
+  Future<Either<Failure, ChatItemModel>> getChats(
       {required String privacy,
       required String categoryId,
       required bool archived,
@@ -61,10 +61,9 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
     };
     final response = await _apiConsumer.post(EndPoints.getChats, data: data);
     return response.fold(
-        (failure) => Left(failure),
-        (data) => Right((data['data'] as List)
-            .map((e) => ChatItemModel.fromJson(e))
-            .toList()));
+      (failure) => Left(failure),
+      (data) => Right(ChatItemModel.fromJson(data['data'])),
+    );
   }
 
   @override

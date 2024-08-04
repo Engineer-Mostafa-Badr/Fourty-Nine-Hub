@@ -320,7 +320,10 @@ class TinderView extends StatelessWidget {
               height: MediaQuery.of(context).size.height / 1.5,
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
-                child: ReportView(id: '2'),
+                child: ReportView(
+                  id: '2',
+                  categoryId: '',
+                ),
               ),
             ),
           );

@@ -187,7 +187,7 @@ class SocketServiceImplementation extends SocketServiceContract {
   listenToUserStatus() {
     socket.on('usersStatus', (data) {
       List<TypingAndOnlineModel> chatIdsTyping = [];
-      debugPrint("usersStatus ${data}");
+      // debugPrint("usersStatus ${data}");
 
       chatIdsTyping.addAll(List<TypingAndOnlineModel>.from(
           json.decode(data).map((x) => TypingAndOnlineModel.fromJson(x))));

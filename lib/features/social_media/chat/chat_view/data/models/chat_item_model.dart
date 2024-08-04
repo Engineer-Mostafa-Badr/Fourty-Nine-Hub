@@ -1,4 +1,21 @@
 class ChatItemModel {
+  List<ChatModel>? chats;
+  int? totalUnread;
+
+  ChatItemModel({this.chats, this.totalUnread});
+
+  ChatItemModel.fromJson(Map<String, dynamic> json) {
+    if (json['chats'] != null) {
+      chats = <ChatModel>[];
+      json['chats'].forEach((v) {
+        chats!.add(ChatModel.fromJson(v));
+      });
+    }
+    totalUnread = json['totalUnread'];
+  }
+}
+
+class ChatModel {
   String? sId;
   String? lastMessageText;
   String? name;
@@ -13,7 +30,7 @@ class ChatItemModel {
   int? unreadCount;
   String? userId;
 
-  ChatItemModel({
+  ChatModel({
     this.sId,
     this.lastMessageText,
     this.muted,
@@ -28,7 +45,7 @@ class ChatItemModel {
     this.userId,
   });
 
-  ChatItemModel.fromJson(Map<String, dynamic> json) {
+  ChatModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     muted = json['muted'];
     archived = json['archived'];

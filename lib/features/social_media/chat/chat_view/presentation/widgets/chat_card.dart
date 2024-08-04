@@ -14,7 +14,7 @@ import 'package:go_router/go_router.dart';
 
 class ChatCard extends StatelessWidget {
   final bool isSecret;
-  final ChatItemModel? chatItemModel;
+  final ChatModel? chatItemModel;
   final ChatsCubit? chatsCubit;
 
   const ChatCard(
@@ -54,12 +54,14 @@ class ChatCard extends StatelessWidget {
                               Assets.profileIcon,
                             ),
 
-                            const Positioned(
+                            Positioned(
                                 bottom: 0,
                                 right: 0,
                                 child: CircleAvatar(
                                   radius: 5,
-                                  backgroundColor: Colors.green,
+                                  backgroundColor: chatItemModel!.online!
+                                      ? Colors.green
+                                      : Colors.transparent,
                                 ))
                           ],
                         ),

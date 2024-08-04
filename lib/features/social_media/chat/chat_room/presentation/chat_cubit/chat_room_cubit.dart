@@ -8,6 +8,8 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/get_user_
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/chat_messgaes_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/typing_and_online_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/deleteMessage_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/getChatMessages_usecase.dart';
 
 part 'chat_view_state.dart';
@@ -16,6 +18,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   final GetTokensUseCase _getTokensUseCase;
   final GetChatMessagesUseCase _getChatMessagesUseCase;
   final GetUserUseCase _getUserUseCase;
+  final DeleteChatMessageUseCase _deleteChatMessageUseCase;
   final SocketServiceContract _socketService;
   List<MessageEntity> chatMessages = [];
   ChatMessagesModel chatMessagesModel = ChatMessagesModel();
@@ -27,9 +30,9 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   ChatRoomCubit(
     this._getTokensUseCase,
     this._getChatMessagesUseCase,
+    this._deleteChatMessageUseCase,
     this._getUserUseCase,
     this._socketService,
-    // this.chatMessagesModel,
   ) : super(const ChatRoomState());
 
   Future<String?> getUserToken() async {
@@ -117,6 +120,12 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
           chatMessages: chatMessages.reversed.toList(),
           status: ChatRoomStates.typing));
     });
+  }
+
+  deleteMessage({required String chatId, required String messageId}) {
+    DeleteMessageParams deleteMessageParams =
+        DeleteMessageParams(chatId: chatId, messageId: messageId);
+    _deleteChatMessageUseCase.call(deleteMessageParams);
   }
 
   @override
