@@ -53,9 +53,12 @@ class TinderViewCubit extends Cubit<TinderViewState> {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
 
         final List<dynamic> responseData = jsonResponse['data'];
+        log(responseData.toString() + ";;;;;;;;;;;;;;;;;;;;;;;;;");
+
         final userData = responseData
             .map<UserData>((data) => UserData.fromJson(data))
             .toList();
+        log("${userData.first.user!.first.firstName};;;;;;;;;;;;;;;;;;;;;;;;;");
         emit(state.updated(userData: userData));
       } else {
         log('Failed to load data: ${response.statusCode}');
@@ -152,7 +155,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
 
   void nextStory() {
     if (state.currentStoryIndex <
-        state.userData[state.currentIndex].pictures.length - 1) {
+        state.userData[state.currentIndex].pictures!.length - 1) {
       emit(state.updated(currentStoryIndex: state.currentStoryIndex + 1));
     }
   }

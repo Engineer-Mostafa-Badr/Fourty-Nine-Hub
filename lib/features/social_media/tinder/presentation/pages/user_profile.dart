@@ -315,7 +315,6 @@ class UserProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('User Profile'),
@@ -346,14 +345,14 @@ class UserProfilePage extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            userData.users.isNotEmpty
-                ? '${userData.users[0].firstName} ${userData.users[0].lastName}'
+            userData.user!.isNotEmpty
+                ? '${userData.user?[0].firstName} ${userData.user?[0].lastName}'
                 : 'User Name',
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 5),
-          Text(userData.users.isNotEmpty
-              ? userData.users[0].email
+          Text(userData.user!.isNotEmpty
+              ? userData.user!.first.email ?? ''
               : 'user.email@example.com'),
         ],
       ),
@@ -368,8 +367,9 @@ class UserProfilePage extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.phone),
             title: const Text('Phone Number'),
-            subtitle:
-                Text(userData.users.isNotEmpty ? userData.users[0].id : 'N/A'),
+            subtitle: Text(userData.user!.isNotEmpty
+                ? userData.user!.first.nuphone.toString()
+                : 'N/A'),
           ),
           const ListTile(
             leading: Icon(Icons.location_city),
@@ -380,8 +380,8 @@ class UserProfilePage extends StatelessWidget {
             leading: const Icon(Icons.cake),
             title: const Text('Date of Birth'),
             subtitle: Text(
-                userData.users.isNotEmpty && userData.users[0].birthday != null
-                    ? userData.users[0].birthday.toString()
+                userData.user!.isNotEmpty && userData.user![0].birthday != null
+                    ? userData.user![0].birthday.toString()
                     : 'N/A'),
           ),
           const ListTile(
@@ -405,9 +405,9 @@ class UserProfilePage extends StatelessWidget {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
-          ...userData.likes
+          ...userData.likes!
               .map((like) =>
-                  _buildActivityItem(like.firstName + ' liked a post'))
+                  _buildActivityItem(like.firstName! + ' liked a post'))
               .toList(),
         ],
       ),
@@ -432,7 +432,7 @@ class UserProfilePage extends StatelessWidget {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
-          ...userData.friends.map((friend) =>
+          ...userData.friends!.map((friend) =>
               _buildFriendItem('${friend.firstName} ${friend.lastName}')),
         ],
       ),
@@ -451,7 +451,7 @@ class UserProfilePage extends StatelessWidget {
 }
 
 class SwipeCardDemo extends StatefulWidget {
-  final List<Picture> userImages;
+  final List<Picture>? userImages;
 
   const SwipeCardDemo({super.key, required this.userImages});
 
@@ -464,10 +464,10 @@ class _SwipeCardDemoState extends State<SwipeCardDemo> {
 
   void _nextStory() {
     setState(() {
-      if (_currentStoryIndex < widget.userImages.length - 1) {
+      if (_currentStoryIndex < widget.userImages!.length - 1) {
         _currentStoryIndex++;
       } else {
-        _currentStoryIndex = widget.userImages.length - 1;
+        _currentStoryIndex = widget.userImages!.length - 1;
       }
     });
   }
@@ -513,11 +513,11 @@ class _SwipeCardDemoState extends State<SwipeCardDemo> {
         children: [
           Hero(
             tag:
-                'userHero-${widget.userImages[_currentStoryIndex].id}', // Unique tag for each image
+                'userHero-${widget.userImages?[_currentStoryIndex].id}', // Unique tag for each image
 
             child: Image.network(
-              (widget.userImages.isNotEmpty)
-                  ? widget.userImages[_currentStoryIndex].mediaKey
+              (widget.userImages!.isNotEmpty)
+                  ? widget.userImages![_currentStoryIndex].mediaKey ?? ''
                   : UIConst.profilePlaceHolder,
               errorBuilder: (context, error, stackTrace) => Image.network(
                 UIConst.profilePlaceHolder,
@@ -534,7 +534,7 @@ class _SwipeCardDemoState extends State<SwipeCardDemo> {
             right: 10,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(widget.userImages.length, (dotIndex) {
+              children: List.generate(widget.userImages!.length, (dotIndex) {
                 return Expanded(
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 2.0),

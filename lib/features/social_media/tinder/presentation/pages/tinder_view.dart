@@ -455,12 +455,10 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/sub_categories/sub_category_card.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_sub_category_card.dart';
@@ -487,7 +485,14 @@ class TinderView extends StatelessWidget {
         builder: (context, state) {
           return SharedScaffold(
             body: state.userData.isEmpty
-                ? const Center(child: CircularProgressIndicator())
+                ? Builder(builder: (context) {
+                    context.read<TinderViewCubit>().fetchUserData().then(
+                      (value) {
+                        print('success..........................');
+                      },
+                    );
+                    return const Center(child: CircularProgressIndicator());
+                  })
                 : Stack(
                     children: [
                       SingleChildScrollView(
@@ -513,8 +518,8 @@ class TinderView extends StatelessWidget {
                                     state.userData.asMap().entries.map((entry) {
                                   int index = entry.key;
                                   UserData user = entry.value;
-                                  return _buildCard(
-                                      context, index, user.pictures, user);
+                                  return _buildCard(context, index,
+                                      user.pictures ?? [], user);
                                 }).toList(),
                               ),
                             ),
@@ -550,7 +555,7 @@ class TinderView extends StatelessWidget {
   }
 
   void switchDisplayGender(TinderViewState state, BuildContext context) {
-    String gender = state.userData.first.users.first.gender.toString();
+    String gender = state.userData.first.user!.first.gender.toString();
     context
         .read<TinderViewCubit>()
         .fetchUserData(gender: gender == 'female' ? 'female' : 'male');
@@ -598,8 +603,8 @@ class TinderView extends StatelessWidget {
                 offset: state.position,
                 child: Transform.rotate(
                   angle: state.rotation,
-                  child:
-                      _cardWidget(context, images: user.pictures, user: user),
+                  child: _cardWidget(context,
+                      images: user.pictures ?? [], user: user),
                 ),
               ),
             )
@@ -621,7 +626,7 @@ class TinderView extends StatelessWidget {
               tag: 'userHero-${user.id}',
               child: Image.network(
                 images.isNotEmpty
-                    ? images[state.currentStoryIndex].mediaKey
+                    ? images[state.currentStoryIndex].mediaKey ?? ''
                     : UIConst.profilePlaceHolder,
                 errorBuilder: (context, error, stackTrace) => Image.network(
                     UIConst.profilePlaceHolder,
@@ -639,7 +644,7 @@ class TinderView extends StatelessWidget {
                   onPressed: () => switchDisplayGender(state, context),
                   iconSize: 30,
                   icon: Icon(
-                      user.users.first.gender == 'male'
+                      user.user!.first.gender == 'male'
                           ? Icons.female
                           : Icons.male,
                       color: Colors.black),
@@ -706,7 +711,7 @@ class TinderView extends StatelessWidget {
                   enabled: false,
                   title: Label(
                     text:
-                        "${user.users.first.firstName} ${user.users.first.lastName}",
+                        "${user.user!.first.firstName} ${user.user!.first.lastName}",
                     style: Styles.headerText(color: Colors.black, fontSize: 26),
                   ),
                   subtitle: Label(
@@ -755,7 +760,7 @@ class TinderView extends StatelessWidget {
             log("${user?.firstName}pppppppppppppppppppppppppppppppppppppppp");
 
             if (user != null) {
-              if (user.isMyAccount(cardUser.userId)) {
+              if (user.isMyAccount(cardUser.userId ?? '')) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -764,7 +769,7 @@ class TinderView extends StatelessWidget {
                 );
               } else {
                 for (var element in listOfUsers) {
-                  if (user.isMyAccount(element.userId)) {
+                  if (user.isMyAccount(element.userId ?? '')) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -811,4 +816,4 @@ class TinderView extends StatelessWidget {
     );
   }
 }
-//rommana2.1
+//rommana2.2
