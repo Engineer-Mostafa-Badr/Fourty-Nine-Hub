@@ -28,6 +28,10 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_dashboard_view.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/pages/create_doctor_view.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_history.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_docs.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_personal_info_view.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_profile.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/governorate_filter_cubit/doctor_governorate_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/city_filter_cubit/doctor_city_filter_cubit.dart';
@@ -658,11 +662,27 @@ class AppPages {
               GoRoute(
                   path: Paths.DOCTORDASHBOARD,
                   name: Routes.DOCTORDASHBOARD,
-                  // BookDoctorAppointmentCubit
                   builder: (context, state) =>
                       BlocProvider<DoctorDashboardCubit>(
                           create: (_) => serviceLocator(),
                           child: const DoctorDashboardView())),
+              GoRoute(
+                  path: Paths.EDITDOCTORPROFILE,
+                  name: Routes.EDITDOCTORPROFILE,
+                  builder: (context, state) => const EditDoctorProfileView()),
+              GoRoute(
+                  path: Paths.EDITDOCTORDOCS,
+                  name: Routes.EDITDOCTORDOCS,
+                  builder: (context, state) => const EditDoctorDocsView()),
+              GoRoute(
+                  path: Paths.EDITDOCTORPERSONALINFO,
+                  name: Routes.EDITDOCTORPERSONALINFO,
+                  builder: (context, state) =>
+                      const EditDoctorPersonalInfoView()),
+              GoRoute(
+                  path: Paths.DOCTORHISTORY,
+                  name: Routes.DOCTORHISTORY,
+                  builder: (context, state) => const DoctorHistoryView()),
             ]),
         GoRoute(
             path: Paths.FOOD,

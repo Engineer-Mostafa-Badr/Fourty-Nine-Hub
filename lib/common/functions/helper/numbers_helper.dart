@@ -31,7 +31,7 @@ extension NumberHelper on num {
       }
       answer += 'K';
     } else {
-      answer = toString();
+      answer = round().toString();
     }
     return answer;
   }

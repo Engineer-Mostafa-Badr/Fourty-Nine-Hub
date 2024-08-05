@@ -3,6 +3,8 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class DoctorRenewDayCountWidget extends StatelessWidget {
   const DoctorRenewDayCountWidget({super.key});
@@ -23,15 +25,23 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             color: Colors.white,
           ),
-          child: const Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _Item(
+              const _Item(
                 numerOfDays: '50',
                 label: Labels.subscription,
               ),
-              _Item(numerOfDays: '2', label: Labels.id),
-              _Item(numerOfDays: '10', label: Labels.practiceCertification),
+              _Item(
+                numerOfDays: '2',
+                label: Labels.id,
+                onTap: () => context.push(Routes.EDITDOCTORDOCS),
+              ),
+              _Item(
+                numerOfDays: '10',
+                label: Labels.practiceCertification,
+                onTap: () => context.push(Routes.EDITDOCTORDOCS),
+              ),
             ],
           ),
         ),
@@ -43,21 +53,25 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
 class _Item extends StatelessWidget {
   final String numerOfDays;
   final String label;
-  const _Item({required this.numerOfDays, required this.label});
+  final Function()? onTap;
+  const _Item({required this.numerOfDays, required this.label, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          numerOfDays,
-          style: Styles.headerText(),
-        ),
-        Text(
-          label,
-          style: Styles.mediumText(),
-        ),
-      ],
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Text(
+            numerOfDays,
+            style: Styles.headerText(),
+          ),
+          Text(
+            label,
+            style: Styles.mediumText(),
+          ),
+        ],
+      ),
     );
   }
 }

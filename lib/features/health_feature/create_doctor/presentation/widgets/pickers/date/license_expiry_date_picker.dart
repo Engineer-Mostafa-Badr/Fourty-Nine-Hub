@@ -9,7 +9,7 @@ class CreateDoctorLicenseExpiryDatePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
-    return DatePickerWidget(
+    return DatePickerField(
       title: "License Expiry Date",
       initialDate: now,
       minDate: now,

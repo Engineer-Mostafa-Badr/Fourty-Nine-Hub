@@ -7,21 +7,17 @@ import 'package:image_picker/image_picker.dart';
 
 class ImagePickerPlaceholder extends StatelessWidget {
   final String? tilte;
-  final double height;
-  final double width;
+  final double? height;
+  final double? width;
   final XFile? image;
   const ImagePickerPlaceholder(
-      {super.key,
-      this.tilte,
-      this.image,
-      this.height = 100,
-      this.width = 100});
+      {super.key, this.tilte, this.image, this.height, this.width});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: height,
-      height: width,
+      width: height ?? 100,
+      height: width ?? 100,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black),
         borderRadius: BorderRadius.circular(UIConst.radius),

@@ -132,4 +132,13 @@ abstract class Labels {
   static const accept = 'Accept';
   static const reject = 'Reject';
   static const editProfile = 'Edit Profile';
+  static const update = 'Update';
+  static const moreDetails = 'More Details';
+  static const timetable = 'Timetable';
+  static const personalInformation = 'Personal Information';
+  static const front = 'Front';
+  static const back = 'Back';
+  static const expireDate = 'Expire Date';
+  static const uploadPhotos = 'Upload Photos';
+  static const deleteAccount = 'Delete Account';
 }

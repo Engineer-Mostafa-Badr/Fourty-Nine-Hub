@@ -3,6 +3,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_subscription_details.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_today_appointments.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_unhandled_appointments.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/popup_menu.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
@@ -15,19 +16,8 @@ class DoctorDashboardView extends StatelessWidget {
       backgroundColor: AppColors.BACKGROUND_COLOR,
       appBar: AppBar(
         title: const Text(Labels.doctorDashboard),
-        actions: [
-          PopupMenuButton(itemBuilder: (context) {
-            return [
-              const PopupMenuItem(
-                value: 2,
-                child: Text(Labels.editProfile),
-              ),
-              const PopupMenuItem(
-                value: 3,
-                child: Text(Labels.history),
-              ),
-            ];
-          })
+        actions: const [
+          DoctorDashboardPopupMenuButton(),
         ],
       ),
       body: ListView(
