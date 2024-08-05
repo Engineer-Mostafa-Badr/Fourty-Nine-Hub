@@ -8,8 +8,9 @@ part of 'social_posts_cubit.dart';
   final List<TwitterPostEntity>? myTweets;
   final List<SuggestUserEntity>? suggestedFriends;
   final bool? friendRequest;
+  final CommentEntity? newComment;
   const SocialPostsState(
-      {this.status = StateStatus.loading,this.friendRequest, this.failure, this.posts, this.myPosts,this.myTweets,this.suggestedFriends});
+      {this.status = StateStatus.loading,this.friendRequest, this.failure, this.posts, this.myPosts,this.myTweets,this.suggestedFriends,this.newComment});
   SocialPostsState copyWith({
      StateStatus? status,
      Failure? failure,
@@ -17,7 +18,8 @@ part of 'social_posts_cubit.dart';
      List<SuggestUserEntity>? suggestedFriends,
       List<PostEntity>? myPosts,
       List<TwitterPostEntity>? myTweets,
-      bool? friendRequest
+      bool? friendRequest,
+    CommentEntity? newComment,
   }) {
     return SocialPostsState(
       status: status?? this.status, 
@@ -27,6 +29,7 @@ part of 'social_posts_cubit.dart';
       myTweets: myTweets?? this.myTweets,
       suggestedFriends: suggestedFriends?? this.suggestedFriends,
       friendRequest: friendRequest?? this.friendRequest,
+      newComment: newComment?? this.newComment,
     );
   }
 }

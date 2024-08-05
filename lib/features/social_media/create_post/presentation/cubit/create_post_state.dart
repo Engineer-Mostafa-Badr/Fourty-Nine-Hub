@@ -10,7 +10,7 @@ class CreatePostState {
   final ActivityEntity? selectedActivity;
   final FeelingEntity? selectedFeeling;
   final UploadFileEntity? fileEntity;
-  final Color backColor;
+  final String backColor;
   const CreatePostState(
       {
       this.status = CreatePostStates.error,
@@ -18,7 +18,7 @@ class CreatePostState {
         this.fileEntity,
       this.activities,
       this.feelings,
-      this.backColor = Colors.white,
+      this.backColor = "#FFFFFFFF",
       this.selectedActivity,
       this.selectedFeeling});
   CreatePostState copyWith({
@@ -29,7 +29,7 @@ class CreatePostState {
     List<FeelingEntity>? feelings,
     ActivityEntity? selectedActivity,
     FeelingEntity? selectedFeeling,
-    Color? backColor,
+    String? backColor,
   }) {
     return CreatePostState(
       status: status?? this.status,

@@ -78,7 +78,7 @@ class CreatePostView extends StatelessWidget {
         builder: (context, state) {
       return Container(
           padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(color: state.backColor),
+          decoration: BoxDecoration(color: Color(int.parse(state.backColor.substring(1), radix: 16))),
           child: TextField(
             maxLines: 4,
             maxLength: 150,
@@ -100,13 +100,14 @@ class CreatePostView extends StatelessWidget {
       return Container(
         width: double.infinity,
         padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(color: state.backColor,),
+        decoration: BoxDecoration(color:  Color(int.parse(state.backColor.substring(1), radix: 16)),),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(25.0),
           child: Image.file(
             File(
               context.read<CreatePostCubit>().fileEntity?.file.path ?? '',
             ),
+            fit: BoxFit.fill,
           ),
         ),
       );
@@ -114,18 +115,18 @@ class CreatePostView extends StatelessWidget {
   }
 
   Widget _buildColorsBallet({required BuildContext context}) {
-    List<Color> colors = [
-      Colors.white,
-      Colors.orange,
-      Colors.blue,
-      Colors.red,
-      Colors.green,
-      Colors.purpleAccent,
-      Colors.pink,
-      Colors.yellow,
-      Colors.redAccent,
-      Colors.lightGreen,
-      Colors.tealAccent
+    final List<String> colors = [
+      "#FFFFFFFF", // Colors.white
+      "#FFFFA500", // Colors.orange
+      "#FF0000FF", // Colors.blue
+      "#FFFF0000", // Colors.red
+      "#FF008000", // Colors.green
+      "#FFDA70D6", // Colors.purpleAccent
+      "#FFFFC0CB", // Colors.pink
+      "#FFFFFF00", // Colors.yellow
+      "#FFFF5252", // Colors.redAccent
+      "#FF90EE90", // Colors.lightGreen
+      "#FF64FFDA"  // Colors.tealAccent
     ];
     final controller = context.read<CreatePostCubit>();
     return SizedBox(
@@ -139,7 +140,7 @@ class CreatePostView extends StatelessWidget {
                 height: 30,
                 width: 30,
                 decoration: BoxDecoration(
-                    color: colors[index],
+                    color:  Color(int.parse(colors[index].substring(1), radix: 16)),
                     border: Border.all(color: Colors.grey, width: .5),
                     borderRadius: BorderRadius.circular(10)),
               ),

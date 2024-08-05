@@ -7,7 +7,6 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/entities/
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_post_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
-import 'package:fourtyninehub/res/assets/jsons.dart';
 import '../../../../../core/api/end_points.dart';
 import '../../../../../core/error/failure.dart';
 import '../models/feeling_model.dart';
@@ -25,20 +24,32 @@ class CreatePostRemoteDataSourceImpl implements CreatePostRemoteDataSource {
   CreatePostRemoteDataSourceImpl(this._jsonParser, this._apiConsumer);
   @override
   Future<Either<Failure, List<ActivityEntity>>> getActivitiesList() async {
-    final response = await _jsonParser.get(Jsons.activities);
+      // final response = await _jsonParser.get(Jsons.activities);
+      // return response.fold(
+      //     (l) => Left(l),
+      //         (data) => Right((data['data']['items'] as List)
+      //         .map((e) => ActivityModel.fromJson(e))
+      //         .toList()));
+    final response = await _apiConsumer.get(EndPoints.activities);
     return response.fold(
-        (l) => Left(l),
-        (data) => Right((data['data']['items'] as List)
+            (l) => Left(l),
+            (data) => Right((data['data'] as List)
             .map((e) => ActivityModel.fromJson(e))
             .toList()));
   }
 
   @override
   Future<Either<Failure, List<FeelingEntity>>> getFeelingsList() async {
-    final response = await _jsonParser.get(Jsons.feelings);
+    // final response = await _jsonParser.get(Jsons.feelings);
+    // return response.fold(
+    //     (l) => Left(l),
+    //     (data) => Right((data['data']['items'] as List)
+    //         .map((e) => FeelingModel.fromJson(e))
+    //         .toList()));
+    final response = await _apiConsumer.get(EndPoints.feelings);
     return response.fold(
-        (l) => Left(l),
-        (data) => Right((data['data']['items'] as List)
+            (l) => Left(l),
+            (data) => Right((data['data'] as List)
             .map((e) => FeelingModel.fromJson(e))
             .toList()));
   }

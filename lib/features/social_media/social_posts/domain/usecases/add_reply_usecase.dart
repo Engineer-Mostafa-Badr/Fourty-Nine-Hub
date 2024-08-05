@@ -6,25 +6,28 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/social_posts_repo.dart';
 
-class PostCommentUseCase extends UseCase<CommentEntity, PostCommentParams> {
+class ReplyOnCommentUseCase extends UseCase<CommentEntity, ReplyOnCommentParams> {
   final SocialPostsRepo _repo;
-  PostCommentUseCase(this._repo);
+  ReplyOnCommentUseCase(this._repo);
   @override
-  Future<Either<Failure, CommentEntity>> call(PostCommentParams params) async {
-    return await _repo.commentOnPost(params: params);
+  Future<Either<Failure, CommentEntity>> call(ReplyOnCommentParams params) async {
+    return await _repo.replyOnComment(params: params);
   }
 }
 
 
 
-class PostCommentParams {
+class ReplyOnCommentParams {
   final String postId;
+  final String commentId;
   final String content;
-  PostCommentParams({
-    required this.postId, 
+  ReplyOnCommentParams({
+    required this.postId,
+    required this.commentId,
     required this.content,
   });
   Map<String, dynamic> toJson() => {
-        'content': content,
-      };
+    'content': content,
+    'reply': commentId,
+  };
 }
