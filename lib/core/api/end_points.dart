@@ -45,11 +45,15 @@ class EndPoints {
   static const getHealthSubcategories = '/health/subCategories-health-with-ads';
   static const getMedicalServices =
       '/health/subCategories-medicalServices-with-ads';
-  static const String getUpcomingUserAppointments =
-      '/health/book-appointment?page=1&limit=20';
+  static const String getUpcomingUserAppointments = '/health/book-appointment';
   static const String getHealthRequestsHistory =
-      '/health/history-patient-booking?page=1&limit=20';
-
+      '/health/history-patient-booking';
+  static String remainingDaysOfDoctorPracticing(String doctorId) =>
+      '/health/dashboard/remaining-days-of-doctor-id/$doctorId';
+  static String remainingDaysOfDoctorID(String doctorId) =>
+      '/health/dashboard/remaining-days-of-doctor-practicing-id/$doctorId';
+  static String remainingDaysOfDoctorSubscription(String doctorId) =>
+      '/health/dashboard/remaining-days-of-doctor-subscription/$doctorId';
   // reels
   static const getExploreReels = '/reels/explore';
 
