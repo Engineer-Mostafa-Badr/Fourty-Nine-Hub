@@ -50,9 +50,12 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/Chat_view.dart';
+import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
+import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_dialogue.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
@@ -61,6 +64,8 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/ti
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
+import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/widgets/meeting_dialogue.dart';
 import 'package:go_router/go_router.dart';
 import '../core/enums/wallet_types_enums.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_ads_cubit.dart';
@@ -126,9 +131,8 @@ import '../features/ride/driver_dashboard/presentation/pages/driver_dashboard_vi
 import '../features/requests_history/presentation/cubit/request_history_cubit.dart';
 import '../features/ride/trip_details/presentation/cubit/trip_details_cubit.dart';
 import '../features/ride/trip_details/presentation/pages/trip_details_view.dart';
-import '../features/social_media/club_house/presentation/pages/club_house_home.dart';
-import '../features/social_media/club_house/presentation/widgets/clubHouseChat.dart';
-import '../features/social_media/club_house/presentation/widgets/clubHouseRoom.dart';
+import '../features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
+import '../features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/reels/presentation/pages/Reel_view.dart';
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
@@ -139,7 +143,7 @@ import '../features/account_taps/wallet/presentation/pages/wallet_view.dart';
 import '../features/youtube/presentation/pages/play_video.dart';
 import '../features/youtube/presentation/pages/youtube.dart';
 import '../features/zoom/presentation/pages/meeting_room.dart';
-import '../features/zoom/presentation/pages/zoom_view.dart';
+import '../features/zoom/presentation/pages/meeting_view.dart';
 import '../service_locator/service_locator.dart';
 import 'routes.dart';
 
@@ -501,28 +505,44 @@ class AppPages {
                   name: Routes.Tinder,
                   builder: (context, state) => const TinderView()),
               GoRoute(
-                  path: Paths.LIVE,
-                  name: Routes.LIVE,
-                  builder: (context, state) => const LiveStreamView()),
+                path: Paths.LIVE,
+                name: Routes.LIVE,
+                builder: (context, state) => const LiveStreamHomeScreen(),
+                routes: [
+                  GoRoute(
+                      path: Paths.LIVEVIEW,
+                      name: Routes.LIVEView,
+                      builder: (context, state) {
+                        var extras = state.extra as ZegoArgs;
+                        return  LiveStreamView(isHost: extras.isHost,liveID: extras.liveId,);
+                      }),
+                ],
+              ),
               // ClubHouseHome
               GoRoute(
                   path: Paths.CLUBHOUSE,
                   name: Routes.CLUBHOUSE,
-                  builder: (context, state) => const ClubHouseHome(),
+                  builder: (context, state) => BlocProvider<ClubVoiceCubit>(
+                        create: (context) => serviceLocator()..getAllRooms(),
+                        child: const ClubHouseHome(),
+                      ),
                   routes: [
                     GoRoute(
-                      path: Paths.CLUBHOUSECHAT,
-                      name: Routes.CLUBHOUSECHAT,
-                      builder: (context, state) => const ClubHouseChat(),
-                    ),
-                    // ClubHouseRoom
-                    GoRoute(
                       path: Paths.CLUBHOUSEROOM,
-                      name: Routes.CLUBHOUSEROOM,
-                      builder: (context, state) => const ClubHouseRoom(),
+                      name: Routes.AUDIOSTREAMSCREEN,
+                      builder: (context, state) {
+                        final extras = state.extra as RoomArgs;
+                        return AudioStreamScreen(
+                          liveId: extras.liveId,
+                          roomSubject: extras.subject,
+                          isHost: extras.isHost,
+                        );
+                      },
+                      routes: [],
                     ),
                   ]),
             ]),
+
         // MazadatView
         GoRoute(
             path: Paths.MAZADAT,
@@ -781,13 +801,21 @@ class AppPages {
         GoRoute(
             path: Paths.ZOOM,
             name: Routes.ZOOM,
-            builder: (context, state) => ZoomView(),
+            builder: (context, state) => BlocProvider<MeetingCubit>(
+                  create: (context) => serviceLocator<MeetingCubit>(),
+                  child: MeetingView(),
+                ),
             routes: [
               // PlayVideo
               GoRoute(
                 path: Paths.MEETINGROOM,
                 name: Routes.MEETINGROOM,
-                builder: (context, state) => const MeetingRoom(),
+                builder: (context, state) {
+                  final extras = state.extra as ZegoArgs;
+
+                  return MeetingRoom(
+                      liveID: extras.liveId, isHost: extras.isHost);
+                },
               ),
             ]),
         GoRoute(

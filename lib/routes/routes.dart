@@ -1,4 +1,3 @@
-
 abstract class Routes {
   Routes._();
 
@@ -25,20 +24,24 @@ abstract class Routes {
 
   static const Tinder = '/Social/Tinder';
   static const LIVE = '/Social/Live';
+  static const LIVEView = '/Social/Live/LiveView';
   static const CLUBHOUSE = '/Social/ClubHouse';
   static const CLUBHOUSECHAT = '/Social/ClubHouse/ClubHouseChat';
-  static const CLUBHOUSEROOM = '/Social/ClubHouse/ClubHouseRoom';
+  static const AUDIOSTREAMSCREEN = '/Social/ClubHouse/ClubHouseRoom';
   static const CHAT = '/Chat';
   static const CHATROOM = '/ChatRoom';
   static const MAZADAT = '/Mazadat';
   static const VISITA = '/Visita';
   static const VISITAEMERGENCY = '/Visita/VisitaEmergency';
+  static const VISITADOCTORLIST = '/Visita/VisitaDoctorsList';
   static const CREATEDOCTOR = '/Visita/CreateDoctor';
   static const FILTERDOCTORSUBCATEGORY = '/Visita/FilterDoctorSubcategory';
   static const FILTERDOCTORGOVERNORATE =
       '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate';
   static const FILTERDOCTORCITY =
-      '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate/FilterDoctorCity';
+      '/Visita/FilterDoctorSubcategory/FilterDoctorCity';
+  static const FILTERDOCTORAREA =
+      '/Visita/FilterDoctorSubcategory/FilterDoctorCity/FilterDoctorArea';
   static const VISITADOCTORLISTBYLOCATION =
       '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate/FilterDoctorCity/VisitaDoctorsList';
   static const VISITADOCTORLISTBYCALL =
@@ -133,6 +136,7 @@ abstract class Paths {
   static const CREATEPOST = 'CreatePost';
   static const TINDER = 'Tinder';
   static const LIVE = 'Live';
+  static const LIVEVIEW = 'LiveView';
   static const CLUBHOUSE = 'ClubHouse';
   static const CLUBHOUSECHAT = 'ClubHouseChat';
   static const CLUBHOUSEROOM = 'ClubHouseRoom';
@@ -145,6 +149,7 @@ abstract class Paths {
   static const FILTERDOCTORSUBCATEGORY = 'FilterDoctorSubcategory';
   static const FILTERDOCTORGOVERNORATE = 'FilterDoctorGovernorate';
   static const FILTERDOCTORCITY = 'FilterDoctorCity';
+  static const FILTERDOCTORAREA = 'FilterDoctorArea';
   static const DOCTORDASHBOARD = 'DoctorDashboard';
   static const FOOD = 'Food';
   static const CusineRestaurants = 'Cusine-Restaurants';

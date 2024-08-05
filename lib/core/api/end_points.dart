@@ -312,6 +312,21 @@ class EndPoints {
   static String getChatMessages(String chatId) {
     return '/chat/get-chat/$chatId';
   }
+
+  //club voice
+  static String allClubVoiceRooms = '/clubvoice';
+  static String createClubVoiceRoom = '/clubvoice';
+  static String joinVoiceRoom(String id) => '/clubvoice/join/$id';
+  static String endVoiceRoom(String id) => '/clubvoice/$id';
+  static String leaveVoiceRoom(String id) => '/clubvoice/leave/$id';
+  static String searchVoiceRooms(String subject) =>
+      '/clubvoice?search=$subject';
+
+
+  //meeting
+  static String createMeeting = '/room-id';
+  static String joinMeeting(String id) => '/room-id/join/$id';
+  static String endMeeting(String id) => '/room-id/finish/$id';
   static String deleteChatMessage(String chatId) {
     return '/chat/get-chat/$chatId';
   }

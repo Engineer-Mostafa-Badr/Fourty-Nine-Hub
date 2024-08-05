@@ -12,6 +12,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
+import '../../../../../../routes/routes.dart';
+import '../../../../../zoom/presentation/widgets/meeting_dialogue.dart';
 import '../../../../social_posts/presentation/widgets/posts/comment_card.dart';
 import 'gifts_widget.dart';
 import 'recharge_coins.dart';
@@ -76,7 +78,13 @@ class _LiveCardState extends State<LiveCard> {
               padding: 10,
               radius: 20,
               icon: Icons.add,
-              onPressed: () {}),
+              onPressed: () {
+                context.push(Routes.LIVEView,
+                    extra: ZegoArgs(
+                      '123',
+                      false,
+                    ));
+              }),
           const Sizer(),
           Row(
             children: [
