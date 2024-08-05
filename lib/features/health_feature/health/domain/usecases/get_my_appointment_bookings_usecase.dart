@@ -4,13 +4,13 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/health_repo.dart';
 
-
-class GetMyAppointmentBookingsUseCase extends UseCase<List<AppointmentBookingEntity>, NoParams> {
+class GetMyAppointmentBookingsHistoryUseCase
+    extends UseCase<List<BookedAppointmentEntity>, NoParams> {
   final HealthRepo _repo;
-  GetMyAppointmentBookingsUseCase(this._repo);
+  GetMyAppointmentBookingsHistoryUseCase(this._repo);
 
   @override
-  Future<Either<Failure, List<AppointmentBookingEntity>>> call(NoParams params) {
-    return _repo.getMyBookings();
+  Future<Either<Failure, List<BookedAppointmentEntity>>> call(NoParams params) {
+    return _repo.getMyBookingsHistory();
   }
 }

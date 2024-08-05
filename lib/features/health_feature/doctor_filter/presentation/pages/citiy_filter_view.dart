@@ -23,7 +23,8 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
     context.read<DoctorCityFilterCubit>().loadData(
         governorateId: serviceLocator<HealthSharedData>()
             .doctorSearchParams
-            .governorateId);
+            .governorate
+            .id);
     super.initState();
   }
 

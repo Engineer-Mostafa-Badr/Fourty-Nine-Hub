@@ -17,9 +17,8 @@ class GovernorateListTitle extends StatelessWidget {
     return ListTile(
       title: Text(governorate.nameEn),
       onTap: () {
-        serviceLocator<HealthSharedData>().doctorSearchParams.governorateId =
-            governorate.id;
-        ;
+        serviceLocator<HealthSharedData>().doctorSearchParams.governorate =
+            governorate;
 
         context.push(Routes.FILTERDOCTORCITY);
       },

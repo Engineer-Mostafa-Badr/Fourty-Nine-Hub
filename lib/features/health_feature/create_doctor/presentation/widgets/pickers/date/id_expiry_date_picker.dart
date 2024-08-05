@@ -9,7 +9,7 @@ class CreateDoctorIDExpiryDatePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
-    return DatePickerWidget(
+    return DatePickerField(
       title: "ID Expiry Date",
       initialDate: now,
       minDate: now,

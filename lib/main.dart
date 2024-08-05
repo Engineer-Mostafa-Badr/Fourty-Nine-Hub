@@ -10,7 +10,6 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'features/social_media/live_streaming/presentation/widgets/liveview/gifts/gift_sheet.dart';
-import 'features/subscribe/presentation/cubit/subscribe_cubit.dart';
 import 'res/style/app_colors.dart';
 import 'routes/pages.dart';
 import 'service_locator/tinder_service_locator.dart';
@@ -38,11 +37,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => serviceLocator<UserCubit>(),
-        ),
-        // SubscribeCubit
-        BlocProvider(
-          create: (context) => serviceLocator<SubscribeCubit>(),
-        ),
+        ),       
         BlocProvider(
           create: (context) => serviceLocator<RiderequestCubit>(),
         ),

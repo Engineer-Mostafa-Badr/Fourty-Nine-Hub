@@ -33,7 +33,27 @@ class EndPoints {
   static const createDoctor = '/health/doctor';
   static const doctorSearch = '/health/doctor-search';
   static const bookEmergency = '/health/book-emergency';
-
+  static String bookRegularAppointment(String appointmentId) =>
+      '/health/book-appointment/$appointmentId';
+  static String toggleFavoriteSubcategory(String subCategoryId) =>
+      '/favorite-sub-category/$subCategoryId';
+  static String bookPremiumAppointment(String appointmentId) =>
+      '/health/book-appointment-premium/$appointmentId';
+  static String getDoctorReviewsForUsers(String doctorId) =>
+      '/health/doctor/rate/$doctorId';
+  static String getDoctorDetails(String doctorId) => '/health/doctor/$doctorId';
+  static const getHealthSubcategories = '/health/subCategories-health-with-ads';
+  static const getMedicalServices =
+      '/health/subCategories-medicalServices-with-ads';
+  static const String getUpcomingUserAppointments = '/health/book-appointment';
+  static const String getHealthRequestsHistory =
+      '/health/history-patient-booking';
+  static String remainingDaysOfDoctorPracticing(String doctorId) =>
+      '/health/dashboard/remaining-days-of-doctor-id/$doctorId';
+  static String remainingDaysOfDoctorID(String doctorId) =>
+      '/health/dashboard/remaining-days-of-doctor-practicing-id/$doctorId';
+  static String remainingDaysOfDoctorSubscription(String doctorId) =>
+      '/health/dashboard/remaining-days-of-doctor-subscription/$doctorId';
   // reels
   static const getExploreReels = '/reels/explore';
 
@@ -308,10 +328,13 @@ class EndPoints {
   }
 
   static String buttonAvailable = '/global/click';
-  static String getSubscribtionPlans = '/subscription/plans';
-  static String checkUserSubscribtion(String id) {
+  static String getSubscriptionPlans(String subcategoryId) =>
+      '/subscription/plans/$subcategoryId';
+  static String checkUserSubscription(String id) {
     return '/subscription/subcategory/$id';
   }
-  static String subscribe ='/subscription/subscribe';
-  
+
+  static String subscribe = '/subscription/subscribe';
+
+  static String getActiveSubscriptionAmounts = '/payment-amount/active';
 }
