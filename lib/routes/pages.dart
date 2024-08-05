@@ -56,6 +56,7 @@ import 'package:fourtyninehub/features/social_media/club_house/presentation/cont
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_dialogue.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
@@ -490,9 +491,19 @@ class AppPages {
                   name: Routes.Tinder,
                   builder: (context, state) => const TinderView()),
               GoRoute(
-                  path: Paths.LIVE,
-                  name: Routes.LIVE,
-                  builder: (context, state) => const LiveStreamView()),
+                path: Paths.LIVE,
+                name: Routes.LIVE,
+                builder: (context, state) => const LiveStreamHomeScreen(),
+                routes: [
+                  GoRoute(
+                      path: Paths.LIVEVIEW,
+                      name: Routes.LIVEView,
+                      builder: (context, state) {
+                        var extras = state.extra as ZegoArgs;
+                        return  LiveStreamView(isHost: extras.isHost,liveID: extras.liveId,);
+                      }),
+                ],
+              ),
               // ClubHouseHome
               GoRoute(
                   path: Paths.CLUBHOUSE,
@@ -787,7 +798,7 @@ class AppPages {
                 path: Paths.MEETINGROOM,
                 name: Routes.MEETINGROOM,
                 builder: (context, state) {
-                  final extras = state.extra as DetailArgs;
+                  final extras = state.extra as ZegoArgs;
 
                   return MeetingRoom(
                       liveID: extras.liveId, isHost: extras.isHost);

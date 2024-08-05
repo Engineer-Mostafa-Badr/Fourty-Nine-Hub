@@ -51,7 +51,7 @@ void showMeetingDialogue(BuildContext context) {
                           if (context.mounted) {
                             context.push(
                               Routes.MEETINGROOM,
-                              extra: DetailArgs(liveId, true),
+                              extra: ZegoArgs(liveId, true),
                             );
                             context.pop();
                           }
@@ -121,7 +121,7 @@ void showMeetingDialogue(BuildContext context) {
                       if (context.mounted) {
                         context.push(
                           Routes.MEETINGROOM,
-                          extra: DetailArgs(liveId, false),
+                          extra: ZegoArgs(liveId, false),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -162,9 +162,9 @@ Future<void> joinRoom(MeetingCubit cubit, String liveId) async {
 }
 
 //for passing args
-class DetailArgs {
+class ZegoArgs {
   final String liveId;
   final bool isHost;
 
-  DetailArgs(this.liveId, this.isHost);
+  ZegoArgs(this.liveId, this.isHost);
 }

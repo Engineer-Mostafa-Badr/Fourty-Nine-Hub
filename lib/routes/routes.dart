@@ -23,6 +23,7 @@ abstract class Routes {
 
   static const Tinder = '/Social/Tinder';
   static const LIVE = '/Social/Live';
+  static const LIVEView = '/Social/Live/LiveView';
   static const CLUBHOUSE = '/Social/ClubHouse';
   static const CLUBHOUSECHAT = '/Social/ClubHouse/ClubHouseChat';
   static const AUDIOSTREAMSCREEN = '/Social/ClubHouse/ClubHouseRoom';
@@ -131,6 +132,7 @@ abstract class Paths {
   static const CREATEPOST = 'CreatePost';
   static const TINDER = 'Tinder';
   static const LIVE = 'Live';
+  static const LIVEVIEW = 'LiveView';
   static const CLUBHOUSE = 'ClubHouse';
   static const CLUBHOUSECHAT = 'ClubHouseChat';
   static const CLUBHOUSEROOM = 'ClubHouseRoom';

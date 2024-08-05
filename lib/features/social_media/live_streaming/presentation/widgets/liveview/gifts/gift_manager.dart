@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
-import '../../components/components.dart';
+import '../../components/gift_mp4_player.dart';
 import 'zego_gift_item.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:http/http.dart' as http;
