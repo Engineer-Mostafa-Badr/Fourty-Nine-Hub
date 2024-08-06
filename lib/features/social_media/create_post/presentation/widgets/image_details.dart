@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:photo_view/photo_view.dart';
 
 class ImageDetailsScreen extends StatelessWidget {
   const ImageDetailsScreen({super.key, required this.image, required this.onRemoveImage, this.fromPost=false, this.isFile=false});
@@ -34,13 +33,21 @@ class ImageDetailsScreen extends StatelessWidget {
         decoration: const BoxDecoration(
           color: AppColors.DARK_BLUE_COLOR,
         ),
-        child:(fromPost==false||isFile==true)?PhotoView(
-          imageProvider:FileImage(
-            File(image),
-        ),
-      ):PhotoView(
-          imageProvider: NetworkImage(
-            image,
+        child:(fromPost==false||isFile==true)?Container(
+          decoration:BoxDecoration(
+            image: DecorationImage(
+                image:FileImage(
+                  File(image),
+                )
+            )
+          ),
+      ):Container(
+          decoration:BoxDecoration(
+              image: DecorationImage(
+                  image:NetworkImage(
+                    image,
+                  )
+              )
           ),
         ),
     ));
