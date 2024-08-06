@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
 
-import '../../components/components.dart';
+import '../../components/gift_mp4_player.dart';
 import 'gift_manager.dart';
 import 'zego_gift_item.dart';
 

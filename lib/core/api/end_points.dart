@@ -322,6 +322,24 @@ class EndPoints {
     return '/chat/get-chat/$chatId';
   }
 
+  //club voice
+  static String allClubVoiceRooms = '/clubvoice';
+  static String createClubVoiceRoom = '/clubvoice';
+  static String joinVoiceRoom(String id) => '/clubvoice/join/$id';
+  static String endVoiceRoom(String id) => '/clubvoice/$id';
+  static String leaveVoiceRoom(String id) => '/clubvoice/leave/$id';
+  static String searchVoiceRooms(String subject) =>
+      '/clubvoice?search=$subject';
+
+
+  //meeting
+  static String createMeeting = '/room-id';
+  static String joinMeeting(String id) => '/room-id/join/$id';
+  static String endMeeting(String id) => '/room-id/finish/$id';
+  static String deleteChatMessage(String chatId) {
+    return '/chat/get-chat/$chatId';
+  }
+
   static String changeChatMuteState(String chatId) {
     return '/chat/mute-chat/$chatId';
   }
@@ -336,5 +354,17 @@ class EndPoints {
     return '/subscription/subcategory/$id';
   }
   static String subscribe ='/subscription/subscribe';
-  
+
+
+  static String lockChat(String chatId) {
+    return '/chat/lock-chat/$chatId';
+  }
+
+  static String unLockChat(String chatId) {
+    return '/chat/unlock-chat/$chatId';
+  }
+
+  static String updateUnLockChatPassword() {
+    return '/chat/update-lock-chat';
+  }
 }

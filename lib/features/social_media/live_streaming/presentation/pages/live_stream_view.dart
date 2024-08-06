@@ -2,6 +2,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/pk_widgets/configs.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
@@ -12,7 +13,9 @@ import '../widgets/liveview/gifts/gift_manager.dart';
 import '../widgets/liveview/gifts/gift_sheet.dart';
 import '../widgets/liveview/gifts/mp4_player_widget.dart';
 import '../widgets/liveview/gifts/zego_gift_item.dart';
-import '../widgets/liveview/live_card.dart';
+import '../widgets/pk_widgets/events.dart';
+import '../widgets/pk_widgets/mute_widget.dart';
+import '../widgets/pk_widgets/surfuce.dart';
 
 class LiveStreamView extends StatefulWidget {
   final String liveID;
@@ -20,8 +23,8 @@ class LiveStreamView extends StatefulWidget {
 
   const LiveStreamView({
     super.key,
-    this.liveID = '123',
-    this.isHost = false,
+    required this.liveID,
+    required this.isHost,
   });
 
   @override
@@ -30,6 +33,14 @@ class LiveStreamView extends StatefulWidget {
 
 class _LiveStreamViewState extends State<LiveStreamView> {
   final userId = Random().nextInt(1000).toString();
+  final liveStateNotifier = ValueNotifier<ZegoLiveStreamingState>(
+    ZegoLiveStreamingState.idle,
+  );
+
+  final requestingHostsMapRequestIDNotifier =
+      ValueNotifier<Map<String, List<String>>>({});
+  final requestIDNotifier = ValueNotifier<String>('');
+  PKEvents? pkEvents;
   @override
   void initState() {
     super.initState();
@@ -37,7 +48,10 @@ class _LiveStreamViewState extends State<LiveStreamView> {
     ZegoGiftManager().cache.cacheAllFiles(giftItemList);
 
     ZegoGiftManager().service.recvNotifier.addListener(onGiftReceived);
-
+    pkEvents = PKEvents(
+      requestIDNotifier: requestIDNotifier,
+      requestingHostsMapRequestIDNotifier: requestingHostsMapRequestIDNotifier,
+    );
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ZegoGiftManager().service.init(
             appID: UIConst.appId,
@@ -60,13 +74,24 @@ class _LiveStreamViewState extends State<LiveStreamView> {
   Widget build(BuildContext context) {
     final hostConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host(
       plugins: [ZegoUIKitSignalingPlugin()],
-    );
+    )
+      ..foreground = PKV2Surface(
+        requestIDNotifier: requestIDNotifier,
+        liveStateNotifier: liveStateNotifier,
+        requestingHostsMapRequestIDNotifier:
+            requestingHostsMapRequestIDNotifier,
+      )
+      ..pkBattle = pkConfig();
 
     final audienceConfig = ZegoUIKitPrebuiltLiveStreamingConfig.audience(
       plugins: [ZegoUIKitSignalingPlugin()],
     )
       ..bottomMenuBar.coHostExtendButtons = [giftButton]
-      ..bottomMenuBar.audienceExtendButtons = [giftButton];
+      ..bottomMenuBar.hostButtons = []
+      ..bottomMenuBar.audienceButtons = []
+      ..bottomMenuBar.audienceExtendButtons = [giftButton]
+      ..audioVideoView.foregroundBuilder = foregroundBuilder
+      ..pkBattle = pkConfig();
 
     return SafeArea(
       child: ZegoUIKitPrebuiltLiveStreaming(
@@ -76,16 +101,95 @@ class _LiveStreamViewState extends State<LiveStreamView> {
         userName: 'user_$userId',
         liveID: widget.liveID,
         events: ZegoUIKitPrebuiltLiveStreamingEvents(
+          pk: pkEvents?.event,
           onStateUpdated: (state) {
             if (ZegoLiveStreamingState.idle == state) {
               ZegoGiftManager().playList.clear();
             }
+            liveStateNotifier.value = state;
           },
         ),
-        config: (widget.isHost ? hostConfig : audienceConfig)
-          ..foreground = giftForeground()
+        config: widget.isHost ? hostConfig : audienceConfig
+          // ..foreground = giftForeground()
           ..mediaPlayer.supportTransparent = true,
       ),
+    );
+  }
+
+  Widget foregroundBuilder(context, size, ZegoUIKitUser? user, _) {
+    if (user == null) {
+      return Container();
+    }
+
+    final hostWidgets = [
+      /// mute pk user
+      Positioned(
+        top: 5,
+        left: 5,
+        child: SizedBox(
+          width: 40,
+          height: 40,
+          child: PKMuteButton(userID: user.id),
+        ),
+      ),
+    ];
+
+    return Stack(
+      children: [
+        ...((widget.isHost && user.id != userId)
+            ? hostWidgets
+            : [
+                giftForeground(),
+              ]),
+
+        /// camera state
+        Positioned(
+          top: 5,
+          right: 35,
+          child: SizedBox(
+            width: 18,
+            height: 18,
+            child: CircleAvatar(
+              backgroundColor: Colors.purple.withOpacity(0.6),
+              child: Icon(
+                user.camera.value ? Icons.videocam : Icons.videocam_off,
+                color: Colors.white,
+                size: 15,
+              ),
+            ),
+          ),
+        ),
+
+        /// microphone state
+        Positioned(
+          top: 5,
+          right: 5,
+          child: SizedBox(
+            width: 18,
+            height: 18,
+            child: CircleAvatar(
+              backgroundColor: Colors.purple.withOpacity(0.6),
+              child: Icon(
+                user.microphone.value ? Icons.mic : Icons.mic_off,
+                color: Colors.white,
+                size: 15,
+              ),
+            ),
+          ),
+        ),
+
+        /// name
+        Positioned(
+          top: 25,
+          right: 5,
+          child: Container(
+            // width: 30,
+            height: 18,
+            color: Colors.purple,
+            child: Text(user.name),
+          ),
+        ),
+      ],
     );
   }
 
@@ -243,11 +347,4 @@ class _LiveStreamViewState extends State<LiveStreamView> {
           count: receivedGift.count,
         ));
   }
-}
-
-Widget _buildLivePages() {
-  return PageView.builder(
-      scrollDirection: Axis.vertical,
-      itemCount: 15,
-      itemBuilder: (context, index) => const LiveCard());
 }
