@@ -4,12 +4,15 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_advertisement_use_case.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_tweet_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/follow_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/friend_request_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comment_replies_usecase.dart';
@@ -22,6 +25,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/pa
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/comment_replies.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/post_comments.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../core/enums/base_status_enum.dart';
@@ -52,6 +56,8 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final CommentReactUseCase _commentReactUseCase;
   final GetPostCommentRepliesUseCase _getPostCommentRepliesUseCase;
   final ReplyOnCommentUseCase _replyOnCommentUseCase;
+  final FaceTweetUseCase _getTwitterFeedUseCase;
+  final FaceAdvertisementUseCase _advertisementUseCase;
 
   SocialPostsCubit(
       this._getFeedUseCase,
@@ -60,7 +66,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       this._getPostCommentsUseCase,
       this._postCommentUseCase,
       this._deletePostUseCase,
-      this._hidePostUseCase, this._suggestedFriendsUseCase, this._friedRequestUseCase, this._followUserUseCase, this._sendGreetMessageUseCase, this._removeSuggestUserUseCase, this._sharePostUseCase, this._commentReactUseCase, this._getPostCommentRepliesUseCase, this._replyOnCommentUseCase,)
+      this._hidePostUseCase, this._suggestedFriendsUseCase, this._friedRequestUseCase, this._followUserUseCase, this._sendGreetMessageUseCase, this._removeSuggestUserUseCase, this._sharePostUseCase, this._commentReactUseCase, this._getPostCommentRepliesUseCase, this._replyOnCommentUseCase, this._getTwitterFeedUseCase, this._advertisementUseCase,)
       : super(const SocialPostsState());
 
   void loadData() async {
@@ -76,29 +82,78 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     });
   }
 
+
+  void onRefresh()async{
+    emit(state.copyWith(tweetPage:0));
+    emit(state.copyWith(advertisementsPage:0));
+    feedPagingController.refresh();
+  }
+
+
+
 // get feed posts
   Future<void> getFeed(int page) async {
-    final response = await _getFeedUseCase(const NoParams());
+    final response = await _getFeedUseCase(TwitterFeedParams(limit: 3, page: page));
+    List<PostEntity> tweets=[];
+    List<PostEntity> advertisements=[];
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-        (data) {
-          final isLastPage = data.length < pageSize;
+        (data) async{
+          // if(data.isNotEmpty){
+          //   tweets = await getTwitterFeed();
+          //   advertisements = await getAdvertisements();
+          // }
+          List<PostEntity> totalPosts=[];
+          totalPosts.addAll(data);
+          totalPosts.addAll(tweets);
+          totalPosts.addAll(advertisements);
+          final isLastPage = totalPosts.length < (4);
           if (page == 1) {
             print("page == 1 $page");
             feedPagingController.itemList = [];
           }
           if (isLastPage) {
             print("isLastPage = $isLastPage");
-            feedPagingController.appendLastPage(data);
+            feedPagingController.appendLastPage(totalPosts);
           } else {
             print("isNotLastPage = $isLastPage");
             final nextPageKey = page + 1;
-            feedPagingController.appendPage(data, nextPageKey);
+            feedPagingController.appendPage(totalPosts, nextPageKey);
           }
-          emit(state.copyWith(posts: data, status: StateStatus.initial));
+          emit(state.copyWith(posts: totalPosts, status: StateStatus.initial));
         });
   }
 
+  // get advertisements
+  Future<List<PostEntity>> getAdvertisements() async {
+    final response =
+    await _advertisementUseCase(TwitterFeedParams(limit: 1, page: state.advertisementsPage!+1));
+    List<PostEntity> advertisements=[];
+    response.fold(
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (data) {
+          advertisements.addAll(data);
+          int? page = state.advertisementsPage!+1;
+          emit(state.copyWith(advertisementsPage: page,posts: data, status: StateStatus.success));
+        });
+    print("advertisements:${advertisements.length}");
+    return advertisements;
+  }
+
+  Future<List<PostEntity>> getTwitterFeed() async {
+    final response =
+    await _getTwitterFeedUseCase(TwitterFeedParams(limit: 1, page: state.tweetPage!+1));
+    List<PostEntity> tweets=[];
+    response.fold(
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (data) {
+              tweets.addAll(data);
+              int? page = state.tweetPage!+1;
+          emit(state.copyWith(tweetPage: page,posts: data, status: StateStatus.success));
+        });
+    print("tweets:${tweets.length}");
+    return tweets;
+  }
   final int pageSize = 10;
   final PagingController<int, SuggestUserEntity> suggestUserPagingController =
   PagingController(firstPageKey: 1);
@@ -265,7 +320,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
-      getMyPosts(context: context);
+          List<PostEntity> posts = state.posts!;
+          posts.removeWhere((e)=>e.id==postId);
+      // state.posts?.removeWhere((e)=>e.id==postId);
+          emit(state.copyWith(posts: posts));
+          showSuccessMessage(context, "Post delete successfully");
     });
   }
 
@@ -274,7 +333,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
-      getMyPosts(context: context);
+          List<PostEntity> posts = state.posts!;
+          posts.removeWhere((e)=>e.id==postId);
+          emit(state.copyWith(posts: posts));
+          showSuccessMessage(context, "Post hide successfully");
+      // getMyPosts(context: context);
     });
   }
 

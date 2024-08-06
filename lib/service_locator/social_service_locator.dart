@@ -25,6 +25,8 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/reposito
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_advertisement_use_case.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_tweet_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/follow_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/friend_request_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_feed_usecase.dart';
@@ -221,6 +223,19 @@ class SocialServiceLocator {
       serviceLocator(),
     ));
 
+    serviceLocator
+        .registerLazySingleton<FaceTweetUseCase>(() => FaceTweetUseCase(
+      serviceLocator(),
+    ));
+
+
+    serviceLocator
+        .registerLazySingleton<FaceAdvertisementUseCase>(() => FaceAdvertisementUseCase(
+      serviceLocator(),
+    ));
+
+
+
     serviceLocator.registerFactory<CreatePostCubit>(() => CreatePostCubit(
           serviceLocator(),
           serviceLocator(),
@@ -230,6 +245,8 @@ class SocialServiceLocator {
 
     serviceLocator.registerFactory<InstagramCubit>(() => InstagramCubit());
     serviceLocator.registerFactory<SocialPostsCubit>(() => SocialPostsCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

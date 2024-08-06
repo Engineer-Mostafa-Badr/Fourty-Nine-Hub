@@ -8,13 +8,16 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import '../../../../../core/error/failure.dart';
 import '../../domain/entities/post_entity.dart';
 import '../../domain/usecases/post_react_usecase.dart';
 import '../models/comment_model.dart';
 
 abstract class SocialPostsRemoteDataSource {
-  Future<Either<Failure, List<PostEntity>>> getFeed();
+  Future<Either<Failure, List<PostEntity>>> getFeed({required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getTweet({required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getAdvertisement({required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getUserPosts(
       {required String userId});
 
@@ -43,13 +46,27 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   final ApiConsumer _apiConsumer;
   SocialPostsRemoteDataSourceImpl(this._apiConsumer);
   @override
-  Future<Either<Failure, List<PostEntity>>> getFeed() async {
-    final response = await _apiConsumer.get(EndPoints.getFeedPosts);
+  Future<Either<Failure, List<PostEntity>>> getFeed({required TwitterFeedParams params}) async {
+    final response = await _apiConsumer.get(EndPoints.getFeedPosts(params));
 
     return response.fold((l) {
       return Left(l);
     }, (data) {
       final list = (data['data']['posts'] as List)
+          .map((e) => PostModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<PostEntity>>> getAdvertisement({required TwitterFeedParams params}) async {
+    final response = await _apiConsumer.get(EndPoints.getAdvertisement(params));
+
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data']['advertises'] as List)
           .map((e) => PostModel.fromJson(e))
           .toList();
       return Right(list);
@@ -172,4 +189,19 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
         .post(EndPoints.commentOnPost(params.postId), data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(CommentModel.fromJson(data['data'])));
   }
+
+  @override
+  Future<Either<Failure, List<PostEntity>>> getTweet({required TwitterFeedParams params}) async {
+    final response = await _apiConsumer.get("${EndPoints.getTwitterFeedPosts}?page=${params.page}&limit=${params.limit}");
+
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data']['posts'] as List)
+          .map((e) => PostModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
+  }
+
 }

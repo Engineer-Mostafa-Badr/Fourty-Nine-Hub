@@ -18,14 +18,14 @@ class PostParams {
   final String? color;
   final String? feeling;
   final String? activity;
-  // final String? location;
+  final String? privacy;
   final List<String>? mediaId;
   PostParams(
       {required this.content,
       this.color,
       this.activity,
       this.feeling,
-      // this.location,
+      this.privacy,
         this.mediaId,});
   Map<String, dynamic> toJson() => {
         'content': content??'',
@@ -33,5 +33,6 @@ class PostParams {
         if(activity!=null)'activity': activity,
     if(color!=null)'background_color': color,
         'media': mediaId,
+        'publicationType': privacy??'public',
       };
 }
