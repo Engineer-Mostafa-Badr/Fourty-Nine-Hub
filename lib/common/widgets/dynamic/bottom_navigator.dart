@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/ride_request_view.dart';
+import '../../../features/zoom/presentation/widgets/meeting_dialogue.dart';
 import '../../../res/assets/assets.dart';
 import '../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -21,6 +22,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         ? <BottomItemModel>[
             BottomItemModel(
                 icon: FontAwesomeIcons.microphone,
+                height: 30,
                 label: 'Voice',
                 index: 0,
                 image: Assets.voiceLive,
@@ -29,18 +31,21 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
                 icon: FontAwesomeIcons.stream,
                 label: 'Live',
                 index: 0,
+                height: 25,
                 image: Assets.live,
                 action: () => context.push(Routes.LIVE)),
             BottomItemModel(
                 icon: Icons.video_call,
                 label: 'Meet',
                 index: 0,
+                height: 25,
                 image: Assets.zoomMeeting,
-                action: () => context.push(Routes.MEETINGROOM)),
+                action: () => showMeetingDialogue(context)),
             BottomItemModel(
                 icon: Icons.video_call,
                 label: 'Broadcast',
                 index: 0,
+                height: 25,
                 image: Assets.radio,
                 action: () => context.push(Routes.CLUBHOUSE)),
           ]
@@ -119,7 +124,8 @@ class CustomBottomNavigationBar extends StatefulWidget {
   final ValueChanged<int> onTap;
   final List<BottomItemModel> items;
 
-  const CustomBottomNavigationBar({super.key, 
+  const CustomBottomNavigationBar({
+    super.key,
     required this.currentIndex,
     required this.onTap,
     required this.items,
@@ -168,27 +174,34 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(widget.items.length, (index) {
                 return GestureDetector(
                   onTap: () {
                     widget.onTap(index);
                   },
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        widget.items[index].image,
-                        height: 23,
-                        semanticsLabel: widget.items[index].label,
-                      ),
-                      Text(
-                        widget.items[index].label,
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                    ],
+                  child: Padding(
+                    padding: index == 1
+                        ? const EdgeInsets.only(right: 10)
+                        : index == 2
+                            ? const EdgeInsets.only(left: 30)
+                            : EdgeInsets.zero,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(
+                          widget.items[index].image,
+                          height: widget.items[index].height,
+                          semanticsLabel: widget.items[index].label,
+                        ),
+                        Text(
+                          widget.items[index].label,
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }),
@@ -206,12 +219,13 @@ class BottomItemModel {
   final int index;
   final String image;
   final Function action;
-
+  final double height;
   BottomItemModel({
     required this.icon,
     required this.label,
     required this.index,
     required this.image,
     required this.action,
+    this.height = 20,
   });
 }
