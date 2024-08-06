@@ -10,10 +10,13 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/useca
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/datasources/remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/repositories/doctor_dashboard_repo_impl.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/repositories/doctor_dashboard_repo.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_appointments_by_day.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_unhandled_appointments_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_id_remaining_days.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_practicing_remaining_days.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_subscription_remaining_days.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_today_appointments/doctor_today_appointments_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/data/datasources/doctor_detail_remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/data/repositories/doctor_details_repo_impl.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/repositories/doctor_details_repo.dart';
@@ -41,6 +44,7 @@ import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_medical_services.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_my_appointment_bookings_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_user_upcoming_appointments.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/is_doctor_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/toggle_favorite_subcategory.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
@@ -149,12 +153,17 @@ class HealthServiceLocator {
     serviceLocator
         .registerLazySingleton<GetDoctorSubscriptionRemainingDaysUseCase>(
             () => GetDoctorSubscriptionRemainingDaysUseCase(serviceLocator()));
-
     serviceLocator
         .registerLazySingleton<GetDoctorPracticingRemainingDaysUseCase>(
             () => GetDoctorPracticingRemainingDaysUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetDoctorIDRemainingDaysUseCase>(
         () => GetDoctorIDRemainingDaysUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetDoctorAppointmentsByDayUseCase>(
+        () => GetDoctorAppointmentsByDayUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetDoctorUnhandledAppointmentsUseCase>(
+        () => GetDoctorUnhandledAppointmentsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<IsDoctorUsecase>(
+        () => IsDoctorUsecase(serviceLocator()));
 
     // -------------------------- cubits --------------------------
     serviceLocator.registerSingleton<HealthSharedData>(HealthSharedData());
@@ -165,6 +174,7 @@ class HealthServiceLocator {
           serviceLocator(),
         ));
     serviceLocator.registerFactory<HealthCubit>(() => HealthCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
@@ -209,6 +219,13 @@ class HealthServiceLocator {
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
-            ));
+              serviceLocator(),
+              serviceLocator(),
+            )..loadData());
+
+    serviceLocator.registerFactory<DoctorTodayAppointmentsCubit>(
+        () => DoctorTodayAppointmentsCubit(
+              serviceLocator(),
+            )..loadData());
   }
 }

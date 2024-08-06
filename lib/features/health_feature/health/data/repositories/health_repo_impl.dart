@@ -17,26 +17,30 @@ class HealthRepoImpl implements HealthRepo {
       getMyBookingsHistory() async {
     return await _remoteDataSource.getMyBookingsHistory();
   }
-  
+
   @override
   Future<Either<Failure, List<BookedAppointmentEntity>>> getUpcomingBookings() {
     return _remoteDataSource.getUpcomingBookings();
   }
 
   @override
-  Future<Either<Failure, List<HealthSubcategoryEntity>>> getHealthSubcategories() {
+  Future<Either<Failure, List<HealthSubcategoryEntity>>>
+      getHealthSubcategories() {
     return _remoteDataSource.getHealthSubcategories();
   }
 
   @override
-  Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices(){
+  Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices() {
     return _remoteDataSource.getMedicalServices();
   }
-  
+
   @override
   Future<Either<Failure, bool>> toggleFavoriteSubcategory(String sucategoryId) {
     return _remoteDataSource.toggleFavoriteSubcategory(sucategoryId);
   }
 
-  
+  @override
+  Future<Either<Failure, bool>> isDoctor() {
+    return _remoteDataSource.isDoctor();
+  }
 }

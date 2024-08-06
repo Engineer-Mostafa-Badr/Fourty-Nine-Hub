@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -27,60 +31,81 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             color: Colors.white,
           ),
+          child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
+            builder: (context, state) {
+              if (state is DoctorDashboardUnhandledAppointments &&
+                  state.appointments.isNotEmpty) {
+                return Column(
+                  children: [
+                    ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: state.appointments.length,
+                      separatorBuilder: (context, index) => const Divider(),
+                      itemBuilder: (context, index) =>
+                          DoctorUnhandledAppointmentCard(
+                        appointment: state.appointments[index],
+                      ),
+                    ),
+                    const Sizer(),
+                    AppButton(label: Labels.viewMore, onPressed: () {})
+                  ],
+                );
+              } else {
+                return const Center(child: Text(Labels.noAppointments));
+              }
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class DoctorUnhandledAppointmentCard extends StatelessWidget {
+  final DoctorAppointmentEntity appointment;
+  const DoctorUnhandledAppointmentCard({super.key, required this.appointment});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+            flex: 1,
+            child: SquareImage(
+              url: appointment.image ?? UIConst.profilePlaceHolder,
+            )),
+        const Sizer(),
+        Expanded(
+          flex: 3,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Label(
+                text: appointment.fullName,
+                style: Styles.headerText(),
+              ),
+              Label(
+                text:
+                    '${appointment.type.translatedName} - ${appointment.day.name}\n${appointment.time}',
+                style: Styles.mediumText(),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          flex: 2,
           child: Column(
             children: [
-              ListView.separated(
-                shrinkWrap: true,
-                itemCount: 2,
-                separatorBuilder: (context, index) => const Divider(),
-                itemBuilder: (context, index) {
-                  return Row(
-                    children: [
-                      const Expanded(
-                          flex: 1,
-                          child: SquareImage(
-                            url: UIConst.profilePlaceHolder,
-                          )),
-                      const Sizer(),
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Label(
-                              text: 'Ahmed Mohamed',
-                              style: Styles.headerText(),
-                            ),
-                            Label(
-                              text: 'Clinic\n9:00 - 10:00 AM',
-                              style: Styles.mediumText(),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          children: [
-                            AppButton(
-                              label: Labels.accept,
-                              onPressed: () {},
-                              backColor: AppColors.PRIMARY_COLOR,
-                            ),
-                            const Sizer(),
-                            AppButton(
-                              label: Labels.reject,
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
+              AppButton(
+                label: Labels.accept,
+                onPressed: () {},
+                backColor: AppColors.PRIMARY_COLOR,
               ),
               const Sizer(),
-              AppButton(label: Labels.viewMore, onPressed: () {})
+              AppButton(
+                label: Labels.reject,
+                onPressed: () {},
+              ),
             ],
           ),
         ),

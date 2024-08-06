@@ -1,0 +1,61 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_today_appointments/doctor_today_appointments_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+
+class DoctorTodayAppointmentsView extends StatelessWidget {
+  const DoctorTodayAppointmentsView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(Labels.todayAppointments),
+      ),
+      body: BlocBuilder<DoctorTodayAppointmentsCubit,
+          DoctorTodayAppointmentsState>(
+        builder: (context, state) {
+          if (state is DoctorTodayAppointmentsLoaded) {
+            if (state.appointments.isNotEmpty) {
+              return ListView.separated(
+                shrinkWrap: true,
+                controller: context
+                    .read<DoctorTodayAppointmentsCubit>()
+                    .scrollController,
+                itemCount: state.appointments.length,
+                itemBuilder: (context, index) {
+                  final appointment = state.appointments[index];
+                  return ListTile(
+                    title: Text(appointment.type.translatedName),
+                    subtitle: Text(appointment.time),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(),
+              );
+            } else {
+              return Center(
+                child: Label(
+                  text: Labels.noAppointmentsToday,
+                  style: Styles.headerText(),
+                ),
+              );
+            }
+          } else if (state is DoctorTodayAppointmentsError) {
+            return Center(
+                child: Label(
+              text: state.message,
+              style: Styles.headerText(),
+            ));
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+    );
+  }
+}

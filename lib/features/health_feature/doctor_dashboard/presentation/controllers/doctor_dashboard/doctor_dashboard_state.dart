@@ -25,3 +25,13 @@ final class DoctorDashboardError extends DoctorDashboardState {
   final String message;
   DoctorDashboardError(this.message);
 }
+
+final class DoctorDashboardTodayAppointments extends DoctorDashboardState {
+  final List<DoctorAppointmentEntity> appointments;
+  DoctorDashboardTodayAppointments(this.appointments);
+}
+
+final class DoctorDashboardUnhandledAppointments extends DoctorDashboardState {
+  final List<DoctorAppointmentEntity> appointments;
+  DoctorDashboardUnhandledAppointments(this.appointments);
+}

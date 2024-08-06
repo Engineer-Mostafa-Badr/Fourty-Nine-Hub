@@ -1,0 +1,39 @@
+import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/enums/week_days.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/repositories/doctor_dashboard_repo.dart';
+
+class GetDoctorAppointmentsByDayUseCase
+    extends UseCase<List<DoctorAppointmentEntity>, GetDoctorAppointmentsByDayParams> {
+  final DoctorDashboardRepo doctorDashboardRepo;
+
+  GetDoctorAppointmentsByDayUseCase(this.doctorDashboardRepo);
+
+  @override
+  Future<Either<Failure, List<DoctorAppointmentEntity>>> call(
+      GetDoctorAppointmentsByDayParams params) {
+    return doctorDashboardRepo.getDoctorAppointmentsByDay(params);
+  }
+}
+
+class GetDoctorAppointmentsByDayParams {
+  WeekDays day;
+  int page;
+  int limit;
+
+  GetDoctorAppointmentsByDayParams(
+      {required this.day, required this.page, required this.limit});
+
+  Map<String, dynamic> toQueryParams() {
+    return {
+      "page": page,
+      "limit": limit,
+    };
+  }
+
+  Map<String, dynamic> toData() => {
+        "day": day.name.toLowerCase(),
+      };
+}

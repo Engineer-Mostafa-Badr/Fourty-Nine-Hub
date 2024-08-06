@@ -22,60 +22,67 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
         ),
         const Sizer(),
         Container(
-          padding: const EdgeInsets.symmetric(vertical: 20),
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.white,
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
-                buildWhen: (previous, current) =>
-                    current is DoctorDashboardInitial ||
-                    current is DoctorDAshboardSupscriptionRemainingDays,
-                builder: (context, state) {
-                  String days = '??';
-                  if (state is DoctorDAshboardSupscriptionRemainingDays) {
-                    days = state.days.toString();
-                  }
-                  return _Item(
-                    numerOfDays: days,
-                    label: Labels.subscription,
-                  );
-                },
+              Expanded(
+                child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
+                  buildWhen: (previous, current) =>
+                      current is DoctorDashboardInitial ||
+                      current is DoctorDAshboardSupscriptionRemainingDays,
+                  builder: (context, state) {
+                    String days = Labels.subscribeNow;
+                    if (state is DoctorDAshboardSupscriptionRemainingDays) {
+                      days = state.days.toString();
+                    }
+                    return _Item(
+                      numerOfDays: days,
+                      label: Labels.subscription,
+                    );
+                  },
+                ),
               ),
-              BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
-                buildWhen: (previous, current) =>
-                    current is DoctorDashboardInitial ||
-                    current is DoctorDashboardIDRemainingDays,
-                builder: (context, state) {
-                  String days = '??';
-                  if (state is DoctorDashboardIDRemainingDays) {
-                    days = state.days.toString();
-                  }
-                  return _Item(
-                    numerOfDays: days,
-                    label: Labels.id,
-                    onTap: () => context.push(Routes.EDITDOCTORDOCS),
-                  );
-                },
+              const Sizer(),
+              Expanded(
+                child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
+                  buildWhen: (previous, current) =>
+                      current is DoctorDashboardInitial ||
+                      current is DoctorDashboardIDRemainingDays,
+                  builder: (context, state) {
+                    String days = '??';
+                    if (state is DoctorDashboardIDRemainingDays) {
+                      days = state.days.toString();
+                    }
+                    return _Item(
+                      numerOfDays: days,
+                      label: Labels.id,
+                      onTap: () => context.push(Routes.EDITDOCTORDOCS),
+                    );
+                  },
+                ),
               ),
-              BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
-                buildWhen: (previous, current) =>
-                    current is DoctorDashboardInitial ||
-                    current is DoctorDashboardPracticingRemainingDays,
-                builder: (context, state) {
-                  String days = '??';
-                  if (state is DoctorDashboardPracticingRemainingDays) {
-                    days = state.days.toString();
-                  }
-                  return _Item(
-                    numerOfDays: days,
-                    label: Labels.practiceCertification,
-                    onTap: () => context.push(Routes.EDITDOCTORDOCS),
-                  );
-                },
+              const Sizer(),
+              Expanded(
+                child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
+                  buildWhen: (previous, current) =>
+                      current is DoctorDashboardInitial ||
+                      current is DoctorDashboardPracticingRemainingDays,
+                  builder: (context, state) {
+                    String days = '??';
+                    if (state is DoctorDashboardPracticingRemainingDays) {
+                      days = state.days.toString();
+                    }
+                    return _Item(
+                      numerOfDays: days,
+                      label: Labels.practiceCertification,
+                      onTap: () => context.push(Routes.EDITDOCTORDOCS),
+                    );
+                  },
+                ),
               ),
             ],
           ),
@@ -97,12 +104,12 @@ class _Item extends StatelessWidget {
       onTap: onTap,
       child: Column(
         children: [
-          Text(
-            numerOfDays,
+          Label(
+            text: numerOfDays,
             style: Styles.headerText(),
           ),
-          Text(
-            label,
+          Label(
+            text: label,
             style: Styles.mediumText(),
           ),
         ],

@@ -48,12 +48,16 @@ class EndPoints {
   static const String getUpcomingUserAppointments = '/health/book-appointment';
   static const String getHealthRequestsHistory =
       '/health/history-patient-booking';
-  static String remainingDaysOfDoctorPracticing(String doctorId) =>
-      '/health/dashboard/remaining-days-of-doctor-id/$doctorId';
-  static String remainingDaysOfDoctorID(String doctorId) =>
-      '/health/dashboard/remaining-days-of-doctor-practicing-id/$doctorId';
-  static String remainingDaysOfDoctorSubscription(String doctorId) =>
-      '/health/dashboard/remaining-days-of-doctor-subscription/$doctorId';
+  static const remainingDaysOfDoctorPracticing =
+      '/health/dashboard/remaining-days-of-doctor-id';
+  static const remainingDaysOfDoctorID =
+      '/health/dashboard/remaining-days-of-doctor-practicing-id';
+  static const remainingDaysOfDoctorSubscription =
+      '/health/dashboard/remaining-days-of-doctor-subscription';
+  static const getDoctorAppointmentsByDay = '/health/doctor/booking-day';
+  static const getDoctorUnhandledAppointments = '/health/book-requests';
+  static const isDoctor = '/health/check-doctor-or-not';
+
   // reels
   static const getExploreReels = '/reels/explore';
 

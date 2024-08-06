@@ -141,4 +141,7 @@ abstract class Labels {
   static const expireDate = 'Expire Date';
   static const uploadPhotos = 'Upload Photos';
   static const deleteAccount = 'Delete Account';
+  static const noAppointmentsToday = 'No Appointments Today';
+  static const subscribeNow = 'Subscribe Now';
+  static const noAppointments = 'No Appointments';
 }
