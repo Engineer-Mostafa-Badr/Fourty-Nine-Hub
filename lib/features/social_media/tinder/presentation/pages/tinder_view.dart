@@ -459,6 +459,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_sub_category_card.dart';
@@ -512,7 +513,7 @@ class TinderView extends StatelessWidget {
                             SizedBox(
                               height: MediaQuery.of(context).size.height -
                                   kToolbarHeight -
-                                  200,
+                                  150,
                               child: Stack(
                                 children:
                                     state.userData.asMap().entries.map((entry) {
@@ -529,8 +530,8 @@ class TinderView extends StatelessWidget {
                                 child: ListView.separated(
                                   separatorBuilder: (context, index) =>
                                       const Sizer(),
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 0, horizontal: 0),
                                   scrollDirection: Axis.horizontal,
                                   itemBuilder: (context, index) =>
                                       TinderSubCategoryCard(
@@ -619,7 +620,7 @@ class TinderView extends StatelessWidget {
       padding: const EdgeInsets.all(0.0),
       child: Card(
         clipBehavior: Clip.hardEdge,
-        elevation: 6,
+        elevation: 2,
         child: Stack(
           children: [
             Hero(
@@ -637,7 +638,7 @@ class TinderView extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 12.0, right: 8),
+              padding: const EdgeInsets.only(top: 0.0, right: 8),
               child: Align(
                 alignment: Alignment.topRight,
                 child: IconButton(
@@ -733,7 +734,15 @@ class TinderView extends StatelessWidget {
         _buildFloatingActionButton(
           context,
           Icons.person,
-          () {},
+          () {
+            Navigator.pop(context);
+            // context.push(Routes.OTHERSACCOUNT);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => OtherAccountView(),
+                ));
+          },
         ),
         _buildFloatingActionButton(
             context, Icons.chat, () => showAdvancedDialog(context),
@@ -789,16 +798,21 @@ class TinderView extends StatelessWidget {
           child: const Icon(Icons.add_photo_alternate_outlined,
               color: Colors.white),
         ),
-        _buildFloatingActionButton(context, Icons.card_giftcard, () {},
-            color: AppColors.ACCENT_COLOR),
+        _buildFloatingActionButton(context, Icons.card_giftcard, () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) => GiftBottomSheet(),
+          );
+        }, color: AppColors.ACCENT_COLOR),
         _buildFloatingActionButton(context, Icons.report, () {
+          final user = context.read<UserCubit>().state.data;
           showModalBottomSheet(
             context: context,
             builder: (context) => SizedBox(
               height: MediaQuery.of(context).size.height / 1.5,
-              child: const Padding(
+              child: Padding(
                 padding: EdgeInsets.all(8.0),
-                child: ReportView(id: '2', categoryId: ''),
+                child: ReportView(id: '${user!.id}', categoryId: ''),
               ),
             ),
           );
@@ -854,39 +868,59 @@ class TinderView extends StatelessWidget {
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.person_outline),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AnonymousChatScreen()),
-                      );
-                    },
+              Expanded(
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.person_outline,
+                            size: 30,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AnonymousChatScreen()),
+                            );
+                          },
+                        ),
+                        Text("Anonymous Chat"),
+                      ],
+                    ),
                   ),
-                  Text("Anonymous Chat"),
-                ],
+                ),
               ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.person),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NormalChatScreen()),
-                      );
-                    },
+              Expanded(
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.person,
+                            size: 30,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NormalChatScreen()),
+                            );
+                          },
+                        ),
+                        Text("Normal Chat"),
+                      ],
+                    ),
                   ),
-                  Text("Normal Chat"),
-                ],
+                ),
               ),
             ],
           ),
@@ -907,53 +941,120 @@ class TinderView extends StatelessWidget {
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  void _showPopupMenu(BuildContext context) {
-    showMenu(
-      context: context,
-      position:
-          RelativeRect.fromLTRB(100, 100, 0, 0), // Adjust position as needed
-      items: [
-        PopupMenuItem<int>(
-          value: 0,
-          child: Text("Anonymous Chat"),
-        ),
-        PopupMenuItem<int>(
-          value: 1,
-          child: Text("Normal Chat"),
-        ),
-      ],
-    ).then((value) {
-      if (value == 0) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => AnonymousChatScreen()),
-        );
-      } else if (value == 1) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => NormalChatScreen()),
-        );
-      }
-    });
-  }
-
+class GiftBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Screen'),
-      ),
-      body: Center(
-        child: Text('Welcome to Home Screen'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showPopupMenu(context),
-        child: Icon(Icons.add),
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'الهدايا',
+              style: TextStyle(
+                  fontSize: 28, fontWeight: FontWeight.bold, color: Colors.red),
+            ),
+          ),
+          ListTile(
+            leading: Image.network(
+              'https://your-correct-image-url/lion.png',
+              width: 50,
+              height: 50,
+              errorBuilder: (BuildContext context, Object exception,
+                  StackTrace? stackTrace) {
+                return Icon(Icons.error, color: Colors.red, size: 50);
+              },
+            ),
+            title: Text('اسد', style: TextStyle(fontSize: 22)),
+            trailing: Text('500 جنيه مصري', style: TextStyle(fontSize: 22)),
+          ),
+          ListTile(
+            leading: Icon(Icons.money, color: Colors.green, size: 50),
+            title: Text('اموال', style: TextStyle(fontSize: 22)),
+            trailing: Text('400 جنيه مصري', style: TextStyle(fontSize: 22)),
+          ),
+          ListTile(
+            leading: Icon(Icons.card_giftcard, color: Colors.red, size: 50),
+            title: Text('صندوق هدايا', style: TextStyle(fontSize: 22)),
+            trailing: Text('300 جنيه مصري', style: TextStyle(fontSize: 22)),
+          ),
+          ListTile(
+            leading: Icon(Icons.local_florist, color: Colors.pink, size: 50),
+            title: Text('باقة ورود', style: TextStyle(fontSize: 22)),
+            trailing: Text('200 جنيه مصري', style: TextStyle(fontSize: 22)),
+          ),
+          ListTile(
+            leading: Image.network(
+              'https://your-correct-image-url/butterfly.png',
+              width: 50,
+              height: 50,
+              errorBuilder: (BuildContext context, Object exception,
+                  StackTrace? stackTrace) {
+                return Icon(Icons.error, color: Colors.red, size: 50);
+              },
+            ),
+            title: Text('فراشة', style: TextStyle(fontSize: 22)),
+            trailing: Text('100 جنيه مصري', style: TextStyle(fontSize: 22)),
+          ),
+          ListTile(
+            leading: Icon(Icons.star, color: Colors.yellow, size: 50),
+            title: Text('نجمة', style: TextStyle(fontSize: 22)),
+            trailing: Text('50 جنيه مصري', style: TextStyle(fontSize: 22)),
+          ),
+        ],
       ),
     );
   }
 }
+
+// class HomeScreen extends StatelessWidget {
+//   void _showPopupMenu(BuildContext context) {
+//     showMenu(
+//       context: context,
+//       position:
+//           RelativeRect.fromLTRB(100, 100, 0, 0), // Adjust position as needed
+//       items: [
+//         PopupMenuItem<int>(
+//           value: 0,
+//           child: Text("Anonymous Chat"),
+//         ),
+//         PopupMenuItem<int>(
+//           value: 1,
+//           child: Text("Normal Chat"),
+//         ),
+//       ],
+//     ).then((value) {
+//       if (value == 0) {
+//         Navigator.push(
+//           context,
+//           MaterialPageRoute(builder: (context) => AnonymousChatScreen()),
+//         );
+//       } else if (value == 1) {
+//         Navigator.push(
+//           context,
+//           MaterialPageRoute(builder: (context) => NormalChatScreen()),
+//         );
+//       }
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Home Screen'),
+//       ),
+//       body: Center(
+//         child: Text('Welcome to Home Screen'),
+//       ),
+//       floatingActionButton: FloatingActionButton(
+//         onPressed: () => _showPopupMenu(context),
+//         child: Icon(Icons.add),
+//       ),
+//     );
+//   }
+// }
 
 class AnonymousChatScreen extends StatelessWidget {
   @override
@@ -982,4 +1083,4 @@ class NormalChatScreen extends StatelessWidget {
     );
   }
 }
-//rommana2.3
+//rommana2.4

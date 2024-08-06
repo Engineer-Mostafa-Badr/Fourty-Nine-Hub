@@ -19,7 +19,7 @@ class TinderSubCategoryCard extends StatelessWidget {
       onTap: () {},
       child: Container(
         width: 200,
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(0),
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),

@@ -16,7 +16,8 @@ import 'package:go_router/go_router.dart';
 class ReportView extends StatefulWidget {
   const ReportView({
     super.key,
-    required this.id, required String categoryId,
+    required this.id,
+    required String categoryId,
   });
 
   final String id;
