@@ -3,6 +3,7 @@ import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_chart.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -23,7 +24,7 @@ class DoctorHistoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
@@ -54,12 +55,23 @@ class DoctorHistoryCard extends StatelessWidget {
             ],
           ),
           const Sizer(
-            height: 60,
+            height: 30,
           ),
-          DoctorHistoryChart(
-            clinicValue: clinicValue,
-            callValue: callValue,
-            homeVisitValue: homeVisitValue,
+          CustomBarChart(
+            data: [
+              BarData(
+                label: Labels.clinic,
+                value: clinicValue,
+              ),
+              BarData(
+                label: Labels.call,
+                value: callValue,
+              ),
+              BarData(
+                label: Labels.homeVist,
+                value: homeVisitValue,
+              ),
+            ],
           ),
         ],
       ),
