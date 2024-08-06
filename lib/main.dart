@@ -11,7 +11,6 @@ import 'features/subscribe/presentation/cubit/subscribe_cubit.dart';
 import 'res/style/app_colors.dart';
 import 'routes/pages.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-//import 'package:admob_flutter/admob_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

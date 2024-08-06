@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 
 class EndPoints {
@@ -89,7 +90,7 @@ class EndPoints {
 
   static const createFacebookPost = '/facebook/post';
   static const createTwitterPost = '/twitter/post';
-  static const getFeedPosts = '/facebook/feed';
+  // static const getFeedPosts = '/facebook/feed';
   static const activities = '/facebook/post/activities';
   static const feelings = '/facebook/post/feelings';
   static const getTwitterFeedPosts = '/twitter/feed';
@@ -103,6 +104,14 @@ class EndPoints {
 
   static String userTweets(GetUserTweetsParams params) {
     return '/twitter/post/user/${params.userId}?limit=10&page=${params.page}&type=1';
+  }
+
+  static String getFeedPosts(TwitterFeedParams params) {
+    return '/facebook/feed?limit=${params.limit}&page=${params.page}';
+  }
+
+  static String getAdvertisement(TwitterFeedParams params) {
+    return '/advertisementCompany?limit=${params.limit}&page=${params.page}';
   }
 
   static String acceptTripRider(String id) {

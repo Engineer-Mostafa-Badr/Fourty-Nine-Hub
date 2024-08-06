@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_card.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -48,6 +50,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.read<UserCubit>().state.data;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -66,7 +69,12 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
               deletePost: widget.deletePost,
               hidePost: widget.hidePost,
               showPostDetails: widget.showPostDetails,
-              showPostComments: widget.showPostComments, onShare: (String id) {  }, from: 'details',),
+              showPostComments: widget.showPostComments,
+            onShare: (String id) {
+            },
+            from: 'details',
+            isMyPost: user?.id==widget.post.user.id,
+          ),
           const Divider(),
           Expanded(
             child: ListView.separated(
