@@ -345,14 +345,14 @@ class UserProfilePage extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            userData.user!.isNotEmpty
-                ? '${userData.user?[0].firstName} ${userData.user?[0].lastName}'
+            userData.user != null
+                ? '${userData.user!.firstName} ${userData.user!.lastName}'
                 : 'User Name',
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 5),
-          Text(userData.user!.isNotEmpty
-              ? userData.user!.first.email ?? ''
+          Text(userData.user != null
+              ? userData.user!.email ?? ''
               : 'user.email@example.com'),
         ],
       ),
@@ -364,26 +364,26 @@ class UserProfilePage extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          ListTile(
-            leading: const Icon(Icons.phone),
-            title: const Text('Phone Number'),
-            subtitle: Text(userData.user!.isNotEmpty
-                ? userData.user!.first.nuphone.toString()
-                : 'N/A'),
-          ),
+          // ListTile(
+          //   leading: const Icon(Icons.phone),
+          //   title: const Text('Phone Number'),
+          //   subtitle: Text(userData.isNotEmpty
+          //       ? userData.user!.phone.toString()
+          //       : 'N/A'),
+          // ),
           const ListTile(
             leading: Icon(Icons.location_city),
             title: Text('Address'),
             subtitle: Text('123 Street, City, Country'), // Adjust as needed
           ),
-          ListTile(
-            leading: const Icon(Icons.cake),
-            title: const Text('Date of Birth'),
-            subtitle: Text(
-                userData.user!.isNotEmpty && userData.user![0].birthday != null
-                    ? userData.user![0].birthday.toString()
-                    : 'N/A'),
-          ),
+          // ListTile(
+          //   leading: const Icon(Icons.cake),
+          //   title: const Text('Date of Birth'),
+          //   subtitle: Text(
+          //       userData.user!.isNotEmpty && userData.user.birthday != null
+          //           ? userData.user.birthday.toString()
+          //           : 'N/A'),
+          // ),
           const ListTile(
             leading: Icon(Icons.info),
             title: Text('Bio'),
@@ -405,10 +405,10 @@ class UserProfilePage extends StatelessWidget {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
-          ...userData.likes!
-              .map((like) =>
-                  _buildActivityItem(like.firstName! + ' liked a post'))
-              .toList(),
+          // ...userData.likes!
+          //     .map((like) =>
+          //         _buildActivityItem(like.firstName! + ' liked a post'))
+          //     .toList(),
         ],
       ),
     );
@@ -432,8 +432,8 @@ class UserProfilePage extends StatelessWidget {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
-          ...userData.friends!.map((friend) =>
-              _buildFriendItem('${friend.firstName} ${friend.lastName}')),
+          // ...userData.friends!.map((friend) =>
+          //     _buildFriendItem('${friend.firstName} ${friend.lastName}')),
         ],
       ),
     );
@@ -451,7 +451,7 @@ class UserProfilePage extends StatelessWidget {
 }
 
 class SwipeCardDemo extends StatefulWidget {
-  final List<Picture>? userImages;
+  final List<Pictures>? userImages;
 
   const SwipeCardDemo({super.key, required this.userImages});
 
@@ -513,7 +513,7 @@ class _SwipeCardDemoState extends State<SwipeCardDemo> {
         children: [
           Hero(
             tag:
-                'userHero-${widget.userImages?[_currentStoryIndex].id}', // Unique tag for each image
+                'userHero-${widget.userImages?[_currentStoryIndex].sId}', // Unique tag for each image
 
             child: Image.network(
               (widget.userImages!.isNotEmpty)

@@ -886,578 +886,107 @@
 //     );
 //   }
 // }
-import 'dart:convert';
+class UserData {
+  String? sId;
+  List<Pictures>? pictures;
+  User? user;
 
-// Model for Pictures
-class Picture {
-  String? id;
-  String? mediaKey;
+  UserData({this.sId, this.pictures, this.user});
 
-  Picture({this.id, this.mediaKey});
-
-  Picture.fromJson(Map<String, dynamic> json) {
-    id = json['_id'];
-    mediaKey = json['mediaKey'];
+  UserData.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    if (json['pictures'] != null) {
+      pictures = <Pictures>[];
+      json['pictures'].forEach((v) {
+        pictures!.add(new Pictures.fromJson(v));
+      });
+    }
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = id;
-    data['mediaKey'] = mediaKey;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    if (this.pictures != null) {
+      data['pictures'] = this.pictures!.map((v) => v.toJson()).toList();
+    }
+    if (this.user != null) {
+      data['user'] = this.user!.toJson();
+    }
     return data;
   }
 }
 
-// Model for Location
+class Pictures {
+  String? sId;
+  String? mediaKey;
+
+  Pictures({this.sId, this.mediaKey});
+
+  Pictures.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    mediaKey = json['mediaKey'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['mediaKey'] = this.mediaKey;
+    return data;
+  }
+}
+
+class User {
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? gender;
+  Location? location;
+
+  User({this.firstName, this.lastName, this.email, this.gender, this.location});
+
+  User.fromJson(Map<String, dynamic> json) {
+    firstName = json['firstName'];
+    lastName = json['lastName'];
+    email = json['email'];
+    gender = json['gender'];
+    location = json['location'] != null
+        ? new Location.fromJson(json['location'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['firstName'] = this.firstName;
+    data['lastName'] = this.lastName;
+    data['email'] = this.email;
+    data['gender'] = this.gender;
+    if (this.location != null) {
+      data['location'] = this.location!.toJson();
+    }
+    return data;
+  }
+}
+
 class Location {
   String? type;
-  List<double>? coordinates;
+  List<int>? coordinates;
 
   Location({this.type, this.coordinates});
 
   Location.fromJson(Map<String, dynamic> json) {
     type = json['type'];
-    coordinates = json['coordinates'].cast<double>();
+    coordinates = json['coordinates'].cast<int>();
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['type'] = type;
-    data['coordinates'] = coordinates;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['type'] = this.type;
+    data['coordinates'] = this.coordinates;
     return data;
   }
 }
 
-// Model for Likes
-class Likes {
-  String? id;
-  String? socketId;
-  String? firstName;
-  String? lastName;
-  String? email;
-  String? birthday;
-  String? hashedPassword;
-  String? gender;
-  Location? location;
-  bool? adminIgnore;
-  List<dynamic>? following;
-  List<dynamic>? blockedUsers;
-  List<dynamic>? hiddenPosts;
-  List<dynamic>? followers;
-  String? referralId;
-  bool? isLocked;
-  String? lockedDate;
-  bool? isRider;
-  bool? isDoctor;
-  bool? isRestaurant;
-  bool? isLoading;
-  String? language;
-  bool? isEmailVerified;
-  bool? isPhoneVerified;
-  bool? isDeleted;
-  String? countryCode;
-  List<String>? auctionUsers;
-  List<String>? installmentsUsers;
-  bool? twitterDocumentation;
-  String? username;
-  String? createdAt;
-  String? updatedAt;
-  String? chatPassword;
-
-  Likes({
-    this.id,
-    this.socketId,
-    this.firstName,
-    this.lastName,
-    this.email,
-    this.birthday,
-    this.hashedPassword,
-    this.gender,
-    this.location,
-    this.adminIgnore,
-    this.following,
-    this.blockedUsers,
-    this.hiddenPosts,
-    this.followers,
-    this.referralId,
-    this.isLocked,
-    this.lockedDate,
-    this.isRider,
-    this.isDoctor,
-    this.isRestaurant,
-    this.isLoading,
-    this.language,
-    this.isEmailVerified,
-    this.isPhoneVerified,
-    this.isDeleted,
-    this.countryCode,
-    this.auctionUsers,
-    this.installmentsUsers,
-    this.twitterDocumentation,
-    this.username,
-    this.createdAt,
-    this.updatedAt,
-    this.chatPassword,
-  });
-
-  Likes.fromJson(Map<String, dynamic> json) {
-    id = json['_id'];
-    socketId = json['socketId'];
-    firstName = json['firstName'];
-    lastName = json['lastName'];
-    email = json['email'];
-    birthday = json['birthday'];
-    hashedPassword = json['hashedPassword'];
-    gender = json['gender'];
-    location =
-        json['location'] != null ? Location.fromJson(json['location']) : null;
-    adminIgnore = json['adminIgnore'];
-    following = json['following'];
-    blockedUsers = json['blockedUsers'];
-    hiddenPosts = json['hiddenPosts'];
-    followers = json['followers'];
-    referralId = json['referralId'];
-    isLocked = json['isLocked'];
-    lockedDate = json['lockedDate'];
-    isRider = json['isRider'];
-    isDoctor = json['isDoctor'];
-    isRestaurant = json['isRestaurant'];
-    isLoading = json['isLoading'];
-    language = json['language'];
-    isEmailVerified = json['isEmailVerified'];
-    isPhoneVerified = json['isPhoneVerified'];
-    isDeleted = json['isDeleted'];
-    countryCode = json['countryCode'];
-    auctionUsers = json['auction_users'] != null
-        ? List<String>.from(json['auction_users'])
-        : null;
-    installmentsUsers = json['installments_users'] != null
-        ? List<String>.from(json['installments_users'])
-        : null;
-    twitterDocumentation = json['twitter_documentation'];
-    username = json['username'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    chatPassword = json['chatPassword'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = id;
-    data['socketId'] = socketId;
-    data['firstName'] = firstName;
-    data['lastName'] = lastName;
-    data['email'] = email;
-    data['birthday'] = birthday;
-    data['hashedPassword'] = hashedPassword;
-    data['gender'] = gender;
-    if (location != null) {
-      data['location'] = location!.toJson();
-    }
-    data['adminIgnore'] = adminIgnore;
-    data['following'] = following;
-    data['blockedUsers'] = blockedUsers;
-    data['hiddenPosts'] = hiddenPosts;
-    data['followers'] = followers;
-    data['referralId'] = referralId;
-    data['isLocked'] = isLocked;
-    data['lockedDate'] = lockedDate;
-    data['isRider'] = isRider;
-    data['isDoctor'] = isDoctor;
-    data['isRestaurant'] = isRestaurant;
-    data['isLoading'] = isLoading;
-    data['language'] = language;
-    data['isEmailVerified'] = isEmailVerified;
-    data['isPhoneVerified'] = isPhoneVerified;
-    data['isDeleted'] = isDeleted;
-    data['countryCode'] = countryCode;
-    data['auction_users'] = auctionUsers;
-    data['installments_users'] = installmentsUsers;
-    data['twitter_documentation'] = twitterDocumentation;
-    data['username'] = username;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    data['chatPassword'] = chatPassword;
-    return data;
-  }
-}
-
-// Model for Friends
-class Friends extends Likes {
-  int? phone;
-
-  Friends({
-    String? id,
-    String? socketId,
-    String? firstName,
-    String? lastName,
-    String? email,
-    String? birthday,
-    String? hashedPassword,
-    String? gender,
-    Location? location,
-    bool? adminIgnore,
-    List<dynamic>? following,
-    List<dynamic>? blockedUsers,
-    List<dynamic>? hiddenPosts,
-    List<dynamic>? followers,
-    String? referralId,
-    bool? isLocked,
-    String? lockedDate,
-    bool? isRider,
-    bool? isDoctor,
-    bool? isRestaurant,
-    bool? isLoading,
-    String? language,
-    bool? isEmailVerified,
-    bool? isPhoneVerified,
-    bool? isDeleted,
-    String? countryCode,
-    List<String>? auctionUsers,
-    List<String>? installmentsUsers,
-    bool? twitterDocumentation,
-    String? username,
-    String? createdAt,
-    String? updatedAt,
-    String? chatPassword,
-    this.phone,
-  }) : super(
-          id: id,
-          socketId: socketId,
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          birthday: birthday,
-          hashedPassword: hashedPassword,
-          gender: gender,
-          location: location,
-          adminIgnore: adminIgnore,
-          following: following,
-          blockedUsers: blockedUsers,
-          hiddenPosts: hiddenPosts,
-          followers: followers,
-          referralId: referralId,
-          isLocked: isLocked,
-          lockedDate: lockedDate,
-          isRider: isRider,
-          isDoctor: isDoctor,
-          isRestaurant: isRestaurant,
-          isLoading: isLoading,
-          language: language,
-          isEmailVerified: isEmailVerified,
-          isPhoneVerified: isPhoneVerified,
-          isDeleted: isDeleted,
-          countryCode: countryCode,
-          auctionUsers: auctionUsers,
-          installmentsUsers: installmentsUsers,
-          twitterDocumentation: twitterDocumentation,
-          username: username,
-          createdAt: createdAt,
-          updatedAt: updatedAt,
-          chatPassword: chatPassword,
-        );
-
-  Friends.fromJson(Map<String, dynamic> json) : super.fromJson(json) {
-    phone = json['phone'];
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = super.toJson();
-    data['phone'] = phone;
-    return data;
-  }
-}
-
-// Model for Gifts
-class Gifts {
-  String? id;
-  String? nameAr;
-  String? nameEn;
-  Picture? picture;
-  int? value;
-  String? createdAt;
-  String? updatedAt;
-
-  Gifts({
-    this.id,
-    this.nameAr,
-    this.nameEn,
-    this.picture,
-    this.value,
-    this.createdAt,
-    this.updatedAt,
-  });
-
-  Gifts.fromJson(Map<String, dynamic> json) {
-    id = json['_id'];
-    nameAr = json['nameAr'];
-    nameEn = json['nameEn'];
-    picture =
-        json['picture'] != null ? Picture.fromJson(json['picture']) : null;
-    value = json['value'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = id;
-    data['nameAr'] = nameAr;
-    data['nameEn'] = nameEn;
-    if (picture != null) {
-      data['picture'] = picture!.toJson();
-    }
-    data['value'] = value;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    return data;
-  }
-}
-
-// Model for UserData
-class UserData {
-  String? id;
-  String? userId;
-  List<Picture>? pictures;
-  List<Likes>? likes;
-  List<Friends>? friends;
-  List<Gifts>? gifts;
-  String? createdAt;
-  String? updatedAt;
-  List<User>? user;
-
-  UserData({
-    this.id,
-    this.userId,
-    this.pictures,
-    this.likes,
-    this.friends,
-    this.gifts,
-    this.createdAt,
-    this.updatedAt,
-    this.user,
-  });
-
-  UserData.fromJson(Map<String, dynamic> json) {
-    id = json['_id'];
-    userId = json['userId'];
-    if (json['pictures'] != null) {
-      pictures = <Picture>[];
-      json['pictures'].forEach((v) {
-        pictures!.add(Picture.fromJson(v));
-      });
-    }
-    if (json['likes'] != null) {
-      likes = <Likes>[];
-      json['likes'].forEach((v) {
-        likes!.add(Likes.fromJson(v));
-      });
-    }
-    if (json['friends'] != null) {
-      friends = <Friends>[];
-      json['friends'].forEach((v) {
-        friends!.add(Friends.fromJson(v));
-      });
-    }
-    if (json['gifts'] != null) {
-      gifts = <Gifts>[];
-      json['gifts'].forEach((v) {
-        gifts!.add(Gifts.fromJson(v));
-      });
-    }
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    if (json['user'] != null) {
-      user = <User>[];
-      json['user'].forEach((v) {
-        user!.add(User.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = id;
-    data['userId'] = userId;
-    if (pictures != null) {
-      data['pictures'] = pictures!.map((v) => v.toJson()).toList();
-    }
-    if (likes != null) {
-      data['likes'] = likes!.map((v) => v.toJson()).toList();
-    }
-    if (friends != null) {
-      data['friends'] = friends!.map((v) => v.toJson()).toList();
-    }
-    if (gifts != null) {
-      data['gifts'] = gifts!.map((v) => v.toJson()).toList();
-    }
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    if (user != null) {
-      data['user'] = user!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-// Model for User
-class User {
-  String? id;
-  String? socketId;
-  String? firstName;
-  String? lastName;
-  String? email;
-  String? birthday;
-  String? hashedPassword;
-  String? gender;
-  Location? location;
-  bool? adminIgnore;
-  List<dynamic>? following;
-  List<dynamic>? blockedUsers;
-  List<dynamic>? hiddenPosts;
-  List<dynamic>? followers;
-  String? referralId;
-  bool? isLocked;
-  String? lockedDate;
-  bool? isRider;
-  bool? isDoctor;
-  bool? isRestaurant;
-  bool? isLoading;
-  String? language;
-  bool? isEmailVerified;
-  bool? isPhoneVerified;
-  bool? isDeleted;
-  String? countryCode;
-  List<String>? auctionUsers;
-  List<String>? installmentsUsers;
-  bool? twitterDocumentation;
-  String? username;
-  String? createdAt;
-  String? updatedAt;
-  String? chatPassword;
-  int? phone;
-
-  User({
-    this.id,
-    this.socketId,
-    this.firstName,
-    this.lastName,
-    this.email,
-    this.birthday,
-    this.hashedPassword,
-    this.gender,
-    this.location,
-    this.adminIgnore,
-    this.following,
-    this.blockedUsers,
-    this.hiddenPosts,
-    this.followers,
-    this.referralId,
-    this.isLocked,
-    this.lockedDate,
-    this.isRider,
-    this.isDoctor,
-    this.isRestaurant,
-    this.isLoading,
-    this.language,
-    this.isEmailVerified,
-    this.isPhoneVerified,
-    this.isDeleted,
-    this.countryCode,
-    this.auctionUsers,
-    this.installmentsUsers,
-    this.twitterDocumentation,
-    this.username,
-    this.createdAt,
-    this.updatedAt,
-    this.chatPassword,
-    this.phone,
-  });
-
-  User.fromJson(Map<String, dynamic> json) {
-    id = json['_id'];
-    socketId = json['socketId'];
-    firstName = json['firstName'];
-    lastName = json['lastName'];
-    email = json['email'];
-    birthday = json['birthday'];
-    hashedPassword = json['hashedPassword'];
-    gender = json['gender'];
-    location =
-        json['location'] != null ? Location.fromJson(json['location']) : null;
-    adminIgnore = json['adminIgnore'];
-    following = json['following'];
-    blockedUsers = json['blockedUsers'];
-    hiddenPosts = json['hiddenPosts'];
-    followers = json['followers'];
-    referralId = json['referralId'];
-    isLocked = json['isLocked'];
-    lockedDate = json['lockedDate'];
-    isRider = json['isRider'];
-    isDoctor = json['isDoctor'];
-    isRestaurant = json['isRestaurant'];
-    isLoading = json['isLoading'];
-    language = json['language'];
-    isEmailVerified = json['isEmailVerified'];
-    isPhoneVerified = json['isPhoneVerified'];
-    isDeleted = json['isDeleted'];
-    countryCode = json['countryCode'];
-    auctionUsers = json['auction_users'] != null
-        ? List<String>.from(json['auction_users'])
-        : null;
-    installmentsUsers = json['installments_users'] != null
-        ? List<String>.from(json['installments_users'])
-        : null;
-    twitterDocumentation = json['twitter_documentation'];
-    username = json['username'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    chatPassword = json['chatPassword'];
-    phone = json['phone'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = id;
-    data['socketId'] = socketId;
-    data['firstName'] = firstName;
-    data['lastName'] = lastName;
-    data['email'] = email;
-    data['birthday'] = birthday;
-    data['hashedPassword'] = hashedPassword;
-    data['gender'] = gender;
-    if (location != null) {
-      data['location'] = location!.toJson();
-    }
-    data['adminIgnore'] = adminIgnore;
-    data['following'] = following;
-    data['blockedUsers'] = blockedUsers;
-    data['hiddenPosts'] = hiddenPosts;
-    data['followers'] = followers;
-    data['referralId'] = referralId;
-    data['isLocked'] = isLocked;
-    data['lockedDate'] = lockedDate;
-    data['isRider'] = isRider;
-    data['isDoctor'] = isDoctor;
-    data['isRestaurant'] = isRestaurant;
-    data['isLoading'] = isLoading;
-    data['language'] = language;
-    data['isEmailVerified'] = isEmailVerified;
-    data['isPhoneVerified'] = isPhoneVerified;
-    data['isDeleted'] = isDeleted;
-    data['countryCode'] = countryCode;
-    data['auction_users'] = auctionUsers;
-    data['installments_users'] = installmentsUsers;
-    data['twitter_documentation'] = twitterDocumentation;
-    data['username'] = username;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    data['chatPassword'] = chatPassword;
-    data['phone'] = phone;
-    return data;
-  }
-}
 
 // Model for Api
 class Api {

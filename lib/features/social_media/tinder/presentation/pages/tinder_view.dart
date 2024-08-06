@@ -555,14 +555,14 @@ class TinderView extends StatelessWidget {
   }
 
   void switchDisplayGender(TinderViewState state, BuildContext context) {
-    String gender = state.userData.first.user!.first.gender.toString();
+    String gender = state.userData.first.user!.gender.toString();
     context
         .read<TinderViewCubit>()
         .fetchUserData(gender: gender == 'female' ? 'female' : 'male');
   }
 
   Widget _buildCard(
-      BuildContext context, int index, List<Picture> images, UserData user) {
+      BuildContext context, int index, List<Pictures> images, UserData user) {
     final cubit = context.read<TinderViewCubit>();
     final state = cubit.state;
     bool isFrontCard = index == state.currentIndex;
@@ -613,7 +613,7 @@ class TinderView extends StatelessWidget {
   }
 
   Widget _cardWidget(BuildContext context,
-      {required List<Picture> images, required UserData user}) {
+      {required List<Pictures> images, required UserData user}) {
     final state = context.read<TinderViewCubit>().state;
     return Padding(
       padding: const EdgeInsets.all(0.0),
@@ -623,7 +623,7 @@ class TinderView extends StatelessWidget {
         child: Stack(
           children: [
             Hero(
-              tag: 'userHero-${user.id}',
+              tag: 'userHero-${user.sId}',
               child: Image.network(
                 images.isNotEmpty
                     ? images[state.currentStoryIndex].mediaKey ?? ''
@@ -644,9 +644,7 @@ class TinderView extends StatelessWidget {
                   onPressed: () => switchDisplayGender(state, context),
                   iconSize: 30,
                   icon: Icon(
-                      user.user!.first.gender == 'male'
-                          ? Icons.female
-                          : Icons.male,
+                      user.user!.gender == 'male' ? Icons.female : Icons.male,
                       color: Colors.black),
                 ),
               ),
@@ -710,8 +708,7 @@ class TinderView extends StatelessWidget {
                   selected: false,
                   enabled: false,
                   title: Label(
-                    text:
-                        "${user.user!.first.firstName} ${user.user!.first.lastName}",
+                    text: "${user.user!.firstName} ${user.user!.lastName}",
                     style: Styles.headerText(color: Colors.black, fontSize: 26),
                   ),
                   subtitle: Label(
@@ -733,8 +730,13 @@ class TinderView extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _buildFloatingActionButton(context, Icons.person, null),
-        _buildFloatingActionButton(context, Icons.chat, null,
+        _buildFloatingActionButton(
+          context,
+          Icons.person,
+          () {},
+        ),
+        _buildFloatingActionButton(
+            context, Icons.chat, () => showAdvancedDialog(context),
             color: AppColors.PRIMARY_COLOR),
         FloatingActionButton.small(
           backgroundColor: Colors.red,
@@ -760,7 +762,7 @@ class TinderView extends StatelessWidget {
             log("${user?.firstName}pppppppppppppppppppppppppppppppppppppppp");
 
             if (user != null) {
-              if (user.isMyAccount(cardUser.userId ?? '')) {
+              if (user.isMyAccount(cardUser.sId ?? '')) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -769,7 +771,7 @@ class TinderView extends StatelessWidget {
                 );
               } else {
                 for (var element in listOfUsers) {
-                  if (user.isMyAccount(element.userId ?? '')) {
+                  if (user.isMyAccount(element.sId ?? '')) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -805,6 +807,94 @@ class TinderView extends StatelessWidget {
     );
   }
 
+  // void _showPopupMenu(BuildContext context) {
+  //   final RenderBox overlay =
+  //       Overlay.of(context).context.findRenderObject() as RenderBox;
+
+  //   showMenu(
+  //     context: context,
+  //     position: RelativeRect.fromRect(
+  //       Rect.fromCenter(
+  //         center: overlay.size.center(Offset.zero),
+  //         width: 300,
+  //         height: 300,
+  //       ),
+  //       Offset.zero & overlay.size,
+  //     ),
+  //     items: [
+  //       PopupMenuItem<int>(
+  //         value: 0,
+  //         child: Text("Anonymous Chat"),
+  //       ),
+  //       PopupMenuItem<int>(
+  //         value: 1,
+  //         child: Text("Normal Chat"),
+  //       ),
+  //     ],
+  //   ).then((value) {
+  //     if (value == 0) {
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => AnonymousChatScreen()),
+  //       );
+  //     } else if (value == 1) {
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => NormalChatScreen()),
+  //       );
+  //     }
+  //   });
+  // }
+  void showAdvancedDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Select Chat Type"),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.person_outline),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AnonymousChatScreen()),
+                      );
+                    },
+                  ),
+                  Text("Anonymous Chat"),
+                ],
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.person),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NormalChatScreen()),
+                      );
+                    },
+                  ),
+                  Text("Normal Chat"),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildFloatingActionButton(
       BuildContext context, IconData icon, VoidCallback? onPressed,
       {Color? color}) {
@@ -816,4 +906,80 @@ class TinderView extends StatelessWidget {
     );
   }
 }
-//rommana2.2
+
+class HomeScreen extends StatelessWidget {
+  void _showPopupMenu(BuildContext context) {
+    showMenu(
+      context: context,
+      position:
+          RelativeRect.fromLTRB(100, 100, 0, 0), // Adjust position as needed
+      items: [
+        PopupMenuItem<int>(
+          value: 0,
+          child: Text("Anonymous Chat"),
+        ),
+        PopupMenuItem<int>(
+          value: 1,
+          child: Text("Normal Chat"),
+        ),
+      ],
+    ).then((value) {
+      if (value == 0) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AnonymousChatScreen()),
+        );
+      } else if (value == 1) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => NormalChatScreen()),
+        );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Home Screen'),
+      ),
+      body: Center(
+        child: Text('Welcome to Home Screen'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showPopupMenu(context),
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class AnonymousChatScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Anonymous Chat'),
+      ),
+      body: Center(
+        child: Text('Welcome to Anonymous Chat'),
+      ),
+    );
+  }
+}
+
+class NormalChatScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Normal Chat'),
+      ),
+      body: Center(
+        child: Text('Welcome to Normal Chat'),
+      ),
+    );
+  }
+}
+//rommana2.3

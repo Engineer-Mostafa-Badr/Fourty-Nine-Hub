@@ -58,7 +58,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
         final userData = responseData
             .map<UserData>((data) => UserData.fromJson(data))
             .toList();
-        log("${userData.first.user!.first.firstName};;;;;;;;;;;;;;;;;;;;;;;;;");
+        log("${userData.first.user!.firstName};;;;;;;;;;;;;;;;;;;;;;;;;");
         emit(state.updated(userData: userData));
       } else {
         log('Failed to load data: ${response.statusCode}');
