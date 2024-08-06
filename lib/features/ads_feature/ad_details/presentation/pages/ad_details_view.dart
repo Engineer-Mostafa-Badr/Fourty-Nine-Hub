@@ -16,7 +16,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
-import '../../../../../common/widgets/stateless/dynamic/CarouselSlider.dart';
+import '../../../../../common/widgets/stateless/dynamic/carousel_slider.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/strings/labels.dart';

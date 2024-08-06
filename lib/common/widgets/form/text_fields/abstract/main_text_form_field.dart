@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fourtyninehub/core/utils/localization.dart';
-import 'package:size_helper/size_helper.dart';
 
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
@@ -100,17 +99,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         maxLength: widget.maxLength,
         expands: widget.expanded,
         enableSuggestions: widget.enableSuggestions,
-        style: widget.style ??
-            context
-                .sizeHelper(
-                    mobileLarge: Theme.of(context).textTheme.bodySmall!,
-                    tabletSmall: Theme.of(context).textTheme.bodySmall!,
-                    tabletNormal: Theme.of(context).textTheme.bodySmall!,
-                    desktopSmall: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(fontSize: 21.0))
-                .copyWith(color: Colors.black),
+        style: const TextStyle(),
         textCapitalization: widget.textCapitalization,
         textAlignVertical:
             widget.expanded ? const TextAlignVertical(y: -0.8) : null,
@@ -122,29 +111,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
           contentPadding:
               widget.contentPadding ?? const EdgeInsets.fromLTRB(16, 0, 16, 0),
           hintText: widget.hintText,
-          hintStyle: context
-              .sizeHelper(
-                mobileLarge: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(fontSize: 10.0),
-                tabletSmall: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(fontSize: 12.0),
-                tabletNormal: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(fontSize: 12.0),
-                desktopSmall: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(fontSize: 20.0),
-              )
-              .copyWith(
-                  color: widget.hintColor ??
-                      widget.borderColor ??
-                      AppColors.GREY_DARK_COLOR),
+          hintStyle: const TextStyle(),
           suffixIcon: widget.suffixIcon,
           prefixIcon: widget.prefixIcon,
           enabledBorder: OutlineInputBorder(

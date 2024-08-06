@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_entity.dart';
-import 'package:semicircle_indicator/semicircle_indicator.dart';
 
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import 'semi_circle_indicator.dart';
 
 class WalletCardWidget extends StatelessWidget {
   final double balance;

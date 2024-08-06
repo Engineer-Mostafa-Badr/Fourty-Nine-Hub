@@ -31,7 +31,7 @@ class ZegoMp4PlayerWidgetState extends State<ZegoMp4PlayerWidget>
     with SingleTickerProviderStateMixin {
   Widget? _mediaPlayerWidget;
 
-  double get fontSize => 15;
+  double get fontSize => 30;
 
   Size get displaySize => null != widget.size
       ? Size(
@@ -100,9 +100,10 @@ class ZegoMp4PlayerWidgetState extends State<ZegoMp4PlayerWidget>
               'x ${widget.playData.count}',
               style: widget.textStyle ??
                   TextStyle(
-                      fontSize: fontSize,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
+                    fontSize: fontSize,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
           )
         : const SizedBox.shrink();

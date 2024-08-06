@@ -32,7 +32,7 @@ class HealthEmergencyView extends StatelessWidget {
             nextFocusNode: emergencyCubit.phoneFocusNode,
           ),
           const Sizer(height: 30),
-          PhoneTextFormField(
+          CustomPhoneTextFormField(
             currentFocusNode: emergencyCubit.phoneFocusNode,
             nextFocusNode: emergencyCubit.locationFocusNode,
             currentController: emergencyCubit.phoneController,

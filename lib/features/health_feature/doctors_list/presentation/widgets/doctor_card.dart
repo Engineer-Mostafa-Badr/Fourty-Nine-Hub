@@ -4,7 +4,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/domain/enti
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/images/profile_image.dart';
-import '../../../../../common/widgets/stateless/labels/ReadMoreLabel.dart';
+import '../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../routes/routes.dart';

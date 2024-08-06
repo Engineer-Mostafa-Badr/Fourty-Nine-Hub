@@ -1,4 +1,3 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +21,6 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../controllers/user_cubit/user_cubit.dart';
-
 
 class RegisterView extends StatelessWidget {
   const RegisterView({super.key});
@@ -84,7 +82,10 @@ class RegisterView extends StatelessWidget {
                     suffixIcon: const Icon(Icons.email),
                     hint: 'Email',
                     validator: (v) {
-                      if (!EmailValidator.validate(v!)) {
+                      String pattern =
+                          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+                      RegExp regex = RegExp(pattern);
+                      if (!regex.hasMatch(v!)) {
                         return 'invalid email';
                       }
                       return null;

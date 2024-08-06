@@ -8,7 +8,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/images/profile_image.dart';
-import '../../../../../common/widgets/stateless/labels/ReadMoreLabel.dart';
+import '../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
 import '../pages/audio_stream_screen.dart';
