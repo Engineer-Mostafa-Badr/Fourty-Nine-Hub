@@ -10,12 +10,20 @@ final class DoctorUnhandledAppointmentsInitial
 final class DoctorUnhandledAppointmentsLoading
     extends DoctorUnhandledAppointmentsState {}
 
-final class DoctorUnhandledAppointmentsLoaded extends DoctorUnhandledAppointmentsState {
+final class DoctorUnhandledAppointmentsLoaded
+    extends DoctorUnhandledAppointmentsState {
   final List<DoctorAppointmentEntity> appointments;
   const DoctorUnhandledAppointmentsLoaded(this.appointments);
 }
 
-final class DoctorUnhandledAppointmentsError extends DoctorUnhandledAppointmentsState {
+final class DoctorUnhandledAppointmentsError
+    extends DoctorUnhandledAppointmentsState {
   final String message;
   const DoctorUnhandledAppointmentsError(this.message);
+}
+
+final class DoctorUnhandledAppotinmentsShowSuccessfulMessage
+    extends DoctorUnhandledAppointmentsState {
+  final String message;
+  const DoctorUnhandledAppotinmentsShowSuccessfulMessage(this.message);
 }

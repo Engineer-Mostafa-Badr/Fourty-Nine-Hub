@@ -40,14 +40,21 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
                 return Column(
                   children: [
                     ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: state.appointments.length,
-                      separatorBuilder: (context, index) => const Divider(),
-                      itemBuilder: (context, index) =>
-                          DoctorUnhandledAppointmentCard(
-                        appointment: state.appointments[index],
-                      ),
-                    ),
+                        shrinkWrap: true,
+                        itemCount: state.appointments.length,
+                        separatorBuilder: (context, index) => const Divider(),
+                        itemBuilder: (context, index) {
+                          final appointment = state.appointments[index];
+                          return DoctorUnhandledAppointmentCard(
+                            appointment: appointment,
+                            onAccept: () => context
+                                .read<DoctorDashboardCubit>()
+                                .acceptAppointment(appointment.id),
+                            onReject: () => context
+                                .read<DoctorDashboardCubit>()
+                                .rejectAppointment(appointment.id),
+                          );
+                        }),
                     const Sizer(),
                     AppButton(
                         label: Labels.viewMore,
@@ -57,7 +64,11 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
                   ],
                 );
               } else {
-                return const Center(child: Text(Labels.noAppointments));
+                return Center(
+                    child: Text(
+                  Labels.noAppointments,
+                  style: Styles.headerText(),
+                ));
               }
             },
           ),
@@ -69,7 +80,10 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
 
 class DoctorUnhandledAppointmentCard extends StatelessWidget {
   final DoctorAppointmentEntity appointment;
-  const DoctorUnhandledAppointmentCard({super.key, required this.appointment});
+  final Function()? onAccept;
+  final Function()? onReject;
+  const DoctorUnhandledAppointmentCard(
+      {super.key, required this.appointment, this.onAccept, this.onReject});
 
   @override
   Widget build(BuildContext context) {
@@ -104,13 +118,13 @@ class DoctorUnhandledAppointmentCard extends StatelessWidget {
             children: [
               AppButton(
                 label: Labels.accept,
-                onPressed: () {},
+                onPressed: () => onAccept?.call(),
                 backColor: AppColors.PRIMARY_COLOR,
               ),
               const Sizer(),
               AppButton(
                 label: Labels.reject,
-                onPressed: () {},
+                onPressed: () => onReject?.call(),
               ),
             ],
           ),

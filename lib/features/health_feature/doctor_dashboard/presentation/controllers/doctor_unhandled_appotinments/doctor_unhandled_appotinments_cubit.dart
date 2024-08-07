@@ -1,6 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/doctor_accept_appointment_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/doctor_reject_appointment.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_unhandled_appointments_usecase.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 
@@ -11,7 +14,13 @@ class DoctorUnhandledAppointmentsCubit
   final GetDoctorUnhandledAppointmentsUseCase
       _getDoctorUnhandledAppointmentsUseCase;
 
-  DoctorUnhandledAppointmentsCubit(this._getDoctorUnhandledAppointmentsUseCase)
+  final DoctorAcceptAppointmentUsecase _doctorAcceptAppointmentUsecase;
+  final DoctorRejectAppointmentUsecase _doctorRejectAppointmentUsecase;
+
+  DoctorUnhandledAppointmentsCubit(
+      this._getDoctorUnhandledAppointmentsUseCase,
+      this._doctorAcceptAppointmentUsecase,
+      this._doctorRejectAppointmentUsecase)
       : super(DoctorUnhandledAppointmentsInitial()) {
     scrollController.addListener(() {
       if (scrollController.offset ==
@@ -42,6 +51,44 @@ class DoctorUnhandledAppointmentsCubit
       _appointments.addAll(r);
       emit(DoctorUnhandledAppointmentsLoaded(_appointments));
     });
+  }
+
+  Future<void> acceptAppointment(String appointmentId) async {
+    emit(DoctorUnhandledAppointmentsLoading());
+    final response = await _doctorAcceptAppointmentUsecase.call(appointmentId);
+    response.fold(
+      (failure) {
+        if (failure is ServerFailure) {
+          emit(DoctorUnhandledAppointmentsError(failure.message));
+        } else {
+          emit(const DoctorUnhandledAppointmentsError(Labels.errorHappened));
+        }
+      },
+      (data) {
+        emit(const DoctorUnhandledAppotinmentsShowSuccessfulMessage(
+            Labels.appointmentAcceptedSuccessfully));
+        _getAppointments();
+      },
+    );
+  }
+
+  Future<void> rejectAppointment(String appointmentId) async {
+    emit(DoctorUnhandledAppointmentsLoading());
+    final response = await _doctorRejectAppointmentUsecase.call(appointmentId);
+    response.fold(
+      (failure) {
+        if (failure is ServerFailure) {
+          emit(DoctorUnhandledAppointmentsError(failure.message));
+        } else {
+          emit(const DoctorUnhandledAppointmentsError(Labels.errorHappened));
+        }
+      },
+      (data) {
+        emit(const DoctorUnhandledAppotinmentsShowSuccessfulMessage(
+            Labels.appointmentRejectedSuccessfully));
+        _getAppointments();
+      },
+    );
   }
 
   @override

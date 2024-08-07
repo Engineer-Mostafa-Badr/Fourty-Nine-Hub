@@ -4,10 +4,10 @@ sealed class DoctorDashboardState {}
 
 final class DoctorDashboardInitial extends DoctorDashboardState {}
 
-final class DoctorDAshboardSupscriptionRemainingDays
+final class DoctorDashboardSupscriptionRemainingDays
     extends DoctorDashboardState {
   final int days;
-  DoctorDAshboardSupscriptionRemainingDays(this.days);
+  DoctorDashboardSupscriptionRemainingDays(this.days);
 }
 
 final class DoctorDashboardIDRemainingDays extends DoctorDashboardState {
@@ -34,4 +34,13 @@ final class DoctorDashboardTodayAppointments extends DoctorDashboardState {
 final class DoctorDashboardUnhandledAppointments extends DoctorDashboardState {
   final List<DoctorAppointmentEntity> appointments;
   DoctorDashboardUnhandledAppointments(this.appointments);
+}
+
+final class DoctorDashboardStartLoading extends DoctorDashboardState {}
+
+final class DoctorDashboardStopLoading extends DoctorDashboardState {}
+
+final class DoctorDashboardShowSuccessfulMessage extends DoctorDashboardState {
+  final String message;
+  DoctorDashboardShowSuccessfulMessage(this.message);
 }

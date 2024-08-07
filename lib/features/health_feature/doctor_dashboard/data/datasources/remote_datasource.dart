@@ -16,6 +16,10 @@ abstract class DoctorDashboardRemoteDataSource {
   Future<Either<Failure, List<DoctorAppointmentEntity>>>
       getDoctorUnhandledAppointments(
           GetDoctorUnhandledAppointmentsParams params);
+
+  Future<Either<Failure, bool>> acceptAppointment(String appointmentId);
+
+  Future<Either<Failure, bool>> rejectAppointment(String appointmentId);
 }
 
 class DoctorDashboardRemoteDataSourceImpl
@@ -74,5 +78,21 @@ class DoctorDashboardRemoteDataSourceImpl
         (data) => Right((data['data'] as List)
             .map((e) => DoctorAppointmentModel.fromJson(e))
             .toList()));
+  }
+
+  @override
+  Future<Either<Failure, bool>> acceptAppointment(String appointmentId) async {
+    final response = await _apiConsumer
+        .put(EndPoints.doctorAcceptAppointment(appointmentId));
+
+    return response.fold((l) => Left(l), (r) => Right(r['status'] as bool));
+  }
+
+  @override
+  Future<Either<Failure, bool>> rejectAppointment(String appointmentId) async {
+    final response = await _apiConsumer
+        .put(EndPoints.doctorRejectAppointment(appointmentId));
+
+    return response.fold((l) => Left(l), (r) => Right(r['status'] as bool));
   }
 }

@@ -145,4 +145,8 @@ abstract class Labels {
   static const subscribeNow = 'Subscribe Now';
   static const noAppointments = 'No Appointments';
   static const requests = 'Requests';
+  static const appointmentAcceptedSuccessfully =
+      'Appointment Accepted Successfully';
+  static const appointmentRejectedSuccessfully =
+      'Appointment Rejected Successfully';
 }

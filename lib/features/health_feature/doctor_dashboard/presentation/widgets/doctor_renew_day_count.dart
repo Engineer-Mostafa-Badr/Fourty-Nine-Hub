@@ -33,10 +33,10 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                 child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
                   buildWhen: (previous, current) =>
                       current is DoctorDashboardInitial ||
-                      current is DoctorDAshboardSupscriptionRemainingDays,
+                      current is DoctorDashboardSupscriptionRemainingDays,
                   builder: (context, state) {
                     String days = Labels.subscribeNow;
-                    if (state is DoctorDAshboardSupscriptionRemainingDays) {
+                    if (state is DoctorDashboardSupscriptionRemainingDays) {
                       days = state.days.toString();
                     }
                     return _Item(

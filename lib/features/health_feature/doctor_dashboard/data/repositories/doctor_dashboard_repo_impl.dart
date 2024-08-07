@@ -34,6 +34,16 @@ class DoctorDashboardRepoImpl implements DoctorDashboardRepo {
   Future<Either<Failure, List<DoctorAppointmentEntity>>> getDoctorUnhandledAppointments(GetDoctorUnhandledAppointmentsParams params) {
     return remoteDataSource.getDoctorUnhandledAppointments(params);
   }
+  
+  @override
+  Future<Either<Failure, bool>> acceptAppointment(String appointmentId) {
+    return remoteDataSource.acceptAppointment(appointmentId);
+  }
+  
+  @override
+  Future<Either<Failure, bool>> rejectAppointment(String appointmentId) {
+    return remoteDataSource.rejectAppointment(appointmentId);
+  }
 
   
 }

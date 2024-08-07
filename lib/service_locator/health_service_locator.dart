@@ -10,6 +10,8 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/useca
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/datasources/remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/repositories/doctor_dashboard_repo_impl.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/repositories/doctor_dashboard_repo.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/doctor_accept_appointment_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/doctor_reject_appointment.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_appointments_by_day.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_unhandled_appointments_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_id_remaining_days.dart';
@@ -165,6 +167,10 @@ class HealthServiceLocator {
         () => GetDoctorUnhandledAppointmentsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<IsDoctorUsecase>(
         () => IsDoctorUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<DoctorRejectAppointmentUsecase>(
+        () => DoctorRejectAppointmentUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<DoctorAcceptAppointmentUsecase>(
+        () => DoctorAcceptAppointmentUsecase(serviceLocator()));
 
     // -------------------------- cubits --------------------------
     serviceLocator.registerSingleton<HealthSharedData>(HealthSharedData());
@@ -222,6 +228,8 @@ class HealthServiceLocator {
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
             )..loadData());
 
     serviceLocator.registerFactory<DoctorTodayAppointmentsCubit>(
@@ -230,6 +238,10 @@ class HealthServiceLocator {
             )..loadData());
 
     serviceLocator.registerFactory<DoctorUnhandledAppointmentsCubit>(
-        () => DoctorUnhandledAppointmentsCubit(serviceLocator())..loadData());
+        () => DoctorUnhandledAppointmentsCubit(
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+            )..loadData());
   }
 }

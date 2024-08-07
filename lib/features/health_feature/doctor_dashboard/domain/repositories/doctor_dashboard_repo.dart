@@ -13,4 +13,7 @@ abstract class DoctorDashboardRepo {
   Future<Either<Failure, List<DoctorAppointmentEntity>>>
       getDoctorUnhandledAppointments(
           GetDoctorUnhandledAppointmentsParams params);
+
+  Future<Either<Failure, bool>> acceptAppointment(String appointmentId);
+  Future<Either<Failure, bool>> rejectAppointment(String appointmentId);
 }
