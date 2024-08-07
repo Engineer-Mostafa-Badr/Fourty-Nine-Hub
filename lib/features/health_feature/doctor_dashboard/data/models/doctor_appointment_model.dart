@@ -6,6 +6,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 
 class DoctorAppointmentModel extends DoctorAppointmentEntity {
   DoctorAppointmentModel({
+    required super.id,
     required super.firstName,
     required super.lastName,
     required super.day,
@@ -18,6 +19,7 @@ class DoctorAppointmentModel extends DoctorAppointmentEntity {
 
   factory DoctorAppointmentModel.fromJson(Map<String, dynamic> json) {
     return DoctorAppointmentModel(
+      id: json['_id'] ?? '',
       firstName: json['userId']['firstName'] ?? '',
       lastName: json['userId']['lastName'] ?? '',
       day:

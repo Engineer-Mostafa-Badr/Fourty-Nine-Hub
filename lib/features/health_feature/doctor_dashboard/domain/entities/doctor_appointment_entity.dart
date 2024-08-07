@@ -3,16 +3,18 @@ import 'package:fourtyninehub/core/enums/week_days.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 
 class DoctorAppointmentEntity {
+  final String id;
   final String firstName;
   final String lastName;
   final String? image;
   final WeekDays day;
   final String time;
   final BookingTypes type;
-final String additionalNotes ;
-final GenderType gender;
+  final String additionalNotes;
+  final GenderType gender;
 
-  DoctorAppointmentEntity( {
+  DoctorAppointmentEntity({
+    required this.id,
     required this.firstName,
     required this.lastName,
     required this.gender,

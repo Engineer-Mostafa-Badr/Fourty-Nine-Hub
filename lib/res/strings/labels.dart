@@ -144,4 +144,5 @@ abstract class Labels {
   static const noAppointmentsToday = 'No Appointments Today';
   static const subscribeNow = 'Subscribe Now';
   static const noAppointments = 'No Appointments';
+  static const requests = 'Requests';
 }

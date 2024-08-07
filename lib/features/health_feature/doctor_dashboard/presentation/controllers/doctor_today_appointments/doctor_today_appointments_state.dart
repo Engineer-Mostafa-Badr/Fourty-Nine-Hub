@@ -1,10 +1,7 @@
 part of 'doctor_today_appointments_cubit.dart';
 
-sealed class DoctorTodayAppointmentsState extends Equatable {
+sealed class DoctorTodayAppointmentsState {
   const DoctorTodayAppointmentsState();
-
-  @override
-  List<Object> get props => [];
 }
 
 final class DoctorTodayAppointmentsInitial

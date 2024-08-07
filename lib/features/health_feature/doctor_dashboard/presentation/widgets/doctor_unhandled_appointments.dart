@@ -11,6 +11,8 @@ import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
   const DoctorUnhandledAppointmentsWidget({super.key});
@@ -47,7 +49,11 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
                       ),
                     ),
                     const Sizer(),
-                    AppButton(label: Labels.viewMore, onPressed: () {})
+                    AppButton(
+                        label: Labels.viewMore,
+                        onPressed: () {
+                          context.push(Routes.DOCTORUNHANDLEDAPPOINTMENTS);
+                        })
                   ],
                 );
               } else {
