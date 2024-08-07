@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -41,13 +42,10 @@ class DoctorTodayAppointmentsWidget extends StatelessWidget {
                     ListView.separated(
                       shrinkWrap: true,
                       itemCount: state.appointments.length,
-                      itemBuilder: (context, index) {
-                        final appointment = state.appointments[index];
-                        return ListTile(
-                          title: Text(appointment.type.translatedName),
-                          subtitle: Text(appointment.time),
-                        );
-                      },
+                      itemBuilder: (context, index) =>
+                          DoctorTodayAppointmentCard(
+                        appointment: state.appointments[index],
+                      ),
                       separatorBuilder: (BuildContext context, int index) =>
                           const Divider(),
                     ),
@@ -69,6 +67,19 @@ class DoctorTodayAppointmentsWidget extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class DoctorTodayAppointmentCard extends StatelessWidget {
+  final DoctorAppointmentEntity appointment;
+  const DoctorTodayAppointmentCard({super.key, required this.appointment});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(appointment.type.translatedName),
+      subtitle: Text(appointment.time),
     );
   }
 }

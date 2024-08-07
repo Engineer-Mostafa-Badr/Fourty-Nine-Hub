@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_today_appointments/doctor_today_appointments_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_today_appointments.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -27,13 +27,9 @@ class DoctorTodayAppointmentsView extends StatelessWidget {
                     .read<DoctorTodayAppointmentsCubit>()
                     .scrollController,
                 itemCount: state.appointments.length,
-                itemBuilder: (context, index) {
-                  final appointment = state.appointments[index];
-                  return ListTile(
-                    title: Text(appointment.type.translatedName),
-                    subtitle: Text(appointment.time),
-                  );
-                },
+                itemBuilder: (context, index) => DoctorTodayAppointmentCard(
+                  appointment: state.appointments[index],
+                ),
                 separatorBuilder: (BuildContext context, int index) =>
                     const Divider(),
               );
