@@ -10,9 +10,9 @@ import 'package:fourtyninehub/res/style/styles.dart';
 class DoctorHistoryCard extends StatelessWidget {
   final String title;
   final num totalValue;
-  final double clinicValue;
-  final double callValue;
-  final double homeVisitValue;
+  final num clinicValue;
+  final num callValue;
+  final num homeVisitValue;
   const DoctorHistoryCard(
       {super.key,
       required this.title,

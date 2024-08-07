@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/datasources/remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_statistics_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/repositories/doctor_dashboard_repo.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_appointments_by_day.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_unhandled_appointments_usecase.dart';
@@ -43,6 +44,11 @@ class DoctorDashboardRepoImpl implements DoctorDashboardRepo {
   @override
   Future<Either<Failure, bool>> rejectAppointment(String appointmentId) {
     return remoteDataSource.rejectAppointment(appointmentId);
+  }
+
+  @override
+  Future<Either<Failure, DoctorStatisticsEntity>> getDoctorStatistics() {
+    return remoteDataSource.getDoctorStatistics();
   }
 
   

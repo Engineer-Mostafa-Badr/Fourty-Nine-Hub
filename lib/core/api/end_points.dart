@@ -57,8 +57,12 @@ class EndPoints {
   static const getDoctorAppointmentsByDay = '/health/doctor/booking-day';
   static const getDoctorUnhandledAppointments = '/health/book-requests';
   static const isDoctor = '/health/check-doctor-or-not';
-  static String doctorAcceptAppointment(String appointmentId) => '/health/book-appointment/approve/$appointmentId';
-  static String doctorRejectAppointment(String appointmentId) => '/health/book-appointment/reject/$appointmentId';
+  static const getDoctorTotalEarnedMoney =
+      '/health/dashboard/total-earned-money';
+  static String doctorAcceptAppointment(String appointmentId) =>
+      '/health/book-appointment/approve/$appointmentId';
+  static String doctorRejectAppointment(String appointmentId) =>
+      '/health/book-appointment/reject/$appointmentId';
 
   // reels
   static const getExploreReels = '/reels/explore';

@@ -4,7 +4,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class BarData {
   final String label;
-  final double value;
+  final num value;
 
   BarData({required this.label, required this.value});
 }

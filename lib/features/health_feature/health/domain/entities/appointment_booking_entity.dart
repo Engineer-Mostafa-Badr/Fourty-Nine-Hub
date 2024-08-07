@@ -45,11 +45,11 @@ extension BookingTypesExtension on BookingTypes {
 extension BookingTypesExtensionString on String {
   BookingTypes get toBookingType {
     switch (toLowerCase()) {
-      case 'call':
+      case 'call' || 'calls':
         return BookingTypes.call;
       case 'clinic':
         return BookingTypes.clinic;
-      case 'home':
+      case 'home' || 'homevisit' || 'visithome':
         return BookingTypes.home;
       case 'emergency':
         return BookingTypes.emergency;

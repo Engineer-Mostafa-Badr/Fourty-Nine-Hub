@@ -149,4 +149,6 @@ abstract class Labels {
       'Appointment Accepted Successfully';
   static const appointmentRejectedSuccessfully =
       'Appointment Rejected Successfully';
+
+  static const cantLoadData = 'Can\'t load data';
 }
