@@ -37,9 +37,9 @@ void showGiftListSheet(BuildContext context) {
 
 class ZegoGiftSheet extends StatefulWidget {
   const ZegoGiftSheet({
-    Key? key,
+    super.key,
     required this.itemDataList,
-  }) : super(key: key);
+  });
 
   final List<ZegoGiftItem> itemDataList;
 

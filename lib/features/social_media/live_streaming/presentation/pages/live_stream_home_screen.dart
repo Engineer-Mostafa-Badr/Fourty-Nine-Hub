@@ -32,7 +32,7 @@ class LiveStreamHomeScreen extends StatelessWidget {
   Widget _buildLivePages() {
     return PageView.builder(
       scrollDirection: Axis.vertical,
-      itemCount: 15,
+      itemCount: 3,
       itemBuilder: (context, index) => const LiveCard(),
       
     );
