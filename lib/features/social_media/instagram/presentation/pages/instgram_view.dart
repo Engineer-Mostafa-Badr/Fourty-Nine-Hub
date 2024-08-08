@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-
-import '../../../chat/chat_view/presentation/widgets/chat_stories.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_global_posts.dart';
 import '../../../social_posts/presentation/pages/my_account_view.dart';
 
 class InstagramView extends StatelessWidget {
@@ -15,7 +14,7 @@ class InstagramView extends StatelessWidget {
           mainCategoryId: 3,
           body: Column(
             children: [
-              TabBar(tabs: [
+              const TabBar(tabs: [
                 Tab(
                   icon: Icon(Icons.grid_4x4_outlined),
                 ),
@@ -35,19 +34,8 @@ class InstagramView extends StatelessWidget {
   }
 
   Widget _buildInstagramWidget() {
-    return ListView(
-      children: [
-        const ChatStories(),
-        Container(),
-        // ListView.separated(
-        //     shrinkWrap: true,
-        //     physics: const BouncingScrollPhysics(),
-        //     itemBuilder: (context, index) => PostCard(
-        //           postType: PostType.Instagram,
-        //         ),
-        //     separatorBuilder: (context, index) => const Sizer(),
-        //     itemCount: 30),
-      ],
-    );
+    return const InstagramGlobalPosts();
   }
+
+
 }

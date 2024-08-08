@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/cu
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_tweet_card.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
@@ -149,86 +150,92 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           },
           builder: (context,state) {
             final controller = context.read<SocialPostsCubit>();
-            return widget.post.type=='advertisement'?FacebookAdvertisementCard(post: widget.post,):InkWell(
-              onTap: widget.from == 'posts'
-                  ? () => widget.showPostDetails(widget.post)
-                  : null,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if(widget.post.type!='advertisement')_buildAccountHeader(context: context, post: widget.post),
-                  _buildContentWidget(post: widget.post),
-                  Row(
-                    children: [
-                      if (widget.post.likesCount != 0)
-                        _buildCounterWidget(
-                            value: widget.post.likesCount!, image: Assets.like),
-                      if (widget.post.loveCount != 0)
-                        _buildCounterWidget(
-                            value: widget.post.loveCount!, image: Assets.heart),
-                      if (widget.post.wowCount != 0)
-                        _buildCounterWidget(
-                            value: widget.post.wowCount!, image: Assets.wow),
-                      if (widget.post.sadCount != 0)
-                        _buildCounterWidget(
-                            value: widget.post.sadCount!, image: Assets.sad),
-                      if (widget.post.angryCount != 0)
-                        _buildCounterWidget(
-                            value: widget.post.angryCount!, image: Assets.angry),
-                      const Spacer(),
-                      InkWell(
-                        onTap: () => widget.showPostComments(widget.post.id),
-                        child: Row(
-                          children: [
-                            Label(
-                              text: widget.post.commentsCount.toString(),
-                              style: Styles.mediumText(),
-                            ),
-                            const Sizer(
-                              width: 5,
-                            ),
-                            Label(
-                              text: 'Comments',
-                              style: Styles.mediumText(),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Divider(
-                    color: AppColors.LIGHT_GRAY_COLOR,
-                  ),
-                  SizedBox(
-                    height: kToolbarHeight * .6,
-                    child: Row(
+            if(widget.post.type=='advertisement'){
+              return FacebookAdvertisementCard(post: widget.post,);
+            }else if(widget.post.type=='twitter_post'){
+              return FacebookTweetCard(post: widget.post,);
+            }else{
+              return  InkWell(
+                onTap: widget.from == 'posts'
+                    ? () => widget.showPostDetails(widget.post)
+                    : null,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if(widget.post.type!='advertisement')_buildAccountHeader(context: context, post: widget.post),
+                    _buildContentWidget(post: widget.post),
+                    Row(
                       children: [
-                        Expanded(
-                            child: BuildReactionsButtons(
-                          post: widget.post,
-                          from: 'posts',
-                        )),
-                        if (widget.from == 'posts')
-                          Expanded(
-                            child: _buildReactionPlaceHolder(
-                                icon: Icons.chat_bubble_outline_rounded,
-                                label: 'Comment',
-                                onTap: () => widget.showPostComments(widget.post.id)),
+                        if (widget.post.likesCount != 0)
+                          _buildCounterWidget(
+                              value: widget.post.likesCount!, image: Assets.like),
+                        if (widget.post.loveCount != 0)
+                          _buildCounterWidget(
+                              value: widget.post.loveCount!, image: Assets.heart),
+                        if (widget.post.wowCount != 0)
+                          _buildCounterWidget(
+                              value: widget.post.wowCount!, image: Assets.wow),
+                        if (widget.post.sadCount != 0)
+                          _buildCounterWidget(
+                              value: widget.post.sadCount!, image: Assets.sad),
+                        if (widget.post.angryCount != 0)
+                          _buildCounterWidget(
+                              value: widget.post.angryCount!, image: Assets.angry),
+                        const Spacer(),
+                        InkWell(
+                          onTap: () => widget.showPostComments(widget.post.id),
+                          child: Row(
+                            children: [
+                              Label(
+                                text: widget.post.commentsCount.toString(),
+                                style: Styles.mediumText(),
+                              ),
+                              const Sizer(
+                                width: 5,
+                              ),
+                              Label(
+                                text: 'Comments',
+                                style: Styles.mediumText(),
+                              )
+                            ],
                           ),
-                        Expanded(
-                          child: _buildReactionPlaceHolder(
-                              icon: Icons.chat_rounded,
-                              label: 'Share',
-                              onTap: () {
-                                controller.onShare(postId: widget.post.id);
-                              }),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-            );
+                    const Divider(
+                      color: AppColors.LIGHT_GRAY_COLOR,
+                    ),
+                    SizedBox(
+                      height: kToolbarHeight * .6,
+                      child: Row(
+                        children: [
+                          Expanded(
+                              child: BuildReactionsButtons(
+                                post: widget.post,
+                                from: 'posts',
+                              )),
+                          if (widget.from == 'posts')
+                            Expanded(
+                              child: _buildReactionPlaceHolder(
+                                  icon: Icons.chat_bubble_outline_rounded,
+                                  label: 'Comment',
+                                  onTap: () => widget.showPostComments(widget.post.id)),
+                            ),
+                          Expanded(
+                            child: _buildReactionPlaceHolder(
+                                icon: Icons.chat_rounded,
+                                label: 'Share',
+                                onTap: () {
+                                  controller.onShare(postId: widget.post.id);
+                                }),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
           }
         ),
       );
@@ -258,7 +265,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
 
   Widget _buildPostOptions({required bool fromDetails}) {
     return SizedBox(
-      height: 180,
+      height: widget.isMyPost?150:80,
       child: Column(
         children: [
           if (widget.isMyPost)
@@ -273,7 +280,6 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     context.pop();
                   }
                 }),
-          if (widget.isMyPost)
             listTile(
                 icon: Icons.visibility_off,
                 title: 'Hide Post',
@@ -327,7 +333,6 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 : UIConst.profilePlaceHolder),
           ),
         ),
-        if(post.type=='twitter_posr')Text("twitter_posr"),
         const Sizer(),
         Expanded(
             child: Row(
@@ -370,7 +375,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               icon: Icons.clear,
               onPressed: () {
                 bottomSheet(context: context, widget: _buildPostOptions(fromDetails: widget.from=='details'));
-              })
+              },),
       ],
     );
   }
@@ -515,27 +520,6 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                           ),
                                       ],
                                     ),
-                                    if (index == 0 && post.images!.length == 1)
-                                      PositionedDirectional(
-                                        end: 15,
-                                        top: 5,
-                                        child: InkWell(
-                                          onTap: () {
-                                            // controller.removePhoto(post.images?[index]);
-                                          },
-                                          child: Container(
-                                              height: 30,
-                                              width: 30,
-                                              alignment: Alignment.center,
-                                              padding: const EdgeInsets.all(5),
-                                              decoration: const BoxDecoration(
-                                                  color: Colors.white, shape: BoxShape.circle),
-                                              child: const Icon(
-                                                Icons.close,
-                                                color: Colors.red,
-                                              )),
-                                        ),
-                                      ),
                                   ],
                                 ),
                               )),
