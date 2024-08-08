@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/doctor_accept_appointment_usecase.dart';
@@ -42,7 +43,7 @@ class DoctorUnhandledAppointmentsCubit
 
   Future<void> _getAppointments() async {
     final response = await _getDoctorUnhandledAppointmentsUseCase
-        .call(GetDoctorUnhandledAppointmentsParams(page: _page, limit: 20));
+        .call(PaginationParams(page: _page));
     response.fold(
         (l) =>
             emit(const DoctorUnhandledAppointmentsError(Labels.errorHappened)),

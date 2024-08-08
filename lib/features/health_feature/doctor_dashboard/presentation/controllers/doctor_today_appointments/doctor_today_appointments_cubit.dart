@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/enums/week_days.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_appointments_by_day.dart';
@@ -33,7 +34,8 @@ class DoctorTodayAppointmentsCubit extends Cubit<DoctorTodayAppointmentsState> {
   Future<void> _getAppointmentsByDay() async {
     final response = await _getDoctorAppointmentsByDayUseCase.call(
         GetDoctorAppointmentsByDayParams(
-            day: DateTime.now().weekday.toWeekDay, page: _page, limit: 20));
+            day: DateTime.now().weekday.toWeekDay,
+            paginationParams: PaginationParams(page: _page)));
     response.fold(
         (l) => emit(const DoctorTodayAppointmentsError(Labels.errorHappened)),
         (r) {

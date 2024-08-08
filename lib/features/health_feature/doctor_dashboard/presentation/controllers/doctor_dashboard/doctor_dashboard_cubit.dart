@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/week_days.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -72,14 +73,15 @@ class DoctorDashboardCubit extends Cubit<DoctorDashboardState> {
   Future<void> _getAppointmentsByDay() async {
     final response = await _getDoctorAppointmentsByDayUseCase.call(
         GetDoctorAppointmentsByDayParams(
-            day: DateTime.now().weekday.toWeekDay, page: 1, limit: 2));
+            day: DateTime.now().weekday.toWeekDay,
+            paginationParams: PaginationParams(page: 1, limit: 2)));
     response.fold((l) => emit(DoctorDashboardError(Labels.errorHappened)),
         (r) => emit(DoctorDashboardTodayAppointments(r)));
   }
 
   Future<void> _getUnhandledAppointments() async {
     final response = await _getDoctorUnhandledAppointmentsUseCase
-        .call(GetDoctorUnhandledAppointmentsParams(page: 1, limit: 2));
+        .call(PaginationParams(page: 1, limit: 2));
     response.fold((l) => emit(DoctorDashboardError(Labels.errorHappened)),
         (r) => emit(DoctorDashboardUnhandledAppointments(r)));
   }

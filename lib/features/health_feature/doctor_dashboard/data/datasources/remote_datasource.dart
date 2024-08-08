@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -7,7 +8,6 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/mode
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_statistics_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_appointments_by_day.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_unhandled_appointments_usecase.dart';
 
 abstract class DoctorDashboardRemoteDataSource {
   Future<Either<Failure, int>> getPracticingRemainingDays();
@@ -16,14 +16,16 @@ abstract class DoctorDashboardRemoteDataSource {
   Future<Either<Failure, List<DoctorAppointmentEntity>>>
       getDoctorAppointmentsByDay(GetDoctorAppointmentsByDayParams params);
   Future<Either<Failure, List<DoctorAppointmentEntity>>>
-      getDoctorUnhandledAppointments(
-          GetDoctorUnhandledAppointmentsParams params);
+      getDoctorUnhandledAppointments(PaginationParams params);
 
   Future<Either<Failure, bool>> acceptAppointment(String appointmentId);
 
   Future<Either<Failure, bool>> rejectAppointment(String appointmentId);
 
   Future<Either<Failure, DoctorStatisticsEntity>> getDoctorStatistics();
+
+  Future<Either<Failure, List<DoctorAppointmentEntity>>> getAllReservations(
+      PaginationParams params);
 }
 
 class DoctorDashboardRemoteDataSourceImpl
@@ -61,7 +63,7 @@ class DoctorDashboardRemoteDataSourceImpl
     final response = await _apiConsumer.get(
       EndPoints.getDoctorAppointmentsByDay,
       data: params.toData(),
-      queryParameters: params.toQueryParams(),
+      queryParameters: params.paginationParams.toJson(),
     );
     return response.fold(
         (l) => Left(l),
@@ -72,11 +74,10 @@ class DoctorDashboardRemoteDataSourceImpl
 
   @override
   Future<Either<Failure, List<DoctorAppointmentEntity>>>
-      getDoctorUnhandledAppointments(
-          GetDoctorUnhandledAppointmentsParams params) async {
+      getDoctorUnhandledAppointments(PaginationParams params) async {
     final response = await _apiConsumer.get(
         EndPoints.getDoctorUnhandledAppointments,
-        queryParameters: params.queryParams);
+        queryParameters: params.toJson());
     return response.fold(
         (l) => Left(l),
         (data) => Right((data['data'] as List)
@@ -107,6 +108,19 @@ class DoctorDashboardRemoteDataSourceImpl
 
     return response.fold((failure) => Left(failure), (data) {
       return Right(DoctorStatisticsModel.fromJson(data));
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<DoctorAppointmentEntity>>> getAllReservations(
+      PaginationParams params) async {
+    final response = await _apiConsumer.get(EndPoints.getAllDoctorReservations,
+        queryParameters: params.toJson());
+
+    return response.fold((failure) => Left(failure), (data) {
+      return Right((data['data']['reservations'] as List)
+          .map((e) => DoctorAppointmentModel.fromJson(e))
+          .toList());
     });
   }
 }

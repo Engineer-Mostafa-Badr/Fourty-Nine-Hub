@@ -1,14 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_today_appointments/doctor_today_appointments_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/all_doctor_reservations/all_doctor_reservations_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_today_appointments.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class DoctorTodayAppointmentsView extends StatelessWidget {
-  const DoctorTodayAppointmentsView({super.key});
+class AllDoctorReservationsView extends StatelessWidget {
+  const AllDoctorReservationsView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,19 +15,17 @@ class DoctorTodayAppointmentsView extends StatelessWidget {
       appBar: AppBar(
         title: const Text(Labels.todayAppointments),
       ),
-      body: BlocBuilder<DoctorTodayAppointmentsCubit,
-          DoctorTodayAppointmentsState>(
+      body: BlocBuilder<AllDoctorReservationsCubit, AllDoctorReservationsState>(
         builder: (context, state) {
-          if (state is DoctorTodayAppointmentsLoaded) {
-            if (state.appointments.isNotEmpty) {
+          if (state is AllDoctorReservationsLoaded) {
+            if (state.reservations.isNotEmpty) {
               return ListView.separated(
                 shrinkWrap: true,
-                controller: context
-                    .read<DoctorTodayAppointmentsCubit>()
-                    .scrollController,
-                itemCount: state.appointments.length,
+                controller:
+                    context.read<AllDoctorReservationsCubit>().scrollController,
+                itemCount: state.reservations.length,
                 itemBuilder: (context, index) => DoctorAppointmentCard(
-                  appointment: state.appointments[index],
+                  appointment: state.reservations[index],
                 ),
                 separatorBuilder: (BuildContext context, int index) =>
                     const Divider(),
@@ -41,7 +38,7 @@ class DoctorTodayAppointmentsView extends StatelessWidget {
                 ),
               );
             }
-          } else if (state is DoctorTodayAppointmentsError) {
+          } else if (state is AllDoctorReservationsError) {
             return Center(
                 child: Label(
               text: state.message,

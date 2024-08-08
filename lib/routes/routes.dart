@@ -45,7 +45,9 @@ abstract class Routes {
   static const EDITDOCTORPERSONALINFO = '/Visita/EditDoctorPersonalInfo';
   static const DOCTORSTATISTICS = '/Visita/DoctorStatistics';
   static const DOCTORTODAYAPPOINTMENTS = '/Visita/DoctorTodayAppointments';
-  static const DOCTORUNHANDLEDAPPOINTMENTS = '/Visita/DoctorUnhandledAppointments';
+  static const DOCTORUNHANDLEDAPPOINTMENTS =
+      '/Visita/DoctorUnhandledAppointments';
+  static const ALLDOCTORRESERVATIONS = '/Visita/AllDoctorReservations';
   static const FOOD = '/Food';
 
   static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
@@ -152,6 +154,7 @@ abstract class Paths {
   static const DOCTORSTATISTICS = 'DoctorStatistics';
   static const DOCTORTODAYAPPOINTMENTS = 'DoctorTodayAppointments';
   static const DOCTORUNHANDLEDAPPOINTMENTS = 'DoctorUnhandledAppointments';
+  static const ALLDOCTORRESERVATIONS = 'AllDoctorReservations';
   static const FOOD = 'Food';
   static const CusineRestaurants = 'Cusine-Restaurants';
   static const RestaurantDashboard = 'RestaurantDashboard';

@@ -42,8 +42,7 @@ class DoctorTodayAppointmentsWidget extends StatelessWidget {
                     ListView.separated(
                       shrinkWrap: true,
                       itemCount: state.appointments.length,
-                      itemBuilder: (context, index) =>
-                          DoctorTodayAppointmentCard(
+                      itemBuilder: (context, index) => DoctorAppointmentCard(
                         appointment: state.appointments[index],
                       ),
                       separatorBuilder: (BuildContext context, int index) =>
@@ -71,9 +70,9 @@ class DoctorTodayAppointmentsWidget extends StatelessWidget {
   }
 }
 
-class DoctorTodayAppointmentCard extends StatelessWidget {
+class DoctorAppointmentCard extends StatelessWidget {
   final DoctorAppointmentEntity appointment;
-  const DoctorTodayAppointmentCard({super.key, required this.appointment});
+  const DoctorAppointmentCard({super.key, required this.appointment});
 
   @override
   Widget build(BuildContext context) {

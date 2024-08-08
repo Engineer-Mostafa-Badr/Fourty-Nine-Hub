@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/cubit/doctor_statistics_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_statistics/doctor_statistics_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/history/doctor_history_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class DoctorStatisticsView extends StatelessWidget {
   const DoctorStatisticsView({super.key});
@@ -21,12 +23,17 @@ class DoctorStatisticsView extends StatelessWidget {
             return ListView(
               padding: const EdgeInsets.all(20),
               children: [
-                DoctorHistoryCard(
-                  title: 'Total Appointments',
-                  totalValue: statistics.appointmentsCount,
-                  clinicValue: statistics.clinic.appointmentsCount,
-                  callValue: statistics.call.appointmentsCount,
-                  homeVisitValue: statistics.homeVisit.appointmentsCount,
+                InkWell(
+                  onTap: () {
+                    context.push(Routes.ALLDOCTORRESERVATIONS);
+                  },
+                  child: DoctorHistoryCard(
+                    title: 'Total Appointments',
+                    totalValue: statistics.appointmentsCount,
+                    clinicValue: statistics.clinic.appointmentsCount,
+                    callValue: statistics.call.appointmentsCount,
+                    homeVisitValue: statistics.homeVisit.appointmentsCount,
+                  ),
                 ),
                 const Sizer(
                   height: 20,

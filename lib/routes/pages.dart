@@ -24,10 +24,12 @@ import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/present
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/registable_sub_categories_cubit/registable_subcategories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/cubit/doctor_statistics_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/all_doctor_reservations/all_doctor_reservations_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_statistics/doctor_statistics_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_today_appointments/doctor_today_appointments_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_unhandled_appotinments/doctor_unhandled_appotinments_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/all_doctor_reservations_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_dashboard_view.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/pages/create_doctor_view.dart';
@@ -687,7 +689,8 @@ class AppPages {
               GoRoute(
                   path: Paths.DOCTORSTATISTICS,
                   name: Routes.DOCTORSTATISTICS,
-                  builder: (context, state) => BlocProvider<DoctorStatisticsCubit>(
+                  builder: (context, state) =>
+                      BlocProvider<DoctorStatisticsCubit>(
                         create: (context) => serviceLocator(),
                         child: const DoctorStatisticsView(),
                       )),
@@ -706,6 +709,14 @@ class AppPages {
                       BlocProvider<DoctorUnhandledAppointmentsCubit>(
                         create: (context) => serviceLocator(),
                         child: const DoctorUnhandledAppointmentsView(),
+                      )),
+              GoRoute(
+                  path: Paths.ALLDOCTORRESERVATIONS,
+                  name: Routes.ALLDOCTORRESERVATIONS,
+                  builder: (context, state) =>
+                      BlocProvider<AllDoctorReservationsCubit>(
+                        create: (context) => serviceLocator(),
+                        child: const AllDoctorReservationsView(),
                       )),
             ]),
         GoRoute(

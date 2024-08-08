@@ -63,6 +63,7 @@ class EndPoints {
       '/health/book-appointment/approve/$appointmentId';
   static String doctorRejectAppointment(String appointmentId) =>
       '/health/book-appointment/reject/$appointmentId';
+  static const getAllDoctorReservations = '/health/dashboard/number-of-reservations';
 
   // reels
   static const getExploreReels = '/reels/explore';

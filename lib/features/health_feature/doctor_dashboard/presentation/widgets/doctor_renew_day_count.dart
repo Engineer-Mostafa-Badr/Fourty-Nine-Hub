@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -35,7 +36,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                       current is DoctorDashboardInitial ||
                       current is DoctorDashboardSupscriptionRemainingDays,
                   builder: (context, state) {
-                    String days = Labels.subscribeNow;
+                    String days = '0';
                     if (state is DoctorDashboardSupscriptionRemainingDays) {
                       days = state.days.toString();
                     }
@@ -53,7 +54,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                       current is DoctorDashboardInitial ||
                       current is DoctorDashboardIDRemainingDays,
                   builder: (context, state) {
-                    String days = '??';
+                    String days = '0';
                     if (state is DoctorDashboardIDRemainingDays) {
                       days = state.days.toString();
                     }
@@ -72,7 +73,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                       current is DoctorDashboardInitial ||
                       current is DoctorDashboardPracticingRemainingDays,
                   builder: (context, state) {
-                    String days = '??';
+                    String days = '0';
                     if (state is DoctorDashboardPracticingRemainingDays) {
                       days = state.days.toString();
                     }
@@ -106,7 +107,7 @@ class _Item extends StatelessWidget {
         children: [
           Label(
             text: numerOfDays,
-            style: Styles.headerText(),
+            style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
           ),
           Label(
             text: label,

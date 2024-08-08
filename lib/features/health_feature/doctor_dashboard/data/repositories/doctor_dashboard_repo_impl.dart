@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/datasources/remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_statistics_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/repositories/doctor_dashboard_repo.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_appointments_by_day.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_unhandled_appointments_usecase.dart';
 
 class DoctorDashboardRepoImpl implements DoctorDashboardRepo {
   final DoctorDashboardRemoteDataSource remoteDataSource;
@@ -27,20 +27,22 @@ class DoctorDashboardRepoImpl implements DoctorDashboardRepo {
   }
 
   @override
-  Future<Either<Failure, List<DoctorAppointmentEntity>>> getDoctorAppointmentsByDay(GetDoctorAppointmentsByDayParams params) {
+  Future<Either<Failure, List<DoctorAppointmentEntity>>>
+      getDoctorAppointmentsByDay(GetDoctorAppointmentsByDayParams params) {
     return remoteDataSource.getDoctorAppointmentsByDay(params);
   }
 
   @override
-  Future<Either<Failure, List<DoctorAppointmentEntity>>> getDoctorUnhandledAppointments(GetDoctorUnhandledAppointmentsParams params) {
+  Future<Either<Failure, List<DoctorAppointmentEntity>>>
+      getDoctorUnhandledAppointments(PaginationParams params) {
     return remoteDataSource.getDoctorUnhandledAppointments(params);
   }
-  
+
   @override
   Future<Either<Failure, bool>> acceptAppointment(String appointmentId) {
     return remoteDataSource.acceptAppointment(appointmentId);
   }
-  
+
   @override
   Future<Either<Failure, bool>> rejectAppointment(String appointmentId) {
     return remoteDataSource.rejectAppointment(appointmentId);
@@ -51,5 +53,9 @@ class DoctorDashboardRepoImpl implements DoctorDashboardRepo {
     return remoteDataSource.getDoctorStatistics();
   }
 
-  
+  @override
+  Future<Either<Failure, List<DoctorAppointmentEntity>>> getAllReservations(
+      PaginationParams params) {
+    return remoteDataSource.getAllReservations(params);
+  }
 }
