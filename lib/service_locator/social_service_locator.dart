@@ -261,6 +261,7 @@ class SocialServiceLocator {
     serviceLocator.registerFactory<InstagramCubit>(() => InstagramCubit(
       serviceLocator(),
       serviceLocator(),
+      serviceLocator(),
     ));
     serviceLocator.registerFactory<SocialPostsCubit>(() => SocialPostsCubit(
           serviceLocator(),

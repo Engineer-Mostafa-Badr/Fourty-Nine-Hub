@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_advertisement_use_case.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -12,8 +13,9 @@ part 'instagram_state.dart';
 class InstagramCubit extends Cubit<InstagramState> {
   final GetInstagramFeedUseCase _getFeedUseCase;
   final FaceAdvertisementUseCase _advertisementUseCase;
+  final PostReactUseCase _postReactUseCase;
 
-  InstagramCubit(this._getFeedUseCase, this._advertisementUseCase) : super(const InstagramState());
+  InstagramCubit(this._getFeedUseCase, this._advertisementUseCase, this._postReactUseCase) : super(const InstagramState());
 
 
   void loadData() async {
@@ -80,5 +82,27 @@ class InstagramCubit extends Cubit<InstagramState> {
     print("advertisements:${advertisements.length}");
     return advertisements;
   }
+
+
+  void changeIndex(int index){
+    emit(state.copyWith(pageIndex: index));
+  }
+
+
+// react on a post
+  Future<bool> onReact({required PostReactParams params}) async {
+    var response =await _postReactUseCase(params);
+    bool value = false;
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: StateStatus.error)),
+            (r){
+          value=r;
+        }
+    );
+    return value;
+
+  }
+
 
 }

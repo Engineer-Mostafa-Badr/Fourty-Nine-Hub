@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../res/style/styles.dart';
 import '../labels/label.dart';
@@ -20,6 +22,9 @@ class SocialImageViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: ()=>showDialog(context: context,builder: (context)=>ImageDetailsScreen(image: image, fromPost: true,isFile: false,onRemoveImage: (){
+        context.pop();
+      },),),
       onDoubleTap: () => onDoubleTap != null ? onDoubleTap!() : null,
       child: SizedBox(
           height: height ?? kToolbarHeight * 3,
