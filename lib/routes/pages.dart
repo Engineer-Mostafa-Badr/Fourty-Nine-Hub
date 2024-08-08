@@ -195,7 +195,7 @@ class AppPages {
                   builder: (context, state) => BlocProvider.value(
                         value: serviceLocator<AdsCubit>(),
                         child: AdsView(
-                          subCategoryId: state.extra as String,
+                          params: state.extra as AdsViewParams,
                         ),
                       ),
                   routes: [

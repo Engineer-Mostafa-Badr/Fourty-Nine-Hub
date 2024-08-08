@@ -1,5 +1,4 @@
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_statistics_entity.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/publisher_entity.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../core/utils/duration_helper.dart';
