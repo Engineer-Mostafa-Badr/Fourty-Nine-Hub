@@ -29,6 +29,7 @@ class ChatModel {
   int? lastSeenCount;
   int? unreadCount;
   String? userId;
+  String? formattedUpdatedAt;
 
   ChatModel({
     this.sId,
@@ -43,6 +44,7 @@ class ChatModel {
     this.lastSeenCount,
     this.unreadCount,
     this.userId,
+    this.formattedUpdatedAt,
   });
 
   ChatModel.fromJson(Map<String, dynamic> json) {
@@ -57,6 +59,7 @@ class ChatModel {
     locked = json['locked'];
     unreadCount = json['unreadCount'];
     userId = json['userId'];
+    formattedUpdatedAt = json['formattedUpdatedAt'];
     typing = false;
     online = false;
   }

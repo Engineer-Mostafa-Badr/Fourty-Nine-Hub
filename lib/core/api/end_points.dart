@@ -327,9 +327,8 @@ class EndPoints {
   static String createMeeting = '/room-id';
   static String joinMeeting(String id) => '/room-id/join/$id';
   static String endMeeting(String id) => '/room-id/finish/$id';
-  static String deleteChatMessage(String chatId) {
-    return '/chat/get-chat/$chatId';
-  }
+  static String deleteChatMessage = '/chat/message';
+
 
   static String changeChatMuteState(String chatId) {
     return '/chat/mute-chat/$chatId';
