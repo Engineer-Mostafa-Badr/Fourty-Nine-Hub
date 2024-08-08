@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/functions/global/capitalize_first_letter_of_words.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 
@@ -407,7 +408,7 @@ class DrawerWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Label(
-                text: user?.fullName ?? '',
+                text: user?.fullName.capitalizeByWord() ?? '',
                 style: Styles.mediumText(fontWeight: FontWeight.bold),
               ),
               Label(
