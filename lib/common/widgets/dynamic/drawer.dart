@@ -383,20 +383,27 @@ class DrawerWidget extends StatelessWidget {
             width: kToolbarHeight * 1.5,
             child: Stack(
               children: [
-                Positioned.fill(
+                const Positioned.fill(
                   child: CircleAvatar(
-                    backgroundColor: Colors.white,
+                    backgroundColor: Colors.transparent,
                     backgroundImage: NetworkImage(
-                      user?.profilePicture ?? UIConst.profilePlaceHolder,
+                        'https://st3.depositphotos.com/9998432/13335/v/450/depositphotos_133352010-stock-illustration-default-placeholder-man-and-woman.jpg'
+                      // user?.profilePicture ?? UIConst.profilePlaceHolder,
                     ),
                   ),
                 ),
-                const Positioned(
+                 Positioned(
                   bottom: 0,
                   right: 0,
-                  child: Icon(
-                    Icons.verified,
-                    color: AppColors.PRIMARY_COLOR,
+                  child: InkWell(
+                    onTap: (){
+                      //change the image of user profile
+                    },
+                    child: const Icon(
+                      Icons.camera_enhance_outlined,
+                      color: AppColors.PRIMARY_COLOR,
+                      size: 20,
+                    ),
                   ),
                 )
               ],
@@ -417,7 +424,7 @@ class DrawerWidget extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  context.push(Routes.WALLET);
+                  context.push(Routes.WALLET,);
                 },
                 child: Row(
                   children: [
@@ -432,7 +439,7 @@ class DrawerWidget extends StatelessWidget {
                     ),
                     Expanded(
                       child: Label(
-                        text: '1000 L.E',
+                        text: '1000',
                         style: Styles.mediumText(
                             decoration: TextDecoration.underline),
                       ),
