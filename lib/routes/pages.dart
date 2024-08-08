@@ -790,7 +790,7 @@ class AppPages {
             name: Routes.ZOOM,
             builder: (context, state) => BlocProvider<MeetingCubit>(
                   create: (context) => serviceLocator<MeetingCubit>(),
-                  child: MeetingView(),
+                  child: const MeetingView(),
                 ),
             routes: [
               // PlayVideo
