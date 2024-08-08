@@ -34,7 +34,7 @@ class _SocialHomeViewState extends State<SocialHomeView> {
   @override
   void initState() {
     controller = context.read<SocialPostsCubit>();
-    controller.getMyPosts(context: context);
+    // controller.getMyPosts(context: context);
   }
 
   @override

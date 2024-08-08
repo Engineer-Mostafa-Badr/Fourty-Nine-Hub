@@ -1,14 +1,33 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
-class ImageDetailsScreen extends StatelessWidget {
-  const ImageDetailsScreen({super.key, required this.image, required this.onRemoveImage, this.fromPost=false, this.isFile=false});
+class ImageDetailsScreen extends StatefulWidget {
+  const ImageDetailsScreen({
+    super.key,
+    required this.image,
+    required this.onRemoveImage,
+    this.fromPost = false,
+    this.isFile = false,
+  });
+
   final String image;
   final bool? fromPost;
   final bool? isFile;
   final Function onRemoveImage;
+
+  @override
+  _ImageDetailsScreenState createState() => _ImageDetailsScreenState();
+}
+
+class _ImageDetailsScreenState extends State<ImageDetailsScreen> {
+  double _scale = 1.0;
+  double _previousScale = 1.0;
+  final double _minScale = 1.0;
+  final double _maxScale = 4.0; // Maximum scale factor
+  Offset _position = Offset.zero;
+  Offset _previousPosition = Offset.zero;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,40 +35,76 @@ class ImageDetailsScreen extends StatelessWidget {
         backgroundColor: AppColors.DARK_BLUE_COLOR,
         leading: IconButton(
           onPressed: () {
-            onRemoveImage();
+            widget.onRemoveImage();
           },
-          icon: fromPost==true? const Icon(
+          icon: widget.fromPost == true
+              ? const Icon(
             Icons.arrow_back,
             color: Colors.white,
-          ): const Icon(
+          )
+              : const Icon(
             Icons.close,
             color: Colors.white,
           ),
         ),
       ),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          color: AppColors.DARK_BLUE_COLOR,
-        ),
-        child:(fromPost==false||isFile==true)?Container(
-          decoration:BoxDecoration(
-            image: DecorationImage(
-                image:FileImage(
-                  File(image),
-                )
-            )
+      body: GestureDetector(
+        onScaleStart: (ScaleStartDetails details) {
+          _previousScale = _scale;
+          _previousPosition = details.focalPoint;
+        },
+        onScaleUpdate: (ScaleUpdateDetails details) {
+          setState(() {
+            _scale = (_previousScale * details.scale).clamp(_minScale, _maxScale);
+
+            if (_scale > _minScale) {
+              final Offset delta = details.focalPoint - _previousPosition;
+              _previousPosition = details.focalPoint;
+              _position += delta;
+            } else {
+              _position = Offset.zero;
+            }
+          });
+        },
+        onScaleEnd: (ScaleEndDetails details) {
+          _previousScale = 1.0;
+          _previousPosition = Offset.zero;
+        },
+        onDoubleTap: () {
+          setState(() {
+            if (_scale > _minScale) {
+              _scale = _minScale;
+              _position = Offset.zero;
+            } else {
+              _scale = 2.0; // Zoom-in scale factor on double-tap
+              _position = Offset.zero; // Center the image
+            }
+          });
+        },
+        child: Container(
+          height: double.infinity,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            color: AppColors.DARK_BLUE_COLOR,
           ),
-      ):Container(
-          decoration:BoxDecoration(
-              image: DecorationImage(
-                  image:NetworkImage(
-                    image,
-                  )
+          child: Center(
+            child: Transform(
+              transform: Matrix4.identity()
+                ..translate(_position.dx, _position.dy)
+                ..scale(_scale),
+              child: widget.fromPost == false || widget.isFile == true
+                  ? Image.file(
+                File(widget.image),
+                fit: BoxFit.contain,
               )
+                  : Image.network(
+                widget.image,
+                fit: BoxFit.contain,
+              ),
+            ),
           ),
         ),
-    ));
+      ),
+    );
   }
 }

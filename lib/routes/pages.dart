@@ -62,6 +62,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/pages/mus
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
@@ -434,7 +435,7 @@ class AppPages {
         GoRoute(
           path: Paths.INSTAGRAM,
           name: Routes.INSTAGRAM,
-          builder: (context, state) => BlocProvider<InstagramCubit>(create: (_)=>serviceLocator(), 
+          builder: (context, state) => BlocProvider<InstagramCubit>(create: (_)=>serviceLocator()..loadData(),
           child: const InstagramView(),
           ),
         ),
@@ -476,7 +477,17 @@ class AppPages {
                   name: Routes.TWITTER,
                   builder: (context, state) => BlocProvider<TwitterCubit>(
                       create: (_)=>serviceLocator(),
-                      child: const TwitterView())),
+                      child: const TwitterView()),
+              routes: [
+                GoRoute(
+                  path: Paths.TWITTERPOSTDETAILS,
+                  name: Routes.TWITTERPOSTDETAILS,
+                  builder: (context, state) {
+                    final id = state.extra as String?;
+                    return TwitterPostDetails(postId: id??'',);
+                  },
+                )
+              ]),
               GoRoute(
                 path: Paths.OTHERSACCOUNT,
                 name: Routes.OTHERSACCOUNT,

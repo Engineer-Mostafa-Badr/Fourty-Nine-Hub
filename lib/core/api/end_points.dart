@@ -110,6 +110,10 @@ class EndPoints {
     return '/facebook/feed?limit=${params.limit}&page=${params.page}';
   }
 
+  static String getInstagramPosts(TwitterFeedParams params) {
+    return '/instagram/feed?limit=${params.limit}&page=${params.page}';
+  }
+
   static String getAdvertisement(TwitterFeedParams params) {
     return '/advertisementCompany?limit=${params.limit}&page=${params.page}';
   }

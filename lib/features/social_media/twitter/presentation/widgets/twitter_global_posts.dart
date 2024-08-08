@@ -91,11 +91,22 @@ class _TwitterGlobalPostsState extends State<TwitterGlobalPosts> {
                     );
                   },
                   getPost: () {
-                    controller.getTwitterPost(
-                        context,
-                        controller
-                            .postsPagingController.itemList![index].mainPost.id,
-                        state.newCommentId ?? '',widget.userData);
+                    print("objectH");
+                    // bottomSheet(
+                    //     context: context,
+                    //     isScrollControlled: true,
+                    //     widget: TwitterPostDetails(
+                    //       postId: controller.postsPagingController.itemList![index].mainPost.id,
+                    //       showPostComments: (id) {
+                    //
+                    //       },
+                    //       onReport: (TwitterReportParams params) {
+                    //       },
+                    //     ));
+                    // controller.getTwitterPost(
+                    //     context,
+                    //     '66b248964a2a579a9e878dc0',
+                    //     state.newCommentId ?? '',widget.userData);
                   },
                   onReport: (TwitterReportParams params) {
                     controller.onReport(params);

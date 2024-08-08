@@ -20,6 +20,10 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_activities_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_feelings_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/data/datasources/instagram_remote_datasource.dart';
+import 'package:fourtyninehub/features/social_media/instagram/data/repositories/instagram_repo_impl.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/repositories/social_posts_repo.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/datasources/social_posts_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/repositories/social_posts_repo.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
@@ -66,6 +70,8 @@ class SocialServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     serviceLocator.registerLazySingleton<CreatePostRemoteDataSource>(() =>
         CreatePostRemoteDataSourceImpl(serviceLocator(), serviceLocator()));
+    serviceLocator.registerLazySingleton<InstagramRemoteDataSource>(() =>
+        InstagramRemoteDataSourceImpl(serviceLocator(),));
     serviceLocator.registerLazySingleton<SocialPostsRemoteDataSource>(
         () => SocialPostsRemoteDataSourceImpl(
               serviceLocator(),
@@ -81,6 +87,8 @@ class SocialServiceLocator {
         () => SocialPostsRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<TwitterRepo>(
         () => TwitterRepoImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<InstagramRepo>(
+        () => InstagramRepoImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<CreatePostUseCase>(
         () => CreatePostUseCase(serviceLocator()));
@@ -236,6 +244,13 @@ class SocialServiceLocator {
 
 
 
+    serviceLocator
+        .registerLazySingleton<GetInstagramFeedUseCase>(() => GetInstagramFeedUseCase(
+      serviceLocator(),
+    ));
+
+
+
     serviceLocator.registerFactory<CreatePostCubit>(() => CreatePostCubit(
           serviceLocator(),
           serviceLocator(),
@@ -243,7 +258,10 @@ class SocialServiceLocator {
           serviceLocator(),
         ));
 
-    serviceLocator.registerFactory<InstagramCubit>(() => InstagramCubit());
+    serviceLocator.registerFactory<InstagramCubit>(() => InstagramCubit(
+      serviceLocator(),
+      serviceLocator(),
+    ));
     serviceLocator.registerFactory<SocialPostsCubit>(() => SocialPostsCubit(
           serviceLocator(),
           serviceLocator(),

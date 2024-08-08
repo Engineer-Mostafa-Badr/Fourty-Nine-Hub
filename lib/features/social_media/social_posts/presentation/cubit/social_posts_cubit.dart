@@ -84,8 +84,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 
 
   void onRefresh()async{
-    emit(state.copyWith(tweetPage:0));
-    emit(state.copyWith(advertisementsPage:0));
+    emit(state.copyWith(tweetPage:0,advertisementsPage:0));
     feedPagingController.refresh();
   }
 
@@ -99,10 +98,10 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) async{
-          // if(data.isNotEmpty){
-          //   tweets = await getTwitterFeed();
-          //   advertisements = await getAdvertisements();
-          // }
+          if(data.isNotEmpty){
+            tweets = await getTwitterFeed();
+            advertisements = await getAdvertisements();
+          }
           List<PostEntity> totalPosts=[];
           totalPosts.addAll(data);
           totalPosts.addAll(tweets);

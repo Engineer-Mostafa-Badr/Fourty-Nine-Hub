@@ -1,6 +1,7 @@
 import 'package:fourtyninehub/features/social_media/create_post/data/models/activity_model.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/models/feeling_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
+import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_main_post_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
 
 class PostModel extends PostEntity {
@@ -36,7 +37,7 @@ class PostModel extends PostEntity {
       super.advertisementType,
       super.post,
       super.description,
-      // super.totalPrice,
+      super.mainPost,
       super.isApproved,
       required super.user,
       super.wowCount,
@@ -68,6 +69,9 @@ class PostModel extends PostEntity {
             : null,
         feeling: json['feeling'] != null
             ? FeelingModel.fromJson(json['feeling'])
+            : null,
+        mainPost: json['mainPost'] != null
+            ?json['mainPost'] is String ?json['mainPost']: TwitterMainPostModel.fromJson(json['mainPost'] )
             : null,
         user: json['user'] == null?null:json['user'] is String
             ? json['user']
