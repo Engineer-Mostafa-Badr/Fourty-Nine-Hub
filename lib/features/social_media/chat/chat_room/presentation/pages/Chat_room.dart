@@ -79,7 +79,9 @@ class _ChatRoomState extends State<ChatRoom> {
                             },
                             deleteFunction: () {
                               Navigator.of(context).pop();
-                              deleteMessage();
+                              deleteMessage(
+                                  chatId: state.chatMessages![index].chatId!,
+                                  messageId: state.chatMessages![index].sId!);
                             },
                           );
                         },
@@ -109,8 +111,14 @@ class _ChatRoomState extends State<ChatRoom> {
     focusNode.requestFocus();
   }
 
-  deleteMessage() {
-    bottomSheet(context: context, widget: const DeleteMessageBody());
+  deleteMessage({required String chatId, required String messageId}) {
+    bottomSheet(
+        context: context,
+        widget: DeleteMessageBody(
+          deleteMessageFunction: () {
+            chatRoomCubit.deleteMessage(chatId: chatId, messageId: messageId);
+          },
+        ));
   }
 
   cancelReplay() {

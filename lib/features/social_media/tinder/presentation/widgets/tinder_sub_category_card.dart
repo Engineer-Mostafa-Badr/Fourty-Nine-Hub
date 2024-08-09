@@ -1,40 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
-import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_subcategory_model.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
 
-class HealthMedicalServiceCard extends StatelessWidget {
-  final HealthSubcategoryEntity subCategory;
-  const HealthMedicalServiceCard({super.key, required this.subCategory});
+class TinderSubCategoryCard extends StatelessWidget {
+  final SubCategoryData subCategory;
+  const TinderSubCategoryCard({super.key, required this.subCategory});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        context.push(Routes.ADS,
-            extra: AdsViewParams(
-                mainCategory: serviceLocator<HealthSharedData>().mainCategory,
-                subCategory: subCategory));
-      },
+      onTap: () {},
       child: Container(
         width: 200,
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(0),
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
-            boxShadow: AppColors.SHADOW),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 10,
+                offset: Offset(0, 10),
+              ),
+            ]),
         child: Column(
           children: [
             Expanded(
@@ -46,7 +41,7 @@ class HealthMedicalServiceCard extends StatelessWidget {
                     child: SquareImage(
                       fit: BoxFit.fitWidth,
                       radius: 10,
-                      url: subCategory.image,
+                      url: subCategory.picture,
                     ),
                   ),
                   Positioned(
@@ -54,15 +49,9 @@ class HealthMedicalServiceCard extends StatelessWidget {
                       right: 5,
                       child: IconAppButton(
                           size: 20,
-                          icon: subCategory.isFavorite
-                              ? Icons.favorite
-                              : Icons.favorite_border,
+                          icon: Icons.favorite_border,
                           color: Colors.red,
-                          onPressed: () {
-                            context
-                                .read<HealthCubit>()
-                                .toggleFavoriteMedicalService(subCategory.id);
-                          }))
+                          onPressed: () {}))
                 ],
               ),
             )),
@@ -73,11 +62,11 @@ class HealthMedicalServiceCard extends StatelessWidget {
                 Column(
                   children: [
                     Label(
-                      text: subCategory.name,
-                      style: Styles.mediumText(fontWeight: FontWeight.bold),
+                      text: subCategory.nameEn ?? '',
+                      style: Styles.headerText(fontWeight: FontWeight.bold),
                     ),
                     Label(
-                      text: '${subCategory.numberOfContent.toShortScale} ads',
+                      text: '${9355.toShortScale} ads',
                       style: Styles.mediumText(),
                     ),
                   ],
@@ -95,6 +84,5 @@ class HealthMedicalServiceCard extends StatelessWidget {
         ),
       ),
     );
- 
   }
 }

@@ -18,6 +18,7 @@ class MessageEntity {
   String? updatedAt;
   bool? byMe;
   ReplyMessage? replyMessageId;
+  String? formattedCreatedAt;
 
   MessageEntity({
     this.sId,
@@ -38,6 +39,7 @@ class MessageEntity {
     this.createdAt,
     this.updatedAt,
     this.byMe,
+    this.formattedCreatedAt,
     this.replyMessageId,
   });
 }

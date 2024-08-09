@@ -14,7 +14,7 @@ class HealthSubCategories extends StatelessWidget {
     return BlocBuilder<HealthCubit, HealthState>(builder: (context, state) {
       if (state.subCategories != null && state.subCategories!.isNotEmpty) {
         return SizedBox(
-          height: 200,
+          height: 250,
           child: ListView.separated(
             separatorBuilder: (context, index) => const Sizer(),
             padding: const EdgeInsets.symmetric(vertical: 20),
