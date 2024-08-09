@@ -90,19 +90,6 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                   widget.comment.loveCount = widget.comment.loveCount! + 1;
                   setState(() {});
                 }
-                // if(widget.comment.isReact=true){
-                //   widget.onCommentReact();
-                //   widget.comment.loveCount-1;
-                //   setState(() {
-                //
-                //   });
-                // }else{
-                //   widget.onCommentReact();
-                //   widget.comment.loveCount+1;
-                //   setState(() {
-                //
-                //   });
-                // }
               },
               child: Icon(
                 widget.comment.isReact == false
