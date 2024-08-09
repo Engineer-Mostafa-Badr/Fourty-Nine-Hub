@@ -123,18 +123,9 @@ class MessageCard extends StatelessWidget {
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
+
                           Label(
-                              text: '12',
-                              style: Styles.smallText(color: Colors.black)),
-                          const Sizer(),
-                          const Icon(
-                            FontAwesomeIcons.eye,
-                            color: Colors.black,
-                            size: 10,
-                          ),
-                          const Sizer(),
-                          Label(
-                              text: '3:16 PM',
+                              text: '${messageEntity.formattedCreatedAt}',
                               style: Styles.smallText(color: Colors.black)),
                           const Sizer(),
                           const Icon(
