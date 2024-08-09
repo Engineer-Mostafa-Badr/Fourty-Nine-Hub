@@ -7,9 +7,9 @@ import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_state.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:go_router/go_router.dart';
-import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
 import '../../../../service_locator/service_locator.dart';
+import '../../../social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 
 class MeetingRoom extends StatelessWidget {
   const MeetingRoom({super.key, required this.liveID, required this.isHost});
