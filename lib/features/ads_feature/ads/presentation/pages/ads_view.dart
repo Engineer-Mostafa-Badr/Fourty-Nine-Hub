@@ -1,144 +1,128 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
-import 'package:fourtyninehub/features/requests_history/presentation/widgets/trip_card.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
-
-import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../core/enums/ride_services_enum.dart';
-
-import '../../../../../core/error/failure.dart';
-import '../../../../../core/messages/messages.dart';
-import '../../domain/usecases/request_come_with_me_usecase.dart';
-import '../widgets/ad_card.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 
 class AdsView extends StatefulWidget {
-  final String subCategoryId;
-  const AdsView({super.key, required this.subCategoryId});
+  final AdsViewParams params;
+
+  const AdsView({
+    super.key,
+    required this.params,
+  });
 
   @override
   State<AdsView> createState() => _AdsViewState();
 }
 
-class _AdsViewState extends State<AdsView> {
+class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
   @override
   void initState() {
-    context.read<AdsCubit>().loadData(subCategoryId: widget.subCategoryId);
     super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    context.read<AdsCubit>().loadData(
+          subCategoryId: widget.params.subCategory.id,
+        );
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AdsCubit, AdsState>(builder: (context, state) {
-      if (getRideServiceEnum(value: widget.subCategoryId) ==
-          RideServicesEnum.pickMe) {
-        return Scaffold(
-          appBar: const BackAppBar(
-            label: 'Pick Me',
+    return Scaffold(
+      appBar: const HomeAppbar(),
+      body: Column(
+        children: [
+          const Sizer(),
+          MainCategoryBanner(category: widget.params.mainCategory),
+          const Sizer(),
+          Label(
+            text: widget.params.subCategory.name,
+            style: Styles.headerText(),
           ),
-          body: Padding(
-              padding: const EdgeInsets.all(8.0), child: _buildPickMeTrips()),
-        );
-      } else if (getRideServiceEnum(value: widget.subCategoryId) ==
-          RideServicesEnum.comeWithYou) {
-        return Scaffold(
-          appBar: const BackAppBar(
-            label: 'Come With Me',
+          const Sizer(),
+          TabBar(
+            controller: _tabController,
+            labelColor: AppColors.SECONDARY_COLOR,
+            unselectedLabelColor: AppColors.PRIMARY_COLOR,
+            indicatorColor: AppColors.SECONDARY_COLOR,
+            indicatorSize: TabBarIndicatorSize.tab,
+            tabs: const [
+              Tab(text: Labels.serviceProvider),
+              Tab(text: Labels.user),
+            ],
           ),
-          body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _buildComeWithMeTrips()),
-        );
-      } else {
-        return Scaffold(
-          appBar: const BackAppBar(),
-          body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _buildCommonAdsWidget()),
-        );
-      }
-    }, listener: (context, state) {
-      if (state.isError && state.failure != null) {
-        showErrorMessage(
-          context,
-          getFailureMessage(
-            state.failure!,
-            context,
+          // TabBarView
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                BlocBuilder<AdsCubit, AdsState>(
+                  builder: (context, state) {
+                    if (state.ads != null) {
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(8.0),
+                        separatorBuilder: (context, index) => const Sizer(),
+                        itemCount: state.ads?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return AdCard(
+                            item: state.ads![index],
+                          );
+                        },
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
+                BlocBuilder<AdsCubit, AdsState>(
+                  builder: (context, state) {
+                    if (state.ads != null) {
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(8.0),
+                        separatorBuilder: (context, index) => const Sizer(),
+                        itemCount: state.ads?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return AdCard(
+                            item: state.ads![index],
+                          );
+                        },
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
-        );
-      } else if (state.isSuccess) {
-        showSuccessMessage(context, Labels.success);
-      }
-    });
+        ],
+      ),
+    );
   }
+}
 
-  Widget _buildCommonAdsWidget() {
-    return BlocBuilder<AdsCubit, AdsState>(builder: (context, state) {
-      if (state.isLoading) {
-        return const Center(
-          child: CircularProgressIndicator.adaptive(),
-        );
-      } else if (state.ads?.isEmpty ?? true) {
-        return const EmptyPage(
-          label: 'There is no ADs',
-        );
-      }
-      return GridView.builder(
-          itemBuilder: (context, index) => AdCard(
-                item: state.ads![index],
-              ),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: .8,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              crossAxisCount: 2),
-          itemCount: state.ads?.length ?? 0);
-    });
-  }
+class AdsViewParams {
+  final MainCategoryEntity mainCategory;
+  final SubCategoryEntity subCategory;
 
-  Widget _buildComeWithMeTrips() {
-    return BlocBuilder<AdsCubit, AdsState>(builder: (context, state) {
-      final controller = context.read<AdsCubit>();
-
-      if (state.isLoading) {
-        return const Center(
-          child: CircularProgressIndicator.adaptive(),
-        );
-      }
-      return ListView.separated(
-          itemBuilder: (context, index) => TripCard(
-                trip: state.comeWithMeAds![index],
-                onRequest: (RequestParams params) =>
-                    controller.requestComeWithMeAd(params: params),
-              ),
-          separatorBuilder: (context, index) {
-            return const Sizer();
-          },
-          itemCount: state.comeWithMeAds?.length ?? 0);
-    });
-  }
-
-  Widget _buildPickMeTrips() {
-    return BlocBuilder<AdsCubit, AdsState>(builder: (context, state) {
-      final controller = context.read<AdsCubit>();
-      if (state.isLoading) {
-        return const Center(
-          child: CircularProgressIndicator.adaptive(),
-        );
-      }
-      return ListView.separated(
-          itemBuilder: (context, index) => TripCard(
-                trip: state.pickMeAds![index],
-                onRequest: (RequestParams params) =>
-                    controller.requestPickMeAd(params: params),
-              ),
-          separatorBuilder: (context, index) {
-            return const Sizer();
-          },
-          itemCount: state.pickMeAds?.length ?? 0);
-    });
-  }
+  AdsViewParams({required this.mainCategory, required this.subCategory});
 }
