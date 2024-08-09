@@ -6,7 +6,6 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/address_field.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/description_filed.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/phone_field.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/subcategory.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/info.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/location/cities_dropdowns.dart';
@@ -61,8 +60,6 @@ class CreateDoctorView extends StatelessWidget {
                 CreateDoctorOptionsCheckbox(),
                 const Sizer(height: 20),
                 const CreateDoctorNameField(),
-                const Sizer(height: 20),
-                const CreateDoctorPhoneField(),
                 const Sizer(height: 20),
                 const CreateDoctorProfilePhotoPicker(),
                 const Sizer(height: 20),
