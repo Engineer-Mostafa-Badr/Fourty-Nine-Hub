@@ -32,7 +32,11 @@ class ChatRemoteDataSourceImplementation implements ChatRemoteDataSource {
 
   @override
   Future<Either<Failure, bool>> deleteMessage({required String chatId, required String messageId}) async {
-    final response = await _apiConsumer.get(EndPoints.deleteChatMessage(chatId));
+    var data = {
+      "chatId": chatId,
+      "messageId": messageId,
+    };
+    final response = await _apiConsumer.delete(EndPoints.deleteChatMessage,data: data);
     return response.fold(
             (failure) => Left(failure), (data) => Right(data['status']));
   }

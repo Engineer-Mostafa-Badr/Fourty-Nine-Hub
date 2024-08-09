@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/phone_number_text_field.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/presentation/cubit/emergency_cubit.dart';
@@ -33,8 +34,9 @@ class HealthEmergencyView extends StatelessWidget {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(Labels.emergency),
+        backgroundColor: Colors.white,
+        appBar: const BackAppBar(
+          label: Labels.emergency,
         ),
         body: Form(
           key: context.read<HealthEmergencyCubit>().formKey,

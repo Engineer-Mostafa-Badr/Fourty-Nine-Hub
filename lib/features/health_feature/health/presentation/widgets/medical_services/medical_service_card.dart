@@ -32,9 +32,9 @@ class HealthMedicalServiceCard extends StatelessWidget {
         width: 200,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: AppColors.SHADOW),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: Column(
           children: [
             Expanded(
@@ -95,6 +95,5 @@ class HealthMedicalServiceCard extends StatelessWidget {
         ),
       ),
     );
- 
   }
 }

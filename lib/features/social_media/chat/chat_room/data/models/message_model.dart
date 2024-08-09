@@ -20,6 +20,7 @@ class MessageModel extends MessageEntity {
     super.createdAt,
     super.updatedAt,
     super.byMe,
+    super.formattedCreatedAt,
     super.replyMessageId,
   });
 
@@ -42,6 +43,7 @@ class MessageModel extends MessageEntity {
       angryCount: json['angryCount'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
+      formattedCreatedAt: json['formattedCreatedAt'],
       byMe: json['byMe'],
       replyMessageId: json['replyMessageId'] != null
           ? ReplyMessageModel.fromJson(json['replyMessageId'])

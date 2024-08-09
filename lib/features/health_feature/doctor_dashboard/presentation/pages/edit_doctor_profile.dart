@@ -7,7 +7,6 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/edit_profile/update_profile_photo_card.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/edit_profile/update_time_table.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class EditDoctorProfileView extends StatelessWidget {
   const EditDoctorProfileView({super.key});
@@ -15,7 +14,6 @@ class EditDoctorProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.BACKGROUND_COLOR,
       appBar: AppBar(
         title: const Text(Labels.editProfile),
       ),

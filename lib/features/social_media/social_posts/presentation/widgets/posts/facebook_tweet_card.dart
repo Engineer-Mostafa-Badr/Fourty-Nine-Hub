@@ -99,7 +99,6 @@ class FacebookTweetCard extends StatelessWidget {
 
   Widget _buildAccountHeader({
     required BuildContext context,
-    bool showOptions = true,
     required TwitterUserEntity user,
   }) {
     return Row(
@@ -160,6 +159,7 @@ class FacebookTweetCard extends StatelessWidget {
           ),
           if ((post.images?.isNotEmpty ?? false))
             SizedBox(
+              height: MediaQuery.of(context).size.height*0.42,
               child: GridView.builder(
                   padding: const EdgeInsets.all(10),
                   shrinkWrap: true,
@@ -255,7 +255,7 @@ class FacebookTweetCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ReadMoreLabel(text: post.content ?? ''),
+          ReadMoreLabel(text: post.content),
           const SizedBox(
             height: 10,
           ),

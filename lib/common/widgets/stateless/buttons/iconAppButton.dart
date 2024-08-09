@@ -30,6 +30,9 @@ class IconAppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      splashColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       onTap: () => onPressed(),
       child: Container(
           height: height ?? kToolbarHeight * .6,
