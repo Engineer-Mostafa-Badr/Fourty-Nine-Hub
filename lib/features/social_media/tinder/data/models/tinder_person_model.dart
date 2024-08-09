@@ -886,12 +886,327 @@
 //     );
 //   }
 // }
+//.............................
+// class UserData {
+//   String? sId;
+//   List<Pictures>? pictures;
+//   User? user;
+//
+//   UserData({this.sId, this.pictures, this.user});
+//
+//   UserData.fromJson(Map<String, dynamic> json) {
+//     sId = json['_id'];
+//     if (json['pictures'] != null) {
+//       pictures = <Pictures>[];
+//       json['pictures'].forEach((v) {
+//         pictures!.add(new Pictures.fromJson(v));
+//       });
+//     }
+//     user = json['user'] != null ? new User.fromJson(json['user']) : null;
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['_id'] = this.sId;
+//     if (this.pictures != null) {
+//       data['pictures'] = this.pictures!.map((v) => v.toJson()).toList();
+//     }
+//     if (this.user != null) {
+//       data['user'] = this.user!.toJson();
+//     }
+//     return data;
+//   }
+// }
+//
+// class Pictures {
+//   String? sId;
+//   String? mediaKey;
+//
+//   Pictures({this.sId, this.mediaKey});
+//
+//   Pictures.fromJson(Map<String, dynamic> json) {
+//     sId = json['_id'];
+//     mediaKey = json['mediaKey'];
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['_id'] = this.sId;
+//     data['mediaKey'] = this.mediaKey;
+//     return data;
+//   }
+// }
+//
+// class User {
+//   String? firstName;
+//   String? lastName;
+//   String? email;
+//   String? gender;
+//   Location? location;
+//
+//   User({this.firstName, this.lastName, this.email, this.gender, this.location});
+//
+//   User.fromJson(Map<String, dynamic> json) {
+//     firstName = json['firstName'];
+//     lastName = json['lastName'];
+//     email = json['email'];
+//     gender = json['gender'];
+//     location = json['location'] != null
+//         ? new Location.fromJson(json['location'])
+//         : null;
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['firstName'] = this.firstName;
+//     data['lastName'] = this.lastName;
+//     data['email'] = this.email;
+//     data['gender'] = this.gender;
+//     if (this.location != null) {
+//       data['location'] = this.location!.toJson();
+//     }
+//     return data;
+//   }
+// }
+//
+// class Location {
+//   String? type;
+//   List<int>? coordinates;
+//
+//   Location({this.type, this.coordinates});
+//
+//   Location.fromJson(Map<String, dynamic> json) {
+//     type = json['type'];
+//     coordinates = json['coordinates'].cast<int>();
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['type'] = this.type;
+//     data['coordinates'] = this.coordinates;
+//     return data;
+//   }
+// }
+//
+//
+// // Model for Api
+// class Api {
+//   bool? status;
+//   List<UserData>? data;
+//
+//   Api({this.status, this.data});
+//
+//   Api.fromJson(Map<String, dynamic> json) {
+//     status = json['status'];
+//     if (json['data'] != null) {
+//       data = <UserData>[];
+//       json['data'].forEach((v) {
+//         data!.add(UserData.fromJson(v));
+//       });
+//     }
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     data['status'] = status;
+//     if (this.data != null) {
+//       data['data'] = this.data!.map((v) => v.toJson()).toList();
+//     }
+//     return data;
+//   }
+// }
+//...............
+// class Api {
+//   bool? status;
+//   List<UserData>? data;
+//
+//   Api({this.status, this.data});
+//
+//   Api.fromJson(Map<String, dynamic> json) {
+//     status = json['status'];
+//     if (json['data'] != null) {
+//       data = <UserData>[];
+//       json['data'].forEach((v) {
+//         data!.add(new UserData.fromJson(v));
+//       });
+//     }
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['status'] = this.status;
+//     if (this.data != null) {
+//       data['data'] = this.data!.map((v) => v.toJson()).toList();
+//     }
+//     return data;
+//   }
+// }
+//
+// class UserData {
+//   String? sId;
+//   List<Pictures>? pictures;
+//   User? user;
+//   int? followersCount;
+//   int? followingCount;
+//   int? friendsCount;
+//
+//   UserData(
+//       {this.sId,
+//         this.pictures,
+//         this.user,
+//         this.followersCount,
+//         this.followingCount,
+//         this.friendsCount});
+//
+//   UserData.fromJson(Map<String, dynamic> json) {
+//     sId = json['_id'];
+//     if (json['pictures'] != null) {
+//       pictures = <Pictures>[];
+//       json['pictures'].forEach((v) {
+//         pictures!.add(new Pictures.fromJson(v));
+//       });
+//     }
+//     user = json['user'] != null ? new User.fromJson(json['user']) : null;
+//     followersCount = json['followersCount'];
+//     followingCount = json['followingCount'];
+//     friendsCount = json['friendsCount'];
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['_id'] = this.sId;
+//     if (this.pictures != null) {
+//       data['pictures'] = this.pictures!.map((v) => v.toJson()).toList();
+//     }
+//     if (this.user != null) {
+//       data['user'] = this.user!.toJson();
+//     }
+//     data['followersCount'] = this.followersCount;
+//     data['followingCount'] = this.followingCount;
+//     data['friendsCount'] = this.friendsCount;
+//     return data;
+//   }
+// }
+//
+// class Pictures {
+//   String? sId;
+//   String? mediaKey;
+//
+//   Pictures({this.sId, this.mediaKey});
+//
+//   Pictures.fromJson(Map<String, dynamic> json) {
+//     sId = json['_id'];
+//     mediaKey = json['mediaKey'];
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['_id'] = this.sId;
+//     data['mediaKey'] = this.mediaKey;
+//     return data;
+//   }
+// }
+//
+// class User {
+//   String? firstName;
+//   String? lastName;
+//   String? email;
+//   String? birthday;
+//   String? gender;
+//   Location? location;
+//
+//   User(
+//       {this.firstName,
+//         this.lastName,
+//         this.email,
+//         this.birthday,
+//         this.gender,
+//         this.location});
+//
+//   User.fromJson(Map<String, dynamic> json) {
+//     firstName = json['firstName'];
+//     lastName = json['lastName'];
+//     email = json['email'];
+//     birthday = json['birthday'];
+//     gender = json['gender'];
+//     location = json['location'] != null
+//         ? new Location.fromJson(json['location'])
+//         : null;
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['firstName'] = this.firstName;
+//     data['lastName'] = this.lastName;
+//     data['email'] = this.email;
+//     data['birthday'] = this.birthday;
+//     data['gender'] = this.gender;
+//     if (this.location != null) {
+//       data['location'] = this.location!.toJson();
+//     }
+//     return data;
+//   }
+// }
+//
+// class Location {
+//   String? type;
+//   List<double>? coordinates;
+//
+//   Location({this.type, this.coordinates});
+//
+//   Location.fromJson(Map<String, dynamic> json) {
+//     type = json['type'];
+//     coordinates = json['coordinates'].cast<double>();
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['type'] = this.type;
+//     data['coordinates'] = this.coordinates;
+//     return data;
+//   }
+// }
+class Api {
+  bool? status;
+  List<UserData>? data;
+
+  Api({this.status, this.data});
+
+  Api.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    if (json['data'] != null) {
+      data = <UserData>[];
+      json['data'].forEach((v) {
+        data!.add(new UserData.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
 class UserData {
   String? sId;
   List<Pictures>? pictures;
   User? user;
+  int? followersCount;
+  int? followingCount;
+  int? friendsCount;
 
-  UserData({this.sId, this.pictures, this.user});
+  UserData(
+      {this.sId,
+        this.pictures,
+        this.user,
+        this.followersCount,
+        this.followingCount,
+        this.friendsCount});
 
   UserData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -902,6 +1217,9 @@ class UserData {
       });
     }
     user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    followersCount = json['followersCount'];
+    followingCount = json['followingCount'];
+    friendsCount = json['friendsCount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -913,6 +1231,9 @@ class UserData {
     if (this.user != null) {
       data['user'] = this.user!.toJson();
     }
+    data['followersCount'] = this.followersCount;
+    data['followingCount'] = this.followingCount;
+    data['friendsCount'] = this.friendsCount;
     return data;
   }
 }
@@ -937,18 +1258,29 @@ class Pictures {
 }
 
 class User {
+  String? sId;
   String? firstName;
   String? lastName;
   String? email;
+  String? birthday;
   String? gender;
   Location? location;
 
-  User({this.firstName, this.lastName, this.email, this.gender, this.location});
+  User(
+      {this.sId,
+        this.firstName,
+        this.lastName,
+        this.email,
+        this.birthday,
+        this.gender,
+        this.location});
 
   User.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
     firstName = json['firstName'];
     lastName = json['lastName'];
     email = json['email'];
+    birthday = json['birthday'];
     gender = json['gender'];
     location = json['location'] != null
         ? new Location.fromJson(json['location'])
@@ -957,9 +1289,11 @@ class User {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
     data['firstName'] = this.firstName;
     data['lastName'] = this.lastName;
     data['email'] = this.email;
+    data['birthday'] = this.birthday;
     data['gender'] = this.gender;
     if (this.location != null) {
       data['location'] = this.location!.toJson();
@@ -970,47 +1304,19 @@ class User {
 
 class Location {
   String? type;
-  List<int>? coordinates;
+  List<double>? coordinates;
 
   Location({this.type, this.coordinates});
 
   Location.fromJson(Map<String, dynamic> json) {
     type = json['type'];
-    coordinates = json['coordinates'].cast<int>();
+    coordinates = json['coordinates'].cast<double>();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['type'] = this.type;
     data['coordinates'] = this.coordinates;
-    return data;
-  }
-}
-
-
-// Model for Api
-class Api {
-  bool? status;
-  List<UserData>? data;
-
-  Api({this.status, this.data});
-
-  Api.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    if (json['data'] != null) {
-      data = <UserData>[];
-      json['data'].forEach((v) {
-        data!.add(UserData.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['status'] = status;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
     return data;
   }
 }
