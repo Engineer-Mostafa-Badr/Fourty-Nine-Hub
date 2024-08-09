@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
@@ -21,27 +22,25 @@ class GetDoctorListUseCase
 
 class DoctorSearchParams {
   GovernorateEntity governorate =
-      GovernorateEntity(id: '', nameAr: '', nameEn: '');
-  CityEntity city = CityEntity(id: '', nameAr: '', nameEn: '');
+      GovernorateEntity(id: '', nameEn: '', nameAr: '');
+  CityEntity city = CityEntity(id: '', nameEn: '', nameAr: '');
   SubCategoryEntity subCategory =
       SubCategoryEntity(id: '', name: '', image: '', isFavorite: false);
-  BookingTypes bookingType = BookingTypes.call;
+  BookingTypes? bookingType;
+  PaginationParams paginationParams = PaginationParams(page: 1);
   DoctorSearchParams();
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['governorateId'] = governorate.id;
-    data['cityId'] = city.id;
     data['subCategoryId'] = subCategory.id;
-    data['type'] = bookingType.name;
-    return data;
-  }
+    if (bookingType != null) {
+      data['type'] = bookingType?.name;
+      if (bookingType != BookingTypes.call) {
+        data['governorateId'] = governorate.id;
+        data['cityId'] = city.id;
+      }
+    }
 
-  void reset() {
-    governorate = GovernorateEntity(id: '', nameAr: '', nameEn: '');
-    city = CityEntity(id: '', nameAr: '', nameEn: '');
-    subCategory =
-        SubCategoryEntity(id: '', name: '', image: '', isFavorite: false);
-    bookingType = BookingTypes.call;
+    return data;
   }
 }

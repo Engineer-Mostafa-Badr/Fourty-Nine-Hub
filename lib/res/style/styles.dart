@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 abstract class Styles {
 // text
   static TextStyle smallText(
       {double fontSize = 10,
-      Color color = Colors.black,
+      Color color = AppColors.PRIMARY_COLOR,
       TextDecoration? decoration,
       List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {
@@ -19,7 +20,7 @@ abstract class Styles {
 
   static TextStyle mediumText(
       {double fontSize = 12,
-      Color color = Colors.black,
+      Color color = AppColors.PRIMARY_COLOR,
       TextDecoration? decoration,
       List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {
@@ -38,7 +39,7 @@ abstract class Styles {
       TextDecoration? decoration,
       TextAlign textAlign = TextAlign.center,
       List<Shadow>? shadows,
-      Color color = Colors.black,
+      Color color = AppColors.PRIMARY_COLOR,
       FontWeight fontWeight = FontWeight.w600}) {
     return TextStyle(
       fontSize: fontSize,
