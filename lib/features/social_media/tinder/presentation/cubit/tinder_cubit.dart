@@ -15,15 +15,30 @@ import '../../data/models/tinder_subcategory_model.dart';
 
 class TinderViewCubit extends Cubit<TinderViewState> {
   TinderViewCubit() : super(TinderViewState.initial());
+
+  // static const token =
+  //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6ImIwODI3MjQ3LWRkMWMtNGU5YS05MWFhLTA0YjU3MGQ2NTgwMCIsImlhdCI6MTcyMzIwMDM3MSwiZXhwIjo1NTcyMzIwMDM3MSwic3ViIjoiNjZhNDBmN2Q4OGRjMjJkY2RiZDE0MjQwIn0.CAlB8Ne-HCyGy3qyBpVVHnO_-Gt607BPn-s-eLGKtAY';
+
   static const token =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjAyYTlkZGY3LWI2NzItNGE1NC04NmJmLTE3MzQzM2M5NjYwZiIsImlhdCI6MTcyMjA5NjI5OSwiZXhwIjo1NTcyMjA5NjI5OSwic3ViIjoiNjZhNGUwNDQ1MzVlMThlNWMxZDcyMGM4In0.-xgk-lnnQP3t19LrwsNwBQN_TleJYPyX0N-soJeQA6c';
 
   Future<void> fetchLastSeen(String userId) async {
     try {
       final response = await http.get(
-          Uri.parse('{{49URL}}/api/v1/users/last-seen/$userId?status=online'));
+        Uri.parse(
+            'https://49dev.com/api/v1/users/last-seen/$userId?status=online'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+          // 'Authorization':
+          //     'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6ImYyZTM2M2M1LWJlNjctNDZkMi04MjMwLTI0NTE5MzBiYTcyNiIsImlhdCI6MTcyMzEyNDQ3NSwiZXhwIjo1NTcyMzEyNDQ3NSwic3ViIjoiNjZhNDBmN2Q4OGRjMjJkY2RiZDE0MjQwIn0.jWU3AjoF2pCuw0QH_rgWU2A3lQ-aaaM9LIEMl7kBT7c',
+        },
+      );
+      // log(response.body + '000000000000000000000000');
       if (response.statusCode == 200) {
         final lastSeenModel = LastSeenModel.fromJson(jsonDecode(response.body));
+
+        // log('${lastSeenModel.data!.lastSeen}&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
 
         emit(state.updated(lastSeenModel: lastSeenModel));
       } else {
@@ -87,9 +102,9 @@ class TinderViewCubit extends Cubit<TinderViewState> {
         Uri.parse(url),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-          // 'Authorization':
-          //     'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6ImYyZTM2M2M1LWJlNjctNDZkMi04MjMwLTI0NTE5MzBiYTcyNiIsImlhdCI6MTcyMzEyNDQ3NSwiZXhwIjo1NTcyMzEyNDQ3NSwic3ViIjoiNjZhNDBmN2Q4OGRjMjJkY2RiZDE0MjQwIn0.jWU3AjoF2pCuw0QH_rgWU2A3lQ-aaaM9LIEMl7kBT7c',
+          // 'Authorization': 'Bearer $token',
+          'Authorization':
+              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6ImYyZTM2M2M1LWJlNjctNDZkMi04MjMwLTI0NTE5MzBiYTcyNiIsImlhdCI6MTcyMzEyNDQ3NSwiZXhwIjo1NTcyMzEyNDQ3NSwic3ViIjoiNjZhNDBmN2Q4OGRjMjJkY2RiZDE0MjQwIn0.jWU3AjoF2pCuw0QH_rgWU2A3lQ-aaaM9LIEMl7kBT7c',
         },
         body: jsonEncode(data),
       );
@@ -127,7 +142,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
         final GiftApi giftApi = GiftApi.fromJson(jsonResponse);
         emit(state.updated(gifts: giftApi.data ?? []));
 
-        log(giftApi.data!.first.nameAr.toString() + '0000000000000000');
+        log('${giftApi.data!.first.nameAr}0000000000000000');
         return giftApi.data;
       } else {
         log('Failed to load gifts');
@@ -205,7 +220,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
 
         final List<dynamic> responseData = jsonResponse['data'];
-        log(responseData.toString() + ";;;;;;;;;;;;;;;;;;;;;;;;;");
+        log("$responseData;;;;;;;;;;;;;;;;;;;;;;;;;");
 
         final userData = responseData
             .map<UserData>((data) => UserData.fromJson(data))

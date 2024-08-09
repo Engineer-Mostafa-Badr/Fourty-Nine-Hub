@@ -21,6 +21,7 @@ class SubscriptionController {
   final SubscribeUseCase _subscribeUseCase;
   final GetActiveSubscriptionAmountsUseCase
       _getActiveSubscriptionAmountsUseCase;
+
   SubscriptionController(
       this._checkIfUserSubscribedUseCase,
       this._getSubscriptionPlansUseCase,
@@ -86,6 +87,8 @@ class SubscriptionController {
     );
   }
 
+  //payment method
+
   Future<void> subscribe({required SubscribeParams subscribeParams}) async {
     final response = await _subscribeUseCase(subscribeParams);
     response.fold((l) {
@@ -105,3 +108,4 @@ class SubscriptionController {
     });
   }
 }
+//9.16 8/9/2024

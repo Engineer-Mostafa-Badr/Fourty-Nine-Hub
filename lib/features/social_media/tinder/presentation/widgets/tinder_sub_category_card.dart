@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 class TinderSubCategoryCard extends StatelessWidget {
   final SubCategoryData subCategory;
+
   const TinderSubCategoryCard({super.key, required this.subCategory});
 
   @override
@@ -21,66 +22,69 @@ class TinderSubCategoryCard extends StatelessWidget {
         width: 200,
         padding: const EdgeInsets.all(0),
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 10,
-                offset: Offset(0, 10),
-              ),
-            ]),
-        child: Column(
-          children: [
-            Expanded(
-                child: SizedBox(
-              width: double.infinity,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: SquareImage(
-                      fit: BoxFit.fitWidth,
-                      radius: 10,
-                      url: subCategory.picture,
-                    ),
-                  ),
-                  Positioned(
-                      top: 5,
-                      right: 5,
-                      child: IconAppButton(
-                          size: 20,
-                          icon: Icons.favorite_border,
-                          color: Colors.red,
-                          onPressed: () {}))
-                ],
-              ),
-            )),
-            const Sizer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Card(
+          clipBehavior: Clip.hardEdge,
+          color: Colors.white,
+          elevation: 2,
+          child: Column(
+            children: [
+              Expanded(
+                  child: SizedBox(
+                width: double.infinity,
+                child: Stack(
                   children: [
-                    Label(
-                      text: subCategory.nameEn ?? '',
-                      style: Styles.headerText(fontWeight: FontWeight.bold),
+                    Positioned.fill(
+                      child: SquareImage(
+                        fit: BoxFit.fitWidth,
+                        radius: 10,
+                        url: subCategory.picture,
+                      ),
                     ),
-                    Label(
-                      text: '${9355.toShortScale} ads',
-                      style: Styles.mediumText(),
-                    ),
+                    Positioned(
+                        top: 5,
+                        right: 5,
+                        child: IconAppButton(
+                            size: 20,
+                            icon: Icons.favorite_border,
+                            color: Colors.red,
+                            onPressed: () {}))
                   ],
                 ),
-                IconAppButton(
-                  icon: Icons.add,
-                  isCircle: true,
-                  color: Colors.white,
-                  backColor: AppColors.PRIMARY_COLOR,
-                  onPressed: () {},
-                )
-              ],
-            ),
-          ],
+              )),
+              const Sizer(),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Label(
+                          text: subCategory.nameEn ?? '',
+                          style: Styles.headerText(fontSize: 16,fontWeight: FontWeight.bold),
+                        ),
+                        Label(
+                          text: '${9355.toShortScale} ads',
+                          style: Styles.mediumText(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                    IconAppButton(
+                      icon: Icons.add,
+                      isCircle: true,
+                      color: Colors.white,
+                      backColor: AppColors.PRIMARY_COLOR,
+                      onPressed: () {},
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1344,12 +1344,14 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/consts/shared.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
@@ -1358,6 +1360,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:intl/intl.dart';
 import '../../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -1377,61 +1380,74 @@ class TinderView extends StatelessWidget {
       child: BlocBuilder<TinderViewCubit, TinderViewState>(
         builder: (context, state) {
           return SharedScaffold(
-            body: state.userData.isEmpty
-                ? const Center(child: CircularProgressIndicator())
-                : Stack(
-                    children: [
-                      SingleChildScrollView(
-                        child: Column(
-                          children: [
+            body: state.userData.isNotEmpty || state.subCategoryData.isNotEmpty
+                ? Container(
+                    color: Colors.white,
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Label(
+                                text: 'Find',
+                                style: Styles.headerText(fontSize: 18),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height -
+                                kToolbarHeight -
+                                200,
+                            child: Stack(
+                              children: List.generate(
+                                state.userData.length,
+                                (index) {
+                                  final cardUser = state.userData[index];
+                                  return _buildCard(context, index, cardUser);
+                                },
+                              ),
+                            ),
+                          ),
+                          Container(
+                            color: Colors.grey.shade500,
+                            height: 1,
+                            width: double.infinity,
+                          ),
+                          if (state.subCategoryData.isNotEmpty)
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Align(
-                                alignment: Alignment.topLeft,
-                                child: Label(
-                                  text: 'Find',
-                                  style: Styles.headerText(),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height -
-                                  kToolbarHeight -
-                                  150,
-                              child: Stack(
-                                children: List.generate(
-                                  state.userData.length,
-                                  (index) {
-                                    final cardUser = state.userData[index];
-                                    return _buildCard(context, index, cardUser);
-                                  },
-                                ),
-                              ),
-                            ),
-                            if (state.subCategoryData.isNotEmpty)
-                              SizedBox(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 4.0, horizontal: 0.0),
+                              child: SizedBox(
                                 height: 200,
                                 child: ListView.separated(
                                   separatorBuilder: (context, index) =>
-                                      const Sizer(),
+                                      const Sizer(
+                                    width: 0,
+                                  ),
                                   padding: EdgeInsets.zero,
                                   scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) =>
-                                      TinderSubCategoryCard(
-                                          subCategory:
-                                              state.subCategoryData[index]),
+                                  itemBuilder: (context, index) => Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: TinderSubCategoryCard(
+                                        subCategory:
+                                            state.subCategoryData[index]),
+                                  ),
                                   itemCount: state.subCategoryData.length,
                                 ),
-                              )
-                            else
-                              const SizedBox.shrink(),
-                            const SizedBox(height: 50),
-                          ],
-                        ),
+                              ),
+                            )
+                          else
+                            const SizedBox.shrink(),
+                          const SizedBox(height: 50),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  )
+                : const Center(child: CircularProgressIndicator()),
             mainCategoryId: 2,
           );
         },
@@ -1444,54 +1460,48 @@ class TinderView extends StatelessWidget {
     final state = cubit.state;
     final isFrontCard = index == state.currentIndex;
 
-    return Positioned(
-      left: 0,
-      right: 0,
-      top: 0,
-      bottom: 0,
-      child: isFrontCard
-          ? GestureDetector(
-              onPanStart: (details) =>
-                  cubit.updatePanStart(details.globalPosition),
-              onPanUpdate: (details) {
-                final position = details.globalPosition - state.startDragOffset;
-                final rotation = position.dx /
-                    (position.dy > state.startDragOffset.dy - 180 ? 500 : -500);
-                cubit.updatePanUpdate(position, rotation);
-              },
-              onPanEnd: (details) {
-                if (state.position.dx > 250 ||
-                    state.position.dx < -250 ||
-                    state.position.dy > 250 ||
-                    state.position.dy < -250) {
-                  cubit.swipeAway();
-                } else {
-                  cubit.resetPan();
-                }
-              },
-              onTapUp: (details) {
-                final tapPosition = details.localPosition.dx;
-                final screenWidth = MediaQuery.of(context).size.width;
-                tapPosition < screenWidth / 2
-                    ? cubit.previousStory()
-                    : cubit.nextStory();
-              },
-              child: Transform.translate(
-                offset: state.position,
-                child: Transform.rotate(
-                  angle: state.rotation,
-                  child: _cardWidget(context, user),
-                ),
+    return isFrontCard
+        ? GestureDetector(
+            onPanStart: (details) =>
+                cubit.updatePanStart(details.globalPosition),
+            onPanUpdate: (details) {
+              final position = details.globalPosition - state.startDragOffset;
+              final rotation = position.dx /
+                  (position.dy > state.startDragOffset.dy - 180 ? 500 : -500);
+              cubit.updatePanUpdate(position, rotation);
+            },
+            onPanEnd: (details) {
+              if (state.position.dx > 250 ||
+                  state.position.dx < -250 ||
+                  state.position.dy > 250 ||
+                  state.position.dy < -250) {
+                cubit.swipeAway();
+              } else {
+                cubit.resetPan();
+              }
+            },
+            onTapUp: (details) {
+              final tapPosition = details.localPosition.dx;
+              final screenWidth = MediaQuery.of(context).size.width;
+              tapPosition < screenWidth / 2
+                  ? cubit.previousStory()
+                  : cubit.nextStory();
+            },
+            child: Transform.translate(
+              offset: state.position,
+              child: Transform.rotate(
+                angle: state.rotation,
+                child: _cardWidget(context, user),
               ),
-            )
-          : const Offstage(),
-    );
+            ),
+          )
+        : const Offstage();
   }
 
   Widget _cardWidget(BuildContext context, UserData user) {
     final state = context.read<TinderViewCubit>().state;
     return Padding(
-      padding: const EdgeInsets.all(0.0),
+      padding: const EdgeInsets.all(2.0),
       child: Card(
         clipBehavior: Clip.hardEdge,
         elevation: 2,
@@ -1512,18 +1522,32 @@ class TinderView extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 0.0, right: 8),
+              padding: const EdgeInsets.only(right: 8, top: 25),
               child: Align(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  onPressed: () => switchDisplayGender(state, context),
-                  iconSize: 30,
-                  icon: Icon(
-                      user.user!.gender == 'male' ? Icons.female : Icons.male,
-                      color: Colors.black),
-                ),
-              ),
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    width: 45,
+                    height: 45,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.5),
+                      shape: BoxShape.circle,
+                    ),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: IconButton(
+                        onPressed: () => switchDisplayGender(state, context),
+                        iconSize: 50, // Icon size
+                        icon: Icon(
+                          user.user!.gender == 'male'
+                              ? Icons.female
+                              : Icons.male,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  )),
             ),
+            //story bar
             Positioned(
               top: 10,
               left: 10,
@@ -1538,7 +1562,7 @@ class TinderView extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: dotIndex == state.currentStoryIndex
                             ? Colors.red
-                            : Colors.white54,
+                            : Colors.grey.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -1547,15 +1571,15 @@ class TinderView extends StatelessWidget {
               ),
             ),
             Positioned(
-              bottom: kToolbarHeight * 1.2,
-              right: 20,
-              left: 20,
+              bottom: kToolbarHeight * 1.1,
+              right: 8,
+              left: 8,
               child: _buildPersonInfo(context, user),
             ),
             Positioned(
               bottom: 8,
-              right: 10,
-              left: 10,
+              right: 8,
+              left: 8,
               child: _buildActions(context, user),
             ),
           ],
@@ -1564,109 +1588,213 @@ class TinderView extends StatelessWidget {
     );
   }
 
-  Widget _buildPersonInfo(BuildContext context, UserData user) {
-    return BlocBuilder<TinderViewCubit, TinderViewState>(
-      builder: (context, state) {
-        return Builder(builder: (context) {
-          context
-              .read<TinderViewCubit>()
-              .checkUserNearby(cardUserId: user.user?.sId ?? '');
-          log(user.user!.sId ?? '');
+  String getTimeAgo(String lastSeen) {
+    DateTime lastSeenTime = DateTime.parse(lastSeen);
+    DateTime now = DateTime.now().toUtc(); // Ensure we're using UTC
 
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    Duration difference = now.difference(lastSeenTime);
+
+    // Check if the last seen is more than a week old
+    if (difference.inDays > 7) {
+      // Format the date and time
+      DateFormat dateFormat = DateFormat('EEEE, MMMM d, yyyy');
+      DateFormat timeFormat = DateFormat('h:mm a');
+      String formattedDate = dateFormat.format(lastSeenTime);
+      String formattedTime = timeFormat.format(lastSeenTime);
+      return 'Date: $formattedDate\nTime: $formattedTime';
+    } else if (difference.inMinutes < 1) {
+      return "Just now";
+    } else if (difference.inMinutes == 1) {
+      return "1 minute ago";
+    } else if (difference.inMinutes < 60) {
+      return "${difference.inMinutes} minutes ago";
+    } else if (difference.inHours == 1) {
+      return "1 hour ago";
+    } else {
+      return "${difference.inHours} hours ago";
+    }
+  }
+
+  Widget _buildPersonInfo(BuildContext context, UserData user) {
+    return BlocConsumer<TinderViewCubit, TinderViewState>(
+      builder: (context, state) {
+        context
+            .read<TinderViewCubit>()
+            .checkUserNearby(cardUserId: user.user?.sId ?? '');
+        log(user.user!.sId ?? '');
+        context.read<TinderViewCubit>().fetchLastSeen(user.user!.sId ?? '');
+        if (state.lastSeenModel != null && state.lastSeenModel!.data != null) {
+          print(
+              "${state.lastSeenModel?.data?.lastSeen}+++++++++++++++++++++++++++++++++++++++++++++");
+
+          final lastSeen =
+              getTimeAgo(state.lastSeenModel!.data?.lastSeen ?? '');
+
+          return Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    BlocBuilder<TinderViewCubit, TinderViewState>(
-                      builder: (context, state) {
-                        return state.isUserNearby
-                            ? const BadgedLabel(
-                                color: AppColors.SECONDARY_COLOR,
-                                label: 'Nearby')
-                            : const BadgedLabel(
-                                color: AppColors.SECONDARY_COLOR,
-                                label: 'is not Nearby');
-                      },
+                    BadgedLabel(
+                      color: AppColors.WHATS_APP_COLOR,
+                      label: state.lastSeenModel!.data!.status ?? '',
                     ),
-                    ListTile(
-                      onTap: null,
-                      selected: false,
-                      enabled: false,
-                      title: Label(
-                        text: capitalizeAndSplit(
-                            "${user.user!.firstName} ${user.user!.lastName}" ??
-                                ''),
-                        style: Styles.headerText(
-                            color: Colors.black, fontSize: 26),
-                      ),
-                      subtitle: Label(
-                        text: 'last seen 3 minute ago',
-                        style: Styles.mediumText(color: Colors.black),
-                      ),
-                    ),
+                    const SizedBox(width: 10),
+                    state.isUserNearby
+                        ? const BadgedLabel(
+                            color: AppColors.SECONDARY_COLOR, label: 'Nearby')
+                        : const BadgedLabel(
+                            color: AppColors.SECONDARY_COLOR,
+                            label: 'is not Nearby'),
                   ],
                 ),
-              ),
-            ],
+                ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    onTap: null,
+                    selected: false,
+                    enabled: false,
+                    title: OutlineText(
+                      text: capitalizeAndSplit(
+                          "${user.user!.firstName} ${user.user!.lastName}"),
+                      textStyle: Styles.headerText(
+                          color: Colors.white,
+                          fontSize: 38,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: OutlineText(
+                      text: "Last seen $lastSeen",
+                      textStyle: Styles.mediumText(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    )),
+              ],
+            ),
           );
-        });
+        }
+        //------------------
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const BadgedLabel(
+                        color: AppColors.WHATS_APP_COLOR,
+                        label: 'N/A',
+                      ),
+                      const SizedBox(width: 10),
+                      state.isUserNearby
+                          ? const BadgedLabel(
+                              color: AppColors.SECONDARY_COLOR, label: 'Nearby')
+                          : const BadgedLabel(
+                              color: AppColors.SECONDARY_COLOR,
+                              label: 'is not Nearby'),
+                    ],
+                  ),
+                  ListTile(
+                    selected: false,
+                    enabled: false,
+                    title: OutlineText(
+                      text: capitalizeAndSplit(
+                          "${user.user!.firstName} ${user.user!.lastName}"),
+                      textStyle: Styles.headerText(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
       },
+      listener: (BuildContext context, TinderViewState state) {},
     );
   }
 
+  // _showGiftBottomSheet2(BuildContext context) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     backgroundColor: Colors.black.withOpacity(0.8),
+  //     // To simulate the transparent effect
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+  //     ),
+  //     builder: (context) => BottomSheetContent(
+  //       gifts: const [],
+  //       cardUser: null,
+  //       currentLoggedUser: null, subCategoryId: null,
+  //     ),
+  //   );
+  // }
+
   Widget _buildActions(BuildContext context, UserData user) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _buildFloatingActionButton(
-          context,
-          Icons.person,
-          () => context.push(Routes.OTHERSACCOUNT),
-          heroTag: 'personButton',
-        ),
-        _buildFloatingActionButton(
-          context,
-          Icons.chat,
-          () => showAdvancedDialog(context),
-          color: AppColors.PRIMARY_COLOR,
-          heroTag: 'chatButton',
-        ),
-        _buildFloatingActionButton(
-          context,
-          Icons.add_photo_alternate_outlined,
-          () => _navigateToUserProfile(context, user),
-          color: Colors.red,
-          heroTag: 'photoButton',
-        ),
-        _buildFloatingActionButton(
-          context,
-          Icons.card_giftcard,
-          () => _showGiftBottomSheet(context, cardUser: user),
-          // () {
-          //   context.read<TinderViewCubit>().fetchGifts();
-          //   // BlocBuilder<TinderViewCubit, TinderViewState>(
-          //   //   builder: (context, state) {
-          //   //     log(state.gifts.first.toString()+"-------------------------");
-          //   //
-          //   //     return SizedBox();
-          //   //   },
-          //   // );
-          // },
-          color: AppColors.ACCENT_COLOR,
-          heroTag: 'giftButton',
-        ),
-        _buildFloatingActionButton(
-          context,
-          Icons.report,
-          () => _showReportBottomSheet(context, user),
-          color: Colors.red,
-          heroTag: 'reportButton',
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _buildFloatingActionButton(
+            context,
+            Icons.person,
+            () => context.push(Routes.OTHERSACCOUNT),
+            heroTag: 'personButton',
+          ),
+          _buildFloatingActionButton(
+            context,
+            Icons.chat,
+            () => showAdvancedDialog(context),
+            color: AppColors.PRIMARY_COLOR,
+            heroTag: 'chatButton',
+          ),
+          _buildFloatingActionButton(
+            context,
+            Icons.add_photo_alternate_outlined,
+            () => _navigateToUserProfile(context, user),
+            color: Colors.red,
+            heroTag: 'photoButton',
+          ),
+          _buildFloatingActionButton(
+            context,
+            Icons.card_giftcard,
+            // () => _showGiftBottomSheet2,
+            () => _showGiftBottomSheet22(
+              cardUser: user,
+              context,
+            ),
+            // () {
+            //   context.read<TinderViewCubit>().fetchGifts();
+            //   // BlocBuilder<TinderViewCubit, TinderViewState>(
+            //   //   builder: (context, state) {
+            //   //     log(state.gifts.first.toString()+"-------------------------");
+            //   //
+            //   //     return SizedBox();
+            //   //   },
+            //   // );
+            // },
+            color: AppColors.ACCENT_COLOR,
+            heroTag: 'giftButton',
+          ),
+          _buildFloatingActionButton(
+            context,
+            Icons.report,
+            () => _showReportBottomSheet(context, user),
+            color: Colors.red,
+            heroTag: 'reportButton',
+          ),
+        ],
+      ),
     );
   }
 
@@ -1744,6 +1872,29 @@ class TinderView extends StatelessWidget {
         gifts: giftData,
         cardUser: cardUser,
         currentLoggedUser: currentLoggedUser,
+      ),
+    );
+  }
+
+  _showGiftBottomSheet22(BuildContext context, {required cardUser}) async {
+    final currentLoggedUser = context.read<UserCubit>().state.data;
+    List<GiftData>? giftData =
+        await context.read<TinderViewCubit>().fetchGifts();
+    log('${giftData.toString()}//////////////////////////////////////');
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.black.withOpacity(0.8),
+      // To simulate the transparent effect
+      // shape: const RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      // ),
+      builder: (context) => BottomSheetContent(
+        gifts: giftData,
+        cardUser: cardUser,
+        currentLoggedUser: currentLoggedUser,
+        subCategoryId: null,
       ),
     );
   }
@@ -1892,6 +2043,8 @@ class TinderView extends StatelessWidget {
 //....
 
 void showGiftSentPopup(BuildContext context, String? amount) {
+  Navigator.pop(context);
+
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -1899,13 +2052,13 @@ void showGiftSentPopup(BuildContext context, String? amount) {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
         ),
-        title: Row(
+        title: const Row(
           children: [
             Icon(Icons.card_giftcard, color: Colors.green, size: 30),
             // Gift icon
             SizedBox(width: 10),
             // Spacing between icon and title
-            const Text(
+            Text(
               'Gift Sent',
               style: TextStyle(
                 fontSize: 20,
@@ -1927,7 +2080,7 @@ void showGiftSentPopup(BuildContext context, String? amount) {
                   ? 'The gift has been sent successfully!\nAmount deducted: ¥$amount' // Using ¥ as a generic currency symbol
                   : 'The gift has been sent successfully!',
 
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 color: Colors.black87,
               ),
@@ -1936,7 +2089,7 @@ void showGiftSentPopup(BuildContext context, String? amount) {
             const SizedBox(height: 20),
             // More spacing
             // Optional: Add a decorative element
-            Icon(Icons.check_circle, color: Colors.green, size: 50),
+            const Icon(Icons.check_circle, color: Colors.green, size: 50),
             // Success icon
           ],
         ),
@@ -1963,7 +2116,65 @@ void showGiftSentPopup(BuildContext context, String? amount) {
   );
 }
 
+// void showInsufficientFundsPopup(BuildContext context, String? message) {
+//   showDialog(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return AlertDialog(
+//         shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.circular(16.0),
+//         ),
+//         title: const Row(
+//           children: [
+//             Icon(Icons.money_off, color: Colors.red, size: 30), // Related icon
+//             SizedBox(width: 10), // Spacing between icon and title
+//             Text('Insufficient Funds'),
+//           ],
+//         ),
+//         content: Text(
+//           message ?? 'You do not have enough money in your wallet.',
+//           style: const TextStyle(fontSize: 16),
+//         ),
+//         actionsAlignment: MainAxisAlignment.spaceBetween,
+//         actions: [
+//           TextButton(
+//             onPressed: () {
+//               Navigator.of(context).pop(); // Close the dialog
+//             },
+//             style: TextButton.styleFrom(
+//               foregroundColor: Colors.white,
+//               backgroundColor: Colors.red, // Button color
+//               shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(8.0),
+//               ),
+//             ),
+//             child: const Text('OK'),
+//           ),
+//           TextButton(
+//             onPressed: () {
+//               // Add your logic to charge the wallet here
+//               Navigator.of(context).pop(); // Optionally close the dialog
+//               // Navigate to the charge wallet screen or perform the charge action
+//               // Navigator.push(context, MaterialPageRoute(builder: (context) => ChargeWalletScreen()));
+//             },
+//             style: TextButton.styleFrom(
+//               foregroundColor: Colors.white,
+//               backgroundColor: Colors.indigo,
+//               // Different color for the charge button
+//               shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(8.0),
+//               ),
+//             ),
+//             child: const Text('Charge Wallet'),
+//           ),
+//         ],
+//       );
+//     },
+//   );
+// }
 void showInsufficientFundsPopup(BuildContext context, String? message) {
+  Navigator.pop(context);
+
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -1978,10 +2189,26 @@ void showInsufficientFundsPopup(BuildContext context, String? message) {
             Text('Insufficient Funds'),
           ],
         ),
-        content: Text(
-          message ?? 'You do not have enough money in your wallet.',
-          style: const TextStyle(fontSize: 16),
-        ),
+        content: message == 'Unexpected response format.'
+            ? SizedBox(
+                height: 50, // Adjust height as needed
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const LinearProgressIndicator(), // Show progress indicator
+                    const SizedBox(height: 10), // Spacing
+                    Text(
+                      message!,
+                      style: const TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              )
+            : Text(
+                message ?? 'You do not have enough money in your wallet.',
+                style: const TextStyle(fontSize: 16),
+              ),
         actionsAlignment: MainAxisAlignment.spaceBetween,
         actions: [
           TextButton(
@@ -2024,7 +2251,7 @@ String handleResponse(String jsonResponse, BuildContext context) {
   print("Raw JSON response: $jsonResponse"); // Debugging output
 
   // Check if the response is null or empty
-  if (jsonResponse == null || jsonResponse.isEmpty) {
+  if (jsonResponse.isEmpty) {
     // showInsufficientFundsPopup(context, "No data received.");
     return "No data received.";
   }
@@ -2064,122 +2291,119 @@ Widget _buildGiftItem({
     create: (context) => TinderViewCubit()..fetchGifts(),
     child: BlocBuilder<TinderViewCubit, TinderViewState>(
       builder: (context, state) {
-        return FutureBuilder(
-          builder: (context, snapshot) => InkWell(
-            // onTap: () {
-            //   // Assuming this is where you get the snapshot data
-            //   print("Snapshot data: ${snapshot.data.toString()} /***************");
-            //
-            //   // Check if snapshot.data is not null or empty
-            //   if (snapshot.data == null || snapshot.data!.isEmpty) {
-            //     print("Error: No data received");
-            //     showInsufficientFundsPopup(context, "No data received.");
-            //     return;
-            //   }
-            //
-            //   // Attempt to decode the JSON data
-            //   // try {
-            //   // Map<String, dynamic> successData =
-            //   //     json.decode(snapshot.data ?? '');
-            //   //
-            //   // // log("${successData['success']}**********************");
-            //   // log("${successData}--------------------------------------");
-            //   //
-            //   // if (successData['success'] == false) {
-            //   //   showInsufficientFundsPopup(
-            //   //       context, state.sendGiftErrorData!.message);
-            //   // } else {
-            //   //   showGiftSentPopup(context, '10');
-            //   // }
-            //   // } catch (e) {
-            //   // Handle JSON decoding errors
-            //   // print("Error decoding JSON: ");
-            //   // showInsufficientFundsPopup(context, "Invalid response format.");
-            //   // }
-            // },
-            onTap: () {
-              // handleResponse(snapshot.data ?? '', context);
-              // Use switch case to handle different response types
-              print("${snapshot.data}oppppppppppppppppppppppppp");
-              switch (snapshot.data) {
-                case """{"success":false,"error":{"name":"Bad Request","httpCode":400,"message":"You does not have enough money in the wallet","data":{},"isOperational":true,"stack":"","domain":"49dev.com"}}""":
-                  showInsufficientFundsPopup(
-                      context, 'You do not have enough money in your wallet.');
-                  break;
+        return InkWell(
+          // onTap: () {
+          //   // Assuming this is where you get the snapshot data
+          //   print("Snapshot data: ${snapshot.data.toString()} /***************");
+          //
+          //   // Check if snapshot.data is not null or empty
+          //   if (snapshot.data == null || snapshot.data!.isEmpty) {
+          //     print("Error: No data received");
+          //     showInsufficientFundsPopup(context, "No data received.");
+          //     return;
+          //   }
+          //
+          //   // Attempt to decode the JSON data
+          //   // try {
+          //   // Map<String, dynamic> successData =
+          //   //     json.decode(snapshot.data ?? '');
+          //   //
+          //   // // log("${successData['success']}**********************");
+          //   // log("${successData}--------------------------------------");
+          //   //
+          //   // if (successData['success'] == false) {
+          //   //   showInsufficientFundsPopup(
+          //   //       context, state.sendGiftErrorData!.message);
+          //   // } else {
+          //   //   showGiftSentPopup(context, '10');
+          //   // }
+          //   // } catch (e) {
+          //   // Handle JSON decoding errors
+          //   // print("Error decoding JSON: ");
+          //   // showInsufficientFundsPopup(context, "Invalid response format.");
+          //   // }
+          // },
+          onTap: () async {
+            final data = await context.read<TinderViewCubit>().sendGift(
+                  receiverId: receiverId,
+                  giftId: giftId,
+                  subCategoryId: subCategoryId,
+                  currentUserToken: 'currentUserToken',
+                );
+            // handleResponse(snapshot.data ?? '', context);
+            // Use switch case to handle different response types
+            print("${data}oppppppppppppppppppppppppp");
+            switch (data) {
+              case """{"success":false,"error":{"name":"Bad Request","httpCode":400,"message":"You does not have enough money in the wallet","data":{},"isOperational":true,"stack":"","domain":"49dev.com"}}""":
+                showInsufficientFundsPopup(
+                    context, 'You do not have enough money in your wallet.');
 
-                case """{"status":true,"message":"sent Gift Successfully"}""":
-                  showGiftSentPopup(context, '10');
-                  break;
+                break;
 
-                default:
-                  showInsufficientFundsPopup(
-                      context, 'Unexpected response format.');
-                  break;
-              }
-            },
-            // onTap: () {
-            //   // context.read<TinderViewCubit>().sendGift(
-            //   //       currentUserToken: currentLoggedUser.id,
-            //   //       receiverId: receiverId,
-            //   //       giftId: giftId,
-            //   //       subCategoryId: subCategoryId,
-            //   //     );
-            //   // if (state.sendGiftErrorData!.message.toString() ==
-            //   //     'You does not have enough money in the wallet') {
-            //   //   showInsufficientFundsPopup(
-            //   //       context, state.sendGiftErrorData!.message);
-            //   // }
-            //   // if (state.sendGiftErrorData!.message!.trim() ==
-            //   //     'You does not have enough money in the wallet') {
-            //   //   showInsufficientFundsPopup(
-            //   //       context, state.sendGiftErrorData!.message);
-            //   // }
-            //   print(snapshot.data);
-            //   // List<dynamic> successData = json.decode('[${snapshot.data}]');
-            //   Map<String, dynamic> successData =
-            //       json.decode(snapshot.data ?? '');
-            //
-            //   log("${successData['success']}**********************");
-            //   log("${successData['status']}**********************");
-            //   // bool containsMessage = successData
-            //   //     .any((item) => item['message'] == 'sent Gift Successfully');
-            //   if (successData['success'] == false) {
-            //     showInsufficientFundsPopup(
-            //         context, state.sendGiftErrorData!.message);
-            //   } else {
-            //     showGiftSentPopup(context, '10');
-            //   }
-            //   //   showInsufficientFundsPopup(
-            //   //       context, state.sendGiftErrorData!.message);
-            // },
-            child: Column(
-              children: [
-                ListTile(
-                  leading: Image.network(
-                    gift.picture!,
-                    width: 50,
-                    height: 50,
-                    errorBuilder: (BuildContext context, Object exception,
-                        StackTrace? stackTrace) {
-                      return const Icon(Icons.error,
-                          color: Colors.red, size: 50);
-                    },
-                  ),
-                  title:
-                      Text(gift.nameEn!, style: const TextStyle(fontSize: 22)),
-                  trailing: Text(gift.value.toString(),
-                      style: const TextStyle(fontSize: 22)),
+              case """{"status":true,"message":"sent Gift Successfully"}""":
+                showGiftSentPopup(context, '10');
+                break;
+
+              default:
+                showInsufficientFundsPopup(
+                    context, 'Unexpected response format.');
+                break;
+            }
+          },
+          // onTap: () {
+          //   // context.read<TinderViewCubit>().sendGift(
+          //   //       currentUserToken: currentLoggedUser.id,
+          //   //       receiverId: receiverId,
+          //   //       giftId: giftId,
+          //   //       subCategoryId: subCategoryId,
+          //   //     );
+          //   // if (state.sendGiftErrorData!.message.toString() ==
+          //   //     'You does not have enough money in the wallet') {
+          //   //   showInsufficientFundsPopup(
+          //   //       context, state.sendGiftErrorData!.message);
+          //   // }
+          //   // if (state.sendGiftErrorData!.message!.trim() ==
+          //   //     'You does not have enough money in the wallet') {
+          //   //   showInsufficientFundsPopup(
+          //   //       context, state.sendGiftErrorData!.message);
+          //   // }
+          //   print(snapshot.data);
+          //   // List<dynamic> successData = json.decode('[${snapshot.data}]');
+          //   Map<String, dynamic> successData =
+          //       json.decode(snapshot.data ?? '');
+          //
+          //   log("${successData['success']}**********************");
+          //   log("${successData['status']}**********************");
+          //   // bool containsMessage = successData
+          //   //     .any((item) => item['message'] == 'sent Gift Successfully');
+          //   if (successData['success'] == false) {
+          //     showInsufficientFundsPopup(
+          //         context, state.sendGiftErrorData!.message);
+          //   } else {
+          //     showGiftSentPopup(context, '10');
+          //   }
+          //   //   showInsufficientFundsPopup(
+          //   //       context, state.sendGiftErrorData!.message);
+          // },
+          child: Column(
+            children: [
+              ListTile(
+                leading: Image.network(
+                  gift.picture!,
+                  width: 50,
+                  height: 50,
+                  errorBuilder: (BuildContext context, Object exception,
+                      StackTrace? stackTrace) {
+                    return const Icon(Icons.error, color: Colors.red, size: 50);
+                  },
                 ),
-                const Divider(),
-              ],
-            ),
-          ),
-          future: context.read<TinderViewCubit>().sendGift(
-                currentUserToken: currentLoggedUser.id,
-                receiverId: receiverId,
-                giftId: giftId,
-                subCategoryId: subCategoryId,
+                title: Text(gift.nameEn!, style: const TextStyle(fontSize: 22)),
+                trailing: Text(gift.value.toString(),
+                    style: const TextStyle(fontSize: 22)),
               ),
+              const Divider(),
+            ],
+          ),
         );
       },
     ),

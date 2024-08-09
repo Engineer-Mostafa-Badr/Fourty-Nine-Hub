@@ -75,9 +75,11 @@ class TinderViewState {
   final int currentIndex;
   final int currentStoryIndex;
   final bool isUserNearby;
+  final LastSeenModel? lastSeenModel;
 
   TinderViewState({
     required this.userData,
+    required this.lastSeenModel,
     required this.subCategoryData,
     required this.gifts, // Initialize gifts here
     required this.position,
@@ -102,21 +104,22 @@ class TinderViewState {
       currentStoryIndex: 0,
       isUserNearby: false,
       sendGiftErrorData: SendGiftErrorData(),
+      lastSeenModel: LastSeenModel(),
     );
   }
 
   TinderViewState updated({
-     LastSeenModel? lastSeenModel,
-     List<UserData>? userData,
-     List<SubCategoryData>? subCategoryData,
-     List<GiftData>? gifts, // Add gifts parameter
-     Offset? position,
-     SendGiftErrorData? giftErrorData,
-     Offset? startDragOffset,
-     double? rotation,
-     int? currentIndex,
-     int? currentStoryIndex,
-     bool? isUserNearby,
+    LastSeenModel? lastSeenModel,
+    List<UserData>? userData,
+    List<SubCategoryData>? subCategoryData,
+    List<GiftData>? gifts, // Add gifts parameter
+    Offset? position,
+    SendGiftErrorData? giftErrorData,
+    Offset? startDragOffset,
+    double? rotation,
+    int? currentIndex,
+    int? currentStoryIndex,
+    bool? isUserNearby,
   }) {
     return TinderViewState(
       userData: userData ?? this.userData,
@@ -130,6 +133,7 @@ class TinderViewState {
       currentStoryIndex: currentStoryIndex ?? this.currentStoryIndex,
       isUserNearby: isUserNearby ?? this.isUserNearby,
       sendGiftErrorData: giftErrorData ?? this.sendGiftErrorData,
+      lastSeenModel: lastSeenModel,
     );
   }
 }
