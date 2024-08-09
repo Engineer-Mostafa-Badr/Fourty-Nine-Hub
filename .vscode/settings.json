@@ -94,4 +94,6 @@
         "titleBar.activeBackground": "#60360C",
         "titleBar.activeForeground": "#FEFAF6"
     },
+    "IDX.aI.enableInlineCompletion": true,
+    "IDX.aI.enableCodebaseIndexing": true,
 }
