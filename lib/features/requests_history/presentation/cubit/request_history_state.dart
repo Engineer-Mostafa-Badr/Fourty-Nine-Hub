@@ -15,7 +15,7 @@ class RequestHistoryState {
   final List<TripModel>? trips;
   final List<FoodOrderModel>? foodOrders;
   final List<ShippingRequestModel>? shippingRequests;
-  final List<AppointmentBookingEntity>? healthBookings;
+  final List<BookedAppointmentEntity>? healthBookings;
   const RequestHistoryState(
       {this.status,
       this.trips,
@@ -28,14 +28,14 @@ class RequestHistoryState {
     List<TripModel>? trips,
     List<FoodOrderModel>? foodOrders,
     Failure? failure,
-    List<AppointmentBookingEntity>? healthBookings,
+    List<BookedAppointmentEntity>? healthBookings,
     List<ShippingRequestModel>? shippingRequests,
   }) {
     return RequestHistoryState(
         status: status ?? this.status,
         trips: trips ?? this.trips,
         foodOrders: foodOrders ?? this.foodOrders,
-        healthBookings: healthBookings?? this.healthBookings,
+        healthBookings: healthBookings ?? this.healthBookings,
         shippingRequests: shippingRequests ?? this.shippingRequests,
         failure: failure ?? this.failure);
   }

@@ -5,28 +5,31 @@ enum HealthStates { loading, initState, error }
 class HealthState {
   final HealthStates status;
   final Failure? failure;
-  final List<AppointmentBookingEntity>? myBookings;
-  final List<SubCategoryModel>? subCategories;
-  final List<SubCategoryModel>? medicalServices;
-  final isDoctor = false;
+  final List<BookedAppointmentEntity>? myBookings;
+  final List<HealthSubcategoryEntity>? subCategories;
+  final List<HealthSubcategoryEntity>? medicalServices;
+  final bool? isDoctor;
   const HealthState(
       {this.status = HealthStates.loading,
       this.failure,
       this.myBookings,
+      this.isDoctor,
       this.subCategories,
       this.medicalServices});
   HealthState copyWith({
     HealthStates? status,
     Failure? failure,
-    List<AppointmentBookingEntity>? myBookings,
-    List<SubCategoryModel>? subCategories,
-    List<SubCategoryModel>? medicalServices,
+    bool? isDoctor,
+    List<BookedAppointmentEntity>? myBookings,
+    List<HealthSubcategoryEntity>? subCategories,
+    List<HealthSubcategoryEntity>? medicalServices,
   }) {
     return HealthState(
         status: status ?? this.status,
         medicalServices: medicalServices ?? this.medicalServices,
         failure: failure ?? this.failure,
         myBookings: myBookings ?? this.myBookings,
+        isDoctor: isDoctor ?? this.isDoctor,
         subCategories: subCategories ?? this.subCategories);
   }
 }

@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
 import 'package:fourtyninehub/features/requests_history/domain/entities/address_entity.dart';
+import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -26,7 +27,6 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../ride/RideRequest/presentation/widgets/customer/createOrder/changePhoneNumber.dart';
-import '../../../../subscribe/presentation/cubit/subscribe_cubit.dart';
 
 class AdDetailsView extends StatefulWidget {
   final String id;
@@ -164,9 +164,8 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         label: 'Premium Request',
                         icon: Icons.bookmark,
                         onPressed: () {
-                          serviceLocator<SubscribeCubit>()
+                          serviceLocator<SubscriptionController>()
                               .checkIfUserSubscribed(
-                                  context: context,
                                   onSubscribed: () {
                                     if (controller.phone == null) {
                                       bottomSheet(

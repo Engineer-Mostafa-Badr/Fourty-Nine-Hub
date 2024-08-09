@@ -5,7 +5,7 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/widget
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/booking/bookgins.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/doctor_dashboard_banner.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/medical_services/medical_services.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/options/options.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/booking_types/booking_types.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/sub_categories/sub_categories.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 
@@ -21,13 +21,13 @@ class HealthView extends StatelessWidget {
           children: const [
             HealthBanner(),
             Sizer(),
-            HealthOptions(),
+            DoctorDashboardBanner(),
+            Sizer(),
+            HealthBookingTypesWidgt(),
             Sizer(),
             HealthSubCategories(),
             Sizer(),
             HealthMedicalServices(),
-            Sizer(),
-            DoctorDashboardBanner(),
             Sizer(),
             HealthBookings(),
             Sizer(),
