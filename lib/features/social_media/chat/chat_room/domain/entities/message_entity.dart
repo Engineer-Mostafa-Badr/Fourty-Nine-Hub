@@ -17,6 +17,7 @@ class MessageEntity {
   String? createdAt;
   String? updatedAt;
   bool? byMe;
+  ReplyMessage? replyMessageId;
 
   MessageEntity({
     this.sId,
@@ -37,5 +38,13 @@ class MessageEntity {
     this.createdAt,
     this.updatedAt,
     this.byMe,
+    this.replyMessageId,
   });
+}
+
+class ReplyMessage {
+  String? id;
+  String? text;
+
+  ReplyMessage({this.id, this.text});
 }

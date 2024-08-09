@@ -2,17 +2,22 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/liveview/gifts/simple_gifts_sheet.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/pk_widgets/configs.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 // import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_bottom_navigator.dart';
 
-import '../widgets/liveview/gifts/gift_manager.dart';
-import '../widgets/liveview/gifts/gift_sheet.dart';
-import '../widgets/liveview/gifts/mp4_player_widget.dart';
-import '../widgets/liveview/gifts/zego_gift_item.dart';
-import '../widgets/liveview/live_card.dart';
+import '../widgets/liveview/super_gifts/gift_manager.dart';
+import '../widgets/liveview/super_gifts/gift_sheet.dart';
+import '../widgets/liveview/super_gifts/mp4_player_widget.dart';
+import '../widgets/liveview/super_gifts/zego_gift_item.dart';
+import '../widgets/pk_widgets/events.dart';
+import '../widgets/pk_widgets/mute_widget.dart';
+import '../widgets/pk_widgets/surfuce.dart';
 
 class LiveStreamView extends StatefulWidget {
   final String liveID;
@@ -20,8 +25,8 @@ class LiveStreamView extends StatefulWidget {
 
   const LiveStreamView({
     super.key,
-    this.liveID = '123',
-    this.isHost = false,
+    required this.liveID,
+    required this.isHost,
   });
 
   @override
@@ -30,6 +35,14 @@ class LiveStreamView extends StatefulWidget {
 
 class _LiveStreamViewState extends State<LiveStreamView> {
   final userId = Random().nextInt(1000).toString();
+  final liveStateNotifier = ValueNotifier<ZegoLiveStreamingState>(
+    ZegoLiveStreamingState.idle,
+  );
+
+  final requestingHostsMapRequestIDNotifier =
+      ValueNotifier<Map<String, List<String>>>({});
+  final requestIDNotifier = ValueNotifier<String>('');
+  PKEvents? pkEvents;
   @override
   void initState() {
     super.initState();
@@ -37,7 +50,10 @@ class _LiveStreamViewState extends State<LiveStreamView> {
     ZegoGiftManager().cache.cacheAllFiles(giftItemList);
 
     ZegoGiftManager().service.recvNotifier.addListener(onGiftReceived);
-
+    pkEvents = PKEvents(
+      requestIDNotifier: requestIDNotifier,
+      requestingHostsMapRequestIDNotifier: requestingHostsMapRequestIDNotifier,
+    );
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ZegoGiftManager().service.init(
             appID: UIConst.appId,
@@ -60,13 +76,43 @@ class _LiveStreamViewState extends State<LiveStreamView> {
   Widget build(BuildContext context) {
     final hostConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host(
       plugins: [ZegoUIKitSignalingPlugin()],
-    );
+    )
+      ..layout = ZegoLayout.gallery()
+      ..pkBattle = pkConfig();
 
     final audienceConfig = ZegoUIKitPrebuiltLiveStreamingConfig.audience(
       plugins: [ZegoUIKitSignalingPlugin()],
     )
-      ..bottomMenuBar.coHostExtendButtons = [giftButton]
-      ..bottomMenuBar.audienceExtendButtons = [giftButton];
+      ..bottomMenuBar.coHostExtendButtons = [
+        giftButton,
+        superGiftButton,
+      ]
+      ..bottomMenuBar.hostButtons = []
+      ..bottomMenuBar.audienceButtons = []
+      ..bottomMenuBar.coHostButtons = []
+      ..bottomMenuBar.audienceExtendButtons = [
+        giftButton,
+        superGiftButton,
+      ]
+      ..bottomMenuBar.audienceButtons = [
+        ZegoLiveStreamingMenuBarButtonName.expanding,
+        ZegoLiveStreamingMenuBarButtonName.coHostControlButton,
+        // ZegoLiveStreamingMenuBarButtonName.soundEffectButton,
+      ]
+      ..inRoomMessage = ZegoLiveStreamingInRoomMessageConfig(
+          resendIcon: const Icon(
+        Icons.reply,
+        color: Colors.white,
+      ))
+      ..foreground = PKV2Surface(
+        requestIDNotifier: requestIDNotifier,
+        liveStateNotifier: liveStateNotifier,
+        requestingHostsMapRequestIDNotifier:
+            requestingHostsMapRequestIDNotifier,
+      )
+      ..layout = ZegoLayout.gallery()
+      ..audioVideoView.foregroundBuilder = foregroundBuilder
+      ..pkBattle = pkConfig();
 
     return SafeArea(
       child: ZegoUIKitPrebuiltLiveStreaming(
@@ -76,16 +122,95 @@ class _LiveStreamViewState extends State<LiveStreamView> {
         userName: 'user_$userId',
         liveID: widget.liveID,
         events: ZegoUIKitPrebuiltLiveStreamingEvents(
+          pk: pkEvents?.event,
           onStateUpdated: (state) {
             if (ZegoLiveStreamingState.idle == state) {
               ZegoGiftManager().playList.clear();
             }
+            liveStateNotifier.value = state;
           },
         ),
-        config: (widget.isHost ? hostConfig : audienceConfig)
-          ..foreground = giftForeground()
+        config: widget.isHost ? hostConfig : audienceConfig
+          // ..foreground = giftForeground()
           ..mediaPlayer.supportTransparent = true,
       ),
+    );
+  }
+
+  Widget foregroundBuilder(context, size, ZegoUIKitUser? user, _) {
+    if (user == null) {
+      return Container();
+    }
+
+    final hostWidgets = [
+      /// mute pk user
+      Positioned(
+        top: 5,
+        left: 5,
+        child: SizedBox(
+          width: 40,
+          height: 40,
+          child: PKMuteButton(userID: user.id),
+        ),
+      ),
+    ];
+
+    return Stack(
+      children: [
+        ...((widget.isHost && user.id != userId)
+            ? hostWidgets
+            : [
+                giftForeground(),
+              ]),
+
+        /// camera state
+        Positioned(
+          top: 5,
+          right: 35,
+          child: SizedBox(
+            width: 18,
+            height: 18,
+            child: CircleAvatar(
+              backgroundColor: Colors.purple.withOpacity(0.6),
+              child: Icon(
+                user.camera.value ? Icons.videocam : Icons.videocam_off,
+                color: Colors.white,
+                size: 15,
+              ),
+            ),
+          ),
+        ),
+
+        /// microphone state
+        Positioned(
+          top: 5,
+          right: 5,
+          child: SizedBox(
+            width: 18,
+            height: 18,
+            child: CircleAvatar(
+              backgroundColor: Colors.purple.withOpacity(0.6),
+              child: Icon(
+                user.microphone.value ? Icons.mic : Icons.mic_off,
+                color: Colors.white,
+                size: 15,
+              ),
+            ),
+          ),
+        ),
+
+        /// name
+        Positioned(
+          top: 25,
+          right: 5,
+          child: Container(
+            // width: 30,
+            height: 18,
+            color: Colors.purple,
+            child: Text(user.name),
+          ),
+        ),
+      ],
     );
   }
 
@@ -219,14 +344,26 @@ class _LiveStreamViewState extends State<LiveStreamView> {
 
   ZegoLiveStreamingMenuBarExtendButton get giftButton =>
       ZegoLiveStreamingMenuBarExtendButton(
-        index: 0,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(shape: const CircleBorder()),
-          onPressed: () {
-            showGiftListSheet(context);
-          },
-          child: const Icon(Icons.blender),
-        ),
+        index: 0, //index of button
+        child: InkWell(
+            onTap: () {
+              //send a message and some interaction
+              showSimpleGiftBottomSheet(context,userId);
+            },
+            child: SvgPicture.asset(
+              'assets/images/gift.svg',
+              height: 50,
+            )),
+      );
+  ZegoLiveStreamingMenuBarExtendButton get superGiftButton =>
+      ZegoLiveStreamingMenuBarExtendButton(
+        index: 1,
+        child: InkWell(
+            onTap: () => showGiftListSheet(context),
+            child: SvgPicture.asset(
+              'assets/images/super_gifts.svg',
+              height: 40,
+            )),
       );
 
   void onGiftReceived() {
@@ -243,11 +380,4 @@ class _LiveStreamViewState extends State<LiveStreamView> {
           count: receivedGift.count,
         ));
   }
-}
-
-Widget _buildLivePages() {
-  return PageView.builder(
-      scrollDirection: Axis.vertical,
-      itemCount: 15,
-      itemBuilder: (context, index) => const LiveCard());
 }

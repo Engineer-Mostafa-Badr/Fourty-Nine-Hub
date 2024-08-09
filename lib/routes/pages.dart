@@ -1,7 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/enums/doctor_services.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
-
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/pages/contact_us_view.dart';
@@ -25,11 +23,21 @@ import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/present
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/registable_sub_categories_cubit/registable_subcategories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/cubit/doctor_dashboard_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/all_doctor_reservations/all_doctor_reservations_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_statistics/doctor_statistics_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_today_appointments/doctor_today_appointments_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_unhandled_appotinments/doctor_unhandled_appotinments_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/all_doctor_reservations_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_dashboard_view.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/pages/create_doctor_view.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_statistics.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_docs.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_personal_info_view.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_profile.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/today_doctor_appointments_view.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/unhandled_doctor_appointments_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/governorate_filter_cubit/doctor_governorate_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/city_filter_cubit/doctor_city_filter_cubit.dart';
@@ -40,7 +48,6 @@ import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation
 import 'package:fourtyninehub/features/health_feature/emergency/presentation/cubit/emergency_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/presentation/pages/emergnce_view.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/features/installment_feature/create_installment/presentation/cubit/create_installment_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_details/presentation/cubit/installment_details_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_list/presentation/cubit/installment_list_cubit.dart';
@@ -54,9 +61,12 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/Chat_view.dart';
+import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
+import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_dialogue.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
@@ -66,8 +76,9 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/ti
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
+import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/widgets/meeting_dialogue.dart';
 import 'package:go_router/go_router.dart';
 import '../core/enums/wallet_types_enums.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_ads_cubit.dart';
@@ -77,7 +88,6 @@ import '../features/account_taps/my_adds/presentation/pages/my_adds.dart';
 import '../features/account_taps/policies/presentation/pages/policy_view.dart';
 import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
 import '../features/account_taps/transfer_money/presentation/pages/transfer_money_view.dart';
-import '../features/account_taps/wallet/domain/entities/wallet_entity.dart';
 import '../features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import '../features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import '../features/ads_feature/create_company_ad/presentation/pages/create_company_ad.dart';
@@ -96,7 +106,7 @@ import '../features/food_feature/restaurants_list/presentation/cubit/restaurants
 import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
 import '../features/fourty_nine/presentation/controllers/main_categories_cubit/parent_main_categories_cubit.dart';
 import '../features/fourty_nine/presentation/controllers/parent_main_categories_cubit/main_categories_cubit.dart';
-import '../features/health_feature/book_doctor_appointment/presentation/cubit/book_doctor_appointment_cubit.dart';
+import '../features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
 import '../features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import '../features/health_feature/health/presentation/pages/health_view.dart';
 import '../features/installment_feature/create_installment/presentation/pages/create_installment_view.dart';
@@ -111,7 +121,7 @@ import '../features/account_taps/account/presentation/pages/favourite_category_v
 import '../features/account_taps/account/presentation/pages/favourite_subcategory_view.dart';
 import '../features/health_feature/doctor_details/presentation/pages/DoctorDetails.dart';
 import '../features/health_feature/doctor_filter/presentation/pages/doctors_list.dart';
-import '../features/health_feature/book_doctor_appointment/presentation/pages/visita_booking.dart';
+import '../features/health_feature/booking/presentation/pages/visita_booking.dart';
 import '../features/authentication/presentation/pages/login_view.dart';
 import '../features/authentication/presentation/pages/register/register_verify_otp.dart';
 import '../features/authentication/presentation/pages/register/register_view.dart';
@@ -134,9 +144,8 @@ import '../features/ride/driver_dashboard/presentation/pages/driver_dashboard_vi
 import '../features/requests_history/presentation/cubit/request_history_cubit.dart';
 import '../features/ride/trip_details/presentation/cubit/trip_details_cubit.dart';
 import '../features/ride/trip_details/presentation/pages/trip_details_view.dart';
-import '../features/social_media/club_house/presentation/pages/club_house_home.dart';
-import '../features/social_media/club_house/presentation/widgets/clubHouseChat.dart';
-import '../features/social_media/club_house/presentation/widgets/clubHouseRoom.dart';
+import '../features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
+import '../features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
@@ -146,7 +155,7 @@ import '../features/account_taps/wallet/presentation/pages/wallet_view.dart';
 import '../features/youtube/presentation/pages/play_video.dart';
 import '../features/youtube/presentation/pages/youtube.dart';
 import '../features/zoom/presentation/pages/meeting_room.dart';
-import '../features/zoom/presentation/pages/zoom_view.dart';
+import '../features/zoom/presentation/pages/meeting_view.dart';
 import '../service_locator/service_locator.dart';
 import 'routes.dart';
 
@@ -190,7 +199,7 @@ class AppPages {
                   builder: (context, state) => BlocProvider.value(
                         value: serviceLocator<AdsCubit>(),
                         child: AdsView(
-                          subCategoryId: state.extra as String,
+                          params: state.extra as AdsViewParams,
                         ),
                       ),
                   routes: [
@@ -437,8 +446,9 @@ class AppPages {
         GoRoute(
           path: Paths.INSTAGRAM,
           name: Routes.INSTAGRAM,
-          builder: (context, state) => BlocProvider<InstagramCubit>(create: (_)=>serviceLocator(), 
-          child: const InstagramView(),
+          builder: (context, state) => BlocProvider<InstagramCubit>(
+            create: (_) => serviceLocator(),
+            child: const InstagramView(),
           ),
         ),
         GoRoute(
@@ -448,7 +458,7 @@ class AppPages {
               final userId = state.extra as String?;
 
               return BlocProvider<SocialPostsCubit>(
-                create: (_) => serviceLocator(),
+                create: (_) => serviceLocator()..loadData(),
                 child: SocialHomeView(
                   userId: userId ?? '',
                 ),
@@ -456,13 +466,19 @@ class AppPages {
             },
             routes: [
               GoRoute(
-                  path: Paths.CREATEPOST,
-                  name: Routes.CREATEPOST,
-                  builder: (context, state) {
-                    final social = state.extra as String?;
+                path: Paths.CREATEPOST,
+                name: Routes.CREATEPOST,
+                builder: (context, state) {
+                  final social = state.extra as String?;
 
                     return BlocProvider<CreatePostCubit>(
-                        create: (_) => serviceLocator(),
+                        create: (_) {
+                          if(social !='twitter'){
+                            return serviceLocator()..loadData();
+                          }else{
+                            return serviceLocator();
+                          }
+                        },
                         child: CreatePostView(social: social??'social',),
                       );
                   },
@@ -473,7 +489,17 @@ class AppPages {
                   name: Routes.TWITTER,
                   builder: (context, state) => BlocProvider<TwitterCubit>(
                       create: (_)=>serviceLocator(),
-                      child: const TwitterView())),
+                      child: const TwitterView()),
+              routes: [
+                GoRoute(
+                  path: Paths.TWITTERPOSTDETAILS,
+                  name: Routes.TWITTERPOSTDETAILS,
+                  builder: (context, state) {
+                    final id = state.extra as String?;
+                    return TwitterPostDetails(postId: id??'',);
+                  },
+                )
+              ]),
               GoRoute(
                 path: Paths.OTHERSACCOUNT,
                 name: Routes.OTHERSACCOUNT,
@@ -502,28 +528,44 @@ class AppPages {
                   name: Routes.Tinder,
                   builder: (context, state) => const TinderView()),
               GoRoute(
-                  path: Paths.LIVE,
-                  name: Routes.LIVE,
-                  builder: (context, state) => const LiveStreamView()),
+                path: Paths.LIVE,
+                name: Routes.LIVE,
+                builder: (context, state) => const LiveStreamHomeScreen(),
+                routes: [
+                  GoRoute(
+                      path: Paths.LIVEVIEW,
+                      name: Routes.LIVEView,
+                      builder: (context, state) {
+                        var extras = state.extra as ZegoArgs;
+                        return  LiveStreamView(isHost: extras.isHost,liveID: extras.liveId,);
+                      }),
+                ],
+              ),
               // ClubHouseHome
               GoRoute(
                   path: Paths.CLUBHOUSE,
                   name: Routes.CLUBHOUSE,
-                  builder: (context, state) => const ClubHouseHome(),
+                  builder: (context, state) => BlocProvider<ClubVoiceCubit>(
+                        create: (context) => serviceLocator()..getAllRooms(),
+                        child: const ClubHouseHome(),
+                      ),
                   routes: [
                     GoRoute(
-                      path: Paths.CLUBHOUSECHAT,
-                      name: Routes.CLUBHOUSECHAT,
-                      builder: (context, state) => const ClubHouseChat(),
-                    ),
-                    // ClubHouseRoom
-                    GoRoute(
                       path: Paths.CLUBHOUSEROOM,
-                      name: Routes.CLUBHOUSEROOM,
-                      builder: (context, state) => const ClubHouseRoom(),
+                      name: Routes.AUDIOSTREAMSCREEN,
+                      builder: (context, state) {
+                        final extras = state.extra as RoomArgs;
+                        return AudioStreamScreen(
+                          liveId: extras.liveId,
+                          roomSubject: extras.subject,
+                          isHost: extras.isHost,
+                        );
+                      },
+                      routes: [],
                     ),
                   ]),
             ]),
+
         // MazadatView
         GoRoute(
             path: Paths.MAZADAT,
@@ -581,7 +623,7 @@ class AppPages {
             name: Routes.VISITA,
             builder: (context, state) {
               return BlocProvider<HealthCubit>(
-                create: (_) => serviceLocator(),
+                create: (_) => serviceLocator<HealthCubit>(),
                 child: const HealthView(),
               );
             },
@@ -603,62 +645,47 @@ class AppPages {
                 ),
               ),
               GoRoute(
-                  path: Paths.FILTERDOCTORSUBCATEGORY,
-                  name: Routes.FILTERDOCTORSUBCATEGORY,
-                  builder: (context, state) =>
-                      BlocProvider<DoctorSubcategoryFilterCubit>(
-                        create: (context) => serviceLocator(),
-                        child: const DoctorSubcategoryFilterView(),
-                      ),
-                  routes: [
-                    GoRoute(
-                      path: Paths.VISITADOCTORLIST,
-                      name: Routes.VISITADOCTORLISTBYCALL,
-                      builder: (context, state) =>
-                          BlocProvider<DoctorsListCubit>(
-                        create: (context) => serviceLocator(),
-                        child: const DoctorsListView(),
-                      ),
-                    ),
-                    GoRoute(
-                        path: Paths.FILTERDOCTORGOVERNORATE,
-                        name: Routes.FILTERDOCTORGOVERNORATE,
-                        builder: (context, state) =>
-                            BlocProvider<DoctorGovernorateFilterCubit>(
-                              create: (context) => serviceLocator(),
-                              child: const DoctorGovernorateFilterView(),
-                            ),
-                        routes: [
-                          GoRoute(
-                              path: Paths.FILTERDOCTORCITY,
-                              name: Routes.FILTERDOCTORCITY,
-                              builder: (context, state) =>
-                                  BlocProvider<DoctorCityFilterCubit>(
-                                    create: (context) => serviceLocator(),
-                                    child: const DoctorCityFilterView(),
-                                  ),
-                              routes: [
-                                GoRoute(
-                                  path: Paths.VISITADOCTORLIST,
-                                  name: Routes.VISITADOCTORLISTBYLOCATION,
-                                  builder: (context, state) =>
-                                      BlocProvider<DoctorsListCubit>(
-                                    create: (context) => serviceLocator(),
-                                    child: const DoctorsListView(),
-                                  ),
-                                ),
-                              ]),
-                        ]),
-                  ]),
+                path: Paths.FILTERDOCTORSUBCATEGORY,
+                name: Routes.FILTERDOCTORSUBCATEGORY,
+                builder: (context, state) =>
+                    BlocProvider<DoctorSubcategoryFilterCubit>(
+                  create: (context) => serviceLocator(),
+                  child: const DoctorSubcategoryFilterView(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.FILTERDOCTORGOVERNORATE,
+                name: Routes.FILTERDOCTORGOVERNORATE,
+                builder: (context, state) =>
+                    BlocProvider<DoctorGovernorateFilterCubit>(
+                  create: (context) => serviceLocator(),
+                  child: const DoctorGovernorateFilterView(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.FILTERDOCTORCITY,
+                name: Routes.FILTERDOCTORCITY,
+                builder: (context, state) =>
+                    BlocProvider<DoctorCityFilterCubit>(
+                  create: (context) => serviceLocator(),
+                  child: const DoctorCityFilterView(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.VISITADOCTORLIST,
+                name: Routes.VISITADOCTORLIST,
+                builder: (context, state) => BlocProvider<DoctorsListCubit>(
+                  create: (context) => serviceLocator(),
+                  child: const DoctorsListView(),
+                ),
+              ),
               GoRoute(
                   path: Paths.VISITADOCTORDETAILS,
                   name: Routes.VISITADOCTORDETAILS,
                   builder: (context, state) {
-                    final id = state.extra;
-
                     return BlocProvider<DoctorDetailsCubit>(
-                        child: DoctorDetails(
-                          id: id as int,
+                        child: DoctorDetailsView(
+                          doctorId: (state.extra) as String,
                         ),
                         create: (_) => serviceLocator());
                   }),
@@ -669,15 +696,62 @@ class AppPages {
                   builder: (context, state) =>
                       BlocProvider<BookDoctorAppointmentCubit>(
                           create: (_) => serviceLocator(),
-                          child: const VisitaBooking())),
+                          child: VisitaBooking(
+                            doctorDetailsCubit:
+                                (state.extra) as DoctorDetailsCubit,
+                          ))),
               GoRoute(
                   path: Paths.DOCTORDASHBOARD,
                   name: Routes.DOCTORDASHBOARD,
-                  // BookDoctorAppointmentCubit
                   builder: (context, state) =>
                       BlocProvider<DoctorDashboardCubit>(
                           create: (_) => serviceLocator(),
                           child: const DoctorDashboardView())),
+              GoRoute(
+                  path: Paths.EDITDOCTORPROFILE,
+                  name: Routes.EDITDOCTORPROFILE,
+                  builder: (context, state) => const EditDoctorProfileView()),
+              GoRoute(
+                  path: Paths.EDITDOCTORDOCS,
+                  name: Routes.EDITDOCTORDOCS,
+                  builder: (context, state) => const EditDoctorDocsView()),
+              GoRoute(
+                  path: Paths.EDITDOCTORPERSONALINFO,
+                  name: Routes.EDITDOCTORPERSONALINFO,
+                  builder: (context, state) =>
+                      const EditDoctorPersonalInfoView()),
+              GoRoute(
+                  path: Paths.DOCTORSTATISTICS,
+                  name: Routes.DOCTORSTATISTICS,
+                  builder: (context, state) =>
+                      BlocProvider<DoctorStatisticsCubit>(
+                        create: (context) => serviceLocator(),
+                        child: const DoctorStatisticsView(),
+                      )),
+              GoRoute(
+                  path: Paths.DOCTORTODAYAPPOINTMENTS,
+                  name: Routes.DOCTORTODAYAPPOINTMENTS,
+                  builder: (context, state) =>
+                      BlocProvider<DoctorTodayAppointmentsCubit>(
+                        create: (context) => serviceLocator(),
+                        child: const DoctorTodayAppointmentsView(),
+                      )),
+              GoRoute(
+                  path: Paths.DOCTORUNHANDLEDAPPOINTMENTS,
+                  name: Routes.DOCTORUNHANDLEDAPPOINTMENTS,
+                  builder: (context, state) =>
+                      BlocProvider<DoctorUnhandledAppointmentsCubit>(
+                        create: (context) => serviceLocator(),
+                        child: const DoctorUnhandledAppointmentsView(),
+                      )),
+              GoRoute(
+                  path: Paths.ALLDOCTORRESERVATIONS,
+                  name: Routes.ALLDOCTORRESERVATIONS,
+                  builder: (context, state) =>
+                      BlocProvider<AllDoctorReservationsCubit>(
+                        create: (context) => serviceLocator(),
+                        child: const AllDoctorReservationsView(),
+                      )),
             ]),
         GoRoute(
             path: Paths.FOOD,
@@ -782,13 +856,21 @@ class AppPages {
         GoRoute(
             path: Paths.ZOOM,
             name: Routes.ZOOM,
-            builder: (context, state) => ZoomView(),
+            builder: (context, state) => BlocProvider<MeetingCubit>(
+                  create: (context) => serviceLocator<MeetingCubit>(),
+                  child: const MeetingView(),
+                ),
             routes: [
               // PlayVideo
               GoRoute(
                 path: Paths.MEETINGROOM,
                 name: Routes.MEETINGROOM,
-                builder: (context, state) => const MeetingRoom(),
+                builder: (context, state) {
+                  final extras = state.extra as ZegoArgs;
+
+                  return MeetingRoom(
+                      liveID: extras.liveId, isHost: extras.isHost);
+                },
               ),
             ]),
         GoRoute(

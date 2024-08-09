@@ -10,6 +10,11 @@ abstract class ChatRemoteDataSource {
   Future<Either<Failure, ChatMessagesModel>> getChatMessages({
     required String chatId,
   });
+
+  Future<Either<Failure, bool>> deleteMessage({
+    required String chatId,
+    required String messageId,
+  });
 }
 
 class ChatRemoteDataSourceImplementation implements ChatRemoteDataSource {
@@ -23,5 +28,12 @@ class ChatRemoteDataSourceImplementation implements ChatRemoteDataSource {
     final response = await _apiConsumer.get(EndPoints.getChatMessages(chatId));
     return response.fold((failure) => Left(failure),
         (data) => Right(ChatMessagesModel.fromJson(data['data'])));
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteMessage({required String chatId, required String messageId}) async {
+    final response = await _apiConsumer.get(EndPoints.deleteChatMessage(chatId));
+    return response.fold(
+            (failure) => Left(failure), (data) => Right(data['status']));
   }
 }

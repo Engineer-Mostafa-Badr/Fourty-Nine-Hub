@@ -6,14 +6,14 @@ class SubCategoryModel extends SubCategoryEntity {
       {required super.id,
       required super.name,
       required super.image,
-      required super.isFavourite});
+      required super.isFavorite});
 
   factory SubCategoryModel.fromJson(Map<String, dynamic> json) {
     return SubCategoryModel(
       id: json['_id'],
       name: getLang() == 'ar' ? json['nameAr'] : json['nameEn'],
-      image: json['picture']??'',
-      isFavourite: json['is_favourite'] ?? false,
+      image: json['picture'] ?? '',
+      isFavorite: json['isFavorite'] ?? false,
     );
   }
 
@@ -22,7 +22,7 @@ class SubCategoryModel extends SubCategoryEntity {
     data['id'] = id;
     data['name'] = name;
     data['image'] = image;
-    data['is_favourite'] = isFavourite;
+    data['isFavorite'] = isFavorite;
 
     return data;
   }

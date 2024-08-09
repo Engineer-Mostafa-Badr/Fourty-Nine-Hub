@@ -1,12 +1,14 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/detail_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_all_comewithme_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_all_pickme_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_come_with_me_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_pick_me_usecase.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
+import 'package:fourtyninehub/features/requests_history/domain/entities/address_entity.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../requests_history/domain/entities/trip_entity.dart';
@@ -46,7 +48,42 @@ class AdsCubit extends Cubit<AdsState> {
     response.fold(
         (failure) =>
             emit(state.copyWith(failure: failure, status: AdsStates.error)),
-        (data) => emit(state.copyWith(ads: data, status: AdsStates.initState)));
+        (data) => emit(state.copyWith(
+            ads: List.generate(
+                6,
+                (index) => AdModel(
+                    id: 'id',
+                    title: 'title',
+                    description: 'description',
+                    images: ['images'],
+                    price: 500,
+                    address: AddressEntity(
+                        id: '',
+                        coordinates: [],
+                        address: '',
+                        street: '',
+                        flat: '',
+                        building: '',
+                        firstName: '',
+                        lastName: '',
+                        phone: ''),
+                    phone: 'phone',
+                    user: const UserEntity(
+                        id: '',
+                        firstName: '',
+                        lastName: '',
+                        email: '',
+                        profilePicture: '',
+                        profileCover: '',
+                        friendsCount: null,
+                        followersCount: null,
+                        followingCount: null),
+                    active: true,
+                    details: [
+                      DetailEntiy(label: 'label', type: 'type', value: 'value')
+                    ],
+                    createdAt: DateTime.now())),
+            status: AdsStates.initState)));
   }
 
   Future<void> getPickMeAds() async {

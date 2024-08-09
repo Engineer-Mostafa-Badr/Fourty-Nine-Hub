@@ -1,9 +1,0 @@
-{
-    "status":true,
-    "message":null, 
-    "data":{
-        "price":80, 
-        "time":"120 min",
-        "distance": "130 km"
-    }
-}

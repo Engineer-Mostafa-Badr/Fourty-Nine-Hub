@@ -7,11 +7,13 @@ abstract class Failure {
 
 class ServerFailure extends Failure {
   final String message;
+  final int? statusCode;
   final List<String>? errors;
 
   const ServerFailure({
     required this.message,
     this.errors,
+    this.statusCode,
   });
 }
 

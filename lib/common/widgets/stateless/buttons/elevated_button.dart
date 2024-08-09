@@ -18,7 +18,8 @@ class ElevatedAppButton extends StatelessWidget {
       required this.label,
       required this.onPressed,
       this.icon,
-      this.backColor = AppColors.PRIMARY_COLOR, this.textStyle});
+      this.backColor = AppColors.PRIMARY_COLOR,
+      this.textStyle});
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +37,13 @@ class ElevatedAppButton extends StatelessWidget {
                   color: Colors.white,
                 )),
                 TextSpan(
-                    text: label, style: textStyle??Styles.mediumText(color: Colors.white))
+                    text: label,
+                    style: textStyle ?? Styles.mediumText(color: Colors.white))
               ]),
             )
-          : Label(text: label, style: textStyle??Styles.mediumText(color: Colors.white)),
+          : Label(
+              text: label,
+              style: textStyle ?? Styles.mediumText(color: Colors.white)),
     );
   }
 }

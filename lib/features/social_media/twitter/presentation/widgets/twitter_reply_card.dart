@@ -56,7 +56,7 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                   bottomSheet(
                       context: context,
                       widget: ReportView(
-                        id: widget.reply.id, categoryId: '',
+                        id: widget.reply.id, categoryId: '66a3583454e6e337915514db',
 
                       ));
                 },

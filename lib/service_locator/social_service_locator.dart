@@ -1,6 +1,7 @@
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasources/chat_message_remote_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/repositories/chat_room_repository_implement.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/deleteMessage_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/getChatMessages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/datasources/chats_remote_datasourse.dart';
@@ -9,6 +10,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/reposi
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatMuteState_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatToArchiveNormal_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getChats_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unlock_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/datasources/create_post_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/repositories/create_post_repo.dart';
@@ -17,16 +20,26 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_activities_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_feelings_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/data/datasources/instagram_remote_datasource.dart';
+import 'package:fourtyninehub/features/social_media/instagram/data/repositories/instagram_repo_impl.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/repositories/social_posts_repo.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/datasources/social_posts_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/repositories/social_posts_repo.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_advertisement_use_case.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_tweet_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/follow_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/friend_request_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_feed_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comment_replies_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/hide_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/remove_suggest_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/send_greet_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/share_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/datasources/twitter_remote_datasource.dart';
@@ -57,21 +70,25 @@ class SocialServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     serviceLocator.registerLazySingleton<CreatePostRemoteDataSource>(() =>
         CreatePostRemoteDataSourceImpl(serviceLocator(), serviceLocator()));
+    serviceLocator.registerLazySingleton<InstagramRemoteDataSource>(() =>
+        InstagramRemoteDataSourceImpl(serviceLocator(),));
     serviceLocator.registerLazySingleton<SocialPostsRemoteDataSource>(
         () => SocialPostsRemoteDataSourceImpl(
               serviceLocator(),
             ));
     serviceLocator.registerLazySingleton<TwitterRemoteDataSource>(
-            () => TwitterRemoteDataSourceImpl(
-          serviceLocator(),
-        ));
+        () => TwitterRemoteDataSourceImpl(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<CreatePostRepo>(
         () => CreatePostRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<SocialPostsRepo>(
         () => SocialPostsRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<TwitterRepo>(
-            () => TwitterRepoImpl(serviceLocator()));
+        () => TwitterRepoImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<InstagramRepo>(
+        () => InstagramRepoImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<CreatePostUseCase>(
         () => CreatePostUseCase(serviceLocator()));
@@ -104,104 +121,148 @@ class SocialServiceLocator {
               serviceLocator(),
             ));
 
-    serviceLocator
-        .registerLazySingleton<GetTwitterFeedUseCase>(() => GetTwitterFeedUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<GetTwitterFeedUseCase>(
+        () => GetTwitterFeedUseCase(
+              serviceLocator(),
+            ));
 
-    serviceLocator
-        .registerLazySingleton<TwitterPostReactUseCase>(() => TwitterPostReactUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<TwitterPostReactUseCase>(
+        () => TwitterPostReactUseCase(
+              serviceLocator(),
+            ));
 
-    serviceLocator
-        .registerLazySingleton<GetTwitterPostCommentsUseCase>(() => GetTwitterPostCommentsUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<GetTwitterPostCommentsUseCase>(
+        () => GetTwitterPostCommentsUseCase(
+              serviceLocator(),
+            ));
 
-    serviceLocator
-        .registerLazySingleton<CreateTwitterPostUseCase>(() => CreateTwitterPostUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<CreateTwitterPostUseCase>(
+        () => CreateTwitterPostUseCase(
+              serviceLocator(),
+            ));
 
-    serviceLocator
-        .registerLazySingleton<TwitterCommentReactUseCase>(() => TwitterCommentReactUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<TwitterCommentReactUseCase>(
+        () => TwitterCommentReactUseCase(
+              serviceLocator(),
+            ));
 
-    serviceLocator
-        .registerLazySingleton<GetTwitterPostUseCase>(() => GetTwitterPostUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<GetTwitterPostUseCase>(
+        () => GetTwitterPostUseCase(
+              serviceLocator(),
+            ));
 
-    serviceLocator
-        .registerLazySingleton<TwitterSharePostUseCase>(() => TwitterSharePostUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<TwitterSharePostUseCase>(
+        () => TwitterSharePostUseCase(
+              serviceLocator(),
+            ));
 
-    serviceLocator
-        .registerLazySingleton<TwitterPostCommentUseCase>(() => TwitterPostCommentUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<TwitterPostCommentUseCase>(
+        () => TwitterPostCommentUseCase(
+              serviceLocator(),
+            ));
 
-    serviceLocator
-        .registerLazySingleton<TwitterCommentReplyUseCase>(() => TwitterCommentReplyUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<TwitterCommentReplyUseCase>(
+        () => TwitterCommentReplyUseCase(
+              serviceLocator(),
+            ));
 
-    serviceLocator
-        .registerLazySingleton<GetTwitterCommentRepliesUseCase>(() => GetTwitterCommentRepliesUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<GetTwitterCommentRepliesUseCase>(
+        () => GetTwitterCommentRepliesUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator
         .registerLazySingleton<TwitterReportUseCase>(() => TwitterReportUseCase(
-      serviceLocator(),
-    ));
+              serviceLocator(),
+            ));
 
-    serviceLocator
-        .registerLazySingleton<RequestDocumentUseCase>(() => RequestDocumentUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<RequestDocumentUseCase>(
+        () => RequestDocumentUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator
         .registerLazySingleton<GetUserTweetsUseCase>(() => GetUserTweetsUseCase(
-      serviceLocator(),
-    ));
+              serviceLocator(),
+            ));
 
-    serviceLocator
-        .registerLazySingleton<SuggestedFriendsUseCase>(() => SuggestedFriendsUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<SuggestedFriendsUseCase>(
+        () => SuggestedFriendsUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator
         .registerLazySingleton<FriedRequestUseCase>(() => FriedRequestUseCase(
-      serviceLocator(),
-    ));
+              serviceLocator(),
+            ));
 
     serviceLocator
         .registerLazySingleton<FollowUserUseCase>(() => FollowUserUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<RemoveSuggestUserUseCase>(
+        () => RemoveSuggestUserUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<SendGreetMessageUseCase>(
+        () => SendGreetMessageUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator
+        .registerLazySingleton<SharePostUseCase>(() => SharePostUseCase(
       serviceLocator(),
     ));
 
     serviceLocator
-        .registerLazySingleton<RemoveSuggestUserUseCase>(() => RemoveSuggestUserUseCase(
+        .registerLazySingleton<CommentReactUseCase>(() => CommentReactUseCase(
       serviceLocator(),
     ));
 
     serviceLocator
-        .registerLazySingleton<SendGreetMessageUseCase>(() => SendGreetMessageUseCase(
+        .registerLazySingleton<GetPostCommentRepliesUseCase>(() => GetPostCommentRepliesUseCase(
       serviceLocator(),
     ));
+
+    serviceLocator
+        .registerLazySingleton<ReplyOnCommentUseCase>(() => ReplyOnCommentUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<FaceTweetUseCase>(() => FaceTweetUseCase(
+      serviceLocator(),
+    ));
+
+
+    serviceLocator
+        .registerLazySingleton<FaceAdvertisementUseCase>(() => FaceAdvertisementUseCase(
+      serviceLocator(),
+    ));
+
+
+
+    serviceLocator
+        .registerLazySingleton<GetInstagramFeedUseCase>(() => GetInstagramFeedUseCase(
+      serviceLocator(),
+    ));
+
+
 
     serviceLocator.registerFactory<CreatePostCubit>(() => CreatePostCubit(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
-        )..loadData());
+        ));
 
-    serviceLocator.registerFactory<InstagramCubit>(() => InstagramCubit());
+    serviceLocator.registerFactory<InstagramCubit>(() => InstagramCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+    ));
     serviceLocator.registerFactory<SocialPostsCubit>(() => SocialPostsCubit(
           serviceLocator(),
           serviceLocator(),
@@ -215,21 +276,27 @@ class SocialServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
-        )..loadData());
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
     serviceLocator.registerFactory<TwitterCubit>(() => TwitterCubit(
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-    ));
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
 
     // chats
 
@@ -245,9 +312,12 @@ class SocialServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
         ));
 
     serviceLocator.registerFactory<ChatRoomCubit>(() => ChatRoomCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
@@ -268,6 +338,15 @@ class SocialServiceLocator {
               serviceLocator(),
             ));
 
+    serviceLocator
+        .registerLazySingleton<UnLockChatUseCase>(() => UnLockChatUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<LockChatUseCase>(() => LockChatUseCase(
+          serviceLocator(),
+        ));
+
     serviceLocator.registerLazySingleton<ChatRoomRepository>(
         () => ChatRoomRepositoryImplementation(serviceLocator()));
 
@@ -275,6 +354,11 @@ class SocialServiceLocator {
         () => ChatRemoteDataSourceImplementation(serviceLocator()));
     serviceLocator.registerLazySingleton<GetChatMessagesUseCase>(
         () => GetChatMessagesUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<DeleteChatMessageUseCase>(
+        () => DeleteChatMessageUseCase(
               serviceLocator(),
             ));
   }

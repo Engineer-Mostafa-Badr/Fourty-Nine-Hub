@@ -1,0 +1,54 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/all_doctor_reservations/all_doctor_reservations_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_today_appointments.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+
+class AllDoctorReservationsView extends StatelessWidget {
+  const AllDoctorReservationsView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(Labels.todayAppointments),
+      ),
+      body: BlocBuilder<AllDoctorReservationsCubit, AllDoctorReservationsState>(
+        builder: (context, state) {
+          if (state is AllDoctorReservationsLoaded) {
+            if (state.reservations.isNotEmpty) {
+              return ListView.separated(
+                shrinkWrap: true,
+                controller:
+                    context.read<AllDoctorReservationsCubit>().scrollController,
+                itemCount: state.reservations.length,
+                itemBuilder: (context, index) => DoctorAppointmentCard(
+                  appointment: state.reservations[index],
+                ),
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(),
+              );
+            } else {
+              return Center(
+                child: Label(
+                  text: Labels.noAppointmentsToday,
+                  style: Styles.headerText(),
+                ),
+              );
+            }
+          } else if (state is AllDoctorReservationsError) {
+            return Center(
+                child: Label(
+              text: state.message,
+              style: Styles.headerText(),
+            ));
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+    );
+  }
+}

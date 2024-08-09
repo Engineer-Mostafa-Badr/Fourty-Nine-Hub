@@ -1,6 +1,6 @@
 part of 'chat_room_cubit.dart';
 
-enum ChatRoomStates { initState, loading, error }
+enum ChatRoomStates { initState, loading, error , typing}
 
 extension ChatRoomStateX on ChatRoomState {
   bool get isInitial => status == ChatRoomStates.initState;
@@ -8,6 +8,8 @@ extension ChatRoomStateX on ChatRoomState {
   bool get isLoading => status == ChatRoomStates.loading;
 
   bool get isError => status == ChatRoomStates.error;
+
+  bool get isTyping => status == ChatRoomStates.typing;
 }
 
 @immutable

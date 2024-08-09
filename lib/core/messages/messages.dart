@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
 
 import '../../common/widgets/stateless/buttons/default_button.dart';
 import '../../common/widgets/stateless/buttons/elevated_button.dart';
@@ -109,11 +110,15 @@ void showSuccessDialog(BuildContext context, String text) => showDialog(
       ),
     );
 
-void showLoadingDialog(BuildContext context, {String? message}) => showDialog(
+void showLoadingDialog(BuildContext context,
+        {String? message,
+        bool canPop = false,
+        bool barrierDismissible = false}) =>
+    showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: barrierDismissible,
       builder: (_) => PopScope(
-        canPop: false,
+        canPop: canPop,
         child: AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
@@ -124,7 +129,7 @@ void showLoadingDialog(BuildContext context, {String? message}) => showDialog(
               const CircularProgressIndicator.adaptive(),
               const Sizer(height: 20),
               Text(
-                message ?? "Loading...",
+                message ?? Labels.loading,
                 style: const TextStyle(
                   fontSize: 16,
                 ),

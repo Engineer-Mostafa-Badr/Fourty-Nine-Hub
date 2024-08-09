@@ -10,8 +10,8 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/create_doctor.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_cities.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_health_subcategories.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -19,13 +19,13 @@ part 'create_doctor_state.dart';
 
 class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   final HealthSharedData _shareCubit;
-  final GetSubCategoriesUseCase _getSubCategoriesUseCase;
+  final GetHealthSubcategoriesUseCase _getHealthSubcategoriesUseCase;
   final GetGovernoratesUseCase _getGovernoratesUseCase;
   final GetCitiesUseCase _getCitiesUseCase;
   final CreateDoctorUseCase _createDoctorUseCase;
   CreateDoctorCubit(
       this._shareCubit,
-      this._getSubCategoriesUseCase,
+      this._getHealthSubcategoriesUseCase,
       this._getGovernoratesUseCase,
       this._getCitiesUseCase,
       this._createDoctorUseCase)
@@ -58,7 +58,7 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   Future<void> _getSubCategories() async {
     if (_shareCubit.subCategories.isEmpty) {
       final response =
-          await _getSubCategoriesUseCase.call('62c8b57c9332225799fe3306');
+          await _getHealthSubcategoriesUseCase.call(const NoParams());
       response
           .fold((failure) => emit(CreateDoctorError("Can't Load Specialities")),
               (data) {

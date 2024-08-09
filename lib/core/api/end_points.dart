@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 
 class EndPoints {
@@ -33,6 +34,37 @@ class EndPoints {
   static const createDoctor = '/health/doctor';
   static const doctorSearch = '/health/doctor-search';
   static const bookEmergency = '/health/book-emergency';
+  static String bookRegularAppointment(String appointmentId) =>
+      '/health/book-appointment/$appointmentId';
+  static String toggleFavoriteSubcategory(String subCategoryId) =>
+      '/favorite-sub-category/$subCategoryId';
+  static String bookPremiumAppointment(String appointmentId) =>
+      '/health/book-appointment-premium/$appointmentId';
+  static String getDoctorReviewsForUsers(String doctorId) =>
+      '/health/doctor/rate/$doctorId';
+  static String getDoctorDetails(String doctorId) => '/health/doctor/$doctorId';
+  static const getHealthSubcategories = '/health/subCategories-health-with-ads';
+  static const getMedicalServices =
+      '/health/subCategories-medicalServices-with-ads';
+  static const String getUpcomingUserAppointments = '/health/book-appointment';
+  static const String getHealthRequestsHistory =
+      '/health/history-patient-booking';
+  static const remainingDaysOfDoctorPracticing =
+      '/health/dashboard/remaining-days-of-doctor-id';
+  static const remainingDaysOfDoctorID =
+      '/health/dashboard/remaining-days-of-doctor-practicing-id';
+  static const remainingDaysOfDoctorSubscription =
+      '/health/dashboard/remaining-days-of-doctor-subscription';
+  static const getDoctorAppointmentsByDay = '/health/doctor/booking-day';
+  static const getDoctorUnhandledAppointments = '/health/book-requests';
+  static const isDoctor = '/health/check-doctor-or-not';
+  static const getDoctorTotalEarnedMoney =
+      '/health/dashboard/total-earned-money';
+  static String doctorAcceptAppointment(String appointmentId) =>
+      '/health/book-appointment/approve/$appointmentId';
+  static String doctorRejectAppointment(String appointmentId) =>
+      '/health/book-appointment/reject/$appointmentId';
+  static const getAllDoctorReservations = '/health/dashboard/number-of-reservations';
 
   // reels
   static const getExploreReels = '/reels/explore';
@@ -89,7 +121,9 @@ class EndPoints {
 
   static const createFacebookPost = '/facebook/post';
   static const createTwitterPost = '/twitter/post';
-  static const getFeedPosts = '/facebook/feed';
+  // static const getFeedPosts = '/facebook/feed';
+  static const activities = '/facebook/post/activities';
+  static const feelings = '/facebook/post/feelings';
   static const getTwitterFeedPosts = '/twitter/feed';
   static String userPosts(String userId) {
     return '/facebook/post/user/$userId?limit=20&page=1&type=1';
@@ -101,6 +135,18 @@ class EndPoints {
 
   static String userTweets(GetUserTweetsParams params) {
     return '/twitter/post/user/${params.userId}?limit=10&page=${params.page}&type=1';
+  }
+
+  static String getFeedPosts(TwitterFeedParams params) {
+    return '/facebook/feed?limit=${params.limit}&page=${params.page}';
+  }
+
+  static String getInstagramPosts(TwitterFeedParams params) {
+    return '/instagram/feed?limit=${params.limit}&page=${params.page}';
+  }
+
+  static String getAdvertisement(TwitterFeedParams params) {
+    return '/advertisementCompany?limit=${params.limit}&page=${params.page}';
   }
 
   static String acceptTripRider(String id) {
@@ -147,6 +193,10 @@ class EndPoints {
     return '/facebook/post/react/$postId';
   }
 
+  static String reactOnComment(String postId) {
+    return '/facebook/comment/react/$postId';
+  }
+
   static String reactOnTwitterPost(String postId) {
     return '/twitter/post/react/$postId';
   }
@@ -159,6 +209,10 @@ class EndPoints {
     return '/twitter/post/share/$postId';
   }
 
+  static String shareFacebookPost(String postId) {
+    return '/facebook/post/share/$postId';
+  }
+
   static String commentOnPost(String postId) {
     return '/facebook/comment/create-comment/$postId';
   }
@@ -169,6 +223,10 @@ class EndPoints {
 
   static String getPostComments(String postId) {
     return '/facebook/comment/get-post-comments/$postId';
+  }
+
+  static String getPostCommentReplies(String commentId) {
+    return '/facebook/comment/get-comment-replies/$commentId';
   }
 
   static String getTwitterPostComments(String postId) {
@@ -299,6 +357,24 @@ class EndPoints {
     return '/chat/get-chat/$chatId';
   }
 
+  //club voice
+  static String allClubVoiceRooms = '/clubvoice';
+  static String createClubVoiceRoom = '/clubvoice';
+  static String joinVoiceRoom(String id) => '/clubvoice/join/$id';
+  static String endVoiceRoom(String id) => '/clubvoice/$id';
+  static String leaveVoiceRoom(String id) => '/clubvoice/leave/$id';
+  static String searchVoiceRooms(String subject) =>
+      '/clubvoice?search=$subject';
+
+
+  //meeting
+  static String createMeeting = '/room-id';
+  static String joinMeeting(String id) => '/room-id/join/$id';
+  static String endMeeting(String id) => '/room-id/finish/$id';
+  static String deleteChatMessage(String chatId) {
+    return '/chat/get-chat/$chatId';
+  }
+
   static String changeChatMuteState(String chatId) {
     return '/chat/mute-chat/$chatId';
   }
@@ -308,10 +384,26 @@ class EndPoints {
   }
 
   static String buttonAvailable = '/global/click';
-  static String getSubscribtionPlans = '/subscription/plans';
-  static String checkUserSubscribtion(String id) {
+  static String getSubscriptionPlans(String subcategoryId) =>
+      '/subscription/plans/$subcategoryId';
+  static String checkUserSubscription(String id) {
     return '/subscription/subcategory/$id';
   }
-  static String subscribe ='/subscription/subscribe';
-  
+
+  static String subscribe = '/subscription/subscribe';
+
+  static String getActiveSubscriptionAmounts = '/payment-amount/active';
+
+  static String lockChat(String chatId) {
+    return '/chat/lock-chat/$chatId';
+  }
+
+  static String unLockChat(String chatId) {
+    return '/chat/unlock-chat/$chatId';
+  }
+
+  static String updateUnLockChatPassword() {
+    return '/chat/update-lock-chat';
+  }
+
 }

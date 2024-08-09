@@ -1,7 +1,5 @@
 import 'package:dartz/dartz.dart';
 
-
-
 import 'package:fourtyninehub/core/error/failure.dart';
 
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
@@ -19,4 +17,6 @@ class DoctorListRepoImpl implements DoctorListRepo {
       {required DoctorSearchParams params}) async {
     return await _remoteDataSource.getDoctorsList(params: params);
   }
+
+
 }

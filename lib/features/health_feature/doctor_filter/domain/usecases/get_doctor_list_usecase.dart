@@ -1,8 +1,11 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/enums/doctor_services.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/repositories/doctor_list_repo.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import '../../../../../../core/abstract/use_case.dart';
 
 class GetDoctorListUseCase
@@ -17,24 +20,28 @@ class GetDoctorListUseCase
 }
 
 class DoctorSearchParams {
-  String governorateId = "";
-  String cityId = "";
-  String subCategoryId = "";
-  DoctorServices? doctorService;
+  GovernorateEntity governorate =
+      GovernorateEntity(id: '', nameAr: '', nameEn: '');
+  CityEntity city = CityEntity(id: '', nameAr: '', nameEn: '');
+  SubCategoryEntity subCategory =
+      SubCategoryEntity(id: '', name: '', image: '', isFavorite: false);
+  BookingTypes bookingType = BookingTypes.call;
   DoctorSearchParams();
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['governorateId'] = governorateId;
-    data['cityId'] = cityId;
-    data['subCategoryId'] = subCategoryId;
+    data['governorateId'] = governorate.id;
+    data['cityId'] = city.id;
+    data['subCategoryId'] = subCategory.id;
+    data['type'] = bookingType.name;
     return data;
   }
 
   void reset() {
-    governorateId = "";
-    cityId = "";
-    subCategoryId = "";
-    doctorService = null;
+    governorate = GovernorateEntity(id: '', nameAr: '', nameEn: '');
+    city = CityEntity(id: '', nameAr: '', nameEn: '');
+    subCategory =
+        SubCategoryEntity(id: '', name: '', image: '', isFavorite: false);
+    bookingType = BookingTypes.call;
   }
 }

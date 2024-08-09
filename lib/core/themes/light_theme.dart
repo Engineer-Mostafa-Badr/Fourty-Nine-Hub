@@ -1,0 +1,40 @@
+import 'package:flutter/material.dart';
+
+import '../../res/style/app_colors.dart';
+
+ThemeData lightTheme() {
+  return ThemeData(
+    primaryColor: AppColors.PRIMARY_COLOR,
+    scaffoldBackgroundColor: AppColors.BACKGROUND_COLOR,
+    colorScheme: ColorScheme.fromSeed(
+      background: Colors.white,
+      seedColor: const Color(0xff0b1035),
+    ),
+    useMaterial3: true,
+    appBarTheme: const AppBarTheme(
+      color: AppColors.PRIMARY_COLOR,
+    ),
+    textTheme: const TextTheme(
+      displayMedium: TextStyle(color: AppColors.DARK_GRAY_COLOR),
+      displaySmall: TextStyle(color: AppColors.DARK_GRAY_COLOR),
+    ),
+    iconTheme: const IconThemeData(
+      color: AppColors.DARK_BLUE_COLOR,
+    ),
+    buttonTheme: const ButtonThemeData(
+      buttonColor: AppColors.SECONDARY_COLOR,
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: AppColors.TXTFIELD_GRAY_COLOR2,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8.0),
+        borderSide: const BorderSide(
+          color: AppColors.DIVIDER_GRAY_COLOR2,
+        ),
+      ),
+    ),
+    dividerColor: AppColors.DIVIDER_GRAY_COLOR,
+    
+  );
+}

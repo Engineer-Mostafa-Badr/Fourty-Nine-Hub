@@ -1,7 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/models/public/state_model.dart';
-
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/create_post_repo.dart';
@@ -18,17 +15,24 @@ class CreatePostUseCase extends UseCase<bool, PostParams> {
 
 class PostParams {
   final String content;
-  final Color? color;
+  final String? color;
   final String? feeling;
   final String? activity;
-  final String? location;
+  final String? privacy;
+  final List<String>? mediaId;
   PostParams(
       {required this.content,
       this.color,
       this.activity,
       this.feeling,
-      this.location});
+      this.privacy,
+        this.mediaId,});
   Map<String, dynamic> toJson() => {
-        'content': content,
+        'content': content??'',
+    if(feeling!=null)'feeling': feeling,
+        if(activity!=null)'activity': activity,
+    if(color!=null)'background_color': color,
+        'media': mediaId,
+        'publicationType': privacy??'public',
       };
 }
