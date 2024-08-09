@@ -27,7 +27,7 @@ class EditDoctorPersonalInfoView extends StatelessWidget {
           const Sizer(
             height: 20,
           ),
-          const EditDoctorPhoneField(),
+          // const EditDoctorPhoneField(),
           const Sizer(
             height: 20,
           ),

@@ -122,6 +122,6 @@ class DI {
     //meeting
     MeetingServiceLocator.execute(serviceLocator: serviceLocator);
     // subscribtions
-    SubscribtionServiceLocator.execute(serviceLocator: serviceLocator);
+    // SubscribtionServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

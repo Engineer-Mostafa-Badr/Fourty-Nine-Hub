@@ -34,21 +34,22 @@ abstract class Routes {
   static const MAZADAT = '/Mazadat';
   static const VISITA = '/Visita';
   static const VISITAEMERGENCY = '/Visita/VisitaEmergency';
-  static const VISITADOCTORLIST = '/Visita/VisitaDoctorsList';
   static const CREATEDOCTOR = '/Visita/CreateDoctor';
   static const FILTERDOCTORSUBCATEGORY = '/Visita/FilterDoctorSubcategory';
-  static const FILTERDOCTORGOVERNORATE =
-      '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate';
-  static const FILTERDOCTORCITY =
-      '/Visita/FilterDoctorSubcategory/FilterDoctorCity';
-  static const FILTERDOCTORAREA =
+   static const FILTERDOCTORAREA =
       '/Visita/FilterDoctorSubcategory/FilterDoctorCity/FilterDoctorArea';
   static const VISITADOCTORLISTBYLOCATION =
       '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate/FilterDoctorCity/VisitaDoctorsList';
   static const VISITADOCTORLISTBYCALL =
       '/Visita/FilterDoctorSubcategory/VisitaDoctorsList';
-  static const FILTERDOCTORGOVERNORATE = '/Visita/FilterDoctorGovernorate';
-  static const FILTERDOCTORCITY = '/Visita/FilterDoctorCity';
+  // static const FILTERDOCTORGOVERNORATE = '/Visita/FilterDoctorGovernorate';
+  static const FILTERDOCTORGOVERNORATE =
+      '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate';
+
+  // static const FILTERDOCTORCITY = '/Visita/FilterDoctorCity';
+  static const FILTERDOCTORCITY =
+      '/Visita/FilterDoctorSubcategory/FilterDoctorCity';
+
   static const VISITADOCTORLIST = '/Visita/VisitaDoctorsList';
   static const EDITDOCTORPROFILE = '/Visita/EditDoctorProfile';
   static const VISITADOCTORDETAILS = '/Visita/DoctorDetails';

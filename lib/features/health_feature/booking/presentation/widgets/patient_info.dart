@@ -45,7 +45,7 @@ class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
               key: controller.formKey,
               child: Column(
                 children: [
-                  PhoneTextFormField(
+                  CustomPhoneTextFormField(
                     currentFocusNode: controller.phoneFousNode,
                     currentController: controller.phoneNumberTextController,
                     onInputChanged: (value) {},
