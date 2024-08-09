@@ -16,8 +16,6 @@ class HealthBookingTypeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        serviceLocator<HealthSharedData>().doctorSearchParams.reset();
-
         if (context.read<UserCubit>().isLoggedIn) {
           serviceLocator<HealthSharedData>().doctorSearchParams.bookingType =
               bookingFilterModel.bookingType;

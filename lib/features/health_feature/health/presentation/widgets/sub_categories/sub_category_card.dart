@@ -7,7 +7,11 @@ import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart'
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 
 class HealthSubCategoryCard extends StatelessWidget {
   final HealthSubcategoryEntity subCategory;
@@ -16,7 +20,11 @@ class HealthSubCategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
+            subCategory;
+        context.push(Routes.VISITADOCTORLIST);
+      },
       child: Container(
         width: 200,
         padding: const EdgeInsets.all(10),

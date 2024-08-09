@@ -7,7 +7,6 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/widget
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/medical_services/medical_services.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/booking_types/booking_types.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/sub_categories/sub_categories.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 
 class HealthView extends StatelessWidget {
@@ -17,7 +16,6 @@ class HealthView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SharedScaffold(
         mainCategoryId: 1,
-        backgroundColor: AppColors.BACKGROUND_COLOR,
         body: ListView(
           padding: const EdgeInsets.all(8.0),
           children: const [

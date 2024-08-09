@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_statistics/doctor_statistics_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/history/doctor_history_card.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -14,7 +13,6 @@ class DoctorStatisticsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.BACKGROUND_COLOR,
       appBar: AppBar(),
       body: BlocBuilder<DoctorStatisticsCubit, DoctorStatisticsState>(
         builder: (context, state) {

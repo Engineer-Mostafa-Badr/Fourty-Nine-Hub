@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/address.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/appointments.dart';
@@ -27,8 +28,9 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(Labels.details),
+      backgroundColor: Colors.white,
+      appBar: const BackAppBar(
+        label: Labels.details,
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),

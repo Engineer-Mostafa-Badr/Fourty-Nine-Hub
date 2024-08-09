@@ -154,4 +154,5 @@ abstract class Labels {
   static const user = 'User';
   static const specialities = 'Specialities';
   static const medicalServices = 'Medical Services';
+  static const waitingDoctorAppointment = 'Waiting for doctor\'s appointment';
 }
