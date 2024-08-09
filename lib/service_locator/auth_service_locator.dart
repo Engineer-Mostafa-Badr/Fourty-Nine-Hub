@@ -23,6 +23,7 @@ import '../features/authentication/domain/use_cases/get_user_use_case.dart';
 import '../features/authentication/domain/use_cases/login_use_case.dart';
 import '../features/authentication/domain/use_cases/register_use_case.dart';
 import '../features/authentication/domain/use_cases/save_tokens_use_case.dart';
+import '../features/authentication/domain/use_cases/sign_out_usecase.dart';
 import '../features/authentication/domain/use_cases/verify_otp_use_case.dart';
 import '../features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
 import '../features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
@@ -70,6 +71,7 @@ class AuthServiceLocator {
     serviceLocator.registerFactory(() => RegisterUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => VerifyOTPUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => ResendOTPUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => SignOutUseCase(serviceLocator()));
     serviceLocator
         .registerFactory(() => GetWelcomeGiftUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => GoogleSignInUseCase(serviceLocator()));
@@ -96,6 +98,7 @@ class AuthServiceLocator {
     );
     serviceLocator.registerSingleton(
       UserCubit(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

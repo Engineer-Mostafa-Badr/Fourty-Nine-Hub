@@ -4,7 +4,6 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/health_repo.dart';
 
-// class GetMyAppointmentBookingsUseCase 
 
 class GetMyAppointmentBookingsUseCase extends UseCase<List<AppointmentBookingEntity>, NoParams> {
   final HealthRepo _repo;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/functions/global/button_availability.dart';
 import 'package:fourtyninehub/common/functions/helper/launch_url.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 
@@ -13,6 +14,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
 import 'package:fourtyninehub/features/requests_history/domain/entities/address_entity.dart';
 import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
@@ -24,6 +26,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../ride/RideRequest/presentation/widgets/customer/createOrder/changePhoneNumber.dart';
+import '../../../../subscribe/presentation/cubit/subscribe_cubit.dart';
 
 class AdDetailsView extends StatefulWidget {
   final String id;
@@ -44,7 +47,6 @@ class _AdDetailsViewState extends State<AdDetailsView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: const BackAppBar(),
-        bottomNavigationBar: _buildActionsWidget(),
         body: BlocConsumer<AdDetailsCubit, AdDetailsState>(
             listener: (contex, state) {
           if (state.isError) {
@@ -66,18 +68,25 @@ class _AdDetailsViewState extends State<AdDetailsView> {
           }
           return Padding(
             padding: const EdgeInsets.all(10.0),
-            child: ListView(
+            child: Column(
               children: [
-                _buildAdInfoWidget(ad: state.ad!),
-                const Sizer(),
-                // const GoogleAddsBanner(
-                //   margin: 0,
-                // ),
-                const Sizer(),
-                _buildDetailsWidget(ad: state.ad!),
-                _buildLocationWidget(address: state.ad!.address!),
-                const Sizer(),
-                _buildRelevantAdsWidget(),
+                Expanded(
+                  child: ListView(
+                    children: [
+                      _buildAdInfoWidget(ad: state.ad!),
+                      const Sizer(),
+                      // const GoogleAddsBanner(
+                      //   margin: 0,
+                      // ),
+                      const Sizer(),
+                      _buildDetailsWidget(ad: state.ad!),
+                      _buildLocationWidget(address: state.ad!.address!),
+                      const Sizer(),
+                      _buildRelevantAdsWidget(),
+                    ],
+                  ),
+                ),
+                _buildActionsWidget(),
               ],
             ),
           );
@@ -117,52 +126,87 @@ class _AdDetailsViewState extends State<AdDetailsView> {
       final controller = context.read<AdDetailsCubit>();
       return Container(
         margin: const EdgeInsets.all(10),
-        child: Row(
+        child: Column(
           children: [
-            Expanded(
-                child: AppButton(
-                    label: 'Chat',
-                    icon: Icons.chat_bubble_outline,
-                    onPressed: () => context.push(Routes.CHATROOM))),
-            const Sizer(
-              width: 5,
+            FutureBuilder(
+                future: ButtonAvailability().isShowButton(
+                    otherUserId: state.ad?.user?.id ?? '',
+                    subcategoryId: state.ad?.subCategoryId ?? ''),
+                builder: (context, snap) {
+                  if (snap.data ?? false) {
+                    return Row(
+                      children: [
+                        Expanded(
+                            child: AppButton(
+                                label: 'Chat',
+                                icon: Icons.chat_bubble_outline,
+                                onPressed: () =>
+                                    context.push(Routes.CHATROOM))),
+                        const Sizer(
+                          width: 5,
+                        ),
+                        Expanded(
+                            child: AppButton(
+                                label: 'Call',
+                                icon: Icons.call,
+                                onPressed: () => LaunchURLHelper()
+                                    .call(phone: state.ad?.phone ?? ''))),
+                      ],
+                    );
+                  }
+                  return const SizedBox();
+                }),
+            const Sizer(),
+            Row(
+              children: [
+                Expanded(
+                    child: AppButton(
+                        label: 'Premium Request',
+                        icon: Icons.bookmark,
+                        onPressed: () {
+                          serviceLocator<SubscribeCubit>()
+                              .checkIfUserSubscribed(
+                                  context: context,
+                                  onSubscribed: () {
+                                    if (controller.phone == null) {
+                                      bottomSheet(
+                                          context: context,
+                                          widget: RideContactPhoneNumber(
+                                            onChanged: (String v) =>
+                                                controller.changePhone(v: v),
+                                            onSubmit: () => controller
+                                                .makeAdRequest(id: widget.id),
+                                          ));
+                                    } else {
+                                      controller.makeAdRequest(id: widget.id);
+                                    }
+                                  },
+                                  subCategoryId: state.ad?.subCategoryId ??
+                                      '62c8ba9f8e28a58a3edf57eb');
+                        })),
+                const Sizer(
+                  width: 5,
+                ),
+                Expanded(
+                    child: AppButton(
+                        label: 'Request',
+                        icon: Icons.bookmark,
+                        onPressed: () {
+                          if (controller.phone == null) {
+                            bottomSheet(
+                                context: context,
+                                widget: RideContactPhoneNumber(
+                                  onChanged: (String v) =>
+                                      controller.changePhone(v: v),
+                                  onSubmit: () =>
+                                      controller.makeAdRequest(id: widget.id),
+                                ));
+                          } else {
+                            controller.makeAdRequest(id: widget.id);
+                          }
+                        })),
+              ],
             ),
-            Expanded(
-                child: AppButton(
-                    label: 'Call',
-                    icon: Icons.call,
-                    onPressed: () =>
-                        LaunchURLHelper().call(phone: state.ad?.phone ?? ''))),
-            const Sizer(
-              width: 5,
-            ),
-            Expanded(
-                child: AppButton(
-                    label: 'Whatsapp',
-                    icon: FontAwesomeIcons.whatsapp,
-                    onPressed: () => LaunchURLHelper()
-                        .openWhatsapp(phone: state.ad?.phone ?? ''))),
-            const Sizer(
-              width: 5,
-            ),
-            Expanded(
-                child: AppButton(
-                    label: 'Request',
-                    icon: Icons.bookmark,
-                    onPressed: () {
-                      if (controller.phone == null) {
-                        bottomSheet(
-                            context: context,
-                            widget: RideContactPhoneNumber(
-                              onChanged: (String v) =>
-                                  controller.changePhone(v: v),
-                              onSubmit: () =>
-                                  controller.makeAdRequest(id: widget.id),
-                            ));
-                      } else {
-                        controller.makeAdRequest(id: widget.id);
-                      }
-                    })),
           ],
         ),
       );

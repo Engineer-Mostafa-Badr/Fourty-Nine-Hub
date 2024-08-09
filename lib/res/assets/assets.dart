@@ -42,9 +42,11 @@ abstract class Assets {
   static String scooter = 'assets/images/motorcycle.png';
   static String restaurant = 'assets/images/restaurant.png';
   static String doctor = 'assets/images/doctor.png';
+  static String metaVerified = 'assets/images/meta-verified.jpeg';
   static String healthBanner = 'assets/images/health_banner.png';
   static String emergency = 'assets/images/emergency.png';
   static String doctorHomeVisit = 'assets/images/doctor_home_visit.png';
   static String doctorCall = 'assets/images/doctor_call.png';
   static String doctorClinicVisit = 'assets/images/doctor_clinic.png';
+  static String profileIcon = 'assets/images/profile_icon.png';
 }

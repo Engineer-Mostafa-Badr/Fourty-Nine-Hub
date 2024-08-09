@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_card.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -46,6 +50,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.read<UserCubit>().state.data;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -64,7 +69,12 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
               deletePost: widget.deletePost,
               hidePost: widget.hidePost,
               showPostDetails: widget.showPostDetails,
-              showPostComments: widget.showPostComments),
+              showPostComments: widget.showPostComments,
+            onShare: (String id) {
+            },
+            from: 'details',
+            isMyPost: user?.id==widget.post.user.id,
+          ),
           const Divider(),
           Expanded(
             child: ListView.separated(
@@ -103,16 +113,32 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
     );
   }
 
-  void onCommentAdded() {
-    widget.onAddComment(
+  void onCommentAdded() async{
+    CommentModel data = await widget.onAddComment(
       PostCommentParams(
           postId: widget.post.id, content: commentTextController.text),
     );
-    widget.comments.add(CommentModel(
-        id: 'id',
+    final user = context.read<UserCubit>().state.data;
+
+    widget.comments.add(
+      CommentModel(
+        id: data.id,
         content: commentTextController.text,
         post: widget.post.id,
-        createdAt: DateTime.now()));
+        createdAt: DateTime.now(),
+        loveCount: data.loveCount,
+        angryCount: data.angryCount,
+        likesCount: data.likesCount,
+        repliesCount: data.repliesCount,
+        sadCount: data.sadCount,
+        wowCount: data.wowCount,
+        isAngry: false,
+        isLikes: false,
+        isLove: false,
+        isSad: false,
+        isWow: false, user: data.user,
+      ),
+    );
     commentTextController.clear();
     setState(() {});
   }

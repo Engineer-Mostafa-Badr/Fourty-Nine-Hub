@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/competition/presentation/pages/competitio
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/wallet_history.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
@@ -117,7 +118,7 @@ class WalletView extends StatelessWidget {
     // final controller = context.read<WalletCubit>();
     if (type == WalletTypes.balance) {
       return const BalanceWalletView();
-    } else if (type == WalletTypes.gift) {
+    } else if (type == WalletTypes.giftWallet) {
       return const GiftWalletView();
     } else {
       return const NormalWalletView();

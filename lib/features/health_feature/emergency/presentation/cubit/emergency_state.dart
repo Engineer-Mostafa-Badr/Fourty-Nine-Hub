@@ -1,17 +1,19 @@
 part of 'emergency_cubit.dart';
 
-sealed class EmergencyState {}
+sealed class HealthEmergencyState {}
 
-final class EmergencyInitial extends EmergencyState {}
+final class HealthEmergencyInitial extends HealthEmergencyState {}
 
-final class EmergencyLoading extends EmergencyState {}
+final class HealthEmergencyLoading extends HealthEmergencyState {}
 
-final class EmergencyLoaded extends EmergencyState {
+final class HealthEmergencySuccess extends HealthEmergencyState {}
+
+final class HealthEmergencySubCategoriesLoaded extends HealthEmergencyState {
   final List<SubCategoryEntity> subCategories;
-  EmergencyLoaded({required this.subCategories});
+  HealthEmergencySubCategoriesLoaded({required this.subCategories});
 }
 
-final class EmergencyError extends EmergencyState {
+final class HealthEmergencyError extends HealthEmergencyState {
   final String message;
-  EmergencyError({required this.message});
+  HealthEmergencyError({required this.message});
 }

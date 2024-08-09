@@ -6,11 +6,13 @@ abstract class Styles {
       {double fontSize = 10,
       Color color = Colors.black,
       TextDecoration? decoration,
+      List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
         fontSize: fontSize,
         color: color,
         decoration: decoration,
+        shadows: shadows,
         decorationColor: color,
         fontWeight: fontWeight);
   }
@@ -19,11 +21,13 @@ abstract class Styles {
       {double fontSize = 12,
       Color color = Colors.black,
       TextDecoration? decoration,
+      List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
         fontSize: fontSize,
         color: color,
         // overflow: TextOverflow.ellipsis,
+        shadows: shadows,
         decoration: decoration,
         decorationColor: color,
         fontWeight: fontWeight);
@@ -33,8 +37,14 @@ abstract class Styles {
       {double fontSize = 16,
       TextDecoration? decoration,
       TextAlign textAlign = TextAlign.center,
+      List<Shadow>? shadows,
       Color color = Colors.black,
       FontWeight fontWeight = FontWeight.w600}) {
-    return TextStyle(fontSize: fontSize, color: color, fontWeight: fontWeight);
+    return TextStyle(
+      fontSize: fontSize,
+      color: color,
+      fontWeight: fontWeight,
+      shadows: shadows,
+    );
   }
 }

@@ -19,6 +19,7 @@ abstract class Routes {
   static const REELS = '/Social/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
   static const TWITTER = '/Social/Twitter';
+  static const TWITTERPOSTDETAILS = '/Social/Twitter/TwitterPostDetails';
   static const CREATEPOST = '/Social/CreatePost';
 
   static const Tinder = '/Social/Tinder';
@@ -35,12 +36,14 @@ abstract class Routes {
   static const VISITADOCTORLIST = '/Visita/VisitaDoctorsList';
   static const CREATEDOCTOR = '/Visita/CreateDoctor';
   static const FILTERDOCTORSUBCATEGORY = '/Visita/FilterDoctorSubcategory';
+  static const FILTERDOCTORGOVERNORATE =
+      '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate';
   static const FILTERDOCTORCITY =
       '/Visita/FilterDoctorSubcategory/FilterDoctorCity';
   static const FILTERDOCTORAREA =
       '/Visita/FilterDoctorSubcategory/FilterDoctorCity/FilterDoctorArea';
   static const VISITADOCTORLISTBYLOCATION =
-      '/Visita/FilterDoctorSubcategory/FilterDoctorCity/FilterDoctorArea/VisitaDoctorsList';
+      '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate/FilterDoctorCity/VisitaDoctorsList';
   static const VISITADOCTORLISTBYCALL =
       '/Visita/FilterDoctorSubcategory/VisitaDoctorsList';
   static const VISITADOCTORDETAILS = '/Visita/DoctorDetails';
@@ -129,6 +132,7 @@ abstract class Paths {
   static const REELS = 'Reels';
   static const MUSICREELS = 'MUSICREELS';
   static const TWITTER = 'Twitter';
+  static const TWITTERPOSTDETAILS = 'TwitterPostDetails';
   static const CREATEPOST = 'CreatePost';
   static const TINDER = 'Tinder';
   static const LIVE = 'Live';
@@ -143,6 +147,7 @@ abstract class Paths {
   static const VISITABOOKING = 'VisitaBooking';
   static const CREATEDOCTOR = 'CreateDoctor';
   static const FILTERDOCTORSUBCATEGORY = 'FilterDoctorSubcategory';
+  static const FILTERDOCTORGOVERNORATE = 'FilterDoctorGovernorate';
   static const FILTERDOCTORCITY = 'FilterDoctorCity';
   static const FILTERDOCTORAREA = 'FilterDoctorArea';
   static const DOCTORDASHBOARD = 'DoctorDashboard';

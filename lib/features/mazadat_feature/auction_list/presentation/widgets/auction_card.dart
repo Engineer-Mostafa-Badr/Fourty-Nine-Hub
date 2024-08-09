@@ -63,8 +63,8 @@ class AuctionCard extends StatelessWidget {
                     ],
                   )),
                   const Sizer(),
-                  IconAppButton(
-                      size: 20, icon: Icons.favorite_border, onPressed: () {}),
+                  // IconAppButton(
+                  //     size: 20, icon: Icons.favorite_border, onPressed: () {}),
                 ],
               ),
               Label(
@@ -87,9 +87,15 @@ class AuctionCard extends StatelessWidget {
                   ),
                   const Sizer(),
                   Expanded(
-                    child: AppButton(
-                        label: 'Bidding',
-                        onPressed: () => context.push(Routes.MAZADDETAILS)),
+                    child: item.isMine
+                        ? AppButton(
+                            label: 'Details',
+                            onPressed: () => context.push(Routes.MAZADDETAILS,
+                                extra: item.id))
+                        : AppButton(
+                            label: 'Bidding',
+                            onPressed: () => context.push(Routes.MAZADDETAILS,
+                                extra: item.id)),
                   ),
                 ],
               ),
@@ -126,8 +132,8 @@ class AuctionCard extends StatelessWidget {
               ),
             ),
             const Sizer(),
-            IconAppButton(
-                size: 20, icon: Icons.favorite_border, onPressed: () {}),
+            // IconAppButton(
+            //     size: 20, icon: Icons.favorite_border, onPressed: () {}),
           ],
         ),
         Label(

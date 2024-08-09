@@ -6,19 +6,24 @@ import 'package:fourtyninehub/features/ride/trip_details/domain/entities/trip_an
 import '../../../../../core/data/datasources/json_parser.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
+import '../../../../installment_feature/installment_list/domain/entities/installment_entity.dart';
+import '../../../../mazadat_feature/auction_list/data/models/auction_model.dart';
+import '../../../../mazadat_feature/auction_list/domain/entities/auction_entity.dart';
 import '../../../../ride/trip_details/data/models/trip_and_request_model.dart';
 
 abstract class MyAdsRemoteDatasource {
   Future<Either<Failure, List<AdEntity>>> getAds();
   Future<Either<Failure, List<TripAndRequestEntity>>> getComeWithMeAds();
   Future<Either<Failure, List<TripAndRequestModel>>> getPickMeAds();
+  Future<Either<Failure, List<AuctionEntity>>> getMyAuctions();
+  Future<Either<Failure, List<InstallmentEntity>>> getMyInstallments();
   Future<Either<Failure, bool>> deleteComeWithMeAd({required String id});
   Future<Either<Failure, bool>> deletePickMeAd({required String id});
   Future<Either<Failure, bool>> acceptPickMeRequest({required String id});
   Future<Either<Failure, bool>> rejectPickMeRequest({required String id});
   Future<Either<Failure, bool>> acceptComeWithYouRequests({required String id});
   Future<Either<Failure, bool>> rejectComeWithYouRequests({required String id});
-  Future<Either<Failure, bool>> cancelAd({required int id});
+  Future<Either<Failure, bool>> cancelAd({required String id});
   Future<Either<Failure, bool>> deactivateAd({required int id});
 }
 
@@ -27,9 +32,11 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
   final JsonParser _jsonParser;
   MyAdsRemoteDatasourceImpl(this._apiConsumer, this._jsonParser);
   @override
-  Future<Either<Failure, bool>> cancelAd({required int id}) {
-    // TODO: implement cancelAd
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> cancelAd({required String id}) async{
+     final response =
+        await _apiConsumer.delete(EndPoints.deleteAd(id));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+
   }
 
   @override
@@ -109,5 +116,21 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
       {required String id}) async {
     final response = await _apiConsumer.put(EndPoints.rejectPickMeRequest(id));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+  
+  @override
+  Future<Either<Failure, List<AuctionEntity>>> getMyAuctions()async {
+    final response = await _apiConsumer.get(EndPoints.myAuctions);
+    return response.fold(
+        (failure) => Left(failure),
+        (data) => Right((data['data']['docs'] as List)
+            .map((e) => AuctionModel.fromJson(e))
+            .toList()));
+  }
+  
+  @override
+  Future<Either<Failure, List<InstallmentEntity>>> getMyInstallments() {
+    // TODO: implement getMyInstallments
+    throw UnimplementedError();
   }
 }

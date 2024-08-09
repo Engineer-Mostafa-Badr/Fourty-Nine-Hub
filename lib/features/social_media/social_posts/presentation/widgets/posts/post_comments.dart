@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/comment_model.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/form/text_fields/form_text_field.dart';
@@ -82,16 +85,41 @@ class _PostCommentsState extends State<PostComments> {
     );
   }
 
-  void onCommentAdded() {
-    widget.onAddComment(
+  void onCommentAdded() async {
+    CommentModel data = await widget.onAddComment(
       PostCommentParams(
           postId: widget.postId, content: commentTextController.text),
     );
-    widget.comments.add(CommentModel(
-        id: 'id',
+    final user = context.read<UserCubit>().state.data;
+
+    widget.comments.add(
+      CommentModel(
+        id: data.id,
         content: commentTextController.text,
         post: widget.postId,
-        createdAt: DateTime.now()));
+        createdAt: DateTime.now(),
+        loveCount: data.loveCount,
+        angryCount: data.angryCount,
+        likesCount: data.likesCount,
+        repliesCount: data.repliesCount,
+        sadCount: data.sadCount,
+        wowCount: data.wowCount,
+        isAngry: false,
+        isLikes: false,
+        isLove: false,
+        isSad: false,
+        isWow: false,
+        user: TwitterUserEntity(
+            id: user!.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            createdAt: DateTime.now(),
+            image: user.profilePicture ?? '',
+            email: user.email ?? '',
+            isDocumented: false,
+        ),
+      ),
+    );
     commentTextController.clear();
     setState(() {});
   }

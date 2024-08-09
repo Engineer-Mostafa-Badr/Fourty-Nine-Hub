@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 
+import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/error/failure.dart';
 import '../entities/competition_entity.dart';
 import '../entities/wallet_entity.dart';

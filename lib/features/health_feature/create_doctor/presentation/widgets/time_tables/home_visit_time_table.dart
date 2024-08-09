@@ -10,30 +10,23 @@ class CreateDoctorHomeVisitTimeTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final createDoctorCubit = context.read<CreateDoctorCubit>();
     return BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
       buildWhen: (previous, current) => current is CreateDoctorShowHomeVisit,
       builder: (context, state) {
         if (state is CreateDoctorShowHomeVisit && state.check) {
-          return TimeTable(
+          return Timetable(
               title: 'Home Visit',
-              onChanged: (check, day) {
-                if (check) {
-                  context.read<CreateDoctorCubit>().addHomeVisitWorkDay(day);
-                } else {
-                  context
-                      .read<CreateDoctorCubit>().deleteHomeVisitWorkDay(day);
-                }
-              },
+              timetale: createDoctorCubit.homeVisitTimetable,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   DefaultTextFormField(
-                    currentFocusNode: context
-                        .read<CreateDoctorCubit>()
+                    currentFocusNode: createDoctorCubit
                         .homeVisitPriceFocusNode,
-                    currentController: context
-                        .read<CreateDoctorCubit>()
+                    currentController: createDoctorCubit
                         .homeVisitPriceController,
+                    nextFocusNode: createDoctorCubit.homeVisitExamineDurationFocusNode,
                     keyboardType: TextInputType.number,
                     isRequired: true,
                     hint: 'Home Visit Price',
@@ -43,11 +36,9 @@ class CreateDoctorHomeVisitTimeTable extends StatelessWidget {
                     hint: 'Home Visit Examine Duration (in minutes)',
                     keyboardType: TextInputType.number,
                     isRequired: true,
-                    currentFocusNode: context
-                        .read<CreateDoctorCubit>()
+                    currentFocusNode: createDoctorCubit
                         .homeVisitExamineDurationFocusNode,
-                    currentController: context
-                        .read<CreateDoctorCubit>()
+                    currentController: createDoctorCubit
                         .homeVisitExamineDurationController,
                   ),
                 ],

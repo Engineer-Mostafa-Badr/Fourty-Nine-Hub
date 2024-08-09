@@ -1,77 +1,184 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/doctor_location.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/work_day_model.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/work_day_entity.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/enums/week_days.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/doctor_day_model.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_day_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/create_doctor.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/data/models/address_search_params_model.dart';
-import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_cities.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
-import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:image_picker/image_picker.dart';
 
 part 'create_doctor_state.dart';
 
 class CreateDoctorCubit extends Cubit<CreateDoctorState> {
-  CreateDoctorCubit() : super(CreateDoctorInitial());
+  final HealthSharedData _shareCubit;
+  final GetSubCategoriesUseCase _getSubCategoriesUseCase;
+  final GetGovernoratesUseCase _getGovernoratesUseCase;
+  final GetCitiesUseCase _getCitiesUseCase;
+  final CreateDoctorUseCase _createDoctorUseCase;
+  CreateDoctorCubit(
+      this._shareCubit,
+      this._getSubCategoriesUseCase,
+      this._getGovernoratesUseCase,
+      this._getCitiesUseCase,
+      this._createDoctorUseCase)
+      : super(CreateDoctorInitial());
 
-  void load() {}
+  Future<void> loadData() async {
+    await _getSubCategories();
+    await _getGovernorates();
+  }
 
-  CreateDoctorParams _createDoctorParams = CreateDoctorParams(
-    firstName: '',
-    lastName: '',
-    subCategoryId: '',
-    phone: '',
-    email: '',
-    mediaId: '',
-    clinicPrice: '',
-    waitingTime: '',
-    callsPrice: '',
-    description: '',
-    idFrontKey: '',
-    idBehindKey: '',
-    idExpiryDate: '',
-    practicingBehind: '',
-    practicingFront: '',
-    practicingExpiryDate: '',
-    clinicWorkDays: [],
-    callsWorkDays: [],
-    homeVisitWorkDays: [],
-    address: AddressSearchParamsModel(address: '', lat: 0, lng: 0),
-  );
+  Future<void> submit() async {
+    if (formKey.currentState!.validate()) {
+      _saveTextEditingControllers();
+      _saveWorkDays();
+      String? checkFilledMessage = _createDoctorParams.isFilled();
+      if (checkFilledMessage == null) {
+        emit(CreateDoctorLoading("Creating Account..."));
+        final response = await _createDoctorUseCase.call(_createDoctorParams);
+        emit(CreateDoctorCloseLoading());
+        response.fold(
+            (failure) => emit(CreateDoctorError("Can't Create Doctor")),
+            (data) => emit(CreateDoctorSuccess(
+                "You are submit sccessfuly. Please wait admin approve and abroval.")));
+      } else {
+        emit(CreateDoctorError(checkFilledMessage));
+      }
+    }
+  }
 
-  // SubCategoryModel _subCategoryModel =
-  //     SubCategoryModel(id: '', name: '', image: '', isFavourite: false);
+  Future<void> _getSubCategories() async {
+    if (_shareCubit.subCategories.isEmpty) {
+      final response =
+          await _getSubCategoriesUseCase.call('62c8b57c9332225799fe3306');
+      response
+          .fold((failure) => emit(CreateDoctorError("Can't Load Specialities")),
+              (data) {
+        _shareCubit.subCategories = data;
+        emit(CreateDoctorSubCategoriesLoaded(data));
+      });
+    } else {
+      emit(CreateDoctorSubCategoriesLoaded(_shareCubit.subCategories));
+    }
+  }
 
-  // List<DoctorWorkDayEntity> clinicWorkDays = [];
-  // List<DoctorWorkDayEntity> callWorkDays = [];
-  // List<DoctorWorkDayEntity> homeVisitWorkDays = [];
+  Future<void> _getGovernorates() async {
+    if (_shareCubit.governorates.isEmpty) {
+      final response = await _getGovernoratesUseCase.call(const NoParams());
+      response
+          .fold((failure) => emit(CreateDoctorError("Can't Load Governorates")),
+              (data) {
+        _shareCubit.governorates = data;
+        emit(CreateDoctorGovernoratesLoaded(data));
+      });
+    } else {
+      emit(CreateDoctorGovernoratesLoaded(_shareCubit.governorates));
+    }
+  }
 
-  // DoctorLocationModel _location =
-  //     DoctorLocationModel(governorate: '', city: '', address: '');
+  Future<void> _getCities(String governorateId) async {
+    emit(CreateDoctorCitiesLoading());
+    final response = await _getCitiesUseCase.call(governorateId);
 
-  // dropdowns
+    response.fold(
+      (failure) => emit(CreateDoctorError("Can't Load Cities")),
+      (data) => emit(CreateDoctorCitiesLoaded(data)),
+    );
+  }
+
+  final CreateDoctorParams _createDoctorParams = CreateDoctorParams();
+
+  // =============================== Timetables ===============================
+  List<DoctorDayEntity> clinicTimetable = [
+    DoctorDayEntity(day: WeekDays.saturday),
+    DoctorDayEntity(day: WeekDays.sunday),
+    DoctorDayEntity(day: WeekDays.monday),
+    DoctorDayEntity(day: WeekDays.tuesday),
+    DoctorDayEntity(day: WeekDays.wednesday),
+    DoctorDayEntity(day: WeekDays.thursday),
+    DoctorDayEntity(day: WeekDays.friday),
+  ];
+
+  List<DoctorDayEntity> callTimetable = [
+    DoctorDayEntity(day: WeekDays.saturday),
+    DoctorDayEntity(day: WeekDays.sunday),
+    DoctorDayEntity(day: WeekDays.monday),
+    DoctorDayEntity(day: WeekDays.tuesday),
+    DoctorDayEntity(day: WeekDays.wednesday),
+    DoctorDayEntity(day: WeekDays.thursday),
+    DoctorDayEntity(day: WeekDays.friday),
+  ];
+
+  List<DoctorDayEntity> homeVisitTimetable = [
+    DoctorDayEntity(day: WeekDays.saturday),
+    DoctorDayEntity(day: WeekDays.sunday),
+    DoctorDayEntity(day: WeekDays.monday),
+    DoctorDayEntity(day: WeekDays.tuesday),
+    DoctorDayEntity(day: WeekDays.wednesday),
+    DoctorDayEntity(day: WeekDays.thursday),
+    DoctorDayEntity(day: WeekDays.friday),
+  ];
+
+  void _saveWorkDays() {
+    for (var element in clinicTimetable) {
+      if (element.isAvailable) {
+        _createDoctorParams.clinic?.workDays
+            .add(DoctorDayModel.fromEntity(element));
+      }
+    }
+
+    for (var element in callTimetable) {
+      if (element.isAvailable) {
+        _createDoctorParams.calls?.workDays
+            .add(DoctorDayModel.fromEntity(element));
+      }
+    }
+
+    for (var element in homeVisitTimetable) {
+      if (element.isAvailable) {
+        _createDoctorParams.visitHome?.workDays
+            .add(DoctorDayModel.fromEntity(element));
+      }
+    }
+  }
+
+  // ================================ DatePickers ===============================
+  void pickIDExpiryDate(DateTime value) {
+    _createDoctorParams.idExpiryDate = value.toIso8601String();
+  }
+
+  void pickPracticingExpiryDate(DateTime value) {
+    _createDoctorParams.practicingExpiryDate = value.toIso8601String();
+  }
+
+  // ================================ dropdowns ===============================
+  Future<void> selectGovernorate(GovernorateEntity value) async {
+    _createDoctorParams.address.governorateId = value.id;
+    await _getCities(value.id);
+  }
+
+  void selectCity(CityEntity value) {
+    _createDoctorParams.address.cityId = value.id;
+  }
 
   void selectSubcategory(SubCategoryEntity subCategoryModel) {
     _createDoctorParams.subCategoryId = subCategoryModel.id;
   }
 
-  void selectGovernorate(String value) {
-    // _location.governorate = value;
-  }
-
-  void selectCity(String value) {
-    // _location.city = value;
-  }
-
-  // upload images
+  // ================================= upload images =================================
   Future<void> _uploadImage(
       {required dynamic Function(UploadFileEntity) onUploaded}) async {
     if (_createDoctorParams.subCategoryId.isNotEmpty) {
       emit(CreateDoctorLoading("Uploading Image..."));
-      UploadFile().uploadImage(
+      await UploadFile().uploadImage(
         subCategoryId: _createDoctorParams.subCategoryId,
         onUploaded: (value) {
           onUploaded(value);
@@ -118,76 +225,99 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
     });
   }
 
-  // text controllers
+  // ================================= toggles =================================
+
+  void toggleClinic(bool value) {
+    _createDoctorParams.hasClinic = value;
+    emit(CreateDoctorShowClinic(value));
+  }
+
+  void toggleCallCheck(bool value) {
+    _createDoctorParams.hasCalls = value;
+    emit(CreateDoctorShowCall(value));
+  }
+
+  void toggleHomeVisit(bool value) {
+    _createDoctorParams.hasHomeVisit = value;
+    emit(CreateDoctorShowHomeVisit(value));
+  }
+
+  // ================================= TextEditingControllers =================================
+
+  void _saveTextEditingControllers() {
+    _createDoctorParams.firstName = firstNameController.text;
+    _createDoctorParams.lastName = lastNameController.text;
+    _createDoctorParams.phone = phoneController.text;
+    _createDoctorParams.address.address = addressController.text;
+    _createDoctorParams.detectionPeriodClinic =
+        clinicExamineDurationController.text;
+    _createDoctorParams.detectionPeriodCalls =
+        callExamineDurationController.text;
+    _createDoctorParams.detectionPeriodvisitHome =
+        homeVisitExamineDurationController.text;
+    _createDoctorParams.callsPrice = callPriceController.text;
+    _createDoctorParams.visitHomePrice = homeVisitPriceController.text;
+    _createDoctorParams.clinicPrice = clinicPriceController.text;
+    _createDoctorParams.waitingTime = waitingTimeController.text;
+    _createDoctorParams.description = descriptionController.text;
+  }
+
   final firstNameFocusNode = FocusNode();
   final lastNameFocusNode = FocusNode();
-  final specialtyFocusNode = FocusNode();
+  final descriptionFocusNode = FocusNode();
   final callPriceFocusNode = FocusNode();
   final homeVisitPriceFocusNode = FocusNode();
   final clinicPriceFocusNode = FocusNode();
-  final locationFocusNode = FocusNode();
   final waitingTimeFocusNode = FocusNode();
   final clinicExamineDurationFocusNode = FocusNode();
   final callExamineDurationFocusNode = FocusNode();
   final homeVisitExamineDurationFocusNode = FocusNode();
   final homeVisitDurationFocusNode = FocusNode();
   final addressFocusNode = FocusNode();
+  final phoneFocusNode = FocusNode();
 
   final homeVisitExamineDurationController = TextEditingController();
   final addressController = TextEditingController();
   final callExamineDurationController = TextEditingController();
   final waitingTimeController = TextEditingController();
   final clinicExamineDurationController = TextEditingController();
-  final locationController = TextEditingController();
   final firstNameController = TextEditingController();
-  final specialtyController = TextEditingController();
+  final descriptionController = TextEditingController();
   final lastNameController = TextEditingController();
   final callPriceController = TextEditingController();
   final homeVisitPriceController = TextEditingController();
   final clinicPriceController = TextEditingController();
+  final phoneController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
 
-  // services toggles
-  void toggleClinic(bool value) {
-    emit(CreateDoctorShowClinic(value));
-  }
-
-  void toggleCallCheck(bool value) {
-    emit(CreateDoctorShowCall(value));
-  }
-
-  void toggleHomeVisit(bool value) {
-    emit(CreateDoctorShowHomeVisit(value));
-  }
-
-// Work days setters
-  void addClinicWorkDay(DoctorWorkDayEntity value) {
-    _createDoctorParams.clinicWorkDays
-        .add(DoctorWorkDayModel.fromEntity(value));
-  }
-
-  void addCallWorkDay(DoctorWorkDayEntity value) {
-    _createDoctorParams.callsWorkDays.add(DoctorWorkDayModel.fromEntity(value));
-  }
-
-  void addHomeVisitWorkDay(DoctorWorkDayEntity value) {
-    _createDoctorParams.homeVisitWorkDays
-        .add(DoctorWorkDayModel.fromEntity(value));
-  }
-
-  void deleteClinicWorkDay(DoctorWorkDayEntity value) {
-    _createDoctorParams.clinicWorkDays
-        .removeWhere((element) => element.day == value.day);
-  }
-
-  void deleteCallWorkDay(DoctorWorkDayEntity value) {
-    _createDoctorParams.callsWorkDays
-        .removeWhere((element) => element.day == value.day);
-  }
-
-  void deleteHomeVisitWorkDay(DoctorWorkDayEntity value) {
-    _createDoctorParams.homeVisitWorkDays
-        .removeWhere((element) => element.day == value.day);
+  @override
+  Future<void> close() {
+    firstNameFocusNode.dispose();
+    lastNameFocusNode.dispose();
+    descriptionFocusNode.dispose();
+    callPriceFocusNode.dispose();
+    homeVisitPriceFocusNode.dispose();
+    clinicPriceFocusNode.dispose();
+    waitingTimeFocusNode.dispose();
+    clinicExamineDurationFocusNode.dispose();
+    callExamineDurationFocusNode.dispose();
+    homeVisitExamineDurationFocusNode.dispose();
+    homeVisitDurationFocusNode.dispose();
+    addressFocusNode.dispose();
+    phoneFocusNode.dispose();
+    homeVisitExamineDurationController.dispose();
+    addressController.dispose();
+    callExamineDurationController.dispose();
+    waitingTimeController.dispose();
+    clinicExamineDurationController.dispose();
+    firstNameController.dispose();
+    descriptionController.dispose();
+    lastNameController.dispose();
+    callPriceController.dispose();
+    homeVisitPriceController.dispose();
+    clinicPriceController.dispose();
+    phoneController.dispose();
+    return super.close();
   }
 }

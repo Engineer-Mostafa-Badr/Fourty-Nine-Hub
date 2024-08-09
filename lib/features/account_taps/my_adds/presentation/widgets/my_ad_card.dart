@@ -9,13 +9,15 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 
 class MyAdCard extends StatelessWidget {
   final AdEntity item;
-  const MyAdCard({super.key, required this.item});
+  final Function(String) onDelete;
+  const MyAdCard({super.key, required this.item, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +47,14 @@ class MyAdCard extends StatelessWidget {
               children: [
                 Expanded(
                     child: AppButton(
-                        label: 'Edit',
-                        onPressed: () => context.push(Routes.CREATEAD))),
+                        label: Labels.delete,
+                        onPressed: () => showAreYouSure(
+                            title: 'Alert',
+                            subTitle: 'Are you sure, you want to remove AD?',
+                            action: () {
+                              onDelete(item.id);
+                            },
+                            context: context))),
                 const Sizer(),
                 AppButton(
                     label: '',
@@ -58,18 +66,18 @@ class MyAdCard extends StatelessWidget {
                           widget: ListView(
                             shrinkWrap: true,
                             children: [
-                              _buildOptionsWidget(
-                                label: 'Delete',
-                                onTap: () {
-                                  showAreYouSure(
-                                      title: 'Alert',
-                                      subTitle:
-                                          'Are you sure, you want to remove AD?',
-                                      action: () {},
-                                      context: context);
-                                },
-                                icon: Icons.delete,
-                              ),
+                              // _buildOptionsWidget(
+                              //   label: Labels.edit,
+                              //   onTap: () {
+                              //     showAreYouSure(
+                              //         title: 'Alert',
+                              //         subTitle:
+                              //             'Are you sure, you want to remove AD?',
+                              //         action: () {},
+                              //         context: context);
+                              //   },
+                              //   icon: Icons.delete,
+                              // ),
                               _buildOptionsWidget(
                                 label: 'Sold Out',
                                 onTap: () {
@@ -96,13 +104,15 @@ class MyAdCard extends StatelessWidget {
                               ),
                               _buildOptionsWidget(
                                 label: 'Installment',
-                                onTap: () =>
-                                    context.push(Routes.CREATEINSTALLMENT),
+                                onTap: () => context.push(
+                                    Routes.CREATEINSTALLMENT,
+                                    extra: item.id),
                                 icon: Icons.list,
                               ),
                               _buildOptionsWidget(
                                 label: 'Auction',
-                                onTap: () => context.push(Routes.CREATEAUCTION, extra: item.id),
+                                onTap: () => context.push(Routes.CREATEAUCTION,
+                                    extra: item.id),
                                 icon: Icons.group,
                               ),
                             ],

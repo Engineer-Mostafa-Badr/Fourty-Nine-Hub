@@ -63,7 +63,7 @@ extension RideServicesEnumExtension on RideServicesEnum {
       case RideServicesEnum.premium:
         return 'Premium';
       case RideServicesEnum.comeWithYou:
-        return 'Come With You';
+        return 'Trip Join';
       case RideServicesEnum.pickup:
         return 'Pick up';
       case RideServicesEnum.suv:

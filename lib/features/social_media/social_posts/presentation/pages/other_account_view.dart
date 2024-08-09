@@ -1,22 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_tweets.dart';
+import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
+import '../../../../../common/widgets/dynamic/drawer.dart';
+import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
-import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
-import '../../../../../common/widgets/dynamic/drawer.dart';
-import '../../../../../common/widgets/dynamic/floating_button.dart';
-import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../res/style/app_colors.dart';
-import '../widgets/account/high_lights_section.dart';
 import '../widgets/account/media_section.dart';
 import '../widgets/account/posts_section.dart';
 
@@ -98,7 +98,7 @@ class OtherAccountView extends StatelessWidget {
                       text: 'Posts',
                     ),
                     Tab(
-                      text: 'Highlights',
+                      text: 'Tweets',
                     ),
                     Tab(
                       text: 'Reels',
@@ -118,6 +118,7 @@ class OtherAccountView extends StatelessWidget {
   Widget _buildAccountCounter({
     required BuildContext context,
   }) {
+    final user = context.read<UserCubit>().state.data;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -181,7 +182,7 @@ class OtherAccountView extends StatelessWidget {
                 )),
               ],
             )),
-            const Positioned(
+            Positioned(
                 bottom: 20,
                 left: 10,
                 child: CircleAvatar(
@@ -190,7 +191,7 @@ class OtherAccountView extends StatelessWidget {
                   child: CircleAvatar(
                     radius: 28,
                     backgroundColor: Colors.white,
-                    backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+                    backgroundImage: NetworkImage(user!.profilePicture??''),
                   ),
                 ))
           ],
@@ -203,7 +204,7 @@ class OtherAccountView extends StatelessWidget {
               Row(
                 children: [
                   Label(
-                      text: 'Mohamed Gamal',
+                      text: "${user.firstName} ${user.lastName}",
                       style: Styles.headerText(fontWeight: FontWeight.w600)),
                   const Sizer(
                     width: 5,
@@ -216,24 +217,24 @@ class OtherAccountView extends StatelessWidget {
                 ],
               ),
               Label(
-                  text: '@mohamedgamal',
+                  text: '@${user.email?.split('@')[0]}',
                   style: Styles.mediumText(color: Colors.grey)),
               const Sizer(),
               Row(
                 children: [
                   _buildCounter(
-                    value: '585 ',
+                    value: '${user.friendsCount} ',
                     label: 'Friends',
                   ),
                   const Sizer(),
                   _buildCounter(
-                    value: '181M ',
+                    value: '${user.followersCount} ',
                     label: 'Follower',
                   ),
                   const Sizer(),
                   _buildCounter(
-                    value: '151 ',
-                    label: 'Subscription',
+                    value: '${user.followingCount} ',
+                    label: 'Following',
                   ),
                 ],
               ),
@@ -282,7 +283,29 @@ class OtherAccountView extends StatelessWidget {
   Widget _buildAccountPages() {
     return TabBarView(children: [
       const PostsSection(),
-      const HighLightsSection(),
+      BlocBuilder<UserCubit, BasicState<UserEntity>>(
+          builder: (context, state) {
+            UserEntity? userData = state.data;
+            return context.read<UserCubit>().isLoggedIn
+                ? UserTweets(userData: userData!)
+                : Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                        onTap: () => context.push(Routes.LOGIN),
+                        child: Label(
+                            text: 'Login',
+                            style: Styles.headerText(color: Colors.blue))),
+                    Label(
+                        text: ', To continue in using chat services',
+                        style: Styles.headerText()),
+                  ],
+                ));
+          }),
+
+      // const HighLightsSection(),
+
       Center(
         child: Label(text: 'Not Designed yet!', style: Styles.mediumText()),
       ),

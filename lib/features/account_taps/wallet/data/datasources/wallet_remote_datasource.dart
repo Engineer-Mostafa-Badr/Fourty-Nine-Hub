@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/compe
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_history_entity.dart';
 
+import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../res/assets/jsons.dart';
 import '../models/wallet_history_model.dart';
 
@@ -41,7 +42,7 @@ class WalletRemoteDataSouceImpl implements WalletRemoteDataSouce {
     String json = Jsons.walletHistoryList;
     if (type == WalletTypes.balance) {
       json = Jsons.balanceHistoryList;
-    } else if (type == WalletTypes.gift) {
+    } else if (type == WalletTypes.giftWallet) {
       json = Jsons.giftHistoryList;
     }
     final response = await _apiConsumer.get(json);

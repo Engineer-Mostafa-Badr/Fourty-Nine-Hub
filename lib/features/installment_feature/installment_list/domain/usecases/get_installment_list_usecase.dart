@@ -6,12 +6,12 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
 class GetInstallmentListUseCase
-    extends UseCase<List<InstallmentEntity>, int> {
+    extends UseCase<List<InstallmentEntity>, String> {
   final InstallmentListRepo _repo;
   GetInstallmentListUseCase(this._repo);
 
   @override
-  Future<Either<Failure, List<InstallmentEntity>>> call(int params) {
+  Future<Either<Failure, List<InstallmentEntity>>> call(String params) {
     return _repo.getInstallmentsList();
   }
 }

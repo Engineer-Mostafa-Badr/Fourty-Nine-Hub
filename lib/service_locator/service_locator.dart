@@ -26,6 +26,7 @@ import 'health_service_locator.dart';
 import 'installment_service_locator.dart';
 import 'meeting_service_locator.dart';
 import 'social_service_locator.dart';
+import 'subscribe_service_locator.dart';
 
 final serviceLocator = GetIt.instance;
 
@@ -118,5 +119,7 @@ class DI {
     ClubVoiceServiceLocator.execute(serviceLocator: serviceLocator);
     //meeting
     MeetingServiceLocator.execute(serviceLocator: serviceLocator);
+    // subscribtions
+    SubscribtionServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

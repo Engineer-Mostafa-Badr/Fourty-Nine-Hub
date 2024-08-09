@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_nearby_restaurants_usecase.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/domain/entities/auction_entity.dart';
@@ -19,7 +19,7 @@ class AuctionListCubit extends Cubit<AuctionListState> {
   void loadData() async {
     emit(state.copyWith(status: AuctionListStates.loading));
     await getAuctionList();
-    await getSubCategories();
+    // await getSubCategories();
   }
 
   Future<void> getSubCategories() async {

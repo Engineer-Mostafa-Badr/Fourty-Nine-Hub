@@ -1,8 +1,16 @@
 class ChatsRequestParams {
-  final String privacyId;
-  final String categoryId;
+  String? privacyId;
+  String? categoryId;
+  bool? archived;
+  bool? isLocked;
+  bool? isUnread;
+  String? lockChatPassword;
   ChatsRequestParams({
-    required this.privacyId,
-    required this.categoryId,
+     this.privacyId,
+     this.categoryId,
+     this.archived,
+     this.isLocked,
+     this.isUnread,
+     this.lockChatPassword,
   });
 }

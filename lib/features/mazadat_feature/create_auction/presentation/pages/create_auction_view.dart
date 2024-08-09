@@ -67,7 +67,7 @@ class CreateAuctionView extends StatelessWidget {
           ),
         );
       } else if (state.isSuccess) {
-        context.push(Routes.MYADDS);
+        context.go(Routes.MYADDS);
         showSuccessMessage(context, Labels.success);
       }
     });

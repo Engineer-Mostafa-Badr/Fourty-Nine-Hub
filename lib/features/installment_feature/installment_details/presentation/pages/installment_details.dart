@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_details/presentation/cubit/installment_details_cubit.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../common/functions/helper/launch_url.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -19,9 +21,24 @@ import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 
-class InstallmentsDetails extends StatelessWidget {
-  const InstallmentsDetails({super.key});
+class InstallmentsDetails extends StatefulWidget {
+  final String installmentId;
+  const InstallmentsDetails({super.key, required this.installmentId});
+
+  @override
+  State<InstallmentsDetails> createState() => _InstallmentsDetailsState();
+}
+
+class _InstallmentsDetailsState extends State<InstallmentsDetails> {
+  @override
+  void initState() {
+    context
+        .read<InstallmentDetailsCubit>()
+        .loadData(installmentId: widget.installmentId);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +68,20 @@ class InstallmentsDetails extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ListView(
                     children: [
-                      _buildAdInfoWidget(ad: state.installment!.ad),
+                      _buildAdInfoWidget(ad: state.installment!.ad!),
                       _buildPlansWidget(context: context),
                       AppButton(
                           label:
                               '${Labels.buyWithInstallment} ${NumbersHelper.formatThousands(number: state.selectedPlan?.installment ?? 0)} ${Labels.currency} / ${Labels.month}',
-                          onPressed: () => controller.buyWithInstallment()),
-                      _buildDetailsWidget(ad: state.installment!.ad),
+                          onPressed: () {
+                            if (AuthHelper().isLoggedIn()) {
+                              controller.buyWithInstallment(
+                                  installmentId: widget.installmentId);
+                            } else {
+                              context.push(Routes.LOGIN);
+                            }
+                          }),
+                      _buildDetailsWidget(ad: state.installment!.ad!),
                     ],
                   ),
                 ),
@@ -85,13 +109,14 @@ class InstallmentsDetails extends StatelessWidget {
         ),
         InkWell(
           onTap: () => LaunchURLHelper().openLocation(
-              lat: ad.address?.coordinates[0]??0, lng: ad.address?.coordinates[1]??0),
+              lat: ad.address?.coordinates[0] ?? 0,
+              lng: ad.address?.coordinates[1] ?? 0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Icon(Icons.location_on_outlined),
               const Sizer(),
-              Expanded(child: Label(text: ad.address?.address??'')),
+              Expanded(child: Label(text: ad.address?.address ?? '')),
               const Sizer(),
               Label(text: ad.formatedDate)
             ],

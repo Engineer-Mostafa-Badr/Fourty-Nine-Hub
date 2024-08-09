@@ -5,13 +5,13 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/c
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/repositories/chats_repository.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/chats_request.dart';
 
-class GetChatsUseCase extends UseCase<List<ChatItemModel>, ChatsRequestParams> {
+class GetChatsUseCase extends UseCase<ChatItemModel, ChatsRequestParams> {
   final ChatsRepository _repo;
 
   GetChatsUseCase(this._repo);
 
   @override
-  Future<Either<Failure, List<ChatItemModel>>> call(ChatsRequestParams params) {
+  Future<Either<Failure, ChatItemModel>> call(ChatsRequestParams params) {
     return _repo.getChats(params);
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 
 class CreateDoctorGovernorateDropdown extends StatelessWidget {
   const CreateDoctorGovernorateDropdown({super.key});
@@ -11,14 +10,14 @@ class CreateDoctorGovernorateDropdown extends StatelessWidget {
     final createDoctorCubit = context.read<CreateDoctorCubit>();
     return BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
       buildWhen: (previous, current) =>
-          current is CreateDoctorGovernorateLoaded,
+          current is CreateDoctorGovernoratesLoaded,
       builder: (context, state) {
-        if (state is CreateDoctorGovernorateLoaded) {
+        if (state is CreateDoctorGovernoratesLoaded) {
           return DropdownMenu(
               width: MediaQuery.of(context).size.width * 0.9,
               hintText: "Governorate",
               dropdownMenuEntries: state.governorates
-                  .map((e) => DropdownMenuEntry(value: e, label: e))
+                  .map((e) => DropdownMenuEntry(value: e, label: e.nameEn))
                   .toList(),
               onSelected: (value) {
                 if (value != null) {
@@ -26,7 +25,7 @@ class CreateDoctorGovernorateDropdown extends StatelessWidget {
                 }
               });
         } else {
-          return Text("can't load governorates", style: Styles.headerText());
+          return const SizedBox.shrink();
         }
       },
     );

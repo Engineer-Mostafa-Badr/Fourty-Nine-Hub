@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
+import 'package:fourtyninehub/features/installment_feature/installment_list/presentation/widgets/installment_ad_card.dart';
+import 'package:fourtyninehub/features/mazadat_feature/auction_list/presentation/widgets/auction_card.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/widgets/trip_card.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -16,7 +19,7 @@ class MyAddsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 5,
       child: Scaffold(
         appBar: const BackAppBar(
           label: 'My Ads',
@@ -38,7 +41,7 @@ class MyAddsView extends StatelessWidget {
               onRefresh: () async => context.read<MyAddsCubit>().loadData(),
               child: Column(
                 children: [
-                  const TabBar(tabs: [
+                  const TabBar(isScrollable: true, tabs: [
                     Tab(
                       text: 'Pick Me',
                     ),
@@ -48,6 +51,12 @@ class MyAddsView extends StatelessWidget {
                     Tab(
                       text: 'Other',
                     ),
+                    Tab(
+                      text: 'Auctions',
+                    ),
+                    Tab(
+                      text: 'Installment',
+                    ),
                   ]),
                   Expanded(
                       child: Padding(
@@ -56,6 +65,8 @@ class MyAddsView extends StatelessWidget {
                       _buildMyPickMeTripsWidget(),
                       _buildMyComeWithmeWidget(),
                       _buildMyAdsWidget(),
+                      _buildMyAuctionsWidget(),
+                      _buildMyInstallmentsWidget(),
                     ]),
                   )),
                 ],
@@ -67,14 +78,55 @@ class MyAddsView extends StatelessWidget {
     );
   }
 
+  Widget _buildMyInstallmentsWidget() {
+    return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
+      final controller = context.read<MyAddsCubit>();
+      if (state.myInstallments?.isEmpty ?? true) {
+        return const EmptyPage();
+      }
+      return ListView.separated(
+          itemCount: state.myInstallments?.length ?? 0,
+          separatorBuilder: (context, index) => const Sizer(),
+          itemBuilder: (context, index) {
+            return InstallmentAdCard(
+              isVertical: false,
+              item: state.myInstallments![index],
+            );
+          });
+    });
+  }
+
+  Widget _buildMyAuctionsWidget() {
+    return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
+      final controller = context.read<MyAddsCubit>();
+      if (state.myAuctions?.isEmpty ?? true) {
+        return const EmptyPage();
+      }
+      return ListView.separated(
+          itemCount: state.myAuctions?.length ?? 0,
+          separatorBuilder: (context, index) => const Sizer(),
+          itemBuilder: (context, index) {
+            return AuctionCard(
+              isVertical: false,
+              item: state.myAuctions![index],
+            );
+          });
+    });
+  }
+
   Widget _buildMyAdsWidget() {
     return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
+      final controller = context.read<MyAddsCubit>();
+      if (state.myAds?.isEmpty ?? true) {
+        return const EmptyPage();
+      }
       return ListView.separated(
           itemCount: state.myAds?.length ?? 0,
           separatorBuilder: (context, index) => const Sizer(),
           itemBuilder: (context, index) {
             return MyAdCard(
               item: state.myAds![index],
+              onDelete: (String id) => controller.cancelAd(id: id),
             );
           });
     });
@@ -83,6 +135,9 @@ class MyAddsView extends StatelessWidget {
   Widget _buildMyPickMeTripsWidget() {
     return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
       final controller = context.read<MyAddsCubit>();
+      if (state.pickMeTrips?.isEmpty ?? true) {
+        return const EmptyPage();
+      }
       return ListView.separated(
           itemCount: state.pickMeTrips?.length ?? 0,
           separatorBuilder: (context, index) => const Sizer(),
@@ -102,7 +157,9 @@ class MyAddsView extends StatelessWidget {
   Widget _buildMyComeWithmeWidget() {
     return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
       final controller = context.read<MyAddsCubit>();
-
+      if (state.comeWithMeTrips?.isEmpty ?? true) {
+        return const EmptyPage();
+      }
       return ListView.separated(
           itemCount: state.comeWithMeTrips?.length ?? 0,
           separatorBuilder: (context, index) => const Sizer(),

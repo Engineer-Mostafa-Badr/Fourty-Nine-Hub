@@ -40,8 +40,10 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_cat
 import 'package:get_it/get_it.dart';
 import '../features/account_taps/contact_us/domain/repositories/contact_us_repo.dart';
 import '../features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
+import '../features/account_taps/my_adds/domain/usecases/cancel_ad_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/delete_come_with_me_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/delete_pick_me_usecase.dart';
+import '../features/account_taps/my_adds/domain/usecases/get_my_auctions_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/get_my_come_with_you_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/get_my_pick_me_usecase.dart';
 import '../features/ads_feature/ad_details/data/repositories/ad_details_repo_impl.dart';
@@ -68,7 +70,6 @@ class FourtyNineServiceLocator {
     serviceLocator.registerLazySingleton<AdsRemoteDataSource>(
       () => AdsRemoteDataSourceImpl(
         serviceLocator(),
-
       ),
     );
     serviceLocator.registerLazySingleton<AdDetailsRemoteDataSource>(
@@ -238,8 +239,18 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<GetMyAuctionsUseCase>(
+      () => GetMyAuctionsUseCase(
+        serviceLocator(),
+      ),
+    );
     serviceLocator.registerLazySingleton<AcceptComeWithMeUseCase>(
       () => AcceptComeWithMeUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<CancelAdUseCase>(
+      () => CancelAdUseCase(
         serviceLocator(),
       ),
     );
@@ -258,7 +269,7 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-     serviceLocator.registerLazySingleton<MakeAdRequestUsecase>(
+    serviceLocator.registerLazySingleton<MakeAdRequestUsecase>(
       () => MakeAdRequestUsecase(
         serviceLocator(),
       ),
@@ -287,6 +298,8 @@ class FourtyNineServiceLocator {
     );
     serviceLocator.registerFactory<MyAddsCubit>(
       () => MyAddsCubit(
+        serviceLocator(),
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

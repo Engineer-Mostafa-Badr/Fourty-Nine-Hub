@@ -8,6 +8,7 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -67,7 +68,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                 children: [
                   const WalletCardWidget(
                     balance: 400,
-                    type: WalletTypes.normal,
+                    type: WalletTypes.mainWallet,
 
                     // target: 1002,
                   ),
