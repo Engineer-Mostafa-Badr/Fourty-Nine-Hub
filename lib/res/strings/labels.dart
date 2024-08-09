@@ -152,4 +152,6 @@ abstract class Labels {
   static const cantLoadData = 'Can\'t load data';
   static const serviceProvider = 'Service Provider';
   static const user = 'User';
+  static const specialities = 'Specialities';
+  static const medicalServices = 'Medical Services';
 }

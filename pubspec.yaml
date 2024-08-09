@@ -116,9 +116,9 @@ flutter:
     - assets/images/
     # - assets/json/
     - assets/images/reactions/
-    - assets/images/lion.png
-    - assets/images/butterfly.png
-    - assets/images/salary.png
+    # - assets/images/lion.png
+    # - assets/images/butterfly.png
+    # - assets/images/salary.png
     - assets/images/
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
