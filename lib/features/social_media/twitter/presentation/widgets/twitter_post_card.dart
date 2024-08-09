@@ -12,7 +12,6 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/ReadMoreLabel.dart';
@@ -69,8 +68,6 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
   @override
   Widget build(BuildContext context) {
     bool isShared = widget.post.isShared!;
-    final user = context.read<UserCubit>().state.data;
-    bool isMyPost = widget.post.user.id==user!.id;
     return Container(
       decoration: const BoxDecoration(color: Colors.white),
       child: Container(
@@ -247,6 +244,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
         const Sizer(),
         if ((widget.post.images?.isNotEmpty ?? false))
           SizedBox(
+            height: MediaQuery.of(context).size.height*0.42,
             child: GridView.builder(
                 padding: const EdgeInsets.all(10),
                 shrinkWrap: true,
@@ -348,7 +346,6 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
   //done for twitter
   Widget _buildAccountRow({
     required BuildContext context,
-    bool showOptions = true,
     required String date,
     required TwitterPostEntity post,
   }) {

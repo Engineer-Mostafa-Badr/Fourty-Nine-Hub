@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
@@ -16,110 +14,89 @@ class FacebookAdvertisementCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           border: Border.all(), borderRadius: BorderRadius.circular(15)),
       child: Column(
         children: [
-          GridView.builder(
-              padding: const EdgeInsets.all(10),
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: post.images!.length == 1 ? 1 : 2),
-              itemCount: post.images!.length < 4 ? post.images!.length : 4,
-              itemBuilder: (context, index) => InkWell(
-                    onTap: () {
-                      if (index != 3 ||
-                          (index == 3 && post.images!.length == 4)) {
-                        showDialog(
-                            context: context,
-                            builder: (context) => ImageDetailsScreen(
-                                  image: post.images![index],
-                                  fromPost: true,
-                                  onRemoveImage: () {
-                                    // controller
-                                    //     .removePhoto(post.images![index]);
-                                    context.pop();
+          SizedBox(
+            height: MediaQuery.of(context).size.height*0.42,
+            child: GridView.builder(
+                padding: const EdgeInsets.all(10),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: post.images!.length == 1 ? 1 : 2),
+                itemCount: post.images!.length < 4 ? post.images!.length : 4,
+                itemBuilder: (context, index) => InkWell(
+                      onTap: () {
+                        if (index != 3 ||
+                            (index == 3 && post.images!.length == 4)) {
+                          showDialog(
+                              context: context,
+                              builder: (context) => ImageDetailsScreen(
+                                    image: post.images![index],
+                                    fromPost: true,
+                                    onRemoveImage: () {
+                                      // controller
+                                      //     .removePhoto(post.images![index]);
+                                      context.pop();
+                                    },
+                                  ));
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return ShowPostsImages(
+                                  images: post.images ?? [],
+                                  onRemoveImage: (UploadFileEntity image) {
+                                    // controller.removePhoto(image);
                                   },
-                                ));
-                      } else {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return ShowPostsImages(
-                                images: post.images ?? [],
-                                onRemoveImage: (UploadFileEntity image) {
-                                  // controller.removePhoto(image);
-                                },
-                              );
-                            });
-                      }
-                    },
-                    child: Stack(
-                      children: [
-                        Stack(
-                          children: [
+                                );
+                              });
+                        }
+                      },
+                      child: Stack(
+                        children: [
+                          Container(
+                            margin: const EdgeInsetsDirectional.only(
+                                end: 10, bottom: 10),
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(15),
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: NetworkImage(
+                                  post.images?[index] ?? '',
+                                ),
+                              ),
+                            ),
+                          ),
+                          if (index == 3 && post.images!.length > 4)
                             Container(
                               margin: const EdgeInsetsDirectional.only(
                                   end: 10, bottom: 10),
-                              padding: const EdgeInsets.all(10),
+                              // padding: const EdgeInsets.all(10),
+                              alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
-                                image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: NetworkImage(
-                                    post.images?[index] ?? '',
+                                color: Colors.black.withOpacity(0.5),
+                              ),
+                              child: Center(
+                                child: Label(
+                                  text: "+${post.images!.length - 4}",
+                                  style: Styles.headerText(
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
                             ),
-                            if (index == 3 && post.images!.length > 4)
-                              Container(
-                                margin: const EdgeInsetsDirectional.only(
-                                    end: 10, bottom: 10),
-                                // padding: const EdgeInsets.all(10),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Colors.black.withOpacity(0.5),
-                                ),
-                                child: Center(
-                                  child: Label(
-                                    text: "+${post.images!.length - 4}",
-                                    style: Styles.headerText(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                        // if (index == 0 && post.images!.length == 1)
-                        //   PositionedDirectional(
-                        //     end: 15,
-                        //     top: 5,
-                        //     child: InkWell(
-                        //       onTap: () {
-                        //         // controller.removePhoto(post.images?[index]);
-                        //       },
-                        //       child: Container(
-                        //           height: 30,
-                        //           width: 30,
-                        //           alignment: Alignment.center,
-                        //           padding: const EdgeInsets.all(5),
-                        //           decoration: const BoxDecoration(
-                        //               color: Colors.white, shape: BoxShape.circle),
-                        //           child: const Icon(
-                        //             Icons.close,
-                        //             color: Colors.red,
-                        //           )),
-                        //     ),
-                        //   ),
-                      ],
-                    ),
-                  )),
+                        ],
+                      ),
+                    )),
+          ),
           const SizedBox(
             height: 10,
           ),
