@@ -160,7 +160,7 @@ class ChatCard extends StatelessWidget {
                 Column(
                   children: [
                     Label(
-                        text: '5:57 PM',
+                        text: '${chatItemModel?.formattedUpdatedAt}',
                         style: Styles.mediumText(color: Colors.grey)),
                     Row(
                       children: [

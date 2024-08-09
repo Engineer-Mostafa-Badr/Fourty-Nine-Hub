@@ -1565,50 +1565,57 @@ class TinderView extends StatelessWidget {
   }
 
   Widget _buildPersonInfo(BuildContext context, UserData user) {
-    return Builder(builder: (context) {
-      context
-          .read<TinderViewCubit>()
-          .checkUserNearby(cardUserId: user.user?.sId ?? '');
-      log(user.user!.sId ?? '');
+    return BlocBuilder<TinderViewCubit, TinderViewState>(
+      builder: (context, state) {
+        return Builder(builder: (context) {
+          context
+              .read<TinderViewCubit>()
+              .checkUserNearby(cardUserId: user.user?.sId ?? '');
+          log(user.user!.sId ?? '');
 
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BlocBuilder<TinderViewCubit, TinderViewState>(
-                  builder: (context, state) {
-                    return state.isUserNearby
-                        ? const BadgedLabel(
-                            color: AppColors.SECONDARY_COLOR, label: 'Nearby')
-                        : const BadgedLabel(
-                            color: AppColors.SECONDARY_COLOR,
-                            label: 'is not Nearby');
-                  },
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BlocBuilder<TinderViewCubit, TinderViewState>(
+                      builder: (context, state) {
+                        return state.isUserNearby
+                            ? const BadgedLabel(
+                                color: AppColors.SECONDARY_COLOR,
+                                label: 'Nearby')
+                            : const BadgedLabel(
+                                color: AppColors.SECONDARY_COLOR,
+                                label: 'is not Nearby');
+                      },
+                    ),
+                    ListTile(
+                      onTap: null,
+                      selected: false,
+                      enabled: false,
+                      title: Label(
+                        text: capitalizeAndSplit(
+                            "${user.user!.firstName} ${user.user!.lastName}" ??
+                                ''),
+                        style: Styles.headerText(
+                            color: Colors.black, fontSize: 26),
+                      ),
+                      subtitle: Label(
+                        text: 'last seen 3 minute ago',
+                        style: Styles.mediumText(color: Colors.black),
+                      ),
+                    ),
+                  ],
                 ),
-                ListTile(
-                  onTap: null,
-                  selected: false,
-                  enabled: false,
-                  title: Label(
-                    text: capitalizeAndSplit(
-                        "${user.user!.firstName} ${user.user!.lastName}" ?? ''),
-                    style: Styles.headerText(color: Colors.black, fontSize: 26),
-                  ),
-                  subtitle: Label(
-                    text: 'last seen 3 minute ago',
-                    style: Styles.mediumText(color: Colors.black),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      );
-    });
+              ),
+            ],
+          );
+        });
+      },
+    );
   }
 
   Widget _buildActions(BuildContext context, UserData user) {

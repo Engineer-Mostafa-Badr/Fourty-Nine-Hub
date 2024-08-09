@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/last_seen_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/send_gift_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_subcategory_model.dart';
@@ -105,16 +106,17 @@ class TinderViewState {
   }
 
   TinderViewState updated({
-    List<UserData>? userData,
-    List<SubCategoryData>? subCategoryData,
-    List<GiftData>? gifts, // Add gifts parameter
-    Offset? position,
-    SendGiftErrorData? giftErrorData,
-    Offset? startDragOffset,
-    double? rotation,
-    int? currentIndex,
-    int? currentStoryIndex,
-    bool? isUserNearby,
+     LastSeenModel? lastSeenModel,
+     List<UserData>? userData,
+     List<SubCategoryData>? subCategoryData,
+     List<GiftData>? gifts, // Add gifts parameter
+     Offset? position,
+     SendGiftErrorData? giftErrorData,
+     Offset? startDragOffset,
+     double? rotation,
+     int? currentIndex,
+     int? currentStoryIndex,
+     bool? isUserNearby,
   }) {
     return TinderViewState(
       userData: userData ?? this.userData,
