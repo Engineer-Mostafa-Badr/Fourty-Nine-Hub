@@ -9,7 +9,7 @@ class ButtonAvailability {
     required String subcategoryId,
   }) async {
     try {
-      final userId = serviceLocator<UserCubit>().state.data;
+      final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
       final response = await serviceLocator<ApiConsumer>()
           .post(EndPoints.buttonAvailable, data: {
         "clientId": userId,

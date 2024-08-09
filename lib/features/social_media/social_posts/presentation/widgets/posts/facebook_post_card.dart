@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_reaction_button/flutter_reaction_button.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/ReadMoreLabel.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -15,6 +14,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_tweet_card.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -62,6 +62,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   bool isLiked = false;
   bool hide = false;
   Reaction<String>? _selectedReaction;
+
   @override
   void initState() {
     pageController.addListener(() {
@@ -135,109 +136,114 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       );
     } else {
       return BlocProvider<SocialPostsCubit>(
-        create: (_)=>serviceLocator(),
-        child: BlocConsumer<SocialPostsCubit,SocialPostsState>(
-          listener: (context,state){
-            if (state.status == StateStatus.error) {
-              showErrorMessage(
+        create: (_) => serviceLocator(),
+        child: BlocConsumer<SocialPostsCubit, SocialPostsState>(
+            listener: (context, state) {
+          if (state.status == StateStatus.error) {
+            showErrorMessage(
+              context,
+              getFailureMessage(
+                state.failure ?? const UnknownFailure(),
                 context,
-                getFailureMessage(
-                  state.failure ?? const UnknownFailure(),
-                  context,
-                ),
-              );
-            }
-          },
-          builder: (context,state) {
-            final controller = context.read<SocialPostsCubit>();
-            if(widget.post.type=='advertisement'){
-              return FacebookAdvertisementCard(post: widget.post,);
-            }else if(widget.post.type=='twitter_post'){
-              return FacebookTweetCard(post: widget.post,);
-            }else{
-              return  InkWell(
-                onTap: widget.from == 'posts'
-                    ? () => widget.showPostDetails(widget.post)
-                    : null,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if(widget.post.type!='advertisement')_buildAccountHeader(context: context, post: widget.post),
-                    _buildContentWidget(post: widget.post),
-                    Row(
+              ),
+            );
+          }
+        }, builder: (context, state) {
+          final controller = context.read<SocialPostsCubit>();
+          if (widget.post.type == 'advertisement') {
+            return FacebookAdvertisementCard(
+              post: widget.post,
+            );
+          } else if (widget.post.type == 'twitter_post') {
+            return FacebookTweetCard(
+              post: widget.post,
+            );
+          } else {
+            return InkWell(
+              onTap: widget.from == 'posts'
+                  ? () => widget.showPostDetails(widget.post)
+                  : null,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (widget.post.type != 'advertisement')
+                    _buildAccountHeader(context: context, post: widget.post),
+                  _buildContentWidget(post: widget.post),
+                  Row(
+                    children: [
+                      if (widget.post.likesCount != 0)
+                        _buildCounterWidget(
+                            value: widget.post.likesCount!, image: Assets.like),
+                      if (widget.post.loveCount != 0)
+                        _buildCounterWidget(
+                            value: widget.post.loveCount!, image: Assets.heart),
+                      if (widget.post.wowCount != 0)
+                        _buildCounterWidget(
+                            value: widget.post.wowCount!, image: Assets.wow),
+                      if (widget.post.sadCount != 0)
+                        _buildCounterWidget(
+                            value: widget.post.sadCount!, image: Assets.sad),
+                      if (widget.post.angryCount != 0)
+                        _buildCounterWidget(
+                            value: widget.post.angryCount!,
+                            image: Assets.angry),
+                      const Spacer(),
+                      InkWell(
+                        onTap: () => widget.showPostComments(widget.post.id),
+                        child: Row(
+                          children: [
+                            Label(
+                              text: widget.post.commentsCount.toString(),
+                              style: Styles.mediumText(),
+                            ),
+                            const Sizer(
+                              width: 5,
+                            ),
+                            Label(
+                              text: 'Comments',
+                              style: Styles.mediumText(),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Divider(
+                    color: AppColors.LIGHT_GRAY_COLOR,
+                  ),
+                  SizedBox(
+                    height: kToolbarHeight * .6,
+                    child: Row(
                       children: [
-                        if (widget.post.likesCount != 0)
-                          _buildCounterWidget(
-                              value: widget.post.likesCount!, image: Assets.like),
-                        if (widget.post.loveCount != 0)
-                          _buildCounterWidget(
-                              value: widget.post.loveCount!, image: Assets.heart),
-                        if (widget.post.wowCount != 0)
-                          _buildCounterWidget(
-                              value: widget.post.wowCount!, image: Assets.wow),
-                        if (widget.post.sadCount != 0)
-                          _buildCounterWidget(
-                              value: widget.post.sadCount!, image: Assets.sad),
-                        if (widget.post.angryCount != 0)
-                          _buildCounterWidget(
-                              value: widget.post.angryCount!, image: Assets.angry),
-                        const Spacer(),
-                        InkWell(
-                          onTap: () => widget.showPostComments(widget.post.id),
-                          child: Row(
-                            children: [
-                              Label(
-                                text: widget.post.commentsCount.toString(),
-                                style: Styles.mediumText(),
-                              ),
-                              const Sizer(
-                                width: 5,
-                              ),
-                              Label(
-                                text: 'Comments',
-                                style: Styles.mediumText(),
-                              )
-                            ],
+                        Expanded(
+                            child: BuildReactionsButtons(
+                          post: widget.post,
+                          from: 'posts',
+                        )),
+                        if (widget.from == 'posts')
+                          Expanded(
+                            child: _buildReactionPlaceHolder(
+                                icon: Icons.chat_bubble_outline_rounded,
+                                label: 'Comment',
+                                onTap: () =>
+                                    widget.showPostComments(widget.post.id)),
                           ),
+                        Expanded(
+                          child: _buildReactionPlaceHolder(
+                              icon: Icons.chat_rounded,
+                              label: 'Share',
+                              onTap: () {
+                                controller.onShare(postId: widget.post.id);
+                              }),
                         ),
                       ],
                     ),
-                    const Divider(
-                      color: AppColors.LIGHT_GRAY_COLOR,
-                    ),
-                    SizedBox(
-                      height: kToolbarHeight * .6,
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: BuildReactionsButtons(
-                                post: widget.post,
-                                from: 'posts',
-                              )),
-                          if (widget.from == 'posts')
-                            Expanded(
-                              child: _buildReactionPlaceHolder(
-                                  icon: Icons.chat_bubble_outline_rounded,
-                                  label: 'Comment',
-                                  onTap: () => widget.showPostComments(widget.post.id)),
-                            ),
-                          Expanded(
-                            child: _buildReactionPlaceHolder(
-                                icon: Icons.chat_rounded,
-                                label: 'Share',
-                                onTap: () {
-                                  controller.onShare(postId: widget.post.id);
-                                }),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
+                  ),
+                ],
+              ),
+            );
           }
-        ),
+        }),
       );
     }
   }
@@ -265,7 +271,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
 
   Widget _buildPostOptions({required bool fromDetails}) {
     return SizedBox(
-      height: widget.isMyPost?150:80,
+      height: widget.isMyPost ? 150 : 80,
       child: Column(
         children: [
           if (widget.isMyPost)
@@ -276,20 +282,20 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     'Your post will be deleted, and you cannot get it again',
                 onTap: () {
                   widget.deletePost(widget.post.id);
-                  if(fromDetails==true){
+                  if (fromDetails == true) {
                     context.pop();
                   }
                 }),
-            listTile(
-                icon: Icons.visibility_off,
-                title: 'Hide Post',
-                subTitle: 'Your post will be hidden, you can get it again',
-                onTap: () {
-                  widget.hidePost(widget.post.id);
-                  if(fromDetails==true){
-                    context.pop();
-                  }
-                }),
+          listTile(
+              icon: Icons.visibility_off,
+              title: 'Hide Post',
+              subTitle: 'Your post will be hidden, you can get it again',
+              onTap: () {
+                widget.hidePost(widget.post.id);
+                if (fromDetails == true) {
+                  context.pop();
+                }
+              }),
         ],
       ),
     );
@@ -372,10 +378,14 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         //       icon: const Icon(Icons.more_horiz)),
         if (showOptions)
           IconAppButton(
-              icon: Icons.clear,
-              onPressed: () {
-                bottomSheet(context: context, widget: _buildPostOptions(fromDetails: widget.from=='details'));
-              },),
+            icon: Icons.clear,
+            onPressed: () {
+              bottomSheet(
+                  context: context,
+                  widget:
+                      _buildPostOptions(fromDetails: widget.from == 'details'));
+            },
+          ),
       ],
     );
   }
@@ -395,137 +405,143 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 ? Color(int.parse(widget.post.backgroundColor!.substring(1),
                     radix: 16))
                 : Colors.white,
-      child: ReadMoreLabel(text: post.content??'',style: Styles.headerText(
-        color: Colors.black,
-        fontSize: 24
-      ),),
+            child: ReadMoreLabel(
+              text: post.content ?? '',
+              style: Styles.headerText(color: Colors.black, fontSize: 24),
+            ),
           )
         : Container(
             width: double.infinity,
             margin: const EdgeInsets.symmetric(vertical: 10),
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
             child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ReadMoreLabel(text: post.content??''),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      // if(widget.post.photo.isNotEmpty)Container(
-                      //   height: 200,
-                      //   width: double.infinity,
-                      //   decoration: BoxDecoration(
-                      //       boxShadow: [
-                      //         BoxShadow(
-                      //           color: Colors.black.withOpacity(0.05),
-                      //           spreadRadius: 12,
-                      //           blurRadius: 8,
-                      //         ),
-                      //       ],
-                      //       borderRadius: BorderRadius.circular(25),
-                      //       image: DecorationImage(
-                      //           image: NetworkImage(post.photo), fit: BoxFit.fill)),
-                      // ),
-                      if ((post.images?.isNotEmpty ?? false))
-                        SizedBox(
-                          // height: kToolbarHeight * 4,
-                          // child: PageView.builder(
-                          //     controller: pageController,
-                          //     scrollDirection: Axis.horizontal,
-                          //     itemCount: post.images?.length ?? 0,
-                          //     itemBuilder: (context, index) {
-                          //       return SocialImageViewer(
-                          //         image: post.images![index],
-                          //         index: index + 1,
-                          //         length: post.images!.length,
-                          //         onDoubleTap: () {
-                          //           isLiked = !isLiked;
-                          //           setState(() {});
-                          //         },
-                          //       );
-                          //     }),
-                          child: GridView.builder(
-                              padding: const EdgeInsets.all(10),
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: post.images!.length == 1 ? 1 : 2),
-                              itemCount:
-                              post.images!.length < 4 ? post.images!.length : 4,
-                              itemBuilder: (context, index) => InkWell(
-                                onTap: () {
-                                  if (index != 3 ||
-                                      (index == 3 && post.images!.length == 4)) {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) => ImageDetailsScreen(
-                                          image: post.images![index],
-                                          fromPost: true,
-                                          onRemoveImage: () {
-                                            // controller
-                                            //     .removePhoto(post.images![index]);
-                                            context.pop();
-                                          },
-                                        ));
-                                  } else {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return ShowPostsImages(
-                                          images: post.images??[],
-                                          onRemoveImage: (UploadFileEntity image) {
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ReadMoreLabel(text: post.content ?? ''),
+                const SizedBox(
+                  height: 10,
+                ),
+                // if(widget.post.photo.isNotEmpty)Container(
+                //   height: 200,
+                //   width: double.infinity,
+                //   decoration: BoxDecoration(
+                //       boxShadow: [
+                //         BoxShadow(
+                //           color: Colors.black.withOpacity(0.05),
+                //           spreadRadius: 12,
+                //           blurRadius: 8,
+                //         ),
+                //       ],
+                //       borderRadius: BorderRadius.circular(25),
+                //       image: DecorationImage(
+                //           image: NetworkImage(post.photo), fit: BoxFit.fill)),
+                // ),
+                if ((post.images?.isNotEmpty ?? false))
+                  SizedBox(
+                    // height: kToolbarHeight * 4,
+                    // child: PageView.builder(
+                    //     controller: pageController,
+                    //     scrollDirection: Axis.horizontal,
+                    //     itemCount: post.images?.length ?? 0,
+                    //     itemBuilder: (context, index) {
+                    //       return SocialImageViewer(
+                    //         image: post.images![index],
+                    //         index: index + 1,
+                    //         length: post.images!.length,
+                    //         onDoubleTap: () {
+                    //           isLiked = !isLiked;
+                    //           setState(() {});
+                    //         },
+                    //       );
+                    //     }),
+                    child: GridView.builder(
+                        padding: const EdgeInsets.all(10),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: post.images!.length == 1 ? 1 : 2),
+                        itemCount:
+                            post.images!.length < 4 ? post.images!.length : 4,
+                        itemBuilder: (context, index) => InkWell(
+                              onTap: () {
+                                if (index != 3 ||
+                                    (index == 3 && post.images!.length == 4)) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => ImageDetailsScreen(
+                                            image: post.images![index],
+                                            fromPost: true,
+                                            onRemoveImage: () {
+                                              // controller
+                                              //     .removePhoto(post.images![index]);
+                                              context.pop();
+                                            },
+                                          ));
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return ShowPostsImages(
+                                          images: post.images ?? [],
+                                          onRemoveImage:
+                                              (UploadFileEntity image) {
                                             // controller.removePhoto(image);
                                           },
                                         );
-                                        }
-                                    );
-                                  }
-                                },
-                                child: Stack(
-                                  children: [
-                                    Stack(
-                                      children: [
+                                      });
+                                }
+                              },
+                              child: Stack(
+                                children: [
+                                  Stack(
+                                    children: [
+                                      Container(
+                                        margin:
+                                            const EdgeInsetsDirectional.only(
+                                                end: 10, bottom: 10),
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          image: DecorationImage(
+                                            fit: BoxFit.fill,
+                                            image: NetworkImage(
+                                              post.images?[index] ?? '',
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      if (index == 3 && post.images!.length > 4)
                                         Container(
-                                          margin: const EdgeInsetsDirectional.only(
-                                              end: 10, bottom: 10),
-                                          padding: const EdgeInsets.all(10),
+                                          margin:
+                                              const EdgeInsetsDirectional.only(
+                                                  end: 10, bottom: 10),
+                                          // padding: const EdgeInsets.all(10),
+                                          alignment: Alignment.center,
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(15),
-                                            image: DecorationImage(
-                                              fit: BoxFit.fill,
-                                              image: NetworkImage(
-                                                post.images?[index]??'',
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            color:
+                                                Colors.black.withOpacity(0.5),
+                                          ),
+                                          child: Center(
+                                            child: Label(
+                                              text:
+                                                  "+${post.images!.length - 4}",
+                                              style: Styles.headerText(
+                                                color: Colors.white,
                                               ),
                                             ),
                                           ),
                                         ),
-                                        if (index == 3 && post.images!.length > 4)
-                                          Container(
-                                            margin: const EdgeInsetsDirectional.only(
-                                                end: 10, bottom: 10),
-                                            // padding: const EdgeInsets.all(10),
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(15),
-                                              color: Colors.black.withOpacity(0.5),
-                                            ),
-                                            child: Center(
-                                              child: Label(
-                                                text: "+${post.images!.length - 4}",
-                                                style: Styles.headerText(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )),
-                        ),
-                    ],
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )),
                   ),
+              ],
+            ),
           );
   }
 
@@ -562,6 +578,21 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         ),
       );
     }
+  }
+
+  Widget _buildReactionItem({
+    required Reactions item,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          item.image(),
+          height: 20,
+        ),
+        // Label(text: item.label()),
+      ],
+    );
   }
 
   Widget _buildReactionWidget({

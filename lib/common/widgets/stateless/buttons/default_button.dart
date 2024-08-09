@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/utils/type_defs.dart';
 import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/theme.dart';
 
 class DefaultButton extends StatefulWidget {
   const DefaultButton({
@@ -16,7 +15,7 @@ class DefaultButton extends StatefulWidget {
     this.labelStyle = const TextStyle(
       fontSize: 16.0,
       color: Colors.white,
-      height: textHeight,
+      height: 2,
       fontWeight: FontWeight.normal,
     ),
     this.alignment = Alignment.center,

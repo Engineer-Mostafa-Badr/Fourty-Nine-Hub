@@ -2,6 +2,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/liveview/gifts/simple_gifts_sheet.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/pk_widgets/configs.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
@@ -9,10 +11,10 @@ import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 // import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_bottom_navigator.dart';
 
-import '../widgets/liveview/gifts/gift_manager.dart';
-import '../widgets/liveview/gifts/gift_sheet.dart';
-import '../widgets/liveview/gifts/mp4_player_widget.dart';
-import '../widgets/liveview/gifts/zego_gift_item.dart';
+import '../widgets/liveview/super_gifts/gift_manager.dart';
+import '../widgets/liveview/super_gifts/gift_sheet.dart';
+import '../widgets/liveview/super_gifts/mp4_player_widget.dart';
+import '../widgets/liveview/super_gifts/zego_gift_item.dart';
 import '../widgets/pk_widgets/events.dart';
 import '../widgets/pk_widgets/mute_widget.dart';
 import '../widgets/pk_widgets/surfuce.dart';
@@ -75,21 +77,40 @@ class _LiveStreamViewState extends State<LiveStreamView> {
     final hostConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host(
       plugins: [ZegoUIKitSignalingPlugin()],
     )
+      ..layout = ZegoLayout.gallery()
+      ..pkBattle = pkConfig();
+
+    final audienceConfig = ZegoUIKitPrebuiltLiveStreamingConfig.audience(
+      plugins: [ZegoUIKitSignalingPlugin()],
+    )
+      ..bottomMenuBar.coHostExtendButtons = [
+        giftButton,
+        superGiftButton,
+      ]
+      ..bottomMenuBar.hostButtons = []
+      ..bottomMenuBar.audienceButtons = []
+      ..bottomMenuBar.coHostButtons = []
+      ..bottomMenuBar.audienceExtendButtons = [
+        giftButton,
+        superGiftButton,
+      ]
+      ..bottomMenuBar.audienceButtons = [
+        ZegoLiveStreamingMenuBarButtonName.expanding,
+        ZegoLiveStreamingMenuBarButtonName.coHostControlButton,
+        // ZegoLiveStreamingMenuBarButtonName.soundEffectButton,
+      ]
+      ..inRoomMessage = ZegoLiveStreamingInRoomMessageConfig(
+          resendIcon: const Icon(
+        Icons.reply,
+        color: Colors.white,
+      ))
       ..foreground = PKV2Surface(
         requestIDNotifier: requestIDNotifier,
         liveStateNotifier: liveStateNotifier,
         requestingHostsMapRequestIDNotifier:
             requestingHostsMapRequestIDNotifier,
       )
-      ..pkBattle = pkConfig();
-
-    final audienceConfig = ZegoUIKitPrebuiltLiveStreamingConfig.audience(
-      plugins: [ZegoUIKitSignalingPlugin()],
-    )
-      ..bottomMenuBar.coHostExtendButtons = [giftButton]
-      ..bottomMenuBar.hostButtons = []
-      ..bottomMenuBar.audienceButtons = []
-      ..bottomMenuBar.audienceExtendButtons = [giftButton]
+      ..layout = ZegoLayout.gallery()
       ..audioVideoView.foregroundBuilder = foregroundBuilder
       ..pkBattle = pkConfig();
 
@@ -323,14 +344,26 @@ class _LiveStreamViewState extends State<LiveStreamView> {
 
   ZegoLiveStreamingMenuBarExtendButton get giftButton =>
       ZegoLiveStreamingMenuBarExtendButton(
-        index: 0,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(shape: const CircleBorder()),
-          onPressed: () {
-            showGiftListSheet(context);
-          },
-          child: const Icon(Icons.blender),
-        ),
+        index: 0, //index of button
+        child: InkWell(
+            onTap: () {
+              //send a message and some interaction
+              showSimpleGiftBottomSheet(context,userId);
+            },
+            child: SvgPicture.asset(
+              'assets/images/gift.svg',
+              height: 50,
+            )),
+      );
+  ZegoLiveStreamingMenuBarExtendButton get superGiftButton =>
+      ZegoLiveStreamingMenuBarExtendButton(
+        index: 1,
+        child: InkWell(
+            onTap: () => showGiftListSheet(context),
+            child: SvgPicture.asset(
+              'assets/images/super_gifts.svg',
+              height: 40,
+            )),
       );
 
   void onGiftReceived() {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/enums/doctor_services.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -18,13 +18,11 @@ class SubcategoryListTitle extends StatelessWidget {
       ),
       title: Text(specialty.name),
       onTap: () {
-        serviceLocator<HealthSharedData>().doctorSearchParams.subCategoryId =
-            specialty.id;
-        if (serviceLocator<HealthSharedData>()
-                .doctorSearchParams
-                .doctorService ==
-            DoctorServices.CALL) {
-          context.push(Routes.VISITADOCTORLISTBYCALL);
+        serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
+            specialty;
+        if (serviceLocator<HealthSharedData>().doctorSearchParams.bookingType ==
+            BookingTypes.call) {
+          context.push(Routes.VISITADOCTORLIST);
         } else {
           context.push(Routes.FILTERDOCTORGOVERNORATE);
         }

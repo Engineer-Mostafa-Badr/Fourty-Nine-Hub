@@ -18,18 +18,37 @@ class AdCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => context.push(Routes.ADdetails, extra: item.id),
-      child: SizedBox(
+      child: Container(
         width: kToolbarHeight * 2.5,
-        // decoration: BoxDecoration(color: Colors.red),
+        height: 250,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: AppColors.BACKGROUND_COLOR, width: 2),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-                child: SquareImage(
-                    width: double.infinity,
-                    radius: 10,
-                    fit: BoxFit.cover,
-                    source: NetworkImage(item.images.first))),
+                child: SizedBox(
+              width: double.infinity,
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: SquareImage(
+                      fit: BoxFit.fitWidth,
+                      radius: 10,
+                      url: item.images.first,
+                    ),
+                  ),
+                  Positioned(
+                    top: 5,
+                    right: 5,
+                    child: _buildTag(),
+                  )
+                ],
+              ),
+            )),
             Row(
               children: [
                 Expanded(
@@ -70,7 +89,7 @@ class AdCard extends StatelessWidget {
                             )))
                         .toList())),
             Label(
-              text: item.address?.street??'',
+              text: item.address?.street ?? '',
               style: Styles.mediumText(color: Colors.grey),
               maxLines: 1,
             ),
@@ -83,5 +102,12 @@ class AdCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildTag() {
+    // super premium
+    return const Icon(Icons.workspace_premium_outlined, size: 20,color: AppColors.SECONDARY_COLOR,);
+    // premium
+    // regular
   }
 }

@@ -8,6 +8,7 @@ import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
+import '../../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/comment_entity.dart';

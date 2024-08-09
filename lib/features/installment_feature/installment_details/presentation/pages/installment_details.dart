@@ -11,9 +11,9 @@ import '../../../../../common/functions/helper/launch_url.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 
-import '../../../../../common/widgets/stateless/dynamic/CarouselSlider.dart';
+import '../../../../../common/widgets/stateless/dynamic/carousel_slider.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
-import '../../../../../common/widgets/stateless/labels/ReadMoreLabel.dart';
+import '../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';

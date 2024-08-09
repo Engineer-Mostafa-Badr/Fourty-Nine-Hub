@@ -18,15 +18,16 @@ class MainCategoryModel extends MainCategoryEntity {
 
   factory MainCategoryModel.fromJson(Map<String, dynamic> json) =>
       MainCategoryModel(
-        id: json['_id'],
-        name: getLang()=='ar'?json['nameAr']:json['nameEn'],
-        image: json['image']??UIConst.imagePlaceHolder,
-        banner: json['banner']??'',
-        cover: json['cover']??'',
-        isFavorite: json['is_favorite']??false,
-        total: json['total'] ?? 0,
-        subcategories: 
-        json['subCategories']==null?[]:
-        (json['subCategories'] as List).map((e) => SubCategoryModel.fromJson(e)).toList()
-      );
+          id: json['_id'],
+          name: getLang() == 'ar' ? json['nameAr'] : json['nameEn'],
+          image: json['image'] ?? UIConst.imagePlaceHolder,
+          banner: json['banner'] ?? '',
+          cover: json['cover'] ?? '',
+          isFavorite: json['is_favorite'] ?? false,
+          total: json['total'] ?? 0,
+          subcategories: json['subCategories'] == null
+              ? []
+              : (json['subCategories'] as List)
+                  .map((e) => SubCategoryModel.fromJson(e))
+                  .toList());
 }

@@ -62,7 +62,7 @@ class MeetingRoom extends StatelessWidget {
           ];
     var zegoLiveStreamingTopMenuBarAudienceConfig =
         ZegoLiveStreamingTopMenuBarConfig(buttons: [
-      ZegoLiveStreamingMenuBarButtonName.minimizingButton,
+      // ZegoLiveStreamingMenuBarButtonName.minimizingButton,
 
       // ZegoLiveStreamingMenuBarButtonName.beautyEffectButton
     ]);
@@ -140,11 +140,19 @@ class MeetingRoom extends StatelessWidget {
             ),
             onPressed: () async {
               await endRoom(cubit);
+              await kickAllUsersOut();
               if (context.mounted) {
                 context.pop();
                 context.pop();
               }
             }));
+  }
+
+  Future<void> kickAllUsersOut() async {
+    final users = ZegoUIKit().getAllUsers();
+    for (var user in users) {
+      await ZegoUIKit().removeUserFromRoom([user.id]);
+    }
   }
 
   Future<void> endRoom(MeetingCubit cubit) async => cubit.endRoom(liveID);

@@ -9,7 +9,7 @@ import 'package:fourtyninehub/features/mazadat_feature/auction_details/presentat
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
-import '../../../../../common/widgets/stateless/dynamic/CarouselSlider.dart';
+import '../../../../../common/widgets/stateless/dynamic/carousel_slider.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';

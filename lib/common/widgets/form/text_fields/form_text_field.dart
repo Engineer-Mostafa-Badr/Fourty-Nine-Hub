@@ -1,4 +1,3 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -80,14 +79,16 @@ class _FormTextFieldState extends State<FormTextField> {
             },
             validator: (value) {
               validate = true;
-
+              String pattern =
+                  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+              RegExp regex = RegExp(pattern);
               setState(() {});
               if ((value == null || value.isEmpty) &&
                   (widget.required ?? true)) {
                 return 'Required';
               } else if (widget.extraValidation ?? false) {
                 return widget.extraValidationMessage ?? '';
-              } else if (!EmailValidator.validate(value!.trim()) &&
+              } else if (!regex.hasMatch(value!.trim()) &&
                   (widget.isEmail ?? false)) {
                 return 'Enter correct email format';
               } else {

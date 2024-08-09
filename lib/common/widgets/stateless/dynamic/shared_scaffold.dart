@@ -28,6 +28,7 @@ class SharedScaffold extends StatelessWidget {
       bottomNavigationBar: BottomNavigator(
         mainCategory: mainCategoryId,
         index: 2,
+        
       ),
       floatingActionButton: FloatingButton(
         changeView: mainCategoryId,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/functions/global/capitalize_first_letter_of_words.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 
@@ -382,20 +383,27 @@ class DrawerWidget extends StatelessWidget {
             width: kToolbarHeight * 1.5,
             child: Stack(
               children: [
-                Positioned.fill(
+                const Positioned.fill(
                   child: CircleAvatar(
-                    backgroundColor: Colors.white,
+                    backgroundColor: Colors.transparent,
                     backgroundImage: NetworkImage(
-                      user?.profilePicture ?? UIConst.profilePlaceHolder,
+                        'https://st3.depositphotos.com/9998432/13335/v/450/depositphotos_133352010-stock-illustration-default-placeholder-man-and-woman.jpg'
+                      // user?.profilePicture ?? UIConst.profilePlaceHolder,
                     ),
                   ),
                 ),
-                const Positioned(
+                 Positioned(
                   bottom: 0,
                   right: 0,
-                  child: Icon(
-                    Icons.verified,
-                    color: AppColors.PRIMARY_COLOR,
+                  child: InkWell(
+                    onTap: (){
+                      //change the image of user profile
+                    },
+                    child: const Icon(
+                      Icons.camera_enhance_outlined,
+                      color: AppColors.PRIMARY_COLOR,
+                      size: 20,
+                    ),
                   ),
                 )
               ],
@@ -407,7 +415,7 @@ class DrawerWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Label(
-                text: user?.fullName ?? '',
+                text: user?.fullName.capitalizeByWord() ?? '',
                 style: Styles.mediumText(fontWeight: FontWeight.bold),
               ),
               Label(
@@ -416,7 +424,7 @@ class DrawerWidget extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  context.push(Routes.WALLET);
+                  context.push(Routes.WALLET,);
                 },
                 child: Row(
                   children: [
@@ -431,7 +439,7 @@ class DrawerWidget extends StatelessWidget {
                     ),
                     Expanded(
                       child: Label(
-                        text: '1000 L.E',
+                        text: '1000',
                         style: Styles.mediumText(
                             decoration: TextDecoration.underline),
                       ),

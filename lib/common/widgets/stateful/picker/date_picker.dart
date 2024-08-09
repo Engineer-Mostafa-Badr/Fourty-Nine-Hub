@@ -4,13 +4,13 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class DatePickerWidget extends StatefulWidget {
+class DatePickerField extends StatefulWidget {
   final String? title;
   final DateTime initialDate;
   final DateTime minDate;
   final DateTime maxDate;
   final Function(DateTime?) onDateSelected;
-  const DatePickerWidget(
+  const DatePickerField(
       {super.key,
       this.title,
       required this.initialDate,
@@ -19,10 +19,10 @@ class DatePickerWidget extends StatefulWidget {
       required this.onDateSelected});
 
   @override
-  State<DatePickerWidget> createState() => _DatePickerWidgetState();
+  State<DatePickerField> createState() => _DatePickerFieldState();
 }
 
-class _DatePickerWidgetState extends State<DatePickerWidget> {
+class _DatePickerFieldState extends State<DatePickerField> {
   DateTime? _selectedDate;
 
   @override

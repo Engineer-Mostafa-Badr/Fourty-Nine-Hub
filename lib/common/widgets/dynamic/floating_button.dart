@@ -17,32 +17,42 @@ class FloatingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: onTap != null
-          ? () => onTap!()
-          : () {
-              if (changeView == 1) {
-                context.push(Routes.SOCIAL);
-              } else if (changeView == 2) {
-                context.push(Routes.INSTAGRAM);
-              } else {
-                context.push(Routes.HOME);
-              }
-            },
-      backgroundColor: changeView == 2 ? AppColors.PRIMARY_COLOR : Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(200),
+    return Container(
+      decoration: const BoxDecoration(
+        // color: Colors.white,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2)
+        ],
       ),
-      child: icon != null
-          ? Icon(
-              icon,
-              color: AppColors.SECONDARY_COLOR,
-            )
-          : Image.asset(
-              Assets.logo,
-              height: 30,
-            ),
-      //params
+      child: FloatingActionButton(
+        onPressed: onTap != null
+            ? () => onTap!()
+            : () {
+                if (changeView == 1) {
+                  context.push(Routes.SOCIAL);
+                } else if (changeView == 2) {
+                  context.push(Routes.INSTAGRAM);
+                } else {
+                  context.push(Routes.HOME);
+                }
+              },
+        backgroundColor:
+            changeView == 2 ? AppColors.PRIMARY_COLOR : Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(200),
+        ),
+        child: icon != null
+            ? Icon(
+                icon,
+                color: AppColors.SECONDARY_COLOR,
+              )
+            : Image.asset(
+                Assets.logo,
+                height: 30,
+              ),
+        //params
+      ),
     );
   }
 }

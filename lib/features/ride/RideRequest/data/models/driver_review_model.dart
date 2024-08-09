@@ -5,11 +5,11 @@ class ReviewModel extends ReviewEntity {
   
   factory ReviewModel.fromJson(Map<String, dynamic> json) {
     return ReviewModel(
-      id: json['id'],
-      name: json['name'],
+      id: json['_id'],
+      name: json['name']??'no name',
       comment: json['comment'],
       rate: json['rate'],
-      createdAt: json['created_at'],
+      createdAt: json['createdAt'],
     );
   }
 }

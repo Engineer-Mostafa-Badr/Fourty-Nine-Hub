@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/ReadMoreLabel.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/room/replay_message_widget.dart';
@@ -123,18 +123,9 @@ class MessageCard extends StatelessWidget {
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
+
                           Label(
-                              text: '12',
-                              style: Styles.smallText(color: Colors.black)),
-                          const Sizer(),
-                          const Icon(
-                            FontAwesomeIcons.eye,
-                            color: Colors.black,
-                            size: 10,
-                          ),
-                          const Sizer(),
-                          Label(
-                              text: '3:16 PM',
+                              text: '${messageEntity.formattedCreatedAt}',
                               style: Styles.smallText(color: Colors.black)),
                           const Sizer(),
                           const Icon(

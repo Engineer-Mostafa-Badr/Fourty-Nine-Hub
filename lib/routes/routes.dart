@@ -1,3 +1,4 @@
+
 abstract class Routes {
   Routes._();
 
@@ -33,23 +34,34 @@ abstract class Routes {
   static const MAZADAT = '/Mazadat';
   static const VISITA = '/Visita';
   static const VISITAEMERGENCY = '/Visita/VisitaEmergency';
-  static const VISITADOCTORLIST = '/Visita/VisitaDoctorsList';
   static const CREATEDOCTOR = '/Visita/CreateDoctor';
   static const FILTERDOCTORSUBCATEGORY = '/Visita/FilterDoctorSubcategory';
-  static const FILTERDOCTORGOVERNORATE =
-      '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate';
-  static const FILTERDOCTORCITY =
-      '/Visita/FilterDoctorSubcategory/FilterDoctorCity';
-  static const FILTERDOCTORAREA =
+   static const FILTERDOCTORAREA =
       '/Visita/FilterDoctorSubcategory/FilterDoctorCity/FilterDoctorArea';
   static const VISITADOCTORLISTBYLOCATION =
       '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate/FilterDoctorCity/VisitaDoctorsList';
   static const VISITADOCTORLISTBYCALL =
       '/Visita/FilterDoctorSubcategory/VisitaDoctorsList';
+  // static const FILTERDOCTORGOVERNORATE = '/Visita/FilterDoctorGovernorate';
+  static const FILTERDOCTORGOVERNORATE =
+      '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate';
+
+  // static const FILTERDOCTORCITY = '/Visita/FilterDoctorCity';
+  static const FILTERDOCTORCITY =
+      '/Visita/FilterDoctorSubcategory/FilterDoctorCity';
+
+  static const VISITADOCTORLIST = '/Visita/VisitaDoctorsList';
+  static const EDITDOCTORPROFILE = '/Visita/EditDoctorProfile';
   static const VISITADOCTORDETAILS = '/Visita/DoctorDetails';
   static const VISITABOOKING = '/Visita/VisitaBooking';
   static const DOCTORDASHBOARD = '/Visita/DoctorDashboard';
-
+  static const EDITDOCTORDOCS = '/Visita/EditDoctorDocs';
+  static const EDITDOCTORPERSONALINFO = '/Visita/EditDoctorPersonalInfo';
+  static const DOCTORSTATISTICS = '/Visita/DoctorStatistics';
+  static const DOCTORTODAYAPPOINTMENTS = '/Visita/DoctorTodayAppointments';
+  static const DOCTORUNHANDLEDAPPOINTMENTS =
+      '/Visita/DoctorUnhandledAppointments';
+  static const ALLDOCTORRESERVATIONS = '/Visita/AllDoctorReservations';
   static const FOOD = '/Food';
 
   static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
@@ -104,6 +116,7 @@ abstract class Routes {
   static const NOTIFICATIONS = '/Account/Norifications';
   static const SETTINGS = '/Account/Settings';
   static const PAYMENT = '/Payment';
+  static const SUBSCRIPTIONPLANS = '/SubscriptionPlans';
 }
 
 abstract class Paths {
@@ -146,11 +159,18 @@ abstract class Paths {
   static const VISITADOCTORDETAILS = 'DoctorDetails';
   static const VISITABOOKING = 'VisitaBooking';
   static const CREATEDOCTOR = 'CreateDoctor';
+  static const EDITDOCTORPROFILE = 'EditDoctorProfile';
   static const FILTERDOCTORSUBCATEGORY = 'FilterDoctorSubcategory';
   static const FILTERDOCTORGOVERNORATE = 'FilterDoctorGovernorate';
+  static const EDITDOCTORDOCS = 'EditDoctorDocs';
   static const FILTERDOCTORCITY = 'FilterDoctorCity';
   static const FILTERDOCTORAREA = 'FilterDoctorArea';
   static const DOCTORDASHBOARD = 'DoctorDashboard';
+  static const EDITDOCTORPERSONALINFO = 'EditDoctorPersonalInfo';
+  static const DOCTORSTATISTICS = 'DoctorStatistics';
+  static const DOCTORTODAYAPPOINTMENTS = 'DoctorTodayAppointments';
+  static const DOCTORUNHANDLEDAPPOINTMENTS = 'DoctorUnhandledAppointments';
+  static const ALLDOCTORRESERVATIONS = 'AllDoctorReservations';
   static const FOOD = 'Food';
   static const CusineRestaurants = 'Cusine-Restaurants';
   static const RestaurantDashboard = 'RestaurantDashboard';
@@ -198,4 +218,5 @@ abstract class Paths {
   static const QURAAN = 'Quraan';
   static const AZKAAR = 'Azkaar';
   static const PAYMENT = 'Payment';
+  static const SUBSCRIPTIONPLANS = 'SubscriptionPlans';
 }

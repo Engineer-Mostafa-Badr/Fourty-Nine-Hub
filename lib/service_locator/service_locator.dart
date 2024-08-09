@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
@@ -24,7 +25,7 @@ import 'food_service_locator.dart';
 import 'fourty_nine_service_locator.dart';
 import 'health_service_locator.dart';
 import 'installment_service_locator.dart';
-import 'meeting_service_locatora.dart';
+import 'meeting_service_locator.dart';
 import 'social_service_locator.dart';
 import 'subscribe_service_locator.dart';
 
@@ -63,6 +64,7 @@ class DI {
           },
         ),
       )..interceptors.addAll([
+          SubscriptionInterceptor(),
           if (kDebugMode)
             PrettyDioLogger(
               requestHeader: true,
@@ -120,6 +122,6 @@ class DI {
     //meeting
     MeetingServiceLocator.execute(serviceLocator: serviceLocator);
     // subscribtions
-    SubscribtionServiceLocator.execute(serviceLocator: serviceLocator);
+    // SubscribtionServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

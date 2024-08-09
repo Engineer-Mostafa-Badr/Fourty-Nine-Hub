@@ -209,6 +209,7 @@ class BaseApiConsumer extends ApiConsumer {
           e.response?.data['message'] is String) {
         return ServerFailure(
           message: e.response?.data['message'] as String,
+          statusCode: e.response?.statusCode,
         );
       } else if (e.response?.data is Map && e.response?.data['error'] is Map) {
         final error = e.response?.data['error'] as Map;
@@ -222,12 +223,14 @@ class BaseApiConsumer extends ApiConsumer {
         }
         return ServerFailure(
           message: error['message'] as String,
+          statusCode: e.response?.statusCode,
           errors: errors,
         );
       } else if (e.response?.data is Map &&
           e.response?.data['data'] is String) {
         return ServerFailure(
           message: e.response?.data['data'] as String,
+          statusCode: e.response?.statusCode,
         );
       }
     }
