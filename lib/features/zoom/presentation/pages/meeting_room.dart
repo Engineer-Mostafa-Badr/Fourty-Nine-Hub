@@ -28,6 +28,9 @@ class MeetingRoom extends StatelessWidget {
                 ZegoShowFullscreenModeToggleButtonRules.alwaysShow,
             showNewScreenSharingViewInFullscreenMode: false,
           )
+          ..turnOnCameraWhenJoining = !ZegoUIKit()
+              .getCameraStateNotifier(ZegoUIKit().getLocalUser().id)
+              .value
           //  Set the layout to gallery mode. and configure the [showNewScreenSharingViewInFullscreenMode] and [showScreenSharingFullscreenModeToggleButtonRules].
           ..bottomMenuBar = ZegoLiveStreamingBottomMenuBarConfig(
             hostButtons: [
@@ -93,7 +96,7 @@ class MeetingRoom extends StatelessWidget {
               isLiveStream: false,
               userName: 'user_$userId',
               liveID: liveID,
-              
+
               /// to forcefully end meeting and dismiss all audience automatically the host ends live stream
               events: ZegoUIKitPrebuiltLiveStreamingEvents(
                 onEnded: (

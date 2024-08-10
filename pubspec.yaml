@@ -79,7 +79,6 @@ dependencies:
   video_player: ^2.8.6
   webview_flutter: ^4.8.0
   zego_uikit_prebuilt_live_audio_room: ^3.7.5
-  zego_uikit_prebuilt_live_streaming: ^3.8.9
   zego_uikit_signaling_plugin: ^2.8.2
 
   # for behaviour subject

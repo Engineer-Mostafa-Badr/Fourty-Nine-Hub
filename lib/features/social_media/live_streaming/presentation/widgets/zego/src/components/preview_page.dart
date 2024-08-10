@@ -41,7 +41,6 @@ class ZegoLiveStreamingPreviewPage extends StatefulWidget {
   final int appID;
   final String appSign;
 
-
   final String userID;
   final String userName;
 
@@ -84,10 +83,15 @@ class _ZegoLiveStreamingPreviewPageState
 
   @override
   Widget build(BuildContext context) {
-    if(widget.isLiveStream) {
-      return const Scaffold();
+    if (!widget.isLiveStream) {
+      return zoomPreviewScreen(context);
     } else {
-      return Scaffold(
+      return livePreviewScreen();
+    }
+  }
+
+  Scaffold livePreviewScreen() {
+    return Scaffold(
       resizeToAvoidBottomInset: false,
       body: ZegoScreenUtilInit(
         designSize: const Size(750, 1334),
@@ -120,7 +124,7 @@ class _ZegoLiveStreamingPreviewPageState
                       builder: widget.config.avatarBuilder,
                     ),
                   ),
-                  topBar(),
+                  liveTopBar(),
                   bottomBar(),
                   foreground(
                     constraints.maxWidth,
@@ -133,7 +137,77 @@ class _ZegoLiveStreamingPreviewPageState
         },
       ),
     );
-    }
+  }
+
+  Scaffold zoomPreviewScreen(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xff2d2d2d),
+      appBar: AppBar(
+        backgroundColor: const Color(0xff2d2d2d),
+        centerTitle: true,
+        leadingWidth: 80,
+        elevation: 0,
+        leading: TextButton(
+          onPressed: () {
+            Navigator.of(
+              context,
+              rootNavigator: widget.config.rootNavigator,
+            ).pop();
+          },
+          child: const Text(
+            'Cancel',
+            style: TextStyle(color: Colors.blue),
+          ),
+        ),
+        title: const Text(
+          'Start a meeting',
+          style: TextStyle(color: Colors.white, fontSize: 18),
+        ),
+      ),
+      resizeToAvoidBottomInset: false,
+      body: ZegoScreenUtilInit(
+        designSize: const Size(750, 1334),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (context, child) {
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              return Stack(
+                children: [
+                  //background(constraints.maxHeight),
+                  // ZegoAudioVideoContainer(
+                  //   layout: ZegoLayout.pictureInPicture(
+                  //     smallViewPosition: ZegoViewPosition.bottomRight,
+                  //     smallViewSize: Size(139.5.zW, 248.0.zH),
+                  //     smallViewMargin: EdgeInsets.only(
+                  //       left: 24.zR,
+                  //       top: 144.zR,
+                  //       right: 24.zR,
+                  //       bottom: 144.zR,
+                  //     ),
+                  //   ),
+                  //   // foregroundBuilder: audioVideoViewForeground,
+                  //   // backgroundBuilder: audioVideoViewBackground,
+                  //   avatarConfig: ZegoAvatarConfig(
+                  //     showInAudioMode:
+                  //         widget.config.audioVideoView.showAvatarInAudioMode,
+                  //     showSoundWavesInAudioMode: widget
+                  //         .config.audioVideoView.showSoundWavesInAudioMode,
+                  //     builder: widget.config.avatarBuilder,
+                  //   ),
+                  // ),
+                  zoomTopBar(),
+                  // foreground(
+                  //   constraints.maxWidth,
+                  //   constraints.maxHeight,
+                  // ),
+                ],
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 
   Widget foreground(double width, double height) {
@@ -158,7 +232,7 @@ class _ZegoLiveStreamingPreviewPageState
     );
   }
 
-  Widget topBar() {
+  Widget liveTopBar() {
     if (!widget.config.preview.topBar.isVisible) {
       return Container();
     }
@@ -444,5 +518,188 @@ class _ZegoLiveStreamingPreviewPageState
             Container(color: Colors.transparent),
       ],
     );
+  }
+
+  zoomTopBar() {
+    final ValueNotifier<bool> usePersonalIdNotifier = ValueNotifier<bool>(true);
+    if (!widget.config.preview.topBar.isVisible) {
+      return Container();
+    }
+
+    final buttonSize = Size(88.zR, 88.zR);
+    final iconSize = Size(56.zR, 56.zR);
+
+    return Column(
+      children: [
+        Container(
+          color: const Color(0xff4b4b4b),
+          child: Padding(
+            padding: const EdgeInsets.only(
+              left: 4,
+              top: 4,
+              bottom: 4,
+            ),
+            child: Column(
+              children: [
+                ValueListenableBuilder<bool>(
+                    valueListenable: ZegoUIKit()
+                        .getCameraStateNotifier(ZegoUIKit().getLocalUser().id),
+                    builder: (context, videoOn, child) {
+                      return SwitchListTile(
+                        title: const Text(
+                          "Video on",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                        value: videoOn,
+                        onChanged: (v) {
+                          print('camera state notifier is $videoOn');
+                          _toggleCamera(v);
+                        },
+                        activeColor: Colors.white,
+                        activeTrackColor: Colors.red,
+                      );
+                    }),
+                Container(
+                  margin: const EdgeInsets.only(left: 20),
+                  width: double.infinity,
+                  color: Colors.grey,
+                  height: 1,
+                ),
+                ValueListenableBuilder<bool>(
+                  valueListenable: usePersonalIdNotifier,
+                  builder: (BuildContext context, bool value, Widget? child) {
+                    return SwitchListTile(
+                      title: const Expanded(
+                        child: Text(
+                          "Use personal meeting ID (PMI)",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      ),
+                      subtitle: Text(
+                        widget.liveID,
+                        style:
+                            const TextStyle(color: Colors.grey, fontSize: 20),
+                      ),
+                      value: value,
+                      onChanged: (v) {
+                        usePersonalIdNotifier.value = v;
+                        print('use id notifier ${usePersonalIdNotifier.value}');
+                      },
+                      activeColor: Colors.white,
+                      activeTrackColor: Colors.red,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        zoomBottomBar()
+      ],
+    );
+  }
+
+  Widget zoomBottomBar() {
+    if (!widget.config.preview.bottomBar.isVisible) {
+      return Container();
+    }
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: 89.zR,
+          top: 0,
+          right: 89.zR,
+          bottom: 97.zR,
+        ),
+        child: zoomStartButton(),
+      ),
+    );
+  }
+
+  Widget zoomStartButton() {
+    final permissions = <Permission>[];
+    if (widget.config.turnOnCameraWhenJoining) {
+      permissions.add(Permission.camera);
+    }
+    if (widget.config.turnOnMicrophoneWhenJoining) {
+      permissions.add(Permission.microphone);
+    }
+
+    defaultAction() async {
+      await checkPermissions(
+        context: context,
+        permissions: permissions,
+        isShowDialog: true,
+        translationText: widget.config.innerText,
+        rootNavigator: widget.config.rootNavigator,
+        popUpManager: widget.popUpManager,
+        kickOutNotifier: widget.kickOutNotifier,
+      ).then(
+        (value) {
+          if (!widget.liveStreamingPageReady.value) {
+            ZegoLoggerService.logInfo(
+              'live streaming page is waiting room login',
+              tag: 'live-streaming',
+              subTag: 'preview page',
+            );
+            return;
+          }
+
+          widget.startedNotifier.value = true;
+        },
+      );
+    }
+
+    return widget.config.preview.startLiveButtonBuilder?.call(context,
+            () async {
+          defaultAction.call();
+        }) ??
+        GestureDetector(
+          onTap: defaultAction,
+          child: Container(
+            width: double.infinity,
+            height: 94.zR,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30.zR),
+              color: const Color(0xff000080),
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                'Start a Meeting',
+                style: TextStyle(
+                  fontSize: 32.zR,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        );
+  }
+
+  void _toggleCamera(bool v) {
+    final valueNotifier = v;
+
+    final targetState = valueNotifier;
+
+    if (targetState) {
+      requestPermission(Permission.camera).then((value) {
+        /// reverse current state
+        ZegoUIKit().turnCameraOn(true);
+      });
+    } else {
+      /// reverse current state
+      ZegoUIKit().turnCameraOn(false);
+    }
+
+    ZegoUIKit().getCameraStateNotifier(ZegoUIKit().getLocalUser().id).value =
+        !v;
   }
 }
