@@ -10,12 +10,13 @@ class SharedScaffold extends StatelessWidget {
   final Widget body;
   final bool extendBody;
   final bool isWithBackArrow;
+  final Color? backgroundColor;
   const SharedScaffold(
       {super.key,
       required this.mainCategoryId,
       this.extendBody = false,
       this.isWithBackArrow = true,
-      required this.body});
+      required this.body, this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +31,7 @@ class SharedScaffold extends StatelessWidget {
         index: 2,
         
       ),
+      backgroundColor:backgroundColor ,
       floatingActionButton: FloatingButton(
         changeView: mainCategoryId,
       ),

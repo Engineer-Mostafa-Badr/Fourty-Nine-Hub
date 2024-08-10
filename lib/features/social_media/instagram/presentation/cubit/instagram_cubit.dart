@@ -65,7 +65,7 @@ class InstagramCubit extends Cubit<InstagramState> {
           List<PostEntity> totalPosts=[];
           totalPosts.addAll(data);
           totalPosts.addAll(advertisements);
-          final isLastPage = totalPosts.length < (4);
+          final isLastPage = totalPosts.length < (6);
           if (page == 1) {
             print("page == 1 $page");
             feedPagingController.itemList = [];

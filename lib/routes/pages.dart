@@ -447,7 +447,7 @@ class AppPages {
           path: Paths.INSTAGRAM,
           name: Routes.INSTAGRAM,
           builder: (context, state) => BlocProvider<InstagramCubit>(
-            create: (_) => serviceLocator(),
+            create: (_) => serviceLocator()..loadData(),
             child: const InstagramView(),
           ),
         ),

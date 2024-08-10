@@ -33,11 +33,11 @@ class SocialImageViewer extends StatelessWidget {
             children: [
               Positioned.fill(
                 child: Image(
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                   image: Image.network(image).image,
                 ),
               ),
-              Positioned(
+              if(length>1)Positioned(
                   top: 10,
                   right: 10,
                   child: Container(

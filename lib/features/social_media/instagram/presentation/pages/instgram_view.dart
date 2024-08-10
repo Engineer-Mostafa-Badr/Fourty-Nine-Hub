@@ -11,6 +11,7 @@ class InstagramView extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: SharedScaffold(
+          backgroundColor:Colors.white,
           mainCategoryId: 3,
           body: Column(
             children: [

@@ -65,13 +65,13 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
 
                   }else{
                     return Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 10.0,end:10,top: 10,),
+                      padding: const EdgeInsetsDirectional.only(start: 10.0,end:10,top: 0,),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Sizer(),
                           SizedBox(
-                            height: kToolbarHeight * 4,
+                            height: kToolbarHeight * 5,
                             child: PageView.builder(
                                 controller: pageController,
                                 scrollDirection: Axis.horizontal,
@@ -166,6 +166,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                               ],
                             ),
                           ),
+                          SizedBox()
                         ],
                       ),
                     );
