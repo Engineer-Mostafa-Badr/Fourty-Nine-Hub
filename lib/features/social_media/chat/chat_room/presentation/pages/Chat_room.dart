@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -117,6 +118,7 @@ class _ChatRoomState extends State<ChatRoom> {
         widget: DeleteMessageBody(
           deleteMessageFunction: () {
             chatRoomCubit.deleteMessage(chatId: chatId, messageId: messageId);
+            Navigator.of(context).pop();
           },
         ));
   }

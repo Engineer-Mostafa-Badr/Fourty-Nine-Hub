@@ -45,10 +45,10 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     _socketService.joinRoom(chatId);
   }
 
-  getChatMessages(String chatID) async {
-    // join chat room , socket
-    // _joinRoom(chatID);
+  BehaviorSubject<List<MessageEntity>> messages =
+      BehaviorSubject<List<MessageEntity>>();
 
+  getChatMessages(String chatID) async {
     chatId = chatID;
     final response = await _getChatMessagesUseCase.call(chatID);
     response.fold(
@@ -72,7 +72,6 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     if (chatId != null) {
       _socketService.sendMessage(
           message: message, chatId: chatId!, replyMessageId: replyMessageId);
-
       emit.call(state.copyWith(
           chatData: chatMessagesModel,
           chatMessages: chatMessages.reversed.toList(),
@@ -122,16 +121,16 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     });
   }
 
-  deleteMessage({required String chatId, required String messageId}) {
+  deleteMessage({required String chatId, required String messageId}) async {
     DeleteMessageParams deleteMessageParams =
         DeleteMessageParams(chatId: chatId, messageId: messageId);
-    _deleteChatMessageUseCase.call(deleteMessageParams);
+    await _deleteChatMessageUseCase.call(deleteMessageParams);
+    getChatMessages(chatId);
   }
 
   @override
   Future<void> close() {
-    // socket.disconnect();
-    // socket.dispose();
+    // _socketService.disposeSocket();
     return super.close();
   }
 }

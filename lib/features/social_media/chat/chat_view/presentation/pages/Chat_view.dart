@@ -62,6 +62,7 @@ class _ChatViewState extends State<ChatView> {
       length: groups.length,
       initialIndex: 0,
       child: SharedScaffold(
+        backgroundColor: Colors.white,
         mainCategoryId: 2,
         body: NestedAppbar(
           appBars: [
@@ -72,11 +73,12 @@ class _ChatViewState extends State<ChatView> {
               flexibleSpace: ChatStories(),
             ),
             SliverAppBar(
+              backgroundColor: Colors.white,
               automaticallyImplyLeading: false,
               floating: true,
               pinned: true,
               titleSpacing: 0,
-              title: _buildCategoriesLabels(),
+              title: _buildCategoriesLabels(chatCubit.unReadMessage),
             )
           ],
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
@@ -104,7 +106,7 @@ class _ChatViewState extends State<ChatView> {
     );
   }
 
-  Widget _buildCategoriesLabels() {
+  Widget _buildCategoriesLabels(int unReadMessages) {
     return TabBar(
         onTap: (index) {
           context.read<ChatsCubit>().getChats(index: index);
@@ -118,7 +120,7 @@ class _ChatViewState extends State<ChatView> {
         isScrollable: true,
         tabs: groups.map((e) {
           return Tab(
-            text: e,
+            text: unReadMessages == 0 ? e : "$e($unReadMessages)",
           );
         }).toList());
   }
@@ -155,6 +157,7 @@ class _ChatViewState extends State<ChatView> {
                 )
               : ListView.separated(
                   shrinkWrap: true,
+                  // padding: const EdgeInsets.only(top: 10),
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) => Slidable(
                     key: ValueKey(index),
@@ -175,12 +178,10 @@ class _ChatViewState extends State<ChatView> {
                                   chatsCubit: chatCubit,
                                 ));
                           },
-                          backgroundColor:
-                              const Color.fromARGB(255, 191, 191, 191),
-                          foregroundColor: Colors.white,
                           icon: Icons.more_horiz,
                           label: 'More',
                           padding: EdgeInsets.zero,
+                          backgroundColor: AppColors.GRAY_LIGHT_COLOR3,
                         ),
                         SlidableAction(
                           onPressed: (value) async {
