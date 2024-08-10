@@ -45,8 +45,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     _socketService.joinRoom(chatId);
   }
 
-  BehaviorSubject<List<MessageEntity>> messages =
-      BehaviorSubject<List<MessageEntity>>();
+  // BehaviorSubject<List<MessageEntity>> messages =
+  //     BehaviorSubject<List<MessageEntity>>();
 
   getChatMessages(String chatID) async {
     chatId = chatID;
