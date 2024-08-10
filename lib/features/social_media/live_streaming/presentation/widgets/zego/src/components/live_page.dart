@@ -30,7 +30,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 /// user and sdk should be login and init before page enter
 class ZegoLiveStreamingLivePage extends StatefulWidget {
   const ZegoLiveStreamingLivePage({
-    Key? key,
+    super.key,
     required this.appID,
     required this.appSign,
     required this.userID,
@@ -44,11 +44,13 @@ class ZegoLiveStreamingLivePage extends StatefulWidget {
     required this.liveStatusManager,
     required this.liveDurationManager,
     required this.popUpManager,
+    required this.isLiveStream,    
     this.plugins,
-  }) : super(key: key);
+  });
 
   final int appID;
   final String appSign;
+  final bool isLiveStream;
 
   final String userID;
   final String userName;
@@ -126,6 +128,7 @@ class _ZegoLiveStreamingLivePageState extends State<ZegoLiveStreamingLivePage>
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: WillPopScope(

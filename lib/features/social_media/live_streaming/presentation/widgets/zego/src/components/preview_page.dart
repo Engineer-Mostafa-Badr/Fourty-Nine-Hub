@@ -17,14 +17,13 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/config.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/defines.dart';
 
-
 import 'dart:math' as math; // import this
 
 /// @nodoc
 /// user should be login before page enter
 class ZegoLiveStreamingPreviewPage extends StatefulWidget {
   const ZegoLiveStreamingPreviewPage({
-    Key? key,
+    super.key,
     required this.appID,
     required this.appSign,
     required this.userID,
@@ -36,10 +35,12 @@ class ZegoLiveStreamingPreviewPage extends StatefulWidget {
     required this.config,
     required this.popUpManager,
     required this.kickOutNotifier,
-  }) : super(key: key);
+    required this.isLiveStream,
+  });
 
   final int appID;
   final String appSign;
+
 
   final String userID;
   final String userName;
@@ -55,6 +56,9 @@ class ZegoLiveStreamingPreviewPage extends StatefulWidget {
 
   final ZegoLiveStreamingPopUpManager popUpManager;
   final ValueNotifier<bool> kickOutNotifier;
+
+  /// to distinguesh between our [live] types
+  final bool isLiveStream;
 
   @override
   State<ZegoLiveStreamingPreviewPage> createState() =>
@@ -80,7 +84,10 @@ class _ZegoLiveStreamingPreviewPageState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    if(widget.isLiveStream) {
+      return const Scaffold();
+    } else {
+      return Scaffold(
       resizeToAvoidBottomInset: false,
       body: ZegoScreenUtilInit(
         designSize: const Size(750, 1334),
@@ -126,6 +133,7 @@ class _ZegoLiveStreamingPreviewPageState
         },
       ),
     );
+    }
   }
 
   Widget foreground(double width, double height) {
@@ -173,7 +181,7 @@ class _ZegoLiveStreamingPreviewPageState
             Container(
               margin: const EdgeInsets.only(left: 20),
               decoration: BoxDecoration(
-                  color: Color(0xFFED1C24),
+                  color: const Color(0xFFED1C24),
                   borderRadius: BorderRadius.circular(15)),
               child: ZegoTextIconButton(
                 onPressed: () {
@@ -206,7 +214,7 @@ class _ZegoLiveStreamingPreviewPageState
               margin: const EdgeInsets.all(25),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: Color(0xFFED1C24),
+                color: const Color(0xFFED1C24),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -215,7 +223,7 @@ class _ZegoLiveStreamingPreviewPageState
                     buttonSize: buttonSize,
                     iconSize: iconSize,
                     icon: ButtonIcon(
-                      icon: Icon(Icons.switch_camera, size: 20),
+                      icon: const Icon(Icons.switch_camera, size: 20),
                       backgroundColor: Colors.transparent,
                     ),
                     defaultUseFrontFacingCamera: ZegoUIKit()
@@ -227,13 +235,13 @@ class _ZegoLiveStreamingPreviewPageState
                     buttonSize: buttonSize,
                     iconSize: iconSize,
                     normalIcon: ButtonIcon(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.videocam_outlined,
                           size: 20,
                         ),
                         backgroundColor: Colors.transparent),
                     offIcon: ButtonIcon(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.videocam_off_outlined,
                         size: 20,
                       ),
@@ -244,14 +252,14 @@ class _ZegoLiveStreamingPreviewPageState
                     buttonSize: buttonSize,
                     iconSize: iconSize,
                     iconStartSharing: ButtonIcon(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.screen_share_rounded,
                         size: 20,
                       ),
                       backgroundColor: Colors.transparent,
                     ),
                     iconStopSharing: ButtonIcon(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.stop_screen_share_outlined,
                         size: 20,
                       ),
@@ -262,14 +270,14 @@ class _ZegoLiveStreamingPreviewPageState
                     buttonSize: buttonSize,
                     iconSize: iconSize,
                     normalIcon: ButtonIcon(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.mic,
                         size: 20,
                       ),
                       backgroundColor: Colors.transparent,
                     ),
                     offIcon: ButtonIcon(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.mic_off_outlined,
                         size: 20,
                       ),
@@ -377,7 +385,7 @@ class _ZegoLiveStreamingPreviewPageState
             height: 88.zR,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(44.zR),
-              color: Color(0xFFED1C24),
+              color: const Color(0xFFED1C24),
             ),
             child: Align(
               alignment: Alignment.center,

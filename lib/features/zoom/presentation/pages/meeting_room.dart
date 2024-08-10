@@ -90,9 +90,10 @@ class MeetingRoom extends StatelessWidget {
               appID: UIConst.appId,
               appSign: UIConst.appSign,
               userID: userId,
+              isLiveStream: false,
               userName: 'user_$userId',
               liveID: liveID,
-
+              
               /// to forcefully end meeting and dismiss all audience automatically the host ends live stream
               events: ZegoUIKitPrebuiltLiveStreamingEvents(
                 onEnded: (

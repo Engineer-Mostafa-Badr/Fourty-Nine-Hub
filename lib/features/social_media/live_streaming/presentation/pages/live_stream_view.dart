@@ -101,7 +101,8 @@ class _LiveStreamViewState extends State<LiveStreamView> {
         ZegoLiveStreamingMenuBarButtonName.coHostControlButton,
         // ZegoLiveStreamingMenuBarButtonName.soundEffectButton,
       ]
-      ..inRoomMessage = ZegoLiveStreamingInRoomMessageConfig(
+      ..inRoomMessage = ZegoLiveStreamingInRoomMessageConfig( 
+        
           resendIcon: const Icon(
         Icons.reply,
         color: Colors.white,
@@ -123,6 +124,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
         userID: userId,
         userName: 'user_$userId',
         liveID: widget.liveID,
+        isLiveStream: true,
         events: ZegoUIKitPrebuiltLiveStreamingEvents(
           pk: pkEvents?.event,
           onStateUpdated: (state) {
