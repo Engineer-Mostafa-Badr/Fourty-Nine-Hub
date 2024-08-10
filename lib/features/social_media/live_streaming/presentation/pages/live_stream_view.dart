@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/liveview/gifts/simple_gifts_sheet.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/pk_widgets/configs.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/pk_widgets/surfuce.dart';
 import 'package:fourtyninehub/res/style/const.dart';
-import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 // import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_bottom_navigator.dart';
@@ -17,7 +17,7 @@ import '../widgets/liveview/super_gifts/mp4_player_widget.dart';
 import '../widgets/liveview/super_gifts/zego_gift_item.dart';
 import '../widgets/pk_widgets/events.dart';
 import '../widgets/pk_widgets/mute_widget.dart';
-import '../widgets/pk_widgets/surfuce.dart';
+import '../widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 
 class LiveStreamView extends StatefulWidget {
   final String liveID;
@@ -87,7 +87,9 @@ class _LiveStreamViewState extends State<LiveStreamView> {
         giftButton,
         superGiftButton,
       ]
-      ..bottomMenuBar.hostButtons = []
+      ..bottomMenuBar.hostButtons = [
+      
+      ]
       ..bottomMenuBar.audienceButtons = []
       ..bottomMenuBar.coHostButtons = []
       ..bottomMenuBar.audienceExtendButtons = [

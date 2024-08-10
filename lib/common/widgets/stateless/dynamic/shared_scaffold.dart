@@ -9,6 +9,7 @@ class SharedScaffold extends StatelessWidget {
   final int mainCategoryId;
   final Widget body;
   final bool extendBody;
+  final Color? backgroundColor;
   final bool isWithBackArrow;
   final Color? backgroundColor;
   const SharedScaffold(
@@ -22,6 +23,7 @@ class SharedScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: extendBody,
+      backgroundColor: backgroundColor,
       appBar:  HomeAppbar(
         isWithBackArrow: isWithBackArrow,
       ),

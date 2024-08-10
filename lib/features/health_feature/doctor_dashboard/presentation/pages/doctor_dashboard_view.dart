@@ -8,7 +8,6 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_unhandled_appointments.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/popup_menu.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 class DoctorDashboardView extends StatelessWidget {
@@ -38,7 +37,6 @@ class DoctorDashboardView extends StatelessWidget {
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.BACKGROUND_COLOR,
         appBar: AppBar(
           title: const Text(Labels.doctorDashboard),
           actions: const [
