@@ -8,7 +8,8 @@ class ImageUploaderWidget extends StatefulWidget {
   final String? tilte;
   final double? height;
   final double? width;
-  XFile? image;
+  XFile? imageFile;
+  final String? imageUrl;
   final String subCategoryId;
   final Function(UploadFileEntity)? onUploaded;
   ImageUploaderWidget({
@@ -16,9 +17,10 @@ class ImageUploaderWidget extends StatefulWidget {
     this.tilte,
     this.height,
     this.width,
-    this.image,
+    this.imageFile,
     required this.subCategoryId,
     this.onUploaded,
+    this.imageUrl,
   });
 
   @override
@@ -34,7 +36,7 @@ class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
           subCategoryId: widget.subCategoryId,
           onUploaded: (value) {
             setState(() {
-              widget.image = value.file;
+              widget.imageFile = value.file;
             });
             widget.onUploaded?.call(value);
           },
@@ -43,8 +45,9 @@ class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
       child: ImagePickerPlaceholder(
         height: widget.height,
         width: widget.width,
-        image: widget.image,
+        imageFile: widget.imageFile,
         tilte: widget.tilte,
+        imageUrl: widget.imageUrl,
       ),
     );
   }

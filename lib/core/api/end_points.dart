@@ -64,7 +64,9 @@ class EndPoints {
       '/health/book-appointment/approve/$appointmentId';
   static String doctorRejectAppointment(String appointmentId) =>
       '/health/book-appointment/reject/$appointmentId';
-  static const getAllDoctorReservations = '/health/dashboard/number-of-reservations';
+  static const getAllDoctorReservations =
+      '/health/dashboard/number-of-reservations';
+  static const getDoctorProfile = '/health/doctor-profile';
 
   // reels
   static const getExploreReels = '/reels/explore';
@@ -366,13 +368,11 @@ class EndPoints {
   static String searchVoiceRooms(String subject) =>
       '/clubvoice?search=$subject';
 
-
   //meeting
   static String createMeeting = '/room-id';
   static String joinMeeting(String id) => '/room-id/join/$id';
   static String endMeeting(String id) => '/room-id/finish/$id';
   static String deleteChatMessage = '/chat/message';
-
 
   static String changeChatMuteState(String chatId) {
     return '/chat/mute-chat/$chatId';
@@ -404,5 +404,4 @@ class EndPoints {
   static String updateUnLockChatPassword() {
     return '/chat/update-lock-chat';
   }
-
 }

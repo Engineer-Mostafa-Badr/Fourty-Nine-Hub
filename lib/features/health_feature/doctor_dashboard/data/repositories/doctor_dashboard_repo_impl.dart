@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/en
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_statistics_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/repositories/doctor_dashboard_repo.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_appointments_by_day.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 
 class DoctorDashboardRepoImpl implements DoctorDashboardRepo {
   final DoctorDashboardRemoteDataSource remoteDataSource;
@@ -57,5 +58,10 @@ class DoctorDashboardRepoImpl implements DoctorDashboardRepo {
   Future<Either<Failure, List<DoctorAppointmentEntity>>> getAllReservations(
       PaginationParams params) {
     return remoteDataSource.getAllReservations(params);
+  }
+
+  @override
+  Future<Either<Failure, DoctorEntity>> getDoctorProfile() {
+    return remoteDataSource.getDoctorProfile();
   }
 }

@@ -8,6 +8,8 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/mode
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_statistics_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_appointments_by_day.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/data/models/doctor_model.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 
 abstract class DoctorDashboardRemoteDataSource {
   Future<Either<Failure, int>> getPracticingRemainingDays();
@@ -26,6 +28,8 @@ abstract class DoctorDashboardRemoteDataSource {
 
   Future<Either<Failure, List<DoctorAppointmentEntity>>> getAllReservations(
       PaginationParams params);
+
+  Future<Either<Failure, DoctorEntity>> getDoctorProfile();
 }
 
 class DoctorDashboardRemoteDataSourceImpl
@@ -62,7 +66,7 @@ class DoctorDashboardRemoteDataSourceImpl
           GetDoctorAppointmentsByDayParams params) async {
     final response = await _apiConsumer.get(
       EndPoints.getDoctorAppointmentsByDay,
-      data: params.toData(),
+      data: params.toJson(),
       queryParameters: params.paginationParams.toJson(),
     );
     return response.fold(
@@ -122,5 +126,14 @@ class DoctorDashboardRemoteDataSourceImpl
           .map((e) => DoctorAppointmentModel.fromJson(e))
           .toList());
     });
+  }
+
+  @override
+  Future<Either<Failure, DoctorEntity>> getDoctorProfile() async {
+    final response = await _apiConsumer.get(EndPoints.getDoctorProfile);
+    return response.fold(
+      (failure) => Left(failure),
+      (data) => Right(DoctorModel.fromJson(data['data'])),
+    );
   }
 }

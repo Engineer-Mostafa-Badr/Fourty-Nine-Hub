@@ -38,7 +38,7 @@ class _CreateDoctorProfilePhotoPickerState
             builder: (context, state) {
               if (state is CreateDoctorUploadProfileImage) {
                 return ImagePickerPlaceholder(
-                  image: state.file,
+                  imageFile: state.file,
                 );
               }
               return const ImagePickerPlaceholder();

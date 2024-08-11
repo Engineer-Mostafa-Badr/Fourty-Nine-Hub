@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_statistics_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_appointments_by_day.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 
 abstract class DoctorDashboardRepo {
   Future<Either<Failure, int>> getPracticingRemainingDays();
@@ -21,4 +22,6 @@ abstract class DoctorDashboardRepo {
 
   Future<Either<Failure, List<DoctorAppointmentEntity>>> getAllReservations(
       PaginationParams params);
+
+  Future<Either<Failure, DoctorEntity>> getDoctorProfile();
 }
