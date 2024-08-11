@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -22,13 +23,14 @@ class ChatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: () => context.push(Routes.CHATROOM, extra: chatItemModel?.sId),
-        child: Column(
-          children: [
-            Row(
+    return InkWell(
+      onTap: () => context.push(Routes.CHATROOM, extra: chatItemModel?.sId),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12),
+            child: Row(
               children: [
                 SizedBox(
                   height: kToolbarHeight * .7,
@@ -67,23 +69,20 @@ class ChatCard extends StatelessWidget {
                         ),
                 ),
                 const Sizer(),
-                Expanded(
+                Flexible(
+                  flex: 1,
                   child: Column(
-                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Row(
-                        children: [
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Label(
-                              text: isSecret
-                                  ? 'Mxxx xxxl'
-                                  : '${chatItemModel?.name}',
-                              style: Styles.mediumText(
-                                  fontWeight: FontWeight.bold)),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Label(
+                          text:
+                              isSecret ? 'Mxxx xxxl' : '${chatItemModel?.name}',
+                          style: Styles.mediumText(fontWeight: FontWeight.bold),
+                          maxLines: 1,
+                        ),
                       ),
                       Row(
                         children: [
@@ -168,13 +167,15 @@ class ChatCard extends StatelessWidget {
                             text: '${chatItemModel?.lastSeenCount}',
                             style: Styles.mediumText(color: Colors.grey)),
                         const SizedBox(
-                          height: 15,
                           width: 10,
                         ),
-                        const Icon(
-                          FontAwesomeIcons.eye,
-                          color: Colors.grey,
-                          size: 14,
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 2.0),
+                          child: Icon(
+                            FontAwesomeIcons.eye,
+                            color: Colors.grey,
+                            size: 14,
+                          ),
                         ),
                       ],
                     )
@@ -182,9 +183,13 @@ class ChatCard extends StatelessWidget {
                 ),
               ],
             ),
-            const Divider(),
-          ],
-        ),
+          ),
+          Container(
+            height: 0.4,
+            width: MediaQuery.of(context).size.width,
+            color: Colors.black,
+          ),
+        ],
       ),
     );
   }
