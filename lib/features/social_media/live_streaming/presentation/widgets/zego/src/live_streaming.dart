@@ -11,7 +11,6 @@ import 'swiping/page.dart';
 
 // Project imports:
 
-
 /// Live Streaming Widget.
 ///
 /// You can embed this widget into any page of your project to integrate the functionality of a live streaming.
@@ -33,6 +32,7 @@ class ZegoUIKitPrebuiltLiveStreaming extends StatefulWidget {
     required this.userName,
     required this.liveID,
     required this.config,
+    required this.isLiveStream,
     this.events,
   });
 
@@ -62,6 +62,9 @@ class ZegoUIKitPrebuiltLiveStreaming extends StatefulWidget {
   /// You can listen to events that you are interested in here.
   final ZegoUIKitPrebuiltLiveStreamingEvents? events;
 
+  /// to diffrentiate between zoom and live feature
+  final bool isLiveStream;
+
   @override
   State<ZegoUIKitPrebuiltLiveStreaming> createState() =>
       _ZegoUIKitPrebuiltLiveStreamingState();
@@ -80,6 +83,7 @@ class _ZegoUIKitPrebuiltLiveStreamingState
             liveID: widget.liveID,
             config: widget.config,
             events: widget.events,
+            isLiveStream: widget.isLiveStream,
           )
         : ZegoLiveStreamingSwipingPage(
             initialLiveID: widget.liveID,
@@ -90,6 +94,7 @@ class _ZegoUIKitPrebuiltLiveStreamingState
             config: widget.config,
             events: widget.events,
             swipingConfig: widget.config.swiping!,
+            isLiveStream: widget.isLiveStream,
           );
   }
 }

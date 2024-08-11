@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../../zego_uikit_prebuilt_live_streaming.dart';
@@ -72,6 +71,7 @@ class ZegoLiveStreamingControllerMinimizingImpl
                 : minimizeData.liveID,
             config: minimizeData.config,
             events: minimizeData.events,
+            isLiveStream: false,
           );
           return withSafeArea
               ? SafeArea(

@@ -227,7 +227,7 @@ class ZegoUIKitPrebuiltLiveStreamingConfig {
   ZegoUIKitPrebuiltLiveStreamingConfig.host({List<IZegoUIKitPlugin>? plugins})
       : role = ZegoLiveStreamingRole.host,
         plugins = plugins ?? [],
-        turnOnCameraWhenJoining = true,
+        turnOnCameraWhenJoining = ZegoUIKit().getCameraStateNotifier(ZegoUIKit().getLocalUser().id).value,
         useFrontFacingCamera = true,
         turnOnMicrophoneWhenJoining = true,
         useSpeakerWhenJoining = true,
@@ -267,7 +267,9 @@ class ZegoUIKitPrebuiltLiveStreamingConfig {
           disableCoHostInvitationReceivedDialog: false,
         ) {
     coHost.turnOnCameraWhenCohosted = () {
-      return true;
+      return ZegoUIKit()
+          .getCameraStateNotifier(ZegoUIKit().getLocalUser().id)
+          .value;
     };
   }
 
