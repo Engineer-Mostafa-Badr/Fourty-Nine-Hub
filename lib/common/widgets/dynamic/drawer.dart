@@ -29,6 +29,7 @@ class DrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, BasicState<UserEntity>>(
       builder: (context, state) {
+        //to get token for current user
         context.read<UserCubit>().giveMeTokenForTinder().then((value) {
           TinderSharedUtils.initializeToken(value!.accessToken);
         });
