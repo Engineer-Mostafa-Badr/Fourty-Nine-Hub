@@ -194,7 +194,7 @@ class _ZegoLiveStreamingLivePageState extends State<ZegoLiveStreamingLivePage>
                             popUpManager: widget.popUpManager,
                             connectManager:
                                 ZegoLiveStreamingManagers().connectManager!,
-                            plugins: widget.plugins,
+                            plugins: widget.plugins, isLiveStream: widget.isLiveStream,
                           ),
                         ],
                       );

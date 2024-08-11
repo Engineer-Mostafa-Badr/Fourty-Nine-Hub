@@ -38,8 +38,10 @@ class MeetingRoom extends StatelessWidget {
               ZegoLiveStreamingMenuBarButtonName.toggleMicrophoneButton,
               ZegoLiveStreamingMenuBarButtonName.toggleCameraButton,
               ZegoLiveStreamingMenuBarButtonName.switchCameraButton,
+              ZegoLiveStreamingMenuBarButtonName.chatButton
             ],
           )
+          ..bottomMenuBar.showInRoomMessageButton=false
           ..bottomMenuBar.hostExtendButtons = [
             _copyMeetingLiveIdExtendedButton(context),
             _endMeetingExtendedButton(context, cubit)
@@ -56,6 +58,7 @@ class MeetingRoom extends StatelessWidget {
             ZegoLiveStreamingMenuBarButtonName.toggleMicrophoneButton,
             ZegoLiveStreamingMenuBarButtonName.toggleCameraButton,
             ZegoLiveStreamingMenuBarButtonName.switchCameraButton,
+            ZegoLiveStreamingMenuBarButtonName.chatButton
             // ZegoLiveStreamingMenuBarButtonName.coHostControlButton,
             // ZegoLiveStreamingMenuBarButtonName.minimizingButton,
           ],
@@ -70,8 +73,10 @@ class MeetingRoom extends StatelessWidget {
       // ZegoLiveStreamingMenuBarButtonName.beautyEffectButton
     ]);
 
+
     zegoUIKitPrebuiltLiveStreamingConfig(MeetingCubit cubit) =>
         ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+          ..bottomMenuBar.showInRoomMessageButton=false
           ..layout =
               zegoLayout // Set the layout to gallery mode. and configure the [showNewScreenSharingViewInFullscreenMode] and [showScreenSharingFullscreenModeToggleButtonRules].
           ..bottomMenuBar = zegoLiveStreamingBottomMenuBarAudienceConfig(cubit)

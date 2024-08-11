@@ -1,5 +1,5 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:win32/win32.dart';
 
 // Package imports:
 import 'package:zego_uikit/zego_uikit.dart';
@@ -16,6 +16,9 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/minimizing/mini_button.dart';
+import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
+
+import '../../../../../../../../res/style/app_colors.dart';
 
 /// @nodoc
 class ZegoLiveStreamingTopBar extends StatefulWidget {
@@ -36,6 +39,7 @@ class ZegoLiveStreamingTopBar extends StatefulWidget {
   final ZegoUIKitPrebuiltLiveStreamingInnerText translationText;
 
   final ValueNotifier<bool>? isLeaveRequestingNotifier;
+  final bool isLiveStream;
 
   const ZegoLiveStreamingTopBar({
     super.key,
@@ -50,6 +54,7 @@ class ZegoLiveStreamingTopBar extends StatefulWidget {
     required this.popUpManager,
     required this.translationText,
     this.isLeaveRequestingNotifier,
+    required this.isLiveStream,
   });
 
   @override
@@ -88,20 +93,21 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
             children: [
               minimizingButton(),
               SizedBox(width: 20.zR),
-              ZegoLiveStreamingMemberButton(
-                config: widget.config.memberList,
-                events: widget.events.memberList,
-                isCoHostEnabled: widget.isCoHostEnabled,
-                hostManager: widget.hostManager,
-                connectManager: widget.connectManager,
-                popUpManager: widget.popUpManager,
-                translationText: widget.translationText,
-                builder: widget.config.memberButton.builder,
-                icon: widget.config.memberButton.icon,
-                backgroundColor: widget.config.memberButton.backgroundColor,
-                avatarBuilder: widget.config.avatarBuilder,
-                itemBuilder: widget.config.memberList.itemBuilder,
-              ),
+              if (widget.isLiveStream)
+                ZegoLiveStreamingMemberButton(
+                  config: widget.config.memberList,
+                  events: widget.events.memberList,
+                  isCoHostEnabled: widget.isCoHostEnabled,
+                  hostManager: widget.hostManager,
+                  connectManager: widget.connectManager,
+                  popUpManager: widget.popUpManager,
+                  translationText: widget.translationText,
+                  builder: widget.config.memberButton.builder,
+                  icon: widget.config.memberButton.icon,
+                  backgroundColor: widget.config.memberButton.backgroundColor,
+                  avatarBuilder: widget.config.avatarBuilder,
+                  itemBuilder: widget.config.memberList.itemBuilder,
+                ),
               SizedBox(width: 20.zR),
               closeButton(),
               SizedBox(width: 33.zR),
@@ -154,42 +160,66 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
         return Row(
           children: [
             SizedBox(width: 32.zR),
-            GestureDetector(
-              onTap: () {
-                widget.events.topMenuBar.onHostAvatarClicked?.call(host);
-              },
-              child: widget.config.topMenuBar.hostAvatarBuilder?.call(host) ??
-                  SizedBox(
-                    height: 68.zR,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: ZegoUIKitDefaultTheme.buttonBackgroundColor,
-                        borderRadius: BorderRadius.circular(68.zR),
-                      ),
-                      child: Row(
-                        children: [
-                          SizedBox(width: 6.zR),
-                          ZegoAvatar(
-                            user: host,
-                            avatarSize: Size(56.zR, 56.zR),
-                            showSoundLevel: false,
-                            avatarBuilder: widget.config.avatarBuilder,
-                          ),
-                          SizedBox(width: 12.zR),
-                          Text(
-                            host.name,
-                            style: TextStyle(
-                              fontSize: 24.zR,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          SizedBox(width: 24.zR),
-                        ],
-                      ),
-                    ),
-                  ),
+            SizedBox(
+              height: 68.zR,
+              child: IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: AppColors.AUTH_CONTAINER_COLOR,
+                ),
+              ),
             ),
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: const Icon(
+            //     Icons.speaker_phone_outlined,
+            //     color: AppColors.AUTH_CONTAINER_COLOR,
+            //   ),
+            // ),
+            // GestureDetector(
+            //   onTap: () {
+            //     widget.events.topMenuBar.onHostAvatarClicked?.call(host);
+            //   },
+            //   child: widget.config.topMenuBar.hostAvatarBuilder?.call(host) ??
+            //       SizedBox(
+            //         height: 68.zR,
+            //         child: IconButton(
+            //           onPressed: () {},
+            //           icon: const Icon(
+            //             Icons.arrow_back_ios,
+            //             color: AppColors.AUTH_CONTAINER_COLOR,
+            //           ),
+            //         ),
+            //         // child: Container(
+            //         //   decoration: BoxDecoration(
+            //         //     color: ZegoUIKitDefaultTheme.buttonBackgroundColor,
+            //         //     borderRadius: BorderRadius.circular(68.zR),
+            //         //   ),
+            //         //   child: Row(
+            //         //     children: [
+            //         //       SizedBox(width: 6.zR),
+            //         //       ZegoAvatar(
+            //         //         user: host,
+            //         //         avatarSize: Size(56.zR, 56.zR),
+            //         //         showSoundLevel: false,
+            //         //         avatarBuilder: widget.config.avatarBuilder,
+            //         //       ),
+            //         //       SizedBox(width: 12.zR),
+            //         //       Text(
+            //         //         host.name,
+            //         //         style: TextStyle(
+            //         //           fontSize: 24.zR,
+            //         //           color: Colors.white,
+            //         //           fontWeight: FontWeight.w400,
+            //         //         ),
+            //         //       ),
+            //         //       SizedBox(width: 24.zR),
+            //         //     ],
+            //         //   ),
+            //         // ),
+            //       ),
+            // ),
           ],
         );
       },
