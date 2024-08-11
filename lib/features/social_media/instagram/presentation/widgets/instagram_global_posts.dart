@@ -65,7 +65,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
 
                   }else{
                     return Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsetsDirectional.only(start: 10.0,end:10,top: 10,),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -125,22 +125,11 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                       IconAppButton(
                                         icon: Icons.chat_bubble_outline_rounded,
                                         onPressed: () {
-                                          // bottomSheet(
-                                          //   context: context,
-                                          //   isScrollControlled: true,
-                                          //   widget: const PostComments(),
-                                          // );
+                                          controller.showPostComments(context: context, postId: controller.feedPagingController.itemList![index].id);
                                         },
                                         color: Colors.grey,
                                         size: 25,
                                       ),
-                                      // const Sizer(),
-                                      // IconAppButton(
-                                      //   icon: Icons.send_rounded,
-                                      //   color: Colors.grey,
-                                      //   onPressed: () => context.push(Routes.CHAT),
-                                      //   size: 25,
-                                      // ),
                                     ],
                                   ),
                                 ),
@@ -170,12 +159,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      // IconAppButton(
-                                      //   icon: Icons.bookmark_outline,
-                                      //   color: Colors.grey,
-                                      //   onPressed: () {},
-                                      //   size: 25,
-                                      // ),
+
                                     ],
                                   ),
                                 ),
