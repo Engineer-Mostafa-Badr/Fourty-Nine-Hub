@@ -4,6 +4,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/shared/tinder_shared_utils.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'core/themes/light_theme.dart';
 import 'features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
@@ -54,7 +56,11 @@ class MyApp extends StatelessWidget {
         // health
         // BlocProvider(
         //   create: (context) => serviceLocator<DoctorsListCubit>(),
-        // ),
+        // ),/
+        //  tinder
+        BlocProvider(
+          create: (context) => TinderViewCubit(),
+        ),
       ],
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,

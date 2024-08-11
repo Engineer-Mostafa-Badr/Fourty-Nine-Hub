@@ -432,7 +432,7 @@ class AppPages {
                   builder: (context, state) =>
                       BlocProvider<FavouriteSubCategoryCubit>(
                         create: (_) => serviceLocator(),
-                        child: const FavouriteSubCategoryView(),
+                        child:  FavSubCategoryView(),
                       )),
               GoRoute(
                   path: Paths.MYADDS,
@@ -561,7 +561,7 @@ class AppPages {
                           isHost: extras.isHost,
                         );
                       },
-                      routes: [],
+                      routes: const [],
                     ),
                   ]),
             ]),
