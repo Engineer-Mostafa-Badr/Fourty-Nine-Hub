@@ -8,11 +8,13 @@ import 'package:fourtyninehub/common/functions/global/loading_custom.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/service/socket_service.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/room/delete_message_body.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:get_it/get_it.dart';
 import 'package:swipe_to/swipe_to.dart';
 import '../widgets/room/message_card.dart';
 import '../widgets/room/chat_room_app_bar.dart';
@@ -63,7 +65,9 @@ class _ChatRoomState extends State<ChatRoom> {
             return state.isLoading
                 ? LoadingCustom.customThreeBounce(context)
                 : ListView.separated(
-                    reverse: true,
+                    addAutomaticKeepAlives: true,
+                    controller: chatRoomCubit.scrollController,
+                    // reverse: true,
                     // physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) => SwipeTo(
                       onRightSwipe: (message) {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
@@ -22,6 +24,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   final SocketServiceContract _socketService;
   List<MessageEntity> chatMessages = [];
   ChatMessagesModel chatMessagesModel = ChatMessagesModel();
+  final ScrollController? scrollController = ScrollController();
 
   String? userToken;
   String? userId;
@@ -60,9 +63,15 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       emit(state.copyWith(
           chatData: data,
-          chatMessages: data.messages!.reversed.toList(),
+          chatMessages: data.messages!,
           status: ChatRoomStates.initState));
     });
+
+
+    Timer(
+        const Duration(milliseconds: 200),
+            () => scrollController!
+            .jumpTo(scrollController!.position.maxScrollExtent));
 
     // to listen new message
     listenToNewMessages();
@@ -72,10 +81,10 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     if (chatId != null) {
       _socketService.sendMessage(
           message: message, chatId: chatId!, replyMessageId: replyMessageId);
-      emit.call(state.copyWith(
-          chatData: chatMessagesModel,
-          chatMessages: chatMessages.reversed.toList(),
-          status: ChatRoomStates.initState));
+      // emit.call(state.copyWith(
+      //     chatData: chatMessagesModel,
+      //     chatMessages: chatMessages.reversed.toList(),
+      //     status: ChatRoomStates.initState));
     } else {
       debugPrint("Error chat id not found");
     }
@@ -102,9 +111,18 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       chatMessages.add(event);
       emit.call(state.copyWith(
           chatData: chatMessagesModel,
-          chatMessages: chatMessages.reversed.toList(),
+          chatMessages: chatMessages,
           status: ChatRoomStates.initState));
+
+
+      Timer(
+          const Duration(milliseconds: 200),
+              () => scrollController!
+              .jumpTo(scrollController!.position.maxScrollExtent));
+
     });
+
+
   }
 
   listenToMessageTyping() {
@@ -116,7 +134,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       emit.call(state.copyWith(
           chatData: chatMessagesModel,
-          chatMessages: chatMessages.reversed.toList(),
+          chatMessages: chatMessages,
           status: ChatRoomStates.typing));
     });
   }
