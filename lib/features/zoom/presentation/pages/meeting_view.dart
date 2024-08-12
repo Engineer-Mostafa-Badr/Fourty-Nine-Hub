@@ -28,14 +28,14 @@ class MeetingView extends StatelessWidget {
       backgroundColor: AppColors.GRAY_LIGHT_COLOR3,
       appBar: const HomeAppbar(),
       drawer: const DrawerWidget(),
-      bottomNavigationBar: const BottomNavigator(
-        mainCategory: 3,
-        index: 2,
-      ),
-      floatingActionButton: const FloatingButton(
-        changeView: 2,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // bottomNavigationBar: const BottomNavigator(
+      //   mainCategory: 3,
+      //   index: 2,
+      // ),
+      // floatingActionButton: const FloatingButton(
+      //   changeView: 2,
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: BlocBuilder<MeetingCubit, MeetingState>(
         builder: (context, state) {
           var cubit = context.read<MeetingCubit>();
