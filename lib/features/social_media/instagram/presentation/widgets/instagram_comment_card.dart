@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_comment_replies.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
@@ -31,7 +33,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
       create: (_) => serviceLocator(),
       child: BlocBuilder<InstagramCubit, InstagramState>(
           builder: (context, state) {
-            final controller = context.read<InstagramCubit>();
+            // final controller = context.read<InstagramCubit>();
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -109,11 +111,15 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                         style: Styles.mediumText(),
                         label: 'Reply',
                         onPressed: () {
-                          controller.showPostCommentReplies(
-                            context: context,
-                            commentId: widget.comment.id,
-                            postId: widget.comment.post,
-                          );
+                          bottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              widget: InstagramCommentReplies(
+                                postId: widget.comment.post, commentId: widget.comment.id,
+                                onAddReply: (ReplyOnCommentParams params) {
+                                  // replyOnComment(params: params);
+                                },
+                              ));
                         })
                   ],
                 ),

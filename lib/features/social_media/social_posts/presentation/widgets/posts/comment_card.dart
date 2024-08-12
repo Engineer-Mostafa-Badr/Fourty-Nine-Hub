@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
@@ -16,9 +17,14 @@ import '../../../domain/entities/comment_entity.dart';
 
 class CommentCard extends StatelessWidget {
   final Color textColor;
+  final String from;
   final CommentEntity comment;
+  final Function(ReplyOnCommentParams) onAddReply;
+  final Function(String) onDeleteComment;
+  final Function(String) onDeleteReply;
+
   const CommentCard(
-      {super.key, this.textColor = Colors.black, required this.comment});
+      {super.key, this.textColor = Colors.black, required this.comment, required this.onAddReply, required this.onDeleteComment, required this.onDeleteReply, required this.from});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +32,7 @@ class CommentCard extends StatelessWidget {
       create: (_) => serviceLocator(),
       child: BlocBuilder<SocialPostsCubit, SocialPostsState>(
           builder: (context, state) {
-        return Column(
+            return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
@@ -50,8 +56,8 @@ class CommentCard extends StatelessWidget {
                         style: Styles.mediumText(color: textColor)),
                   ],
                 )),
-                IconButton(
-                    onPressed: () {
+                GestureDetector(
+                    onTap: () {
                       bottomSheet(
                           context: context,
                           widget: ReportView(
@@ -59,9 +65,19 @@ class CommentCard extends StatelessWidget {
                             categoryId: '66a3583454e6e337915514db',
                           ));
                     },
-                    icon: Icon(
+                    child: Icon(
                       Icons.more_vert,
                       color: textColor,
+                    )),
+                Sizer(),
+                GestureDetector(
+                    onTap: (){
+                      onDeleteComment(comment.id);
+                    },
+                    child: Icon(
+                      Icons.close,
+                      color: textColor,
+                      size: 20,
                     )),
               ],
             ),
@@ -78,16 +94,16 @@ class CommentCard extends StatelessWidget {
                   post: comment,
                   from: 'comments',
                 ),
-                // Label(
-                //     text: "${
-                //         comment.isLikes==true?comment.likesCount
-                //         :comment.isSad==true?comment.sadCount
-                //         :comment.isWow==true?comment.wowCount
-                //         :comment.isAngry==true?comment.angryCount
-                //         :comment.isLove==true?comment.loveCount
-                //             :0
-                //     }",
-                //     style: Styles.mediumText(color: textColor)),
+                if(comment.isLikes==true||comment.isSad==true||comment.isWow==true||comment.isAngry==true||comment.isLove==true)Label(
+                    text: "${
+                        comment.isLikes==true?comment.likesCount
+                        :comment.isSad==true?comment.sadCount
+                        :comment.isWow==true?comment.wowCount
+                        :comment.isAngry==true?comment.angryCount
+                        :comment.isLove==true?comment.loveCount
+                            :0
+                    }",
+                    style: Styles.mediumText(color: textColor)),
                 const Sizer(),
                 TextAppButton(
                     style: Styles.mediumText(),
@@ -96,12 +112,13 @@ class CommentCard extends StatelessWidget {
                       bottomSheet(
                           context: context,
                           isScrollControlled: true,
-                          widget: CommentReplies(
-                            replies: [],
-                            postId: comment.post, commentId: comment.id,
-                            onAddReply: (ReplyOnCommentParams params) {
-                            // replyOnComment(params: params);
-                          },
+                          widget: BlocProvider.value(
+                            value: serviceLocator<SocialPostsCubit>()..loadReplies(context,comment.id),
+                            child: CommentReplies(
+                              replies: const [],
+                              postId: comment.post, commentId: comment.id,
+                              onAddReply: (ReplyOnCommentParams params) =>onAddReply(params), onDeleteReply: (String id)=>onDeleteReply(id), from: from,
+                            ),
                           ));
                     })
               ],

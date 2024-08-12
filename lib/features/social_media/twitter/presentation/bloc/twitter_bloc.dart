@@ -274,44 +274,6 @@ class TwitterCubit extends Cubit<TwitterState> {
         });
   }
 
-  //
-  // List<TwitterCommentReplyEntity> replies = [];
-  // getCommentReplies(
-  //     {required BuildContext context,
-  //     required String commentId,
-  //     required String postId,
-  //     required TwitterPostCommentEntity comment,required UserEntity userData}) async {
-  //   final response = await _twitterCommentRepliesUseCase(commentId);
-  //   response.fold(
-  //     (failure) =>
-  //         emit(state.copyWith(failure: failure, status: StateStatus.error)),
-  //     (data) {
-  //       emit(state.copyWith(commentReplies: data,status: StateStatus.success));
-  //       bottomSheet(
-  //       context: context,
-  //       isScrollControlled: true,
-  //       widget: TwitterCommentReplies(
-  //         replies: data,
-  //         onAddReply: (TwitterCommentReplyParams params) {
-  //           onCommentReply(params: params);
-  //         },
-  //         commentId: commentId,
-  //         postId: postId,
-  //         onReplyReact: (String id) {
-  //           onCommentReact(
-  //               params:
-  //                   TwitterCommentReactParams(commentId: id, react: 'love'));
-  //         },
-  //         onReport: (TwitterReportParams params) {
-  //           onReport(params);
-  //         }, userData: userData,
-  //       ),
-  //     );
-  //     },
-  //   );
-  // }
-
-  // add comment usecase
   Future<TwitterPostCommentEntity> onPostComment(
       {required PostCommentParams params}) async {
     var response = await _twitterPostCommentUseCase(params);

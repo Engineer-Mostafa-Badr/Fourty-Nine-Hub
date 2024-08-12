@@ -246,6 +246,10 @@ class EndPoints {
     return '/facebook/post/$postId';
   }
 
+  static String deleteComment(String commentId) {
+    return '/facebook/comment/delete-comment/$commentId';
+  }
+
   static String hidePost(String postId) {
     return '/facebook/post/hide/$postId';
   }

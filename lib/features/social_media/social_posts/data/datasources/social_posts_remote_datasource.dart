@@ -35,6 +35,7 @@ abstract class SocialPostsRemoteDataSource {
       {required PostCommentsParams params});
 
   Future<Either<Failure, bool>> deletePost({required String postId});
+  Future<Either<Failure, bool>> deleteComment({required String commentId});
   Future<Either<Failure, bool>> hidePost({required String postId});
   Future<Either<Failure, bool>> friendRequest({required String userId});
   Future<Either<Failure, bool>> followRequest({required String userId});
@@ -144,6 +145,12 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   @override
   Future<Either<Failure, bool>> deletePost({required String postId}) async {
     final response = await _apiConsumer.delete(EndPoints.deletePost(postId));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteComment({required String commentId}) async {
+    final response = await _apiConsumer.delete(EndPoints.deleteComment(commentId));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 

@@ -7,10 +7,12 @@ class InstagramState {
   final int? newPage;
   final List<PostEntity>? posts;
   final int? pageIndex;
+  final int? count;
   CommentEntity? newComment;
+  final List<CommentEntity>? postComments;
 
   InstagramState(
-      {this.advertisementsPage=0,this.newPage=0,this.pageIndex=0, this.posts, this.status, this.failure,this.newComment});
+      {this.advertisementsPage=0,this.newPage=0,this.pageIndex=0, this.posts, this.status, this.failure,this.newComment,this.postComments,this.count=0});
   InstagramState copyWith({
     StateStatus? status,
     Failure? failure,
@@ -18,7 +20,9 @@ class InstagramState {
     int? advertisementsPage,
     int? newPage,
     int? pageIndex,
+    int? count,
     CommentEntity? newComment,
+    List<CommentEntity>? postComments,
   }) {
     return InstagramState(
       status: status ?? this.status,
@@ -26,8 +30,10 @@ class InstagramState {
       posts: posts ?? this.posts,
       advertisementsPage: advertisementsPage ?? this.advertisementsPage,
       newPage: newPage ?? this.newPage,
+      count: count ?? this.count,
       pageIndex: pageIndex ?? this.pageIndex,
       newComment: newComment ?? this.newComment,
+      postComments: postComments ?? this.postComments,
     );
   }
 }

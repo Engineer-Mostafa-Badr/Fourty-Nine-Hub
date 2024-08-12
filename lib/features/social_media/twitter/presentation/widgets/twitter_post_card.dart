@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -351,17 +352,22 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             : const ProfileImage(accountId: 0),
         const Sizer(),
         Label(
-            text: post.user.firstName ?? "",
+            text: "${post.user.firstName} ${post.user.lastName}",
             style: Styles.mediumText(fontWeight: FontWeight.w500)),
-        const Sizer(),
+         Sizer(width: 4,),
         if (post.user.isDocumented == true)
           const Icon(
             Icons.verified,
             color: AppColors.PRIMARY_COLOR,
           ),
         const Sizer(),
+        Expanded(
+          child: Label(
+              text: '@${post.user.email.split('@')[0]}',
+              style: Styles.mediumText(color: Colors.grey)),
+        ),
         Label(
-            text: '@${post.user.email.split('@')[0]} . $date',
+            text: ' . $date',
             style: Styles.mediumText(color: Colors.grey)),
         IconButton(
           onPressed: () {

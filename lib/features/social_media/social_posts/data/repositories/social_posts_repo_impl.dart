@@ -61,6 +61,11 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   }
 
   @override
+  Future<Either<Failure, bool>> deleteComment({required String commentId}) {
+    return _remoteDataSource.deleteComment(commentId: commentId);
+  }
+
+  @override
   Future<Either<Failure, bool>> hidePost({required String postId}) {
     return _remoteDataSource.hidePost(postId  : postId);
   }

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_reels_usecase.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_comment_replies.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_comments.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
@@ -43,6 +40,20 @@ class InstagramCubit extends Cubit<InstagramState> {
     });
   }
 
+  void loadComments(BuildContext context,String postId) async {
+    await getPostComments(context: context, postId: postId,page: 1);
+    commentsPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getPostComments(context: context, postId: postId,page: pageKey);
+    });
+  }
+  void loadReplies(BuildContext context,String commentId) async {
+    await getCommentReplies(context: context, commentId: commentId,page: 1);
+    commentsPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getCommentReplies(context: context, commentId: commentId,page: pageKey);
+    });
+  }
 
   void onRefresh()async{
     emit(state.copyWith(advertisementsPage:0,newPage: 0));
@@ -136,6 +147,7 @@ class InstagramCubit extends Cubit<InstagramState> {
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
             (r){
           value=r;
+          emit(state.copyWith(count:state.count!+1));
         }
     );
     return value;
@@ -143,41 +155,96 @@ class InstagramCubit extends Cubit<InstagramState> {
   }
 
 
-  void showPostComments(
-      {required BuildContext context, required PostCommentsParams params}) async {
-    final response = await _getPostCommentsUseCase(params);
+  final PagingController<int, CommentEntity> commentsPagingController =
+  PagingController(firstPageKey: 1);
+
+  int pageSize =10;
+  Future<void> getPostComments(
+      {required BuildContext context, required String postId,required int page}) async {
+    final response = await _getPostCommentsUseCase(PostCommentsParams(page: page,limit: pageSize,postId: postId,),);
     response.fold(
             (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (data) => bottomSheet(
-            context: context,
-            isScrollControlled: true,
-            widget: InstagramPostComments(
-                comments: data,
-                postId: params.postId,
-                onAddComment: (PostCommentParams params) {
-                  onPostComment(params: params);
-                }),),);
+            (data) {
+          final isLastPage = data.length < pageSize;
+          if (page == 1) {
+            print("page == 1 $page");
+            commentsPagingController.itemList = [];
+          }
+          if (isLastPage) {
+            print("isLastPage = $isLastPage");
+            commentsPagingController.appendLastPage(data);
+          } else {
+            print("isNotLastPage = $isLastPage");
+            final nextPageKey = page + 1;
+            commentsPagingController.appendPage(data, nextPageKey);
+          }
+          emit(state.copyWith(postComments:data,status: StateStatus.success ,),);
+        });
   }
+  // void showPostComments(
+  //     {required BuildContext context, required PostCommentsParams params}) async {
+  //   final response = await _getPostCommentsUseCase(params);
+  //   response.fold(
+  //           (failure) =>
+  //           emit(state.copyWith(failure: failure, status: StateStatus.error)),
+  //           (data) => bottomSheet(
+  //           context: context,
+  //           isScrollControlled: true,
+  //           widget: InstagramPostComments(
+  //               comments: data,
+  //               postId: params.postId,
+  //               onAddComment: (PostCommentParams params) {
+  //                 onPostComment(params: params);
+  //               }),),);
+  // }
 
   // show comments with rendered data
 
-  void showPostCommentReplies(
-      {required BuildContext context, required String commentId,required String postId}) async {
-    final response = await _getPostCommentRepliesUseCase(PostCommentsParams(page: 0, limit: 0, postId: 'postId'));
+  // void showPostCommentReplies(
+  //     {required BuildContext context, required String commentId,required String postId}) async {
+  //   final response = await _getPostCommentRepliesUseCase(PostCommentsParams(page: 0, limit: 0, postId: 'postId'));
+  //   response.fold(
+  //           (failure) =>
+  //           emit(state.copyWith(failure: failure, status: StateStatus.error)),
+  //           (data) => bottomSheet(
+  //           context: context,
+  //           isScrollControlled: true,
+  //           widget: InstagramCommentReplies(
+  //             replies: data,
+  //             postId: postId, commentId: commentId, onAddReply: (ReplyOnCommentParams params) {
+  //             replyOnComment(params: params);
+  //           },
+  //           )));
+  // }
+
+
+  final PagingController<int, CommentEntity> repliesPagingController =
+  PagingController(firstPageKey: 1);
+  Future<void> getCommentReplies(
+      {required BuildContext context,required String commentId,required int page}) async {
+    final response = await _getPostCommentRepliesUseCase(PostCommentsParams(page: page,limit: pageSize,postId: commentId,),);
     response.fold(
             (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (data) => bottomSheet(
-            context: context,
-            isScrollControlled: true,
-            widget: InstagramCommentReplies(
-              replies: data,
-              postId: postId, commentId: commentId, onAddReply: (ReplyOnCommentParams params) {
-              replyOnComment(params: params);
-            },
-            )));
+            (data) {
+          final isLastPage = data.length < pageSize;
+          if (page == 1) {
+            print("page == 1 $page");
+            repliesPagingController.itemList = [];
+          }
+          if (isLastPage) {
+            print("isLastPage = $isLastPage");
+            repliesPagingController.appendLastPage(data);
+          } else {
+            print("isNotLastPage = $isLastPage");
+            final nextPageKey = page + 1;
+            repliesPagingController.appendPage(data, nextPageKey);
+          }
+          emit(state.copyWith(status: StateStatus.success ,),);
+        });
   }
+
 
 // add comment usecase
   Future<CommentEntity> onPostComment({required PostCommentParams params}) async {
@@ -186,6 +253,8 @@ class InstagramCubit extends Cubit<InstagramState> {
     response.fold((failure)=>emit(state.copyWith(failure: failure,status: StateStatus.error),),
             (data){
           model=data;
+          feedPagingController.itemList?.firstWhere((element) => element.id==params.postId).commentsCount=(feedPagingController.itemList!.firstWhere((element) => element.id==params.postId).commentsCount!+1);
+          print("CommentsCount ${feedPagingController.itemList?.firstWhere((element) => element.id==params.postId).commentsCount}");
           emit(state.copyWith(newComment: data,status: StateStatus.success));
         }
     );
