@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
+import 'package:fourtyninehub/common/widgets/stateful/dynamic/list_view_pagination.dart';
 
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/core/animations/moving_widget_hr.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/parent_main_categories_cubit/main_categories_cubit.dart';
@@ -32,15 +35,15 @@ class FourtyNineView extends StatefulWidget {
 }
 
 class _FourtyNineViewState extends State<FourtyNineView> {
-  bool isList = true;
-  final scrollController = ScrollController();
+  // bool isList = true;
+  // final scrollController = ScrollController();
 
   @override
   void initState() {
-    final controller = context.read<MainCategoriesCubit>();
-    scrollController.addListener(() async {
-      await controller.getMainCategoriesPagination();
-    });
+    // final controller = context.read<MainCategoriesCubit>();
+    // scrollController.addListener(() async {
+    //   // await controller.getMainCategoriesPagination();
+    // });
     super.initState();
   }
 
@@ -50,39 +53,63 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         mainCategoryId: 1,
         isWithBackArrow: false,
         body: SingleChildScrollView(
-            controller: scrollController,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const AnnounceWidget(),
-                    const AdsTextBanner(),
-                    const WalletWidget(),
-                    const GoogleAddsBanner(),
-                    const Sizer(),
-                    _buildMazadatWidget(),
-                    const Sizer(),
-                    BlocBuilder<MainCategoriesCubit,
-                        BasicState<List<MainCategoryEntity>>>(
-                      builder: (context, state) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            const AnnounceWidget(),
+            const AdsTextBanner(),
+            const WalletWidget(),
+            const GoogleAddsBanner(),
+            const Sizer(),
+            _buildMazadatWidget(),
+            const Sizer(),
+            SizedBox(
+              height: 500,
+              child: PaginationView<MainCategoryEntity>(
+                build: (ScrollController scrollController,
+                    List<MainCategoryEntity> data) {
+                  return ListView.separated(
+                    itemCount: data.length,
+                    shrinkWrap: true,
+                    controller: scrollController,
+                    itemBuilder: (context, index) =>
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if (state.data != null)
-                              ...state.data!.map(
-                                (e) => _buildMainCategoriesWidget(
-                                  category: e,
-                                ),
-                              ),
-                            if (state.isLoading)
-                              const CircularProgressIndicator.adaptive()
+                            Label(text: data[index].name, style: Styles.headerText()),
+                            MainCategoryBanner(category: data[index]),
                           ],
-                        );
-                      },
-                    ),
-                  ]),
-            )));
+                        ),
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const Sizer(),
+                  );
+                },
+                fetchData: (PaginationParams paginationParams) => context
+                    .read<MainCategoriesCubit>()
+                    .getMainCategories(paginationParams),
+              ),
+            ),
+            // BlocBuilder<MainCategoriesCubit,
+            //     BasicState<List<MainCategoryEntity>>>(
+            //   builder: (context, state) {
+            //     return Column(
+            //       crossAxisAlignment: CrossAxisAlignment.center,
+            //       children: [
+            //         if (state.data != null)
+            //           ...state.data!.map(
+            //             (e) => _buildMainCategoriesWidget(
+            //               category: e,
+            //             ),
+            //           ),
+            //         if (state.isLoading)
+            //           const CircularProgressIndicator.adaptive()
+            //       ],
+            //     );
+            //   },
+            // ),
+          ]),
+        )));
   }
 
   Widget _buildMazadatWidget() {
@@ -187,7 +214,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Label(text: service.title(), style: Styles.headerText()),
-            // MovingWidgetHr(asset: image, label: service.title())
+            MovingWidgetHr(asset: image)
           ],
         ),
       ),
@@ -204,19 +231,19 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           text: category.name,
           style: Styles.headerText(),
         ),
-        if(category.subcategories?.isNotEmpty??false)
-        SizedBox(
-          height: kToolbarHeight * 3,
-          child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return SubCategoryCard(
-                    mainCategory: category,
-                    item: category.subcategories![index]);
-              },
-              separatorBuilder: (context, index) => const Sizer(),
-              itemCount: category.subcategories?.length ?? 0),
-        )
+        if (category.subcategories?.isNotEmpty ?? false)
+          SizedBox(
+            height: kToolbarHeight * 3,
+            child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return SubCategoryCard(
+                      mainCategory: category,
+                      item: category.subcategories![index]);
+                },
+                separatorBuilder: (context, index) => const Sizer(),
+                itemCount: category.subcategories?.length ?? 0),
+          )
       ],
     );
   }

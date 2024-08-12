@@ -11,6 +11,7 @@ import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
 import 'package:fourtyninehub/service_locator/reels_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
+import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -93,6 +94,8 @@ class DI {
     await AuthServiceLocator.execute(serviceLocator: serviceLocator);
     // Ride Customer
     await RideServiceLocator.execute(serviceLocator: serviceLocator);
+    // Subcategories
+    SubcategoriesServiceLocator.execute(serviceLocator: serviceLocator);
     // Fourty-Nine
     FourtyNineServiceLocator.execute(serviceLocator);
 

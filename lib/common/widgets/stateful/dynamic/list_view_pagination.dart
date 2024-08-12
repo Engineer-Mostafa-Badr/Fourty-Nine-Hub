@@ -4,13 +4,13 @@ import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 class PaginationView<T> extends StatefulWidget {
   final PaginationParams intialPagination;
   final Widget Function(ScrollController scrollController, List<T> data) build;
-  final List<T>? Function(PaginationParams paginationParams) fetchData;
-  PaginationView(
-      {super.key,
-      PaginationParams? intialPagination,
-      required this.build,
-      required this.fetchData})
-      : intialPagination = intialPagination ?? PaginationParams.basic();
+  final Future<List<T>>? Function(PaginationParams paginationParams) fetchData;
+  PaginationView({
+    super.key,
+    PaginationParams? intialPagination,
+    required this.build,
+    required this.fetchData,
+  }) : intialPagination = intialPagination ?? PaginationParams.basic();
 
   @override
   State<PaginationView> createState() => _PaginationViewState<T>();
@@ -30,22 +30,24 @@ class _PaginationViewState<T> extends State<PaginationView<T>> {
     _lastPage = false;
     _data = [];
     _scrollController = ScrollController();
-    _scrollController.addListener(() {
+    _fetchData();
+    _scrollController.addListener(() async {
       if (_scrollController.offset ==
               _scrollController.position.maxScrollExtent &&
           !_lastPage) {
-        _fetchData();
+        await _fetchData();
       }
     });
     super.initState();
   }
 
-  _fetchData() async {
-    _fetchedData = widget.fetchData(_paginationParams);
+  Future<void> _fetchData() async {
+    _fetchedData = await widget.fetchData(_paginationParams);
     if (_fetchedData != null) {
       _data.addAll(_fetchedData!);
       _lastPage = _fetchedData!.length < _paginationParams.limit;
       _paginationParams.page++;
+      setState(() {});
     }
   }
 

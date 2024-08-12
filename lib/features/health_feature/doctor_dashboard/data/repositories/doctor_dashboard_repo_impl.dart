@@ -6,6 +6,9 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/en
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_statistics_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/repositories/doctor_dashboard_repo.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_appointments_by_day.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_id_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_personal_info_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_timetable_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 
 class DoctorDashboardRepoImpl implements DoctorDashboardRepo {
@@ -63,5 +66,37 @@ class DoctorDashboardRepoImpl implements DoctorDashboardRepo {
   @override
   Future<Either<Failure, DoctorEntity>> getDoctorProfile() {
     return remoteDataSource.getDoctorProfile();
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteAccount() {
+    return remoteDataSource.deleteAccount();
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateID(DoctorDocsParams params) {
+    return remoteDataSource.updateID(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> updatePersonalInfo(
+      DoctorPersonalInfoParams params) {
+    return remoteDataSource.updatePersonalInfo(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> updatePracticingCirtificate(
+      DoctorDocsParams params) {
+    return remoteDataSource.updatePracticingCirtificate(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateProfilePhoto(String photoUrl) {
+    return remoteDataSource.updateProfilePhoto(photoUrl);
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateTimetable(DoctorTimetableParams params) {
+    return remoteDataSource.updateTimetable(params);
   }
 }

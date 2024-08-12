@@ -17,6 +17,8 @@ class EndPoints {
   static const refreshToken = '/auth/refresh/token';
   static const getParentMainCategories = '/category/parent';
   static const getMainCategories = '/category/parent/get-all-main';
+  static const getMainCategoriesWithoutSubcategories = '/categories/main';
+
   static const getWheel = '/wheels/random';
   static const spinWheel = '/wheels/spin/';
   static const wheelWallet = '/wheel/wallets/my/wallet';
@@ -42,7 +44,7 @@ class EndPoints {
       '/health/book-appointment-premium/$appointmentId';
   static String getDoctorReviewsForUsers(String doctorId) =>
       '/health/doctor/rate/$doctorId';
-  static String getDoctorDetails(String doctorId) => '/health/doctor/$doctorId';
+  static String getDoctorDetails(String doctorId) => '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
   static const getHealthSubcategories = '/health/subCategories-health-with-ads';
   static const getMedicalServices =
       '/health/subCategories-medicalServices-with-ads';

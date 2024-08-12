@@ -8,6 +8,9 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/mode
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_statistics_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_appointments_by_day.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_id_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_personal_info_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_timetable_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/data/models/doctor_model.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 
@@ -30,6 +33,20 @@ abstract class DoctorDashboardRemoteDataSource {
       PaginationParams params);
 
   Future<Either<Failure, DoctorEntity>> getDoctorProfile();
+
+  Future<Either<Failure, bool>> deleteAccount();
+
+  Future<Either<Failure, bool>> updateID(DoctorDocsParams params);
+
+  Future<Either<Failure, bool>> updatePersonalInfo(
+      DoctorPersonalInfoParams params);
+
+  Future<Either<Failure, bool>> updatePracticingCirtificate(
+      DoctorDocsParams params);
+
+  Future<Either<Failure, bool>> updateProfilePhoto(String photoUrl);
+
+  Future<Either<Failure, bool>> updateTimetable(DoctorTimetableParams params);
 }
 
 class DoctorDashboardRemoteDataSourceImpl
@@ -135,5 +152,43 @@ class DoctorDashboardRemoteDataSourceImpl
       (failure) => Left(failure),
       (data) => Right(DoctorModel.fromJson(data['data'])),
     );
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteAccount() {
+    // TODO: implement deleteAccount
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateID(DoctorDocsParams params) {
+    // TODO: implement updateID
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> updatePersonalInfo(
+      DoctorPersonalInfoParams params) {
+    // TODO: implement updatePersonalInfo
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> updatePracticingCirtificate(
+      DoctorDocsParams params) {
+    // TODO: implement updatePracticingCirtificate
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateProfilePhoto(String photoUrl) {
+    // TODO: implement updateProfilePhoto
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateTimetable(DoctorTimetableParams params) {
+    // TODO: implement updateTimetable
+    throw UnimplementedError();
   }
 }

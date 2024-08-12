@@ -75,7 +75,7 @@ class RegisterOptions extends StatelessWidget {
       required String image,
       required MainServicesEnum service}) {
     return InkWell(
-      onTap: () => context.go(Routes.REGISTERDRIVER, extra: service.value()),
+      onTap: () => context.go(Routes.REGISTERDRIVER, extra: service.id()),
       child: Container(
         width: kToolbarHeight,
         padding: const EdgeInsets.all(5),

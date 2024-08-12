@@ -51,10 +51,10 @@ class HealthCubit extends Cubit<HealthState> {
   ];
 
   void loadData() async {
-    await getMyBookings();
-    await getServices();
-    await getSubCategories();
     await _isDoctor();
+    await getSubCategories();
+    await getServices();
+    await getMyBookings();
   }
 
   Future<void> getMyBookings() async {

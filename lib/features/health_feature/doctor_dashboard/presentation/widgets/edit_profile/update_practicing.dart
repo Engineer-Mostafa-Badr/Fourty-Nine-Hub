@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_id_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/edit_doctor_profile/edit_doctor_profile_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_docs.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/edit_profile/update_card.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 
 class UpdateDoctorPracticingCirtificateCard extends StatelessWidget {
   const UpdateDoctorPracticingCirtificateCard({super.key});
@@ -12,7 +15,14 @@ class UpdateDoctorPracticingCirtificateCard extends StatelessWidget {
     return EditDoctorProfileCard(
       title: Labels.practiceCertification,
       onTap: () {
-        context.push(Routes.EDITDOCTORDOCS);
+        bottomSheet(
+          context: context,
+          widget: EditDoctorDocsView(
+            onSubmit: (DoctorDocsParams doctorDocsParams) {
+              context.read<EditDoctorProfileCubit>().updatePracticingCirtificate(doctorDocsParams);
+            },
+          ),
+        );
       },
     );
   }

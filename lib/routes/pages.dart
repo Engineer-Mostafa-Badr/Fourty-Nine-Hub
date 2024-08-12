@@ -34,7 +34,6 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/pages/create_doctor_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_statistics.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_docs.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_personal_info_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_profile.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/today_doctor_appointments_view.dart';
@@ -718,14 +717,11 @@ class AppPages {
               GoRoute(
                   path: Paths.EDITDOCTORPROFILE,
                   name: Routes.EDITDOCTORPROFILE,
-                  builder: (context, state) => BlocProvider<EditDoctorProfileCubit>(
+                  builder: (context, state) =>
+                      BlocProvider<EditDoctorProfileCubit>(
                         create: (context) => serviceLocator(),
                         child: const EditDoctorProfileView(),
                       )),
-              GoRoute(
-                  path: Paths.EDITDOCTORDOCS,
-                  name: Routes.EDITDOCTORDOCS,
-                  builder: (context, state) => EditDoctorDocsView()),
               GoRoute(
                   path: Paths.EDITDOCTORPERSONALINFO,
                   name: Routes.EDITDOCTORPERSONALINFO,

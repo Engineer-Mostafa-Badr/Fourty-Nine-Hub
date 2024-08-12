@@ -20,6 +20,9 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/us
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_id_remaining_days.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_practicing_remaining_days.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_subscription_remaining_days.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_id_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_practicing_cirtification_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_profile_photo_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/all_doctor_reservations/all_doctor_reservations_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_statistics/doctor_statistics_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
@@ -183,6 +186,13 @@ class HealthServiceLocator {
         () => GetAllDoctorReservationsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetDoctorProfileUseCase>(
         () => GetDoctorProfileUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<UpdateDoctorIDUsecase>(
+        () => UpdateDoctorIDUsecase(serviceLocator()));
+    serviceLocator
+        .registerLazySingleton<UpdateDoctorPracticingCirtificateUsecase>(
+            () => UpdateDoctorPracticingCirtificateUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<UpdateDoctorProfilePhotoUsecase>(
+        () => UpdateDoctorProfilePhotoUsecase(serviceLocator()));
 
     // -------------------------- cubits --------------------------
     serviceLocator.registerSingleton<HealthSharedData>(HealthSharedData());
@@ -264,7 +274,12 @@ class HealthServiceLocator {
     serviceLocator.registerFactory<AllDoctorReservationsCubit>(
         () => AllDoctorReservationsCubit(serviceLocator())..loadData());
 
-    serviceLocator.registerFactory<EditDoctorProfileCubit>(
-        () => EditDoctorProfileCubit(serviceLocator())..loadData());
+    serviceLocator
+        .registerFactory<EditDoctorProfileCubit>(() => EditDoctorProfileCubit(
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+            )..loadData());
   }
 }

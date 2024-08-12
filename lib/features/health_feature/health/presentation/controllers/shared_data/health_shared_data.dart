@@ -12,7 +12,7 @@ class HealthSharedData {
   final DoctorSearchParams doctorSearchParams = DoctorSearchParams();
 
   MainCategoryEntity mainCategory = MainCategoryEntity(
-    id: MainServicesEnum.health.value(),
+    id: MainServicesEnum.health.id(),
     name: MainServicesEnum.health.displayTitle,
     image: '',
     banner:

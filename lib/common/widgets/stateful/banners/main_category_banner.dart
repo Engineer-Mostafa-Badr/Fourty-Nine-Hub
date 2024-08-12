@@ -38,47 +38,41 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: Colors.yellow  ,
+          color: Colors.yellow,
           image: DecorationImage(
             fit: BoxFit.cover,
             image: NetworkImage(widget.category.banner),
           )),
       child: Row(
         children: [
-          Expanded(
-            child: Column(
-              children: [
-                InkWell(
-                  onTap: () {
-                    final result = widget.onFavorite?.call();
-                    if (result != null && result != _isFavorite) {
-                      setState(() {
-                        _isFavorite = result;
-                      });
-                    }
-                  },
-                  child: Icon(
-                    _isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: AppColors.SECONDARY_COLOR,
-                  ),
+          _buildRegisterButton(),
+          const Spacer(),
+          Column(
+            
+            children: [
+              InkWell(
+                onTap: () {
+                  final result = widget.onFavorite?.call();
+                  if (result != null && result != _isFavorite) {
+                    setState(() {
+                      _isFavorite = result;
+                    });
+                  }
+                },
+                child: Icon(
+                  _isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: AppColors.SECONDARY_COLOR,
                 ),
-                const Sizer(),
-                Label(
-                  text: '${widget.category.total.toShortScale} ${Labels.ads}',
-                  style: Styles.mediumText(),
-                )
-              ],
-            ),
+              ),
+
+              const Sizer(height: 20,),
+              
+              Label(
+                text: '${widget.category.total.toShortScale} ${Labels.ads}',
+                style: Styles.mediumText(),
+              )
+            ],
           ),
-          const Spacer(),
-          Expanded(
-            child: Text(
-              widget.category.name,
-              style: Styles.headerText(color: AppColors.DARK_BLUE_COLOR),
-            ),
-          ),
-          const Spacer(),
-          Expanded(child: _buildRegisterButton())
         ],
       ),
     );

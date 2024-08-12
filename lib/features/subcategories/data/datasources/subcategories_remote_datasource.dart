@@ -1,0 +1,34 @@
+import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/api/api_consumer.dart';
+import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
+
+abstract class SubcategoriesRemoteDataSource {
+  Future<Either<Failure, List<SubCategoryEntity>>> getSubcategories(
+      GetSubCategoriesParams params);
+}
+
+class SubcategoriesRemoteDataSourceImpl
+    implements SubcategoriesRemoteDataSource {
+  final ApiConsumer _apiConsumer;
+
+  SubcategoriesRemoteDataSourceImpl(this._apiConsumer);
+
+  @override
+  Future<Either<Failure, List<SubCategoryEntity>>> getSubcategories(
+      GetSubCategoriesParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.subCategories(mainCategoryId: params.mainCategoryId),
+      queryParameters: params.paginationParams.toJson(),
+    );
+
+    return response.fold(
+        (failure) => Left(failure),
+        (data) => Right((data['data']['subcategories'] as List)
+            .map((e) => SubCategoryModel.fromJson(e))
+            .toList()));
+  }
+}
