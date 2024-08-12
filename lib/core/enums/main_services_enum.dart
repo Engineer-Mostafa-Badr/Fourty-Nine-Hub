@@ -21,7 +21,7 @@ extension MainServicesEnumExtention on MainServicesEnum {
     }
   }
 
-  String id() {
+  String get id {
     switch (this) {
       case MainServicesEnum.ride:
         return '62c8b5779332225799fe3304';

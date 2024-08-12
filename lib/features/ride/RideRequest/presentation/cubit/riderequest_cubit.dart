@@ -48,7 +48,7 @@ class RiderequestCubit extends Cubit<RiderequestState> {
     // -------------------------------load subcategories ---------------------------
     final subCategories = await _getSubCategoriesUseCase.call(
         GetSubCategoriesParams(
-            mainCategoryId: service.id(),
+            mainCategoryId: service.id,
             paginationParams: PaginationParams.basic()));
     subCategories.fold((failure) {
       emit(state.copyWith(

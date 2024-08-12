@@ -31,4 +31,9 @@ class FourtyNineRepositoryImpl implements FourtyNineRepository {
         return _fourtyNineRemoteDataSource.getSliderItems();
 
   }
+  
+  @override
+  Future<Either<Failure, MainCategoryEntity>> getMainCategoryDetails(String id) {
+    return _fourtyNineRemoteDataSource.getMainCategoryDetails(id);
+  }
 }

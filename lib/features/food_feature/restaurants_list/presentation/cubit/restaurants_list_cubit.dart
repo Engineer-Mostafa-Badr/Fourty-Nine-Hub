@@ -55,7 +55,7 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
 
   Future<void> getSubCategories() async {
     final response = await _getFoodCategoriesUseCase(GetSubCategoriesParams(
-        mainCategoryId: service.id(),
+        mainCategoryId: service.id,
         paginationParams: PaginationParams.basic()));
     response.fold(
         (failure) => emit(state.copyWith(

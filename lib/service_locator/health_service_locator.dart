@@ -209,6 +209,7 @@ class HealthServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
         )..loadData());
     serviceLocator.registerFactory<CreateDoctorCubit>(
       () => CreateDoctorCubit(

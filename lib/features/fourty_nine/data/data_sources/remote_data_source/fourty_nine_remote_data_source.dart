@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/main_category_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/parent_main_category_model.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/parent_main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
 
@@ -19,6 +20,8 @@ abstract class FourtyNineRemoteDataSource {
   Future<Either<Failure, List<MainCategoryModel>>> getMainCategories(
       {required PaginationParams params});
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems();
+
+  Future<Either<Failure, MainCategoryEntity>> getMainCategoryDetails(String id);
 }
 
 class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
@@ -60,6 +63,17 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
       (response) => Right((response['data']['items'] as List)
           .map((e) => SliderItemModel.fromJson(e))
           .toList()),
+    );
+  }
+
+  @override
+  Future<Either<Failure, MainCategoryEntity>> getMainCategoryDetails(
+      String id) async {
+    final result = await _apiConsumer.get(EndPoints.getMainCategoryDetails(id));
+    return result.fold(
+      (failure) => Left(failure),
+      (response) =>
+          Right(MainCategoryModel.fromJson(response['data']['mainCategory'])),
     );
   }
 }

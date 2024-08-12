@@ -18,6 +18,7 @@ class EndPoints {
   static const getParentMainCategories = '/category/parent';
   static const getMainCategories = '/category/parent/get-all-main';
   static const getMainCategoriesWithoutSubcategories = '/categories/main';
+  static String getMainCategoryDetails(String id) => '/categories/main/$id';
 
   static const getWheel = '/wheels/random';
   static const spinWheel = '/wheels/spin/';
