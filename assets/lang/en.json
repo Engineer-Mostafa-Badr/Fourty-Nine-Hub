@@ -15,5 +15,6 @@
   "live":"Live",
   "health":"Health",
   "shipping":"Shipping",
-  "ride":"Ride"
+  "ride":"Ride",
+  "lang": "EN"
 }
