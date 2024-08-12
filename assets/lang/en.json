@@ -1,6 +1,5 @@
 {
   "join": "Join",
-  "arabic": "Arabic",
-  "english": "English",
+  "lang": "EN",
   "new_meeting": "New Meeting"
 }

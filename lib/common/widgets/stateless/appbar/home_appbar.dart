@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import '../../../translations/translation_cubit.dart';
 import '../buttons/iconAppButton.dart';
 import '../labels/label.dart';
 
@@ -79,8 +83,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                     const SizedBox(width: 5),
                     Expanded(
-                      child:
-                          Label(text: 'Search', style: Styles.mediumText()),
+                      child: Label(text: 'Search', style: Styles.mediumText()),
                     ),
                   ],
                 ),
@@ -94,9 +97,12 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: TextAppButton(
-                  label: 'EN',
+                  label: 'lang'.localize,
                   style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
-                  onPressed: () {})),
+                  onPressed: () {
+                    context.read<TranslationCubit>().changeLanguage(
+                        Locale(context.isArabic ? 'en' : 'ar'), context);
+                  })),
           Stack(
             children: [
               IconButton(
@@ -124,8 +130,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Label(
-                      text: '1',
-                      style: Styles.mediumText(color: Colors.white)),
+                      text: '1', style: Styles.mediumText(color: Colors.white)),
                 ),
               ),
             ],

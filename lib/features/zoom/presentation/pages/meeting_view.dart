@@ -33,22 +33,6 @@ class MeetingView extends StatelessWidget {
           var cubit = context.read<MeetingCubit>();
           return Column(
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  context
-                      .read<TranslationCubit>()
-                      .changeLanguage(const Locale('en'), context);
-                },
-                child: const Text('english').tr(),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  context
-                      .read<TranslationCubit>()
-                      .changeLanguage(const Locale('ar'), context);
-                },
-                child: const Text('arabic').tr(),
-              ),
               SizedBox(
                 height: 200,
                 child: GridView(
