@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fourtyninehub/core/utils/localization.dart';
 
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
@@ -74,7 +73,6 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    _currentDir ??= context.isArabic ? TextDirection.rtl : TextDirection.ltr;
     Widget textFieldWidget = TextFormField(
         onTap: widget.onTap ??
             () {
