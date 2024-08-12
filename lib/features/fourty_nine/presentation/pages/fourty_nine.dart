@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/parent_main_categories_cubit/main_categories_cubit.dart';
 
+import '../../../../common/widgets/dynamic/bottom_navigator.dart';
+import '../../../../common/widgets/dynamic/drawer.dart';
+import '../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../common/widgets/dynamic/google_ads_banner.dart';
+import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
 
 import '../../../../core/animations/moving_widget_hr.dart';
@@ -47,44 +49,55 @@ class _FourtyNineViewState extends State<FourtyNineView> {
 
   @override
   Widget build(BuildContext context) {
-    return SharedScaffold(
-        mainCategoryId: 1,
+    return Scaffold(
+      appBar:  const HomeAppbar(
         isWithBackArrow: false,
-        body: SingleChildScrollView(
-            controller: scrollController,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const AnnounceWidget(),
-                    const AdsTextBanner(),
-                    const WalletWidget(),
-                    const GoogleAddsBanner(),
-                    const Sizer(),
-                    _buildMazadatWidget(),
-                    const Sizer(),
-                    BlocBuilder<MainCategoriesCubit,
-                        BasicState<List<MainCategoryEntity>>>(
-                      buildWhen: (previous, current) => previous != current,
-                      builder: (context, state) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            if (state.data != null)
-                              ...state.data!.map(
-                                (e) => _buildMainCategoriesWidget(
-                                  category: e,
-                                ),
+      ),
+      bottomNavigationBar: const BottomNavigator(
+        mainCategory: 1,
+        index: 2,
+      ),
+      floatingActionButton: const FloatingButton(
+        changeView: 1,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      drawer: const DrawerWidget(),
+      body: SingleChildScrollView(
+          controller: scrollController,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const AnnounceWidget(),
+                  const AdsTextBanner(),
+                  const WalletWidget(),
+                  const GoogleAddsBanner(),
+                  const Sizer(),
+                  _buildMazadatWidget(),
+                  const Sizer(),
+                  BlocBuilder<MainCategoriesCubit,
+                      BasicState<List<MainCategoryEntity>>>(
+                    buildWhen: (previous, current) => previous != current,
+                    builder: (context, state) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          if (state.data != null)
+                            ...state.data!.map(
+                                  (e) => _buildMainCategoriesWidget(
+                                category: e,
                               ),
-                            if (state.isLoading)
-                              const CircularProgressIndicator.adaptive()
-                          ],
-                        );
-                      },
-                    ),
-                  ]),
-            )));
+                            ),
+                          if (state.isLoading)
+                            const CircularProgressIndicator.adaptive()
+                        ],
+                      );
+                    },
+                  ),
+                ]),
+          )),
+    );
   }
 
   Widget _buildMazadatWidget() {

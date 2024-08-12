@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
@@ -9,9 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 
-import '../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../common/widgets/dynamic/drawer.dart';
-import '../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -26,16 +22,10 @@ class MeetingView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.GRAY_LIGHT_COLOR3,
-      appBar: const HomeAppbar(),
+      appBar: const HomeAppbar(
+        isWithBackArrow: true,
+      ),
       drawer: const DrawerWidget(),
-      // bottomNavigationBar: const BottomNavigator(
-      //   mainCategory: 3,
-      //   index: 2,
-      // ),
-      // floatingActionButton: const FloatingButton(
-      //   changeView: 2,
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: BlocBuilder<MeetingCubit, MeetingState>(
         builder: (context, state) {
           var cubit = context.read<MeetingCubit>();
