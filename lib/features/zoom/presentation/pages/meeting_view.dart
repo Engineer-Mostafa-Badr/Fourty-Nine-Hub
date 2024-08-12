@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,9 +9,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 
-import '../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../common/widgets/dynamic/drawer.dart';
-import '../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
