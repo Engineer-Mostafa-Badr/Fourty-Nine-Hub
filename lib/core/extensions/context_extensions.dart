@@ -1,0 +1,29 @@
+import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+extension ContextExtensions on BuildContext {
+
+  // Get the current locale
+  Locale get appLocale => locale;
+
+  // Get the current theme mode
+  ThemeMode get themeMode => Theme.of(this).brightness == Brightness.dark
+      ? ThemeMode.dark
+      : ThemeMode.light;
+
+  // Get the current screen height
+  double get screenHeight => MediaQuery.of(this).size.height;
+
+  // Get the current screen width
+  double get screenWidth => MediaQuery.of(this).size.width;
+
+  // Get the current theme
+  ThemeData get theme => Theme.of(this);
+
+  // Get the text theme
+  TextTheme get textTheme => Theme.of(this).textTheme;
+
+  // Get the current color scheme
+  ColorScheme get colorScheme => Theme.of(this).colorScheme;
+
+}

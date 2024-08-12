@@ -16,8 +16,9 @@ ThemeData lightTheme() {
     ),
     textTheme: const TextTheme(
       displayMedium: TextStyle(color: AppColors.DARK_GRAY_COLOR),
-      displaySmall: TextStyle(color: AppColors.DARK_GRAY_COLOR),
+      // displaySmall: TextStyle(color: AppColors.DARK_GRAY_COLOR),
     ),
+    
     iconTheme: const IconThemeData(
       color: AppColors.DARK_BLUE_COLOR,
     ),
@@ -36,5 +37,22 @@ ThemeData lightTheme() {
     ),
     dividerColor: AppColors.DIVIDER_GRAY_COLOR,
     
+    drawerTheme: const DrawerThemeData(),
+    actionIconTheme: const ActionIconThemeData(),
+    bottomAppBarTheme: const BottomAppBarTheme(),
+    canvasColor: Colors.black38,
+    bannerTheme: const MaterialBannerThemeData(),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(),
+    cardColor: Colors.white,
+    dialogTheme: const DialogTheme(),
+    bottomSheetTheme: const BottomSheetThemeData(),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(),
+    iconButtonTheme: const IconButtonThemeData(),
+    elevatedButtonTheme: const ElevatedButtonThemeData(),
+    textButtonTheme: const TextButtonThemeData(),
+    listTileTheme: const ListTileThemeData(),
+    dividerTheme: const DividerThemeData(),
+    tabBarTheme: const TabBarTheme(),
+
   );
 }
