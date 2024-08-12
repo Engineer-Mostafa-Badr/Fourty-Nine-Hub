@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
+import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/common/translations/translation_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_state.dart';
@@ -48,6 +50,17 @@ class MeetingView extends StatelessWidget {
                       .changeLanguage(const Locale('ar'), context);
                 },
                 child: const Text('arabic').tr(),
+              ),
+              BlocBuilder<ThemeCubit,ThemeStates>(
+                builder: (BuildContext context, state) {
+                  return SwitchListTile(
+                    title: ThemeCubit.get(context).isDarkTheme?const Text('Dark mode'):const Text('Light mode'),
+                    value: ThemeCubit.get(context).isDarkTheme,
+                    onChanged: (value){
+                      ThemeCubit.get(context).changeThemeMode();
+                    },
+                  );
+                },
               ),
               SizedBox(
                 height: 200,

@@ -11,6 +11,7 @@ import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
 import 'package:fourtyninehub/service_locator/reels_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
+import 'package:fourtyninehub/service_locator/theme_service_locator.dart';
 import 'package:fourtyninehub/service_locator/translation_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
 import 'package:get_it/get_it.dart';
@@ -50,7 +51,6 @@ class DI {
         storage: FlutterSecureStorage(),
       ),
     );
-
     // dio
     serviceLocator.registerLazySingleton<Dio>(
       () => Dio(
@@ -125,5 +125,6 @@ class DI {
     // subscribtions
     // SubscribtionServiceLocator.execute(serviceLocator: serviceLocator);
     TranslationServiceLocator.execute(serviceLocator: serviceLocator);
+    ThemeServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }
