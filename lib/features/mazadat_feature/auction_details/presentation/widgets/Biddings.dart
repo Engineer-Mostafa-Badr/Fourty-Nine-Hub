@@ -37,7 +37,8 @@ class Biddings extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: Colors.white,
-            backgroundImage: NetworkImage(item.user.profilePicture??UIConst.profilePlaceHolder),
+            backgroundImage: NetworkImage(
+                item.user.profilePicture ?? UIConst.profilePlaceHolder),
           ),
           const Sizer(),
           Expanded(

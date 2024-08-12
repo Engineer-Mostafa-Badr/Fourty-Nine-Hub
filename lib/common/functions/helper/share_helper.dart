@@ -5,6 +5,6 @@ class ShareHelper {
     required String text,
     required String subject,
   }) async {
-     await Share.share(text, subject: subject);
+    await Share.share(text, subject: subject);
   }
 }

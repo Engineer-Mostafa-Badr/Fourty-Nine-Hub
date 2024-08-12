@@ -4,8 +4,7 @@ import 'package:fourtyninehub/features/account_taps/my_adds/domain/repositories/
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import '../../../../../../core/abstract/use_case.dart';
 
-class GetMyAdsUseCase
-    extends UseCase<List<AdEntity>, NoParams> {
+class GetMyAdsUseCase extends UseCase<List<AdEntity>, NoParams> {
   final MyAdsRepo _repo;
   GetMyAdsUseCase(this._repo);
 

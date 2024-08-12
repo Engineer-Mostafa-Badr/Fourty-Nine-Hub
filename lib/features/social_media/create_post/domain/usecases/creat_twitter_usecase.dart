@@ -4,11 +4,13 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
-class CreateTwitterPostUseCase extends UseCase<TwitterPostEntity, CreateTwitterPostParams> {
+class CreateTwitterPostUseCase
+    extends UseCase<TwitterPostEntity, CreateTwitterPostParams> {
   final CreatePostRepo _repo;
   CreateTwitterPostUseCase(this._repo);
   @override
-  Future<Either<Failure, TwitterPostEntity>> call( CreateTwitterPostParams params) async {
+  Future<Either<Failure, TwitterPostEntity>> call(
+      CreateTwitterPostParams params) async {
     return await _repo.createTwitterPost(params: params);
   }
 }
@@ -21,7 +23,7 @@ class CreateTwitterPostParams {
     required this.mediaIds,
   });
   Map<String, dynamic> toJson() => {
-    'content': content,
-    'mediaIds': mediaIds,
-  };
+        'content': content,
+        'mediaIds': mediaIds,
+      };
 }

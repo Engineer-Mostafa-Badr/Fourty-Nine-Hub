@@ -31,7 +31,7 @@ class RestaurantsListState {
   }) {
     return RestaurantsListState(
       status: status ?? this.status,
-      failure: failure?? this.failure,
+      failure: failure ?? this.failure,
       nearByRestaurants: nearByRestaurants ?? this.nearByRestaurants,
       trendingRestaurants: trendingRestaurants ?? this.trendingRestaurants,
       categories: categories ?? this.categories,

@@ -22,12 +22,12 @@ class UserTweets extends StatefulWidget {
 }
 
 class _UserTweetsState extends State<UserTweets> {
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider<TwitterCubit>(
-      create: (_)=>serviceLocator()..loadUserTweets(widget.userData.id),
-      child: BlocConsumer<TwitterCubit, TwitterState>(listener: (context, state) {
+      create: (_) => serviceLocator()..loadUserTweets(widget.userData.id),
+      child:
+          BlocConsumer<TwitterCubit, TwitterState>(listener: (context, state) {
         if (state.status == StateStatus.error) {
           showErrorMessage(
             context,
@@ -41,84 +41,95 @@ class _UserTweetsState extends State<UserTweets> {
         final controller = context.read<TwitterCubit>();
         return RefreshIndicator(
           onRefresh: () async => controller.loadUserTweets(widget.userData.id),
-          child:state.status == StateStatus.success? PagedListView<int, TwitterPostEntity>(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
-            pagingController: controller.userTweetsPagingController,
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
-            builderDelegate: PagedChildBuilderDelegate<TwitterPostEntity>(
-                noItemsFoundIndicatorBuilder: (context) {
-                  print(controller.userTweetsPagingController.itemList?.length);
-                  return const Padding(
-                      padding: EdgeInsets.only(top: 200),
-                      child: Center(
-                        child: Text(
-                          "لا يوجد بوستات",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ));
-                },
-                itemBuilder: (context, item, index) {
-                  return TwitterPostCard(
-                    post: controller.userTweetsPagingController.itemList![index],
-                    onReact: () {
-                      controller.onReact(
-                          params: TwitterPostReactParams(
-                              postId: controller
-                                  .userTweetsPagingController.itemList![index].id,
-                              react: 'love'));
-                      controller.userTweetsPagingController.itemList?[index].isReact =
-                      !controller
-                          .userTweetsPagingController.itemList![index].isReact!;
-                    },
-                    shareSuccess: state.shareSuccess,
-                    onShare: () {
-                      controller.onShare(
-                        postId:
-                        controller.userTweetsPagingController.itemList![index].id,
-                      );
-                      setState(() {});
-                    },
-                    showPostComments: (String v) {
-                      print(
-                          "mainId ${controller.userTweetsPagingController.itemList![index].id}");
-                      controller.showPostComments(
-                        context: context,
-                        postId:
-                        controller.userTweetsPagingController.itemList![index].id,
-                        newCommentId: state.newCommentId ?? '',
-                        user:
-                        controller.userTweetsPagingController.itemList![index].user, userData: widget.userData,
-                      );
-                    },
-                    getPost: () {
-                      controller.getTwitterPost(
-                          context,
-                          controller
-                              .userTweetsPagingController.itemList![index].mainPost.id,
-                          state.newCommentId ?? '',widget.userData);
-                    },
-                    onReport: (TwitterReportParams params) {
-                      controller.onReport(params);
-                    },
-                  );
-                },
-                noMoreItemsIndicatorBuilder: (context) => Container(),
-                firstPageProgressIndicatorBuilder: (context) => Container(
-                    margin: const EdgeInsets.only(top: 150),
-                    child: const CupertinoActivityIndicator()),
-                newPageProgressIndicatorBuilder: (context) =>
-                const CupertinoActivityIndicator()),
-          ):Center(
-            child: Label(text: getFailureMessage(
-              state.failure ?? const UnknownFailure(),
-              context,
-            )),
-          ),
+          child: state.status == StateStatus.success
+              ? PagedListView<int, TwitterPostEntity>(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                  pagingController: controller.userTweetsPagingController,
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  builderDelegate: PagedChildBuilderDelegate<TwitterPostEntity>(
+                      noItemsFoundIndicatorBuilder: (context) {
+                        print(controller
+                            .userTweetsPagingController.itemList?.length);
+                        return const Padding(
+                            padding: EdgeInsets.only(top: 200),
+                            child: Center(
+                              child: Text(
+                                "لا يوجد بوستات",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ));
+                      },
+                      itemBuilder: (context, item, index) {
+                        return TwitterPostCard(
+                          post: controller
+                              .userTweetsPagingController.itemList![index],
+                          onReact: () {
+                            controller.onReact(
+                                params: TwitterPostReactParams(
+                                    postId: controller
+                                        .userTweetsPagingController
+                                        .itemList![index]
+                                        .id,
+                                    react: 'love'));
+                            controller.userTweetsPagingController
+                                    .itemList?[index].isReact =
+                                !controller.userTweetsPagingController
+                                    .itemList![index].isReact!;
+                          },
+                          shareSuccess: state.shareSuccess,
+                          onShare: () {
+                            controller.onShare(
+                              postId: controller.userTweetsPagingController
+                                  .itemList![index].id,
+                            );
+                            setState(() {});
+                          },
+                          showPostComments: (String v) {
+                            print(
+                                "mainId ${controller.userTweetsPagingController.itemList![index].id}");
+                            controller.showPostComments(
+                              context: context,
+                              postId: controller.userTweetsPagingController
+                                  .itemList![index].id,
+                              newCommentId: state.newCommentId ?? '',
+                              user: controller.userTweetsPagingController
+                                  .itemList![index].user,
+                              userData: widget.userData,
+                            );
+                          },
+                          getPost: () {
+                            controller.getTwitterPost(
+                                context,
+                                controller.userTweetsPagingController
+                                    .itemList![index].mainPost.id,
+                                state.newCommentId ?? '',
+                                widget.userData);
+                          },
+                          onReport: (TwitterReportParams params) {
+                            controller.onReport(params);
+                          },
+                        );
+                      },
+                      noMoreItemsIndicatorBuilder: (context) => Container(),
+                      firstPageProgressIndicatorBuilder: (context) => Container(
+                          margin: const EdgeInsets.only(top: 150),
+                          child: const CupertinoActivityIndicator()),
+                      newPageProgressIndicatorBuilder: (context) =>
+                          const CupertinoActivityIndicator()),
+                )
+              : Center(
+                  child: Label(
+                      text: getFailureMessage(
+                    state.failure ?? const UnknownFailure(),
+                    context,
+                  )),
+                ),
         );
       }),
     );

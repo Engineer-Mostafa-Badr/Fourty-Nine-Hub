@@ -1,14 +1,16 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class CacheService {
+  Future<void> init();
   Future<bool> saveUserData(String userData);
   Future<String?> getUserData();
 
   Future<bool> saveUserIsLoggedIn(bool isLoggedIn);
-  Future<bool?> getUserIsLoggedIn();
+  bool? getUserIsLoggedIn();
 
   Future<bool> saveUserToken(String userToken);
   Future<String?> getUserToken();
@@ -57,7 +59,7 @@ class CacheServiceImpl implements CacheService {
   static const _APPLE_USER_DATA = "APPLE_USER_DATA";
   static const _IS_FIRST_LUNCH = "IS_FIRST_LUNCH";
   static const _FAV_PRODUCTS_LIST = "FAV_PRODUCTS_LIST";
-
+  static late SharedPreferences prefs;
   @override
   Future<bool> saveUserData(String userData) async {
     final prefs = await SharedPreferences.getInstance();
@@ -77,8 +79,7 @@ class CacheServiceImpl implements CacheService {
   }
 
   @override
-  Future<bool?> getUserIsLoggedIn() async {
-    final prefs = await SharedPreferences.getInstance();
+  bool? getUserIsLoggedIn() {
     return prefs.getBool(_IS_LOGGED_IN);
   }
 
@@ -208,6 +209,16 @@ class CacheServiceImpl implements CacheService {
     final prefs = await SharedPreferences.getInstance();
     return await prefs.setStringList(_FAV_PRODUCTS_LIST, favList);
   }
+
+  @override
+  Future<void> init() async {
+    log("333333333333333333333333333");
+    prefs = await SharedPreferences.getInstance();
+  }
+  // static late SharedPreferences sharedPreferences;
+  // static init() async {
+  //   prefs = await SharedPreferences.getInstance();
+  // }
 }
 
 class CacheServiceImplV2 implements CacheService {
@@ -315,7 +326,7 @@ class CacheServiceImplV2 implements CacheService {
   }
 
   @override
-  Future<bool?> getUserIsLoggedIn() {
+  bool? getUserIsLoggedIn() {
     // TODO: implement getUserIsLoggedIn
     throw UnimplementedError();
   }
@@ -395,6 +406,12 @@ class CacheServiceImplV2 implements CacheService {
   @override
   Future<bool> saveFavList(List<String> favList) {
     // TODO: implement saveFavList
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> init() {
+    // TODO: implement init
     throw UnimplementedError();
   }
 }

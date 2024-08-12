@@ -39,8 +39,9 @@ class LoginView extends StatelessWidget {
             ),
           );
         } else if (state is LoginSuccess) {
+          context.read<UserCubit>().setUserLogged();
           context.read<UserCubit>().getUser();
-          context.go(Routes.HOME);
+          context.push(Routes.HOME);
           showSuccessMessage(context, 'welcome back');
         } else if (state is LoginLoading) {
           showAdaptiveDialog(
@@ -136,7 +137,6 @@ class LoginView extends StatelessWidget {
                     ),
                     const Sizer(),
                     RichText(
-                      
                       text: TextSpan(
                         children: [
                           TextSpan(

@@ -4,9 +4,7 @@ import 'package:fourtyninehub/features/account_taps/my_adds/domain/repositories/
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/domain/entities/auction_entity.dart';
 import '../../../../../../core/abstract/use_case.dart';
 
-
-class GetMyAuctionsUseCase
-    extends UseCase<List<AuctionEntity>, NoParams> {
+class GetMyAuctionsUseCase extends UseCase<List<AuctionEntity>, NoParams> {
   final MyAdsRepo _repo;
   GetMyAuctionsUseCase(this._repo);
 

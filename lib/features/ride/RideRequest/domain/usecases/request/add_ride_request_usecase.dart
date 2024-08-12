@@ -6,15 +6,11 @@ import 'package:fourtyninehub/features/ride/RideRequest/domain/repositories/ride
 import '../../../../../../core/abstract/use_case.dart';
 import '../../../../../../core/enums/ride_services_enum.dart';
 
-
-class AddRideRequestUseCase
-    extends UseCase<String, RideRequestModel> {
+class AddRideRequestUseCase extends UseCase<String, RideRequestModel> {
   final RideRequestRepo _repo;
   AddRideRequestUseCase(this._repo);
   @override
-  Future<Either<Failure, String>> call(
-      RideRequestModel params) {
-            return _repo.addNormalRequest(request: params);
-
+  Future<Either<Failure, String>> call(RideRequestModel params) {
+    return _repo.addNormalRequest(request: params);
   }
 }

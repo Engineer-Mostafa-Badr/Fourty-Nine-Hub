@@ -1,10 +1,14 @@
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 
 class GovernorateModel extends GovernorateEntity {
-  GovernorateModel({required super.id, required super.nameAr, required super.nameEn});
+  GovernorateModel(
+      {required super.id, required super.nameAr, required super.nameEn});
 
   factory GovernorateModel.fromJson(Map<String, dynamic> json) {
-    return GovernorateModel(id: json['_id'], nameAr: json['governorate_name_ar'], nameEn: json['governorate_name_en']);
+    return GovernorateModel(
+        id: json['_id'],
+        nameAr: json['governorate_name_ar'],
+        nameEn: json['governorate_name_en']);
   }
 
   Map<String, dynamic> toJson() {

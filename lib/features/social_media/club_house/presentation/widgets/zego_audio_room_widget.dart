@@ -86,7 +86,8 @@ class _ZegoAudioRoomWidgetState extends State<ZegoAudioRoomWidget> {
             ZegoLiveAudioRoomLayoutRowConfig(
                 count: 4,
                 alignment: ZegoLiveAudioRoomLayoutAlignment.spaceAround),
-          ]..bottomMenuBar.audienceExtendButtons =[
+          ]
+          ..bottomMenuBar.audienceExtendButtons = [
             connectButton(),
           ],
       ),

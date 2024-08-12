@@ -89,15 +89,16 @@ class _VisitaBookingState extends State<VisitaBooking> {
                       height: 50,
                       label: "${Labels.premium} ${Labels.book}",
                       onPressed: () {
-                        serviceLocator<SubscriptionController>().checkIfUserSubscribed(
-                              onSubscribed: () async {
-                                await controller.premiumBook();
-                              },
-                              subCategoryId: serviceLocator<HealthSharedData>()
-                                  .doctorSearchParams
-                                  .subCategory
-                                  .id,
-                            );
+                        serviceLocator<SubscriptionController>()
+                            .checkIfUserSubscribed(
+                          onSubscribed: () async {
+                            await controller.premiumBook();
+                          },
+                          subCategoryId: serviceLocator<HealthSharedData>()
+                              .doctorSearchParams
+                              .subCategory
+                              .id,
+                        );
                       }),
                   const Sizer(),
                 ],

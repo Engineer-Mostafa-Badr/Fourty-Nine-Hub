@@ -20,7 +20,7 @@ class DriverModel extends DriverEntity {
       name: json['name'],
       phone: json['phone'],
       email: json['email'],
-      profileImage: json['profile_image']??UIConst.profilePlaceHolder,
+      profileImage: json['profile_image'] ?? UIConst.profilePlaceHolder,
       carSign: json['car_sign'],
       carImage: json['car_image'],
       rate: json['rate'],

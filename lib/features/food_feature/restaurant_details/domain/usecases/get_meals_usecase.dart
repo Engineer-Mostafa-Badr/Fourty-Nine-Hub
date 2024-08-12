@@ -5,8 +5,7 @@ import '../../../../../../core/abstract/use_case.dart';
 
 import '../repositories/restaurant_details_repo.dart';
 
-class GetMealsUseCase
-    extends UseCase<List<MealEntity>, String> {
+class GetMealsUseCase extends UseCase<List<MealEntity>, String> {
   final RestaurantDetailsRepo _repo;
   GetMealsUseCase(this._repo);
 

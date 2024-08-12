@@ -5,7 +5,8 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/domain/repo
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import '../../../../../../core/abstract/use_case.dart';
 
-class GetDoctorDetailsUseCase extends UseCase<DoctorEntity, GetDoctorDetailsParams> {
+class GetDoctorDetailsUseCase
+    extends UseCase<DoctorEntity, GetDoctorDetailsParams> {
   final DoctorDetailsRepo _repo;
   GetDoctorDetailsUseCase(this._repo);
 

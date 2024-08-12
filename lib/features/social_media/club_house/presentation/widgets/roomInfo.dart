@@ -64,9 +64,9 @@ class RoomInfoWidget extends StatelessWidget {
               ],
             ),
           ),
-          
-          const Sizer(height: 20,),
-          
+          const Sizer(
+            height: 20,
+          ),
           Container(
             height: 45,
             decoration: BoxDecoration(

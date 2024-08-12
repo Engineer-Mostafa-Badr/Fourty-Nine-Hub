@@ -19,7 +19,8 @@ class DoctorDetailsRepoImpl implements DoctorDetailsRepo {
   }
 
   @override
-  Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorReviews(String doctorId) {
+  Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorReviews(
+      String doctorId) {
     return _remoteDataSource.getDoctorReviews(doctorId);
   }
 }

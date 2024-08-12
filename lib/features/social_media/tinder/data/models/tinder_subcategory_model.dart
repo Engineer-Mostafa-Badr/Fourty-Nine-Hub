@@ -59,24 +59,24 @@ class SubCategoryData {
 
   SubCategoryData(
       {int? overHeadFactor,
-        String? sId,
-        bool? isHidden,
-        String? parent,
-        int? dailyPrice,
-        int? portion,
-        int? providerPortion,
-        int? paymentFactor,
-        int? grossMoney,
-        String? picture,
-        int? index,
-        String? createdAt,
-        String? updatedAt,
-        bool? hasAuction,
-        String? nameAr,
-        String? nameEn,
-        String? nameCode,
-        String? enableChatAndCallButton,
-        String? paymentMethods}) {
+      String? sId,
+      bool? isHidden,
+      String? parent,
+      int? dailyPrice,
+      int? portion,
+      int? providerPortion,
+      int? paymentFactor,
+      int? grossMoney,
+      String? picture,
+      int? index,
+      String? createdAt,
+      String? updatedAt,
+      bool? hasAuction,
+      String? nameAr,
+      String? nameEn,
+      String? nameCode,
+      String? enableChatAndCallButton,
+      String? paymentMethods}) {
     if (overHeadFactor != null) {
       this._overHeadFactor = overHeadFactor;
     }

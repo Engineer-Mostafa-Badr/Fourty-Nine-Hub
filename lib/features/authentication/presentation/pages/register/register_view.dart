@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +48,8 @@ class _RegisterViewState extends State<RegisterView> {
             extra: registerCubit.emailTextController.text,
           );
         } else if (state is RegisterSuccess) {
+          log("lllllllllllllllllllllllllllllllllllllllllllllllllllllllllll");
+          context.read<UserCubit>().setUserLogged();
           context.read<UserCubit>().getUser();
           context.go(Routes.HOME);
         }

@@ -32,7 +32,7 @@ class EditDoctorPersonalInfoView extends StatelessWidget {
             height: 20,
           ),
           const EditDoctorAddressField(),
-           Sizer(
+          Sizer(
             height: MediaQuery.of(context).size.height * 0.15,
           ),
           AppButton(

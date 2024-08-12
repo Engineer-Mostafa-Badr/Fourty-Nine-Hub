@@ -12,10 +12,9 @@ class CreatePostState {
   final UploadFileEntity? fileEntity;
   final Color backColor;
   const CreatePostState(
-      {
-      this.status = CreatePostStates.error,
-        this.failure,
-        this.fileEntity,
+      {this.status = CreatePostStates.error,
+      this.failure,
+      this.fileEntity,
       this.activities,
       this.feelings,
       this.backColor = Colors.white,
@@ -32,7 +31,7 @@ class CreatePostState {
     Color? backColor,
   }) {
     return CreatePostState(
-      status: status?? this.status,
+      status: status ?? this.status,
       failure: failure ?? this.failure,
       fileEntity: fileEntity ?? this.fileEntity,
       activities: activities ?? this.activities,

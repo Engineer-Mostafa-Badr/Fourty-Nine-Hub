@@ -5,7 +5,6 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-
 class ChatStories extends StatelessWidget {
   const ChatStories({super.key});
 

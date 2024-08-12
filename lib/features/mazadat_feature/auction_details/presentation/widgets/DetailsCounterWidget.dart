@@ -59,7 +59,9 @@ class DetailsCounterWidget extends StatelessWidget {
                               child: CircleAvatar(
                                 radius: 12,
                                 backgroundColor: Colors.white,
-                                backgroundImage: NetworkImage(e.user.profilePicture?? UIConst.profilePlaceHolder),
+                                backgroundImage: NetworkImage(
+                                    e.user.profilePicture ??
+                                        UIConst.profilePlaceHolder),
                               ),
                             );
                           }).toList() ??

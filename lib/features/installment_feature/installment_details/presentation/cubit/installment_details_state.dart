@@ -31,7 +31,7 @@ class InstallmentDetailsState {
     return InstallmentDetailsState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
-      selectedPlan: selectedPlan?? this.selectedPlan,
+      selectedPlan: selectedPlan ?? this.selectedPlan,
       installment: installment ?? this.installment,
       successMessage: successMessage ?? this.successMessage,
     );

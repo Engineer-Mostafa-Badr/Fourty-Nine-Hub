@@ -4,9 +4,7 @@ import 'package:fourtyninehub/features/mazadat_feature/auction_details/domain/re
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
-
-class EndAuctionUsecase
-    extends UseCase<bool, String> {
+class EndAuctionUsecase extends UseCase<bool, String> {
   final AuctionDetailsRepo _repo;
   EndAuctionUsecase(this._repo);
 

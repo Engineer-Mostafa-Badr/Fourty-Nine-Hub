@@ -14,7 +14,8 @@ class TwitterPostDetails extends StatelessWidget {
       required this.post,
       required this.onReact,
       required this.onShare,
-      required this.showPostComments, required this.onReport});
+      required this.showPostComments,
+      required this.onReport});
   final TwitterPostEntity post;
   final Function onReact;
   final Function onShare;
@@ -37,11 +38,12 @@ class TwitterPostDetails extends StatelessWidget {
               onReact: onReact,
               showPostComments: showPostComments,
               onShare: onShare,
-              getPost: () {}, onReport: (TwitterReportParams params) async{
-              await onReport(params);
-              showSuccessMessage(context, "Report sent successfully");
-              context.pop();
-            },
+              getPost: () {},
+              onReport: (TwitterReportParams params) async {
+                await onReport(params);
+                showSuccessMessage(context, "Report sent successfully");
+                context.pop();
+              },
             );
           },
         ),

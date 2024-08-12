@@ -7,11 +7,9 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/repos
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/create_doctor.dart';
 
 class CreateDoctorRepoImpl implements CreateDoctorRepo {
-
   final CreateDoctorRemoteDataSource _createDoctorRemoteDataSource;
 
   CreateDoctorRepoImpl(this._createDoctorRemoteDataSource);
-
 
   @override
   Future<Either<Failure, bool>> createDoctor(CreateDoctorParams params) {

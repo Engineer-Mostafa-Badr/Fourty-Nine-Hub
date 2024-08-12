@@ -27,11 +27,12 @@ class UserData {
       userId: json['userId'],
       pictures: List<String>.from(json['pictures']),
       likes: (json['likes'] as List).map((i) => Like.fromJson(i)).toList(),
-      friends: (json['friends'] as List).map((i) => Friend.fromJson(i)).toList(),
+      friends:
+          (json['friends'] as List).map((i) => Friend.fromJson(i)).toList(),
       gifts: (json['gifts'] as List).map((i) => Gift.fromJson(i)).toList(),
       user: (json['user'] as List).map((i) => User.fromJson(i)).toList(),
-      createdAt: (json['createdAt']??''),
-      updatedAt: (json['updatedAt']??''),
+      createdAt: (json['createdAt'] ?? ''),
+      updatedAt: (json['updatedAt'] ?? ''),
     );
   }
 }
@@ -258,8 +259,8 @@ class Friend {
       installmentsUsers: List<dynamic>.from(json['installments_users']),
       twitterDocumentation: json['twitter_documentation'],
       username: json['username'],
-      createdAt: (json['createdAt'])??'',
-      updatedAt: (json['updatedAt'])??'',
+      createdAt: (json['createdAt']) ?? '',
+      updatedAt: (json['updatedAt']) ?? '',
     );
   }
 }
@@ -404,8 +405,8 @@ class User {
       installmentsUsers: List<dynamic>.from(json['installments_users']),
       twitterDocumentation: json['twitter_documentation'],
       username: json['username'],
-      createdAt: (json['createdAt'])??'',
-      updatedAt: (json['updatedAt'])??'',
+      createdAt: (json['createdAt']) ?? '',
+      updatedAt: (json['updatedAt']) ?? '',
       chatPassword: json['chatPassword'],
     );
   }

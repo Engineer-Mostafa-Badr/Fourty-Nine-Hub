@@ -9,9 +9,7 @@ import '../entities/feeling_entity.dart';
 abstract class CreatePostRepo {
   Future<Either<Failure, List<FeelingEntity>>> getFeelingsList();
   Future<Either<Failure, List<ActivityEntity>>> getActivitiesList();
-  Future<Either<Failure, bool>> postData({
-    required Map<String,dynamic> data 
-  });
-  Future<Either<Failure, TwitterPostEntity>> createTwitterPost({required CreateTwitterPostParams params});
-
+  Future<Either<Failure, bool>> postData({required Map<String, dynamic> data});
+  Future<Either<Failure, TwitterPostEntity>> createTwitterPost(
+      {required CreateTwitterPostParams params});
 }

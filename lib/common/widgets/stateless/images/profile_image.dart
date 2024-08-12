@@ -31,7 +31,8 @@ class ProfileImage extends StatelessWidget {
         child: CircleAvatar(
           radius: size,
           backgroundColor: Colors.white,
-          backgroundImage: CachedNetworkImageProvider(imageURL?? UIConst.profilePlaceHolder),
+          backgroundImage: CachedNetworkImageProvider(
+              imageURL ?? UIConst.profilePlaceHolder),
         ),
       ),
     );

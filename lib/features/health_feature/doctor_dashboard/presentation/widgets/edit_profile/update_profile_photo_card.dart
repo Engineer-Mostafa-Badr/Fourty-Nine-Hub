@@ -17,7 +17,9 @@ class UpdateProfilePhotoCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          ImageUploaderWidget(subCategoryId: '',),
+          ImageUploaderWidget(
+            subCategoryId: '',
+          ),
           const Sizer(
             height: 20,
           ),

@@ -20,12 +20,14 @@ abstract class MainTextFormField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final bool expanded;
   final int? maxLines;
+  final int? minLines;
   final EdgeInsetsGeometry? contentPadding;
   final Color? borderColor;
   final Color? hintColor;
   final bool enableSuggestions;
   final bool showScrollbar;
   final bool? obscureText;
+  final bool readOnly;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final ValueChanged<String>? onChanged;
@@ -34,11 +36,12 @@ abstract class MainTextFormField extends StatefulWidget {
   final TextStyle? style;
   final VoidCallback? onTap;
   final VoidCallback? onEditComplete;
-  
 
   const MainTextFormField(
       {super.key,
       required this.currentFocusNode,
+      this.minLines,
+      this.readOnly = false,
       this.nextFocusNode,
       required this.currentController,
       required this.hintText,
@@ -115,6 +118,8 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         textAlignVertical:
             widget.expanded ? const TextAlignVertical(y: -0.8) : null,
         obscureText: widget.obscureText ?? false,
+        minLines: widget.minLines,
+        readOnly: widget.readOnly,
         decoration: InputDecoration(
           fillColor: widget.fillColor ??
               (widget.enabled ? Colors.white : Colors.white),

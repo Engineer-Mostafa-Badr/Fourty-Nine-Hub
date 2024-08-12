@@ -1,4 +1,3 @@
-
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 
 class MessageModel extends MessageEntity {
@@ -20,8 +19,7 @@ class MessageModel extends MessageEntity {
       super.angryCount,
       super.createdAt,
       super.updatedAt,
-      super.byMe
-      });
+      super.byMe});
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
     return MessageModel(

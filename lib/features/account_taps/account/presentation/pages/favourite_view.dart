@@ -41,7 +41,6 @@ class _FavouriteViewState extends State<FavouriteView> {
               itemCount: state.data?.length ?? 0),
         );
       }),
-      
     );
   }
 }

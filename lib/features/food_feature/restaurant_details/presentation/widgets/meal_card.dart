@@ -13,9 +13,11 @@ class MealCard extends StatelessWidget {
   final MealEntity item;
   final String restaurantId;
   final Function(SelectedMealModel) addToCart;
-  const MealCard({super.key,
-  required this.restaurantId,
-   required this.item, required this.addToCart});
+  const MealCard(
+      {super.key,
+      required this.restaurantId,
+      required this.item,
+      required this.addToCart});
 
   @override
   Widget build(BuildContext context) {

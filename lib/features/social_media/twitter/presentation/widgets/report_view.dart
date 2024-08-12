@@ -319,7 +319,8 @@ class _ReportViewState extends State<ReportView> {
 
                             if (response == true) {
                               showSuccessMessage(
-                                context, "Report send successfully",
+                                context,
+                                "Report send successfully",
                               );
                               context.pop();
                             } else {

@@ -16,15 +16,17 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/requ
 import '../../../../../core/error/failure.dart';
 
 abstract class TwitterRemoteDataSource {
-  Future<Either<Failure, List<TwitterPostEntity>>> getFeed({required TwitterFeedParams params});
-  Future<Either<Failure, TwitterPostEntity>> getTwitterPost({required String postId});
+  Future<Either<Failure, List<TwitterPostEntity>>> getFeed(
+      {required TwitterFeedParams params});
+  Future<Either<Failure, TwitterPostEntity>> getTwitterPost(
+      {required String postId});
   Future<Either<Failure, List<TwitterPostEntity>>> getUserPosts(
       {required GetUserTweetsParams params});
 
-  Future<Either<Failure, bool>> reactOnPost({required  params});
-  Future<Either<Failure, bool>> reactOnComment({required  params});
-  Future<Either<Failure, bool>> sharePost({required  params});
-  Future<Either<Failure, bool>> addReport({required  params});
+  Future<Either<Failure, bool>> reactOnPost({required params});
+  Future<Either<Failure, bool>> reactOnComment({required params});
+  Future<Either<Failure, bool>> sharePost({required params});
+  Future<Either<Failure, bool>> addReport({required params});
   Future<Either<Failure, TwitterPostCommentEntity>> commentOnTwitterPost(
       {required PostCommentParams params});
   Future<Either<Failure, TwitterCommentReplyEntity>> replyOnComment(
@@ -36,15 +38,18 @@ abstract class TwitterRemoteDataSource {
 
   Future<Either<Failure, bool>> deletePost({required String postId});
   Future<Either<Failure, bool>> hidePost({required String postId});
-  Future<Either<Failure, bool>> requestDocument({required TwitterDocumentationParams params});
+  Future<Either<Failure, bool>> requestDocument(
+      {required TwitterDocumentationParams params});
 }
 
 class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   final ApiConsumer _apiConsumer;
   TwitterRemoteDataSourceImpl(this._apiConsumer);
   @override
-  Future<Either<Failure, List<TwitterPostEntity>>> getFeed({required TwitterFeedParams params}) async {
-    final response = await _apiConsumer.get("${EndPoints.getTwitterFeedPosts}?page=${params.page}&limit=${params.limit}");
+  Future<Either<Failure, List<TwitterPostEntity>>> getFeed(
+      {required TwitterFeedParams params}) async {
+    final response = await _apiConsumer.get(
+        "${EndPoints.getTwitterFeedPosts}?page=${params.page}&limit=${params.limit}");
 
     return response.fold((l) {
       return Left(l);
@@ -57,8 +62,10 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, TwitterPostEntity>> getTwitterPost({required String postId}) async {
-    final response = await _apiConsumer.get("${EndPoints.createTwitterPost}/$postId");
+  Future<Either<Failure, TwitterPostEntity>> getTwitterPost(
+      {required String postId}) async {
+    final response =
+        await _apiConsumer.get("${EndPoints.createTwitterPost}/$postId");
 
     return response.fold((l) {
       return Left(l);
@@ -75,56 +82,59 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
     final response = await _apiConsumer.get(EndPoints.userTweets(params));
     return response.fold(
         (l) => Left(l),
-        (data) => Right(
-            (data['data'] as List).map((e) => TwitterPostModel.fromJson(e)).toList()));
+        (data) => Right((data['data'] as List)
+            .map((e) => TwitterPostModel.fromJson(e))
+            .toList()));
   }
 
   @override
-  Future<Either<Failure, bool>> reactOnPost(
-      {required  params}) async {
-    final response = await _apiConsumer
-        .post(EndPoints.reactOnTwitterPost(params.postId), data: params.toJson());
+  Future<Either<Failure, bool>> reactOnPost({required params}) async {
+    final response = await _apiConsumer.post(
+        EndPoints.reactOnTwitterPost(params.postId),
+        data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, bool>> reactOnComment(
-      {required  params}) async {
-    final response = await _apiConsumer
-        .post(EndPoints.reactOnTwitterComment(params.commentId), data: params.toJson());
+  Future<Either<Failure, bool>> reactOnComment({required params}) async {
+    final response = await _apiConsumer.post(
+        EndPoints.reactOnTwitterComment(params.commentId),
+        data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, bool>> sharePost({required params}) async{
-    final response = await _apiConsumer
-        .post(EndPoints.shareTwitterPost(params));
+  Future<Either<Failure, bool>> sharePost({required params}) async {
+    final response =
+        await _apiConsumer.post(EndPoints.shareTwitterPost(params));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
-
   }
 
   @override
   Future<Either<Failure, TwitterPostCommentEntity>> commentOnTwitterPost(
       {required PostCommentParams params}) async {
-    final response = await _apiConsumer
-        .post(EndPoints.commentOnTwitterPost(params.postId), data: params.toJson());
-    return response.fold((l) => Left(l), (data) => Right(TwitterPostCommentModel.fromJson(data['data'])));
+    final response = await _apiConsumer.post(
+        EndPoints.commentOnTwitterPost(params.postId),
+        data: params.toJson());
+    return response.fold((l) => Left(l),
+        (data) => Right(TwitterPostCommentModel.fromJson(data['data'])));
   }
+
   @override
   Future<Either<Failure, TwitterCommentReplyEntity>> replyOnComment(
       {required TwitterCommentReplyParams params}) async {
-    final response = await _apiConsumer
-        .post(EndPoints.commentOnTwitterPost(params.postId), data: {
-          'content':params.content,
-      'reply':params.reply
-    });
-    return response.fold((l) => Left(l), (data) => Right(TwitterCommentReplyModel.fromJson(data['data'])));
+    final response = await _apiConsumer.post(
+        EndPoints.commentOnTwitterPost(params.postId),
+        data: {'content': params.content, 'reply': params.reply});
+    return response.fold((l) => Left(l),
+        (data) => Right(TwitterCommentReplyModel.fromJson(data['data'])));
   }
 
   @override
   Future<Either<Failure, List<TwitterPostCommentEntity>>> getPostComments(
       {required String postId}) async {
-    final response = await _apiConsumer.get(EndPoints.getTwitterPostComments(postId));
+    final response =
+        await _apiConsumer.get(EndPoints.getTwitterPostComments(postId));
     return response.fold(
         (l) => Left(l),
         (data) => Right((data['data'] as List)
@@ -132,18 +142,17 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
             .toList()));
   }
 
- @override
+  @override
   Future<Either<Failure, List<TwitterCommentReplyEntity>>> getCommentReplies(
       {required String commentId}) async {
-    final response = await _apiConsumer.get(EndPoints.getTwitterCommentReplies(commentId));
+    final response =
+        await _apiConsumer.get(EndPoints.getTwitterCommentReplies(commentId));
     return response.fold(
         (l) => Left(l),
         (data) => Right((data['data'] as List)
             .map((e) => TwitterCommentReplyModel.fromJson(e))
             .toList()));
   }
-
-
 
   @override
   Future<Either<Failure, bool>> deletePost({required String postId}) async {
@@ -158,18 +167,17 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> addReport({required params}) async{
-    final response = await _apiConsumer
-        .post(EndPoints.report, data: params.toJson());
+  Future<Either<Failure, bool>> addReport({required params}) async {
+    final response =
+        await _apiConsumer.post(EndPoints.report, data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, bool>> requestDocument({required TwitterDocumentationParams params}) async{
-    final response = await _apiConsumer
-        .post(EndPoints.documentRequest, data: params.toJson());
+  Future<Either<Failure, bool>> requestDocument(
+      {required TwitterDocumentationParams params}) async {
+    final response = await _apiConsumer.post(EndPoints.documentRequest,
+        data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
-
-
 }

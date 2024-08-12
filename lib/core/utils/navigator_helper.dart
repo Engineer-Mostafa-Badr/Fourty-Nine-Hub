@@ -236,10 +236,9 @@ class NavigatorHelper extends Navigator {
     scaffoldMessenger.clearSnackBars();
     Navigator.of(context).popUntil(predicate);
   }
-  void navigate(
-      {required Widget widget}) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => widget));
 
+  void navigate({required Widget widget}) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => widget));
   }
 
   void removeRoute(Route<dynamic> route) {

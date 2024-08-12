@@ -65,7 +65,8 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> toggleFavoriteSubcategory(String sucategoryId) async {
+  Future<Either<Failure, bool>> toggleFavoriteSubcategory(
+      String sucategoryId) async {
     final response = await _apiConsumer
         .post(EndPoints.toggleFavoriteSubcategory(sucategoryId));
     return response.fold(

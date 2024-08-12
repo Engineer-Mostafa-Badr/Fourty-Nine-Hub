@@ -1,5 +1,1 @@
-enum PostType{
- Instagram , 
- Twitter, 
- Facebook 
-}
+enum PostType { Instagram, Twitter, Facebook }

@@ -21,9 +21,9 @@ class TwitterPostComments extends StatefulWidget {
   final String postId;
   final Function(PostCommentParams) onAddComment;
   final Function(TwitterCommentReplyParams) onAddReply;
-  final Function(String,TwitterPostCommentEntity) onGetReplies;
-  final Function(TwitterCommentReactParams ) onCommentReact;
-  final Function(TwitterReportParams ) onReport;
+  final Function(String, TwitterPostCommentEntity) onGetReplies;
+  final Function(TwitterCommentReactParams) onCommentReact;
+  final Function(TwitterReportParams) onReport;
   final TwitterState state;
   final String newCommentId;
   final dynamic user;
@@ -33,7 +33,14 @@ class TwitterPostComments extends StatefulWidget {
       required this.postId,
       required this.comments,
       required this.onAddComment,
-      required this.onCommentReact, required this.onAddReply, required this.onGetReplies, required this.newCommentId, required this.state, this.user, required this.onReport, required this.userData});
+      required this.onCommentReact,
+      required this.onAddReply,
+      required this.onGetReplies,
+      required this.newCommentId,
+      required this.state,
+      this.user,
+      required this.onReport,
+      required this.userData});
 
   @override
   State<TwitterPostComments> createState() => _TwitterPostCommentsState();
@@ -63,13 +70,16 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
           Expanded(
             child: ListView.separated(
                 itemBuilder: (context, index) => _buildCommentCard(
-                    comment: widget.comments[index], showReplies: showReplies, onShowReplies:()async{
-                    widget.comments[index].showReplies = true;
+                    comment: widget.comments[index],
+                    showReplies: showReplies,
+                    onShowReplies: () async {
+                      widget.comments[index].showReplies = true;
 
-                    await widget.onGetReplies(widget.comments[index].id,widget.comments[index]);
-                    // widget.comments[index].replies?.addAll(controller.replies);
-                    setState(() {});
-                }),
+                      await widget.onGetReplies(
+                          widget.comments[index].id, widget.comments[index]);
+                      // widget.comments[index].replies?.addAll(controller.replies);
+                      setState(() {});
+                    }),
                 separatorBuilder: (context, index) => const Sizer(),
                 itemCount: widget.comments.length),
           ),
@@ -95,10 +105,12 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                     IconAppButton(
                         icon: Icons.send,
                         isCircle: true,
-                        onPressed: () async{
-                          TwitterPostCommentModel data = await widget.onAddComment(
+                        onPressed: () async {
+                          TwitterPostCommentModel data =
+                              await widget.onAddComment(
                             PostCommentParams(
-                                postId: widget.postId, content: commentTextController.text),
+                                postId: widget.postId,
+                                content: commentTextController.text),
                           );
                           widget.comments.insert(
                               0,
@@ -109,7 +121,9 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                                   createdAt: data.createdAt,
                                   adminIgnore: data.adminIgnore,
                                   user: widget.user,
-                                  love: data.love,loveCount: data.loveCount, isReact: data.isReact));
+                                  love: data.love,
+                                  loveCount: data.loveCount,
+                                  isReact: data.isReact));
                           commentTextController.clear();
                           setState(() {});
                         })
@@ -120,35 +134,39 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
     );
   }
 
-  void onCommentAdded(String id,) async {
+  void onCommentAdded(
+    String id,
+  ) async {
     await widget.onAddComment(
       PostCommentParams(
-          postId: widget.postId, content: commentTextController.text,),
+        postId: widget.postId,
+        content: commentTextController.text,
+      ),
     );
-
   }
 
   Widget _buildCommentCard(
-      {required TwitterPostCommentEntity comment, required bool showReplies,required Function onShowReplies}) {
+      {required TwitterPostCommentEntity comment,
+      required bool showReplies,
+      required Function onShowReplies}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TwitterCommentCard(
           comment: comment,
-
-          onCommentReact: (){
-            widget.onCommentReact(
-              TwitterCommentReactParams(commentId: comment.id, react: 'love')
-            );
-            comment.isReact=!comment.isReact!;
+          onCommentReact: () {
+            widget.onCommentReact(TwitterCommentReactParams(
+                commentId: comment.id, react: 'love'));
+            comment.isReact = !comment.isReact!;
           },
           onCommentReply: () {
-             widget.onGetReplies(comment.id,comment);
+            widget.onGetReplies(comment.id, comment);
 
             print(comment.showReplies);
-          }, onReport: (TwitterReportParams params) {
+          },
+          onReport: (TwitterReportParams params) {
             widget.onReport(params);
-        },
+          },
         ),
       ],
     );

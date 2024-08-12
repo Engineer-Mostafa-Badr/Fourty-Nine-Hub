@@ -21,7 +21,7 @@ class SharedScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: extendBody,
-      appBar:  HomeAppbar(
+      appBar: HomeAppbar(
         isWithBackArrow: isWithBackArrow,
       ),
       drawer: const DrawerWidget(),

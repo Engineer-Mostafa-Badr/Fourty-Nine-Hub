@@ -9,7 +9,8 @@ class MoreIconBottomSheet extends StatelessWidget {
   final ChatItemModel chatItemModel;
   final ChatsCubit chatsCubit;
 
-  const MoreIconBottomSheet({super.key, required this.chatItemModel, required this.chatsCubit});
+  const MoreIconBottomSheet(
+      {super.key, required this.chatItemModel, required this.chatsCubit});
 
   @override
   Widget build(BuildContext context) {

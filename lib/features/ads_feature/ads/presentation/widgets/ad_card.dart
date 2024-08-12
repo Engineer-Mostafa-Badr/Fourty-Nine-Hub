@@ -70,7 +70,7 @@ class AdCard extends StatelessWidget {
                             )))
                         .toList())),
             Label(
-              text: item.address?.street??'',
+              text: item.address?.street ?? '',
               style: Styles.mediumText(color: Colors.grey),
               maxLines: 1,
             ),

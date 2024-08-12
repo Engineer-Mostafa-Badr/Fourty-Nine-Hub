@@ -1,4 +1,3 @@
-
 import '../../domain/entities/variation_entity.dart';
 import 'option_model.dart';
 
@@ -9,7 +8,9 @@ class VariationModel extends VariationEntity {
     return VariationModel(
       id: json['_id'],
       name: json['name'],
-      options: (json['options'] as List).map((e) => OptionModel.fromJson(e)).toList(),
+      options: (json['options'] as List)
+          .map((e) => OptionModel.fromJson(e))
+          .toList(),
     );
   }
 }

@@ -105,7 +105,10 @@ class ChatCard extends StatelessWidget {
                     Label(
                         text: '${chatItemModel?.lastSeenCount}',
                         style: Styles.mediumText(color: Colors.grey)),
-                    const SizedBox(height: 15,width: 10,),
+                    const SizedBox(
+                      height: 15,
+                      width: 10,
+                    ),
                     const Icon(
                       FontAwesomeIcons.eye,
                       color: Colors.grey,

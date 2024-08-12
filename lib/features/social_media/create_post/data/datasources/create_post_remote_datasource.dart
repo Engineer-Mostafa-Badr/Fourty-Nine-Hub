@@ -16,7 +16,8 @@ abstract class CreatePostRemoteDataSource {
   Future<Either<Failure, List<FeelingEntity>>> getFeelingsList();
   Future<Either<Failure, List<ActivityEntity>>> getActivitiesList();
   Future<Either<Failure, bool>> postData({required Map<String, dynamic> data});
-  Future<Either<Failure, TwitterPostEntity>> createTwitterPost({required CreateTwitterPostParams params});
+  Future<Either<Failure, TwitterPostEntity>> createTwitterPost(
+      {required CreateTwitterPostParams params});
 }
 
 class CreatePostRemoteDataSourceImpl implements CreatePostRemoteDataSource {
@@ -54,13 +55,14 @@ class CreatePostRemoteDataSourceImpl implements CreatePostRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, TwitterPostEntity>> createTwitterPost({required CreateTwitterPostParams params}) async{
+  Future<Either<Failure, TwitterPostEntity>> createTwitterPost(
+      {required CreateTwitterPostParams params}) async {
     final response =
         await _apiConsumer.post(EndPoints.createTwitterPost, data: {
-          'content':params.content,
-          'mediaIds':params.mediaIds.isEmpty?[]:params.mediaIds
-        });
-    return response.fold(
-            (l) => Left(l), (data) => Right(TwitterPostModel.fromJson(data['data'])));
+      'content': params.content,
+      'mediaIds': params.mediaIds.isEmpty ? [] : params.mediaIds
+    });
+    return response.fold((l) => Left(l),
+        (data) => Right(TwitterPostModel.fromJson(data['data'])));
   }
 }

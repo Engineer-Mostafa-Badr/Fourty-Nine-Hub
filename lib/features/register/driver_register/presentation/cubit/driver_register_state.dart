@@ -49,7 +49,7 @@ class DriverRegisterState {
         carType: carType ?? this.carType,
         status: status ?? this.status,
         failure: failure ?? this.failure,
-        selectedOptions: selectedOptions??this.selectedOptions,
+        selectedOptions: selectedOptions ?? this.selectedOptions,
         riderInfo: riderInfo ?? this.riderInfo);
   }
 }

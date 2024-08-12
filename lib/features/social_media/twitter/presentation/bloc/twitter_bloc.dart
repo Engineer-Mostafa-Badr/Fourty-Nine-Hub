@@ -53,7 +53,8 @@ class TwitterCubit extends Cubit<TwitterState> {
     this._twitterCommentRepliesUseCase,
     this._getTwitterPostUseCase,
     this._twitterReportUseCase,
-    this._requestDocumentUseCase, this._getUserTweetsUseCase,
+    this._requestDocumentUseCase,
+    this._getUserTweetsUseCase,
   ) : super(const TwitterState());
 
   void loadData() async {
@@ -67,10 +68,10 @@ class TwitterCubit extends Cubit<TwitterState> {
 
   void loadUserTweets(String userId) async {
     //   await getFeed(1);
-    getUserTweets(1,userId);
+    getUserTweets(1, userId);
     userTweetsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getUserTweets(pageKey,userId);
+      getUserTweets(pageKey, userId);
     });
   }
 
@@ -79,7 +80,6 @@ class TwitterCubit extends Cubit<TwitterState> {
   final int pageSize = 10;
   final PagingController<int, TwitterPostEntity> postsPagingController =
       PagingController(firstPageKey: 1);
-
 
   final PagingController<int, TwitterPostEntity> userTweetsPagingController =
       PagingController(firstPageKey: 1);
@@ -106,12 +106,10 @@ class TwitterCubit extends Cubit<TwitterState> {
       emit(state.copyWith(posts: data, status: StateStatus.success));
     });
   }
-  Future<void> getUserTweets(int page,String userId) async {
-    final response =
-        await _getUserTweetsUseCase(GetUserTweetsParams(
-          page: page,
-          userId: userId
-        ));
+
+  Future<void> getUserTweets(int page, String userId) async {
+    final response = await _getUserTweetsUseCase(
+        GetUserTweetsParams(page: page, userId: userId));
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) {
@@ -132,8 +130,8 @@ class TwitterCubit extends Cubit<TwitterState> {
     });
   }
 
-  Future<void> getTwitterPost(
-      BuildContext context, String postId, String newCommentId,UserEntity? userData) async {
+  Future<void> getTwitterPost(BuildContext context, String postId,
+      String newCommentId, UserEntity? userData) async {
     final response = await _getTwitterPostUseCase(postId);
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
@@ -159,7 +157,8 @@ class TwitterCubit extends Cubit<TwitterState> {
                   context: context,
                   postId: postId,
                   newCommentId: newCommentId,
-                  user: '', userData: userData!);
+                  user: '',
+                  userData: userData!);
             },
             onReport: (TwitterReportParams params) {
               onReport(params);
@@ -252,14 +251,16 @@ class TwitterCubit extends Cubit<TwitterState> {
               context: context,
               commentId: id,
               comment: comment,
-              postId: postId, userData: userData,
+              postId: postId,
+              userData: userData,
             );
           },
           newCommentId: newCommentId,
           state: state,
           onReport: (TwitterReportParams params) {
             onReport(params);
-          }, userData: userData,
+          },
+          userData: userData,
         ),
       ),
     );
@@ -270,33 +271,35 @@ class TwitterCubit extends Cubit<TwitterState> {
       {required BuildContext context,
       required String commentId,
       required String postId,
-      required TwitterPostCommentEntity comment,required UserEntity userData}) async {
+      required TwitterPostCommentEntity comment,
+      required UserEntity userData}) async {
     final response = await _twitterCommentRepliesUseCase(commentId);
     response.fold(
       (failure) =>
           emit(state.copyWith(failure: failure, status: StateStatus.error)),
       (data) {
-        emit(state.copyWith(commentReplies: data,status: StateStatus.success));
+        emit(state.copyWith(commentReplies: data, status: StateStatus.success));
         bottomSheet(
-        context: context,
-        isScrollControlled: true,
-        widget: TwitterCommentReplies(
-          replies: data,
-          onAddReply: (TwitterCommentReplyParams params) {
-            onCommentReply(params: params);
-          },
-          commentId: commentId,
-          postId: postId,
-          onReplyReact: (String id) {
-            onCommentReact(
-                params:
-                    TwitterCommentReactParams(commentId: id, react: 'love'));
-          },
-          onReport: (TwitterReportParams params) {
-            onReport(params);
-          }, userData: userData,
-        ),
-      );
+          context: context,
+          isScrollControlled: true,
+          widget: TwitterCommentReplies(
+            replies: data,
+            onAddReply: (TwitterCommentReplyParams params) {
+              onCommentReply(params: params);
+            },
+            commentId: commentId,
+            postId: postId,
+            onReplyReact: (String id) {
+              onCommentReact(
+                  params:
+                      TwitterCommentReactParams(commentId: id, react: 'love'));
+            },
+            onReport: (TwitterReportParams params) {
+              onReport(params);
+            },
+            userData: userData,
+          ),
+        );
       },
     );
   }

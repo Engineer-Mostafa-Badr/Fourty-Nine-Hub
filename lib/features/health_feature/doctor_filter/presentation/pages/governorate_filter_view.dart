@@ -11,7 +11,8 @@ class DoctorGovernorateFilterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final doctorGovernorateFilter = context.read<DoctorGovernorateFilterCubit>();
+    final doctorGovernorateFilter =
+        context.read<DoctorGovernorateFilterCubit>();
     return Scaffold(
       appBar: AppBar(
         title: const Text(Labels.governorate),
@@ -34,7 +35,8 @@ class DoctorGovernorateFilterView extends StatelessWidget {
             const Sizer(
               height: 30,
             ),
-            BlocBuilder<DoctorGovernorateFilterCubit, DoctorGovernorateFilterState>(
+            BlocBuilder<DoctorGovernorateFilterCubit,
+                DoctorGovernorateFilterState>(
               builder: (context, state) {
                 switch (state) {
                   case DoctorGovernorateFilterLoaded _:
@@ -42,8 +44,8 @@ class DoctorGovernorateFilterView extends StatelessWidget {
                         child: ListView.separated(
                       itemCount: state.governorates.length,
                       separatorBuilder: (context, index) => const Divider(),
-                      itemBuilder: (context, index) =>
-                          GovernorateListTitle(governorate: state.governorates[index]),
+                      itemBuilder: (context, index) => GovernorateListTitle(
+                          governorate: state.governorates[index]),
                     ));
                   case DoctorGovernorateFilterError _:
                     return Center(child: Text(state.message));

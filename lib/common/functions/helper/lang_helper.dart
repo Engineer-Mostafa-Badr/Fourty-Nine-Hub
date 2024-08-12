@@ -1,4 +1,3 @@
 String getLang() {
   return 'en';
 }
-

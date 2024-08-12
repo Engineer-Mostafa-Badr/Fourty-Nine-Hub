@@ -147,7 +147,6 @@ class _CreateAdViewState extends State<CreateAdView> {
                 const Sizer(),
                 DefaultButton(
                     label: 'Publish',
-                   
                     onPressed: () {
                       controller.createAd(
                           categorize: widget.categorization, context: context);

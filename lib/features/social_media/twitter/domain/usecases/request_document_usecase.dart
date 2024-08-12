@@ -12,14 +12,13 @@ class RequestDocumentUseCase extends UseCase<bool, TwitterDocumentationParams> {
   }
 }
 
-class TwitterDocumentationParams{
+class TwitterDocumentationParams {
   final List<String> mediaIds;
   final String name;
 
-  TwitterDocumentationParams({required this.mediaIds, required this.name,});
-  Map<String, dynamic> toJson() => {
-    'mediaIds': mediaIds,
-    'name': name
-  };
+  TwitterDocumentationParams({
+    required this.mediaIds,
+    required this.name,
+  });
+  Map<String, dynamic> toJson() => {'mediaIds': mediaIds, 'name': name};
 }
-

@@ -204,19 +204,19 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           text: category.name,
           style: Styles.headerText(),
         ),
-        if(category.subcategories?.isNotEmpty??false)
-        SizedBox(
-          height: kToolbarHeight * 3,
-          child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return SubCategoryCard(
-                    mainCategory: category,
-                    item: category.subcategories![index]);
-              },
-              separatorBuilder: (context, index) => const Sizer(),
-              itemCount: category.subcategories?.length ?? 0),
-        )
+        if (category.subcategories?.isNotEmpty ?? false)
+          SizedBox(
+            height: kToolbarHeight * 3,
+            child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return SubCategoryCard(
+                      mainCategory: category,
+                      item: category.subcategories![index]);
+                },
+                separatorBuilder: (context, index) => const Sizer(),
+                itemCount: category.subcategories?.length ?? 0),
+          )
       ],
     );
   }

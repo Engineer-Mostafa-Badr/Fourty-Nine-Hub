@@ -1,5 +1,3 @@
-
-
 import 'package:dartz/dartz.dart';
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
@@ -13,8 +11,6 @@ class TwitterPostReactUseCase extends UseCase<bool, TwitterPostReactParams> {
     return await _repo.reactOnPost(params: params);
   }
 }
-
-
 
 class TwitterPostReactParams {
   final String postId;

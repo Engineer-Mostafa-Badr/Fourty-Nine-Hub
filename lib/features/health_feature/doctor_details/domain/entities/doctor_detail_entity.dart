@@ -3,5 +3,6 @@ class DoctorDetailEntity {
   final String label;
   final String details;
 
-  DoctorDetailEntity({required this.id, required this.label, required this.details});
+  DoctorDetailEntity(
+      {required this.id, required this.label, required this.details});
 }

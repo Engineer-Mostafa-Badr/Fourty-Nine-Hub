@@ -3,8 +3,9 @@ class AdStatisticsEntity {
   final int calls;
   final int chats;
   final int requests;
-  AdStatisticsEntity({
-    required this.calls, 
-    required this.chats, required this.requests, required this.views
-  });
+  AdStatisticsEntity(
+      {required this.calls,
+      required this.chats,
+      required this.requests,
+      required this.views});
 }

@@ -4,12 +4,9 @@ import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../res/style/styles.dart';
 
-
-
 class OfferCard extends StatelessWidget {
   const OfferCard({super.key});
 
-  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,8 +28,7 @@ class OfferCard extends StatelessWidget {
                 child: RichText(
                     text: TextSpan(children: [
                   TextSpan(
-                      text:
-                          'Farouk Shahin',
+                      text: 'Farouk Shahin',
                       style: TextStyle(color: Colors.black)),
                   const WidgetSpan(
                       child: Icon(
@@ -40,20 +36,16 @@ class OfferCard extends StatelessWidget {
                     color: Colors.orange,
                     size: 16,
                   )),
+                  TextSpan(text: '120', style: TextStyle(color: Colors.black)),
                   TextSpan(
-                      text: '120',
-                      style: TextStyle(color: Colors.black)),
-                  TextSpan(
-                      text: '  3)\n',
-                      style: TextStyle(color: Colors.grey)),
+                      text: '  3)\n', style: TextStyle(color: Colors.grey)),
                   TextSpan(
                       text: 'Fiat Tipo', style: TextStyle(color: Colors.black)),
                 ])),
               ),
               RichText(
-                  text:  TextSpan(children: [
-                TextSpan(
-                    text: '2\n', style: TextStyle(color: Colors.black)),
+                  text: TextSpan(children: [
+                TextSpan(text: '2\n', style: TextStyle(color: Colors.black)),
                 TextSpan(text: '30km', style: TextStyle(color: Colors.black)),
               ]))
             ],
@@ -61,9 +53,13 @@ class OfferCard extends StatelessWidget {
           const Sizer(),
           Row(
             children: [
-              Expanded(child: Label(text: 'EGP 120', style: Styles.mediumText())),
+              Expanded(
+                  child: Label(text: 'EGP 120', style: Styles.mediumText())),
               ElevatedButton(
-                  onPressed: () {}, child: Label(text: 'Accept', style: Styles.mediumText(color: Colors.white))),
+                  onPressed: () {},
+                  child: Label(
+                      text: 'Accept',
+                      style: Styles.mediumText(color: Colors.white))),
             ],
           )
         ],

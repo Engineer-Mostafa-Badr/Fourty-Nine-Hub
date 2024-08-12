@@ -20,13 +20,17 @@ class SettingsView extends StatelessWidget {
           children: [
             listTileWidget(
                 icon: Icons.notifications_active_outlined,
-                trailing:
-                    FutureBuilder(future: Permission.notification.isGranted, builder: (context, snap) {
-                      final isGranted = snap.data?? false;
-                      return Switch(value: isGranted, onChanged: (v)async => await Permission.notification.request());
+                trailing: FutureBuilder(
+                    future: Permission.notification.isGranted,
+                    builder: (context, snap) {
+                      final isGranted = snap.data ?? false;
+                      return Switch(
+                          value: isGranted,
+                          onChanged: (v) async =>
+                              await Permission.notification.request());
                     }),
                 label: 'Enable Notifications',
-                onTap: ()async=> await Permission.notification.request()),
+                onTap: () async => await Permission.notification.request()),
             listTileWidget(
                 icon: Icons.password,
                 trailing: const Icon(Icons.arrow_forward_ios_outlined),

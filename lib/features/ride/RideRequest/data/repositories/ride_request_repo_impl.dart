@@ -31,8 +31,6 @@ class RideRequestRepoImpl implements RideRequestRepo {
     return _remoteDataSource.addRideRequest(request: request);
   }
 
- 
-
   @override
   Future<Either<Failure, bool>> callTheDriver() {
     // TODO: implement callTheDriver
@@ -97,7 +95,8 @@ class RideRequestRepoImpl implements RideRequestRepo {
   }
 
   @override
-  Future<Either<Failure, List<SubCategoryModel>>> getSubCategories({required String mainCategoryId}) {
+  Future<Either<Failure, List<SubCategoryModel>>> getSubCategories(
+      {required String mainCategoryId}) {
     return _remoteDataSource.getSubCategories(mainCategoryId: mainCategoryId);
   }
 
@@ -108,8 +107,7 @@ class RideRequestRepoImpl implements RideRequestRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> rateTheDriver(
-      {required ReviewModel review}) {
+  Future<Either<Failure, bool>> rateTheDriver({required ReviewModel review}) {
     return _remoteDataSource.rateTheDriver(review: review);
   }
 

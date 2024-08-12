@@ -33,7 +33,6 @@ class GiftWalletView extends StatelessWidget {
                     balance: 300,
                     type: WalletTypes.giftWallet,
                   ),
-                  
                   const Sizer(),
                   Label(
                     text: 'Competitions',

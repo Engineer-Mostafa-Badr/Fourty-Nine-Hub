@@ -4,7 +4,6 @@ class ExpectedPriceEntity {
   final num distance;
   final num duration;
 
-
   ExpectedPriceEntity(
       {this.status = true,
       required this.price,

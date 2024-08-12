@@ -22,17 +22,10 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
     await _getDoctors();
   }
 
-
-
-
-
-
   Future<void> _getDoctors() async {
     final response =
         await _getDoctorListUseCase.call(_healthSharedData.doctorSearchParams);
     response.fold((failure) => emit(DoctorsListError(Labels.errorHappened)),
         (data) => emit(DoctorsListLoaded(data)));
   }
-
-
 }

@@ -67,14 +67,14 @@ class _TwitterGlobalPostsState extends State<TwitterGlobalPosts> {
                                 .postsPagingController.itemList![index].id,
                             react: 'love'));
                     controller.postsPagingController.itemList?[index].isReact =
-                    !controller
-                        .postsPagingController.itemList![index].isReact!;
+                        !controller
+                            .postsPagingController.itemList![index].isReact!;
                   },
                   shareSuccess: state.shareSuccess,
                   onShare: () {
                     controller.onShare(
                       postId:
-                      controller.postsPagingController.itemList![index].id,
+                          controller.postsPagingController.itemList![index].id,
                     );
                     setState(() {});
                   },
@@ -84,10 +84,11 @@ class _TwitterGlobalPostsState extends State<TwitterGlobalPosts> {
                     controller.showPostComments(
                       context: context,
                       postId:
-                      controller.postsPagingController.itemList![index].id,
+                          controller.postsPagingController.itemList![index].id,
                       newCommentId: state.newCommentId ?? '',
-                      user:
-                      controller.postsPagingController.itemList![index].user, userData: widget.userData,
+                      user: controller
+                          .postsPagingController.itemList![index].user,
+                      userData: widget.userData,
                     );
                   },
                   getPost: () {
@@ -95,7 +96,8 @@ class _TwitterGlobalPostsState extends State<TwitterGlobalPosts> {
                         context,
                         controller
                             .postsPagingController.itemList![index].mainPost.id,
-                        state.newCommentId ?? '',widget.userData);
+                        state.newCommentId ?? '',
+                        widget.userData);
                   },
                   onReport: (TwitterReportParams params) {
                     controller.onReport(params);
@@ -107,7 +109,7 @@ class _TwitterGlobalPostsState extends State<TwitterGlobalPosts> {
                   margin: const EdgeInsets.only(top: 150),
                   child: const CupertinoActivityIndicator()),
               newPageProgressIndicatorBuilder: (context) =>
-              const CupertinoActivityIndicator()),
+                  const CupertinoActivityIndicator()),
         ),
       );
     });

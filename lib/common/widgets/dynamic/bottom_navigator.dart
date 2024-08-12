@@ -90,7 +90,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
                 // BottomItemModel(icon: FontAwesomeIcons.home, label: '', index: 2),
                 BottomItemModel(
                     icon: Icons.delivery_dining,
-                    label: 'Shipping',
+                    label: 'Ship',
                     index: 3,
                     image: Assets.shipping,
                     action: () => context.push(Routes.SHIPPING)),

@@ -4,7 +4,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/trip_model.dart';
 import '../repositories/trip_details_repo.dart';
 
-class GetTripDetailsUseCase extends UseCase<TripModel,int> {
+class GetTripDetailsUseCase extends UseCase<TripModel, int> {
   final TripDetailsRepo _repository;
 
   const GetTripDetailsUseCase(this._repository);

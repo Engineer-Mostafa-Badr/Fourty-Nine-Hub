@@ -6,8 +6,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_slider_i
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/states/basic_state.dart';
 
-class SliderCubit
-    extends Cubit<BasicState<List<SliderItemEntity>>> {
+class SliderCubit extends Cubit<BasicState<List<SliderItemEntity>>> {
   final GetSliderItemsUseCase _getSliderItemsUseCase;
 
   SliderCubit(this._getSliderItemsUseCase)

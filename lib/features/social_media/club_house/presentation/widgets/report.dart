@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../res/style/app_colors.dart';
 
-
 class ReportWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -171,7 +170,8 @@ class ReportWidget extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {},
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.PRIMARY_COLOR),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.PRIMARY_COLOR),
               child: const Text('إبلاغ'),
             ),
           ],

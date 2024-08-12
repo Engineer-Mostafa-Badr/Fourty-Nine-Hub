@@ -84,6 +84,7 @@ dependencies:
   # skeletons: ^0.0.3
   flutter_slidable: ^3.1.0
   fl_chart: ^0.68.0
+  gap: ^3.0.1
 
   # share_plus: ^9.0.0
 

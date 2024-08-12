@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,6 +9,7 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/liveview/gifts/gift_manager.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:go_router/go_router.dart';
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
@@ -24,6 +27,8 @@ class DrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log(context.read<UserCubit>().state.data?.email.toString()??"lllllllllllllllllll");
+    // CacheImpl
     return BlocBuilder<UserCubit, BasicState<UserEntity>>(
       builder: (context, state) {
         return Drawer(
@@ -41,7 +46,7 @@ class DrawerWidget extends StatelessWidget {
 
                   competitionSubscription(context: context),
 
-                  // walletCircularProgress(context: context),
+                  // walletCircularProgress(context: context), gemy3617@gmail.com
                   drawerListTile(
                       icon: FontAwesomeIcons.bullhorn,
                       label: 'Advertise Your Company',
@@ -441,14 +446,8 @@ class DrawerWidget extends StatelessWidget {
               )
             ],
           )),
-          
-          
         ],
       ),
     );
   }
-
-
-
-
 }

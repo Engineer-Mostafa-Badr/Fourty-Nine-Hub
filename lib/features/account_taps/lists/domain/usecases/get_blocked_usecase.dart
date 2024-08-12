@@ -8,7 +8,7 @@ class GetBlockedUseCase extends UseCase<List<UsersListEntity>, NoParams> {
   final ListsRepo _repo;
   GetBlockedUseCase(this._repo);
   @override
-  Future<Either<Failure, List<UsersListEntity>>> call(NoParams params)async {
+  Future<Either<Failure, List<UsersListEntity>>> call(NoParams params) async {
     return await _repo.getBlockedUsers();
   }
 }
