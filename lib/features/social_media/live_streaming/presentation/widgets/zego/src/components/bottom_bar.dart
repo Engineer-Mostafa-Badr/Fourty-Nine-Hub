@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 // Package imports:
 
 import 'package:zego_uikit/zego_uikit.dart';
@@ -25,10 +26,13 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/pk_combine_notifier.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/minimizing/mini_button.dart';
 
+import '../inner_text.dart';
+
 /// @nodoc
 class ZegoLiveStreamingBottomBar extends StatefulWidget {
   final ZegoUIKitPrebuiltLiveStreamingConfig config;
   final ZegoUIKitPrebuiltLiveStreamingEvents events;
+  final bool isLiveStream;
   final void Function(ZegoLiveStreamingEndEvent event) defaultEndAction;
   final Future<bool> Function(
     ZegoLiveStreamingLeaveConfirmationEvent event,
@@ -45,6 +49,9 @@ class ZegoLiveStreamingBottomBar extends StatefulWidget {
 
   final ValueNotifier<bool>? isLeaveRequestingNotifier;
 
+  final bool isCoHostEnabled;
+  final ZegoUIKitPrebuiltLiveStreamingInnerText translationText;
+
   const ZegoLiveStreamingBottomBar({
     Key? key,
     required this.config,
@@ -57,7 +64,7 @@ class ZegoLiveStreamingBottomBar extends StatefulWidget {
     required this.liveStatusNotifier,
     required this.connectManager,
     required this.popUpManager,
-    this.isLeaveRequestingNotifier,
+    this.isLeaveRequestingNotifier, required this.isLiveStream, required this.isCoHostEnabled, required this.translationText,
   }) : super(key: key);
 
   @override
@@ -88,9 +95,9 @@ class _ZegoLiveStreamingBottomBarState
     return Container(
       margin: widget.config.bottomMenuBar.margin,
       padding: widget.config.bottomMenuBar.padding,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color:
-            widget.config.bottomMenuBar.backgroundColor ?? Colors.transparent,
+        Color(0xFF35383F),
       ),
       height: widget.config.bottomMenuBar.height ?? 124.zR,
       child: Stack(
@@ -116,7 +123,7 @@ class _ZegoLiveStreamingBottomBarState
                 return rightToolbar(context);
               },
             ),
-          leftChatButton(),
+          //leftChatButton(),
         ],
       ),
     );
@@ -171,12 +178,10 @@ class _ZegoLiveStreamingBottomBarState
                 widget.popUpManager.removeAPopUpSheet(key);
               },
               enabledIcon: ButtonIcon(
-                icon: widget
-                    .config.bottomMenuBar.buttonStyle?.chatEnabledButtonIcon,
+                icon: const Icon(Icons.chat,color: Colors.white),
               ),
               disabledIcon: ButtonIcon(
-                icon: widget
-                    .config.bottomMenuBar.buttonStyle?.chatDisabledButtonIcon,
+                icon: const Icon(Icons.chat,color: Colors.white,),
               ),
             ),
           ],
@@ -215,13 +220,13 @@ class _ZegoLiveStreamingBottomBarState
         SliverFillRemaining(
           hasScrollBody: false,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ...leftPaddings,
               ...getDisplayButtons(context),
-              zegoLiveButtonPadding,
-              zegoLiveButtonPadding,
+              // zegoLiveButtonPadding,
+              // zegoLiveButtonPadding,
             ],
           ),
         ),
@@ -306,44 +311,62 @@ class _ZegoLiveStreamingBottomBarState
         0,
         widget.config.bottomMenuBar.maxCount - 1,
       )..add(
-          buttonWrapper(
-            child: ZegoMoreButton(
-              menuButtonListFunc: () {
-                final buttonList = sortDisplayButtons(
-                  getDefaultButtons(
-                    context,
-                    cameraDefaultValueFunc: () {
-                      return ZegoUIKit()
-                          .getCameraStateNotifier(ZegoUIKit().getLocalUser().id)
-                          .value;
-                    },
-                    microphoneDefaultValueFunc: () {
-                      return ZegoUIKit()
-                          .getMicrophoneStateNotifier(
-                              ZegoUIKit().getLocalUser().id)
-                          .value;
-                    },
-                  ),
-                  extendButtons,
-                )..removeRange(
-                    0,
-                    widget.config.bottomMenuBar.maxCount - 1,
-                  );
+          Row(
+            children: [
+              if (!widget.isLiveStream)
+                ZegoLiveStreamingMemberButton(
+                  config: widget.config.memberList,
+                  events: widget.events.memberList,
+                  isCoHostEnabled: widget.isCoHostEnabled,
+                  hostManager: widget.hostManager,
+                  connectManager: widget.connectManager,
+                  popUpManager: widget.popUpManager,
+                  translationText: widget.translationText,
+                  builder: widget.config.memberButton.builder,
+                  icon: widget.config.memberButton.icon,
+                  backgroundColor: widget.config.memberButton.backgroundColor,
+                  avatarBuilder: widget.config.avatarBuilder,
+                  itemBuilder: widget.config.memberList.itemBuilder,
+                ),
+              buttonWrapper(
+                child: ZegoMoreButton(
+                  menuButtonListFunc: () {
+                    final buttonList = sortDisplayButtons(
+                      getDefaultButtons(
+                        context,
+                        cameraDefaultValueFunc: () {
+                          return ZegoUIKit()
+                              .getCameraStateNotifier(ZegoUIKit().getLocalUser().id)
+                              .value;
+                        },
+                        microphoneDefaultValueFunc: () {
+                          return ZegoUIKit()
+                              .getMicrophoneStateNotifier(
+                                  ZegoUIKit().getLocalUser().id)
+                              .value;
+                        },
+                      ),
+                      extendButtons,
+                    )..removeRange(
+                        0,
+                        widget.config.bottomMenuBar.maxCount - 1,
+                      );
 
-                return buttonList;
-              },
-              icon: ButtonIcon(
-                icon: ZegoLiveStreamingImage.asset(
-                    ZegoLiveStreamingIconUrls.bottomBarMore),
-                backgroundColor: Colors.transparent,
+                    return buttonList;
+                  },
+                  icon: ButtonIcon(
+                    icon: const Icon(Icons.more_horiz,color: Colors.white,),
+                    backgroundColor: Colors.transparent,
+                  ),
+                  onSheetPopUp: (int key) {
+                    widget.popUpManager.addAPopUpSheet(key);
+                  },
+                  onSheetPop: (int key) {
+                    widget.popUpManager.removeAPopUpSheet(key);
+                  },
+                ),
               ),
-              onSheetPopUp: (int key) {
-                widget.popUpManager.addAPopUpSheet(key);
-              },
-              onSheetPop: (int key) {
-                widget.popUpManager.removeAPopUpSheet(key);
-              },
-            ),
+            ],
           ),
         );
     } else {
@@ -488,19 +511,11 @@ class _ZegoLiveStreamingBottomBarState
               buttonSize: buttonSize,
               iconSize: iconSize,
               normalIcon: ButtonIcon(
-                icon: widget.config.bottomMenuBar.buttonStyle
-                        ?.toggleMicrophoneOnButtonIcon ??
-                    ZegoLiveStreamingImage.asset(
-                      ZegoLiveStreamingIconUrls.toolbarMicNormal,
-                    ),
+                icon: const Icon(Icons.mic,color: Colors.white,),
                 backgroundColor: Colors.transparent,
               ),
               offIcon: ButtonIcon(
-                icon: widget.config.bottomMenuBar.buttonStyle
-                        ?.toggleMicrophoneOffButtonIcon ??
-                    ZegoLiveStreamingImage.asset(
-                      ZegoLiveStreamingIconUrls.toolbarMicOff,
-                    ),
+                icon: const Icon(Icons.mic_off,color: Colors.white,),
                 backgroundColor: Colors.transparent,
               ),
               defaultOn: microphoneDefaultOn,
@@ -532,39 +547,36 @@ class _ZegoLiveStreamingBottomBarState
           buttonSize: buttonSize,
           iconSize: iconSize,
           normalIcon: ButtonIcon(
-            icon: widget.config.bottomMenuBar.buttonStyle
-                    ?.toggleCameraOnButtonIcon ??
-                ZegoLiveStreamingImage.asset(
-                  ZegoLiveStreamingIconUrls.toolbarCameraNormal,
-                ),
+            icon: const Icon(Icons.videocam_outlined,color: Colors.white,),
             backgroundColor: Colors.transparent,
           ),
           offIcon: ButtonIcon(
-            icon: widget.config.bottomMenuBar.buttonStyle
-                    ?.toggleCameraOffButtonIcon ??
-                ZegoLiveStreamingImage.asset(
-                  ZegoLiveStreamingIconUrls.toolbarCameraOff,
-                ),
+            icon: const Icon(Icons.videocam_off_outlined,color: Colors.white,),
             backgroundColor: Colors.transparent,
           ),
           defaultOn: cameraDefaultOn,
         );
       case ZegoLiveStreamingMenuBarButtonName.switchCameraButton:
-        return ZegoSwitchCameraButton(
-          buttonSize: buttonSize,
-          iconSize: iconSize,
-          icon: ButtonIcon(
-            icon: widget
-                    .config.bottomMenuBar.buttonStyle?.switchCameraButtonIcon ??
-                ZegoLiveStreamingImage.asset(
-                  ZegoLiveStreamingIconUrls.toolbarFlipCamera,
-                ),
-            backgroundColor: Colors.transparent,
-          ),
-          defaultUseFrontFacingCamera: ZegoUIKit()
-              .getUseFrontFacingCameraStateNotifier(
-                  ZegoUIKit().getLocalUser().id)
-              .value,
+        return Row(
+          children: [
+            Container(
+              width: 1,
+              color: Colors.red,
+              height: 50,
+            ),
+            ZegoSwitchCameraButton(
+              buttonSize: buttonSize,
+              iconSize: iconSize,
+              icon: ButtonIcon(
+                icon: const Icon(Icons.cameraswitch,color: Colors.white,),
+                backgroundColor: Colors.transparent,
+              ),
+              defaultUseFrontFacingCamera: ZegoUIKit()
+                  .getUseFrontFacingCameraStateNotifier(
+                      ZegoUIKit().getLocalUser().id)
+                  .value,
+            ),
+          ],
         );
       case ZegoLiveStreamingMenuBarButtonName.leaveButton:
         return ZegoLiveStreamingLeaveButton(
