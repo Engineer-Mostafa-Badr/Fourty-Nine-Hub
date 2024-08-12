@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/translations/translation_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_state.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/meeting_dialogue.dart';
@@ -28,45 +30,60 @@ class MeetingView extends StatelessWidget {
       backgroundColor: AppColors.GRAY_LIGHT_COLOR3,
       appBar: const HomeAppbar(),
       drawer: const DrawerWidget(),
-      bottomNavigationBar: const BottomNavigator(
-        mainCategory: 3,
-        index: 2,
-      ),
-      floatingActionButton: const FloatingButton(
-        changeView: 2,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: BlocBuilder<MeetingCubit, MeetingState>(
         builder: (context, state) {
           var cubit = context.read<MeetingCubit>();
-          return GridView(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 1,
-              crossAxisCount: 2,
-            ),
+          return Column(
             children: [
-              _buildMeetingItem(
-                color: AppColors.ACCENT_COLOR,
-                label: 'New Meeting',
-                icon: Icons.video_call,
-                onTap: () async {
-                  await newMeeting(cubit);
-                  if (context.mounted) {
-                    context.push(
-                      Routes.MEETINGROOM,
-                      extra: ZegoArgs(genRandNo, true),
-                    );
-                  }
+              ElevatedButton(
+                onPressed: () {
+                  context
+                      .read<TranslationCubit>()
+                      .changeLanguage(const Locale('en'), context);
                 },
+                child: const Text('english').tr(),
               ),
-              _buildMeetingItem(
-                  color: AppColors.PRIMARY_COLOR,
-                  label: 'Join',
-                  icon: Icons.add_box_rounded,
-                  onTap: () {
-                    // join meeting
-                    showMeetingDialogue(context);
-                  }),
+              ElevatedButton(
+                onPressed: () {
+                  context
+                      .read<TranslationCubit>()
+                      .changeLanguage(const Locale('ar'), context);
+                },
+                child: const Text('arabic').tr(),
+              ),
+              SizedBox(
+                height: 200,
+                child: GridView(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    childAspectRatio: 1,
+                    crossAxisCount: 2,
+                  ),
+                  children: [
+                    _buildMeetingItem(
+                      color: AppColors.ACCENT_COLOR,
+                      label: 'new_meeting'.tr(),
+                      icon: Icons.video_call,
+                      onTap: () async {
+                        await newMeeting(cubit);
+                        if (context.mounted) {
+                          context.push(
+                            Routes.MEETINGROOM,
+                            extra: ZegoArgs(genRandNo, true),
+                          );
+                        }
+                      },
+                    ),
+                    _buildMeetingItem(
+                        color: AppColors.PRIMARY_COLOR,
+                        label: 'join'.tr(),
+                        icon: Icons.add_box_rounded,
+                        onTap: () {
+                          // join meeting
+                          showMeetingDialogue(context);
+                        }),
+                  ],
+                ),
+              ),
             ],
           );
         },

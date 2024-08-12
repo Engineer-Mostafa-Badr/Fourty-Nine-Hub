@@ -11,6 +11,7 @@ import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
 import 'package:fourtyninehub/service_locator/reels_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
+import 'package:fourtyninehub/service_locator/translation_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -123,5 +124,6 @@ class DI {
     MeetingServiceLocator.execute(serviceLocator: serviceLocator);
     // subscribtions
     // SubscribtionServiceLocator.execute(serviceLocator: serviceLocator);
+    TranslationServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

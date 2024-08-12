@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fourtyninehub/common/translations/translation_cubit.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
@@ -8,11 +10,10 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'core/themes/light_theme.dart';
 import 'features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'res/style/app_colors.dart';
 import 'routes/pages.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'dart:ui' as ui;
+
 //import 'package:admob_flutter/admob_flutter.dart';
-import 'service_locator/tinder_service_locator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +24,17 @@ void main() async {
   //Admob.initialize();
 
   runApp(
-    const MyApp(),
+    EasyLocalization(
+      startLocale: const Locale('en'),
+      supportedLocales: const [
+        Locale('en'),
+        Locale('ar'),
+      ],
+      path: 'assets/lang',
+      saveLocale: true,
+      fallbackLocale: const Locale('en'),
+      child: const MyApp(),
+    ),
   );
 }
 
@@ -45,6 +56,9 @@ class MyApp extends StatelessWidget {
           create: (context) => serviceLocator<RiderequestCubit>(),
         ),
         BlocProvider(
+          create: (context) => serviceLocator<TranslationCubit>(),
+        ),
+        BlocProvider(
           create: (context) => serviceLocator<CreateShippingRequestCubit>(),
         ),
         // CreateAdCubit
@@ -59,16 +73,32 @@ class MyApp extends StatelessWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: FocusManager.instance.primaryFocus?.unfocus,
-        child: MaterialApp.router(
-          themeMode: ThemeMode.light,
-          theme: lightTheme(),
-          darkTheme: darkTheme(),
-          title: '49',
-          debugShowCheckedModeBanner: false,
-          routerConfig: AppPages.router,
-          locale: const Locale('en'),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
+        child: BlocBuilder<TranslationCubit, Locale>(
+          builder: (context, state) {
+            return MaterialApp.router(
+              themeMode: ThemeMode.light,
+              theme: lightTheme(),
+              darkTheme: darkTheme(),
+              title: '49',
+              debugShowCheckedModeBanner: false,
+              routerConfig: AppPages.router,
+              locale: state,
+              supportedLocales: context.supportedLocales,
+              localizationsDelegates: context.localizationDelegates,
+              localeResolutionCallback: (locale, supportedLocales) {
+                // Ensure that the app is aware of RTL and LTR
+                return locale;
+              },
+              builder: (context, child) {
+                return Directionality(
+                  textDirection: context.locale.languageCode == 'ar'
+                      ? ui.TextDirection.rtl
+                      : ui.TextDirection.ltr,
+                  child: child!,
+                );
+              },
+            );
+          },
         ),
       ),
     );

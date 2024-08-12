@@ -183,10 +183,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                     widget.onTap(index);
                   },
                   child: Padding(
-                    padding: index == 1
+                    padding: index == 3
                         ? const EdgeInsets.only(right: 10)
-                        : index == 2
-                            ? const EdgeInsets.only(left: 30)
+                        : index == 0
+                            ? const EdgeInsets.only(left: 10)
                             : EdgeInsets.zero,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
