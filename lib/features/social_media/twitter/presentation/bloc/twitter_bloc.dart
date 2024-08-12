@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/delete_twitter_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_post_comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_twitter_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/hide_twitter_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/request_document_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/share_twitter_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_comment_replied.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_post_comments.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 part 'twitter_state.dart';
@@ -41,6 +41,8 @@ class TwitterCubit extends Cubit<TwitterState> {
   final TwitterReportUseCase _twitterReportUseCase;
   final RequestDocumentUseCase _requestDocumentUseCase;
   final GetUserTweetsUseCase _getUserTweetsUseCase;
+  final DeleteTwitterPostUseCase _deleteTwitterPostUseCase;
+  final HideTwitterPostUseCase _hideTwitterPostUseCase;
 
   TwitterCubit(
     this._getFeedUseCase,
@@ -53,7 +55,7 @@ class TwitterCubit extends Cubit<TwitterState> {
     this._twitterCommentRepliesUseCase,
     this._getTwitterPostUseCase,
     this._twitterReportUseCase,
-    this._requestDocumentUseCase, this._getUserTweetsUseCase,
+    this._requestDocumentUseCase, this._getUserTweetsUseCase, this._deleteTwitterPostUseCase, this._hideTwitterPostUseCase,
   ) : super(const TwitterState());
 
   void loadData() async {
@@ -63,6 +65,26 @@ class TwitterCubit extends Cubit<TwitterState> {
       print("initStatePageKey : $pageKey");
       getFeed(pageKey);
     });
+  }
+
+  void loadComments(BuildContext context,String postId) async {
+    await getPostComments(context: context, postId: postId,page: 1);
+    commentsPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getPostComments(context: context, postId: postId,page: pageKey);
+    });
+  }
+
+  void loadReplies(BuildContext context,String commentId) async {
+    await getCommentReplies(context: context, postId: commentId,page: 1);
+    commentsPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getCommentReplies(context: context, postId: commentId,page: pageKey);
+    });
+  }
+
+  void onRefresh()async{
+    postsPagingController.refresh();
   }
 
   void loadUserTweets(String userId) async {
@@ -139,34 +161,6 @@ class TwitterCubit extends Cubit<TwitterState> {
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) {
           emit(state.copyWith(postDetails:data,status: StateStatus.success));
-      // bottomSheet(
-      //     context: context,
-      //     isScrollControlled: true,
-      //     widget: TwitterPostDetails(
-      //       post: data,
-      //       postId: postId,
-      //       onReact: () {
-      //         onReact(
-      //           params: TwitterPostReactParams(
-      //             postId: postId,
-      //             react: 'love',
-      //           ),
-      //         );
-      //       },
-      //       onShare: () {
-      //         onShare(postId: postId);
-      //       },
-      //       showPostComments: (id) {
-      //         showPostComments(
-      //             context: context,
-      //             postId: postId,
-      //             newCommentId: newCommentId,
-      //             user: '', userData: userData!);
-      //       },
-      //       onReport: (TwitterReportParams params) {
-      //         onReport(params);
-      //       },
-      //     ));
     });
   }
 
@@ -224,84 +218,98 @@ class TwitterCubit extends Cubit<TwitterState> {
     );
   }
 
-  void showPostComments(
-      {required BuildContext context,
-      required String postId,
-      required String newCommentId,
-      required dynamic user,
-      required UserEntity userData}) async {
-    final response = await _getTwitterPostCommentsUseCase(postId);
+
+  final PagingController<int, TwitterPostCommentEntity> commentsPagingController =
+  PagingController(firstPageKey: 1);
+
+  Future<void> getPostComments(
+      {required BuildContext context, required String postId,required int page}) async {
+    final response = await _getTwitterPostCommentsUseCase(PostCommentsParams(page: page,limit: pageSize,postId: postId,),);
     response.fold(
-      (failure) =>
-          emit(state.copyWith(failure: failure, status: StateStatus.error)),
-      (data) => bottomSheet(
-        context: context,
-        isScrollControlled: true,
-        widget: TwitterPostComments(
-          comments: data,
-          postId: postId,
-          user: user,
-          onAddComment: (PostCommentParams params) =>
-              onPostComment(params: params),
-          onAddReply: (TwitterCommentReplyParams params) {
-            onCommentReply(params: params);
-          },
-          onCommentReact: (TwitterCommentReactParams params) {
-            onCommentReact(params: params);
-          },
-          onGetReplies: (String id, TwitterPostCommentEntity comment) async {
-            getCommentReplies(
-              context: context,
-              commentId: id,
-              comment: comment,
-              postId: postId, userData: userData,
-            );
-          },
-          newCommentId: newCommentId,
-          state: state,
-          onReport: (TwitterReportParams params) {
-            onReport(params);
-          }, userData: userData,
-        ),
-      ),
-    );
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: StateStatus.error)),
+            (data) {
+          final isLastPage = data.length < pageSize;
+          if (page == 1) {
+            print("page == 1 $page");
+            commentsPagingController.itemList = [];
+          }
+          if (isLastPage) {
+            print("isLastPage = $isLastPage");
+            commentsPagingController.appendLastPage(data);
+          } else {
+            print("isNotLastPage = $isLastPage");
+            final nextPageKey = page + 1;
+            commentsPagingController.appendPage(data, nextPageKey);
+          }
+          emit(state.copyWith(postComments:data,status: StateStatus.success ,),);
+        });
   }
 
-  List<TwitterCommentReplyEntity> replies = [];
-  getCommentReplies(
-      {required BuildContext context,
-      required String commentId,
-      required String postId,
-      required TwitterPostCommentEntity comment,required UserEntity userData}) async {
-    final response = await _twitterCommentRepliesUseCase(commentId);
+
+  final PagingController<int, TwitterCommentReplyEntity> repliesPagingController =
+  PagingController(firstPageKey: 1);
+
+  Future<void> getCommentReplies(
+      {required BuildContext context, required String postId,required int page}) async {
+    final response = await _twitterCommentRepliesUseCase(PostCommentsParams(page: page,limit: pageSize,postId: postId,),);
     response.fold(
-      (failure) =>
-          emit(state.copyWith(failure: failure, status: StateStatus.error)),
-      (data) {
-        emit(state.copyWith(commentReplies: data,status: StateStatus.success));
-        bottomSheet(
-        context: context,
-        isScrollControlled: true,
-        widget: TwitterCommentReplies(
-          replies: data,
-          onAddReply: (TwitterCommentReplyParams params) {
-            onCommentReply(params: params);
-          },
-          commentId: commentId,
-          postId: postId,
-          onReplyReact: (String id) {
-            onCommentReact(
-                params:
-                    TwitterCommentReactParams(commentId: id, react: 'love'));
-          },
-          onReport: (TwitterReportParams params) {
-            onReport(params);
-          }, userData: userData,
-        ),
-      );
-      },
-    );
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: StateStatus.error)),
+            (data) {
+          final isLastPage = data.length < pageSize;
+          if (page == 1) {
+            print("page == 1 $page");
+            repliesPagingController.itemList = [];
+          }
+          if (isLastPage) {
+            print("isLastPage = $isLastPage");
+            repliesPagingController.appendLastPage(data);
+          } else {
+            print("isNotLastPage = $isLastPage");
+            final nextPageKey = page + 1;
+            repliesPagingController.appendPage(data, nextPageKey);
+          }
+          emit(state.copyWith(commentReplies:data,status: StateStatus.success ,),);
+        });
   }
+
+  //
+  // List<TwitterCommentReplyEntity> replies = [];
+  // getCommentReplies(
+  //     {required BuildContext context,
+  //     required String commentId,
+  //     required String postId,
+  //     required TwitterPostCommentEntity comment,required UserEntity userData}) async {
+  //   final response = await _twitterCommentRepliesUseCase(commentId);
+  //   response.fold(
+  //     (failure) =>
+  //         emit(state.copyWith(failure: failure, status: StateStatus.error)),
+  //     (data) {
+  //       emit(state.copyWith(commentReplies: data,status: StateStatus.success));
+  //       bottomSheet(
+  //       context: context,
+  //       isScrollControlled: true,
+  //       widget: TwitterCommentReplies(
+  //         replies: data,
+  //         onAddReply: (TwitterCommentReplyParams params) {
+  //           onCommentReply(params: params);
+  //         },
+  //         commentId: commentId,
+  //         postId: postId,
+  //         onReplyReact: (String id) {
+  //           onCommentReact(
+  //               params:
+  //                   TwitterCommentReactParams(commentId: id, react: 'love'));
+  //         },
+  //         onReport: (TwitterReportParams params) {
+  //           onReport(params);
+  //         }, userData: userData,
+  //       ),
+  //     );
+  //     },
+  //   );
+  // }
 
   // add comment usecase
   Future<TwitterPostCommentEntity> onPostComment(
@@ -311,6 +319,7 @@ class TwitterCubit extends Cubit<TwitterState> {
       (failure) =>
           emit(state.copyWith(failure: failure, status: StateStatus.error)),
       (data) {
+        postsPagingController.itemList?.firstWhere((element) => element.id==params.postId).commentsCount=(postsPagingController.itemList!.firstWhere((element) => element.id==params.postId).comments.length+1);
         emit(state.copyWith(newComment: data, status: StateStatus.success));
       },
     );
@@ -372,6 +381,34 @@ class TwitterCubit extends Cubit<TwitterState> {
           print("BackId name ${data.file}");
           print("BackId: ${data.mediaId}");
           emit(state.copyWith(backId: data, status: StateStatus.success));
+        });
+  }
+
+
+
+
+  void deletePost(
+      {required BuildContext context, required String postId}) async {
+    final response = await _deleteTwitterPostUseCase(postId);
+    response.fold(
+            (l) {
+              emit(state.copyWith(failure: l, status: StateStatus.error));
+            },
+            (r) {
+          postsPagingController.itemList?.removeWhere((e)=>e.id==postId);
+          emit(state.copyWith(posts: postsPagingController.itemList));
+          showSuccessMessage(context, "Post delete successfully");
+        });
+  }
+
+  void hidePost({required BuildContext context, required String postId}) async {
+    final response = await _hideTwitterPostUseCase(postId);
+    response.fold(
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (r) {
+          postsPagingController.itemList?.removeWhere((e)=>e.id==postId);
+          emit(state.copyWith(posts: postsPagingController.itemList));
+          showSuccessMessage(context, "Post hide successfully");
         });
   }
 }

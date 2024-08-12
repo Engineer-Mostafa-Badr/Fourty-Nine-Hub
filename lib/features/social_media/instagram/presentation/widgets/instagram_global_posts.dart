@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
@@ -10,7 +11,9 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -50,7 +53,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                 noItemsFoundIndicatorBuilder: (context) {
                   return const Center(
                     child: Text(
-                      "لا يوجد بوستات",
+                      "No Posts",
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 18,
@@ -63,7 +66,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                   if(controller.feedPagingController.itemList?[index].type=='advertisement'){
                     return FacebookAdvertisementCard(post: controller.feedPagingController.itemList![index],);
 
-                  }else{
+                  }else if(controller.feedPagingController.itemList?[index].type=='facebook_post'){
                     return Padding(
                       padding: const EdgeInsetsDirectional.only(start: 10.0,end:10,top: 0,),
                       child: Column(
@@ -85,6 +88,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                     index: i + 1,
                                     length: controller.feedPagingController.itemList![index].images!.length,
                                     onDoubleTap: () {
+
                                       controller.feedPagingController.itemList?[index].isLove = !controller.feedPagingController.itemList![index].isLove!;
                                       setState(() {});
                                     },
@@ -125,7 +129,9 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                       IconAppButton(
                                         icon: Icons.chat_bubble_outline_rounded,
                                         onPressed: () {
-                                          controller.showPostComments(context: context, postId: controller.feedPagingController.itemList![index].id);
+                                          controller.showPostComments(context: context, params: PostCommentsParams(
+                                            postId:controller.feedPagingController.itemList![index].id, page: 1, limit: 1,
+                                          ));
                                         },
                                         color: Colors.grey,
                                         size: 25,
@@ -170,7 +176,28 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                         ],
                       ),
                     );
-                  }                      },
+                  } else{
+                    return Column(
+                      children: [
+                        Container(
+                          height: 5,
+                          width: double.infinity,
+                          color: AppColors.DIVIDER_GRAY_COLOR2,
+                        ),
+                        Container(
+                          color: Colors.black,
+                            height: 300,
+                            width: double.infinity,
+                            child: InstagramReelCard(item: controller.feedPagingController.itemList![index],),),
+                        Container(
+                          height: 5,
+                          width: double.infinity,
+                          color: AppColors.DIVIDER_GRAY_COLOR2,
+                        ),
+                      ],
+                    );
+                  }
+                  },
                 noMoreItemsIndicatorBuilder: (context) => Container(),
                 firstPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator(),
                 newPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator(),

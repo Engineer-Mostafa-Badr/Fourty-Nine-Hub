@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_feed_usecase.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_comment_replies.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_comments.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
@@ -29,8 +30,9 @@ class InstagramCubit extends Cubit<InstagramState> {
   final PostCommentUseCase _postCommentUseCase;
   final ReplyOnCommentUseCase _replyOnCommentUseCase;
   final CommentReactUseCase _commentReactUseCase;
+  final GetInstagramReelsUseCase _instagramReelsUseCase;
 
-  InstagramCubit(this._getFeedUseCase, this._advertisementUseCase, this._postReactUseCase, this._getPostCommentsUseCase, this._getPostCommentRepliesUseCase, this._postCommentUseCase, this._replyOnCommentUseCase, this._commentReactUseCase) : super(InstagramState());
+  InstagramCubit(this._getFeedUseCase, this._advertisementUseCase, this._postReactUseCase, this._getPostCommentsUseCase, this._getPostCommentRepliesUseCase, this._postCommentUseCase, this._replyOnCommentUseCase, this._commentReactUseCase, this._instagramReelsUseCase) : super(InstagramState());
 
 
   void loadData() async {
@@ -43,7 +45,7 @@ class InstagramCubit extends Cubit<InstagramState> {
 
 
   void onRefresh()async{
-    emit(state.copyWith(advertisementsPage:0));
+    emit(state.copyWith(advertisementsPage:0,newPage: 0));
     feedPagingController.refresh();
   }
 
@@ -56,15 +58,18 @@ class InstagramCubit extends Cubit<InstagramState> {
   Future<void> getFeed(int page) async {
     final response = await _getFeedUseCase(TwitterFeedParams(limit: 5, page: page));
     List<PostEntity> advertisements=[];
+    List<PostEntity> reels=[];
     response.fold(
             (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
             (data) async{
           if(data.isNotEmpty){
             advertisements = await getAdvertisements();
+            reels = await getReels();
           }
           List<PostEntity> totalPosts=[];
           totalPosts.addAll(data);
           totalPosts.addAll(advertisements);
+          totalPosts.addAll(reels);
           final isLastPage = totalPosts.length < (6);
           if (page == 1) {
             print("page == 1 $page");
@@ -98,6 +103,24 @@ class InstagramCubit extends Cubit<InstagramState> {
     return advertisements;
   }
 
+  // get reels
+  Future<List<PostEntity>> getReels() async {
+    final response =
+    await _instagramReelsUseCase(TwitterFeedParams(limit: 1, page: state.newPage!+1));
+    List<PostEntity> reels=[];
+    response.fold(
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (data) {
+          reels.addAll(data);
+          int? page = state.newPage!+1;
+          print("newPage:${state.newPage}");
+          print("newPage:$page");
+          emit(state.copyWith(newPage: page,posts: data, status: StateStatus.success));
+        });
+    print("reels:${reels.length}");
+    return reels;
+  }
+
 
   void changeIndex(int index){
     emit(state.copyWith(pageIndex: index));
@@ -121,8 +144,8 @@ class InstagramCubit extends Cubit<InstagramState> {
 
 
   void showPostComments(
-      {required BuildContext context, required String postId}) async {
-    final response = await _getPostCommentsUseCase(postId);
+      {required BuildContext context, required PostCommentsParams params}) async {
+    final response = await _getPostCommentsUseCase(params);
     response.fold(
             (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
@@ -131,7 +154,7 @@ class InstagramCubit extends Cubit<InstagramState> {
             isScrollControlled: true,
             widget: InstagramPostComments(
                 comments: data,
-                postId: postId,
+                postId: params.postId,
                 onAddComment: (PostCommentParams params) {
                   onPostComment(params: params);
                 }),),);
@@ -141,7 +164,7 @@ class InstagramCubit extends Cubit<InstagramState> {
 
   void showPostCommentReplies(
       {required BuildContext context, required String commentId,required String postId}) async {
-    final response = await _getPostCommentRepliesUseCase(commentId);
+    final response = await _getPostCommentRepliesUseCase(PostCommentsParams(page: 0, limit: 0, postId: 'postId'));
     response.fold(
             (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
@@ -197,5 +220,26 @@ class InstagramCubit extends Cubit<InstagramState> {
     return value;
 
   }
+
+
+
+  //
+  //
+  //
+  // Future<void> _getExploreReels(int page) async {
+  //   final result = await _getExploreReelsUseCase(page);
+  //   result.fold(
+  //         (failure) {
+  //       exploreReelsPagingController.error = failure;
+  //     },
+  //         (reels) {
+  //       if (reels.length < EndPoints.pageSize) {
+  //         exploreReelsPagingController.appendLastPage(reels);
+  //       } else {
+  //         exploreReelsPagingController.appendPage(reels, page + 1);
+  //       }
+  //     },
+  //   );
+  // }
 
 }

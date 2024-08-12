@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_comment_reply_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_post_comment_model.dart';
@@ -30,9 +31,9 @@ abstract class TwitterRemoteDataSource {
   Future<Either<Failure, TwitterCommentReplyEntity>> replyOnComment(
       {required TwitterCommentReplyParams params});
   Future<Either<Failure, List<TwitterPostCommentEntity>>> getPostComments(
-      {required String postId});
+      {required PostCommentsParams params});
   Future<Either<Failure, List<TwitterCommentReplyEntity>>> getCommentReplies(
-      {required String commentId});
+      {required PostCommentsParams params});
 
   Future<Either<Failure, bool>> deletePost({required String postId});
   Future<Either<Failure, bool>> hidePost({required String postId});
@@ -123,22 +124,22 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
 
   @override
   Future<Either<Failure, List<TwitterPostCommentEntity>>> getPostComments(
-      {required String postId}) async {
-    final response = await _apiConsumer.get(EndPoints.getTwitterPostComments(postId));
+      {required PostCommentsParams params}) async {
+    final response = await _apiConsumer.get(EndPoints.getTwitterPostComments(params));
     return response.fold(
         (l) => Left(l),
-        (data) => Right((data['data'] as List)
+        (data) => Right((data['data']['comments'] as List)
             .map((e) => TwitterPostCommentModel.fromJson(e))
             .toList()));
   }
 
  @override
   Future<Either<Failure, List<TwitterCommentReplyEntity>>> getCommentReplies(
-      {required String commentId}) async {
-    final response = await _apiConsumer.get(EndPoints.getTwitterCommentReplies(commentId));
+      {required PostCommentsParams params}) async {
+    final response = await _apiConsumer.get(EndPoints.getTwitterCommentReplies(params));
     return response.fold(
         (l) => Left(l),
-        (data) => Right((data['data'] as List)
+        (data) => Right((data['data']['replies'] as List)
             .map((e) => TwitterCommentReplyModel.fromJson(e))
             .toList()));
   }
@@ -147,13 +148,13 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
 
   @override
   Future<Either<Failure, bool>> deletePost({required String postId}) async {
-    final response = await _apiConsumer.delete(EndPoints.deletePost(postId));
+    final response = await _apiConsumer.delete(EndPoints.deleteTwitterPost(postId));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
   @override
   Future<Either<Failure, bool>> hidePost({required String postId}) async {
-    final response = await _apiConsumer.put(EndPoints.hidePost(postId));
+    final response = await _apiConsumer.put(EndPoints.hideTwitterPost(postId));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 

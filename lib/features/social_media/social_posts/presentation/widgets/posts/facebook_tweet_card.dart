@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
@@ -199,20 +200,8 @@ class FacebookTweetCard extends StatelessWidget {
                           children: [
                             Stack(
                               children: [
-                                Container(
-                                  margin: const EdgeInsetsDirectional.only(
-                                      end: 10, bottom: 10),
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    image: DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: NetworkImage(
-                                        post.images?[index] ?? '',
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                ImageFromInternet(image: post.images?[index]??'',),
+
                                 if (index == 3 && post.images!.length > 4)
                                   Container(
                                     margin: const EdgeInsetsDirectional.only(
@@ -220,7 +209,7 @@ class FacebookTweetCard extends StatelessWidget {
                                     // padding: const EdgeInsets.all(10),
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
+                                      // borderRadius: BorderRadius.circular(15),
                                       color: Colors.black.withOpacity(0.5),
                                     ),
                                     child: Center(

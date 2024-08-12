@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
@@ -27,6 +28,8 @@ class TwitterPostCard extends StatefulWidget {
   final Function onReact;
   final Function getPost;
   final Function onShare;
+  final Function(String) deletePost;
+  final Function(String) hidePost;
   final Function(String) showPostComments;
   final Function(TwitterReportParams) onReport;
   bool? shareSuccess;
@@ -39,7 +42,7 @@ class TwitterPostCard extends StatefulWidget {
     required this.showPostComments,
     required this.onShare,
     required this.getPost,
-    required this.onReport,
+    required this.onReport, required this.deletePost, required this.hidePost,
   });
 
   @override
@@ -154,7 +157,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
           Expanded(
             child: _buildTwitterItem(
               icon: Icons.comment,
-              label: '${post.comments.length}',
+              label: '${post.commentsCount}',
               onTap: () {
                 return widget.showPostComments(widget.post.id);
               },
@@ -287,17 +290,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                         children: [
                           Stack(
                             children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(
-                                      widget.post.images?[index] ?? '',
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              ImageFromInternet(image: widget.post.images?[index]??'',),
                               if (index == 3 && widget.post.images!.length > 4)
                                 Container(
                                   alignment: Alignment.center,
@@ -319,7 +312,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                           ),
                         ],
                       ),
-                    )),
+                    ),),
           ),
         if (image != '')
           Container(
@@ -413,7 +406,8 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 subTitle:
                     'Your post will be deleted, and you cannot get it again',
                 onTap: () {
-                  // widget.deletePost(widget.post.id);
+                  widget.deletePost(widget.post.id);
+                  // context.pop();
                   // if(fromDetails==true){
                   //   context.pop();
                   // }
@@ -423,7 +417,8 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               title: 'Hide Post',
               subTitle: 'Your post will be hidden, you can get it again',
               onTap: () {
-                // widget.hidePost(widget.post.id);
+                widget.hidePost(widget.post.id);
+                // context.pop();
                 // if(fromDetails==true){
                 //   context.pop();
                 // }

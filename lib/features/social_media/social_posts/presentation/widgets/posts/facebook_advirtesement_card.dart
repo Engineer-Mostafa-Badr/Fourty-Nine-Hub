@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
@@ -59,21 +60,23 @@ class FacebookAdvertisementCard extends StatelessWidget {
                       },
                       child: Stack(
                         children: [
-                          Container(
-                            margin: const EdgeInsetsDirectional.only(
-                                end: 10, bottom: 10),
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(15),
-                              image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: NetworkImage(
-                                  post.images?[index] ?? '',
-                                ),
-                              ),
-                            ),
-                          ),
+                          ImageFromInternet(image: post.images?[index] ?? '',borderRadius: BorderRadius.circular(15),),
+
+                          // Container(
+                          //   margin: const EdgeInsetsDirectional.only(
+                          //       end: 10, bottom: 10),
+                          //   padding: const EdgeInsets.all(10),
+                          //   decoration: BoxDecoration(
+                          //     color: Colors.red,
+                          //     borderRadius: BorderRadius.circular(15),
+                          //     image: DecorationImage(
+                          //       fit: BoxFit.fill,
+                          //       image: NetworkImage(
+                          //         post.images?[index] ?? '',
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                           if (index == 3 && post.images!.length > 4)
                             Container(
                               margin: const EdgeInsetsDirectional.only(

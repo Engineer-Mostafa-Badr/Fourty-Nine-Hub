@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/comment_replies.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
-import '../../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/comment_entity.dart';
@@ -25,7 +26,6 @@ class CommentCard extends StatelessWidget {
       create: (_) => serviceLocator(),
       child: BlocBuilder<SocialPostsCubit, SocialPostsState>(
           builder: (context, state) {
-        final controller = context.read<SocialPostsCubit>();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -93,11 +93,16 @@ class CommentCard extends StatelessWidget {
                     style: Styles.mediumText(),
                     label: 'Reply',
                     onPressed: () {
-                      controller.showPostCommentReplies(
-                        context: context,
-                        commentId: comment.id,
-                        postId: comment.post,
-                      );
+                      bottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          widget: CommentReplies(
+                            replies: [],
+                            postId: comment.post, commentId: comment.id,
+                            onAddReply: (ReplyOnCommentParams params) {
+                            // replyOnComment(params: params);
+                          },
+                          ));
                     })
               ],
             ),

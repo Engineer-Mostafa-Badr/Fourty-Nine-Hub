@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
@@ -145,6 +146,10 @@ class EndPoints {
     return '/instagram/feed?limit=${params.limit}&page=${params.page}';
   }
 
+  static String getReels(TwitterFeedParams params) {
+    return '/reels/explore?limit=${params.limit}&page=${params.page}';
+  }
+
   static String getAdvertisement(TwitterFeedParams params) {
     return '/advertisementCompany?limit=${params.limit}&page=${params.page}';
   }
@@ -221,20 +226,20 @@ class EndPoints {
     return '/twitter/comment/create-comment/$postId';
   }
 
-  static String getPostComments(String postId) {
-    return '/facebook/comment/get-post-comments/$postId';
+  static String getPostComments(PostCommentsParams params) {
+    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}&page=${params.page}';
   }
 
-  static String getPostCommentReplies(String commentId) {
-    return '/facebook/comment/get-comment-replies/$commentId';
+  static String getPostCommentReplies(PostCommentsParams params) {
+    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}';
   }
 
-  static String getTwitterPostComments(String postId) {
-    return '/twitter/comment/get-post-comments/$postId';
+  static String getTwitterPostComments(PostCommentsParams params) {
+    return '/twitter/comment/get-post-comments/${params.postId}?limit=${params.limit}&page=${params.page}';
   }
 
-  static String getTwitterCommentReplies(String commentId) {
-    return '/twitter/comment/get-comment-replies/$commentId';
+  static String getTwitterCommentReplies(PostCommentsParams params) {
+    return '/twitter/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}';
   }
 
   static String deletePost(String postId) {
@@ -243,6 +248,14 @@ class EndPoints {
 
   static String hidePost(String postId) {
     return '/facebook/post/hide/$postId';
+  }
+
+  static String deleteTwitterPost(String postId) {
+    return '/twitter/post/$postId';
+  }
+
+  static String hideTwitterPost(String postId) {
+    return '/twitter/post/hide/$postId';
   }
 
   static String friendRequest(String userId) {

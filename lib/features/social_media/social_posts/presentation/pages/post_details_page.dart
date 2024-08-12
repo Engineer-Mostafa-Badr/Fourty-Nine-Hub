@@ -1,11 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_card.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
@@ -22,7 +26,7 @@ import '../widgets/posts/comment_card.dart';
 
 class PostDetailsPage extends StatefulWidget {
   final List<CommentEntity> comments;
-  final PostEntity post;
+  final String postId;
   final Function(PostCommentParams) onAddComment;
   final Function(PostReactParams) onReact;
   final Function(String) showPostComments;
@@ -31,7 +35,7 @@ class PostDetailsPage extends StatefulWidget {
   final Function(String) hidePost;
   const PostDetailsPage({
     super.key,
-    required this.post,
+    required this.postId,
     required this.onAddComment,
     required this.onReact,
     required this.showPostComments,
@@ -61,86 +65,206 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
             onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          FacebookPostCard(
-              post: widget.post,
-              onReact: widget.onReact,
-              deletePost: widget.deletePost,
-              hidePost: widget.hidePost,
-              showPostDetails: widget.showPostDetails,
-              showPostComments: widget.showPostComments,
-            onShare: (String id) {
-            },
-            from: 'details',
-            isMyPost: user?.id==widget.post.user.id,
-          ),
-          const Divider(),
-          Expanded(
-            child: ListView.separated(
-                itemBuilder: (context, index) =>
-                    _buildCommentCard(comment: widget.comments[index]),
-                separatorBuilder: (context, index) => const Sizer(),
-                itemCount: widget.comments.length),
-          ),
-          Container(
-              height: kToolbarHeight,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Row(
-                children: [
-                  const ProfileImage(accountId: 0),
-                  const Sizer(),
-                  Expanded(
-                      child: FormTextField(
-                          hint: 'Type your comment ....',
-                          height: kToolbarHeight * .7,
-                          action: (v) {
-                            setState(() {});
-                          },
-                          controller: commentTextController)),
-                  const Sizer(),
-                  if (commentTextController.text.isNotEmpty)
-                    IconAppButton(
+      // body: Stack(
+      //   alignment: Alignment.bottomCenter,
+      //   children: [
+      //     ListView(
+      //       shrinkWrap: true,
+      //       children: [
+      //         FacebookPostCard(
+      //             post: widget.post,
+      //             onReact: widget.onReact,
+      //             deletePost: widget.deletePost,
+      //             hidePost: widget.hidePost,
+      //             showPostDetails: widget.showPostDetails,
+      //             showPostComments: widget.showPostComments,
+      //           onShare: (String id) {
+      //           },
+      //           from: 'details',
+      //           isMyPost: user?.id==widget.post.user.id,
+      //         ),
+      //         const Divider(),
+      //         Expanded(
+      //           child: ListView.separated(
+      //             shrinkWrap: true,
+      //               physics: const NeverScrollableScrollPhysics(),
+      //               itemBuilder: (context, index) =>
+      //                   _buildCommentCard(comment: widget.comments[index]),
+      //               separatorBuilder: (context, index) => const Sizer(),
+      //               itemCount: widget.comments.length),
+      //         ),
+      //       ],
+      //     ),
+      //     Container(
+      //         height: kToolbarHeight,
+      //         decoration: const BoxDecoration(
+      //           color: Colors.white,
+      //         ),
+      //         child: Row(
+      //           children: [
+      //             const ProfileImage(accountId: 0),
+      //             const Sizer(),
+      //             Expanded(
+      //                 child: FormTextField(
+      //                     hint: 'Type your comment ....',
+      //                     height: kToolbarHeight * .7,
+      //                     action: (v) {
+      //                       setState(() {});
+      //                     },
+      //                     controller: commentTextController)),
+      //             const Sizer(),
+      //             if (commentTextController.text.isNotEmpty)
+      //               IconAppButton(
+      //                   icon: Icons.send,
+      //                   isCircle: true,
+      //                   onPressed: () async{
+      //                     onCommentAdded();
+      //
+      //                   })
+      //           ],
+      //         )),
+      //   ],
+      // ),
+      body: BlocProvider<SocialPostsCubit>(
+        create: (_) =>
+        serviceLocator()..loadPostDetails(context, widget.postId),
+        child: BlocConsumer<SocialPostsCubit, SocialPostsState>(
+            listener: (context, state) {},
+            builder: (context, state) {
+              final controller = context.read<SocialPostsCubit>();
+
+              return Column(
+              children: [
+                Expanded(
+                  child:state.status == StateStatus.success? RefreshIndicator(
+                  onRefresh: () async => controller.onRefresh(),
+                  child: RefreshIndicator(
+                    onRefresh: () async=> controller.onRefreshPostDetails(),
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              FacebookPostCard(
+                                post: state.postDetails!,
+                                onReact: widget.onReact,
+                                deletePost: widget.deletePost,
+                                hidePost: widget.hidePost,
+                                showPostDetails: widget.showPostDetails,
+                                showPostComments: widget.showPostComments,
+                                onShare: (String id) {},
+                                from: 'details',
+                                isMyPost:
+                                user?.id == state.postDetails?.user.id,
+                              ),
+                              const Divider(),
+                            ],
+                          ),
+                        ),
+                        PagedSliverList<int, CommentEntity>(
+                          pagingController:
+                          controller.commentsPagingController,
+                          builderDelegate:
+                          PagedChildBuilderDelegate<CommentEntity>(
+                            noItemsFoundIndicatorBuilder: (context) {
+                              return const Center(
+                                child: Text(
+                                  "No Comments",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              );
+                            },
+                            itemBuilder: (context, item, index) {
+                              return _buildCommentCard(
+                                  comment: controller
+                                      .commentsPagingController
+                                      .itemList![index]);
+                            },
+                            noMoreItemsIndicatorBuilder: (context) =>
+                                Container(),
+                            firstPageProgressIndicatorBuilder: (context) =>
+                            const CupertinoActivityIndicator(),
+                            newPageProgressIndicatorBuilder: (context) =>
+                            const CupertinoActivityIndicator(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ):Center(child: CupertinoActivityIndicator()),
+                ),
+                Container(
+                  height: kToolbarHeight,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  child: Row(children: [
+                    const ProfileImage(accountId: 0),
+                    const Sizer(),
+                    Expanded(
+                        child: FormTextField(
+                            hint: 'Type your comment ....',
+                            height: kToolbarHeight * .7,
+                            action: (v) {
+                              setState(() {});
+                            },
+                            controller: commentTextController)),
+                    const Sizer(),
+                    if (commentTextController.text.isNotEmpty)
+                      IconAppButton(
                         icon: Icons.send,
                         isCircle: true,
-                        onPressed: () => onCommentAdded())
-                ],
-              )),
-        ],
+                        onPressed: () async {
+                          CommentEntity data = await controller.onPostComment(
+                            params:PostCommentParams(
+                                postId: widget.postId, content: commentTextController.text),
+                          );
+                          final user = context.read<UserCubit>().state.data;
+
+                          controller.commentsPagingController.itemList?.insert(
+                            0,
+                            CommentModel(
+                              id: data.id,
+                              content: commentTextController.text,
+                              post: widget.postId,
+                              createdAt: DateTime.now(),
+                              loveCount: data.loveCount,
+                              angryCount: data.angryCount,
+                              likesCount: data.likesCount,
+                              repliesCount: data.repliesCount,
+                              sadCount: data.sadCount,
+                              wowCount: data.wowCount,
+                              isAngry: false,
+                              isLikes: false,
+                              isLove: false,
+                              isSad: false,
+                              isWow: false, user: TwitterUserEntity(
+                              id: user!.id,
+                              firstName: user.firstName,
+                              lastName: user.lastName,
+                              createdAt: DateTime.now(),
+                              image: user.profilePicture ?? '',
+                              email: user.email ?? '',
+                              isDocumented: false,
+                            ),
+                            ),
+                          );
+                          commentTextController.clear();
+                          FocusScope.of(context).unfocus();
+                          setState(() {});
+                        },
+                      )
+                  ]),
+                )
+              ],
+            );
+          }
+        ),
       ),
     );
-  }
-
-  void onCommentAdded() async{
-    CommentModel data = await widget.onAddComment(
-      PostCommentParams(
-          postId: widget.post.id, content: commentTextController.text),
-    );
-    final user = context.read<UserCubit>().state.data;
-
-    widget.comments.add(
-      CommentModel(
-        id: data.id,
-        content: commentTextController.text,
-        post: widget.post.id,
-        createdAt: DateTime.now(),
-        loveCount: data.loveCount,
-        angryCount: data.angryCount,
-        likesCount: data.likesCount,
-        repliesCount: data.repliesCount,
-        sadCount: data.sadCount,
-        wowCount: data.wowCount,
-        isAngry: false,
-        isLikes: false,
-        isLove: false,
-        isSad: false,
-        isWow: false, user: data.user,
-      ),
-    );
-    commentTextController.clear();
-    setState(() {});
   }
 
   Widget _buildCommentCard({

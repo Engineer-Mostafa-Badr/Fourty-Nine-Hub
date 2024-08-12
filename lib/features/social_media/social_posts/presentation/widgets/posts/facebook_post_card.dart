@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_reaction_button/flutter_reaction_button.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -11,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_tweet_card.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -61,17 +61,17 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   final pageController = PageController();
   bool isLiked = false;
   bool hide = false;
-  Reaction<String>? _selectedReaction;
+  // Reaction<String>? _selectedReaction;
 
   @override
   void initState() {
     pageController.addListener(() {
       setState(() {});
     });
-    _selectedReaction = Reaction<String>(
-      value: 'like',
-      icon: _buildReactionWidget(item: Reactions.like),
-    );
+    // _selectedReaction = Reaction<String>(
+    //   value: 'like',
+    //   icon: _buildReactionWidget(item: Reactions.like),
+    // );
     super.initState();
   }
 
@@ -370,12 +370,6 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             _buildActivityFeelingWidget(),
           ],
         )),
-        // if (widget.showOptions)
-        //   IconButton(
-        //       onPressed: () {
-        //         bottomSheet(context: context, widget: _buildPostOptions());
-        //       },
-        //       icon: const Icon(Icons.more_horiz)),
         if (showOptions)
           IconAppButton(
             icon: Icons.clear,
@@ -463,6 +457,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                         itemCount:
                             post.images!.length < 4 ? post.images!.length : 4,
                         itemBuilder: (context, index) => InkWell(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
                               onTap: () {
                                 if (index != 3 ||
                                     (index == 3 && post.images!.length == 4)) {
@@ -500,16 +497,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                             const EdgeInsetsDirectional.only(
                                                 end: 10, bottom: 10),
                                         padding: const EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          image: DecorationImage(
-                                            fit: BoxFit.fill,
-                                            image: NetworkImage(
-                                              post.images?[index] ?? '',
-                                            ),
-                                          ),
-                                        ),
+                                        child: ImageFromInternet(image: post.images?[index]??'',),
                                       ),
                                       if (index == 3 && post.images!.length > 4)
                                         Container(
@@ -580,35 +568,6 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
     }
   }
 
-  Widget _buildReactionItem({
-    required Reactions item,
-  }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset(
-          item.image(),
-          height: 20,
-        ),
-        // Label(text: item.label()),
-      ],
-    );
-  }
-
-  Widget _buildReactionWidget({
-    required Reactions item,
-  }) {
-    return Row(
-      children: [
-        Image.asset(
-          item.image(),
-          height: 20,
-        ),
-        const Sizer(width: 5),
-        Label(text: item.label()),
-      ],
-    );
-  }
 
   Widget _buildActivityFeelingWidget() {
     return Padding(

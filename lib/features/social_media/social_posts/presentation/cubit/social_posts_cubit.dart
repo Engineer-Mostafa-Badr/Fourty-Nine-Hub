@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -16,21 +13,17 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/follow_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/friend_request_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comment_replies_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/hide_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/remove_suggest_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/send_greet_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/share_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/post_details_page.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/comment_replies.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/post_comments.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../domain/entities/post_entity.dart';
-
 import '../../domain/usecases/get_feed_usecase.dart';
 import '../../domain/usecases/get_post_comments_usecase.dart';
 import '../../domain/usecases/get_user_posts_usecase.dart';
@@ -58,6 +51,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final ReplyOnCommentUseCase _replyOnCommentUseCase;
   final FaceTweetUseCase _getTwitterFeedUseCase;
   final FaceAdvertisementUseCase _advertisementUseCase;
+  final GetPostUseCase _getPostUseCase;
 
   SocialPostsCubit(
       this._getFeedUseCase,
@@ -66,7 +60,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       this._getPostCommentsUseCase,
       this._postCommentUseCase,
       this._deletePostUseCase,
-      this._hidePostUseCase, this._suggestedFriendsUseCase, this._friedRequestUseCase, this._followUserUseCase, this._sendGreetMessageUseCase, this._removeSuggestUserUseCase, this._sharePostUseCase, this._commentReactUseCase, this._getPostCommentRepliesUseCase, this._replyOnCommentUseCase, this._getTwitterFeedUseCase, this._advertisementUseCase,)
+      this._hidePostUseCase, this._suggestedFriendsUseCase, this._friedRequestUseCase, this._followUserUseCase, this._sendGreetMessageUseCase, this._removeSuggestUserUseCase, this._sharePostUseCase, this._commentReactUseCase, this._getPostCommentRepliesUseCase, this._replyOnCommentUseCase, this._getTwitterFeedUseCase, this._advertisementUseCase, this._getPostUseCase,)
       : super(const SocialPostsState());
 
   void loadData() async {
@@ -82,13 +76,49 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     });
   }
 
+  void loadComments(BuildContext context,String postId) async {
+    await getPostComments(context: context, postId: postId,page: 1);
+    commentsPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getPostComments(context: context, postId: postId,page: pageKey);
+    });
+  }
+
+  void loadReplies(BuildContext context,String commentId) async {
+    await getCommentReplies(context: context, commentId: commentId,page: 1);
+    commentsPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getCommentReplies(context: context, commentId: commentId,page: pageKey);
+    });
+  }
+
+  void loadPostDetails(BuildContext context,String postId) async {
+    await getPostDetails(postId);
+    await getPostComments(context: context, postId: postId,page: 1);
+    commentsPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getPostComments(context: context, postId: postId,page: pageKey);
+    });
+  }
+
 
   void onRefresh()async{
     emit(state.copyWith(tweetPage:0,advertisementsPage:0));
     feedPagingController.refresh();
+    suggestUserPagingController.refresh();
+  }
+
+  void onRefreshPostDetails()async{
+    emit(state.copyWith(status: StateStatus.loading));
+    commentsPagingController.refresh();
   }
 
 
+  void refreshPosts(List<PostEntity>? posts){
+    emit(state.copyWith(posts: posts, status: StateStatus.initial));
+    feedPagingController.itemList?.clear();
+    feedPagingController.itemList?.addAll(posts!);
+  }
 
 // get feed posts
   Future<void> getFeed(int page) async {
@@ -120,6 +150,18 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
             feedPagingController.appendPage(totalPosts, nextPageKey);
           }
           emit(state.copyWith(posts: totalPosts, status: StateStatus.initial));
+        });
+  }
+
+
+// get feed posts
+  Future<void> getPostDetails(String postId) async {
+    emit(state.copyWith(status: StateStatus.loading));
+    final response = await _getPostUseCase(postId);
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) async{
+          emit(state.copyWith(postDetails: data, status: StateStatus.initial));
         });
   }
 
@@ -223,20 +265,21 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 
   }
 
-// add comment usecase
+// add comment
   Future<CommentEntity> onPostComment({required PostCommentParams params}) async {
     var response = await _postCommentUseCase(params);
     CommentEntity? model;
     response.fold((failure)=>emit(state.copyWith(failure: failure,status: StateStatus.error),),
         (data){
       model=data;
+      feedPagingController.itemList?.firstWhere((element) => element.id==params.postId).commentsCount=(feedPagingController.itemList!.firstWhere((element) => element.id==params.postId).comments!.length+1);
       emit(state.copyWith(newComment: data,status: StateStatus.success));
         }
     );
     return model!;
   }
 
-  // add comment usecase
+  // add reply
   Future<CommentEntity> replyOnComment({required ReplyOnCommentParams params}) async {
     var response = await _replyOnCommentUseCase(params);
     CommentEntity? model;
@@ -251,66 +294,58 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 
   // show comments with rendered data
 
-  void showPostComments(
-      {required BuildContext context, required String postId}) async {
-    final response = await _getPostCommentsUseCase(postId);
+
+  final PagingController<int, CommentEntity> commentsPagingController =
+  PagingController(firstPageKey: 1);
+
+  Future<void> getPostComments(
+      {required BuildContext context, required String postId,required int page}) async {
+    final response = await _getPostCommentsUseCase(PostCommentsParams(page: page,limit: pageSize,postId: postId,),);
     response.fold(
         (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-        (data) => bottomSheet(
-            context: context,
-            isScrollControlled: true,
-            widget: PostComments(
-                comments: data,
-                postId: postId,
-                onAddComment: (PostCommentParams params) =>
-                    onPostComment(params: params))));
+        (data) {
+          final isLastPage = data.length < pageSize;
+          if (page == 1) {
+            print("page == 1 $page");
+            commentsPagingController.itemList = [];
+          }
+          if (isLastPage) {
+            print("isLastPage = $isLastPage");
+            commentsPagingController.appendLastPage(data);
+          } else {
+            print("isNotLastPage = $isLastPage");
+            final nextPageKey = page + 1;
+            commentsPagingController.appendPage(data, nextPageKey);
+          }
+          emit(state.copyWith(postComments:data,status: StateStatus.success ,),);
+        });
   }
 
-
-  // show comments with rendered data
-
-  void showPostCommentReplies(
-      {required BuildContext context, required String commentId,required String postId}) async {
-    final response = await _getPostCommentRepliesUseCase(commentId);
+  final PagingController<int, CommentEntity> repliesPagingController =
+  PagingController(firstPageKey: 1);
+  Future<void> getCommentReplies(
+      {required BuildContext context,required String commentId,required int page}) async {
+    final response = await _getPostCommentRepliesUseCase(PostCommentsParams(page: page,limit: pageSize,postId: commentId,),);
     response.fold(
-        (failure) =>
+            (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-        (data) => bottomSheet(
-            context: context,
-            isScrollControlled: true,
-            widget: CommentReplies(
-                replies: data,
-                postId: postId, commentId: commentId, onAddReply: (ReplyOnCommentParams params) {
-                  replyOnComment(params: params);
-            },
-                )));
-  }
-
-  void showPostDetails(
-      {required BuildContext context, required PostEntity post}) async {
-    final response = await _getPostCommentsUseCase(post.id);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: StateStatus.error)),
-        (data) => bottomSheet(
-            context: context,
-            isScrollControlled: true,
-            widget: PostDetailsPage(
-              comments: data,
-              post: post,
-              deletePost: (String postId) =>
-                  deletePost(context: context, postId: postId),
-              hidePost: (String postId) =>
-                  hidePost(context: context, postId: postId),
-              onAddComment: (PostCommentParams params) =>
-                  onPostComment(params: params),
-              onReact: (params) => onReact(params: params),
-              showPostComments: (postId) =>
-                  showPostComments(context: context, postId: postId),
-              showPostDetails: (PostEntity post) =>
-                  showPostDetails(context: context, post: post),
-            )));
+            (data) {
+          final isLastPage = data.length < pageSize;
+          if (page == 1) {
+            print("page == 1 $page");
+            repliesPagingController.itemList = [];
+          }
+          if (isLastPage) {
+            print("isLastPage = $isLastPage");
+            repliesPagingController.appendLastPage(data);
+          } else {
+            print("isNotLastPage = $isLastPage");
+            final nextPageKey = page + 1;
+            repliesPagingController.appendPage(data, nextPageKey);
+          }
+          emit(state.copyWith(status: StateStatus.success ,),);
+        });
   }
 
   void deletePost(
@@ -319,10 +354,8 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
-          List<PostEntity> posts = state.posts!;
-          posts.removeWhere((e)=>e.id==postId);
-      // state.posts?.removeWhere((e)=>e.id==postId);
-          emit(state.copyWith(posts: posts));
+          feedPagingController.itemList?.removeWhere((e)=>e.id==postId);
+          emit(state.copyWith(posts: feedPagingController.itemList));
           showSuccessMessage(context, "Post delete successfully");
     });
   }
@@ -332,11 +365,9 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
-          List<PostEntity> posts = state.posts!;
-          posts.removeWhere((e)=>e.id==postId);
-          emit(state.copyWith(posts: posts));
+          feedPagingController.itemList?.removeWhere((e)=>e.id==postId);
+          emit(state.copyWith(posts: feedPagingController.itemList));
           showSuccessMessage(context, "Post hide successfully");
-      // getMyPosts(context: context);
     });
   }
 
@@ -346,12 +377,9 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
-      // getMyPosts(context: context);
-          print("object $r}");
           isAdd=r;
           emit(state.copyWith(friendRequest: r, status: StateStatus.success));
     });
-    print(isAdd);
     return isAdd;
   }
 
@@ -361,11 +389,9 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
-          print("object $r}");
           isAdd=r;
           emit(state.copyWith(friendRequest: r, status: StateStatus.success));
     });
-    print(isAdd);
     return isAdd;
   }
 

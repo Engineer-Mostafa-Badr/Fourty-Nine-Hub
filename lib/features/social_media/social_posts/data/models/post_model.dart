@@ -8,7 +8,7 @@ class PostModel extends PostEntity {
   PostModel(
       {required super.id,
           super.content,
-      required super.createdAt,
+          super.createdAt,
       required super.type,
       super.angryCount,
       super.commentsCount,
@@ -41,6 +41,9 @@ class PostModel extends PostEntity {
       super.isApproved,
       required super.user,
       super.wowCount,
+      super.name,
+      super.videoMedia,
+      super.audioMedia,
       required super.photo});
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
@@ -55,6 +58,9 @@ class PostModel extends PostEntity {
         advertisementType: json['advertisement_type'] ?? '',
         post: json['post'] ?? '',
         description: json['description'] ?? '',
+        name: json['name'] ?? '',
+        videoMedia: json['videoMedia'] ?? '',
+        audioMedia: json['audioMedia'] ?? '',
         // totalPrice: json['totalPrice'] ?? '',
         isApproved: json['isApproved'] ?? false,
         isReact: json['isReact'] ?? false,
@@ -85,7 +91,7 @@ class PostModel extends PostEntity {
         sadCount: json['sadCount'] ?? 0,
         angryCount: json['angryCount'] ?? 0,
         totalCount: json['totalCount'] ?? 0,
-        createdAt: DateTime.parse(json['createdAt']),
+        createdAt:json['createdAt']!=null? DateTime.parse(json['createdAt']):null,
         shares: json['shares'] != null ? List<String>.from(json['shares']) : [],
         commentsCount: json['commentsCount'] ?? 0,
         comments:

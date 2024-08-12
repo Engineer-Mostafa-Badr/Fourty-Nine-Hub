@@ -1,7 +1,6 @@
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import '../../../../../core/utils/duration_helper.dart';
 import '../../../../../res/assets/assets.dart';
 
@@ -23,7 +22,7 @@ class PostEntity {
   ActivityEntity? activity;
   final int privacy;
   final int commentPrivacy;
-  final num commentsCount;
+  num? commentsCount;
   final num sharesCount;
   num? likesCount;
   num? loveCount;
@@ -32,6 +31,9 @@ class PostEntity {
   num? angryCount;
   num? totalCount;
   String? backgroundColor;
+  String? name;
+  String? videoMedia;
+  String? audioMedia;
 
   //==>twitter
   List<String>? shares;
@@ -48,8 +50,8 @@ class PostEntity {
   bool? isApproved;
 
 
-  final DateTime createdAt;
-   Duration get publishedDuration => DateTime.now().difference(createdAt);
+  DateTime? createdAt;
+   Duration get publishedDuration => DateTime.now().difference(createdAt!);
 
   String get sinceTime =>
       DurationHelper().sinceTime(duration: publishedDuration);
@@ -77,7 +79,7 @@ class PostEntity {
     this.sadCount = 0,
     this.angryCount = 0,
     this.totalCount = 0,
-    required this.createdAt,
+    this.createdAt,
     this.feeling,
     this.activity,
     this.backgroundColor,
@@ -89,7 +91,9 @@ class PostEntity {
     this.advertisementType,
     this.post,
     this.description,
-    // this.totalPrice,
+    this.name,
+    this.videoMedia,
+    this.audioMedia,
     this.isApproved=false,
     required this.photo,
   });

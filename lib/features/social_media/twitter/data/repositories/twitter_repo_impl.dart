@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
@@ -63,8 +64,8 @@ class TwitterRepoImpl implements TwitterRepo {
 
   @override
   Future<Either<Failure, List<TwitterPostCommentEntity>>> getPostComments(
-      {required String postId}) {
-    return _remoteDataSource.getPostComments(postId: postId);
+      {required PostCommentsParams params}) {
+    return _remoteDataSource.getPostComments(params: params);
   }
 
 
@@ -79,8 +80,8 @@ class TwitterRepoImpl implements TwitterRepo {
   }
 
   @override
-  Future<Either<Failure, List<TwitterCommentReplyEntity>>> getCommentReplies({required String commentId}) {
-    return _remoteDataSource.getCommentReplies(commentId: commentId);
+  Future<Either<Failure, List<TwitterCommentReplyEntity>>> getCommentReplies({required PostCommentsParams params}) {
+    return _remoteDataSource.getCommentReplies(params: params);
   }
 
   @override

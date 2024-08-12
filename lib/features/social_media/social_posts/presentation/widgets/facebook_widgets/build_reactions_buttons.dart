@@ -259,7 +259,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons> {
           item.image(),
           height: 20,
         ),
-        if(from=="view")Label(text: count.toString()),
+        // if(from=="view")Label(text: count.toString()),
       ],
     );
   }

@@ -1,17 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/other_account_view.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/post_details_page.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_people_you_may_know.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_global_posts.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_comments.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -33,6 +41,7 @@ class _SocialHomeViewState extends State<SocialHomeView> {
 
   @override
   void initState() {
+    super.initState();
     controller = context.read<SocialPostsCubit>();
     // controller.getMyPosts(context: context);
   }
@@ -42,24 +51,42 @@ class _SocialHomeViewState extends State<SocialHomeView> {
     return DefaultTabController(
       length: 3,
       child: SharedScaffold(
-        mainCategoryId: 2,
-        body: NestedAppbar(appBars: [
-          const SliverAppBar(
-            backgroundColor: Colors.white,
-            automaticallyImplyLeading: false,
-            floating: true,
-            // pinned: true,
-            flexibleSpace: CreatePostBanner(),
-          ),
-          SliverAppBar(
-            backgroundColor: Colors.white,
-            automaticallyImplyLeading: false,
-            // floating: true,
-            pinned: true,
-            flexibleSpace: _buildTabBar(),
-          )
-        ], body: _buildBody()),
-      ),
+          backgroundColor: Colors.white,
+          mainCategoryId: 2,
+          body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
+              builder: (context, state) {
+            return context.read<UserCubit>().isLoggedIn
+                ? NestedAppbar(appBars: [
+                    const SliverAppBar(
+                      backgroundColor: Colors.white,
+                      automaticallyImplyLeading: false,
+                      floating: true,
+                      // pinned: true,
+                      flexibleSpace: CreatePostBanner(),
+                    ),
+                    SliverAppBar(
+                      backgroundColor: Colors.white,
+                      automaticallyImplyLeading: false,
+                      // floating: true,
+                      pinned: true,
+                      flexibleSpace: _buildTabBar(),
+                    )
+                  ], body: _buildBody())
+                : Center(
+                    child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                          onTap: () => context.push(Routes.LOGIN),
+                          child: Label(
+                              text: 'Login',
+                              style: Styles.headerText(color: Colors.blue))),
+                      Label(
+                          text: ', To continue in using chat services',
+                          style: Styles.headerText()),
+                    ],
+                  ));
+          })),
     );
   }
 
@@ -87,18 +114,17 @@ class _SocialHomeViewState extends State<SocialHomeView> {
 
   Widget _buildFacebookWidget() {
     return BlocConsumer<SocialPostsCubit, SocialPostsState>(
-        listener: (context,state){
-          if (state.status == StateStatus.error) {
-            showErrorMessage(
-              context,
-              getFailureMessage(
-                state.failure!,
-                context,
-              ),
-            );
-          }
-        },
-        builder: (context, state) {
+        listener: (context, state) {
+      if (state.status == StateStatus.error) {
+        showErrorMessage(
+          context,
+          getFailureMessage(
+            state.failure!,
+            context,
+          ),
+        );
+      }
+    }, builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
       return RefreshIndicator(
         onRefresh: () async => controller.onRefresh(),
@@ -119,7 +145,7 @@ class _SocialHomeViewState extends State<SocialHomeView> {
                     noItemsFoundIndicatorBuilder: (context) {
                       return const Center(
                         child: Text(
-                          "لا يوجد بوستات",
+                          "No Posts",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 18,
@@ -132,13 +158,54 @@ class _SocialHomeViewState extends State<SocialHomeView> {
                       return Column(
                         children: [
                           FacebookPostCard(
-                            deletePost: (String postId) => controller.deletePost(context: context, postId: postId),
-                            hidePost: (String postId) => controller.deletePost(context: context, postId: postId),
-                            post: controller.feedPagingController.itemList![index],
-                            onReact: (PostReactParams item) => controller.onReact(params: item),
-                            showPostComments: (String v) => controller.showPostComments(context: context, postId: v),
-                            showPostDetails: (PostEntity post) => controller.showPostDetails(context: context, post: post),
-                            isMyPost: controller.feedPagingController.itemList?[index].user!=null?(user?.id == controller.feedPagingController.itemList?[index].user.id):false,
+                            deletePost: (String postId) => controller
+                                .deletePost(context: context, postId: postId),
+                            hidePost: (String postId) => controller.hidePost(
+                                context: context, postId: postId),
+                            post: controller
+                                .feedPagingController.itemList![index],
+                            onReact: (PostReactParams item) =>
+                                controller.onReact(params: item),
+                            showPostComments: (String v) {
+                              bottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  widget: FacebookPostComments(
+                                      postId: controller.feedPagingController
+                                          .itemList![index].id,
+                                      onAddComment:
+                                          (PostCommentParams params) =>
+                                              controller.onPostComment(
+                                                  params: params)));
+                              // controller.showPostComments(
+                              //     context: context,
+                              //     params: PostCommentsParams(
+                              //         page: 1, limit: 1, postId: v));
+                            },
+                            showPostDetails: (PostEntity post) =>
+                                bottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    widget: PostDetailsPage(
+                                      comments: [],
+                                      postId: controller.feedPagingController.itemList![index].id,
+                                      deletePost: (String postId) =>
+                                          controller.deletePost(context: context, postId: postId),
+                                      hidePost: (String postId) =>
+                                          controller.hidePost(context: context, postId: postId),
+                                      onAddComment: (PostCommentParams params) =>
+                                          controller.onPostComment(params: params),
+                                      onReact: (params) => controller.onReact(params: params),
+                                      showPostComments: (postId) {},
+                                      showPostDetails: (PostEntity post) {},
+                                    )),
+                            isMyPost: controller.feedPagingController
+                                        .itemList?[index].user !=
+                                    null
+                                ? (user?.id ==
+                                    controller.feedPagingController
+                                        .itemList?[index].user.id)
+                                : false,
                             onShare: (String id) {
                               controller.onShare(postId: id);
                             },
@@ -153,8 +220,10 @@ class _SocialHomeViewState extends State<SocialHomeView> {
                       );
                     },
                     noMoreItemsIndicatorBuilder: (context) => Container(),
-                    firstPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator(),
-                    newPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator(),
+                    firstPageProgressIndicatorBuilder: (context) =>
+                        const CupertinoActivityIndicator(),
+                    newPageProgressIndicatorBuilder: (context) =>
+                        const CupertinoActivityIndicator(),
                   ),
                 );
               },
@@ -167,18 +236,17 @@ class _SocialHomeViewState extends State<SocialHomeView> {
 
   Widget _buildMyPostsWidget() {
     return BlocConsumer<SocialPostsCubit, SocialPostsState>(
-      listener: (context,state){
-        if (state.status == StateStatus.error) {
-          showErrorMessage(
+        listener: (context, state) {
+      if (state.status == StateStatus.error) {
+        showErrorMessage(
+          context,
+          getFailureMessage(
+            state.failure!,
             context,
-            getFailureMessage(
-              state.failure!,
-              context,
-            ),
-          );
-        }
-      },
-        builder: (context, state) {
+          ),
+        );
+      }
+    }, builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
       return RefreshIndicator(
         onRefresh: () async => controller.loadData(),
@@ -194,12 +262,12 @@ class _SocialHomeViewState extends State<SocialHomeView> {
                   post: state.myPosts![index],
                   onReact: (PostReactParams item) =>
                       controller.onReact(params: item),
-                  showPostComments: (String v) =>
-                      controller.showPostComments(context: context, postId: v),
-                  showPostDetails: (PostEntity post) =>
-                      controller.showPostDetails(context: context, post: post), onShare: (String id) {
+                  showPostComments: (String v) {},
+                  showPostDetails: (PostEntity post) {},
+                  onShare: (String id) {
                     controller.onShare(postId: id);
-            }, from: 'posts',
+                  },
+                  from: 'posts',
                 ),
             separatorBuilder: (context, index) {
               if (index == 4) {}
@@ -213,20 +281,4 @@ class _SocialHomeViewState extends State<SocialHomeView> {
     });
   }
 
-  Widget _buildInstagramWidget() {
-    return ListView(
-      children: [
-        const ChatStories(),
-        Container(),
-        // ListView.separated(
-        //     shrinkWrap: true,
-        //     physics: const BouncingScrollPhysics(),
-        //     itemBuilder: (context, index) => PostCard(
-        //           postType: PostType.Instagram,
-        //         ),
-        //     separatorBuilder: (context, index) => const Sizer(),
-        //     itemCount: 30),
-      ],
-    );
-  }
 }

@@ -9,7 +9,6 @@ class SharedScaffold extends StatelessWidget {
   final int mainCategoryId;
   final Widget body;
   final bool extendBody;
-  final Color? backgroundColor;
   final bool isWithBackArrow;
   final Color? backgroundColor;
   const SharedScaffold(
@@ -33,7 +32,6 @@ class SharedScaffold extends StatelessWidget {
         index: 2,
         
       ),
-      backgroundColor:backgroundColor ,
       floatingActionButton: FloatingButton(
         changeView: mainCategoryId,
       ),

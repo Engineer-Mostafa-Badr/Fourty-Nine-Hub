@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/data/models/sug
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
@@ -17,6 +18,7 @@ import '../models/comment_model.dart';
 abstract class SocialPostsRemoteDataSource {
   Future<Either<Failure, List<PostEntity>>> getFeed({required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getTweet({required TwitterFeedParams params});
+  Future<Either<Failure, PostEntity>> getPost({required String postId});
   Future<Either<Failure, List<PostEntity>>> getAdvertisement({required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getUserPosts(
       {required String userId});
@@ -27,10 +29,10 @@ abstract class SocialPostsRemoteDataSource {
   Future<Either<Failure, CommentEntity>> commentOnPost(
       {required PostCommentParams params});
   Future<Either<Failure, List<CommentEntity>>> getPostComments(
-      {required String postId});
+      {required PostCommentsParams params});
 
   Future<Either<Failure, List<CommentEntity>>> getPostCommentReplies(
-      {required String commentId});
+      {required PostCommentsParams params});
 
   Future<Either<Failure, bool>> deletePost({required String postId});
   Future<Either<Failure, bool>> hidePost({required String postId});
@@ -74,6 +76,16 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   }
 
   @override
+  Future<Either<Failure, PostEntity>> getPost({required String postId}) async {
+    final response = await _apiConsumer.get(EndPoints.deletePost(postId));
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      return Right(PostModel.fromJson(data['data'][0]));
+    });
+  }
+
+  @override
   Future<Either<Failure, List<PostEntity>>> getUserPosts(
       {required String userId}) async {
     final response = await _apiConsumer.get(EndPoints.userPosts(userId));
@@ -109,22 +121,22 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
 
   @override
   Future<Either<Failure, List<CommentEntity>>> getPostComments(
-      {required String postId}) async {
-    final response = await _apiConsumer.get(EndPoints.getPostComments(postId));
+      {required PostCommentsParams params}) async {
+    final response = await _apiConsumer.get(EndPoints.getPostComments(params));
     return response.fold(
         (l) => Left(l),
-        (data) => Right((data['data'] as List)
+        (data) => Right((data['data']['comments'] as List)
             .map((e) => CommentModel.fromJson(e))
             .toList()));
   }
 
   @override
   Future<Either<Failure, List<CommentEntity>>> getPostCommentReplies(
-      {required String commentId}) async {
-    final response = await _apiConsumer.get(EndPoints.getPostCommentReplies(commentId));
+      {required PostCommentsParams params}) async {
+    final response = await _apiConsumer.get(EndPoints.getPostCommentReplies(params));
     return response.fold(
         (l) => Left(l),
-        (data) => Right((data['data'] as List)
+        (data) => Right((data['data']['replies'] as List)
             .map((e) => CommentModel.fromJson(e))
             .toList()));
   }
