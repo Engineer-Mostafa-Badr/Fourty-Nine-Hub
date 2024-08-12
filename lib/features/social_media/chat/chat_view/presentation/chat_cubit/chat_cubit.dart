@@ -29,6 +29,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   final ChangeChatToArchiveOrNormalUseCase _changeChatToArchiveOrNormalUseCase;
   final LockChatUseCase _lockChatUseCase;
   final UnLockChatUseCase _unLockChatUseCase;
+  int unReadMessage = 0;
 
   String? userToken;
   late int selectedTabIndex;
@@ -90,9 +91,6 @@ class ChatsCubit extends Cubit<ChatsState> {
             .map((e) => _chats.update(e.sId!, (value) => e, ifAbsent: () => e))
             .toList();
 
-        // to can listen or start chat , should to join room id
-        // data.map((e) => _joinRoom(e.sId!).toList());
-        // _joinRoom(data[0].sId!);
 
         // to listen typing and online emit event status
         List<UserStatusParams> userStatusParams = [];
@@ -101,10 +99,12 @@ class ChatsCubit extends Cubit<ChatsState> {
               .add(UserStatusParams(chatId: item.sId!, userId: item.userId!));
         }
 
-        await Future.delayed(Duration(seconds: 1));
+        // await data chats returned then send user status
+        await Future.delayed(const Duration(seconds: 1));
         sendUserStatus(userStatusParams);
-
         _socketService.listenToUserStatus();
+
+        unReadMessage = data.totalUnread ?? 0;
 
         return emit
             .call(state.copyWith(chats: data.chats, status: ChatsStates.initState));
