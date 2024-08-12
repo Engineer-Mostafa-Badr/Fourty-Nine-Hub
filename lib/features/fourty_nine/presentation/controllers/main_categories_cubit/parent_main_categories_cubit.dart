@@ -15,19 +15,19 @@ class ParentMainCategoriesCubit
         );
 
   Future<void> getParentMainCategories() async {
-    emit(state.copyWith(status: StateStatus.loading));
-    final result = await _getParentMainCategoriesUseCase.call(const NoParams());
-    emit(
-      result.fold(
-        (failure) => state.copyWith(
-          failure: failure,
-          status: StateStatus.error,
-        ),
-        (data) => state.copyWith(
-          status: StateStatus.success,
-          data: data,
-        ),
-      ),
-    );
+    // emit(state.copyWith(status: StateStatus.loading));
+    // final result = await _getParentMainCategoriesUseCase.call(const NoParams());
+    // emit(
+    //   result.fold(
+    //     (failure) => state.copyWith(
+    //       failure: failure,
+    //       status: StateStatus.error,
+    //     ),
+    //     (data) => state.copyWith(
+    //       status: StateStatus.success,
+    //       data: data,
+    //     ),
+    //   ),
+    // );
   }
 }

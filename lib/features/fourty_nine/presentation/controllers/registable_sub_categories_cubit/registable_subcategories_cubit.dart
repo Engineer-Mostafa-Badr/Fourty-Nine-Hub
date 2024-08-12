@@ -16,20 +16,20 @@ class RegistableSubCategoriesCubit
         );
 
   void loadData() async {
-    emit(state.copyWith(status: StateStatus.loading));
-    final result = await _getSubCategoriesUseCase.call(GetSubCategoriesParams(
-        mainCategoryId: '', paginationParams: PaginationParams.basic()));
-    emit(
-      result.fold(
-        (failure) => state.copyWith(
-          failure: failure,
-          status: StateStatus.error,
-        ),
-        (data) => state.copyWith(
-          status: StateStatus.success,
-          data: data,
-        ),
-      ),
-    );
+    // emit(state.copyWith(status: StateStatus.loading));
+    // final result = await _getSubCategoriesUseCase.call(GetSubCategoriesParams(
+    //     mainCategoryId: '', paginationParams: PaginationParams.basic()));
+    // emit(
+    //   result.fold(
+    //     (failure) => state.copyWith(
+    //       failure: failure,
+    //       status: StateStatus.error,
+    //     ),
+    //     (data) => state.copyWith(
+    //       status: StateStatus.success,
+    //       data: data,
+    //     ),
+    //   ),
+    // );
   }
 }

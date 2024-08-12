@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/common/widgets/stateful/dynamic/list_view_pagination.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
 
 import '../cubit/subcategories_cubit.dart';
 
 class SubCategoriesView extends StatefulWidget {
-  final String mainCategoryId;
-  const SubCategoriesView({super.key, required this.mainCategoryId});
+  final MainCategoryEntity mainCategory;
+  const SubCategoriesView({super.key, required this.mainCategory});
 
   @override
   State<SubCategoriesView> createState() => _SubCategoriesViewState();
@@ -17,7 +22,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
   void initState() {
     context
         .read<SubcategoriesCubit>()
-        .loadData(mainCategoryId: widget.mainCategoryId);
+        .init(mainCategoryId: widget.mainCategory.id);
     super.initState();
   }
 
@@ -27,39 +32,25 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
       appBar: const BackAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ListView(
-          children: [
-            // const GoogleAddsBanner(
-            //   margin: 0,
-            // ),
-            // const Sizer(),
-            // const WalletWidget(),
-            _buildSubCategories(),
-          ],
+        child: PaginationView<SubCategoryEntity>(
+          build: (ScrollController scrollController,
+              List<SubCategoryEntity> data) {
+            return GridView.builder(
+              itemCount: data.length,
+              controller: scrollController,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, childAspectRatio: 1),
+              itemBuilder: (context, index) => SubCategoryCard(
+                mainCategory: widget.mainCategory,
+                item: data[index],
+              ),
+            );
+          },
+          fetchData: (PaginationParams paginationParams) => context
+              .read<SubcategoriesCubit>()
+              .getSubcategories(paginationParams: paginationParams),
         ),
       ),
     );
-  }
-
-  Widget _buildSubCategories() {
-    return BlocConsumer<SubcategoriesCubit, SubcategoriesState>(
-        builder: (context, state) {
-          if (state.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator.adaptive(),
-            );
-          }
-          return Container();
-          // return SizedBox(
-          //   height: kToolbarHeight * 1.5,
-          //   child: ListView.builder(
-          //       scrollDirection: Axis.horizontal,
-          //       itemCount: state.subCategories?.length ?? 0,
-          //       itemBuilder: (context, index) => SubCategoryCard(
-          //             item: state.subCategories![index],
-          //           )),
-          // );
-        },
-        listener: (context, state) {});
   }
 }

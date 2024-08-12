@@ -44,7 +44,8 @@ class EndPoints {
       '/health/book-appointment-premium/$appointmentId';
   static String getDoctorReviewsForUsers(String doctorId) =>
       '/health/doctor/rate/$doctorId';
-  static String getDoctorDetails(String doctorId) => '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
+  static String getDoctorDetails(String doctorId) =>
+      '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
   static const getHealthSubcategories = '/health/subCategories-health-with-ads';
   static const getMedicalServices =
       '/health/subCategories-medicalServices-with-ads';
@@ -77,7 +78,7 @@ class EndPoints {
   static const expectedPrice = '/ride/trips/expected/price';
   static const carTypes = '/cars';
   static String subCategories({required String mainCategoryId}) {
-    return '/categories/subcategories/$mainCategoryId?page=1&limit=30';
+    return '/categories/subcategories/$mainCategoryId';
   }
 
   static const riderInfoRegister = '/ride/riders/register';
@@ -103,6 +104,7 @@ class EndPoints {
   static const getMyPickMeTrips = '/ride/pick-me/trip/requests';
   static const getAllComeWithMeAds = '/ride/come-with-you/get-all';
   static const getAllPickMeAds = '/ride/pick-me/get-all';
+  static const getRideThumbnails = '/ride/come-with-me/get-thumbnails';
   static String deletePickMeTrips(String id) {
     return '/ride/pick-me/Delete/$id';
   }

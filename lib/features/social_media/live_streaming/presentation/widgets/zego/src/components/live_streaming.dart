@@ -28,7 +28,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.defines.dart';
 
-
 /// Live Streaming Widget.
 ///
 /// You can embed this widget into any page of your project to integrate the functionality of a live streaming.
@@ -44,6 +43,7 @@ class ZegoLiveStreamingPage extends StatefulWidget {
     required this.userName,
     required this.liveID,
     required this.config,
+    required this.isLiveStream,
     this.events,
   });
 
@@ -72,6 +72,9 @@ class ZegoLiveStreamingPage extends StatefulWidget {
 
   /// You can listen to events that you are interested in here.
   final ZegoUIKitPrebuiltLiveStreamingEvents? events;
+
+  ///updates by mine
+  final bool isLiveStream;
 
   /// @nodoc
   @override
@@ -300,7 +303,9 @@ class _ZegoUIKitPrebuiltLiveStreamingState extends State<ZegoLiveStreamingPage>
                     ? ValueListenableBuilder<bool>(
                         valueListenable: startedByLocalNotifier,
                         builder: (context, isLiveStarted, _) {
-                          return isLiveStarted ? livePage() : previewPage();
+                          return isLiveStarted
+                              ? livePage()
+                              : previewPage();
                         })
                     : livePage();
               } else {
@@ -637,6 +642,7 @@ class _ZegoUIKitPrebuiltLiveStreamingState extends State<ZegoLiveStreamingPage>
       config: widget.config,
       popUpManager: popUpManager,
       kickOutNotifier: ZegoLiveStreamingManagers().kickOutNotifier,
+      isLiveStream: widget.isLiveStream,
     );
   }
 
@@ -656,6 +662,7 @@ class _ZegoUIKitPrebuiltLiveStreamingState extends State<ZegoLiveStreamingPage>
       liveDurationManager: ZegoLiveStreamingManagers().liveDurationManager!,
       popUpManager: popUpManager,
       plugins: ZegoLiveStreamingManagers().plugins,
+      isLiveStream: widget.isLiveStream,
     );
   }
 

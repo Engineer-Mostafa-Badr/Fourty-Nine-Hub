@@ -15,6 +15,35 @@ enum RideServicesEnum {
   premium
 }
 
+extension RideServicesEnumOnString on String {
+  RideServicesEnum get toRideServiceEnum {
+    switch (toLowerCase().replaceAll(' ', '')) {
+      case 'pickme':
+        return RideServicesEnum.pickMe;
+      case 'comewithyou':
+        return RideServicesEnum.comeWithYou;
+      case 'womenonly':
+        return RideServicesEnum.womenOnly;
+      case 'captain':
+        return RideServicesEnum.captain;
+      case 'taxi':
+        return RideServicesEnum.taxi;
+      case 'scooter':
+        return RideServicesEnum.scooter;
+      case 'intercity':
+        return RideServicesEnum.intercity;
+      case 'pickup':
+        return RideServicesEnum.pickup;
+      case 'suv':
+        return RideServicesEnum.suv;
+      case 'premium':
+        return RideServicesEnum.premium;
+      default:
+        return RideServicesEnum.pickMe;
+    }
+  }
+}
+
 extension RideServicesEnumExtension on RideServicesEnum {
   String get name => describeEnum(this);
   bool get isCaptain => this == RideServicesEnum.captain;

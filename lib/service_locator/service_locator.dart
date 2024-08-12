@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/api/interceptors/auth_interceptor.dart';
 import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
@@ -66,6 +67,7 @@ class DI {
         ),
       )..interceptors.addAll([
           SubscriptionInterceptor(),
+          AuthInterceptor(),
           if (kDebugMode)
             PrettyDioLogger(
               requestHeader: true,

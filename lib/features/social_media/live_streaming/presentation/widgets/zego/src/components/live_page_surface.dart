@@ -26,6 +26,8 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 
 /// @nodoc
 class ZegoLiveStreamingLivePageSurface extends StatefulWidget {
+  final bool isLiveStream;
+
   const ZegoLiveStreamingLivePageSurface({
     Key? key,
     required this.config,
@@ -37,15 +39,15 @@ class ZegoLiveStreamingLivePageSurface extends StatefulWidget {
     required this.liveDurationManager,
     required this.popUpManager,
     required this.connectManager,
-    this.plugins,
+    this.plugins, required this.isLiveStream,
   }) : super(key: key);
 
   final ZegoUIKitPrebuiltLiveStreamingConfig config;
   final ZegoUIKitPrebuiltLiveStreamingEvents events;
   final void Function(ZegoLiveStreamingEndEvent event) defaultEndAction;
   final Future<bool> Function(
-    ZegoLiveStreamingLeaveConfirmationEvent event,
-  ) defaultLeaveConfirmationAction;
+      ZegoLiveStreamingLeaveConfirmationEvent event,
+      ) defaultLeaveConfirmationAction;
 
   final ZegoLiveStreamingHostManager hostManager;
   final ZegoLiveStreamingStatusManager liveStatusManager;
@@ -90,24 +92,24 @@ class _ZegoLiveStreamingLivePageSurfaceState
   Widget build(BuildContext context) {
     return widget.config.slideSurfaceToHide
         ? GestureDetector(
-            behavior: HitTestBehavior.translucent, // 添加此行
+      behavior: HitTestBehavior.translucent, // 添加此行
 
-            onHorizontalDragUpdate: (DragUpdateDetails details) {
-              _animationController.value +=
-                  details.primaryDelta! / context.size!.width;
-            },
-            onHorizontalDragEnd: (DragEndDetails details) {
-              if (_animationController.value >= 0.5) {
-                _animationController.forward();
-              } else {
-                _animationController.reverse();
-              }
-            },
-            child: SlideTransition(
-              position: _animation,
-              child: body(),
-            ),
-          )
+      onHorizontalDragUpdate: (DragUpdateDetails details) {
+        _animationController.value +=
+            details.primaryDelta! / context.size!.width;
+      },
+      onHorizontalDragEnd: (DragEndDetails details) {
+        if (_animationController.value >= 0.5) {
+          _animationController.forward();
+        } else {
+          _animationController.reverse();
+        }
+      },
+      child: SlideTransition(
+        position: _animation,
+        child: body(),
+      ),
+    )
         : body();
   }
 
@@ -149,11 +151,16 @@ class _ZegoLiveStreamingLivePageSurfaceState
         isLeaveRequestingNotifier: ZegoUIKitPrebuiltLiveStreamingController()
             .isLeaveRequestingNotifier,
         translationText: widget.config.innerText,
+        isLiveStream: widget.isLiveStream,
       ),
     );
   }
 
+
   Widget bottomBar() {
+    final isCoHostEnabled = (widget.plugins?.isEnabled ?? false) &&
+        widget.config.bottomMenuBar.audienceButtons
+            .contains(ZegoLiveStreamingMenuBarButtonName.coHostControlButton);
     return Align(
       alignment: Alignment.bottomCenter,
       child: ZegoLiveStreamingBottomBar(
@@ -169,6 +176,9 @@ class _ZegoLiveStreamingLivePageSurfaceState
         isLeaveRequestingNotifier: ZegoUIKitPrebuiltLiveStreamingController()
             .isLeaveRequestingNotifier,
         popUpManager: widget.popUpManager,
+        isLiveStream: widget.isLiveStream,
+        isCoHostEnabled: isCoHostEnabled,
+        translationText: widget.config.innerText,
       ),
     );
   }
@@ -199,10 +209,10 @@ class _ZegoLiveStreamingLivePageSurfaceState
           innerText: widget.config.innerText,
           avatarBuilder: widget.config.avatarBuilder,
           pseudoStream: ZegoUIKitPrebuiltLiveStreamingController()
-                  .message
-                  .private
-                  .streamControllerPseudoMessage
-                  ?.stream ??
+              .message
+              .private
+              .streamControllerPseudoMessage
+              ?.stream ??
               const Stream.empty(),
         ),
       ),

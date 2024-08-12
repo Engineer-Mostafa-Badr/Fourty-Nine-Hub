@@ -12,15 +12,23 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   SubcategoriesCubit(this._getSubcategoriesUsecase)
       : super(const SubcategoriesState());
 
-  void loadData({required String mainCategoryId}) async {
+  String _mainCategoryId = '';
+
+  init({required String mainCategoryId}) {
+    _mainCategoryId = mainCategoryId;
+  }
+
+  Future<List<SubCategoryEntity>> getSubcategories(
+      {required PaginationParams paginationParams}) async {
+    List<SubCategoryEntity> data = [];
     emit(state.copyWith(status: SubcategoriesStates.loading));
     final response = await _getSubcategoriesUsecase(GetSubCategoriesParams(
-        mainCategoryId: mainCategoryId,
-        paginationParams: PaginationParams.basic()));
+        mainCategoryId: _mainCategoryId, paginationParams: paginationParams));
     response.fold(
         (failure) => emit(state.copyWith(
             failure: failure, status: SubcategoriesStates.error)),
-        (data) => emit(state.copyWith(
-            subCategories: data, status: SubcategoriesStates.initState)));
+        (r) => data = r);
+
+    return data;
   }
 }

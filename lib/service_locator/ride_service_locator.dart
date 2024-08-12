@@ -3,6 +3,7 @@ import 'package:fourtyninehub/features/requests_history/domain/usecases/get_ship
 import 'package:fourtyninehub/features/requests_history/presentation/cubit/request_history_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/datasources/remote_data_source.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/repositories/ride_request_repo_impl.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/get_ride_thumbnails.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/add_ride_request_usecase.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_car_types_use_case.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_expected_price_use_case.dart';
@@ -130,10 +131,12 @@ class RideServiceLocator {
         () => GetExpectedPriceUseCase(serviceLocator()));
     serviceLocator.registerFactory<GetCarTypesUseCase>(
         () => GetCarTypesUseCase(serviceLocator()));
-  
+
     serviceLocator.registerFactory<CreateRiderOfferUseCase>(
         () => CreateRiderOfferUseCase(serviceLocator()));
-   serviceLocator.registerFactory<AcceptRideUseCase>(
+    serviceLocator.registerFactory<AcceptRideUseCase>(
         () => AcceptRideUseCase(serviceLocator()));
+    serviceLocator.registerFactory<GetRideThumbnailsUseCase>(
+        () => GetRideThumbnailsUseCase(serviceLocator()));
   }
 }
