@@ -5,16 +5,21 @@ import 'package:fourtyninehub/common/theme/cubit/states.dart';
 
 class ThemeCubit extends Cubit<ThemeStates>
 {
-  ThemeCubit():super(ThemeInitialStates());
+  ThemeCubit():super(LightThemeModeStates());
   static ThemeCubit get(context)=>BlocProvider.of(context);
 
 
-   bool isDarkTheme =true;
+   bool isDarkTheme =false;
 
-  void changeThemeMode() {
-    isDarkTheme = !isDarkTheme;
-    //await SharedPreference.saveData(key: 'Theme', value: isDarkTheme);
-    emit(ChangeThemeModeStates());
+  void lightThemeMode() {
+    isDarkTheme = false;
+    emit(LightThemeModeStates());
+    print(isDarkTheme);
+  }
+
+  void darkThemeMode() {
+    isDarkTheme = true;
+    emit(DarkThemeModeStates());
     print(isDarkTheme);
   }
 

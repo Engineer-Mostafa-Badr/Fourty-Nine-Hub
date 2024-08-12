@@ -48,7 +48,9 @@ ThemeData lightTheme() {
     bottomSheetTheme: const BottomSheetThemeData(),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(),
     iconButtonTheme: const IconButtonThemeData(),
-    elevatedButtonTheme: const ElevatedButtonThemeData(),
+    elevatedButtonTheme:  ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(backgroundColor: Colors.red,),
+    ),
     textButtonTheme: const TextButtonThemeData(),
     listTileTheme: const ListTileThemeData(),
     dividerTheme: const DividerThemeData(),

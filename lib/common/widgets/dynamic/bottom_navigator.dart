@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/translations/translation_cubit.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import '../../../res/assets/assets.dart';
 import '../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -21,32 +22,33 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+
     List<BottomItemModel> pages = mainCategory == 3
         ? <BottomItemModel>[
       BottomItemModel(
           icon: FontAwesomeIcons.microphone,
           height: 30,
-          label: 'Voice',
+          label: 'voice'.localize,
           index: 0,
           image: Assets.voiceLive,
           route: Routes.CLUBHOUSE),
       BottomItemModel(
           icon: FontAwesomeIcons.stream,
-          label: 'Live',
+          label: 'live'.localize,
           index: 0,
           height: 25,
           image: Assets.live,
           route: Routes.LIVE),
       BottomItemModel(
           icon: Icons.video_call,
-          label: 'Meet',
+          label: 'meet'.localize,
           index: 0,
           height: 25,
           image: Assets.zoomMeeting,
           route: Routes.ZOOM),
       BottomItemModel(
           icon: Icons.video_call,
-          label: 'Cast',
+          label: 'cast'.localize,
           index: 0,
           height: 25,
           image: Assets.radio,
@@ -56,25 +58,25 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         ? <BottomItemModel>[
       BottomItemModel(
           icon: FontAwesomeIcons.twitter,
-          label: 'Tweet',
+          label: 'tweet'.localize,
           index: 0,
           image: Assets.twitter,
           route: Routes.TWITTER),
       BottomItemModel(
           icon: FontAwesomeIcons.list,
-          label: 'Reels',
+          label: 'reels'.localize,
           index: 1,
           image: Assets.reels,
           route: Routes.REELS),
       BottomItemModel(
           icon: Icons.chat,
-          label: 'Chat',
+          label: 'chat'.localize,
           index: 3,
           image: Assets.message,
           route: Routes.CHAT),
       BottomItemModel(
           icon: FontAwesomeIcons.car,
-          label: 'Find',
+          label: 'find'.localize,
           index: 4,
           image: Assets.social,
           route: Routes.Tinder),
@@ -82,25 +84,25 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         : <BottomItemModel>[
       BottomItemModel(
           icon: FontAwesomeIcons.bowlFood,
-          label: 'meal'.tr(),
+          label: 'meal'.localize,
           index: 0,
           image: Assets.food,
           route: Routes.FOOD),
       BottomItemModel(
           icon: FontAwesomeIcons.kitMedical,
-          label: 'Health',
+          label: 'health'.localize,
           index: 1,
           image: Assets.health,
           route: Routes.VISITA),
       BottomItemModel(
           icon: Icons.delivery_dining,
-          label: 'Shipping',
+          label: 'shipping'.localize,
           index: 3,
           image: Assets.shipping,
           route: Routes.SHIPPING),
       BottomItemModel(
           icon: FontAwesomeIcons.car,
-          label: 'Ride',
+          label: 'ride'.localize,
           index: 4,
           image: Assets.ride,
           route: Routes.RIDE),

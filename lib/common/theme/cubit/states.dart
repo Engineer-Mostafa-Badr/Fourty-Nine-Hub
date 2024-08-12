@@ -1,6 +1,5 @@
 abstract class ThemeStates{}
 
-class ThemeInitialStates extends ThemeStates{}
-
-class ChangeThemeModeStates extends ThemeStates{}
+class DarkThemeModeStates extends ThemeStates{}
+class LightThemeModeStates extends ThemeStates{}
 

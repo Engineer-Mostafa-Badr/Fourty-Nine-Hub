@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/common/translations/translation_cubit.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_state.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/meeting_dialogue.dart';
@@ -25,7 +27,7 @@ class MeetingView extends StatelessWidget {
     // init signalling service
 
     return Scaffold(
-      backgroundColor: AppColors.GRAY_LIGHT_COLOR3,
+      //backgroundColor: AppColors.GRAY_LIGHT_COLOR3,
       appBar: const HomeAppbar(
         isWithBackArrow: true,
       ),
@@ -36,6 +38,11 @@ class MeetingView extends StatelessWidget {
           return Column(
             children: [
               ElevatedButton(
+                style: context.theme.elevatedButtonTheme.style!.copyWith(
+                  backgroundColor: MaterialStatePropertyAll(
+                   context.themeMode==ThemeMode.light? Colors.green:Colors.yellow,
+                  ),
+                ),
                 onPressed: () {
                   context
                       .read<TranslationCubit>()
@@ -52,12 +59,16 @@ class MeetingView extends StatelessWidget {
                 child: const Text('arabic').tr(),
               ),
               BlocBuilder<ThemeCubit,ThemeStates>(
-                builder: (BuildContext context, state) {
+                builder: (BuildContext context, theme) {
                   return SwitchListTile(
-                    title: ThemeCubit.get(context).isDarkTheme?const Text('Dark mode'):const Text('Light mode'),
+                    title: theme is DarkThemeModeStates?Text('dark mode'.localize): Text('light mode'.localize),
                     value: ThemeCubit.get(context).isDarkTheme,
                     onChanged: (value){
-                      ThemeCubit.get(context).changeThemeMode();
+                      if(theme is LightThemeModeStates){
+                        ThemeCubit.get(context).darkThemeMode();
+                      } if(theme is DarkThemeModeStates){
+                        ThemeCubit.get(context).lightThemeMode();
+                      }
                     },
                   );
                 },

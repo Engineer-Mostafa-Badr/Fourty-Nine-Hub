@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
+import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/common/translations/translation_cubit.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
@@ -60,10 +61,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => serviceLocator<TranslationCubit>(),
         ),
-        // BlocProvider(
-        //   create: (context) => serviceLocator<ThemeCubit>(),
-        // ),
-        BlocProvider(create: (BuildContext context)=>ThemeCubit(),),
+        BlocProvider(
+          create: (context) => serviceLocator<ThemeCubit>(),
+        ),
         BlocProvider(
           create: (context) => serviceLocator<CreateShippingRequestCubit>(),
         ),
@@ -81,26 +81,30 @@ class MyApp extends StatelessWidget {
         onTap: FocusManager.instance.primaryFocus?.unfocus,
         child: BlocBuilder<TranslationCubit, Locale>(
           builder: (context, state) {
-            return MaterialApp.router(
-              themeMode:ThemeCubit.get(context).isDarkTheme? ThemeMode.dark:ThemeMode.light,
-              theme: lightTheme(),
-              darkTheme: darkTheme(),
-              title: '49',
-              debugShowCheckedModeBanner: false,
-              routerConfig: AppPages.router,
-              locale: state,
-              supportedLocales: context.supportedLocales,
-              localizationsDelegates: context.localizationDelegates,
-              localeResolutionCallback: (locale, supportedLocales) {
-                // Ensure that the app is aware of RTL and LTR
-                return locale;
-              },
-              builder: (context, child) {
-                return Directionality(
-                  textDirection: context.locale.languageCode == 'ar'
-                      ? ui.TextDirection.rtl
-                      : ui.TextDirection.ltr,
-                  child: child!,
+            return BlocBuilder<ThemeCubit,ThemeStates>(
+              builder: (BuildContext context, theme) {
+                return MaterialApp.router(
+                  themeMode:theme is LightThemeModeStates? ThemeMode.light:ThemeMode.dark,
+                  theme: lightTheme(),
+                  darkTheme: darkTheme(),
+                  title: '49',
+                  debugShowCheckedModeBanner: false,
+                  routerConfig: AppPages.router,
+                  locale: state,
+                  supportedLocales: context.supportedLocales,
+                  localizationsDelegates: context.localizationDelegates,
+                  localeResolutionCallback: (locale, supportedLocales) {
+                    // Ensure that the app is aware of RTL and LTR
+                    return locale;
+                  },
+                  builder: (context, child) {
+                    return Directionality(
+                      textDirection: context.locale.languageCode == 'ar'
+                          ? ui.TextDirection.rtl
+                          : ui.TextDirection.ltr,
+                      child: child!,
+                    );
+                  },
                 );
               },
             );

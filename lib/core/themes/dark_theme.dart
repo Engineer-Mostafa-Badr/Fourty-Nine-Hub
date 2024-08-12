@@ -46,7 +46,10 @@ ThemeData darkTheme() {
     bottomSheetTheme: const BottomSheetThemeData(),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(),
     iconButtonTheme: const IconButtonThemeData(),
-    elevatedButtonTheme: const ElevatedButtonThemeData(),
+    elevatedButtonTheme:  ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(backgroundColor: Colors.blue,textStyle: TextStyle(color: Colors.white,fontSize: 20)),
+
+    ),
     textButtonTheme: const TextButtonThemeData(),
     listTileTheme: const ListTileThemeData(),
     dividerTheme: const DividerThemeData(),

@@ -6,6 +6,6 @@ import '../common/translations/translation_cubit.dart';
 class ThemeServiceLocator{
 
   static void execute({required GetIt serviceLocator}){
-    serviceLocator.registerFactoryParam((param1, param2) => ThemeCubit(),);
+    serviceLocator.registerFactory(() => ThemeCubit());
   }
 }
