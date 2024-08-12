@@ -44,7 +44,7 @@ class ZegoLiveStreamingLivePage extends StatefulWidget {
     required this.liveStatusManager,
     required this.liveDurationManager,
     required this.popUpManager,
-    required this.isLiveStream,    
+    required this.isLiveStream,
     this.plugins,
   });
 
@@ -128,7 +128,6 @@ class _ZegoLiveStreamingLivePageState extends State<ZegoLiveStreamingLivePage>
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: WillPopScope(
@@ -194,7 +193,8 @@ class _ZegoLiveStreamingLivePageState extends State<ZegoLiveStreamingLivePage>
                             popUpManager: widget.popUpManager,
                             connectManager:
                                 ZegoLiveStreamingManagers().connectManager!,
-                            plugins: widget.plugins, isLiveStream: widget.isLiveStream,
+                            plugins: widget.plugins,
+                            isLiveStream: widget.isLiveStream,
                           ),
                         ],
                       );
