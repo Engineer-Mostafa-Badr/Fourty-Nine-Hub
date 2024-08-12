@@ -38,7 +38,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: Colors.yellow,
+          color: Colors.transparent,
           image: DecorationImage(
             fit: BoxFit.cover,
             image: NetworkImage(widget.category.banner),
@@ -46,9 +46,13 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       child: Row(
         children: [
           _buildRegisterButton(),
+          widget.canRegister ? const Spacer() : const SizedBox.shrink(),
+          Label(
+            text: widget.category.name,
+            style: Styles.headerText(color: Colors.white),
+          ),
           const Spacer(),
           Column(
-            
             children: [
               InkWell(
                 onTap: () {
@@ -64,12 +68,12 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                   color: AppColors.SECONDARY_COLOR,
                 ),
               ),
-
-              const Sizer(height: 20,),
-              
+              const Sizer(
+                height: 20,
+              ),
               Label(
                 text: '${widget.category.total.toShortScale} ${Labels.ads}',
-                style: Styles.mediumText(),
+                style: Styles.mediumText(color: Colors.white),
               )
             ],
           ),
@@ -83,10 +87,10 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       return InkWell(
         onTap: () => widget.onRegister?.call(),
         child: Text(Labels.register,
-            style: Styles.mediumText(color: AppColors.DARK_BLUE_COLOR)),
+            style: Styles.mediumText(color: Colors.white)),
       );
     } else {
-      return const Sizer();
+      return const SizedBox.shrink();
     }
   }
 }
