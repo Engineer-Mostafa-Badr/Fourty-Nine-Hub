@@ -12,6 +12,7 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_for
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -48,7 +49,6 @@ class _RegisterViewState extends State<RegisterView> {
             extra: registerCubit.emailTextController.text,
           );
         } else if (state is RegisterSuccess) {
-          log("lllllllllllllllllllllllllllllllllllllllllllllllllllllllllll");
           context.read<UserCubit>().setUserLogged();
           context.read<UserCubit>().getUser();
           context.go(Routes.HOME);
@@ -161,6 +161,10 @@ class _RegisterViewState extends State<RegisterView> {
                     label: 'Register',
                     width: double.infinity,
                     onPressed: registerCubit.register,
+                    // onPressed: () async {
+                    //   var r = await getDeviceId();
+                    //   log(r.toString());
+                    // },
                   ),
                   const Sizer(),
                   const Sizer(),
