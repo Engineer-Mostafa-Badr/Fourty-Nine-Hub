@@ -25,15 +25,6 @@ class SharedScaffold extends StatelessWidget {
         isWithBackArrow: isWithBackArrow,
       ),
       drawer: const DrawerWidget(),
-      // bottomNavigationBar: BottomNavigator(
-      //   mainCategory: mainCategoryId,
-      //   index: 2,
-      //
-      // ),
-      // floatingActionButton: FloatingButton(
-      //   changeView: mainCategoryId,
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: body,
     );
   }
