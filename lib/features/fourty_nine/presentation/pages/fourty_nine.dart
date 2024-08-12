@@ -8,13 +8,10 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/parent_main_categories_cubit/main_categories_cubit.dart';
 
-import '../../../../common/widgets/dynamic/bottom_navigator.dart';
-import '../../../../common/widgets/dynamic/drawer.dart';
-import '../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../common/widgets/dynamic/google_ads_banner.dart';
-import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
 
+import '../../../../core/animations/moving_widget_hr.dart';
 import '../../../../core/enums/ride_services_enum.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/styles.dart';
@@ -50,55 +47,44 @@ class _FourtyNineViewState extends State<FourtyNineView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar:  const HomeAppbar(
-        isWithBackArrow: true,
-      ),
-      drawer: const DrawerWidget(),
-      bottomNavigationBar: const BottomNavigator(
-        mainCategory: 1,
-        index: 2,
-
-      ),
-      floatingActionButton: const FloatingButton(
-        changeView: 1,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: SingleChildScrollView(
-          controller: scrollController,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const AnnounceWidget(),
-                  const AdsTextBanner(),
-                  const WalletWidget(),
-                  const GoogleAddsBanner(),
-                  const Sizer(),
-                  _buildMazadatWidget(),
-                  const Sizer(),
-                  BlocBuilder<MainCategoriesCubit,
-                      BasicState<List<MainCategoryEntity>>>(
-                    builder: (context, state) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          if (state.data != null)
-                            ...state.data!.map(
-                                  (e) => _buildMainCategoriesWidget(
-                                category: e,
+    return SharedScaffold(
+        mainCategoryId: 1,
+        isWithBackArrow: false,
+        body: SingleChildScrollView(
+            controller: scrollController,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const AnnounceWidget(),
+                    const AdsTextBanner(),
+                    const WalletWidget(),
+                    const GoogleAddsBanner(),
+                    const Sizer(),
+                    _buildMazadatWidget(),
+                    const Sizer(),
+                    BlocBuilder<MainCategoriesCubit,
+                        BasicState<List<MainCategoryEntity>>>(
+                      buildWhen: (previous, current) => previous != current,
+                      builder: (context, state) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            if (state.data != null)
+                              ...state.data!.map(
+                                (e) => _buildMainCategoriesWidget(
+                                  category: e,
+                                ),
                               ),
-                            ),
-                          if (state.isLoading)
-                            const CircularProgressIndicator.adaptive()
-                        ],
-                      );
-                    },
-                  ),
-                ]),
-          )),
-    );
+                            if (state.isLoading)
+                              const CircularProgressIndicator.adaptive()
+                          ],
+                        );
+                      },
+                    ),
+                  ]),
+            )));
   }
 
   Widget _buildMazadatWidget() {
@@ -203,7 +189,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Label(text: service.title(), style: Styles.headerText()),
-            // MovingWidgetHr(asset: image, label: service.title())
+            MovingWidgetHr(
+              asset: image,
+            )
           ],
         ),
       ),
@@ -220,19 +208,19 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           text: category.name,
           style: Styles.headerText(),
         ),
-        if(category.subcategories?.isNotEmpty??false)
-        SizedBox(
-          height: kToolbarHeight * 3,
-          child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return SubCategoryCard(
-                    mainCategory: category,
-                    item: category.subcategories![index]);
-              },
-              separatorBuilder: (context, index) => const Sizer(),
-              itemCount: category.subcategories?.length ?? 0),
-        )
+        if (category.subcategories?.isNotEmpty ?? false)
+          SizedBox(
+            height: kToolbarHeight * 3,
+            child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return SubCategoryCard(
+                      mainCategory: category,
+                      item: category.subcategories![index]);
+                },
+                separatorBuilder: (context, index) => const Sizer(),
+                itemCount: category.subcategories?.length ?? 0),
+          )
       ],
     );
   }

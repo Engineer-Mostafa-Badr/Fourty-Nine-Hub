@@ -168,15 +168,19 @@ class AppPages {
       builder: (context, state) => MultiBlocProvider(
         providers: [
           BlocProvider<RegistableSubCategoriesCubit>(
+            lazy: false,
             create: (_) => serviceLocator(),
           ),
           BlocProvider(
+            lazy: false,
             create: (context) => serviceLocator<ParentMainCategoriesCubit>(),
           ),
           BlocProvider(
+            lazy: false,
             create: (context) => serviceLocator<MainCategoriesCubit>(),
           ),
           BlocProvider(
+            lazy: false,
             create: (context) => serviceLocator<SliderCubit>(),
           ),
         ],
