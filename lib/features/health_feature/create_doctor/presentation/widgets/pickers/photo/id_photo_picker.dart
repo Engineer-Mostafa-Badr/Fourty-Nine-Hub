@@ -33,7 +33,7 @@ class CreateDoctorIDPhotoPicker extends StatelessWidget {
                 builder: (context, state) {
                   if (state is CreateDoctorUploadIdFrontImage) {
                     return ImagePickerPlaceholder(
-                      imageFile: state.file,
+                      image: Image.asset(state.file.path),
                     );
                   }
                   return const ImagePickerPlaceholder(
@@ -54,7 +54,7 @@ class CreateDoctorIDPhotoPicker extends StatelessWidget {
                 builder: (context, state) {
                   if (state is CreateDoctorUploadIdBehindImage) {
                     return ImagePickerPlaceholder(
-                      imageFile: state.file,
+                      image: Image.asset(state.file.path),
                     );
                   }
                   return const ImagePickerPlaceholder(

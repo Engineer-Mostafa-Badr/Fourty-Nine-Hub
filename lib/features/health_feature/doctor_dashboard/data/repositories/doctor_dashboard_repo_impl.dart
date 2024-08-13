@@ -69,8 +69,8 @@ class DoctorDashboardRepoImpl implements DoctorDashboardRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> deleteAccount() {
-    return remoteDataSource.deleteAccount();
+  Future<Either<Failure, bool>> deleteAccount(String doctorId) {
+    return remoteDataSource.deleteAccount(doctorId);
   }
 
   @override
@@ -91,8 +91,8 @@ class DoctorDashboardRepoImpl implements DoctorDashboardRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> updateProfilePhoto(String photoUrl) {
-    return remoteDataSource.updateProfilePhoto(photoUrl);
+  Future<Either<Failure, bool>> updateProfilePhoto(String photoId) {
+    return remoteDataSource.updateProfilePhoto(photoId);
   }
 
   @override

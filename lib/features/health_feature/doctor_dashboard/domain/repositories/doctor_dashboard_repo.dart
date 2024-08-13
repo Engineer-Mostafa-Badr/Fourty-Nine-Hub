@@ -28,11 +28,11 @@ abstract class DoctorDashboardRepo {
 
   Future<Either<Failure, DoctorEntity>> getDoctorProfile();
 
-  Future<Either<Failure, bool>> updateProfilePhoto(String photoUrl);
+  Future<Either<Failure, bool>> updateProfilePhoto(String photoId);
   Future<Either<Failure, bool>> updateID(DoctorDocsParams params);
   Future<Either<Failure, bool>> updatePracticingCirtificate(
       DoctorDocsParams params);
-  Future<Either<Failure, bool>> deleteAccount();
+  Future<Either<Failure, bool>> deleteAccount(String doctorId);
   Future<Either<Failure, bool>> updatePersonalInfo(
       DoctorPersonalInfoParams params);
   Future<Either<Failure, bool>> updateTimetable(DoctorTimetableParams params);

@@ -17,8 +17,8 @@ class DoctorDayModel extends DoctorDayEntity {
   factory DoctorDayModel.fromJson(Map<String, dynamic> json) {
     return DoctorDayModel(
       day: (json['day'] as String).toWeekDay,
-      from: json['workFrom'],
-      to: json['workTo'],
+      from: (json['workFrom'] as String).toTimeOfDay,
+      to: (json['workTo'] as String).toTimeOfDay,
       isAvailable: json['isAvailable'] ?? true,
     );
   }

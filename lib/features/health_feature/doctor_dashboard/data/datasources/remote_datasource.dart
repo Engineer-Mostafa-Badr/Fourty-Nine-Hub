@@ -34,7 +34,7 @@ abstract class DoctorDashboardRemoteDataSource {
 
   Future<Either<Failure, DoctorEntity>> getDoctorProfile();
 
-  Future<Either<Failure, bool>> deleteAccount();
+  Future<Either<Failure, bool>> deleteAccount(String doctorId);
 
   Future<Either<Failure, bool>> updateID(DoctorDocsParams params);
 
@@ -44,7 +44,7 @@ abstract class DoctorDashboardRemoteDataSource {
   Future<Either<Failure, bool>> updatePracticingCirtificate(
       DoctorDocsParams params);
 
-  Future<Either<Failure, bool>> updateProfilePhoto(String photoUrl);
+  Future<Either<Failure, bool>> updateProfilePhoto(String photoId);
 
   Future<Either<Failure, bool>> updateTimetable(DoctorTimetableParams params);
 }
@@ -155,15 +155,21 @@ class DoctorDashboardRemoteDataSourceImpl
   }
 
   @override
-  Future<Either<Failure, bool>> deleteAccount() {
-    // TODO: implement deleteAccount
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> deleteAccount(String doctorId) async {
+    final response =
+        await _apiConsumer.delete(EndPoints.deleteDoctor(doctorId));
+
+    return response.fold((l) => Left(l), (r) => Right(r['status'] as bool));
   }
 
   @override
-  Future<Either<Failure, bool>> updateID(DoctorDocsParams params) {
-    // TODO: implement updateID
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> updateID(DoctorDocsParams params) async {
+    final response = await _apiConsumer.post(
+      EndPoints.updateDoctorID,
+      data: params.toJson(),
+    );
+
+    return response.fold((l) => Left(l), (r) => Right(r['status'] as bool));
   }
 
   @override
@@ -175,15 +181,21 @@ class DoctorDashboardRemoteDataSourceImpl
 
   @override
   Future<Either<Failure, bool>> updatePracticingCirtificate(
-      DoctorDocsParams params) {
-    // TODO: implement updatePracticingCirtificate
-    throw UnimplementedError();
+      DoctorDocsParams params) async {
+    final response = await _apiConsumer.post(
+      EndPoints.updateDoctorPractcing,
+      data: params.toJson(),
+    );
+
+    return response.fold((l) => Left(l), (r) => Right(r['status'] as bool));
   }
 
   @override
-  Future<Either<Failure, bool>> updateProfilePhoto(String photoUrl) {
-    // TODO: implement updateProfilePhoto
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> updateProfilePhoto(String photoId) async {
+    final response = await _apiConsumer
+        .put(EndPoints.updateDoctorProfilePhoto, data: {'mediaId': photoId});
+
+    return response.fold((l) => Left(l), (r) => Right(r['status'] as bool));
   }
 
   @override

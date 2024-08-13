@@ -19,7 +19,8 @@ class EndPoints {
   static const getMainCategories = '/category/parent/get-all-main';
   static const getMainCategoriesWithoutSubcategories = '/categories/main';
   static String getMainCategoryDetails(String id) => '/categories/main/$id';
-  static String addMainCategoryToFavorite(String id) => '/favorite-category/$id';
+  static String addMainCategoryToFavorite(String id) =>
+      '/favorite-category/$id';
   static String deleteMainCategoryFromFavorite(String id) =>
       '/favorite-category/$id';
 
@@ -74,6 +75,11 @@ class EndPoints {
   static const getAllDoctorReservations =
       '/health/dashboard/number-of-reservations';
   static const getDoctorProfile = '/health/doctor-profile';
+  static const updateDoctorProfilePhoto = '/health/doctor/picture';
+  static const updateDoctorPractcing =
+      '/health/doctor-upload-license-practicing';
+  static const updateDoctorID = '/health/doctor-upload-license-id';
+  static String deleteDoctor(String doctorId) => '/health/doctor/$doctorId';
 
   // reels
   static const getExploreReels = '/reels/explore';

@@ -1,17 +1,33 @@
 part of 'edit_doctor_profile_cubit.dart';
 
-sealed class EditDoctorProfileState {}
-
-final class EditDoctorProfileInitial extends EditDoctorProfileState {}
-
-final class EditDoctorProfileLoading extends EditDoctorProfileState {}
-
-final class EditDoctorProfileLoaded extends EditDoctorProfileState {
-  final DoctorEntity doctor;
-  EditDoctorProfileLoaded(this.doctor);
+enum EditDoctorProfileStateStatus {
+  initial,
+  startLoading,
+  endLoading,
+  getDoctor,
+  error,
+  doctorDeleted,
+  updated,
 }
 
-final class EditDoctorProfileError extends EditDoctorProfileState {
-  final String message;
-  EditDoctorProfileError(this.message);
+class EditDoctorProfileState {
+  final EditDoctorProfileStateStatus status;
+  final DoctorEntity? doctor;
+  final Failure? failure;
+  EditDoctorProfileState({
+    this.status = EditDoctorProfileStateStatus.initial,
+    this.failure,
+    this.doctor,
+  });
+  EditDoctorProfileState copyWith({
+    EditDoctorProfileStateStatus? status,
+    Failure? failure,
+    DoctorEntity? doctor,
+  }) {
+    return EditDoctorProfileState(
+      status: status ?? this.status,
+      failure: failure ?? this.failure,
+      doctor: doctor ?? this.doctor,
+    );
+  }
 }

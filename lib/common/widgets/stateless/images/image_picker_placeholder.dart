@@ -1,24 +1,20 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ImagePickerPlaceholder extends StatelessWidget {
   final String? tilte;
   final double? height;
   final double? width;
-  final XFile? imageFile;
-  final String? imageUrl;
-  const ImagePickerPlaceholder(
-      {super.key,
-      this.tilte,
-      this.imageFile,
-      this.height,
-      this.width,
-      this.imageUrl});
+  final Widget? image;
+  const ImagePickerPlaceholder({
+    super.key,
+    this.tilte,
+    this.image,
+    this.height,
+    this.width,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +30,8 @@ class ImagePickerPlaceholder extends StatelessWidget {
   }
 
   Widget _buildImage() {
-    if (imageFile != null) {
-      return Image.file(File(imageFile!.path));
-    } else if (imageUrl == null || imageUrl!.isEmpty) {
-      return SquareImage(
-        url: imageUrl,
-      );
+    if (image != null) {
+      return image!;
     } else {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,

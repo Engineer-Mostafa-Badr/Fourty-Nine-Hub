@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/useca
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/datasources/remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/repositories/doctor_dashboard_repo_impl.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/repositories/doctor_dashboard_repo.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/delete_doctor_account_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/doctor_accept_appointment_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/doctor_reject_appointment.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_all_doctor_reservations_usecase.dart';
@@ -193,7 +194,8 @@ class HealthServiceLocator {
             () => UpdateDoctorPracticingCirtificateUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<UpdateDoctorProfilePhotoUsecase>(
         () => UpdateDoctorProfilePhotoUsecase(serviceLocator()));
-
+    serviceLocator.registerLazySingleton<DeleteDoctorAccountUseCase>(
+        () => DeleteDoctorAccountUseCase(serviceLocator()));
     // -------------------------- cubits --------------------------
     serviceLocator.registerSingleton<HealthSharedData>(HealthSharedData());
     serviceLocator.registerFactory<DoctorDetailsCubit>(() => DoctorDetailsCubit(
@@ -277,6 +279,7 @@ class HealthServiceLocator {
 
     serviceLocator
         .registerFactory<EditDoctorProfileCubit>(() => EditDoctorProfileCubit(
+              serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
