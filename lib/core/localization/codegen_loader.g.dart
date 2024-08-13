@@ -16,13 +16,47 @@ class CodegenLoader extends AssetLoader{
 
   static const Map<String,dynamic> ar = {
   "join": "انضم الآن",
-  "lang": "AR",
-  "newMeeting": "اجتماع جديد"
+  "arabic": "اللغه العربيه",
+  "english": "اللغه الانجليزيه",
+  "newMeeting": "اجتماع جديد",
+  "meal": "اكله",
+  "darkMode": "الوضع الداكن",
+  "lightMode": "الوضع الفاتح",
+  "voice": "صوت",
+  "meet": "زوم",
+  "cast": "سرعة",
+  "tweet": "تويته",
+  "reels": "بكرات",
+  "chat": "شات",
+  "find": "ايجاد",
+  "live": "لابف",
+  "health": "صحه",
+  "shipping": "تحميله",
+  "ride": "توصيله",
+  "lang": "EN",
+  "search": "بحث"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
-  "lang": "EN",
-  "newMeeting": "New Meeting"
+  "arabic": "Arabic",
+  "english": "English",
+  "newMeeting": "New Meeting",
+  "meal": "Meal",
+  "darkMode": "Dark mode",
+  "lightMode": "Light mode",
+  "voice": "Voice",
+  "meet": "Meet",
+  "cast": "Cast",
+  "tweet": "Tweet",
+  "reels": "Reels",
+  "chat": "Chat",
+  "find": "Find",
+  "live": "Live",
+  "health": "Health",
+  "shipping": "Shipping",
+  "ride": "Ride",
+  "lang": "ع",
+  "search": "Search"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

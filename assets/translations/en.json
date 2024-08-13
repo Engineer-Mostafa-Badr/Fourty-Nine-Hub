@@ -1,5 +1,22 @@
 {
   "join": "Join",
-  "lang": "EN",
-  "newMeeting": "New Meeting"
+  "arabic": "Arabic",
+  "english": "English",
+  "newMeeting": "New Meeting",
+  "meal": "Meal",
+  "darkMode": "Dark mode",
+  "lightMode": "Light mode",
+  "voice": "Voice",
+  "meet": "Meet",
+  "cast": "Cast",
+  "tweet": "Tweet",
+  "reels": "Reels",
+  "chat": "Chat",
+  "find": "Find",
+  "live": "Live",
+  "health": "Health",
+  "shipping": "Shipping",
+  "ride": "Ride",
+  "lang": "ع",
+  "search": "Search"
 }
