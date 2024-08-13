@@ -16,8 +16,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unlock_chat_usecase.dart';
 import 'package:fourtyninehub/res/style/const.dart';
-import 'package:socket_io_client/socket_io_client.dart';
-
 
 part 'chats_state.dart';
 
@@ -36,6 +34,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   late String lockChatPassword;
   final messageTextController = TextEditingController();
   final Map<String, ChatModel> _chats = {};
+  List<UserStatusParams> userStatusParams = [];
 
   ChatsCubit(
     this._getTokensUseCase,
@@ -66,6 +65,10 @@ class ChatsCubit extends Cubit<ChatsState> {
     });
   }
 
+  initChat() async {
+    await getChats(index: 0);
+  }
+
   getChats({required int index, String? password}) async {
     selectedTabIndex = index;
 
@@ -76,50 +79,55 @@ class ChatsCubit extends Cubit<ChatsState> {
     }
     ChatsRequestParams chatsRequestParams =
         getTabParams(index: index, password: password);
+
     if (chatsRequestParams.categoryId == null) {
       return emit
           .call(state.copyWith(chats: [], status: ChatsStates.initState));
     } else {
+
+      _chats.clear();
+
       final response = await _getChatsUseCase.call(
         chatsRequestParams,
       );
       response.fold(
-          (failure) => emit.call(
-              state.copyWith(failure: failure, status: ChatsStates.error)),
-          (data) async {
-        data.chats!
-            .map((e) => _chats.update(e.sId!, (value) => e, ifAbsent: () => e))
-            .toList();
+        (failure) => emit
+            .call(state.copyWith(failure: failure, status: ChatsStates.error)),
+        (data) async {
+          data.chats!
+              .map(
+                  (e) => _chats.update(e.sId!, (value) => e, ifAbsent: () => e))
+              .toList();
+
+          // to listen typing and online emit event status
+          userStatusParams = [];
+          for (var item in _chats.values) {
+            userStatusParams
+                .add(UserStatusParams(chatId: item.sId!, userId: item.userId!));
+          }
+
+          // await data chats returned then send user status
+          await Future.delayed(const Duration(seconds: 1));
+          sendUserStatus(userStatusParams);
+          _socketService.listenToUserStatus();
+          unReadMessage = data.totalUnread ?? 0;
 
 
-        // to listen typing and online emit event status
-        List<UserStatusParams> userStatusParams = [];
-        for (var item in _chats.values) {
-          userStatusParams
-              .add(UserStatusParams(chatId: item.sId!, userId: item.userId!));
-        }
 
-        // await data chats returned then send user status
-        await Future.delayed(const Duration(seconds: 1));
-        sendUserStatus(userStatusParams);
-        _socketService.listenToUserStatus();
-
-        unReadMessage = data.totalUnread ?? 0;
-
-        return emit
-            .call(state.copyWith(chats: data.chats, status: ChatsStates.initState));
-      });
+          if (data.chats?.length == 0) {
+            print("data.chats ${data.chats?.length}");
+            return emit
+                .call(ChatsState(chats: [], status: ChatsStates.initState));
+          } else {
+            return emit.call(state.copyWith(
+                chats: data.chats, status: ChatsStates.initState));
+          }
+        },
+      );
     }
   }
 
-  listenToNewMessages() {
-    _socketService.socketMessageStream.listen((event) {
-      debugPrint("Last message chat cubit ${event.text}");
-      _chats[event.chatId]?.lastMessageText = event.text;
-      emit.call(state.copyWith(
-          chats: _chats.values.toList(), status: ChatsStates.initState));
-    });
-  }
+
 
   changeChatMuteState(String chatId) async {
     final response = await _changeChatMuteStateUseCase.call(chatId);
@@ -146,6 +154,7 @@ class ChatsCubit extends Cubit<ChatsState> {
 
   ChatsRequestParams getTabParams({required int index, String? password}) {
     // 0 => Normal
+    // 1 => Services
     // 7 => Archived
     // 8 => Locked
     // 9 => unRead
@@ -157,6 +166,16 @@ class ChatsCubit extends Cubit<ChatsState> {
         isLocked: false,
         isUnread: false,
         archived: false,
+        isServices: false,
+      );
+    } else if (index == 1) {
+      return ChatsRequestParams(
+        privacyId: 'normal',
+        categoryId: UIConst.chatNormalId,
+        isLocked: false,
+        isUnread: false,
+        archived: false,
+        isServices: true,
       );
     } else if (index == 7) {
       return ChatsRequestParams(
@@ -165,6 +184,7 @@ class ChatsCubit extends Cubit<ChatsState> {
         isLocked: false,
         isUnread: false,
         archived: true,
+        isServices: false,
       );
     } else if (index == 8) {
       return ChatsRequestParams(
@@ -173,6 +193,7 @@ class ChatsCubit extends Cubit<ChatsState> {
           isLocked: true,
           archived: false,
           isUnread: false,
+          isServices: false,
           lockChatPassword: password);
     } else if (index == 9) {
       return ChatsRequestParams(
@@ -180,6 +201,7 @@ class ChatsCubit extends Cubit<ChatsState> {
           categoryId: UIConst.chatNormalId,
           isLocked: false,
           archived: false,
+          isServices: false,
           isUnread: true,
           lockChatPassword: password);
     } else {
@@ -227,13 +249,28 @@ class ChatsCubit extends Cubit<ChatsState> {
     _socketService.socketChatTypingStream.listen((event) {
       List<TypingAndOnlineModel> chatsIds = event ?? [];
 
-      for (var key in chatsIds) {
-        _chats[key.chatId]!.typing = key.typing;
-        _chats[key.chatId]!.online = key.online;
+      if(!_chats.values.isEmpty){
+        for (var key in chatsIds) {
+          _chats[key.chatId]!.typing = key.typing;
+          _chats[key.chatId]!.online = key.online;
+        }
+
+        emit.call(state.copyWith(
+            chats: _chats.values.toList(), status: ChatsStates.typing));
       }
 
-      emit.call(state.copyWith(
-          chats: _chats.values.toList(), status: ChatsStates.typing));
+    });
+  }
+
+  listenToNewMessages() {
+    _socketService.socketMessageStream.listen((event) {
+      debugPrint("Last message chat cubit ${event.text}");
+      if(!_chats.values.isEmpty){
+        _chats[event.chatId]?.lastMessageText = event.text;
+        emit.call(state.copyWith(
+            chats: _chats.values.toList(), status: ChatsStates.initState));
+      }
+
     });
   }
 

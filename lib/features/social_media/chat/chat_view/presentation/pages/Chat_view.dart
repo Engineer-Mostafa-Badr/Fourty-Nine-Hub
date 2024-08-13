@@ -40,7 +40,7 @@ class _ChatViewState extends State<ChatView> {
 
   initSocketConnection() {
     chatCubit = context.read<ChatsCubit>()..initSocketConnection();
-    chatCubit.getChats(index: 0);
+    chatCubit.initChat();
   }
 
   final List<String> groups = [
@@ -108,6 +108,8 @@ class _ChatViewState extends State<ChatView> {
 
   Widget _buildCategoriesLabels(int unReadMessages) {
     return TabBar(
+        labelColor: AppColors.PRIMARY_COLOR,
+        indicatorColor: Colors.red,
         onTap: (index) {
           context.read<ChatsCubit>().getChats(index: index);
 
@@ -120,7 +122,11 @@ class _ChatViewState extends State<ChatView> {
         isScrollable: true,
         tabs: groups.map((e) {
           return Tab(
-            text: unReadMessages == 0 ? e : "$e($unReadMessages)",
+            text: chatCubit.selectedTabIndex == groups.indexOf(e)
+                ? unReadMessages == 0
+                    ? e
+                    : "$e($unReadMessages)"
+                : e,
           );
         }).toList());
   }
@@ -137,8 +143,6 @@ class _ChatViewState extends State<ChatView> {
       _buildCategoryChats(),
       _buildCategoryChats(),
       _buildCategoryChats(),
-      // _buildCategoryChats(),
-      // _buildCategoryChats(),
     ]);
   }
 
@@ -162,7 +166,6 @@ class _ChatViewState extends State<ChatView> {
                   itemBuilder: (context, index) => Slidable(
                     key: ValueKey(index),
                     // All actions are defined in the children parameter.
-
                     closeOnScroll: false,
                     endActionPane: ActionPane(
                       motion: const ScrollMotion(),
@@ -176,7 +179,8 @@ class _ChatViewState extends State<ChatView> {
                                 widget: MoreIconBottomSheet(
                                   chatItemModel: state.chats![index],
                                   chatsCubit: chatCubit,
-                                ));
+                                ),
+                            );
                           },
                           icon: Icons.more_horiz,
                           label: 'More',

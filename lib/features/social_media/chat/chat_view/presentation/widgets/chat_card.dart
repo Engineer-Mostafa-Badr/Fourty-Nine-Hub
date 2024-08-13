@@ -1,13 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -44,17 +42,18 @@ class ChatCard extends StatelessWidget {
                           ))
                       : Stack(
                           children: [
-                            // Positioned.fill(
-                            //   child: CircleAvatar(
-                            //     backgroundColor: Colors.black,
-                            //     backgroundImage:
-                            //         NetworkImage(UIConst.profilePlaceHolder),
-                            //   ),
-                            // ),
-
-                            Image.asset(
-                              Assets.profileIcon,
+                            Positioned.fill(
+                              child: CircleAvatar(
+                                minRadius: 50,
+                                backgroundColor: Colors.black,
+                                backgroundImage:
+                                    NetworkImage(chatItemModel?.avatar ?? ''),
+                              ),
                             ),
+
+                            // Image.asset(
+                            //   Assets.profileIcon,
+                            // ),
 
                             Positioned(
                                 bottom: 0,
@@ -183,11 +182,6 @@ class ChatCard extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          Container(
-            height: 0.4,
-            width: MediaQuery.of(context).size.width,
-            color: Colors.black,
           ),
         ],
       ),

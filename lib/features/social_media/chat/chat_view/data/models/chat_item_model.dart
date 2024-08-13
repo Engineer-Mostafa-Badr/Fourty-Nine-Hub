@@ -30,6 +30,7 @@ class ChatModel {
   int? unreadCount;
   String? userId;
   String? formattedUpdatedAt;
+  String? userAvatar;
 
   ChatModel({
     this.sId,
@@ -44,6 +45,7 @@ class ChatModel {
     this.lastSeenCount,
     this.unreadCount,
     this.userId,
+    this.userAvatar,
     this.formattedUpdatedAt,
   });
 
@@ -60,6 +62,7 @@ class ChatModel {
     unreadCount = json['unreadCount'];
     userId = json['userId'];
     formattedUpdatedAt = json['formattedUpdatedAt'];
+    userAvatar = json['avatar'];
     typing = false;
     online = false;
   }

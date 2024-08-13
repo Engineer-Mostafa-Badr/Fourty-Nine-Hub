@@ -21,6 +21,7 @@ class ChatsRepositoryImplementation extends ChatsRepository {
       isLocked: chatsRequestParams.isLocked!,
       password: chatsRequestParams.lockChatPassword,
       unRead: chatsRequestParams.isUnread!,
+      isServices: chatsRequestParams.isServices!,
     );
   }
 

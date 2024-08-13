@@ -12,6 +12,7 @@ abstract class ChatsRemoteDataSource {
     required bool archived,
     required bool isLocked,
     required bool unRead,
+    required bool isServices,
     String? password,
   });
 
@@ -50,12 +51,14 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
       required bool archived,
       required bool isLocked,
       required bool unRead,
+      required bool isServices,
       String? password}) async {
     var data = {
       "privacy": "normal",
       "categoryId": UIConst.chatNormalId,
       "archived": archived,
       "isLocked": isLocked,
+      "isServices": isServices,
       "isUnread": unRead,
       if (password != null) "password": password
     };
