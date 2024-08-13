@@ -94,16 +94,16 @@ class CommentCard extends StatelessWidget {
                   post: comment,
                   from: 'comments',
                 ),
-                if(comment.isLikes==true||comment.isSad==true||comment.isWow==true||comment.isAngry==true||comment.isLove==true)Label(
-                    text: "${
-                        comment.isLikes==true?comment.likesCount
-                        :comment.isSad==true?comment.sadCount
-                        :comment.isWow==true?comment.wowCount
-                        :comment.isAngry==true?comment.angryCount
-                        :comment.isLove==true?comment.loveCount
-                            :0
-                    }",
-                    style: Styles.mediumText(color: textColor)),
+                // if(comment.isLikes==true||comment.isSad==true||comment.isWow==true||comment.isAngry==true||comment.isLove==true)Label(
+                //     text: "${
+                //         comment.isLikes==true?comment.likesCount
+                //         :comment.isSad==true?comment.sadCount
+                //         :comment.isWow==true?comment.wowCount
+                //         :comment.isAngry==true?comment.angryCount
+                //         :comment.isLove==true?comment.loveCount
+                //             :0
+                //     }",
+                //     style: Styles.mediumText(color: textColor)),
                 const Sizer(),
                 TextAppButton(
                     style: Styles.mediumText(),

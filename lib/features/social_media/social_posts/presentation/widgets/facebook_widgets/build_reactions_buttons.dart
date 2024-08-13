@@ -29,7 +29,6 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons> {
           return ReactionButton<String>(
             boxColor: Colors.white,
             boxRadius: 10,
-
             onReactionChanged: (Reaction<String>? reaction) async {
               if (reaction?.value == 'likes'||reaction?.value == 'like' && widget.post.isLikes == false) {
                 var response = widget.from=='posts'?await controller.onReact(
@@ -196,7 +195,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons> {
                 : null,
             // boxColor: Colors.black.withOpacity(0.5),
             itemsSpacing: 10,
-            itemSize: const Size(20, 20),
+            itemSize: const Size(40, 40),
             reactions: <Reaction<String>>[
               Reaction<String>(
                 value: widget.from=='posts'?'likes':'like',
@@ -253,7 +252,8 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons> {
       children: [
         Image.asset(
           item.image(),
-          height: 20,
+          height: from=='view'?20:35,
+          width: from=='view'?20:35,
         ),
         // if(from=="view")Label(text: count.toString()),
       ],

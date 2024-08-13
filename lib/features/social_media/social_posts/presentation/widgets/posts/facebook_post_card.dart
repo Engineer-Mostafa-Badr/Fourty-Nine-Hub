@@ -6,6 +6,8 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/data/models/main_post_model.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
@@ -14,6 +16,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_tweet_card.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
+import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_main_post_model.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -103,9 +106,25 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (myPost.type != 'advertisement')
-                    _buildAccountHeader(context: context, post: myPost),
-                  _buildContentWidget(post: myPost),
+                  if (myPost.isShared==true)_buildAccountHeader(context: context, post: myPost),
+                  Label(text: myPost.mainPost?.content??''),
+
+                  Container(
+                    margin: EdgeInsets.all(myPost.isShared==true?10:0),
+                    padding: EdgeInsets.all(myPost.isShared==true?10:0),
+                    decoration: BoxDecoration(
+                      border: myPost.isShared==true?Border.all():null
+                    ),
+                    child: Column(
+                      children: [
+                        if (myPost.type != 'advertisement')
+                          _buildMainAccountHeader(context: context, post: myPost.mainPost!),
+                        _buildContentWidget(content: myPost.mainPost?.content??'',backgroundColor: null,images: myPost.mainPost?.images??[]),
+
+
+                      ],
+                    ),
+                  ),
                   Row(
                     children: [
                       if (myPost.likesCount != 0)
@@ -192,7 +211,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               children: [
                 if (myPost.type != 'advertisement')
                   _buildAccountHeader(context: context, post: myPost),
-                _buildContentWidget(post: myPost),
+                _buildContentWidget(content: myPost.content??'',backgroundColor: myPost.backgroundColor,images: myPost.images),
                 Row(
                   children: [
                     if (myPost.likesCount != 0)
@@ -407,24 +426,75 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
     );
   }
 
-  Widget _buildContentWidget({required PostEntity post}) {
-    return (post.backgroundColor != null &&
-                post.backgroundColor != '#FFFFFFFF') &&
-            post.images!.isEmpty
+  Widget _buildMainAccountHeader({
+    required BuildContext context,
+    bool showOptions = true,
+    required MainPostEntity post,
+  }) {
+    return Row(
+      children: [
+        InkWell(
+          onTap: () => context.push(Routes.OTHERSACCOUNT),
+          child: CircleAvatar(
+            backgroundColor: Colors.white,
+            backgroundImage: NetworkImage((post.user.image.isNotEmpty)
+                ? post.user.image
+                : UIConst.profilePlaceHolder),
+          ),
+        ),
+        const Sizer(),
+        Expanded(
+            child: Row(
+          children: [
+            InkWell(
+              onTap: () => context.push(Routes.OTHERSACCOUNT),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextAppButton(
+                      label: post.user.firstName,
+                      onPressed: () =>
+                          () => context.push(Routes.OTHERSACCOUNT)),
+                  RichText(
+                      text: TextSpan(children: [
+                    TextSpan(
+                        text: post.sinceTime,
+                        style: Styles.mediumText(color: Colors.grey)),
+                    const WidgetSpan(
+                        child: Icon(
+                      Icons.group,
+                      size: 14,
+                      color: Colors.grey,
+                    ))
+                  ]))
+                ],
+              ),
+            ),
+            // _buildActivityFeelingWidget(post),
+          ],
+        )),
+      ],
+    );
+  }
+
+  Widget _buildContentWidget({String? backgroundColor,required String content,List<String>? images}) {
+    return (backgroundColor != null &&
+                backgroundColor != '#FFFFFFFF') &&
+            images!.isEmpty
         ? Container(
             width: double.infinity,
             height: 400,
             alignment: Alignment.center,
             margin: const EdgeInsets.symmetric(vertical: 10),
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-            color: post.backgroundColor != null &&
-                    post.images!.isEmpty
-                ? Color(int.parse(post.backgroundColor!.substring(1),
+            color: backgroundColor != null &&
+                    images.isEmpty
+                ? Color(int.parse(backgroundColor.substring(1),
                     radix: 16))
                 : Colors.white,
             child: ReadMoreLabel(
-              text: post.content ?? '',
-              style: Styles.headerText(color: Colors.black, fontSize: 24),
+              text: content ?? '',
+              style: Styles.headerText(color: Colors.black, fontSize: 24,fontWeight: FontWeight.bold),
             ),
           )
         : Container(
@@ -434,50 +504,35 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ReadMoreLabel(text: post.content ?? ''),
+                ReadMoreLabel(text: content ?? ''),
                 const SizedBox(
                   height: 10,
                 ),
-                // if(controller.feedPagingController.itemList![widget.index].photo.isNotEmpty)Container(
-                //   height: 200,
-                //   width: double.infinity,
-                //   decoration: BoxDecoration(
-                //       boxShadow: [
-                //         BoxShadow(
-                //           color: Colors.black.withOpacity(0.05),
-                //           spreadRadius: 12,
-                //           blurRadius: 8,
-                //         ),
-                //       ],
-                //       borderRadius: BorderRadius.circular(25),
-                //       image: DecorationImage(
-                //           image: NetworkImage(post.photo), fit: BoxFit.fill)),
-                // ),
-                if ((post.images?.isNotEmpty ?? false))
+                if ((images?.isNotEmpty ?? false))
                   SizedBox(
                     child: GridView.builder(
                         padding: const EdgeInsets.all(10),
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: post.images!.length == 1 ? 1 : 2),
+                            crossAxisCount: images!.length == 1 ? 1 : 2),
                         itemCount:
-                            post.images!.length < 4 ? post.images!.length : 4,
+                            images!.length < 4 ? images!.length : 4,
                         itemBuilder: (context, index) => InkWell(
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           hoverColor: Colors.transparent,
                               onTap: () {
                                 if (index != 3 ||
-                                    (index == 3 && post.images!.length == 4)) {
+                                    (index == 3 && images!.length == 4)) {
                                   showDialog(
                                       context: context,
                                       builder: (context) => ImageDetailsScreen(
-                                            image: post.images![index],
+                                            image: images![index],
                                             fromPost: true,
                                             onRemoveImage: () {
                                               // controller
-                                              //     .removePhoto(post.images![index]);
+                                              //     .removePhoto(images![index]);
                                               context.pop();
                                             },
                                           ));
@@ -486,7 +541,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                       context: context,
                                       builder: (context) {
                                         return ShowPostsImages(
-                                          images: post.images ?? [],
+                                          images: images ?? [],
                                           onRemoveImage:
                                               (UploadFileEntity image) {
                                             // controller.removePhoto(image);
@@ -504,9 +559,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                             const EdgeInsetsDirectional.only(
                                                 end: 10, bottom: 10),
                                         padding: const EdgeInsets.all(10),
-                                        child: ImageFromInternet(image: post.images?[index]??'',),
+                                        child: ImageFromInternet(image: images?[index]??'',),
                                       ),
-                                      if (index == 3 && post.images!.length > 4)
+                                      if (index == 3 && images!.length > 4)
                                         Container(
                                           margin:
                                               const EdgeInsetsDirectional.only(
@@ -522,7 +577,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                           child: Center(
                                             child: Label(
                                               text:
-                                                  "+${post.images!.length - 4}",
+                                                  "+${images!.length - 4}",
                                               style: Styles.headerText(
                                                 color: Colors.white,
                                               ),

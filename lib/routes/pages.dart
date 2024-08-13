@@ -457,11 +457,8 @@ class AppPages {
             builder: (context, state) {
               final userId = state.extra as String?;
 
-              return BlocProvider<SocialPostsCubit>(
-                create: (_) => serviceLocator()..loadData(),
-                child: SocialHomeView(
-                  userId: userId ?? '',
-                ),
+              return SocialHomeView(
+                userId: userId ?? '',
               );
             },
             routes: [

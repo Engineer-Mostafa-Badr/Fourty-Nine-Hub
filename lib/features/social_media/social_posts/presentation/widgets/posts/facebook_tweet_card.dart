@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
@@ -82,9 +83,9 @@ class FacebookTweetCard extends StatelessWidget {
                     child: Column(
                       children: [
                         _buildAccountHeader(
-                            context: context, user: isShared==true?post.mainPost.user:post.user),
+                            context: context, user: isShared==true?post.mainPost?.user:post.user),
                         isShared==true?_buildMainContent(
-                            context: context, post: post.mainPost):_buildContent(
+                            context: context, post: post.mainPost!):_buildContent(
                             context: context, post: post),
                       ],
                     ),
@@ -234,7 +235,7 @@ class FacebookTweetCard extends StatelessWidget {
 
   Widget _buildMainContent({
     required BuildContext context,
-    required TwitterMainPostEntity post,
+    required MainPostEntity post,
   }) {
     return Container(
       width: double.infinity,
@@ -244,7 +245,7 @@ class FacebookTweetCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ReadMoreLabel(text: post.content),
+          ReadMoreLabel(text: post.content??''),
           const SizedBox(
             height: 10,
           ),
