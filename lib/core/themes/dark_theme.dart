@@ -6,19 +6,19 @@ ThemeData darkTheme() {
   return ThemeData(
     brightness: Brightness.dark,
     primaryColor: AppColors.DARK_BLUE_COLOR,
-    scaffoldBackgroundColor: AppColors.SPLASH_BLACK_COLOR,
+    scaffoldBackgroundColor: AppColors.QUANTITY_COLOR,
     appBarTheme: const AppBarTheme(
-      color: AppColors.DARK_BLUE_COLOR,
+      color: AppColors.QUANTITY_COLOR,
     ),
     textTheme: const TextTheme(
-      bodyMedium: TextStyle(color: AppColors.LIGHT_GRAY_COLOR),
-      bodySmall: TextStyle(color: AppColors.LIGHT_GRAY_COLOR),
+      bodyMedium: TextStyle(color: AppColors.AUTH_CONTAINER_COLOR),
+      bodySmall: TextStyle(color: AppColors.AUTH_CONTAINER_COLOR),
     ),
     iconTheme: const IconThemeData(
-      color: AppColors.LIGHT_COLOR,
+      color: AppColors.AUTH_CONTAINER_COLOR,
     ),
     buttonTheme: const ButtonThemeData(
-      buttonColor: AppColors.PRIMARY_COLOR_DARK,
+      buttonColor: AppColors.AUTH_CONTAINER_COLOR,
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
