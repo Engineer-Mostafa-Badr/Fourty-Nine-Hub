@@ -16,7 +16,6 @@ import 'list_sheet.dart';
 
 // Project imports:
 
-
 /// @nodoc
 class ZegoLiveStreamingMemberButton extends StatefulWidget {
   const ZegoLiveStreamingMemberButton({
@@ -101,22 +100,14 @@ class _ZegoLiveStreamingMemberButtonState
       child: null == widget.builder
           ? Stack(
               children: [
-                Container(
-                  width: 106.zR,
-                  height: 56.zR,
-                  decoration: BoxDecoration(
-                    color: widget.backgroundColor ??
-                        ZegoUIKitDefaultTheme.buttonBackgroundColor,
-                    borderRadius: BorderRadius.all(Radius.circular(28.zR)),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      icon(),
-                      SizedBox(width: 6.zR),
-                      memberCount(),
-                    ],
-                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    icon(),
+                    SizedBox(width: 6.zR),
+                    memberCount(),
+                  ],
                 ),
                 redPoint(),
               ],
@@ -168,14 +159,10 @@ class _ZegoLiveStreamingMemberButtonState
   }
 
   Widget icon() {
-    return SizedBox(
-      width: 48.zR,
-      height: 48.zR,
-      child: widget.icon ??
-          const Icon(
-            Icons.person,
-            color: Colors.white,
-          ),
+    return Icon(
+      Icons.people_outline,
+      color: Colors.white,
+      size: 30,
     );
   }
 

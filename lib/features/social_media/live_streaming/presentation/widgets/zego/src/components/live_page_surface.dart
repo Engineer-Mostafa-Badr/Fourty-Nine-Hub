@@ -66,6 +66,8 @@ class _ZegoLiveStreamingLivePageSurfaceState
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<Offset> _animation;
+  //whether bottom and top bars are shown or not
+  final ValueNotifier<bool> surfaceShown = ValueNotifier(true);
 
   @override
   void initState() {
@@ -105,6 +107,9 @@ class _ZegoLiveStreamingLivePageSurfaceState
                 _animationController.reverse();
               }
             },
+            onTap: () {
+              surfaceShown.value = !surfaceShown.value;
+            },
             child: SlideTransition(
               position: _animation,
               child: body(),
@@ -118,8 +123,18 @@ class _ZegoLiveStreamingLivePageSurfaceState
       return Stack(
         children: [
           durationTimeBoard(),
-          topBar(),
-          bottomBar(),
+          ValueListenableBuilder(
+            valueListenable: surfaceShown,
+            builder: (BuildContext context, bool surfaceShown, Widget? child) {
+              return surfaceShown ? topBar() : Container();
+            },
+          ),
+          ValueListenableBuilder(
+            valueListenable: surfaceShown,
+            builder: (BuildContext context, bool surfaceShown, Widget? child) {
+              return surfaceShown ? bottomBar() : Container();
+            },
+          ),
           messageList(),
           foreground(
             constraints.maxWidth,
