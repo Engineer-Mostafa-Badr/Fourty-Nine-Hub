@@ -1,8 +1,7 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/translations/translation_cubit.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import '../../../res/assets/assets.dart';
 import '../../../routes/routes.dart';
@@ -173,14 +172,16 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(widget.items.length, (index) {
+              int index1= context.isArabic? 2:1;
+              int index2= context.isArabic? 1:2;
                 return GestureDetector(
                   onTap: () {
                     widget.onTap(index);
                   },
                   child: Padding(
-                    padding: index == 1
+                    padding: index == index1
                         ? const EdgeInsets.only(right: 10)
-                        : index == 2
+                        : index == index2
                         ? const EdgeInsets.only(left: 30)
                         : EdgeInsets.zero,
                     child: Column(

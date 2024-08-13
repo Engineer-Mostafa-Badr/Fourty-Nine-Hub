@@ -100,7 +100,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: TextAppButton(
                   label: 'lang'.localize,
-                  style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
+                  style: Styles.mediumText(color: AppColors.SECONDARY_COLOR).copyWith(
+                    fontSize:context.isArabic? 14:18
+                  ),
                   onPressed: () {
                     context.read<TranslationCubit>().changeLanguage(
                         Locale(context.isArabic ? 'en' : 'ar'), context);
