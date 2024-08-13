@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 class MovingWidgetHr extends StatefulWidget {
   final String asset;
   // final String label;
-  const MovingWidgetHr({
-    super.key,
-    required this.asset,
-  });
+  const MovingWidgetHr({super.key, required this.asset, });
 
   @override
   State<MovingWidgetHr> createState() => _MovingWidgetHrState();

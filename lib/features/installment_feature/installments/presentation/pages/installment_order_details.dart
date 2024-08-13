@@ -22,12 +22,6 @@ class InstallmentOrderDetails extends StatelessWidget {
     return Scaffold(
       appBar: const HomeAppbar(),
       drawer: const DrawerWidget(),
-      bottomNavigationBar: const BottomNavigator(
-        mainCategory: 1,
-        index: 2,
-      ),
-      floatingActionButton: const FloatingButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(

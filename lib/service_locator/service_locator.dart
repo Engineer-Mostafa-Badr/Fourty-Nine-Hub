@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/api/interceptors/auth_interceptor.dart';
 import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
+import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
@@ -51,6 +52,8 @@ class DI {
         storage: FlutterSecureStorage(),
       ),
     );
+
+    await LocalizationService.init();
 
     // dio
     serviceLocator.registerLazySingleton<Dio>(

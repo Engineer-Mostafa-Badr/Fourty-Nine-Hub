@@ -87,7 +87,7 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
         await _apiConsumer.post(EndPoints.addMainCategoryToFavorite(id));
     return result.fold(
       (failure) => Left(failure),
-      (data) => Right(data['success']),
+      (data) => Right(data['status']),
     );
   }
 
@@ -98,7 +98,7 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
         await _apiConsumer.delete(EndPoints.deleteMainCategoryFromFavorite(id));
     return result.fold(
       (failure) => Left(failure),
-      (data) => Right(data['success']),
+      (data) => Right(data['status']),
     );
   }
 }

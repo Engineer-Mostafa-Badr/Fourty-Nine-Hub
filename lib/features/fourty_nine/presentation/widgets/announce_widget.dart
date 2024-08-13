@@ -15,15 +15,17 @@ class AnnounceWidget extends StatelessWidget {
     return BlocBuilder<SliderCubit, BasicState<List<SliderItemEntity>>>(
         builder: (context, state) {
       if (state.data?.isEmpty ?? true) {
+        // print('data is empty');
         return const SizedBox();
+      } else {
+        return CarouselSliderWidget(
+            height: 300,
+            autoPlay: true,
+            widgets: state.data?.map((e) {
+                  return _buildAnnounceItem(item: e);
+                }).toList() ??
+                []);
       }
-      return CarouselSliderWidget(
-          height: 300,
-          autoPlay: true,
-          widgets: state.data?.map((e) {
-                return _buildAnnounceItem(item: e);
-              }).toList() ??
-              []);
     });
   }
 

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -11,8 +10,11 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_people_you_may_know.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_global_posts.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
+import '../../../../../common/widgets/dynamic/drawer.dart';
+import '../../../../../common/widgets/dynamic/floating_button.dart';
+import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../domain/entities/post_entity.dart';
@@ -41,8 +43,20 @@ class _SocialHomeViewState extends State<SocialHomeView> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
-      child: SharedScaffold(
-        mainCategoryId: 2,
+      child : Scaffold(
+        appBar:  const HomeAppbar(
+          isWithBackArrow: true,
+        ),
+        drawer: const DrawerWidget(),
+        bottomNavigationBar: const BottomNavigator(
+          mainCategory: 2,
+          index: 2,
+
+        ),
+        floatingActionButton: const FloatingButton(
+          changeView: 2,
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: NestedAppbar(appBars: [
           const SliverAppBar(
             backgroundColor: Colors.white,

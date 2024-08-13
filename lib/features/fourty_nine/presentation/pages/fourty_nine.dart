@@ -4,7 +4,6 @@ import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/list_view_pagination.dart';
 
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -15,7 +14,11 @@ import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/pare
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 
+import '../../../../common/widgets/dynamic/bottom_navigator.dart';
+import '../../../../common/widgets/dynamic/drawer.dart';
+import '../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../common/widgets/dynamic/google_ads_banner.dart';
+import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
 
 import '../../../../core/enums/ride_services_enum.dart';
@@ -39,51 +42,61 @@ class FourtyNineView extends StatefulWidget {
 class _FourtyNineViewState extends State<FourtyNineView> {
   @override
   Widget build(BuildContext context) {
-    return SharedScaffold(
-      mainCategoryId: 1,
-      isWithBackArrow: false,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            const AnnounceWidget(),
-            const AdsTextBanner(),
-            const WalletWidget(),
-            const GoogleAddsBanner(),
-            const Sizer(),
-            _buildMazadatWidget(),
-            const Sizer(),
-            SizedBox(
-              height: 500,
-              child: PaginationView<MainCategoryEntity>(
-                build: (ScrollController scrollController,
-                    List<MainCategoryEntity> data) {
-                  return ListView.separated(
-                    itemCount: data.length,
-                    shrinkWrap: true,
-                    controller: scrollController,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          context.push(Routes.SUBCATEGORIES,
-                              extra: data[index]);
-                        },
-                        child: MainCategoryBanner(category: data[index]),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const Sizer(),
-                  );
-                },
-                fetchData: (PaginationParams paginationParams) => context
-                    .read<MainCategoriesCubit>()
-                    .getMainCategories(paginationParams),
-              ),
-            ),
-          ]),
-        ),
+    return Scaffold(
+      appBar:  const HomeAppbar(
+        isWithBackArrow: false,
       ),
+      bottomNavigationBar: const BottomNavigator(
+        mainCategory: 1,
+        index: 2,
+      ),
+      floatingActionButton: const FloatingButton(
+        changeView: 1,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      drawer: const DrawerWidget(),
+      body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const AnnounceWidget(),
+                  const AdsTextBanner(),
+                  const WalletWidget(),
+                  const GoogleAddsBanner(),
+                  const Sizer(),
+                  _buildMazadatWidget(),
+                  const Sizer(),
+                   SizedBox(
+                    height: 500,
+                    child: PaginationView<MainCategoryEntity>(
+                      build: (ScrollController scrollController,
+                          List<MainCategoryEntity> data) {
+                        return ListView.separated(
+                          itemCount: data.length,
+                          shrinkWrap: true,
+                          controller: scrollController,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                context.push(Routes.SUBCATEGORIES,
+                                    extra: data[index]);
+                              },
+                              child: MainCategoryBanner(category: data[index]),
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) =>
+                              const Sizer(),
+                        );
+                      },
+                      fetchData: (PaginationParams paginationParams) => context
+                          .read<MainCategoriesCubit>()
+                          .getMainCategories(paginationParams),
+                    ),
+                  ),
+                ]),
+          )),
     );
   }
 

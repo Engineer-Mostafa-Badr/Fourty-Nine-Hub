@@ -1,7 +1,6 @@
-/* import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import '../services/current_user.dart';
-import 'preferences.dart';
+
 
 class LocalizationHelper {
   LocalizationHelper._internal(BuildContext context) : _context = context;
@@ -32,7 +31,7 @@ class LocalizationHelper {
 
   ///This method override the easyLocalization saved locale value
   Future<void> _makeSureTheTempLocaleIsSavedLocally(Locale? locale) async {
-    if (locale != null) await Preferences.setLocale(locale.toString());
+    // if (locale != null) await Preferences.setLocale(locale.toString());
   }
 
   ///`true` means the resetting was needed
@@ -52,7 +51,7 @@ class LocalizationHelper {
   }
 
   void _saveLocalizationCode(String languageCode) {
-    CurrentUser().forceUpdateLanguageCode(languageCode);
+    // CurrentUser().forceUpdateLanguageCode(languageCode);
   }
 }
- */
+ 

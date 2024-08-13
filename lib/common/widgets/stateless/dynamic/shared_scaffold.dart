@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../dynamic/bottom_navigator.dart';
 import '../../dynamic/drawer.dart';
-import '../../dynamic/floating_button.dart';
 import '../appbar/home_appbar.dart';
 
 class SharedScaffold extends StatelessWidget {
@@ -27,15 +25,6 @@ class SharedScaffold extends StatelessWidget {
         isWithBackArrow: isWithBackArrow,
       ),
       drawer: const DrawerWidget(),
-      bottomNavigationBar: BottomNavigator(
-        mainCategory: mainCategoryId,
-        index: 2,
-        
-      ),
-      floatingActionButton: FloatingButton(
-        changeView: mainCategoryId,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: body,
     );
   }

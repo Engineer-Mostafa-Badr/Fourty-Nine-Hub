@@ -57,27 +57,27 @@ class OtherAccountView extends StatelessWidget {
                   ),
                   itemBuilder: (context) {
                     return [
-                      PopupMenuItem<int>(
+                      const PopupMenuItem<int>(
                         value: 0,
                         child: Text("Media, links, and docs"),
                       ),
-                      PopupMenuItem<int>(
+                      const PopupMenuItem<int>(
                         value: 1,
                         child: Text("Search"),
                       ),
-                      PopupMenuItem<int>(
+                      const PopupMenuItem<int>(
                         value: 2,
                         child: Text("Mute notifications"),
                       ),
-                      PopupMenuItem<int>(
+                      const PopupMenuItem<int>(
                         value: 3,
                         child: Text("Delete Chat"),
                       ),
-                      PopupMenuItem<int>(
+                      const PopupMenuItem<int>(
                         value: 4,
                         child: Text("Report"),
                       ),
-                      PopupMenuItem<int>(
+                      const PopupMenuItem<int>(
                         value: 5,
                         child: Text("Block"),
                       ),
