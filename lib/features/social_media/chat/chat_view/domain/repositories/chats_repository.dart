@@ -10,4 +10,5 @@ abstract class ChatsRepository {
   Future<Either<Failure, bool>> changeChatToArchiveNormal(String chatId);
   Future<Either<Failure, bool>> lockChat(LockChatParams lockChatParams);
   Future<Either<Failure, bool>> unLockChat(LockChatParams lockChatParams);
+  Future<Either<Failure, ChatItemModel>> getGroups();
 }

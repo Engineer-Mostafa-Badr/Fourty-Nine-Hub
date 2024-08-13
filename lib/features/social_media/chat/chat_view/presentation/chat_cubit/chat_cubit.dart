@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatToArchiveNormal_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/chats_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getChats_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getGroupsChats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unlock_chat_usecase.dart';
@@ -27,6 +28,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   final ChangeChatToArchiveOrNormalUseCase _changeChatToArchiveOrNormalUseCase;
   final LockChatUseCase _lockChatUseCase;
   final UnLockChatUseCase _unLockChatUseCase;
+  final GroupsChatsUseCase _groupsChatsUseCase;
   int unReadMessage = 0;
 
   String? userToken;
@@ -44,6 +46,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     this._changeChatToArchiveOrNormalUseCase,
     this._lockChatUseCase,
     this._unLockChatUseCase,
+    this._groupsChatsUseCase,
   ) : super(const ChatsState());
 
   initSocketConnection() async {
@@ -80,16 +83,22 @@ class ChatsCubit extends Cubit<ChatsState> {
     ChatsRequestParams chatsRequestParams =
         getTabParams(index: index, password: password);
 
-    if (chatsRequestParams.categoryId == null) {
+
+    if (chatsRequestParams.categoryId == null && index != 5) {
       return emit
           .call(state.copyWith(chats: [], status: ChatsStates.initState));
     } else {
-
       _chats.clear();
+      var response;
+      if (index == 5) {
 
-      final response = await _getChatsUseCase.call(
-        chatsRequestParams,
-      );
+        response = await _groupsChatsUseCase.call(const NoParams());
+      } else {
+        response = await _getChatsUseCase.call(
+          chatsRequestParams,
+        );
+      }
+
       response.fold(
         (failure) => emit
             .call(state.copyWith(failure: failure, status: ChatsStates.error)),
@@ -99,35 +108,32 @@ class ChatsCubit extends Cubit<ChatsState> {
                   (e) => _chats.update(e.sId!, (value) => e, ifAbsent: () => e))
               .toList();
 
-          // to listen typing and online emit event status
-          userStatusParams = [];
-          for (var item in _chats.values) {
-            userStatusParams
-                .add(UserStatusParams(chatId: item.sId!, userId: item.userId!));
-          }
-
-          // await data chats returned then send user status
-          await Future.delayed(const Duration(seconds: 1));
-          sendUserStatus(userStatusParams);
-          _socketService.listenToUserStatus();
-          unReadMessage = data.totalUnread ?? 0;
-
-
-
-          if (data.chats?.length == 0) {
-            print("data.chats ${data.chats?.length}");
-            return emit
-                .call(ChatsState(chats: [], status: ChatsStates.initState));
-          } else {
-            return emit.call(state.copyWith(
-                chats: data.chats, status: ChatsStates.initState));
-          }
+          refreshChatData(data);
         },
       );
     }
   }
 
+  refreshChatData(ChatItemModel data) async {
+    // to listen typing and online emit event status
+    userStatusParams = [];
+    for (var item in _chats.values) {
+      userStatusParams
+          .add(UserStatusParams(chatId: item.sId!, userId: item.userId!));
+    }
 
+    await Future.delayed(const Duration(seconds: 1));
+    sendUserStatus(userStatusParams);
+    _socketService.listenToUserStatus();
+    unReadMessage = data.totalUnread ?? 0;
+
+    if (data.chats?.length == 0) {
+      return emit.call(ChatsState(chats: [], status: ChatsStates.initState));
+    } else {
+      return emit.call(
+          state.copyWith(chats: data.chats, status: ChatsStates.initState));
+    }
+  }
 
   changeChatMuteState(String chatId) async {
     final response = await _changeChatMuteStateUseCase.call(chatId);
@@ -155,6 +161,8 @@ class ChatsCubit extends Cubit<ChatsState> {
   ChatsRequestParams getTabParams({required int index, String? password}) {
     // 0 => Normal
     // 1 => Services
+    // 4 => Greets
+    // 5 => Groups
     // 7 => Archived
     // 8 => Locked
     // 9 => unRead
@@ -176,6 +184,15 @@ class ChatsCubit extends Cubit<ChatsState> {
         isUnread: false,
         archived: false,
         isServices: true,
+      );
+    } else if (index == 4) {
+      return ChatsRequestParams(
+        privacyId: 'normal',
+        categoryId: UIConst.chatGreetId,
+        isLocked: false,
+        isUnread: false,
+        archived: false,
+        isServices: false,
       );
     } else if (index == 7) {
       return ChatsRequestParams(
@@ -249,34 +266,31 @@ class ChatsCubit extends Cubit<ChatsState> {
     _socketService.socketChatTypingStream.listen((event) {
       List<TypingAndOnlineModel> chatsIds = event ?? [];
 
-      if(!_chats.values.isEmpty){
+      if (_chats.values.length > 0) {
         for (var key in chatsIds) {
-          _chats[key.chatId]!.typing = key.typing;
-          _chats[key.chatId]!.online = key.online;
+          _chats[key.chatId]?.typing = key.typing;
+          _chats[key.chatId]?.online = key.online;
         }
 
         emit.call(state.copyWith(
             chats: _chats.values.toList(), status: ChatsStates.typing));
       }
-
     });
   }
 
   listenToNewMessages() {
     _socketService.socketMessageStream.listen((event) {
-      debugPrint("Last message chat cubit ${event.text}");
-      if(!_chats.values.isEmpty){
+      if (!_chats.values.isEmpty) {
         _chats[event.chatId]?.lastMessageText = event.text;
         emit.call(state.copyWith(
             chats: _chats.values.toList(), status: ChatsStates.initState));
       }
-
     });
   }
 
   sendUserStatus(List<UserStatusParams> params) {
     Timer? timer;
-    timer = Timer.periodic(const Duration(seconds: 7), (Timer t) {
+    timer = Timer.periodic(const Duration(seconds: 5), (Timer t) {
       _socketService.sendUserStatus(params);
     });
   }

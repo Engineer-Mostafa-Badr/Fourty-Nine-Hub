@@ -405,4 +405,6 @@ class EndPoints {
     return '/chat/update-lock-chat';
   }
 
+  static String getChatGroups = '/chat/group/get-groups/';
+
 }

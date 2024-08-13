@@ -37,6 +37,8 @@ abstract class ChatsRemoteDataSource {
   Future<Either<Failure, String>> updateLockChatPassword({
     required String password,
   });
+
+  Future<Either<Failure, ChatItemModel>> getGroups();
 }
 
 class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
@@ -55,7 +57,7 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
       String? password}) async {
     var data = {
       "privacy": "normal",
-      "categoryId": UIConst.chatNormalId,
+      "categoryId": categoryId,
       "archived": archived,
       "isLocked": isLocked,
       "isServices": isServices,
@@ -125,5 +127,12 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
         .put(EndPoints.updateUnLockChatPassword(), data: dataParams);
     return response.fold(
         (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, ChatItemModel>> getGroups() async {
+    final response = await _apiConsumer.get(EndPoints.getChatGroups);
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(ChatItemModel.fromJson(data['data'])));
   }
 }

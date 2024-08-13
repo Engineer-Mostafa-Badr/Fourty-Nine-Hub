@@ -46,4 +46,9 @@ class ChatsRepositoryImplementation extends ChatsRepository {
   Future<Either<Failure, bool>> unLockChat(LockChatParams lockChatParams) {
     return _chatsRemoteDataSource.unLockChat(chatId: lockChatParams.chatId!,password: lockChatParams.lockChatPassword!);
   }
+
+  @override
+  Future<Either<Failure, ChatItemModel>> getGroups() {
+    return _chatsRemoteDataSource.getGroups();
+  }
 }

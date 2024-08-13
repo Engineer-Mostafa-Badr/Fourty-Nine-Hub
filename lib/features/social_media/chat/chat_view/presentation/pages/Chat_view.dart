@@ -133,16 +133,16 @@ class _ChatViewState extends State<ChatView> {
 
   Widget _buildCategoriesViews() {
     return TabBarView(children: [
-      _buildCategoryChats(),
-      _buildCategoryChats(),
-      _buildCallingHistory(isVideo: false),
-      _buildCallingHistory(isVideo: true),
-      _buildCallingHistory(isVideo: false),
-      _buildCallingHistory(isVideo: true),
-      _buildCategoryChats(isSecret: true),
-      _buildCategoryChats(),
-      _buildCategoryChats(),
-      _buildCategoryChats(),
+      _buildCategoryChats(), // social
+      _buildCategoryChats(), // services
+      _buildCallingHistory(isVideo: false),// call & video (social)
+      _buildCallingHistory(isVideo: true),// call & video (services)
+      _buildCategoryChats(),// Greet
+      _buildCategoryChats(),//Groups
+      _buildCategoryChats(isSecret: true),//Anonymous
+      _buildCategoryChats(),//Archive
+      _buildCategoryChats(),//Lock Chat
+      _buildCategoryChats(),//Unread
     ]);
   }
 
@@ -174,12 +174,12 @@ class _ChatViewState extends State<ChatView> {
                         SlidableAction(
                           onPressed: (value) {
                             bottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                widget: MoreIconBottomSheet(
-                                  chatItemModel: state.chats![index],
-                                  chatsCubit: chatCubit,
-                                ),
+                              context: context,
+                              isScrollControlled: true,
+                              widget: MoreIconBottomSheet(
+                                chatItemModel: state.chats![index],
+                                chatsCubit: chatCubit,
+                              ),
                             );
                           },
                           icon: Icons.more_horiz,
