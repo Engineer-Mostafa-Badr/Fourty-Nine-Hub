@@ -20,15 +20,29 @@ class FourtyNineRepositoryImpl implements FourtyNineRepository {
   }
 
   @override
-  Future<Either<Failure, List<MainCategoryEntity>>> getMainCategories({
-    required PaginationParams params
-  }) {
-    return _fourtyNineRemoteDataSource.getMainCategories(params:params);
+  Future<Either<Failure, List<MainCategoryEntity>>> getMainCategories(
+      {required PaginationParams params}) {
+    return _fourtyNineRemoteDataSource.getMainCategories(params: params);
   }
 
   @override
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems() {
-        return _fourtyNineRemoteDataSource.getSliderItems();
+    return _fourtyNineRemoteDataSource.getSliderItems();
+  }
 
+  @override
+  Future<Either<Failure, MainCategoryEntity>> getMainCategoryDetails(
+      String id) {
+    return _fourtyNineRemoteDataSource.getMainCategoryDetails(id);
+  }
+
+  @override
+  Future<Either<Failure, bool>> addMainCategoryToFavorites(String id) {
+    return _fourtyNineRemoteDataSource.addMainCategoryToFavorites(id);
+  }
+
+  @override
+  Future<Either<Failure, bool>> removeMainCategoryFromFavorites(String id) {
+    return _fourtyNineRemoteDataSource.removeMainCategoryFromFavorites(id);
   }
 }

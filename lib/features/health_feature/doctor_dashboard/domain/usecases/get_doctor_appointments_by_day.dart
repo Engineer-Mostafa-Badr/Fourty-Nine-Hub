@@ -26,7 +26,7 @@ class GetDoctorAppointmentsByDayParams {
   GetDoctorAppointmentsByDayParams(
       {required this.day, required this.paginationParams});
 
-  Map<String, dynamic> toData() => {
+  Map<String, dynamic> toJson() => {
         "day": day.name.toLowerCase(),
       };
 }

@@ -31,7 +31,7 @@ class SettingsView extends StatelessWidget {
                     return Switch(
                         value: isGranted,
                         onChanged: (v) async =>
-                            await Permission.notification.request());
+                        await Permission.notification.request());
                   }),
               label: 'Enable Notifications',
               onTap: () async => await Permission.notification.request(),
@@ -47,15 +47,15 @@ class SettingsView extends StatelessWidget {
                   ),
                   title: theme is DarkThemeModeStates
                       ? Text(
-                          'dark mode'.localize,
-                          style: const TextStyle(
-                              color: AppColors.AUTH_CONTAINER_COLOR),
-                        )
+                    'dark mode'.localize,
+                    style: const TextStyle(
+                        color: AppColors.AUTH_CONTAINER_COLOR),
+                  )
                       : Text(
-                          'light mode'.localize,
-                          style:
-                              const TextStyle(color: AppColors.QUANTITY_COLOR),
-                        ),
+                    'light mode'.localize,
+                    style:
+                    const TextStyle(color: AppColors.QUANTITY_COLOR),
+                  ),
                   value: ThemeCubit.get(context).isDarkTheme,
                   activeColor: Colors.grey,
                   activeTrackColor: AppColors.AUTH_CONTAINER_COLOR,
@@ -99,9 +99,9 @@ class SettingsView extends StatelessWidget {
 
   Widget listTileWidget(
       {required IconData icon,
-      required Widget trailing,
-      required String label,
-      required Function onTap}) {
+        required Widget trailing,
+        required String label,
+        required Function onTap}) {
     return ListTile(
       leading: Icon(
         icon,

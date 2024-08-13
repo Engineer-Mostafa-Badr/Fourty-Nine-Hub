@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
+import 'package:fourtyninehub/common/widgets/stateful/dynamic/list_view_pagination.dart';
+
+import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/parent_main_categories_cubit/main_categories_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../common/widgets/dynamic/drawer.dart';
@@ -13,9 +21,7 @@ import '../../../../common/widgets/dynamic/google_ads_banner.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
 
-import '../../../../core/animations/moving_widget_hr.dart';
 import '../../../../core/enums/ride_services_enum.dart';
-import '../../../../res/assets/assets.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -23,7 +29,6 @@ import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/dynamic/wallet_widget.dart';
 import '../../../../res/style/app_colors.dart';
 
-import '../../../subcategories/presentation/widgets/subcategory_card.dart';
 import '../widgets/ads_text_banner.dart';
 import '../widgets/announce_widget.dart';
 
@@ -35,18 +40,6 @@ class FourtyNineView extends StatefulWidget {
 }
 
 class _FourtyNineViewState extends State<FourtyNineView> {
-  bool isList = true;
-  final scrollController = ScrollController();
-
-  @override
-  void initState() {
-    final controller = context.read<MainCategoriesCubit>();
-    scrollController.addListener(() async {
-      await controller.getMainCategoriesPagination();
-    });
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +56,6 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       drawer: const DrawerWidget(),
       body: SingleChildScrollView(
-          controller: scrollController,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Column(
@@ -76,24 +68,32 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   const Sizer(),
                   _buildMazadatWidget(),
                   const Sizer(),
-                  BlocBuilder<MainCategoriesCubit,
-                      BasicState<List<MainCategoryEntity>>>(
-                    buildWhen: (previous, current) => previous != current,
-                    builder: (context, state) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          if (state.data != null)
-                            ...state.data!.map(
-                                  (e) => _buildMainCategoriesWidget(
-                                category: e,
-                              ),
-                            ),
-                          if (state.isLoading)
-                            const CircularProgressIndicator.adaptive()
-                        ],
-                      );
-                    },
+                   SizedBox(
+                    height: 500,
+                    child: PaginationView<MainCategoryEntity>(
+                      build: (ScrollController scrollController,
+                          List<MainCategoryEntity> data) {
+                        return ListView.separated(
+                          itemCount: data.length,
+                          shrinkWrap: true,
+                          controller: scrollController,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                context.push(Routes.SUBCATEGORIES,
+                                    extra: data[index]);
+                              },
+                              child: MainCategoryBanner(category: data[index]),
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) =>
+                              const Sizer(),
+                        );
+                      },
+                      fetchData: (PaginationParams paginationParams) => context
+                          .read<MainCategoriesCubit>()
+                          .getMainCategories(paginationParams),
+                    ),
                   ),
                 ]),
           )),
@@ -103,19 +103,32 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   Widget _buildMazadatWidget() {
     return Column(
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: _buildRideSubCategoryItem(
-                  service: RideServicesEnum.comeWithYou,
-                  image: Assets.movingCar),
-            ),
-            const Sizer(),
-            Expanded(
-              child: _buildRideSubCategoryItem(
-                  service: RideServicesEnum.pickMe, image: Assets.walking),
-            )
-          ],
+        BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
+          builder: (context, state) {
+            if (state.status == StateStatus.success &&
+                state.data != null &&
+                state.data!.isNotEmpty) {
+              return Row(
+                children: [
+                  Expanded(
+                    child: _buildRideSubCategoryItem(
+                      service: state.data![0].service,
+                      image: state.data![0].image,
+                    ),
+                  ),
+                  const Sizer(),
+                  Expanded(
+                    child: _buildRideSubCategoryItem(
+                      service: state.data![1].service,
+                      image: state.data![1].image,
+                    ),
+                  )
+                ],
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          },
         ),
         const Sizer(),
         Row(
@@ -198,43 +211,20 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   offset: Offset(1, 1))
             ]),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            Expanded(
+              child: SquareImage(
+                fit: BoxFit.cover,
+                radius: 5,
+                url: image,
+              ),
+            ),
             Label(text: service.title(), style: Styles.headerText()),
-            MovingWidgetHr(
-              asset: image,
-            )
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildMainCategoriesWidget({
-    required MainCategoryEntity category,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(
-          text: category.name,
-          style: Styles.headerText(),
-        ),
-        if (category.subcategories?.isNotEmpty ?? false)
-          SizedBox(
-            height: kToolbarHeight * 3,
-            child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return SubCategoryCard(
-                      mainCategory: category,
-                      item: category.subcategories![index]);
-                },
-                separatorBuilder: (context, index) => const Sizer(),
-                itemCount: category.subcategories?.length ?? 0),
-          )
-      ],
     );
   }
 }

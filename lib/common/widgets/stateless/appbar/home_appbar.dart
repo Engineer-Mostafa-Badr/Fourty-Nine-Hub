@@ -1,16 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import '../../../translations/translation_cubit.dart';
 import '../buttons/iconAppButton.dart';
 import '../labels/label.dart';
 
@@ -36,6 +34,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.isIconWhite = false,
     this.showLanguage = false,
     this.color=AppColors.PRIMARY_COLOR,
+
   });
 
   @override
@@ -85,7 +84,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                     const SizedBox(width: 5),
                     Expanded(
-                      child: Label(text: 'Search'.localize, style: Styles.mediumText()),
+                      child: Label(text: 'Search', style: Styles.mediumText()),
                     ),
                   ],
                 ),
@@ -99,13 +98,12 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: TextAppButton(
-                  label: 'lang'.localize,
-                  style: Styles.mediumText(color: AppColors.SECONDARY_COLOR).copyWith(
-                    fontSize:context.isArabic? 14:18
-                  ),
+                  label: LocaleKeys.lang.tr(),
+                  style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
                   onPressed: () {
-                    context.read<TranslationCubit>().changeLanguage(
-                        Locale(context.isArabic ? 'en' : 'ar'), context);
+                    context.locale == Locales.english
+                        ? context.setLocale(Locales.arabic)
+                        : context.setLocale(Locales.english);
                   })),
           Stack(
             children: [

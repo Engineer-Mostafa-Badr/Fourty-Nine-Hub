@@ -21,19 +21,21 @@ import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentat
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit/food_cart_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/registable_sub_categories_cubit/registable_subcategories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/all_doctor_reservations/all_doctor_reservations_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_statistics/doctor_statistics_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_today_appointments/doctor_today_appointments_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_unhandled_appotinments/doctor_unhandled_appotinments_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/edit_doctor_profile/edit_doctor_profile_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/all_doctor_reservations_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_dashboard_view.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/pages/create_doctor_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_statistics.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_docs.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_personal_info_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_profile.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/today_doctor_appointments_view.dart';
@@ -183,6 +185,9 @@ class AppPages {
             lazy: false,
             create: (context) => serviceLocator<SliderCubit>(),
           ),
+           BlocProvider(
+            create: (context) => serviceLocator<ThumbnailsCubit>(),
+          ),
         ],
         child: const FourtyNineView(),
       ),
@@ -193,7 +198,7 @@ class AppPages {
             builder: (context, state) => BlocProvider.value(
                   value: serviceLocator<SubcategoriesCubit>(),
                   child: SubCategoriesView(
-                    mainCategoryId: state.extra as String,
+                    mainCategory: state.extra as MainCategoryEntity,
                   ),
                 ),
             routes: [
@@ -475,35 +480,39 @@ class AppPages {
                 builder: (context, state) {
                   final social = state.extra as String?;
 
-                    return BlocProvider<CreatePostCubit>(
-                        create: (_) {
-                          if(social !='twitter'){
-                            return serviceLocator()..loadData();
-                          }else{
-                            return serviceLocator();
-                          }
-                        },
-                        child: CreatePostView(social: social??'social',),
-                      );
-                  },
+                  return BlocProvider<CreatePostCubit>(
+                    create: (_) {
+                      if (social != 'twitter') {
+                        return serviceLocator()..loadData();
+                      } else {
+                        return serviceLocator();
+                      }
+                    },
+                    child: CreatePostView(
+                      social: social ?? 'social',
+                    ),
+                  );
+                },
               ),
 
               GoRoute(
                   path: Paths.TWITTER,
                   name: Routes.TWITTER,
                   builder: (context, state) => BlocProvider<TwitterCubit>(
-                      create: (_)=>serviceLocator(),
+                      create: (_) => serviceLocator(),
                       child: const TwitterView()),
-              routes: [
-                GoRoute(
-                  path: Paths.TWITTERPOSTDETAILS,
-                  name: Routes.TWITTERPOSTDETAILS,
-                  builder: (context, state) {
-                    final id = state.extra as String?;
-                    return TwitterPostDetails(postId: id??'',);
-                  },
-                )
-              ]),
+                  routes: [
+                    GoRoute(
+                      path: Paths.TWITTERPOSTDETAILS,
+                      name: Routes.TWITTERPOSTDETAILS,
+                      builder: (context, state) {
+                        final id = state.extra as String?;
+                        return TwitterPostDetails(
+                          postId: id ?? '',
+                        );
+                      },
+                    )
+                  ]),
               GoRoute(
                 path: Paths.OTHERSACCOUNT,
                 name: Routes.OTHERSACCOUNT,
@@ -541,7 +550,10 @@ class AppPages {
                       name: Routes.LIVEView,
                       builder: (context, state) {
                         var extras = state.extra as ZegoArgs;
-                        return  LiveStreamView(isHost: extras.isHost,liveID: extras.liveId,);
+                        return LiveStreamView(
+                          isHost: extras.isHost,
+                          liveID: extras.liveId,
+                        );
                       }),
                 ],
               ),
@@ -714,11 +726,11 @@ class AppPages {
               GoRoute(
                   path: Paths.EDITDOCTORPROFILE,
                   name: Routes.EDITDOCTORPROFILE,
-                  builder: (context, state) => const EditDoctorProfileView()),
-              GoRoute(
-                  path: Paths.EDITDOCTORDOCS,
-                  name: Routes.EDITDOCTORDOCS,
-                  builder: (context, state) => const EditDoctorDocsView()),
+                  builder: (context, state) =>
+                      BlocProvider<EditDoctorProfileCubit>(
+                        create: (context) => serviceLocator(),
+                        child: const EditDoctorProfileView(),
+                      )),
               GoRoute(
                   path: Paths.EDITDOCTORPERSONALINFO,
                   name: Routes.EDITDOCTORPERSONALINFO,
