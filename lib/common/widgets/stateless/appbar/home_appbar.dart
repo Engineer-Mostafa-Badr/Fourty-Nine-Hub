@@ -21,6 +21,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   final bool showChat;
   final bool isIconWhite;
   final bool showLanguage;
+  final Color color;
 
   const HomeAppbar({
     super.key,
@@ -32,6 +33,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.showChat = true,
     this.isIconWhite = false,
     this.showLanguage = false,
+    this.color=AppColors.PRIMARY_COLOR,
+
   });
 
   @override
@@ -114,7 +117,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     ? AppColors.SPLASH_BLACK_COLOR
                     : isDetailsCardService
                         ? AppColors.PRIMARY_COLOR
-                        : AppColors.PRIMARY_COLOR,
+                        : color,
               ),
               Positioned(
                 top: 10,
