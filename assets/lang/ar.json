@@ -3,7 +3,7 @@
   "arabic": "اللغه العربيه",
   "english": "اللغه الانجليزيه",
   "new_meeting": "اجتماع جديد",
-  "meal": "اكلة",
+  "meal": "اكله",
   "dark mode":"الوضع الداكن",
   "light mode":"الوضع الفاتح",
   "voice":"صوت",
@@ -14,9 +14,9 @@
   "chat":"شات",
   "find":"ايجاد",
   "live":"لابف",
-  "health":"صحي",
-  "shipping":"تسوق",
-  "ride":"يركب"
+  "health":"صحه",
+  "shipping":"تحميله",
+  "ride":"توصيله",
   "lang": "AR",
-  "new_meeting": "اجتماع جديد"
+  "search": "Search"
 }

@@ -51,14 +51,14 @@ class IconAppButton extends StatelessWidget {
         backgroundColor: backColor,
         child: Icon(
           icon,
-          size: size ?? 18,
+          size: size ?? 30,
           color: color,
         ),
       );
     } else {
       return Icon(
         icon,
-        size: size ?? 18,
+        size: size ?? 30,
         color: color,
       );
     }
