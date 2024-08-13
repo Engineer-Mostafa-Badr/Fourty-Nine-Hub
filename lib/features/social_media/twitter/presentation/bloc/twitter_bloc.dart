@@ -275,7 +275,7 @@ class TwitterCubit extends Cubit<TwitterState> {
   }
 
   Future<TwitterPostCommentEntity> onPostComment(
-      {required PostCommentParams params}) async {
+      {required TwitterPostCommentParams params}) async {
     var response = await _twitterPostCommentUseCase(params);
     response.fold(
       (failure) =>

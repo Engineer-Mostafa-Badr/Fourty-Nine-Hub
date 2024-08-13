@@ -26,5 +26,6 @@ class PostCommentParams {
   });
   Map<String, dynamic> toJson() => {
         'content': content,
+    'subCategory':'66b77e77bb35968b535dc944'
       };
 }

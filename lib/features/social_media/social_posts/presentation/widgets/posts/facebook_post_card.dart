@@ -117,8 +117,10 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     ),
                     child: Column(
                       children: [
-                        if (myPost.type != 'advertisement')
+                        if (myPost.type != 'advertisement'&&myPost.isShared==true)
                           _buildMainAccountHeader(context: context, post: myPost.mainPost!),
+                        if (myPost.type != 'advertisement'&&myPost.isShared==false)
+                          _buildAccountHeader(context: context, post: myPost),
                         _buildContentWidget(content: myPost.mainPost?.content??'',backgroundColor: null,images: myPost.mainPost?.images??[]),
 
 

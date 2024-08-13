@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comm
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/request_document_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 
@@ -23,7 +24,7 @@ abstract class TwitterRepo {
   Future<Either<Failure, bool>> sharePost({required String postId});
   Future<Either<Failure, bool>> reactOnComment({required TwitterCommentReactParams params});
   Future<Either<Failure, TwitterPostCommentEntity>> commentOnTwitterPost(
-      {required PostCommentParams params});
+      {required TwitterPostCommentParams params});
   Future<Either<Failure, TwitterCommentReplyEntity>> replyOnComment(
       {required TwitterCommentReplyParams params});
   Future<Either<Failure, List<TwitterPostCommentEntity>>> getPostComments(

@@ -111,14 +111,6 @@ class _SocialHomeViewState extends State<SocialHomeView> with SingleTickerProvid
         ),
       ),
     ));
-    return  TabBar(
-      onTap: (i){
-        if(i==1){
-          context.push(Routes.OTHERSACCOUNT);
-        }
-      },
-        tabs: List.generate(2, (index) => const Icon(Icons.home))
-    );
   }
 
   Widget _buildBody() {
@@ -220,7 +212,7 @@ class _SocialHomeViewState extends State<SocialHomeView> with SingleTickerProvid
                                       context: context,
                                       isScrollControlled: true,
                                       widget: BlocProvider.value(
-                                        value:serviceLocator<SocialPostsCubit>()..loadPostDetails(context, controller.feedPagingController.itemList![index].id),
+                                        value:serviceLocator<SocialPostsCubit>()..loadPostDetails(context, controller.feedPagingController.itemList![index].isShared==true?controller.feedPagingController.itemList![index].mainPost!.id:controller.feedPagingController.itemList![index].id),
                                         child: PostDetailsPage(
                                           comments: const [],
                                           postId: controller.feedPagingController.itemList![index].id,
@@ -233,7 +225,7 @@ class _SocialHomeViewState extends State<SocialHomeView> with SingleTickerProvid
                                           onReact: (params) => controller.onReact(params: params, from: 'posts'),
                                           showPostComments: (postId) {},
                                           showPostDetails: (PostEntity post) {},
-                                          post: controller.feedPagingController.itemList![index],
+                                          // post: controller.feedPagingController.itemList![index],
 
                                             onCommentReply: (ReplyOnCommentParams params) {
                                               return controller.replyOnComment(

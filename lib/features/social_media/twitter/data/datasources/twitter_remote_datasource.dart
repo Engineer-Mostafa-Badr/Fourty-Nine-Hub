@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/request_document_usecase.dart';
 
 import '../../../../../core/error/failure.dart';
@@ -27,7 +28,7 @@ abstract class TwitterRemoteDataSource {
   Future<Either<Failure, bool>> sharePost({required  params});
   Future<Either<Failure, bool>> addReport({required  params});
   Future<Either<Failure, TwitterPostCommentEntity>> commentOnTwitterPost(
-      {required PostCommentParams params});
+      {required TwitterPostCommentParams params});
   Future<Either<Failure, TwitterCommentReplyEntity>> replyOnComment(
       {required TwitterCommentReplyParams params});
   Future<Either<Failure, List<TwitterPostCommentEntity>>> getPostComments(
@@ -45,7 +46,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   TwitterRemoteDataSourceImpl(this._apiConsumer);
   @override
   Future<Either<Failure, List<TwitterPostEntity>>> getFeed({required TwitterFeedParams params}) async {
-    final response = await _apiConsumer.get("${EndPoints.getTwitterFeedPosts}?page=${params.page}&limit=${params.limit}");
+    final response = await _apiConsumer.get("${EndPoints.getTwitterFeedPosts}?page=${params.page}&limit=${params.limit}&subCategory=66a3583454e6e337915514db");
 
     return response.fold((l) {
       return Left(l);
@@ -59,7 +60,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
 
   @override
   Future<Either<Failure, TwitterPostEntity>> getTwitterPost({required String postId}) async {
-    final response = await _apiConsumer.get("${EndPoints.createTwitterPost}/$postId");
+    final response = await _apiConsumer.get("${EndPoints.createTwitterPost}/$postId&subCategory=66a3583454e6e337915514db");
 
     return response.fold((l) {
       return Left(l);
@@ -106,7 +107,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
 
   @override
   Future<Either<Failure, TwitterPostCommentEntity>> commentOnTwitterPost(
-      {required PostCommentParams params}) async {
+      {required TwitterPostCommentParams params}) async {
     final response = await _apiConsumer
         .post(EndPoints.commentOnTwitterPost(params.postId), data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(TwitterPostCommentModel.fromJson(data['data'])));
@@ -117,7 +118,8 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
     final response = await _apiConsumer
         .post(EndPoints.commentOnTwitterPost(params.postId), data: {
           'content':params.content,
-      'reply':params.reply
+      'reply':params.reply,
+      'subCategory':'66a3583454e6e337915514db'
     });
     return response.fold((l) => Left(l), (data) => Right(TwitterCommentReplyModel.fromJson(data['data'])));
   }

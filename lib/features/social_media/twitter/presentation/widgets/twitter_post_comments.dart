@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_comment_card.dart';
@@ -27,7 +28,7 @@ import '../../../../../../res/style/styles.dart';
 class TwitterPostComments extends StatefulWidget {
   final List<TwitterPostCommentEntity> comments;
   final String postId;
-  final Function(PostCommentParams) onAddComment;
+  final Function(TwitterPostCommentParams) onAddComment;
   final Function(TwitterCommentReplyParams) onAddReply;
   final Function(String,TwitterPostCommentEntity) onGetReplies;
   final Function(TwitterCommentReactParams ) onCommentReact;
@@ -151,7 +152,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                               isCircle: true,
                               onPressed: () async{
                                 TwitterPostCommentModel data = await widget.onAddComment(
-                                  PostCommentParams(
+                                  TwitterPostCommentParams(
                                       postId: widget.postId, content: commentTextController.text),
                                 );
                                 final user = context.read<UserCubit>().state.data;
@@ -184,7 +185,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
 
   void onCommentAdded(String id,) async {
     await widget.onAddComment(
-      PostCommentParams(
+      TwitterPostCommentParams(
           postId: widget.postId, content: commentTextController.text,),
     );
 

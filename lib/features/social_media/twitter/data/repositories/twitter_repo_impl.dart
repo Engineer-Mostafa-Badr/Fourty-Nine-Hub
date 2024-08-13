@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comm
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/request_document_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
@@ -52,7 +53,7 @@ class TwitterRepoImpl implements TwitterRepo {
 
   @override
   Future<Either<Failure, TwitterPostCommentEntity>> commentOnTwitterPost(
-      {required PostCommentParams params}) {
+      {required TwitterPostCommentParams params}) {
     return _remoteDataSource.commentOnTwitterPost(params: params);
   }
 

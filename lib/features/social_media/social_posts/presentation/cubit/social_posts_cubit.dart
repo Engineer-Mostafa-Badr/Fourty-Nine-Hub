@@ -108,7 +108,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   }
 
   void loadPostDetails(BuildContext context, String postId) async {
-    // await getPostDetails(postId);
+    await getPostDetails(postId);
     await getPostComments(context: context, postId: postId, page: 1);
     commentsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");

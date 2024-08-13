@@ -24,8 +24,8 @@ class EndPoints {
   static const sendForgetPasswordOTP = '/auth/forgot-password';
   static const verifyForgetPasswordOTP = '/auth/verify/otp';
   static const createNewForgetPassword = '/auth/reset-password';
-  static const report = '/report';
-  static const documentRequest = '/twitter/document-request';
+  static const report = '/report?subCategory=66a3583454e6e337915514db';
+  static const documentRequest = '/twitter/document-request?&subCategory=66a3583454e6e337915514db';
   // ride
 
   // health
@@ -127,19 +127,19 @@ class EndPoints {
   static const feelings = '/facebook/post/feelings';
   static const getTwitterFeedPosts = '/twitter/feed';
   static String userPosts(String userId) {
-    return '/facebook/post/user/$userId?limit=20&page=1&type=1';
+    return '/facebook/post/user/$userId?limit=20&page=1&type=1&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String userSuggests(SuggestedFriendsParams params) {
-    return '/users/suggest?limit=${params.limit}&page=${params.page}';
+    return '/users/suggest?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String userTweets(GetUserTweetsParams params) {
-    return '/twitter/post/user/${params.userId}?limit=10&page=${params.page}&type=1';
+    return '/twitter/post/user/${params.userId}?limit=10&page=${params.page}&type=1&subCategory=66a3583454e6e337915514db';
   }
 
   static String getFeedPosts(TwitterFeedParams params) {
-    return '/facebook/feed?limit=${params.limit}&page=${params.page}';
+    return '/facebook/feed?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String getInstagramPosts(TwitterFeedParams params) {
@@ -151,7 +151,7 @@ class EndPoints {
   }
 
   static String getAdvertisement(TwitterFeedParams params) {
-    return '/advertisementCompany?limit=${params.limit}&page=${params.page}';
+    return '/advertisementCompany?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String acceptTripRider(String id) {
@@ -203,19 +203,19 @@ class EndPoints {
   }
 
   static String reactOnTwitterPost(String postId) {
-    return '/twitter/post/react/$postId';
+    return '/twitter/post/react/$postId&subCategory=66a3583454e6e337915514db';
   }
 
   static String reactOnTwitterComment(String commentId) {
-    return '/twitter/comment/react/$commentId';
+    return '/twitter/comment/react/$commentId&subCategory=66a3583454e6e337915514db';
   }
 
   static String shareTwitterPost(String postId) {
-    return '/twitter/post/share/$postId';
+    return '/twitter/post/share/$postId&subCategory=66a3583454e6e337915514db';
   }
 
   static String shareFacebookPost(String postId) {
-    return '/facebook/post/share/$postId';
+    return '/facebook/post/share/$postId&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String commentOnPost(String postId) {
@@ -223,59 +223,59 @@ class EndPoints {
   }
 
   static String commentOnTwitterPost(String postId) {
-    return '/twitter/comment/create-comment/$postId';
+    return '/twitter/comment/create-comment/$postId&subCategory=66a3583454e6e337915514db';
   }
 
   static String getPostComments(PostCommentsParams params) {
-    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}&page=${params.page}';
+    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String getPostCommentReplies(PostCommentsParams params) {
-    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}';
+    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String getTwitterPostComments(PostCommentsParams params) {
-    return '/twitter/comment/get-post-comments/${params.postId}?limit=${params.limit}&page=${params.page}';
+    return '/twitter/comment/get-post-comments/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=66a3583454e6e337915514db';
   }
 
   static String getTwitterCommentReplies(PostCommentsParams params) {
-    return '/twitter/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}';
+    return '/twitter/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=66a3583454e6e337915514db';
   }
 
   static String deletePost(String postId) {
-    return '/facebook/post/$postId';
+    return '/facebook/post/$postId&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String deleteComment(String commentId) {
-    return '/facebook/comment/delete-comment/$commentId';
+    return '/facebook/comment/delete-comment/$commentId&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String hidePost(String postId) {
-    return '/facebook/post/hide/$postId';
+    return '/facebook/post/hide/$postId&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String deleteTwitterPost(String postId) {
-    return '/twitter/post/$postId';
+    return '/twitter/post/$postId&subCategory=66a3583454e6e337915514db';
   }
 
   static String hideTwitterPost(String postId) {
-    return '/twitter/post/hide/$postId';
+    return '/twitter/post/hide/$postId&subCategory=66a3583454e6e337915514db';
   }
 
   static String friendRequest(String userId) {
-    return '/friends/sendFriendRequest/$userId';
+    return '/friends/sendFriendRequest/$userId&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String followRequest(String userId) {
-    return '/follow/make-follow/$userId';
+    return '/follow/make-follow/$userId&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String greetMessage(String userId) {
-    return '/users/greet/$userId';
+    return '/users/greet/$userId&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String removeSuggestUser(String userId) {
-    return '/friends/remove-user-suggest/$userId';
+    return '/friends/remove-user-suggest/$userId&subCategory=66b77e77bb35968b535dc944';
   }
 
   // food

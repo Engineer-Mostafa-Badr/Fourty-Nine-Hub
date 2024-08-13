@@ -50,7 +50,9 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   SocialPostsRemoteDataSourceImpl(this._apiConsumer);
   @override
   Future<Either<Failure, List<PostEntity>>> getFeed({required TwitterFeedParams params}) async {
-    final response = await _apiConsumer.get(EndPoints.getFeedPosts(params));
+    final response = await _apiConsumer.get(EndPoints.getFeedPosts(params),data: {
+      'subCategory':'66b77e77bb35968b535dc944'
+    });
 
     return response.fold((l) {
       return Left(l);

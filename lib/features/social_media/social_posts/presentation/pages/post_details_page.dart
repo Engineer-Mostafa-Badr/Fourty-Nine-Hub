@@ -26,7 +26,7 @@ import '../../domain/usecases/post_react_usecase.dart';
 import '../widgets/posts/comment_card.dart';
 
 class PostDetailsPage extends StatefulWidget {
-  final PostEntity post;
+  // final PostEntity post;
   final List<CommentEntity> comments;
   final String postId;
   final Function(PostCommentParams) onAddComment;
@@ -47,7 +47,7 @@ class PostDetailsPage extends StatefulWidget {
     required this.showPostDetails,
     required this.comments,
     required this.deletePost,
-    required this.hidePost, required this.post, required this.onCommentReply, required this.onDeleteComment, required this.onDeleteReply,
+    required this.hidePost, required this.onCommentReply, required this.onDeleteComment, required this.onDeleteReply,
   });
 
   @override
@@ -75,137 +75,143 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
           builder: (context, state) {
             final controller = context.read<SocialPostsCubit>();
 
-            return Column(
-            children: [
-              Expanded(
-                child:RefreshIndicator(
-                  onRefresh: () async=> controller.onRefreshPostDetails(),
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverToBoxAdapter(
-                        child: Column(
-                          children: [
-                            FacebookPostCard(
-                              post: widget.post,
-                              onReact: widget.onReact,
-                              deletePost: widget.deletePost,
-                              hidePost: widget.hidePost,
-                              showPostDetails: widget.showPostDetails,
-                              showPostComments: widget.showPostComments,
-                              onShare: (String id) {},
-                              from: 'details',
-                              isMyPost:
-                              user?.id == widget.post.user.id, index: 0,
-                            ),
-                            const Divider(),
-                          ],
-                        ),
-                      ),
-                      state.status==StateStatus.error?Center(
-                        child: Label(text: getFailureMessage(
-                          state.failure!,
-                          context,
-                        ),),
-                      ):PagedSliverList<int, CommentEntity>(
-                        pagingController:
-                        controller.commentsPagingController,
-                        builderDelegate:
-                        PagedChildBuilderDelegate<CommentEntity>(
-                          noItemsFoundIndicatorBuilder: (context) {
-                            return const Center(
-                              child: Text(
-                                "No Comments",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
+            if(state.status==StateStatus.loading){
+              return Center(child: CircularProgressIndicator(),);
+            }else if(state.status==StateStatus.error||state.postDetails==null){
+              return Center(
+                child: Label(text: getFailureMessage(
+                  state.failure!,
+                  context,
+                ),),
+              );
+            }else{
+              return Column(
+                children: [
+                  Expanded(
+                    child:RefreshIndicator(
+                      onRefresh: () async=> controller.onRefreshPostDetails(),
+                      child: CustomScrollView(
+                        slivers: [
+                          SliverToBoxAdapter(
+                            child: Column(
+                              children: [
+                                FacebookPostCard(
+                                  post: state.postDetails!,
+                                  onReact: widget.onReact,
+                                  deletePost: widget.deletePost,
+                                  hidePost: widget.hidePost,
+                                  showPostDetails: widget.showPostDetails,
+                                  showPostComments: widget.showPostComments,
+                                  onShare: (String id) {},
+                                  from: 'details',
+                                  isMyPost:
+                                  user?.id == state.postDetails?.user.id, index: 0,
                                 ),
+                                const Divider(),
+                              ],
+                            ),
+                          ),
+                          PagedSliverList<int, CommentEntity>(
+                            pagingController:
+                            controller.commentsPagingController,
+                            builderDelegate:
+                            PagedChildBuilderDelegate<CommentEntity>(
+                              noItemsFoundIndicatorBuilder: (context) {
+                                return const Center(
+                                  child: Text(
+                                    "No Comments",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                );
+                              },
+                              itemBuilder: (context, item, index) {
+                                return _buildCommentCard(
+                                    comment: controller
+                                        .commentsPagingController
+                                        .itemList![index]);
+                              },
+                              noMoreItemsIndicatorBuilder: (context) =>
+                                  Container(),
+                              firstPageProgressIndicatorBuilder: (context) =>
+                              const CupertinoActivityIndicator(),
+                              newPageProgressIndicatorBuilder: (context) =>
+                              const CupertinoActivityIndicator(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: kToolbarHeight,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                    ),
+                    child: Row(children: [
+                      const ProfileImage(accountId: 0),
+                      const Sizer(),
+                      Expanded(
+                          child: FormTextField(
+                              hint: 'Type your comment ....',
+                              height: kToolbarHeight * .7,
+                              action: (v) {
+                                setState(() {});
+                              },
+                              controller: commentTextController)),
+                      const Sizer(),
+                      if (commentTextController.text.isNotEmpty)
+                        IconAppButton(
+                          icon: Icons.send,
+                          isCircle: true,
+                          onPressed: () async {
+                            CommentEntity data = await widget.onAddComment(
+                              PostCommentParams(
+                                  postId: widget.postId, content: commentTextController.text),
+                            );
+                            final user = context.read<UserCubit>().state.data;
+
+                            controller.commentsPagingController.itemList?.insert(
+                              0,
+                              CommentModel(
+                                id: data.id,
+                                content: commentTextController.text,
+                                post: widget.postId,
+                                createdAt: DateTime.now(),
+                                loveCount: data.loveCount,
+                                angryCount: data.angryCount,
+                                likesCount: data.likesCount,
+                                repliesCount: data.repliesCount,
+                                sadCount: data.sadCount,
+                                wowCount: data.wowCount,
+                                isAngry: false,
+                                isLikes: false,
+                                isLove: false,
+                                isSad: false,
+                                isWow: false, user: TwitterUserEntity(
+                                id: user!.id,
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                createdAt: DateTime.now(),
+                                image: user.profilePicture ?? '',
+                                email: user.email ?? '',
+                                isDocumented: false,
+                              ),
                               ),
                             );
-                          },
-                          itemBuilder: (context, item, index) {
-                            return _buildCommentCard(
-                                comment: controller
-                                    .commentsPagingController
-                                    .itemList![index]);
-                          },
-                          noMoreItemsIndicatorBuilder: (context) =>
-                              Container(),
-                          firstPageProgressIndicatorBuilder: (context) =>
-                          const CupertinoActivityIndicator(),
-                          newPageProgressIndicatorBuilder: (context) =>
-                          const CupertinoActivityIndicator(),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                height: kToolbarHeight,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Row(children: [
-                  const ProfileImage(accountId: 0),
-                  const Sizer(),
-                  Expanded(
-                      child: FormTextField(
-                          hint: 'Type your comment ....',
-                          height: kToolbarHeight * .7,
-                          action: (v) {
+                            // widget.post.commentsCount=(widget.post.commentsCount!+1);
+                            commentTextController.clear();
+                            FocusScope.of(context).unfocus();
                             setState(() {});
                           },
-                          controller: commentTextController)),
-                  const Sizer(),
-                  if (commentTextController.text.isNotEmpty)
-                    IconAppButton(
-                      icon: Icons.send,
-                      isCircle: true,
-                      onPressed: () async {
-                        CommentEntity data = await widget.onAddComment(
-                          PostCommentParams(
-                              postId: widget.postId, content: commentTextController.text),
-                        );
-                        final user = context.read<UserCubit>().state.data;
-
-                        controller.commentsPagingController.itemList?.insert(
-                          0,
-                          CommentModel(
-                            id: data.id,
-                            content: commentTextController.text,
-                            post: widget.postId,
-                            createdAt: DateTime.now(),
-                            loveCount: data.loveCount,
-                            angryCount: data.angryCount,
-                            likesCount: data.likesCount,
-                            repliesCount: data.repliesCount,
-                            sadCount: data.sadCount,
-                            wowCount: data.wowCount,
-                            isAngry: false,
-                            isLikes: false,
-                            isLove: false,
-                            isSad: false,
-                            isWow: false, user: TwitterUserEntity(
-                            id: user!.id,
-                            firstName: user.firstName,
-                            lastName: user.lastName,
-                            createdAt: DateTime.now(),
-                            image: user.profilePicture ?? '',
-                            email: user.email ?? '',
-                            isDocumented: false,
-                          ),
-                          ),
-                        );
-                        // widget.post.commentsCount=(widget.post.commentsCount!+1);
-                        commentTextController.clear();
-                        FocusScope.of(context).unfocus();
-                        setState(() {});
-                      },
-                    )
-                ]),
-              )
-            ],
-          );
+                        )
+                    ]),
+                  )
+                ],
+              );
+            }
         }
       ),
     );

@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
@@ -172,7 +173,7 @@ class _TwitterViewState extends State<TwitterView> {
                               comments: [],
                               postId: controller.postsPagingController.itemList![index].id,
                               user: user,
-                              onAddComment: (PostCommentParams params) =>
+                              onAddComment: (TwitterPostCommentParams params) =>
                                   controller.onPostComment(params: params),
                               onAddReply: (TwitterCommentReplyParams params) {
                                 controller.onCommentReply(params: params);
