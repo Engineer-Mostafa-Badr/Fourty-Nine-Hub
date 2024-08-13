@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
           create: (context) => serviceLocator<UserCubit>(),
         ),
 
+        BlocProvider(create: (BuildContext context) =>ThemeCubit(),),
         BlocProvider(
           create: (context) => serviceLocator<RiderequestCubit>(),
         ),
@@ -55,16 +56,20 @@ class MyApp extends StatelessWidget {
           create: (context) => serviceLocator<CreateAdCubit>(),
         ),
       ],
-      child: MaterialApp.router(
-        themeMode: ThemeMode.light,
-        theme: lightTheme(),
-        darkTheme: darkTheme(),
-        title: '49',
-        debugShowCheckedModeBanner: false,
-        routerConfig: AppPages.router,
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
+      child: BlocBuilder<ThemeCubit,ThemeStates>(
+        builder: (BuildContext context, state) {
+          return MaterialApp.router(
+            themeMode:context.read<ThemeCubit>().isDarkTheme? ThemeMode.dark:ThemeMode.light,
+            theme: lightTheme(),
+            darkTheme: darkTheme(),
+            title: '49',
+            debugShowCheckedModeBanner: false,
+            routerConfig: AppPages.router,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+          );
+        },
       ),
     );
   }

@@ -5,29 +5,29 @@ import '../../res/style/app_colors.dart';
 ThemeData lightTheme() {
   return ThemeData(
     primaryColor: AppColors.PRIMARY_COLOR,
-    scaffoldBackgroundColor: AppColors.BACKGROUND_COLOR,
+    scaffoldBackgroundColor: AppColors.AUTH_CONTAINER_COLOR,
     colorScheme: ColorScheme.fromSeed(
       background: Colors.white,
       seedColor: const Color(0xff0b1035),
     ),
     useMaterial3: true,
     appBarTheme: const AppBarTheme(
-      color: AppColors.PRIMARY_COLOR,
+      color: AppColors.AUTH_CONTAINER_COLOR,
     ),
     textTheme: const TextTheme(
-      displayMedium: TextStyle(color: AppColors.DARK_GRAY_COLOR),
+      displayMedium: TextStyle(color: AppColors.QUANTITY_COLOR),
       // displaySmall: TextStyle(color: AppColors.DARK_GRAY_COLOR),
     ),
     
     iconTheme: const IconThemeData(
-      color: AppColors.DARK_BLUE_COLOR,
+      color: AppColors.QUANTITY_COLOR,
     ),
     buttonTheme: const ButtonThemeData(
-      buttonColor: AppColors.SECONDARY_COLOR,
+      buttonColor: AppColors.QUANTITY_COLOR,
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.TXTFIELD_GRAY_COLOR2,
+      fillColor: AppColors.QUANTITY_COLOR,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8.0),
         borderSide: const BorderSide(

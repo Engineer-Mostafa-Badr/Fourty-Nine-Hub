@@ -24,10 +24,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      
       centerTitle: true,
-      backgroundColor: backColor ?? AppColors.LIGHT_COLOR,
-      iconTheme: IconThemeData(color: iconColor ?? AppColors.PRIMARY_COLOR),
       automaticallyImplyLeading: automaticallyImplyLeading,
       title: label != null
           ? Label(
