@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 import '../../../../../core/enums/base_status_enum.dart';
@@ -15,19 +16,20 @@ class RegistableSubCategoriesCubit
         );
 
   void loadData() async {
-    emit(state.copyWith(status: StateStatus.loading));
-    final result = await _getSubCategoriesUseCase.call('');
-    emit(
-      result.fold(
-        (failure) => state.copyWith(
-          failure: failure,
-          status: StateStatus.error,
-        ),
-        (data) => state.copyWith(
-          status: StateStatus.success,
-          data: data,
-        ),
-      ),
-    );
+    // emit(state.copyWith(status: StateStatus.loading));
+    // final result = await _getSubCategoriesUseCase.call(GetSubCategoriesParams(
+    //     mainCategoryId: '', paginationParams: PaginationParams.basic()));
+    // emit(
+    //   result.fold(
+    //     (failure) => state.copyWith(
+    //       failure: failure,
+    //       status: StateStatus.error,
+    //     ),
+    //     (data) => state.copyWith(
+    //       status: StateStatus.success,
+    //       data: data,
+    //     ),
+    //   ),
+    // );
   }
 }

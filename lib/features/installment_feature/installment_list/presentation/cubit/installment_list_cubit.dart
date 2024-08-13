@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
+import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
 
 import '../../../../subcategories/domain/entities/sub_category_entity.dart';
 import '../../domain/entities/installment_entity.dart';
@@ -32,7 +33,8 @@ class InstallmentListCubit extends Cubit<InstallmentListState> {
   }
 
   Future<void> getSubCategories() async {
-    final response = await _getSubCategoriesUseCase.call('');
+    final response = await _getSubCategoriesUseCase.call(GetSubCategoriesParams(
+        mainCategoryId: '', paginationParams: PaginationParams.basic()));
     response.fold(
         (failure) => emit(state.copyWith(
             failure: failure, status: InstallmentListStates.error)),

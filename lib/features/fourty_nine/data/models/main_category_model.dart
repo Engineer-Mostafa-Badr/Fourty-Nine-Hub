@@ -23,8 +23,8 @@ class MainCategoryModel extends MainCategoryEntity {
           image: json['image'] ?? UIConst.imagePlaceHolder,
           banner: json['banner'] ?? '',
           cover: json['cover'] ?? '',
-          isFavorite: json['is_favorite'] ?? false,
-          total: json['total'] ?? 0,
+          isFavorite: json['isFavorite'] ?? false,
+          total: json['totalAds'] ?? 0,
           subcategories: json['subCategories'] == null
               ? []
               : (json['subCategories'] as List)

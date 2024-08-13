@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 extension ContextExtensions on BuildContext {
-  // Get the current locale
-  Locale get appLocale => locale;
-
   // Get the current theme mode
   ThemeMode get themeMode => Theme.of(this).brightness == Brightness.dark
       ? ThemeMode.dark

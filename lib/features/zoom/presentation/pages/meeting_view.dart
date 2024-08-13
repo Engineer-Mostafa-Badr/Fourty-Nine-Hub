@@ -2,14 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/translations/translation_cubit.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_state.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/meeting_dialogue.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../common/theme/cubit/cubit.dart';
-import '../../../../common/theme/cubit/states.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 
@@ -37,42 +33,6 @@ class MeetingView extends StatelessWidget {
           var cubit = context.read<MeetingCubit>();
           return Column(
             children: [
-              ElevatedButton(
-                style: context.theme.elevatedButtonTheme.style!.copyWith(
-                  backgroundColor: MaterialStatePropertyAll(
-                   context.themeMode==ThemeMode.light? Colors.green:Colors.yellow,
-                  ),
-                ),
-                onPressed: () {
-                  context
-                      .read<TranslationCubit>()
-                      .changeLanguage(const Locale('en'), context);
-                },
-                child: const Text('english').tr(),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  context
-                      .read<TranslationCubit>()
-                      .changeLanguage(const Locale('ar'), context);
-                },
-                child: const Text('arabic').tr(),
-              ),
-              BlocBuilder<ThemeCubit,ThemeStates>(
-                builder: (BuildContext context, theme) {
-                  return SwitchListTile(
-                    title: theme is DarkThemeModeStates?Text('dark mode'.localize): Text('light mode'.localize),
-                    value: ThemeCubit.get(context).isDarkTheme,
-                    onChanged: (value){
-                      if(theme is LightThemeModeStates){
-                        ThemeCubit.get(context).darkThemeMode();
-                      } if(theme is DarkThemeModeStates){
-                        ThemeCubit.get(context).lightThemeMode();
-                      }
-                    },
-                  );
-                },
-              ),
               SizedBox(
                 height: 200,
                 child: GridView(

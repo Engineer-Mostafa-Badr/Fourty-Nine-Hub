@@ -1,9 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_nearby_restaurants_usecase.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/domain/entities/auction_entity.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
+import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 import '../../domain/usecases/get_auction_list_usecase.dart';
@@ -23,7 +24,8 @@ class AuctionListCubit extends Cubit<AuctionListState> {
   }
 
   Future<void> getSubCategories() async {
-    final response = await _getSubCategoriesUseCase.call('');
+    final response = await _getSubCategoriesUseCase.call(GetSubCategoriesParams(
+        mainCategoryId: '', paginationParams: PaginationParams.basic()));
     response.fold(
         (failure) => emit(
             state.copyWith(failure: failure, status: AuctionListStates.error)),

@@ -3,21 +3,23 @@ import 'package:fourtyninehub/core/enums/week_days.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_day_entity.dart';
 
 class DoctorDayModel extends DoctorDayEntity {
-  DoctorDayModel({required super.day, super.from, super.to});
+  DoctorDayModel({required super.day, super.from, super.to, super.isAvailable});
 
   factory DoctorDayModel.fromEntity(DoctorDayEntity entity) {
     return DoctorDayModel(
       day: entity.day,
       from: entity.from,
       to: entity.to,
+      isAvailable: entity.isAvailable,
     );
   }
 
   factory DoctorDayModel.fromJson(Map<String, dynamic> json) {
     return DoctorDayModel(
       day: (json['day'] as String).toWeekDay,
-      from: json['workFrom'],
-      to: json['workTo'],
+      from: (json['workFrom'] as String).toTimeOfDay,
+      to: (json['workTo'] as String).toTimeOfDay,
+      isAvailable: json['isAvailable'] ?? true,
     );
   }
 
@@ -26,6 +28,7 @@ class DoctorDayModel extends DoctorDayEntity {
       'day': day.name.toLowerCase(),
       'workFrom': from.display,
       'workTo': to.display,
+      'isAvailable': isAvailable
     };
   }
 }

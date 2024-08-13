@@ -6,8 +6,6 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 
 class DoctorRenewDayCountWidget extends StatelessWidget {
   const DoctorRenewDayCountWidget({super.key});
@@ -61,7 +59,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                     return _Item(
                       numerOfDays: days,
                       label: Labels.id,
-                      onTap: () => context.push(Routes.EDITDOCTORDOCS),
+                      // onTap: () => context.push(Routes.EDITDOCTORDOCS),
                     );
                   },
                 ),
@@ -80,7 +78,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                     return _Item(
                       numerOfDays: days,
                       label: Labels.practiceCertification,
-                      onTap: () => context.push(Routes.EDITDOCTORDOCS),
+                      // onTap: () => context.push(Routes.EDITDOCTORDOCS),
                     );
                   },
                 ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/edit_doctor_profile/edit_doctor_profile_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/edit_profile/update_card.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -14,7 +16,9 @@ class DeleteDoctorAccountCard extends StatelessWidget {
       textStyle: Styles.headerText(color: AppColors.SECONDARY_COLOR),
       icon: Icons.delete,
       iconColor: AppColors.SECONDARY_COLOR,
-      onTap: () {},
+      onTap: () {
+        context.read<EditDoctorProfileCubit>().deleteAccount();
+      },
     );
   }
 }
