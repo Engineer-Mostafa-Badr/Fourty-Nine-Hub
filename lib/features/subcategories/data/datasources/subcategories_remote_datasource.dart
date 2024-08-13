@@ -9,6 +9,8 @@ import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_cat
 abstract class SubcategoriesRemoteDataSource {
   Future<Either<Failure, List<SubCategoryEntity>>> getSubcategories(
       GetSubCategoriesParams params);
+
+  Future<Either<Failure, bool>> toggleFavoriteSubcategory(String sucategoryId);
 }
 
 class SubcategoriesRemoteDataSourceImpl
@@ -30,5 +32,14 @@ class SubcategoriesRemoteDataSourceImpl
         (data) => Right((data['data']['subcategories'] as List)
             .map((e) => SubCategoryModel.fromJson(e))
             .toList()));
+  }
+
+  @override
+  Future<Either<Failure, bool>> toggleFavoriteSubcategory(
+      String sucategoryId) async {
+    final response = await _apiConsumer
+        .post(EndPoints.toggleFavoriteSubcategory(sucategoryId));
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
   }
 }

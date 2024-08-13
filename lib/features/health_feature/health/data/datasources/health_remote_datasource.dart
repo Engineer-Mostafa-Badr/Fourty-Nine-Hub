@@ -13,7 +13,7 @@ abstract class HealthRemoteDataSource {
   Future<Either<Failure, List<HealthSubcategoryEntity>>>
       getHealthSubcategories();
   Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices();
-  Future<Either<Failure, bool>> toggleFavoriteSubcategory(String sucategoryId);
+
   Future<Either<Failure, bool>> isDoctor();
 }
 
@@ -63,15 +63,6 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
         (data) => Right((data['data']['subcategories'] as List)
             .map((e) => HealthSubcategoryModel.fromJson(e))
             .toList()));
-  }
-
-  @override
-  Future<Either<Failure, bool>> toggleFavoriteSubcategory(
-      String sucategoryId) async {
-    final response = await _apiConsumer
-        .post(EndPoints.toggleFavoriteSubcategory(sucategoryId));
-    return response.fold(
-        (failure) => Left(failure), (data) => Right(data['status']));
   }
 
   @override

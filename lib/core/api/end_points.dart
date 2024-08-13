@@ -19,6 +19,9 @@ class EndPoints {
   static const getMainCategories = '/category/parent/get-all-main';
   static const getMainCategoriesWithoutSubcategories = '/categories/main';
   static String getMainCategoryDetails(String id) => '/categories/main/$id';
+  static String addMainCategoryToFavorite(String id) => '/favorite-category/$id';
+  static String deleteMainCategoryFromFavorite(String id) =>
+      '/favorite-category/$id';
 
   static const getWheel = '/wheels/random';
   static const spinWheel = '/wheels/spin/';

@@ -22,6 +22,10 @@ abstract class FourtyNineRemoteDataSource {
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems();
 
   Future<Either<Failure, MainCategoryEntity>> getMainCategoryDetails(String id);
+
+  Future<Either<Failure, bool>> addMainCategoryToFavorites(String id);
+
+  Future<Either<Failure, bool>> removeMainCategoryFromFavorites(String id);
 }
 
 class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
@@ -74,6 +78,27 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
       (failure) => Left(failure),
       (response) =>
           Right(MainCategoryModel.fromJson(response['data']['mainCategory'])),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> addMainCategoryToFavorites(String id) async {
+    final result =
+        await _apiConsumer.post(EndPoints.addMainCategoryToFavorite(id));
+    return result.fold(
+      (failure) => Left(failure),
+      (data) => Right(data['success']),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> removeMainCategoryFromFavorites(
+      String id) async {
+    final result =
+        await _apiConsumer.delete(EndPoints.deleteMainCategoryFromFavorite(id));
+    return result.fold(
+      (failure) => Left(failure),
+      (data) => Right(data['success']),
     );
   }
 }

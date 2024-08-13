@@ -6,4 +6,6 @@ import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_cat
 abstract class SubcategoriesRepo {
   Future<Either<Failure, List<SubCategoryEntity>>> getSubcategories(
       GetSubCategoriesParams params);
+
+  Future<Either<Failure, bool>> toggleFavoriteSubcategory(String sucategoryId);
 }

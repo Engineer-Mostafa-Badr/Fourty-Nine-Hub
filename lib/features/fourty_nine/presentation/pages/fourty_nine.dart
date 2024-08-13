@@ -69,15 +69,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                           context.push(Routes.SUBCATEGORIES,
                               extra: data[index]);
                         },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Label(
-                                text: data[index].name,
-                                style: Styles.headerText()),
-                            MainCategoryBanner(category: data[index]),
-                          ],
-                        ),
+                        child: MainCategoryBanner(category: data[index]),
                       );
                     },
                     separatorBuilder: (BuildContext context, int index) =>

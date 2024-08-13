@@ -18,4 +18,10 @@ class SubcategoriesRepoImpl implements SubcategoriesRepo{
 
     return _remoteDataSource.getSubcategories(params);
   }
+  
+  @override
+  Future<Either<Failure, bool>> toggleFavoriteSubcategory(String sucategoryId) {
+
+    return _remoteDataSource.toggleFavoriteSubcategory(sucategoryId);
+  }
 }

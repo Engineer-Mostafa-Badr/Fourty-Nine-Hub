@@ -36,8 +36,10 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentatio
 import 'package:fourtyninehub/features/fourty_nine/data/data_sources/remote_data_source/fourty_nine_remote_data_source.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/repositories/fourty_nine_repository_impl.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/repositories/fourty_nine_repository.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/add_main_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/remove_main_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:get_it/get_it.dart';
 import '../features/account_taps/contact_us/domain/repositories/contact_us_repo.dart';
@@ -143,7 +145,17 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-
+    serviceLocator
+        .registerLazySingleton<RemoveMainCategoryFromFavoritesUseCase>(
+      () => RemoveMainCategoryFromFavoritesUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<AddMainCategoryToFavoritesUseCase>(
+      () => AddMainCategoryToFavoritesUseCase(
+        serviceLocator(),
+      ),
+    );
     serviceLocator.registerLazySingleton<GetMainCategoryDetailsUseCase>(
       () => GetMainCategoryDetailsUseCase(
         serviceLocator(),

@@ -15,5 +15,9 @@ abstract class FourtyNineRepository {
 
   Future<Either<Failure, MainCategoryEntity>> getMainCategoryDetails(String id);
 
+  Future<Either<Failure, bool>> addMainCategoryToFavorites(String id);
+
+  Future<Either<Failure, bool>> removeMainCategoryFromFavorites(String id);
+
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems();
 }
