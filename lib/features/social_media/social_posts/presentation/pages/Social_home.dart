@@ -23,6 +23,10 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
+import '../../../../../common/widgets/dynamic/drawer.dart';
+import '../../../../../common/widgets/dynamic/floating_button.dart';
+import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../domain/entities/post_entity.dart';
@@ -51,9 +55,19 @@ class _SocialHomeViewState extends State<SocialHomeView> with SingleTickerProvid
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: SharedScaffold(
-          backgroundColor: Colors.white,
-          mainCategoryId: 2,
+      child: Scaffold(
+          appBar:  const HomeAppbar(
+            isWithBackArrow: true,
+          ),
+          drawer: const DrawerWidget(),
+          bottomNavigationBar: const BottomNavigator(
+            mainCategory: 2,
+            index: 2,
+          ),
+          floatingActionButton: const FloatingButton(
+            changeView: 2,
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
               builder: (context, state) {
             return context.read<UserCubit>().isLoggedIn

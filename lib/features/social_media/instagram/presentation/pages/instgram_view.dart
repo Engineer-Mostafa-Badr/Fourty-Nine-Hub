@@ -9,6 +9,10 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
+import '../../../../../common/widgets/dynamic/drawer.dart';
+import '../../../../../common/widgets/dynamic/floating_button.dart';
+import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../social_posts/presentation/pages/my_account_view.dart';
 
 class InstagramView extends StatelessWidget {
@@ -18,9 +22,19 @@ class InstagramView extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: SharedScaffold(
-          backgroundColor:Colors.white,
-          mainCategoryId: 3,
+      child: Scaffold(
+          appBar:  const HomeAppbar(
+            isWithBackArrow: true,
+          ),
+          drawer: const DrawerWidget(),
+          floatingActionButton: const FloatingButton(
+            changeView: 3,
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          bottomNavigationBar: const BottomNavigator(
+            mainCategory: 3,
+            index: 2,
+          ),
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
               builder: (context, state) {
                 return context.read<UserCubit>().isLoggedIn
