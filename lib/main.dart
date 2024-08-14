@@ -10,9 +10,12 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/service_locator/theme_service_locator.dart';
+import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+import 'features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'routes/pages.dart';
 
 //import 'package:admob_flutter/admob_flutter.dart';
@@ -59,12 +62,13 @@ class MyApp extends StatelessWidget {
         // BlocProvider(
         //   create: (context) => serviceLocator<DoctorsListCubit>(),
         // ),
+        //to be reviewed
+        //  tinder
         BlocProvider(
           create: (context) => serviceLocator<ChatsCubit>(),
         ),
-        //  tinder
         BlocProvider(
-          create: (context) => TinderViewCubit(),
+          create: (context) => ThemeCubit(),
         ),
       ],
       child: BlocBuilder<ThemeCubit,ThemeStates>(
