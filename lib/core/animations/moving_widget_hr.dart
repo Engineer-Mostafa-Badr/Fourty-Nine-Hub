@@ -28,31 +28,7 @@ class _MovingWidgetHrState extends State<MovingWidgetHr> {
   @override
   Widget build(BuildContext context) {
     initWidth = (MediaQuery.of(context).size.width / 2 - 70);
-    return Container(
-      padding: const EdgeInsets.all(5),
-      // margin: const EdgeInsets.all(5),
-      height: kToolbarHeight * .8,
-      width: double.infinity,
-
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: rightWidth,
-          ),
-          Transform.flip(
-            flipX: right,
-            child: Image.asset(
-              widget.asset,
-              width: 30,
-            ),
-          ),
-          SizedBox(
-            width: index,
-          ),
-        ],
-      ),
-    );
+    return SizedBox();
   }
 
   void handleWidth() {

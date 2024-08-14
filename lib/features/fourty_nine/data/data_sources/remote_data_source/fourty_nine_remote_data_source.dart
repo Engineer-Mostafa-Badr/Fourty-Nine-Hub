@@ -51,6 +51,8 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
     );
   }
 
+  
+
   @override
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems() async {
     final result = await _jsonParser.get(Jsons.sliderItems);

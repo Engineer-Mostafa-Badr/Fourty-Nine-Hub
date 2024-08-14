@@ -23,7 +23,6 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:gap/gap.dart';
 
 import '../../../../../common/widgets/stateful/maps/map_picker.dart';
 import '../../../../ride/RideRequest/domain/entity/address_search_params_entity.dart';
@@ -132,7 +131,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                               if (field.hasError)
                                 Column(
                                   children: [
-                                    Gap(8),
+                                    SizedBox(height: 8,),
                                     Text(
                                       field.errorText ?? "",
                                       style:
@@ -270,7 +269,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       width: 25,
                       height: 25,
                     )),
-                    const Gap(10),
+                    const SizedBox(width: 10),
                     const Flexible(
                         flex: 3,
                         child: Text(Labels.theApplicationDoesNot,
@@ -279,7 +278,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                 fontSize: 20, fontWeight: FontWeight.bold))),
                   ],
                 ),
-                const Gap(30),
+                const SizedBox(height: 30),
+                // const Gap(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -290,7 +290,9 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       width: 25,
                       height: 25,
                     )),
-                    const Gap(10),
+                const SizedBox(width: 10),
+
+                    // const Gap(10),
                     const Flexible(
                         flex: 3,
                         child: Text(
@@ -301,7 +303,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                         )),
                   ],
                 ),
-                const Gap(30),
+                const SizedBox(height: 30),
+                // const Gap(30),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -312,7 +315,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       width: 25,
                       height: 25,
                     )),
-                    const Gap(10),
+                    // const Gap(10),
+                const SizedBox(width: 10),
                     const Flexible(
                       flex: 3,
                       child: Text(
@@ -326,7 +330,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                     ),
                   ],
                 ),
-                const Gap(50),
+                const SizedBox(height: 50),
+                // const Gap(50),
                 Row(
                   children: [
                     Flexible(
@@ -336,7 +341,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                           style: Styles.headerText(color: Colors.white),
                           onPressed: () {}),
                     ),
-                    const Gap(6),
+                    // const Gap(6),
+                const SizedBox(width: 6),
                     Flexible(
                       child: AppButton(
                           height: 60,
@@ -352,7 +358,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                     ),
                   ],
                 ),
-                const Gap(100),
+                // const Gap(100),
+                const SizedBox(height: 100),
               ],
             ),
           ),

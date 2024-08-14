@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 
 class EndPoints {
@@ -54,12 +55,23 @@ class EndPoints {
   static const String getUpcomingUserAppointments = '/health/book-appointment';
   static const String getHealthRequestsHistory =
       '/health/history-patient-booking';
-  static String remainingDaysOfDoctorPracticing(String doctorId) =>
-      '/health/dashboard/remaining-days-of-doctor-id/$doctorId';
-  static String remainingDaysOfDoctorID(String doctorId) =>
-      '/health/dashboard/remaining-days-of-doctor-practicing-id/$doctorId';
-  static String remainingDaysOfDoctorSubscription(String doctorId) =>
-      '/health/dashboard/remaining-days-of-doctor-subscription/$doctorId';
+  static const remainingDaysOfDoctorPracticing =
+      '/health/dashboard/remaining-days-of-doctor-id';
+  static const remainingDaysOfDoctorID =
+      '/health/dashboard/remaining-days-of-doctor-practicing-id';
+  static const remainingDaysOfDoctorSubscription =
+      '/health/dashboard/remaining-days-of-doctor-subscription';
+  static const getDoctorAppointmentsByDay = '/health/doctor/booking-day';
+  static const getDoctorUnhandledAppointments = '/health/book-requests';
+  static const isDoctor = '/health/check-doctor-or-not';
+  static const getDoctorTotalEarnedMoney =
+      '/health/dashboard/total-earned-money';
+  static String doctorAcceptAppointment(String appointmentId) =>
+      '/health/book-appointment/approve/$appointmentId';
+  static String doctorRejectAppointment(String appointmentId) =>
+      '/health/book-appointment/reject/$appointmentId';
+  static const getAllDoctorReservations = '/health/dashboard/number-of-reservations';
+
   // reels
   static const getExploreReels = '/reels/explore';
 
@@ -115,7 +127,9 @@ class EndPoints {
 
   static const createFacebookPost = '/facebook/post';
   static const createTwitterPost = '/twitter/post';
-  static const getFeedPosts = '/facebook/feed';
+  // static const getFeedPosts = '/facebook/feed';
+  static const activities = '/facebook/post/activities';
+  static const feelings = '/facebook/post/feelings';
   static const getTwitterFeedPosts = '/twitter/feed';
   static String userPosts(String userId) {
     return '/facebook/post/user/$userId?limit=20&page=1&type=1';
@@ -127,6 +141,18 @@ class EndPoints {
 
   static String userTweets(GetUserTweetsParams params) {
     return '/twitter/post/user/${params.userId}?limit=10&page=${params.page}&type=1';
+  }
+
+  static String getFeedPosts(TwitterFeedParams params) {
+    return '/facebook/feed?limit=${params.limit}&page=${params.page}';
+  }
+
+  static String getInstagramPosts(TwitterFeedParams params) {
+    return '/instagram/feed?limit=${params.limit}&page=${params.page}';
+  }
+
+  static String getAdvertisement(TwitterFeedParams params) {
+    return '/advertisementCompany?limit=${params.limit}&page=${params.page}';
   }
 
   static String acceptTripRider(String id) {
@@ -173,6 +199,10 @@ class EndPoints {
     return '/facebook/post/react/$postId';
   }
 
+  static String reactOnComment(String postId) {
+    return '/facebook/comment/react/$postId';
+  }
+
   static String reactOnTwitterPost(String postId) {
     return '/twitter/post/react/$postId';
   }
@@ -185,6 +215,10 @@ class EndPoints {
     return '/twitter/post/share/$postId';
   }
 
+  static String shareFacebookPost(String postId) {
+    return '/facebook/post/share/$postId';
+  }
+
   static String commentOnPost(String postId) {
     return '/facebook/comment/create-comment/$postId';
   }
@@ -195,6 +229,10 @@ class EndPoints {
 
   static String getPostComments(String postId) {
     return '/facebook/comment/get-post-comments/$postId';
+  }
+
+  static String getPostCommentReplies(String commentId) {
+    return '/facebook/comment/get-comment-replies/$commentId';
   }
 
   static String getTwitterPostComments(String postId) {
@@ -325,6 +363,23 @@ class EndPoints {
     return '/chat/get-chat/$chatId';
   }
 
+  //club voice
+  static String allClubVoiceRooms = '/clubvoice';
+  static String createClubVoiceRoom = '/clubvoice';
+  static String joinVoiceRoom(String id) => '/clubvoice/join/$id';
+  static String endVoiceRoom(String id) => '/clubvoice/$id';
+  static String leaveVoiceRoom(String id) => '/clubvoice/leave/$id';
+  static String searchVoiceRooms(String subject) =>
+      '/clubvoice?search=$subject';
+
+
+  //meeting
+  static String createMeeting = '/room-id';
+  static String joinMeeting(String id) => '/room-id/join/$id';
+  static String endMeeting(String id) => '/room-id/finish/$id';
+  static String deleteChatMessage = '/chat/message';
+
+
   static String changeChatMuteState(String chatId) {
     return '/chat/mute-chat/$chatId';
   }
@@ -343,4 +398,17 @@ class EndPoints {
   static String subscribe = '/subscription/subscribe';
 
   static String getActiveSubscriptionAmounts = '/payment-amount/active';
+
+  static String lockChat(String chatId) {
+    return '/chat/lock-chat/$chatId';
+  }
+
+  static String unLockChat(String chatId) {
+    return '/chat/unlock-chat/$chatId';
+  }
+
+  static String updateUnLockChatPassword() {
+    return '/chat/update-lock-chat';
+  }
+
 }

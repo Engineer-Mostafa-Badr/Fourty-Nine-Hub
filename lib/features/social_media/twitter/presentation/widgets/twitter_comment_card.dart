@@ -63,8 +63,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                   bottomSheet(
                       context: context,
                       widget: ReportView(
-                        id: widget.comment.id,
-                        categoryId: '66a3583454e6e337915514db',
+                        id: widget.comment.id, categoryId: '',
                       ));
                 },
                 icon: Icon(
@@ -93,19 +92,6 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                   widget.comment.loveCount = widget.comment.loveCount! + 1;
                   setState(() {});
                 }
-                // if(widget.comment.isReact=true){
-                //   widget.onCommentReact();
-                //   widget.comment.loveCount-1;
-                //   setState(() {
-                //
-                //   });
-                // }else{
-                //   widget.onCommentReact();
-                //   widget.comment.loveCount+1;
-                //   setState(() {
-                //
-                //   });
-                // }
               },
               child: Icon(
                 widget.comment.isReact == false

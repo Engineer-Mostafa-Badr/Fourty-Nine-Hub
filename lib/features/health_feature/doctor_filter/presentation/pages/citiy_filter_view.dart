@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/city_filter_cubit/doctor_city_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/widgets/city_list_title.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
@@ -32,8 +33,9 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
   Widget build(BuildContext context) {
     final doctorCityFilter = context.read<DoctorCityFilterCubit>();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(Labels.city),
+      backgroundColor: Colors.white,
+      appBar: const BackAppBar(
+        label: Labels.city,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(

@@ -8,6 +8,9 @@ class SocialPostsState {
   final List<TwitterPostEntity>? myTweets;
   final List<SuggestUserEntity>? suggestedFriends;
   final bool? friendRequest;
+  final CommentEntity? newComment;
+  final int? tweetPage;
+  final int? advertisementsPage;
   const SocialPostsState(
       {this.status = StateStatus.loading,
       this.friendRequest,
@@ -15,15 +18,22 @@ class SocialPostsState {
       this.posts,
       this.myPosts,
       this.myTweets,
-      this.suggestedFriends});
-  SocialPostsState copyWith(
-      {StateStatus? status,
-      Failure? failure,
-      List<PostEntity>? posts,
-      List<SuggestUserEntity>? suggestedFriends,
-      List<PostEntity>? myPosts,
-      List<TwitterPostEntity>? myTweets,
-      bool? friendRequest}) {
+      this.suggestedFriends,
+      this.newComment,
+      this.tweetPage = 0,
+      this.advertisementsPage = 0});
+  SocialPostsState copyWith({
+    StateStatus? status,
+    Failure? failure,
+    List<PostEntity>? posts,
+    List<SuggestUserEntity>? suggestedFriends,
+    List<PostEntity>? myPosts,
+    List<TwitterPostEntity>? myTweets,
+    bool? friendRequest,
+    int? tweetPage,
+    int? advertisementsPage,
+    CommentEntity? newComment,
+  }) {
     return SocialPostsState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
@@ -32,6 +42,9 @@ class SocialPostsState {
       myTweets: myTweets ?? this.myTweets,
       suggestedFriends: suggestedFriends ?? this.suggestedFriends,
       friendRequest: friendRequest ?? this.friendRequest,
+      newComment: newComment ?? this.newComment,
+      tweetPage: tweetPage ?? this.tweetPage,
+      advertisementsPage: advertisementsPage ?? this.advertisementsPage,
     );
   }
 }

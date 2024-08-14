@@ -6,7 +6,7 @@ class EditDoctorPhoneField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PhoneTextFormField(
+    return CustomPhoneTextFormField(
         currentFocusNode: FocusNode(),
         nextFocusNode: FocusNode(),
         currentController: TextEditingController(),

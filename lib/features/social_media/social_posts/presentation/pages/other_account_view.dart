@@ -197,7 +197,7 @@ class OtherAccountView extends StatelessWidget {
           ],
         )),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

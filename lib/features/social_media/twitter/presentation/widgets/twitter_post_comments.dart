@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_post_comment_model.dart';
+import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
@@ -112,6 +115,8 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                                 postId: widget.postId,
                                 content: commentTextController.text),
                           );
+                          final user = context.read<UserCubit>().state.data;
+                          
                           widget.comments.insert(
                               0,
                               TwitterPostCommentModel(
@@ -120,10 +125,10 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                                   post: widget.postId,
                                   createdAt: data.createdAt,
                                   adminIgnore: data.adminIgnore,
-                                  user: widget.user,
-                                  love: data.love,
-                                  loveCount: data.loveCount,
-                                  isReact: data.isReact));
+                                  user: TwitterUserModel(
+                                    image: user?.profilePicture??'', id: user?.id??'', firstName: user?.firstName??'', lastName: user?.lastName??'', createdAt: DateTime.now(), email: user?.email??'', isDocumented: false,
+                                  ),
+                                  love: data.love,loveCount: data.loveCount, isReact: data.isReact));
                           commentTextController.clear();
                           setState(() {});
                         })

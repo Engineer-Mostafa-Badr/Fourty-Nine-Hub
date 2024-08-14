@@ -136,34 +136,35 @@ class TwitterCubit extends Cubit<TwitterState> {
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) {
-      bottomSheet(
-          context: context,
-          isScrollControlled: true,
-          widget: TwitterPostDetails(
-            post: data,
-            onReact: () {
-              onReact(
-                params: TwitterPostReactParams(
-                  postId: postId,
-                  react: 'love',
-                ),
-              );
-            },
-            onShare: () {
-              onShare(postId: postId);
-            },
-            showPostComments: (id) {
-              showPostComments(
-                  context: context,
-                  postId: postId,
-                  newCommentId: newCommentId,
-                  user: '',
-                  userData: userData!);
-            },
-            onReport: (TwitterReportParams params) {
-              onReport(params);
-            },
-          ));
+          emit(state.copyWith(postDetails:data,status: StateStatus.success));
+      // bottomSheet(
+      //     context: context,
+      //     isScrollControlled: true,
+      //     widget: TwitterPostDetails(
+      //       post: data,
+      //       postId: postId,
+      //       onReact: () {
+      //         onReact(
+      //           params: TwitterPostReactParams(
+      //             postId: postId,
+      //             react: 'love',
+      //           ),
+      //         );
+      //       },
+      //       onShare: () {
+      //         onShare(postId: postId);
+      //       },
+      //       showPostComments: (id) {
+      //         showPostComments(
+      //             context: context,
+      //             postId: postId,
+      //             newCommentId: newCommentId,
+      //             user: '', userData: userData!);
+      //       },
+      //       onReport: (TwitterReportParams params) {
+      //         onReport(params);
+      //       },
+      //     ));
     });
   }
 

@@ -40,7 +40,6 @@ class _VisitaBookingState extends State<VisitaBooking> {
     final controller = context.read<BookDoctorAppointmentCubit>();
 
     return Scaffold(
-        backgroundColor: AppColors.BACKGROUND_COLOR,
         appBar: const BackAppBar(
           label: Labels.confirmBooking,
         ),
@@ -49,7 +48,7 @@ class _VisitaBookingState extends State<VisitaBooking> {
           listener: (context, state) {
             switch (state) {
               case BookDoctorAppointmentSuccessState _:
-                showSuccessMessage(context, Labels.bookingSuccess);
+                showSuccessMessage(context, Labels.waitingDoctorAppointment);
                 Future.delayed(const Duration(seconds: 1));
                 context.pushAndRemoveUntil(Routes.VISITA);
                 break;

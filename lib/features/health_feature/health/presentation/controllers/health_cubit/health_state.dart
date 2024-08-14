@@ -8,16 +8,18 @@ class HealthState {
   final List<BookedAppointmentEntity>? myBookings;
   final List<HealthSubcategoryEntity>? subCategories;
   final List<HealthSubcategoryEntity>? medicalServices;
-  final isDoctor = true;
+  final bool? isDoctor;
   const HealthState(
       {this.status = HealthStates.loading,
       this.failure,
       this.myBookings,
+      this.isDoctor,
       this.subCategories,
       this.medicalServices});
   HealthState copyWith({
     HealthStates? status,
     Failure? failure,
+    bool? isDoctor,
     List<BookedAppointmentEntity>? myBookings,
     List<HealthSubcategoryEntity>? subCategories,
     List<HealthSubcategoryEntity>? medicalServices,
@@ -27,6 +29,7 @@ class HealthState {
         medicalServices: medicalServices ?? this.medicalServices,
         failure: failure ?? this.failure,
         myBookings: myBookings ?? this.myBookings,
+        isDoctor: isDoctor ?? this.isDoctor,
         subCategories: subCategories ?? this.subCategories);
   }
 }

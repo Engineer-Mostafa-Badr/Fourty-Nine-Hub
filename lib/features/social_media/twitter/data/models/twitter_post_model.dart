@@ -25,7 +25,10 @@ class TwitterPostModel extends TwitterPostEntity {
     return TwitterPostModel(
       id: json['_id'],
       content: json['content'],
-      images: json['images'] != null ? List<String>.from(json['images']) : [],
+      images: json['media'] != null
+          ? List<String>.from(
+          json['media'].map((mediaItem) => mediaItem['photo']))
+          : null,
       shares: json['shares'] != null ? List<String>.from(json['shares']) : [],
       love: (json['love'] as List)
           .map((e) => TwitterUserModel.fromJson(e))

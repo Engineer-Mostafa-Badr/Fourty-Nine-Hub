@@ -4,7 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/subscription_widget.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../common/functions/helper/local_auth.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -38,9 +37,9 @@ class _NormalWalletViewState extends State<NormalWalletView> {
           margin: const EdgeInsets.all(10),
           child: MaterialButton(
             onPressed: () async {
-              if (await LocalAuth().checkBiometrics()) {
-                context.push(Routes.TRANSFERMONEY);
-              }
+              // if (await LocalAuth().checkBiometrics()) {
+              //   context.push(Routes.TRANSFERMONEY);
+              // }
             },
             color: Colors.red,
             textColor: Colors.white,

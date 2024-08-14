@@ -1,4 +1,21 @@
 class ChatItemModel {
+  List<ChatModel>? chats;
+  int? totalUnread;
+
+  ChatItemModel({this.chats, this.totalUnread});
+
+  ChatItemModel.fromJson(Map<String, dynamic> json) {
+    if (json['chats'] != null) {
+      chats = <ChatModel>[];
+      json['chats'].forEach((v) {
+        chats!.add(ChatModel.fromJson(v));
+      });
+    }
+    totalUnread = json['totalUnread'];
+  }
+}
+
+class ChatModel {
   String? sId;
   String? lastMessageText;
   String? name;
@@ -6,19 +23,31 @@ class ChatItemModel {
   bool? muted;
   bool? seen;
   bool? archived;
+  bool? locked;
+  bool? typing;
+  bool? online;
   int? lastSeenCount;
+  int? unreadCount;
+  String? userId;
+  String? formattedUpdatedAt;
 
-  ChatItemModel(
-      {this.sId,
-      this.lastMessageText,
-      this.muted,
-      this.archived,
-      this.seen,
-      this.name,
-      this.avatar,
-      this.lastSeenCount});
+  ChatModel({
+    this.sId,
+    this.lastMessageText,
+    this.muted,
+    this.archived,
+    this.seen,
+    this.name,
+    this.locked,
+    this.avatar,
+    this.online,
+    this.lastSeenCount,
+    this.unreadCount,
+    this.userId,
+    this.formattedUpdatedAt,
+  });
 
-  ChatItemModel.fromJson(Map<String, dynamic> json) {
+  ChatModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     muted = json['muted'];
     archived = json['archived'];
@@ -27,40 +56,11 @@ class ChatItemModel {
     avatar = json['avatar'];
     lastMessageText = json['lastMessageText'];
     lastSeenCount = json['lastSeenCount'];
+    locked = json['locked'];
+    unreadCount = json['unreadCount'];
+    userId = json['userId'];
+    formattedUpdatedAt = json['formattedUpdatedAt'];
+    typing = false;
+    online = false;
   }
 }
-
-// class User {
-//   String? sId;
-//   String? contactUserId;
-//   String? ownerUserId;
-//   String? privacy;
-//   String? categoryId;
-//   String? createdAt;
-//   String? name;
-//   String? tab;
-//   String? updatedAt;
-//
-//   User(
-//       {this.sId,
-//       this.contactUserId,
-//       this.ownerUserId,
-//       this.privacy,
-//       this.categoryId,
-//       this.createdAt,
-//       this.name,
-//       this.tab,
-//       this.updatedAt});
-//
-//   User.fromJson(Map<String, dynamic> json) {
-//     sId = json['_id'];
-//     contactUserId = json['contactUserId'];
-//     ownerUserId = json['ownerUserId'];
-//     privacy = json['privacy'];
-//     categoryId = json['categoryId'];
-//     createdAt = json['createdAt'];
-//     name = json['name'];
-//     tab = json['tab'];
-//     updatedAt = json['updatedAt'];
-//   }
-// }

@@ -10,7 +10,7 @@ import 'package:fourtyninehub/features/health_feature/health/domain/usecases/tog
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/is_doctor_usecase.dart';
 import '../../../domain/entities/appointment_booking_entity.dart';
 
 part 'health_state.dart';
@@ -21,12 +21,14 @@ class HealthCubit extends Cubit<HealthState> {
   final GetHealthSubcategoriesUseCase _getHealthSubcategoriesUseCase;
   final GetMedicalServicesUseCase _getMedicalServicesUseCase;
   final ToggleFavoriteSubcategoryUseCase _toggleFavoriteSubcategoryUseCase;
+  final IsDoctorUsecase _isDoctorUseCase;
   HealthCubit(
       this._getUserUpcomingAppointmentsUseCase,
       this._healthShare,
       this._getHealthSubcategoriesUseCase,
       this._getMedicalServicesUseCase,
-      this._toggleFavoriteSubcategoryUseCase)
+      this._toggleFavoriteSubcategoryUseCase,
+      this._isDoctorUseCase)
       : super(const HealthState());
 
   final List<HealthBookingFilterModel> services = [
@@ -52,6 +54,7 @@ class HealthCubit extends Cubit<HealthState> {
     await getMyBookings();
     await getServices();
     await getSubCategories();
+    await _isDoctor();
   }
 
   Future<void> getMyBookings() async {
@@ -62,6 +65,14 @@ class HealthCubit extends Cubit<HealthState> {
             emit(state.copyWith(failure: failure, status: HealthStates.error)),
         (data) => emit(
             state.copyWith(status: HealthStates.initState, myBookings: data)));
+  }
+
+  Future<void> _isDoctor() async {
+    final response = await _isDoctorUseCase.call(const NoParams());
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) => emit(state.copyWith(isDoctor: data)));
   }
 
   Future<void> getServices() async {

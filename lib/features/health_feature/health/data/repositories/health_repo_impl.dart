@@ -38,4 +38,9 @@ class HealthRepoImpl implements HealthRepo {
   Future<Either<Failure, bool>> toggleFavoriteSubcategory(String sucategoryId) {
     return _remoteDataSource.toggleFavoriteSubcategory(sucategoryId);
   }
+
+  @override
+  Future<Either<Failure, bool>> isDoctor() {
+    return _remoteDataSource.isDoctor();
+  }
 }

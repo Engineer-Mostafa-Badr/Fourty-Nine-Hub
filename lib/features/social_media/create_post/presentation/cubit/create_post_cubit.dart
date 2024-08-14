@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
 
@@ -23,7 +24,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       this._getFeelingsUseCase, this._createTwitterPostUseCase)
       : super(const CreatePostState());
 
-  UploadFileEntity? fileEntity;
+  List<String>? selectedImages;
 
   void loadData() async {
     await getActivities();
@@ -32,25 +33,30 @@ class CreatePostCubit extends Cubit<CreatePostState> {
 
   Future<void> getActivities() async {
     final response = await _getActivitiesUseCase(const NoParams());
-    response.fold((l) => emit(state.copyWith(failure: l)),
-        (data) => emit(state.copyWith(activities: data)));
+    response.fold((l) => emit(state.copyWith(failure: l)), (data) {
+      print(data.length);
+      emit(state.copyWith(activities: data));
+    });
   }
 
   Future<void> getFeelings() async {
     final response = await _getFeelingsUseCase(const NoParams());
-    response.fold((l) => emit(state.copyWith(failure: l)),
-        (data) => emit(state.copyWith(feelings: data)));
+    response.fold((l) => emit(state.copyWith(failure: l)), (data) {
+      print("feel ${data.length}");
+      emit(state.copyWith(feelings: data));
+    });
   }
 
   void createPost({required BuildContext context, required String type}) async {
     if (postContentTextController.text.isNotEmpty) {
-      print("test media ${fileEntity?.mediaId}");
+      // selectedImages=state.images?.map((e)=>e.mediaId).toList();
+      print("test media ${selectedImages?.length}");
       if (type == 'twitter') {
         final response = await _createTwitterPostUseCase(
             CreateTwitterPostParams(
                 content: postContentTextController.text,
                 mediaIds:
-                    fileEntity == null ? [] : [fileEntity?.mediaId ?? '']));
+                selectedImages??[]));
         response.fold(
             (l) => emit(
                 state.copyWith(failure: l, status: CreatePostStates.error)),
@@ -59,7 +65,15 @@ class CreatePostCubit extends Cubit<CreatePostState> {
         });
       } else if (type == "facebook") {
         final response = await _createPostUseCase(
-            PostParams(content: postContentTextController.text));
+          PostParams(
+            content: postContentTextController.text,
+            mediaId: selectedImages ?? [],
+            color: state.backColor,
+            activity: state.selectedActivity?.id,
+            feeling: state.selectedFeeling?.id,
+            privacy: state.selectedPrivacy,
+          ),
+        );
         response.fold(
             (l) => emit(
                 state.copyWith(failure: l, status: CreatePostStates.error)),
@@ -70,12 +84,17 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     }
   }
 
-  void selectColor({required Color color}) {
+  void selectColor({required String color}) {
     emit(state.copyWith(backColor: color));
   }
 
   void selectedFeeling({required FeelingEntity item}) {
     emit(state.copyWith(selectedFeeling: item));
+  }
+
+  void selectPrivacy({required String privacy}) {
+    emit(state.copyWith(selectedPrivacy: privacy));
+    print(state.selectedPrivacy);
   }
 
   void selectActivity({required ActivityEntity item}) {
@@ -89,14 +108,24 @@ class CreatePostCubit extends Cubit<CreatePostState> {
         onUploaded: (UploadFileEntity data) {
           print("file name ${data.file}");
           print("mediaId: ${data.mediaId}");
-          fileEntity = data;
-          print(fileEntity?.mediaId);
+          selectedImages?.add(data.mediaId);
+          final images = state.images ?? [];
+
+          images.add(data);
+          selectedImages=images.map((e)=>e.mediaId).toList();
+          print("selectedImages${selectedImages?.length}");
+          print(images.length);
           emit(state.copyWith(
-              fileEntity: data, status: CreatePostStates.success));
+              images: images,backColor: '#FFFFFFFF', status: CreatePostStates.success));
         });
+    print("length${state.images?.length}");
+
   }
 
-  removePhoto() {
-    emit(state.copyWith(fileEntity: null, status: CreatePostStates.success));
+  removePhoto(UploadFileEntity? image) {
+    final images = state.images;
+    images?.remove(image);
+    emit(state.copyWith(images: images, status: CreatePostStates.success));
+    // print(state.fileEntity?.mediaId);
   }
 }

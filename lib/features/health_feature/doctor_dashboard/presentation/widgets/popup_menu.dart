@@ -16,7 +16,7 @@ class DoctorDashboardPopupMenuButton extends StatelessWidget {
             child: Text(Labels.editProfile),
           ),
           const PopupMenuItem(
-            value: Routes.DOCTORHISTORY,
+            value: Routes.DOCTORSTATISTICS,
             child: Text(Labels.history),
           ),
         ];

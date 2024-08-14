@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fourtyninehub/common/functions/global/loading_custom.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/nested_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -39,7 +40,7 @@ class _ChatViewState extends State<ChatView> {
 
   initSocketConnection() {
     chatCubit = context.read<ChatsCubit>()..initSocketConnection();
-    chatCubit.getChats(0);
+    chatCubit.getChats(index: 0);
   }
 
   final List<String> groups = [
@@ -61,6 +62,7 @@ class _ChatViewState extends State<ChatView> {
       length: groups.length,
       initialIndex: 0,
       child: SharedScaffold(
+        backgroundColor: Colors.white,
         mainCategoryId: 2,
         body: NestedAppbar(
           appBars: [
@@ -71,11 +73,12 @@ class _ChatViewState extends State<ChatView> {
               flexibleSpace: ChatStories(),
             ),
             SliverAppBar(
+              backgroundColor: Colors.white,
               automaticallyImplyLeading: false,
               floating: true,
               pinned: true,
               titleSpacing: 0,
-              title: _buildCategoriesLabels(),
+              title: _buildCategoriesLabels(chatCubit.unReadMessage),
             )
           ],
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
@@ -103,16 +106,21 @@ class _ChatViewState extends State<ChatView> {
     );
   }
 
-  Widget _buildCategoriesLabels() {
+  Widget _buildCategoriesLabels(int unReadMessages) {
     return TabBar(
         onTap: (index) {
-          context.read<ChatsCubit>().getChats(index);
+          context.read<ChatsCubit>().getChats(index: index);
+
+          // if this locked chat we request password
+          if (index == 8) {
+            showDialogToConfirmChatLockPassword(context);
+          }
         },
         tabAlignment: TabAlignment.start,
         isScrollable: true,
         tabs: groups.map((e) {
           return Tab(
-            text: e,
+            text: unReadMessages == 0 ? e : "$e($unReadMessages)",
           );
         }).toList());
   }
@@ -149,6 +157,7 @@ class _ChatViewState extends State<ChatView> {
                 )
               : ListView.separated(
                   shrinkWrap: true,
+                  // padding: const EdgeInsets.only(top: 10),
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) => Slidable(
                     key: ValueKey(index),
@@ -169,12 +178,10 @@ class _ChatViewState extends State<ChatView> {
                                   chatsCubit: chatCubit,
                                 ));
                           },
-                          backgroundColor:
-                              const Color.fromARGB(255, 191, 191, 191),
-                          foregroundColor: Colors.white,
                           icon: Icons.more_horiz,
                           label: 'More',
                           padding: EdgeInsets.zero,
+                          backgroundColor: AppColors.GRAY_LIGHT_COLOR3,
                         ),
                         SlidableAction(
                           onPressed: (value) async {
@@ -194,7 +201,10 @@ class _ChatViewState extends State<ChatView> {
 
                     // onDismissed: ,
                     child: ChatCard(
-                        isSecret: isSecret, chatItemModel: state.chats?[index]),
+                      isSecret: isSecret,
+                      chatItemModel: state.chats?[index],
+                      chatsCubit: chatCubit,
+                    ),
                   ),
                   separatorBuilder: (context, index) => const SizedBox(),
                   itemCount: state.chats?.length ?? 0,
@@ -211,5 +221,51 @@ class _ChatViewState extends State<ChatView> {
             ),
         separatorBuilder: (context, index) => const SizedBox(),
         itemCount: 8);
+  }
+
+  Future<bool?> showDialogToConfirmChatLockPassword(
+      BuildContext context) async {
+    TextEditingController passwordController = TextEditingController(text: '');
+    return await showDialog(
+      context: context,
+      builder: ((context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            title: Label(
+                text: 'Lock chats password please',
+                style: Styles.headerText(
+                    fontWeight: FontWeight.bold, color: Colors.black)),
+            content: Material(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 100.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    FormTextField(
+                        controller: passwordController,
+                        hint: 'password',
+                        type: TextInputType.number,
+                        // initialValue: '',
+                        style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold),
+                        action: (v) => () {}),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () async {
+                    chatCubit.getChats(
+                        index: 8, password: passwordController.text.trim());
+                    Navigator.of(context).pop(false);
+                  },
+                  child: const Text('Confirm password')),
+            ],
+          )),
+    );
   }
 }

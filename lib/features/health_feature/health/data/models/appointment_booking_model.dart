@@ -1,8 +1,8 @@
 import 'package:fourtyninehub/features/health_feature/doctor_details/data/models/doctor_model.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 
-class BookedAppointmentModel extends BookedAppointmentEntity {
-  BookedAppointmentModel(
+class BookedUserAppointmentModel extends BookedAppointmentEntity {
+  BookedUserAppointmentModel(
       {required super.id,
       required super.bookedPremium,
       required super.doctor,
@@ -13,8 +13,8 @@ class BookedAppointmentModel extends BookedAppointmentEntity {
       required super.bookingId,
       required super.expired});
 
-  factory BookedAppointmentModel.fromJson(Map<String, dynamic> json) {
-    return BookedAppointmentModel(
+  factory BookedUserAppointmentModel.fromJson(Map<String, dynamic> json) {
+    return BookedUserAppointmentModel(
       id: json['_id'],
       bookedPremium: json['bookedPremium'],
       doctor: DoctorModel.fromJson(json['doctorId']),

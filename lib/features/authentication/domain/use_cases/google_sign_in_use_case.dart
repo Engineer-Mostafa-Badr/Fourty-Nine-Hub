@@ -27,7 +27,7 @@ class SocialLoginParams extends Equatable {
   Future<Map<String, dynamic>> toJson() async => {
         'idToken': idToken,
         'fcm': await getFcmToken(),
-        'deviceId': await getDeviceId(),
+        // 'deviceId': await getDeviceId(),
       };
 
   @override
