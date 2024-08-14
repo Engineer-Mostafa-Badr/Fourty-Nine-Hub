@@ -4,7 +4,7 @@ import '../../res/style/app_colors.dart';
 
 ThemeData lightTheme() {
   return ThemeData(
-    primaryColor: AppColors.PRIMARY_COLOR,
+    primaryColor: AppColors.QUANTITY_COLOR,
     scaffoldBackgroundColor: AppColors.AUTH_CONTAINER_COLOR,
     colorScheme: ColorScheme.fromSeed(
       background: Colors.white,
@@ -33,11 +33,13 @@ ThemeData lightTheme() {
         borderSide: const BorderSide(
           color: AppColors.DIVIDER_GRAY_COLOR2,
         ),
-      ),
+      )
     ),
     dividerColor: AppColors.DIVIDER_GRAY_COLOR,
     
-    drawerTheme: const DrawerThemeData(),
+    drawerTheme: const DrawerThemeData(
+      backgroundColor: AppColors.AUTH_CONTAINER_COLOR
+    ),
     actionIconTheme: const ActionIconThemeData(),
     bottomAppBarTheme: const BottomAppBarTheme(),
     canvasColor: Colors.black38,

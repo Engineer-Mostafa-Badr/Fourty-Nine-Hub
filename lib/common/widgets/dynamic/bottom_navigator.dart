@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -7,6 +8,7 @@ import '../../../res/assets/assets.dart';
 import '../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../theme/cubit/cubit.dart';
 import 'bottom_painter.dart';
 
 class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
@@ -160,9 +162,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
       ),
       child: Container(
         padding: const EdgeInsets.only(bottom: 20, top: 10),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          boxShadow: const [
             BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2)
           ],
         ),
@@ -191,10 +193,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                           widget.items[index].image,
                           height: widget.items[index].height,
                           semanticsLabel: widget.items[index].label,
+                          color:context.read<ThemeCubit>().isDarkTheme? Colors.white:null,
                         ),
                         Text(
                           widget.items[index].label,
-                          style: const TextStyle(color: Colors.black),
                         ),
                       ],
                     ),

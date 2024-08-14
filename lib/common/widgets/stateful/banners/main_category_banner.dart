@@ -39,68 +39,79 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          color: Colors.transparent,
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: NetworkImage(widget.category.banner),
-          )),
-      child: Row(
+        borderRadius: BorderRadius.circular(5),
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: NetworkImage(widget.category.banner),
+        ),
+      ),
+      child: Stack(
         children: [
-          _buildRegisterButton(),
-          widget.canRegister ? const Spacer() : const SizedBox.shrink(),
-          Label(
-            text: widget.category.name,
-            style: Styles.headerText(color: Colors.white),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.black.withOpacity(0.5), // Darken the background
+            ),
           ),
-          const Spacer(),
-          Column(
+          Row(
             children: [
-              InkWell(
-                onTap: () async {
-                  if (_isFavorite) {
-                    final result = await serviceLocator<
-                            RemoveMainCategoryFromFavoritesUseCase>()
-                        .call(widget.category.id);
-                    result.fold(
-                      (l) => showErrorMessage(
-                          context, "Can't remove from favorite"),
-                      (r) {
-                        setState(
-                          () {
-                            _isFavorite = false;
-                          },
-                        );
-                      },
-                    );
-                  } else {
-                    final result = await serviceLocator<
-                            AddMainCategoryToFavoritesUseCase>()
-                        .call(widget.category.id);
-                    result.fold(
-                      (l) => showErrorMessage(context, "Can't add to favorite"),
-                      (r) {
-                        setState(
-                          () {
-                            _isFavorite = true;
-                          },
-                        );
-                      },
-                    );
-                  }
-                },
-                child: Icon(
-                  _isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: AppColors.SECONDARY_COLOR,
+              _buildRegisterButton(),
+              widget.canRegister ? const Spacer() : const SizedBox.shrink(),
+              Label(
+                text: widget.category.name,
+                style: Styles.headerText(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
-              const Sizer(
-                height: 20,
+              const Spacer(),
+              Column(
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      if (_isFavorite) {
+                        final result = await serviceLocator<
+                            RemoveMainCategoryFromFavoritesUseCase>()
+                            .call(widget.category.id);
+                        result.fold(
+                              (l) => showErrorMessage(context, "Can't remove from favorite"),
+                              (r) {
+                            setState(() {
+                              _isFavorite = false;
+                            });
+                          },
+                        );
+                      } else {
+                        final result = await serviceLocator<
+                            AddMainCategoryToFavoritesUseCase>()
+                            .call(widget.category.id);
+                        result.fold(
+                              (l) => showErrorMessage(context, "Can't add to favorite"),
+                              (r) {
+                            setState(() {
+                              _isFavorite = true;
+                            });
+                          },
+                        );
+                      }
+                    },
+                    child: Icon(
+                      _isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: AppColors.SECONDARY_COLOR,
+                    ),
+                  ),
+                  const Sizer(height: 20),
+                  Label(
+                    text: '${widget.category.total.toShortScale} ${Labels.ads}',
+                    style: Styles.mediumText(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  )
+                ],
               ),
-              Label(
-                text: '${widget.category.total.toShortScale} ${Labels.ads}',
-                style: Styles.mediumText(color: Colors.white),
-              )
             ],
           ),
         ],

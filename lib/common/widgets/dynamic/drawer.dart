@@ -28,7 +28,6 @@ class DrawerWidget extends StatelessWidget {
     return BlocBuilder<UserCubit, BasicState<UserEntity>>(
       builder: (context, state) {
         return Drawer(
-          backgroundColor: Colors.white,
           child: SafeArea(
             child: SingleChildScrollView(
               child: Column(
@@ -305,7 +304,8 @@ class DrawerWidget extends StatelessWidget {
         margin: const EdgeInsets.all(5),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: AppColors.LIGHT_GRAY_COLOR),
+            color: AppColors.LIGHT_GRAY_COLOR
+        ),
         child: Row(
           children: [
             Expanded(

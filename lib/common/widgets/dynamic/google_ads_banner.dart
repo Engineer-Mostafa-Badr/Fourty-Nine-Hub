@@ -16,7 +16,7 @@ class GoogleAddsBanner extends StatelessWidget {
           horizontal: margin,
         ),
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(5),
             boxShadow: const [
               BoxShadow(
@@ -25,7 +25,10 @@ class GoogleAddsBanner extends StatelessWidget {
                 spreadRadius: 5,
               )
             ]),
-        child: const Center(child: Label(text: 'Ads'))
+        child: const Center(child: Label(text: 'Ads',style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold
+        ),))
         // AdmobBanner(
         //         adUnitId: UIConst.adHomeUnitId,
         //         adSize: AdmobBannerSize.BANNER,

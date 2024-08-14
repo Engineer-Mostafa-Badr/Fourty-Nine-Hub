@@ -29,8 +29,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: label != null
           ? Label(
               text: label ?? '',
-              style: Styles.headerText(
-                  color: iconColor ?? AppColors.PRIMARY_COLOR))
+              style: Styles.headerText())
           : null,
       actions: actions,
     );

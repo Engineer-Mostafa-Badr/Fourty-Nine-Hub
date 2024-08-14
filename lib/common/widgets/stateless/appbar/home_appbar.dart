@@ -71,7 +71,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: const Color(0xfff3f3f3),
+                color: Colors.grey
               ),
               child: InkWell(
                 borderRadius: BorderRadius.circular(20),
@@ -99,7 +99,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: TextAppButton(
                   label: LocaleKeys.lang.tr(),
-                  style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
+                  style: Styles.mediumText(color: AppColors.SECONDARY_COLOR,fontSize: 20),
                   onPressed: () {
                     context.locale == Locales.english
                         ? context.setLocale(Locales.arabic)
@@ -113,11 +113,11 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   size: 26,
                 ),
                 onPressed: () => context.push(Routes.NOTIFICATIONS),
-                color: inNotifications
-                    ? AppColors.SPLASH_BLACK_COLOR
-                    : isDetailsCardService
-                        ? AppColors.PRIMARY_COLOR
-                        : color,
+                // color: inNotifications
+                //     ? AppColors.SPLASH_BLACK_COLOR
+                //     : isDetailsCardService
+                //         ? AppColors.PRIMARY_COLOR
+                //         : color,
               ),
               Positioned(
                 top: 10,
@@ -139,11 +139,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
-      backgroundColor: Colors.white,
       elevation: 0,
       titleSpacing: 0,
       //systemOverlayStyle: SystemUiOverlayStyle.light,
-      iconTheme: const IconThemeData(color: Colors.black),
       // automaticallyImplyLeading: false,
     );
   }
