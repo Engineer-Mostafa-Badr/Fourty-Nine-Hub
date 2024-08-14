@@ -22,9 +22,11 @@ import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/registable_sub_categories_cubit/registable_subcategories_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/pages/main_categories_cards_view.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/pages/main_categories_taps_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/all_doctor_reservations/all_doctor_reservations_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_statistics/doctor_statistics_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
@@ -106,8 +108,7 @@ import '../features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
-import '../features/fourty_nine/presentation/controllers/main_categories_cubit/parent_main_categories_cubit.dart';
-import '../features/fourty_nine/presentation/controllers/parent_main_categories_cubit/main_categories_cubit.dart';
+import '../features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import '../features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
 import '../features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import '../features/health_feature/health/presentation/pages/health_view.dart';
@@ -169,14 +170,6 @@ class AppPages {
       path: Routes.HOME,
       builder: (context, state) => MultiBlocProvider(
         providers: [
-          BlocProvider<RegistableSubCategoriesCubit>(
-            lazy: false,
-            create: (_) => serviceLocator(),
-          ),
-          BlocProvider(
-            lazy: false,
-            create: (context) => serviceLocator<ParentMainCategoriesCubit>(),
-          ),
           BlocProvider(
             lazy: false,
             create: (context) => serviceLocator<MainCategoriesCubit>(),
@@ -185,7 +178,7 @@ class AppPages {
             lazy: false,
             create: (context) => serviceLocator<SliderCubit>(),
           ),
-           BlocProvider(
+          BlocProvider(
             create: (context) => serviceLocator<ThumbnailsCubit>(),
           ),
         ],
@@ -240,6 +233,19 @@ class AppPages {
                     ),
                   ]),
             ]),
+        GoRoute(
+          name: Routes.MAINCATEGORIESCARDS,
+          path: Paths.MAINCATEGORIESCARDS,
+          builder: (context, state) => const MainCategoriesCardsView(),
+        ),
+        GoRoute(
+          name: Routes.MAINCATEGORIESTREE,
+          path: Paths.MAINCATEGORIESTREE,
+          builder: (context, state) => BlocProvider(
+            create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
+            child: const MainCategoriesTapsView(),
+          ),
+        ),
         GoRoute(
           name: Routes.LOGIN,
           path: Paths.LOGIN,
@@ -577,7 +583,6 @@ class AppPages {
                           isHost: extras.isHost,
                         );
                       },
-                      routes: [],
                     ),
                   ]),
             ]),

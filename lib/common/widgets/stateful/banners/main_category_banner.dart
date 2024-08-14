@@ -43,7 +43,13 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
           color: Colors.transparent,
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: NetworkImage(widget.category.banner),
+            image: NetworkImage(
+              widget.category.banner,
+            ),
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.3), // Adjust the opacity as needed
+              BlendMode.darken,
+            ),
           )),
       child: Row(
         children: [

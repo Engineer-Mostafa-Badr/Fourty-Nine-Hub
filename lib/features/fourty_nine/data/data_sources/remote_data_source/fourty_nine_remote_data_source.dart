@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
@@ -9,7 +10,6 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/parent_main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
 
-import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../res/assets/jsons.dart';
 import '../../models/slider_item_model.dart';
 
@@ -18,7 +18,7 @@ abstract class FourtyNineRemoteDataSource {
       getParentMainCategories();
 
   Future<Either<Failure, List<MainCategoryModel>>> getMainCategories(
-      {required PaginationParams params});
+      PaginationParams params);
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems();
 
   Future<Either<Failure, MainCategoryEntity>> getMainCategoryDetails(String id);
@@ -47,10 +47,11 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
 
   @override
   Future<Either<Failure, List<MainCategoryModel>>> getMainCategories(
-      {required PaginationParams params}) async {
+      PaginationParams params) async {
     final result = await _apiConsumer.get(
-        EndPoints.getMainCategoriesWithoutSubcategories,
-        queryParameters: params.toJson());
+      EndPoints.getMainCategoriesWithoutSubcategories,
+      queryParameters: params.toJson(),
+    );
     return result.fold(
       (failure) => Left(failure),
       (response) => Right((response['data']['mainCategories'] as List)
