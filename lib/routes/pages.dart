@@ -526,7 +526,7 @@ class AppPages {
               GoRoute(
                   path: Paths.TINDER,
                   name: Routes.Tinder,
-                  builder: (context, state) => const TinderView()),
+                  builder: (context, state) => const TinderScreen()),
               GoRoute(
                 path: Paths.LIVE,
                 name: Routes.LIVE,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/fav_category_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/add_category_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/last_seen_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/send_gift_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/near_by_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_subcategory_model.dart';
 
@@ -312,14 +314,29 @@ import '../../data/models/gift_model.dart';
 enum DataState { initial, failure, success }
 
 class TinderViewState {
+  final List<UserData>? userData0;
+  final DataState? userDataState0;
+  final int? currentPage;
+
   final List<UserData> userData;
   final DataState userDataState;
+
+  final ProfileUserData? profileUserData;
+  final DataState profileUserState;
 
   final List<SubCategoryData> subCategoryData;
   final DataState subCategoryDataState;
 
-  final FavoritesResponse favoritesResponse;
-  final DataState favoritesResponseState;
+  final DataState uploadImageState;
+
+  final SubFavoritesResponse? getFavCategoryModel;
+  final DataState getFavCategoryModelState;
+
+  // final FavoritesResponse favoritesResponse;
+  // final DataState favoritesResponseState;
+
+  final AddCategoryModel addCategoryModel;
+  final DataState addCategoryModelState;
 
   final List<GiftData> gifts;
   final DataState giftsState;
@@ -327,7 +344,9 @@ class TinderViewState {
   final Offset position;
   final DataState positionState;
 
-  final SendGiftErrorData? sendGiftErrorData;
+  final String? sendGiftErrorData;
+
+  // final SendGiftErrorData? sendGiftErrorData;
   final DataState sendGiftErrorDataState;
 
   final Offset startDragOffset;
@@ -342,13 +361,21 @@ class TinderViewState {
   final int currentStoryIndex;
   final DataState currentStoryIndexState;
 
-  final bool isUserNearby;
+  final NearByModel? isUserNearby;
   final DataState isUserNearbyState;
 
   final LastSeenModel? lastSeenModel;
   final DataState lastSeenModelState;
 
   TinderViewState({
+    required this.userData0,
+    required this.userDataState0,
+    this.currentPage = 1,
+    required this.uploadImageState,
+    required this.profileUserData,
+    required this.profileUserState,
+    required this.addCategoryModel,
+    required this.addCategoryModelState,
     required this.userData,
     required this.userDataState,
     required this.subCategoryData,
@@ -371,8 +398,8 @@ class TinderViewState {
     required this.isUserNearbyState,
     required this.lastSeenModel,
     required this.lastSeenModelState,
-    required this.favoritesResponse,
-    required this.favoritesResponseState,
+    required this.getFavCategoryModel,
+    required this.getFavCategoryModelState,
   });
 
   // Factory method to create an initial state
@@ -386,7 +413,7 @@ class TinderViewState {
       giftsState: DataState.initial,
       position: Offset.zero,
       positionState: DataState.initial,
-      sendGiftErrorData: SendGiftErrorData(),
+      sendGiftErrorData: '',
       sendGiftErrorDataState: DataState.initial,
       startDragOffset: Offset.zero,
       startDragOffsetState: DataState.initial,
@@ -396,28 +423,45 @@ class TinderViewState {
       currentIndexState: DataState.initial,
       currentStoryIndex: 0,
       currentStoryIndexState: DataState.initial,
-      isUserNearby: true,
+      isUserNearby: NearByModel(),
       isUserNearbyState: DataState.initial,
       lastSeenModel: LastSeenModel(),
       lastSeenModelState: DataState.initial,
-      favoritesResponse: FavoritesResponse(),
-      favoritesResponseState: DataState.initial,
+      getFavCategoryModel: null,
+      getFavCategoryModelState: DataState.initial,
+      addCategoryModel: AddCategoryModel(),
+      addCategoryModelState: DataState.initial,
+      profileUserData: null,
+      profileUserState: DataState.initial,
+      uploadImageState: DataState.initial,
+      userData0: [],
+      userDataState0: DataState.initial,
     );
   }
 
   // Method to update the state
   TinderViewState copyWith({
+    List<UserData>? userData0,
+    DataState? userDataState0,
+    int? currentPage,
+    ProfileUserData? profileUserData,
+    DataState? profileUserState,
+    SubFavoritesResponse? getFavCategoryList,
+    DataState? getFavCategoryListState,
+    AddCategoryModel? addCategoryModel,
+    DataState? addCategoryModelState,
     List<UserData>? userData,
     DataState? userDataState,
     List<SubCategoryData>? subCategoryData,
     DataState? subCategoryDataState,
-    FavoritesResponse? favoritesResponse,
+    // GetFavCategoryModel? favoritesResponse,
     DataState? favoritesResponseState,
     List<GiftData>? gifts,
     DataState? giftsState,
     Offset? position,
     DataState? positionState,
-    SendGiftErrorData? sendGiftErrorData,
+    String? sendGiftErrorData,
+    // SendGiftErrorData? sendGiftErrorData,
     DataState? sendGiftErrorDataState,
     Offset? startDragOffset,
     DataState? startDragOffsetState,
@@ -427,12 +471,16 @@ class TinderViewState {
     DataState? currentIndexState,
     int? currentStoryIndex,
     DataState? currentStoryIndexState,
-    bool? isUserNearby,
+    NearByModel? isUserNearby,
+    DataState? uploadImageState,
     DataState? isUserNearbyState,
     LastSeenModel? lastSeenModel,
     DataState? lastSeenModelState,
   }) {
     return TinderViewState(
+      userData0: userData0 ?? this.userData0,
+      userDataState0: userDataState0 ?? this.userDataState0,
+      currentPage: currentPage ?? this.currentPage,
       userData: userData ?? this.userData,
       userDataState: userDataState ?? this.userDataState,
       subCategoryData: subCategoryData ?? this.subCategoryData,
@@ -457,26 +505,15 @@ class TinderViewState {
       isUserNearbyState: isUserNearbyState ?? this.isUserNearbyState,
       lastSeenModel: lastSeenModel ?? this.lastSeenModel,
       lastSeenModelState: lastSeenModelState ?? this.lastSeenModelState,
-      favoritesResponse: this.favoritesResponse,
-      favoritesResponseState: this.favoritesResponseState,
+      getFavCategoryModel: getFavCategoryList ?? this.getFavCategoryModel,
+      getFavCategoryModelState:
+          getFavCategoryListState ?? this.getFavCategoryModelState,
+      addCategoryModel: addCategoryModel ?? this.addCategoryModel,
+      addCategoryModelState:
+          addCategoryModelState ?? this.addCategoryModelState,
+      profileUserData: profileUserData ?? this.profileUserData,
+      profileUserState: profileUserState ?? this.profileUserState,
+      uploadImageState: this.uploadImageState,
     );
   }
-}
-
-abstract class FavoritesState {}
-
-class FavoritesInitial extends FavoritesState {}
-
-class FavoritesLoading extends FavoritesState {}
-
-class FavoritesLoaded extends FavoritesState {
-  final FavoritesResponse favoritesResponse;
-
-  FavoritesLoaded(this.favoritesResponse);
-}
-
-class FavoritesError extends FavoritesState {
-  final String error;
-
-  FavoritesError(this.error);
 }

@@ -510,14 +510,19 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dar
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/fav_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/tinder_shared_utils.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class FavSubCategoryView extends StatelessWidget {
-  const FavSubCategoryView({super.key});
+  final favoriteSubCategory;
+
+  const FavSubCategoryView({super.key, this.favoriteSubCategory});
 
   @override
   Widget build(BuildContext context) {
@@ -534,24 +539,27 @@ class _FavSubCategoryViewContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SharedScaffold(
-      body: FutureBuilder<FavoritesResponse?>(
-        future: context
-            .read<TinderViewCubit>()
-            .fetchFavorites(TinderSharedUtils.token),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData ||
-              snapshot.data!.data!.favorites!.isEmpty) {
-            return const Center(child: Text('No data available'));
-          }
-
-          final favorites = snapshot.data!.data!.favorites!;
-          return _buildFavoritesGrid(context, favorites);
-        },
-      ),
+      body:
+      // _buildFavoritesGrid(context, favoriteSubCategory)
+      Container(),
+      // FutureBuilder<FavoritesResponse?>(
+      //   future: context
+      //       .read<TinderViewCubit>()
+      //       .fetchFavorites(TinderSharedUtils.token),
+      //   builder: (context, snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.waiting) {
+      //       return const Center(child: CircularProgressIndicator());
+      //     } else if (snapshot.hasError) {
+      //       return Center(child: Text('Error: ${snapshot.error}'));
+      //     } else if (!snapshot.hasData ||
+      //         snapshot.data!.data!.favorites!.isEmpty) {
+      //       return const Center(child: Text('No data available'));
+      //     }
+      //
+      //     final favorites = snapshot.data!.data!.favorites!;
+      //     return _buildFavoritesGrid(context, favorites);
+      //   },
+      // ),
       mainCategoryId: 5,
     );
   }
@@ -630,32 +638,30 @@ class FavTinderSubCategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-      favSubCategoryCardData.categoryId != null ?
-      InkWell(
-        onTap: () {},
-        child: Container(
-          width: 200,
-          padding: const EdgeInsets.all(0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+    return favSubCategoryCardData.categoryId != null
+        ? InkWell(
+      onTap: () {},
+      child: Container(
+        width: 200,
+        padding: const EdgeInsets.all(0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Card(
+          clipBehavior: Clip.hardEdge,
+          color: Colors.white,
+          elevation: 2,
+          child: Column(
+            children: [
+              _buildImageSection(context),
+              const Sizer(),
+              _buildInfoSection(context),
+            ],
           ),
-          child: Card(
-            clipBehavior: Clip.hardEdge,
-            color: Colors.white,
-            elevation: 2,
-            child: Column(
-              children: [
-                _buildImageSection(context),
-                const Sizer(),
-                _buildInfoSection(context),
-              ],
-            ),
-          )
-          ,
-        )
-        ,
-      ):const Sizer();
+        ),
+      ),
+    )
+        : const Sizer();
   }
 
   Widget _buildImageSection(BuildContext context) {
@@ -710,7 +716,7 @@ class FavTinderSubCategoryCard extends StatelessWidget {
                 ),
               ),
               Label(
-                text: '${favSubCategoryCardData.categoryId!.nameCode} ads',
+                text: '${favSubCategoryCardData.categoryId!.nameAr} ads',
                 // text: '${9355.toShortScale} ads',
                 style: Styles.mediumText(fontSize: 14),
               ),
@@ -721,7 +727,33 @@ class FavTinderSubCategoryCard extends StatelessWidget {
             isCircle: true,
             color: Colors.white,
             backColor: AppColors.PRIMARY_COLOR,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        AdsView(
+                          params: AdsViewParams(
+                            mainCategory: MainCategoryEntity(
+                              id: favSubCategoryCardData.categoryId!.sId!,
+                              name: favSubCategoryCardData.categoryId!.nameEn!,
+                              image: favSubCategoryCardData.categoryId!.cover!,
+                              banner: favSubCategoryCardData.categoryId!
+                                  .banner!,
+                              cover: favSubCategoryCardData.categoryId!.cover!,
+                              isFavorite: true,
+                              total: 2,
+                            ),
+                            subCategory: SubCategoryEntity(
+                              id: favSubCategoryCardData.categoryId!.sId!,
+                              name: favSubCategoryCardData.categoryId!.nameEn!,
+                              image: favSubCategoryCardData.categoryId!.cover!,
+                              isFavorite: true,
+                            ),
+                          ),
+                        ),
+                  ));
+            },
           ),
         ],
       ),

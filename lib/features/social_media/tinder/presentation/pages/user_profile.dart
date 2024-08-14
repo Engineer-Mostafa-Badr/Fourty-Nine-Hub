@@ -1,1001 +1,233 @@
-// // import 'package:flutter/material.dart';
-// // import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
-// // import 'package:fourtyninehub/res/style/app_colors.dart';
-// // import 'package:fourtyninehub/res/style/const.dart';
-//
-// // class UserProfilePage extends StatelessWidget {
-// //   final UserData userData;
-//
-// //   UserProfilePage({required this.userData});
-//
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return Scaffold(
-// //       appBar: AppBar(
-// //         title: const Text('User Profile'),
-// //       ),
-// //       body: SingleChildScrollView(
-// //         child: Column(
-// //           children: [
-// //             _buildProfileHeader(),
-// //             _buildUserInfo(),
-// //             _buildActivityFeed(),
-// //             _buildFriendsList(),
-// //           ],
-// //         ),
-// //       ),
-// //     );
-// //   }
-//
-// //   Widget _buildProfileHeader() {
-// //     return Container(
-// //       padding: const EdgeInsets.all(16.0),
-// //       child: Column(
-// //         children: [
-// //           SizedBox(
-// //               height: 400,
-// //               // width: MediaQuery.of(context).size.width - 20,
-// //               child: SwipeCardDemo(
-// //                 userImages: userData.pictures,
-// //               )),
-// //           const SizedBox(height: 10),
-// //           Text(
-// //             userData.users.isNotEmpty
-// //                 ? '${userData.users[0].firstName} ${userData.users[0].lastName}'
-// //                 : 'User Name',
-// //             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-// //           ),
-// //           const SizedBox(height: 5),
-// //           Text(userData.users.isNotEmpty
-// //               ? userData.users[0].email
-// //               : 'user.email@example.com'),
-// //         ],
-// //       ),
-// //     );
-// //   }
-//
-// //   Widget _buildUserInfo() {
-// //     return Container(
-// //       padding: const EdgeInsets.all(16.0),
-// //       child: Column(
-// //         children: [
-// //           ListTile(
-// //             leading: const Icon(Icons.phone),
-// //             title: const Text('Phone Number'),
-// //             subtitle:
-// //                 Text(userData.users.isNotEmpty ? userData.users[0].id : 'N/A'),
-// //           ),
-// //           const ListTile(
-// //             leading: Icon(Icons.location_city),
-// //             title: Text('Address'),
-// //             subtitle: Text('123 Street, City, Country'), // Adjust as needed
-// //           ),
-// //           ListTile(
-// //             leading: const Icon(Icons.cake),
-// //             title: const Text('Date of Birth'),
-// //             subtitle: Text(
-// //                 userData.users.isNotEmpty && userData.users[0].birthday != null
-// //                     ? userData.users[0].birthday.toString()
-// //                     : 'N/A'),
-// //           ),
-// //           const ListTile(
-// //             leading: Icon(Icons.info),
-// //             title: Text('Bio'),
-// //             subtitle: Text('User bio goes here.'), // Adjust as needed
-// //           ),
-// //         ],
-// //       ),
-// //     );
-// //   }
-//
-// //   Widget _buildActivityFeed() {
-// //     return Container(
-// //       padding: const EdgeInsets.all(16.0),
-// //       child: Column(
-// //         crossAxisAlignment: CrossAxisAlignment.start,
-// //         children: [
-// //           const Text(
-// //             'Recent Activities',
-// //             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-// //           ),
-// //           const SizedBox(height: 10),
-// //           ...userData.likes
-// //               .map((like) =>
-// //                   _buildActivityItem(like.firstName + ' liked a post'))
-// //               .toList(),
-// //         ],
-// //       ),
-// //     );
-// //   }
-//
-// //   Widget _buildActivityItem(String activity) {
-// //     return ListTile(
-// //       leading: const Icon(Icons.check_circle_outline),
-// //       title: Text(activity),
-// //     );
-// //   }
-//
-// //   Widget _buildFriendsList() {
-// //     return Container(
-// //       padding: const EdgeInsets.all(16.0),
-// //       child: Column(
-// //         crossAxisAlignment: CrossAxisAlignment.start,
-// //         children: [
-// //           const Text(
-// //             'Friends',
-// //             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-// //           ),
-// //           const SizedBox(height: 10),
-// //           ...userData.friends.map((friend) =>
-// //               _buildFriendItem('${friend.firstName} ${friend.lastName}')),
-// //         ],
-// //       ),
-// //     );
-// //   }
-//
-// //   Widget _buildFriendItem(String friendName) {
-// //     return ListTile(
-// //       leading: const CircleAvatar(
-// //         backgroundImage: NetworkImage(
-// //             'https://via.placeholder.com/150'), // Placeholder image
-// //       ),
-// //       title: Text(friendName),
-// //     );
-// //   }
-// // }
-//
-// // class SwipeCardDemo extends StatefulWidget {
-// //   List<Picture> userImages;
-//
-// //   SwipeCardDemo({super.key, required this.userImages});
-//
-// //   @override
-// //   _SwipeCardDemoState createState() => _SwipeCardDemoState();
-// // }
-//
-// // class _SwipeCardDemoState extends State<SwipeCardDemo> {
-// //   int _currentStoryIndex = 0;
-//
-// //   void _nextStory() {
-// //     setState(() {
-// //       if (_currentStoryIndex < widget.userImages.length - 1) {
-// //         _currentStoryIndex++;
-// //       } else {
-// //         _currentStoryIndex = widget.userImages.length - 1;
-// //       }
-// //     });
-// //   }
-//
-// //   void _previousStory() {
-// //     setState(() {
-// //       if (_currentStoryIndex > 0) {
-// //         _currentStoryIndex--;
-// //       } else {
-// //         _currentStoryIndex = 0;
-// //       }
-// //     });
-// //   }
-//
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return _buildCard();
-// //   }
-//
-// //   Widget _buildCard() {
-// //     return Positioned(
-// //       left: 0,
-// //       right: 0,
-// //       top: 0,
-// //       bottom: 0,
-// //       child: GestureDetector(
-// //         onTapUp: (details) {
-// //           setState(() {
-// //             double tapPosition = details.localPosition.dx;
-// //             double screenWidth = MediaQuery.of(context).size.width;
-//
-// //             if (tapPosition < screenWidth / 2) {
-// //               _previousStory();
-// //             } else {
-// //               _nextStory();
-// //             }
-// //           });
-// //         },
-// //         child: _cardWidget(),
-// //       ),
-// //     );
-// //   }
-//
-// //   Widget _buildActions() {
-// //     return Row(
-// //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-// //       children: [
-// //         FloatingActionButton.small(
-// //           onPressed: null,
-// //           // onPressed: () => cardSwipperController.undo(),
-// //           shape:
-// //               RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-// //           child: const Icon(Icons.undo_rounded),
-// //         ),
-// //         FloatingActionButton.small(
-// //           // onPressed: () =>
-// //           //     cardSwipperController.swipe(CardSwiperDirection.right),
-// //           onPressed: null,
-// //           backgroundColor: Colors.red,
-// //           shape:
-// //               RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-// //           child: const Icon(
-// //             Icons.clear,
-// //             color: Colors.white,
-// //           ),
-// //         ),
-// //         FloatingActionButton.small(
-// //           onPressed: () {},
-// //           backgroundColor: AppColors.ACCENT_COLOR,
-// //           shape:
-// //               RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-// //           child: const Icon(
-// //             Icons.star_rounded,
-// //             color: Colors.white,
-// //           ),
-// //         ),
-// //         FloatingActionButton.small(
-// //           onPressed: () {},
-// //           backgroundColor: AppColors.PRIMARY_COLOR,
-// //           shape:
-// //               RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-// //           child: const Icon(
-// //             Icons.chat,
-// //             color: Colors.white,
-// //           ),
-// //         ),
-// //       ],
-// //     );
-// //   }
-//
-// //   _cardWidget() {
-// //     return Card(
-// //       clipBehavior: Clip.hardEdge,
-// //       elevation: 4,
-// //       child: Stack(
-// //         children: [
-// //           Hero(
-// //             tag: 'userHero-${555}', // Ensure each hero tag is unique
-//
-// //             child: Image.network(
-// //               (widget.userImages.isNotEmpty)
-// //                   ? widget.userImages[_currentStoryIndex].mediaKey
-// //                   : UIConst.profilePlaceHolder,
-// //               errorBuilder: (context, error, stackTrace) => Image.network(
-// //                 UIConst.profilePlaceHolder,
-// //                 fit: BoxFit.fitHeight,
-// //                 height: double.infinity,
-// //               ),
-// //               fit: BoxFit.fitHeight,
-// //               height: double.infinity,
-// //             ),
-// //           ),
-// //           Positioned(
-// //             top: 10,
-// //             left: 10,
-// //             right: 10,
-// //             child: Row(
-// //               mainAxisAlignment: MainAxisAlignment.center,
-// //               children: List.generate(widget.userImages.length, (dotIndex) {
-// //                 return Expanded(
-// //                   child: Container(
-// //                     margin: const EdgeInsets.symmetric(horizontal: 2.0),
-// //                     height: 4,
-// //                     decoration: BoxDecoration(
-// //                       color: (dotIndex == _currentStoryIndex)
-// //                           ? Colors.red
-// //                           : Colors.white54,
-// //                       borderRadius: BorderRadius.circular(2),
-// //                     ),
-// //                   ),
-// //                 );
-// //               }),
-// //             ),
-//
-// import 'dart:developer';
-//
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-// import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
-// import 'package:fourtyninehub/service_locator/service_locator.dart';
-//
-// import '../../../../../res/style/styles.dart';
-//
-// //           ),
-// //         ],
-// //       ),
-// //     );
-// //   }
-// // }
-// import 'package:flutter/material.dart';
-// import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
-// import 'package:fourtyninehub/res/style/const.dart';
-//
-// import '../cubit/tinder_cubit.dart';
-//
-// class UserProfilePage extends StatelessWidget {
-//   final UserData userData;
-//
-//   const UserProfilePage({super.key, required this.userData});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocProvider(
-//       create: (context) => TinderViewCubit(),
-//       child: BlocBuilder<TinderViewCubit, TinderViewState>(
-//         builder: (context, state) {
-//           return Scaffold(
-//             floatingActionButton: FloatingActionButton(
-//               heroTag: 'upload image',
-//               onPressed: () async {
-//                 // Uploading an image and updating state with the uploaded image's media ID
-//                 try {
-//                   await UploadFile().uploadImage(
-//                     subCategoryId: '66af974f8bf69f9469944746',
-//                     onUploaded: (p0) {
-//                       context.read<TinderViewCubit>().uploadPictures(
-//                         pictures: [p0.mediaId], accessToken: '',
-//                       );
-//                       log("${p0.file.path}-----------===========");
-//                     },
-//                   );
-//                   log("Image uploaded successfully:");
-//                 } catch (e) {
-//                   log("Image upload failed: $e");
-//                 }
-//               },
-//               backgroundColor: Colors.red,
-//               shape: RoundedRectangleBorder(
-//                   borderRadius: BorderRadius.circular(100)),
-//               child: const Icon(Icons.add_photo_alternate_outlined,
-//                   color: Colors.white),
-//             ),
-//             appBar: AppBar(
-//               title: const Text('User Profile'),
-//             ),
-//             body: SingleChildScrollView(
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.stretch,
-//                 children: [
-//                   _buildProfileHeader(),
-//                   _buildUserInfo(),
-//                   _buildStats(),
-//                   // _buildActivityFeed(),
-//                 ],
-//               ),
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-//
-//   Widget _buildProfileHeader() {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.center,
-//       children: [
-//         // SizedBox(
-//         //   height: 200,
-//         //   child: ClipRRect(
-//         //     borderRadius: BorderRadius.circular(100.0),
-//         //     child: Image.network(
-//         //        'https://via.placeholder.com/150',
-//         //       fit: BoxFit.cover,
-//         //     ),
-//         //   ),
-//         // ),
-//         SizedBox(
-//             height: 400,
-//             // width: MediaQuery.of(context).size.width - 20,
-//             child: SwipeCardDemo(
-//               userImages: userData.pictures,
-//             )),
-//         const SizedBox(height: 10),
-//
-//         Text(
-//           capitalizeAndSplit(
-//               "${userData.user!.firstName} ${userData.user!.lastName}"),
-//           style: Styles.headerText(color: Colors.black, fontSize: 26),
-//         ),
-//
-//         const SizedBox(height: 5),
-//         Text(
-//           userData.user!.email ?? 'user.email@example.com',
-//           style: Styles.headerText(
-//               color: Colors.black, fontWeight: FontWeight.normal),
-//         ),
-//       ],
-//     );
-//   }
-//
-//   Widget _buildUserInfo() {
-//     return Container(
-//       margin: const EdgeInsets.only(top: 10.0),
-//       padding: const EdgeInsets.all(16.0),
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.circular(10.0),
-//         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5)],
-//       ),
-//       child: Column(
-//         children: [
-//           ListTile(
-//             leading: const Icon(
-//               Icons.cake,
-//               color: Colors.redAccent,
-//             ),
-//             title: const Text('Date of Birth'),
-//             subtitle: Text(userData.user!.birthday ?? 'N/A'),
-//           ),
-//           ListTile(
-//             leading: const Icon(
-//               Icons.person,
-//               color: Colors.deepPurple,
-//             ),
-//             title: const Text('Gender'),
-//             subtitle: Text(userData.user!.gender ?? 'N/A'),
-//           ),
-//           // const ListTile(
-//           //   leading: Icon(Icons.info),
-//           //   title: Text('Bio'),
-//           //   subtitle: Text('User bio goes here.'),
-//           // ),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget _buildStats() {
-//     return Container(
-//       margin: const EdgeInsets.symmetric(vertical: 10.0),
-//       padding: const EdgeInsets.all(16.0),
-//       decoration: BoxDecoration(
-//         color: Colors.blueAccent,
-//         borderRadius: BorderRadius.circular(10.0),
-//         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5)],
-//       ),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceAround,
-//         children: [
-//           _buildStatItem(
-//               'Followers', userData.followersCount?.toString() ?? '0'),
-//           _buildStatItem(
-//               'Following', userData.followingCount?.toString() ?? '0'),
-//           _buildStatItem('Friends', userData.friendsCount?.toString() ?? '0'),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget _buildStatItem(String label, String count) {
-//     return Column(
-//       children: [
-//         Text(
-//           count,
-//           style: const TextStyle(
-//               fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
-//         ),
-//         const SizedBox(height: 5),
-//         Text(
-//           label,
-//           style: const TextStyle(fontSize: 16, color: Colors.white70),
-//         ),
-//       ],
-//     );
-//   }
-//
-// // Widget _buildActivityFeed() {
-// //   return Container(
-// //     margin: const EdgeInsets.symmetric(vertical: 10.0),
-// //     padding: const EdgeInsets.all(16.0),
-// //     decoration: BoxDecoration(
-// //       color: Colors.white,
-// //       borderRadius: BorderRadius.circular(10.0),
-// //       boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
-// //     ),
-// //     child: Column(
-// //       crossAxisAlignment: CrossAxisAlignment.start,
-// //       children: [
-// //         const Text(
-// //           'Recent Activities',
-// //           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-// //         ),
-// //         const SizedBox(height: 10),
-// //         // Example of activities, replace with actual data
-// //         _buildActivityItem('Liked a post'),
-// //         _buildActivityItem('Commented on a picture'),
-// //       ],
-// //     ),
-// //   );
-// // }
-//
-// // Widget _buildFriendsList() {
-// //   return Container(
-// //     margin: const EdgeInsets.symmetric(vertical: 10.0),
-// //     padding: const EdgeInsets.all(16.0),
-// //     decoration: BoxDecoration(
-// //       color: Colors.white,
-// //       borderRadius: BorderRadius.circular(10.0),
-// //       boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
-// //     ),
-// //     child: Column(
-// //       crossAxisAlignment: CrossAxisAlignment.start,
-// //       children: [
-// //         const Text(
-// //           'Friends',
-// //           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-// //         ),
-// //         const SizedBox(height: 10),
-// //         // Example of friends, replace with actual data
-// //         _buildFriendItem('John Doe'),
-// //         _buildFriendItem('Jane Smith'),
-// //       ],
-// //     ),
-// //   );
-// // }
-//
-// // Widget _buildFriendItem(String friendName) {
-// //   return ListTile(
-// //     leading: const CircleAvatar(
-// //       backgroundImage: NetworkImage('https://via.placeholder.com/150'),
-// //     ),
-// //     title: Text(friendName),
-// //   );
-// // }
-// }
-//
-// class SwipeCardDemo extends StatefulWidget {
-//   final List<Pictures>? userImages;
-//
-//   const SwipeCardDemo({super.key, required this.userImages});
-//
-//   @override
-//   _SwipeCardDemoState createState() => _SwipeCardDemoState();
-// }
-//
-// class _SwipeCardDemoState extends State<SwipeCardDemo> {
-//   int _currentStoryIndex = 0;
-//
-//   void _nextStory() {
-//     setState(() {
-//       if (_currentStoryIndex < widget.userImages!.length - 1) {
-//         _currentStoryIndex++;
-//       } else {
-//         _currentStoryIndex = widget.userImages!.length - 1;
-//       }
-//     });
-//   }
-//
-//   void _previousStory() {
-//     setState(() {
-//       if (_currentStoryIndex > 0) {
-//         _currentStoryIndex--;
-//       } else {
-//         _currentStoryIndex = 0;
-//       }
-//     });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return _buildCard();
-//   }
-//
-//   Widget _buildCard() {
-//     return GestureDetector(
-//       onTapUp: (details) {
-//         setState(() {
-//           double tapPosition = details.localPosition.dx;
-//           double screenWidth = MediaQuery.of(context).size.width;
-//
-//           if (tapPosition < screenWidth / 2) {
-//             _previousStory();
-//           } else {
-//             _nextStory();
-//           }
-//         });
-//       },
-//       child: _cardWidget(),
-//     );
-//   }
-//
-//   Widget _cardWidget() {
-//     return Card(
-//       clipBehavior: Clip.hardEdge,
-//       elevation: 4,
-//       child: Stack(
-//         children: [
-//           Hero(
-//             tag: 'userHero-${widget.userImages?[_currentStoryIndex].sId}',
-//             // Unique tag for each image
-//
-//             child: Image.network(
-//               (widget.userImages!.isNotEmpty)
-//                   ? widget.userImages![_currentStoryIndex].mediaKey ?? ''
-//                   : UIConst.profilePlaceHolder,
-//               errorBuilder: (context, error, stackTrace) => Image.network(
-//                 UIConst.profilePlaceHolder,
-//                 fit: BoxFit.fitHeight,
-//                 height: double.infinity,
-//               ),
-//               fit: BoxFit.fitHeight,
-//               height: double.infinity,
-//             ),
-//           ),
-//           Positioned(
-//             top: 10,
-//             left: 10,
-//             right: 10,
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: List.generate(widget.userImages!.length, (dotIndex) {
-//                 return Expanded(
-//                   child: Container(
-//                     margin: const EdgeInsets.symmetric(horizontal: 2.0),
-//                     height: 4,
-//                     decoration: BoxDecoration(
-//                       color: (dotIndex == _currentStoryIndex)
-//                           ? Colors.red
-//                           : Colors.white54,
-//                       borderRadius: BorderRadius.circular(2),
-//                     ),
-//                   ),
-//                 );
-//               }),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-//
-// String capitalize(String name) {
-//   if (name.isEmpty) return name;
-//   return name[0].toUpperCase() + name.substring(1).toLowerCase();
-// }
-//
-// String capitalizeAndSplit(String name) {
-//   if (name.isEmpty) return name;
-//   List<String> parts = name.split(' ');
-//   parts = parts.take(2).toList(); // Take the first two parts
-//   parts = parts.map((part) => capitalize(part)).toList();
-//   return parts.join(' ');
-// }
-//
-// import 'dart:developer';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-// import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
-// import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
-// import 'package:fourtyninehub/res/style/const.dart';
-// import 'package:fourtyninehub/res/style/styles.dart';
-//
-// class UserProfilePage extends StatelessWidget {
-//   final UserData userData;
-//
-//   const UserProfilePage({super.key, required this.userData});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocProvider(
-//       create: (context) => TinderViewCubit(),
-//       child: BlocBuilder<TinderViewCubit, TinderViewState>(
-//         builder: (context, state) {
-//           return Scaffold(
-//             floatingActionButton: _buildFloatingActionButton(context),
-//             appBar: AppBar(
-//               title: const Text('User Profile'),
-//             ),
-//             body: SingleChildScrollView(
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.stretch,
-//                 children: [
-//                   _buildProfileHeader(context),
-//                   _buildUserInfo(),
-//                   _buildStats(),
-//                 ],
-//               ),
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-//
-//   FloatingActionButton _buildFloatingActionButton(BuildContext context) {
-//     return FloatingActionButton(
-//       heroTag: 'upload image',
-//       onPressed: () async {
-//         try {
-//           await UploadFile().uploadImage(
-//             subCategoryId: '66af974f8bf69f9469944746',
-//             onUploaded: (p0) {
-//               context.read<TinderViewCubit>().uploadPictures(
-//                 pictures: [p0.mediaId],
-//                 accessToken: '',
-//               );
-//               log("${p0.file.path} uploaded successfully.");
-//             },
-//           );
-//         } catch (e) {
-//           log("Image upload failed: $e");
-//         }
-//       },
-//       backgroundColor: Colors.red,
-//       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-//       child:
-//           const Icon(Icons.add_photo_alternate_outlined, color: Colors.white),
-//     );
-//   }
-//
-//   Widget _buildProfileHeader(BuildContext context) {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.center,
-//       children: [
-//         SizedBox(
-//           height: 400,
-//           child: SwipeCardDemo(userImages: userData.pictures),
-//         ),
-//         const SizedBox(height: 10),
-//         Text(
-//           capitalizeAndSplit(
-//               "${userData.user!.firstName} ${userData.user!.lastName}"),
-//           style: Styles.headerText(color: Colors.black, fontSize: 26),
-//         ),
-//         const SizedBox(height: 5),
-//         Text(
-//           userData.user!.email ?? 'user.email@example.com',
-//           style: Styles.headerText(
-//               color: Colors.black, fontWeight: FontWeight.normal),
-//         ),
-//       ],
-//     );
-//   }
-//
-//   Widget _buildUserInfo() {
-//     return Container(
-//       margin: const EdgeInsets.only(top: 10.0),
-//       padding: const EdgeInsets.all(16.0),
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.circular(10.0),
-//         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5)],
-//       ),
-//       child: Column(
-//         children: [
-//           _buildListTile(
-//             icon: Icons.cake,
-//             iconColor: Colors.redAccent,
-//             title: 'Date of Birth',
-//             subtitle: userData.user!.birthday ?? 'N/A',
-//           ),
-//           _buildListTile(
-//             icon: Icons.person,
-//             iconColor: Colors.deepPurple,
-//             title: 'Gender',
-//             subtitle: userData.user!.gender ?? 'N/A',
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   ListTile _buildListTile(
-//       {required IconData icon,
-//       required Color iconColor,
-//       required String title,
-//       required String subtitle}) {
-//     return ListTile(
-//       leading: Icon(icon, color: iconColor),
-//       title: Text(title),
-//       subtitle: Text(subtitle),
-//     );
-//   }
-//
-//   Widget _buildStats() {
-//     return Container(
-//       margin: const EdgeInsets.symmetric(vertical: 10.0),
-//       padding: const EdgeInsets.all(16.0),
-//       decoration: BoxDecoration(
-//         color: Colors.blueAccent,
-//         borderRadius: BorderRadius.circular(10.0),
-//         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5)],
-//       ),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceAround,
-//         children: [
-//           _buildStatItem(
-//               'Followers', userData.followersCount?.toString() ?? '0'),
-//           _buildStatItem(
-//               'Following', userData.followingCount?.toString() ?? '0'),
-//           _buildStatItem('Friends', userData.friendsCount?.toString() ?? '0'),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget _buildStatItem(String label, String count) {
-//     return Column(
-//       children: [
-//         Text(
-//           count,
-//           style: const TextStyle(
-//               fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
-//         ),
-//         const SizedBox(height: 5),
-//         Text(
-//           label,
-//           style: const TextStyle(fontSize: 16, color: Colors.white70),
-//         ),
-//       ],
-//     );
-//   }
-// }
-//
-// class SwipeCardDemo extends StatefulWidget {
-//   final List<Pictures>? userImages;
-//
-//   const SwipeCardDemo({super.key, required this.userImages});
-//
-//   @override
-//   _SwipeCardDemoState createState() => _SwipeCardDemoState();
-// }
-//
-// class _SwipeCardDemoState extends State<SwipeCardDemo> {
-//   int _currentStoryIndex = 0;
-//
-//   void _nextStory() {
-//     setState(() {
-//       _currentStoryIndex = (_currentStoryIndex < widget.userImages!.length - 1)
-//           ? _currentStoryIndex + 1
-//           : widget.userImages!.length - 1;
-//     });
-//   }
-//
-//   void _previousStory() {
-//     setState(() {
-//       _currentStoryIndex =
-//           (_currentStoryIndex > 0) ? _currentStoryIndex - 1 : 0;
-//     });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       onTapUp: (details) {
-//         final double screenWidth = MediaQuery.of(context).size.width;
-//         final bool tappedLeftSide = details.localPosition.dx < screenWidth / 2;
-//
-//         if (tappedLeftSide) {
-//           _previousStory();
-//         } else {
-//           _nextStory();
-//         }
-//       },
-//       child: _buildCard(),
-//     );
-//   }
-//
-//   Widget _buildCard() {
-//     return Card(
-//       clipBehavior: Clip.hardEdge,
-//       elevation: 4,
-//       child: Stack(
-//         children: [
-//           Hero(
-//             tag: 'userHero-${widget.userImages?[_currentStoryIndex].sId}',
-//             child: Image.network(
-//               widget.userImages?.isNotEmpty ?? false
-//                   ? widget.userImages![_currentStoryIndex].mediaKey ?? ''
-//                   : UIConst.profilePlaceHolder,
-//               errorBuilder: (context, error, stackTrace) => Image.network(
-//                   UIConst.profilePlaceHolder,
-//                   fit: BoxFit.fitHeight,
-//                   height: double.infinity),
-//               fit: BoxFit.fitHeight,
-//               height: double.infinity,
-//             ),
-//           ),
-//           _buildImageIndicators(),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget _buildImageIndicators() {
-//     return Positioned(
-//       top: 10,
-//       left: 10,
-//       right: 10,
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: List.generate(widget.userImages!.length, (dotIndex) {
-//           return Expanded(
-//             child: Container(
-//               margin: const EdgeInsets.symmetric(horizontal: 2.0),
-//               height: 4,
-//               decoration: BoxDecoration(
-//                 color: (dotIndex == _currentStoryIndex)
-//                     ? Colors.red
-//                     : Colors.white54,
-//                 borderRadius: BorderRadius.circular(2),
-//               ),
-//             ),
-//           );
-//         }),
-//       ),
-//     );
-//   }
-// }
-//
-// String capitalize(String name) {
-//   if (name.isEmpty) return name;
-//   return name[0].toUpperCase() + name.substring(1).toLowerCase();
-// }
-//
-// String capitalizeAndSplit(String name) {
-//   if (name.isEmpty) return name;
-//   List<String> parts = name.split(' ').take(2).toList();
-//   return parts.map(capitalize).join(' ');
-// }
-//refactored
 
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/shared/tinder_shared_utils.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:intl/intl.dart';
 
-class UserProfilePage extends StatelessWidget {
-  final UserData userData;
+class UserProfilePage extends StatefulWidget {
+  // final UserData user;
+  // final BuildContext context;
+  // final TinderViewCubit tinderCubit;
+  final UserCubit userCubit;
 
-  const UserProfilePage({super.key, required this.userData});
+  // final String userId;
+
+  const UserProfilePage(
+      {
+      // required this.userId,
+      super.key,
+      // required this.user,
+      // required this.context,
+      // required this.tinderCubit,
+      required this.userCubit});
 
   @override
+  State<UserProfilePage> createState() => _UserProfilePageState();
+}
+
+class _UserProfilePageState extends State<UserProfilePage> {
+  @override
+  void initState() {
+    final tinderCubit = context.read<TinderViewCubit>()..resetStoryIndex();
+    tinderCubit.fetchUserProfile(
+        userId: widget.userCubit.state.data!.id,
+        token: widget.userCubit.state.token!.accessToken);
+    log("${widget.userCubit.state.data!.id}  from ini  ini  ini  ini  ini  ini  ini  ini  ini  ini  ini ");
+    super.initState();
+  }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   final tinderCubit = context.watch<TinderViewCubit>();
+  //
+  //   return SharedScaffold(
+  //     mainCategoryId: 6,
+  //     body: Scaffold(
+  //       floatingActionButton: _buildFloatingActionButton(context),
+  //       appBar: AppBar(
+  //         backgroundColor: Colors.transparent,
+  //         title: const Text('My Profile'),
+  //       ),
+  //       body: SingleChildScrollView(
+  //           child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.stretch,
+  //         children: [
+  //           SizedBox(
+  //             width: 300,
+  //             height: 500,
+  //             child: SwipeCardDemo(
+  //                 userImages: tinderCubit.state.profileUserData!.pictures),
+  //           ),
+  //           _buildUserInfo(context, tinderCubit.state.profileUserData!),
+  //           _buildStats(tinderCubit.state.profileUserData!),
+  //         ],
+  //       )
+  //           // BlocConsumer<TinderViewCubit, TinderViewState>(
+  //           //   listener: (context, state) {
+  //           //     if (state.uploadImageState == DataState.success) {
+  //           //       context.read<TinderViewCubit>().fetchUserProfile(
+  //           //         '66a40f7d88dc22dcdbd14240',
+  //           //         TinderSharedUtils.token,
+  //           //         '66af974f8bf69f9469944746',
+  //           //       );
+  //           //     }
+  //           //   },
+  //           //   builder: (context, state) {
+  //           //     final userData = state.profileUserData;
+  //           //     if (userData == null) {
+  //           //       return Center(child: CircularProgressIndicator());
+  //           //     }
+  //           //     return Column(
+  //           //       crossAxisAlignment: CrossAxisAlignment.stretch,
+  //           //       children: [
+  //           //         SizedBox(
+  //           //           width: 300,
+  //           //           height: 500,
+  //           //           child: SwipeCardDemo(userImages: userData.pictures),
+  //           //         ),
+  //           //         _buildUserInfo(context, userData),
+  //           //         _buildStats(userData),
+  //           //       ],
+  //           //     );
+  //           //   },
+  //           // ),
+  //
+  //           ),
+  //     ),
+  //   );
+  // }
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TinderViewCubit(),
-      child: BlocBuilder<TinderViewCubit, TinderViewState>(
-        builder: (context, state) {
-          return Scaffold(
-            floatingActionButton: _buildFloatingActionButton(context),
-            appBar: AppBar(
-              title: const Text('User Profile'),
-            ),
-            body: SingleChildScrollView(
+    final tinderCubit = context.watch<TinderViewCubit>();
+
+    // Check if profileUserData is null
+    if (tinderCubit.state.profileUserData == null) {
+      return SharedScaffold(
+        mainCategoryId: 6,
+        body: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            title: const Text('My Profile'),
+          ),
+          body: const Center(
+            child: CircularProgressIndicator(), // Or any placeholder widget
+          ),
+        ),
+      );
+    }
+
+    // If profileUserData is not null, proceed with the regular UI
+    return SharedScaffold(
+      mainCategoryId: 6,
+      body: Scaffold(
+        floatingActionButton:
+            _buildFloatingActionButton(context, tinderCubit: tinderCubit),
+        // appBar: AppBar(
+        //   backgroundColor: Colors.transparent,
+        //   title: const Text('My Profile'),
+        // ),
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _buildProfileHeader(context),
-                  _buildUserInfo(),
-                  _buildStats(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width - 16,
+                    height: MediaQuery.of(context).size.height * 0.60,
+                    child: SwipeCardDemo(
+                        userImages:
+                            tinderCubit.state.profileUserData!.pictures),
+                  ),
+                  _buildUserInfo(context, tinderCubit.state.profileUserData!),
+                  _buildStats(tinderCubit.state.profileUserData!),
+                  const SizedBox(
+                    height: 20,
+                  ),
                 ],
               ),
             ),
-          );
-        },
+            // Positioned(
+            //   height: 5,
+            //   left: 5,
+            //   child: IconButton(
+            //       onPressed: () => Navigator.pop(context),
+            //       icon: const Icon(Icons.arrow_back_ios)),
+            // ),
+          ],
+        ),
       ),
     );
   }
 
-  FloatingActionButton _buildFloatingActionButton(BuildContext context) {
+  // FloatingActionButton _buildFloatingActionButton(BuildContext context) {
+  //   return FloatingActionButton(
+  //     heroTag: 'upload_image',
+  //     onPressed: () => _handleImageUpload(context),
+  //     backgroundColor: Colors.red,
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+  //     child: const Icon(Icons.add_photo_alternate_outlined, color: Colors.white),
+  //   );
+  // }
+  FloatingActionButton _buildFloatingActionButton(BuildContext context,
+      {required TinderViewCubit tinderCubit}) {
     return FloatingActionButton(
       heroTag: 'upload_image',
-      onPressed: () => _handleImageUpload(context),
+      onPressed: () async {
+        try {
+          // Uploading an image and updating state with the uploaded image's media ID
+          final uploadResult = await UploadFile().uploadImage(
+            subCategoryId: '66af974f8bf69f9469944746',
+            onUploaded: (uploadedFile) {
+              // Update the BLoC state with the new image
+              tinderCubit.uploadPictures(
+                pictures: [uploadedFile.mediaId],
+                accessToken: widget.userCubit.state.token!.accessToken,
+              ).then((value) => tinderCubit.fetchUserProfile(
+                    userId: widget.userCubit.state.data!.id,
+                    token: widget.userCubit.state.token!.accessToken,
+                  ));
+              // context.read<TinderViewCubit>().uploadPictures(
+              //   pictures: [uploadedFile.mediaId],
+              //   accessToken: TinderSharedUtils.token,
+              // );
+              //
+              // // Fetch updated user profile to get the latest images
+              // context.read<TinderViewCubit>().fetchUserProfile(
+              //       userId: widget.userCubit.state.data!.id,
+              //       token: TinderSharedUtils.token,
+              //     );
+            },
+          );
+
+          if (uploadResult == null) {
+            log("Image upload failed: No file selected.");
+          }
+        } catch (e) {
+          log("Image upload failed: $e");
+        }
+      },
       backgroundColor: Colors.red,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-      child: const Icon(Icons.add_photo_alternate_outlined, color: Colors.white),
+      child:
+          const Icon(Icons.add_photo_alternate_outlined, color: Colors.white),
     );
   }
 
@@ -1006,7 +238,7 @@ class UserProfilePage extends StatelessWidget {
         onUploaded: (uploadedFile) {
           context.read<TinderViewCubit>().uploadPictures(
             pictures: [uploadedFile.mediaId],
-            accessToken: '',
+            accessToken: TinderSharedUtils.token,
           );
           log("${uploadedFile.file.path} uploaded successfully.");
         },
@@ -1019,29 +251,7 @@ class UserProfilePage extends StatelessWidget {
     }
   }
 
-  Widget _buildProfileHeader(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SizedBox(
-          height: 400,
-          child: SwipeCardDemo(userImages: userData.pictures),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          capitalizeAndSplit("${userData.user!.firstName} ${userData.user!.lastName}"),
-          style: Styles.headerText(color: Colors.black, fontSize: 26),
-        ),
-        const SizedBox(height: 5),
-        Text(
-          userData.user!.email ?? 'user.email@example.com',
-          style: Styles.headerText(color: Colors.black, fontWeight: FontWeight.normal),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildUserInfo() {
+  Widget _buildUserInfo(BuildContext context, ProfileUserData userData) {
     return Container(
       margin: const EdgeInsets.only(top: 10.0),
       padding: const EdgeInsets.all(16.0),
@@ -1052,20 +262,45 @@ class UserProfilePage extends StatelessWidget {
       ),
       child: Column(
         children: [
+          _buildPersonInfo(userData),
+          const Divider(),
           _buildListTile(
             icon: Icons.cake,
             iconColor: Colors.redAccent,
             title: 'Date of Birth',
-            subtitle: userData.user!.birthday ?? 'N/A',
+            subtitle: userData.userId.birthday ?? 'N/A',
           ),
           _buildListTile(
             icon: Icons.person,
-            iconColor: Colors.deepPurple,
+            iconColor: Colors.redAccent,
             title: 'Gender',
-            subtitle: userData.user!.gender ?? 'N/A',
+            subtitle: userData.userId.gender ?? 'N/A',
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildPersonInfo(ProfileUserData user) {
+    return Column(
+      children: [
+        Text(
+          capitalizeAndSplit(
+              "${user.userId.firstName} ${user.userId.lastName}"),
+          style: Styles.headerText(
+            color: AppColors.PRIMARY_COLOR,
+            fontSize: 38,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          user.userId.email,
+          style: Styles.headerText(
+            fontWeight: FontWeight.w400,
+            color: AppColors.PRIMARY_COLOR,
+          ),
+        ),
+      ],
     );
   }
 
@@ -1082,20 +317,22 @@ class UserProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildStats() {
+  Widget _buildStats(ProfileUserData userData) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10.0),
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: Colors.blueAccent,
+        color: AppColors.PRIMARY_COLOR,
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5)],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildStatItem('Followers', userData.followersCount?.toString() ?? '0'),
-          _buildStatItem('Following', userData.followingCount?.toString() ?? '0'),
+          _buildStatItem(
+              'Followers', userData.followersCount?.toString() ?? '0'),
+          _buildStatItem(
+              'Following', userData.followingCount?.toString() ?? '0'),
           _buildStatItem('Friends', userData.friendsCount?.toString() ?? '0'),
         ],
       ),
@@ -1107,7 +344,11 @@ class UserProfilePage extends StatelessWidget {
       children: [
         Text(
           count,
-          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
         const SizedBox(height: 5),
         Text(
@@ -1120,7 +361,7 @@ class UserProfilePage extends StatelessWidget {
 }
 
 class SwipeCardDemo extends StatefulWidget {
-  final List<Pictures>? userImages;
+  final List<ProfilePictureModel?> userImages;
 
   const SwipeCardDemo({super.key, required this.userImages});
 
@@ -1133,27 +374,28 @@ class _SwipeCardDemoState extends State<SwipeCardDemo> {
 
   void _nextStory() {
     setState(() {
-      _currentStoryIndex = (_currentStoryIndex < widget.userImages!.length - 1)
+      _currentStoryIndex = (_currentStoryIndex < widget.userImages.length - 1)
           ? _currentStoryIndex + 1
-          : widget.userImages!.length - 1;
+          : widget.userImages.length - 1;
     });
   }
 
   void _previousStory() {
     setState(() {
-      _currentStoryIndex = (_currentStoryIndex > 0) ? _currentStoryIndex - 1 : 0;
+      _currentStoryIndex =
+          (_currentStoryIndex > 0) ? _currentStoryIndex - 1 : 0;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapUp: (details) => _handleTap(details.localPosition, context),
+      onTapUp: (details) => _handleTap(details.localPosition),
       child: _buildCard(),
     );
   }
 
-  void _handleTap(Offset localPosition, BuildContext context) {
+  void _handleTap(Offset localPosition) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final bool tappedLeftSide = localPosition.dx < screenWidth / 2;
 
@@ -1165,23 +407,27 @@ class _SwipeCardDemoState extends State<SwipeCardDemo> {
   }
 
   Widget _buildCard() {
+    final imageUrl = widget.userImages.isNotEmpty
+        ? widget.userImages.reversed.toList()[_currentStoryIndex]?.mediaKey ??
+            UIConst.profilePlaceHolder
+        : UIConst.profilePlaceHolder;
+
     return Card(
       clipBehavior: Clip.hardEdge,
       elevation: 4,
       child: Stack(
         children: [
           Hero(
-            tag: 'userHero-${widget.userImages?[_currentStoryIndex].sId}',
+            tag:
+                'userHero-${widget.userImages.reversed.toList()[_currentStoryIndex]?.id}',
             child: Image.network(
-              widget.userImages?.isNotEmpty ?? false
-                  ? widget.userImages![_currentStoryIndex].mediaKey ?? ''
-                  : UIConst.profilePlaceHolder,
+              imageUrl,
               errorBuilder: (context, error, stackTrace) => Image.network(
                 UIConst.profilePlaceHolder,
                 fit: BoxFit.fitHeight,
                 height: double.infinity,
               ),
-              fit: BoxFit.fitHeight,
+              fit: BoxFit.fitWidth,
               height: double.infinity,
             ),
           ),
@@ -1198,13 +444,15 @@ class _SwipeCardDemoState extends State<SwipeCardDemo> {
       right: 10,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(widget.userImages!.length, (dotIndex) {
+        children: List.generate(widget.userImages.length, (dotIndex) {
           return Expanded(
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 2.0),
               height: 4,
               decoration: BoxDecoration(
-                color: (dotIndex == _currentStoryIndex) ? Colors.red : Colors.white54,
+                color: (dotIndex == _currentStoryIndex)
+                    ? Colors.red
+                    : Colors.white54,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

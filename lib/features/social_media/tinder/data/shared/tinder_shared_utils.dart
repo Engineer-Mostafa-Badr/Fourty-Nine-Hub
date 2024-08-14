@@ -131,35 +131,48 @@
 //   }
 // }
 //enhanced
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 class TinderSharedUtils {
-  static String? _token;
+  static String _token = '';
+  static List<String>? favListIds;
+
+  // ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjAyYTlkZGY3LWI2NzItNGE1NC04NmJmLTE3MzQzM2M5NjYwZiIsImlhdCI6MTcyMjA5NjI5OSwiZXhwIjo1NTcyMjA5NjI5OSwic3ViIjoiNjZhNGUwNDQ1MzVlMThlNWMxZDcyMGM4In0.-xgk-lnnQP3t19LrwsNwBQN_TleJYPyX0N-soJeQA6c';
 
   // Method to initialize _token
   static void initializeToken(String token) {
-    if (_token != null) {
-      return;
-    }
+    // if (_token.isNotEmpty) {
+    //   log("$tokenالتوكن مليان يا معلم ");
+    //
+    //   return;
+    // }
     _token = token;
+    log("$tokenالتوكين كان فاضي ");
   }
 
   // Public getter for _token
   static String get token {
-    if (_token == null) {
-      throw Exception('Token has not been initialized');
-    }
-    return _token!;
+    return _token;
   }
 
   // Method to check if the token has been initialized
   static bool get isTokenInitialized => _token != null;
 
+
+  static String capitalizeEachWord(String input) {
+    if (input.isEmpty) {
+      return input;
+    }
+    return input.split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
+  }
   /// Handles the response from a gift-related operation and displays appropriate UI feedback.
-  static void handleGiftResponse({
-    required BuildContext context,
-    required String response,
-  }) {
+  static void handleGiftResponse(
+      {required BuildContext context,
+      required String response,
+      required price}) {
     const insufficientFundsMessage =
         'You do not have enough money in your wallet.';
     const successMessage = 'The gift has been sent successfully!';
@@ -179,7 +192,7 @@ class TinderSharedUtils {
           context: context,
           icon: Icons.card_giftcard,
           title: 'Gift Sent',
-          message: '$successMessage\nAmount deducted: ¥10',
+          message: '$successMessage\nAmount deducted: ¥$price',
           isError: false,
         );
         break;

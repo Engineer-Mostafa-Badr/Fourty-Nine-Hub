@@ -15,7 +15,6 @@ import 'package:go_router/go_router.dart';
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
-import '../../../res/style/const.dart';
 import '../../../res/style/styles.dart';
 import '../../../routes/routes.dart';
 import '../stateless/buttons/iconAppButton.dart';
@@ -30,9 +29,9 @@ class DrawerWidget extends StatelessWidget {
     return BlocBuilder<UserCubit, BasicState<UserEntity>>(
       builder: (context, state) {
         //to get token for current user
-        context.read<UserCubit>().giveMeTokenForTinder().then((value) {
-          TinderSharedUtils.initializeToken(value!.accessToken);
-        });
+        // context.read<UserCubit>().giveMeTokenForTinder().then((value) {
+        //   TinderSharedUtils.initializeToken(value!.accessToken);
+        // });
 
         return Drawer(
           backgroundColor: Colors.white,

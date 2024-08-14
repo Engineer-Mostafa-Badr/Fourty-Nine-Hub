@@ -873,17 +873,20 @@
 
 //down enhanced
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_subcategory_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/tinder_shared_utils.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_sub_category_card.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -929,181 +932,449 @@ class OutlineText extends StatelessWidget {
   }
 }
 
-class BottomSheetContent extends StatefulWidget {
-  final List<GiftData>? gifts;
-  final UserData? cardUser;
-  final UserEntity? currentLoggedUser;
+// class BottomSheetContent1 extends StatelessWidget {
+//   final UserData? cardUser;
+//   final TinderViewCubit tinderCubit;
+//
+//   final UserCubit userCubit;
+//
+//   // final UserEntity? currentLoggedUser;
+//
+//   const BottomSheetContent1({
+//     super.key,
+//     required this.cardUser,
+//     required this.tinderCubit,
+//     required this.userCubit,
+//     // required this.currentLoggedUser,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//       height: MediaQuery.of(context).size.height / 2,
+//       child: SingleChildScrollView(
+//         child: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             _buildHeader(),
+//             const Divider(),
+//             _buildGiftGrid(tinderCubit: tinderCubit, context: context),
+//             const SizedBox(height: 20),
+//             _buildRechargeButton(),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+//
+//   Widget _buildHeader() {
+//     return Container(
+//       width: double.infinity,
+//       height: kToolbarHeight * 0.75,
+//       decoration: BoxDecoration(
+//         color: Colors.black.withOpacity(0.4),
+//         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+//       ),
+//       child: const FittedBox(
+//         fit: BoxFit.scaleDown,
+//         child: Text(
+//           'Send a gift 🎁',
+//           style: TextStyle(
+//             color: AppColors.ACCENT_COLOR,
+//             fontWeight: FontWeight.w300,
+//           ),
+//           textAlign: TextAlign.center,
+//           textScaler: TextScaler.linear(1.6),
+//         ),
+//       ),
+//     );
+//   }
+//
+//   // Widget _buildGiftGrid() {
+//   Widget _buildGiftGrid(
+//       {required TinderViewCubit tinderCubit, required BuildContext context}) {
+//     // return GridView(
+//     //   physics: const NeverScrollableScrollPhysics(),
+//     //   shrinkWrap: true,
+//     //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+//     //     crossAxisCount: 4,
+//     //     childAspectRatio: 1 / 1.5,
+//     //   ),
+//     //   children: tinderCubit.state.gifts
+//     //       .map((gift) => _buildGiftItem(context, gift))
+//     //       .toList(),
+//     // );
+//     return GridView.builder(
+//       physics: const NeverScrollableScrollPhysics(),
+//       shrinkWrap: true,
+//       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+//         crossAxisCount: 4,
+//         childAspectRatio: 1 / 1.5,
+//       ),
+//       itemBuilder: (context, index) =>
+//           _buildGiftItem(context, tinderCubit.state.gifts[index]),
+//     );
+//   }
+//
+//   Widget _buildGiftItem(BuildContext context, GiftData gift) {
+//     return InkWell(
+//       onTap: () => _handleGiftTap(context, gift),
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           SizedBox(width: 50, height: 50, child: _buildGiftImage(gift)
+//               // FutureBuilder<Widget>(
+//               //   future: loadSvgImage(gift),
+//               //   builder: (context, snapshot) {
+//               //     if (snapshot.connectionState == ConnectionState.waiting) {
+//               //       return Image.asset(
+//               //         'assets/images/icon.png',
+//               //         width: 50,
+//               //         height: 50,
+//               //       );
+//               //     } else if (snapshot.hasError) {
+//               //       return Column(
+//               //         mainAxisAlignment: MainAxisAlignment.center,
+//               //         children: [
+//               //           Icon(Icons.error, color: Colors.red, size: 50),
+//               //           SizedBox(height: 10),
+//               //           Text('Failed to load image'),
+//               //         ],
+//               //       );
+//               //     } else {
+//               //       return snapshot.data!;
+//               //     }
+//               //   },
+//               // ),
+//               ),
+//           const SizedBox(height: 8),
+//           Text(
+//             gift.nameEn ?? 'No Name',
+//             textAlign: TextAlign.center,
+//             style: const TextStyle(fontSize: 16, color: Colors.white),
+//           ),
+//           const SizedBox(height: 4),
+//           Text(
+//             '${gift.value ?? 0} 💰',
+//             style: const TextStyle(color: Colors.white),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+//
+//   // Future<Widget> loadSvgImage(GiftData gift) async {
+//   Widget _buildGiftImage(GiftData gift) {
+//     // const String svgUrl =
+//     //     'https://49hub-reels.s3.eu-central-1.amazonaws.com/gifts/Sail%20Away.svg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZI2LDRJFLQMKAMUH%2F20240811%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20240811T192725Z&X-Amz-Expires=3600&X-Amz-Signature=2e2b255cec93eb38bdd7521d8bb44dce238e611919b41810f2677dacdab755d6&X-Amz-SignedHeaders=host&x-id=GetObject';
+//
+//     return SvgPicture.network(
+//       gift.picture!,
+//       fit: BoxFit.scaleDown,
+//       placeholderBuilder: (BuildContext context) => Image.asset(
+//         'assets/images/icon.png',
+//         width: 50,
+//         height: 50,
+//       ),
+//       width: 50,
+//       height: 50,
+//     );
+//     // : Image.asset(
+//     //     'assets/images/icon.png',
+//     //     width: 50,
+//     //     height: 50,
+//     //   );
+//
+//     //   Image.network(
+//     //   gift.picture,
+//     //   loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+//     //     if (loadingProgress == null) {
+//     //       return child;
+//     //     } else {
+//     //       return Center(
+//     //         child: CircularProgressIndicator(
+//     //           value: loadingProgress.expectedTotalBytes != null
+//     //               ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+//     //               : null,
+//     //         ),
+//     //       );
+//     //     }
+//     //   },
+//     //   errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+//     //     return Center(child: Text('Failed to load image'));
+//     //   },
+//     // );
+//     // //------------------------------
+//     //   gift.picture != null
+//     //       ? Image.network(
+//     //           gift.picture!,
+//     //           width: 50,
+//     //           height: 50,
+//     //           loadingBuilder: (context, child, loadingProgress) =>
+//     //               Image.asset(
+//     //             'assets/images/icon.png',
+//     //             width: 50,
+//     //             height: 50,
+//     //           ),
+//     //           errorBuilder: (context, error, stackTrace) => Image.asset(
+//     //             'assets/images/icon.png',
+//     //             width: 50,
+//     //             height: 50,
+//     //           ),
+//     //         )
+//     //       : Image.asset(
+//     //           'assets/images/icon.png',
+//     //           width: 50,
+//     //           height: 50,
+//     //         );
+//   }
+//
+//   Future<void> _handleGiftTap(BuildContext context, GiftData gift) async {
+//     log("${cardUser!.id} -===================================");
+//     final data = await context.read<TinderViewCubit>().sendGift(
+//           receiverId: cardUser!.id ?? '',
+//           subCategoryId: '66af974f8bf69f9469944746',
+//           giftId: gift.sId ?? '',
+//           // currentUserToken: TinderSharedUtils.token,
+//           accessToken: TinderSharedUtils.token,
+//         );
+//
+//     TinderSharedUtils.handleGiftResponse(
+//         context: context, response: data!, price: gift.value);
+//   }
+//
+//   Widget _buildRechargeButton() {
+//     return Align(
+//       alignment: Alignment.bottomRight,
+//       child: Padding(
+//         padding: const EdgeInsets.all(4.0),
+//         child: OutlinedButton(
+//           style: ButtonStyle(
+//             side: const MaterialStatePropertyAll(BorderSide(width: 0)),
+//             iconColor: const MaterialStatePropertyAll(Colors.white),
+//             backgroundColor:
+//                 MaterialStatePropertyAll(Colors.black.withOpacity(0.8)),
+//           ),
+//           onPressed: () {
+//             serviceLocator<SubscriptionController>()
+//                 .showActiveSubscriptionAmounts(walletType: WalletTypes.balance);
+//           },
+//           child: const Row(
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//               Text(
+//                 '💳 Recharge',
+//                 style: TextStyle(
+//                     fontWeight: FontWeight.normal, color: Colors.white),
+//                 textScaler: TextScaler.linear(1.2),
+//               ),
+//               Icon(Icons.arrow_right),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
-  const BottomSheetContent({
-    super.key,
-    required this.gifts,
-    required this.cardUser,
-    required this.currentLoggedUser,
-  });
+class BottomSheetContent extends StatefulWidget {
+  final String accessToken;
+  final UserCubit userCubit;
+
+  const BottomSheetContent(
+      {super.key, required this.accessToken, required this.userCubit});
 
   @override
-  State<BottomSheetContent> createState() => _BottomSheetContentState();
+  _BottomSheetContentState createState() => _BottomSheetContentState();
 }
 
 class _BottomSheetContentState extends State<BottomSheetContent> {
-  late final List<GiftData> items;
+  late ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
-    items = widget.gifts?.toList() ?? [];
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
+    _fetchInitialGifts();
+  }
+
+  void _fetchInitialGifts() {
+    context.read<GiftsCubit>().fetchGifts(accessToken: widget.accessToken);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      context.read<GiftsCubit>().fetchGifts(accessToken: widget.accessToken);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height / 2,
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildHeader(),
-            const Divider(),
-            _buildGiftGrid(),
-            const SizedBox(height: 20),
-            _buildRechargeButton(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      width: double.infinity,
-      height: kToolbarHeight * 0.75,
-      decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.4),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: const FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Text(
-          'Send a gift 🎁',
-          style: TextStyle(
-            color: AppColors.ACCENT_COLOR,
-            fontWeight: FontWeight.w300,
-          ),
-          textAlign: TextAlign.center,
-          textScaler: TextScaler.linear(1.6),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildGiftGrid() {
-    return GridView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: items.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        childAspectRatio: 1 / 1.5,
-      ),
-      itemBuilder: (context, index) => _buildGiftItem(context, items[index]),
+    return BlocBuilder<GiftsCubit, GiftsState>(
+      builder: (context, state) {
+        if (state is GiftsInitial) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is GiftsLoaded) {
+          // return GridView.builder(
+          //   controller: _scrollController,
+          //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          //     crossAxisCount: 2,
+          //     childAspectRatio: 1,
+          //   ),
+          //   itemCount: state.gifts.length + 1,
+          //   // Add one for the loading indicator
+          //   itemBuilder: (context, index) {
+          //     if (index < state.gifts.length) {
+          //       final gift = state.gifts[index];
+          //       return Card(
+          //         child: Center(child: Text(gift.nameEn ?? '')),
+          //       );
+          //     } else {
+          //       // Loading indicator at the bottom
+          //       return const Center(child: CircularProgressIndicator());
+          //     }
+          //   },
+          // );
+          return GridView.builder(
+            controller: _scrollController,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              childAspectRatio: 3 / 4,
+            ),
+            itemCount: state.gifts.length + 1,
+            shrinkWrap: true,
+            // Add one for the loading indicator
+            itemBuilder: (context, index) {
+              if (index < state.gifts.length) {
+                final gift = state.gifts[index];
+                return _buildGiftItem(context, state.gifts[index]);
+              } else {
+                // Loading indicator at the bottom
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          );
+        } else if (state is GiftsError) {
+          return Center(child: Text(state.message));
+        } else {
+          return Container();
+        }
+      },
     );
   }
 
   Widget _buildGiftItem(BuildContext context, GiftData gift) {
-    return BlocProvider(
-      create: (context) => TinderViewCubit()..fetchGifts(accessToken: ''),
-      child: BlocBuilder<TinderViewCubit, TinderViewState>(
-        builder: (context, state) {
-          return InkWell(
-            onTap: () => _handleGiftTap(context, gift),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildGiftImage(gift),
-                const SizedBox(height: 8),
-                Text(
-                  gift.nameEn ?? 'No Name',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 16, color: Colors.white),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '${gift.value ?? 0} 💰',
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildGiftImage(GiftData gift) {
-    return gift.picture != null
-        ? Image.network(
-      gift.picture!,
-      width: 50,
-      height: 50,
-      loadingBuilder: (context, child, loadingProgress) => Image.asset(
-        'assets/images/icon.png',
-        width: 50,
-        height: 50,
-      ),
-      errorBuilder: (context, error, stackTrace) => Image.asset(
-        'assets/images/icon.png',
-        width: 50,
-        height: 50,
-      ),
-    )
-        : Image.asset(
-      'assets/images/icon.png',
-      width: 50,
-      height: 50,
-    );
-  }
-
-  Future<void> _handleGiftTap(BuildContext context, GiftData gift) async {
-    final data = await context.read<TinderViewCubit>().sendGift(
-      receiverId: widget.cardUser?.user?.sId ?? '',
-      subCategoryId: '66af974f8bf69f9469944746',
-      giftId: gift.sId ?? '',
-      currentUserToken: 'currentUserToken',
-      accessToken: '',
-    );
-
-    TinderSharedUtils.handleGiftResponse(context: context, response: data!);
-  }
-
-  Widget _buildRechargeButton() {
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: OutlinedButton(
-          style: ButtonStyle(
-            side: const MaterialStatePropertyAll(BorderSide(width: 0)),
-            iconColor: const MaterialStatePropertyAll(Colors.white),
-            backgroundColor: MaterialStatePropertyAll(Colors.black.withOpacity(0.8)),
-          ),
-          onPressed: () {
-            serviceLocator<SubscriptionController>()
-                .showActiveSubscriptionAmounts(walletType: WalletTypes.balance);
-          },
-          child: const Row(
-            mainAxisSize: MainAxisSize.min,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: FittedBox(
+        child: InkWell(
+          onTap: () => _handleGiftTap(context, gift),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              _buildGiftImage(gift),
+              const SizedBox(height: 8),
               Text(
-                '💳 Recharge',
-                style: TextStyle(fontWeight: FontWeight.normal, color: Colors.white),
-                textScaler: TextScaler.linear(1.2),
+                gift.nameEn ?? 'No Name',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 16, color: Colors.white),
               ),
-              Icon(Icons.arrow_right),
+              const SizedBox(height: 4),
+              Text(
+                '${gift.value ?? 0} 💰',
+                style: const TextStyle(color: Colors.white),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildGiftImage(GiftData gift) {
+    // const String svgUrl =
+    //     'https://49hub-reels.s3.eu-central-1.amazonaws.com/gifts/Sail%20Away.svg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZI2LDRJFLQMKAMUH%2F20240811%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20240811T192725Z&X-Amz-Expires=3600&X-Amz-Signature=2e2b255cec93eb38bdd7521d8bb44dce238e611919b41810f2677dacdab755d6&X-Amz-SignedHeaders=host&x-id=GetObject';
+
+    return SvgPicture.network(
+      gift.picture!,
+      fit: BoxFit.scaleDown,
+      placeholderBuilder: (BuildContext context) => Image.asset(
+        'assets/images/icon.png',
+        width: 50,
+        height: 50,
+      ),
+      width: 50,
+      height: 50,
+    );
+    // : Image.asset(
+    //     'assets/images/icon.png',
+    //     width: 50,
+    //     height: 50,
+    //   );
+
+    //   Image.network(
+    //   gift.picture,
+    //   loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+    //     if (loadingProgress == null) {
+    //       return child;
+    //     } else {
+    //       return Center(
+    //         child: CircularProgressIndicator(
+    //           value: loadingProgress.expectedTotalBytes != null
+    //               ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+    //               : null,
+    //         ),
+    //       );
+    //     }
+    //   },
+    //   errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+    //     return Center(child: Text('Failed to load image'));
+    //   },
+    // );
+    // //------------------------------
+    //   gift.picture != null
+    //       ? Image.network(
+    //           gift.picture!,
+    //           width: 50,
+    //           height: 50,
+    //           loadingBuilder: (context, child, loadingProgress) =>
+    //               Image.asset(
+    //             'assets/images/icon.png',
+    //             width: 50,
+    //             height: 50,
+    //           ),
+    //           errorBuilder: (context, error, stackTrace) => Image.asset(
+    //             'assets/images/icon.png',
+    //             width: 50,
+    //             height: 50,
+    //           ),
+    //         )
+    //       : Image.asset(
+    //           'assets/images/icon.png',
+    //           width: 50,
+    //           height: 50,
+    //         );
+  }
+
+  Future<void> _handleGiftTap(BuildContext context, GiftData gift) async {
+    final data = await context.read<TinderViewCubit>().sendGift(
+          receiverId: widget.userCubit.state.data!.id ?? '',
+          subCategoryId: '66af974f8bf69f9469944746',
+          giftId: gift.sId ?? '',
+          // currentUserToken: TinderSharedUtils.token,
+          accessToken: widget.userCubit.state.token!.accessToken,
+        );
+
+    TinderSharedUtils.handleGiftResponse(
+        context: context, response: data!, price: gift.value);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }
 
