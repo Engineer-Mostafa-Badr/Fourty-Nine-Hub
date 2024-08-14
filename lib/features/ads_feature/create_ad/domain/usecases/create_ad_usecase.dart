@@ -5,10 +5,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart
 
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/repositories/create_ad_repo.dart';
 
-
-
-class CreateAdUseCase
-    extends UseCase<bool, AdModel> {
+class CreateAdUseCase extends UseCase<bool, AdModel> {
   final CreateAdRepo _repo;
 
   CreateAdUseCase(this._repo);

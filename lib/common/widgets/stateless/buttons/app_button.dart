@@ -13,6 +13,7 @@ class AppButton extends StatelessWidget {
   final Widget? widget;
   final TextStyle? style;
   final IconData? icon;
+  final Color? color;
 
   const AppButton(
       {super.key,
@@ -28,6 +29,7 @@ class AppButton extends StatelessWidget {
       this.textColor,
       this.style,
       this.icon,
+        this.color,
       this.width});
 
   @override
@@ -61,7 +63,7 @@ class AppButton extends StatelessWidget {
                   Label(
                       text: label,
                       style: style ??
-                          Styles.mediumText(color: textColor ?? Colors.white)),
+                          Styles.mediumText(color: color)),
                 ],
               ),
             ),

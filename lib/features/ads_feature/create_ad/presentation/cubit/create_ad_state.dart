@@ -47,7 +47,7 @@ class CreateAdState {
       subCategories: subCategories ?? this.subCategories,
       selectedCategory: selectedCategory ?? this.selectedCategory,
       selectedSubCategory: selectedSubCategory ?? this.selectedSubCategory,
-      images: images?? this.images,
+      images: images ?? this.images,
     );
   }
 }

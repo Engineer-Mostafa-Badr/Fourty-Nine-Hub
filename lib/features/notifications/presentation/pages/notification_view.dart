@@ -20,7 +20,9 @@ class NotificationView extends StatelessWidget {
     return DefaultTabController(
         length: 3,
         child: Scaffold(
-          appBar: const HomeAppbar(),
+          appBar: const HomeAppbar(
+            color: Colors.red,
+          ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(

@@ -11,9 +11,8 @@ part 'restaurant_dashboard_state.dart';
 
 class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
   final GetRestaurantOrdersUseCase _getRestaurantOrdersUseCase;
-  RestaurantDashboardCubit(
-    this._getRestaurantOrdersUseCase
-  ) : super(const RestaurantDashboardState());
+  RestaurantDashboardCubit(this._getRestaurantOrdersUseCase)
+      : super(const RestaurantDashboardState());
 
   void loadData() async {
     await getRestaurantOrders();
@@ -22,28 +21,26 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
   Future<void> getRestaurantOrders() async {
     final response = await _getRestaurantOrdersUseCase.call(const NoParams());
     response.fold(
-        (l) => emit(
-            state.copyWith(failure: l, status: RestaurantDashboardStates.error)),
+        (l) => emit(state.copyWith(
+            failure: l, status: RestaurantDashboardStates.error)),
         (data) => emit(state.copyWith(
             orders: data, status: RestaurantDashboardStates.initState)));
   }
-Future<void> approveRequest({
-    required int id
-  }) async {
+
+  Future<void> approveRequest({required int id}) async {
     emit(state.copyWith(
         status: RestaurantDashboardStates.success,
         successMessage: Labels.bookingApproved));
     getRestaurantOrders();
   }
-   Future<void> changeConnectivityStatus() async {
-    emit(state.copyWith(
-connected: !state.connected,
-        ));
-  }
-   Future<void> cancelBooking({
-        required int id
 
-   }) async {
+  Future<void> changeConnectivityStatus() async {
+    emit(state.copyWith(
+      connected: !state.connected,
+    ));
+  }
+
+  Future<void> cancelBooking({required int id}) async {
     emit(state.copyWith(
         status: RestaurantDashboardStates.success,
         successMessage: Labels.bookingRejected));

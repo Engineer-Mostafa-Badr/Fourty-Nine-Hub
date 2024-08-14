@@ -8,9 +8,7 @@ class GetTwitterPostUseCase extends UseCase<TwitterPostEntity, String> {
   final TwitterRepo _repo;
   GetTwitterPostUseCase(this._repo);
   @override
-  Future<Either<Failure, TwitterPostEntity>> call( String params) async {
+  Future<Either<Failure, TwitterPostEntity>> call(String params) async {
     return await _repo.getTwitterPost(postId: params);
   }
 }
-
-

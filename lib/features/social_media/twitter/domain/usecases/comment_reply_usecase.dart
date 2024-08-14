@@ -4,16 +4,16 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/repositories/
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
-class TwitterCommentReplyUseCase extends UseCase<TwitterCommentReplyEntity, TwitterCommentReplyParams> {
+class TwitterCommentReplyUseCase
+    extends UseCase<TwitterCommentReplyEntity, TwitterCommentReplyParams> {
   final TwitterRepo _repo;
   TwitterCommentReplyUseCase(this._repo);
   @override
-  Future<Either<Failure, TwitterCommentReplyEntity>> call(TwitterCommentReplyParams params) async {
+  Future<Either<Failure, TwitterCommentReplyEntity>> call(
+      TwitterCommentReplyParams params) async {
     return await _repo.replyOnComment(params: params);
   }
 }
-
-
 
 class TwitterCommentReplyParams {
   final String postId;
@@ -25,8 +25,8 @@ class TwitterCommentReplyParams {
     required this.content,
   });
   Map<String, dynamic> toJson() => {
-    'content': content,
-    'reply': reply,
-    'postId': postId,
-  };
+        'content': content,
+        'reply': reply,
+        'postId': postId,
+      };
 }

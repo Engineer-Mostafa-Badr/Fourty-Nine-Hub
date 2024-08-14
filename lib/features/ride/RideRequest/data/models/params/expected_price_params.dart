@@ -15,6 +15,5 @@ class ExpectedPriceParams {
   Map<String, dynamic> toJson() => {
         "startLocation": ["$fromLat", "$fromLng"],
         "targetLocation": ["$toLat", "$toLng"],
-        
       };
 }

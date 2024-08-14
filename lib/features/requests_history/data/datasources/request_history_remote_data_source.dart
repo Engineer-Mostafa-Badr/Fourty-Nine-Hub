@@ -9,7 +9,7 @@ import '../models/shipping_request_model.dart';
 
 abstract class RequestHistoryRemoteDataSource {
   Future<Either<Failure, List<TripModel>>> getRideHistory();
-   Future<Either<Failure, List<ShippingRequestModel>>> getShippingRequests();
+  Future<Either<Failure, List<ShippingRequestModel>>> getShippingRequests();
   Future<Either<Failure, List<FoodOrderModel>>> getFoodHistory();
 }
 
@@ -31,16 +31,21 @@ class RequestHistoryRemoteDataSourceImpl
   @override
   Future<Either<Failure, List<FoodOrderModel>>> getFoodHistory() async {
     final response = await _apiConsumer.get(Jsons.foodOrders);
-    return response.fold((failure) => Left(failure), (data) => Right(
-      (data['data']['orders'] as List).map((e) => FoodOrderModel.fromJson(e)).toList()
-    ));
+    return response.fold(
+        (failure) => Left(failure),
+        (data) => Right((data['data']['orders'] as List)
+            .map((e) => FoodOrderModel.fromJson(e))
+            .toList()));
   }
-  
+
   @override
-  Future<Either<Failure, List<ShippingRequestModel>>> getShippingRequests() async{
-   final response = await _apiConsumer.get(Jsons.shippingRequests);
-    return response.fold((failure) => Left(failure), (data) => Right(
-      (data['data']['requests'] as List).map((e) => ShippingRequestModel.fromJson(e)).toList()
-    ));
+  Future<Either<Failure, List<ShippingRequestModel>>>
+      getShippingRequests() async {
+    final response = await _apiConsumer.get(Jsons.shippingRequests);
+    return response.fold(
+        (failure) => Left(failure),
+        (data) => Right((data['data']['requests'] as List)
+            .map((e) => ShippingRequestModel.fromJson(e))
+            .toList()));
   }
 }

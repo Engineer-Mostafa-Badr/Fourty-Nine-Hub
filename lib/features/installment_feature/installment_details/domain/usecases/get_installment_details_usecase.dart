@@ -6,9 +6,7 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/installment_details_repo.dart';
 
-
-class GetInstallmentDetailsUseCase
-    extends UseCase<InstallmentEntity, String> {
+class GetInstallmentDetailsUseCase extends UseCase<InstallmentEntity, String> {
   final InstallmentDetailsRepo _repo;
   GetInstallmentDetailsUseCase(this._repo);
 

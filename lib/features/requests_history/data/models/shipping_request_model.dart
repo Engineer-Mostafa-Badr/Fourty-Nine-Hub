@@ -5,8 +5,27 @@ import 'driver_model.dart';
 import 'offer_model.dart';
 
 class ShippingRequestModel extends ShippingRequestEntity {
-  ShippingRequestModel({required super.id, required super.fromCoordinates, required super.toCoordinates, required super.fromAddress, required super.toAddress, required super.price, required super.time, required super.distance, required super.started, required super.ended, required super.canceled, required super.calls, required super.offers, required super.driver, required super.category, required super.moreFromAddressDetails, required super.moreToAddressDetails, required super.receiverPhone, required super.senderPhone});
-factory ShippingRequestModel.fromJson(Map<String, dynamic> json) {
+  ShippingRequestModel(
+      {required super.id,
+      required super.fromCoordinates,
+      required super.toCoordinates,
+      required super.fromAddress,
+      required super.toAddress,
+      required super.price,
+      required super.time,
+      required super.distance,
+      required super.started,
+      required super.ended,
+      required super.canceled,
+      required super.calls,
+      required super.offers,
+      required super.driver,
+      required super.category,
+      required super.moreFromAddressDetails,
+      required super.moreToAddressDetails,
+      required super.receiverPhone,
+      required super.senderPhone});
+  factory ShippingRequestModel.fromJson(Map<String, dynamic> json) {
     return ShippingRequestModel(
       id: json['id'],
       fromCoordinates: json['from_coordinates'].cast<double>(),
@@ -27,10 +46,10 @@ factory ShippingRequestModel.fromJson(Map<String, dynamic> json) {
       driver:
           json['driver'] != null ? DriverModel.fromJson(json['driver']) : null,
       category: SubCategoryModel.fromJson(json['category']),
-       moreFromAddressDetails: json['more_from_address_details'],
-       moreToAddressDetails: json['more_to_address_details'],
-       senderPhone: json['sender_phone'],
-       receiverPhone: json['receiver_phone'],
+      moreFromAddressDetails: json['more_from_address_details'],
+      moreToAddressDetails: json['more_to_address_details'],
+      senderPhone: json['sender_phone'],
+      receiverPhone: json['receiver_phone'],
     );
   }
 }

@@ -27,7 +27,7 @@ class DoctorUnhandledAppointmentsView extends StatelessWidget {
       },
       child: Scaffold(
         appBar: const BackAppBar(
-          label: Labels.requests,
+          label: 'No Appointments',
         ),
         body: BlocBuilder<DoctorUnhandledAppointmentsCubit,
             DoctorUnhandledAppointmentsState>(
@@ -62,7 +62,7 @@ class DoctorUnhandledAppointmentsView extends StatelessWidget {
               } else {
                 return Center(
                   child: Label(
-                    text: Labels.noAppointments,
+                    text: 'No Appointments',
                     style: Styles.headerText(),
                   ),
                 );

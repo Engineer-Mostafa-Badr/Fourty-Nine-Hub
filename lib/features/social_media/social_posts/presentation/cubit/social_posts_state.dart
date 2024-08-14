@@ -4,11 +4,13 @@ class SocialPostsState {
   final StateStatus status;
   final Failure? failure;
   final List<PostEntity>? posts;
+  final PostEntity? postDetails;
   final List<PostEntity>? myPosts;
   final List<TwitterPostEntity>? myTweets;
   final List<SuggestUserEntity>? suggestedFriends;
   final bool? friendRequest;
   final CommentEntity? newComment;
+  final List<CommentEntity>? postComments;
   final int? tweetPage;
   final int? advertisementsPage;
   const SocialPostsState(
@@ -20,6 +22,8 @@ class SocialPostsState {
       this.myTweets,
       this.suggestedFriends,
       this.newComment,
+      this.postComments,
+      this.postDetails,
       this.tweetPage = 0,
       this.advertisementsPage = 0});
   SocialPostsState copyWith({
@@ -28,11 +32,13 @@ class SocialPostsState {
     List<PostEntity>? posts,
     List<SuggestUserEntity>? suggestedFriends,
     List<PostEntity>? myPosts,
+    List<CommentEntity>? postComments,
     List<TwitterPostEntity>? myTweets,
     bool? friendRequest,
     int? tweetPage,
     int? advertisementsPage,
     CommentEntity? newComment,
+    PostEntity? postDetails,
   }) {
     return SocialPostsState(
       status: status ?? this.status,
@@ -45,6 +51,8 @@ class SocialPostsState {
       newComment: newComment ?? this.newComment,
       tweetPage: tweetPage ?? this.tweetPage,
       advertisementsPage: advertisementsPage ?? this.advertisementsPage,
+      postComments: postComments ?? this.postComments,
+      postDetails: postDetails ?? this.postDetails,
     );
   }
 }

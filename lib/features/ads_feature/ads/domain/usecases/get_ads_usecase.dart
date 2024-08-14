@@ -5,8 +5,7 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/ads_repo.dart';
 
-class GetAdsUseCase
-    extends UseCase<List<AdModel>, String> {
+class GetAdsUseCase extends UseCase<List<AdModel>, String> {
   final AdsRepo _repo;
   GetAdsUseCase(this._repo);
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +11,7 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_for
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -40,6 +43,7 @@ class RegisterView extends StatelessWidget {
             extra: registerCubit.emailTextController.text,
           );
         } else if (state is RegisterSuccess) {
+          context.read<UserCubit>().setLogin(true);
           context.read<UserCubit>().getUser();
           context.go(Routes.HOME);
         }
@@ -160,6 +164,10 @@ class RegisterView extends StatelessWidget {
                     label: 'Register',
                     width: double.infinity,
                     onPressed: registerCubit.register,
+                    // onPressed: () async {
+                    //   var r = await getDeviceId();
+                    //   log(r.toString());
+                    // },
                   ),
                   const Sizer(),
                   const Sizer(),

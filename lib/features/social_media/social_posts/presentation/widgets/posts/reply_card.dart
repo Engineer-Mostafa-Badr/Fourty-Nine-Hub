@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
@@ -13,13 +14,14 @@ class ReplyCard extends StatefulWidget {
   final Color textColor;
   final CommentEntity reply;
   final Function(String) onReplyReact;
+  final Function(String) onDeleteReply;
   final Function(TwitterReportParams) onReport;
   const ReplyCard({
     super.key,
     this.textColor = Colors.black,
     required this.reply,
     required this.onReplyReact,
-    required this.onReport,
+    required this.onReport, required this.onDeleteReply,
   });
 
   @override
@@ -53,8 +55,8 @@ class _ReplyCardState extends State<ReplyCard> {
                     style: Styles.mediumText(color: widget.textColor)),
               ],
             )),
-            IconButton(
-                onPressed: () {
+            GestureDetector(
+                onTap: () {
                   bottomSheet(
                       context: context,
                       widget: ReportView(
@@ -62,8 +64,17 @@ class _ReplyCardState extends State<ReplyCard> {
 
                       ));
                 },
-                icon: Icon(
+                child: Icon(
                   Icons.more_vert,
+                  color: widget.textColor,
+                )),
+            Sizer(),
+            GestureDetector(
+                onTap: () {
+                  widget.onDeleteReply(widget.reply.id);
+                },
+                child: Icon(
+                  Icons.close,
                   color: widget.textColor,
                 )),
           ],

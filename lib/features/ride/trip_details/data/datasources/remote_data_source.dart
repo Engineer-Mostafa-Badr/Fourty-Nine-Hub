@@ -10,9 +10,8 @@ import '../../../../../core/data/datasources/json_parser.dart';
 abstract class TripDetailsRemoteDataSource {
   Future<Either<Failure, TripModel>> getTripDetails({required int tripId});
   Future<Either<Failure, List<CancelReasonModel>>> getCancelReasons();
-  Future<Either<Failure, List<TripRequestEntity>>> getTripRequests({
-    required String id
-  });
+  Future<Either<Failure, List<TripRequestEntity>>> getTripRequests(
+      {required String id});
 }
 
 class TripDetailsRemoteDataSourceImpl implements TripDetailsRemoteDataSource {
@@ -36,9 +35,10 @@ class TripDetailsRemoteDataSourceImpl implements TripDetailsRemoteDataSource {
             .map((e) => CancelReasonModel.fromJson(e))
             .toList()));
   }
-  
+
   @override
-  Future<Either<Failure, List<TripRequestEntity>>> getTripRequests({required String id}) {
+  Future<Either<Failure, List<TripRequestEntity>>> getTripRequests(
+      {required String id}) {
     // TODO: implement getTripRequests
     throw UnimplementedError();
   }

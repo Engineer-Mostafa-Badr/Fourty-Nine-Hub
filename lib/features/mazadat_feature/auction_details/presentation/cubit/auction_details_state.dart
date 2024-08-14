@@ -15,20 +15,21 @@ class AuctionDetailsState {
   final AuctionEntity? auction;
   final String? successMessage;
   const AuctionDetailsState(
-      {this.auction, this.failure,
+      {this.auction,
+      this.failure,
       this.successMessage,
-       this.status = AuctionDetailsStates.loading});
-AuctionDetailsState copyWith({
-   AuctionDetailsStates? status,
-   Failure? failure,
-   AuctionEntity? auction,
-   String? successMessage,
-}){
-  return AuctionDetailsState(
-    status: status?? this.status,
-    failure: failure?? this.failure,
-    auction: auction?? this.auction,
-    successMessage: successMessage?? this.successMessage,
-  );
-}
+      this.status = AuctionDetailsStates.loading});
+  AuctionDetailsState copyWith({
+    AuctionDetailsStates? status,
+    Failure? failure,
+    AuctionEntity? auction,
+    String? successMessage,
+  }) {
+    return AuctionDetailsState(
+      status: status ?? this.status,
+      failure: failure ?? this.failure,
+      auction: auction ?? this.auction,
+      successMessage: successMessage ?? this.successMessage,
+    );
+  }
 }

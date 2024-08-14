@@ -90,7 +90,7 @@ class EnterPersonalInfo extends StatelessWidget {
                   ),
                 const Sizer(),
                 _buildCategoriesWidget(context: context),
-              EnterCarInfo(),
+                EnterCarInfo(),
               ],
             ),
           ),

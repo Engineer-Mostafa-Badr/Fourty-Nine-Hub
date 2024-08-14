@@ -113,6 +113,7 @@ abstract class Routes {
   static const SETTINGS = '/Account/Settings';
   static const PAYMENT = '/Payment';
   static const SUBSCRIPTIONPLANS = '/SubscriptionPlans';
+  static const SHIPPING_REGISTER = '/shippingRegister';
 }
 
 abstract class Paths {
@@ -216,4 +217,5 @@ abstract class Paths {
   static const AZKAAR = 'Azkaar';
   static const PAYMENT = 'Payment';
   static const SUBSCRIPTIONPLANS = 'SubscriptionPlans';
+  static const SHIPPING_REGISTER = 'shippingRegister';
 }

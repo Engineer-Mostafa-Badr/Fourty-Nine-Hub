@@ -20,7 +20,7 @@ abstract class Styles {
 
   static TextStyle mediumText(
       {double fontSize = 12,
-      Color color = AppColors.PRIMARY_COLOR,
+      Color? color ,
       TextDecoration? decoration,
       List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {
@@ -30,7 +30,6 @@ abstract class Styles {
         // overflow: TextOverflow.ellipsis,
         shadows: shadows,
         decoration: decoration,
-        decorationColor: color,
         fontWeight: fontWeight);
   }
 
@@ -39,13 +38,13 @@ abstract class Styles {
       TextDecoration? decoration,
       TextAlign textAlign = TextAlign.center,
       List<Shadow>? shadows,
-      Color color = AppColors.PRIMARY_COLOR,
+      Color? color ,
       FontWeight fontWeight = FontWeight.w600}) {
     return TextStyle(
       fontSize: fontSize,
-      color: color,
       fontWeight: fontWeight,
       shadows: shadows,
+      color: color
     );
   }
 }

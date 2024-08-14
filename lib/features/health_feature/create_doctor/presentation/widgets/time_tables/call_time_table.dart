@@ -25,7 +25,8 @@ class CreateDoctorCallTimeTable extends StatelessWidget {
                     keyboardType: TextInputType.number,
                     isRequired: true,
                     currentFocusNode: doctorLoginCubit.callPriceFocusNode,
-                    nextFocusNode: doctorLoginCubit.callExamineDurationFocusNode,
+                    nextFocusNode:
+                        doctorLoginCubit.callExamineDurationFocusNode,
                     currentController: doctorLoginCubit.callPriceController),
                 const Sizer(),
                 DefaultTextFormField(

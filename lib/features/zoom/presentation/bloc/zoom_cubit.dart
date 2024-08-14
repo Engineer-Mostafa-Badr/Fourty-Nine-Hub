@@ -19,7 +19,7 @@ class MeetingCubit extends Cubit<MeetingState> {
     super.onChange(change);
   }
   void addRoom(String roomId) {
-    emit(MeetingCreateLoadingState());
+    // emit(MeetingCreateLoadingState());
     addRoomUseCase(MeetingParams(id: roomId))
         .then((value) => emit(MeetingCreateSuccessState()))
         .catchError((error) => emit(MeetingCreateFailureState()));
@@ -43,5 +43,10 @@ class MeetingCubit extends Cubit<MeetingState> {
           print('room Not Ended');
           emit(MeetingEndFailureState());
         });
+  }
+  bool surfaceShown = true;
+  void toggleSurfaceShown(){
+    surfaceShown = !surfaceShown;
+    emit(MeetingSurfaceShownState(surfaceShown: surfaceShown));
   }
 }

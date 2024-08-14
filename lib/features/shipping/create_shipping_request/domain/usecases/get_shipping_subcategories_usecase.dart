@@ -4,14 +4,13 @@ import '../../../../../../core/abstract/use_case.dart';
 import '../../../../subcategories/data/models/sub_category_model.dart';
 import '../repositories/create_shipping_repo.dart';
 
-class GetShippingSubCategoriesUseCase extends UseCase<List<SubCategoryModel>, String> {
+class GetShippingSubCategoriesUseCase
+    extends UseCase<List<SubCategoryModel>, String> {
   final CreateShippingRepo _repo;
   GetShippingSubCategoriesUseCase(this._repo);
 
   @override
   Future<Either<Failure, List<SubCategoryModel>>> call(String params) {
-
-
-    return  _repo.getSubCategories(mainCategoryId: params);
+    return _repo.getSubCategories(mainCategoryId: params);
   }
 }

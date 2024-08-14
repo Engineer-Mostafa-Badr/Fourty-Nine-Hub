@@ -9,7 +9,6 @@ import '../../domain/entities/auction_entity.dart';
 abstract class AuctionListRemoteDataSource {
   Future<Either<Failure, List<AuctionEntity>>> getAuctions(
       {required LocationParams params});
-
 }
 
 class AuctionListRemoteDataSourceImpl implements AuctionListRemoteDataSource {
@@ -25,6 +24,4 @@ class AuctionListRemoteDataSourceImpl implements AuctionListRemoteDataSource {
             .map((e) => AuctionModel.fromJson(e))
             .toList()));
   }
-
-
 }

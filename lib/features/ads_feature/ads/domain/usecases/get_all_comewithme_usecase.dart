@@ -4,8 +4,7 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/ads_repo.dart';
 
-class GetAllComeWithMeUseCase
-    extends UseCase<List<TripEntity>, NoParams> {
+class GetAllComeWithMeUseCase extends UseCase<List<TripEntity>, NoParams> {
   final AdsRepo _repo;
   GetAllComeWithMeUseCase(this._repo);
 

@@ -67,7 +67,7 @@ class DoctorUnhandledAppointmentsCubit
       },
       (data) {
         emit(const DoctorUnhandledAppotinmentsShowSuccessfulMessage(
-            Labels.appointmentAcceptedSuccessfully));
+            'appointmentAcceptedSuccessfully'));
         _getAppointments();
       },
     );
@@ -86,7 +86,7 @@ class DoctorUnhandledAppointmentsCubit
       },
       (data) {
         emit(const DoctorUnhandledAppotinmentsShowSuccessfulMessage(
-            Labels.appointmentRejectedSuccessfully));
+            'appointmentRejectedSuccessfully'));
         _getAppointments();
       },
     );

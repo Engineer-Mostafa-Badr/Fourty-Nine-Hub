@@ -2,13 +2,13 @@ import '../../domain/entities/installment_request_entity.dart';
 
 class InstallmentRequestModel extends InstallmentRequestEntity {
   InstallmentRequestModel(
-      { super.id,
+      {super.id,
       required super.installmentId,
       required super.downPayment,
       required super.installment,
       required super.duration,
-       super.userId,
-       super.isApproved,
+      super.userId,
+      super.isApproved,
       super.createdAt});
 
   factory InstallmentRequestModel.fromJson(Map<String, dynamic> json) {
@@ -24,8 +24,8 @@ class InstallmentRequestModel extends InstallmentRequestEntity {
     );
   }
   Map<String, dynamic> toJson() => {
-     "start_price" : downPayment,
-    "number_months" : duration,
-    "financial_payment" : installment
-  };
+        "start_price": downPayment,
+        "number_months": duration,
+        "financial_payment": installment
+      };
 }

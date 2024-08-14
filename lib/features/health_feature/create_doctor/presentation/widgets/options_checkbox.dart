@@ -17,7 +17,9 @@ class CreateDoctorOptionsCheckbox extends StatelessWidget {
     return Row(
       children: [
         BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
-          buildWhen: (previous, current) => current is CreateDoctorShowClinic ||  current is CreateDoctorInitial,
+          buildWhen: (previous, current) =>
+              current is CreateDoctorShowClinic ||
+              current is CreateDoctorInitial,
           builder: (context, state) {
             return Checkbox(
               value: _clinic,
@@ -34,7 +36,8 @@ class CreateDoctorOptionsCheckbox extends StatelessWidget {
         ),
         const Sizer(),
         BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
-          buildWhen: (previous, current) => current is CreateDoctorShowCall ||  current is CreateDoctorInitial,
+          buildWhen: (previous, current) =>
+              current is CreateDoctorShowCall || current is CreateDoctorInitial,
           builder: (context, state) {
             return Checkbox(
               value: _call,
@@ -51,7 +54,9 @@ class CreateDoctorOptionsCheckbox extends StatelessWidget {
         ),
         const Sizer(),
         BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
-          buildWhen: (previous, current) => current is CreateDoctorShowHomeVisit ||  current is CreateDoctorInitial,
+          buildWhen: (previous, current) =>
+              current is CreateDoctorShowHomeVisit ||
+              current is CreateDoctorInitial,
           builder: (context, state) {
             return Checkbox(
               value: _homeVisit,

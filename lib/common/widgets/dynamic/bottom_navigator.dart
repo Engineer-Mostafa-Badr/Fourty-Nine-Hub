@@ -1,10 +1,17 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import '../../../res/assets/assets.dart';
 import '../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../theme/cubit/cubit.dart';
 import 'bottom_painter.dart';
 
 class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
@@ -19,32 +26,33 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+
     List<BottomItemModel> pages = mainCategory == 3
         ? <BottomItemModel>[
       BottomItemModel(
           icon: FontAwesomeIcons.microphone,
           height: 30,
-          label: 'Voice',
+          label: 'voice'.localize,
           index: 0,
           image: Assets.voiceLive,
           route: Routes.CLUBHOUSE),
       BottomItemModel(
           icon: FontAwesomeIcons.stream,
-          label: 'Live',
+          label: 'live'.localize,
           index: 0,
           height: 25,
           image: Assets.live,
           route: Routes.LIVE),
       BottomItemModel(
           icon: Icons.video_call,
-          label: 'Meet',
+          label: 'meet'.localize,
           index: 0,
           height: 25,
           image: Assets.zoomMeeting,
           route: Routes.ZOOM),
       BottomItemModel(
           icon: Icons.video_call,
-          label: 'Cast',
+          label: 'cast'.localize,
           index: 0,
           height: 25,
           image: Assets.radio,
@@ -54,25 +62,25 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         ? <BottomItemModel>[
       BottomItemModel(
           icon: FontAwesomeIcons.twitter,
-          label: 'Tweet',
+          label: 'tweet'.localize,
           index: 0,
           image: Assets.twitter,
           route: Routes.TWITTER),
       BottomItemModel(
           icon: FontAwesomeIcons.list,
-          label: 'Reels',
+          label: 'reels'.localize,
           index: 1,
           image: Assets.reels,
           route: Routes.REELS),
       BottomItemModel(
           icon: Icons.chat,
-          label: 'Chat',
+          label: 'chat'.localize,
           index: 3,
           image: Assets.message,
           route: Routes.CHAT),
       BottomItemModel(
           icon: FontAwesomeIcons.car,
-          label: 'Find',
+          label: 'find'.localize,
           index: 4,
           image: Assets.social,
           route: Routes.Tinder),
@@ -80,25 +88,25 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         : <BottomItemModel>[
       BottomItemModel(
           icon: FontAwesomeIcons.bowlFood,
-          label: 'Meal',
+          label: 'meal'.localize,
           index: 0,
           image: Assets.food,
           route: Routes.FOOD),
       BottomItemModel(
           icon: FontAwesomeIcons.kitMedical,
-          label: 'Health',
+          label: 'health'.localize,
           index: 1,
           image: Assets.health,
           route: Routes.VISITA),
       BottomItemModel(
           icon: Icons.delivery_dining,
-          label: 'Shipping',
+          label: 'shipping'.localize,
           index: 3,
           image: Assets.shipping,
           route: Routes.SHIPPING),
       BottomItemModel(
           icon: FontAwesomeIcons.car,
-          label: 'Ride',
+          label: LocaleKeys.ride.tr(),
           index: 4,
           image: Assets.ride,
           route: Routes.RIDE),
@@ -157,9 +165,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
       ),
       child: Container(
         padding: const EdgeInsets.only(bottom: 20, top: 10),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          boxShadow: const [
             BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2)
           ],
         ),
@@ -169,14 +177,16 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(widget.items.length, (index) {
+              int index1= context.isArabic? 2:1;
+              int index2= context.isArabic? 1:2;
                 return GestureDetector(
                   onTap: () {
                     widget.onTap(index);
                   },
                   child: Padding(
-                    padding: index == 1
+                    padding: index == index1
                         ? const EdgeInsets.only(right: 10)
-                        : index == 2
+                        : index == index2
                         ? const EdgeInsets.only(left: 30)
                         : EdgeInsets.zero,
                     child: Column(
@@ -186,10 +196,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                           widget.items[index].image,
                           height: widget.items[index].height,
                           semanticsLabel: widget.items[index].label,
+                          color:context.read<ThemeCubit>().isDarkTheme? Colors.white:null,
                         ),
                         Text(
                           widget.items[index].label,
-                          style: const TextStyle(color: Colors.black),
                         ),
                       ],
                     ),

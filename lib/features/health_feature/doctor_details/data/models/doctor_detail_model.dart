@@ -5,9 +5,9 @@ class DoctorDetailModel extends DoctorDetailEntity {
       {required super.id, required super.label, required super.details});
   factory DoctorDetailModel.fromJson(Map<String, dynamic> json) {
     return DoctorDetailModel(
-      id : json['id'],
-    label : json['label'],
-    details : json['details'],
+      id: json['id'],
+      label: json['label'],
+      details: json['details'],
     );
   }
 }

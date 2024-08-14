@@ -19,15 +19,15 @@ class TwitterMainPostModel extends TwitterMainPostEntity {
       });
   factory TwitterMainPostModel.fromJson(Map<String, dynamic> json) {
     return TwitterMainPostModel(
-      id: json['_id'],
-      content: json['content'],
+      id: json['_id']??'',
+      content: json['content']??'',
       images: json['images'] != null ? List<String>.from(json['images']) : [],
       shares: json['shares'] != null ? List<String>.from(json['shares']) : [],
       love: json['love'] != null ? List<String>.from(json['love']) : [],
       comments: json['comments'] != null ? List<String>.from(json['comments']) : [],
       isShared: json['isShared'] ?? false,
       user: TwitterUserModel.fromJson(json['user']),
-      commentPrivacy: json['commentPrivacy'],
+      commentPrivacy: json['commentPrivacy']??0,
       sharesCount: json['sharesCount']??0,
       loveCount: json['loveCount']??0,
       createdAt: DateTime.parse(json['createdAt']),

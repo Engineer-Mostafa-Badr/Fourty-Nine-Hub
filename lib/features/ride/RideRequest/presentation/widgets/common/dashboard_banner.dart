@@ -9,7 +9,10 @@ class DashboardBanner extends StatelessWidget {
   final String subTitle;
   final String route;
   const DashboardBanner(
-      {super.key, required this.subTitle, required this.title, required this.route});
+      {super.key,
+      required this.subTitle,
+      required this.title,
+      required this.route});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +21,7 @@ class DashboardBanner extends StatelessWidget {
       child: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-              color: AppColors.PRIMARY_COLOR,
+              color: Theme.of(context).primaryColor,
               borderRadius: BorderRadius.circular(10)),
           child: Row(
             children: [
@@ -26,21 +29,21 @@ class DashboardBanner extends StatelessWidget {
                 child: RichText(
                     text: TextSpan(children: [
                   TextSpan(
-                    text: title,
+                    text: '$title ',
                     style: Styles.mediumText(
-                        color: Colors.white, fontWeight: FontWeight.bold),
+                        color: Theme.of(context).scaffoldBackgroundColor, fontWeight: FontWeight.bold),
                   ),
                   TextSpan(
                     text: subTitle,
                     style: Styles.mediumText(
-                      color: Colors.white,
+                      color: Theme.of(context).scaffoldBackgroundColor,
                     ),
                   ),
                 ])),
               ),
-              const Icon(
+               Icon(
                 Icons.arrow_forward_ios_outlined,
-                color: Colors.white,
+                color: Theme.of(context).scaffoldBackgroundColor,
               ),
             ],
           )),

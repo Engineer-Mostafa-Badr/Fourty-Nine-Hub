@@ -20,7 +20,7 @@ class DoctorStatisticsCubit extends Cubit<DoctorStatisticsState> {
   Future<void> _getDoctorStatistics() async {
     final response = await _getDoctorStatisticsUsecase.call(const NoParams());
     response.fold((failure) {
-      String message = Labels.cantLoadData;
+      String message = 'cannotLoadData';
       if (failure is ServerFailure) {
         message = failure.message;
       }

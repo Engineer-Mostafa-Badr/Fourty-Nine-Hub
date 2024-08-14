@@ -6,11 +6,12 @@ class CompanyAdModel extends CompanyAdEntity {
       {required super.title,
       required super.allowVideo,
       required super.options});
-  factory CompanyAdModel.fromJson(Map<String,dynamic> json) {
+  factory CompanyAdModel.fromJson(Map<String, dynamic> json) {
     return CompanyAdModel(
-      title: json['title'],
-      allowVideo: json['allow_video'],
-      options: (json['options'] as List).map((e) => CompanyAdOptionModel.fromJson(e)).toList()
-    );
+        title: json['title'],
+        allowVideo: json['allow_video'],
+        options: (json['options'] as List)
+            .map((e) => CompanyAdOptionModel.fromJson(e))
+            .toList());
   }
 }

@@ -15,11 +15,14 @@ class MainCategoryBanner extends StatefulWidget {
   final MainCategoryEntity category;
   final bool canRegister;
   final Function()? onRegister;
-  const MainCategoryBanner(
-      {super.key,
-      this.canRegister = false,
-      this.onRegister,
-      required this.category});
+  final Color? color;
+  const MainCategoryBanner({
+    super.key,
+    this.canRegister = false,
+    this.onRegister,
+    required this.category,
+    this.color = Colors.white,
+  });
 
   @override
   State<MainCategoryBanner> createState() => _MainCategoryBannerState();
@@ -72,11 +75,9 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                       (l) => showErrorMessage(
                           context, "Can't remove from favorite"),
                       (r) {
-                        setState(
-                          () {
-                            _isFavorite = false;
-                          },
-                        );
+                        setState(() {
+                          _isFavorite = false;
+                        });
                       },
                     );
                   } else {
@@ -86,11 +87,9 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                     result.fold(
                       (l) => showErrorMessage(context, "Can't add to favorite"),
                       (r) {
-                        setState(
-                          () {
-                            _isFavorite = true;
-                          },
-                        );
+                        setState(() {
+                          _isFavorite = true;
+                        });
                       },
                     );
                   }
@@ -100,12 +99,14 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                   color: AppColors.SECONDARY_COLOR,
                 ),
               ),
-              const Sizer(
-                height: 20,
-              ),
+              const Sizer(height: 20),
               Label(
                 text: '${widget.category.total.toShortScale} ${Labels.ads}',
-                style: Styles.mediumText(color: Colors.white),
+                style: Styles.mediumText(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: widget.color,
+                ),
               )
             ],
           ),

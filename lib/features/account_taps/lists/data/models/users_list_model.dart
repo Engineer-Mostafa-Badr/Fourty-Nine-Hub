@@ -5,8 +5,6 @@ class UsersListModel extends UsersListEntity {
   UsersListModel({required super.id, required super.user});
   factory UsersListModel.fromJson(Map<String, dynamic> json) {
     return UsersListModel(
-      id: json['id'],
-      user: PublisherModel.fromJson(json['user'])
-    );
+        id: json['id'], user: PublisherModel.fromJson(json['user']));
   }
 }

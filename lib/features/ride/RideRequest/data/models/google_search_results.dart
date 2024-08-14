@@ -2,18 +2,17 @@ class GoogleSearchResultModel {
   String? formattedAddress;
   Geometry? geometry;
 
-  GoogleSearchResultModel(
-      { this.formattedAddress, this.geometry});
+  GoogleSearchResultModel({this.formattedAddress, this.geometry});
 
   GoogleSearchResultModel.fromJson(Map<String, dynamic> json) {
     formattedAddress = json['formatted_address'] as String;
     geometry = json['geometry'] != null
-        ?  Geometry.fromJson(json['geometry'] as Map<String, dynamic>)
+        ? Geometry.fromJson(json['geometry'] as Map<String, dynamic>)
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['formatted_address'] = formattedAddress;
     if (geometry != null) {
       data['geometry'] = geometry!.toJson();
@@ -29,12 +28,12 @@ class Geometry {
 
   Geometry.fromJson(Map<String, dynamic> json) {
     location = json['location'] != null
-        ?  Location.fromJson(json['location'] as Map<String, dynamic>)
+        ? Location.fromJson(json['location'] as Map<String, dynamic>)
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     if (location != null) {
       data['location'] = this.location!.toJson();
     }

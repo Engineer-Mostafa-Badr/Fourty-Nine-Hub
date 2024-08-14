@@ -4,9 +4,6 @@ class CompanyAdEntity {
   final String title;
   final bool allowVideo;
   final List<CompanyAdOptionEntity> options;
-  CompanyAdEntity({
-    required this.title, 
-    required this.allowVideo, 
-    required this.options
-  });
+  CompanyAdEntity(
+      {required this.title, required this.allowVideo, required this.options});
 }

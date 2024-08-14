@@ -8,9 +8,8 @@ import '../usecases/create_rider_offer_usecase.dart';
 abstract class DriverDashboardRepo {
   Future<Either<Failure, List<TripModel>>> getNewTrips();
   Future<Either<Failure, DriverStatisticsModel>> getStatistics();
- Future<Either<Failure, bool>> createOffer(
+  Future<Either<Failure, bool>> createOffer(
       {required CreateRiderOfferParams params});
 
   Future<Either<Failure, String>> acceptTrip({required String id});
-
 }

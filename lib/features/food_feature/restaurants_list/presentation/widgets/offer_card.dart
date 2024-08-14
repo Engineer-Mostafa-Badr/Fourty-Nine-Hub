@@ -12,9 +12,7 @@ import '../../../../subcategories/domain/entities/sub_category_entity.dart';
 class FoodOfferCard extends StatelessWidget {
   final SubCategoryEntity item;
   final Function(String) onTap;
-  const FoodOfferCard({super.key, 
-  required this.onTap,
-  required this.item});
+  const FoodOfferCard({super.key, required this.onTap, required this.item});
 
   @override
   Widget build(BuildContext context) {

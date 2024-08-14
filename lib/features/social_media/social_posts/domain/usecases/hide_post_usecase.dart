@@ -8,6 +8,6 @@ class HidePostUseCase extends UseCase<bool, String> {
   HidePostUseCase(this._repo);
   @override
   Future<Either<Failure, bool>> call(String params) async {
-    return await _repo.deletePost(postId: params);
+    return await _repo.hidePost(postId: params);
   }
 }

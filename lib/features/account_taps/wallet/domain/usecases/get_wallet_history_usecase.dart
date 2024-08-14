@@ -8,7 +8,8 @@ import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/wallet_repo.dart';
 
-class GetWalletHistoryUseCase extends UseCase<List<WalletHistoryEntity>, WalletTypes> {
+class GetWalletHistoryUseCase
+    extends UseCase<List<WalletHistoryEntity>, WalletTypes> {
   final WalletRepo _repo;
   GetWalletHistoryUseCase(this._repo);
   @override

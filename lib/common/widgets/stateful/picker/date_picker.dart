@@ -9,12 +9,14 @@ class DatePickerField extends StatefulWidget {
   final DateTime initialDate;
   final DateTime minDate;
   final DateTime maxDate;
+  final Color? borderColor;
   final Function(DateTime?) onDateSelected;
   const DatePickerField(
       {super.key,
       this.title,
       required this.initialDate,
       required this.minDate,
+      this.borderColor,
       required this.maxDate,
       required this.onDateSelected});
 
@@ -46,7 +48,8 @@ class _DatePickerFieldState extends State<DatePickerField> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
         decoration: BoxDecoration(
-          border: Border.all(width: .5),
+          border:
+              Border.all(width: .5, color: widget.borderColor ?? Colors.black),
           borderRadius: BorderRadius.circular(UIConst.radius),
         ),
         child: Row(

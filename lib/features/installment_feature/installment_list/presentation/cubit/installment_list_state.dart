@@ -15,30 +15,28 @@ class InstallmentListState {
   final List<SubCategoryEntity>? subCategories;
   final SubCategoryEntity? selectedSubCategory;
   final bool isGrid;
-  const InstallmentListState({
-    this.failure,
-    this.installments,
-    this.subCategories,
-    this.selectedSubCategory,
-    this.status = InstallmentListStates.loading,
-   this. isGrid = true
-  });
+  const InstallmentListState(
+      {this.failure,
+      this.installments,
+      this.subCategories,
+      this.selectedSubCategory,
+      this.status = InstallmentListStates.loading,
+      this.isGrid = true});
 
-  InstallmentListState copyWith({
-    InstallmentListStates? status,
-    Failure? failure,
-    List<InstallmentEntity>? installments,
-    List<SubCategoryEntity>? subCategories,
-    SubCategoryEntity? selectedSubCategory,
-    bool? isGrid
-  }) {
+  InstallmentListState copyWith(
+      {InstallmentListStates? status,
+      Failure? failure,
+      List<InstallmentEntity>? installments,
+      List<SubCategoryEntity>? subCategories,
+      SubCategoryEntity? selectedSubCategory,
+      bool? isGrid}) {
     return InstallmentListState(
-        status: status ?? this.status,
-        failure: failure ?? this.failure,
-        subCategories: subCategories ?? this.subCategories,
-        selectedSubCategory: selectedSubCategory ?? this.selectedSubCategory,
-        installments: installments ?? this.installments, 
-        isGrid: isGrid?? this.isGrid,
-        );
+      status: status ?? this.status,
+      failure: failure ?? this.failure,
+      subCategories: subCategories ?? this.subCategories,
+      selectedSubCategory: selectedSubCategory ?? this.selectedSubCategory,
+      installments: installments ?? this.installments,
+      isGrid: isGrid ?? this.isGrid,
+    );
   }
 }
