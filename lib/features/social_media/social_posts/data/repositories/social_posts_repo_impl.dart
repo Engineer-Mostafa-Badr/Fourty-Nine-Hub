@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
@@ -50,13 +51,18 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
 
   @override
   Future<Either<Failure, List<CommentEntity>>> getPostComments(
-      {required String postId}) {
-    return _remoteDataSource.getPostComments(postId: postId);
+      {required PostCommentsParams params}) {
+    return _remoteDataSource.getPostComments(params: params);
   }
 
   @override
   Future<Either<Failure, bool>> deletePost({required String postId}) {
     return _remoteDataSource.deletePost(postId: postId);
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteComment({required String commentId}) {
+    return _remoteDataSource.deleteComment(commentId: commentId);
   }
 
   @override
@@ -93,8 +99,8 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   }
 
   @override
-  Future<Either<Failure, List<CommentEntity>>> getPostCommentReplies({required String commentId}) {
-    return _remoteDataSource.getPostCommentReplies(commentId: commentId);
+  Future<Either<Failure, List<CommentEntity>>> getPostCommentReplies({required PostCommentsParams params}) {
+    return _remoteDataSource.getPostCommentReplies(params: params);
   }
   @override
   Future<Either<Failure, CommentEntity>> replyOnComment({required ReplyOnCommentParams params}) {
@@ -104,5 +110,11 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   @override
   Future<Either<Failure, List<PostEntity>>> getTweet({required TwitterFeedParams params}) {
     return _remoteDataSource.getTweet(params: params);
+  }
+
+  @override
+  Future<Either<Failure, PostEntity>> getPost({required String postId}) {
+    return _remoteDataSource.getPost(postId: postId);
+
   }
 }

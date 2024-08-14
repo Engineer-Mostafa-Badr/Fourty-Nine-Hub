@@ -14,4 +14,9 @@ class InstagramRepoImpl implements InstagramRepo {
     return _remoteDataSource.getFeed(params: params);
   }
 
+  @override
+  Future<Either<Failure, List<PostEntity>>> getReels({required TwitterFeedParams params}) {
+    return _remoteDataSource.getReels(params: params);
+  }
+
 }

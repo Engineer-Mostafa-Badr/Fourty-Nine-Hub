@@ -24,10 +24,12 @@ import 'package:fourtyninehub/features/social_media/instagram/data/datasources/i
 import 'package:fourtyninehub/features/social_media/instagram/data/repositories/instagram_repo_impl.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/repositories/social_posts_repo.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_feed_usecase.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/datasources/social_posts_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/repositories/social_posts_repo.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/comment_react_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_advertisement_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_tweet_use_case.dart';
@@ -35,6 +37,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/friend_request_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comment_replies_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/hide_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/remove_suggest_user_usecase.dart';
@@ -47,11 +50,13 @@ import 'package:fourtyninehub/features/social_media/twitter/data/repositories/tw
 import 'package:fourtyninehub/features/social_media/twitter/domain/repositories/twitter_repo.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/delete_twitter_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_post_comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_twitter_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/hide_twitter_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/request_document_usecase.dart';
@@ -250,6 +255,36 @@ class SocialServiceLocator {
     ));
 
 
+    serviceLocator
+        .registerLazySingleton<HideTwitterPostUseCase>(() => HideTwitterPostUseCase(
+      serviceLocator(),
+    ));
+
+
+    serviceLocator
+        .registerLazySingleton<DeleteTwitterPostUseCase>(() => DeleteTwitterPostUseCase(
+      serviceLocator(),
+    ));
+
+
+
+    serviceLocator
+        .registerLazySingleton<GetInstagramReelsUseCase>(() => GetInstagramReelsUseCase(
+      serviceLocator(),
+    ));
+
+
+    serviceLocator
+        .registerLazySingleton<GetPostUseCase>(() => GetPostUseCase(
+      serviceLocator(),
+    ));
+
+
+    serviceLocator
+        .registerLazySingleton<DeleteCommentUseCase>(() => DeleteCommentUseCase(
+      serviceLocator(),
+    ));
+
 
     serviceLocator.registerFactory<CreatePostCubit>(() => CreatePostCubit(
           serviceLocator(),
@@ -259,6 +294,7 @@ class SocialServiceLocator {
         ));
 
     serviceLocator.registerFactory<InstagramCubit>(() => InstagramCubit(
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
@@ -287,8 +323,12 @@ class SocialServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
         ));
     serviceLocator.registerFactory<TwitterCubit>(() => TwitterCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

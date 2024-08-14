@@ -25,5 +25,6 @@ class TwitterPostReactParams {
   });
   Map<String, dynamic> toJson() => {
         'react': react,
+  'subCategory':'66a3583454e6e337915514db'
       };
 }

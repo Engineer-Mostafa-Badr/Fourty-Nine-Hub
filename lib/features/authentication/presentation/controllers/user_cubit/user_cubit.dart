@@ -50,6 +50,10 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     );
   }
 
+  void changeUserData(UserEntity? user)async{
+    emit(state.copyWith(data: user,status: StateStatus.success));
+  }
+
   void attachToken() async {
     final result = await _getTokensUseCase(const NoParams());
     result.fold(

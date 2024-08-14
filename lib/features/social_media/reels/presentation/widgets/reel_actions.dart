@@ -4,13 +4,11 @@ import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_e
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../social_posts/presentation/widgets/posts/post_comments.dart';
 
 class ReelActions extends StatelessWidget {
   final ReelEntity item;

@@ -456,7 +456,7 @@ class AppPages {
           path: Paths.INSTAGRAM,
           name: Routes.INSTAGRAM,
           builder: (context, state) => BlocProvider<InstagramCubit>(
-            create: (_) => serviceLocator(),
+            create: (_) => serviceLocator()..loadData(),
             child: const InstagramView(),
           ),
         ),
@@ -466,11 +466,8 @@ class AppPages {
             builder: (context, state) {
               final userId = state.extra as String?;
 
-              return BlocProvider<SocialPostsCubit>(
-                create: (_) => serviceLocator()..loadData(),
-                child: SocialHomeView(
-                  userId: userId ?? '',
-                ),
+              return SocialHomeView(
+                userId: userId ?? '',
               );
             },
             routes: [

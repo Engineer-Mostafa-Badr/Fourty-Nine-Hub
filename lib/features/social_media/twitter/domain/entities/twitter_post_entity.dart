@@ -13,7 +13,7 @@ class TwitterPostEntity {
   final dynamic user;
   final List<String> comments;
   final int commentPrivacy;
-  final num commentsCount;
+  num? commentsCount;
   num? sharesCount;
   num? loveCount;
   bool? isReact;

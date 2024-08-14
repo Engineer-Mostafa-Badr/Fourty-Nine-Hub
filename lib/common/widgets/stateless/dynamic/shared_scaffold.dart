@@ -7,8 +7,8 @@ class SharedScaffold extends StatelessWidget {
   final int mainCategoryId;
   final Widget body;
   final bool extendBody;
-  final Color? backgroundColor;
   final bool isWithBackArrow;
+  final Color? backgroundColor;
   const SharedScaffold(
       {super.key,
       required this.mainCategoryId,

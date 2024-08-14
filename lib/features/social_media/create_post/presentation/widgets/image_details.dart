@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class ImageDetailsScreen extends StatefulWidget {
@@ -32,7 +33,7 @@ class _ImageDetailsScreenState extends State<ImageDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.DARK_BLUE_COLOR,
+        backgroundColor: AppColors.BACKGROUND_COLOR,
         leading: IconButton(
           onPressed: () {
             widget.onRemoveImage();
@@ -40,11 +41,11 @@ class _ImageDetailsScreenState extends State<ImageDetailsScreen> {
           icon: widget.fromPost == true
               ? const Icon(
             Icons.arrow_back,
-            color: Colors.white,
+            color: Colors.black,
           )
               : const Icon(
             Icons.close,
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
       ),
@@ -85,7 +86,7 @@ class _ImageDetailsScreenState extends State<ImageDetailsScreen> {
           height: double.infinity,
           width: double.infinity,
           decoration: const BoxDecoration(
-            color: AppColors.DARK_BLUE_COLOR,
+            color: AppColors.BACKGROUND_COLOR,
           ),
           child: Center(
             child: Transform(
@@ -97,10 +98,13 @@ class _ImageDetailsScreenState extends State<ImageDetailsScreen> {
                 File(widget.image),
                 fit: BoxFit.contain,
               )
-                  : Image.network(
-                widget.image,
-                fit: BoxFit.contain,
-              ),
+                  :
+              ImageFromInternet(image: widget.image,),
+
+              // Image.network(
+              //   widget.image,
+              //   fit: BoxFit.contain,
+              // ),
             ),
           ),
         ),
