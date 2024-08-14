@@ -44,4 +44,9 @@ class MeetingCubit extends Cubit<MeetingState> {
           emit(MeetingEndFailureState());
         });
   }
+  bool surfaceShown = true;
+  void toggleSurfaceShown(){
+    surfaceShown = !surfaceShown;
+    emit(MeetingSurfaceShownState(surfaceShown: surfaceShown));
+  }
 }

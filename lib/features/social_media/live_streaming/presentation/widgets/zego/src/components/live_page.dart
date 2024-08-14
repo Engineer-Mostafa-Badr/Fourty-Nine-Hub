@@ -4,6 +4,7 @@ import 'dart:core';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Package imports:
 import 'package:zego_uikit/zego_uikit.dart';
@@ -25,6 +26,9 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/defines.dart';
+
+import '../../../../../../../../service_locator/service_locator.dart';
+import '../../../../../../../zoom/presentation/bloc/zoom_cubit.dart';
 
 /// @nodoc
 /// user and sdk should be login and init before page enter
@@ -181,20 +185,23 @@ class _ZegoLiveStreamingLivePageState extends State<ZegoLiveStreamingLivePage>
                             plugins: widget.plugins,
                             constraints: constraints,
                           ),
-                          ZegoLiveStreamingLivePageSurface(
-                            config: widget.config,
-                            events: widget.events,
-                            defaultEndAction: widget.defaultEndAction,
-                            defaultLeaveConfirmationAction:
-                                widget.defaultLeaveConfirmationAction,
-                            hostManager: widget.hostManager,
-                            liveStatusManager: widget.liveStatusManager,
-                            liveDurationManager: widget.liveDurationManager,
-                            popUpManager: widget.popUpManager,
-                            connectManager:
-                                ZegoLiveStreamingManagers().connectManager!,
-                            plugins: widget.plugins,
-                            isLiveStream: widget.isLiveStream,
+                          BlocProvider.value(
+                            value: serviceLocator<MeetingCubit>(),
+                            child: ZegoLiveStreamingLivePageSurface(
+                              config: widget.config,
+                              events: widget.events,
+                              defaultEndAction: widget.defaultEndAction,
+                              defaultLeaveConfirmationAction:
+                                  widget.defaultLeaveConfirmationAction,
+                              hostManager: widget.hostManager,
+                              liveStatusManager: widget.liveStatusManager,
+                              liveDurationManager: widget.liveDurationManager,
+                              popUpManager: widget.popUpManager,
+                              connectManager:
+                                  ZegoLiveStreamingManagers().connectManager!,
+                              plugins: widget.plugins,
+                              isLiveStream: widget.isLiveStream,
+                            ),
                           ),
                         ],
                       );
