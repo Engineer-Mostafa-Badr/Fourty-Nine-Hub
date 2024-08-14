@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/attach_token_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
@@ -23,6 +24,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
       : super(const BasicState());
 
   bool get isLoggedIn => state.data != null;
+
   bool isSameAccount(String anotherId) {
     if (isLoggedIn) {
       return state.data?.id == anotherId;
@@ -58,6 +60,23 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
         getUser();
       },
     );
+  }
+
+  Future<void> giveMeTokenForTinder() async {
+    final result = await _getTokensUseCase(const NoParams());
+
+    // UserTokensEntity? token;
+    result.fold(
+      (_) {},
+      (tokens) {
+        _attachTokenUseCase(tokens);
+        _isTokenAttached = true;
+        // token = tokens!;
+        emit(state.copyWith(status: StateStatus.success, token: tokens));
+      },
+    );
+    // TinderSharedUtils.initializeToken(token!.accessToken);
+    // return token;
   }
 
   void logout() async {

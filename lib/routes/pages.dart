@@ -441,7 +441,7 @@ class AppPages {
                   builder: (context, state) =>
                       BlocProvider<FavouriteSubCategoryCubit>(
                         create: (_) => serviceLocator(),
-                        child: const FavouriteSubCategoryView(),
+                        child:  FavSubCategoryView(),
                       )),
               GoRoute(
                   path: Paths.MYADDS,
@@ -539,7 +539,7 @@ class AppPages {
               GoRoute(
                   path: Paths.TINDER,
                   name: Routes.Tinder,
-                  builder: (context, state) => const TinderView()),
+                  builder: (context, state) => const TinderScreen()),
               GoRoute(
                 path: Paths.LIVE,
                 name: Routes.LIVE,
@@ -577,7 +577,7 @@ class AppPages {
                           isHost: extras.isHost,
                         );
                       },
-                      routes: [],
+                      routes: const [],
                     ),
                   ]),
             ]),
