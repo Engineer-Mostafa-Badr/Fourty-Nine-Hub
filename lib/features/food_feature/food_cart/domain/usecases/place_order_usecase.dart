@@ -3,7 +3,6 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/food_cart_repo.dart';
 
-
 class PlaceOrderUseCase extends UseCase<bool, String> {
   final FoodCartRepo _repo;
   PlaceOrderUseCase(this._repo);

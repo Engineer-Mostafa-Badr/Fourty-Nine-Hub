@@ -58,7 +58,9 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
@@ -441,7 +443,7 @@ class AppPages {
                   builder: (context, state) =>
                       BlocProvider<FavouriteSubCategoryCubit>(
                         create: (_) => serviceLocator(),
-                        child: const FavouriteSubCategoryView(),
+                        child:  FavSubCategoryView(),
                       )),
               GoRoute(
                   path: Paths.MYADDS,
@@ -456,21 +458,19 @@ class AppPages {
           path: Paths.INSTAGRAM,
           name: Routes.INSTAGRAM,
           builder: (context, state) => BlocProvider<InstagramCubit>(
-            create: (_) => serviceLocator(),
+            create: (_) => serviceLocator()..loadData(),
             child: const InstagramView(),
           ),
         ),
+        //social home
         GoRoute(
             path: Paths.SOCIAL,
             name: Routes.SOCIAL,
             builder: (context, state) {
               final userId = state.extra as String?;
 
-              return BlocProvider<SocialPostsCubit>(
-                create: (_) => serviceLocator()..loadData(),
-                child: SocialHomeView(
-                  userId: userId ?? '',
-                ),
+              return SocialHomeView(
+                userId: userId ?? '',
               );
             },
             routes: [
@@ -539,7 +539,7 @@ class AppPages {
               GoRoute(
                   path: Paths.TINDER,
                   name: Routes.Tinder,
-                  builder: (context, state) => const TinderView()),
+                  builder: (context, state) => const TinderScreen()),
               GoRoute(
                 path: Paths.LIVE,
                 name: Routes.LIVE,
@@ -577,7 +577,7 @@ class AppPages {
                           isHost: extras.isHost,
                         );
                       },
-                      routes: [],
+                      routes: const [],
                     ),
                   ]),
             ]),
@@ -826,7 +826,9 @@ class AppPages {
         GoRoute(
           path: Paths.SHIPPING,
           name: Routes.SHIPPING,
-          builder: (context, state) => const CreateShippingView(),
+          builder: (context, state) => CreateShippingView(
+            cubit: context.read<ShippingCubit>(),
+          ),
         ),
         GoRoute(
             path: Paths.RIDE,
@@ -928,6 +930,12 @@ class AppPages {
                 builder: (context, state) => const InstallmentOrdersList(),
               )
             ]),
+        // ___________________ shipping ______________
+        GoRoute(
+          path: Paths.SHIPPING_REGISTER,
+          name: Routes.SHIPPING_REGISTER,
+          builder: (context, state) => RegisterShippingScreen(),
+        )
       ],
     ),
   ]);

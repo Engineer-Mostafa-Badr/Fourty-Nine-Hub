@@ -17,6 +17,4 @@ class DoctorListRepoImpl implements DoctorListRepo {
       {required DoctorSearchParams params}) async {
     return await _remoteDataSource.getDoctorsList(params: params);
   }
-
-
 }

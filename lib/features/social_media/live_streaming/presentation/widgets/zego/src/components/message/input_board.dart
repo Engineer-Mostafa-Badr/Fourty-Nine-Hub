@@ -6,6 +6,7 @@ import 'package:zego_uikit/zego_uikit.dart';
 
 // Project imports:
 import '../../inner_text.dart';
+
 /// @nodoc
 class ZegoLiveStreamingInRoomMessageInputBoard extends ModalRoute<String> {
   ZegoLiveStreamingInRoomMessageInputBoard({
@@ -59,6 +60,8 @@ class ZegoLiveStreamingInRoomMessageInputBoard extends ModalRoute<String> {
           ZegoInRoomMessageInput(
             placeHolder: translationText.messageEmptyToast,
             payloadAttributes: payloadAttributes,
+            // to change text field text color
+            textColor: Colors.black,
             onSubmit: () {
               Navigator.of(
                 context,

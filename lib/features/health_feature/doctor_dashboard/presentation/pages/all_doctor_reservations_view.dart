@@ -34,7 +34,7 @@ class AllDoctorReservationsView extends StatelessWidget {
             } else {
               return Center(
                 child: Label(
-                  text: Labels.noAppointmentsToday,
+                  text: 'No Appointments',
                   style: Styles.headerText(),
                 ),
               );

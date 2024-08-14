@@ -17,7 +17,7 @@ class FoodOrderModel extends FoodOrderEntity {
       address: AddressModel.fromJson(json['address']),
       meals: [],
       restaurant: RestaurantModel.fromJson(json['restaurant']),
-      user: json['user']!=null? PublisherModel.fromJson(json['user']):null,
+      user: json['user'] != null ? PublisherModel.fromJson(json['user']) : null,
     );
   }
 }

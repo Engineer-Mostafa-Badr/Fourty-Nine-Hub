@@ -4,7 +4,8 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/repo
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
-class GetCompanyAdsOptionsUseCase extends UseCase<List<CompanyAdEntity>, NoParams> {
+class GetCompanyAdsOptionsUseCase
+    extends UseCase<List<CompanyAdEntity>, NoParams> {
   final CreateCompanyAdRepo _repo;
   GetCompanyAdsOptionsUseCase(this._repo);
   @override

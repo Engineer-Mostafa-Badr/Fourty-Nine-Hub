@@ -33,9 +33,12 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
       children: [
         Row(
           children: [
-            const ProfileImage(
+            widget.reply.user.image==''? const ProfileImage(
               accountId: 0,
               withBorder: false,
+            ):ProfileImage(
+              accountId: 0,
+              imageURL: widget.reply.user.image,
             ),
             const Sizer(),
             Expanded(
@@ -56,8 +59,8 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                   bottomSheet(
                       context: context,
                       widget: ReportView(
-                        id: widget.reply.id, categoryId: '66a3583454e6e337915514db',
-
+                        id: widget.reply.id,
+                        categoryId: '66a3583454e6e337915514db',
                       ));
                 },
                 icon: Icon(

@@ -5,6 +5,4 @@ class GovernorateEntity {
 
   GovernorateEntity(
       {required this.id, required this.nameAr, required this.nameEn});
-
-  
 }

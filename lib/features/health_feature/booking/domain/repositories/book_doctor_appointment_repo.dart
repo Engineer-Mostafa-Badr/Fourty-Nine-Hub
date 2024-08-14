@@ -7,6 +7,6 @@ abstract class BookAppointmentRepo {
   Future<Either<Failure, bool>> bookRegularAppointment(
       BookAppointmentParams params);
 
-       Future<Either<Failure, bool>> bookPremiumAppointment(
+  Future<Either<Failure, bool>> bookPremiumAppointment(
       BookAppointmentParams params);
 }

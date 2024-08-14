@@ -26,25 +26,25 @@ class ShippingRequestEntity {
 
   bool get showOffers => !started && !ended && !canceled;
 
-  ShippingRequestEntity(
-      {required this.id,
-      required this.fromCoordinates,
-      required this.toCoordinates,
-      required this.fromAddress,
-      required this.toAddress,
-      required this.price,
-      required this.time,
-      required this.distance,
-      required this.started,
-      required this.ended,
-      required this.canceled,
-      required this.calls,
-      required this.offers,
-      required this.driver,
-      required this.category, 
-      required this.moreFromAddressDetails,
-      required this.moreToAddressDetails,
-      required this.receiverPhone,
-      required this.senderPhone,
-      });
+  ShippingRequestEntity({
+    required this.id,
+    required this.fromCoordinates,
+    required this.toCoordinates,
+    required this.fromAddress,
+    required this.toAddress,
+    required this.price,
+    required this.time,
+    required this.distance,
+    required this.started,
+    required this.ended,
+    required this.canceled,
+    required this.calls,
+    required this.offers,
+    required this.driver,
+    required this.category,
+    required this.moreFromAddressDetails,
+    required this.moreToAddressDetails,
+    required this.receiverPhone,
+    required this.senderPhone,
+  });
 }

@@ -24,21 +24,21 @@ class RestaurantDashboardRemoteDataSourceImpl
 
   @override
   Future<Either<Failure, bool>> cancelOrder({required int id}) async {
-      return const Right(true);
-
+    return const Right(true);
   }
 
   @override
   Future<Either<Failure, bool>> changeActiveStatus() async {
-       return const Right(true);
-
+    return const Right(true);
   }
 
   @override
   Future<Either<Failure, List<FoodOrderEntity>>> getRestaurantOrders() async {
-     final response = await _apiConsumer.get(Jsons.foodOrders);
-    return response.fold((failure) => Left(failure), (data) => Right(
-      (data['data']['orders'] as List).map((e) => FoodOrderModel.fromJson(e)).toList()
-    ));
+    final response = await _apiConsumer.get(Jsons.foodOrders);
+    return response.fold(
+        (failure) => Left(failure),
+        (data) => Right((data['data']['orders'] as List)
+            .map((e) => FoodOrderModel.fromJson(e))
+            .toList()));
   }
 }

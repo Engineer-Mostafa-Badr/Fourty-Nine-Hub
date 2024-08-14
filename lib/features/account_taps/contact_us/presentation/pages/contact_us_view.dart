@@ -23,53 +23,51 @@ class ContactUsView extends StatelessWidget {
     final controller = context.read<ContactUsCubit>();
     return BlocConsumer<ContactUsCubit, ContactUsState>(
         builder: (context, state) {
-          return Scaffold(
-            appBar: const BackAppBar(
-              label: 'Contact Us',
-            ),
-            bottomNavigationBar: AppButton(
-                label: 'Send',
-                margin: 10,
-                onPressed: () => controller.createContactUs()),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Form(
-                key: controller.formKey,
-                child: ListView(
-                  children: [
-                    const Label(text: '49Hub Team is ready to help'),
-                    const Sizer(),
-                    FormTextField(
-                      label: 'Phone (Optional)',
-                      required: false,
-                      controller: controller.phoneController,
-                    ),
-                    const Sizer(),
-                    FormTextField(
-                      hint: 'Message',
-                      maxLines: 3,
-                      controller: controller.messageController,
-                    ),
-                  ],
+      return Scaffold(
+        appBar: const BackAppBar(
+          label: 'Contact Us',
+        ),
+        bottomNavigationBar: AppButton(
+            label: 'Send',
+            margin: 10,
+            onPressed: () => controller.createContactUs()),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Form(
+            key: controller.formKey,
+            child: ListView(
+              children: [
+                const Label(text: '49Hub Team is ready to help'),
+                const Sizer(),
+                FormTextField(
+                  label: 'Phone (Optional)',
+                  required: false,
+                  controller: controller.phoneController,
                 ),
-              ),
+                const Sizer(),
+                FormTextField(
+                  hint: 'Message',
+                  maxLines: 3,
+                  controller: controller.messageController,
+                ),
+              ],
             ),
-          );
-        },
-        listener: (context, state) {
-           if (state.status == StateStatus.error) {
-          showErrorMessage(
+          ),
+        ),
+      );
+    }, listener: (context, state) {
+      if (state.status == StateStatus.error) {
+        showErrorMessage(
+          context,
+          getFailureMessage(
+            state.failure!,
             context,
-            getFailureMessage(
-              state.failure!,
-              context,
-            ),
-          );
-        } else if (state.status == StateStatus.success) {
-
-          context.pop();
-          showSuccessMessage(context, state.successMessage??Labels.success);
-        }
-        });
+          ),
+        );
+      } else if (state.status == StateStatus.success) {
+        context.pop();
+        showSuccessMessage(context, state.successMessage ?? Labels.success);
+      }
+    });
   }
 }

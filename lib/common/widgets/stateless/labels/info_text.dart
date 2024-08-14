@@ -6,7 +6,8 @@ class AppInfoText extends StatelessWidget {
   final String text;
   final TextStyle? textStyle;
   final double? iconHeight;
-  const AppInfoText({super.key, required this.text, this.textStyle, this.iconHeight});
+  const AppInfoText(
+      {super.key, required this.text, this.textStyle, this.iconHeight});
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +15,12 @@ class AppInfoText extends StatelessWidget {
       children: [
         Image.asset(
           Assets.icon,
-          height:iconHeight?? 30,
+          height: iconHeight ?? 30,
         ),
         Expanded(
           child: Text(
             text,
-            style: textStyle?? Styles.mediumText(),
+            style: textStyle ?? Styles.mediumText(),
           ),
         )
       ],

@@ -12,7 +12,10 @@ class Timetable extends StatelessWidget {
   final Widget child;
   final List<DoctorDayEntity> timetale;
   const Timetable(
-      {super.key, required this.title, required this.child, required this.timetale});
+      {super.key,
+      required this.title,
+      required this.child,
+      required this.timetale});
 
   @override
   Widget build(BuildContext context) {

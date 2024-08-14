@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/reports_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/shared/tinder_shared_utils.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -78,7 +79,8 @@ class _ReportViewState extends State<ReportView> {
                         children: [
                           Expanded(
                             child: Label(
-                              text: reports[i].displayTitleEn,
+                              text: TinderSharedUtils.capitalizeEachWord(
+                                  reports[i].name),
                               style: Styles.headerText(
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.DARK_GRAY_COLOR,
@@ -132,7 +134,8 @@ class _ReportViewState extends State<ReportView> {
 
                             if (response == true) {
                               showSuccessMessage(
-                                context, "Report send successfully",
+                                context,
+                                "Report send successfully",
                               );
                               context.pop();
                             } else {

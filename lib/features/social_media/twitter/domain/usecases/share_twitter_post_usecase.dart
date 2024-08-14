@@ -1,5 +1,3 @@
-
-
 import 'package:dartz/dartz.dart';
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
@@ -16,4 +14,3 @@ class TwitterSharePostUseCase extends UseCase<bool, String> {
     return await _repo.sharePost(postId: params);
   }
 }
-

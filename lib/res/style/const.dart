@@ -1,4 +1,3 @@
-
 //import 'package:admob_flutter/admob_flutter.dart';
 
 class UIConst {
@@ -30,13 +29,10 @@ class UIConst {
   static const String quraanWeb = 'https://surahquran.com/';
   static const String azkar = 'https://www.islambook.com/azkar/';
 
-
-  static const String appSign = '45ecafc4787be753f178d5cc03f93eccb8167c6280d3697bf3909dbe53b86c54';
+  static const String appSign =
+      '45ecafc4787be753f178d5cc03f93eccb8167c6280d3697bf3909dbe53b86c54';
   static const int appId = 2045827723;
-
-
 
   //Chat
   static const String chatNormalId = '668e7dc4e8cfec5bcc752afc';
-
 }

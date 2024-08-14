@@ -5,4 +5,5 @@ import '../../../../../core/error/failure.dart';
 
 abstract class InstagramRepo {
   Future<Either<Failure, List<PostEntity>>> getFeed({required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getReels({required TwitterFeedParams params});
 }

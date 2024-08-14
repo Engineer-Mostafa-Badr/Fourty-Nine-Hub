@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import '../../../../../core/error/failure.dart';
@@ -24,10 +25,14 @@ abstract class SocialPostsRepo {
   Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends(
       {required SuggestedFriendsParams params});
   Future<Either<Failure, List<CommentEntity>>> getPostComments(
-      {required String postId});
+      {required PostCommentsParams params});
   Future<Either<Failure, List<CommentEntity>>> getPostCommentReplies(
-      {required String commentId});
+      {required PostCommentsParams params});
+
+  Future<Either<Failure, PostEntity>> getPost(
+      {required String postId});
   Future<Either<Failure, bool>> deletePost({required String postId});
+  Future<Either<Failure, bool>> deleteComment({required String commentId});
   Future<Either<Failure, bool>> friendRequest({required String userId});
   Future<Either<Failure, bool>> followRequest({required String userId});
   Future<Either<Failure, bool>> sendGreetMessage({required String userId});

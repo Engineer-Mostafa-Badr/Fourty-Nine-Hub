@@ -3,5 +3,4 @@ class CategoryReportEntity {
   final String text;
 
   CategoryReportEntity({required this.category, required this.text});
-
 }

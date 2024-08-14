@@ -15,8 +15,8 @@ class ParentMainCategoryModel extends ParentMainCategoryEntity {
   factory ParentMainCategoryModel.fromJson(Map<String, dynamic> json) =>
       ParentMainCategoryModel(
         id: json['_id'],
-        name: getLang()=='ar'? json['name_ar']:json['name_en'],
-        image: json['image']??UIConst.imagePlaceHolder,
+        name: getLang() == 'ar' ? json['name_ar'] : json['name_en'],
+        image: json['image'] ?? UIConst.imagePlaceHolder,
         mainCategories: (json['mainCategories'] as List)
             .map((e) => MainCategoryModel.fromJson(e))
             .toList(),

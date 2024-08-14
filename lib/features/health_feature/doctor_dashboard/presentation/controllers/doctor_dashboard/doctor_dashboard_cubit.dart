@@ -94,7 +94,7 @@ class DoctorDashboardCubit extends Cubit<DoctorDashboardState> {
       (l) => emit(DoctorDashboardError(Labels.errorHappened)),
       (r) {
         emit(DoctorDashboardShowSuccessfulMessage(
-            Labels.appointmentAcceptedSuccessfully));
+            'appointmentAcceptedSuccessfully'));
         _getUnhandledAppointments();
       },
     );
@@ -108,7 +108,7 @@ class DoctorDashboardCubit extends Cubit<DoctorDashboardState> {
       (l) => emit(DoctorDashboardError(Labels.errorHappened)),
       (r) {
         emit(DoctorDashboardShowSuccessfulMessage(
-            Labels.appointmentRejectedSuccessfully));
+            'appointmentRejectedSuccessfully'));
         _getUnhandledAppointments();
       },
     );

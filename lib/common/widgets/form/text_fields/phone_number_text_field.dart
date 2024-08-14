@@ -120,7 +120,8 @@ class _CustomPhoneTextFormFieldState extends State<CustomPhoneTextFormField> {
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
-              maxLength: 15, // Adjust as needed
+              maxLength: 15,
+              // Adjust as needed
               onChanged: (value) {
                 widget.onInputChanged('$_selectedCountryCode$value');
               },

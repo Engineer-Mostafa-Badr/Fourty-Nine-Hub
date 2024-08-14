@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_place
 import 'package:fourtyninehub/common/widgets/stateless/images/image_uploader_widget.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/edit_doctor_profile/edit_doctor_profile_cubit.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UpdateProfilePhotoCard extends StatelessWidget {
   const UpdateProfilePhotoCard({super.key});
@@ -28,7 +29,7 @@ class UpdateProfilePhotoCard extends StatelessWidget {
               children: [
                 ImageUploaderWidget(
                   subCategoryId: state.doctor?.subCategory.id ?? '',
-                  image: Image.network(state.doctor?.image ?? ''),
+                  image: XFile(state.doctor?.image ?? ''),
                   onUploaded: (data) {
                     context
                         .read<EditDoctorProfileCubit>()
@@ -66,7 +67,6 @@ class UpdateProfilePhotoCard extends StatelessWidget {
             ),
           );
         }
-      },
+      }
     );
-  }
-}
+}}

@@ -9,7 +9,10 @@ class DashboardBanner extends StatelessWidget {
   final String subTitle;
   final String route;
   const DashboardBanner(
-      {super.key, required this.subTitle, required this.title, required this.route});
+      {super.key,
+      required this.subTitle,
+      required this.title,
+      required this.route});
 
   @override
   Widget build(BuildContext context) {

@@ -39,7 +39,6 @@ class FoodOrderCard extends StatelessWidget {
     );
   }
 
- 
   Widget _buildMealsWidget() {
     return ListView.builder(
         itemCount: item.meals.length,

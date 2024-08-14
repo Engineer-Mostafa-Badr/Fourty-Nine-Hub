@@ -13,8 +13,8 @@ class InstallmentDetailsRepoImpl implements InstallmentDetailsRepo {
   InstallmentDetailsRepoImpl(this._remoteDataSource);
   @override
   Future<Either<Failure, bool>> buyWithInstallment(
-      {required InstallmentRequestModel params})  {
-    return  _remoteDataSource.buyWithInstallment(params: params);
+      {required InstallmentRequestModel params}) {
+    return _remoteDataSource.buyWithInstallment(params: params);
   }
 
   @override

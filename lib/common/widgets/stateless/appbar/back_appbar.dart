@@ -11,14 +11,13 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? iconColor;
   final List<Widget>? actions;
 
-  const BackAppBar({
-    super.key,
-    this.automaticallyImplyLeading = true,
-    this.label,
-    this.backColor,
-    this.iconColor,
-    this.actions
-  });
+  const BackAppBar(
+      {super.key,
+      this.automaticallyImplyLeading = true,
+      this.label,
+      this.backColor,
+      this.iconColor,
+      this.actions});
 
   @override
   Widget build(BuildContext context) {

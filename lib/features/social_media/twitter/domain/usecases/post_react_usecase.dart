@@ -1,5 +1,3 @@
-
-
 import 'package:dartz/dartz.dart';
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
@@ -14,8 +12,6 @@ class TwitterPostReactUseCase extends UseCase<bool, TwitterPostReactParams> {
   }
 }
 
-
-
 class TwitterPostReactParams {
   final String postId;
   final String react;
@@ -25,5 +21,6 @@ class TwitterPostReactParams {
   });
   Map<String, dynamic> toJson() => {
         'react': react,
+  'subCategory':'66a3583454e6e337915514db'
       };
 }

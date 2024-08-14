@@ -28,7 +28,8 @@ class AdsRepoImpl implements AdsRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> requestComeWithMe({required RequestParams params}) {
+  Future<Either<Failure, bool>> requestComeWithMe(
+      {required RequestParams params}) {
     return _remoteDataSource.requestComeWithMe(params: params);
   }
 

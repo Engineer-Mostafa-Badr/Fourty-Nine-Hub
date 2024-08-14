@@ -48,6 +48,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     if (state is RegisterLoading) return;
     if (formKey.currentState!.validate()) {
       emit(RegisterLoading());
+      
       final result = await _registerUseCase(
         RegisterParams(
           firstName: firstNameController.text.trim(),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
@@ -55,6 +57,7 @@ class BaseApiConsumer extends ApiConsumer {
   @override
   void attachToken(UserTokensEntity? token) {
     _token = token;
+    log("${token?.accessToken}", name: "Token");
     if (token != null) {
       _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
     }

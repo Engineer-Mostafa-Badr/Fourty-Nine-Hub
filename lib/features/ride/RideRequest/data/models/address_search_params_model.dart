@@ -1,7 +1,8 @@
 import '../../domain/entity/address_search_params_entity.dart';
 
 class AddressSearchParamsModel extends AddressSearchParamsEntity {
-  AddressSearchParamsModel({required super.address, required super.lat, required super.lng});
+  AddressSearchParamsModel(
+      {required super.address, required super.lat, required super.lng});
 
   factory AddressSearchParamsModel.fromJson(Map<String, dynamic> json) {
     return AddressSearchParamsModel(
@@ -11,9 +12,9 @@ class AddressSearchParamsModel extends AddressSearchParamsEntity {
     );
   }
 
-   Map<String, dynamic> toJson() => {
-        'address': address, 
-        'lat':lat, 
-        'lng':lng,
-    };
+  Map<String, dynamic> toJson() => {
+        'address': address,
+        'lat': lat,
+        'lng': lng,
+      };
 }

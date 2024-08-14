@@ -72,7 +72,7 @@ class NotificationService {
   }
 
   _showDialogToNavigate(notificationType, code, link) {
-    // TODO 
+    // TODO
     return null;
 
     // return showDialog(
@@ -185,26 +185,25 @@ class _FlutterLocalNotificationHelper {
 
 Future<void> navigateToPage(
     {required String notificationType, String? link, String? code}) {
-      
   // if (notificationType == "Http Link" && link != null)
-    // return navigatorKey.currentState!.push(
-    //   MaterialPageRoute(
-    //     builder: (context) => SafeArea(
-    //       child: Scaffold(
-    //         body: InAppWebView(
-    //           initialOptions: InAppWebViewGroupOptions(
-    //             android: AndroidInAppWebViewOptions(
-    //               useHybridComposition: true,
-    //             ),
-    //           ),
-    //           initialUrlRequest: URLRequest(
-    //             url: Uri.parse(link),
-    //           ),
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
+  // return navigatorKey.currentState!.push(
+  //   MaterialPageRoute(
+  //     builder: (context) => SafeArea(
+  //       child: Scaffold(
+  //         body: InAppWebView(
+  //           initialOptions: InAppWebViewGroupOptions(
+  //             android: AndroidInAppWebViewOptions(
+  //               useHybridComposition: true,
+  //             ),
+  //           ),
+  //           initialUrlRequest: URLRequest(
+  //             url: Uri.parse(link),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   ),
+  // );
   // else if (notificationType == "Category")
   //   return navigatorKey.currentState!.push(
   //     MaterialPageRoute(
@@ -222,7 +221,7 @@ Future<void> navigateToPage(
   //     ),
   //   );
   // else
-    return Future.value();
+  return Future.value();
 }
 
 class _NotificationIdGenerator {

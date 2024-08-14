@@ -12,9 +12,10 @@ class UserEntity extends Equatable {
   final int? followingCount;
 
   String get fullName => '$firstName $lastName';
-  bool  isMyAccount(String anotherId){
+  bool isMyAccount(String anotherId) {
     return id == anotherId;
-  } 
+  }
+
   const UserEntity({
     required this.id,
     required this.firstName,

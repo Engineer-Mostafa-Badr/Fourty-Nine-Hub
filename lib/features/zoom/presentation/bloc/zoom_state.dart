@@ -27,3 +27,10 @@ class MeetingEndLoadingState extends MeetingState {}
 class MeetingEndSuccessState extends MeetingState {}
 
 class MeetingEndFailureState extends MeetingState {}
+
+class MeetingSurfaceShownState extends MeetingState{
+  final bool surfaceShown;
+
+  const MeetingSurfaceShownState({required this.surfaceShown});
+
+}

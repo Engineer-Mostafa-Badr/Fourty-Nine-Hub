@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -25,6 +27,8 @@ class DrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log(context.read<UserCubit>().state.data?.email.toString()??"lllllllllllllllllll");
+    // CacheImpl
     return BlocBuilder<UserCubit, BasicState<UserEntity>>(
       builder: (context, state) {
         return Drawer(
@@ -41,7 +45,7 @@ class DrawerWidget extends StatelessWidget {
 
                   competitionSubscription(context: context),
 
-                  // walletCircularProgress(context: context),
+                  // walletCircularProgress(context: context), gemy3617@gmail.com
                   drawerListTile(
                       icon: FontAwesomeIcons.bullhorn,
                       label: 'Advertise Your Company',
@@ -451,14 +455,8 @@ class DrawerWidget extends StatelessWidget {
               )
             ],
           )),
-          
-          
         ],
       ),
     );
   }
-
-
-
-
 }

@@ -14,8 +14,8 @@ class SuggestUserEntity {
     required this.lastName,
     required this.mutualFriendsCount,
     required this.profilePicture,
-    this.addedSuccessfully=false,
-    this.followSuccessfully=false,
-    this.sendWelcomeSuccessfully=false,
+    this.addedSuccessfully = false,
+    this.followSuccessfully = false,
+    this.sendWelcomeSuccessfully = false,
   });
 }

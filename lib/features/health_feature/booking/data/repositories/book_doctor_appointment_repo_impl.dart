@@ -15,9 +15,10 @@ class BookAppointmentRepoImpl implements BookAppointmentRepo {
       BookAppointmentParams params) {
     return _remoteDataSource.bookRegularAppointment(params);
   }
-  
+
   @override
-  Future<Either<Failure, bool>> bookPremiumAppointment(BookAppointmentParams params) {
+  Future<Either<Failure, bool>> bookPremiumAppointment(
+      BookAppointmentParams params) {
     return _remoteDataSource.bookPremiumAppointment(params);
   }
 }

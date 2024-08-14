@@ -13,14 +13,13 @@ class SelectedMealModel extends SelectedMealEntity {
       required super.selectedAddOn,
       required super.selectedVariations});
 
-  
   Map<String, dynamic> toJson() => {
         "restuarantId": restaurantId,
         "restaurantItems": [
           {
             "foodId": meal.id,
             "quantity": qty,
-            "option":selectedVariations.first.selectedOption.id
+            "option": selectedVariations.first.selectedOption.id
           }
         ]
       };
