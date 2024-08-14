@@ -147,7 +147,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                             label: 'Auction',
                             style: const TextStyle(
                                 fontSize: 17,
-                                fontWeight: FontWeight.bold
+                                fontWeight: FontWeight.bold,
+                              color: Colors.white
                             ),
                             icon: Icons.group,
                             iconSize: 22,
@@ -191,7 +192,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   label: 'Installments',
                   style: const TextStyle(
                     fontSize: 17,
-                    fontWeight: FontWeight.bold
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white
                   ),
                   icon: Icons.list,
                   iconSize: 22,

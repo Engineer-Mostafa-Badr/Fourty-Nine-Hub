@@ -18,7 +18,7 @@ class DashboardBanner extends StatelessWidget {
       child: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-              color: AppColors.PRIMARY_COLOR,
+              color: Theme.of(context).primaryColor,
               borderRadius: BorderRadius.circular(10)),
           child: Row(
             children: [
