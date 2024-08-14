@@ -34,7 +34,7 @@ class HealthMedicalServiceCard extends StatelessWidget {
         width: 200,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
