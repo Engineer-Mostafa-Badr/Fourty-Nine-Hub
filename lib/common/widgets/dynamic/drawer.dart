@@ -32,7 +32,6 @@ class DrawerWidget extends StatelessWidget {
     return BlocBuilder<UserCubit, BasicState<UserEntity>>(
       builder: (context, state) {
         return Drawer(
-          backgroundColor: Colors.white,
           child: SafeArea(
             child: SingleChildScrollView(
               child: Column(
@@ -187,24 +186,27 @@ class DrawerWidget extends StatelessWidget {
               label: 'Special Ads',
               value: '+8',
               onTap: () {},
+                context: context
             ),
             counterItem(
               icon: Icons.person_add,
               label: 'Friends',
               value: '+110',
               onTap: () {},
+                context: context
             ),
             counterItem(
               icon: FontAwesomeIcons.car,
               label: 'Rides',
               value: '+5',
+    context: context,
               onTap: () {},
             ),
             counterItem(
               icon: Icons.more_horiz,
               label: 'More',
               value: '+1K',
-              onTap: () => context.go(Routes.COMPETITIONS),
+              onTap: () => context.go(Routes.COMPETITIONS), context: context,
             ),
           ],
         ),
@@ -309,7 +311,8 @@ class DrawerWidget extends StatelessWidget {
         margin: const EdgeInsets.all(5),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: AppColors.LIGHT_GRAY_COLOR),
+            color: AppColors.LIGHT_GRAY_COLOR
+        ),
         child: Row(
           children: [
             Expanded(
@@ -318,10 +321,10 @@ class DrawerWidget extends StatelessWidget {
                 children: [
                   Label(
                       text: 'Lucky Wheel',
-                      style: Styles.mediumText(fontWeight: FontWeight.bold)),
+                      style: Styles.mediumText(fontWeight: FontWeight.bold,color: Theme.of(context).scaffoldBackgroundColor)),
                   Label(
                       text: 'Do You feel lucky?',
-                      style: Styles.mediumText(fontWeight: FontWeight.w400)),
+                      style: Styles.mediumText(fontWeight: FontWeight.w400,color: Theme.of(context).scaffoldBackgroundColor)),
                 ],
               ),
             ),
@@ -344,6 +347,7 @@ class DrawerWidget extends StatelessWidget {
       {required IconData icon,
       required String label,
       required String value,
+        required context,
       required Function onTap}) {
     return Expanded(
       child: InkWell(
@@ -356,13 +360,13 @@ class DrawerWidget extends StatelessWidget {
               child: Icon(
                 icon,
                 // size: ,
-                color: AppColors.PRIMARY_COLOR,
+                color: Theme.of(context).scaffoldBackgroundColor,
               ),
             ),
             Label(
               text: value,
               style: Styles.mediumText(
-                color: AppColors.PRIMARY_COLOR,
+                color:Theme.of(context).primaryColor,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
@@ -405,7 +409,6 @@ class DrawerWidget extends StatelessWidget {
                     },
                     child: const Icon(
                       Icons.camera_enhance_outlined,
-                      color: AppColors.PRIMARY_COLOR,
                       size: 20,
                     ),
                   ),
@@ -432,9 +435,8 @@ class DrawerWidget extends StatelessWidget {
                 },
                 child: Row(
                   children: [
-                    const Icon(
+                     const Icon(
                       Icons.wallet,
-                      color: AppColors.PRIMARY_COLOR,
                       size: 18,
                     ),
                     const Sizer(

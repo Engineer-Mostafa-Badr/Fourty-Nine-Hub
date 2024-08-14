@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_bann
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -26,6 +27,7 @@ class HealthBanner extends StatelessWidget {
               ),
               const Sizer(),
               MainCategoryBanner(
+                color: AppColors.QUANTITY_COLOR,
                   category: state.mainCategory!,
                   canRegister: state.isDoctor == true ? false : true,
                   onRegister: () {

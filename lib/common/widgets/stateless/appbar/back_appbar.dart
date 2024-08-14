@@ -24,14 +24,11 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       elevation: 0,
       centerTitle: true,
-      backgroundColor: backColor ?? AppColors.LIGHT_COLOR,
-      iconTheme: IconThemeData(color: iconColor ?? AppColors.PRIMARY_COLOR),
       automaticallyImplyLeading: automaticallyImplyLeading,
       title: label != null
           ? Label(
               text: label ?? '',
-              style: Styles.headerText(
-                  color: iconColor ?? AppColors.PRIMARY_COLOR))
+              style: Styles.headerText())
           : null,
       actions: actions,
     );

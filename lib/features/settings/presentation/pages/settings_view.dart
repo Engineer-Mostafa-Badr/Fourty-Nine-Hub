@@ -24,11 +24,14 @@ class SettingsView extends StatelessWidget {
           children: [
             listTileWidget(
               icon: Icons.notifications_active_outlined,
+
               trailing: FutureBuilder(
                   future: Permission.notification.isGranted,
                   builder: (context, snap) {
                     final isGranted = snap.data ?? false;
                     return Switch(
+                        // activeColor: Colors.blue,
+                        // activeTrackColor: Colors.grey,
                         value: isGranted,
                         onChanged: (v) async =>
                         await Permission.notification.request());
@@ -46,15 +49,15 @@ class SettingsView extends StatelessWidget {
                     size: 28,
                   ),
                   title: theme is DarkThemeModeStates
-                      ? Text(
-                    'dark mode'.localize,
-                    style: const TextStyle(
+                      ? const Text(
+                    'dark mode',
+                    style: TextStyle(
                         color: AppColors.AUTH_CONTAINER_COLOR),
                   )
-                      : Text(
-                    'light mode'.localize,
+                      : const Text(
+                    'light mode',
                     style:
-                    const TextStyle(color: AppColors.QUANTITY_COLOR),
+                    TextStyle(color: AppColors.QUANTITY_COLOR),
                   ),
                   value: ThemeCubit.get(context).isDarkTheme,
                   activeColor: Colors.grey,
@@ -106,7 +109,6 @@ class SettingsView extends StatelessWidget {
       leading: Icon(
         icon,
         size: 25,
-        color: AppColors.PRIMARY_COLOR,
       ),
       title: Label(text: label),
       onTap: () => onTap(),

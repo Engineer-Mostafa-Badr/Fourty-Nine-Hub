@@ -143,8 +143,15 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     children: [
                       Positioned.fill(
                         child: AppButton(
+                          color: Colors.white,
                             label: 'Auction',
+                            style: const TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                              color: Colors.white
+                            ),
                             icon: Icons.group,
+                            iconSize: 22,
                             onPressed: () => context.push(Routes.MAZADAT)),
                       ),
                       const Positioned(
@@ -180,9 +187,16 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             Expanded(
               child: AppButton(
                   padding: 5,
+                  color: Colors.white,
                   height: kToolbarHeight * .5,
                   label: 'Installments',
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white
+                  ),
                   icon: Icons.list,
+                  iconSize: 22,
                   onPressed: () => context.push(Routes.INSTALLMENT)),
             )
           ],
@@ -201,27 +215,69 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         height: kToolbarHeight * 1.3,
         padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-            boxShadow: const [
-              BoxShadow(
-                  color: Color.fromARGB(255, 249, 159, 162),
-                  spreadRadius: 1,
-                  blurRadius: 3,
-                  offset: Offset(1, 1))
-            ]),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(5),
+          boxShadow: const [
+            BoxShadow(
+              color: Color.fromARGB(255, 249, 159, 162),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: Offset(1, 1),
+            )
+          ],
+        ),
+        child: Stack(
+          alignment: AlignmentDirectional.centerStart,
           children: [
-            Expanded(
-              child: SquareImage(
-                fit: BoxFit.cover,
-                radius: 5,
-                url: image,
+            Positioned.fill(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    SquareImage(
+                      fit: BoxFit.cover,
+                      url: image,
+                    ),
+                    Container(
+                      color: Colors.black.withOpacity(0.3), // Darken the background
+                    ),
+                  ],
+                ),
               ),
             ),
-            Label(text: service.title(), style: Styles.headerText()),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 5
+              ),
+              child: Row(
+                children: [
+                  Label(
+                    text: service.title(),
+                    style: Styles.headerText(color: Colors.white),
+                  ),
+                  const Spacer(),
+                  Column(
+                    children: [
+                      InkWell(
+                        onTap: () async {},
+                        child: const Icon(
+                          Icons.favorite_border,
+                          color: AppColors.SECONDARY_COLOR,
+                        ),
+                      ),
+                      const Sizer(
+                        height: 20,
+                      ),
+                      Label(
+                        text: '1 Ads',
+                        style: Styles.mediumText(color: Colors.white, fontSize: 15),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
@@ -34,7 +35,7 @@ class HealthMedicalServiceCard extends StatelessWidget {
         width: 200,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
@@ -59,7 +60,7 @@ class HealthMedicalServiceCard extends StatelessWidget {
                           icon: subCategory.isFavorite
                               ? Icons.favorite
                               : Icons.favorite_border,
-                          color: Colors.red,
+                          color: ThemeCubit.get(context).isDarkTheme?AppColors.AUTH_CONTAINER_COLOR:AppColors.PRIMARY_COLOR_DARK,
                           onPressed: () {
                             context
                                 .read<HealthCubit>()
@@ -87,7 +88,7 @@ class HealthMedicalServiceCard extends StatelessWidget {
                 IconAppButton(
                   icon: Icons.add,
                   isCircle: true,
-                  color: Colors.white,
+                  color: Theme.of(context).scaffoldBackgroundColor,
                   backColor: AppColors.PRIMARY_COLOR,
                   onPressed: () {},
                 )
