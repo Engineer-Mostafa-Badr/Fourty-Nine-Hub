@@ -35,7 +35,7 @@ class RegisterVerifyOTP extends StatelessWidget {
         } else if (state is ResendOtpSuccess) {
           showSuccessMessage(context, 'resend otp success');
         } else if (state is VerifyOtpSuccess) {
-          context.read<UserCubit>().setUserLogged();
+          context.read<UserCubit>().setLogin(true);
           context.read<UserCubit>().getUser();
           context.push(Routes.HOME);
         }

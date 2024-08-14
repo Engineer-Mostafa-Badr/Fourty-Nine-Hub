@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:gap/gap.dart';
 
 class CreateDoctorGovernorateDropdown extends StatelessWidget {
   const CreateDoctorGovernorateDropdown(
@@ -52,7 +51,7 @@ class CreateDoctorGovernorateDropdown extends StatelessWidget {
                   if (field.hasError)
                     Column(
                       children: [
-                        Gap(8),
+                        const SizedBox(height: 8),
                         Text(
                           field.errorText ?? "",
                           style: Styles.mediumText(color: Colors.red),

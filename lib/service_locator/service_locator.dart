@@ -16,6 +16,7 @@ import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
 import 'package:fourtyninehub/service_locator/reels_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
+import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -23,6 +24,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../core/api/api_consumer.dart';
 import '../core/local_storage/local_storage_consumer.dart';
 
+import '../core/localization/localization_service.dart';
 import '../firebase_options.dart';
 import 'account_service_locator.dart';
 import 'auction_service_locator.dart';

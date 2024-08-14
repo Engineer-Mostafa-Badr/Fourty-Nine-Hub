@@ -36,7 +36,7 @@ class AllDoctorReservationsCubit extends Cubit<AllDoctorReservationsState> {
     final result =
         await _allDoctorReservationsUsecase.call(PaginationParams(page: _page));
     result.fold((failure) {
-      String message = Labels.cantLoadData;
+      String message = 'cannotLoadData';
       if (failure is ServerFailure) {
         message = failure.message;
       }

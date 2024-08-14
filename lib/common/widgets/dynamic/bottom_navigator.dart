@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/ride_request_view.dart';
 import '../../../features/zoom/presentation/widgets/meeting_dialogue.dart';
 import '../../../res/assets/assets.dart';
@@ -26,28 +28,28 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
                 label: 'Voice',
                 index: 0,
                 image: Assets.voiceLive,
-                action: () => context.push(Routes.CLUBHOUSE)),
+                route: Routes.CLUBHOUSE,),
             BottomItemModel(
                 icon: FontAwesomeIcons.stream,
                 label: 'Live',
                 index: 0,
                 height: 25,
                 image: Assets.live,
-                action: () => context.push(Routes.LIVE)),
+                route:Routes.LIVE),
             BottomItemModel(
                 icon: Icons.video_call,
                 label: 'Meet',
                 index: 0,
                 height: 25,
                 image: Assets.zoomMeeting,
-                action: () => context.push(Routes.ZOOM)),
+                route: Routes.ZOOM),
             BottomItemModel(
                 icon: Icons.video_call,
                 label: 'Cast',
                 index: 0,
                 height: 25,
                 image: Assets.radio,
-                action: () => context.push(Routes.CLUBHOUSE)),
+                route: Routes.CLUBHOUSE),
           ]
         : mainCategory == 2
         ? <BottomItemModel>[
@@ -106,7 +108,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
     return CustomBottomNavigationBar(
       currentIndex: index,
       onTap: (index) {
-        pages[index].action();
+        pages[index].action(context);
       },
       items: pages,
     );
@@ -224,7 +226,7 @@ class BottomItemModel {
     required this.label,
     required this.index,
     required this.image,
-    required this.action,
+    required this.route,
     this.height = 20,
   });
 

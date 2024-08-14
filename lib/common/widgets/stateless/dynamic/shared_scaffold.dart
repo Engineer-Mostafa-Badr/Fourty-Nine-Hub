@@ -20,16 +20,15 @@ class SharedScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: extendBody,
-<<<<<<< HEAD
-      appBar: HomeAppbar(
-=======
-      backgroundColor: backgroundColor,
+        backgroundColor: backgroundColor,
+        drawer: const DrawerWidget(),
+    body: body,
+
+
       appBar:  HomeAppbar(
->>>>>>> f81a07431967fea988d5dd11b16e94cf604744ed
         isWithBackArrow: isWithBackArrow,
       ),
-      drawer: const DrawerWidget(),
-      body: body,
+
     );
   }
 }

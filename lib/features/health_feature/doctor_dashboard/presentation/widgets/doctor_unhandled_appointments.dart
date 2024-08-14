@@ -66,7 +66,7 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
               } else {
                 return Center(
                     child: Text(
-                  Labels.noAppointments,
+                  'No Appointments',
                   style: Styles.headerText(),
                 ));
               }

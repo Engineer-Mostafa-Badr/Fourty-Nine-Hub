@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,7 +43,7 @@ class RegisterView extends StatelessWidget {
             extra: registerCubit.emailTextController.text,
           );
         } else if (state is RegisterSuccess) {
-          context.read<UserCubit>().setUserLogged();
+          context.read<UserCubit>().setLogin(true);
           context.read<UserCubit>().getUser();
           context.go(Routes.HOME);
         }

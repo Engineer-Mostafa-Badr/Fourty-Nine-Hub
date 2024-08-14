@@ -1,11 +1,11 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageValidation extends StatelessWidget {
@@ -58,7 +58,7 @@ class ImageValidation extends StatelessWidget {
             if (field.hasError)
               Column(
                 children: [
-                  Gap(8),
+                  const SizedBox(height: 8),
                   Text(
                     field.errorText ?? "",
                     style: Styles.mediumText(color: Colors.red),

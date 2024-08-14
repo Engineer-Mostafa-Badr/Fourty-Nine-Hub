@@ -26,6 +26,8 @@ import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../common/widgets/stateless/labels/label.dart';
+
 class CreateDoctorView extends StatelessWidget {
   const CreateDoctorView({super.key});
 
@@ -60,7 +62,7 @@ class CreateDoctorView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                    text: Labels.welcomeToDoctorRegister,
+                    text: Labels.doctor,
                     style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
                 const CreateDoctorSubcategoryDropdown(),
                 const Sizer(height: 20),

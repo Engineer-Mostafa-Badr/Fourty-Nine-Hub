@@ -39,7 +39,7 @@ class LoginView extends StatelessWidget {
             ),
           );
         } else if (state is LoginSuccess) {
-          context.read<UserCubit>().setUserLogged();
+          context.read<UserCubit>().setLogin(true);
           context.read<UserCubit>().getUser();
           context.push(Routes.HOME);
           showSuccessMessage(context, 'welcome back');

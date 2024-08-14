@@ -519,11 +519,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                 // const Gap(30),
                 SizedBox(height: 30,),
                 // DefaultTextFormField(currentFocusNode: FocusNode(), currentController: TextEditingController(), hint: Labels.phone),
-                PhoneTextFormField(
-                    currentFocusNode: phoneFocusNode,
-                    nextFocusNode: descriptionFocusNode,
-                    currentController: phoneController,
-                    onInputChanged: (v) {}),
+
                 // const Gap(50),
                 SizedBox(height: 50,),
                 Center(
@@ -688,7 +684,7 @@ class _PickImageShippingCardState extends State<PickImageShippingCard> {
                     color: Colors.grey,
                     size: 30,
                   ),
-                  const Gap(10),
+                  const SizedBox(height: 10),
                   Text(
                     widget.text,
                     style: Styles.headerText(),
@@ -699,8 +695,3 @@ class _PickImageShippingCardState extends State<PickImageShippingCard> {
     );
   }
 }
-
-///
-/// ازار الصور
-/// فالديشن
-/// يو هاف سبميتت سكسفلي ويتنج فور امدنستريشن ابروفل

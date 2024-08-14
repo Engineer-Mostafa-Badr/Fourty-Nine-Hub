@@ -44,8 +44,14 @@ class TinderView extends StatelessWidget {
           create: (context) => TinderViewCubit(),
         ),
         BlocProvider(
-          create: (context) => UserCubit(serviceLocator(), serviceLocator(),
-              serviceLocator(), serviceLocator(), serviceLocator()),
+          create: (context) => UserCubit(
+            serviceLocator(),
+            serviceLocator(),
+            serviceLocator(),
+            serviceLocator(),
+            serviceLocator(),
+            serviceLocator(),
+          ),
         ),
         // BlocProvider(
         //   create: (context) => GiftsCubit(),
@@ -74,18 +80,18 @@ class _TinderScreenState extends State<TinderScreen> {
     // } else {
     //   TinderSharedUtils.initializeToken('');
 
-    final currentUserCubit = context.read<UserCubit>();
-    currentUserCubit.giveMeTokenForTinder().then((_) {
-      final tinderCubit = context.read<TinderViewCubit>();
-      tinderCubit
-        ..fetchUserData(
-          accessToken: currentUserCubit.state.token?.accessToken ?? '',
-          gender: 'female',
-        )
-        ..fetchSubCategoryData(
-            accessToken: currentUserCubit.state.token?.accessToken ?? '')
-        ..fetchFavorites(currentUserCubit.state.token?.accessToken ?? '');
-    });
+    // final currentUserCubit = context.read<UserCubit>();
+    // currentUserCubit.giveMeTokenForTinder().then((_) {
+    //   final tinderCubit = context.read<TinderViewCubit>();
+    //   tinderCubit
+    //     ..fetchUserData(
+    //       accessToken: currentUserCubit.state.token?.accessToken ?? '',
+    //       gender: 'female',
+    //     )
+    //     ..fetchSubCategoryData(
+    //         accessToken: currentUserCubit.state.token?.accessToken ?? '')
+    //     ..fetchFavorites(currentUserCubit.state.token?.accessToken ?? '');
+    // });
     // }
     super.initState();
     // _tinderViewCubit = context.read<TinderViewCubit>()..resetStoryIndex();
@@ -751,7 +757,7 @@ class _PersonInfoWidgetState extends State<PersonInfoWidget> {
                     fontWeight: FontWeight.bold),
               ),
               subtitle: Text(
-                 tinderCubit.state.lastSeenModel?.data?.lastSeen != null
+                tinderCubit.state.lastSeenModel?.data?.lastSeen != null
                     ? "Last seen ${getTimeAgo(tinderCubit.state.lastSeenModel!.data!.lastSeen ?? '')}"
                     : "Last seen ",
                 style: Styles.mediumText(
@@ -792,6 +798,7 @@ void _showGiftBottomSheet22(BuildContext context,
         ),
         BlocProvider(
           create: (context) => UserCubit(
+            serviceLocator(),
             serviceLocator(),
             serviceLocator(),
             serviceLocator(),

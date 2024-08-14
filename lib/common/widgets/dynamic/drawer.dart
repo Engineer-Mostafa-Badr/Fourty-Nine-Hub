@@ -10,7 +10,6 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/liveview/gifts/gift_manager.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:go_router/go_router.dart';
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
