@@ -6,7 +6,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
@@ -165,8 +164,18 @@ class TwitterCubit extends Cubit<TwitterState> {
   }
 
   // react on a post
-  void onReact({required TwitterPostReactParams params}) async {
-    await _twitterPostReactUseCase(params);
+  Future<bool> onReact({required TwitterPostReactParams params}) async {
+    var response = await _twitterPostReactUseCase(params);
+    bool result = false;
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: StateStatus.error)),
+            (data) {
+              result = data;
+          emit(state.copyWith( status: StateStatus.success));
+          print(data);
+        });
+    return result;
   }
 
   // share post
@@ -322,6 +331,21 @@ class TwitterCubit extends Cubit<TwitterState> {
           emit(
               state.copyWith(personalPhoto: data, status: StateStatus.success));
         });
+  }
+
+  removePersonalPhoto(){
+    state.copyWith(personalPhoto: null, status: StateStatus.success);
+  }
+
+  removeFrontId(){
+    state.copyWith(frontId: null, status: StateStatus.success);
+  }
+
+  removeBackId(){
+    print('Before: ${state.backId?.mediaId}');
+    state.copyWith(backId: null);
+    state.copyWith(status: StateStatus.success);
+    print(state.backId?.mediaId);
   }
 
   uploadFrontId() {

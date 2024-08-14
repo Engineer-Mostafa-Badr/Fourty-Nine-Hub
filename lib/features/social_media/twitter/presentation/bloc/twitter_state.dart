@@ -79,7 +79,7 @@ class TwitterState {
       newReply: newReply ?? this.newReply,
       personalPhoto: personalPhoto ?? this.personalPhoto,
       frontId: frontId ?? this.frontId,
-      backId: backId ?? this.backId,
+      backId: backId ?? backId,
       reportSuccess: reportSuccess ?? this.reportSuccess,
       userTweets: userTweets ?? this.userTweets,
     );

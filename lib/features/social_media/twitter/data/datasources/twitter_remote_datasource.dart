@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_comment_reply_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_post_comment_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_post_model.dart';
@@ -60,7 +59,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
 
   @override
   Future<Either<Failure, TwitterPostEntity>> getTwitterPost({required String postId}) async {
-    final response = await _apiConsumer.get("${EndPoints.createTwitterPost}/$postId&subCategory=66a3583454e6e337915514db");
+    final response = await _apiConsumer.get("${EndPoints.createTwitterPost}/$postId?subCategory=66a3583454e6e337915514db");
 
     return response.fold((l) {
       return Left(l);
@@ -119,7 +118,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
         .post(EndPoints.commentOnTwitterPost(params.postId), data: {
           'content':params.content,
       'reply':params.reply,
-      'subCategory':'66a3583454e6e337915514db'
+      // 'subCategory':'66a3583454e6e337915514db'
     });
     return response.fold((l) => Left(l), (data) => Right(TwitterCommentReplyModel.fromJson(data['data'])));
   }

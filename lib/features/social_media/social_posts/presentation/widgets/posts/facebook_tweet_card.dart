@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -83,7 +82,7 @@ class FacebookTweetCard extends StatelessWidget {
                     child: Column(
                       children: [
                         _buildAccountHeader(
-                            context: context, user: isShared==true?post.mainPost?.user:post.user),
+                            context: context, user: isShared==true&&post.mainPost!=null?post.mainPost?.user:post.user),
                         isShared==true?_buildMainContent(
                             context: context, post: post.mainPost!):_buildContent(
                             context: context, post: post),

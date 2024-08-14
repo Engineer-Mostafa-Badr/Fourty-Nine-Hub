@@ -10,7 +10,6 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
@@ -145,15 +144,22 @@ class _TwitterViewState extends State<TwitterView> {
                       final user = context.read<UserCubit>().state.data;
                       return TwitterPostCard(
                         post: controller.postsPagingController.itemList![index],
-                        onReact: () {
-                          controller.onReact(
+                        onReact: () async{
+                          var result = await controller.onReact(
                               params: TwitterPostReactParams(
                                   postId: controller
                                       .postsPagingController.itemList![index].id,
                                   react: 'love'));
-                          controller.postsPagingController.itemList?[index].isReact =
-                          !controller
-                              .postsPagingController.itemList![index].isReact!;
+                          if(result == true){
+                            if(controller.postsPagingController.itemList?[index].isReact==true){
+                              controller.postsPagingController.itemList?[index].isReact=false;
+                              controller.postsPagingController.itemList?[index].loveCount=(controller.postsPagingController.itemList![index].loveCount!-1);
+                            }else{
+                              controller.postsPagingController.itemList?[index].isReact=true;
+                              controller.postsPagingController.itemList?[index].loveCount=(controller.postsPagingController.itemList![index].loveCount!+1);
+                            }
+                          }
+
                         },
                         shareSuccess: state.shareSuccess,
                         onShare: () {
@@ -193,7 +199,7 @@ class _TwitterViewState extends State<TwitterView> {
                               state: state,
                               onReport: (TwitterReportParams params) {
                                 controller.onReport(params);
-                              }, userData: userData,
+                              },
                             ),
 
                           );

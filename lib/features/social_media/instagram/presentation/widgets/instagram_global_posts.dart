@@ -199,11 +199,21 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                       .id,
                                                   onAddComment:
                                                       (PostCommentParams
-                                                              params) =>
-                                                          controller
+                                                              params) async{
+                                                        var result = await controller
                                                               .onPostComment(
                                                                   params:
-                                                                      params)));
+                                                                      params);
+                                                        controller
+                                                            .feedPagingController
+                                                            .itemList![index].commentsCount=(controller
+                                                            .feedPagingController
+                                                            .itemList![index].commentsCount!+1);
+                                                        setState(() {
+
+                                                        });
+                                                        return result;
+                                                      }));
                                         },
                                         color: Colors.grey,
                                         size: 25,

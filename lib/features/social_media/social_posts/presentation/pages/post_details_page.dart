@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/utils/change_react.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
@@ -97,7 +98,14 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                               children: [
                                 FacebookPostCard(
                                   post: state.postDetails!,
-                                  onReact: widget.onReact,
+                                  onReact: (params)async{
+                                    var result = await widget.onReact(params);
+                                    changeReaction(state.postDetails, params.react);
+                                    setState(() {
+
+                                    });
+                                    return result;
+                                  },
                                   deletePost: widget.deletePost,
                                   hidePost: widget.hidePost,
                                   showPostDetails: widget.showPostDetails,
@@ -131,7 +139,15 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                 return _buildCommentCard(
                                     comment: controller
                                         .commentsPagingController
-                                        .itemList![index]);
+                                        .itemList![index], onCommentReply: (ReplyOnCommentParams params) async{
+                                      var result = await widget.onCommentReply(params);
+
+                                        state.postDetails?.commentsCount=(state.postDetails!.commentsCount!+1);
+                                        setState(() {
+
+                                        });
+                                      return result;
+                                });
                               },
                               noMoreItemsIndicatorBuilder: (context) =>
                                   Container(),
@@ -172,7 +188,6 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                   postId: widget.postId, content: commentTextController.text),
                             );
                             final user = context.read<UserCubit>().state.data;
-
                             controller.commentsPagingController.itemList?.insert(
                               0,
                               CommentModel(
@@ -202,6 +217,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                               ),
                             );
                             // widget.post.commentsCount=(widget.post.commentsCount!+1);
+                            state.postDetails?.commentsCount=(state.postDetails!.commentsCount!+1);
                             commentTextController.clear();
                             FocusScope.of(context).unfocus();
                             setState(() {});
@@ -219,6 +235,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
   Widget _buildCommentCard({
     required CommentEntity comment,
+    required Function(ReplyOnCommentParams) onCommentReply
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,7 +243,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
         CommentCard(
           comment: comment,
           onAddReply: (ReplyOnCommentParams params) async{
-            var result = await widget.onCommentReply(params);
+            var result = await onCommentReply(params);
             setState(() {});
             return result;
           },

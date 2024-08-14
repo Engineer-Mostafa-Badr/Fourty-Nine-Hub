@@ -5,7 +5,6 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
@@ -19,7 +18,7 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
-class TwitterPostDetails extends StatelessWidget {
+class TwitterPostDetails extends StatefulWidget {
   const TwitterPostDetails(
       {super.key,
         this.post,
@@ -35,6 +34,11 @@ class TwitterPostDetails extends StatelessWidget {
   final Function(TwitterReportParams)? onReport;
 
   @override
+  State<TwitterPostDetails> createState() => _TwitterPostDetailsState();
+}
+
+class _TwitterPostDetailsState extends State<TwitterPostDetails> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -44,7 +48,7 @@ class TwitterPostDetails extends StatelessWidget {
       body: BlocProvider<TwitterCubit>(
         create: (_) {
           final user = context.read<UserCubit>().state.data;
-          return serviceLocator()..getTwitterPost(context, postId, '', user);
+          return serviceLocator()..getTwitterPost(context, widget.postId, '', user);
         },
         child: BlocConsumer<TwitterCubit, TwitterState>(
           buildWhen: (current , previous)=>previous.status== StateStatus.success,
@@ -63,13 +67,22 @@ class TwitterPostDetails extends StatelessWidget {
             final controller = context.read<TwitterCubit>();
             return state.status==StateStatus.success?TwitterPostCard(
               post: state.postDetails!,
-              onReact: () {
-                controller.onReact(
+              onReact: () async{
+                var result = await controller.onReact(
                   params: TwitterPostReactParams(
                       react: 'love', postId: state.postDetails!.id),
                 );
+                if(result == true){
+                  if(state.postDetails?.isReact==true){
+                    state.postDetails?.isReact=false;
+                    state.postDetails?.loveCount=(state.postDetails!.loveCount!-1);
+                  }else{
+                    state.postDetails?.isReact=true;
+                    state.postDetails?.loveCount=(state.postDetails!.loveCount!+1);
+                  }
+                }
               },
-              showPostComments: showPostComments??(i){
+              showPostComments: (i){
                 final user = context.read<UserCubit>().state.data;
 
                 bottomSheet(
@@ -77,10 +90,16 @@ class TwitterPostDetails extends StatelessWidget {
                   isScrollControlled: true,
                   widget: TwitterPostComments(
                     comments: [],
-                    postId: post!.id,
+                    postId: state.postDetails!.id,
                     user: user,
-                    onAddComment: (TwitterPostCommentParams params) =>
-                        controller.onPostComment(params: params),
+                    onAddComment: (TwitterPostCommentParams params) async{
+                      var result =await controller.onPostComment(params: params);
+                      state.postDetails?.commentsCount=(state.postDetails!.commentsCount!+1);
+                      setState(() {
+
+                      });
+                      return result;
+                    },
                     onAddReply: (TwitterCommentReplyParams params) {
                       controller.onCommentReply(params: params);
                     },
@@ -100,7 +119,7 @@ class TwitterPostDetails extends StatelessWidget {
                     onReport: (TwitterReportParams params) {
                       controller.onReport(params);
                     },
-                    userData: post?.user,
+                    // userData: user,
                   ),
 
                 );
@@ -114,10 +133,10 @@ class TwitterPostDetails extends StatelessWidget {
                 showSuccessMessage(context, "Report sent successfully");
                 context.pop();
               }, deletePost: (String id) {
-                controller.deletePost(context: context, postId: postId);
+                controller.deletePost(context: context, postId: widget.postId);
                 context.pop();
             }, hidePost: (String id) {
-              controller.deletePost(context: context, postId: postId);
+              controller.deletePost(context: context, postId: widget.postId);
               context.pop();
             },
             ):const Center(

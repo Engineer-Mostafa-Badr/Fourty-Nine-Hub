@@ -97,7 +97,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 children: [
                   InkWell(
                     onTap: () {
-                      if (isShared == true) {
+
                         print("objectH");
                         // context.push(Routes.TWITTERPOSTDETAILS,extra: widget.post.mainPost.id);
 
@@ -105,11 +105,11 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                             context: context,
                             isScrollControlled: true,
                             widget: TwitterPostDetails(
-                              postId: widget.post.mainPost.id,
+                              postId:isShared == true? widget.post.mainPost.id:widget.post.id,
                               showPostComments: (id) {},
                               onReport: (TwitterReportParams params) {},
                             ));
-                      }
+
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,7 +119,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                             showOptions: false,
                             post: widget.post,
                             date: widget.post.isShared == true
-                                ? widget.post.mainPost?.sinceTime
+                                ? widget.post.mainPost?.sinceTime??''
                                 : widget.post.sinceTime),
                         const SizedBox(
                           height: 10,
@@ -185,17 +185,30 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                     : Icons.favorite,
                 label: "${post.loveCount}",
                 onTap: () {
-                  if (post.isReact == true) {
-                    widget.onReact();
-
-                    post.loveCount = (post.loveCount! - 1);
-                    setState(() {});
-                  } else {
-                    widget.onReact();
-
-                    post.loveCount = post.loveCount! + 1;
-                    setState(() {});
-                  }
+                  widget.onReact();
+                  // print(result);
+                  // if(result == true){
+                  //   if(post.isReact == true){
+                  //     post.isReact = false;
+                  //     post.loveCount = (post.loveCount! - 1);
+                  //     setState(() {});
+                  //   }else{
+                  //     post.isReact = true;
+                  //     post.loveCount = (post.loveCount! + 1);
+                  //     setState(() {});
+                  //   }
+                  // }
+                  // if (post.isReact == true) {
+                  //   var result = widget.onReact();
+                  //   print(result);
+                  //   post.loveCount = (post.loveCount! - 1);
+                  //   setState(() {});
+                  // } else {
+                  //   widget.onReact();
+                  //
+                  //   post.loveCount = post.loveCount! + 1;
+                  //   setState(() {});
+                  // }
                 },
                 iconColor: post.isReact == false ? Colors.grey : Colors.red),
           ),
@@ -474,7 +487,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               const Sizer(),
               Label(
                   text: post.isShared == true
-                      ? post.mainPost?.user.firstName
+                      ? post.mainPost?.user.firstName??''
                       : post.user.firstName,
                   style: Styles.mediumText(fontWeight: FontWeight.w500)),
               const Sizer(),
@@ -490,7 +503,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 width: 100,
                 child: Label(
                     text:
-                        '@${(post.isShared == true ? post.mainPost.user.email : post.user.email).split('@')[0]} . $date',
+                        '@${(post.isShared == true&&post.mainPost!=null ? post.mainPost.user.email??'' : post.user.email).split('@')[0]} . $date',
                     maxLines: 1,
                     style: Styles.mediumText(color: Colors.grey)),
               ),
