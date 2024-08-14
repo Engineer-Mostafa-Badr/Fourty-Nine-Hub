@@ -1,9 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import '../../../res/assets/assets.dart';
 import '../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -103,7 +106,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
           route: Routes.SHIPPING),
       BottomItemModel(
           icon: FontAwesomeIcons.car,
-          label: 'ride'.localize,
+          label: LocaleKeys.ride.tr(),
           index: 4,
           image: Assets.ride,
           route: Routes.RIDE),
