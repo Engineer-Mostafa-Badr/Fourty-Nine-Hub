@@ -1368,7 +1368,7 @@ class _BottomSheetContentState extends State<BottomSheetContent> {
         );
 
     TinderSharedUtils.handleGiftResponse(
-        context: context, response: data!, price: gift.value);
+        context: context, response: data!, gift: gift);
   }
 
   @override

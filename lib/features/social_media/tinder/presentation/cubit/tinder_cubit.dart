@@ -1201,7 +1201,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
           isUserNearby: nearByModel, isUserNearbyState: DataState.success));
     }catch(e){
       log(e.toString()+" nearByModel faild ");
-      emit(state.copyWith(isUserNearbyState: DataState.failure));
+      emit(state.copyWith(isUserNearbyState: DataState.failure,isUserNearby: NearByModel()));
 
     }
   }
@@ -1254,7 +1254,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     required String gender,
     required String accessToken,
   }) async {
-    emit(state.copyWith(userDataState: DataState.initial));
+    emit(state.copyWith(userDataState: DataState.initial,userData: []));
 
     final url =
         'https://49dev.com/api/v1/tinder/?gender=$gender&page=1&limit=20&subCategory=66af974f8bf69f9469944746';
@@ -1271,7 +1271,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       emit(
           state.copyWith(userData: userData, userDataState: DataState.success));
     } else {
-      emit(state.copyWith(userDataState: DataState.failure));
+      emit(state.copyWith(userDataState: DataState.failure,userData: []));
     }
   }
 
@@ -1381,11 +1381,19 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       emit(state.copyWith(currentStoryIndex: state.currentStoryIndex + 1));
     }
   }
+  // void nextStory() {
+  //   final newIndex = (state.currentUserIndex + 1) % state.userData.length;
+  //   updateCurrentIndex(newIndex);
+  // }
 
   void previousStory() {
     if (state.currentStoryIndex > 0) {
       emit(state.copyWith(currentStoryIndex: state.currentStoryIndex - 1));
     }
+  }
+
+  void updateCurrentIndex(int newIndex) {
+    emit(state.copyWith(currentIndex: newIndex));
   }
 
   void resetStoryIndex() {

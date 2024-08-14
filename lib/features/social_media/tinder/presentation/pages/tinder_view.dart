@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.da
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/tinder_shared_utils.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_card_stack.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -170,8 +171,12 @@ class _TinderScreenState extends State<TinderScreen> {
       child: Column(
         children: [
           _buildHeader(),
-          _buildCardStack(context,
-              tinderCubit: tinderCubit, userCubit: currentUserCubit),
+          TinderCardStack(
+            // tinderCubit: tinderCubit,
+            userCubit: currentUserCubit,
+          ),
+          // _buildCardStack(context,
+          //     tinderCubit: tinderCubit, userCubit: currentUserCubit),
           // CardStackWidget(tinderCubit: tinderCubit, userCubit: currentUserCubit),
           _buildSeparator(),
           _buildSubCategoryList(context,
@@ -291,7 +296,7 @@ class _TinderScreenState extends State<TinderScreen> {
             //     tinderCubit: tinderCubit, userCubit: userCubit),
             PersonInfoWidget(
               cardUser: cardUser,
-              tinderCubit: tinderCubit,
+              // tinderCubit: tinderCubit,
               userCubit: userCubit,
             ),
             _buildActions(context, cardUser,
@@ -654,13 +659,14 @@ class _TinderScreenState extends State<TinderScreen> {
 
 class PersonInfoWidget extends StatefulWidget {
   final UserData cardUser;
-  final TinderViewCubit tinderCubit;
+
+  // final TinderViewCubit tinderCubit;
   final UserCubit userCubit;
 
   const PersonInfoWidget({
     super.key,
     required this.cardUser,
-    required this.tinderCubit,
+    // required this.tinderCubit,
     required this.userCubit,
   });
 
@@ -671,7 +677,9 @@ class PersonInfoWidget extends StatefulWidget {
 class _PersonInfoWidgetState extends State<PersonInfoWidget> {
   @override
   void initState() {
-    widget.tinderCubit
+    final tinderCubit = context.read<TinderViewCubit>();
+
+    tinderCubit
       ..fetchLastSeen(
         userId: widget.cardUser.id!,
         accessToken: widget.userCubit.state.token!.accessToken,
@@ -688,20 +696,20 @@ class _PersonInfoWidgetState extends State<PersonInfoWidget> {
   @override
   Widget build(BuildContext context) {
     final innerTinderCubit = context.watch<TinderViewCubit>();
-    if (widget.tinderCubit.state.lastSeenModel == null ||
-        widget.tinderCubit.state.lastSeenModel!.status == false) {
-      innerTinderCubit.fetchLastSeen(
-        userId: widget.cardUser.id!,
-        accessToken: widget.userCubit.state.token!.accessToken,
-      );
-    }
-    if (widget.tinderCubit.state.isUserNearby == null ||
-        widget.tinderCubit.state.isUserNearby!.status == false) {
-      innerTinderCubit.checkUserNearby(
-        cardUserId: widget.cardUser.id!,
-        accessToken: widget.userCubit.state.token!.accessToken,
-      );
-    }
+    // if (innerTinderCubit.state.lastSeenModel == null ||
+    //     innerTinderCubit.state.lastSeenModel!.status == false) {
+    //   innerTinderCubit.fetchLastSeen(
+    //     userId: widget.cardUser.id!,
+    //     accessToken: widget.userCubit.state.token!.accessToken,
+    //   );
+    // }
+    // if (innerTinderCubit.state.isUserNearby == null ||
+    //     innerTinderCubit.state.isUserNearby!.status == false) {
+    //   innerTinderCubit.checkUserNearby(
+    //     cardUserId: widget.cardUser.id!,
+    //     accessToken: widget.userCubit.state.token!.accessToken,
+    //   );
+    // }
 
     return _buildPersonInfo(context, widget.cardUser,
         // tinderCubit: widget.tinderCubit,
@@ -730,12 +738,13 @@ class _PersonInfoWidgetState extends State<PersonInfoWidget> {
                 const SizedBox(width: 10),
                 BadgedLabel(
                   color: AppColors.SECONDARY_COLOR,
-                  label: (tinderCubit.state.isUserNearby == null ||
-                          tinderCubit.state.isUserNearby!.data == null)
-                      ? 'N/A'
-                      : (tinderCubit.state.isUserNearby!.data!.isNearBy == true)
+                  label: (tinderCubit.state.isUserNearby != null &&
+                          tinderCubit.state.isUserNearby!.data != null)
+                      ? ((tinderCubit.state.isUserNearby!.data!.isNearBy ==
+                              true)
                           ? 'Nearby'
-                          : 'is not Nearby',
+                          : 'is not Nearby')
+                      : "N/A",
                 ),
               ],
             ),
@@ -751,7 +760,7 @@ class _PersonInfoWidgetState extends State<PersonInfoWidget> {
                     fontWeight: FontWeight.bold),
               ),
               subtitle: Text(
-                 tinderCubit.state.lastSeenModel?.data?.lastSeen != null
+                tinderCubit.state.lastSeenModel?.data?.lastSeen != null
                     ? "Last seen ${getTimeAgo(tinderCubit.state.lastSeenModel!.data!.lastSeen ?? '')}"
                     : "Last seen ",
                 style: Styles.mediumText(
@@ -1041,7 +1050,7 @@ class CardStackWidgetState extends State<CardStackWidget> {
             //     tinderCubit: tinderCubit, userCubit: userCubit),
             PersonInfoWidget(
               cardUser: cardUser,
-              tinderCubit: tinderCubit,
+              // tinderCubit: tinderCubit,
               userCubit: userCubit,
             ),
             _buildActions(context, cardUser,
@@ -1962,7 +1971,7 @@ class GiftItem extends StatelessWidget {
             .then((value) {
           log("$value`````````````````````````````````");
           TinderSharedUtils.handleGiftResponse(
-              context: context, response: value!, price: gift.value);
+              context: context, response: value!, gift: gift);
         });
       },
       child: Column(
