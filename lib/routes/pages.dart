@@ -462,6 +462,7 @@ class AppPages {
             child: const InstagramView(),
           ),
         ),
+        //social home
         GoRoute(
             path: Paths.SOCIAL,
             name: Routes.SOCIAL,

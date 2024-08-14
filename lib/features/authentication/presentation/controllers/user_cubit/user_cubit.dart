@@ -81,6 +81,22 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   setLogin(bool value){
     cacheService.setLogin(value);
   }
+  Future<void> giveMeTokenForTinder() async {
+    final result = await _getTokensUseCase(const NoParams());
+
+    // UserTokensEntity? token;
+    result.fold(
+          (_) {},
+          (tokens) {
+        _attachTokenUseCase(tokens);
+        _isTokenAttached = true;
+        // token = tokens!;
+        emit(state.copyWith(status: StateStatus.success, token: tokens));
+      },
+    );
+    // TinderSharedUtils.initializeToken(token!.accessToken);
+    // return token;
+  }
 // getWallet() async {
 //   if (!_isTokenAttached) return;
 //   var response = await repository.getWallet();

@@ -20,6 +20,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheServiceImpl.init();
   await DI.execute();
+
   //to cache gift items
   // ZegoGiftManager().cache.cache(giftItemList);
   // ZegoGiftManager().cache.cache(giftItemList);

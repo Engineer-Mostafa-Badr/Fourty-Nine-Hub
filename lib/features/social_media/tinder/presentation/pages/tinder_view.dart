@@ -80,18 +80,18 @@ class _TinderScreenState extends State<TinderScreen> {
     // } else {
     //   TinderSharedUtils.initializeToken('');
 
-    // final currentUserCubit = context.read<UserCubit>();
-    // currentUserCubit.giveMeTokenForTinder().then((_) {
-    //   final tinderCubit = context.read<TinderViewCubit>();
-    //   tinderCubit
-    //     ..fetchUserData(
-    //       accessToken: currentUserCubit.state.token?.accessToken ?? '',
-    //       gender: 'female',
-    //     )
-    //     ..fetchSubCategoryData(
-    //         accessToken: currentUserCubit.state.token?.accessToken ?? '')
-    //     ..fetchFavorites(currentUserCubit.state.token?.accessToken ?? '');
-    // });
+    final currentUserCubit = context.read<UserCubit>();
+    currentUserCubit.giveMeTokenForTinder().then((_) {
+      final tinderCubit = context.read<TinderViewCubit>();
+      tinderCubit
+        ..fetchUserData(
+          accessToken: currentUserCubit.state.token?.accessToken ?? '',
+          gender: 'female',
+        )
+        ..fetchSubCategoryData(
+            accessToken: currentUserCubit.state.token?.accessToken ?? '')
+        ..fetchFavorites(currentUserCubit.state.token?.accessToken ?? '');
+    });
     // }
     super.initState();
     // _tinderViewCubit = context.read<TinderViewCubit>()..resetStoryIndex();
