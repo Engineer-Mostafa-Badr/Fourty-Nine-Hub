@@ -873,23 +873,15 @@
 
 //down enhanced
 
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/tinder_shared_utils.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
-import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class OutlineText extends StatelessWidget {
   final String text;
@@ -1248,7 +1240,6 @@ class _BottomSheetContentState extends State<BottomSheetContent> {
             // Add one for the loading indicator
             itemBuilder: (context, index) {
               if (index < state.gifts.length) {
-                final gift = state.gifts[index];
                 return _buildGiftItem(context, state.gifts[index]);
               } else {
                 // Loading indicator at the bottom

@@ -860,12 +860,8 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/add_category_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/fav_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/shared/tinder_shared_utils.dart';
 import 'package:http/http.dart' as http;
 
 import '../../data/models/gift_model.dart';
@@ -1173,7 +1169,6 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     log('${giftApi.data!.first.nameEn!}giftApi111111111111111111111111');
     emit(state.copyWith(gifts: giftApi.data ?? []));
     return giftApi.data;
-    return null;
   }
 
   Future<void> checkUserNearby({
