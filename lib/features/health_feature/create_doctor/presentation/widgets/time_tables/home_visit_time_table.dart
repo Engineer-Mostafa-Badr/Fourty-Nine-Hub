@@ -22,11 +22,11 @@ class CreateDoctorHomeVisitTimeTable extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   DefaultTextFormField(
-                    currentFocusNode: createDoctorCubit
-                        .homeVisitPriceFocusNode,
-                    currentController: createDoctorCubit
-                        .homeVisitPriceController,
-                    nextFocusNode: createDoctorCubit.homeVisitExamineDurationFocusNode,
+                    currentFocusNode: createDoctorCubit.homeVisitPriceFocusNode,
+                    currentController:
+                        createDoctorCubit.homeVisitPriceController,
+                    nextFocusNode:
+                        createDoctorCubit.homeVisitExamineDurationFocusNode,
                     keyboardType: TextInputType.number,
                     isRequired: true,
                     hint: 'Home Visit Price',
@@ -36,10 +36,10 @@ class CreateDoctorHomeVisitTimeTable extends StatelessWidget {
                     hint: 'Home Visit Examine Duration (in minutes)',
                     keyboardType: TextInputType.number,
                     isRequired: true,
-                    currentFocusNode: createDoctorCubit
-                        .homeVisitExamineDurationFocusNode,
-                    currentController: createDoctorCubit
-                        .homeVisitExamineDurationController,
+                    currentFocusNode:
+                        createDoctorCubit.homeVisitExamineDurationFocusNode,
+                    currentController:
+                        createDoctorCubit.homeVisitExamineDurationController,
                   ),
                 ],
               ));

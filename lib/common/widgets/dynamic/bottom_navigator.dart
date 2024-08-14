@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/ride_request_view.dart';
+import '../../../features/zoom/presentation/widgets/meeting_dialogue.dart';
 import '../../../res/assets/assets.dart';
 import '../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -13,46 +13,42 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
   final int mainCategory;
   final int index;
 
-  const BottomNavigator({
-    super.key,
-    required this.mainCategory,
-    required this.index
-  });
+  const BottomNavigator(
+      {super.key, required this.mainCategory, required this.index});
 
   @override
   Widget build(BuildContext context) {
-
     List<BottomItemModel> pages = mainCategory == 3
         ? <BottomItemModel>[
-      BottomItemModel(
-          icon: FontAwesomeIcons.microphone,
-          height: 30,
-          label: 'voice'.localize,
-          index: 0,
-          image: Assets.voiceLive,
-          route: Routes.CLUBHOUSE),
-      BottomItemModel(
-          icon: FontAwesomeIcons.stream,
-          label: 'live'.localize,
-          index: 0,
-          height: 25,
-          image: Assets.live,
-          route: Routes.LIVE),
-      BottomItemModel(
-          icon: Icons.video_call,
-          label: 'meet'.localize,
-          index: 0,
-          height: 25,
-          image: Assets.zoomMeeting,
-          route: Routes.ZOOM),
-      BottomItemModel(
-          icon: Icons.video_call,
-          label: 'cast'.localize,
-          index: 0,
-          height: 25,
-          image: Assets.radio,
-          route: Routes.CLUBHOUSE),
-    ]
+            BottomItemModel(
+                icon: FontAwesomeIcons.microphone,
+                height: 30,
+                label: 'Voice',
+                index: 0,
+                image: Assets.voiceLive,
+                action: () => context.push(Routes.CLUBHOUSE)),
+            BottomItemModel(
+                icon: FontAwesomeIcons.stream,
+                label: 'Live',
+                index: 0,
+                height: 25,
+                image: Assets.live,
+                action: () => context.push(Routes.LIVE)),
+            BottomItemModel(
+                icon: Icons.video_call,
+                label: 'Meet',
+                index: 0,
+                height: 25,
+                image: Assets.zoomMeeting,
+                action: () => context.push(Routes.ZOOM)),
+            BottomItemModel(
+                icon: Icons.video_call,
+                label: 'Cast',
+                index: 0,
+                height: 25,
+                image: Assets.radio,
+                action: () => context.push(Routes.CLUBHOUSE)),
+          ]
         : mainCategory == 2
         ? <BottomItemModel>[
       BottomItemModel(
@@ -110,10 +106,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
     return CustomBottomNavigationBar(
       currentIndex: index,
       onTap: (index) {
-        final selectedItem = pages[index];
-        if (selectedItem.route != ModalRoute.of(context)?.settings.name) {
-          selectedItem.action(context);
-        }
+        pages[index].action();
       },
       items: pages,
     );
@@ -142,13 +135,22 @@ class CustomBottomNavigationBar extends StatefulWidget {
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     with SingleTickerProviderStateMixin {
+  // late AnimationController _controller;
+  // late Animation<double> _animation;
+
   @override
   void initState() {
     super.initState();
+    // _controller = AnimationController(
+    //   duration: const Duration(milliseconds: 300),
+    //   vsync: this,
+    // );
+    // _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
   }
 
   @override
   void dispose() {
+    // _controller.dispose();
     super.dispose();
   }
 
@@ -165,6 +167,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
           boxShadow: [
             BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2)
           ],
+          // borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
         ),
         child: SafeArea(
           child: Padding(
@@ -179,11 +182,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                     widget.onTap(index);
                   },
                   child: Padding(
-                    padding: index == index1
+                    padding: index == 1
                         ? const EdgeInsets.only(right: 10)
-                        : index == index2
-                        ? const EdgeInsets.only(left: 30)
-                        : EdgeInsets.zero,
+                        : index == 2
+                            ? const EdgeInsets.only(left: 30)
+                            : EdgeInsets.zero,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -216,13 +219,12 @@ class BottomItemModel {
   final String image;
   final String route;
   final double height;
-
   BottomItemModel({
     required this.icon,
     required this.label,
     required this.index,
     required this.image,
-    required this.route,
+    required this.action,
     this.height = 20,
   });
 

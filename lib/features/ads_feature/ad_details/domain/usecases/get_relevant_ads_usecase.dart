@@ -5,9 +5,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
-
-class GetRelevantAdsUseCase
-    extends UseCase<List<AdModel>, int> {
+class GetRelevantAdsUseCase extends UseCase<List<AdModel>, int> {
   final AdDetailsRepo _repo;
   GetRelevantAdsUseCase(this._repo);
 

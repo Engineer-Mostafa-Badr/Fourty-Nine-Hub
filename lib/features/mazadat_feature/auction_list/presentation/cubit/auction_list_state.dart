@@ -20,7 +20,7 @@ class AuctionListState {
       this.auctionList,
       this.failure,
       this.subCategories,
-      this.isGrid = true, 
+      this.isGrid = true,
       this.selectedSubCategory});
   AuctionListState copyWith({
     AuctionListStates? status,
@@ -28,7 +28,7 @@ class AuctionListState {
     List<AuctionEntity>? auctionList,
     List<SubCategoryEntity>? subCategories,
     SubCategoryEntity? selectedSubCategory,
-    bool? isGrid ,
+    bool? isGrid,
   }) {
     return AuctionListState(
       status: status ?? this.status,
@@ -36,7 +36,7 @@ class AuctionListState {
       auctionList: auctionList ?? this.auctionList,
       subCategories: subCategories ?? this.subCategories,
       selectedSubCategory: selectedSubCategory ?? this.selectedSubCategory,
-      isGrid:  isGrid?? this.isGrid,
+      isGrid: isGrid ?? this.isGrid,
     );
   }
 }

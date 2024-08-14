@@ -15,7 +15,8 @@ class DoctorSubcategoryFilterCubit extends Cubit<DoctorSubcategoryFilterState> {
   final FocusNode searchFocusNode = FocusNode();
   final TextEditingController searchController = TextEditingController();
 
-  DoctorSubcategoryFilterCubit(this._getHealthSubcategoriesUseCase, this._shareCubit)
+  DoctorSubcategoryFilterCubit(
+      this._getHealthSubcategoriesUseCase, this._shareCubit)
       : super(DoctorSubcategoryFilterInitial());
 
   Future<void> loadData() async {
@@ -28,8 +29,8 @@ class DoctorSubcategoryFilterCubit extends Cubit<DoctorSubcategoryFilterState> {
       final response =
           await _getHealthSubcategoriesUseCase.call(const NoParams());
       response.fold(
-          (failure) => emit(
-              DoctorSubcategoryFilterError(message: Labels.errorHappened)),
+          (failure) =>
+              emit(DoctorSubcategoryFilterError(message: Labels.errorHappened)),
           (data) {
         _shareCubit.subCategories = data;
         emit(DoctorSubcategoryFilterLoaded(subCategories: data));

@@ -5,8 +5,7 @@ import '../../../../../../core/abstract/use_case.dart';
 import '../repositories/ads_repo.dart';
 import 'request_come_with_me_usecase.dart';
 
-class RequestPickMeUseCase
-    extends UseCase<bool, RequestParams> {
+class RequestPickMeUseCase extends UseCase<bool, RequestParams> {
   final AdsRepo _repo;
   RequestPickMeUseCase(this._repo);
   @override

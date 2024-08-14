@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,15 +8,15 @@ import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 
 import 'package:fourtyninehub/core/states/basic_state.dart';
-import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_subcategory_view.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/shared/tinder_shared_utils.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/liveview/gifts/gift_manager.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:go_router/go_router.dart';
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
+import '../../../res/style/const.dart';
 import '../../../res/style/styles.dart';
 import '../../../routes/routes.dart';
 import '../stateless/buttons/iconAppButton.dart';
@@ -26,13 +28,10 @@ class DrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log(context.read<UserCubit>().state.data?.email.toString()??"lllllllllllllllllll");
+    // CacheImpl
     return BlocBuilder<UserCubit, BasicState<UserEntity>>(
       builder: (context, state) {
-        //to get token for current user
-        // context.read<UserCubit>().giveMeTokenForTinder().then((value) {
-        //   TinderSharedUtils.initializeToken(value!.accessToken);
-        // });
-
         return Drawer(
           backgroundColor: Colors.white,
           child: SafeArea(
@@ -48,7 +47,7 @@ class DrawerWidget extends StatelessWidget {
 
                   competitionSubscription(context: context),
 
-                  // walletCircularProgress(context: context),
+                  // walletCircularProgress(context: context), gemy3617@gmail.com
                   drawerListTile(
                       icon: FontAwesomeIcons.bullhorn,
                       label: 'Advertise Your Company',
@@ -73,11 +72,7 @@ class DrawerWidget extends StatelessWidget {
                       icon: Icons.favorite,
                       label: 'Favourite Sub Categories',
                       requireLogin: true,
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const FavSubCategoryView(),
-                          ))),
+                      onTap: () => context.push(Routes.FAVOURITESUBCATEGORIES)),
                   drawerListTile(
                       icon: FontAwesomeIcons.adn,
                       label: 'Favourite Ads',
@@ -398,15 +393,15 @@ class DrawerWidget extends StatelessWidget {
                     backgroundColor: Colors.transparent,
                     backgroundImage: NetworkImage(
                         'https://st3.depositphotos.com/9998432/13335/v/450/depositphotos_133352010-stock-illustration-default-placeholder-man-and-woman.jpg'
-                        // user?.profilePicture ?? UIConst.profilePlaceHolder,
-                        ),
+                      // user?.profilePicture ?? UIConst.profilePlaceHolder,
+                    ),
                   ),
                 ),
-                Positioned(
+                 Positioned(
                   bottom: 0,
                   right: 0,
                   child: InkWell(
-                    onTap: () {
+                    onTap: (){
                       //change the image of user profile
                     },
                     child: const Icon(
@@ -434,9 +429,7 @@ class DrawerWidget extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  context.push(
-                    Routes.WALLET,
-                  );
+                  context.push(Routes.WALLET,);
                 },
                 child: Row(
                   children: [

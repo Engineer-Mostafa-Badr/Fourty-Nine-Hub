@@ -92,8 +92,6 @@ class SocialServiceLocator {
         () => SocialPostsRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<TwitterRepo>(
         () => TwitterRepoImpl(serviceLocator()));
-    serviceLocator.registerLazySingleton<InstagramRepo>(
-        () => InstagramRepoImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<CreatePostUseCase>(
         () => CreatePostUseCase(serviceLocator()));
@@ -215,21 +213,6 @@ class SocialServiceLocator {
         () => SendGreetMessageUseCase(
               serviceLocator(),
             ));
-
-    serviceLocator
-        .registerLazySingleton<SharePostUseCase>(() => SharePostUseCase(
-      serviceLocator(),
-    ));
-
-    serviceLocator
-        .registerLazySingleton<CommentReactUseCase>(() => CommentReactUseCase(
-      serviceLocator(),
-    ));
-
-    serviceLocator
-        .registerLazySingleton<GetPostCommentRepliesUseCase>(() => GetPostCommentRepliesUseCase(
-      serviceLocator(),
-    ));
 
     serviceLocator
         .registerLazySingleton<ReplyOnCommentUseCase>(() => ReplyOnCommentUseCase(

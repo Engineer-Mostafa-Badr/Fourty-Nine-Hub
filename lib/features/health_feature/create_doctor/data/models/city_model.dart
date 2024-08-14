@@ -1,4 +1,3 @@
-
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 
 class CityModel extends CityEntity {

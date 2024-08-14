@@ -125,7 +125,7 @@ class CreateShippingRequestCubit extends Cubit<CreateShippingRequestState> {
 
     final response = await _getShippingExpectedPriceUseCase.call(
         ExpectedPriceParams(
-          subCategoryId: state.subCategory?.id??'',
+            subCategoryId: state.subCategory?.id ?? '',
             fromLat: from.lat,
             fromLng: from.lng,
             toLat: to.lat,

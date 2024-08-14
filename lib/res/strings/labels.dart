@@ -72,6 +72,8 @@ abstract class Labels {
   static const doctorDashboard = 'Doctor Dashboard';
   static const doctorDashboardBannerDiscription =
       'New Bookings are waiting you, go to doctor dashboard and explore more!';
+  static const driverDashboardBannerDiscription =
+      'New Bookings are waiting you, go to driver dashboard and explore more!';
   static const homeVist = 'Home Vist';
   static const clinicVist = 'Clinic Vist';
   static const call = 'Call';
@@ -141,19 +143,29 @@ abstract class Labels {
   static const expireDate = 'Expire Date';
   static const uploadPhotos = 'Upload Photos';
   static const deleteAccount = 'Delete Account';
-  static const noAppointmentsToday = 'No Appointments Today';
-  static const subscribeNow = 'Subscribe Now';
-  static const noAppointments = 'No Appointments';
-  static const requests = 'Requests';
-  static const appointmentAcceptedSuccessfully =
-      'Appointment Accepted Successfully';
-  static const appointmentRejectedSuccessfully =
-      'Appointment Rejected Successfully';
-  static const cantLoadData = 'Can\'t load data';
-  static const serviceProvider = 'Service Provider';
-  static const user = 'User';
-  static const specialities = 'Specialities';
-  static const medicalServices = 'Medical Services';
-  static const waitingDoctorAppointment = 'Waiting for doctor\'s appointment';
-  static const welcomeToDoctorRegister = 'Welcome to doctor register';
+
+  static const receiptPoint = 'Receipt Point';
+  static const deliveryPoint = 'Delivery Point';
+  static const time = 'Time';
+  static const offerPrice = 'Offer Price';
+  static const phone = 'Phone';
+  static const theApplicationDoesNot =
+      'The application does not deduct any percentage from the service provider.';
+  static const thePremiumPackageGivesYou =
+      'The Premium Package gives you the opportunity to be more visible and get more cashback.';
+  static const freeCancellation = 'Free cancellation';
+  static const request = 'Request';
+  static const driverDashboard = 'Driver dashboard';
+  static const premiumRequest = 'Premium Request';
+  static const youWillGetPounds =
+      'You will get 3,650 pounds annually if you subscribe.';
+  static const right = 'right';
+  static const left = 'left';
+  static const behind = 'behind';
+  static const inFront = 'In front';
+  static const identificationCard = 'ID card';
+  static const drivingLicense = 'Driving License';
+  static const license = 'License';
+  static const model = 'Model';
+  static const submit = 'Submit';
 }

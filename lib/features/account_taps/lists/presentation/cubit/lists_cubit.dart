@@ -10,8 +10,6 @@ import '../../domain/entities/users_list_entity.dart';
 
 part 'lists_state.dart';
 
-
-
 class ListsCubit extends Cubit<ListsState> {
   final GetFriendRequestsUsecase _getFriendRequestsUsecase;
   final GetBlockedUseCase _getBlockedUseCase;

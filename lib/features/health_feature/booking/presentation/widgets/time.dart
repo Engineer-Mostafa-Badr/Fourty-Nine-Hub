@@ -19,7 +19,7 @@ class BookDoctorAppointmentTimeCard extends StatelessWidget {
             appointment.day,
             style: Styles.headerText(),
           ),
-            Text(
+          Text(
             appointment.time,
             style: Styles.mediumText(),
           ),

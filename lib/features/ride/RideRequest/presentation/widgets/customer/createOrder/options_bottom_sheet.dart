@@ -193,10 +193,10 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                       onTap: () {
                         bottomSheet(
                             widget: RideContactPhoneNumber(
-                              onChanged: (String v)=>rideCubit.changePhoneNumber(v),
+                              onChanged: (String v) =>
+                                  rideCubit.changePhoneNumber(v),
                             ),
                             isScrollControlled: true,
-                            
                             context: context);
                       },
                       child: Container(

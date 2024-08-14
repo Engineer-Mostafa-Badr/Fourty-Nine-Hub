@@ -39,7 +39,8 @@ class WalletCubit extends Cubit<WalletState> {
   }
 
   Future<void> getNormalWalletHistory() async {
-    final response = await _getWalletHistoryUseCase.call(WalletTypes.mainWallet);
+    final response =
+        await _getWalletHistoryUseCase.call(WalletTypes.mainWallet);
     response.fold((l) {
       emit(state.copyWith(failure: l, status: WalletStates.error));
     }, (data) {
@@ -59,7 +60,8 @@ class WalletCubit extends Cubit<WalletState> {
   void showGiftsHistory({
     required BuildContext context,
   }) async {
-    final response = await _getWalletHistoryUseCase.call(WalletTypes.giftWallet);
+    final response =
+        await _getWalletHistoryUseCase.call(WalletTypes.giftWallet);
     response.fold((l) {
       emit(state.copyWith(failure: l, status: WalletStates.error));
     }, (data) {

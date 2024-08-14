@@ -20,7 +20,7 @@ class MazadatView extends StatelessWidget {
         body: BlocBuilder<AuctionListCubit, AuctionListState>(
           builder: (context, state) {
             return RefreshIndicator(
-              onRefresh: ()async=>controller.loadData(),
+              onRefresh: () async => controller.loadData(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [

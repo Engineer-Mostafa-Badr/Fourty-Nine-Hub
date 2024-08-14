@@ -67,6 +67,26 @@ class UpdateProfilePhotoCard extends StatelessWidget {
           );
         }
       },
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+      ),
+      child: Column(
+        children: [
+          ImageUploaderWidget(
+            subCategoryId: '',
+          ),
+          const Sizer(
+            height: 20,
+          ),
+          AppButton(
+            label: Labels.update,
+            onPressed: () {},
+          ),
+        ],
+      ),
     );
   }
 }

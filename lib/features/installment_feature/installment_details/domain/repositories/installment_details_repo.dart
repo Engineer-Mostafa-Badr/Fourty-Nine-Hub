@@ -7,5 +7,6 @@ import '../../data/models/installment_request_model.dart';
 abstract class InstallmentDetailsRepo {
   Future<Either<Failure, InstallmentEntity>> getInstallmentDetails(
       {required String id});
-  Future<Either<Failure, bool>> buyWithInstallment({required InstallmentRequestModel params});
+  Future<Either<Failure, bool>> buyWithInstallment(
+      {required InstallmentRequestModel params});
 }

@@ -1,13 +1,6 @@
 part of 'riderequest_cubit.dart';
 
-enum RideRequestStatusesEnum {
-  initState,
-  loading,
-  error,
-  success,
-  requestSent
-  
-}
+enum RideRequestStatusesEnum { initState, loading, error, success, requestSent }
 
 extension RiderequestStateX on RiderequestState {
   bool get isInitial => status == RideRequestStatusesEnum.initState;

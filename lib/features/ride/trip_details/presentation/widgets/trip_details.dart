@@ -22,11 +22,10 @@ class TripDetailsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return trip.showOffers
         ? TripOffersWidget(
             trip: trip,
           )
-        :  StartedTripWidget(trip: trip);
+        : StartedTripWidget(trip: trip);
   }
 }

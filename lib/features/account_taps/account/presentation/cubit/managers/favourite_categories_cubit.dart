@@ -5,7 +5,8 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_category_entity.dart';
 import '../../../domain/usecases/get_favourite_categories_usecase.dart';
 
-class FavouriteCategoryCubit extends Cubit<BasicState<List<FavouriteCategoryEntity>>> {
+class FavouriteCategoryCubit
+    extends Cubit<BasicState<List<FavouriteCategoryEntity>>> {
   final GetFavouriteCategoriesUseCase _getMainCategoriesUseCase;
 
   FavouriteCategoryCubit(this._getMainCategoriesUseCase)

@@ -33,7 +33,7 @@ class FoodCartView extends StatelessWidget {
       );
     });
   }
-  
+
   Widget _buildCartItems({required BuildContext context}) {
     // final controller = context.read<FoodCartCubit>();
     return BlocBuilder<FoodCartCubit, BasicState<CartEntity>>(

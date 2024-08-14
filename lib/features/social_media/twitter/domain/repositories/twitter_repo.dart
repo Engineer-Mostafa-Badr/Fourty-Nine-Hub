@@ -16,13 +16,17 @@ import '../entities/twitter_post_entity.dart';
 import '../usecases/post_react_usecase.dart';
 
 abstract class TwitterRepo {
-  Future<Either<Failure, List<TwitterPostEntity>>> getFeed({required TwitterFeedParams params});
-  Future<Either<Failure, TwitterPostEntity>> getTwitterPost({required String postId});
+  Future<Either<Failure, List<TwitterPostEntity>>> getFeed(
+      {required TwitterFeedParams params});
+  Future<Either<Failure, TwitterPostEntity>> getTwitterPost(
+      {required String postId});
   Future<Either<Failure, List<TwitterPostEntity>>> getUserPosts(
       {required GetUserTweetsParams params});
-  Future<Either<Failure, bool>> reactOnPost({required TwitterPostReactParams params});
+  Future<Either<Failure, bool>> reactOnPost(
+      {required TwitterPostReactParams params});
   Future<Either<Failure, bool>> sharePost({required String postId});
-  Future<Either<Failure, bool>> reactOnComment({required TwitterCommentReactParams params});
+  Future<Either<Failure, bool>> reactOnComment(
+      {required TwitterCommentReactParams params});
   Future<Either<Failure, TwitterPostCommentEntity>> commentOnTwitterPost(
       {required TwitterPostCommentParams params});
   Future<Either<Failure, TwitterCommentReplyEntity>> replyOnComment(
@@ -33,6 +37,8 @@ abstract class TwitterRepo {
       {required PostCommentsParams params});
   Future<Either<Failure, bool>> deletePost({required String postId});
   Future<Either<Failure, bool>> hidePost({required String postId});
-  Future<Either<Failure, bool>> addReport({required TwitterReportParams params});
-  Future<Either<Failure, bool>> requestDocument({required TwitterDocumentationParams params});
+  Future<Either<Failure, bool>> addReport(
+      {required TwitterReportParams params});
+  Future<Either<Failure, bool>> requestDocument(
+      {required TwitterDocumentationParams params});
 }

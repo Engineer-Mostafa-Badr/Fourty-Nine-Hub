@@ -15,6 +15,6 @@ class FoodOrderEntity {
       {required this.id,
       required this.address,
       required this.meals,
-      required this.restaurant, 
+      required this.restaurant,
       this.user});
 }

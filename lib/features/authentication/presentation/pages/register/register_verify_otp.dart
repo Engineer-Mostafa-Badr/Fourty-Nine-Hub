@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -33,8 +35,9 @@ class RegisterVerifyOTP extends StatelessWidget {
         } else if (state is ResendOtpSuccess) {
           showSuccessMessage(context, 'resend otp success');
         } else if (state is VerifyOtpSuccess) {
+          context.read<UserCubit>().setUserLogged();
           context.read<UserCubit>().getUser();
-          context.go(Routes.HOME);
+          context.push(Routes.HOME);
         }
       },
       child: Scaffold(

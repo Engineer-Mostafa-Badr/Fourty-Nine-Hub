@@ -163,37 +163,41 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends({required SuggestedFriendsParams params}) async{
+  Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends(
+      {required SuggestedFriendsParams params}) async {
     final response = await _apiConsumer.get(EndPoints.userSuggests(params));
     return response.fold(
-            (l) => Left(l),
-            (data) => Right((data['data'] as List)
+        (l) => Left(l),
+        (data) => Right((data['data'] as List)
             .map((e) => SuggestUserModel.fromJson(e))
             .toList()));
   }
 
   @override
-  Future<Either<Failure, bool>> friendRequest({required String userId}) async{
+  Future<Either<Failure, bool>> friendRequest({required String userId}) async {
     final response = await _apiConsumer.post(EndPoints.friendRequest(userId));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, bool>> followRequest({required String userId}) async{
+  Future<Either<Failure, bool>> followRequest({required String userId}) async {
     final response = await _apiConsumer.post(EndPoints.followRequest(userId));
-    return response.fold((l) => Left(l), (data) => Right(data['status']));
-  }
-  @override
-  Future<Either<Failure, bool>> sendGreetMessage({required String userId}) async{
-    final response = await _apiConsumer.post(EndPoints.greetMessage(userId),data: {
-      "message":"Greet"
-    });
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, bool>> removeSuggestUser({required String userId}) async{
-    final response = await _apiConsumer.post(EndPoints.removeSuggestUser(userId));
+  Future<Either<Failure, bool>> sendGreetMessage(
+      {required String userId}) async {
+    final response = await _apiConsumer
+        .post(EndPoints.greetMessage(userId), data: {"message": "Greet"});
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> removeSuggestUser(
+      {required String userId}) async {
+    final response =
+        await _apiConsumer.post(EndPoints.removeSuggestUser(userId));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 

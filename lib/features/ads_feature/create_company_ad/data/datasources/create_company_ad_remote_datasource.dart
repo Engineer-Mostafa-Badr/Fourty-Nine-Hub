@@ -17,6 +17,10 @@ class CreateCompanyAdRemoteDataSourceImpl
   @override
   Future<Either<Failure, List<CompanyAdEntity>>> getCompanyAdsOptions() async {
     final response = await _apiConsumer.get(Jsons.companyAds);
-    return response.fold((l) => Left(l), (data) => Right((data['data'] as List).map((e) => CompanyAdModel.fromJson(e)).toList()));
+    return response.fold(
+        (l) => Left(l),
+        (data) => Right((data['data'] as List)
+            .map((e) => CompanyAdModel.fromJson(e))
+            .toList()));
   }
 }

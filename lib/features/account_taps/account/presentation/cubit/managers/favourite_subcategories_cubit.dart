@@ -6,7 +6,8 @@ import 'package:fourtyninehub/features/account_taps/account/domain/usecases/get_
 
 import '../../../domain/entities/favourite_subcategory_entity.dart';
 
-class FavouriteSubCategoryCubit extends Cubit<BasicState<List<FavouriteSubcategoryEntity>>> {
+class FavouriteSubCategoryCubit
+    extends Cubit<BasicState<List<FavouriteSubcategoryEntity>>> {
   final GetFavouriteSubCategoriesUseCase _getFavouriteSubCategoriesUseCase;
 
   FavouriteSubCategoryCubit(this._getFavouriteSubCategoriesUseCase)
@@ -16,7 +17,8 @@ class FavouriteSubCategoryCubit extends Cubit<BasicState<List<FavouriteSubcatego
 
   void loadData() async {
     emit(state.copyWith(status: StateStatus.loading));
-    final result = await _getFavouriteSubCategoriesUseCase.call(const NoParams());
+    final result =
+        await _getFavouriteSubCategoriesUseCase.call(const NoParams());
     emit(
       result.fold(
         (failure) => state.copyWith(

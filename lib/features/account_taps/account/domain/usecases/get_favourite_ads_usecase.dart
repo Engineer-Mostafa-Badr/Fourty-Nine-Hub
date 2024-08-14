@@ -5,7 +5,8 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/account_repo.dart';
 
-class GetFavouriteAdsUsecase extends UseCase<List<FavouriteAdEntity>, NoParams> {
+class GetFavouriteAdsUsecase
+    extends UseCase<List<FavouriteAdEntity>, NoParams> {
   final AccountRepo _repo;
   GetFavouriteAdsUsecase(this._repo);
   @override

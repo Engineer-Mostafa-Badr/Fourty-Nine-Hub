@@ -17,21 +17,19 @@ class DriverDashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DriverDashboardCubit, DriverDashboardState>(
-       listener: (context, state){
-        if (state.isError && state.failure!=null) {
-          showErrorMessage(
+        listener: (context, state) {
+      if (state.isError && state.failure != null) {
+        showErrorMessage(
+          context,
+          getFailureMessage(
+            state.failure!,
             context,
-            getFailureMessage(
-              state.failure!,
-              context,
-            ),
-          );
-        } else if (state.isSuccess) {
-          
-          showSuccessMessage(context, Labels.success);
-        } 
-       },
-        builder: (context, state) {
+          ),
+        );
+      } else if (state.isSuccess) {
+        showSuccessMessage(context, Labels.success);
+      }
+    }, builder: (context, state) {
       final controller = context.read<DriverDashboardCubit>();
       return SharedScaffold(
           mainCategoryId: 1,

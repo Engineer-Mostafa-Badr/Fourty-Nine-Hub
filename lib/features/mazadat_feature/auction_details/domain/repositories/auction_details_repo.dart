@@ -6,13 +6,12 @@ import '../../../auction_list/domain/entities/auction_entity.dart';
 import '../entities/bidding_entity.dart';
 
 abstract class AuctionDetailsRepo {
-  Future<Either<Failure, AuctionEntity>> getAuctionDetails({required String id});
-  Future<Either<Failure, bool>> sendAuction({
-    required SendBiddingParams params
-  });
+  Future<Either<Failure, AuctionEntity>> getAuctionDetails(
+      {required String id});
+  Future<Either<Failure, bool>> sendAuction(
+      {required SendBiddingParams params});
   Future<Either<Failure, bool>> followUserAuctions({required String userId});
   Future<Either<Failure, bool>> finishAuction({required String id});
-   Future<Either<Failure, List<BiddingEntity>>> getAuctionRequests(
+  Future<Either<Failure, List<BiddingEntity>>> getAuctionRequests(
       {required String id});
-
 }

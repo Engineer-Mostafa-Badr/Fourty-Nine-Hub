@@ -1,3 +1,1 @@
-class CarModelEntity {
-  
-}
+class CarModelEntity {}

@@ -5,7 +5,8 @@ import 'package:fourtyninehub/features/ride/driver_dashboard/data/models/driver_
 
 import '../repositories/driver_dashboard_repo.dart';
 
-class GetDriverStatisticsUseCase extends UseCase<DriverStatisticsModel, NoParams> {
+class GetDriverStatisticsUseCase
+    extends UseCase<DriverStatisticsModel, NoParams> {
   final DriverDashboardRepo _repository;
 
   const GetDriverStatisticsUseCase(this._repository);

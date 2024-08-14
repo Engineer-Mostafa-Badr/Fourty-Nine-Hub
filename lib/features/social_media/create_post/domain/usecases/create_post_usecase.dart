@@ -8,7 +8,6 @@ class CreatePostUseCase extends UseCase<bool, PostParams> {
   CreatePostUseCase(this._repo);
   @override
   Future<Either<Failure, bool>> call(PostParams params) {
-
     return _repo.postData(data: params.toJson());
   }
 }

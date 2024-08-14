@@ -3,7 +3,8 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/domain/repositories/emergency_repo.dart';
 
-class BookHealthEmergencyUseCase extends UseCase<bool, BookHealthEmergencyParams> {
+class BookHealthEmergencyUseCase
+    extends UseCase<bool, BookHealthEmergencyParams> {
   final HealthEmergencyRepo _repo;
   BookHealthEmergencyUseCase(this._repo);
 

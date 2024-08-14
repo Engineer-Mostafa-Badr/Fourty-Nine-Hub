@@ -34,6 +34,12 @@ class EndPoints {
   static const report = '/report?subCategory=66a3583454e6e337915514db';
   static const documentRequest = '/twitter/document-request?subCategory=66a3583454e6e337915514db';
   // ride
+  //shipping
+  static String bannerData = "$developmentBaseUrl/loading/driver/subcategory";
+  static const drivingLicenseS3 = '/ride/info/driving-license';
+  static const carImageS3 = '/ride/info/car-images';
+  static const carLicenseS3 = '/ride/info/car-license';
+  static const idLicenseS3 = '/ride/info/id';
 
   // health
   static String getCities({required String governorateId}) =>

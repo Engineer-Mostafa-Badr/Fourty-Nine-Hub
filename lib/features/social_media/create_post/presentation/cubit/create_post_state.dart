@@ -35,7 +35,7 @@ class CreatePostState {
     String? backColor,
   }) {
     return CreatePostState(
-      status: status?? this.status,
+      status: status ?? this.status,
       failure: failure ?? this.failure,
       images: images ?? this.images,
       activities: activities ?? this.activities,

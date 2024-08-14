@@ -80,7 +80,7 @@ class StartedTripWidget extends StatelessWidget {
             const Icon(FontAwesomeIcons.car, color: AppColors.PRIMARY_COLOR),
             const Sizer(),
             Label(
-              text: trip.category?.name??"",
+              text: trip.category?.name ?? "",
               style: Styles.mediumText(fontWeight: FontWeight.bold),
             ),
           ],

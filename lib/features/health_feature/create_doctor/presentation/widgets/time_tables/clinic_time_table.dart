@@ -21,11 +21,10 @@ class CreateDoctorClinicTimeTable extends StatelessWidget {
               child: Column(
                 children: [
                   DefaultTextFormField(
-                    currentFocusNode:
-                        createDoctorCubit.clinicPriceFocusNode,
-                    currentController:
-                        createDoctorCubit.clinicPriceController,
-                    nextFocusNode: createDoctorCubit.clinicExamineDurationFocusNode,
+                    currentFocusNode: createDoctorCubit.clinicPriceFocusNode,
+                    currentController: createDoctorCubit.clinicPriceController,
+                    nextFocusNode:
+                        createDoctorCubit.clinicExamineDurationFocusNode,
                     keyboardType: TextInputType.number,
                     isRequired: true,
                     hint: 'Clinic Price',
@@ -36,20 +35,18 @@ class CreateDoctorClinicTimeTable extends StatelessWidget {
                     keyboardType: TextInputType.number,
                     isRequired: true,
                     nextFocusNode: createDoctorCubit.waitingTimeFocusNode,
-                    currentFocusNode: createDoctorCubit
-                        .clinicExamineDurationFocusNode,
-                    currentController: createDoctorCubit
-                        .clinicExamineDurationController,
+                    currentFocusNode:
+                        createDoctorCubit.clinicExamineDurationFocusNode,
+                    currentController:
+                        createDoctorCubit.clinicExamineDurationController,
                   ),
                   const Sizer(),
                   DefaultTextFormField(
                     hint: 'Clinic Waiting time (in minutes)',
                     keyboardType: TextInputType.number,
                     isRequired: true,
-                    currentFocusNode:
-                        createDoctorCubit.waitingTimeFocusNode,
-                    currentController:
-                        createDoctorCubit.waitingTimeController,
+                    currentFocusNode: createDoctorCubit.waitingTimeFocusNode,
+                    currentController: createDoctorCubit.waitingTimeController,
                   ),
                 ],
               ));

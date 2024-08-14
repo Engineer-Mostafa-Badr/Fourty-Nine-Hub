@@ -8,7 +8,8 @@ import '../../../../../subcategories/domain/entities/sub_category_entity.dart';
 class ChooseRegisterSubcategories extends StatelessWidget {
   final List<SubCategoryEntity> subCategories;
   final Function(SubCategoryEntity) onSelection;
-  const ChooseRegisterSubcategories({super.key, required this.subCategories, required this.onSelection});
+  const ChooseRegisterSubcategories(
+      {super.key, required this.subCategories, required this.onSelection});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class ChooseRegisterSubcategories extends StatelessWidget {
           itemBuilder: (context, index) {
             final item = subCategories[index];
             return InkWell(
-              onTap: ()=>onSelection(item),
+              onTap: () => onSelection(item),
               child: Column(
                 children: [
                   Expanded(

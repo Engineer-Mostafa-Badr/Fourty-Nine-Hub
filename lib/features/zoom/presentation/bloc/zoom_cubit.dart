@@ -19,7 +19,7 @@ class MeetingCubit extends Cubit<MeetingState> {
     super.onChange(change);
   }
   void addRoom(String roomId) {
-    emit(MeetingCreateLoadingState());
+    // emit(MeetingCreateLoadingState());
     addRoomUseCase(MeetingParams(id: roomId))
         .then((value) => emit(MeetingCreateSuccessState()))
         .catchError((error) => emit(MeetingCreateFailureState()));
