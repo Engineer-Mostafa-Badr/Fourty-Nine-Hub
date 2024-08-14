@@ -6,12 +6,12 @@ class AddCategoryModel {
 
   AddCategoryModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['success'] = success;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -26,14 +26,14 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     favorite = json['favorite'] != null
-        ? new Favorite.fromJson(json['favorite'])
+        ? Favorite.fromJson(json['favorite'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.favorite != null) {
-      data['favorite'] = this.favorite!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (favorite != null) {
+      data['favorite'] = favorite!.toJson();
     }
     return data;
   }
@@ -58,12 +58,12 @@ class Favorite {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['category_id'] = this.categoryId;
-    data['user_id'] = this.userId;
-    data['_id'] = this.sId;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['category_id'] = categoryId;
+    data['user_id'] = userId;
+    data['_id'] = sId;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
     return data;
   }
 }

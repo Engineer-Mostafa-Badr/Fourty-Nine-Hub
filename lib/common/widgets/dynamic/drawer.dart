@@ -76,7 +76,7 @@ class DrawerWidget extends StatelessWidget {
                       onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const FavSubCategoryView(),
+                            builder: (context) => const FavSubCategoryView(favoriteSubCategory: [],),
                           ))),
                   drawerListTile(
                       icon: FontAwesomeIcons.adn,

@@ -276,18 +276,45 @@ class _ReportViewState extends State<ReportView> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: FormTextField(
+                        child: TextField(
                           style: Styles.headerText(
-                            fontSize: screenWidth * 0.035,
+                            fontSize: MediaQuery.of(context).size.width * 0.04,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.DARK_GRAY_COLOR,
+                            color: AppColors.DARK_BLUE_COLOR,
                           ),
-                          hint: 'Type report reason ....',
-                          height: kToolbarHeight * .7,
-                          action: (v) {
+                          // hint: 'Type report reason...',
+                          // height: MediaQuery.of(context).size.height * 0.07,
+                          // action: (v) {
+                          //   setState(() {});
+                          // },
+                          onChanged: (value) {
                             setState(() {});
                           },
                           controller: reportTextController,
+
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical:
+                                  MediaQuery.of(context).size.height * 0.02,
+                              horizontal: 16.0,
+                            ),
+                            hintText: 'Type report reason...',
+                            hintStyle: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.04,
+                              color: AppColors.DARK_GRAY_COLOR,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderSide: const BorderSide(
+                                  color: AppColors.LIGHT_GRAY_COLOR),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderSide: const BorderSide(
+                                  color: AppColors.PRIMARY_COLOR),
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(
@@ -295,6 +322,8 @@ class _ReportViewState extends State<ReportView> {
                       ),
                       if (reportTextController.text.isNotEmpty)
                         IconAppButton(
+                          height: screenWidth * 0.1,
+                          width: screenWidth * 0.1,
                           icon: Icons.send,
                           isCircle: true,
                           onPressed: () async {

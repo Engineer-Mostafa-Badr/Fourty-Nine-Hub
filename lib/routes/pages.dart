@@ -429,10 +429,8 @@ class AppPages {
               GoRoute(
                   path: Paths.FAVOURITESUBCATEGORIES,
                   name: Routes.FAVOURITESUBCATEGORIES,
-                  builder: (context, state) =>
-                      BlocProvider<FavouriteSubCategoryCubit>(
-                        create: (_) => serviceLocator(),
-                        child:  FavSubCategoryView(),
+                  builder: (context, state) => const FavSubCategoryView(
+                        favoriteSubCategory: [],
                       )),
               GoRoute(
                   path: Paths.MYADDS,
@@ -471,35 +469,39 @@ class AppPages {
                 builder: (context, state) {
                   final social = state.extra as String?;
 
-                    return BlocProvider<CreatePostCubit>(
-                        create: (_) {
-                          if(social !='twitter'){
-                            return serviceLocator()..loadData();
-                          }else{
-                            return serviceLocator();
-                          }
-                        },
-                        child: CreatePostView(social: social??'social',),
-                      );
-                  },
+                  return BlocProvider<CreatePostCubit>(
+                    create: (_) {
+                      if (social != 'twitter') {
+                        return serviceLocator()..loadData();
+                      } else {
+                        return serviceLocator();
+                      }
+                    },
+                    child: CreatePostView(
+                      social: social ?? 'social',
+                    ),
+                  );
+                },
               ),
 
               GoRoute(
                   path: Paths.TWITTER,
                   name: Routes.TWITTER,
                   builder: (context, state) => BlocProvider<TwitterCubit>(
-                      create: (_)=>serviceLocator(),
+                      create: (_) => serviceLocator(),
                       child: const TwitterView()),
-              routes: [
-                GoRoute(
-                  path: Paths.TWITTERPOSTDETAILS,
-                  name: Routes.TWITTERPOSTDETAILS,
-                  builder: (context, state) {
-                    final id = state.extra as String?;
-                    return TwitterPostDetails(postId: id??'',);
-                  },
-                )
-              ]),
+                  routes: [
+                    GoRoute(
+                      path: Paths.TWITTERPOSTDETAILS,
+                      name: Routes.TWITTERPOSTDETAILS,
+                      builder: (context, state) {
+                        final id = state.extra as String?;
+                        return TwitterPostDetails(
+                          postId: id ?? '',
+                        );
+                      },
+                    )
+                  ]),
               GoRoute(
                 path: Paths.OTHERSACCOUNT,
                 name: Routes.OTHERSACCOUNT,
@@ -537,7 +539,10 @@ class AppPages {
                       name: Routes.LIVEView,
                       builder: (context, state) {
                         var extras = state.extra as ZegoArgs;
-                        return  LiveStreamView(isHost: extras.isHost,liveID: extras.liveId,);
+                        return LiveStreamView(
+                          isHost: extras.isHost,
+                          liveID: extras.liveId,
+                        );
                       }),
                 ],
               ),
