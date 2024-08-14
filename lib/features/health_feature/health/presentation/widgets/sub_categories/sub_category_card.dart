@@ -13,6 +13,9 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../common/theme/cubit/cubit.dart';
+import '../../../../../../res/style/app_colors.dart';
+
 class HealthSubCategoryCard extends StatelessWidget {
   final HealthSubcategoryEntity subCategory;
   const HealthSubCategoryCard({super.key, required this.subCategory});
@@ -54,7 +57,7 @@ class HealthSubCategoryCard extends StatelessWidget {
                           icon: subCategory.isFavorite
                               ? Icons.favorite
                               : Icons.favorite_border,
-                          color: Colors.red,
+                          color: ThemeCubit.get(context).isDarkTheme?Theme.of(context).scaffoldBackgroundColor:AppColors.PRIMARY_COLOR_DARK,
                           onPressed: () {
                             context
                                 .read<HealthCubit>()

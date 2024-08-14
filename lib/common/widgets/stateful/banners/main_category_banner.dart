@@ -15,11 +15,14 @@ class MainCategoryBanner extends StatefulWidget {
   final MainCategoryEntity category;
   final bool canRegister;
   final Function()? onRegister;
+  final Color? color;
   const MainCategoryBanner(
       {super.key,
       this.canRegister = false,
       this.onRegister,
-      required this.category});
+      required this.category,
+        this.color=Colors.white,
+      });
 
   @override
   State<MainCategoryBanner> createState() => _MainCategoryBannerState();
@@ -62,7 +65,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 style: Styles.headerText(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: widget.color,
                 ),
               ),
               const Spacer(),
@@ -107,7 +110,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                     style: Styles.mediumText(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: widget.color,
                     ),
                   )
                 ],
