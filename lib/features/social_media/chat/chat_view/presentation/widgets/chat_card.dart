@@ -160,24 +160,26 @@ class ChatCard extends StatelessWidget {
                     Label(
                         text: '${chatItemModel?.formattedUpdatedAt}',
                         style: Styles.mediumText(color: Colors.grey)),
-                    Row(
-                      children: [
-                        Label(
-                            text: '${chatItemModel?.lastSeenCount}',
-                            style: Styles.mediumText(color: Colors.grey)),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 2.0),
-                          child: Icon(
-                            FontAwesomeIcons.eye,
-                            color: Colors.grey,
-                            size: 14,
-                          ),
-                        ),
-                      ],
-                    )
+                    chatItemModel?.lastSeenCount == null
+                        ? const SizedBox()
+                        : Row(
+                            children: [
+                              Label(
+                                  text: '${chatItemModel?.lastSeenCount}',
+                                  style: Styles.mediumText(color: Colors.grey)),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 2.0),
+                                child: Icon(
+                                  FontAwesomeIcons.eye,
+                                  color: Colors.grey,
+                                  size: 14,
+                                ),
+                              ),
+                            ],
+                          )
                   ],
                 ),
               ],

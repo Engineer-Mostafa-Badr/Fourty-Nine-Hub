@@ -93,9 +93,9 @@ class _ChatViewState extends State<ChatView> {
                             onTap: () => context.push(Routes.LOGIN),
                             child: Label(
                                 text: 'Login',
-                                style: Styles.headerText(color: Colors.blue))),
+                                style: Styles.headerText(color: AppColors.PRIMARY_COLOR,decoration: TextDecoration.underline))),
                         Label(
-                            text: ', To continue in using chat services',
+                            text: ', to continue in using chat services',
                             style: Styles.headerText()),
                       ],
                     ));
@@ -111,11 +111,13 @@ class _ChatViewState extends State<ChatView> {
         labelColor: AppColors.PRIMARY_COLOR,
         indicatorColor: Colors.red,
         onTap: (index) {
-          context.read<ChatsCubit>().getChats(index: index);
+          if(context.read<UserCubit>().isLoggedIn){
+            context.read<ChatsCubit>().getChats(index: index);
 
-          // if this locked chat we request password
-          if (index == 8) {
-            showDialogToConfirmChatLockPassword(context);
+            // if this locked chat we request password
+            if (index == 8) {
+              showDialogToConfirmChatLockPassword(context);
+            }
           }
         },
         tabAlignment: TabAlignment.start,

@@ -108,7 +108,11 @@ class ChatsCubit extends Cubit<ChatsState> {
                   (e) => _chats.update(e.sId!, (value) => e, ifAbsent: () => e))
               .toList();
 
-          refreshChatData(data);
+          // in case groups we do not need refresh data status
+          if (index != 5) {
+            refreshChatData(data);
+          }
+
         },
       );
     }
