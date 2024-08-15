@@ -1,3 +1,4 @@
+import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
@@ -233,8 +234,15 @@ class AppPages {
         GoRoute(
           name: Routes.LOGIN,
           path: Paths.LOGIN,
-          builder: (context, state) => BlocProvider(
-            create: (_) => serviceLocator<LoginCubit>(),
+          builder: (context, state) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => serviceLocator<LoginCubit>(),
+              ),
+              BlocProvider(
+                create: (_) => serviceLocator<RegisterCubit>(),
+              ),
+            ],
             child: const LoginView(),
           ),
         ),
@@ -814,8 +822,10 @@ class AppPages {
         GoRoute(
           path: Paths.SHIPPING,
           name: Routes.SHIPPING,
-          builder: (context, state) => CreateShippingView(
-            cubit: context.read<ShippingCubit>(),
+          builder: (context, state) => BlocProvider<ShippingCubit>(
+            create: (context) =>
+                serviceLocator<ShippingCubit>()..getBannerData(),
+            child: const CreateShippingView(),
           ),
         ),
         GoRoute(
@@ -922,7 +932,15 @@ class AppPages {
         GoRoute(
           path: Paths.SHIPPING_REGISTER,
           name: Routes.SHIPPING_REGISTER,
-          builder: (context, state) => const RegisterShippingScreen(),
+          builder: (context, state) => MultiBlocProvider(providers: [
+            BlocProvider(
+              create: (context) => serviceLocator<ShippingCubit>(),
+            ),
+            //to be reviewed
+            BlocProvider(
+              create: (context) => serviceLocator<CreateDoctorCubit>(),
+            ),
+          ], child: const RegisterShippingScreen()),
         )
       ],
     ),

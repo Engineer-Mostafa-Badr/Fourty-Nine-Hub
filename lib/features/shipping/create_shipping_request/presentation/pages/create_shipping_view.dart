@@ -24,19 +24,13 @@ import '../../../../../common/widgets/stateful/maps/map_picker.dart';
 import '../../../../ride/RideRequest/domain/entity/address_search_params_entity.dart';
 
 class CreateShippingView extends StatefulWidget {
-  const CreateShippingView({super.key, required this.cubit});
-  final ShippingCubit cubit;
+  const CreateShippingView({super.key});
   @override
   State<CreateShippingView> createState() => _CreateShippingViewState();
 }
 
+
 class _CreateShippingViewState extends State<CreateShippingView> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    widget.cubit.getBannerData();
-  }
 
   TextEditingController receiptPoint = TextEditingController();
   TextEditingController deliveryPoint = TextEditingController();
@@ -70,7 +64,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   },
                 ),
                 const Sizer(),
-                 DashboardBanner(
+                 const DashboardBanner(
                   title: Labels.driverDashboard,
                   subTitle: Labels.driverDashboardBannerDiscription,
                   route: Routes.DOCTORDASHBOARD,
@@ -266,11 +260,11 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       height: 25,
                     )),
                     const SizedBox(width: 10),
-                     Flexible(
+                     const Flexible(
                         flex: 3,
                         child: Text(Labels.theApplicationDoesNot,
                             textAlign: TextAlign.start,
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold))),
                   ],
                 ),
