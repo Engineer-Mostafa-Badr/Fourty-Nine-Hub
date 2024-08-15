@@ -5,7 +5,8 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/wallet_repo.dart';
 
-class GetCompetitionsUsecase extends UseCase<List<CompetitionEntity>, NoParams> {
+class GetCompetitionsUsecase
+    extends UseCase<List<CompetitionEntity>, NoParams> {
   final WalletRepo _repo;
   GetCompetitionsUsecase(this._repo);
   @override

@@ -25,8 +25,7 @@ class DoctorGovernorateFilterCubit extends Cubit<DoctorGovernorateFilterState> {
     if (_shareCubit.governorates.isEmpty) {
       final response = await _getGovernoratesUseCase.call(const NoParams());
       response.fold(
-          (failure) =>
-              emit(DoctorGovernorateFilterError(Labels.errorHappened)),
+          (failure) => emit(DoctorGovernorateFilterError(Labels.errorHappened)),
           (data) {
         _shareCubit.governorates = data;
         emit(DoctorGovernorateFilterLoaded(data));

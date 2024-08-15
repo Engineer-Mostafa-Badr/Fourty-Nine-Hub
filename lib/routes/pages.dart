@@ -21,19 +21,21 @@ import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentat
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit/food_cart_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/registable_sub_categories_cubit/registable_subcategories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/all_doctor_reservations/all_doctor_reservations_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_statistics/doctor_statistics_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_today_appointments/doctor_today_appointments_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_unhandled_appotinments/doctor_unhandled_appotinments_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/edit_doctor_profile/edit_doctor_profile_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/all_doctor_reservations_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_dashboard_view.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/pages/create_doctor_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_statistics.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_docs.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_personal_info_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_profile.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/today_doctor_appointments_view.dart';
@@ -56,7 +58,9 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
@@ -168,16 +172,23 @@ class AppPages {
       builder: (context, state) => MultiBlocProvider(
         providers: [
           BlocProvider<RegistableSubCategoriesCubit>(
+            lazy: false,
             create: (_) => serviceLocator(),
           ),
           BlocProvider(
+            lazy: false,
             create: (context) => serviceLocator<ParentMainCategoriesCubit>(),
           ),
           BlocProvider(
+            lazy: false,
             create: (context) => serviceLocator<MainCategoriesCubit>(),
           ),
           BlocProvider(
+            lazy: false,
             create: (context) => serviceLocator<SliderCubit>(),
+          ),
+           BlocProvider(
+            create: (context) => serviceLocator<ThumbnailsCubit>(),
           ),
         ],
         child: const FourtyNineView(),
@@ -189,7 +200,7 @@ class AppPages {
             builder: (context, state) => BlocProvider.value(
                   value: serviceLocator<SubcategoriesCubit>(),
                   child: SubCategoriesView(
-                    mainCategoryId: state.extra as String,
+                    mainCategory: state.extra as MainCategoryEntity,
                   ),
                 ),
             routes: [
@@ -445,21 +456,19 @@ class AppPages {
           path: Paths.INSTAGRAM,
           name: Routes.INSTAGRAM,
           builder: (context, state) => BlocProvider<InstagramCubit>(
-            create: (_) => serviceLocator(),
+            create: (_) => serviceLocator()..loadData(),
             child: const InstagramView(),
           ),
         ),
+        //social home
         GoRoute(
             path: Paths.SOCIAL,
             name: Routes.SOCIAL,
             builder: (context, state) {
               final userId = state.extra as String?;
 
-              return BlocProvider<SocialPostsCubit>(
-                create: (_) => serviceLocator()..loadData(),
-                child: SocialHomeView(
-                  userId: userId ?? '',
-                ),
+              return SocialHomeView(
+                userId: userId ?? '',
               );
             },
             routes: [
@@ -715,11 +724,11 @@ class AppPages {
               GoRoute(
                   path: Paths.EDITDOCTORPROFILE,
                   name: Routes.EDITDOCTORPROFILE,
-                  builder: (context, state) => const EditDoctorProfileView()),
-              GoRoute(
-                  path: Paths.EDITDOCTORDOCS,
-                  name: Routes.EDITDOCTORDOCS,
-                  builder: (context, state) => const EditDoctorDocsView()),
+                  builder: (context, state) =>
+                      BlocProvider<EditDoctorProfileCubit>(
+                        create: (context) => serviceLocator(),
+                        child: const EditDoctorProfileView(),
+                      )),
               GoRoute(
                   path: Paths.EDITDOCTORPERSONALINFO,
                   name: Routes.EDITDOCTORPERSONALINFO,
@@ -815,7 +824,9 @@ class AppPages {
         GoRoute(
           path: Paths.SHIPPING,
           name: Routes.SHIPPING,
-          builder: (context, state) => const CreateShippingView(),
+          builder: (context, state) => CreateShippingView(
+            cubit: context.read<ShippingCubit>(),
+          ),
         ),
         GoRoute(
             path: Paths.RIDE,
@@ -917,6 +928,12 @@ class AppPages {
                 builder: (context, state) => const InstallmentOrdersList(),
               )
             ]),
+        // ___________________ shipping ______________
+        GoRoute(
+          path: Paths.SHIPPING_REGISTER,
+          name: Routes.SHIPPING_REGISTER,
+          builder: (context, state) => RegisterShippingScreen(),
+        )
       ],
     ),
   ]);

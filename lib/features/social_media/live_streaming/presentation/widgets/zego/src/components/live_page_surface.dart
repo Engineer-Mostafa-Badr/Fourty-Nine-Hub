@@ -3,6 +3,7 @@ import 'dart:core';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Package imports:
 import 'package:zego_uikit/zego_uikit.dart';
@@ -23,11 +24,15 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.defines.dart';
 
+import '../../../../../../../zoom/presentation/bloc/zoom_cubit.dart';
+import '../../../../../../../zoom/presentation/bloc/zoom_state.dart';
 
 /// @nodoc
 class ZegoLiveStreamingLivePageSurface extends StatefulWidget {
+  final bool isLiveStream;
+
   const ZegoLiveStreamingLivePageSurface({
-    Key? key,
+    super.key,
     required this.config,
     required this.events,
     required this.defaultEndAction,
@@ -37,8 +42,9 @@ class ZegoLiveStreamingLivePageSurface extends StatefulWidget {
     required this.liveDurationManager,
     required this.popUpManager,
     required this.connectManager,
+    required this.isLiveStream,
     this.plugins,
-  }) : super(key: key);
+  });
 
   final ZegoUIKitPrebuiltLiveStreamingConfig config;
   final ZegoUIKitPrebuiltLiveStreamingEvents events;
@@ -88,36 +94,51 @@ class _ZegoLiveStreamingLivePageSurfaceState
 
   @override
   Widget build(BuildContext context) {
-    return widget.config.slideSurfaceToHide
-        ? GestureDetector(
-            behavior: HitTestBehavior.translucent, // 添加此行
+    return BlocBuilder<MeetingCubit, MeetingState>(
+      builder: (context, state) {
+        var cubit = context.read<MeetingCubit>();
+        return GestureDetector(
+          behavior: HitTestBehavior.translucent, // 添加此行
 
-            onHorizontalDragUpdate: (DragUpdateDetails details) {
-              _animationController.value +=
-                  details.primaryDelta! / context.size!.width;
-            },
-            onHorizontalDragEnd: (DragEndDetails details) {
-              if (_animationController.value >= 0.5) {
-                _animationController.forward();
-              } else {
-                _animationController.reverse();
-              }
-            },
-            child: SlideTransition(
-              position: _animation,
-              child: body(),
-            ),
-          )
-        : body();
+          onHorizontalDragUpdate: (DragUpdateDetails details) {
+            _animationController.value +=
+                details.primaryDelta! / context.size!.width;
+          },
+          onHorizontalDragEnd: (DragEndDetails details) {
+            if (_animationController.value >= 0.5) {
+              _animationController.forward();
+            } else {
+              _animationController.reverse();
+            }
+          },
+          onTap: () {
+            print(
+                'camera state before ${ZegoUIKit().getCameraStateNotifier(ZegoUIKit().getLocalUser().id).value}');
+            cubit.toggleSurfaceShown();
+
+            // print(
+            //     'camera state after ${ZegoUIKit().getCameraStateNotifier(ZegoUIKit().getLocalUser().id).value}');
+          },
+          child: SlideTransition(
+            position: _animation,
+            child: body(state),
+          ),
+        );
+      },
+    );
   }
 
-  Widget body() {
+  Widget body(MeetingState state) {
     return LayoutBuilder(builder: (context, constraints) {
       return Stack(
         children: [
           durationTimeBoard(),
-          topBar(),
-          bottomBar(),
+          state == MeetingSurfaceShownState(surfaceShown: true)
+              ? topBar()
+              : Container(),
+          state == MeetingSurfaceShownState(surfaceShown: true)
+              ? bottomBar()
+              : Container(),
           messageList(),
           foreground(
             constraints.maxWidth,
@@ -149,11 +170,15 @@ class _ZegoLiveStreamingLivePageSurfaceState
         isLeaveRequestingNotifier: ZegoUIKitPrebuiltLiveStreamingController()
             .isLeaveRequestingNotifier,
         translationText: widget.config.innerText,
+        isLiveStream: widget.isLiveStream,
       ),
     );
   }
 
   Widget bottomBar() {
+    final isCoHostEnabled = (widget.plugins?.isEnabled ?? false) &&
+        widget.config.bottomMenuBar.audienceButtons
+            .contains(ZegoLiveStreamingMenuBarButtonName.coHostControlButton);
     return Align(
       alignment: Alignment.bottomCenter,
       child: ZegoLiveStreamingBottomBar(
@@ -169,6 +194,9 @@ class _ZegoLiveStreamingLivePageSurfaceState
         isLeaveRequestingNotifier: ZegoUIKitPrebuiltLiveStreamingController()
             .isLeaveRequestingNotifier,
         popUpManager: widget.popUpManager,
+        isLiveStream: widget.isLiveStream,
+        isCoHostEnabled: isCoHostEnabled,
+        translationText: widget.config.innerText,
       ),
     );
   }

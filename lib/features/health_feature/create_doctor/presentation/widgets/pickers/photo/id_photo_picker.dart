@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_place
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreateDoctorIDPhotoPicker extends StatelessWidget {
   const CreateDoctorIDPhotoPicker({super.key});
@@ -33,7 +34,7 @@ class CreateDoctorIDPhotoPicker extends StatelessWidget {
                 builder: (context, state) {
                   if (state is CreateDoctorUploadIdFrontImage) {
                     return ImagePickerPlaceholder(
-                      image: state.file,
+                      image: XFile(state.file.path),
                     );
                   }
                   return const ImagePickerPlaceholder(
@@ -54,7 +55,7 @@ class CreateDoctorIDPhotoPicker extends StatelessWidget {
                 builder: (context, state) {
                   if (state is CreateDoctorUploadIdBehindImage) {
                     return ImagePickerPlaceholder(
-                      image: state.file,
+                      image: XFile(state.file.path),
                     );
                   }
                   return const ImagePickerPlaceholder(

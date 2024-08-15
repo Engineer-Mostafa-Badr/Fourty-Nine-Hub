@@ -1,6 +1,5 @@
 part of 'cusine_restaurants_cubit.dart';
 
-
 enum CusineRestaurantsStates { initState, loading, error }
 
 extension CusineRestaurantsStateX on CusineRestaurantsState {
@@ -14,29 +13,21 @@ class CusineRestaurantsState {
   final CusineRestaurantsStates? status;
   final Failure? failure;
   final List<RestaurantModel>? cusineRestaurants;
-  
-   const CusineRestaurantsState({
+
+  const CusineRestaurantsState({
     this.status,
     this.failure,
     this.cusineRestaurants,
-    
   });
   CusineRestaurantsState copyWith({
     CusineRestaurantsStates? status,
     Failure? failure,
     List<RestaurantModel>? cusineRestaurants,
-    
   }) {
     return CusineRestaurantsState(
       status: status ?? this.status,
-      failure: failure?? this.failure,
+      failure: failure ?? this.failure,
       cusineRestaurants: cusineRestaurants ?? this.cusineRestaurants,
-      
-      
     );
   }
 }
-
-
-
-

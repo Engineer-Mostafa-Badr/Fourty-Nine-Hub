@@ -30,9 +30,6 @@ class IconAppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      splashColor: Colors.transparent,
-      hoverColor: Colors.transparent,
-      highlightColor: Colors.transparent,
       onTap: () => onPressed(),
       child: Container(
           height: height ?? kToolbarHeight * .6,
@@ -48,18 +45,16 @@ class IconAppButton extends StatelessWidget {
       return widget!;
     } else if (isCircle) {
       return CircleAvatar(
-        backgroundColor: backColor,
         child: Icon(
           icon,
-          size: size ?? 18,
-          color: color,
+          size: size ?? 30,
         ),
       );
     } else {
       return Icon(
         icon,
-        size: size ?? 18,
         color: color,
+        size: size ?? 30,
       );
     }
   }

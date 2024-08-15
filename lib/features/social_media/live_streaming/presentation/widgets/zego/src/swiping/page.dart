@@ -31,6 +31,7 @@ class ZegoLiveStreamingSwipingPage extends StatefulWidget {
     required this.userName,
     required this.config,
     required this.swipingConfig,
+    required this.isLiveStream,
     this.events,
   });
   final String initialLiveID;
@@ -55,6 +56,8 @@ class ZegoLiveStreamingSwipingPage extends StatefulWidget {
 
   /// same as [ZegoLiveStreamingPage.events]
   final ZegoUIKitPrebuiltLiveStreamingEvents? events;
+
+  final bool isLiveStream;
 
   /// @nodoc
   @override
@@ -189,6 +192,7 @@ class _ZegoLiveStreamingSwipingPageState
                 userName: widget.userName,
                 events: widget.events,
                 config: widget.config,
+                isLiveStream: widget.isLiveStream,
               );
             },
           );

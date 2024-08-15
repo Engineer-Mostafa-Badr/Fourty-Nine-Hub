@@ -22,7 +22,9 @@ class AllReviews extends StatelessWidget {
         label: Labels.reviews,
       ),
       body: ListView.separated(
-          itemBuilder: (context, index) =>  ReviewCard(review: reviews[index],),
+          itemBuilder: (context, index) => ReviewCard(
+                review: reviews[index],
+              ),
           separatorBuilder: (context, index) => const Divider(
                 color: Colors.grey,
               ),

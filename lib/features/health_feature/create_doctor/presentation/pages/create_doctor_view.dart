@@ -21,6 +21,12 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/presentation
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/name_filed.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/options_checkbox.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/pickers/photo/doctor_photo_picker.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/widgets/doctor_card.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+
+import '../../../../../common/widgets/stateless/labels/label.dart';
 
 class CreateDoctorView extends StatelessWidget {
   const CreateDoctorView({super.key});
@@ -55,6 +61,9 @@ class CreateDoctorView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Label(
+                    text: Labels.doctor,
+                    style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
                 const CreateDoctorSubcategoryDropdown(),
                 const Sizer(height: 20),
                 CreateDoctorOptionsCheckbox(),
@@ -65,7 +74,11 @@ class CreateDoctorView extends StatelessWidget {
                 const Sizer(height: 20),
                 const CreateDoctorIDPhotoPicker(),
                 const Sizer(height: 20),
-                const CreateDoctorIDExpiryDatePicker(),
+                CreateDoctorIDExpiryDatePicker(
+                  onDateSelected: (date) {
+                    context.read<CreateDoctorCubit>().pickIDExpiryDate(date!);
+                  },
+                ),
                 const Sizer(height: 20),
                 const CreateDoctorLicensePhotoPicker(),
                 const Sizer(height: 20),
@@ -73,7 +86,15 @@ class CreateDoctorView extends StatelessWidget {
                 const Sizer(height: 20),
                 const CreateDoctorDescriptionField(),
                 const Sizer(height: 20),
-                const CreateDoctorGovernorateDropdown(),
+                CreateDoctorGovernorateDropdown(
+                  onSelected: (value) {
+                    if (value != null) {
+                      context
+                          .read<CreateDoctorCubit>()
+                          .selectGovernorate(value);
+                    }
+                  },
+                ),
                 const Sizer(height: 20),
                 const CreateDoctorCitiesDropdowns(),
                 const Sizer(height: 20),

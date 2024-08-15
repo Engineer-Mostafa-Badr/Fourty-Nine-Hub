@@ -48,9 +48,10 @@ class _VisitaBookingState extends State<VisitaBooking> {
           listener: (context, state) {
             switch (state) {
               case BookDoctorAppointmentSuccessState _:
-                showSuccessMessage(context, Labels.waitingDoctorAppointment);
+                showSuccessMessage(context, 'waitingDoctorAppointment');
                 Future.delayed(const Duration(seconds: 1));
-                context.pushAndRemoveUntil(Routes.VISITA);
+                context.pushAndRemoveUntil(
+                    Routes.VISITA, (route) => route == Routes.HOME);
                 break;
 
               case BookDoctorAppointmentStartLoadingState _:

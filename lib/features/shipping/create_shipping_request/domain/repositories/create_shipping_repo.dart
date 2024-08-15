@@ -9,7 +9,6 @@ import '../../../../ride/RideRequest/data/models/ride_request_model.dart';
 import '../../../../subcategories/data/models/sub_category_model.dart';
 
 abstract class CreateShippingRepo {
-
   Future<Either<Failure, List<SubCategoryModel>>> getSubCategories(
       {required String mainCategoryId});
 
@@ -21,6 +20,4 @@ abstract class CreateShippingRepo {
 
   Future<Either<Failure, ExpectedPriceModel>> getExpectedPrice(
       {required ExpectedPriceParams params});
-
 }
- 

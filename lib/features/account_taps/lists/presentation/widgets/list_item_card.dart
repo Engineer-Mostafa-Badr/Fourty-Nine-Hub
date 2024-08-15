@@ -18,7 +18,7 @@ class ListItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-return Container();
+    return Container();
     // return Row(
     //   children: [
     //     ProfileImage(
@@ -138,5 +138,4 @@ return Container();
   //     ],
   //   );
   // }
-
 }

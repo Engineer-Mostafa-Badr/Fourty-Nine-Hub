@@ -32,7 +32,7 @@ class DoctorTodayAppointmentsCubit extends Cubit<DoctorTodayAppointmentsState> {
   final List<DoctorAppointmentEntity> _appointments = [];
 
   Future<void> _getAppointmentsByDay() async {
-    final response = await _getDoctorAppointmentsByDayUseCase.call(
+    final response = await _getDoctorAppointmentsByDayUseCase(
         GetDoctorAppointmentsByDayParams(
             day: DateTime.now().weekday.toWeekDay,
             paginationParams: PaginationParams(page: _page)));

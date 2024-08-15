@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_today_appointments/doctor_today_appointments_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_today_appointments.dart';
@@ -13,8 +14,8 @@ class DoctorTodayAppointmentsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(Labels.todayAppointments),
+      appBar: const BackAppBar(
+        label: Labels.todayAppointments,
       ),
       body: BlocBuilder<DoctorTodayAppointmentsCubit,
           DoctorTodayAppointmentsState>(
@@ -36,7 +37,7 @@ class DoctorTodayAppointmentsView extends StatelessWidget {
             } else {
               return Center(
                 child: Label(
-                  text: Labels.noAppointmentsToday,
+                  text: 'No Appointments',
                   style: Styles.headerText(),
                 ),
               );

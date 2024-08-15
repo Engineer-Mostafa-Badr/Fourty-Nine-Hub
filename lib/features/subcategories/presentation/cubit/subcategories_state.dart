@@ -10,15 +10,14 @@ class SubcategoriesState {
       this.status = SubcategoriesStates.loading});
 
   SubcategoriesState copyWith({
-       Failure? failure,
-   SubcategoriesStates? status,
-   List<SubCategoryEntity>? subCategories,
-
+    Failure? failure,
+    SubcategoriesStates? status,
+    List<SubCategoryEntity>? subCategories,
   }) {
     return SubcategoriesState(
-      failure: failure?? this.failure,
-      status: status?? this.status,
-      subCategories: subCategories?? this.subCategories,
+      failure: failure ?? this.failure,
+      status: status ?? this.status,
+      subCategories: subCategories ?? this.subCategories,
     );
   }
 }

@@ -52,7 +52,7 @@ class WalletHistory extends StatelessWidget {
               color: Colors.red,
               textColor: Colors.white,
               shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10),
               ),
               minWidth: double.infinity,
               child: Row(

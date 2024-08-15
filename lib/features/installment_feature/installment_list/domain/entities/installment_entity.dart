@@ -8,6 +8,6 @@ class InstallmentEntity {
   InstallmentEntity({
     required this.id,
     this.plans,
-     this.ad,
+    this.ad,
   });
 }

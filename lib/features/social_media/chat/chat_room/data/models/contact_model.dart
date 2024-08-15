@@ -1,4 +1,3 @@
-
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/contact_entity.dart';
 
 class Contact extends ContactEntity {

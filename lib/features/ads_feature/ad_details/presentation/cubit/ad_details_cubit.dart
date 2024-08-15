@@ -33,7 +33,7 @@ class AdDetailsCubit extends Cubit<AdDetailsState> {
   }
 
   Future<void> getRelevantAds() async {
-    final response = await _getAdsUseCase(state.ad?.subCategoryId??'');
+    final response = await _getAdsUseCase(state.ad?.subCategoryId ?? '');
     response.fold(
         (failure) => emit(
             state.copyWith(failure: failure, status: AdDetailsStates.error)),
@@ -62,7 +62,3 @@ class AdDetailsCubit extends Cubit<AdDetailsState> {
     }
   }
 }
-
-
- 
- 

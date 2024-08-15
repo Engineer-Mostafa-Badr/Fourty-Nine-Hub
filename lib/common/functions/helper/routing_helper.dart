@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 extension RoutingHelper on BuildContext {
-  void pushAndRemoveUntil(String location, {Object? extra}) {
-    while (canPop() && (ModalRoute.of(this)!.settings.name != Routes.HOME)) {
+  void pushAndRemoveUntil(
+      // condition: A function that returns true to keep a route in the stack or false to remove it.
+      // To remove all routes, use (String route) => false.
+      String location,
+      bool Function(String route) predicate,
+      {Object? extra}) {
+    while (canPop() && !(predicate(ModalRoute.of(this)!.settings.name!))) {
       pop();
     }
-    push(location, extra: extra);
+
+    pushReplacement(location, extra: extra);
   }
 }

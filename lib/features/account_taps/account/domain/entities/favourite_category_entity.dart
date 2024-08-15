@@ -4,8 +4,5 @@ class FavouriteCategoryEntity {
   final int id;
 
   final MainCategoryEntity item;
-  FavouriteCategoryEntity({
-    required this.id, 
-    required this.item
-  });
+  FavouriteCategoryEntity({required this.id, required this.item});
 }

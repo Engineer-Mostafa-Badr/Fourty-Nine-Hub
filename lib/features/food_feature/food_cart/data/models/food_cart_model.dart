@@ -16,5 +16,4 @@ class FoodCartModel extends FoodCartEntity {
       id: json['_id'],
     );
   }
-  
 }

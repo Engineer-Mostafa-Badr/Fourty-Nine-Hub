@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../../dynamic/bottom_navigator.dart';
 import '../../dynamic/drawer.dart';
-import '../../dynamic/floating_button.dart';
 import '../appbar/home_appbar.dart';
 
 class SharedScaffold extends StatelessWidget {
   final int mainCategoryId;
   final Widget body;
   final bool extendBody;
-  final Color? backgroundColor;
   final bool isWithBackArrow;
+  final Color? backgroundColor;
   const SharedScaffold(
       {super.key,
       required this.mainCategoryId,
@@ -22,21 +20,15 @@ class SharedScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: extendBody,
-      backgroundColor: backgroundColor,
+        backgroundColor: backgroundColor,
+        drawer: const DrawerWidget(),
+    body: body,
+
+
       appBar:  HomeAppbar(
         isWithBackArrow: isWithBackArrow,
       ),
-      drawer: const DrawerWidget(),
-      bottomNavigationBar: BottomNavigator(
-        mainCategory: mainCategoryId,
-        index: 2,
-        
-      ),
-      floatingActionButton: FloatingButton(
-        changeView: mainCategoryId,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: body,
+
     );
   }
 }

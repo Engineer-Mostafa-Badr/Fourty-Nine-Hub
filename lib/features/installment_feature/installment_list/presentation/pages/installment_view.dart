@@ -162,30 +162,29 @@ class InstallmentView extends StatelessWidget {
         builder: (context, state) {
       return Padding(
         padding: const EdgeInsets.all(8.0),
-        child: 
-        state.isLoading ?
-
-        const Center(
-          child: CircularProgressIndicator.adaptive(),
-        ):
-        state.isGrid
-            ? GridView.builder(
-                itemBuilder: (context, index) => InstallmentAdCard(
-                      item: state.installments![index],
-                    ),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: .8,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    crossAxisCount: 2),
-                itemCount: state.installments?.length ?? 0)
-            : ListView.separated(
-                itemBuilder: (context, index) => InstallmentAdCard(
-                      item: state.installments![index],
-                      isVertical: false,
-                    ),
-                separatorBuilder: (context, index) => const Sizer(),
-                itemCount: state.installments?.length ?? 0),
+        child: state.isLoading
+            ? const Center(
+                child: CircularProgressIndicator.adaptive(),
+              )
+            : state.isGrid
+                ? GridView.builder(
+                    itemBuilder: (context, index) => InstallmentAdCard(
+                          item: state.installments![index],
+                        ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: .8,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                            crossAxisCount: 2),
+                    itemCount: state.installments?.length ?? 0)
+                : ListView.separated(
+                    itemBuilder: (context, index) => InstallmentAdCard(
+                          item: state.installments![index],
+                          isVertical: false,
+                        ),
+                    separatorBuilder: (context, index) => const Sizer(),
+                    itemCount: state.installments?.length ?? 0),
       );
     });
   }

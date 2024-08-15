@@ -1,6 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_comment_reply_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
@@ -10,6 +11,7 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/tw
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_reply_card.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -24,9 +26,8 @@ class TwitterCommentReplies extends StatefulWidget {
   final Function(String) onReplyReact;
   final Function(TwitterCommentReplyParams) onAddReply;
   final Function(TwitterReportParams) onReport;
-  final UserEntity userData;
   const TwitterCommentReplies(
-      {super.key, required this.replies, required this.onReplyReact, required this.onAddReply, required this.commentId, required this.postId, required this.onReport, required this.userData,
+      {super.key, required this.replies, required this.onReplyReact, required this.onAddReply, required this.commentId, required this.postId, required this.onReport,
       });
 
   @override
@@ -38,33 +39,61 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.grey),
-        title: Label(
-            text: '${widget.replies.length} Replies',
-            style: Styles.mediumText()),
-        leading: IconButton(
-            onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
-        centerTitle: true,
-      ),
-      body: BlocProvider<TwitterCubit>(
-        create: (_)=>serviceLocator(),
-        child: BlocBuilder<TwitterCubit,TwitterState>(
+    return BlocProvider<TwitterCubit>(
+      create: (_)=>serviceLocator()..loadReplies(context,widget.commentId),
+      child: BlocBuilder<TwitterCubit,TwitterState>(
           builder: (context,state) {
             final controller = context.read<TwitterCubit>();
-            return Column(
+            final user = context.read<UserCubit>().state.data;
+            return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              iconTheme: const IconThemeData(color: Colors.grey),
+              title: Label(
+                  text: '${controller.repliesPagingController.itemList?.length} Replies',
+                  style: Styles.mediumText()),
+              leading: IconButton(
+                  onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
+              centerTitle: true,
+            ),
+            body: Column(
               children: [
                 Expanded(
-                  child: ListView.separated(
-                      itemBuilder: (context, index) => _buildCommentCard(
-                          reply: widget.replies[index],
-                          ),
-                      separatorBuilder: (context, index) => const Sizer(),
-                      itemCount: widget.replies.length),
+                  child: PagedListView<int, TwitterCommentReplyEntity>(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                    pagingController: controller.repliesPagingController,
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    builderDelegate: PagedChildBuilderDelegate<TwitterCommentReplyEntity>(
+                        noItemsFoundIndicatorBuilder: (context) {
+                          print(controller.repliesPagingController.itemList?.length);
+                          return const Padding(
+                              padding: EdgeInsets.only(top: 200),
+                              child: Center(
+                                child: Text(
+                                  "No Replies",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ));
+                        },
+                        itemBuilder: (context, item, index) {
+
+                          return _buildCommentCard(reply: controller.repliesPagingController.itemList![index]);
+                        },
+                        noMoreItemsIndicatorBuilder: (context) => Container(),
+                        firstPageProgressIndicatorBuilder: (context) => Container(
+                            margin: const EdgeInsets.only(top: 150),
+                            child: const CupertinoActivityIndicator()),
+                        newPageProgressIndicatorBuilder: (context) =>
+                        const CupertinoActivityIndicator()),
+                  ),
                 ),
+
                 Container(
                     height: kToolbarHeight,
                     decoration: const BoxDecoration(
@@ -92,14 +121,14 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                                   params:TwitterCommentReplyParams(postId: widget.postId,reply: widget.commentId,content: replyTextController.text),
                                 );
                                 print("state.newReply?.id${state.newReply?.id}");
-                                widget.replies.insert(
+                                controller.repliesPagingController.itemList?.insert(
                                     0,
                                     TwitterCommentReplyModel(
                                         id: data.id,
                                         content: replyTextController.text,
                                         post: widget.postId,
                                         createdAt: data.createdAt,
-                                        user: TwitterUserEntity(id: widget.userData.id, firstName: widget.userData.firstName, lastName: widget.userData.lastName, createdAt: DateTime.now(), image: widget.userData.profilePicture??'', email: widget.userData.email??'', isDocumented: false),
+                                        user: TwitterUserEntity(id: user?.id??'', firstName: user?.firstName??'', lastName: user?.lastName??'', createdAt: DateTime.now(), image: user?.profilePicture??'', email: user?.email??'', isDocumented: false),
                                         love: data.love, isReact: data.isReact, image: data.image));
                                 replyTextController.clear();
                                 print(widget.replies.length);
@@ -109,34 +138,13 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                       ],
                     )),
               ],
-            );
-          }
-        ),
+            ),
+          );
+        }
       ),
     );
   }
 
-  void onReplyAdded() async {
-    var newReply = await widget.onAddReply(
-      TwitterCommentReplyParams(postId: widget.postId,reply: widget.commentId,content: replyTextController.text),
-    );
-    widget.replies.insert(
-        0,
-        TwitterCommentReplyEntity(
-            id: newReply.id,
-            content: replyTextController.text,
-            post: widget.postId,
-            createdAt: DateTime.now(),
-            user: '',
-            // image: '',
-            love: [], isReact: false, image: ''));
-    replyTextController.clear();
-    setState(() {
-
-    });
-    replyTextController.clear();
-    setState(() {});
-  }
 
   Widget _buildCommentCard(
       {required TwitterCommentReplyEntity reply}) {

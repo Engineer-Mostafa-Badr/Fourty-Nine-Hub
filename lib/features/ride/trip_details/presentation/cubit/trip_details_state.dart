@@ -16,7 +16,10 @@ class TripDetailsState extends Equatable {
   final List<CancelReasonModel>? cancelReasons;
 
   const TripDetailsState(
-      {this.failure, this.trip, this.status = TripDetailsStates.loading, this.cancelReasons});
+      {this.failure,
+      this.trip,
+      this.status = TripDetailsStates.loading,
+      this.cancelReasons});
 
   TripDetailsState copyWith({
     TripDetailsStates? status,
@@ -27,7 +30,7 @@ class TripDetailsState extends Equatable {
     return TripDetailsState(
         status: status ?? this.status,
         failure: failure ?? this.failure,
-        cancelReasons: cancelReasons?? this.cancelReasons,
+        cancelReasons: cancelReasons ?? this.cancelReasons,
         trip: trip ?? this.trip);
   }
 

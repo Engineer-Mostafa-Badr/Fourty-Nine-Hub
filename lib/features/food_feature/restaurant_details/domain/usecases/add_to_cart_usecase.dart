@@ -7,8 +7,7 @@ import '../../../../../../core/abstract/use_case.dart';
 
 import '../repositories/restaurant_details_repo.dart';
 
-class AddToCartUseCase
-    extends UseCase<bool, SelectedMealModel> {
+class AddToCartUseCase extends UseCase<bool, SelectedMealModel> {
   final RestaurantDetailsRepo _repo;
   AddToCartUseCase(this._repo);
 

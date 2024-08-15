@@ -35,13 +35,15 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
       children: [
         Row(
           children: [
-            widget.comment.user.image==''? const ProfileImage(
-              accountId: 0,
-              withBorder: false,
-            ):ProfileImage(
-              accountId: 0,
-              imageURL: widget.comment.user.image,
-            ),
+            widget.comment.user.image == ''
+                ? const ProfileImage(
+                    accountId: 0,
+                    withBorder: false,
+                  )
+                : ProfileImage(
+                    accountId: 0,
+                    imageURL: widget.comment.user.image,
+                  ),
             const Sizer(),
             Expanded(
                 child: Column(

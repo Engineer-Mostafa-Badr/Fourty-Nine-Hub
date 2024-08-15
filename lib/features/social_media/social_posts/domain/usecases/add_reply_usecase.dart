@@ -29,5 +29,6 @@ class ReplyOnCommentParams {
   Map<String, dynamic> toJson() => {
     'content': content,
     'reply': commentId,
+    // 'subCategory':'66b77e77bb35968b535dc944'
   };
 }

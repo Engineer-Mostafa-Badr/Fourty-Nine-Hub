@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -34,6 +35,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
           text: "Documentation",
           style: Styles.headerText(fontSize: 20, fontWeight: FontWeight.bold),
         ),
+        backgroundColor: AppColors.BACKGROUND_COLOR,
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
@@ -73,65 +75,73 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                   const SizedBox(
                     height: 15,
                   ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Label(
-                          text: "Personal Photo",
-                          style: Styles.headerText(
-                              fontSize: 20, color: AppColors.GREY_DARK_COLOR),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        _buildImageCard(
-                          label: '',
-                          onTap: (){
-                            controller.uploadPersonalPhoto();
-                          },
-                          fileData: state.personalPhoto,
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Label(
-                          text: "ID",
-                          style: Styles.headerText(
-                              fontSize: 20, color: AppColors.GREY_DARK_COLOR),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildImageCard(
-                                label: '',
-                                text: 'front',
-                                onTap: (){
-                                  controller.uploadFrontId();
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Label(
+                        text: "Personal Photo",
+                        style: Styles.headerText(
+                            fontSize: 20, color: AppColors.GREY_DARK_COLOR),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      _buildImageCard(
+                        label: '',
+                        onTap: (){
+                          controller.uploadPersonalPhoto();
+                        },
+                        onRemove: (){
+                          controller.removePersonalPhoto();
+                        },
+                        fileData: state.personalPhoto,
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Label(
+                        text: "ID",
+                        style: Styles.headerText(
+                            fontSize: 20, color: AppColors.GREY_DARK_COLOR),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildImageCard(
+                              label: '',
+                              text: 'front',
+                              onTap: (){
+                                controller.uploadFrontId();
+                              },
+                                onRemove: (){
+                                controller.removeFrontId();
                                 },
-                                fileData: state.frontId
-                              ),
+                              fileData: state.frontId
                             ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: _buildImageCard(
-                                label: '',
-                                text: 'back',
-                                onTap: (){
-                                  controller.uploadBackId();
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: _buildImageCard(
+                              label: '',
+                              text: 'back',
+                              onTap: (){
+                                controller.uploadBackId();
+                              },
+                                onRemove: (){
+                                print('back');
+                                controller.removeBackId();
                                 },
-                                fileData: state.backId
-                              ),
+                              fileData: state.backId
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 20,
@@ -203,7 +213,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
   }
 
   Widget _buildImageCard(
-      {Function()? onTap, required String label, String? text,UploadFileEntity? fileData}) {
+      {Function()? onTap,Function()? onRemove, required String label, String? text,UploadFileEntity? fileData}) {
     return Column(
       children: [
         if (label.isNotEmpty) ...[
@@ -224,16 +234,24 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
             ),
             child: _buildImage(text ?? ''),
           ),
-        ) else Container(
-          width: double.infinity,
-          height: 200, // Set your desired height here
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(UIConst.radius),
-            image: DecorationImage(
-              image: FileImage(File(fileData.file.path)),
-              fit: BoxFit.fill,
+        ) else Stack(
+          children: [
+            Container(
+              width: double.infinity,
+              height: 200, // Set your desired height here
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(UIConst.radius),
+                image: DecorationImage(
+                  image: FileImage(File(fileData.file.path)),
+                  fit: BoxFit.fill,
+                ),
+              ),
             ),
-          ),
+            // PositionedDirectional(
+            //     top: 5,
+            //     end: 5,
+            //     child: InkWell(onTap: onRemove,child: Icon(Icons.close,color: Colors.red,)))
+          ],
         )
       ],
     );

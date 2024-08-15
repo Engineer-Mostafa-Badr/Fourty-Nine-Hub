@@ -1,8 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
@@ -26,8 +23,7 @@ class MessageCard extends StatelessWidget {
 
     return messageEntity.byMe!
         ? _buildMineMessage(width: width, messageEntity: messageEntity)
-        : _buildOtherMessage(
-            width: width, messageEntity: messageEntity, context: context);
+        : _buildOtherMessage(width: width, messageEntity: messageEntity, context: context);
   }
 
   Widget _buildMineMessage({
@@ -120,22 +116,39 @@ class MessageCard extends StatelessWidget {
                     ? const SizedBox(
                         height: 5,
                       )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-
-                          Label(
-                              text: '${messageEntity.formattedCreatedAt}',
-                              style: Styles.smallText(color: Colors.black)),
-                          const Sizer(),
-                          const Icon(
-                            FontAwesomeIcons.checkDouble,
-                            color: Colors.black,
-                            size: 10,
-                          ),
-                        ],
+                    : Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Label(
+                                text: '${messageEntity.formattedCreatedAt}',
+                                style: Styles.smallText(color: Colors.black)),
+                            const Sizer(),
+                            messageEntity.seen!
+                                ? const Icon(
+                                    FontAwesomeIcons.checkDouble,
+                                    color: Colors.blue,
+                                    size: 10,
+                                  )
+                                : messageEntity.delivered!
+                                    ? const Icon(
+                                        FontAwesomeIcons.checkDouble,
+                                        color: AppColors.PRIMARY_COLOR,
+                                        size: 10,
+                                      )
+                                    : const Icon(
+                                        FontAwesomeIcons.check,
+                                        color: Colors.black,
+                                        size: 10,
+                                      ),
+                            const SizedBox(
+                              width: 8,
+                            )
+                          ],
+                        ),
                       ),
-              )
+              ),
             ],
           ),
         ),

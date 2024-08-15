@@ -58,7 +58,7 @@ class DoctorTodayAppointmentsWidget extends StatelessWidget {
               } else {
                 return Center(
                     child: Text(
-                  Labels.noAppointmentsToday,
+                      'No Appointments',
                   style: Styles.headerText(),
                 ));
               }

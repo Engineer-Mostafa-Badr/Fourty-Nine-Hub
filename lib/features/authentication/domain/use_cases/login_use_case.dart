@@ -31,7 +31,7 @@ class LoginParams extends Equatable {
         'email': email,
         'password': password,
         'fcmToken': await getFcmToken(),
-        'fcmToken': 'fcmToken',
+        // 'fcmToken': 'fcmToken',
       };
 
   @override

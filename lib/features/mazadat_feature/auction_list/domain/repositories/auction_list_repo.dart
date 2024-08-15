@@ -8,4 +8,3 @@ abstract class AuctionListRepo {
   Future<Either<Failure, List<AuctionEntity>>> getAuctions(
       {required LocationParams params});
 }
-

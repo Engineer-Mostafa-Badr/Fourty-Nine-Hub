@@ -46,7 +46,7 @@ class _CustomPhoneTextFormFieldState extends State<CustomPhoneTextFormField> {
   @override
   Widget build(BuildContext context) {
     final textStyle =
-        Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.black) ??
+        Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.black) ??
             const TextStyle(color: Colors.black);
 
     return Container(

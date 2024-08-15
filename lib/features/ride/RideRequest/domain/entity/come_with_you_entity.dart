@@ -12,18 +12,15 @@ class ComeWithYouRequestEntity {
   final bool isRepeat;
 
   ComeWithYouRequestEntity(
-      {
-       required this.vehicleId,
-     required  this.categoryId,
-     required  this.startLocation,
-     required  this.targetLocation,
-     required  this.from,
-     required  this.to,
+      {required this.vehicleId,
+      required this.categoryId,
+      required this.startLocation,
+      required this.targetLocation,
+      required this.from,
+      required this.to,
       this.passengers = 1,
-     required  this.price,
-    required   this.phone,
-   required    this.time,
+      required this.price,
+      required this.phone,
+      required this.time,
       this.isRepeat = false});
-
-  
 }

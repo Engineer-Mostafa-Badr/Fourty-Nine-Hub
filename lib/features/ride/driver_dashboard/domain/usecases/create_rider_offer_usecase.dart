@@ -1,4 +1,3 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -16,7 +15,6 @@ class CreateRiderOfferUseCase extends UseCase<bool, CreateRiderOfferParams> {
   }
 }
 
-
 class CreateRiderOfferParams {
   final String tripId;
   final num price;
@@ -25,7 +23,7 @@ class CreateRiderOfferParams {
   CreateRiderOfferParams({
     required this.tripId,
     required this.price,
-    required this.lat, 
+    required this.lat,
     required this.lng,
   });
   Map<String, dynamic> toJson() => {

@@ -1,4 +1,3 @@
-
 import '../../domain/entities/option_entity.dart';
 
 class OptionModel extends OptionEntity {
