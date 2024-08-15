@@ -40,9 +40,9 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
         return Container(
           height: height * .7,
           padding: const EdgeInsets.all(10),
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
+          decoration:  BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(15), topLeft: Radius.circular(15))),
           child: Column(
             children: [
@@ -57,9 +57,8 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                     onTap: () {
                       context.pop();
                     },
-                    child: CircleAvatar(
-                        backgroundColor: Colors.grey[50],
-                        child: const Icon(
+                    child: const CircleAvatar(
+                        child: Icon(
                           Icons.clear,
                         )),
                   )
@@ -87,6 +86,9 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                     Expanded(
                         child: Text(
                       state.fromAddress?.address ?? 'Select Pickup location',
+                      style: const TextStyle(
+                        color: AppColors.QUANTITY_COLOR
+                      ),
                       maxLines: 1,
                     )),
                   ],
@@ -104,6 +106,7 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                     AppButton(
                         margin: 5,
                         label: 'Search',
+                        color: AppColors.AUTH_CONTAINER_COLOR,
                         width: kToolbarHeight,
                         height: 30,
                         onPressed: () => rideCubit.loadNearByPlaces(
@@ -111,6 +114,7 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                   ],
                 ),
                 hint: 'To',
+                hintColor: AppColors.QUANTITY_COLOR,
               ),
               const Sizer(),
               if (state.loading) const CircularProgressIndicator.adaptive(),
