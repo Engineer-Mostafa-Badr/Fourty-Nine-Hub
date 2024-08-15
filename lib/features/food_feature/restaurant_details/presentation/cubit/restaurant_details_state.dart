@@ -8,7 +8,6 @@ extension RestaurantDetailsStateX on RestaurantDetailsState {
   bool get isError => status == RestaurantDetailsStates.error;
 }
 
-
 class RestaurantDetailsState {
   final RestaurantDetailsStates? status;
   final Failure? failure;

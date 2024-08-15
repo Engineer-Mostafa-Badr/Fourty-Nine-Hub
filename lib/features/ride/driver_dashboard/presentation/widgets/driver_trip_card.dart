@@ -123,7 +123,7 @@ class DriverTripCard extends StatelessWidget {
               ProgressButton(
                 label: 'Accept',
                 width: double.infinity,
-                onPressed: ()=> acceptRide(trip.id),
+                onPressed: () => acceptRide(trip.id),
               ),
             ],
           ),

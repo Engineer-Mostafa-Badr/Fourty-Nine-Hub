@@ -20,20 +20,19 @@ class TwitterPostCommentEntity {
 
   String get sinceTime =>
       DurationHelper().sinceTime(duration: publishedDuration);
-  TwitterPostCommentEntity({
-    required this.adminIgnore,
-    required this.id,
-    required this.user,
-    required this.content,
-    required this.post,
-    // required this.image,
-    required this.createdAt,
-    this.loveCount = 0,
-    required this.love,
-    this.repliesCount = 0,
-    this.showReplies=false,
-    this.addReply=false,
-    this.isReact=false,
-    this.replies
-  });
+  TwitterPostCommentEntity(
+      {required this.adminIgnore,
+      required this.id,
+      required this.user,
+      required this.content,
+      required this.post,
+      // required this.image,
+      required this.createdAt,
+      this.loveCount = 0,
+      required this.love,
+      this.repliesCount = 0,
+      this.showReplies = false,
+      this.addReply = false,
+      this.isReact = false,
+      this.replies});
 }

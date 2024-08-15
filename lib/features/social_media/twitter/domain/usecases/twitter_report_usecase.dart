@@ -12,8 +12,6 @@ class TwitterReportUseCase extends UseCase<bool, TwitterReportParams> {
   }
 }
 
-
-
 class TwitterReportParams {
   final String category;
   final String userId;
@@ -28,10 +26,10 @@ class TwitterReportParams {
     required this.categoryId,
   });
   Map<String, dynamic> toJson() => {
-    'category': category,
-    'userId': userId,
-    'reason': reason,
-    'content': content,
-    'categoryId': categoryId,
-  };
+        'category': category,
+        'userId': userId,
+        'reason': reason,
+        'content': content,
+        'categoryId': categoryId,
+      };
 }

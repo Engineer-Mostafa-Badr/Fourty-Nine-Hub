@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
@@ -54,6 +56,7 @@ class BaseApiConsumer extends ApiConsumer {
 
   @override
   void attachToken(UserTokensEntity? token) {
+    log(token?.accessToken.toString() ?? "Token", name: "Token");
     _token = token;
     if (token != null) {
       _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
@@ -101,7 +104,14 @@ class BaseApiConsumer extends ApiConsumer {
         url,
         data: data,
         queryParameters: queryParameters,
+        options: Options(
+          headers: {
+            "Authorization": 'Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjY4ZmJiMWYxLTIzNDgtNDQzOC1iNTk1LTNkOTk2MDJjMjlmYyIsImlhdCI6MTcyMzU3ODk1MCwiZXhwIjo1NTcyMzU3ODk1MCwic3ViIjoiNjZiNDY1OWQxYzljNGIxY2IzNWJmZWU0In0.tu8B1stXjAsJzalYyGXzDgl69InB9axF8z46zdiPIl4"}'
+          }
+        )
       );
+      log(url);
+      log(_dio.options.headers['Authorization'], name: "Authorization$url");
       if (result.data['status']) {
         return Right(result.data as Map<String, dynamic>);
       } else {

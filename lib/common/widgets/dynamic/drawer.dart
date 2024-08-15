@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,6 +8,8 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_state.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:go_router/go_router.dart';
@@ -24,6 +28,7 @@ class DrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var walletCubit = context.read<GetWalletCubit>();
     return BlocBuilder<UserCubit, BasicState<UserEntity>>(
       builder: (context, state) {
         return Drawer(
@@ -169,6 +174,7 @@ class DrawerWidget extends StatelessWidget {
     required BuildContext context,
     required UserEntity? user,
   }) {
+    log(user?.id.toString() ?? "UserId", name: "UserId");
     return Column(
       children: [
         accountWidget(context: context, user: user),
@@ -373,6 +379,7 @@ class DrawerWidget extends StatelessWidget {
     required BuildContext context,
     required UserEntity? user,
   }) {
+    var walletCubit = context.read<GetWalletCubit>();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -394,7 +401,7 @@ class DrawerWidget extends StatelessWidget {
                   bottom: 0,
                   right: 0,
                   child: Icon(
-                    Icons.verified,
+                    Icons.camera_alt_outlined,
                     color: AppColors.PRIMARY_COLOR,
                   ),
                 )
@@ -406,9 +413,20 @@ class DrawerWidget extends StatelessWidget {
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Label(
-                text: user?.fullName ?? '',
-                style: Styles.mediumText(fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  Label(
+                    text: user?.fullName ?? '',
+                    style: Styles.mediumText(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Icon(
+                    Icons.verified,
+                    color: AppColors.PRIMARY_COLOR,
+                  ),
+                ],
               ),
               Label(
                 text: 'Driver',
@@ -429,26 +447,25 @@ class DrawerWidget extends StatelessWidget {
                       width: 4,
                       height: 4,
                     ),
-                    Expanded(
-                      child: Label(
-                        text: '1000 L.E',
-                        style: Styles.mediumText(
-                            decoration: TextDecoration.underline),
-                      ),
-                    ),
+                    BlocBuilder<GetWalletCubit, GetWalletState>(
+                      builder: (context, state) {
+                        return Expanded(
+                          child: Label(
+                            text:
+                                '${state is SuccessGetWallet ? state.model.balance : 0} L.E',
+                            style: Styles.mediumText(
+                                decoration: TextDecoration.underline),
+                          ),
+                        );
+                      },
+                    )
                   ],
                 ),
               )
             ],
           )),
-          
-          
         ],
       ),
     );
   }
-
-
-
-
 }

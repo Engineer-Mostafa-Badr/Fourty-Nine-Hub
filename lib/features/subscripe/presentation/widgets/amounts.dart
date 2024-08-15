@@ -34,7 +34,6 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
         ),
         const Sizer(),
         Expanded(
-          
           child: ListView.builder(
             shrinkWrap: true,
             itemCount: widget.amounts.length,
@@ -51,7 +50,8 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
                     },
                   ),
                   ElevatedAppButton(
-                      label: '${widget.amounts[index].amount}', onPressed: () {}),
+                      label: '${widget.amounts[index].amount}',
+                      onPressed: () {}),
                 ],
               );
             },

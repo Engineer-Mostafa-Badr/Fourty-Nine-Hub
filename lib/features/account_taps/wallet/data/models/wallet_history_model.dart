@@ -8,10 +8,9 @@ class WalletHistoryModel extends WalletHistoryEntity {
       required super.createdAt});
   factory WalletHistoryModel.fromJson(Map<String, dynamic> json) {
     return WalletHistoryModel(
-      id: json['id'],
-      amount: json['amount'],
-      description: json['description'],
-      createdAt: DateTime.parse(json['created_at'])
-    );
+        id: json['id'],
+        amount: json['amount'],
+        description: json['description'],
+        createdAt: DateTime.parse(json['created_at']));
   }
 }

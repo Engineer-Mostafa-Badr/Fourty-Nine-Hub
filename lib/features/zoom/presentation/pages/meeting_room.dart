@@ -5,7 +5,8 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
 class MeetingRoom extends StatelessWidget {
-  const MeetingRoom({super.key, this.liveID = '12356456466', this.isHost = true});
+  const MeetingRoom(
+      {super.key, this.liveID = '12356456466', this.isHost = true});
 
   final String liveID;
   final bool isHost;

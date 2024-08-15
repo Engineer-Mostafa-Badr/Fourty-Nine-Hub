@@ -10,9 +10,8 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
-class SelectShippingDestination extends StatelessWidget{
+class SelectShippingDestination extends StatelessWidget {
   const SelectShippingDestination({super.key});
-
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +19,6 @@ class SelectShippingDestination extends StatelessWidget{
     final rideCubit = context.read<CreateShippingRequestCubit>();
 
     return BlocBuilder<CreateShippingRequestCubit, CreateShippingRequestState>(
-     
       builder: (context, state) {
         return Container(
           height: height * .7,
@@ -136,6 +134,4 @@ class SelectShippingDestination extends StatelessWidget{
       },
     );
   }
-
-  }
-
+}

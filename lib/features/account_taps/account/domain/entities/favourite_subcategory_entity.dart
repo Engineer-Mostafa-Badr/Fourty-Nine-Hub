@@ -4,8 +4,5 @@ class FavouriteSubcategoryEntity {
   final int id;
 
   final SubCategoryEntity item;
-  FavouriteSubcategoryEntity({
-    required this.id, 
-    required this.item
-  });
+  FavouriteSubcategoryEntity({required this.id, required this.item});
 }

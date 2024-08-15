@@ -4,9 +4,9 @@ class ChatsRequestParams {
   bool? archived;
   bool? isLocked;
   ChatsRequestParams({
-     this.privacyId,
-     this.categoryId,
-     this.archived,
-     this.isLocked,
+    this.privacyId,
+    this.categoryId,
+    this.archived,
+    this.isLocked,
   });
 }

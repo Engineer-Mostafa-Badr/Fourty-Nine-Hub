@@ -135,7 +135,7 @@ class RideServiceLocator {
         () => GetSubCategoriesUseCase(serviceLocator()));
     serviceLocator.registerFactory<CreateRiderOfferUseCase>(
         () => CreateRiderOfferUseCase(serviceLocator()));
-   serviceLocator.registerFactory<AcceptRideUseCase>(
+    serviceLocator.registerFactory<AcceptRideUseCase>(
         () => AcceptRideUseCase(serviceLocator()));
   }
 }

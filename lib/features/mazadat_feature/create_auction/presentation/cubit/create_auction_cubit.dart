@@ -20,7 +20,9 @@ class CreateAuctionCubit extends Cubit<BasicState<bool>> {
           description: description ?? ''));
       response.fold(
           (l) => emit(state.copyWith(status: StateStatus.error, failure: l)),
-          (r) => emit(state.copyWith(status: StateStatus.success, )));
+          (r) => emit(state.copyWith(
+                status: StateStatus.success,
+              )));
     }
   }
 }

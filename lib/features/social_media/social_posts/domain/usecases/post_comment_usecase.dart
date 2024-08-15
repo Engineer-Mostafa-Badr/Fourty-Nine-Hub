@@ -1,5 +1,3 @@
-
-
 import 'package:dartz/dartz.dart';
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
@@ -14,13 +12,11 @@ class PostCommentUseCase extends UseCase<bool, PostCommentParams> {
   }
 }
 
-
-
 class PostCommentParams {
   final String postId;
   final String content;
   PostCommentParams({
-    required this.postId, 
+    required this.postId,
     required this.content,
   });
   Map<String, dynamic> toJson() => {

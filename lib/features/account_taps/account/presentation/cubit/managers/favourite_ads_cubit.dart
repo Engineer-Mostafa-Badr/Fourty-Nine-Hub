@@ -5,9 +5,7 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 
 import 'package:fourtyninehub/features/account_taps/account/domain/usecases/get_favourite_ads_usecase.dart';
 
-
 import '../../../domain/entities/favourite_ad_entity.dart';
-
 
 class FavouriteAdsCubit extends Cubit<BasicState<List<FavouriteAdEntity>>> {
   final GetFavouriteAdsUsecase _getFavouriteAdsUsecase;

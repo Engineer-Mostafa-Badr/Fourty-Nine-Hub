@@ -8,7 +8,7 @@ import '../../../../../res/style/app_colors.dart';
 class CommentWidget extends StatelessWidget {
   final commentController = TextEditingController();
 
-   CommentWidget({super.key});
+  CommentWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +136,8 @@ class CommentWidget extends StatelessWidget {
                             value: 'love',
                           ),
                         ],
-                        itemSize: const Size.fromHeight(kTextTabBarHeight / 1.5),
+                        itemSize:
+                            const Size.fromHeight(kTextTabBarHeight / 1.5),
                       );
                       //   ini: Reaction<String>(
                       //     value: null,

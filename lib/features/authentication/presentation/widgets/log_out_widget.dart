@@ -42,7 +42,8 @@ class LogoutWidget extends StatelessWidget {
                 label: 'Logout',
                 onPressed: () {
                   controller.logout();
-                  context.go(Routes.HOME);
+                  context.pop();
+                  context.pop();
                 },
               ),
             ),

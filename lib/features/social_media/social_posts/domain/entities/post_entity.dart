@@ -20,11 +20,11 @@ class PostEntity {
   final num sadCount;
   final num angryCount;
   final DateTime createdAt;
-   Duration get publishedDuration => DateTime.now().difference(createdAt);
+  Duration get publishedDuration => DateTime.now().difference(createdAt);
 
   String get sinceTime =>
       DurationHelper().sinceTime(duration: publishedDuration);
- 
+
   PostEntity({
     required this.id,
     required this.content,
@@ -61,6 +61,7 @@ extension ReactionX on Reactions {
         return 'angry';
     }
   }
+
   String label() {
     switch (this) {
       case Reactions.like:
@@ -75,6 +76,7 @@ extension ReactionX on Reactions {
         return 'Angry';
     }
   }
+
   String image() {
     switch (this) {
       case Reactions.like:

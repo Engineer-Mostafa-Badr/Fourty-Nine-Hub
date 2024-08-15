@@ -11,13 +11,12 @@ class GetNearByRestaurantsUseCase
 
   @override
   Future<Either<Failure, List<RestaurantModel>>> call(LocationParams params) {
-    return _repo.getNearByReasturants(lat: params.lat , lng: params.lng);
+    return _repo.getNearByReasturants(lat: params.lat, lng: params.lng);
   }
 }
 
 class LocationParams {
   final double lat;
   final double lng;
-  LocationParams({required this.lat,required this.lng});
-
+  LocationParams({required this.lat, required this.lng});
 }

@@ -250,7 +250,9 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
   }) {
     return Row(
       children: [
-        post.user.image!=''? Image.network(post.user.image):ProfileImage(accountId: 0),
+        post.user.image != ''
+            ? Image.network(post.user.image)
+            : ProfileImage(accountId: 0),
         const Sizer(),
         Label(
             text: post.mainPost?.user.firstName ?? "",
@@ -280,7 +282,9 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
         Expanded(
           child: Row(
             children: [
-              post.user.image!=''? ProfileImage(accountId: 0,imageURL:post.user.image):ProfileImage(accountId: 0),
+              post.user.image != ''
+                  ? ProfileImage(accountId: 0, imageURL: post.user.image)
+                  : ProfileImage(accountId: 0),
               const Sizer(),
               Label(
                   text: post.user.firstName,
@@ -308,8 +312,8 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             bottomSheet(
                 context: context,
                 widget: ReportView(
-                  id: widget.post.id, categoryId: '66a3583454e6e337915514db',
-
+                  id: widget.post.id,
+                  categoryId: '66a3583454e6e337915514db',
                 ));
           },
           icon: const Icon(

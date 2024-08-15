@@ -18,4 +18,3 @@ final class BookDoctorAppointmentStartLoadingState
 
 final class BookDoctorAppointmentEndLoadingState
     extends BookDoctorAppointmentState {}
-

@@ -141,4 +141,31 @@ abstract class Labels {
   static const expireDate = 'Expire Date';
   static const uploadPhotos = 'Upload Photos';
   static const deleteAccount = 'Delete Account';
+
+  static const receiptPoint = 'Receipt Point';
+  static const deliveryPoint = 'Delivery Point';
+  static const time = 'Time';
+  static const offerPrice = 'Offer Price';
+  static const phone = 'Phone';
+  static const theApplicationDoesNot =
+      'The application does not deduct any percentage from the service provider.';
+  static const thePremiumPackageGivesYou =
+      'The Premium Package gives you the opportunity to be more visible and get more cashback.';
+  static const freeCancellation = 'Free cancellation';
+  static const request = 'Request';
+  static const driverDashboard = 'Driver dashboard';
+  static const premiumRequest = 'Premium Request';
+  static const youWillGetPounds =
+      'You will get 3,650 pounds annually if you subscribe.';
+  static const right = 'right';
+  static const left = 'left';
+  static const behind = 'behind';
+  static const inFront = 'In front';
+  static const identificationCard = 'ID card';
+  static const drivingLicense = 'Driving License';
+  static const license = 'License';
+  static const model = 'Model';
+  static const submit = 'Submit';
+  static const driverDashboardBannerDiscription =
+      'New Bookings are waiting you, go to driver dashboard and explore more!';
 }

@@ -20,7 +20,7 @@ class HealthBookings extends StatelessWidget {
                   ),
               separatorBuilder: (context, index) => const Sizer(),
               itemCount: state.myBookings?.length ?? 0);
-        }else{
+        } else {
           return const SizedBox.shrink();
         }
       },

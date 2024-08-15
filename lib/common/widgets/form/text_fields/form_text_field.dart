@@ -26,13 +26,22 @@ class FormTextField extends StatefulWidget {
   final int? maxLines;
   final double? height;
   final TextStyle? style;
-
+  final Color? fillColor;
+  final bool noBorder;
+  final TextStyle? hintStyle;
+  final BorderRadius? borderRadius;
+  final BoxConstraints? constraints;
   const FormTextField(
       {super.key,
       this.initialValue,
+      this.hintStyle,
       this.action,
       this.obsecure,
+      this.borderRadius,
       this.prefix,
+      this.noBorder = false,
+      this.constraints,
+      this.fillColor,
       this.hint,
       this.label,
       this.info,
@@ -109,36 +118,48 @@ class _FormTextFieldState extends State<FormTextField> {
             obscureText: widget.obsecure ?? false,
             onChanged: widget.action,
             decoration: InputDecoration(
+              constraints: widget.constraints,
               hintText: widget.hint,
+              filled: true,
+              fillColor: widget.fillColor ?? Colors.transparent,
               labelText: widget.label,
               hintStyle: widget.style ?? const TextStyle(fontSize: 12),
               labelStyle: widget.style ?? const TextStyle(fontSize: 12),
               prefixIcon: widget.prefix,
               suffixIcon: widget.suffix,
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: AppColors.LIGHT_GRAY_COLOR,
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: AppColors.PRIMARY_COLOR,
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
+              enabledBorder: widget.noBorder
+                  ? InputBorder.none
+                  : OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: AppColors.LIGHT_GRAY_COLOR,
+                      ),
+                      borderRadius:
+                          widget.borderRadius ?? BorderRadius.circular(10),
+                    ),
+              focusedBorder: widget.noBorder
+                  ? InputBorder.none
+                  : OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: AppColors.PRIMARY_COLOR,
+                      ),
+                      borderRadius:
+                          widget.borderRadius ?? BorderRadius.circular(10),
+                    ),
               errorBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
                   color: Colors.red,
                 ),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: widget.borderRadius ?? BorderRadius.circular(10),
               ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.red,
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
+              focusedErrorBorder: widget.noBorder
+                  ? InputBorder.none
+                  : OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.red,
+                      ),
+                      borderRadius:
+                          widget.borderRadius ?? BorderRadius.circular(10),
+                    ),
             ),
           ),
         ),

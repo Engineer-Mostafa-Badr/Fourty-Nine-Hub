@@ -50,7 +50,9 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
@@ -223,8 +225,11 @@ class AppPages {
         GoRoute(
           name: Routes.LOGIN,
           path: Paths.LOGIN,
-          builder: (context, state) => BlocProvider(
-            create: (_) => serviceLocator<LoginCubit>(),
+          builder: (context, state) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => serviceLocator<LoginCubit>()),
+              BlocProvider(create: (_) => serviceLocator<RegisterCubit>()),
+            ],
             child: const LoginView(),
           ),
         ),
@@ -741,7 +746,10 @@ class AppPages {
         GoRoute(
           path: Paths.SHIPPING,
           name: Routes.SHIPPING,
-          builder: (context, state) => const CreateShippingView(),
+          builder: (context, state) => BlocProvider<ShippingCubit>(
+            create: (context) => serviceLocator(),
+            child: const CreateShippingView(),
+          ),
         ),
         GoRoute(
             path: Paths.RIDE,
@@ -835,6 +843,11 @@ class AppPages {
                 builder: (context, state) => const InstallmentOrdersList(),
               )
             ]),
+        GoRoute(
+          path: Paths.SHIPPING_REGISTER,
+          name: Routes.SHIPPING_REGISTER,
+          builder: (context, state) => RegisterShippingScreen(),
+        )
       ],
     ),
   ]);

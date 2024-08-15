@@ -7,9 +7,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-
 class CallingCard extends StatelessWidget {
- final bool isVideo;
+  final bool isVideo;
   const CallingCard({super.key, required this.isVideo});
 
   @override
@@ -53,11 +52,7 @@ class CallingCard extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(
-isVideo?Icons.video_call
-            :Icons.call
-            ),
-            
+            Icon(isVideo ? Icons.video_call : Icons.call),
           ],
         ),
       ),

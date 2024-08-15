@@ -21,15 +21,17 @@ class TwitterPostCommentModel extends TwitterPostCommentEntity {
   factory TwitterPostCommentModel.fromJson(Map<String, dynamic> json) {
     return TwitterPostCommentModel(
       id: json['_id'],
-      user:json['user'] is String? json['user']:TwitterUserModel.fromJson(json['user']),
+      user: json['user'] is String
+          ? json['user']
+          : TwitterUserModel.fromJson(json['user']),
       content: json['content'] ?? '',
       post: json['post'] ?? '',
-      loveCount: json['loveCount']??0,
-      repliesCount: json['repliesCount']??0,
+      loveCount: json['loveCount'] ?? 0,
+      repliesCount: json['repliesCount'] ?? 0,
       createdAt: DateTime.parse(json['createdAt']),
       love: json['love'] != null ? List<String>.from(json['love']) : [],
-      adminIgnore: json['adminIgnore']??false,
-      isReact: json['isReact']??false,
+      adminIgnore: json['adminIgnore'] ?? false,
+      isReact: json['isReact'] ?? false,
       // image: json['image'],
     );
   }

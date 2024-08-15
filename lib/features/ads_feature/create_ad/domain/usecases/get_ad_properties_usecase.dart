@@ -5,9 +5,7 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/repositories/create_ad_repo.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 
-
-class GetAdPropertiesUsecase
-    extends UseCase<List<AdPropertiesEntity>, String> {
+class GetAdPropertiesUsecase extends UseCase<List<AdPropertiesEntity>, String> {
   final CreateAdRepo _repo;
 
   GetAdPropertiesUsecase(this._repo);

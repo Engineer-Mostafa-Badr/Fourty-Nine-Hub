@@ -23,7 +23,7 @@ class RestaurantDashboardState {
     return RestaurantDashboardState(
         status: status ?? this.status,
         failure: failure ?? this.failure,
-        connected: connected?? this.connected,
+        connected: connected ?? this.connected,
         successMessage: successMessage ?? this.successMessage,
         orders: orders ?? this.orders);
   }

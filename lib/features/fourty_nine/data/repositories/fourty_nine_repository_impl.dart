@@ -20,15 +20,13 @@ class FourtyNineRepositoryImpl implements FourtyNineRepository {
   }
 
   @override
-  Future<Either<Failure, List<MainCategoryEntity>>> getMainCategories({
-    required PaginationParams params
-  }) {
-    return _fourtyNineRemoteDataSource.getMainCategories(params:params);
+  Future<Either<Failure, List<MainCategoryEntity>>> getMainCategories(
+      {required PaginationParams params}) {
+    return _fourtyNineRemoteDataSource.getMainCategories(params: params);
   }
 
   @override
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems() {
-        return _fourtyNineRemoteDataSource.getSliderItems();
-
+    return _fourtyNineRemoteDataSource.getSliderItems();
   }
 }

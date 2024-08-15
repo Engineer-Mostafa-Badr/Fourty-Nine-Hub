@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
@@ -24,7 +23,6 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       this._getFeelingsUseCase, this._createTwitterPostUseCase)
       : super(const CreatePostState());
 
-
   UploadFileEntity? fileEntity;
 
   void loadData() async {
@@ -44,10 +42,10 @@ class CreatePostCubit extends Cubit<CreatePostState> {
         (data) => emit(state.copyWith(feelings: data)));
   }
 
-  void createPost({required BuildContext context,required String type}) async {
+  void createPost({required BuildContext context, required String type}) async {
     if (postContentTextController.text.isNotEmpty) {
       print("test media ${fileEntity?.mediaId}");
-      if(type=='twitter'){
+      if (type == 'twitter') {
         final response = await _createTwitterPostUseCase(
             CreateTwitterPostParams(
                 content: postContentTextController.text,
@@ -59,15 +57,15 @@ class CreatePostCubit extends Cubit<CreatePostState> {
             (r) {
           Navigator.pop(context);
         });
-      }else if(type == "facebook"){
+      } else if (type == "facebook") {
         final response = await _createPostUseCase(
             PostParams(content: postContentTextController.text));
         response.fold(
-                (l) =>
-                emit(state.copyWith(failure: l, status: CreatePostStates.error)),
-                (r) {
-              Navigator.pop(context);
-            });
+            (l) => emit(
+                state.copyWith(failure: l, status: CreatePostStates.error)),
+            (r) {
+          Navigator.pop(context);
+        });
       }
     }
   }
@@ -84,8 +82,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     emit(state.copyWith(selectedActivity: item));
   }
 
-
-  uploadPhoto(){
+  uploadPhoto() {
     final UploadFile upload = UploadFile();
     upload.uploadImage(
         subCategoryId: '66a3583454e6e337915514db',
@@ -94,12 +91,12 @@ class CreatePostCubit extends Cubit<CreatePostState> {
           print("mediaId: ${data.mediaId}");
           fileEntity = data;
           print(fileEntity?.mediaId);
-          emit(state.copyWith(fileEntity: data,status: CreatePostStates.success));
+          emit(state.copyWith(
+              fileEntity: data, status: CreatePostStates.success));
         });
   }
 
-  removePhoto(){
-    emit(state.copyWith(fileEntity: null,status: CreatePostStates.success));
+  removePhoto() {
+    emit(state.copyWith(fileEntity: null, status: CreatePostStates.success));
   }
-
 }

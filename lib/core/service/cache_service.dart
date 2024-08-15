@@ -4,11 +4,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class CacheService {
+  // Future<void> init();
   Future<bool> saveUserData(String userData);
   Future<String?> getUserData();
+  bool? isLogin();
 
   Future<bool> saveUserIsLoggedIn(bool isLoggedIn);
   Future<bool?> getUserIsLoggedIn();
+  Future<void> setLogin(bool value);
 
   Future<bool> saveUserToken(String userToken);
   Future<String?> getUserToken();
@@ -48,6 +51,7 @@ class CacheServiceImpl implements CacheService {
   static const _USERDATA = "USER_DATA";
   static const _LOCALE = 'locale';
   static const _TOKEN = "TOKEN";
+  static const _ISLOGIN = "ISLOGIN";
   static const _REFRESH_TOKEN = "REFRESH_TOKEN";
   static const _TOKEN_EXPIRE_DATE = "TOKEN_EXPIRE_DATE";
   static const _IS_LOGGED_IN = "IS_LOGGED_IN";
@@ -57,7 +61,7 @@ class CacheServiceImpl implements CacheService {
   static const _APPLE_USER_DATA = "APPLE_USER_DATA";
   static const _IS_FIRST_LUNCH = "IS_FIRST_LUNCH";
   static const _FAV_PRODUCTS_LIST = "FAV_PRODUCTS_LIST";
-
+  static late SharedPreferences preferences;
   @override
   Future<bool> saveUserData(String userData) async {
     final prefs = await SharedPreferences.getInstance();
@@ -207,6 +211,20 @@ class CacheServiceImpl implements CacheService {
   Future<bool> saveFavList(List<String> favList) async {
     final prefs = await SharedPreferences.getInstance();
     return await prefs.setStringList(_FAV_PRODUCTS_LIST, favList);
+  }
+
+  @override
+  bool? isLogin() {
+    return preferences.getBool(_ISLOGIN);
+  }
+
+  static Future<void> init() async {
+    preferences = await SharedPreferences.getInstance();
+  }
+
+  @override
+  Future<void> setLogin(bool value) async {
+    await preferences.setBool(_ISLOGIN, value);
   }
 }
 
@@ -395,6 +413,24 @@ class CacheServiceImplV2 implements CacheService {
   @override
   Future<bool> saveFavList(List<String> favList) {
     // TODO: implement saveFavList
+    throw UnimplementedError();
+  }
+
+  @override
+  bool? isLogin() {
+    // TODO: implement isLogin
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> init() {
+    // TODO: implement init
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setLogin(bool valuel) {
+    // TODO: implement setLogin
     throw UnimplementedError();
   }
 }

@@ -10,9 +10,12 @@ class CreateDoctorSubmitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: ElevatedAppButton(onPressed: () {
-          context.read<CreateDoctorCubit>().submit();
-        }, label: 'Submit')),
+        Expanded(
+            child: ElevatedAppButton(
+                onPressed: () {
+                  context.read<CreateDoctorCubit>().submit();
+                },
+                label: 'Submit')),
       ],
     );
   }

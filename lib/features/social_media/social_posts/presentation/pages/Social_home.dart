@@ -128,8 +128,6 @@ class _SocialHomeViewState extends State<SocialHomeView> {
     });
   }
 
-
-
   Widget _buildMyPostsWidget() {
     return BlocBuilder<SocialPostsCubit, SocialPostsState>(
         builder: (context, state) {

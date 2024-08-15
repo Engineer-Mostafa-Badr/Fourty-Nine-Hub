@@ -10,8 +10,16 @@ class ImagePickerPlaceholder extends StatelessWidget {
   final double? height;
   final double? width;
   final XFile? image;
+  final Color? iconColor;
+  final Color? borderColor;
   const ImagePickerPlaceholder(
-      {super.key, this.tilte, this.image, this.height, this.width});
+      {super.key,
+      this.tilte,
+      this.image,
+      this.height,
+      this.width,
+      this.iconColor,
+      this.borderColor});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +27,7 @@ class ImagePickerPlaceholder extends StatelessWidget {
       width: height ?? 100,
       height: width ?? 100,
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
+        border: Border.all(color: borderColor ?? Colors.black),
         borderRadius: BorderRadius.circular(UIConst.radius),
       ),
       child: _buildImage(),
@@ -31,10 +39,10 @@ class ImagePickerPlaceholder extends StatelessWidget {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
+          Icon(
             Icons.camera_alt,
             size: 50,
-            color: AppColors.LIGHT_GRAY_COLOR,
+            color: iconColor ?? AppColors.LIGHT_GRAY_COLOR,
           ),
           _buildTitle(),
         ],

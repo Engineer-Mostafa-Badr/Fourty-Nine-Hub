@@ -5,7 +5,6 @@
 
 // import 'package:go_router/go_router.dart';
 
-
 // import '../../../../../../../common/widgets/dynamic/sizer.dart';
 
 // class CategoryInfoWidget extends StatelessWidget {

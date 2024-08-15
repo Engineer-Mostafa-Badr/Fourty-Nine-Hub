@@ -6,8 +6,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_e
 
 import '../repositories/fourty_nine_repository.dart';
 
-class GetSliderItemsUseCase
-    extends UseCase<List<SliderItemEntity>, NoParams> {
+class GetSliderItemsUseCase extends UseCase<List<SliderItemEntity>, NoParams> {
   final FourtyNineRepository _fourtyNineRepository;
 
   GetSliderItemsUseCase(this._fourtyNineRepository);

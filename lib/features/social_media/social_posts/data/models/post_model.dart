@@ -27,14 +27,14 @@ class PostModel extends PostEntity {
       user: UserModel.fromJson(json['user']),
       privacy: json['privacy'],
       commentPrivacy: json['commentPrivacy'],
-      sharesCount: json['sharesCount']??0,
-      likesCount: json['likesCount']??0,
-      loveCount: json['loveCount']??0,
-      wowCount: json['wowCount']??0,
-      sadCount: json['sadCount']??0,
-      angryCount: json['angryCount']??0,
+      sharesCount: json['sharesCount'] ?? 0,
+      likesCount: json['likesCount'] ?? 0,
+      loveCount: json['loveCount'] ?? 0,
+      wowCount: json['wowCount'] ?? 0,
+      sadCount: json['sadCount'] ?? 0,
+      angryCount: json['angryCount'] ?? 0,
       createdAt: DateTime.parse(json['createdAt']),
-      commentsCount: json['commentsCount']??0,
+      commentsCount: json['commentsCount'] ?? 0,
     );
   }
 }

@@ -3,7 +3,5 @@ class DetailEntiy {
   final String value;
   final String type;
 
-  DetailEntiy({required this.label,
-  required this.type,
-   required this.value});
+  DetailEntiy({required this.label, required this.type, required this.value});
 }

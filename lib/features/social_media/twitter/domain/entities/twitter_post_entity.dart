@@ -19,29 +19,28 @@ class TwitterPostEntity {
   bool? isReact;
   String? photo;
   final DateTime createdAt;
-   Duration get publishedDuration => DateTime.now().difference(createdAt);
+  Duration get publishedDuration => DateTime.now().difference(createdAt);
 
   String get sinceTime =>
       DurationHelper().sinceTime(duration: publishedDuration);
- 
-  TwitterPostEntity({
-    required this.id,
-    required this.content,
-    this.images,
-    this.shares,
-    this.love,
-    this.isReact=false,
-    required this.user,
-    this.commentPrivacy = 1,
-    this.isShared = false,
-    this.commentsCount = 0,
-    this.sharesCount = 0,
-    this.loveCount = 0,
-    this.mainPost,
-    this.photo,
-    required this.createdAt,
-    required this.comments
-  });
+
+  TwitterPostEntity(
+      {required this.id,
+      required this.content,
+      this.images,
+      this.shares,
+      this.love,
+      this.isReact = false,
+      required this.user,
+      this.commentPrivacy = 1,
+      this.isShared = false,
+      this.commentsCount = 0,
+      this.sharesCount = 0,
+      this.loveCount = 0,
+      this.mainPost,
+      this.photo,
+      required this.createdAt,
+      required this.comments});
 }
 
 enum Reactions { like, love, wow, sad, angry }
@@ -61,6 +60,7 @@ extension ReactionX on Reactions {
         return 'angry';
     }
   }
+
   String label() {
     switch (this) {
       case Reactions.like:
@@ -75,6 +75,7 @@ extension ReactionX on Reactions {
         return 'Angry';
     }
   }
+
   String image() {
     switch (this) {
       case Reactions.like:

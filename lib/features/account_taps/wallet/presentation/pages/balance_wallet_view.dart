@@ -35,8 +35,7 @@ class BalanceWalletView extends StatelessWidget {
                   const WalletCardWidget(
                     balance: 900,
                     target: 1002,
-                                        type: WalletTypes.balance,
-
+                    type: WalletTypes.balance,
                   ),
                   const Sizer(),
                   Row(
@@ -44,7 +43,6 @@ class BalanceWalletView extends StatelessWidget {
                       const Icon(
                         Icons.info_outline,
                         color: Colors.grey,
-                        
                       ),
                       const Sizer(),
                       Expanded(

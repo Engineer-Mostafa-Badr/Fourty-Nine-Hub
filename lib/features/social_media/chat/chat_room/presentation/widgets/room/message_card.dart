@@ -18,8 +18,8 @@ class MessageCard extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
 
     return messageEntity.byMe!
-        ? _buildMineMessage(width: width,messageEntity: messageEntity)
-        : _buildOtherMessage(width: width,messageEntity: messageEntity);
+        ? _buildMineMessage(width: width, messageEntity: messageEntity)
+        : _buildOtherMessage(width: width, messageEntity: messageEntity);
   }
 
   Widget _buildMineMessage({
@@ -78,7 +78,10 @@ class MessageCard extends StatelessWidget {
     );
   }
 
-  Widget _buildOtherMessage({required double width,required MessageEntity messageEntity,}) {
+  Widget _buildOtherMessage({
+    required double width,
+    required MessageEntity messageEntity,
+  }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [

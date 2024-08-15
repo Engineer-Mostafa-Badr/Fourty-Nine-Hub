@@ -20,8 +20,7 @@ class MainCategoryCard extends StatelessWidget {
     return InkWell(
       onTap: () => context.go(Routes.SUBCATEGORIES, extra: mainCategory.id),
       child: isList
-          ? 
-          ClipRRect(
+          ? ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Container(
                 decoration: BoxDecoration(

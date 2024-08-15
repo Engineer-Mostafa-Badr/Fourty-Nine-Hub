@@ -34,7 +34,7 @@ abstract class MainTextFormField extends StatefulWidget {
   final TextStyle? style;
   final VoidCallback? onTap;
   final VoidCallback? onEditComplete;
-  
+  final bool readOnly;
 
   const MainTextFormField(
       {super.key,
@@ -44,6 +44,7 @@ abstract class MainTextFormField extends StatefulWidget {
       required this.hintText,
       this.keyboardType,
       required this.validator,
+      this.readOnly = false,
       this.textCapitalization = TextCapitalization.none,
       this.margin = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       this.enabled = true,
@@ -96,6 +97,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         keyboardType: widget.keyboardType,
         inputFormatters: widget.inputFormatters,
         enabled: widget.enabled,
+        readOnly: widget.readOnly,
         maxLines: widget.maxLines,
         maxLength: widget.maxLength,
         expands: widget.expanded,

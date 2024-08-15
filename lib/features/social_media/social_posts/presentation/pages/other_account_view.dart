@@ -191,7 +191,7 @@ class OtherAccountView extends StatelessWidget {
                   child: CircleAvatar(
                     radius: 28,
                     backgroundColor: Colors.white,
-                    backgroundImage: NetworkImage(user!.profilePicture??''),
+                    backgroundImage: NetworkImage(user!.profilePicture ?? ''),
                   ),
                 ))
           ],
@@ -283,26 +283,25 @@ class OtherAccountView extends StatelessWidget {
   Widget _buildAccountPages() {
     return TabBarView(children: [
       const PostsSection(),
-      BlocBuilder<UserCubit, BasicState<UserEntity>>(
-          builder: (context, state) {
-            UserEntity? userData = state.data;
-            return context.read<UserCubit>().isLoggedIn
-                ? UserTweets(userData: userData!)
-                : Center(
+      BlocBuilder<UserCubit, BasicState<UserEntity>>(builder: (context, state) {
+        UserEntity? userData = state.data;
+        return context.read<UserCubit>().isLoggedIn
+            ? UserTweets(userData: userData!)
+            : Center(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                        onTap: () => context.push(Routes.LOGIN),
-                        child: Label(
-                            text: 'Login',
-                            style: Styles.headerText(color: Colors.blue))),
-                    Label(
-                        text: ', To continue in using chat services',
-                        style: Styles.headerText()),
-                  ],
-                ));
-          }),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                      onTap: () => context.push(Routes.LOGIN),
+                      child: Label(
+                          text: 'Login',
+                          style: Styles.headerText(color: Colors.blue))),
+                  Label(
+                      text: ', To continue in using chat services',
+                      style: Styles.headerText()),
+                ],
+              ));
+      }),
 
       // const HighLightsSection(),
 

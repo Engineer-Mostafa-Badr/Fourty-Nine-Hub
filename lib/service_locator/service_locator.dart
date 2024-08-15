@@ -6,10 +6,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
+import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/reels_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
+import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -83,6 +85,13 @@ class DI {
         serviceLocator(),
       ),
     );
+    // serviceLocator.registerLazySingleton<ApiClientHelper>(
+    //   () => ApiClientHelperImp(),
+    // );
+    // base repo
+    serviceLocator.registerLazySingleton(
+      () => BaseRepository(),
+    );
     // json parser
     serviceLocator.registerLazySingleton<JsonParser>(
       () => JsonParser(),
@@ -117,5 +126,7 @@ class DI {
     SocialServiceLocator.execute(serviceLocator: serviceLocator);
     // subscriptions
     SubscriptionServiceLocator.execute(serviceLocator: serviceLocator);
+    // shipping
+    ShippingServiceLocatior.execute(serviceLocator: serviceLocator);
   }
 }

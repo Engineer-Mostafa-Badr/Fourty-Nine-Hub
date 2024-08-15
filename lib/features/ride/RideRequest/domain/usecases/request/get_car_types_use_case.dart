@@ -4,12 +4,9 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/car_type_mod
 import 'package:fourtyninehub/features/ride/RideRequest/domain/repositories/ride_request_repo.dart';
 import '../../../../../../core/abstract/use_case.dart';
 
-
-class GetCarTypesUseCase
-    extends UseCase<List<CarTypeModel>, String> {
+class GetCarTypesUseCase extends UseCase<List<CarTypeModel>, String> {
   final RideRequestRepo _repo;
   GetCarTypesUseCase(this._repo);
-
 
   @override
   Future<Either<Failure, List<CarTypeModel>>> call(String params) {

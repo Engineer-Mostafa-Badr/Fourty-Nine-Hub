@@ -5,12 +5,11 @@ class CarouselSliderWidget extends StatelessWidget {
   final List<Widget> widgets;
   final double height;
   final bool autoPlay;
-  const CarouselSliderWidget({
-    super.key,
-    required this.widgets,
-    this.height = 400,
-    this.autoPlay = false
-  });
+  const CarouselSliderWidget(
+      {super.key,
+      required this.widgets,
+      this.height = 400,
+      this.autoPlay = false});
 
   @override
   Widget build(BuildContext context) {

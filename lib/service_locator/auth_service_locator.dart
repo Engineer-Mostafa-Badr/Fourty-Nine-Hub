@@ -1,3 +1,6 @@
+import 'package:fourtyninehub/core/service/cache_service.dart';
+import 'package:fourtyninehub/features/authentication/data/data_sources/remote_data_source/wallet_data_source.dart';
+import 'package:fourtyninehub/features/authentication/data/repositories/wallet_repository.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_new_forget_password_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/facebook_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_welcome_gift_use_case.dart';
@@ -7,6 +10,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/send_forg
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_forget_password_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/create_new_forgot_password_cubit/create_new_forgot_password_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_forgot_password_otp/verify_forgot_password_otp_cubit.dart';
 import 'package:get_it/get_it.dart';
 import '../features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
@@ -34,37 +38,47 @@ class AuthServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     // auth feature
     serviceLocator.registerLazySingleton<AuthRemoteDataSource>(
-          () => AuthRemoteDataSourceImpl(
+      () => AuthRemoteDataSourceImpl(
         serviceLocator(),
       ),
     );
     serviceLocator.registerLazySingleton<AuthLocalDataSource>(
-          () => AuthLocalDataSourceImpl(
+      () => AuthLocalDataSourceImpl(
         serviceLocator(),
       ),
     );
     serviceLocator.registerLazySingleton<AuthRepository>(
-          () => AuthRepositoryImpl(
+      () => AuthRepositoryImpl(
         serviceLocator(),
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<UserRemoteDataSource>(
-          () => UserRemoteDataSourceImpl(
+      () => UserRemoteDataSourceImpl(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<UserRepository>(
-          () => UserRepositoryImpl(
+      () => UserRepositoryImpl(
         serviceLocator(),
       ),
     );
-
+    serviceLocator.registerLazySingleton(
+      () => WalletRepository(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton(
+      () => WalletDataSource(
+        serviceLocator(),
+      ),
+    );
     // auth use cases
     serviceLocator.registerFactory(() => LoginUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => GetUserUseCase(serviceLocator()));
+    serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     serviceLocator.registerFactory(() => AttachTokenUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => SaveTokensUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => GetTokensUseCase(serviceLocator()));
@@ -81,13 +95,13 @@ class AuthServiceLocator {
     serviceLocator
         .registerFactory(() => SendForgetPasswordOTPUseCase(serviceLocator()));
     serviceLocator.registerFactory(
-            () => VerifyForgetPasswordOTPUseCase(serviceLocator()));
+        () => VerifyForgetPasswordOTPUseCase(serviceLocator()));
     serviceLocator.registerFactory(
-            () => CreateNewForgetPasswordUseCase(serviceLocator()));
+        () => CreateNewForgetPasswordUseCase(serviceLocator()));
 
     // auth cubits
     serviceLocator.registerFactory<LoginCubit>(
-          () => LoginCubit(
+      () => LoginCubit(
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
@@ -103,27 +117,32 @@ class AuthServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
       )..attachToken(),
     );
-
+    serviceLocator.registerSingleton(
+      GetWalletCubit(
+        serviceLocator(),
+      )..getWallet(),
+    );
     serviceLocator.registerFactory(
-          () => ForgotPasswordCubit(
+      () => ForgotPasswordCubit(
         serviceLocator(),
       ),
     );
     serviceLocator.registerFactory(
-          () => VerifyForgotPasswordOtpCubit(
+      () => VerifyForgotPasswordOtpCubit(
         serviceLocator(),
       ),
     );
     serviceLocator.registerFactory(
-          () => CreateNewForgotPasswordCubit(
+      () => CreateNewForgotPasswordCubit(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerFactory<RegisterCubit>(
-          () => RegisterCubit(
+      () => RegisterCubit(
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
@@ -133,7 +152,7 @@ class AuthServiceLocator {
       )..getWelcomeGift(),
     );
     serviceLocator.registerFactory<VerifyOtpCubit>(
-          () => VerifyOtpCubit(
+      () => VerifyOtpCubit(
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

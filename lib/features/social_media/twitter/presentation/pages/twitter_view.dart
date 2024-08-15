@@ -33,16 +33,19 @@ class _TwitterViewState extends State<TwitterView> {
           mainCategoryId: 2,
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
               builder: (context, state) {
-                UserEntity? userData = state.data;
+            UserEntity? userData = state.data;
             return context.read<UserCubit>().isLoggedIn
                 ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildTwitterTitle(),
-                    const BuildTwitterDocumentCard(),
-                    Expanded(child: TwitterGlobalPosts(userData: userData!,)),
-                  ],
-                )
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildTwitterTitle(),
+                      const BuildTwitterDocumentCard(),
+                      Expanded(
+                          child: TwitterGlobalPosts(
+                        userData: userData!,
+                      )),
+                    ],
+                  )
                 : Center(
                     child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -76,8 +79,7 @@ class _TwitterViewState extends State<TwitterView> {
     );
   }
 
-
-  Widget _buildTwitterTitle(){
+  Widget _buildTwitterTitle() {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Label(
@@ -86,5 +88,4 @@ class _TwitterViewState extends State<TwitterView> {
       ),
     );
   }
-
 }

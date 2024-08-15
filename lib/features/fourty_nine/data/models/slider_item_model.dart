@@ -9,7 +9,7 @@ class SliderItemModel extends SliderItemEntity {
       required super.image});
   factory SliderItemModel.fromJson(Map<String, dynamic> json) {
     return SliderItemModel(
-      id:  json['id'],
+      id: json['id'],
       route: json['route'],
       title: json['title'],
       subTitle: json['sub_title'],

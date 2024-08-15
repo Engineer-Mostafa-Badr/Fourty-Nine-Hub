@@ -20,15 +20,12 @@ class RequestHistoryRepoImpl extends RequestHistoryRepo {
 
   @override
   Future<Either<Failure, List<FoodOrderModel>>> getFoodHistory() async {
-   
-   return await _remoteDataSource.getFoodHistory();
-   
+    return await _remoteDataSource.getFoodHistory();
   }
 
   @override
-  Future<Either<Failure, List<ShippingRequestModel>>> getShippingRequests()async {
-   
-   return  await _remoteDataSource.getShippingRequests();
-   
+  Future<Either<Failure, List<ShippingRequestModel>>>
+      getShippingRequests() async {
+    return await _remoteDataSource.getShippingRequests();
   }
 }

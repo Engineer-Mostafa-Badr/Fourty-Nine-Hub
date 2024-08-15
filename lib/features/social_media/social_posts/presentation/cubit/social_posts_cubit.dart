@@ -43,14 +43,19 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final SendGreetMessageUseCase _sendGreetMessageUseCase;
   final RemoveSuggestUserUseCase _removeSuggestUserUseCase;
   SocialPostsCubit(
-      this._getFeedUseCase,
-      this._getUserPostsUseCase,
-      this._postReactUseCase,
-      this._getPostCommentsUseCase,
-      this._postCommentUseCase,
-      this._deletePostUseCase,
-      this._hidePostUseCase, this._suggestedFriendsUseCase, this._friedRequestUseCase, this._followUserUseCase, this._sendGreetMessageUseCase, this._removeSuggestUserUseCase,)
-      : super(const SocialPostsState());
+    this._getFeedUseCase,
+    this._getUserPostsUseCase,
+    this._postReactUseCase,
+    this._getPostCommentsUseCase,
+    this._postCommentUseCase,
+    this._deletePostUseCase,
+    this._hidePostUseCase,
+    this._suggestedFriendsUseCase,
+    this._friedRequestUseCase,
+    this._followUserUseCase,
+    this._sendGreetMessageUseCase,
+    this._removeSuggestUserUseCase,
+  ) : super(const SocialPostsState());
 
   void loadData() async {
     await getFeed(1);
@@ -71,49 +76,50 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) {
-          final isLastPage = data.length < pageSize;
-          if (page == 1) {
-            print("page == 1 $page");
-            feedPagingController.itemList = [];
-          }
-          if (isLastPage) {
-            print("isLastPage = $isLastPage");
-            feedPagingController.appendLastPage(data);
-          } else {
-            print("isNotLastPage = $isLastPage");
-            final nextPageKey = page + 1;
-            feedPagingController.appendPage(data, nextPageKey);
-          }
-          emit(state.copyWith(posts: data, status: StateStatus.initial));
-        });
+      final isLastPage = data.length < pageSize;
+      if (page == 1) {
+        print("page == 1 $page");
+        feedPagingController.itemList = [];
+      }
+      if (isLastPage) {
+        print("isLastPage = $isLastPage");
+        feedPagingController.appendLastPage(data);
+      } else {
+        print("isNotLastPage = $isLastPage");
+        final nextPageKey = page + 1;
+        feedPagingController.appendPage(data, nextPageKey);
+      }
+      emit(state.copyWith(posts: data, status: StateStatus.initial));
+    });
   }
 
   final int pageSize = 10;
   final PagingController<int, SuggestUserEntity> suggestUserPagingController =
-  PagingController(firstPageKey: 1);
+      PagingController(firstPageKey: 1);
   final PagingController<int, PostEntity> feedPagingController =
-  PagingController(firstPageKey: 1);
+      PagingController(firstPageKey: 1);
   // get suggested friends
   Future<void> getSuggestedFriends(int page) async {
-    final response = await _suggestedFriendsUseCase(SuggestedFriendsParams(limit: pageSize, page: page));
+    final response = await _suggestedFriendsUseCase(
+        SuggestedFriendsParams(limit: pageSize, page: page));
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) {
-              final isLastPage = data.length < pageSize;
-              if (page == 1) {
-                print("page == 1 $page");
-                suggestUserPagingController.itemList = [];
-              }
-              if (isLastPage) {
-                print("isLastPage = $isLastPage");
-                suggestUserPagingController.appendLastPage(data);
-              } else {
-                print("isNotLastPage = $isLastPage");
-                final nextPageKey = page + 1;
-                suggestUserPagingController.appendPage(data, nextPageKey);
-              }
-              emit(state.copyWith(suggestedFriends: data, status: StateStatus.initial));
-            });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) {
+      final isLastPage = data.length < pageSize;
+      if (page == 1) {
+        print("page == 1 $page");
+        suggestUserPagingController.itemList = [];
+      }
+      if (isLastPage) {
+        print("isLastPage = $isLastPage");
+        suggestUserPagingController.appendLastPage(data);
+      } else {
+        print("isNotLastPage = $isLastPage");
+        final nextPageKey = page + 1;
+        suggestUserPagingController.appendPage(data, nextPageKey);
+      }
+      emit(state.copyWith(suggestedFriends: data, status: StateStatus.initial));
+    });
   }
 
   // get feed posts
@@ -201,58 +207,62 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     });
   }
 
-  Future<bool> friendRequest({required BuildContext context, required String userId}) async {
+  Future<bool> friendRequest(
+      {required BuildContext context, required String userId}) async {
     final response = await _friedRequestUseCase(userId);
     bool isAdd = false;
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
       // getMyPosts(context: context);
-          print("object $r}");
-          isAdd=r;
-          emit(state.copyWith(friendRequest: r, status: StateStatus.success));
+      print("object $r}");
+      isAdd = r;
+      emit(state.copyWith(friendRequest: r, status: StateStatus.success));
     });
     print(isAdd);
     return isAdd;
   }
 
-  Future<bool> followRequest({required BuildContext context, required String userId}) async {
+  Future<bool> followRequest(
+      {required BuildContext context, required String userId}) async {
     final response = await _followUserUseCase(userId);
     bool isAdd = false;
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
-          print("object $r}");
-          isAdd=r;
-          emit(state.copyWith(friendRequest: r, status: StateStatus.success));
+      print("object $r}");
+      isAdd = r;
+      emit(state.copyWith(friendRequest: r, status: StateStatus.success));
     });
     print(isAdd);
     return isAdd;
   }
 
-  Future<bool> sendGreetMessage({required BuildContext context, required String userId}) async {
+  Future<bool> sendGreetMessage(
+      {required BuildContext context, required String userId}) async {
     final response = await _sendGreetMessageUseCase(userId);
     bool isAdd = false;
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
-          print("object $r}");
-          isAdd=r;
-          emit(state.copyWith(friendRequest: r, status: StateStatus.success));
+      print("object $r}");
+      isAdd = r;
+      emit(state.copyWith(friendRequest: r, status: StateStatus.success));
     });
     print(isAdd);
     return isAdd;
   }
 
-  Future<bool> removeSuggestUser({required BuildContext context, required String userId}) async {
+  Future<bool> removeSuggestUser(
+      {required BuildContext context, required String userId}) async {
     final response = await _removeSuggestUserUseCase(userId);
     bool isAdd = false;
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
-          print("object $r}");
-          isAdd=r;
-          emit(state.copyWith(status: StateStatus.success));
+      print("object $r}");
+      isAdd = r;
+      emit(state.copyWith(status: StateStatus.success));
     });
     print(isAdd);
     return isAdd;

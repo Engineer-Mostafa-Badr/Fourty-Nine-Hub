@@ -1,8 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
+import 'package:fourtyninehub/features/authentication/domain/repositories/user_repository.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/attach_token_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
@@ -16,13 +18,20 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   final SaveTokensUseCase _saveTokensUseCase;
   final AttachTokenUseCase _attachTokenUseCase;
   final SignOutUseCase _signOutUseCase;
+  final CacheService cacheService;
+  // final UserRepository repository;
   bool _isTokenAttached = false;
 
-  UserCubit(this._getUserUseCase, this._getTokensUseCase,
-      this._attachTokenUseCase, this._saveTokensUseCase, this._signOutUseCase)
+  UserCubit(
+      this._getUserUseCase,
+      this._getTokensUseCase,
+      this._attachTokenUseCase,
+      this._saveTokensUseCase,
+      this._signOutUseCase,
+      this.cacheService)
       : super(const BasicState());
 
-  bool get isLoggedIn => state.data != null;
+  bool get isLoggedIn => cacheService.isLogin() ?? false;
   bool isSameAccount(String anotherId) {
     if (isLoggedIn) {
       return state.data?.id == anotherId;
@@ -61,6 +70,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   }
 
   void logout() async {
+    cacheService.setLogin(false);
     _attachTokenUseCase(null);
     _saveTokensUseCase(null);
     _isTokenAttached = false;
@@ -68,4 +78,19 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
 
     emit(const BasicState());
   }
+  setLogin(bool value){
+    cacheService.setLogin(value);
+  }
+  // getWallet() async {
+  //   if (!_isTokenAttached) return;
+  //   var response = await repository.getWallet();
+  //   response.fold(
+  //     (error) {
+
+  //     },
+  //     (data) {
+
+  //     },
+  //   );
+  // }
 }

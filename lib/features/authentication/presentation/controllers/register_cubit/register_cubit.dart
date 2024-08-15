@@ -31,7 +31,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   final emailFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();
   final confirmPasswordFocusNode = FocusNode();
-
+  bool accept = false;
   bool isMale = true;
   double? welcomeGift;
 

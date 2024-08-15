@@ -32,11 +32,9 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
   final JsonParser _jsonParser;
   MyAdsRemoteDatasourceImpl(this._apiConsumer, this._jsonParser);
   @override
-  Future<Either<Failure, bool>> cancelAd({required String id}) async{
-     final response =
-        await _apiConsumer.delete(EndPoints.deleteAd(id));
+  Future<Either<Failure, bool>> cancelAd({required String id}) async {
+    final response = await _apiConsumer.delete(EndPoints.deleteAd(id));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
-
   }
 
   @override
@@ -50,9 +48,8 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
     final response = await _apiConsumer.get(EndPoints.myAds);
     return response.fold(
         (failure) => Left(failure),
-        (data) => Right((data['data'] as List)
-            .map((e) => AdModel.fromJson(e))
-            .toList()));
+        (data) => Right(
+            (data['data'] as List).map((e) => AdModel.fromJson(e)).toList()));
   }
 
   @override
@@ -117,9 +114,9 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
     final response = await _apiConsumer.put(EndPoints.rejectPickMeRequest(id));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
-  
+
   @override
-  Future<Either<Failure, List<AuctionEntity>>> getMyAuctions()async {
+  Future<Either<Failure, List<AuctionEntity>>> getMyAuctions() async {
     final response = await _apiConsumer.get(EndPoints.myAuctions);
     return response.fold(
         (failure) => Left(failure),
@@ -127,7 +124,7 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
             .map((e) => AuctionModel.fromJson(e))
             .toList()));
   }
-  
+
   @override
   Future<Either<Failure, List<InstallmentEntity>>> getMyInstallments() {
     // TODO: implement getMyInstallments

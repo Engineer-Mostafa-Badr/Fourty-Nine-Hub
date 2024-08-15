@@ -14,9 +14,9 @@ import '../../data/models/google_search_results.dart';
 import '../../data/models/params/expected_price_params.dart';
 import '../../data/models/ride_request_model.dart';
 
-
 abstract class RideRequestRepo {
-  Future<Either<Failure, List<SubCategoryModel>>> getSubCategories({required String mainCategoryId});
+  Future<Either<Failure, List<SubCategoryModel>>> getSubCategories(
+      {required String mainCategoryId});
   Future<Either<Failure, double>> getTripPrice(
       {required RideRequestModel request});
   Future<Either<Failure, List<CarModelsModel>>> getCarModels();
@@ -25,8 +25,7 @@ abstract class RideRequestRepo {
           {required AddressSearchParamsModel params});
   Future<Either<Failure, String>> addNormalRequest(
       {required RideRequestModel request});
-      
- 
+
   Future<Either<Failure, bool>> cancelTrip({required int requestId});
   Future<Either<Failure, bool>> reportTheDriver(
       {required RideReportModel report});
@@ -39,9 +38,9 @@ abstract class RideRequestRepo {
   Future<Either<Failure, bool>> checkUpdatePaymentMethodAvailability();
   Future<Either<Failure, bool>> updatePaymentMethod(
       {required int paymentMethodId});
-  Future<Either<Failure, bool>> rateTheDriver(
-      {required ReviewModel review});
+  Future<Either<Failure, bool>> rateTheDriver({required ReviewModel review});
   Future<Either<Failure, ExpectedPriceModel>> getExpectedPrice(
       {required ExpectedPriceParams params});
-  Future<Either<Failure, List<CarTypeModel>>> getCarTypes({required String subCategoryId});
+  Future<Either<Failure, List<CarTypeModel>>> getCarTypes(
+      {required String subCategoryId});
 }

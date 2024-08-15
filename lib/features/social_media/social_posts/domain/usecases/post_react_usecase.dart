@@ -1,5 +1,3 @@
-
-
 import 'package:dartz/dartz.dart';
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
@@ -14,13 +12,11 @@ class PostReactUseCase extends UseCase<bool, PostReactParams> {
   }
 }
 
-
-
 class PostReactParams {
   final String postId;
   final String react;
   PostReactParams({
-    required this.postId, 
+    required this.postId,
     required this.react,
   });
   Map<String, dynamic> toJson() => {

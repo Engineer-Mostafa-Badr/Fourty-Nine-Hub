@@ -12,13 +12,15 @@ import '../../domain/repositories/rider_register_repo.dart';
 
 class RiderRegisterRepoImpl extends RiderRegisterRepo {
   @override
-  Future<Either<Failure, List<CarTypeModel>>> getCarTypes({required String subCategory}) {
+  Future<Either<Failure, List<CarTypeModel>>> getCarTypes(
+      {required String subCategory}) {
     // TODO: implement getCarTypes
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, List<SubCategoryModel>>> getSubCategories({required String mainCategory}) {
+  Future<Either<Failure, List<SubCategoryModel>>> getSubCategories(
+      {required String mainCategory}) {
     // TODO: implement getSubCategories
     throw UnimplementedError();
   }
@@ -28,5 +30,4 @@ class RiderRegisterRepoImpl extends RiderRegisterRepo {
     // TODO: implement postRiderInfo
     throw UnimplementedError();
   }
-
 }

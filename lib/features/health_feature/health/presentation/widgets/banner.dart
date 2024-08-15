@@ -33,7 +33,9 @@ class HealthBanner extends StatelessWidget {
                 Icons.favorite_border,
                 color: AppColors.SECONDARY_COLOR,
               ),
-              const Sizer(height: 20,),
+              const Sizer(
+                height: 20,
+              ),
               Text(
                 '${9999.toShortScale} ${Labels.ads}',
                 style: Styles.mediumText(),

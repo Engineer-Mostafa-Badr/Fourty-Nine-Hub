@@ -40,7 +40,8 @@ class CreatePostView extends StatelessWidget {
           appBar: BackAppBar(label: 'Create Post', actions: [
             TextButton(
                 child: const Label(text: 'Post'),
-                onPressed: () => controller.createPost(context: context, type: social)),
+                onPressed: () =>
+                    controller.createPost(context: context, type: social)),
           ]),
           body: Column(
             children: [
@@ -82,9 +83,10 @@ class CreatePostView extends StatelessWidget {
           child: TextField(
             maxLines: 4,
             maxLength: 150,
-            onChanged: (c){
+            onChanged: (c) {
               if (c.length == 150) {
-                showErrorMessage(context, "You can't type more than 150 character");
+                showErrorMessage(
+                    context, "You can't type more than 150 character");
               }
             },
             controller:
@@ -100,7 +102,9 @@ class CreatePostView extends StatelessWidget {
       return Container(
         width: double.infinity,
         padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(color: state.backColor,),
+        decoration: BoxDecoration(
+          color: state.backColor,
+        ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(25.0),
           child: Image.file(
@@ -197,42 +201,43 @@ class CreatePostView extends StatelessWidget {
                 color: Colors.orangeAccent,
                 size: 30,
               )),
-        if (social != 'twitter')IconButton(
-            onPressed: () async {
-              final res =
-                  await CustomVerticalSheetItem.normal<PrivacyStatus>(context, [
-                CustomSheetModel(
-                  text: "Public",
-                  value: PrivacyStatus.public,
-                  iconData: Icons.language,
-                ),
-                CustomSheetModel(
-                  text: "Friends",
-                  value: PrivacyStatus.friends,
-                  iconData: Icons.family_restroom,
-                ),
-                CustomSheetModel(
-                  text: "Followers",
-                  value: PrivacyStatus.followers,
-                  iconData: Icons.accessibility_sharp,
-                ),
-                CustomSheetModel(
-                  text: "Friends / Followers",
-                  value: PrivacyStatus.friendsAndFollowers,
-                  iconData: Icons.supervised_user_circle_outlined,
-                ),
-                CustomSheetModel(
-                  text: "Only Me",
-                  value: PrivacyStatus.onlyMe,
-                  iconData: Icons.lock,
-                ),
-              ]);
-            },
-            icon: const Icon(
-              Icons.privacy_tip,
-              color: Colors.grey,
-              size: 30,
-            )),
+        if (social != 'twitter')
+          IconButton(
+              onPressed: () async {
+                final res = await CustomVerticalSheetItem.normal<PrivacyStatus>(
+                    context, [
+                  CustomSheetModel(
+                    text: "Public",
+                    value: PrivacyStatus.public,
+                    iconData: Icons.language,
+                  ),
+                  CustomSheetModel(
+                    text: "Friends",
+                    value: PrivacyStatus.friends,
+                    iconData: Icons.family_restroom,
+                  ),
+                  CustomSheetModel(
+                    text: "Followers",
+                    value: PrivacyStatus.followers,
+                    iconData: Icons.accessibility_sharp,
+                  ),
+                  CustomSheetModel(
+                    text: "Friends / Followers",
+                    value: PrivacyStatus.friendsAndFollowers,
+                    iconData: Icons.supervised_user_circle_outlined,
+                  ),
+                  CustomSheetModel(
+                    text: "Only Me",
+                    value: PrivacyStatus.onlyMe,
+                    iconData: Icons.lock,
+                  ),
+                ]);
+              },
+              icon: const Icon(
+                Icons.privacy_tip,
+                color: Colors.grey,
+                size: 30,
+              )),
       ]);
     });
   }

@@ -25,9 +25,16 @@ class TwitterCommentReplies extends StatefulWidget {
   final Function(TwitterCommentReplyParams) onAddReply;
   final Function(TwitterReportParams) onReport;
   final UserEntity userData;
-  const TwitterCommentReplies(
-      {super.key, required this.replies, required this.onReplyReact, required this.onAddReply, required this.commentId, required this.postId, required this.onReport, required this.userData,
-      });
+  const TwitterCommentReplies({
+    super.key,
+    required this.replies,
+    required this.onReplyReact,
+    required this.onAddReply,
+    required this.commentId,
+    required this.postId,
+    required this.onReport,
+    required this.userData,
+  });
 
   @override
   State<TwitterCommentReplies> createState() => _TwitterCommentRepliesState();
@@ -51,74 +58,90 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
         centerTitle: true,
       ),
       body: BlocProvider<TwitterCubit>(
-        create: (_)=>serviceLocator(),
-        child: BlocBuilder<TwitterCubit,TwitterState>(
-          builder: (context,state) {
-            final controller = context.read<TwitterCubit>();
-            return Column(
-              children: [
-                Expanded(
-                  child: ListView.separated(
-                      itemBuilder: (context, index) => _buildCommentCard(
+        create: (_) => serviceLocator(),
+        child:
+            BlocBuilder<TwitterCubit, TwitterState>(builder: (context, state) {
+          final controller = context.read<TwitterCubit>();
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.separated(
+                    itemBuilder: (context, index) => _buildCommentCard(
                           reply: widget.replies[index],
-                          ),
-                      separatorBuilder: (context, index) => const Sizer(),
-                      itemCount: widget.replies.length),
-                ),
-                Container(
-                    height: kToolbarHeight,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                    ),
-                    child: Row(
-                      children: [
-                        const ProfileImage(accountId: 0),
-                        const Sizer(),
-                        Expanded(
-                            child: FormTextField(
-                                hint: 'Type your reply ....',
-                                height: kToolbarHeight * .7,
-                                action: (v) {
-                                  setState(() {});
-                                },
-                                controller: replyTextController)),
-                        const Sizer(),
-                        if (replyTextController.text.isNotEmpty)
-                          IconAppButton(
-                              icon: Icons.send,
-                              isCircle: true,
-                              onPressed: () async{
-                                TwitterCommentReplyEntity data = await controller.onCommentReply(
-                                  params:TwitterCommentReplyParams(postId: widget.postId,reply: widget.commentId,content: replyTextController.text),
-                                );
-                                print("state.newReply?.id${state.newReply?.id}");
-                                widget.replies.insert(
-                                    0,
-                                    TwitterCommentReplyModel(
-                                        id: data.id,
-                                        content: replyTextController.text,
-                                        post: widget.postId,
-                                        createdAt: data.createdAt,
-                                        user: TwitterUserEntity(id: widget.userData.id, firstName: widget.userData.firstName, lastName: widget.userData.lastName, createdAt: DateTime.now(), image: widget.userData.profilePicture??'', email: widget.userData.email??'', isDocumented: false),
-                                        love: data.love, isReact: data.isReact, image: data.image));
-                                replyTextController.clear();
-                                print(widget.replies.length);
+                        ),
+                    separatorBuilder: (context, index) => const Sizer(),
+                    itemCount: widget.replies.length),
+              ),
+              Container(
+                  height: kToolbarHeight,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  child: Row(
+                    children: [
+                      const ProfileImage(accountId: 0),
+                      const Sizer(),
+                      Expanded(
+                          child: FormTextField(
+                              hint: 'Type your reply ....',
+                              height: kToolbarHeight * .7,
+                              action: (v) {
                                 setState(() {});
                               },
-                          )
-                      ],
-                    )),
-              ],
-            );
-          }
-        ),
+                              controller: replyTextController)),
+                      const Sizer(),
+                      if (replyTextController.text.isNotEmpty)
+                        IconAppButton(
+                          icon: Icons.send,
+                          isCircle: true,
+                          onPressed: () async {
+                            TwitterCommentReplyEntity data =
+                                await controller.onCommentReply(
+                              params: TwitterCommentReplyParams(
+                                  postId: widget.postId,
+                                  reply: widget.commentId,
+                                  content: replyTextController.text),
+                            );
+                            print("state.newReply?.id${state.newReply?.id}");
+                            widget.replies.insert(
+                                0,
+                                TwitterCommentReplyModel(
+                                    id: data.id,
+                                    content: replyTextController.text,
+                                    post: widget.postId,
+                                    createdAt: data.createdAt,
+                                    user: TwitterUserEntity(
+                                        id: widget.userData.id,
+                                        firstName: widget.userData.firstName,
+                                        lastName: widget.userData.lastName,
+                                        createdAt: DateTime.now(),
+                                        image: widget.userData.profilePicture ??
+                                            '',
+                                        email: widget.userData.email ?? '',
+                                        isDocumented: false),
+                                    love: data.love,
+                                    isReact: data.isReact,
+                                    image: data.image));
+                            replyTextController.clear();
+                            print(widget.replies.length);
+                            setState(() {});
+                          },
+                        )
+                    ],
+                  )),
+            ],
+          );
+        }),
       ),
     );
   }
 
   void onReplyAdded() async {
     var newReply = await widget.onAddReply(
-      TwitterCommentReplyParams(postId: widget.postId,reply: widget.commentId,content: replyTextController.text),
+      TwitterCommentReplyParams(
+          postId: widget.postId,
+          reply: widget.commentId,
+          content: replyTextController.text),
     );
     widget.replies.insert(
         0,
@@ -129,27 +152,30 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
             createdAt: DateTime.now(),
             user: '',
             // image: '',
-            love: [], isReact: false, image: ''));
+            love: [],
+            isReact: false,
+            image: ''));
     replyTextController.clear();
-    setState(() {
-
-    });
+    setState(() {});
     replyTextController.clear();
     setState(() {});
   }
 
-  Widget _buildCommentCard(
-      {required TwitterCommentReplyEntity reply}) {
+  Widget _buildCommentCard({required TwitterCommentReplyEntity reply}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TwitterReplyCard(reply: reply, onReplyReact: (String id) {
-          widget.onReplyReact(id);
-          reply.isReact=!reply.isReact!;
-        }, onReport: (TwitterReportParams params) {
-          widget.onReport(params);
-        },),
-       ],
+        TwitterReplyCard(
+          reply: reply,
+          onReplyReact: (String id) {
+            widget.onReplyReact(id);
+            reply.isReact = !reply.isReact!;
+          },
+          onReport: (TwitterReportParams params) {
+            widget.onReport(params);
+          },
+        ),
+      ],
     );
   }
 }

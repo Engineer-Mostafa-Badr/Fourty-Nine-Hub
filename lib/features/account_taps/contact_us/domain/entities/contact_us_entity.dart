@@ -6,8 +6,5 @@ class ContactUsEntity {
   final String content;
   final String phone;
   ContactUsEntity(
-      { this.id,
-       this.user,
-      required this.content,
-      required this.phone});
+      {this.id, this.user, required this.content, required this.phone});
 }

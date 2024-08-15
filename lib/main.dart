@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fourtyninehub/core/service/cache_service.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/liveview/gifts/gift_manager.dart';
@@ -17,6 +19,8 @@ import 'service_locator/tinder_service_locator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // CacheService cacheService = CacheServiceImpl();
+  await CacheServiceImpl.init();
   await DI.execute();
   //to cache gift items
   ZegoGiftManager().cache.cache(giftItemList);
@@ -37,7 +41,10 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => serviceLocator<UserCubit>(),
-        ),       
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<GetWalletCubit>(),
+        ),
         BlocProvider(
           create: (context) => serviceLocator<RiderequestCubit>(),
         ),
@@ -48,7 +55,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => serviceLocator<CreateAdCubit>(),
         ),
-
       ],
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,

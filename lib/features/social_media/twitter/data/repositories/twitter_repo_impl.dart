@@ -19,12 +19,14 @@ class TwitterRepoImpl implements TwitterRepo {
   final TwitterRemoteDataSource _remoteDataSource;
   TwitterRepoImpl(this._remoteDataSource);
   @override
-  Future<Either<Failure, List<TwitterPostEntity>>> getFeed({required TwitterFeedParams params}) {
+  Future<Either<Failure, List<TwitterPostEntity>>> getFeed(
+      {required TwitterFeedParams params}) {
     return _remoteDataSource.getFeed(params: params);
   }
 
   @override
-  Future<Either<Failure, TwitterPostEntity>> getTwitterPost({required String postId}) {
+  Future<Either<Failure, TwitterPostEntity>> getTwitterPost(
+      {required String postId}) {
     return _remoteDataSource.getTwitterPost(postId: postId);
   }
 
@@ -35,18 +37,20 @@ class TwitterRepoImpl implements TwitterRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> reactOnPost({required TwitterPostReactParams params}) {
+  Future<Either<Failure, bool>> reactOnPost(
+      {required TwitterPostReactParams params}) {
     return _remoteDataSource.reactOnPost(params: params);
   }
 
   @override
-  Future<Either<Failure, bool>> reactOnComment({required TwitterCommentReactParams params}) {
+  Future<Either<Failure, bool>> reactOnComment(
+      {required TwitterCommentReactParams params}) {
     return _remoteDataSource.reactOnComment(params: params);
   }
 
   @override
   Future<Either<Failure, bool>> sharePost({required String postId}) {
-    return _remoteDataSource.sharePost( params: postId);
+    return _remoteDataSource.sharePost(params: postId);
   }
 
   @override
@@ -67,7 +71,6 @@ class TwitterRepoImpl implements TwitterRepo {
     return _remoteDataSource.getPostComments(postId: postId);
   }
 
-
   @override
   Future<Either<Failure, bool>> deletePost({required String postId}) {
     return _remoteDataSource.deletePost(postId: postId);
@@ -79,22 +82,20 @@ class TwitterRepoImpl implements TwitterRepo {
   }
 
   @override
-  Future<Either<Failure, List<TwitterCommentReplyEntity>>> getCommentReplies({required String commentId}) {
+  Future<Either<Failure, List<TwitterCommentReplyEntity>>> getCommentReplies(
+      {required String commentId}) {
     return _remoteDataSource.getCommentReplies(commentId: commentId);
   }
 
   @override
-  Future<Either<Failure, bool>> addReport({required TwitterReportParams params}) {
+  Future<Either<Failure, bool>> addReport(
+      {required TwitterReportParams params}) {
     return _remoteDataSource.addReport(params: params);
   }
 
   @override
-  Future<Either<Failure, bool>> requestDocument({required TwitterDocumentationParams params}) {
+  Future<Either<Failure, bool>> requestDocument(
+      {required TwitterDocumentationParams params}) {
     return _remoteDataSource.requestDocument(params: params);
-
   }
-
-
-
-
 }
