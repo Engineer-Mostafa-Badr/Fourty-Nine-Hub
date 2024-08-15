@@ -1,18 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_nearby_restaurants_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
-
 import '../../../../../core/enums/main_services_enum.dart';
-
-import '../../data/models/restaurant_model.dart';
-
 import '../../domain/entities/restaurant_entity.dart';
-import '../../domain/usecases/get_nearby_restaurants_usecase.dart';
 import '../../domain/usecases/get_trending_restaurants_usecase.dart';
-import '../../domain/usecases/getsubcategory_restaurants_usecase.dart';
 
 part 'restaurants_list_state.dart';
 
@@ -30,8 +25,6 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
   final service = MainServicesEnum.food;
 
   void loadData() async {
-    // await getNearByRestaurants();
-    // await getTrendingRestaurants();
     await getSubCategories();
   }
 

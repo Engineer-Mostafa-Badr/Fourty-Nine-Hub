@@ -1,7 +1,13 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/CarouselSlider.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/meal_baner.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/common/dashboard_banner.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
@@ -27,32 +33,75 @@ class RestaurantsListsView extends StatelessWidget {
                   child: CircularProgressIndicator.adaptive(),
                 );
               }
-              return ListView(
+              return Stack(
                 children: [
-                  if (state.categories?.isNotEmpty ?? false)
-                    _buildOffersWidget(),
-                  if (state.trendingRestaurants?.isNotEmpty ?? false)
-                    Label(
-                        text: 'Restaurants you know',
-                        style: Styles.headerText()),
-                  if (state.trendingRestaurants?.isNotEmpty ?? false)
-                    const Sizer(),
-                  if (state.trendingRestaurants?.isNotEmpty ?? false)
-                    _buildHorizontalRestaurants(),
-                  const Sizer(),
-                  const DashboardBanner(
-                      subTitle:
-                          'New Bookings are waiting you, go to doctor dashboard and explore more!',
-                      title: 'Restaurant Dashboard\n',
-                      route: Routes.RestaurantDashboard),
-                  const Sizer(),
-                  const Sizer(),
-                  if (state.nearByRestaurants?.isNotEmpty ?? false)
-                    Label(text: 'All Restaurants', style: Styles.headerText()),
-                  if (state.nearByRestaurants?.isNotEmpty ?? false)
-                    const Sizer(),
-                  if (state.nearByRestaurants?.isNotEmpty ?? false)
-                    _buildVerticalRestaurants()
+                  ListView(
+                    children: [
+                      const MealBanner(),
+                      const Sizer(),
+                      const DashboardBanner(
+                          title: '${Labels.restaurantDashboard}\n',
+                          subTitle:
+                              'New Bookings are waiting you, go to doctor dashboard and explore more!',
+                          route: Routes.RestaurantDashboard),
+                      const Sizer(),
+
+                      /// slider
+                      CarouselSlider.builder(
+                        itemCount: 3,
+                        itemBuilder: (context, index, realIndex) {
+                          return Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal:
+                                    MediaQuery.of(context).size.width * 0.03),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          );
+                        },
+                        options: CarouselOptions(
+                          height: MediaQuery.of(context).size.height * 0.13,
+                          autoPlay: true,
+                        ),
+                      ),
+                      const Sizer(),
+                      if (state.categories?.isNotEmpty ?? false)
+                        _buildOffersWidget(),
+                      if (state.trendingRestaurants?.isNotEmpty ?? false)
+                        Label(
+                            text: 'Restaurants you know',
+                            style: Styles.headerText()),
+                      if (state.trendingRestaurants?.isNotEmpty ?? false)
+                        const Sizer(),
+                      if (state.trendingRestaurants?.isNotEmpty ?? false)
+                        _buildHorizontalRestaurants(),
+                      const Sizer(),
+                      const Sizer(),
+                      if (state.nearByRestaurants?.isNotEmpty ?? false)
+                        Label(
+                            text: 'All Restaurants',
+                            style: Styles.headerText()),
+                      if (state.nearByRestaurants?.isNotEmpty ?? false)
+                        const Sizer(),
+                      if (state.nearByRestaurants?.isNotEmpty ?? false)
+                        _buildVerticalRestaurants(),
+                    ],
+                  ),
+                  Positioned(
+                    bottom: 10,
+                    right: 10,
+                    child: FloatingActionButton(
+                      tooltip: Labels.resturants,
+                      backgroundColor: AppColors.PRIMARY_COLOR,
+                      onPressed: () {},
+                      child: Text(
+                        "12",
+                        style: Styles.mediumText(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  )
                 ],
               );
             },

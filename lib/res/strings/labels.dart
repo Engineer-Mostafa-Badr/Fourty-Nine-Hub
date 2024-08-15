@@ -67,9 +67,11 @@ abstract class Labels {
   static const giftWallet = 'Gift';
   static const adDetails = 'AD Details';
   static const health = 'Health';
+  static const meals = 'Meals';
   static const ads = 'Ads';
   static const register = 'Register';
   static const doctorDashboard = 'Doctor Dashboard';
+  static const restaurantDashboard = 'Restaurant Dashboard';
   static const doctorDashboardBannerDiscription =
       'New Bookings are waiting you, go to doctor dashboard and explore more!';
   static const homeVist = 'Home Vist';
@@ -130,6 +132,7 @@ abstract class Labels {
   static const todayAppointments = 'Today Appointments';
   static const unhandledAppointments = 'Unhandled Appointments';
   static const accept = 'Accept';
+  static const resturants = "resturants";
   static const reject = 'Reject';
   static const editProfile = 'Edit Profile';
   static const update = 'Update';
