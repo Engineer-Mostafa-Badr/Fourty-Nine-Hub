@@ -389,6 +389,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextAppButton(
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor
+                    ),
                       label: post.user.firstName,
                       onPressed: () =>
                           () => context.push(Routes.OTHERSACCOUNT)),
@@ -449,6 +452,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextAppButton(
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor
+                      ),
                       label: post.user.firstName,
                       onPressed: () =>
                           () => context.push(Routes.OTHERSACCOUNT)),
@@ -603,10 +609,10 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         children: [
           Icon(
             icon,
-            color: Colors.grey,
+            color: AppColors.GREY_DARK_COLOR,
           ),
           const Sizer(),
-          Label(text: label, style: Styles.mediumText(color: Colors.grey))
+          Label(text: label, style: Styles.mediumText(color: AppColors.GREY_DARK_COLOR))
         ],
       );
     } else {
@@ -617,10 +623,10 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           children: [
             Icon(
               icon,
-              color: Colors.grey,
+              color:AppColors.GREY_DARK_COLOR,
             ),
             const Sizer(),
-            Label(text: label, style: Styles.mediumText(color: Colors.grey))
+            Label(text: label, style: Styles.mediumText(color: AppColors.GREY_DARK_COLOR))
           ],
         ),
       );

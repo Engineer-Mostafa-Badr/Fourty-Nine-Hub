@@ -72,6 +72,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
+                color: AppColors.AUTH_CONTAINER_COLOR
               ),
               child: InkWell(
                 borderRadius: BorderRadius.circular(20),
@@ -81,10 +82,11 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     const Icon(
                       Icons.search,
                       size: 16,
+                      color: AppColors.QUANTITY_COLOR,
                     ),
                     const SizedBox(width: 5),
                     Expanded(
-                      child: Label(text: 'Search', style: Styles.mediumText()),
+                      child: Label(text: 'Search', style: Styles.mediumText(color: AppColors.QUANTITY_COLOR)),
                     ),
                   ],
                 ),

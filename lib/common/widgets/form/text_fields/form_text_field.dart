@@ -69,7 +69,7 @@ class _FormTextFieldState extends State<FormTextField> {
                   ? (widget.height ?? kToolbarHeight) * 1.5
                   : widget.height ?? kToolbarHeight,
           child: TextFormField(
-            style: Styles.mediumText(),
+            style: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
             textAlignVertical: widget.textAlignVertical,
             maxLines: widget.maxLines ?? 1,
             onFieldSubmitted: (v) {

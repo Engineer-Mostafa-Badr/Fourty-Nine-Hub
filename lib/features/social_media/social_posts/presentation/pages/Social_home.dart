@@ -71,22 +71,24 @@ class _SocialHomeViewState extends State<SocialHomeView> with SingleTickerProvid
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
               builder: (context, state) {
             return context.read<UserCubit>().isLoggedIn
-                ? NestedAppbar(appBars: [
-                    const SliverAppBar(
-                      backgroundColor: Colors.white,
+                ? NestedAppbar(
+                appBars: [
+                     SliverAppBar(
+                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                       automaticallyImplyLeading: false,
                       floating: true,
                       // pinned: true,
-                      flexibleSpace: CreatePostBanner(),
+                      flexibleSpace: const CreatePostBanner(),
                     ),
                     SliverAppBar(
-                      backgroundColor: Colors.white,
+                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                       automaticallyImplyLeading: false,
                       // floating: true,
                       pinned: true,
                       flexibleSpace: _buildTabBar(),
                     )
-                  ], body: _buildBody())
+                  ],
+                body: _buildBody())
                 : Center(
                     child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -95,7 +97,7 @@ class _SocialHomeViewState extends State<SocialHomeView> with SingleTickerProvid
                           onTap: () => context.push(Routes.LOGIN),
                           child: Label(
                               text: 'Login',
-                              style: Styles.headerText(color: Colors.blue))),
+                              style: Styles.headerText())),
                       Label(
                           text: ', To continue in using chat services',
                           style: Styles.headerText()),
@@ -120,7 +122,7 @@ class _SocialHomeViewState extends State<SocialHomeView> with SingleTickerProvid
             decoration: i==0?const BoxDecoration(
               border: Border(bottom: BorderSide(color: Colors.blue,width: 2))
             ):null,
-              child: Icon(i==0?Icons.home:Icons.person,color: i==0?Colors.blue:AppColors.DARK_GRAY_COLOR,)
+              child: Icon(i==0?Icons.home:Icons.person,color: i==0?Colors.blue:Theme.of(context).primaryColor,)
           ),
         ),
       ),
