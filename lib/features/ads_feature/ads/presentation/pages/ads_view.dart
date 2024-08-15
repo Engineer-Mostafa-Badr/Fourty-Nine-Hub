@@ -50,7 +50,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
       body: Column(
         children: [
           const Sizer(),
-          MainCategoryBanner(category: widget.params.mainCategory),
+          MainCategoryBanner(category: widget.params.mainCategory,color: AppColors.QUANTITY_COLOR,),
           const Sizer(),
           Label(
             text: widget.params.subCategory.name,
@@ -60,10 +60,10 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
           TabBar(
             controller: _tabController,
             labelColor: AppColors.SECONDARY_COLOR,
-            unselectedLabelColor: AppColors.PRIMARY_COLOR,
+            unselectedLabelColor: Theme.of(context).primaryColor,
             indicatorColor: AppColors.SECONDARY_COLOR,
             indicatorSize: TabBarIndicatorSize.tab,
-            tabs:   [
+            tabs:   const [
               Tab(text: 'Service Provider'),
               Tab(text: 'User'),
             ],

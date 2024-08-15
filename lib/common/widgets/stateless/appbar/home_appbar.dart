@@ -72,7 +72,6 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Colors.grey
               ),
               child: InkWell(
                 borderRadius: BorderRadius.circular(20),

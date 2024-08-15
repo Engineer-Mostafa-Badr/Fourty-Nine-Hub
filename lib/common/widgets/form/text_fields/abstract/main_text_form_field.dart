@@ -114,9 +114,10 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
           contentPadding:
               widget.contentPadding ?? const EdgeInsets.fromLTRB(16, 0, 16, 0),
           hintText: widget.hintText,
-          hintStyle: const TextStyle(),
+          hintStyle:  const TextStyle(color: AppColors.QUANTITY_COLOR),
           suffixIcon: widget.suffixIcon,
           prefixIcon: widget.prefixIcon,
+          prefixIconColor: AppColors.QUANTITY_COLOR,
           enabledBorder: OutlineInputBorder(
             borderRadius:
                 const BorderRadius.all(Radius.circular(UIConst.radius)),

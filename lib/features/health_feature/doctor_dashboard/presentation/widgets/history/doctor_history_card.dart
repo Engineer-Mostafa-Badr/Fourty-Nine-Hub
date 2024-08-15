@@ -27,7 +27,7 @@ class DoctorHistoryCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +39,6 @@ class DoctorHistoryCard extends StatelessWidget {
                 child: Label(
                   text: title,
                   style: Styles.headerText(
-                    color: AppColors.PRIMARY_COLOR,
                   ),
                 ),
               ),
@@ -49,7 +48,6 @@ class DoctorHistoryCard extends StatelessWidget {
               Label(
                 text: (totalValue).toShortScale,
                 style: Styles.headerText(
-                  color: AppColors.SECONDARY_COLOR,
                 ),
               ),
             ],

@@ -24,7 +24,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.white,
+            color: Theme.of(context).primaryColor,
           ),
           child: Row(
             children: [
@@ -109,7 +109,7 @@ class _Item extends StatelessWidget {
           ),
           Label(
             text: label,
-            style: Styles.mediumText(),
+            style: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
           ),
         ],
       ),

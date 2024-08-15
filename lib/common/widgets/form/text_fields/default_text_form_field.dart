@@ -26,6 +26,7 @@ class DefaultTextFormField extends MainTextFormField {
     final bool? obscureText,
     final int? maxLength,
     final Widget? suffixIcon,
+    final Color? hintColor,
     prefixIcon,
     final String? Function(String?)? validator,
     final ValueChanged<String>? onChanged,
@@ -38,6 +39,7 @@ class DefaultTextFormField extends MainTextFormField {
           validator:
               validator ?? (isRequired ? Validator().validateEmptyField : null),
           hintText: hint + (isRequired ? '*' : ''),
+          hintColor: hintColor,
           keyboardType: keyboardType,
           margin: margin,
           onTap: onTap,
