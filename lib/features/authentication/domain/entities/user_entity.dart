@@ -10,12 +10,16 @@ class UserEntity extends Equatable {
   final int? friendsCount;
   final int? followersCount;
   final int? followingCount;
+  final bool? isRider;
+  final bool? isDoctor;
+  final bool? isRestaurant;
+  final bool? isLoading;
+  final bool? isDocument;
 
   String get fullName => '$firstName $lastName';
-  bool isMyAccount(String anotherId) {
+  bool  isMyAccount(String anotherId){
     return id == anotherId;
-  }
-
+  } 
   const UserEntity({
     required this.id,
     required this.firstName,
@@ -26,6 +30,11 @@ class UserEntity extends Equatable {
     required this.friendsCount,
     required this.followersCount,
     required this.followingCount,
+    this.isRider=false,
+    this.isDoctor=false,
+    this.isRestaurant=false,
+    this.isLoading=false,
+    this.isDocument=false,
   });
 
   @override

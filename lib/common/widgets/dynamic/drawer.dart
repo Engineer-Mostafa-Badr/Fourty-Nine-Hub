@@ -422,6 +422,7 @@ class DrawerWidget extends StatelessWidget {
                   SizedBox(
                     width: 5,
                   ),
+                  if(user?.isDocument??false)
                   Icon(
                     Icons.verified,
                     color: AppColors.PRIMARY_COLOR,
@@ -429,7 +430,7 @@ class DrawerWidget extends StatelessWidget {
                 ],
               ),
               Label(
-                text: 'Driver',
+                text: getUserType(user),
                 style: Styles.mediumText(),
               ),
               InkWell(
@@ -467,5 +468,21 @@ class DrawerWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  getUserType(
+    UserEntity? user,
+  ) {
+    if (user?.isDoctor ?? false) {
+      return "Doctor";
+    } else if (user?.isLoading ?? false) {
+      return "Loading";
+    } else if (user?.isRestaurant ?? false) {
+      return "Restaurant";
+    } else if (user?.isRider ?? false) {
+      return "Rider";
+    } else {
+      return "";
+    }
   }
 }
