@@ -1,0 +1,25 @@
+{
+    "status":true,
+    "message":null,
+    "data":{
+        "cancel_reasons":[
+            {
+                "id":1,
+                "name":"Driver is late"
+            },
+            {
+                "id":2,
+                "name":"Changed My Mind"
+            },
+            {
+                "id":3,
+                "name":"Changed Directionality"   
+            },
+
+            {
+                "id":4,
+                "name":"Bad Experience"   
+            }
+        ]
+    }
+}

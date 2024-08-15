@@ -55,51 +55,46 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       drawer: const DrawerWidget(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const AnnounceWidget(),
-                  const AdsTextBanner(),
-                  const WalletWidget(),
-                  const GoogleAddsBanner(),
-                  const Sizer(),
-                  _buildMazadatWidget(),
-                  const Sizer(),
-                  _buildMainCategoriesViews(),
-                  const Sizer(),
-                ],
-              ),
-            ),
-            BlocBuilder<MainCategoriesCubit,
-                BasicState<List<MainCategoryEntity>>>(
-              builder: (context, state) {
-                if (state.isSuccess && state.data != null) {
-                  return SliverList.separated(
-                    itemCount: state.data?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          context.push(Routes.SUBCATEGORIES,
-                              extra: state.data![index]);
-                        },
-                        child: MainCategoryBanner(category: state.data![index]),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const Sizer(),
-                  );
-                } else {
-                  return const SliverToBoxAdapter(child: SizedBox.shrink());
-                }
-              },
-            ),
-          ],
-        ),
+      body: ListView(
+                  padding : const EdgeInsets.symmetric(horizontal: 10),
+
+        children: [
+          const AnnounceWidget(),
+          // const AdsTextBanner(),
+          const WalletWidget(),
+          const Sizer(),
+          const GoogleAddsBanner(),
+          const Sizer(),
+          _buildMazadatWidget(),
+          const Sizer(),
+          _buildMainCategoriesViews(),
+          const Sizer(),
+          BlocBuilder<MainCategoriesCubit,
+              BasicState<List<MainCategoryEntity>>>(
+            builder: (context, state) {
+              if (state.isSuccess && state.data != null) {
+                return ListView.separated(
+                  itemCount: state.data?.length ?? 0,
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        context.push(Routes.SUBCATEGORIES,
+                            extra: state.data![index]);
+                      },
+                      child: MainCategoryBanner(category: state.data![index]),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Sizer(),
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          ),
+        ],
       ),
     );
   }
@@ -196,13 +191,12 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     children: [
                       Positioned.fill(
                         child: AppButton(
-                          color: Colors.white,
+                            color: Colors.white,
                             label: 'Auction',
                             style: const TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.bold,
-                              color: Colors.white
-                            ),
+                                color: Colors.white),
                             icon: Icons.group,
                             iconSize: 22,
                             onPressed: () => context.push(Routes.MAZADAT)),
@@ -244,10 +238,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   height: kToolbarHeight * .5,
                   label: 'Installments',
                   style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white
-                  ),
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                   icon: Icons.list,
                   iconSize: 22,
                   onPressed: () => context.push(Routes.INSTALLMENT)),
@@ -293,16 +286,15 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                       url: image,
                     ),
                     Container(
-                      color: Colors.black.withOpacity(0.3), // Darken the background
+                      color: Colors.black
+                          .withOpacity(0.3), // Darken the background
                     ),
                   ],
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 5
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Row(
                 children: [
                   Label(
@@ -324,7 +316,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                       ),
                       Label(
                         text: '1 Ads',
-                        style: Styles.mediumText(color: Colors.white, fontSize: 15),
+                        style: Styles.mediumText(
+                            color: Colors.white, fontSize: 15),
                       ),
                     ],
                   ),

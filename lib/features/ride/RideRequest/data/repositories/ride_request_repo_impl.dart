@@ -19,7 +19,7 @@ import '../../../../subcategories/data/models/sub_category_model.dart';
 import '../datasources/remote_data_source.dart';
 
 class RideRequestRepoImpl implements RideRequestRepo {
-  RideRemoteDataSource _remoteDataSource;
+  final RideRemoteDataSource _remoteDataSource;
   RideRequestRepoImpl(this._remoteDataSource);
   @override
   Future<Either<Failure, bool>> acceptRideOffer({required int offerId}) {
