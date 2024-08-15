@@ -127,7 +127,8 @@ class _TinderScreenState extends State<TinderScreen> {
     );
   }
 
-  Widget _buildSubCategoryList(TinderViewCubit tinderCubit, UserCubit userCubit) {
+  Widget _buildSubCategoryList(
+      TinderViewCubit tinderCubit, UserCubit userCubit) {
     return SizedBox(
       height: 200,
       child: ListView.separated(
@@ -206,20 +207,25 @@ class _PersonInfoWidgetState extends State<PersonInfoWidget> {
           children: [
             Row(
               children: [
-                _buildStatusBadge(tinderCubit.state.lastSeenModel?.data?.status),
+                _buildStatusBadge(
+                    tinderCubit.state.lastSeenModel?.data?.status),
                 const SizedBox(width: 10),
-                _buildNearbyBadge(tinderCubit.state.isUserNearby?.data?.isNearBy),
+                _buildNearbyBadge(
+                    tinderCubit.state.isUserNearby?.data?.isNearBy),
               ],
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
               title: Text(
-                capitalizeAndSplit('${cardUser.firstName} ${cardUser.lastName}'),
+                capitalizeAndSplit(
+                    '${cardUser.firstName} ${cardUser.lastName}'),
                 style: Styles.headerText(
-                    color: AppColors.PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                    color: AppColors.PRIMARY_COLOR,
+                    fontWeight: FontWeight.bold),
               ),
               subtitle: Text(
-                _getLastSeenText(tinderCubit.state.lastSeenModel?.data?.lastSeen),
+                _getLastSeenText(
+                    tinderCubit.state.lastSeenModel?.data?.lastSeen),
                 style: Styles.mediumText(
                     color: AppColors.PRIMARY_COLOR,
                     fontWeight: FontWeight.bold,
@@ -247,7 +253,9 @@ class _PersonInfoWidgetState extends State<PersonInfoWidget> {
   }
 
   String _getLastSeenText(String? lastSeen) {
-    return lastSeen != null ? "Last seen ${getTimeAgo(lastSeen)}" : "Last seen N/A";
+    return lastSeen != null
+        ? "Last seen ${getTimeAgo(lastSeen)}"
+        : "Last seen N/A";
   }
 }
 
@@ -284,7 +292,7 @@ class CardStackWidgetState extends State<CardStackWidget> {
 
   void _onScroll() {
     if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent &&
+            _scrollController.position.maxScrollExtent &&
         !_isLoadingMore) {
       _loadMore();
     }
@@ -352,11 +360,15 @@ class CardStackWidgetState extends State<CardStackWidget> {
     if (!isFrontCard) return const Offstage();
 
     return GestureDetector(
-      onPanStart: (details) => tinderCubit.updatePanStart(details.globalPosition),
+      onPanStart: (details) =>
+          tinderCubit.updatePanStart(details.globalPosition),
       onPanUpdate: (details) {
-        final position = details.globalPosition - tinderCubit.state.startDragOffset;
+        final position =
+            details.globalPosition - tinderCubit.state.startDragOffset;
         final rotation = position.dx /
-            (position.dy > tinderCubit.state.startDragOffset.dy - 180 ? 500 : -500);
+            (position.dy > tinderCubit.state.startDragOffset.dy - 180
+                ? 500
+                : -500);
         tinderCubit.updatePanUpdate(position, rotation);
       },
       onPanEnd: (details) {
@@ -411,8 +423,8 @@ class CardStackWidgetState extends State<CardStackWidget> {
   Widget _buildImage(UserData user, {required TinderViewCubit tinderCubit}) {
     final imageUrl = user.pictures.isNotEmpty
         ? user.pictures.reversed
-        .toList()[tinderCubit.state.currentStoryIndex]
-        .mediaKey
+            .toList()[tinderCubit.state.currentStoryIndex]
+            .mediaKey
         : UIConst.profilePlaceHolder;
 
     return Hero(
@@ -432,9 +444,9 @@ class CardStackWidgetState extends State<CardStackWidget> {
 
   Widget _buildGenderSwitch(
       {required BuildContext context,
-        required UserData user,
-        required TinderViewCubit tinderCubit,
-        required UserCubit userCubit}) {
+      required UserData user,
+      required TinderViewCubit tinderCubit,
+      required UserCubit userCubit}) {
     return Padding(
       padding: const EdgeInsets.only(right: 8, top: 25),
       child: Align(
@@ -470,7 +482,7 @@ class CardStackWidgetState extends State<CardStackWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: List.generate(
           user.pictures.length,
-              (dotIndex) => Expanded(
+          (dotIndex) => Expanded(
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 2.0),
               height: 4,
@@ -501,20 +513,20 @@ class CardStackWidgetState extends State<CardStackWidget> {
             _buildFloatingActionButton(
               context,
               Icons.person,
-                  () => context.push(Routes.OTHERSACCOUNT),
+              () => context.push(Routes.OTHERSACCOUNT),
               heroTag: 'personButton',
             ),
             _buildFloatingActionButton(
               context,
               Icons.chat,
-                  () => _showChatTypeAdvancedDialog(context),
+              () => _showChatTypeAdvancedDialog(context),
               color: AppColors.PRIMARY_COLOR,
               heroTag: 'chatButton',
             ),
             _buildFloatingActionButton(
               context,
               Icons.add_photo_alternate_outlined,
-                  () => _navigateToUserProfile(context, user,
+              () => _navigateToUserProfile(context, user,
                   tinderCubit: tinderCubit, userCubit: userCubit),
               color: Colors.red,
               heroTag: 'photoButton',
@@ -522,10 +534,9 @@ class CardStackWidgetState extends State<CardStackWidget> {
             _buildFloatingActionButton(
               context,
               Icons.card_giftcard,
-                  () {
+              () {
                 _showGiftBottomSheet22(context,
-                    tinderCubit: tinderCubit,
-                    userCubit: userCubit);
+                    tinderCubit: tinderCubit, userCubit: userCubit);
               },
               color: AppColors.ACCENT_COLOR,
               heroTag: 'giftButton',
@@ -533,7 +544,7 @@ class CardStackWidgetState extends State<CardStackWidget> {
             _buildFloatingActionButton(
               context,
               Icons.report,
-                  () => _showReportBottomSheet(context, user),
+              () => _showReportBottomSheet(context, user),
               color: Colors.red,
               heroTag: 'reportButton',
             ),
@@ -556,11 +567,11 @@ class CardStackWidgetState extends State<CardStackWidget> {
   }
 
   void _switchDisplayGender(
-      UserData user,
-      BuildContext context, {
-        required TinderViewCubit tinderCubit,
-        required UserCubit userCubit,
-      }) {
+    UserData user,
+    BuildContext context, {
+    required TinderViewCubit tinderCubit,
+    required UserCubit userCubit,
+  }) {
     tinderCubit.fetchUserData(
         gender: user.gender == 'female' ? 'female' : 'male',
         accessToken: userCubit.state.token!.accessToken);
@@ -580,8 +591,7 @@ class CardStackWidgetState extends State<CardStackWidget> {
 }
 
 void _showGiftBottomSheet22(BuildContext context,
-    {required TinderViewCubit tinderCubit,
-      required UserCubit userCubit}) {
+    {required TinderViewCubit tinderCubit, required UserCubit userCubit}) {
   closeAllBottomSheets(context);
 
   showModalBottomSheet(
@@ -592,8 +602,9 @@ void _showGiftBottomSheet22(BuildContext context,
       providers: [
         BlocProvider(create: (context) => GiftsCubit()),
         BlocProvider(create: (context) => TinderViewCubit()),
-        BlocProvider(create: (context) => UserCubit(serviceLocator(), serviceLocator(),
-            serviceLocator(), serviceLocator(), serviceLocator())),
+        BlocProvider(
+            create: (context) => UserCubit(serviceLocator(), serviceLocator(),
+                serviceLocator(), serviceLocator(), serviceLocator())),
       ],
       child: SizedBox(
         height: MediaQuery.of(context).size.height / 2,
@@ -652,7 +663,7 @@ Widget _buildRechargeButton() {
           side: const MaterialStatePropertyAll(BorderSide(width: 0)),
           iconColor: const MaterialStatePropertyAll(Colors.white),
           backgroundColor:
-          MaterialStatePropertyAll(Colors.black.withOpacity(0.8)),
+              MaterialStatePropertyAll(Colors.black.withOpacity(0.8)),
         ),
         onPressed: () {
           serviceLocator<SubscriptionController>()
@@ -741,25 +752,25 @@ void _showChatTypeAdvancedDialog(BuildContext context) {
 
 Widget _buildChatOptionCard(BuildContext context,
     {required IconData icon,
-      required String label,
-      required String route,
-      required String description}) {
+    required String label,
+    required String route,
+    required String description}) {
   return InkWell(
     onTap: () {
       Navigator.pop(context);
       label == "Incognito Chat"
           ? Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const ChatView(initialTabIndex: 6),
-        ),
-      )
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ChatView(initialTabIndex: 6),
+              ),
+            )
           : Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const ChatView(initialTabIndex: 0),
-        ),
-      );
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ChatView(initialTabIndex: 0),
+              ),
+            );
     },
     child: Column(
       children: [

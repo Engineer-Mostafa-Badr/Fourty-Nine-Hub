@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -324,10 +323,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildStatItem(
-              'Followers', userData.followersCount.toString()),
-          _buildStatItem(
-              'Following', userData.followingCount.toString()),
+          _buildStatItem('Followers', userData.followersCount.toString()),
+          _buildStatItem('Following', userData.followingCount.toString()),
           _buildStatItem('Friends', userData.friendsCount.toString()),
         ],
       ),
