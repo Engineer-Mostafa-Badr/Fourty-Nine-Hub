@@ -1,0 +1,22 @@
+{
+    "status":true,
+    "message":null, 
+    "data":{
+        "items":[
+        {
+            "id":1,
+            "amount":-300,
+            "type":"wallet",
+            "description":"Transfer to @ahmedzaky304 ",
+            "created_at":"2012-10-15T21:26:17Z"
+        },
+        {
+            "id":1,
+            "amount":150,
+            "type":"wallet",
+            "description":"Received from @jassermo ",
+            "created_at":"2012-10-15T21:26:17Z"
+        }
+        ]
+    }
+}

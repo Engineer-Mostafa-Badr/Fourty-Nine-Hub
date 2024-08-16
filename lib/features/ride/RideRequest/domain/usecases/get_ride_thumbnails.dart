@@ -11,6 +11,6 @@ class GetRideThumbnailsUseCase
 
   @override
   Future<Either<Failure, List<RideThumbnailEntity>>> call(NoParams params) {
-    throw 'Un implemented get ride thumbnail useCase';
+    return _repo.getThumbnails();
   }
 }

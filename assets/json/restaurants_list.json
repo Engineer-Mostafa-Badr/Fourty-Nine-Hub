@@ -1,0 +1,58 @@
+{
+    "status":true,
+    "message":null, 
+    "data":
+    {
+        "restaurants":[
+            {
+                "id":1,
+                "name":"The Bun",
+                "description":"Burgers, American pizza",
+                "image":"https://s3-eu-west-1.amazonaws.com/elmenusv5-stg/Normal/f0669071-6f0f-4990-a0c7-70d3303084d2.jpg",
+                "banner":"https://www.mowglistreetfood.com/wp-content/uploads/2023/01/Landing_image_Desktop.jpg",
+                "available":true,
+                "delivery_time":"30 mins",
+                "delivery_fee":15,
+                "rate":4.5,
+                "number_of_reviews":18,
+                "cuisine":{
+                    "id":1,
+                    "name":"African"
+                }
+            },
+    
+            {
+                "id":2,
+                "name":"Bazooka Fried Chicken",
+                "description":"fried chicken, sandwiches, chicken",
+                "banner":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTima1sE4i1DAcdIX9zAMWY8cMPgUt9uN2tQw&s",
+                "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSntbUlgCESAvWX4sZP6YOpF8IsDfu_V0XGBw&s",
+                "available":true,
+                "delivery_time":"41 mins",
+                "delivery_fee":20,
+                "rate":5.0,
+                "number_of_reviews":18,
+                "cuisine":{
+                    "id":2,
+                    "name":"Burgers"
+                }
+            },
+            {
+                "id":3,
+                "name":"Mazag",
+                "description":"Burger , pasta, sandwiches",
+                "banner":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdt_-XxgJHgj0iAOvs2aYbBtm10wkptuWMrA&s",
+                "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTx_6Iza_h3mZdp4l-Gix_fh_8p92RGChipA&s",
+                "available":true,
+                "delivery_time":"40 mins",
+                "delivery_fee":25,
+                "rate":5.0,
+                "number_of_reviews":18,
+                "cuisine":{
+                    "id":2,
+                    "name":"Burgers"
+                }
+            }
+        ]
+    }
+}

@@ -45,38 +45,33 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => serviceLocator<UserCubit>(),
         ),
-
-        BlocProvider(
-          create: (context) => serviceLocator<RiderequestCubit>(),
-        ),
-
-        BlocProvider(
-          create: (context) => serviceLocator<CreateShippingRequestCubit>(),
-        ),
-        // CreateAdCubit
-        BlocProvider(
-          create: (context) => serviceLocator<CreateAdCubit>(),
-        ),
-        // health
         // BlocProvider(
-        //   create: (context) => serviceLocator<DoctorsListCubit>(),
+        //   create: (context) => serviceLocator<RiderequestCubit>(),
         // ),
-        //to be reviewed
-        //  tinder
+        // BlocProvider(
+        //   create: (context) => serviceLocator<CreateShippingRequestCubit>(),
+        // ),
+        // // CreateAdCubit
+        // BlocProvider(
+        //   create: (context) => serviceLocator<CreateAdCubit>(),
+        // ),
+        // //  tinder to be reviewed
         BlocProvider(
           create: (context) => serviceLocator<ChatsCubit>(),
         ),
-        BlocProvider(
-          create: (context) => TinderViewCubit(),
-        ),
+        // BlocProvider(
+        //   create: (context) => TinderViewCubit(),
+        // ),
         BlocProvider(
           create: (context) => ThemeCubit(),
         ),
       ],
-      child: BlocBuilder<ThemeCubit,ThemeStates>(
+      child: BlocBuilder<ThemeCubit, ThemeStates>(
         builder: (BuildContext context, state) {
           return MaterialApp.router(
-            themeMode:context.read<ThemeCubit>().isDarkTheme? ThemeMode.dark:ThemeMode.light,
+            themeMode: context.read<ThemeCubit>().isDarkTheme
+                ? ThemeMode.dark
+                : ThemeMode.light,
             theme: lightTheme(),
             darkTheme: darkTheme(),
             title: '49',

@@ -25,6 +25,8 @@ abstract class Assets {
   static String walking = 'assets/images/walking.gif';
   static String image = 'assets/images/image.png';
   static String empty = 'assets/images/image.png';
+  static String threeDots = 'assets/images/three_dots.svg';
+  static String mobile = 'assets/images/mobile_icon.svg';
 
   // reactions
   static String like = 'assets/images/reactions/like.png';

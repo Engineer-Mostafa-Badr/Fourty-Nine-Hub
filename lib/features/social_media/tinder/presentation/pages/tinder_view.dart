@@ -32,16 +32,16 @@ class TinderView extends StatelessWidget {
         BlocProvider<ChatRoomCubit>(
           create: (_) => serviceLocator(),
         ),
-        BlocProvider(create: (context) => _createUserCubit()),
+        BlocProvider(create: (context) => context.read<UserCubit>()),
       ],
       child: const TinderScreen(),
     );
   }
 
-  UserCubit _createUserCubit() {
-    return UserCubit(serviceLocator(), serviceLocator(), serviceLocator(),
-        serviceLocator(), serviceLocator(), serviceLocator());
-  }
+  // UserCubit _createUserCubit() {
+  //   return UserCubit(serviceLocator(), serviceLocator(), serviceLocator(),
+  //       serviceLocator(), serviceLocator(), serviceLocator());
+  // }
 }
 
 class TinderScreen extends StatefulWidget {

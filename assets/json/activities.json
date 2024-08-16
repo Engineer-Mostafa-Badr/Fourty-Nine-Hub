@@ -1,0 +1,18 @@
+{
+    "status":true,
+    "message":null, 
+    "data":{
+        "items":[
+            {
+                "id":1,
+                "name":"Playing",
+                "image":"https://c8.alamy.com/comp/2FKJE4W/gamer-video-game-cartoon-emoji-emoticon-face-2FKJE4W.jpg"
+            },
+            {
+                "id":2,
+                "name":"Reading",
+                "image":"https://st2.depositphotos.com/1967477/6347/v/950/depositphotos_63470203-stock-illustration-happy-smiley-emoticon-cartoon-reading.jpg"
+            }
+        ]
+    }
+}

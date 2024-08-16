@@ -1,0 +1,28 @@
+{
+    "status":true,
+    "message":null,
+    "data":{
+        "sub_categories":[
+            {
+                "id":1,
+                "name":"ربع نقل",
+                "image":"https://static.vecteezy.com/system/resources/thumbnails/020/717/029/small/3d-minimal-products-delivery-parcels-transportation-goods-distribution-preparing-cargo-for-sending-a-delivery-truck-with-cardboxes-3d-rendering-illustration-png.png"
+            },
+            {
+                "id":2,
+                "name":"طلبات",
+                "image":"https://static.vecteezy.com/system/resources/thumbnails/020/717/029/small/3d-minimal-products-delivery-parcels-transportation-goods-distribution-preparing-cargo-for-sending-a-delivery-truck-with-cardboxes-3d-rendering-illustration-png.png"
+            },
+            {
+                "id":3,
+                "name":"اثاث",
+                "image":"https://static.vecteezy.com/system/resources/thumbnails/020/717/029/small/3d-minimal-products-delivery-parcels-transportation-goods-distribution-preparing-cargo-for-sending-a-delivery-truck-with-cardboxes-3d-rendering-illustration-png.png"
+            },
+            {
+                "id":4,
+                "name":"انقاذ",
+                "image":"https://static.vecteezy.com/system/resources/thumbnails/020/717/029/small/3d-minimal-products-delivery-parcels-transportation-goods-distribution-preparing-cargo-for-sending-a-delivery-truck-with-cardboxes-3d-rendering-illustration-png.png"
+            }
+        ]
+    }
+}

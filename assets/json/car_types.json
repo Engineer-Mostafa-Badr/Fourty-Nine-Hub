@@ -1,0 +1,32 @@
+{
+    "status":true,
+    "message":null, 
+    "data":{
+       "car_types":[
+          {
+              "id":1,
+              "brand":"Marcedes",
+              "model":"Marcedes",
+              "year":"2022",
+              "sub_category":1,
+              "image":"https://e7852c3a.rocketcdn.me/wp-content/uploads/2023/09/Mercedes-Benz-AMG-GLC-63s-2024-001.jpg"
+          },
+          {
+            "id":2,
+            "brand":"Tyota",
+            "model":"Tyota",
+            "year":"2022",
+            "sub_category":1,
+            "image":"https://global.toyota/pages/news/images/2021/08/02/1330/001.jpg"
+          },
+          {
+            "id":3,
+            "brand":"hatla",
+            "model":"hatla",
+            "sub_category":1,
+            "year":"2022",
+            "image":"https://media.hatla2eestatic.com/uploads/ncarmodel/11680/big-up_bb49b9e141b98ed027bb0244dec9ebef.jpg"
+          }
+       ]
+    }
+}

@@ -1,0 +1,247 @@
+{
+    "status":true,
+    "message":null,
+    "data":{
+        "orders":[
+            {
+                "id":1,
+                "address":{
+                    "id":1,
+                    "coordinates":[30.044504, 31.193388],
+                    "address":"13 شارع الشيخ صالح موسى، الدقي، قسم الدقي، محافظة الجيزة 11213",
+                    "street":"قسم الدقي",
+                    "flat":"13",
+                    "building":"8",
+                    "first_name":"Farouk",
+                    "last_name":"Shahin",
+                    "phone":"+201010727610"
+                },
+                "user":{
+                    "id":10,
+                    "name":"Ahmed Mohamed",
+                    "phone":"+201010727610",
+                    "type":"user",
+                    "ads_count":3,
+                    "email":"faroukshahin30@gmail.com",
+                    "image":"https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg"
+                }, 
+                "meals":[
+                    {
+                        "qty":3,
+                        "price":490.1,
+                        "selected_addon":[
+                            {
+                                "id":5,
+                                "name":"water",
+                                "price":6.5
+                            }
+                        ],
+                        "selected_variation":[
+                            {
+                                "variation":{
+                                    "id":4,
+                                    "name":"size",
+                                    "options":[]
+                                    
+                                },
+                                "selected_option":{
+                                        "id":5,
+                                        "name":"Medium",
+                                        "price":130.0
+                                    }
+                            },
+                            {
+                                "variation":{
+                                    "id":4,
+                                    "name":"Type",
+                                    "options":[]
+                                    
+                                },
+                                "selected_option":{
+                                        "id":5,
+                                        "name":"Classic",
+                                        "price":130.0
+                                    }
+                            }
+                        ],
+                        "meal": {
+                            "id":1,
+                            "name":"Quadro Meal",
+                            "description":"4 broast pieces",
+                            "price":120,
+                            "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRs1sEXd2q9wAVdU_3tCungtJupolGyrX82yg&s",
+                            "variations":[
+                                {
+                                    "id":1,
+                                    "name":"size",
+                                    "options":[
+                                        {
+                                            "id":1,
+                                            "name":"small",
+                                            "price":0
+                                        },
+                                        {
+                                            "id":2,
+                                            "name":"Medium",
+                                            "price":10
+                                        },
+                                        {
+                                            "id":3,
+                                            "name":"Large",
+                                            "price":20
+                                        }
+                                    ]
+                                },
+            
+                                {
+                                    "id":1,
+                                    "name":"Type",
+                                    "options":[
+                                        {
+                                            "id":1,
+                                            "name":"Spicy",
+                                            "price":0
+                                        },
+                                        {
+                                            "id":2,
+                                            "name":"Classic",
+                                            "price":10
+                                        }
+                                    ]
+                                }
+                            ],
+                            "add_ons":[
+                                {
+                                    "id":1,
+                                    "name":"Cola",
+                                    "price":10
+                                },
+                                {
+                                    "id":1,
+                                    "name":"Watter",
+                                    "price":10
+                                }
+                            ]
+                        }
+                        
+                    },
+                    {
+                        "qty":3,
+                        "price":490.1,
+                        "selected_addon":[
+                            {
+                                "id":5,
+                                "name":"water",
+                                "price":6.5
+                            }
+                        ],
+                        "selected_variation":[
+                            {
+                                "variation":{
+                                    "id":4,
+                                    "name":"size",
+                                    "options":[]
+                                    
+                                },
+                                "selected_option":{
+                                        "id":5,
+                                        "name":"Medium",
+                                        "price":130.0
+                                    }
+                            },
+                            {
+                                "variation":{
+                                    "id":4,
+                                    "name":"Type",
+                                    "options":[]
+                                    
+                                },
+                                "selected_option":{
+                                        "id":5,
+                                        "name":"Classic",
+                                        "price":130.0
+                                    }
+                            }
+                        ],
+                        "meal": {
+                            "id":1,
+                            "name":"Quadro Meal",
+                            "description":"4 broast pieces",
+                            "price":120,
+                            "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRs1sEXd2q9wAVdU_3tCungtJupolGyrX82yg&s",
+                            "variations":[
+                                {
+                                    "id":1,
+                                    "name":"size",
+                                    "options":[
+                                        {
+                                            "id":1,
+                                            "name":"small",
+                                            "price":0
+                                        },
+                                        {
+                                            "id":2,
+                                            "name":"Medium",
+                                            "price":10
+                                        },
+                                        {
+                                            "id":3,
+                                            "name":"Large",
+                                            "price":20
+                                        }
+                                    ]
+                                },
+            
+                                {
+                                    "id":1,
+                                    "name":"Type",
+                                    "options":[
+                                        {
+                                            "id":1,
+                                            "name":"Spicy",
+                                            "price":0
+                                        },
+                                        {
+                                            "id":2,
+                                            "name":"Classic",
+                                            "price":10
+                                        }
+                                    ]
+                                }
+                            ],
+                            "add_ons":[
+                                {
+                                    "id":1,
+                                    "name":"Cola",
+                                    "price":10
+                                },
+                                {
+                                    "id":1,
+                                    "name":"Watter",
+                                    "price":10
+                                }
+                            ]
+                        }
+                        
+                    }
+                ],
+                "restaurant":{
+                    "id":1,
+                    "name":"The Bun",
+                    "description":"Burgers, American pizza",
+                    "image":"https://s3-eu-west-1.amazonaws.com/elmenusv5-stg/Normal/f0669071-6f0f-4990-a0c7-70d3303084d2.jpg",
+                    "banner":"https://www.mowglistreetfood.com/wp-content/uploads/2023/01/Landing_image_Desktop.jpg",
+                    "available":true,
+                    "delivery_time":"30 mins",
+                    "delivery_fee":15,
+                    "rate":4.5,
+                    "number_of_reviews":18,
+                    "cuisine":{
+                        "id":1,
+                        "name":"African"
+                    }
+                }
+            }
+        ]
+    }
+}
