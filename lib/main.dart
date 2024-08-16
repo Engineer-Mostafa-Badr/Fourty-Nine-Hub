@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
@@ -14,7 +13,6 @@ import 'core/themes/light_theme.dart';
 import 'features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
-import 'features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'routes/pages.dart';
 
 //import 'package:admob_flutter/admob_flutter.dart';

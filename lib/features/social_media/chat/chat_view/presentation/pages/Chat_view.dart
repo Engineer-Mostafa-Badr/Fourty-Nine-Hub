@@ -269,7 +269,6 @@
 //   }
 // }
 //after add index to navigate
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -288,7 +287,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/calling_card.dart';
 import '../widgets/chat_card.dart';
@@ -357,19 +355,19 @@ class _ChatViewState extends State<ChatView> {
               return context.read<UserCubit>().isLoggedIn
                   ? _buildCategoriesViews()
                   : Center(
-                      child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                            onTap: () => context.push(Routes.LOGIN),
-                            child: Label(
-                                text: 'Login',
-                                style: Styles.headerText(color: AppColors.PRIMARY_COLOR,decoration: TextDecoration.underline))),
-                        Label(
-                            text: ', to continue in using chat services',
-                            style: Styles.headerText()),
-                      ],
-                    ));
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                          onTap: () => context.push(Routes.LOGIN),
+                          child: Label(
+                              text: 'Login',
+                              style: Styles.headerText())),
+                      Label(
+                          text: ', To continue in using chat services',
+                          style: Styles.headerText()),
+                    ],
+                  ));
             },
           ),
         ),
@@ -406,17 +404,18 @@ class _ChatViewState extends State<ChatView> {
   }
 
   Widget _buildCategoriesViews() {
-    return TabBarView(children: [
-      _buildCategoryChats(), // social
-      _buildCategoryChats(), // services
-      _buildCallingHistory(isVideo: false),// call & video (social)
-      _buildCallingHistory(isVideo: true),// call & video (services)
-      _buildCategoryChats(),// Greet
-      _buildCategoryChats(),//Groups
-      _buildCategoryChats(isSecret: true),//Anonymous
-      _buildCategoryChats(),//Archive
-      _buildCategoryChats(),//Lock Chat
-      _buildCategoryChats(),//Unread
+    return TabBarView(
+        children: [
+      _buildCategoryChats(),
+      _buildCategoryChats(),
+      _buildCallingHistory(isVideo: false),
+      _buildCallingHistory(isVideo: true),
+      _buildCallingHistory(isVideo: false),
+      _buildCallingHistory(isVideo: true),
+      _buildCategoryChats(isSecret: true),
+      _buildCategoryChats(),
+      _buildCategoryChats(),
+      _buildCategoryChats(),
     ]);
   }
 
@@ -425,68 +424,65 @@ class _ChatViewState extends State<ChatView> {
       return state.chats == null || state.isLoading
           ? LoadingCustom.customThreeBounce(context)
           : state.chats?.length == 0
-              ? Center(
-                  child: Label(
-                      text: 'No Chats until now',
-                      style: Styles.mediumText(
-                          color: const Color.fromARGB(255, 87, 87, 87),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18)),
-                )
-              : ListView.separated(
-                  shrinkWrap: true,
-                  // padding: const EdgeInsets.only(top: 10),
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) => Slidable(
-                    key: ValueKey(index),
-                    // All actions are defined in the children parameter.
-                    closeOnScroll: false,
-                    endActionPane: ActionPane(
-                      motion: const ScrollMotion(),
-                      dismissible: DismissiblePane(onDismissed: () {}),
-                      children: [
-                        SlidableAction(
-                          onPressed: (value) {
-                            bottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              widget: MoreIconBottomSheet(
-                                chatItemModel: state.chats![index],
-                                chatsCubit: chatCubit,
-                              ),
-                            );
-                          },
-                          icon: Icons.more_horiz,
-                          label: 'More',
-                          padding: EdgeInsets.zero,
-                          backgroundColor: AppColors.GRAY_LIGHT_COLOR3,
-                        ),
-                        SlidableAction(
-                          onPressed: (value) async {
-                            chatCubit.changeChatToArchiveOrNormalUseCase(
-                                state.chats![index].sId!);
-                          },
-                          backgroundColor: AppColors.PRIMARY_COLOR,
-                          foregroundColor: Colors.white,
-                          icon: Icons.delete_outlined,
-                          label: state.chats![index].archived!
-                              ? 'Unarchive'
-                              : 'Archive',
-                          padding: EdgeInsets.zero,
-                        ),
-                      ],
-                    ),
-
-                    // onDismissed: ,
-                    child: ChatCard(
-                      isSecret: isSecret,
-                      chatItemModel: state.chats?[index],
-                      chatsCubit: chatCubit,
-                    ),
-                  ),
-                  separatorBuilder: (context, index) => const SizedBox(),
-                  itemCount: state.chats?.length ?? 0,
-                );
+          ? Center(
+        child: Label(
+            text: 'No Chats until now',
+            style: Styles.mediumText(
+                fontWeight: FontWeight.bold,
+                fontSize: 18)),
+      )
+          : ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) => Slidable(
+          key: ValueKey(index),
+          closeOnScroll: false,
+          endActionPane: ActionPane(
+            motion: const ScrollMotion(),
+            dismissible: DismissiblePane(onDismissed: () {}),
+            children: [
+              SlidableAction(
+                onPressed: (value) {
+                  bottomSheet(
+                    backColor: Theme.of(context).scaffoldBackgroundColor,
+                      context: context,
+                      isScrollControlled: true,
+                      widget: MoreIconBottomSheet(
+                        chatItemModel: state.chats![index],
+                        chatsCubit: chatCubit,
+                      ));
+                },
+                backgroundColor:
+                const Color.fromARGB(255, 191, 191, 191),
+                foregroundColor: Colors.white,
+                icon: Icons.more_horiz,
+                label: 'More',
+                padding: EdgeInsets.zero,
+              ),
+              SlidableAction(
+                onPressed: (value) async {
+                  chatCubit.changeChatToArchiveOrNormalUseCase(
+                      state.chats![index].sId!);
+                },
+                backgroundColor: AppColors.PRIMARY_COLOR,
+                foregroundColor: Colors.white,
+                icon: Icons.delete_outlined,
+                label: state.chats![index].archived!
+                    ? 'Unarchive'
+                    : 'Archive',
+                padding: EdgeInsets.zero,
+              ),
+            ],
+          ),
+          child: ChatCard(
+            isSecret: isSecret,
+            chatItemModel: state.chats?[index],
+            chatsCubit: chatCubit,
+          ),
+        ),
+        separatorBuilder: (context, index) => const SizedBox(),
+        itemCount: state.chats?.length ?? 0,
+      );
     });
   }
 

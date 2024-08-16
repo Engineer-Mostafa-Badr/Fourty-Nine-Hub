@@ -47,9 +47,9 @@ class _PKRequestingListState extends State<PKRequestingList> {
             valueListenable: widget.requestingHostsMapRequestIDNotifier,
             builder: (context, requestingHostsMapRequestID, _) {
               final uniqueItems = <String>{};
-              requestingHostsMapRequestID.values.forEach((list) {
+              for (var list in requestingHostsMapRequestID.values) {
                 uniqueItems.addAll(list);
-              });
+              }
               final invitingHostIDs = uniqueItems.toList();
 
               return ListView.builder(

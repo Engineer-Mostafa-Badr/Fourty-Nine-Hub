@@ -15,7 +15,6 @@ class DoctorGovernorateFilterView extends StatelessWidget {
     final doctorGovernorateFilter =
         context.read<DoctorGovernorateFilterCubit>();
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: const BackAppBar(
         label: Labels.governorate,
       ),

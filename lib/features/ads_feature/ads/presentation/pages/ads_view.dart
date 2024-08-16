@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cu
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -60,10 +59,10 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
           TabBar(
             controller: _tabController,
             labelColor: AppColors.SECONDARY_COLOR,
-            unselectedLabelColor: AppColors.PRIMARY_COLOR,
+            unselectedLabelColor: Theme.of(context).primaryColor,
             indicatorColor: AppColors.SECONDARY_COLOR,
             indicatorSize: TabBarIndicatorSize.tab,
-            tabs:   [
+            tabs: const [
               Tab(text: 'Service Provider'),
               Tab(text: 'User'),
             ],

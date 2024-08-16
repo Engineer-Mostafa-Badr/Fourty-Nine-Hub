@@ -21,12 +21,12 @@ class ZegoLiveStreamingDurationTimeBoard extends StatefulWidget {
   final double? fontSize;
 
   const ZegoLiveStreamingDurationTimeBoard({
-    Key? key,
+    super.key,
     required this.config,
     required this.events,
     required this.manager,
     this.fontSize,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() =>

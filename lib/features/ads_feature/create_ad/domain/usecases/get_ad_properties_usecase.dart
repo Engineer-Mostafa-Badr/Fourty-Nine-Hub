@@ -3,7 +3,6 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/repositories/create_ad_repo.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 
 class GetAdPropertiesUsecase extends UseCase<List<AdPropertiesEntity>, String> {
   final CreateAdRepo _repo;

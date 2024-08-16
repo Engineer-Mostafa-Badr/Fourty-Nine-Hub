@@ -3,6 +3,8 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class AttachmentTypes extends StatelessWidget {
+  const AttachmentTypes({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GridView(

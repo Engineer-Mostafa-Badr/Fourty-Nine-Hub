@@ -9,10 +9,12 @@ import '../../../../res/style/const.dart';
 import '../../../../res/style/styles.dart';
 
 class Winners extends StatelessWidget {
+  const Winners({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BackAppBar(),
+      appBar: const BackAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: GridView.builder(

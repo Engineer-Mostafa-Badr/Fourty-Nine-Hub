@@ -28,7 +28,7 @@ class DoctorTodayAppointmentsWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.white,
+            color: Theme.of(context).primaryColor,
           ),
           child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
             buildWhen: (previous, current) =>
@@ -59,7 +59,7 @@ class DoctorTodayAppointmentsWidget extends StatelessWidget {
                 return Center(
                     child: Text(
                       'No Appointments',
-                  style: Styles.headerText(),
+                  style: Styles.headerText(color: Theme.of(context).scaffoldBackgroundColor),
                 ));
               }
             },
@@ -77,7 +77,11 @@ class DoctorAppointmentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(appointment.type.translatedName),
+      title: Text(appointment.type.translatedName,
+      style: TextStyle(
+        color: Theme.of(context).primaryColor
+      ),
+      ),
       subtitle: Text(appointment.time),
     );
   }

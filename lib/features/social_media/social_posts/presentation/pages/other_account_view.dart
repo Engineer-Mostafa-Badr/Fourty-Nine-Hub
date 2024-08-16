@@ -173,6 +173,7 @@ class OtherAccountView extends StatelessWidget {
                           }),
                       const Sizer(),
                       AppButton(
+                        color: AppColors.AUTH_CONTAINER_COLOR,
                           height: kToolbarHeight * .5,
                           width: kToolbarHeight * 1.5,
                           label: 'Follow',

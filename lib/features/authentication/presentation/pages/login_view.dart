@@ -70,11 +70,13 @@ class _LoginViewState extends State<LoginView> {
               ),
             );
           } else if (state is LoginSuccess) {
+            // context.pop();
+            context.go(Routes.HOME);
+            context.pop();
             context.read<UserCubit>().setLogin(true);
             context.read<UserCubit>().getUser();
             context.read<GetWalletCubit>().getWallet();
-            context.pop();
-            context.pop();
+
             showSuccessMessage(context, 'welcome back');
           } else if (state is LoginLoading) {
             // showAdaptiveDialog(
@@ -227,11 +229,12 @@ class _LoginWidgetState extends State<LoginWidget> {
           borderRadius: BorderRadius.circular(20),
           style: const TextStyle(
             fontSize: 16,
+            color: AppColors.QUANTITY_COLOR
           ),
           controller: widget.loginCubit.emailTextController,
           // label: 'E-mail or phone number',
           hint: 'Email Or Phone',
-          prefix: const Icon(Icons.email, color: Colors.grey),
+          prefix: const Icon(Icons.email, color: AppColors.QUANTITY_COLOR),
           action: (v) {},
         ),
         const Sizer(
@@ -243,6 +246,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           borderRadius: BorderRadius.circular(20),
           style: const TextStyle(
             fontSize: 16,
+            color: AppColors.QUANTITY_COLOR
           ),
           controller: widget.loginCubit.passwordTextController,
           // label: 'Password',
@@ -255,7 +259,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               });
             },
             child: Icon(obsecure ? Icons.visibility_off : Icons.visibility,
-                color: Colors.grey),
+                color: AppColors.QUANTITY_COLOR),
           ),
           action: (v) {},
         ),
@@ -380,12 +384,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
                     fontSize: 16,
+                    color: AppColors.QUANTITY_COLOR
                   ),
                   controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
                   hint: 'First Name',
                   prefix:
-                  const Icon(Icons.person_2_rounded, color: Colors.grey),
+                  const Icon(Icons.person_2_rounded, color: AppColors.QUANTITY_COLOR),
                   action: (v) {},
                 ),
                 const Sizer(
@@ -397,12 +402,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
                     fontSize: 16,
+                    color: AppColors.QUANTITY_COLOR
                   ),
                   controller: registerCubit.lastNameController,
                   // label: 'E-mail or phone number',
                   hint: 'Last Name',
                   prefix:
-                  const Icon(Icons.person_2_rounded, color: Colors.grey),
+                  const Icon(Icons.person_2_rounded, color: AppColors.QUANTITY_COLOR),
                   action: (v) {},
                 ),
                 const Sizer(
@@ -414,11 +420,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
                     fontSize: 16,
+                    color: AppColors.QUANTITY_COLOR
                   ),
                   controller: registerCubit.emailTextController,
                   // label: 'E-mail or phone number',
                   hint: 'Email Or Phone',
-                  prefix: const Icon(Icons.email, color: Colors.grey),
+                  prefix: const Icon(Icons.email, color: AppColors.QUANTITY_COLOR),
                   action: (v) {},
                 ),
                 const Sizer(
@@ -432,7 +439,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                         child: Text('Gender',
                             style: Styles.headerText(
                                 fontSize: 17,
-                                color: AppColors.PRIMARY_COLOR,
+                                color: Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.w400))),
                     Flexible(
                       child: Row(
@@ -452,7 +459,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                       : Colors.white,
                                   textColor: registerCubit.isMale
                                       ? Colors.white
-                                      : Colors.black,
+                                      : Theme.of(context).scaffoldBackgroundColor,
                                   label: 'Male')),
                           const SizedBox(
                             width: 7,
@@ -469,7 +476,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                               isBordered: true,
                               textColor: registerCubit.isMale
                                   ? Colors.black
-                                  : Colors.white,
+                                  : Theme.of(context).primaryColor,
                               color: registerCubit.isMale
                                   ? Colors.white
                                   : AppColors.PRIMARY_COLOR,
@@ -488,6 +495,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
                     fontSize: 16,
+                    color: AppColors.QUANTITY_COLOR
                   ),
                   controller: registerCubit.passwordTextController,
                   // label: 'Password',
@@ -501,7 +509,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     },
                     child: Icon(
                       obsecure ? Icons.visibility_off : Icons.visibility,
-                      color: Colors.grey,
+                      color: AppColors.QUANTITY_COLOR,
                     ),
                   ),
                   action: (v) {},
@@ -515,6 +523,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
                     fontSize: 16,
+                    color: AppColors.QUANTITY_COLOR
                   ),
                   controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
@@ -529,7 +538,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     ),
                     child: const Icon(
                       Icons.person,
-                      color: Colors.white,
+                      color:AppColors.QUANTITY_COLOR,
                     ),
                   ),
                   action: (v) {},

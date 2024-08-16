@@ -25,6 +25,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+
 part 'chats_state.dart';
 
 class ChatsCubit extends Cubit<ChatsState> {

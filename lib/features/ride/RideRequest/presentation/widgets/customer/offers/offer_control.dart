@@ -8,7 +8,7 @@ import '../../../../../../../res/style/styles.dart';
 import '../createOrder/cancel_order.dart';
 
 class OfferControl extends StatelessWidget {
-  OfferControl({
+  const OfferControl({
     super.key,
   });
 

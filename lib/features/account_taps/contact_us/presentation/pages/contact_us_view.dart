@@ -6,13 +6,12 @@ import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/strings/labels.dart';
-import '../../../../../routes/routes.dart';
 import '../cubit/contact_us_cubit.dart';
 
 class ContactUsView extends StatelessWidget {
@@ -28,6 +27,7 @@ class ContactUsView extends StatelessWidget {
           label: 'Contact Us',
         ),
         bottomNavigationBar: AppButton(
+          color: AppColors.AUTH_CONTAINER_COLOR,
             label: 'Send',
             margin: 10,
             onPressed: () => controller.createContactUs()),
@@ -40,12 +40,18 @@ class ContactUsView extends StatelessWidget {
                 const Label(text: '49Hub Team is ready to help'),
                 const Sizer(),
                 FormTextField(
+                  textStyle: TextStyle(
+                    color: Theme.of(context).primaryColor
+                  ),
                   label: 'Phone (Optional)',
                   required: false,
                   controller: controller.phoneController,
                 ),
                 const Sizer(),
                 FormTextField(
+                  textStyle: TextStyle(
+                      color: Theme.of(context).primaryColor
+                  ),
                   hint: 'Message',
                   maxLines: 3,
                   controller: controller.messageController,

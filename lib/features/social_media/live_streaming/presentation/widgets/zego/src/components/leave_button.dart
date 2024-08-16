@@ -35,7 +35,7 @@ class ZegoLiveStreamingLeaveButton extends StatefulWidget {
   final ValueNotifier<bool>? isLeaveRequestingNotifier;
 
   const ZegoLiveStreamingLeaveButton({
-    Key? key,
+    super.key,
     required this.config,
     required this.events,
     required this.defaultEndAction,
@@ -46,7 +46,7 @@ class ZegoLiveStreamingLeaveButton extends StatefulWidget {
     this.icon,
     this.iconSize,
     this.buttonSize,
-  }) : super(key: key);
+  });
 
   @override
   State<ZegoLiveStreamingLeaveButton> createState() =>

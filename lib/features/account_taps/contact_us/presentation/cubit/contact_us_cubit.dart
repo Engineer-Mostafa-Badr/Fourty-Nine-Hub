@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -18,7 +17,7 @@ class ContactUsCubit extends Cubit<ContactUsState> {
   final GetContactUsMessages _getContactUsMessages;
   final CreateContactUsUseCase _createContactUsUseCase;
   ContactUsCubit(this._createContactUsUseCase, this._getContactUsMessages)
-      : super(ContactUsState());
+      : super(const ContactUsState());
 
   void createContactUs() async {
     if (formKey.currentState?.validate() ?? false) {

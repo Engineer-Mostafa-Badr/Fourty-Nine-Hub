@@ -1,20 +1,14 @@
-import 'package:dartz/dartz.dart' as DartZ;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 class ChatCard extends StatefulWidget {
@@ -49,25 +43,25 @@ class _ChatCardState extends State<ChatCard> {
                   width: kToolbarHeight * .7,
                   child: widget.isSecret
                       ? const CircleAvatar(
-                          backgroundColor: Colors.white,
+                          backgroundColor: Colors.red,
                           child: Icon(
                             FontAwesomeIcons.ghost,
                             color: Colors.grey,
                           ))
                       : Stack(
                           children: [
-                            Positioned.fill(
-                              child: CircleAvatar(
-                                minRadius: 50,
-                                backgroundColor: Colors.black,
-                                backgroundImage: NetworkImage(
-                                    widget.chatItemModel?.avatar ?? ''),
-                              ),
-                            ),
-
-                            // Image.asset(
-                            //   Assets.profileIcon,
+                            // Positioned.fill(
+                            //   child: CircleAvatar(
+                            //     backgroundColor: Colors.black,
+                            //     backgroundImage:
+                            //         NetworkImage(UIConst.profilePlaceHolder),
+                            //   ),
                             // ),
+
+                            Image.asset(
+                              Assets.profileIcon,
+                              color: Theme.of(context).primaryColor,
+                            ),
 
                             Positioned(
                                 bottom: 0,
@@ -109,7 +103,7 @@ class _ChatCardState extends State<ChatCard> {
                               : widget.chatItemModel!.seen!
                                   ? const Icon(
                                       FontAwesomeIcons.checkDouble,
-                                      color: AppColors.PRIMARY_COLOR,
+                                      color: AppColors.GREY_DARK_COLOR,
                                       size: 14,
                                     )
                                   : const SizedBox(),
@@ -132,9 +126,7 @@ class _ChatCardState extends State<ChatCard> {
                                   fontSize: 14,
                                   color: widget.chatItemModel!.typing!
                                       ? AppColors.SPLASH_BLACK_COLOR
-                                      : widget.chatItemModel!.seen!
-                                          ? AppColors.GREY_DARK_COLOR
-                                          : AppColors.SPLASH_BLACK_COLOR,
+                                      : AppColors.DARK_GRAY_COLOR,
                                 )),
                           ),
 
@@ -209,6 +201,11 @@ class _ChatCardState extends State<ChatCard> {
               ],
             ),
           ),
+          Container(
+            height: 0.4,
+            width: MediaQuery.of(context).size.width,
+            color: AppColors.GREY_DARK_COLOR,
+          ),
         ],
       ),
     );
@@ -217,6 +214,6 @@ class _ChatCardState extends State<ChatCard> {
   //
 
   getSeenHistory(String chatId) async {
-    await widget.chatsCubit?.getSeenHistory(chatId,context);
+    await widget.chatsCubit?.getSeenHistory(chatId, context);
   }
 }

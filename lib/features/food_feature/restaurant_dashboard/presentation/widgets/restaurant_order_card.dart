@@ -10,7 +10,6 @@ import 'package:fourtyninehub/res/style/const.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class RestaurantOrderCard extends StatelessWidget {

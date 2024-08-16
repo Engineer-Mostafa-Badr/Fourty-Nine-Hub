@@ -7,12 +7,11 @@ import 'zego_gift_item.dart';
 
 class ZegoMp4PlayerWidget extends StatefulWidget {
   const ZegoMp4PlayerWidget(
-      {Key? key,
+      {super.key,
       required this.onPlayEnd,
       required this.playData,
       this.size,
-      this.textStyle})
-      : super(key: key);
+      this.textStyle});
 
   final VoidCallback onPlayEnd;
   final PlayData playData;

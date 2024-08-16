@@ -176,7 +176,7 @@ class _TwitterViewState extends State<TwitterView> {
                             context: context,
                             isScrollControlled: true,
                             widget: TwitterPostComments(
-                              comments: [],
+                              comments: const [],
                               postId: controller.postsPagingController.itemList![index].id,
                               user: user,
                               onAddComment: (TwitterPostCommentParams params) =>

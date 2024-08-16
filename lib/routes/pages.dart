@@ -242,6 +242,9 @@ class AppPages {
               BlocProvider(
                 create: (_) => serviceLocator<RegisterCubit>(),
               ),
+              BlocProvider(
+                create: (_) => serviceLocator<WalletCubit>(),
+              ),
             ],
             child: const LoginView(),
           ),
