@@ -56,9 +56,9 @@ class MyApp extends StatelessWidget {
         //   create: (context) => serviceLocator<CreateAdCubit>(),
         // ),
         // //  tinder
-        // BlocProvider(
-        //   create: (context) => serviceLocator<ChatsCubit>(),
-        // ),
+        BlocProvider(
+          create: (context) => serviceLocator<ChatsCubit>(),
+        ),
         BlocProvider(
           create: (context) => TinderViewCubit(),
         ),
