@@ -1,13 +1,13 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/CarouselSlider.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/meal_baner.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/announce_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/common/dashboard_banner.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
@@ -37,7 +37,7 @@ class RestaurantsListsView extends StatelessWidget {
                 children: [
                   ListView(
                     children: [
-                      const MealBanner(),
+                      MealBanner(banner: state.banner),
                       const Sizer(),
                       const DashboardBanner(
                           title: '${Labels.restaurantDashboard}\n',
@@ -47,24 +47,9 @@ class RestaurantsListsView extends StatelessWidget {
                       const Sizer(),
 
                       /// slider
-                      CarouselSlider.builder(
-                        itemCount: 3,
-                        itemBuilder: (context, index, realIndex) {
-                          return Container(
-                            margin: EdgeInsets.symmetric(
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.03),
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          );
-                        },
-                        options: CarouselOptions(
-                          height: MediaQuery.of(context).size.height * 0.13,
-                          autoPlay: true,
-                        ),
-                      ),
+                      BlocProvider(
+                          create: (context) => serviceLocator<SliderCubit>(),
+                          child: const AnnounceWidget()),
                       const Sizer(),
                       if (state.categories?.isNotEmpty ?? false)
                         _buildOffersWidget(),
@@ -96,7 +81,7 @@ class RestaurantsListsView extends StatelessWidget {
                       backgroundColor: AppColors.PRIMARY_COLOR,
                       onPressed: () {},
                       child: Text(
-                        "12",
+                        "${state.numOfRestaurants}",
                         style: Styles.mediumText(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),

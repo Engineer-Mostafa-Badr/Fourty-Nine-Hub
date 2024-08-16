@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/data/datasources/restaurant_dashboard_remote_datasource.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/data/repositories/restaurant_dashboard_repo_impl.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_orders_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_num_of_resturant_use_case.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
@@ -54,6 +55,8 @@ class FoodServiceLocator {
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
             )..loadData());
     serviceLocator
         .registerFactory<RestaurantDetailsCubit>(() => RestaurantDetailsCubit(
@@ -81,6 +84,11 @@ class FoodServiceLocator {
         () => GetMealsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetNearByRestaurantsUseCase>(
       () => GetNearByRestaurantsUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<GetNumOfResturantUseCase>(
+      () => GetNumOfResturantUseCase(
         serviceLocator(),
       ),
     );

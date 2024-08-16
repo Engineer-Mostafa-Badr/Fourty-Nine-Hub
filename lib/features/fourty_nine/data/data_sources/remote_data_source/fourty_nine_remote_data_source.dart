@@ -1,9 +1,9 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/fourty_nine/data/models/banner_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/main_category_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/parent_main_category_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/parent_main_category_entity.dart';
@@ -17,10 +17,10 @@ abstract class FourtyNineRemoteDataSource {
   Future<Either<Failure, List<ParentMainCategoryEntity>>>
       getParentMainCategories();
 
-  Future<Either<Failure, List<MainCategoryModel>>> getMainCategories({
-    required PaginationParams params
-  });
+  Future<Either<Failure, List<MainCategoryModel>>> getMainCategories(
+      {required PaginationParams params});
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems();
+  Future<Either<Failure, BannerModel>> getBannerById({required String id});
 }
 
 class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
@@ -42,10 +42,9 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
 
   @override
   Future<Either<Failure, List<MainCategoryModel>>> getMainCategories(
-  {
-  required PaginationParams params
-  }) async {
-    final result = await _apiConsumer.get(EndPoints.getMainCategories, queryParameters: params.toJson());
+      {required PaginationParams params}) async {
+    final result = await _apiConsumer.get(EndPoints.getMainCategories,
+        queryParameters: params.toJson());
     return result.fold(
       (failure) => Left(failure),
       (response) => Right((response['data']['categories'] as List)
@@ -62,6 +61,19 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
       (response) => Right((response['data']['items'] as List)
           .map((e) => SliderItemModel.fromJson(e))
           .toList()),
+    );
+  }
+
+  @override
+  Future<Either<Failure, BannerModel>> getBannerById(
+      {required String id}) async {
+    final result = await _apiConsumer.get(
+      EndPoints.getBannerByID(id: id),
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) => Right(BannerModel.fromJson(
+          response['data']["mainCategory"] as Map<String, dynamic>)),
     );
   }
 }

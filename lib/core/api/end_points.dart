@@ -16,6 +16,8 @@ class EndPoints {
   static const refreshToken = '/auth/refresh/token';
   static const getParentMainCategories = '/category/parent';
   static const getMainCategories = '/category/parent/get-all-main';
+  static String getBannerByID({required String id}) => '/categories/main/$id';
+  static String getNumOfResturants = '/restaurants/num-of-restaurants';
   static const getWheel = '/wheels/random';
   static const spinWheel = '/wheels/spin/';
   static const wheelWallet = '/wheel/wallets/my/wallet';

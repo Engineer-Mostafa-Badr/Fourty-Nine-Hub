@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/features/fourty_nine/data/models/banner_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
 
@@ -20,15 +21,18 @@ class FourtyNineRepositoryImpl implements FourtyNineRepository {
   }
 
   @override
-  Future<Either<Failure, List<MainCategoryEntity>>> getMainCategories({
-    required PaginationParams params
-  }) {
-    return _fourtyNineRemoteDataSource.getMainCategories(params:params);
+  Future<Either<Failure, List<MainCategoryEntity>>> getMainCategories(
+      {required PaginationParams params}) {
+    return _fourtyNineRemoteDataSource.getMainCategories(params: params);
   }
 
   @override
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems() {
-        return _fourtyNineRemoteDataSource.getSliderItems();
+    return _fourtyNineRemoteDataSource.getSliderItems();
+  }
 
+  @override
+  Future<Either<Failure, BannerModel>> getBannerById({required String id}) {
+    return _fourtyNineRemoteDataSource.getBannerById(id: id);
   }
 }

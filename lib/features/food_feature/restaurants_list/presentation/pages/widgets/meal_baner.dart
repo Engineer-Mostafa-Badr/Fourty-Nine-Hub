@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Banner;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/banner.dart';
+
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -11,7 +11,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 class MealBanner extends StatelessWidget {
-  const MealBanner({super.key});
+  const MealBanner({super.key, this.banner});
+  final Banner? banner;
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +24,10 @@ class MealBanner extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: AssetImage(Assets.healthBanner),
+            image: NetworkImage(banner?.banner ?? ""),
           )),
       child: Stack(
         children: [
-          /// image
           Align(
             alignment: Alignment.center,
             child: Row(
@@ -36,7 +36,7 @@ class MealBanner extends StatelessWidget {
                 const Sizer(),
                 Text(
                   Labels.meals,
-                  style: Styles.headerText(color: AppColors.DARK_BLUE_COLOR),
+                  style: Styles.headerText(color: Colors.white),
                 ),
                 InkWell(
                   onTap: () {
@@ -47,8 +47,7 @@ class MealBanner extends StatelessWidget {
                     }
                   },
                   child: Text(Labels.register,
-                      style:
-                          Styles.mediumText(color: AppColors.DARK_BLUE_COLOR)),
+                      style: Styles.mediumText(color: Colors.white)),
                 ),
               ],
             ),
