@@ -4,18 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-import 'package:fourtyninehub/core/states/basic_state.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/tinder_shared_utils.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:intl/intl.dart';
 
 class UserProfilePage extends StatefulWidget {
   // final UserData user;
@@ -330,10 +325,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildStatItem(
-              'Followers', userData.followersCount?.toString() ?? '0'),
+              'Followers', userData.followersCount.toString() ?? '0'),
           _buildStatItem(
-              'Following', userData.followingCount?.toString() ?? '0'),
-          _buildStatItem('Friends', userData.friendsCount?.toString() ?? '0'),
+              'Following', userData.followingCount.toString() ?? '0'),
+          _buildStatItem('Friends', userData.friendsCount.toString() ?? '0'),
         ],
       ),
     );

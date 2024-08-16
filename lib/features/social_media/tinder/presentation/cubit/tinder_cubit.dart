@@ -860,12 +860,8 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/add_category_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/fav_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/shared/tinder_shared_utils.dart';
 import 'package:http/http.dart' as http;
 
 import '../../data/models/gift_model.dart';
@@ -1200,7 +1196,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       emit(state.copyWith(
           isUserNearby: nearByModel, isUserNearbyState: DataState.success));
     }catch(e){
-      log(e.toString()+" nearByModel faild ");
+      log("$e nearByModel faild ");
       emit(state.copyWith(isUserNearbyState: DataState.failure));
 
     }

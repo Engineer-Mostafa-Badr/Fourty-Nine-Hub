@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/enums/base_status_enum.dart';
-import '../../../../../core/error/failure.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
-import '../cubit/social_posts_cubit.dart';
 
 class MyAccountView extends StatelessWidget {
   const MyAccountView({super.key});
@@ -28,7 +24,7 @@ class MyAccountView extends StatelessWidget {
               children: [
                 _buildAccountHeaderView(),
                 // TODO build content
-                TabBar(tabs: [
+                const TabBar(tabs: [
                   Tab(
                     icon: Icon(Icons.grid_view_rounded),
                   ),

@@ -11,7 +11,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../common/widgets/form/text_fields/form_text_field.dart';
+import '../../../../common/widgets/form/text_fields/default_text_form_field.dart';
+import '../../../../common/widgets/form/text_fields/password_text_form_field.dart';
 import '../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../common/widgets/stateless/buttons/default_button.dart';
@@ -62,27 +63,48 @@ class LoginView extends StatelessWidget {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: ListView(
               children: [
-                FormTextField(
-                  controller: loginCubit.emailTextController,
-                  label: 'E-mail or phone number',
-                  hint: 'Type here',
-                  prefix: const Icon(Icons.person),
-                  action: (v) {},
+                DefaultTextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  currentController: loginCubit.emailTextController,
+                  hint: 'E-mail or phone number',
+                  prefixIcon:  const Icon(Icons.person,color: AppColors.QUANTITY_COLOR,),
                 ),
                 const Sizer(),
-                FormTextField(
-                  controller: loginCubit.passwordTextController,
-                  label: 'Password',
-                  hint: '***********',
-                  obsecure: true,
-                  prefix: const Icon(Icons.password),
-                  action: (v) {},
+                PasswordTextFormField(
+                  currentController: loginCubit.passwordTextController,
+                  prefixIcon:  const Icon(Icons.password,color: AppColors.QUANTITY_COLOR,),
+                  hint: 'Password',
                 ),
+                // FormTextField(
+                //   style:  TextStyle(
+                //     color:Theme.of(context).scaffoldBackgroundColor
+                //   ),
+                //   controller: loginCubit.emailTextController,
+                //   label: 'E-mail or phone number',
+                //   hint: 'Type here',
+                //   prefix:  Icon(Icons.person,color: Theme.of(context).scaffoldBackgroundColor,),
+                //   action: (v) {},
+                // ),
+                // const Sizer(),
+                // FormTextField(
+                //   style:  TextStyle(
+                //       color: Theme.of(context).scaffoldBackgroundColor
+                //   ),
+                //   controller: loginCubit.passwordTextController,
+                //   label: 'Password',
+                //   hint: '***********',
+                //   obsecure: true,
+                //   prefix:  Icon(Icons.password,color:Theme.of(context).scaffoldBackgroundColor,),
+                //   action: (v) {},
+                // ),
                 const Sizer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextAppButton(
+                        style:  TextStyle(
+                            color: Theme.of(context).primaryColor
+                        ),
                         label: 'Forgot Password?',
                         onPressed: () => context.push(Routes.FORGOTPASSWORD)),
                   ],
@@ -105,6 +127,9 @@ class LoginView extends StatelessWidget {
                       children: [
                         Expanded(
                           child: AppButton(
+                            style: const TextStyle(
+                                color: AppColors.QUANTITY_COLOR
+                            ),
                             label: 'Google',
                             backColor: AppColors.LIGHT_GRAY_COLOR,
                             textColor: Colors.black,
@@ -115,6 +140,9 @@ class LoginView extends StatelessWidget {
                         const Sizer(),
                         Expanded(
                           child: AppButton(
+                            style: const TextStyle(
+                                color: AppColors.QUANTITY_COLOR
+                            ),
                             label: 'Facebook',
                             backColor: AppColors.LIGHT_GRAY_COLOR,
                             textColor: Colors.black,
@@ -126,6 +154,9 @@ class LoginView extends StatelessWidget {
                         if (Platform.isIOS)
                           Expanded(
                             child: AppButton(
+                              style: const TextStyle(
+                                  color: AppColors.QUANTITY_COLOR
+                              ),
                               label: 'Apple',
                               backColor: AppColors.LIGHT_GRAY_COLOR,
                               textColor: Colors.black,
@@ -147,7 +178,7 @@ class LoginView extends StatelessWidget {
                             text: "Register",
                             recognizer: TapGestureRecognizer()
                               ..onTap = () => context.push(Routes.REGISTER),
-                            style: Styles.headerText(color: Colors.black),
+                            style: Styles.headerText(color: Theme.of(context).primaryColor),
                           ),
                         ],
                       ),

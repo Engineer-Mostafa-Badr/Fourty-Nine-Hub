@@ -42,12 +42,13 @@ class UploadFile {
             }, (data) {
               onUploaded(UploadFileEntity(mediaId: mediaId, file: file));
 
-              return Right(true);
+              return const Right(true);
             });
           });
         });
       }
     });
+    return null;
   }
 
   Future<void> sendBinaryFileData(

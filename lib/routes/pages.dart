@@ -75,7 +75,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
@@ -349,7 +348,7 @@ class AppPages {
         GoRoute(
           path: Paths.WINNERS,
           name: Routes.WINNERS,
-          builder: (context, state) => Winners(),
+          builder: (context, state) => const Winners(),
         ),
         GoRoute(
           path: Paths.QURAAN,
@@ -443,7 +442,7 @@ class AppPages {
                   builder: (context, state) =>
                       BlocProvider<FavouriteSubCategoryCubit>(
                         create: (_) => serviceLocator(),
-                        child:  FavSubCategoryView(),
+                        child:  const FavSubCategoryView(),
                       )),
               GoRoute(
                   path: Paths.MYADDS,
@@ -934,7 +933,7 @@ class AppPages {
         GoRoute(
           path: Paths.SHIPPING_REGISTER,
           name: Routes.SHIPPING_REGISTER,
-          builder: (context, state) => RegisterShippingScreen(),
+          builder: (context, state) => const RegisterShippingScreen(),
         )
       ],
     ),

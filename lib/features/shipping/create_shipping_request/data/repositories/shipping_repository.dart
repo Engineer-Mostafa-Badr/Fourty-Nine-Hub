@@ -6,7 +6,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/datasources/shipping_data_source.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/id_s3_response_model/id_s3_response_model.dart';
 
 class ShippingRepository {
   ShippingDataSource dataSource;

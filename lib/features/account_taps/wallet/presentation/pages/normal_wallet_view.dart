@@ -13,7 +13,6 @@ import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
-import '../../domain/entities/wallet_entity.dart';
 import '../cubit/wallet_cubit.dart';
 import '../widgets/wallet_card_widget.dart';
 import '../widgets/wallet_history_card.dart';

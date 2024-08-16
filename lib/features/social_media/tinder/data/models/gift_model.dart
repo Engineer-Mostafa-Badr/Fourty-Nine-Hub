@@ -76,14 +76,14 @@ class GiftApi {
     if (json['data'] != null) {
       data = <GiftData>[];
       json['data'].forEach((v) {
-        data!.add(new GiftData.fromJson(v));
+        data!.add(GiftData.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -109,12 +109,12 @@ class GiftData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['nameAr'] = this.nameAr;
-    data['nameEn'] = this.nameEn;
-    data['value'] = this.value;
-    data['picture'] = this.picture;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['nameAr'] = nameAr;
+    data['nameEn'] = nameEn;
+    data['value'] = value;
+    data['picture'] = picture;
     return data;
   }
 }

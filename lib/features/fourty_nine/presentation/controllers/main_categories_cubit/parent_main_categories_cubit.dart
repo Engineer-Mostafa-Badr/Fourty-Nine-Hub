@@ -1,6 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/parent_main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_parent_main_categories_use_case.dart';

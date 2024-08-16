@@ -37,7 +37,7 @@ class ConnectionException implements Exception {
   //   }
   // }
 
-  static String _returnMessageFromDioResponse(DioError dioError) {
+  static String _returnMessageFromDioResponse(DioException dioError) {
     var statusCode = dioError.response!.statusCode;
     if (statusCode == 400 || statusCode == 401 || statusCode == 403) {
       return dioError.response!.data['error']['message'];

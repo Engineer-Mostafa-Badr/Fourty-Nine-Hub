@@ -10,7 +10,6 @@ import '../../../../common/widgets/stateful/videos/video_player.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
-import '../../../social_media/social_posts/presentation/widgets/posts/comment_card.dart';
 import '../widgets/youtube_video_card.dart';
 
 class PlayVideo extends StatelessWidget {
@@ -31,7 +30,7 @@ class PlayVideo extends StatelessWidget {
   }
 
   Widget _buildVideoWidget() {
-    return SizedBox(
+    return const SizedBox(
       height: kToolbarHeight * 3,
       child: VideoPlayerWidget(
         url:

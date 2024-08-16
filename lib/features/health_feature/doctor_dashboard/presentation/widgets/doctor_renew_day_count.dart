@@ -40,7 +40,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                     }
                     return _Item(
                       numerOfDays: days,
-                      label: Labels.subscription,
+                      label: Labels.subscription, onTap: (){},
                     );
                   },
                 ),
@@ -58,7 +58,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                     }
                     return _Item(
                       numerOfDays: days,
-                      label: Labels.id,
+                      label: Labels.id, onTap: (){},
                       // onTap: () => context.push(Routes.EDITDOCTORDOCS),
                     );
                   },
@@ -77,7 +77,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                     }
                     return _Item(
                       numerOfDays: days,
-                      label: Labels.practiceCertification,
+                      label: Labels.practiceCertification, onTap: (){},
                       // onTap: () => context.push(Routes.EDITDOCTORDOCS),
                     );
                   },
@@ -94,13 +94,15 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
 class _Item extends StatelessWidget {
   final String numerOfDays;
   final String label;
-  final Function()? onTap;
-  const _Item({required this.numerOfDays, required this.label, this.onTap});
+  final Function onTap;
+  const _Item({required this.numerOfDays, required this.label, required this.onTap,});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: (){
+        onTap();
+      },
       child: Column(
         children: [
           Label(

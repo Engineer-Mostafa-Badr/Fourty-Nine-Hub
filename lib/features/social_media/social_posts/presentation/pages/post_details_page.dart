@@ -77,7 +77,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
             final controller = context.read<SocialPostsCubit>();
 
             if(state.status==StateStatus.loading){
-              return Center(child: CircularProgressIndicator(),);
+              return const Center(child: CircularProgressIndicator(),);
             }else if(state.status==StateStatus.error||state.postDetails==null){
               return Center(
                 child: Label(text: getFailureMessage(

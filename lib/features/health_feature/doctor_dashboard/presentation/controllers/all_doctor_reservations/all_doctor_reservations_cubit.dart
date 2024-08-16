@@ -4,7 +4,6 @@ import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_all_doctor_reservations_usecase.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 
 part 'all_doctor_reservations_state.dart';
 

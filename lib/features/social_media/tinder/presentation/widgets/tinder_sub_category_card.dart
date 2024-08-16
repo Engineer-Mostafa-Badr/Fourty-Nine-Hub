@@ -154,7 +154,6 @@
 //   }
 // }
 //refactored
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -164,21 +163,16 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dar
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_subcategory_view.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_subcategory_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/tinder_shared_utils.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_sub_category_ads_view.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 
 class TinderSubCategoryCard extends StatefulWidget {
   final SubCategoryData subCategoryCardData;

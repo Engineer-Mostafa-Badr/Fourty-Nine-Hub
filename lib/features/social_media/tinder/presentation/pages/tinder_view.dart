@@ -852,11 +852,11 @@ void _showGiftBottomSheet22(BuildContext context,
                       padding: const EdgeInsets.all(4.0),
                       child: OutlinedButton(
                         style: ButtonStyle(
-                          side: const MaterialStatePropertyAll(
+                          side: const WidgetStatePropertyAll(
                               BorderSide(width: 0)),
                           iconColor:
-                              const MaterialStatePropertyAll(Colors.white),
-                          backgroundColor: MaterialStatePropertyAll(
+                              const WidgetStatePropertyAll(Colors.white),
+                          backgroundColor: WidgetStatePropertyAll(
                               Colors.black.withOpacity(0.8)),
                         ),
                         onPressed: () {

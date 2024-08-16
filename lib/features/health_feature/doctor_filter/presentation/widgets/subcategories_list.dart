@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/subcategory_filter_cubit/doctor_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/widgets/subcategory_list_title.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class DoctorsSubcategoriesFilterList extends StatelessWidget {
   const DoctorsSubcategoriesFilterList({super.key});

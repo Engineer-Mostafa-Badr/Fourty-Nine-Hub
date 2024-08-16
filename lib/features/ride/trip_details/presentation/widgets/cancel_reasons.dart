@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 
 import '../../data/models/cancel_reason_model.dart';
-import '../cubit/trip_details_cubit.dart';
 
 class CancelReasons extends StatelessWidget {
   final List<CancelReasonModel> cancelReasons;

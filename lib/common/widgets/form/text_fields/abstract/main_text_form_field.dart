@@ -5,7 +5,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 
 abstract class MainTextFormField extends StatefulWidget {
-  final FocusNode currentFocusNode;
+  final FocusNode? currentFocusNode;
   final FocusNode? nextFocusNode;
   final TextEditingController currentController;
   final String hintText;
@@ -37,7 +37,7 @@ abstract class MainTextFormField extends StatefulWidget {
 
   const MainTextFormField(
       {super.key,
-      required this.currentFocusNode,
+       this.currentFocusNode,
       this.minLines,
       this.readOnly = false,
       this.nextFocusNode,
@@ -100,7 +100,9 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         maxLength: widget.maxLength,
         expands: widget.expanded,
         enableSuggestions: widget.enableSuggestions,
-        style: const TextStyle(),
+        style:  const TextStyle(
+          color: AppColors.QUANTITY_COLOR
+        ),
         textCapitalization: widget.textCapitalization,
         textAlignVertical:
             widget.expanded ? const TextAlignVertical(y: -0.8) : null,
@@ -155,9 +157,9 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         ),
         validator: widget.validator,
         onChanged: (text) {
-          if (text.isEmpty)
+          if (text.isEmpty) {
             setState(() => _currentDir = null);
-          else {
+          } else {
             final dir = _getDirection(text);
             if (dir != _currentDir) setState(() => _currentDir = dir);
           }

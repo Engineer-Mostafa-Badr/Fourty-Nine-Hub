@@ -76,7 +76,7 @@ class GiftsInitial extends GiftsState {
 }
 
 class GiftsLoaded extends GiftsState {
-  GiftsLoaded(List<GiftData> gifts) : super(gifts);
+  GiftsLoaded(super.gifts);
 }
 
 class GiftsError extends GiftsState {

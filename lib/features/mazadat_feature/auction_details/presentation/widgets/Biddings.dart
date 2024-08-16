@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../../common/functions/helper/randome_color.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/text_button.dart';

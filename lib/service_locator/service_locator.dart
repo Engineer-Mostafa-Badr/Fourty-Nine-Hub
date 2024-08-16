@@ -6,7 +6,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fourtyninehub/core/api/api_client_helper.dart';
 import 'package:fourtyninehub/core/api/api_client_helper_imp.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
-import 'package:fourtyninehub/core/api/interceptors/auth_interceptor.dart';
 import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';

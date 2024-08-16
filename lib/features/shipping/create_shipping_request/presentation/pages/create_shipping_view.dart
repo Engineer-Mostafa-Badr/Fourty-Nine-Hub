@@ -70,7 +70,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   },
                 ),
                 const Sizer(),
-                 DashboardBanner(
+                 const DashboardBanner(
                   title: Labels.driverDashboard,
                   subTitle: Labels.driverDashboardBannerDiscription,
                   route: Routes.DOCTORDASHBOARD,
@@ -266,11 +266,11 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       height: 25,
                     )),
                     const SizedBox(width: 10),
-                     Flexible(
+                     const Flexible(
                         flex: 3,
                         child: Text(Labels.theApplicationDoesNot,
                             textAlign: TextAlign.start,
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold))),
                   ],
                 ),

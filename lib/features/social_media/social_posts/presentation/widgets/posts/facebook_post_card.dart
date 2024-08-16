@@ -490,8 +490,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             alignment: Alignment.center,
             margin: const EdgeInsets.symmetric(vertical: 10),
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-            color: backgroundColor != null &&
-                    images.isEmpty
+            color: images.isEmpty
                 ? Color(int.parse(backgroundColor.substring(1),
                     radix: 16))
                 : Colors.white,

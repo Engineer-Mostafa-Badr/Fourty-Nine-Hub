@@ -6,13 +6,11 @@ import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/res/style/const.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/strings/labels.dart';
-import '../../../../../routes/routes.dart';
 import '../cubit/contact_us_cubit.dart';
 
 class ContactUsView extends StatelessWidget {

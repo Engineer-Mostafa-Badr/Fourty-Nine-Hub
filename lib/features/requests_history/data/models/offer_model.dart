@@ -33,16 +33,16 @@ class OfferModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['phone'] = this.phone;
-    data['price'] = this.price;
-    data['distance'] = this.distance;
-    data['time'] = this.time;
-    data['rate'] = this.rate;
-    data['profile_image'] = this.profileImage;
-    data['number_of_reviews'] = this.numberOfReviews;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['phone'] = phone;
+    data['price'] = price;
+    data['distance'] = distance;
+    data['time'] = time;
+    data['rate'] = rate;
+    data['profile_image'] = profileImage;
+    data['number_of_reviews'] = numberOfReviews;
     return data;
   }
 }

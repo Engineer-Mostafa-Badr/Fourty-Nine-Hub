@@ -3,8 +3,6 @@ import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/chat_messgaes_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/chat_messgaes_entity.dart';
 
 abstract class ChatRemoteDataSource {
   Future<Either<Failure, ChatMessagesModel>> getChatMessages({

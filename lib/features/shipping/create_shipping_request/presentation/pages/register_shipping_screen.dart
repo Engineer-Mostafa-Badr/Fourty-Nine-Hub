@@ -7,15 +7,9 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/phone_number_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/name_filed.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/phone_field.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/location/cities_dropdowns.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/location/governorate_dropdown.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/pickers/date/id_expiry_date_picker.dart';
@@ -59,7 +53,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 30,),
+                const SizedBox(height: 30,),
                 // const Gap(30),
                 Text(
                   "Welcome to shipping register",
@@ -68,7 +62,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     color: AppColors.PRIMARY_COLOR_DARK,
                   ),
                 ),
-                SizedBox(height: 40,),
+                const SizedBox(height: 40,),
                 // const Gap(40),
                 Center(
                   child: BlocBuilder<ShippingCubit, ShippingState>(
@@ -78,7 +72,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // Gap(8),
-                            SizedBox(height: 8,),
+                            const SizedBox(height: 8,),
                             FormField(
                               validator: (value) {
                                 return shippingcubit.validation(
@@ -144,7 +138,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                           }
                                         }),
                                     // Gap(8),
-                                    SizedBox(height: 8,),
+                                    const SizedBox(height: 8,),
                                     if (field.hasError)
                                       Text(
                                         field.errorText ?? "",
@@ -164,7 +158,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   ),
                 ),
                 // Gap(35),
-                SizedBox(height: 35,),
+                const SizedBox(height: 35,),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -186,7 +180,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   ],
                 ),
                 // const Gap(30),
-                SizedBox(height: 30,),
+                const SizedBox(height: 30,),
                 // CreateDoctorProfilePhotoPicker(),
                 ImageValidation(
                   title: "Photo",
@@ -201,7 +195,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                 ),
                 // const CreateDoctorPhoneField(),
                 // const Gap(30),
-                SizedBox(height: 30,),
+                const SizedBox(height: 30,),
                 Text(
                   "Car Pictures",
                   style: Styles.headerText(
@@ -210,7 +204,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   ),
                 ),
                 // const Gap(20),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 Column(
                   children: [
                     Row(
@@ -247,7 +241,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       ],
                     ),
                     // Gap(20),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -284,7 +278,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   ],
                 ),
                 // const Gap(30),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(20),
@@ -326,7 +320,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                             },
                           ),
                           // Gap(15),
-                SizedBox(height: 15,),
+                const SizedBox(height: 15,),
                           ImageValidation(
                             iconColor: Colors.grey,
                             hint: Labels.inFront,
@@ -347,7 +341,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   ),
                 ),
                 // const Gap(20),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 CreateDoctorIDExpiryDatePicker(
                   onDateSelected: (date) {
                     shippingcubit.pickIDExpiryDate(date!);
@@ -359,7 +353,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   },
                 ),
                 // const Gap(40),
-                SizedBox(height: 40,),
+                const SizedBox(height: 40,),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(20),
@@ -401,7 +395,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                             },
                           ),
                           // Gap(15),
-                SizedBox(height: 15,),
+                const SizedBox(height: 15,),
                           ImageValidation(
                             iconColor: Colors.grey,
                             hint: Labels.inFront,
@@ -423,7 +417,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   ),
                 ),
                 // const Gap(20),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 CreateDoctorIDExpiryDatePicker(
                   onDateSelected: (date) {
                     context.read<ShippingCubit>().pickIDExpiryDate(date!);
@@ -436,7 +430,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   },
                 ),
                 // const Gap(40),
-                SizedBox(height: 40,),
+                const SizedBox(height: 40,),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(20),
@@ -472,7 +466,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                             },
                           ),
                           // Gap(15),
-                SizedBox(height: 15,),
+                const SizedBox(height: 15,),
                           ImageValidation(
                             iconColor: Colors.grey,
                             hint: Labels.inFront,
@@ -494,7 +488,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   ),
                 ),
                 // const Gap(20),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 CreateDoctorIDExpiryDatePicker(
                   validator: (value) {
                     return shippingcubit.validation(
@@ -504,7 +498,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   },
                 ),
                 // const Gap(40),
-                SizedBox(height: 40,),
+                const SizedBox(height: 40,),
                 DefaultTextFormField(
                     validator: (value) {
                       if (value != null) {
@@ -517,11 +511,11 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     currentController: TextEditingController(),
                     hint: Labels.model),
                 // const Gap(30),
-                SizedBox(height: 30,),
+                const SizedBox(height: 30,),
                 // DefaultTextFormField(currentFocusNode: FocusNode(), currentController: TextEditingController(), hint: Labels.phone),
 
                 // const Gap(50),
-                SizedBox(height: 50,),
+                const SizedBox(height: 50,),
                 Center(
                   child: BlocListener<CreateDoctorCubit, CreateDoctorState>(
                     listener: (context, state) {
@@ -555,7 +549,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       height: 25,
                     )),
                     // const Gap(10),
-                                    SizedBox(width: 10,),
+                                    const SizedBox(width: 10,),
                     const Flexible(
                         flex: 3,
                         child: Text(Labels.theApplicationDoesNot,
@@ -565,7 +559,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   ],
                 ),
                 // const Gap(30),
-                                SizedBox(height: 30,),
+                                const SizedBox(height: 30,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -576,7 +570,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       width: 25,
                       height: 25,
                     )),
-                                    SizedBox(width: 10,),
+                                    const SizedBox(width: 10,),
                     // const Gap(10),
                     const Flexible(
                         flex: 3,
@@ -588,7 +582,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                         )),
                   ],
                 ),
-                                SizedBox(height: 30,),
+                                const SizedBox(height: 30,),
                 // const Gap(30),
                 Align(
                   alignment: Alignment.center,
@@ -616,7 +610,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   // ),
                 ),
                 // const Gap(100)
-                                SizedBox(height: 100,),
+                                const SizedBox(height: 100,),
               ],
             ),
           ),

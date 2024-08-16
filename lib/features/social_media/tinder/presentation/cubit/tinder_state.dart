@@ -505,9 +505,9 @@ class TinderViewState {
       isUserNearbyState: isUserNearbyState ?? this.isUserNearbyState,
       lastSeenModel: lastSeenModel ?? this.lastSeenModel,
       lastSeenModelState: lastSeenModelState ?? this.lastSeenModelState,
-      getFavCategoryModel: getFavCategoryList ?? this.getFavCategoryModel,
+      getFavCategoryModel: getFavCategoryList ?? getFavCategoryModel,
       getFavCategoryModelState:
-          getFavCategoryListState ?? this.getFavCategoryModelState,
+          getFavCategoryListState ?? getFavCategoryModelState,
       addCategoryModel: addCategoryModel ?? this.addCategoryModel,
       addCategoryModelState:
           addCategoryModelState ?? this.addCategoryModelState,

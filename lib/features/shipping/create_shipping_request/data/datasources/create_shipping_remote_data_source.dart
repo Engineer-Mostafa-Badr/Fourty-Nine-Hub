@@ -5,7 +5,6 @@ import '../../../../../core/error/failure.dart';
 import '../../../../../res/assets/jsons.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../ride/RideRequest/data/models/address_search_params_model.dart';
-import '../../../../ride/RideRequest/data/models/car_type_model.dart';
 import '../../../../ride/RideRequest/data/models/expected_price_model.dart';
 import '../../../../ride/RideRequest/data/models/google_search_results.dart';
 import '../../../../ride/RideRequest/data/models/params/expected_price_params.dart';

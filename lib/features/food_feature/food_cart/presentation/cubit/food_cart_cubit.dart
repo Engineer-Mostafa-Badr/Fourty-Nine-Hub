@@ -20,7 +20,7 @@ class FoodCartCubit extends Cubit<BasicState<CartEntity>> {
       : super(const BasicState());
 
   void loadData() async {
-    final response = await _getCartUseCase(NoParams());
+    final response = await _getCartUseCase(const NoParams());
     response.fold((l) => state.copyWith(failure: l),
         (data) => emit(state.copyWith(data: data)));
   }
