@@ -70,11 +70,13 @@ class _LoginViewState extends State<LoginView> {
               ),
             );
           } else if (state is LoginSuccess) {
+            // context.pop();
+            context.go(Routes.HOME);
+            context.pop();
             context.read<UserCubit>().setLogin(true);
             context.read<UserCubit>().getUser();
             context.read<GetWalletCubit>().getWallet();
-            context.pop();
-            context.pop();
+
             showSuccessMessage(context, 'welcome back');
           } else if (state is LoginLoading) {
             // showAdaptiveDialog(
