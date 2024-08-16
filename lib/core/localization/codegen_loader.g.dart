@@ -31,10 +31,17 @@ class CodegenLoader extends AssetLoader{
   "find": "ايجاد",
   "live": "لابف",
   "health": "صحه",
-  "shipping": "تحميله",
+  "ship": "تحميله",
   "ride": "توصيله",
   "lang": "EN",
-  "search": "بحث"
+  "search": "بحث",
+  "message": "مرسالة",
+  "send": "ارسال",
+  "cancel": "الغاء",
+  "delete": "حذف",
+  "yes": "نعم",
+  "no": "لا",
+  "sendTo": "ارسال الى"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -53,10 +60,17 @@ static const Map<String,dynamic> en = {
   "find": "Find",
   "live": "Live",
   "health": "Health",
-  "shipping": "Shipping",
+  "ship": "Ship",
   "ride": "Ride",
   "lang": "ع",
-  "search": "Search"
+  "search": "Search",
+  "message": "Message",
+  "send": "Send",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "yes": "Yes",
+  "no": "No",
+  "sendTo": "Send To"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

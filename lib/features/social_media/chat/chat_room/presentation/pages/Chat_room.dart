@@ -49,60 +49,78 @@ class _ChatRoomState extends State<ChatRoom> {
         child: Scaffold(
           backgroundColor: AppColors.GREY_LIGHT_COLOR,
           appBar: const ChatRoomAppBar(),
-          bottomNavigationBar: Padding(
-            padding: MediaQuery.of(context).viewInsets,
-            child: SendMessageWidget(
-              focusNode: focusNode,
-              replayMessage: _replayMessage,
-              onCancelReplay: cancelReplay,
-              anotherUserName:
-                  chatRoomCubit.chatMessagesModel.chat?.contact?.name ??
-                      'No name',
-            ),
+          // bottomNavigationBar: Padding(
+          //   padding: MediaQuery.of(context).viewInsets,
+          //   child: SendMessageWidget(
+          //     focusNode: focusNode,
+          //     replayMessage: _replayMessage,
+          //     onCancelReplay: cancelReplay,
+          //     anotherUserName:
+          //         chatRoomCubit.chatMessagesModel.chat?.contact?.name ??
+          //             'No name',
+          //   ),
+          // ),
+          body: Column(
+            children: [
+              BlocBuilder<ChatRoomCubit, ChatRoomState>(
+                  builder: (context, state) {
+                return state.isLoading
+                    ? LoadingCustom.customThreeBounce(context)
+                    : const Expanded(
+                        child: SizedBox(),
+                        // child: ListView.separated(
+                        //   addAutomaticKeepAlives: true,
+                        //   controller: chatRoomCubit.scrollController,
+                        //   // reverse: true,
+                        //   // physics: const NeverScrollableScrollPhysics(),
+                        //   itemBuilder: (context, index) => SwipeTo(
+                        //     onRightSwipe: (message) {
+                        //       replayMessage(state.chatMessages![index]);
+                        //     },
+                        //     child: GestureDetector(
+                        //       onLongPress: () {
+                        //         _showReplyDialog(
+                        //           context,
+                        //           messageEntity: state.chatMessages![index],
+                        //           replyFunction: () {
+                        //             Navigator.of(context).pop();
+                        //             replayMessage(state.chatMessages![index]);
+                        //           },
+                        //           deleteFunction: () {
+                        //             Navigator.of(context).pop();
+                        //             deleteMessage(
+                        //                 chatId:
+                        //                     state.chatMessages![index].chatId!,
+                        //                 messageId:
+                        //                     state.chatMessages![index].sId!);
+                        //           },
+                        //         );
+                        //       },
+                        //       child: MessageCard(
+                        //         messageEntity: state.chatMessages![index],
+                        //         anotherUserName:
+                        //             state.chatData?.chat?.contact?.name ??
+                        //                 'No name',
+                        //       ),
+                        //     ),
+                        //   ),
+                        //   separatorBuilder: (context, index) => const Sizer(
+                        //     height: 3,
+                        //   ),
+                        //   itemCount: state.chatMessages?.length ?? 0,
+                        // ),
+                      );
+              }),
+              const SendMessageWidget(
+                  // focusNode: focusNode,
+                  // replayMessage: _replayMessage,
+                  // onCancelReplay: cancelReplay,
+                  // anotherUserName:
+                  //     chatRoomCubit.chatMessagesModel.chat?.contact?.name ??
+                  //         'No name',
+                  ),
+            ],
           ),
-          body: BlocBuilder<ChatRoomCubit, ChatRoomState>(
-              builder: (context, state) {
-            return state.isLoading
-                ? LoadingCustom.customThreeBounce(context)
-                : ListView.separated(
-                    addAutomaticKeepAlives: true,
-                    controller: chatRoomCubit.scrollController,
-                    // reverse: true,
-                    // physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) => SwipeTo(
-                      onRightSwipe: (message) {
-                        replayMessage(state.chatMessages![index]);
-                      },
-                      child: GestureDetector(
-                        onLongPress: () {
-                          _showReplyDialog(
-                            context,
-                            messageEntity: state.chatMessages![index],
-                            replyFunction: () {
-                              Navigator.of(context).pop();
-                              replayMessage(state.chatMessages![index]);
-                            },
-                            deleteFunction: () {
-                              Navigator.of(context).pop();
-                              deleteMessage(
-                                  chatId: state.chatMessages![index].chatId!,
-                                  messageId: state.chatMessages![index].sId!);
-                            },
-                          );
-                        },
-                        child: MessageCard(
-                          messageEntity: state.chatMessages![index],
-                          anotherUserName:
-                              state.chatData?.chat?.contact?.name ?? 'No name',
-                        ),
-                      ),
-                    ),
-                    separatorBuilder: (context, index) => const Sizer(
-                      height: 3,
-                    ),
-                    itemCount: state.chatMessages?.length ?? 0,
-                  );
-          }),
         ),
       ),
     );

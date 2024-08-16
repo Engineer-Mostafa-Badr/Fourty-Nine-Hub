@@ -18,5 +18,12 @@
   "ship": "Ship",
   "ride": "Ride",
   "lang": "ع",
-  "search": "Search"
+  "search": "Search",
+  "message":"Message",
+  "send":"Send",
+  "cancel":"Cancel",
+  "delete":"Delete",
+  "yes":"Yes",
+  "no":"No",
+  "sendTo":"Send To"
 }

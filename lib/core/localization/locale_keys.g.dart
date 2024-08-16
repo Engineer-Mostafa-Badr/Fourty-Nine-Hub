@@ -17,9 +17,16 @@ abstract class  LocaleKeys {
   static const find = 'find';
   static const live = 'live';
   static const health = 'health';
-  static const shipping = 'shipping';
+  static const ship = 'ship';
   static const ride = 'ride';
   static const lang = 'lang';
   static const search = 'search';
+  static const message = 'message';
+  static const send = 'send';
+  static const cancel = 'cancel';
+  static const delete = 'delete';
+  static const yes = 'yes';
+  static const no = 'no';
+  static const sendTo = 'sendTo';
 
 }
