@@ -1,11 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/typing_and_online_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatMuteState_usecase.dart';
@@ -13,10 +18,12 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/chats_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getChats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getGroupsChats_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getSeenHistoryUseCase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unlock_chat_usecase.dart';
 import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 
 part 'chats_state.dart';
 
@@ -29,6 +36,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   final LockChatUseCase _lockChatUseCase;
   final UnLockChatUseCase _unLockChatUseCase;
   final GroupsChatsUseCase _groupsChatsUseCase;
+  final GetSeenHistoryUseCase _getSeenHistoryUseCase;
   int unReadMessage = 0;
 
   String? userToken;
@@ -37,6 +45,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   final messageTextController = TextEditingController();
   final Map<String, ChatModel> _chats = {};
   List<UserStatusParams> userStatusParams = [];
+  List<SeenHistoryModel> seenHistoryList = [];
 
   ChatsCubit(
     this._getTokensUseCase,
@@ -47,6 +56,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     this._lockChatUseCase,
     this._unLockChatUseCase,
     this._groupsChatsUseCase,
+    this._getSeenHistoryUseCase,
   ) : super(const ChatsState());
 
   initSocketConnection() async {
@@ -83,7 +93,6 @@ class ChatsCubit extends Cubit<ChatsState> {
     ChatsRequestParams chatsRequestParams =
         getTabParams(index: index, password: password);
 
-
     if (chatsRequestParams.categoryId == null && index != 5) {
       return emit
           .call(state.copyWith(chats: [], status: ChatsStates.initState));
@@ -91,7 +100,6 @@ class ChatsCubit extends Cubit<ChatsState> {
       _chats.clear();
       var response;
       if (index == 5) {
-
         response = await _groupsChatsUseCase.call(const NoParams());
       } else {
         response = await _getChatsUseCase.call(
@@ -112,7 +120,6 @@ class ChatsCubit extends Cubit<ChatsState> {
           if (index != 5) {
             refreshChatData(data);
           }
-
         },
       );
     }
@@ -304,5 +311,83 @@ class ChatsCubit extends Cubit<ChatsState> {
     print("Close Socket");
     _socketService.disposeSocket();
     return super.close();
+  }
+
+  getSeenHistory(String chatId, BuildContext context) async {
+    var response;
+    response = await _getSeenHistoryUseCase.call(chatId);
+    response.fold(
+      (failure) => emit
+          .call(state.copyWith(failure: failure, status: ChatsStates.error)),
+      (data) async {
+        seenHistoryList = data;
+
+        // emit(data);
+        showDialogToSeenHistory(context);
+      },
+    );
+  }
+
+  Future<bool?> showDialogToSeenHistory(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: ((context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            title: Label(
+                text: 'Seen History',
+                style: Styles.headerText(
+                    fontWeight: FontWeight.bold, color: Colors.black)),
+            content: Container(
+                height: 300,
+                width: 400,
+                child: Column(
+                  children: [
+                    Label(
+                      text: seenHistoryList[0].name ?? "",
+                      style: const TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.w700),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: ListView.builder(
+                        itemCount: seenHistoryList.length,
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        itemBuilder: (context, index) {
+                          return Container(
+                              margin: const EdgeInsets.all(8),
+                              padding: const EdgeInsets.all(4),
+                              color: Colors.grey[300],
+                              child: Row(
+                                children: [
+                                  const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 12.0),
+                                    child: Icon(
+                                      FontAwesomeIcons.eye,
+                                      color: Colors.blueAccent,
+                                      size: 14,
+                                    ),
+                                  ),
+                                  Label(
+                                      text:
+                                          "${seenHistoryList[index].date}  ${seenHistoryList[index].time}")
+                                ],
+                              ));
+                        },
+                      ),
+                    ),
+                  ],
+                )),
+            actions: [
+              TextButton(
+                  onPressed: () async {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: const Text('Close')),
+            ],
+          )),
+    );
   }
 }

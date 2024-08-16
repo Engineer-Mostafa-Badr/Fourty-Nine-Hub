@@ -406,5 +406,9 @@ class EndPoints {
   }
 
   static String getChatGroups = '/chat/group/get-groups/';
+  static String seenHistoryEndpoint(String chatId) {
+    return '/chat/last-seen-logs/$chatId';
+  }
+
 
 }

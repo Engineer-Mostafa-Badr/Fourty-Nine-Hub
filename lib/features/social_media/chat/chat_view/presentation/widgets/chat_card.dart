@@ -1,17 +1,23 @@
+import 'package:dartz/dartz.dart' as DartZ;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/api/api_consumer.dart';
+import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
-class ChatCard extends StatelessWidget {
+class ChatCard extends StatefulWidget {
   final bool isSecret;
   final ChatModel? chatItemModel;
   final ChatsCubit? chatsCubit;
@@ -20,9 +26,17 @@ class ChatCard extends StatelessWidget {
       {super.key, this.isSecret = false, this.chatItemModel, this.chatsCubit});
 
   @override
+  State<ChatCard> createState() => _ChatCardState();
+}
+
+class _ChatCardState extends State<ChatCard> {
+  List<SeenHistoryModel> seenHistoryList = [];
+
+  @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.CHATROOM, extra: chatItemModel?.sId),
+      onTap: () =>
+          context.push(Routes.CHATROOM, extra: widget.chatItemModel?.sId),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -33,7 +47,7 @@ class ChatCard extends StatelessWidget {
                 SizedBox(
                   height: kToolbarHeight * .7,
                   width: kToolbarHeight * .7,
-                  child: isSecret
+                  child: widget.isSecret
                       ? const CircleAvatar(
                           backgroundColor: Colors.white,
                           child: Icon(
@@ -46,8 +60,8 @@ class ChatCard extends StatelessWidget {
                               child: CircleAvatar(
                                 minRadius: 50,
                                 backgroundColor: Colors.black,
-                                backgroundImage:
-                                    NetworkImage(chatItemModel?.avatar ?? ''),
+                                backgroundImage: NetworkImage(
+                                    widget.chatItemModel?.avatar ?? ''),
                               ),
                             ),
 
@@ -60,7 +74,7 @@ class ChatCard extends StatelessWidget {
                                 right: 0,
                                 child: CircleAvatar(
                                   radius: 5,
-                                  backgroundColor: chatItemModel!.online!
+                                  backgroundColor: widget.chatItemModel!.online!
                                       ? Colors.green
                                       : Colors.transparent,
                                 ))
@@ -77,8 +91,9 @@ class ChatCard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Label(
-                          text:
-                              isSecret ? 'Mxxx xxxl' : '${chatItemModel?.name}',
+                          text: widget.isSecret
+                              ? 'Mxxx xxxl'
+                              : '${widget.chatItemModel?.name}',
                           style: Styles.mediumText(fontWeight: FontWeight.bold),
                           maxLines: 1,
                         ),
@@ -89,9 +104,9 @@ class ChatCard extends StatelessWidget {
                             width: 10,
                           ),
 
-                          chatItemModel!.typing!
+                          widget.chatItemModel!.typing!
                               ? const SizedBox()
-                              : chatItemModel!.seen!
+                              : widget.chatItemModel!.seen!
                                   ? const Icon(
                                       FontAwesomeIcons.checkDouble,
                                       color: AppColors.PRIMARY_COLOR,
@@ -99,7 +114,7 @@ class ChatCard extends StatelessWidget {
                                     )
                                   : const SizedBox(),
 
-                          if (chatItemModel!.seen!)
+                          if (widget.chatItemModel!.seen!)
                             const SizedBox(
                               width: 10,
                             ),
@@ -107,16 +122,17 @@ class ChatCard extends StatelessWidget {
                           // last message or typing
                           Expanded(
                             child: Label(
-                                text: chatItemModel!.typing!
+                                text: widget.chatItemModel!.typing!
                                     ? "Typing now..."
-                                    : chatItemModel?.lastMessageText == null
+                                    : widget.chatItemModel?.lastMessageText ==
+                                            null
                                         ? "No messages until now"
-                                        : '${chatItemModel?.lastMessageText}',
+                                        : '${widget.chatItemModel?.lastMessageText}',
                                 style: Styles.mediumText(
                                   fontSize: 14,
-                                  color: chatItemModel!.typing!
+                                  color: widget.chatItemModel!.typing!
                                       ? AppColors.SPLASH_BLACK_COLOR
-                                      : chatItemModel!.seen!
+                                      : widget.chatItemModel!.seen!
                                           ? AppColors.GREY_DARK_COLOR
                                           : AppColors.SPLASH_BLACK_COLOR,
                                 )),
@@ -125,7 +141,7 @@ class ChatCard extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          chatItemModel!.muted!
+                          widget.chatItemModel!.muted!
                               ? const Icon(
                                   Icons.volume_off,
                                   color: Colors.grey,
@@ -139,13 +155,13 @@ class ChatCard extends StatelessWidget {
                 ),
 
                 // number of reads
-                chatItemModel?.unreadCount == 0
+                widget.chatItemModel?.unreadCount == 0
                     ? const SizedBox()
                     : CircleAvatar(
                         maxRadius: 15,
                         backgroundColor: AppColors.PRIMARY_COLOR,
                         child: Label(
-                            text: '${chatItemModel?.unreadCount}',
+                            text: '${widget.chatItemModel?.unreadCount}',
                             style: Styles.mediumText(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -158,27 +174,35 @@ class ChatCard extends StatelessWidget {
                 Column(
                   children: [
                     Label(
-                        text: '${chatItemModel?.formattedUpdatedAt}',
+                        text: '${widget.chatItemModel?.formattedUpdatedAt}',
                         style: Styles.mediumText(color: Colors.grey)),
-                    chatItemModel?.lastSeenCount == null
+                    widget.chatItemModel?.lastSeenCount == null
                         ? const SizedBox()
-                        : Row(
-                            children: [
-                              Label(
-                                  text: '${chatItemModel?.lastSeenCount}',
-                                  style: Styles.mediumText(color: Colors.grey)),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 2.0),
-                                child: Icon(
-                                  FontAwesomeIcons.eye,
-                                  color: Colors.grey,
-                                  size: 14,
+                        : GestureDetector(
+                            onTap: () {
+                              getSeenHistory(widget.chatItemModel!.sId!);
+                            },
+                            child: Row(
+                              children: [
+                                Label(
+                                    text:
+                                        '${widget.chatItemModel?.lastSeenCount}',
+                                    style:
+                                        Styles.mediumText(color: Colors.grey)),
+                                const SizedBox(
+                                  width: 10,
                                 ),
-                              ),
-                            ],
+                                const Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 2.0),
+                                  child: Icon(
+                                    FontAwesomeIcons.eye,
+                                    color: Colors.grey,
+                                    size: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
                           )
                   ],
                 ),
@@ -188,5 +212,11 @@ class ChatCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  //
+
+  getSeenHistory(String chatId) async {
+    await widget.chatsCubit?.getSeenHistory(chatId,context);
   }
 }

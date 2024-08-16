@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 
@@ -39,6 +40,9 @@ abstract class ChatsRemoteDataSource {
   });
 
   Future<Either<Failure, ChatItemModel>> getGroups();
+
+  Future<Either<Failure, List<SeenHistoryModel>>> getSeenHistoryList(
+      {required String chatId});
 }
 
 class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
@@ -132,7 +136,19 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
   @override
   Future<Either<Failure, ChatItemModel>> getGroups() async {
     final response = await _apiConsumer.get(EndPoints.getChatGroups);
+    return response.fold((failure) => Left(failure),
+        (data) => Right(ChatItemModel.fromJson(data['data'])));
+  }
+
+  @override
+  Future<Either<Failure, List<SeenHistoryModel>>> getSeenHistoryList(
+      {required String chatId}) async {
+    final response =
+        await _apiConsumer.get(EndPoints.seenHistoryEndpoint(chatId));
     return response.fold(
-        (failure) => Left(failure), (data) => Right(ChatItemModel.fromJson(data['data'])));
+        (failure) => Left(failure),
+        (data) => Right((data['data']['lastSeen'] as List)
+            .map((e) => SeenHistoryModel.fromJson(e))
+            .toList()));
   }
 }
