@@ -1,3 +1,4 @@
+import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
@@ -22,7 +23,8 @@ import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/registable_sub_categories_cubit/registable_subcategories_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/all_doctor_reservations/all_doctor_reservations_cubit.dart';
@@ -107,8 +109,6 @@ import '../features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
-import '../features/fourty_nine/presentation/controllers/main_categories_cubit/parent_main_categories_cubit.dart';
-import '../features/fourty_nine/presentation/controllers/parent_main_categories_cubit/main_categories_cubit.dart';
 import '../features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
 import '../features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import '../features/health_feature/health/presentation/pages/health_view.dart';
@@ -170,24 +170,14 @@ class AppPages {
       path: Routes.HOME,
       builder: (context, state) => MultiBlocProvider(
         providers: [
-          BlocProvider<RegistableSubCategoriesCubit>(
-            lazy: false,
-            create: (_) => serviceLocator(),
-          ),
           BlocProvider(
-            lazy: false,
-            create: (context) => serviceLocator<ParentMainCategoriesCubit>(),
-          ),
-          BlocProvider(
-            lazy: false,
-            create: (context) => serviceLocator<MainCategoriesCubit>(),
-          ),
-          BlocProvider(
-            lazy: false,
             create: (context) => serviceLocator<SliderCubit>(),
           ),
-           BlocProvider(
+          BlocProvider(
             create: (context) => serviceLocator<ThumbnailsCubit>(),
+          ),
+          BlocProvider(
+            create: (context) => serviceLocator<MainCategoriesCubit>(),
           ),
         ],
         child: const FourtyNineView(),
@@ -244,8 +234,15 @@ class AppPages {
         GoRoute(
           name: Routes.LOGIN,
           path: Paths.LOGIN,
-          builder: (context, state) => BlocProvider(
-            create: (_) => serviceLocator<LoginCubit>(),
+          builder: (context, state) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => serviceLocator<LoginCubit>(),
+              ),
+              BlocProvider(
+                create: (_) => serviceLocator<RegisterCubit>(),
+              ),
+            ],
             child: const LoginView(),
           ),
         ),
@@ -348,7 +345,7 @@ class AppPages {
         GoRoute(
           path: Paths.WINNERS,
           name: Routes.WINNERS,
-          builder: (context, state) => const Winners(),
+          builder: (context, state) => Winners(),
         ),
         GoRoute(
           path: Paths.QURAAN,
@@ -442,7 +439,7 @@ class AppPages {
                   builder: (context, state) =>
                       BlocProvider<FavouriteSubCategoryCubit>(
                         create: (_) => serviceLocator(),
-                        child:  const FavSubCategoryView(),
+                        child: const FavSubCategoryView(),
                       )),
               GoRoute(
                   path: Paths.MYADDS,
@@ -825,8 +822,10 @@ class AppPages {
         GoRoute(
           path: Paths.SHIPPING,
           name: Routes.SHIPPING,
-          builder: (context, state) => CreateShippingView(
-            cubit: context.read<ShippingCubit>(),
+          builder: (context, state) => BlocProvider<ShippingCubit>(
+            create: (context) =>
+                serviceLocator<ShippingCubit>()..getBannerData(),
+            child: const CreateShippingView(),
           ),
         ),
         GoRoute(
@@ -933,7 +932,15 @@ class AppPages {
         GoRoute(
           path: Paths.SHIPPING_REGISTER,
           name: Routes.SHIPPING_REGISTER,
-          builder: (context, state) => const RegisterShippingScreen(),
+          builder: (context, state) => MultiBlocProvider(providers: [
+            BlocProvider(
+              create: (context) => serviceLocator<ShippingCubit>(),
+            ),
+            //to be reviewed
+            BlocProvider(
+              create: (context) => serviceLocator<CreateDoctorCubit>(),
+            ),
+          ], child: const RegisterShippingScreen()),
         )
       ],
     ),

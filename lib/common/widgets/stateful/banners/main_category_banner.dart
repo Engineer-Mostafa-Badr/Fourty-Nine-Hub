@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -16,13 +17,13 @@ class MainCategoryBanner extends StatefulWidget {
   final bool canRegister;
   final Function()? onRegister;
   final Color? color;
-  const MainCategoryBanner(
-      {super.key,
-      this.canRegister = false,
-      this.onRegister,
-      required this.category,
-        this.color=Colors.white,
-      });
+  const MainCategoryBanner({
+    super.key,
+    this.canRegister = false,
+    this.onRegister,
+    required this.category,
+    this.color = Colors.white,
+  });
 
   @override
   State<MainCategoryBanner> createState() => _MainCategoryBannerState();
@@ -42,79 +43,72 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: NetworkImage(widget.category.banner),
-        ),
-      ),
-      child: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Colors.black.withOpacity(0.5), // Darken the background
+          borderRadius: BorderRadius.circular(5),
+          color: Colors.transparent,
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: CachedNetworkImageProvider(
+              widget.category.banner,
             ),
+            // colorFilter: ColorFilter.mode(
+            //   Colors.black.withOpacity(0.3), // Adjust the opacity as needed
+            //   BlendMode.darken,
+            // ),
+          )),
+      child: Row(
+        children: [
+          _buildRegisterButton(),
+          widget.canRegister ? const Spacer() : const SizedBox.shrink(),
+          Label(
+            text: widget.category.name,
+            style: Styles.headerText(color: Colors.white),
           ),
-          Row(
+          const Spacer(),
+          Column(
             children: [
-              _buildRegisterButton(),
-              widget.canRegister ? const Spacer() : const SizedBox.shrink(),
+              InkWell(
+                onTap: () async {
+                  if (_isFavorite) {
+                    final result = await serviceLocator<
+                            RemoveMainCategoryFromFavoritesUseCase>()
+                        .call(widget.category.id);
+                    result.fold(
+                      (l) => showErrorMessage(
+                          context, "Can't remove from favorite"),
+                      (r) {
+                        setState(() {
+                          _isFavorite = false;
+                        });
+                      },
+                    );
+                  } else {
+                    final result = await serviceLocator<
+                            AddMainCategoryToFavoritesUseCase>()
+                        .call(widget.category.id);
+                    result.fold(
+                      (l) => showErrorMessage(context, "Can't add to favorite"),
+                      (r) {
+                        setState(() {
+                          _isFavorite = true;
+                        });
+                      },
+                    );
+                  }
+                },
+                child: Icon(
+                  _isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: AppColors.SECONDARY_COLOR,
+                ),
+              ),
+              const Sizer(height: 20),
               Label(
-                text: widget.category.name,
-                style: Styles.headerText(
-                  fontSize: 20,
+                text: '${widget.category.total.toShortScale} ${Labels.ads}',
+                style: Styles.mediumText(
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
                   color: widget.color,
                 ),
-              ),
-              const Spacer(),
-              Column(
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      if (_isFavorite) {
-                        final result = await serviceLocator<
-                            RemoveMainCategoryFromFavoritesUseCase>()
-                            .call(widget.category.id);
-                        result.fold(
-                              (l) => showErrorMessage(context, "Can't remove from favorite"),
-                              (r) {
-                            setState(() {
-                              _isFavorite = false;
-                            });
-                          },
-                        );
-                      } else {
-                        final result = await serviceLocator<
-                            AddMainCategoryToFavoritesUseCase>()
-                            .call(widget.category.id);
-                        result.fold(
-                              (l) => showErrorMessage(context, "Can't add to favorite"),
-                              (r) {
-                            setState(() {
-                              _isFavorite = true;
-                            });
-                          },
-                        );
-                      }
-                    },
-                    child: Icon(
-                      _isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: AppColors.SECONDARY_COLOR,
-                    ),
-                  ),
-                  const Sizer(height: 20),
-                  Label(
-                    text: '${widget.category.total.toShortScale} ${Labels.ads}',
-                    style: Styles.mediumText(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: widget.color,
-                    ),
-                  )
-                ],
-              ),
+              )
             ],
           ),
         ],

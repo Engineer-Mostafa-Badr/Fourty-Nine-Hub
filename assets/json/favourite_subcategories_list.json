@@ -1,0 +1,26 @@
+{
+    "status":true,
+    "message":null, 
+    "data":{
+        "items":[
+            {
+                "id":1,
+                "type":"category",
+                "item": {
+                    "id":3,
+                    "name":"Come with me",
+                    "image":"https://purepng.com/public/uploads/thumbnail//mercedes-benz-glc-gray-car-51506280141wvu31cihfs.png"
+                }
+            },
+            {
+                "id":2,
+                "type":"category",
+                "item": {
+                    "id":4,
+                    "name":"Pick Me",
+                    "image":"https://img.lovepik.com/free-png/20210926/lovepik-a-car-png-image_401434180_wh1200.png"
+                }
+            }
+        ]
+    }
+}

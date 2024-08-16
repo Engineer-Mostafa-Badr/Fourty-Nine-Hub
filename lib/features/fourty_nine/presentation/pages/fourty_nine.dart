@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
-import 'package:fourtyninehub/common/widgets/stateful/dynamic/list_view_pagination.dart';
 
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -10,9 +9,10 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/parent_main_categories_cubit/main_categories_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../common/widgets/dynamic/drawer.dart';
@@ -43,7 +43,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  const HomeAppbar(
+      appBar: const HomeAppbar(
         isWithBackArrow: false,
       ),
       bottomNavigationBar: const BottomNavigator(
@@ -55,48 +55,96 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       drawer: const DrawerWidget(),
-      body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const AnnounceWidget(),
-                  const AdsTextBanner(),
-                  const WalletWidget(),
-                  const GoogleAddsBanner(),
-                  const Sizer(),
-                  _buildMazadatWidget(),
-                  const Sizer(),
-                   SizedBox(
-                    height: 500,
-                    child: PaginationView<MainCategoryEntity>(
-                      build: (ScrollController scrollController,
-                          List<MainCategoryEntity> data) {
-                        return ListView.separated(
-                          itemCount: data.length,
-                          shrinkWrap: true,
-                          controller: scrollController,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                context.push(Routes.SUBCATEGORIES,
-                                    extra: data[index]);
-                              },
-                              child: MainCategoryBanner(category: data[index]),
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) =>
-                              const Sizer(),
-                        );
+      body: ListView(
+                  padding : const EdgeInsets.symmetric(horizontal: 10),
+
+        children: [
+          const AnnounceWidget(),
+          // const AdsTextBanner(),
+          const WalletWidget(),
+          const Sizer(),
+          const GoogleAddsBanner(),
+          const Sizer(),
+          _buildMazadatWidget(),
+          const Sizer(),
+          _buildMainCategoriesViews(),
+          const Sizer(),
+          BlocBuilder<MainCategoriesCubit,
+              BasicState<List<MainCategoryEntity>>>(
+            builder: (context, state) {
+              if (state.isSuccess && state.data != null) {
+                return ListView.separated(
+                  itemCount: state.data?.length ?? 0,
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        context.push(Routes.SUBCATEGORIES,
+                            extra: state.data![index]);
                       },
-                      fetchData: (PaginationParams paginationParams) => context
-                          .read<MainCategoriesCubit>()
-                          .getMainCategories(paginationParams),
-                    ),
-                  ),
-                ]),
-          )),
+                      child: MainCategoryBanner(category: state.data![index]),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Sizer(),
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMainCategoriesViews() {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: AppColors.PRIMARY_COLOR,
+        ),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildItemTabBar(
+              SvgPicture.asset(
+                Assets.threeDots,
+                height: 20,
+                width: 20,
+              ),
+              Routes.MAINCATEGORIESTREE,
+            ),
+            _buildItemTabBar(
+              SvgPicture.asset(
+                Assets.mobile,
+                height: 20,
+                width: 20,
+              ),
+              Routes.MAINCATEGORIESCARDS,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildItemTabBar(
+    Widget icon,
+    String routeName,
+  ) {
+    return InkWell(
+      onTap: () => context.push(routeName),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 5),
+        decoration: const BoxDecoration(),
+        child: icon,
+      ),
     );
   }
 
@@ -143,13 +191,12 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     children: [
                       Positioned.fill(
                         child: AppButton(
-                          color: Colors.white,
+                            color: Colors.white,
                             label: 'Auction',
                             style: const TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.bold,
-                              color: Colors.white
-                            ),
+                                color: Colors.white),
                             icon: Icons.group,
                             iconSize: 22,
                             onPressed: () => context.push(Routes.MAZADAT)),
@@ -191,10 +238,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   height: kToolbarHeight * .5,
                   label: 'Installments',
                   style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white
-                  ),
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                   icon: Icons.list,
                   iconSize: 22,
                   onPressed: () => context.push(Routes.INSTALLMENT)),
@@ -240,16 +286,15 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                       url: image,
                     ),
                     Container(
-                      color: Colors.black.withOpacity(0.3), // Darken the background
+                      color: Colors.black
+                          .withOpacity(0.3), // Darken the background
                     ),
                   ],
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 5
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Row(
                 children: [
                   Label(
@@ -271,7 +316,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                       ),
                       Label(
                         text: '1 Ads',
-                        style: Styles.mediumText(color: Colors.white, fontSize: 15),
+                        style: Styles.mediumText(
+                            color: Colors.white, fontSize: 15),
                       ),
                     ],
                   ),

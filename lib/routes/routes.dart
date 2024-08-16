@@ -2,6 +2,8 @@ abstract class Routes {
   Routes._();
 
   static const HOME = '/';
+  static const MAINCATEGORIESCARDS = '/MainCategoriesCards';
+  static const MAINCATEGORIESTREE = '/MainCategoriesTree';
   static const SUBCATEGORIES = '/Subcategories';
   static const ADS = '/Subcategories/ADS';
   static const ADdetails = '/Subcategories/ADS/AD-Details';
@@ -118,6 +120,8 @@ abstract class Paths {
   Paths._();
 
   static const HOME = '/';
+  static const MAINCATEGORIESCARDS = 'MainCategoriesCards';
+  static const MAINCATEGORIESTREE = 'MainCategoriesTree';
   static const SUBCATEGORIES = 'Subcategories';
   static const ADS = 'ADS';
   static const ADdetails = 'AD-Details';

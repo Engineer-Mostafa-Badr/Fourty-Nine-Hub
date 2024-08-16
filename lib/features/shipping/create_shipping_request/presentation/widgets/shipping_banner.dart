@@ -1,4 +1,5 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
@@ -26,7 +27,7 @@ class ShippingBanner extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: NetworkImage(model.mainCategory?.banner ?? ""),
+          image: CachedNetworkImageProvider(model.mainCategory?.banner ?? ""),
         ),
       ),
       child: Row(
@@ -34,6 +35,7 @@ class ShippingBanner extends StatelessWidget {
         children: [
           Column(
             children: [
+
               const Icon(
                 Icons.favorite_border,
                 color: AppColors.SECONDARY_COLOR,

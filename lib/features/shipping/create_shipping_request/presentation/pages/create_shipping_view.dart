@@ -24,19 +24,13 @@ import '../../../../../common/widgets/stateful/maps/map_picker.dart';
 import '../../../../ride/RideRequest/domain/entity/address_search_params_entity.dart';
 
 class CreateShippingView extends StatefulWidget {
-  const CreateShippingView({super.key, required this.cubit});
-  final ShippingCubit cubit;
+  const CreateShippingView({super.key});
   @override
   State<CreateShippingView> createState() => _CreateShippingViewState();
 }
 
+
 class _CreateShippingViewState extends State<CreateShippingView> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    widget.cubit.getBannerData();
-  }
 
   TextEditingController receiptPoint = TextEditingController();
   TextEditingController deliveryPoint = TextEditingController();

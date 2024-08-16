@@ -76,17 +76,17 @@ class DoctorModel extends DoctorEntity {
               json['appointments'].map((x) => AppointmentModel.fromJson(x)),
             )
           : [],
-      clinicDays: json['doctorAppointment']['clinic']['workDays'] != null
+      clinicDays: json['doctorAppointment'] != null
           ? List<DoctorDayEntity>.from(json['doctorAppointment']['clinic']
                   ['workDays']
               .map((x) => DoctorDayModel.fromJson(x)))
           : [],
-      callDays: json['doctorAppointment']['calls']['workDays'] != null
+      callDays: json['doctorAppointment'] != null
           ? List<DoctorDayEntity>.from(json['doctorAppointment']['calls']
                   ['workDays']
               .map((x) => DoctorDayModel.fromJson(x)))
           : [],
-      homeVisitDays: json['doctorAppointment']['visitHome']['workDays'] != null
+      homeVisitDays: json['doctorAppointment'] != null
           ? List<DoctorDayEntity>.from(json['doctorAppointment']['visitHome']
                   ['workDays']
               .map((x) => DoctorDayModel.fromJson(x)))

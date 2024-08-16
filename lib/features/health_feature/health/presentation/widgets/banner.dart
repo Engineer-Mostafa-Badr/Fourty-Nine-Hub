@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -18,27 +15,17 @@ class HealthBanner extends StatelessWidget {
     return BlocBuilder<HealthCubit, HealthState>(
       builder: (context, state) {
         if (state.mainCategory != null) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Label(
-                text: state.mainCategory!.name,
-                style: Styles.headerText(),
-              ),
-              const Sizer(),
-              MainCategoryBanner(
-                color: AppColors.QUANTITY_COLOR,
-                  category: state.mainCategory!,
-                  canRegister: state.isDoctor == true ? false : true,
-                  onRegister: () {
-                    if (context.read<UserCubit>().isLoggedIn) {
-                      context.push(Routes.CREATEDOCTOR);
-                    } else {
-                      context.push(Routes.REGISTER);
-                    }
-                  }),
-            ],
-          );
+          return MainCategoryBanner(
+              color: AppColors.QUANTITY_COLOR,
+              category: state.mainCategory!,
+              canRegister: state.isDoctor == true ? false : true,
+              onRegister: () {
+                if (context.read<UserCubit>().isLoggedIn) {
+                  context.push(Routes.CREATEDOCTOR);
+                } else {
+                  context.push(Routes.REGISTER);
+                }
+              });
         } else {
           return const SizedBox.shrink();
         }

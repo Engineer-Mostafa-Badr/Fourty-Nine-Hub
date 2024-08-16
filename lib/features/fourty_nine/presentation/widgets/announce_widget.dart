@@ -19,7 +19,7 @@ class AnnounceWidget extends StatelessWidget {
         return const SizedBox();
       } else {
         return CarouselSliderWidget(
-            height: 300,
+            height: 100,
             autoPlay: true,
             widgets: state.data?.map((e) {
                   return _buildAnnounceItem(item: e);

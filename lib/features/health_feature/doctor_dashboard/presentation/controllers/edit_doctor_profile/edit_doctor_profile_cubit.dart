@@ -32,7 +32,7 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
   Future<void> _getDoctorProfile() async {
     emit(state.copyWith(status: EditDoctorProfileStateStatus.startLoading));
     final response = await _getDoctorProfileUseCase(const NoParams());
-    emit(state.copyWith(status: EditDoctorProfileStateStatus.startLoading));
+    emit(state.copyWith(status: EditDoctorProfileStateStatus.endLoading));
 
     response.fold(
         (failure) => emit(state.copyWith(
@@ -45,7 +45,7 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
     emit(state.copyWith(status: EditDoctorProfileStateStatus.startLoading));
 
     final respone = await _updateDoctorProfilePhotoUsecase(imageid);
-    emit(state.copyWith(status: EditDoctorProfileStateStatus.startLoading));
+    emit(state.copyWith(status: EditDoctorProfileStateStatus.endLoading));
 
     respone.fold(
       (failure) => emit(state.copyWith(
@@ -59,7 +59,7 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
     emit(state.copyWith(status: EditDoctorProfileStateStatus.startLoading));
 
     final respone = await _updateDoctorIDUsecase(params);
-    emit(state.copyWith(status: EditDoctorProfileStateStatus.startLoading));
+    emit(state.copyWith(status: EditDoctorProfileStateStatus.endLoading));
 
     respone.fold(
         (failure) => emit(state.copyWith(
@@ -72,7 +72,7 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
     emit(state.copyWith(status: EditDoctorProfileStateStatus.startLoading));
 
     final respone = await _updateDoctorPracticingCirtificateUsecase(params);
-    emit(state.copyWith(status: EditDoctorProfileStateStatus.startLoading));
+    emit(state.copyWith(status: EditDoctorProfileStateStatus.endLoading));
 
     respone.fold(
         (failure) => emit(state.copyWith(
@@ -84,7 +84,7 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
   Future<void> deleteAccount() async {
     emit(state.copyWith(status: EditDoctorProfileStateStatus.startLoading));
     final respone = await _deleteDoctorAccountUseCase(state.doctor!.id);
-    emit(state.copyWith(status: EditDoctorProfileStateStatus.startLoading));
+    emit(state.copyWith(status: EditDoctorProfileStateStatus.endLoading));
 
     respone.fold(
         (failure) => emit(state.copyWith(
