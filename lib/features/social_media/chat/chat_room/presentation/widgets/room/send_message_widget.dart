@@ -36,14 +36,14 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   final _utils = EmojiPickerUtils();
   late final EmojiTextEditingController _controller;
   late final ScrollController _scrollController;
-  final TextEditingController? _messageTextController = TextEditingController();
+  final TextEditingController _messageTextController = TextEditingController();
   late final TextStyle _textStyle;
   final bool isApple = [TargetPlatform.iOS, TargetPlatform.macOS]
       .contains(foundation.defaultTargetPlatform);
   bool _emojiShowing = false;
   late ChatRoomCubit chatRoomCubit;
-  static final inputTopRadius = const Radius.circular(12);
-  static final inputBottomRadius = const Radius.circular(12);
+  static const inputTopRadius = Radius.circular(12);
+  static const inputBottomRadius = Radius.circular(12);
 
   @override
   void initState() {
@@ -144,7 +144,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                         bottomRight: inputBottomRadius,
                       ),
                     ),
-                    suffixIcon: _messageTextController!.text.trim().length != 0
+                    suffixIcon: _messageTextController.text.trim().isNotEmpty
                         ? const SizedBox()
                         : SizedBox(
                             width: kToolbarHeight * 1.5,
@@ -155,7 +155,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                                     onPressed: () {
                                       bottomSheet(
                                           context: context,
-                                          widget: AttachmentTypes());
+                                          widget: const AttachmentTypes());
                                     },
                                     color: Colors.grey),
                                 const Sizer(),
@@ -170,7 +170,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
             ],
           )),
           const Sizer(),
-          _messageTextController.text.trim().length > 0
+          _messageTextController.text.trim().isNotEmpty
               ? AppButton(
                   backColor: Colors.green,
                   label: '',
@@ -197,8 +197,8 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                   child: SocialMediaRecorder(
                     recordIconBackGroundColor: AppColors.PRIMARY_COLOR,
                     startRecording: () {},
-                    stopRecording: (_time) {},
-                    sendRequestFunction: (soundFile, _time) {},
+                    stopRecording: (time) {},
+                    sendRequestFunction: (soundFile, time) {},
                     encode: AudioEncoderType.AAC,
                   ),
                 ),
@@ -211,7 +211,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
             color: Colors.grey.withOpacity(.2),
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
                 topLeft: inputTopRadius, topRight: inputTopRadius)),
         child: ReplayMessageWidget(
           messageEntity: widget.replayMessage!,

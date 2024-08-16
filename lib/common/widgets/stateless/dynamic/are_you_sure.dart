@@ -50,6 +50,7 @@ class AreYouSure extends StatelessWidget {
         children: [
           Expanded(
               child: AppButton(
+                color: AppColors.AUTH_CONTAINER_COLOR,
                   label: 'Ok',
                   onPressed: () {
                     action();
@@ -58,6 +59,7 @@ class AreYouSure extends StatelessWidget {
           const Sizer(),
           Expanded(
               child: AppButton(
+                  color: AppColors.QUANTITY_COLOR,
                   backColor: AppColors.LIGHT_GRAY_COLOR,
                   label: 'Close',
                   onPressed: () => context.pop())),

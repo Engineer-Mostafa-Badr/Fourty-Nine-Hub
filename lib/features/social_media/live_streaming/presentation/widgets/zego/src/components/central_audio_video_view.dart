@@ -28,14 +28,14 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 /// @nodoc
 class ZegoLiveStreamingCentralAudioVideoView extends StatefulWidget {
   const ZegoLiveStreamingCentralAudioVideoView({
-    Key? key,
+    super.key,
     required this.config,
     required this.hostManager,
     required this.liveStatusManager,
     required this.popUpManager,
     required this.constraints,
     this.plugins,
-  }) : super(key: key);
+  });
 
   final ZegoUIKitPrebuiltLiveStreamingConfig config;
 

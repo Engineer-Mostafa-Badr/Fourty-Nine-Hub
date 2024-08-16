@@ -2,7 +2,6 @@
 import 'dart:async';
 
 import '../../../zego_uikit_prebuilt_live_streaming.dart';
-import '../../swiping/config.dart';
 
 /// @nodoc
 mixin ZegoLiveStreamingControllerSwipingPrivate {

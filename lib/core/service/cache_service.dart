@@ -242,8 +242,9 @@ class CacheServiceImplV2 implements CacheService {
         await storage.deleteAll();
         await prefs.setBool(_HAS_RUN_BEFORE, true);
         _completer.complete(storage);
-      } else
+      } else {
         _completer.complete(const FlutterSecureStorage());
+      }
     });
   }
 

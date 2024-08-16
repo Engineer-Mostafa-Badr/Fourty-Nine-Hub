@@ -34,7 +34,6 @@ class HealthEmergencyView extends StatelessWidget {
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
         appBar: const BackAppBar(
           label: Labels.emergency,
         ),
@@ -45,6 +44,7 @@ class HealthEmergencyView extends StatelessWidget {
             children: [
               const Sizer(height: 30),
               FirstNameTextFormField(
+                hintColor: AppColors.QUANTITY_COLOR,
                 currentFocusNode: emergencyCubit.firstNameFocusNode,
                 currentController: emergencyCubit.firstNameController,
                 nextFocusNode: emergencyCubit.phoneFocusNode,
@@ -66,6 +66,7 @@ class HealthEmergencyView extends StatelessWidget {
               const HealthEmergencySubCategoriesDropdown(),
               const Sizer(height: 30),
               DefaultTextFormField(
+                hintColor: AppColors.QUANTITY_COLOR,
                   currentFocusNode: emergencyCubit.locationFocusNode,
                   currentController: emergencyCubit.locationController,
                   isRequired: true,

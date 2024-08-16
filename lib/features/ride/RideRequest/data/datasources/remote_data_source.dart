@@ -89,7 +89,7 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
           if (data['data'] != null) {
             return Right(data['data']['_id'] ?? '');
           } else {
-            return Right('');
+            return const Right('');
           }
         } else {
           return Left(ValidationFailure(data['message']));
@@ -103,7 +103,7 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
           if (data['data'] != null) {
             return Right(data['data']['_id'] ?? '');
           } else {
-            return Right('');
+            return const Right('');
           }
         } else {
           return Left(ValidationFailure(data['message']));
@@ -117,7 +117,7 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
           if (data['data'] != null) {
             return Right(data['data']['_id'] ?? '');
           } else {
-            return Right('');
+            return const Right('');
           }
         } else {
           return Left(ValidationFailure(data['message']));

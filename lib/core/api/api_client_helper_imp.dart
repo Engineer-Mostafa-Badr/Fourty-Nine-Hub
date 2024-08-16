@@ -1,7 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:fourtyninehub/core/api/api_client_helper.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 
 class ApiClientHelperImp extends ApiClientHelper {
   Map<String, dynamic> baseHeaders = {};

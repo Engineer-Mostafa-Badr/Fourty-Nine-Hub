@@ -1,4 +1,3 @@
-import 'package:fourtyninehub/features/ads_feature/ads/data/models/publisher_model.dart';
 
 import '../../../../authentication/data/models/user_model.dart';
 import '../../domain/entities/bidding_entity.dart';

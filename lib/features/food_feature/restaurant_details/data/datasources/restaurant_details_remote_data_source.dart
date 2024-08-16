@@ -1,11 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 
-import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 
 import '../../../../../core/api/end_points.dart';
-import '../../../../../res/assets/jsons.dart';
 import '../../../restaurants_list/data/models/restaurant_model.dart';
 import '../../../restaurants_list/domain/entities/restaurant_entity.dart';
 import '../../domain/entities/meal_entity.dart';

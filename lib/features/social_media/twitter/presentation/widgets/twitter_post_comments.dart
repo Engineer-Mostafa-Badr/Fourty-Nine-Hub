@@ -209,7 +209,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                        context: context,
                        isScrollControlled: true,
                        widget: TwitterCommentReplies(
-                         replies: [],
+                         replies: const [],
                          onAddReply: (TwitterCommentReplyParams params) {
                          },
                          commentId: comment.id,

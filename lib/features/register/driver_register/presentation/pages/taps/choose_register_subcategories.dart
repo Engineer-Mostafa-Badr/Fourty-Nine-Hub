@@ -14,11 +14,11 @@ class ChooseRegisterSubcategories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BackAppBar(
+      appBar: const BackAppBar(
         label: 'Choose Options',
       ),
       body: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 5,
           ),
           itemCount: subCategories.length,

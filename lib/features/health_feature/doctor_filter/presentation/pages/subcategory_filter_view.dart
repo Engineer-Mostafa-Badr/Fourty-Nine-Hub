@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/subcategory_filter_cubit/doctor_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/widgets/subcategories_list.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class DoctorSubcategoryFilterView extends StatelessWidget {
   const DoctorSubcategoryFilterView({super.key});
@@ -15,7 +16,6 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
     final doctorSubcategoryFilter =
         context.read<DoctorSubcategoryFilterCubit>();
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: const BackAppBar(
         label: Labels.speciality,
       ),
@@ -28,10 +28,11 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DefaultTextFormField(
+              hintColor: Theme.of(context).scaffoldBackgroundColor,
               currentFocusNode: doctorSubcategoryFilter.searchFocusNode,
               currentController: doctorSubcategoryFilter.searchController,
               hint: Labels.search,
-              prefixIcon: const Icon(Icons.search),
+              prefixIcon:  const Icon(Icons.search,color: AppColors.QUANTITY_COLOR,),
               onChanged: (value) => doctorSubcategoryFilter.search(value),
             ),
             const Sizer(

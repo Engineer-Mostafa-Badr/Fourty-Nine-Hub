@@ -33,7 +33,6 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
   Widget build(BuildContext context) {
     final doctorCityFilter = context.read<DoctorCityFilterCubit>();
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: const BackAppBar(
         label: Labels.city,
       ),

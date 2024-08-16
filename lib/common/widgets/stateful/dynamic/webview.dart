@@ -17,7 +17,7 @@ class _WebViewWidgetState extends State<WebViewScaffold> {
   void initState() {
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0x00000000))
+      ..setBackgroundColor(Colors.red)
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {},

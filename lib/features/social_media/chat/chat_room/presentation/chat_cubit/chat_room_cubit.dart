@@ -142,7 +142,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   listenToMessageTyping() {
     _socketService.socketChatTypingStream.listen((event) {
-      debugPrint("chatListen ${event}");
+      debugPrint("chatListen $event");
 
       List<TypingAndOnlineModel> chatsIds = event ?? [];
       chatsIds.map((e) {}).toList();

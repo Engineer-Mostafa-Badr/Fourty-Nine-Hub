@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
@@ -76,7 +74,7 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
     required BuildContext context,
   }) {
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Column(
         children: [
           const SizedBox(
@@ -132,15 +130,17 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
   Future<bool?> showDialogToCreateLockChatPassword(BuildContext context) async {
     TextEditingController passwordController = TextEditingController(text: '');
     return await showDialog(
+
       context: context,
       builder: ((context) => AlertDialog(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5.0),
             ),
             title: Label(
                 text: 'Lock chats password please',
                 style: Styles.headerText(
-                    fontWeight: FontWeight.bold, color: Colors.black)),
+                    fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
             content: Material(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxHeight: 100.0),
@@ -152,9 +152,9 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
                         hint: 'password',
                         type: TextInputType.number,
                         // initialValue: '',
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 20,
-                            color: Colors.grey,
+                            color: Theme.of(context).scaffoldBackgroundColor,
                             fontWeight: FontWeight.bold),
                         action: (v) => () {}),
                   ],
