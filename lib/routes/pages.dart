@@ -1,6 +1,5 @@
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/pages/contact_us_view.dart';
@@ -88,6 +87,7 @@ import 'package:go_router/go_router.dart';
 import '../core/enums/wallet_types_enums.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_ads_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
+import '../features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import '../features/account_taps/lists/presentation/cubit/lists_cubit.dart';
 import '../features/account_taps/my_adds/presentation/pages/my_adds.dart';
 import '../features/account_taps/policies/presentation/pages/policy_view.dart';
@@ -434,13 +434,16 @@ class AppPages {
                         child: const FavouriteCategoryView(),
                       )),
               GoRoute(
-                  path: Paths.FAVOURITESUBCATEGORIES,
-                  name: Routes.FAVOURITESUBCATEGORIES,
-                  builder: (context, state) =>
-                      BlocProvider<FavouriteSubCategoryCubit>(
-                        create: (_) => serviceLocator(),
-                        child: const FavSubCategoryView(),
-                      )),
+                path: Paths.FAVOURITESUBCATEGORIES,
+                name: Routes.FAVOURITESUBCATEGORIES,
+                builder: (context, state) =>
+                    BlocProvider<FavouriteSubCategoryCubit>(
+                  create: (_) => serviceLocator(),
+                  child: const FavSubCategoryView(
+                    favoriteSubCategory: [],
+                  ),
+                ),
+              ),
               GoRoute(
                   path: Paths.MYADDS,
                   name: Routes.MYADDS,
@@ -535,7 +538,8 @@ class AppPages {
               GoRoute(
                   path: Paths.TINDER,
                   name: Routes.Tinder,
-                  builder: (context, state) => const TinderScreen()),
+                  builder: (context, state) => const TinderView()),
+
               GoRoute(
                 path: Paths.LIVE,
                 name: Routes.LIVE,
