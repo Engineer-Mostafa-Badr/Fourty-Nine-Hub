@@ -66,6 +66,7 @@ dependencies:
   win32: ^5.4.0
   zego_uikit_prebuilt_live_audio_room: ^3.7.5
   zego_uikit_signaling_plugin: ^2.8.2
+  card_swiper: ^3.0.1
 
 dev_dependencies:
   flutter_lints: ^4.0.0

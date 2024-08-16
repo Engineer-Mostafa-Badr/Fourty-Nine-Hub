@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 
 import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_subcategory_view.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -69,7 +70,11 @@ class DrawerWidget extends StatelessWidget {
                       icon: Icons.favorite,
                       label: 'Favourite Sub Categories',
                       requireLogin: true,
-                      onTap: () => context.push(Routes.FAVOURITESUBCATEGORIES)),
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>  const FavSubCategoryView(favoriteSubCategory: [],),
+                          ))),
                   drawerListTile(
                       icon: FontAwesomeIcons.adn,
                       label: 'Favourite Ads',
@@ -408,6 +413,7 @@ class DrawerWidget extends StatelessWidget {
                     },
                     child: const Icon(
                       Icons.camera_enhance_outlined,
+                      color: AppColors.PRIMARY_COLOR,
                       size: 20,
                     ),
                   ),

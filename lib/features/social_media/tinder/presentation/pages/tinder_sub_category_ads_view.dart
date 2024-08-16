@@ -4,8 +4,8 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -27,15 +27,21 @@ class TinderSubCategoryAdsView extends StatefulWidget {
 
 class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
     with SingleTickerProviderStateMixin {
+  late final MainCategoryEntity mainCategory;
+
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
+
+    context.read<UserCubit>().giveMeTokenForTinder().then((value) {
+      context.read<TinderViewCubit>().fetchMainCategoryById(
+          '62c8b5b09332225799fe335e',
+          context.read<UserCubit>().state.token!.accessToken);
+    });
+
     _tabController = TabController(length: 2, vsync: this);
-    // context.read<AdsCubit>().loadData(
-    //       subCategoryId: widget.params.subCategory.id,
-    //     );
   }
 
   @override
@@ -46,141 +52,179 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TinderViewCubit(),
-      child: Scaffold(
-        appBar: const HomeAppbar(),
-        body: Column(
-          children: [
-            const Sizer(),
-            // MainCategoryBanner(category: widget.params.mainCategory),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-              decoration: BoxDecoration(
+    final tinderCubit = context.watch<TinderViewCubit>();
+
+    return Scaffold(
+      appBar: const HomeAppbar(),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmallScreen = constraints.maxWidth < 600;
+          final padding = isSmallScreen ? 10.0 : 20.0;
+          final textSize = isSmallScreen ? 14.0 : 18.0;
+          final iconSize = isSmallScreen ? 24.0 : 30.0;
+
+          return tinderCubit.state.mainCategoryResponse?.data !=null?
+          Column(
+            children: [
+              const Sizer(),
+              Container(
+
+                padding: EdgeInsets.symmetric(
+                    vertical: padding, horizontal: padding),
+                decoration: BoxDecoration(
+
                   borderRadius: BorderRadius.circular(5),
                   color: Colors.yellow,
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: NetworkImage(widget.params.subCategory.image),
-                  )),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            // final result = widget.onFavorite?.call();
-                            // if (result != null && result != _isFavorite) {
-                            //   setState(() {
-                            //     _isFavorite = result;
-                            //   });
-                            // }
-                          },
-                          child: Icon(
-                            Icons.favorite,
-                            color: widget.params.subCategory.isFavorite
-                                ? AppColors.SECONDARY_COLOR
-                                : AppColors.GREY_DARK_COLOR,
-                          ),
-                        ),
-                        const Sizer(),
-                        OutlineText(
-                          text: '${2} ${Labels.ads}',
-                          textStyle: Styles.mediumText(color: Colors.white),
-                        )
-                      ],
+                    image: NetworkImage(
+                      tinderCubit.state.mainCategoryResponse?.data.mainCategory
+                              .banner ??
+                          '',
+
                     ),
                   ),
-                  const Spacer(),
-                  Expanded(
-                    child: FittedBox(
-                      child: OutlineText(
-                        text: widget.params.subCategory.name,
-                        textStyle: Styles.headerText(
-                            color: Colors.white, fontSize: 18),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          InkWell(
+                            onTap: () {},
+                            child: Icon(
+                              Icons.favorite,
+                              size: iconSize,
+                              color: widget.params.subCategory.isFavorite
+                                  ? AppColors.SECONDARY_COLOR
+                                  : AppColors.GREY_DARK_COLOR,
+                            ),
+                          ),
+                          const Sizer(),
+                          Text(
+                            '${tinderCubit.state.mainCategoryResponse!.data
+                                .mainCategory.numberOfAds} ${Labels.ads}',
+                            style: Styles.mediumText(
+                                color: Colors.white, fontSize: textSize),
+                          )
+                        ],
                       ),
                     ),
-                  ),
-                  const Spacer(),
-                  // Expanded(child: _buildRegisterButton())
-                ],
+                    const Spacer(),
+                    Expanded(
+                      child: FittedBox(
+                        child: Text(
+                          tinderCubit.state.mainCategoryResponse!.data
+                              .mainCategory.nameEn,
+                          style: Styles.headerText(
+                              // color: AppColors.PRIMARY_COLOR,
+                              color: Colors.white,
+                              fontSize: textSize,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                  ],
+                ),
               ),
-            ),
-            const Sizer(),
-            Label(
-              text: widget.params.subCategory.name,
-              style: Styles.headerText(),
-            ),
-            const Sizer(),
-            TabBar(
-              controller: _tabController,
-              labelColor: AppColors.SECONDARY_COLOR,
-              unselectedLabelColor: AppColors.PRIMARY_COLOR,
-              indicatorColor: AppColors.SECONDARY_COLOR,
-              indicatorSize: TabBarIndicatorSize.tab,
-              tabs: const [
-                Tab(text: Labels.male),
-                Tab(text: Labels.female),
-              ],
-            ),
-            // TabBarView
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: const [
-                  // BlocBuilder<AdsCubit, AdsState>(
-                  //   builder: (context, state) {
-                  //     if (state.ads != null) {
-                  //       return ListView.separated(
-                  //         shrinkWrap: true,
-                  //         padding: const EdgeInsets.all(8.0),
-                  //         separatorBuilder: (context, index) => const Sizer(),
-                  //         itemCount: state.ads?.length ?? 0,
-                  //         itemBuilder: (context, index) {
-                  //           return AdCard(
-                  //             item: state.ads![index],
-                  //           );
-                  //         },
-                  //       );
-                  //     } else {
-                  //       return const Center(child: CircularProgressIndicator());
-                  //     }
-                  //   },
-                  // ),
-                  // BlocBuilder<AdsCubit, AdsState>(
-                  //   builder: (context, state) {
-                  //     if (state.ads != null) {
-                  //       return ListView.separated(
-                  //         shrinkWrap: true,
-                  //         padding: const EdgeInsets.all(8.0),
-                  //         separatorBuilder: (context, index) => const Sizer(),
-                  //         itemCount: state.ads?.length ?? 0,
-                  //         itemBuilder: (context, index) {
-                  //           return AdCard(
-                  //             item: state.ads![index],
-                  //           );
-                  //         },
-                  //       );
-                  //     } else {
-                  //       return const Center(child: CircularProgressIndicator());
-                  //     }
-                  //   },
-                  // ),
-                ],
+              const Sizer(),
+              Label(
+                text: widget.params.subCategory.name,
+                style: Styles.headerText(fontSize: textSize,color: AppColors.SECONDARY_COLOR),
               ),
-            ),
-          ],
-        ),
+              const Sizer(),
+              Builder(builder: (context) {
+                String provider =
+                    getServiceName(widget.params.subCategory.name);
+                String user = getUserName(widget.params.subCategory.name);
+                return TabBar(
+                  controller: _tabController,
+                  labelColor: AppColors.SECONDARY_COLOR,
+                  unselectedLabelColor: AppColors.PRIMARY_COLOR,
+                  indicatorColor: AppColors.SECONDARY_COLOR,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  tabs: [
+                    Tab(text: provider),
+                    Tab(text: user),
+                  ],
+                );
+              }),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    Center(
+                        child: Text(
+                            'Provider: ${getServiceName(widget.params.subCategory.name)}')),
+                    Center(
+                        child: Text(
+                            'User: ${getUserName(widget.params.subCategory.name)}')),
+                  ],
+                ),
+              ),
+            ],
+          ):const Center(child: CircularProgressIndicator());
+        },
       ),
     );
+  }
+
+  String getServiceName(String serviceType) {
+    switch (serviceType) {
+      case 'Friendship':
+        return 'Connector';
+      case 'You Know Me':
+        return 'Man';
+      case 'Chatting':
+        return 'Host';
+      case 'Khatba':
+        return 'Matcher';
+      case 'Marriage':
+        return 'Planner';
+      case 'Maazoun':
+        return 'Registrar';
+      case 'Cafe':
+        return 'Barista';
+      case 'Picnic':
+        return 'Organizer';
+      case 'Forums':
+        return 'Moderator';
+      case 'Missing':
+        return 'Rescuer';
+      default:
+        return 'provider';
+    }
+  }
+
+  String getUserName(String serviceType) {
+    switch (serviceType) {
+      case 'Friendship':
+      case 'Khatba':
+        return 'Seeker';
+      case 'Chatting':
+        return 'Talker';
+      case 'You Know Me':
+        return 'Woman';
+      case 'Marriage':
+      case 'Maazoun':
+        return 'Partner';
+      case 'Cafe':
+        return 'Drinker';
+      case 'Picnic':
+        return 'Picnicker';
+      case 'Forums':
+        return 'Member';
+      case 'Missing':
+        return 'Missing';
+      default:
+        return 'user';
+    }
   }
 }
 
 class TinderSubAdsViewParams {
-  final MainCategoryEntity mainCategory;
   final SubCategoryEntity subCategory;
 
-  TinderSubAdsViewParams(
-      {required this.mainCategory, required this.subCategory});
+  TinderSubAdsViewParams({required this.subCategory});
 }
