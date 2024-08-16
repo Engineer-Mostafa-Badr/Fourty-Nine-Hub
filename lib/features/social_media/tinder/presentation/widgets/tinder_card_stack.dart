@@ -405,8 +405,12 @@ class TinderCardStack extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => UserProfilePage(
-          userCubit: userCubit,
+        builder: (context) => BlocProvider.value(
+          value:
+          TinderViewCubit(),
+          child: UserProfilePage(
+            userCubit: userCubit,
+          ),
         ),
       ),
     );

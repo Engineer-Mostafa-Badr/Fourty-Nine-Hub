@@ -56,11 +56,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       drawer: const DrawerWidget(),
       body: ListView(
-                  padding : const EdgeInsets.symmetric(horizontal: 10),
-
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         children: [
           const AnnounceWidget(),
-          // const AdsTextBanner(),
           const WalletWidget(),
           const Sizer(),
           const GoogleAddsBanner(),
