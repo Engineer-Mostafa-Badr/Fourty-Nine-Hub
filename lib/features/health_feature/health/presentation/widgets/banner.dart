@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,7 +15,6 @@ class HealthBanner extends StatelessWidget {
       builder: (context, state) {
         if (state.mainCategory != null) {
           return MainCategoryBanner(
-              color: AppColors.QUANTITY_COLOR,
               category: state.mainCategory!,
               canRegister: state.isDoctor == true ? false : true,
               onRegister: () {

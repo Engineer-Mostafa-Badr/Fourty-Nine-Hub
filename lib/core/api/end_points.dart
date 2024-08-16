@@ -441,4 +441,11 @@ class EndPoints {
   static String updateUnLockChatPassword() {
     return '/chat/update-lock-chat';
   }
+
+  static String getChatGroups = '/chat/group/get-groups/';
+  static String seenHistoryEndpoint(String chatId) {
+    return '/chat/last-seen-logs/$chatId';
+  }
+
+
 }

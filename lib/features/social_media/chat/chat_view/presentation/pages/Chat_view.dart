@@ -313,7 +313,7 @@ class _ChatViewState extends State<ChatView> {
 
   initSocketConnection() {
     chatCubit = context.read<ChatsCubit>()..initSocketConnection();
-    chatCubit.getChats(index: widget.initialTabIndex);
+    chatCubit.initChat();
   }
 
   final List<String> groups = [
@@ -357,19 +357,19 @@ class _ChatViewState extends State<ChatView> {
               return context.read<UserCubit>().isLoggedIn
                   ? _buildCategoriesViews()
                   : Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                          onTap: () => context.push(Routes.LOGIN),
-                          child: Label(
-                              text: 'Login',
-                              style: Styles.headerText(color: Colors.blue))),
-                      Label(
-                          text: ', To continue in using chat services',
-                          style: Styles.headerText()),
-                    ],
-                  ));
+                      child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                            onTap: () => context.push(Routes.LOGIN),
+                            child: Label(
+                                text: 'Login',
+                                style: Styles.headerText(color: AppColors.PRIMARY_COLOR,decoration: TextDecoration.underline))),
+                        Label(
+                            text: ', to continue in using chat services',
+                            style: Styles.headerText()),
+                      ],
+                    ));
             },
           ),
         ),
@@ -379,36 +379,44 @@ class _ChatViewState extends State<ChatView> {
 
   Widget _buildCategoriesLabels() {
     return TabBar(
-      onTap: (index) {
-        context.read<ChatsCubit>().getChats(index: index);
+        labelColor: AppColors.PRIMARY_COLOR,
+        indicatorColor: Colors.red,
+        onTap: (index) {
+          if(context.read<UserCubit>().isLoggedIn){
+            context.read<ChatsCubit>().getChats(index: index);
 
-        // if this locked chat we request password
-        if (index == 8) {
-          showDialogToConfirmChatLockPassword(context);
-        }
-      },
-      tabAlignment: TabAlignment.start,
-      isScrollable: true,
-      tabs: groups.map((e) {
-        return Tab(
-          text: e,
-        );
-      }).toList(),
-    );
+            // if this locked chat we request password
+            if (index == 8) {
+              showDialogToConfirmChatLockPassword(context);
+            }
+          }
+        },
+        tabAlignment: TabAlignment.start,
+        isScrollable: true,
+        tabs: groups.map((e) {
+          return const Tab(
+            text: 'there was error here look at code and solve it',
+            // text: chatCubit.selectedTabIndex == groups.indexOf(e)
+            //     ? unReadMessages == 0
+            //         ? e
+            //         : "$e($unReadMessages)"
+            //     : e,
+          );
+        }).toList());
   }
 
   Widget _buildCategoriesViews() {
     return TabBarView(children: [
-      _buildCategoryChats(),
-      _buildCategoryChats(),
-      _buildCallingHistory(isVideo: false),
-      _buildCallingHistory(isVideo: true),
-      _buildCallingHistory(isVideo: false),
-      _buildCallingHistory(isVideo: true),
-      _buildCategoryChats(isSecret: true),
-      _buildCategoryChats(),
-      _buildCategoryChats(),
-      _buildCategoryChats(),
+      _buildCategoryChats(), // social
+      _buildCategoryChats(), // services
+      _buildCallingHistory(isVideo: false),// call & video (social)
+      _buildCallingHistory(isVideo: true),// call & video (services)
+      _buildCategoryChats(),// Greet
+      _buildCategoryChats(),//Groups
+      _buildCategoryChats(isSecret: true),//Anonymous
+      _buildCategoryChats(),//Archive
+      _buildCategoryChats(),//Lock Chat
+      _buildCategoryChats(),//Unread
     ]);
   }
 
@@ -417,65 +425,68 @@ class _ChatViewState extends State<ChatView> {
       return state.chats == null || state.isLoading
           ? LoadingCustom.customThreeBounce(context)
           : state.chats?.length == 0
-          ? Center(
-        child: Label(
-            text: 'No Chats until now',
-            style: Styles.mediumText(
-                color: const Color.fromARGB(255, 87, 87, 87),
-                fontWeight: FontWeight.bold,
-                fontSize: 18)),
-      )
-          : ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) => Slidable(
-          key: ValueKey(index),
-          closeOnScroll: false,
-          endActionPane: ActionPane(
-            motion: const ScrollMotion(),
-            dismissible: DismissiblePane(onDismissed: () {}),
-            children: [
-              SlidableAction(
-                onPressed: (value) {
-                  bottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      widget: MoreIconBottomSheet(
-                        chatItemModel: state.chats![index],
-                        chatsCubit: chatCubit,
-                      ));
-                },
-                backgroundColor:
-                const Color.fromARGB(255, 191, 191, 191),
-                foregroundColor: Colors.white,
-                icon: Icons.more_horiz,
-                label: 'More',
-                padding: EdgeInsets.zero,
-              ),
-              SlidableAction(
-                onPressed: (value) async {
-                  chatCubit.changeChatToArchiveOrNormalUseCase(
-                      state.chats![index].sId!);
-                },
-                backgroundColor: AppColors.PRIMARY_COLOR,
-                foregroundColor: Colors.white,
-                icon: Icons.delete_outlined,
-                label: state.chats![index].archived!
-                    ? 'Unarchive'
-                    : 'Archive',
-                padding: EdgeInsets.zero,
-              ),
-            ],
-          ),
-          child: ChatCard(
-            isSecret: isSecret,
-            chatItemModel: state.chats?[index],
-            chatsCubit: chatCubit,
-          ),
-        ),
-        separatorBuilder: (context, index) => const SizedBox(),
-        itemCount: state.chats?.length ?? 0,
-      );
+              ? Center(
+                  child: Label(
+                      text: 'No Chats until now',
+                      style: Styles.mediumText(
+                          color: const Color.fromARGB(255, 87, 87, 87),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18)),
+                )
+              : ListView.separated(
+                  shrinkWrap: true,
+                  // padding: const EdgeInsets.only(top: 10),
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) => Slidable(
+                    key: ValueKey(index),
+                    // All actions are defined in the children parameter.
+                    closeOnScroll: false,
+                    endActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      dismissible: DismissiblePane(onDismissed: () {}),
+                      children: [
+                        SlidableAction(
+                          onPressed: (value) {
+                            bottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              widget: MoreIconBottomSheet(
+                                chatItemModel: state.chats![index],
+                                chatsCubit: chatCubit,
+                              ),
+                            );
+                          },
+                          icon: Icons.more_horiz,
+                          label: 'More',
+                          padding: EdgeInsets.zero,
+                          backgroundColor: AppColors.GRAY_LIGHT_COLOR3,
+                        ),
+                        SlidableAction(
+                          onPressed: (value) async {
+                            chatCubit.changeChatToArchiveOrNormalUseCase(
+                                state.chats![index].sId!);
+                          },
+                          backgroundColor: AppColors.PRIMARY_COLOR,
+                          foregroundColor: Colors.white,
+                          icon: Icons.delete_outlined,
+                          label: state.chats![index].archived!
+                              ? 'Unarchive'
+                              : 'Archive',
+                          padding: EdgeInsets.zero,
+                        ),
+                      ],
+                    ),
+
+                    // onDismissed: ,
+                    child: ChatCard(
+                      isSecret: isSecret,
+                      chatItemModel: state.chats?[index],
+                      chatsCubit: chatCubit,
+                    ),
+                  ),
+                  separatorBuilder: (context, index) => const SizedBox(),
+                  itemCount: state.chats?.length ?? 0,
+                );
     });
   }
 
@@ -534,4 +545,7 @@ class _ChatViewState extends State<ChatView> {
       )),
     );
   }
+
+
+
 }

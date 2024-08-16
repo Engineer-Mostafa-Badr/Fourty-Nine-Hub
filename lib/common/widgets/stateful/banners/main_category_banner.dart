@@ -13,14 +13,12 @@ class MainCategoryBanner extends StatefulWidget {
   final bool canRegister;
   final Function()? onRegister;
   final bool? Function()? onFavorite;
-  final Color? color;
 
   const MainCategoryBanner({
     super.key,
     this.canRegister = false,
     this.onRegister,
     required this.category,
-    this.color = Colors.white,
     this.onFavorite,
   });
 
@@ -86,7 +84,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 style: Styles.mediumText(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
-                  color: widget.color,
+                  color: Colors.white,
                 ),
               )
             ],
