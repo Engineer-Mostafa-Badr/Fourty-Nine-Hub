@@ -9,7 +9,6 @@ import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:fourtyninehub/service_locator/theme_service_locator.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
@@ -60,6 +59,9 @@ class MyApp extends StatelessWidget {
         // BlocProvider(
         //   create: (context) => serviceLocator<ChatsCubit>(),
         // ),
+        BlocProvider(
+          create: (context) => TinderViewCubit(),
+        ),
         BlocProvider(
           create: (context) => ThemeCubit(),
         ),

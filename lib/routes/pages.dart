@@ -1,6 +1,5 @@
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/pages/contact_us_view.dart';
@@ -440,6 +439,8 @@ class AppPages {
                       BlocProvider<FavouriteSubCategoryCubit>(
                         create: (_) => serviceLocator(),
                         child: const FavSubCategoryView(),
+                  builder: (context, state) => const FavSubCategoryView(
+                        favoriteSubCategory: [],
                       )),
               GoRoute(
                   path: Paths.MYADDS,
@@ -535,7 +536,8 @@ class AppPages {
               GoRoute(
                   path: Paths.TINDER,
                   name: Routes.Tinder,
-                  builder: (context, state) => const TinderScreen()),
+                  builder: (context, state) => const TinderView()),
+
               GoRoute(
                 path: Paths.LIVE,
                 name: Routes.LIVE,
