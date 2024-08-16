@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 
 import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_subcategory_view.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -15,7 +16,6 @@ import 'package:go_router/go_router.dart';
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
-import '../../../res/style/const.dart';
 import '../../../res/style/styles.dart';
 import '../../../routes/routes.dart';
 import '../stateless/buttons/iconAppButton.dart';
@@ -73,7 +73,7 @@ class DrawerWidget extends StatelessWidget {
                       onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const FavSubCategoryView(favoriteSubCategory: [],),
+                            builder: (context) =>  const FavSubCategoryView(favoriteSubCategory: [],),
                           ))),
                   drawerListTile(
                       icon: FontAwesomeIcons.adn,

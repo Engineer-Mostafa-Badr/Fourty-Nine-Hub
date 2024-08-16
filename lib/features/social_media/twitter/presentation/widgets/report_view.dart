@@ -293,6 +293,8 @@ class _ReportViewState extends State<ReportView> {
                           controller: reportTextController,
 
                           decoration: InputDecoration(
+                            fillColor: AppColors.DARK_GRAY_COLOR,
+
                             contentPadding: EdgeInsets.symmetric(
                               vertical:
                                   MediaQuery.of(context).size.height * 0.02,
@@ -302,7 +304,7 @@ class _ReportViewState extends State<ReportView> {
                             hintStyle: TextStyle(
                               fontSize:
                                   MediaQuery.of(context).size.width * 0.04,
-                              color: AppColors.DARK_GRAY_COLOR,
+                              color: AppColors.BARRIER_COLOR,
                             ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8.0),

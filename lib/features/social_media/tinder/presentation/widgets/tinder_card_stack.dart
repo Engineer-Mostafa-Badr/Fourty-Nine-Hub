@@ -1,13 +1,12 @@
-
-
-import 'package:flutter_card_swiper/flutter_card_swiper.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/Chat_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/chat_cubit/chat_room_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/tinder_shared_utils.dart';
@@ -17,13 +16,14 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/ti
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
-import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 
 class TinderCardStack extends StatelessWidget {
   final UserCubit userCubit;
@@ -36,6 +36,8 @@ class TinderCardStack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TinderViewCubit tinderCubit = context.watch<TinderViewCubit>();
+    // final UserCubit innerUserCubit = context.watch<UserCubit>();
+    // ..giveMeTokenForTinder();
     final screenHeight = MediaQuery.of(context).size.height;
 
     // Check if there are any users to display
@@ -45,41 +47,44 @@ class TinderCardStack extends StatelessWidget {
       child: !hasCards
           ? const Center(child: CircularProgressIndicator())
           : CardSwiper(
-        cardsCount: tinderCubit.state.userData.length,
-        onSwipe: (previousIndex, currentIndex, direction) {
-          // Fetch updated data on every swipe
-          tinderCubit
-            ..fetchLastSeen(
-              accessToken: userCubit.state.token!.accessToken,
-              userId: tinderCubit.state.userData[currentIndex!].id!,
-            )
-            ..checkUserNearby(
-              cardUserId: tinderCubit.state.userData[currentIndex].id!,
-              accessToken: userCubit.state.token!.accessToken,
-            );
-          return true;
-        },
-        cardBuilder: (context, index, horizontalOffsetPercentage,
-            verticalOffsetPercentage) {
-          return _cardWidget(
-            context,
-            tinderCubit.state.userData[index],
-            tinderCubit: tinderCubit,
-          );
-        },
-        onEnd: () {
-          // Handle end of the card stack
-        },
-        padding: const EdgeInsets.all(16.0),
-        scale: 0.9,
-        duration: const Duration(milliseconds: 200),
-      ),
+              cardsCount: tinderCubit.state.userData.length,
+              onSwipe: (previousIndex, currentIndex, direction) {
+                if (currentIndex != null) {
+                  // Fetch updated data on every swipe
+                  final userId =
+                      tinderCubit.state.userData[currentIndex].id ?? '';
+                  if (userId.isNotEmpty) {
+                    tinderCubit
+                      ..fetchLastSeen(
+                        accessToken: userCubit.state.token?.accessToken ?? '',
+                        userId: userId,
+                      )
+                      ..checkUserNearby(
+                        cardUserId: userId,
+                        accessToken: userCubit.state.token?.accessToken ?? '',
+                      );
+                  }
+                }
+                return true;
+              },
+              cardBuilder: (context, index, horizontalOffsetPercentage,
+                  verticalOffsetPercentage) {
+                return _cardWidget(context, tinderCubit.state.userData[index],
+                    tinderCubit: tinderCubit, innerUserCubit: userCubit);
+              },
+              onEnd: () {
+                // Handle end of the card stack
+              },
+              padding: const EdgeInsets.all(4.0),
+              scale: 0.88,
+              duration: const Duration(milliseconds: 150),
+            ),
     );
   }
 
-
   Widget _cardWidget(BuildContext context, UserData cardUser,
-      {required TinderViewCubit tinderCubit}) {
+      {required TinderViewCubit tinderCubit,
+      required UserCubit innerUserCubit}) {
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: Card(
@@ -92,7 +97,8 @@ class TinderCardStack extends StatelessWidget {
             _buildStoryBar(cardUser, tinderCubit: tinderCubit),
             _buildPersonInfo(context, cardUser,
                 tinderCubit: tinderCubit, userCubit: userCubit),
-            _buildActions(context, cardUser, tinderCubit: tinderCubit),
+            _buildActions(context, cardUser,
+                tinderCubit: tinderCubit, innerUserCubit: innerUserCubit),
           ],
         ),
       ),
@@ -122,12 +128,9 @@ class TinderCardStack extends StatelessWidget {
                     const SizedBox(width: 10),
                     BadgedLabel(
                       color: AppColors.SECONDARY_COLOR,
-                      label: (state.isUserNearby != null &&
-                          state.isUserNearby!.data != null)
-                          ? ((state.isUserNearby!.data!.isNearBy == true)
+                      label: (state.isUserNearby?.data?.isNearBy ?? false)
                           ? 'Nearby'
-                          : 'is not Nearby')
-                          : "N/A",
+                          : 'Not Nearby',
                     ),
                   ],
                 ),
@@ -144,7 +147,7 @@ class TinderCardStack extends StatelessWidget {
                   subtitle: Text(
                     state.lastSeenModel?.data?.lastSeen != null
                         ? "Last seen ${getTimeAgo(state.lastSeenModel!.data!.lastSeen ?? '')}"
-                        : "Last seen ",
+                        : "Last seen N/A",
                     style: Styles.mediumText(
                         color: AppColors.PRIMARY_COLOR,
                         fontWeight: FontWeight.bold,
@@ -160,16 +163,19 @@ class TinderCardStack extends StatelessWidget {
   }
 
   Widget _buildImage(UserData user, {required TinderViewCubit tinderCubit}) {
-    final imageUrl = user.pictures.isNotEmpty
+    final imageUrl = (user.pictures.isNotEmpty
         ? user.pictures.reversed
-        .toList()[tinderCubit.state.currentStoryIndex]
-        .mediaKey
-        : UIConst.profilePlaceHolder;
+            .toList()[tinderCubit.state.currentStoryIndex]
+            .mediaKey
+        : user.profilePicture.toString());
 
     return Hero(
-      tag: 'userHero-${user.id}',
+      tag: UniqueKey(),
       child: Image.network(
-        imageUrl,
+        // Check if imageUrl is valid, otherwise use the placeholder
+        imageUrl.isNotEmpty && Uri.tryParse(imageUrl)?.hasAbsolutePath == true
+            ? imageUrl
+            : UIConst.profilePlaceHolder,
         width: double.infinity,
         height: double.infinity,
         fit: BoxFit.fitHeight,
@@ -217,12 +223,12 @@ class TinderCardStack extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: List.generate(
           user.pictures.length,
-              (dotIndex) => Expanded(
+          (dotIndex) => Expanded(
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 2.0),
               height: 4,
               decoration: BoxDecoration(
-                color: dotIndex == tinderCubit.state.currentStoryIndex
+                color: dotIndex == (tinderCubit.state.currentStoryIndex)
                     ? Colors.red
                     : Colors.grey.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(2),
@@ -234,8 +240,9 @@ class TinderCardStack extends StatelessWidget {
     );
   }
 
-  Widget _buildActions(BuildContext context, UserData user,
-      {required TinderViewCubit tinderCubit}) {
+  Widget _buildActions(BuildContext context, UserData cardUser,
+      {required TinderViewCubit tinderCubit,
+      required UserCubit innerUserCubit}) {
     return Positioned(
       bottom: 4,
       right: 8,
@@ -248,34 +255,35 @@ class TinderCardStack extends StatelessWidget {
             _buildFloatingActionButton(
               context,
               Icons.person,
-                  () => context.push(Routes.OTHERSACCOUNT),
+              () => context.push(Routes.OTHERSACCOUNT),
               heroTag: 'personButton',
             ),
             _buildFloatingActionButton(
               context,
               Icons.chat,
-                  () => _showChatTypeAdvancedDialog(context),
+              () => _showChatTypeAdvancedDialog(context,
+                  cardUser: cardUser, tinderCubit: tinderCubit),
               color: AppColors.PRIMARY_COLOR,
               heroTag: 'chatButton',
             ),
             _buildFloatingActionButton(
               context,
               Icons.add_photo_alternate_outlined,
-                  () => _navigateToUserProfile(context, user),
+              () => _navigateToUserProfile(context, cardUser),
               color: Colors.red,
               heroTag: 'photoButton',
             ),
             _buildFloatingActionButton(
               context,
               Icons.card_giftcard,
-                  () => _showGiftBottomSheet22(context),
+              () => _showGiftBottomSheet22(context, cardUser: cardUser),
               color: AppColors.ACCENT_COLOR,
               heroTag: 'giftButton',
             ),
             _buildFloatingActionButton(
               context,
               Icons.report,
-                  () => _showReportBottomSheet(context, user),
+              () => _showReportBottomSheet(context, cardUser, userCubit),
               color: Colors.red,
               heroTag: 'reportButton',
             ),
@@ -285,26 +293,25 @@ class TinderCardStack extends StatelessWidget {
     );
   }
 
-  void _showReportBottomSheet(BuildContext context, UserData user) {
-    final userState = userCubit.state.data;
-    if (userState != null) {
-      showModalBottomSheet(
-        context: context,
-        builder: (context) => SizedBox(
-          // height: MediaQuery.of(context).size.height ,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ReportView(
-              id: userState.id,
-              categoryId: '66af974f8bf69f9469944746',
-            ),
+  void _showReportBottomSheet(
+      BuildContext context, UserData user, UserCubit innerUserCubit) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SizedBox(
+        // height: MediaQuery.of(context).size.height ,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ReportView(
+            id: context.read<UserCubit>().state.data!.id,
+            categoryId: '66af974f8bf69f9469944746',
           ),
         ),
-      );
-    }
+      ),
+    );
   }
 
-  void _showGiftBottomSheet22(BuildContext context) {
+  void _showGiftBottomSheet22(BuildContext context,
+      {required UserData cardUser}) {
     closeAllBottomSheets(context);
 
     showModalBottomSheet(
@@ -327,7 +334,7 @@ class TinderCardStack extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0.4),
                   borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(20)),
+                      const BorderRadius.vertical(top: Radius.circular(20)),
                 ),
                 child: const FittedBox(
                   fit: BoxFit.scaleDown,
@@ -347,7 +354,7 @@ class TinderCardStack extends StatelessWidget {
                   children: [
                     BottomSheetContent(
                       userCubit: userCubit,
-                      accessToken: userCubit.state.token!.accessToken,
+                      accessToken: userCubit.state.token?.accessToken ?? '',cardUser:cardUser
                     ),
                     Positioned(
                       bottom: 5,
@@ -359,14 +366,14 @@ class TinderCardStack extends StatelessWidget {
                             side: const MaterialStatePropertyAll(
                                 BorderSide(width: 0)),
                             iconColor:
-                            const MaterialStatePropertyAll(Colors.white),
+                                const MaterialStatePropertyAll(Colors.white),
                             backgroundColor: MaterialStatePropertyAll(
                                 Colors.black.withOpacity(0.8)),
                           ),
                           onPressed: () {
                             serviceLocator<SubscriptionController>()
                                 .showActiveSubscriptionAmounts(
-                                walletType: WalletTypes.balance);
+                                    walletType: WalletTypes.balance);
                           },
                           child: const Row(
                             mainAxisSize: MainAxisSize.min,
@@ -422,11 +429,12 @@ class TinderCardStack extends StatelessWidget {
     final gender = user.gender;
     tinderCubit.fetchUserData(
       gender: gender == 'female' ? 'female' : 'male',
-      accessToken: userCubit.state.token!.accessToken,
+      accessToken: userCubit.state.token?.accessToken ?? '',
     );
   }
 
-  void _showChatTypeAdvancedDialog(BuildContext context) {
+  void _showChatTypeAdvancedDialog(BuildContext context,
+      {required UserData cardUser, required TinderViewCubit tinderCubit}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -438,7 +446,7 @@ class TinderCardStack extends StatelessWidget {
         final dialogWidth = screenWidth * 0.75;
         final dialogHeight =
             screenWidth * 0.5; // Adjusted for better responsiveness
-        final titleFontSize = screenHeight * 0.025; // 3% of screen height
+        final titleFontSize = screenHeight * 0.025; // 2.5% of screen height
 
         return AlertDialog(
           title: Padding(
@@ -457,17 +465,17 @@ class TinderCardStack extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildChatOptionCard(
-                    context,
-                    icon: Icons.visibility_off,
-                    label: "Anonymous",
-                  ),
+                  _buildChatOptionCard(context,
+                      icon: Icons.visibility_off,
+                      label: "Anonymous",
+                      cardUser: cardUser,
+                      tinderCubit: tinderCubit),
                   SizedBox(height: screenHeight * 0.02),
-                  _buildChatOptionCard(
-                    context,
-                    icon: Icons.visibility,
-                    label: "Regular",
-                  ),
+                  _buildChatOptionCard(context,
+                      icon: Icons.visibility,
+                      label: "Regular",
+                      cardUser: cardUser,
+                      tinderCubit: tinderCubit),
                 ],
               ),
             ),
@@ -477,52 +485,174 @@ class TinderCardStack extends StatelessWidget {
     );
   }
 
-  Widget _buildChatOptionCard(
-      BuildContext context, {
-        required IconData icon,
-        required String label,
-      }) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final iconSize = screenWidth * 0.1; // 10% of the screen width
-    final fontSize = screenHeight * 0.023; // 2% of the screen height
-    final padding = screenHeight * 0.01; // 1% of the screen height
+  void showMessageDialog(BuildContext context, chatID) {
+    final TextEditingController messageController = TextEditingController();
 
-    return GestureDetector(
-      onTap: () {
-        Navigator.pop(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ChatView(
-              initialTabIndex: label == "Anonymous" ? 6 : 0,
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(20.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+              color: Colors.white,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Send Message',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 20.0),
+                TextField(
+                  controller: messageController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Your Message',
+                  ),
+                  maxLines: 5,
+                ),
+                const SizedBox(height: 20.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                      child: const Text('Cancel'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Add your send message logic here
+                        String message = messageController.text;
+                        Navigator.of(context).pop();
+
+                        context.read<ChatRoomCubit>().sendMessageFromTinder(
+                            message: message, chatID: chatID);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                      child: const Text('Send'),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         );
       },
-      child: Padding(
-        padding: EdgeInsets.all(padding),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: iconSize,
-              color: label == "Anonymous"
-                  ? AppColors.SECONDARY_COLOR
-                  : AppColors.PRIMARY_COLOR,
-            ),
-            SizedBox(height: padding),
-            Text(
-              label,
-              style: Styles.headerText(
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
+    );
+  }
+
+  Widget _buildChatOptionCard(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required UserData cardUser,
+    required TinderViewCubit tinderCubit,
+  }) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final iconSize = screenWidth * 0.1; // 10% of the screen width
+    final fontSize = screenHeight * 0.023; // 2.3% of the screen height
+    final padding = screenHeight * 0.01; // 1% of the screen height
+
+    return BlocProvider(
+      create: (context) => serviceLocator<ChatRoomCubit>(),
+      child: GestureDetector(
+        onTap: () {
+          if (label == "Anonymous") {
+            tinderCubit
+                .startAnonymousChat(
+              receiverId: cardUser.id ?? '',
+              accessToken: userCubit.state.token?.accessToken ?? '',
+            )
+                .then((value) {
+              final chatId =
+                  tinderCubit.state.anonymousChatResponse?.data.chat.id ?? '';
+              if (chatId.isNotEmpty) {
+                context.read<ChatsCubit>().initSocketConnection();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BlocProvider<ChatRoomCubit>(
+                        create: (_) => serviceLocator(),
+                        child: ChatRoom(
+                          chatId: chatId,
+                        ),
+                      ),
+                    ));
+              }
+            });
+          } else {
+            tinderCubit
+                .startNormalChat(
+              receiverId: cardUser.id ?? '',
+              subCategoryId: '62c8be6f8e28a58a3edf5f4f',
+              accessToken: userCubit.state.token?.accessToken ?? '',
+            )
+                .then((value) {
+              final chatId =
+                  tinderCubit.state.normalChatResponse?.data.chat.id ?? '';
+              if (chatId.isNotEmpty) {
+                context.read<ChatsCubit>().initSocketConnection();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BlocProvider<ChatRoomCubit>(
+                        create: (_) => serviceLocator(),
+                        child: ChatRoom(
+                          chatId: chatId,
+                        ),
+                      ),
+                    ));
+              }
+            });
+          }
+        },
+        child: Padding(
+          padding: EdgeInsets.all(padding),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: iconSize,
+                color: label == "Anonymous"
+                    ? AppColors.SECONDARY_COLOR
+                    : AppColors.PRIMARY_COLOR,
               ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: padding / 2),
-          ],
+              SizedBox(height: padding),
+              Text(
+                label,
+                style: Styles.headerText(
+                  fontSize: fontSize,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: padding / 2),
+            ],
+          ),
         ),
       ),
     );

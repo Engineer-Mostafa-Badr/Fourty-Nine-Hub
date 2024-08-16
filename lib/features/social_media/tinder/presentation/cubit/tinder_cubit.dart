@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/anonymous_chat_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/main_category_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/normal_chat_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,6 +18,154 @@ import 'tinder_state.dart';
 
 class TinderViewCubit extends Cubit<TinderViewState> {
   TinderViewCubit() : super(TinderViewState.initial());
+
+  Future<void> fetchMainCategoryById(String id, String token) async {
+    emit(state.copyWith(mainCategoryResponseState: DataState.initial));
+    final url = 'https://49dev.com/api/v1/categories/main/$id';
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final mainCategoryResponse = MainCategoryResponse.fromJson(data);
+        emit(state.copyWith(
+            mainCategoryResponseState: DataState.success,
+            mainCategoryResponse: mainCategoryResponse));
+      } else {
+        emit(state.copyWith(mainCategoryResponseState: DataState.failure));
+      }
+    } catch (e) {
+      emit(state.copyWith(mainCategoryResponseState: DataState.failure));
+    }
+  }
+
+  Future<bool> startNormalChat({
+    required String receiverId,
+    required String subCategoryId,
+    required String accessToken,
+  }) async {
+    emit(state.copyWith(normalChatResponseState: DataState.initial));
+    final url =
+        'https://49dev.com/api/v1/chat/start-chat/$receiverId?categoryId=$subCategoryId';
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final normalChatModel = NormalChatResponse.fromJson(data);
+        log("${response.body}from startNormalChat cubit method ....");
+
+        // final chatId = data['_id']; // Assuming the API response contains an `_id` field for chatId
+
+        emit(state.copyWith(
+            normalChatResponse: normalChatModel,
+            normalChatResponseState: DataState.success));
+        return true;
+      } else {
+        emit(state.copyWith(normalChatResponseState: DataState.failure));
+        return false;
+      }
+    } catch (e) {
+      emit(state.copyWith(normalChatResponseState: DataState.failure));
+      return false;
+    }
+  }
+
+  // Future<String?> startNormalChat({
+  //   required String receiverId,
+  //   required String subCategoryId,
+  //   required String accessToken,
+  // }) async {
+  //   final url =
+  //       'https://49dev.com/api/v1/chat/start-chat/$receiverId?categoryId=62c8be6f8e28a58a3edf5f4f';
+  //   final data = {
+  //     "receiverId": receiverId,
+  //     // "giftId": giftId,
+  //   };
+  //
+  //   try {
+  //     final response = await http.post(
+  //       Uri.parse(url),
+  //       headers: {
+  //         'Authorization': 'Bearer $accessToken',
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: jsonEncode(data),
+  //     );
+  //
+  //     return response.body;
+  //   } catch (e) {
+  //     log('Error posting data: $e');
+  //   }
+  //   return null;
+  //   //
+  //   // final response = await _makePostRequest(
+  //   //   url: url,
+  //   //   accessToken: accessToken,
+  //   //   body: jsonEncode(data),
+  //   // );
+  //   //
+  //   // if (response != null) {
+  //   //   emit(state.copyWith(
+  //   //       sendGiftErrorDataState: DataState.failure,
+  //   //       sendGiftErrorData: response.body));
+  //   //   return response.body;
+  //   // } else {
+  //   //   return 'error';
+  //   // }
+  // }
+
+  Future<bool> startAnonymousChat({
+    required String receiverId,
+    required String accessToken,
+  }) async {
+    emit(state.copyWith(anonymousChatResponseState: DataState.initial));
+    final url =
+        'https://49dev.com/api/v1/chat/start-anonymous-chat/$receiverId';
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        final anonymousChatModel = AnonymousChatResponse.fromJson(data);
+        log("${response.body}from startSecret Chat cubit method ....");
+
+        // final chatId = data['_id']; // Assuming the API response contains an `_id` field for chatId
+
+        emit(state.copyWith(
+            anonymousChatResponse: anonymousChatModel,
+            anonymousChatResponseState: DataState.success));
+        return true;
+      } else {
+        emit(state.copyWith(anonymousChatResponseState: DataState.failure));
+        return false;
+      }
+    } catch (e) {
+      emit(state.copyWith(anonymousChatResponseState: DataState.failure));
+      return false;
+    }
+  }
 
   Future<void> fetchUserProfile(
       {required String userId, required String token}) async {

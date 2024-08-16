@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/add_category_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/anonymous_chat_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/last_seen_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/main_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/near_by_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/normal_chat_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_subcategory_model.dart';
 
 import '../../data/models/gift_model.dart';
-
 
 enum DataState { initial, failure, success }
 
@@ -22,6 +24,15 @@ class TinderViewState {
 
   final ProfileUserData? profileUserData;
   final DataState profileUserState;
+
+  final MainCategoryResponse? mainCategoryResponse;
+  final DataState mainCategoryResponseState;
+
+  final NormalChatResponse? normalChatResponse;
+  final DataState normalChatResponseState;
+
+  final AnonymousChatResponse? anonymousChatResponse;
+  final DataState anonymousChatResponseState;
 
   final List<SubCategoryData> subCategoryData;
   final DataState subCategoryDataState;
@@ -67,6 +78,12 @@ class TinderViewState {
   final DataState lastSeenModelState;
 
   TinderViewState({
+    required this.mainCategoryResponse,
+    required this.mainCategoryResponseState,
+    required this.anonymousChatResponse,
+    required this.anonymousChatResponseState,
+    required this.normalChatResponse,
+    required this.normalChatResponseState,
     required this.userData0,
     required this.userDataState0,
     this.currentPage = 1,
@@ -135,11 +152,23 @@ class TinderViewState {
       uploadImageState: DataState.initial,
       userData0: [],
       userDataState0: DataState.initial,
+      normalChatResponse: null,
+      normalChatResponseState: DataState.initial,
+      anonymousChatResponse: null,
+      anonymousChatResponseState: DataState.initial,
+      mainCategoryResponse: null,
+      mainCategoryResponseState: DataState.initial,
     );
   }
 
   // Method to update the state
   TinderViewState copyWith({
+    MainCategoryResponse? mainCategoryResponse,
+    DataState? mainCategoryResponseState,
+    AnonymousChatResponse? anonymousChatResponse,
+    DataState? anonymousChatResponseState,
+    NormalChatResponse? normalChatResponse,
+    DataState? normalChatResponseState,
     List<UserData>? userData0,
     DataState? userDataState0,
     int? currentPage,
@@ -213,6 +242,16 @@ class TinderViewState {
       profileUserData: profileUserData ?? this.profileUserData,
       profileUserState: profileUserState ?? this.profileUserState,
       uploadImageState: this.uploadImageState,
+      normalChatResponse: normalChatResponse ?? this.normalChatResponse,
+      normalChatResponseState:
+          normalChatResponseState ?? this.normalChatResponseState,
+      anonymousChatResponseState:
+          anonymousChatResponseState ?? this.anonymousChatResponseState,
+      anonymousChatResponse:
+          anonymousChatResponse ?? this.anonymousChatResponse,
+      mainCategoryResponse: mainCategoryResponse ?? this.mainCategoryResponse,
+      mainCategoryResponseState:
+          mainCategoryResponseState ?? this.mainCategoryResponseState,
     );
   }
 }

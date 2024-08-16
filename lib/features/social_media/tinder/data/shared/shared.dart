@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/tinder_shared_utils.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
@@ -49,13 +49,16 @@ class OutlineText extends StatelessWidget {
   }
 }
 
-
 class BottomSheetContent extends StatefulWidget {
   final String accessToken;
   final UserCubit userCubit;
+  final UserData cardUser;
 
   const BottomSheetContent(
-      {super.key, required this.accessToken, required this.userCubit});
+      {super.key,
+      required this.accessToken,
+      required this.userCubit,
+      required this.cardUser});
 
   @override
   BottomSheetContentState createState() => BottomSheetContentState();
@@ -85,6 +88,9 @@ class BottomSheetContentState extends State<BottomSheetContent> {
 
   @override
   Widget build(BuildContext context) {
+    final tinderCubit = context.watch<TinderViewCubit>();
+    final userCubit = context.watch<UserCubit>();
+
     return BlocBuilder<GiftsCubit, GiftsState>(
       builder: (context, state) {
         if (state is GiftsInitial) {
@@ -121,7 +127,8 @@ class BottomSheetContentState extends State<BottomSheetContent> {
             // Add one for the loading indicator
             itemBuilder: (context, index) {
               if (index < state.gifts.length) {
-                return _buildGiftItem(context, state.gifts[index]);
+                return _buildGiftItem(context, state.gifts[index],
+                    tinderCubit: tinderCubit, userCubit: userCubit);
               } else {
                 // Loading indicator at the bottom
                 return const Center(child: CircularProgressIndicator());
@@ -137,12 +144,14 @@ class BottomSheetContentState extends State<BottomSheetContent> {
     );
   }
 
-  Widget _buildGiftItem(BuildContext context, GiftData gift) {
+  Widget _buildGiftItem(BuildContext context, GiftData gift,
+      {required UserCubit userCubit, required TinderViewCubit tinderCubit}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: FittedBox(
         child: InkWell(
-          onTap: () => _handleGiftTap(context, gift),
+          onTap: () => _handleGiftTap(context, gift,
+              userCubit: userCubit, tinderCubit: tinderCubit),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -230,13 +239,15 @@ class BottomSheetContentState extends State<BottomSheetContent> {
     //         );
   }
 
-  Future<void> _handleGiftTap(BuildContext context, GiftData gift) async {
+  Future<void> _handleGiftTap(BuildContext context, GiftData gift,
+      {required UserCubit userCubit,
+      required TinderViewCubit tinderCubit}) async {
     final data = await context.read<TinderViewCubit>().sendGift(
-          receiverId: widget.userCubit.state.data!.id,
+          receiverId: widget.cardUser.id!,
           subCategoryId: '66af974f8bf69f9469944746',
           giftId: gift.sId ?? '',
           // currentUserToken: TinderSharedUtils.token,
-          accessToken: widget.userCubit.state.token!.accessToken,
+          accessToken: userCubit.state.token!.accessToken,
         );
 
     TinderSharedUtils.handleGiftResponse(
@@ -249,5 +260,3 @@ class BottomSheetContentState extends State<BottomSheetContent> {
     super.dispose();
   }
 }
-
-
