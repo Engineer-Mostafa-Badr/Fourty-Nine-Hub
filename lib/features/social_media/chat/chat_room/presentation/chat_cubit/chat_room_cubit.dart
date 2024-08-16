@@ -45,9 +45,9 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     });
   }
 
-  _joinRoom(String chatId) async {
-    _socketService.joinRoom(chatId);
-  }
+  // _joinRoom(String chatId) async {
+  //   _socketService.joinRoom(chatId);
+  // }
 
   // BehaviorSubject<List<MessageEntity>> messages =
   //     BehaviorSubject<List<MessageEntity>>();

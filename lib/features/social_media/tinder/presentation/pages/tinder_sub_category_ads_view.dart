@@ -6,7 +6,6 @@ import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -54,7 +53,6 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
   @override
   Widget build(BuildContext context) {
     final tinderCubit = context.watch<TinderViewCubit>();
-    final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: const HomeAppbar(),

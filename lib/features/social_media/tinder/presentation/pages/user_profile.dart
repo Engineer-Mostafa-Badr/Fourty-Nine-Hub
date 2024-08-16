@@ -153,7 +153,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             icon: Icons.person,
             iconColor: Colors.redAccent,
             title: 'Gender',
-            subtitle: userData.userId.gender ?? 'N/A',
+            subtitle: userData.userId.gender,
           ),
         ],
       ),
@@ -172,7 +172,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           ),
         ),
         Text(
-          user.userId.email ?? 'No Email Provided',
+          user.userId.email,
           style: Styles.headerText(
             fontWeight: FontWeight.w400,
             color: AppColors.PRIMARY_COLOR,
