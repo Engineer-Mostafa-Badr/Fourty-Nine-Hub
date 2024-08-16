@@ -60,6 +60,7 @@ class SubscriptionController {
             ), (plans) {
       bottomSheet(
           context: context,
+          backColor: Theme.of(context).scaffoldBackgroundColor,
           widget: SubscriptionPlansWidget(
             subscribePlans: plans,
             subCategoryId: subCategoryId,
