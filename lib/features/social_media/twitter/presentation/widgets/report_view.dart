@@ -198,7 +198,6 @@ class _ReportViewState extends State<ReportView> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: BlocProvider<TwitterCubit>(
         create: (_) => serviceLocator(),
         child: BlocBuilder<TwitterCubit, TwitterState>(
@@ -218,7 +217,7 @@ class _ReportViewState extends State<ReportView> {
                         style: Styles.headerText(
                           fontSize: screenWidth * 0.07,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: Theme.of(context).primaryColor
                         ),
                       ),
                       const SizedBox(
@@ -251,7 +250,6 @@ class _ReportViewState extends State<ReportView> {
                                 style: Styles.headerText(
                                   fontSize: screenWidth * 0.05,
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.DARK_GRAY_COLOR,
                                 ),
                                 maxLines: 3,
                               ),
@@ -270,6 +268,9 @@ class _ReportViewState extends State<ReportView> {
                         );
                       },
                     ),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

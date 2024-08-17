@@ -28,7 +28,6 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: const BackAppBar(
         label: Labels.details,
       ),

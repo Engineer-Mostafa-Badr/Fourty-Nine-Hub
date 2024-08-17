@@ -72,74 +72,71 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
   Widget build(BuildContext context) {
     bool isShared = widget.post.isShared!;
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
-      child: Container(
-        padding: EdgeInsets.all(isShared == true ? 10 : 0),
-        decoration: const BoxDecoration(color: Colors.white),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (isShared == true)
-              _buildAccountRow(
-                  context: context,
-                  post: widget.post,
-                  date: widget.post.sinceTime),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                  border: isShared == true
-                      ? Border.all(color: AppColors.LIGHT_GRAY_COLOR)
-                      : null),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  InkWell(
-                    onTap: () {
+      padding: EdgeInsets.all(isShared == true ? 10 : 0),
+      decoration:  BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (isShared == true)
+            _buildAccountRow(
+                context: context,
+                post: widget.post,
+                date: widget.post.sinceTime),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+                border: isShared == true
+                    ? Border.all(color: AppColors.LIGHT_GRAY_COLOR)
+                    : null),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                InkWell(
+                  onTap: () {
 
-                        print("objectH");
-                        // context.push(Routes.TWITTERPOSTDETAILS,extra: widget.post.mainPost.id);
+                      print("objectH");
+                      // context.push(Routes.TWITTERPOSTDETAILS,extra: widget.post.mainPost.id);
 
-                        bottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            widget: TwitterPostDetails(
-                              postId:isShared == true? widget.post.mainPost.id:widget.post.id,
-                              showPostComments: (id) {},
-                              onReport: (TwitterReportParams params) {},
-                            ));
+                      bottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          widget: TwitterPostDetails(
+                            postId:isShared == true? widget.post.mainPost.id:widget.post.id,
+                            showPostComments: (id) {},
+                            onReport: (TwitterReportParams params) {},
+                          ));
 
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildMainAccountRow(
-                            context: context,
-                            showOptions: false,
-                            post: widget.post,
-                            date: widget.post.isShared == true
-                                ? widget.post.mainPost?.sinceTime??''
-                                : widget.post.sinceTime),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        _buildContent(
-                            label: widget.post.isShared == true
-                                ? widget.post.mainPost?.content
-                                : widget.post.content,
-                            image: widget.post.photo),
-                      ],
-                    ),
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildMainAccountRow(
+                          context: context,
+                          showOptions: false,
+                          post: widget.post,
+                          date: widget.post.isShared == true
+                              ? widget.post.mainPost?.sinceTime??''
+                              : widget.post.sinceTime),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      _buildContent(
+                          label: widget.post.isShared == true
+                              ? widget.post.mainPost?.content
+                              : widget.post.content,
+                          image: widget.post.photo),
+                    ],
                   ),
-                  if (isShared == false)
-                    _buildStatisticsWidget(widget.post, true),
-                ],
-              ),
+                ),
+                if (isShared == false)
+                  _buildStatisticsWidget(widget.post, true),
+              ],
             ),
-            if (isShared == true)
-              _buildTwitterStaticsWidget(widget.post, false),
-          ],
-        ),
+          ),
+          if (isShared == true)
+            _buildTwitterStaticsWidget(widget.post, false),
+        ],
       ),
     );
   }
@@ -493,9 +490,9 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               if (post.user.isDocumented == true && post.isShared == false ||
                   (post.mainPost?.user.isDocumented == true &&
                       post.isShared == true))
-                const Icon(
+                 Icon(
                   Icons.verified,
-                  color: AppColors.PRIMARY_COLOR,
+                  color: Theme.of(context).primaryColor,
                 ),
               const Sizer(),
               SizedBox(

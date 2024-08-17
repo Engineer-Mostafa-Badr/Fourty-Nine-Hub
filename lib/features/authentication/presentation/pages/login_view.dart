@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,6 +62,7 @@ class _LoginViewState extends State<LoginView> {
       },
       child: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) {
+          log(state.toString(),name: 'Login Success =================================');
           if (state is LoginError) {
             context.pop();
             showErrorMessage(
@@ -71,17 +74,18 @@ class _LoginViewState extends State<LoginView> {
             );
           } else if (state is LoginSuccess) {
             context.read<UserCubit>().setLogin(true);
-            context.read<UserCubit>().getUser();
             context.read<GetWalletCubit>().getWallet();
-            context.pop();
-            context.pop();
+            // context.pop();
+            // context.pop();
+            context.read<UserCubit>().getUser();
+            context.push(Routes.HOME);
             showSuccessMessage(context, 'welcome back');
           } else if (state is LoginLoading) {
             // showAdaptiveDialog(
             //     context: context,
             //     builder: (context) => const Center(
             //           child: CircularProgressIndicator.adaptive(),
-            //         ));
+            //         ));3
           } else if (state is LoginError) {
             context.pop();
           }
