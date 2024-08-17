@@ -8,8 +8,8 @@ import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcat
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class MainCategoriesTapsView extends StatelessWidget {
-  const MainCategoriesTapsView({super.key});
+class MainCategoriesGridView extends StatelessWidget {
+  const MainCategoriesGridView({super.key});
 
   @override
   Widget build(BuildContext context) {

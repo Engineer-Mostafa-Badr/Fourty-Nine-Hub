@@ -109,6 +109,8 @@ import '../features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
+import '../features/fourty_nine/presentation/pages/main_categories_cards_view.dart';
+import '../features/fourty_nine/presentation/pages/main_categories_taps_view.dart';
 import '../features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
 import '../features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import '../features/health_feature/health/presentation/pages/health_view.dart';
@@ -183,6 +185,20 @@ class AppPages {
         child: const FourtyNineView(),
       ),
       routes: <RouteBase>[
+        // FLIP CARDS
+        GoRoute(
+          path: Paths.MAINCATEGORIESCARDS,
+          name: Routes.MAINCATEGORIESCARDS,
+          builder: (context, state) => const MainCategoriesFlipCardsView(),
+        ),
+        //GRID VIEW
+        GoRoute(
+          path: Paths.MAINCATEGORIESTREE,
+          name: Routes.MAINCATEGORIESTREE,
+          builder: (context, state) => BlocProvider(
+            create:(context)=> serviceLocator<MainCategoriesTapsCubit>(),
+            child: const MainCategoriesGridView()),
+        ),
         GoRoute(
             path: Paths.SUBCATEGORIES,
             name: Routes.SUBCATEGORIES,
@@ -348,7 +364,7 @@ class AppPages {
         GoRoute(
           path: Paths.WINNERS,
           name: Routes.WINNERS,
-          builder: (context, state) => Winners(),
+          builder: (context, state) => const Winners(),
         ),
         GoRoute(
           path: Paths.QURAAN,
