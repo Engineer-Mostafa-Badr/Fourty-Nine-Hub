@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../common/widgets/stateless/buttons/default_button.dart';
 import '../../common/widgets/stateless/buttons/elevated_button.dart';
@@ -59,9 +60,9 @@ void showSuccessMessage(BuildContext context, String message) {
             Expanded(
               child: Text(
                 message,
-                style: const TextStyle(
+                style:  const TextStyle(
                   fontWeight: FontWeight.w500,
-                  color: Colors.black,
+                  color: AppColors.QUANTITY_COLOR,
                 ),
               ),
             ),

@@ -88,7 +88,7 @@ class _TinderScreenState extends State<TinderScreen> {
     final userCubit = context.watch<UserCubit>();
 
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(

@@ -99,7 +99,7 @@ class _UserTweetsState extends State<UserTweets> {
                         context: context,
                         isScrollControlled: true,
                         widget: TwitterPostComments(
-                          comments: [],
+                          comments: const [],
                           postId: controller.userTweetsPagingController.itemList![index].id,
                           user: user,
                           onAddComment: (TwitterPostCommentParams params) =>

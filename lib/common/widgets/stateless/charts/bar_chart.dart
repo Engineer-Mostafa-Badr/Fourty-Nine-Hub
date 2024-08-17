@@ -18,15 +18,16 @@ class CustomBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       size: const Size(300, 200),
-      painter: BarChartPainter(data: data),
+      painter: BarChartPainter(context,data: data),
     );
   }
 }
 
 class BarChartPainter extends CustomPainter {
   final List<BarData> data;
+  final context;
 
-  BarChartPainter({required this.data});
+  BarChartPainter(this.context, {required this.data});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -58,7 +59,7 @@ class BarChartPainter extends CustomPainter {
       final textPainter = TextPainter(
         text: TextSpan(
           text: data[i].value.toShortScale,
-          style: const TextStyle(color: Colors.black, fontSize: 12),
+          style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12),
         ),
         textDirection: TextDirection.ltr,
       );
@@ -72,7 +73,7 @@ class BarChartPainter extends CustomPainter {
       final labelPainter = TextPainter(
         text: TextSpan(
           text: data[i].label,
-          style: const TextStyle(color: Colors.black, fontSize: 12),
+          style: TextStyle( color: Theme.of(context).primaryColor,fontSize: 12),
         ),
         textDirection: TextDirection.ltr,
       );

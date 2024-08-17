@@ -33,9 +33,9 @@ class Geometry {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (location != null) {
-      data['location'] = this.location!.toJson();
+      data['location'] = location!.toJson();
     }
     return data;
   }
@@ -53,7 +53,7 @@ class Location {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['lat'] = lat;
     data['lng'] = lng;
     return data;

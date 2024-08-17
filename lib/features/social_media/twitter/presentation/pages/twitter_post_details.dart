@@ -89,7 +89,7 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
                   context: context,
                   isScrollControlled: true,
                   widget: TwitterPostComments(
-                    comments: [],
+                    comments: const [],
                     postId: state.postDetails!.id,
                     user: user,
                     onAddComment: (TwitterPostCommentParams params) async{

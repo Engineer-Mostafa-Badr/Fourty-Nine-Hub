@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../common/widgets/dynamic/wallet_widget.dart';
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../domain/entities/privacy_status_enum.dart';

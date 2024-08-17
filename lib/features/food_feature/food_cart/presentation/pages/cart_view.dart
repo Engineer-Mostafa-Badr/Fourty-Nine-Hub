@@ -41,7 +41,7 @@ class FoodCartView extends StatelessWidget {
       return ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) => Text('label'),
+          itemBuilder: (context, index) => const Text('label'),
           separatorBuilder: (context, state) => const SizedBox(),
           itemCount: state.data?.allItems.length ?? 0);
     });

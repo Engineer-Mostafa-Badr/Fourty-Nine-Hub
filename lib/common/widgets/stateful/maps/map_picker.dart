@@ -210,9 +210,9 @@ class _MapPickerState extends State<MapPicker> {
         travelMode: TravelMode.driving,
         wayPoints: []);
     if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
+      for (var point in result.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
+      }
     }
     _addPolyLine();
   }

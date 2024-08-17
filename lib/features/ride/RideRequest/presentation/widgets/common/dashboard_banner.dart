@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../../res/style/app_colors.dart';
 
 class DashboardBanner extends StatelessWidget {
   final String title;

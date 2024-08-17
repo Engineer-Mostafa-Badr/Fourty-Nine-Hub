@@ -1,4 +1,3 @@
-import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/datasources/images_data_source.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/datasources/shipping_data_source.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/repositories/images_repository.dart';

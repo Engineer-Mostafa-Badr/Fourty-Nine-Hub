@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
@@ -69,7 +68,7 @@ class CommentCard extends StatelessWidget {
                       Icons.more_vert,
                       color: textColor,
                     )),
-                Sizer(),
+                const Sizer(),
                 GestureDetector(
                     onTap: (){
                       onDeleteComment(comment.id);

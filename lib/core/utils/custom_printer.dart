@@ -13,8 +13,9 @@ class CustomPrinter {
       log('[$title] StatusCode: ${response.statusCode}');
       log('[$title] response:');
       log(prettyResponse);
-    } else
+    } else {
       log(response.toString());
+    }
   }
 
   static logRequestPretty(

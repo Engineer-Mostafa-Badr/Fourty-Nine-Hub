@@ -301,7 +301,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
         ),
         child: Card(
           clipBehavior: Clip.hardEdge,
-          color: Colors.white,
+          color: Theme.of(context).scaffoldBackgroundColor,
           elevation: 2,
           child: Column(
             children: [

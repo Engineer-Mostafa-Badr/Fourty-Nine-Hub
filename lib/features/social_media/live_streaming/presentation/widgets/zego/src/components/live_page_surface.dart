@@ -133,10 +133,10 @@ class _ZegoLiveStreamingLivePageSurfaceState
       return Stack(
         children: [
           durationTimeBoard(),
-          state == MeetingSurfaceShownState(surfaceShown: true)
+          state == const MeetingSurfaceShownState(surfaceShown: true)
               ? topBar()
               : Container(),
-          state == MeetingSurfaceShownState(surfaceShown: true)
+          state == const MeetingSurfaceShownState(surfaceShown: true)
               ? bottomBar()
               : Container(),
           messageList(),

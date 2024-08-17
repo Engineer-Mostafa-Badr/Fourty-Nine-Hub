@@ -60,7 +60,7 @@ class HealthMedicalServiceCard extends StatelessWidget {
                           icon: subCategory.isFavorite
                               ? Icons.favorite
                               : Icons.favorite_border,
-                          color: ThemeCubit.get(context).isDarkTheme?AppColors.AUTH_CONTAINER_COLOR:AppColors.PRIMARY_COLOR_DARK,
+                          color: ThemeCubit.get(context).isDarkTheme?AppColors.QUANTITY_COLOR:AppColors.PRIMARY_COLOR_DARK,
                           onPressed: () {
                             context
                                 .read<HealthCubit>()

@@ -389,6 +389,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextAppButton(
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor
+                    ),
                       label: post.user.firstName,
                       onPressed: () =>
                           () => context.push(Routes.OTHERSACCOUNT)),
@@ -449,6 +452,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextAppButton(
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor
+                      ),
                       label: post.user.firstName,
                       onPressed: () =>
                           () => context.push(Routes.OTHERSACCOUNT)),
@@ -484,8 +490,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             alignment: Alignment.center,
             margin: const EdgeInsets.symmetric(vertical: 10),
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-            color: backgroundColor != null &&
-                    images.isEmpty
+            color: images.isEmpty
                 ? Color(int.parse(backgroundColor.substring(1),
                     radix: 16))
                 : Colors.white,
@@ -603,10 +608,10 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         children: [
           Icon(
             icon,
-            color: Colors.grey,
+            color: AppColors.GREY_DARK_COLOR,
           ),
           const Sizer(),
-          Label(text: label, style: Styles.mediumText(color: Colors.grey))
+          Label(text: label, style: Styles.mediumText(color: AppColors.GREY_DARK_COLOR))
         ],
       );
     } else {
@@ -617,10 +622,10 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           children: [
             Icon(
               icon,
-              color: Colors.grey,
+              color:AppColors.GREY_DARK_COLOR,
             ),
             const Sizer(),
-            Label(text: label, style: Styles.mediumText(color: Colors.grey))
+            Label(text: label, style: Styles.mediumText(color: AppColors.GREY_DARK_COLOR))
           ],
         ),
       );

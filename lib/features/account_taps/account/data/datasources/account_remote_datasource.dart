@@ -6,8 +6,6 @@ import 'package:fourtyninehub/features/account_taps/account/domain/entities/favo
 import 'package:fourtyninehub/res/assets/jsons.dart';
 import '../../../../../core/api/api_consumer.dart';
 import '../../../../../core/api/end_points.dart';
-import '../../../../ads_feature/ads/data/models/Ad_model.dart';
-import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
 import '../../domain/entities/favourite_category_entity.dart';
 import '../models/favourite_ad_model.dart';
 import '../models/favourite_category_model.dart';

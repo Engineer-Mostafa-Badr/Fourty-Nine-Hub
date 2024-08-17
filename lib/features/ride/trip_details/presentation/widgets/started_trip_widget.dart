@@ -12,7 +12,6 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../requests_history/data/models/driver_model.dart';
-import '../../../../requests_history/data/models/trip_model.dart';
 
 class StartedTripWidget extends StatelessWidget {
   final TripEntity trip;

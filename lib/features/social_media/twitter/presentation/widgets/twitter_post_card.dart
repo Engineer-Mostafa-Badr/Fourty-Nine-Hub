@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -367,7 +366,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
         Label(
             text: "${post.user.firstName} ${post.user.lastName}",
             style: Styles.mediumText(fontWeight: FontWeight.w500)),
-         Sizer(width: 4,),
+         const Sizer(width: 4,),
         if (post.user.isDocumented == true)
           const Icon(
             Icons.verified,
@@ -483,7 +482,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             children: [
               post.user.image != ''
                   ? ProfileImage(accountId: 0, imageURL: post.user.image)
-                  : ProfileImage(accountId: 0),
+                  : const ProfileImage(accountId: 0),
               const Sizer(),
               Label(
                   text: post.isShared == true

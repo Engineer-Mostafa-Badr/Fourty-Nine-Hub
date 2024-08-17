@@ -31,7 +31,10 @@ class CreateCompanyAdView extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  const FormTextField(
+                   FormTextField(
+                    style:  TextStyle(
+                        color: Theme.of(context).scaffoldBackgroundColor
+                    ),
                     label: 'Slogan',
                     hint: 'Type your slogan (Not more 100 letter)',
                   ),
@@ -47,6 +50,9 @@ class CreateCompanyAdView extends StatelessWidget {
                           },
                           itemCount: state.adOptions?.length ?? 0)),
                   AppButton(
+                      style: const TextStyle(
+                          color: AppColors.AUTH_CONTAINER_COLOR
+                      ),
                       label:
                           'Proceed to Payment (${controller.totalPrice()} ${Labels.currency})',
                       backColor: (state.selectedOptions?.isEmpty ?? true)

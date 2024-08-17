@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:win32/win32.dart';
 
 // Package imports:
 import 'package:zego_uikit/zego_uikit.dart';
