@@ -1,4 +1,3 @@
-import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
@@ -547,7 +546,7 @@ class AppPages {
                   name: Routes.REELS,
                   builder: (context, state) => MultiBlocProvider(
                         providers: [
-                          BlocProvider<ExploreReelsCubit>(
+                          BlocProvider<ReelsCubit>(
                             create: (_) => serviceLocator(),
                           ),
                         ],
@@ -563,7 +562,7 @@ class AppPages {
               GoRoute(
                   path: Paths.TINDER,
                   name: Routes.Tinder,
-                  builder: (context, state) => const TinderView()),
+                  builder: (context, state) =>  const TinderView()),
 
               GoRoute(
                 path: Paths.LIVE,
