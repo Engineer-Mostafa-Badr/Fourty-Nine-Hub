@@ -1,4 +1,6 @@
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
@@ -24,7 +26,9 @@ class EndPoints {
   static const sendForgetPasswordOTP = '/auth/forgot-password';
   static const verifyForgetPasswordOTP = '/auth/verify/otp';
   static const createNewForgetPassword = '/auth/reset-password';
-  static const report = '/report?subCategory=66a3583454e6e337915514db';
+  // static const report = '/report?subCategory=66a3583454e6e337915514db';
+  static String report({required String subCategoryId}) =>
+      '/report?subCategory=$subCategoryId';
   static const documentRequest = '/twitter/document-request?subCategory=66a3583454e6e337915514db';
   // ride
 
@@ -126,8 +130,8 @@ class EndPoints {
   static const activities = '/facebook/post/activities';
   static const feelings = '/facebook/post/feelings';
   static const getTwitterFeedPosts = '/twitter/feed';
-  static String userPosts(String userId) {
-    return '/facebook/post/user/$userId?limit=20&page=1&type=1&subCategory=66b77e77bb35968b535dc944';
+  static String userPosts(UserPostsParams params) {
+    return '/facebook/post/user/${params.userId}?limit=${params.limit}&page=${params.page}&type=1&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String userSuggests(SuggestedFriendsParams params) {
@@ -148,6 +152,9 @@ class EndPoints {
 
   static String getReels(TwitterFeedParams params) {
     return '/reels/explore?limit=${params.limit}&page=${params.page}';
+  }
+  static String getUserReels(UserReelsParams params) {
+    return '/reels/users/${params.userId}?limit=${params.limit}&page=${params.page}';
   }
 
   static String getAdvertisement(TwitterFeedParams params) {
@@ -222,6 +229,10 @@ class EndPoints {
     return '/facebook/comment/create-comment/$postId?subCategory=66b77e77bb35968b535dc944';
   }
 
+  static String getUserProfile(String userId) {
+    return '/users/profile/$userId?subCategory=66b77e77bb35968b535dc944';
+  }
+
   static String commentOnTwitterPost(String postId) {
     return '/twitter/comment/create-comment/$postId?subCategory=66b77e77bb35968b535dc944';
   }
@@ -266,8 +277,20 @@ class EndPoints {
     return '/friends/sendFriendRequest/$userId?subCategory=66b77e77bb35968b535dc944';
   }
 
+  static String removeFriendRequest(String userId) {
+    return '/friends/deleteRequest/$userId?subCategory=66b77e77bb35968b535dc944';
+  }
+
+  static String blocUser(String userId) {
+    return '/users/$userId/blocked';
+  }
+
   static String followRequest(String userId) {
     return '/follow/make-follow/$userId?subCategory=66b77e77bb35968b535dc944';
+  }
+
+  static String removeFollow(String userId) {
+    return '/follow/unFollow/$userId?subCategory=66b77e77bb35968b535dc944';
   }
 
   static String greetMessage(String userId) {

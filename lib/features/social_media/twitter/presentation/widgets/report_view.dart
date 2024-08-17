@@ -17,10 +17,11 @@ class ReportView extends StatefulWidget {
   const ReportView({
     super.key,
     required this.id,
-    required String categoryId,
+    required this.categoryId,
   });
 
   final String id;
+  final String categoryId;
 
   @override
   State<ReportView> createState() => _ReportViewState();
@@ -125,7 +126,7 @@ class _ReportViewState extends State<ReportView> {
                                 userId: widget.id,
                                 category: selectedReport!.name,
                                 content: reportTextController.text,
-                                categoryId: '66a3583454e6e337915514db',
+                                categoryId: widget.categoryId,
                                 reason: selectedReport!.name,
                               ),
                             );

@@ -500,7 +500,12 @@ class AppPages {
               GoRoute(
                 path: Paths.OTHERSACCOUNT,
                 name: Routes.OTHERSACCOUNT,
-                builder: (context, state) => const OtherAccountView(),
+                builder: (context, state) {
+                  final id = state.extra as String?;
+                  return BlocProvider<SocialPostsCubit>(
+                      create: (_)=>serviceLocator()..getUserProfile(id: id??''),
+                      child: OtherAccountView(userId: id??'',));
+                },
               ),
               GoRoute(
                   path: Paths.REELS,

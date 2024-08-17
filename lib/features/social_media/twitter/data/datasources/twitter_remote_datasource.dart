@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/request_document_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 
 import '../../../../../core/error/failure.dart';
 
@@ -25,7 +26,7 @@ abstract class TwitterRemoteDataSource {
   Future<Either<Failure, bool>> reactOnPost({required  params});
   Future<Either<Failure, bool>> reactOnComment({required  params});
   Future<Either<Failure, bool>> sharePost({required  params});
-  Future<Either<Failure, bool>> addReport({required  params});
+  Future<Either<Failure, bool>> addReport({required TwitterReportParams params});
   Future<Either<Failure, TwitterPostCommentEntity>> commentOnTwitterPost(
       {required TwitterPostCommentParams params});
   Future<Either<Failure, TwitterCommentReplyEntity>> replyOnComment(
@@ -160,9 +161,9 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> addReport({required params}) async{
+  Future<Either<Failure, bool>> addReport({required TwitterReportParams params}) async{
     final response = await _apiConsumer
-        .post(EndPoints.report, data: params.toJson());
+        .post(EndPoints.report(subCategoryId: params.categoryId), data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 

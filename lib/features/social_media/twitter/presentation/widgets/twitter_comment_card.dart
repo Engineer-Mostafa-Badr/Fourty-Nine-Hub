@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
-import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 
@@ -14,6 +14,7 @@ class TwitterCommentCard extends StatefulWidget {
   final TwitterPostCommentEntity comment;
   final Function onCommentReact;
   final Function onCommentReply;
+  final bool? fromProfile;
   final Function(TwitterReportParams) onReport;
   const TwitterCommentCard(
       {super.key,
@@ -21,7 +22,7 @@ class TwitterCommentCard extends StatefulWidget {
       required this.comment,
       required this.onCommentReact,
       required this.onCommentReply,
-      required this.onReport});
+      required this.onReport, this.fromProfile=false});
 
   @override
   State<TwitterCommentCard> createState() => _TwitterCommentCardState();
@@ -35,12 +36,16 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
       children: [
         Row(
           children: [
-            widget.comment.user.image==''? const ProfileImage(
+            widget.comment.user.image==''?  UserProfileImage(
               accountId: 0,
               withBorder: false,
-            ):ProfileImage(
+              fromProfile: widget.fromProfile,
+              userId: widget.comment.user.id,
+            ):UserProfileImage(
               accountId: 0,
               imageURL: widget.comment.user.image,
+              fromProfile: widget.fromProfile,
+              userId: widget.comment.user.id,
             ),
             const Sizer(),
             Expanded(

@@ -5,8 +5,10 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
@@ -29,8 +31,8 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
 
   @override
   Future<Either<Failure, List<PostEntity>>> getUserPosts(
-      {required String userId}) {
-    return _remoteDataSource.getUserPosts(userId: userId);
+      {required UserPostsParams params}) {
+    return _remoteDataSource.getUserPosts(params: params);
   }
 
   @override
@@ -79,9 +81,25 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   Future<Either<Failure, bool>> friendRequest({required String userId}) {
     return _remoteDataSource.friendRequest(userId: userId);
   }
+
+  @override
+  Future<Either<Failure, bool>> removeFriendRequest({required String userId}) {
+    return _remoteDataSource.removeFriendRequest(userId: userId);
+  }
+
+  @override
+  Future<Either<Failure, bool>> blockUser({required String userId}) {
+    return _remoteDataSource.blockUser(userId: userId);
+  }
+
   @override
   Future<Either<Failure, bool>> followRequest({required String userId}) {
     return _remoteDataSource.followRequest(userId: userId);
+  }
+
+  @override
+  Future<Either<Failure, bool>> unFollow({required String userId}) {
+    return _remoteDataSource.unFollow(userId: userId);
   }
   @override
   Future<Either<Failure, bool>> sendGreetMessage({required String userId}) {
@@ -116,5 +134,10 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   Future<Either<Failure, PostEntity>> getPost({required String postId}) {
     return _remoteDataSource.getPost(postId: postId);
 
+  }
+
+  @override
+  Future<Either<Failure, UserProfileEntity>> getUserProfile({required String params}) {
+    return _remoteDataSource.getUserProfile(userId: params);
   }
 }
