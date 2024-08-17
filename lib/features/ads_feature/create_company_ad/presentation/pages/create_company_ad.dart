@@ -31,9 +31,10 @@ class CreateCompanyAdView extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                   FormTextField(
+                   const FormTextField(
+                     fillColor: AppColors.AUTH_CONTAINER_COLOR,
                     style:  TextStyle(
-                        color: Theme.of(context).scaffoldBackgroundColor
+                        color: AppColors.QUANTITY_COLOR
                     ),
                     label: 'Slogan',
                     hint: 'Type your slogan (Not more 100 letter)',
