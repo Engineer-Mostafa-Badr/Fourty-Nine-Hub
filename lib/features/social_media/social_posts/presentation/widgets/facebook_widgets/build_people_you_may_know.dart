@@ -23,6 +23,7 @@ class BuildPeopleYouMayKnow extends StatefulWidget {
 }
 
 class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
+
   final messageController = TextEditingController();
 
   @override
@@ -90,14 +91,17 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                           builderDelegate:
                               PagedChildBuilderDelegate<SuggestUserEntity>(
                                   noItemsFoundIndicatorBuilder: (context) {
-                                    print(controller.suggestUserPagingController
-                                        .itemList?.length);
+                                    print(controller
+                                        .suggestUserPagingController
+                                        .itemList
+                                        ?.length);
                                     return const Padding(
                                         padding: EdgeInsets.only(top: 200),
                                         child: Center(
                                           child: Label(
                                             text: "No friends suggested",
                                             style: TextStyle(
+                                              color: Colors.black,
                                               fontSize: 18,
                                             ),
                                           ),
@@ -370,10 +374,12 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                       Container(),
                                   firstPageProgressIndicatorBuilder:
                                       (context) => const Center(
-                                          child: CupertinoActivityIndicator()),
-                                  newPageProgressIndicatorBuilder: (context) =>
-                                      const Center(
-                                          child: CupertinoActivityIndicator())),
+                                          child:
+                                              CupertinoActivityIndicator()),
+                                  newPageProgressIndicatorBuilder:
+                                      (context) => const Center(
+                                          child:
+                                              CupertinoActivityIndicator())),
                         ),
                       ),
                     ],

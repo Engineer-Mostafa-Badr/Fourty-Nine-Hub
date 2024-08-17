@@ -152,6 +152,7 @@ import '../features/ride/trip_details/presentation/pages/trip_details_view.dart'
 import '../features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
 import '../features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
+import '../features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';

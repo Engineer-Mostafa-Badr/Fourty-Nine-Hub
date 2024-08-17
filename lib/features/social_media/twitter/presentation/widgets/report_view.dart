@@ -175,6 +175,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
+
 class ReportView extends StatefulWidget {
   const ReportView({
     super.key,
@@ -294,8 +296,8 @@ class _ReportViewState extends State<ReportView> {
                                 reason: selectedReport!.name,
                               ),
                             );
-
-                              if (response == true) {
+                          if(context.mounted)
+                              {if (response == true) {
                                 showSuccessMessage(
                                   context,
                                   "Report sent successfully",
@@ -310,17 +312,13 @@ class _ReportViewState extends State<ReportView> {
                                   ),
                                 );
                               }
-                            }
+                            }}
                           },
                         ),
                     ],
                   ),
                 ],
-              ),
-            );
-          },
-        ),
-      ),
-    );
+              );
+  })));
   }
 }
