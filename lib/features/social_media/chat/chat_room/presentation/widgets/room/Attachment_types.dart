@@ -19,13 +19,13 @@ class AttachmentTypes extends StatelessWidget {
         _buildAttachmentTypeItem(
             color: Colors.purpleAccent, label: 'Gallery', icon: Icons.image),
         _buildAttachmentTypeItem(
-            color: Colors.greenAccent,
-            label: 'Video',
-            icon: Icons.video_call_sharp),
-        _buildAttachmentTypeItem(
             color: Colors.orange,
             label: 'Audio',
             icon: Icons.audio_file_outlined),
+        _buildAttachmentTypeItem(
+            color: Colors.greenAccent,
+            label: 'Location',
+            icon: Icons.location_on_rounded),
         _buildAttachmentTypeItem(
             color: Colors.blue, label: 'Contact', icon: Icons.person),
       ],

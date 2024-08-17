@@ -29,7 +29,6 @@ import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/dynamic/wallet_widget.dart';
 import '../../../../res/style/app_colors.dart';
 
-import '../widgets/ads_text_banner.dart';
 import '../widgets/announce_widget.dart';
 
 class FourtyNineView extends StatefulWidget {

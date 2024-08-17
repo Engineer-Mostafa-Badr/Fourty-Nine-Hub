@@ -408,14 +408,19 @@
 //   }
 // }
 
-import 'dart:io';
+// ========================================================================================================================================================================================
+// ========================================================================================================================================================================================
+// ========================================================================================================================================================================================
+// ========================================================================================================================================================================================
 
+import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/room/Attachment_types.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/room/emoji_keyboard.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:social_media_recorder/screen/social_media_recorder.dart';
 
@@ -428,37 +433,61 @@ class SendMessageWidget extends StatefulWidget {
 
 class _SendMessageWidgetState extends State<SendMessageWidget> {
   late final TextEditingController _messageTextController;
+  late final FocusNode _messageFocusNode;
   late bool _showMicButton;
+  late bool _showEmojiKeyboard;
   @override
   void initState() {
     _messageTextController = TextEditingController();
+    _messageFocusNode = FocusNode();
     _showMicButton = true;
+    _showEmojiKeyboard = false;
+    _messageTextController.addListener(() {
+      _toggleMicButton(_messageTextController.text);
+    });
     super.initState();
   }
 
   @override
+  void dispose() {
+    _messageFocusNode.dispose();
+    _messageTextController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 6,
-            child: _textField(),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 6,
+                child: _textField(),
+              ),
+              const Sizer(),
+              Expanded(
+                flex: 1,
+                child: _showMicButton ? _micButton() : _sendButton(),
+              ),
+            ],
           ),
-          const Sizer(),
-          Expanded(
-            flex: 1,
-            child: _micButton(),
-          ),
-        ],
-      ),
+        ),
+        _emojiKeyboard(),
+      ],
     );
   }
 
   Widget _textField() {
     return TextFormField(
       controller: _messageTextController,
+      focusNode: _messageFocusNode,
+      onTap: () {
+        _closeEmojiKeyboard();
+        _openTextKeyboard();
+      },
       decoration: InputDecoration(
         fillColor: Colors.white,
         filled: true,
@@ -469,21 +498,25 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
           borderRadius: BorderRadius.circular(25),
           borderSide: BorderSide.none,
         ),
-        prefixIcon: _emojiButton(),
-        suffixIcon: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _attachmentButton(),
-            _cameraButton(),
-          ],
-        ),
+        prefixIcon: _showEmojiKeyboard ? _keyboardButton() : _emojiButton(),
+        suffixIcon: _attachmentButton(),
       ),
       style: const TextStyle(color: Colors.black),
       keyboardType: TextInputType.multiline,
-      maxLines: 5,
+      maxLines: 3,
       minLines: 1,
-      onChanged: (value) {
-        // if
+    );
+  }
+
+  Widget _keyboardButton() {
+    return IconButton(
+      icon: const Icon(
+        Icons.keyboard,
+        color: Colors.grey,
+      ),
+      onPressed: () {
+        _closeEmojiKeyboard();
+        _openTextKeyboard();
       },
     );
   }
@@ -494,7 +527,17 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
         Icons.emoji_emotions_outlined,
         color: Colors.grey,
       ),
-      onPressed: () {},
+      onPressed: () {
+        _closeTextKeyboard();
+        _openEmojiKeyboard();
+      },
+    );
+  }
+
+  Widget _emojiKeyboard() {
+    return Offstage(
+      offstage: !_showEmojiKeyboard,
+      child: EmojiKeyboard(textController: _messageTextController),
     );
   }
 
@@ -511,12 +554,15 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   }
 
   Widget _cameraButton() {
-    return IconButton(
-      icon: const Icon(
-        Icons.camera_alt_outlined,
-        color: Colors.grey,
+    return Offstage(
+      offstage: !_showMicButton,
+      child: IconButton(
+        icon: const Icon(
+          Icons.camera_alt_outlined,
+          color: Colors.grey,
+        ),
+        onPressed: () {},
       ),
-      onPressed: () {},
     );
   }
 
@@ -526,6 +572,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
         return SocialMediaRecorder(
           sendRequestFunction: (File soundFile, String time) {},
           initRecordPackageWidth: constraints.maxWidth,
+          fullRecordPackageHeight: constraints.maxWidth,
           recordIconBackGroundColor: AppColors.PRIMARY_COLOR,
           counterBackGroundColor: AppColors.PRIMARY_COLOR,
           cancelTextBackGroundColor: AppColors.PRIMARY_COLOR,
@@ -539,12 +586,57 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   }
 
   Widget _sendButton() {
-    return FloatingActionButton(
-      onPressed: () {},
-      child: const Icon(
-        Icons.send,
-        color: Colors.white,
-      ),
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      return ClipOval(
+        child: Material(
+          color: AppColors.PRIMARY_COLOR,
+          child: InkWell(
+            onTap: () {},
+            child: SizedBox(
+                width: constraints.maxWidth,
+                height: constraints.maxWidth,
+                child: const Center(
+                  child: Icon(
+                    Icons.send,
+                    color: Colors.white,
+                  ),
+                )),
+          ),
+        ),
+      );
+    });
+  }
+
+  _toggleMicButton(String value) {
+    value = value.trim();
+    if (value.isNotEmpty && _showMicButton) {
+      setState(() {
+        _showMicButton = false;
+      });
+    } else if ((value.isEmpty) && !_showMicButton) {
+      setState(() {
+        _showMicButton = true;
+      });
+    }
+  }
+
+  _closeEmojiKeyboard() {
+    setState(() {
+      _showEmojiKeyboard = false;
+    });
+  }
+
+  _openEmojiKeyboard() {
+    setState(() {
+      _showEmojiKeyboard = true;
+    });
+  }
+
+  _closeTextKeyboard() {
+    _messageFocusNode.unfocus();
+  }
+
+  _openTextKeyboard() {
+    _messageFocusNode.requestFocus();
   }
 }
