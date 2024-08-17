@@ -33,8 +33,8 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
 
   void loadData() async {
     Future.wait([
-      getSubCategories(),
       getBannerById(),
+      getFoodCategories(),
       getNearByRestaurants(),
       getNumOfRestaurants(),
     ]);
@@ -78,7 +78,7 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
     });
   }
 
-  Future<void> getSubCategories() async {
+  Future<void> getFoodCategories() async {
     final response = await _getFoodCategoriesUseCase(service.value());
     response.fold(
         (failure) => emit(state.copyWith(

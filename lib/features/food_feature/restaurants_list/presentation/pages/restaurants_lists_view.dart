@@ -22,9 +22,9 @@ class RestaurantsListsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SharedScaffold(
-      mainCategoryId: 1,
-      body: Padding(
+      body: SharedScaffold(
+        mainCategoryId: 1,
+        body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
             builder: (context, state) {
@@ -47,51 +47,50 @@ class RestaurantsListsView extends StatelessWidget {
                       const Sizer(),
 
                       /// slider
-                      BlocProvider(
-                          create: (context) => serviceLocator<SliderCubit>(),
-                          child: const AnnounceWidget()),
-                      const Sizer(),
+
                       if (state.categories?.isNotEmpty ?? false)
                         _buildOffersWidget(),
-                      if (state.trendingRestaurants?.isNotEmpty ?? false)
+                      if (state.trendingRestaurants?.isNotEmpty ?? false) ...[
                         Label(
-                            text: 'Restaurants you know',
-                            style: Styles.headerText()),
-                      if (state.trendingRestaurants?.isNotEmpty ?? false)
+                          text: 'Restaurants you know',
+                          style: Styles.headerText(),
+                        ),
                         const Sizer(),
-                      if (state.trendingRestaurants?.isNotEmpty ?? false)
                         _buildHorizontalRestaurants(),
+                      ],
                       const Sizer(),
                       const Sizer(),
-                      if (state.nearByRestaurants?.isNotEmpty ?? false)
+                      if (state.nearByRestaurants?.isNotEmpty ?? false) ...[
                         Label(
                             text: 'All Restaurants',
                             style: Styles.headerText()),
-                      if (state.nearByRestaurants?.isNotEmpty ?? false)
                         const Sizer(),
-                      if (state.nearByRestaurants?.isNotEmpty ?? false)
                         _buildVerticalRestaurants(),
+                      ],
                     ],
                   ),
-                  Positioned(
-                    bottom: 10,
-                    right: 10,
-                    child: FloatingActionButton(
-                      tooltip: Labels.resturants,
-                      backgroundColor: AppColors.PRIMARY_COLOR,
-                      onPressed: () {},
-                      child: Text(
-                        "${state.numOfRestaurants}",
-                        style: Styles.mediumText(
-                            color: Colors.white, fontWeight: FontWeight.bold),
+                  if (state.numOfRestaurants != null)
+                    Positioned(
+                      bottom: 10,
+                      right: 10,
+                      child: FloatingActionButton(
+                        tooltip: Labels.resturants,
+                        backgroundColor: AppColors.PRIMARY_COLOR,
+                        onPressed: () {},
+                        child: Text(
+                          "${state.numOfRestaurants}",
+                          style: Styles.mediumText(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                  )
+                    )
                 ],
               );
             },
-          )),
-    ));
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildOffersWidget() {
