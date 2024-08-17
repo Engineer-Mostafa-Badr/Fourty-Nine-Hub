@@ -23,6 +23,6 @@ class TwitterFeedParams {
   Map<String, dynamic> toJson() => {
     'page': page,
     'limit': limit,
-    'subCategory':'66b77e77bb35968b535dc944'
+    // 'subCategory':'66b77e77bb35968b535dc944'
   };
 }

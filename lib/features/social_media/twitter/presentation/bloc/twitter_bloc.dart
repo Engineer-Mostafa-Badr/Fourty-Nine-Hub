@@ -4,7 +4,6 @@ import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
@@ -86,6 +85,10 @@ class TwitterCubit extends Cubit<TwitterState> {
     postsPagingController.refresh();
   }
 
+  void onRefreshUserTweets()async{
+    userTweetsPagingController.refresh();
+  }
+
   void loadUserTweets(String userId) async {
     //   await getFeed(1);
     getUserTweets(1,userId);
@@ -154,7 +157,7 @@ class TwitterCubit extends Cubit<TwitterState> {
   }
 
   Future<void> getTwitterPost(
-      BuildContext context, String postId, String newCommentId,UserEntity? userData) async {
+      BuildContext context, String postId, String newCommentId) async {
     final response = await _getTwitterPostUseCase(postId);
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
@@ -305,6 +308,7 @@ class TwitterCubit extends Cubit<TwitterState> {
       (failure) =>
           emit(state.copyWith(failure: failure, status: StateStatus.error)),
       (data) {
+        postsPagingController.itemList?.firstWhere((element) => element.id==params.postId).commentsCount=(postsPagingController.itemList!.firstWhere((element) => element.id==params.postId).comments.length+1);
         print("newReply${data.id}");
         emit(state.copyWith(newReply: data, status: StateStatus.success));
       },

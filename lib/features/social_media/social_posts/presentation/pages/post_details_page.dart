@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/utils/change_react.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
@@ -12,7 +11,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -100,10 +98,8 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                   post: state.postDetails!,
                                   onReact: (params)async{
                                     var result = await widget.onReact(params);
-                                    changeReaction(state.postDetails, params.react);
-                                    setState(() {
-
-                                    });
+                                    // changeReaction(state.postDetails, params.react);
+                                    // setState(() {});
                                     return result;
                                   },
                                   deletePost: widget.deletePost,
