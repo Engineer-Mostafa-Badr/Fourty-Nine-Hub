@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/delete_doctor_account_usecase.dart';
@@ -29,10 +30,9 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
     await _getDoctorProfile();
   }
 
+
   Future<void> _getDoctorProfile() async {
-    emit(state.copyWith(status: EditDoctorProfileStateStatus.startLoading));
     final response = await _getDoctorProfileUseCase(const NoParams());
-    emit(state.copyWith(status: EditDoctorProfileStateStatus.endLoading));
 
     response.fold(
         (failure) => emit(state.copyWith(

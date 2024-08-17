@@ -428,9 +428,11 @@ class SendMessageWidget extends StatefulWidget {
 
 class _SendMessageWidgetState extends State<SendMessageWidget> {
   late final TextEditingController _messageTextController;
+  late bool _showMicButton;
   @override
   void initState() {
     _messageTextController = TextEditingController();
+    _showMicButton = true;
     super.initState();
   }
 
@@ -480,6 +482,9 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
       keyboardType: TextInputType.multiline,
       maxLines: 5,
       minLines: 1,
+      onChanged: (value) {
+        // if
+      },
     );
   }
 
@@ -500,7 +505,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
         color: Colors.grey,
       ),
       onPressed: () {
-        bottomSheet(context: context, widget: AttachmentTypes());
+        bottomSheet(context: context, widget: const AttachmentTypes());
       },
     );
   }
@@ -521,15 +526,25 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
         return SocialMediaRecorder(
           sendRequestFunction: (File soundFile, String time) {},
           initRecordPackageWidth: constraints.maxWidth,
-          recordIconBackGroundColor: AppColors.SECONDARY_COLOR,
-          counterBackGroundColor: AppColors.SECONDARY_COLOR,
-          cancelTextBackGroundColor: AppColors.SECONDARY_COLOR,
-          recordIconWhenLockBackGroundColor: AppColors.SECONDARY_COLOR,
-          backGroundColor: AppColors.SECONDARY_COLOR,
+          recordIconBackGroundColor: AppColors.PRIMARY_COLOR,
+          counterBackGroundColor: AppColors.PRIMARY_COLOR,
+          cancelTextBackGroundColor: AppColors.PRIMARY_COLOR,
+          recordIconWhenLockBackGroundColor: AppColors.PRIMARY_COLOR,
+          backGroundColor: AppColors.PRIMARY_COLOR,
           radius: BorderRadius.circular(50),
           recordIcon: const Icon(Icons.mic, color: Colors.white),
         );
       },
+    );
+  }
+
+  Widget _sendButton() {
+    return FloatingActionButton(
+      onPressed: () {},
+      child: const Icon(
+        Icons.send,
+        color: Colors.white,
+      ),
     );
   }
 }
