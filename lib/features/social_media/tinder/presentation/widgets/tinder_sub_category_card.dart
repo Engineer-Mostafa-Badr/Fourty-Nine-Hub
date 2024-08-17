@@ -397,18 +397,23 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TinderSubCategoryAdsView(
-                      params: TinderSubAdsViewParams(
-                        subCategory: SubCategoryEntity(
-                          id: subCategoryId,
-                          name: subCategoryName,
-                          image: subCategoryPicture,
-                          isFavorite: containsSpecificId(
-                              tinderCubit.state.getFavCategoryModel?.data ?? [],
-                              subCategoryId),
+                    builder: (context) =>
+                        BlocProvider(
+                          create: (context) => TinderViewCubit(),
+                          child: TinderSubCategoryAdsView(
+                            params: TinderSubAdsViewParams(
+                              subCategory: SubCategoryEntity(
+                                id: subCategoryId,
+                                name: subCategoryName,
+                                image: subCategoryPicture,
+                                isFavorite: containsSpecificId(
+                                    tinderCubit.state.getFavCategoryModel
+                                        ?.data ?? [],
+                                    subCategoryId),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
                   ),
                 );
               }

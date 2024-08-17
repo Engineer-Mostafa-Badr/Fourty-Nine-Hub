@@ -288,7 +288,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/calling_card.dart';
 import '../widgets/chat_card.dart';
@@ -310,6 +309,7 @@ class _ChatViewState extends State<ChatView> {
     super.initState();
     initSocketConnection();
   }
+
 
   initSocketConnection() {
     chatCubit = context.read<ChatsCubit>()..initSocketConnection();

@@ -1,18 +1,11 @@
-
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/confirm_password_text_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/password_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
+import
+'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -21,9 +14,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../common/widgets/stateless/appbar/back_appbar.dart';
-import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../common/widgets/stateless/buttons/default_button.dart';
-import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -38,6 +29,7 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   AuthType selectedAuth = AuthType.LOGIN;
+
   @override
   Widget build(BuildContext context) {
     final loginCubit = context.read<LoginCubit>();
@@ -87,90 +79,89 @@ class _LoginViewState extends State<LoginView> {
           }
         },
         child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          // Ensure the keyboard doesn't obscure the content
+
           appBar: const BackAppBar(),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Form(
-              key: loginCubit.formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: Stack(
-                children: [
-                  ListView(
-                    children: [
-                      Image.asset(
-                        Assets.logo,
-                        width: 200,
-                        height: 200,
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          chooseAuthWidget(
-                              onTap: () {
-                                setState(() {
-                                  selectedAuth = AuthType.LOGIN;
-                                });
-                              },
-                              active: selectedAuth == AuthType.LOGIN,
-                              text: "Login",
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(50),
-                                bottomLeft: Radius.circular(50),
-                              )),
-                          chooseAuthWidget(
-                              onTap: () {
-                                setState(() {
-                                  selectedAuth = AuthType.REGISTER;
-                                });
-                              },
-                              active: selectedAuth == AuthType.REGISTER,
-                              text: "Register",
-                              borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(50),
-                                bottomRight: Radius.circular(50),
-                              )),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      selectedAuth == AuthType.LOGIN
-                          ? LoginWidget(
-                        loginCubit: loginCubit,
-                      )
-                          : const RegisterWidget()
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: selectedAuth == AuthType.REGISTER
-                        ? DefaultButton(
-                      label: 'Register',
-                      width: double.infinity,
-                      onPressed: () {
-                        if (registerCubit.accept) {
-                          registerCubit.register;
-                        } else {
-                          showErrorMessage(
-                              context,
-                              getFailureMessage(
-                                  const ServerFailure(
-                                      message:
-                                      "Please accept the terms and conditions to continue."),
-                                  context));
-                        }
-                      },
-                    )
-                        : DefaultButton(
-                      width: double.infinity,
-                      label: 'Login',
-                      onPressed: loginCubit.login,
+            child: SingleChildScrollView(
+              child: Form(
+                key: loginCubit.formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Image.asset(
+                      Assets.logo,
+                      width: 200,
+                      height: 200,
                     ),
-                  )
-                ],
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        chooseAuthWidget(
+                            onTap: () {
+                              setState(() {
+                                selectedAuth = AuthType.LOGIN;
+                              });
+                            },
+                            active: selectedAuth == AuthType.LOGIN,
+                            text: "Login",
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(50),
+                              bottomLeft: Radius.circular(50),
+                            )),
+                        chooseAuthWidget(
+                            onTap: () {
+                              setState(() {
+                                selectedAuth = AuthType.REGISTER;
+                              });
+                            },
+                            active: selectedAuth == AuthType.REGISTER,
+                            text: "Register",
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(50),
+                              bottomRight: Radius.circular(50),
+                            )),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    selectedAuth == AuthType.LOGIN
+                        ? LoginWidget(
+                            loginCubit: loginCubit,
+                          )
+                        : const RegisterWidget(),
+                    selectedAuth == AuthType.REGISTER
+                        ? DefaultButton(
+                            label: 'Register',
+                            width: double.infinity,
+                            onPressed: () {
+                              if (registerCubit.accept) {
+                                registerCubit.register;
+                              } else {
+                                showErrorMessage(
+                                    context,
+                                    getFailureMessage(
+                                        const ServerFailure(
+                                            message:
+                                                "Please accept the terms and conditions to continue."),
+                                        context));
+                              }
+                            },
+                          )
+                        : DefaultButton(
+                            width: double.infinity,
+                            label: 'Login',
+                            onPressed: loginCubit.login,
+                          )
+                  ],
+                ),
               ),
             ),
           ),
@@ -181,9 +172,9 @@ class _LoginViewState extends State<LoginView> {
 
   chooseAuthWidget(
       {required bool active,
-        required String text,
-        required BorderRadius borderRadius,
-        void Function()? onTap}) {
+      required String text,
+      required BorderRadius borderRadius,
+      void Function()? onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -209,6 +200,7 @@ enum AuthType { LOGIN, REGISTER }
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key, required this.loginCubit});
+
   final LoginCubit loginCubit;
 
   @override
@@ -217,6 +209,7 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   bool obsecure = false;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -361,6 +354,7 @@ class RegisterWidget extends StatefulWidget {
 
 class _RegisterWidgetState extends State<RegisterWidget> {
   bool obsecure = true;
+
   @override
   Widget build(BuildContext context) {
     final registerCubit = context.read<RegisterCubit>();
@@ -375,7 +369,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             child: Column(
               children: [
                 FormTextField(
-                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
@@ -385,14 +380,15 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   // label: 'E-mail or phone number',
                   hint: 'First Name',
                   prefix:
-                  const Icon(Icons.person_2_rounded, color: Colors.grey),
+                      const Icon(Icons.person_2_rounded, color: Colors.grey),
                   action: (v) {},
                 ),
                 const Sizer(
                   height: 30,
                 ),
                 FormTextField(
-                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
@@ -402,14 +398,15 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   // label: 'E-mail or phone number',
                   hint: 'Last Name',
                   prefix:
-                  const Icon(Icons.person_2_rounded, color: Colors.grey),
+                      const Icon(Icons.person_2_rounded, color: Colors.grey),
                   action: (v) {},
                 ),
                 const Sizer(
                   height: 30,
                 ),
                 FormTextField(
-                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
@@ -483,7 +480,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 ),
                 const Sizer(height: 30),
                 FormTextField(
-                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
@@ -510,7 +508,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30,
                 ),
                 FormTextField(
-                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
