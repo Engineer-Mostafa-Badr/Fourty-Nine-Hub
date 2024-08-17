@@ -1,5 +1,6 @@
 abstract class Labels {
   static const currency = 'L.E';
+  static const welcomRegiesterResturant = 'Welcome to Resturant Registeration';
   static const highestBid = 'Highest bid';
   static const bid = 'bid';
   static const biddings = 'Biddings';
@@ -74,10 +75,13 @@ abstract class Labels {
   static const restaurantDashboard = 'Restaurant Dashboard';
   static const doctorDashboardBannerDiscription =
       'New Bookings are waiting you, go to doctor dashboard and explore more!';
+  static const resturantDashboardBannerDiscription =
+      'New Bookings are waiting you, go to resturant dashboard and explore more!';
   static const driverDashboardBannerDiscription =
       'New Bookings are waiting you, go to driver dashboard and explore more!';
   static const homeVist = 'Home Vist';
   static const clinicVist = 'Clinic Vist';
+  static const restaurantsForSelectedMeal = 'Restaurants For Selected Meal';
   static const call = 'Call';
   static const emergency = 'Emergency';
   static const address = 'Address';

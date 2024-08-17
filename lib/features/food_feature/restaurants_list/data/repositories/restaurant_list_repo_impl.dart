@@ -33,4 +33,9 @@ class RestaurantListRepoImpl implements RestaurantListRepo {
   Future<Either<Failure, int>> numOfRestaurants() {
     return _remoteDataSource.numOfRestaurants();
   }
+
+  @override
+  Future<Either<Failure, bool>> isResturant() {
+    return _remoteDataSource.isResturant();
+  }
 }

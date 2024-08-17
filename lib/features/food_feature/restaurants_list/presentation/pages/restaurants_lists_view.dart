@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/meal_baner.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/banner.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/meal_categories.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/resturant_dashboard_banner.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/common/dashboard_banner.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -34,22 +36,15 @@ class RestaurantsListsView extends StatelessWidget {
                 children: [
                   ListView(
                     children: [
-                      MealBanner(banner: state.banner),
+                      const MealBanner(),
                       const Sizer(),
-                      const DashboardBanner(
-                          title: '${Labels.restaurantDashboard}\n',
-                          subTitle:
-                              'New Bookings are waiting you, go to resturant dashboard and explore more!',
-                          route: Routes.RestaurantDashboard),
+                      const ResturantDashboardButton(),
                       const Sizer(),
-
-                      /// slider
-
                       if (state.categories?.isNotEmpty ?? false)
-                        _buildOffersWidget(),
-                      if (state.trendingRestaurants?.isNotEmpty ?? false) ...[
+                        const MealCategories(),
+                      if (state.subCategories?.isNotEmpty ?? false) ...[
                         Label(
-                          text: 'Restaurants you know',
+                          text: Labels.restaurantsForSelectedMeal,
                           style: Styles.headerText(),
                         ),
                         const Sizer(),
@@ -66,6 +61,8 @@ class RestaurantsListsView extends StatelessWidget {
                       ],
                     ],
                   ),
+
+                  /// numOfRestaurants
                   if (state.numOfRestaurants != null)
                     Positioned(
                       bottom: 10,
@@ -113,14 +110,14 @@ class RestaurantsListsView extends StatelessWidget {
     return BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
         builder: (context, state) {
       return SizedBox(
-          height: kToolbarHeight * 3,
+          height: kToolbarHeight * 3.15,
           child: ListView.separated(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) =>
-                  RestaurantCard(item: state.trendingRestaurants![index]),
+                  RestaurantCard(item: state.subCategories![index]),
               separatorBuilder: (context, index) => const Sizer(),
-              itemCount: state.trendingRestaurants?.length ?? 0));
+              itemCount: state.subCategories?.length ?? 0));
     });
   }
 

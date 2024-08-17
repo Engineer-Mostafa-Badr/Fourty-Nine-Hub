@@ -12,6 +12,8 @@ class RestaurantEntity {
   final String deliveryTime;
   final String deliveryFee;
   final double rate;
+  final bool? isFavorite;
+  final int? numberOfContent;
   final int numberOfReviews;
   final CuisineModel? cuisine;
   final List<ReviewModel>? reviews;
@@ -19,9 +21,11 @@ class RestaurantEntity {
   RestaurantEntity(
       {required this.id,
       required this.name,
+      this.numberOfContent,
       required this.description,
       required this.image,
       required this.available,
+      this.isFavorite,
       required this.deliveryTime,
       required this.deliveryFee,
       required this.rate,

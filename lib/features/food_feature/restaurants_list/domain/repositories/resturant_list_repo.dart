@@ -10,6 +10,8 @@ abstract class RestaurantListRepo {
     required double lat,
     required double lng,
   });
+  Future<Either<Failure, bool>> isResturant();
+
   Future<Either<Failure, int>> numOfRestaurants();
   Future<Either<Failure, List<RestaurantModel>>> getTrendingRestaurants({
     required double lat,

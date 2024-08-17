@@ -19,7 +19,6 @@ class EndPoints {
   static const getParentMainCategories = '/category/parent';
   static const getMainCategories = '/category/parent/get-all-main';
   static String getBannerByID({required String id}) => '/categories/main/$id';
-  static String getNumOfResturants = '/restaurants/num-of-restaurants';
   static const getMainCategoriesWithoutSubcategories = '/categories/main';
   static String getMainCategoryDetails(String id) => '/categories/main/$id';
   static String addMainCategoryToFavorite(String id) =>
@@ -307,6 +306,10 @@ class EndPoints {
   static String subCategoryRestaurants(String id) {
     return '/restaurants/subcategory/$id';
   }
+
+  static String getNumOfResturants = '/restaurants/num-of-restaurants';
+  static String isResturant = '/restaurants/check-user-have-restaurant';
+  static String createRestaurant = '/restaurants/create-restaurant';
 
   static String restaurantDetails(String id) {
     return '/restaurants/$id';
