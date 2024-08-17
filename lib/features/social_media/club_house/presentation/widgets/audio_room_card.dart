@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/entities/club_voice_room_entity.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -46,6 +47,9 @@ class AudioRoomCard extends StatelessWidget {
         child: Column(
           children: [
             ReadMoreLabel(
+              style: const TextStyle(
+                color: AppColors.QUANTITY_COLOR
+              ),
               text: room.subject,
               trimLines: 2,
             ),
@@ -81,6 +85,7 @@ class AudioRoomCard extends StatelessWidget {
                           return Row(
                             children: [
                               Label(
+                                  color: AppColors.QUANTITY_COLOR,
                                   text: room.hostname,
                                   style: Styles.mediumText()),
                               const Sizer(),
