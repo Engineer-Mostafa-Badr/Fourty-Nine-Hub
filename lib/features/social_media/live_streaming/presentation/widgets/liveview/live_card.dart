@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
@@ -12,8 +10,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
-import '../../../../social_posts/presentation/widgets/posts/comment_card.dart';
-import 'gifts_widget.dart';
+import '../../../../../../routes/routes.dart';
+import '../../../../../zoom/presentation/widgets/meeting_dialogue.dart';
 import 'recharge_coins.dart';
 
 class LiveCard extends StatefulWidget {
@@ -76,7 +74,13 @@ class _LiveCardState extends State<LiveCard> {
               padding: 10,
               radius: 20,
               icon: Icons.add,
-              onPressed: () {}),
+              onPressed: () {
+                context.push(Routes.LIVEView,
+                    extra: ZegoArgs(
+                      '123',
+                      false,
+                    ));
+              }),
           const Sizer(),
           Row(
             children: [
@@ -153,7 +157,7 @@ class _LiveCardState extends State<LiveCard> {
                 bottomSheet(
                     context: context,
                     backColor: Colors.black87,
-                    widget: const GiftsWidget());
+                    widget: Container());
               }),
           const Sizer(),
           _buildActionButton(

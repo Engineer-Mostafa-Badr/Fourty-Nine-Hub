@@ -1,412 +1,143 @@
+
+class UserModel {
+  final bool status;
+  final List<UserData> data;
+
+  UserModel({
+    required this.status,
+    required this.data,
+  });
+
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      status: json['status'],
+      data: List<UserData>.from(json['data'].map((x) => UserData.fromJson(x))),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'status': status,
+      'data': List<dynamic>.from(data.map((x) => x.toJson())),
+    };
+  }
+}
+
 class UserData {
-  String id;
-  String userId;
-  List<String> pictures;
-  List<Like> likes;
-  List<Friend> friends;
-  List<Gift> gifts;
-  List<User> user;
-  String createdAt;
-  String updatedAt;
+  final String? id;
+  final String? firstName;
+  final String? lastName;
+  final String? email;
+  final String? birthday;
+  final String? gender;
+  final Location? location;
+  final String? profilePicture;
+  final int followersCount;
+  final int followingCount;
+  final int friendsCount;
+  final List<TinderUserPicture> pictures;
 
   UserData({
-    required this.id,
-    required this.userId,
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.birthday,
+    this.gender,
+    this.location,
+    this.profilePicture,
+    required this.followersCount,
+    required this.followingCount,
+    required this.friendsCount,
     required this.pictures,
-    required this.likes,
-    required this.friends,
-    required this.gifts,
-    required this.user,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
       id: json['_id'],
-      userId: json['userId'],
-      pictures: List<String>.from(json['pictures']),
-      likes: (json['likes'] as List).map((i) => Like.fromJson(i)).toList(),
-      friends: (json['friends'] as List).map((i) => Friend.fromJson(i)).toList(),
-      gifts: (json['gifts'] as List).map((i) => Gift.fromJson(i)).toList(),
-      user: (json['user'] as List).map((i) => User.fromJson(i)).toList(),
-      createdAt: (json['createdAt']??''),
-      updatedAt: (json['updatedAt']??''),
-    );
-  }
-}
-
-class Like {
-  String id;
-  String socketId;
-  String firstName;
-  String lastName;
-  String email;
-  dynamic birthday;
-  String hashedPassword;
-  String gender;
-  LocationData location;
-  bool adminIgnore;
-  List<dynamic> following;
-  List<dynamic> blockedUsers;
-  List<dynamic> hiddenPosts;
-  List<dynamic> followers;
-  String referralId;
-  bool isLocked;
-  dynamic lockedDate;
-  bool isRider;
-  bool isDoctor;
-  bool isRestaurant;
-  bool isLoading;
-  String language;
-  bool isEmailVerified;
-  bool isPhoneVerified;
-  bool isDeleted;
-  String countryCode;
-  List<dynamic> auctionUsers;
-  List<dynamic> installmentsUsers;
-  bool twitterDocumentation;
-  String username;
-  String createdAt;
-  String updatedAt;
-
-  Like({
-    required this.id,
-    required this.socketId,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    this.birthday,
-    required this.hashedPassword,
-    required this.gender,
-    required this.location,
-    required this.adminIgnore,
-    required this.following,
-    required this.blockedUsers,
-    required this.hiddenPosts,
-    required this.followers,
-    required this.referralId,
-    required this.isLocked,
-    this.lockedDate,
-    required this.isRider,
-    required this.isDoctor,
-    required this.isRestaurant,
-    required this.isLoading,
-    required this.language,
-    required this.isEmailVerified,
-    required this.isPhoneVerified,
-    required this.isDeleted,
-    required this.countryCode,
-    required this.auctionUsers,
-    required this.installmentsUsers,
-    required this.twitterDocumentation,
-    required this.username,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory Like.fromJson(Map<String, dynamic> json) {
-    return Like(
-      id: json['_id'],
-      socketId: json['socketId'],
       firstName: json['firstName'],
       lastName: json['lastName'],
       email: json['email'],
       birthday: json['birthday'],
-      hashedPassword: json['hashedPassword'],
       gender: json['gender'],
-      location: LocationData.fromJson(json['location']),
-      adminIgnore: json['adminIgnore'],
-      following: List<dynamic>.from(json['following']),
-      blockedUsers: List<dynamic>.from(json['blockedUsers']),
-      hiddenPosts: List<dynamic>.from(json['hiddenPosts']),
-      followers: List<dynamic>.from(json['followers']),
-      referralId: json['referralId'],
-      isLocked: json['isLocked'],
-      lockedDate: json['lockedDate'],
-      isRider: json['isRider'],
-      isDoctor: json['isDoctor'],
-      isRestaurant: json['isRestaurant'],
-      isLoading: json['isLoading'],
-      language: json['language'],
-      isEmailVerified: json['isEmailVerified'],
-      isPhoneVerified: json['isPhoneVerified'],
-      isDeleted: json['isDeleted'],
-      countryCode: json['countryCode'],
-      auctionUsers: List<dynamic>.from(json['auction_users']),
-      installmentsUsers: List<dynamic>.from(json['installments_users']),
-      twitterDocumentation: json['twitter_documentation'],
-      username: json['username'],
-      createdAt: (json['createdAt']),
-      updatedAt: (json['updatedAt']),
+      location: json['location'] != null
+          ? Location.fromJson(json['location'])
+          : null,
+      profilePicture: json['profilePicture'],
+      followersCount: json['followersCount'] ?? 0,
+      followingCount: json['followingCount'] ?? 0,
+      friendsCount: json['friendsCount'] ?? 0,
+      pictures: json['pictures'] != null
+          ? List<TinderUserPicture>.from(
+        json['pictures'].map((x) => TinderUserPicture.fromJson(x)),
+      )
+          : [],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'firstName': firstName,
+      'lastName': lastName,
+      'email': email,
+      'birthday': birthday,
+      'gender': gender,
+      'location': location?.toJson(),
+      'profilePicture': profilePicture,
+      'followersCount': followersCount,
+      'followingCount': followingCount,
+      'friendsCount': friendsCount,
+      'pictures': List<dynamic>.from(pictures.map((x) => x.toJson())),
+    };
   }
 }
 
-class LocationData {
-  String type;
-  List<int> coordinates;
+class Location {
+  final String type;
+  final List<double> coordinates;
 
-  LocationData({required this.type, required this.coordinates});
+  Location({
+    required this.type,
+    required this.coordinates,
+  });
 
-  factory LocationData.fromJson(Map<String, dynamic> json) {
-    return LocationData(
+  factory Location.fromJson(Map<String, dynamic> json) {
+    return Location(
       type: json['type'],
-      coordinates: List<int>.from(json['coordinates']),
+      coordinates:
+      List<double>.from(json['coordinates'].map((x) => x.toDouble())),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'coordinates': List<dynamic>.from(coordinates.map((x) => x)),
+    };
   }
 }
 
-class Friend {
-  String id;
-  String socketId;
-  String firstName;
-  String lastName;
-  String email;
-  dynamic birthday;
-  String hashedPassword;
-  String gender;
-  LocationData location;
-  bool adminIgnore;
-  List<dynamic> following;
-  List<dynamic> blockedUsers;
-  List<dynamic> hiddenPosts;
-  List<dynamic> followers;
-  String referralId;
-  bool isLocked;
-  dynamic lockedDate;
-  bool isRider;
-  bool isDoctor;
-  bool isRestaurant;
-  bool isLoading;
-  String language;
-  bool isEmailVerified;
-  bool isPhoneVerified;
-  bool isDeleted;
-  String countryCode;
-  List<dynamic> auctionUsers;
-  List<dynamic> installmentsUsers;
-  bool twitterDocumentation;
-  String username;
-  String createdAt;
-  String updatedAt;
+class TinderUserPicture {
+  final String id;
+  final String mediaKey;
 
-  Friend({
+  TinderUserPicture({
     required this.id,
-    required this.socketId,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    this.birthday,
-    required this.hashedPassword,
-    required this.gender,
-    required this.location,
-    required this.adminIgnore,
-    required this.following,
-    required this.blockedUsers,
-    required this.hiddenPosts,
-    required this.followers,
-    required this.referralId,
-    required this.isLocked,
-    this.lockedDate,
-    required this.isRider,
-    required this.isDoctor,
-    required this.isRestaurant,
-    required this.isLoading,
-    required this.language,
-    required this.isEmailVerified,
-    required this.isPhoneVerified,
-    required this.isDeleted,
-    required this.countryCode,
-    required this.auctionUsers,
-    required this.installmentsUsers,
-    required this.twitterDocumentation,
-    required this.username,
-    required this.createdAt,
-    required this.updatedAt,
+    required this.mediaKey,
   });
 
-  factory Friend.fromJson(Map<String, dynamic> json) {
-    return Friend(
+  factory TinderUserPicture.fromJson(Map<String, dynamic> json) {
+    return TinderUserPicture(
       id: json['_id'],
-      socketId: json['socketId'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      email: json['email'],
-      birthday: json['birthday'],
-      hashedPassword: json['hashedPassword'],
-      gender: json['gender'],
-      location: LocationData.fromJson(json['location']),
-      adminIgnore: json['adminIgnore'],
-      following: List<dynamic>.from(json['following']),
-      blockedUsers: List<dynamic>.from(json['blockedUsers']),
-      hiddenPosts: List<dynamic>.from(json['hiddenPosts']),
-      followers: List<dynamic>.from(json['followers']),
-      referralId: json['referralId'],
-      isLocked: json['isLocked'],
-      lockedDate: json['lockedDate'],
-      isRider: json['isRider'],
-      isDoctor: json['isDoctor'],
-      isRestaurant: json['isRestaurant'],
-      isLoading: json['isLoading'],
-      language: json['language'],
-      isEmailVerified: json['isEmailVerified'],
-      isPhoneVerified: json['isPhoneVerified'],
-      isDeleted: json['isDeleted'],
-      countryCode: json['countryCode'],
-      auctionUsers: List<dynamic>.from(json['auction_users']),
-      installmentsUsers: List<dynamic>.from(json['installments_users']),
-      twitterDocumentation: json['twitter_documentation'],
-      username: json['username'],
-      createdAt: (json['createdAt'])??'',
-      updatedAt: (json['updatedAt'])??'',
+      mediaKey: json['mediaKey'],
     );
   }
-}
 
-class Gift {
-  String id;
-  String nameAr;
-  String nameEn;
-  Picture picture;
-
-  Gift({
-    required this.id,
-    required this.nameAr,
-    required this.nameEn,
-    required this.picture,
-  });
-
-  factory Gift.fromJson(Map<String, dynamic> json) {
-    return Gift(
-      id: json['_id'],
-      nameAr: json['nameAr'],
-      nameEn: json['nameEn'],
-      picture: Picture.fromJson(json['picture']),
-    );
-  }
-}
-
-class Picture {
-  int index;
-  String url;
-
-  Picture({required this.index, required this.url});
-
-  factory Picture.fromJson(Map<String, dynamic> json) {
-    return Picture(
-      index: json['index'],
-      url: json['url'],
-    );
-  }
-}
-
-class User {
-  String id;
-  String socketId;
-  String firstName;
-  String lastName;
-  String email;
-  dynamic birthday;
-  String hashedPassword;
-  String gender;
-  LocationData location;
-  bool adminIgnore;
-  List<dynamic> following;
-  List<dynamic> blockedUsers;
-  List<dynamic> hiddenPosts;
-  List<dynamic> followers;
-  String referralId;
-  bool isLocked;
-  dynamic lockedDate;
-  bool isRider;
-  bool isDoctor;
-  bool isRestaurant;
-  bool isLoading;
-  String language;
-  bool isEmailVerified;
-  bool isPhoneVerified;
-  bool isDeleted;
-  String countryCode;
-  List<dynamic> auctionUsers;
-  List<dynamic> installmentsUsers;
-  bool twitterDocumentation;
-  String username;
-  String createdAt;
-  String updatedAt;
-  String? chatPassword;
-
-  User({
-    required this.id,
-    required this.socketId,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    this.birthday,
-    required this.hashedPassword,
-    required this.gender,
-    required this.location,
-    required this.adminIgnore,
-    required this.following,
-    required this.blockedUsers,
-    required this.hiddenPosts,
-    required this.followers,
-    required this.referralId,
-    required this.isLocked,
-    this.lockedDate,
-    required this.isRider,
-    required this.isDoctor,
-    required this.isRestaurant,
-    required this.isLoading,
-    required this.language,
-    required this.isEmailVerified,
-    required this.isPhoneVerified,
-    required this.isDeleted,
-    required this.countryCode,
-    required this.auctionUsers,
-    required this.installmentsUsers,
-    required this.twitterDocumentation,
-    required this.username,
-    required this.createdAt,
-    required this.updatedAt,
-    this.chatPassword,
-  });
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['_id'],
-      socketId: json['socketId'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      email: json['email'],
-      birthday: json['birthday'],
-      hashedPassword: json['hashedPassword'],
-      gender: json['gender'],
-      location: LocationData.fromJson(json['location']),
-      adminIgnore: json['adminIgnore'],
-      following: List<dynamic>.from(json['following']),
-      blockedUsers: List<dynamic>.from(json['blockedUsers']),
-      hiddenPosts: List<dynamic>.from(json['hiddenPosts']),
-      followers: List<dynamic>.from(json['followers']),
-      referralId: json['referralId'],
-      isLocked: json['isLocked'],
-      lockedDate: json['lockedDate'],
-      isRider: json['isRider'],
-      isDoctor: json['isDoctor'],
-      isRestaurant: json['isRestaurant'],
-      isLoading: json['isLoading'],
-      language: json['language'],
-      isEmailVerified: json['isEmailVerified'],
-      isPhoneVerified: json['isPhoneVerified'],
-      isDeleted: json['isDeleted'],
-      countryCode: json['countryCode'],
-      auctionUsers: List<dynamic>.from(json['auction_users']),
-      installmentsUsers: List<dynamic>.from(json['installments_users']),
-      twitterDocumentation: json['twitter_documentation'],
-      username: json['username'],
-      createdAt: (json['createdAt'])??'',
-      updatedAt: (json['updatedAt'])??'',
-      chatPassword: json['chatPassword'],
-    );
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'mediaKey': mediaKey,
+    };
   }
 }

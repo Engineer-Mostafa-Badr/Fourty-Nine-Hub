@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../../../common/functions/helper/local_auth.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
 import '../../domain/entities/wallet_history_entity.dart';
 
 class WalletHistory extends StatelessWidget {
@@ -46,14 +43,14 @@ class WalletHistory extends StatelessWidget {
             ),
             MaterialButton(
               onPressed: () async {
-                if (await LocalAuth().checkBiometrics()) {
-                  context.push(Routes.PAYMENT);
-                }
+                // if (await LocalAuth().checkBiometrics()) {
+                //   context.push(Routes.PAYMENT);
+                // }
               },
               color: Colors.red,
               textColor: Colors.white,
               shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10),
               ),
               minWidth: double.infinity,
               child: Row(

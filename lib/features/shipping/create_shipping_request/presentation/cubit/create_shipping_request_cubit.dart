@@ -1,6 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -125,7 +123,7 @@ class CreateShippingRequestCubit extends Cubit<CreateShippingRequestState> {
 
     final response = await _getShippingExpectedPriceUseCase.call(
         ExpectedPriceParams(
-          subCategoryId: state.subCategory?.id??'',
+            subCategoryId: state.subCategory?.id ?? '',
             fromLat: from.lat,
             fromLng: from.lng,
             toLat: to.lat,

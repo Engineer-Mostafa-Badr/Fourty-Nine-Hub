@@ -10,6 +10,8 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/google_searc
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/params/expected_price_params.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/ride_offer_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/ride_request_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/ride_thumbnail_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 import 'package:fourtyninehub/res/assets/jsons.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -61,6 +63,8 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, List<CarTypeModel>>> getCarTypes({
     required String subCategoryId,
   });
+
+  Future<Either<Failure, List<RideThumbnailEntity>>> getThumbnails();
 }
 
 class RideRemoteDataSourceImpl implements RideRemoteDataSource {
@@ -85,7 +89,7 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
           if (data['data'] != null) {
             return Right(data['data']['_id'] ?? '');
           } else {
-            return Right('');
+            return const Right('');
           }
         } else {
           return Left(ValidationFailure(data['message']));
@@ -99,7 +103,7 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
           if (data['data'] != null) {
             return Right(data['data']['_id'] ?? '');
           } else {
-            return Right('');
+            return const Right('');
           }
         } else {
           return Left(ValidationFailure(data['message']));
@@ -113,7 +117,7 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
           if (data['data'] != null) {
             return Right(data['data']['_id'] ?? '');
           } else {
-            return Right('');
+            return const Right('');
           }
         } else {
           return Left(ValidationFailure(data['message']));
@@ -254,6 +258,17 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
         (failure) => Left(failure),
         (data) => Right((data['data']['car_types'] as List)
             .map((e) => CarTypeModel.fromJson(e))
+            .toList()));
+  }
+
+  @override
+  Future<Either<Failure, List<RideThumbnailEntity>>> getThumbnails() async {
+    final response = await _apiConsumer.get(EndPoints.getRideThumbnails);
+
+    return response.fold(
+        (failure) => Left(failure),
+        (data) => Right((data['data'] as List)
+            .map((e) => RideThumbnailModel.fromJson(e))
             .toList()));
   }
 }

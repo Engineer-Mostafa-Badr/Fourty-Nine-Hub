@@ -10,7 +10,6 @@ import '../../domain/usecases/get_doctor_list_usecase.dart';
 abstract class DoctorListRemoteDataSource {
   Future<Either<Failure, List<DoctorEntity>>> getDoctorsList(
       {required DoctorSearchParams params});
-
 }
 
 class DoctorListRemoteDataSourceImpl implements DoctorListRemoteDataSource {
@@ -29,5 +28,4 @@ class DoctorListRemoteDataSourceImpl implements DoctorListRemoteDataSource {
             .map((e) => DoctorModel.fromJson(e))
             .toList()));
   }
-
 }

@@ -21,9 +21,9 @@ class DetailsCounterWidget extends StatelessWidget {
       height: kToolbarHeight * 2,
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
+      decoration:  BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(10),
             bottomLeft: Radius.circular(10),
             topRight: Radius.circular(100),
@@ -59,13 +59,18 @@ class DetailsCounterWidget extends StatelessWidget {
                               child: CircleAvatar(
                                 radius: 12,
                                 backgroundColor: Colors.white,
-                                backgroundImage: NetworkImage(e.user.profilePicture?? UIConst.profilePlaceHolder),
+                                backgroundImage: NetworkImage(
+                                    e.user.profilePicture ??
+                                        UIConst.profilePlaceHolder),
                               ),
                             );
                           }).toList() ??
                           [],
                       const Sizer(),
                       TextAppButton(
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor
+                        ),
                           label: '${auction.biddings?.length} ${Labels.bid}',
                           onPressed: () {
                             bottomSheet(

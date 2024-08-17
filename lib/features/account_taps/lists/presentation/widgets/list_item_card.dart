@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/publisher_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
 import '../cubit/lists_cubit.dart';
 
 class ListItemCard extends StatelessWidget {
@@ -18,7 +10,7 @@ class ListItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-return Container();
+    return Container();
     // return Row(
     //   children: [
     //     ProfileImage(
@@ -138,5 +130,4 @@ return Container();
   //     ],
   //   );
   // }
-
 }

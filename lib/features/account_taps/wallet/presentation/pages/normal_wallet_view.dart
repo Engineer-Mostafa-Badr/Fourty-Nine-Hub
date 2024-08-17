@@ -4,7 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/subscription_widget.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../common/functions/helper/local_auth.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -14,7 +13,6 @@ import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
-import '../../domain/entities/wallet_entity.dart';
 import '../cubit/wallet_cubit.dart';
 import '../widgets/wallet_card_widget.dart';
 import '../widgets/wallet_history_card.dart';
@@ -38,9 +36,9 @@ class _NormalWalletViewState extends State<NormalWalletView> {
           margin: const EdgeInsets.all(10),
           child: MaterialButton(
             onPressed: () async {
-              if (await LocalAuth().checkBiometrics()) {
-                context.push(Routes.TRANSFERMONEY);
-              }
+              // if (await LocalAuth().checkBiometrics()) {
+              //   context.push(Routes.TRANSFERMONEY);
+              // }
             },
             color: Colors.red,
             textColor: Colors.white,
@@ -116,7 +114,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                             : Icons.arrow_drop_up_rounded),
                         Label(
                           text: 'Show More',
-                          style: Styles.smallText(),
+                          style: Styles.smallText(color: Theme.of(context).primaryColor),
                         ),
                       ],
                     ),

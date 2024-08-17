@@ -7,5 +7,5 @@ class HealthSharedData {
 
   List<GovernorateEntity> governorates = [];
 
-  final  DoctorSearchParams doctorSearchParams = DoctorSearchParams();
+  final DoctorSearchParams doctorSearchParams = DoctorSearchParams();
 }

@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/core/utils/fcm.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
 
@@ -42,7 +41,7 @@ class RegisterParams extends Equatable {
         'confirmPassword': confirmPassword,
         'gender': isMale ? 'male' : 'female',
         'fcm': await getFcmToken(),
-        'deviceId': await getDeviceId(),
+        // 'deviceId': await getDeviceId(),
       };
 
   @override

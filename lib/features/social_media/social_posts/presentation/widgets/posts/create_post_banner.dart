@@ -25,7 +25,7 @@ class CreatePostBanner extends StatelessWidget {
           ),
           Expanded(
               child: InkWell(
-            onTap: () => context.push(Routes.CREATEPOST,extra: 'facebook'),
+            onTap: () => context.push(Routes.CREATEPOST, extra: 'facebook'),
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
               decoration: BoxDecoration(
@@ -41,7 +41,6 @@ class CreatePostBanner extends StatelessWidget {
           const Sizer(
             width: 10,
           ),
-         
           InkWell(
             onTap: () => context.push(Routes.QURAAN),
             child: Column(

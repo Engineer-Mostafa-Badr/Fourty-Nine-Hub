@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 void bottomSheet(
     {required BuildContext context,
     required Widget widget,
-    Color backColor = Colors.white,
+    Color? backColor ,
     bool isFloating = false,
     bool isScrollControlled = false}) {
   showModalBottomSheet(
@@ -19,7 +19,8 @@ void bottomSheet(
                 topLeft: Radius.circular(10),
                 topRight: Radius.circular(10),
               ),
-              color: backColor),
+              color: backColor,
+        ),
           child: widget,
         );
       });

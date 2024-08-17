@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
   const DoctorUnhandledAppointmentsWidget({super.key});
@@ -25,62 +31,101 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.white,
+            color: Theme.of(context).primaryColor,
           ),
+          child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
+            builder: (context, state) {
+              if (state is DoctorDashboardUnhandledAppointments &&
+                  state.appointments.isNotEmpty) {
+                return Column(
+                  children: [
+                    ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: state.appointments.length,
+                        separatorBuilder: (context, index) => const Divider(),
+                        itemBuilder: (context, index) {
+                          final appointment = state.appointments[index];
+                          return DoctorUnhandledAppointmentCard(
+                            appointment: appointment,
+                            onAccept: () => context
+                                .read<DoctorDashboardCubit>()
+                                .acceptAppointment(appointment.id),
+                            onReject: () => context
+                                .read<DoctorDashboardCubit>()
+                                .rejectAppointment(appointment.id),
+                          );
+                        }),
+                    const Sizer(),
+                    AppButton(
+                        label: Labels.viewMore,
+                        onPressed: () {
+                          context.push(Routes.DOCTORUNHANDLEDAPPOINTMENTS);
+                        })
+                  ],
+                );
+              } else {
+                return Center(
+                    child: Text(
+                  'No Appointments',
+                  style: Styles.headerText(color: Theme.of(context).scaffoldBackgroundColor),
+                ));
+              }
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class DoctorUnhandledAppointmentCard extends StatelessWidget {
+  final DoctorAppointmentEntity appointment;
+  final Function()? onAccept;
+  final Function()? onReject;
+  const DoctorUnhandledAppointmentCard(
+      {super.key, required this.appointment, this.onAccept, this.onReject});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+            flex: 1,
+            child: SquareImage(
+              url: appointment.image ?? UIConst.profilePlaceHolder,
+            )),
+        const Sizer(),
+        Expanded(
+          flex: 3,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Label(
+                text: appointment.fullName,
+                style: Styles.headerText(),
+              ),
+              Label(
+                text:
+                    '${appointment.type.translatedName} - ${appointment.day.name}\n${appointment.time}',
+                style: Styles.mediumText(),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          flex: 2,
           child: Column(
             children: [
-              ListView.separated(
-                shrinkWrap: true,
-                itemCount: 2,
-                separatorBuilder: (context, index) => const Divider(),
-                itemBuilder: (context, index) {
-                  return Row(
-                    children: [
-                      const Expanded(
-                          flex: 1,
-                          child: SquareImage(
-                            url: UIConst.profilePlaceHolder,
-                          )),
-                      const Sizer(),
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Label(
-                              text: 'Ahmed Mohamed',
-                              style: Styles.headerText(),
-                            ),
-                            Label(
-                              text: 'Clinic\n9:00 - 10:00 AM',
-                              style: Styles.mediumText(),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          children: [
-                            AppButton(
-                              label: Labels.accept,
-                              onPressed: () {},
-                              backColor: AppColors.PRIMARY_COLOR,
-                            ),
-                            const Sizer(),
-                            AppButton(
-                              label: Labels.reject,
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
+              AppButton(
+                label: Labels.accept,
+                onPressed: () => onAccept?.call(),
+                backColor: AppColors.PRIMARY_COLOR,
               ),
               const Sizer(),
-              AppButton(label: Labels.viewMore, onPressed: () {})
+              AppButton(
+                label: Labels.reject,
+                onPressed: () => onReject?.call(),
+              ),
             ],
           ),
         ),

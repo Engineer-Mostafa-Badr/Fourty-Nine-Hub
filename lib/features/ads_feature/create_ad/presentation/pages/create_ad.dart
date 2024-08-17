@@ -10,7 +10,6 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
-import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/labels/badged_label.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -147,7 +146,6 @@ class _CreateAdViewState extends State<CreateAdView> {
                 const Sizer(),
                 DefaultButton(
                     label: 'Publish',
-                   
                     onPressed: () {
                       controller.createAd(
                           categorize: widget.categorization, context: context);

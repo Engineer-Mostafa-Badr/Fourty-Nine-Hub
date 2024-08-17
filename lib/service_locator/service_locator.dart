@@ -3,13 +3,19 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fourtyninehub/core/api/api_client_helper.dart';
+import 'package:fourtyninehub/core/api/api_client_helper_imp.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
+import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
+import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
 import 'package:fourtyninehub/service_locator/reels_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
+import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
+import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -17,6 +23,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../core/api/api_consumer.dart';
 import '../core/local_storage/local_storage_consumer.dart';
 
+import '../core/localization/localization_service.dart';
 import '../firebase_options.dart';
 import 'account_service_locator.dart';
 import 'auction_service_locator.dart';
@@ -24,6 +31,7 @@ import 'food_service_locator.dart';
 import 'fourty_nine_service_locator.dart';
 import 'health_service_locator.dart';
 import 'installment_service_locator.dart';
+import 'meeting_service_locator.dart';
 import 'social_service_locator.dart';
 import 'subscribe_service_locator.dart';
 
@@ -47,6 +55,8 @@ class DI {
         storage: FlutterSecureStorage(),
       ),
     );
+
+    await LocalizationService.init();
 
     // dio
     serviceLocator.registerLazySingleton<Dio>(
@@ -83,6 +93,13 @@ class DI {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<ApiClientHelper>(
+      () => ApiClientHelperImp(),
+    );
+    // base repo
+    serviceLocator.registerLazySingleton(
+      () => BaseRepository(),
+    );
     // json parser
     serviceLocator.registerLazySingleton<JsonParser>(
       () => JsonParser(),
@@ -91,6 +108,8 @@ class DI {
     await AuthServiceLocator.execute(serviceLocator: serviceLocator);
     // Ride Customer
     await RideServiceLocator.execute(serviceLocator: serviceLocator);
+    // Subcategories
+    SubcategoriesServiceLocator.execute(serviceLocator: serviceLocator);
     // Fourty-Nine
     FourtyNineServiceLocator.execute(serviceLocator);
 
@@ -115,7 +134,13 @@ class DI {
     AccountServiceLocator.execute(serviceLocator: serviceLocator);
     // social
     SocialServiceLocator.execute(serviceLocator: serviceLocator);
+    //club voice
+    ClubVoiceServiceLocator.execute(serviceLocator: serviceLocator);
+    //meeting
+    MeetingServiceLocator.execute(serviceLocator: serviceLocator);
     // subscriptions
     SubscriptionServiceLocator.execute(serviceLocator: serviceLocator);
+    // shipping
+    ShippingServiceLocatior.execute(serviceLocator: serviceLocator);
   }
 }

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/charts/bar_chart.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_chart.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class DoctorHistoryCard extends StatelessWidget {
   final String title;
   final num totalValue;
-  final double clinicValue;
-  final double callValue;
-  final double homeVisitValue;
+  final num clinicValue;
+  final num callValue;
+  final num homeVisitValue;
   const DoctorHistoryCard(
       {super.key,
       required this.title,
@@ -23,10 +23,10 @@ class DoctorHistoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,7 +38,6 @@ class DoctorHistoryCard extends StatelessWidget {
                 child: Label(
                   text: title,
                   style: Styles.headerText(
-                    color: AppColors.PRIMARY_COLOR,
                   ),
                 ),
               ),
@@ -48,18 +47,28 @@ class DoctorHistoryCard extends StatelessWidget {
               Label(
                 text: (totalValue).toShortScale,
                 style: Styles.headerText(
-                  color: AppColors.SECONDARY_COLOR,
                 ),
               ),
             ],
           ),
           const Sizer(
-            height: 60,
+            height: 30,
           ),
-          DoctorHistoryChart(
-            clinicValue: clinicValue,
-            callValue: callValue,
-            homeVisitValue: homeVisitValue,
+          CustomBarChart(
+            data: [
+              BarData(
+                label: Labels.clinic,
+                value: clinicValue,
+              ),
+              BarData(
+                label: Labels.call,
+                value: callValue,
+              ),
+              BarData(
+                label: Labels.homeVist,
+                value: homeVisitValue,
+              ),
+            ],
           ),
         ],
       ),

@@ -7,6 +7,4 @@ import '../usecases/get_doctor_list_usecase.dart';
 abstract class DoctorListRepo {
   Future<Either<Failure, List<DoctorEntity>>> getDoctorsList(
       {required DoctorSearchParams params});
-
-
 }

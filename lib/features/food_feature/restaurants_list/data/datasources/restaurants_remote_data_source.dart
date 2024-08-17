@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import '../../../../../core/api/end_points.dart';
 import '../../../../../res/assets/jsons.dart';

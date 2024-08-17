@@ -29,7 +29,7 @@ class SubCategoryCard extends StatelessWidget {
         height: kToolbarHeight * 3,
         margin: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(5),
             boxShadow: const [
               BoxShadow(

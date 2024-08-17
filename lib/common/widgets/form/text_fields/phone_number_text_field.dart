@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:size_helper/size_helper.dart';
 
 import '../../../../res/style/app_colors.dart';
 
-class PhoneTextFormField extends StatelessWidget {
-  const PhoneTextFormField({
+class CustomPhoneTextFormField extends StatefulWidget {
+  final FocusNode currentFocusNode;
+  final FocusNode? nextFocusNode;
+  final TextEditingController currentController;
+  final EdgeInsetsGeometry? margin;
+  final String? initialCountryCode;
+  final ValueChanged<String> onInputChanged;
+  final bool isEnabled;
+  final String? hint;
+  final Color? fillColor;
+  final Color? codeColor;
+
+  const CustomPhoneTextFormField({
     super.key,
     required this.currentFocusNode,
     required this.nextFocusNode,
     required this.currentController,
     this.margin,
-    this.initialValue,
+    this.initialCountryCode,
     required this.onInputChanged,
     this.isEnabled = true,
     this.hint,
@@ -19,112 +28,112 @@ class PhoneTextFormField extends StatelessWidget {
     this.codeColor = Colors.white,
   });
 
-  final FocusNode currentFocusNode;
-  final FocusNode? nextFocusNode;
-  final TextEditingController currentController;
-  final EdgeInsetsGeometry? margin;
-  final PhoneNumber? initialValue;
-  final ValueChanged<PhoneNumber> onInputChanged;
-  final bool isEnabled;
-  final String? hint;
-  final Color? fillColor;
-  final Color? codeColor;
+  @override
+  _CustomPhoneTextFormFieldState createState() =>
+      _CustomPhoneTextFormFieldState();
+}
+
+class _CustomPhoneTextFormFieldState extends State<CustomPhoneTextFormField> {
+  String _selectedCountryCode = '+1'; // Default to US country code
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialCountryCode != null) {
+      _selectedCountryCode = widget.initialCountryCode!;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = context
-        .sizeHelper(
-            mobileLarge:
-                Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 14.0),
-            tabletSmall: Theme.of(context).textTheme.bodySmall!,
-            tabletNormal: Theme.of(context).textTheme.bodySmall!,
-            desktopSmall:
-                Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 21.0))
-        .copyWith(color: Colors.black);
+    final textStyle =
+        Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.black) ??
+            const TextStyle(color: Colors.black);
+
     return Container(
-      margin: margin,
-      child: InternationalPhoneNumberInput(
-        locale: Localizations.localeOf(context).languageCode,
-        countries: const ['EG'],
-        isEnabled: isEnabled,
-        focusNode: currentFocusNode,
-        textFieldController: currentController,
-        cursorColor: AppColors.PRIMARY_COLOR,
-        textStyle: textStyle,
-        selectorTextStyle: textStyle.copyWith(color: codeColor),
-        inputDecoration: InputDecoration(
-          fillColor: fillColor ??
-              (isEnabled ? Colors.white : AppColors.GREY_NORMAL_COLOR),
-          filled: true,
-          contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-          hintText: hint ?? 'Phone Number',
-          hintStyle: context
-              .sizeHelper(
-                mobileLarge: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(fontSize: 10.0),
-                tabletSmall: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(fontSize: 12.0),
-                tabletNormal: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(fontSize: 12.0),
-                desktopSmall: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(fontSize: 20.0),
-              )
-              .copyWith(color: Colors.black),
-          counterText: '',
-          disabledBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            borderSide: BorderSide(color: AppColors.GREY_DARK_COLOR),
-          ),
-          enabledBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            borderSide: BorderSide(color: AppColors.GREY_DARK_COLOR),
-          ),
-          focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            borderSide: BorderSide(color: AppColors.GREY_DARK_COLOR),
-          ),
-          errorBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.red,
-              width: 1,
+      margin: widget.margin,
+      child: Row(
+        children: [
+          // Country Code Dropdown
+          Expanded(
+            flex: 2,
+            child: Container(
+              decoration: BoxDecoration(
+                color: widget.fillColor ?? Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                border: Border.all(color: widget.codeColor ?? Colors.grey),
+              ),
+              child: DropdownButton<String>(
+                value: _selectedCountryCode,
+                icon: const Icon(Icons.arrow_drop_down, color: AppColors.QUANTITY_COLOR,),
+                isExpanded: true,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedCountryCode = newValue!;
+                  });
+                },
+                style: const TextStyle(
+                  color: AppColors.QUANTITY_COLOR
+                ),
+                items: <String>[
+                  '+1',
+                  '+44',
+                  '+91'
+                ] // Add more country codes as needed
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
             ),
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
           ),
-          focusedErrorBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.red,
-              width: 1,
+          const SizedBox(width: 8.0),
+          // Phone Number Text Field
+          Expanded(
+            flex: 8,
+            child: TextFormField(
+              focusNode: widget.currentFocusNode,
+              controller: widget.currentController,
+              enabled: widget.isEnabled,
+              cursorColor: Colors.blue,
+              style: textStyle,
+              decoration: InputDecoration(
+                fillColor: widget.fillColor ??
+                    (widget.isEnabled ? Colors.white : Colors.grey),
+                filled: true,
+                contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                hintText: widget.hint ?? 'Phone Number',
+                hintStyle: textStyle.copyWith(color: AppColors.QUANTITY_COLOR),
+                counterText: '',
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                errorBorder: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+                focusedErrorBorder: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+              maxLength: 15,
+              // Adjust as needed
+              onChanged: (value) {
+                widget.onInputChanged('$_selectedCountryCode$value');
+              },
+              onFieldSubmitted: (_) =>
+                  FocusScope.of(context).requestFocus(widget.nextFocusNode),
             ),
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
           ),
-        ),
-        autoValidateMode: AutovalidateMode.disabled,
-        ignoreBlank: false,
-        initialValue: initialValue ?? PhoneNumber(isoCode: 'KW'),
-        selectorConfig: const SelectorConfig(
-          trailingSpace: false,
-          leadingPadding: 0.0,
-          selectorType: PhoneInputSelectorType.DIALOG,
-        ),
-        searchBoxDecoration: const InputDecoration(
-          hintText: 'Search By Country Name or Code',
-        ),
-        spaceBetweenSelectorAndTextField: 8.0,
-        errorMessage: 'Invalid Phone Number',
-        hintText: '01.........',
-        onInputChanged: onInputChanged,
-        onFieldSubmitted: (_) =>
-            FocusScope.of(context).requestFocus(nextFocusNode),
-        maxLength: 11,
-        formatInput: false,
+        ],
       ),
     );
   }

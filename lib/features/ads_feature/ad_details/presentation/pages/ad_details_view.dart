@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/global/button_availability.dart';
 import 'package:fourtyninehub/common/functions/helper/launch_url.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
@@ -19,7 +18,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
-import '../../../../../common/widgets/stateless/dynamic/CarouselSlider.dart';
+import '../../../../../common/widgets/stateless/dynamic/carousel_slider.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/strings/labels.dart';

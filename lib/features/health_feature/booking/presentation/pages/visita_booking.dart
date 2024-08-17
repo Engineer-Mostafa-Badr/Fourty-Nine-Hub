@@ -40,7 +40,6 @@ class _VisitaBookingState extends State<VisitaBooking> {
     final controller = context.read<BookDoctorAppointmentCubit>();
 
     return Scaffold(
-        backgroundColor: AppColors.BACKGROUND_COLOR,
         appBar: const BackAppBar(
           label: Labels.confirmBooking,
         ),
@@ -49,9 +48,10 @@ class _VisitaBookingState extends State<VisitaBooking> {
           listener: (context, state) {
             switch (state) {
               case BookDoctorAppointmentSuccessState _:
-                showSuccessMessage(context, Labels.bookingSuccess);
+                showSuccessMessage(context, 'waitingDoctorAppointment');
                 Future.delayed(const Duration(seconds: 1));
-                context.pushAndRemoveUntil(Routes.VISITA);
+                context.pushAndRemoveUntil(
+                    Routes.VISITA, (route) => route == Routes.HOME);
                 break;
 
               case BookDoctorAppointmentStartLoadingState _:
@@ -89,15 +89,16 @@ class _VisitaBookingState extends State<VisitaBooking> {
                       height: 50,
                       label: "${Labels.premium} ${Labels.book}",
                       onPressed: () {
-                        serviceLocator<SubscriptionController>().checkIfUserSubscribed(
-                              onSubscribed: () async {
-                                await controller.premiumBook();
-                              },
-                              subCategoryId: serviceLocator<HealthSharedData>()
-                                  .doctorSearchParams
-                                  .subCategory
-                                  .id,
-                            );
+                        serviceLocator<SubscriptionController>()
+                            .checkIfUserSubscribed(
+                          onSubscribed: () async {
+                            await controller.premiumBook();
+                          },
+                          subCategoryId: serviceLocator<HealthSharedData>()
+                              .doctorSearchParams
+                              .subCategory
+                              .id,
+                        );
                       }),
                   const Sizer(),
                 ],

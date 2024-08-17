@@ -7,8 +7,14 @@ import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart'
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../../common/theme/cubit/cubit.dart';
+import '../../../../../../res/style/app_colors.dart';
 
 class HealthSubCategoryCard extends StatelessWidget {
   final HealthSubcategoryEntity subCategory;
@@ -17,14 +23,18 @@ class HealthSubCategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
+            subCategory;
+        context.push(Routes.VISITADOCTORLIST);
+      },
       child: Container(
         width: 200,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: AppColors.SHADOW),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: Column(
           children: [
             Expanded(
@@ -47,7 +57,7 @@ class HealthSubCategoryCard extends StatelessWidget {
                           icon: subCategory.isFavorite
                               ? Icons.favorite
                               : Icons.favorite_border,
-                          color: Colors.red,
+                          color: ThemeCubit.get(context).isDarkTheme?Theme.of(context).scaffoldBackgroundColor:AppColors.PRIMARY_COLOR_DARK,
                           onPressed: () {
                             context
                                 .read<HealthCubit>()

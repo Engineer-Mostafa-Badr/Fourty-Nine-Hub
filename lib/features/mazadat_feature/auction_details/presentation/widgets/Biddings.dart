@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../../common/functions/helper/randome_color.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/text_button.dart';
@@ -37,7 +36,8 @@ class Biddings extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: Colors.white,
-            backgroundImage: NetworkImage(item.user.profilePicture??UIConst.profilePlaceHolder),
+            backgroundImage: NetworkImage(
+                item.user.profilePicture ?? UIConst.profilePlaceHolder),
           ),
           const Sizer(),
           Expanded(

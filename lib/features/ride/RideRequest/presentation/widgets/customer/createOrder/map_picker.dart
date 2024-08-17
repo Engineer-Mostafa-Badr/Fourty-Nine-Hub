@@ -189,7 +189,7 @@ class _mapPickerState extends State<MapPicker> {
   }
 
   _addPolyLine() {
-    PolylineId id = PolylineId("poly");
+    PolylineId id = const PolylineId("poly");
     Polyline polyline = Polyline(
         polylineId: id,
         color: AppColors.PRIMARY_COLOR,
@@ -209,9 +209,9 @@ class _mapPickerState extends State<MapPicker> {
         travelMode: TravelMode.driving,
         wayPoints: []);
     if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
+      for (var point in result.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
+      }
     }
     _addPolyLine();
   }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_static_maps_controller/google_static_maps_controller.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -10,7 +9,6 @@ import '../../../../../common/widgets/stateless/buttons/progress_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
 import '../../../../requests_history/data/models/trip_model.dart';
 import '../../domain/usecases/create_rider_offer_usecase.dart';
 import 'driver_trip_details.dart';
@@ -123,7 +121,7 @@ class DriverTripCard extends StatelessWidget {
               ProgressButton(
                 label: 'Accept',
                 width: double.infinity,
-                onPressed: ()=> acceptRide(trip.id),
+                onPressed: () => acceptRide(trip.id),
               ),
             ],
           ),

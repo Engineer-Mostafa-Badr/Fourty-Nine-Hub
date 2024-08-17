@@ -25,6 +25,8 @@ abstract class Assets {
   static String walking = 'assets/images/walking.gif';
   static String image = 'assets/images/image.png';
   static String empty = 'assets/images/image.png';
+  static String threeDots = 'assets/images/three_dots.svg';
+  static String mobile = 'assets/images/mobile_icon.svg';
 
   // reactions
   static String like = 'assets/images/reactions/like.png';
@@ -48,4 +50,5 @@ abstract class Assets {
   static String doctorHomeVisit = 'assets/images/doctor_home_visit.png';
   static String doctorCall = 'assets/images/doctor_call.png';
   static String doctorClinicVisit = 'assets/images/doctor_clinic.png';
+  static String profileIcon = 'assets/images/profile_icon.png';
 }

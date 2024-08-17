@@ -37,8 +37,10 @@ abstract class Jsons {
   static String statesList = 'assets/json/states_list.json';
   static String citiesList = 'assets/json/cities_list.json';
   static String doctorAppointments = 'assets/json/doctor_appointments.json';
-  static String favouriteCategoriesList = 'assets/json/favourite_categories_list.json';
-  static String favouriteSubcategoriesList = 'assets/json/favourite_subcategories_list.json';
+  static String favouriteCategoriesList =
+      'assets/json/favourite_categories_list.json';
+  static String favouriteSubcategoriesList =
+      'assets/json/favourite_subcategories_list.json';
   static String favouriteAdsList = 'assets/json/favourite_ads_list.json';
   static String usersList = 'assets/json/users_list.json';
   static String walletHistoryList = 'assets/json/wallet_history_list.json';
@@ -48,8 +50,4 @@ abstract class Jsons {
   static String activities = 'assets/json/activities.json';
   static String feelings = 'assets/json/feelings.json';
   static String companyAds = 'assets/json/company_ads.json';
-
-
-
-
 }

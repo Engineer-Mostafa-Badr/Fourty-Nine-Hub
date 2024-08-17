@@ -52,7 +52,8 @@ class RestaurantHeader extends StatelessWidget {
                       BoxShadow(
                           color: Colors.grey, spreadRadius: 6, blurRadius: 10)
                     ],
-                    color: Colors.white),
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                ),
                 child: Column(
                   children: [
                     Row(

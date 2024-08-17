@@ -15,10 +15,11 @@ class LauncherServiceImpl extends LauncherService {
   Future<void> callPhone(String phoneNumber) async {
     final uri = Uri.parse('tel:$phoneNumber');
     final result = await canLaunchUrl(uri);
-    if (result)
+    if (result) {
       await launchUrl(uri);
-    else
+    } else {
       throw LauncherException();
+    }
   }
 
   @override
@@ -26,13 +27,14 @@ class LauncherServiceImpl extends LauncherService {
     final uri = Uri.parse(url.trim());
 
     final result = await canLaunchUrl(uri);
-    if (result)
+    if (result) {
       await launchUrl(
         uri,
         mode: LaunchMode.externalApplication,
       );
-    else
+    } else {
       throw LauncherException();
+    }
   }
 
   @override
@@ -42,16 +44,18 @@ class LauncherServiceImpl extends LauncherService {
     final linkAttributesList = <String>[];
     if (phoneNumber != null) linkAttributesList.add('phone=$phoneNumber');
 
-    if (linkAttributesList.isNotEmpty)
+    if (linkAttributesList.isNotEmpty) {
       url = '$url?${linkAttributesList.join('&')}';
+    }
 
     final uri = Uri.parse(url);
 
     final result = await canLaunchUrl(uri);
-    if (result)
+    if (result) {
       await launchUrl(uri);
-    else
+    } else {
       throw LauncherException();
+    }
   }
 
   @override
@@ -63,10 +67,11 @@ class LauncherServiceImpl extends LauncherService {
     final uri = Uri.parse('mailto:$email');
 
     final result = await canLaunchUrl(uri);
-    if (result)
+    if (result) {
       await launchUrl(uri);
-    else
+    } else {
       throw LauncherException();
+    }
   }
 
   @override
@@ -74,9 +79,10 @@ class LauncherServiceImpl extends LauncherService {
     final uri = Uri.parse(url);
 
     final result = await canLaunchUrl(uri);
-    if (result)
+    if (result) {
       await launchUrl(uri);
-    else
+    } else {
       throw LauncherException();
+    }
   }
 }

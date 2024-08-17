@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/medical_services/medical_service_card.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 
 class HealthMedicalServices extends StatelessWidget {
   const HealthMedicalServices({
@@ -16,13 +18,24 @@ class HealthMedicalServices extends StatelessWidget {
       if (state.medicalServices != null && state.medicalServices!.isNotEmpty) {
         return SizedBox(
           height: 200,
-          child: ListView.separated(
-            separatorBuilder: (context, index) => const Sizer(),
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => HealthMedicalServiceCard(
-                subCategory: state.medicalServices![index]),
-            itemCount: state.medicalServices!.length,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Label(
+                text: 'Medical Services',
+                style: Styles.headerText(),
+              ),
+              const Sizer(),
+              Expanded(
+                child: ListView.separated(
+                  separatorBuilder: (context, index) => const Sizer(),
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) => HealthMedicalServiceCard(
+                      subCategory: state.medicalServices![index]),
+                  itemCount: state.medicalServices!.length,
+                ),
+              ),
+            ],
           ),
         );
       } else {

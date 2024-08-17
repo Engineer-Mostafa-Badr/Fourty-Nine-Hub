@@ -10,7 +10,7 @@ final class DoctorGovernorateFilterLoading
 
 final class DoctorGovernorateFilterLoaded extends DoctorGovernorateFilterState {
   final List<GovernorateEntity> governorates;
-  DoctorGovernorateFilterLoaded( this.governorates);
+  DoctorGovernorateFilterLoaded(this.governorates);
 }
 
 class Entity {}

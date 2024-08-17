@@ -9,6 +9,9 @@ class CartItemEntity {
   String id;
 
   CartItemEntity(
-      {
-        required this.foodId,required  this.quantity,required  this.price, required this.option, required this.id});
+      {required this.foodId,
+      required this.quantity,
+      required this.price,
+      required this.option,
+      required this.id});
 }

@@ -1,6 +1,6 @@
 part of 'chat_cubit.dart';
 
-enum ChatsStates { initState, loading, error }
+enum ChatsStates { initState, loading, error ,typing }
 
 extension ChatMessagesStateX on ChatsState {
   bool get isInitial => status == ChatsStates.initState;
@@ -8,13 +8,14 @@ extension ChatMessagesStateX on ChatsState {
   bool get isLoading => status == ChatsStates.loading;
 
   bool get isError => status == ChatsStates.error;
+  bool get isTyping => status == ChatsStates.typing;
 }
 
 @immutable
 class ChatsState {
   final ChatsStates status;
   final Failure? failure;
-  final List<ChatItemModel>? chats;
+  final List<ChatModel>? chats;
 
   const ChatsState({
     this.status = ChatsStates.loading,
@@ -25,7 +26,7 @@ class ChatsState {
   ChatsState copyWith({
     ChatsStates? status,
     Failure? failure,
-    List<ChatItemModel>? chats,
+    List<ChatModel>? chats,
   }) {
     return ChatsState(
       status: status ?? this.status,

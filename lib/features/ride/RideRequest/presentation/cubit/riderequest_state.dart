@@ -1,13 +1,6 @@
 part of 'riderequest_cubit.dart';
 
-enum RideRequestStatusesEnum {
-  initState,
-  loading,
-  error,
-  success,
-  requestSent
-  
-}
+enum RideRequestStatusesEnum { initState, loading, error, success, requestSent }
 
 extension RiderequestStateX on RiderequestState {
   bool get isInitial => status == RideRequestStatusesEnum.initState;
@@ -20,8 +13,8 @@ extension RiderequestStateX on RiderequestState {
 class RiderequestState {
   final RideRequestStatusesEnum status;
   final bool? isPaymentRequired;
-  final List<SubCategoryModel>? subCategories;
-  final SubCategoryModel? subCategory;
+  final List<SubCategoryEntity>? subCategories;
+  final SubCategoryEntity? subCategory;
   final RideRequestModel? request;
   final AddressSearchParamsEntity? fromAddress;
   final AddressSearchParamsEntity? toAddress;
@@ -83,8 +76,8 @@ class RiderequestState {
     Failure? failure,
     String? phone,
     int? passengers,
-    List<SubCategoryModel>? subCategories,
-    SubCategoryModel? subCategory,
+    List<SubCategoryEntity>? subCategories,
+    SubCategoryEntity? subCategory,
   }) {
     return RiderequestState(
       subCategories: subCategories ?? this.subCategories,

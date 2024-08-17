@@ -39,11 +39,12 @@ class SubscriptionServiceLocator {
               serviceLocator(),
             ));
     // ================================== cubits =============================
-    serviceLocator.registerLazySingleton<SubscriptionController>(() => SubscriptionController(
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-        ));
+    serviceLocator.registerLazySingleton<SubscriptionController>(
+        () => SubscriptionController(
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+            ));
   }
 }

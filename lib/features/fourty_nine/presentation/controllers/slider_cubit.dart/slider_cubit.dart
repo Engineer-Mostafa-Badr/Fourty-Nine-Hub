@@ -6,8 +6,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_slider_i
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/states/basic_state.dart';
 
-class SliderCubit
-    extends Cubit<BasicState<List<SliderItemEntity>>> {
+class SliderCubit extends Cubit<BasicState<List<SliderItemEntity>>> {
   final GetSliderItemsUseCase _getSliderItemsUseCase;
 
   SliderCubit(this._getSliderItemsUseCase)
@@ -18,16 +17,23 @@ class SliderCubit
   void loadData() async {
     emit(state.copyWith(status: StateStatus.loading));
     final result = await _getSliderItemsUseCase.call(const NoParams());
+    
     emit(
       result.fold(
-        (failure) => state.copyWith(
+        (failure) {
+          print('there is an error ${failure.toString()}');
+          return state.copyWith(
           failure: failure,
           status: StateStatus.error,
-        ),
-        (data) => state.copyWith(
+        );
+        },
+        (data) {
+          print('data is $data');
+          return state.copyWith(
           status: StateStatus.success,
           data: data,
-        ),
+        );
+        },
       ),
     );
   }

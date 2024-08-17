@@ -39,7 +39,7 @@ class RestaurantsListsView extends StatelessWidget {
                       const DashboardBanner(
                           title: '${Labels.restaurantDashboard}\n',
                           subTitle:
-                              'New Bookings are waiting you, go to doctor dashboard and explore more!',
+                              'New Bookings are waiting you, go to resturant dashboard and explore more!',
                           route: Routes.RestaurantDashboard),
                       const Sizer(),
 

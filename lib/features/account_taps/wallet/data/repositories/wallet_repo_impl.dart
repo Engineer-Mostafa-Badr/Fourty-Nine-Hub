@@ -26,9 +26,8 @@ class WalletRepoImpl implements WalletRepo {
   }
 
   @override
-  Future<Either<Failure, List<WalletHistoryEntity>>> getWalletHistory({
-    required WalletTypes type
-  }) {
+  Future<Either<Failure, List<WalletHistoryEntity>>> getWalletHistory(
+      {required WalletTypes type}) {
     return _remoteDataSouce.getWalletHistory(type: type);
   }
 }

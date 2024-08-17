@@ -5,9 +5,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 class WebViewScaffold extends StatefulWidget {
   final String url;
   final String label;
-  const WebViewScaffold({super.key, 
-  required this.label,
-  required this.url});
+  const WebViewScaffold({super.key, required this.label, required this.url});
 
   @override
   State<WebViewScaffold> createState() => _WebViewWidgetState();
@@ -19,7 +17,7 @@ class _WebViewWidgetState extends State<WebViewScaffold> {
   void initState() {
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0x00000000))
+      ..setBackgroundColor(Colors.red)
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {},
@@ -40,6 +38,6 @@ class _WebViewWidgetState extends State<WebViewScaffold> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: BackAppBar(label: widget.label),
-         body: WebViewWidget(controller: controller));
+        body: WebViewWidget(controller: controller));
   }
 }

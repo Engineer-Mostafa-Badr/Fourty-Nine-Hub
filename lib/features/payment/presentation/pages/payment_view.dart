@@ -8,9 +8,14 @@ class PaymentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const BackAppBar(label: 'Payment',),
-      body: Center(child: Label(text: 'Pending',)),
+    return const Scaffold(
+      appBar: BackAppBar(
+        label: 'Payment',
+      ),
+      body: Center(
+          child: Label(
+        text: 'Pending',
+      )),
     );
   }
 }

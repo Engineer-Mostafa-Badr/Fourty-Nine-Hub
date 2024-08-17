@@ -45,18 +45,16 @@ class IconAppButton extends StatelessWidget {
       return widget!;
     } else if (isCircle) {
       return CircleAvatar(
-        backgroundColor: backColor,
         child: Icon(
           icon,
-          size: size ?? 18,
-          color: color,
+          size: size ?? 30,
         ),
       );
     } else {
       return Icon(
         icon,
-        size: size ?? 18,
         color: color,
+        size: size ?? 30,
       );
     }
   }

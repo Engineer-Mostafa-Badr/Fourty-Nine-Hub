@@ -17,11 +17,8 @@ class AdRequestParams {
   final String adId;
   final String phone;
   AdRequestParams({
-    required this.adId, 
-    required this.phone, 
+    required this.adId,
+    required this.phone,
   });
-  Map<String,dynamic> toJson()=>{
-    "adId":adId,
-    "phone":phone
-  };
+  Map<String, dynamic> toJson() => {"adId": adId, "phone": phone};
 }

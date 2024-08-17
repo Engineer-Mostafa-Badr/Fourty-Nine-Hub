@@ -4,7 +4,8 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/account_repo.dart';
 
-class GetFavouriteCategoriesUseCase extends UseCase<List<FavouriteCategoryEntity>, NoParams> {
+class GetFavouriteCategoriesUseCase
+    extends UseCase<List<FavouriteCategoryEntity>, NoParams> {
   final AccountRepo _repo;
   GetFavouriteCategoriesUseCase(this._repo);
   @override

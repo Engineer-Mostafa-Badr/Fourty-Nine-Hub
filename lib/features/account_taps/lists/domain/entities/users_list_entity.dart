@@ -4,7 +4,7 @@ class UsersListEntity {
   final int id;
   final PublisherEntity user;
   UsersListEntity({
-    required this.id, 
+    required this.id,
     required this.user,
   });
 }

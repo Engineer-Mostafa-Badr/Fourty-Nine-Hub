@@ -5,7 +5,6 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
-import 'package:fourtyninehub/features/register/driver_register/presentation/widgets/upload_image.dart';
 import '../../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../cubit/driver_register_cubit.dart';
@@ -90,7 +89,7 @@ class EnterPersonalInfo extends StatelessWidget {
                   ),
                 const Sizer(),
                 _buildCategoriesWidget(context: context),
-              EnterCarInfo(),
+                const EnterCarInfo(),
               ],
             ),
           ),

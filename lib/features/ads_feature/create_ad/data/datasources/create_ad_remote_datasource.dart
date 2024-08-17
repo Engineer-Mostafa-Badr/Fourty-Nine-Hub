@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/models/ad_property_model.dart';

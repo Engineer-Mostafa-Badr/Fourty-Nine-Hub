@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/params/expec
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/report_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/ride_offer_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/ride_request_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 
 import 'package:fourtyninehub/features/ride/RideRequest/domain/repositories/ride_request_repo.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
@@ -18,7 +19,7 @@ import '../../../../subcategories/data/models/sub_category_model.dart';
 import '../datasources/remote_data_source.dart';
 
 class RideRequestRepoImpl implements RideRequestRepo {
-  RideRemoteDataSource _remoteDataSource;
+  final RideRemoteDataSource _remoteDataSource;
   RideRequestRepoImpl(this._remoteDataSource);
   @override
   Future<Either<Failure, bool>> acceptRideOffer({required int offerId}) {
@@ -30,8 +31,6 @@ class RideRequestRepoImpl implements RideRequestRepo {
       {required RideRequestModel request}) {
     return _remoteDataSource.addRideRequest(request: request);
   }
-
- 
 
   @override
   Future<Either<Failure, bool>> callTheDriver() {
@@ -97,7 +96,8 @@ class RideRequestRepoImpl implements RideRequestRepo {
   }
 
   @override
-  Future<Either<Failure, List<SubCategoryModel>>> getSubCategories({required String mainCategoryId}) {
+  Future<Either<Failure, List<SubCategoryModel>>> getSubCategories(
+      {required String mainCategoryId}) {
     return _remoteDataSource.getSubCategories(mainCategoryId: mainCategoryId);
   }
 
@@ -108,8 +108,7 @@ class RideRequestRepoImpl implements RideRequestRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> rateTheDriver(
-      {required ReviewModel review}) {
+  Future<Either<Failure, bool>> rateTheDriver({required ReviewModel review}) {
     return _remoteDataSource.rateTheDriver(review: review);
   }
 
@@ -123,5 +122,10 @@ class RideRequestRepoImpl implements RideRequestRepo {
   Future<Either<Failure, List<CarTypeModel>>> getCarTypes(
       {required String subCategoryId}) {
     return _remoteDataSource.getCarTypes(subCategoryId: subCategoryId);
+  }
+
+  @override
+  Future<Either<Failure, List<RideThumbnailEntity>>> getThumbnails() {
+    return _remoteDataSource.getThumbnails();
   }
 }

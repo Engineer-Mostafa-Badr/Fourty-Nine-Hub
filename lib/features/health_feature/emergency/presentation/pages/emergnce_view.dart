@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/phone_number_text_field.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/presentation/cubit/emergency_cubit.dart';
@@ -33,8 +34,8 @@ class HealthEmergencyView extends StatelessWidget {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(Labels.emergency),
+        appBar: const BackAppBar(
+          label: Labels.emergency,
         ),
         body: Form(
           key: context.read<HealthEmergencyCubit>().formKey,
@@ -43,12 +44,19 @@ class HealthEmergencyView extends StatelessWidget {
             children: [
               const Sizer(height: 30),
               FirstNameTextFormField(
+                hintColor: AppColors.QUANTITY_COLOR,
                 currentFocusNode: emergencyCubit.firstNameFocusNode,
                 currentController: emergencyCubit.firstNameController,
                 nextFocusNode: emergencyCubit.phoneFocusNode,
               ),
               const Sizer(height: 30),
-              PhoneTextFormField(
+              // PhoneTextFormField(
+              //   currentFocusNode: emergencyCubit.phoneFocusNode,
+              //   nextFocusNode: emergencyCubit.locationFocusNode,
+              //   currentController: emergencyCubit.phoneController,
+              //   onInputChanged: (value) {},
+              // ),
+              CustomPhoneTextFormField(
                 currentFocusNode: emergencyCubit.phoneFocusNode,
                 nextFocusNode: emergencyCubit.locationFocusNode,
                 currentController: emergencyCubit.phoneController,
@@ -58,6 +66,7 @@ class HealthEmergencyView extends StatelessWidget {
               const HealthEmergencySubCategoriesDropdown(),
               const Sizer(height: 30),
               DefaultTextFormField(
+                hintColor: AppColors.QUANTITY_COLOR,
                   currentFocusNode: emergencyCubit.locationFocusNode,
                   currentController: emergencyCubit.locationController,
                   isRequired: true,

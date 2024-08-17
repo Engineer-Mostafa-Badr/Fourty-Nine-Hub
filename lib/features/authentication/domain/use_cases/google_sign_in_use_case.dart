@@ -5,7 +5,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
 
-import '../../../../core/utils/device_id.dart';
 import '../../../../core/utils/fcm.dart';
 
 class GoogleSignInUseCase extends UseCase<UserTokensEntity, NoParams> {
@@ -27,7 +26,7 @@ class SocialLoginParams extends Equatable {
   Future<Map<String, dynamic>> toJson() async => {
         'idToken': idToken,
         'fcm': await getFcmToken(),
-        'deviceId': await getDeviceId(),
+        // 'deviceId': await getDeviceId(),
       };
 
   @override

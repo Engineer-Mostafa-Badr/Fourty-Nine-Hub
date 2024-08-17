@@ -2,7 +2,7 @@
 
 import 'package:flutter/foundation.dart' show describeEnum;
 
-enum ReportsEnum { nudity, frequent, fake, abuse,hated,illegal,politics }
+enum ReportsEnum { nudity, frequent, fake, abuse, hated, illegal, politics }
 
 extension ReportsEnumExtention on ReportsEnum {
   String get name => describeEnum(this);
@@ -44,7 +44,6 @@ extension ReportsEnumExtention on ReportsEnum {
     }
   }
 
-
   String get displayTitleAr {
     switch (this) {
       case ReportsEnum.nudity:
@@ -63,5 +62,4 @@ extension ReportsEnumExtention on ReportsEnum {
         return 'يتضمن المحتوى المعني دعاية سياسية أو معلومات متحيزة.';
     }
   }
-
 }

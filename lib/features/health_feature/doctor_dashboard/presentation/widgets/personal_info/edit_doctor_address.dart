@@ -18,7 +18,9 @@ class EditDoctorAddressField extends StatelessWidget {
             if (value != null) {}
           },
         ),
-        const Sizer(height: 20,),
+        const Sizer(
+          height: 20,
+        ),
         DropdownMenu(
           width: MediaQuery.of(context).size.width * 0.9,
           hintText: Labels.city,
@@ -27,7 +29,9 @@ class EditDoctorAddressField extends StatelessWidget {
             if (value != null) {}
           },
         ),
-        const Sizer(height: 20,),
+        const Sizer(
+          height: 20,
+        ),
         DefaultTextFormField(
           hint: Labels.address,
           keyboardType: TextInputType.text,

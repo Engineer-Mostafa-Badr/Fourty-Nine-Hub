@@ -58,7 +58,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                       Labels.regular,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: !_isPremium ? Colors.white : Colors.black,
+                        color: !_isPremium ? Colors.white : Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -72,15 +72,15 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
                       color: _isPremium
-                          ? AppColors.PRIMARY_COLOR
-                          : Colors.transparent,
+                          ? Theme.of(context).primaryColor
+                          : Colors.red,
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: Text(
                       Labels.premium,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: _isPremium ? Colors.white : Colors.black,
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

@@ -10,7 +10,6 @@ import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
-import '../../domain/entities/wallet_entity.dart';
 
 class WalletView extends StatelessWidget {
   final WalletTypes type;

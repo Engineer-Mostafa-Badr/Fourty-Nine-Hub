@@ -4,7 +4,6 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/food_cart_repo.dart';
 
-
 class GetCartUseCase extends UseCase<CartEntity, NoParams> {
   final FoodCartRepo _repo;
   GetCartUseCase(this._repo);

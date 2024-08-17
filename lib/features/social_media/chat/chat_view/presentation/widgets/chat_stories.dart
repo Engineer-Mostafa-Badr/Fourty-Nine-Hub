@@ -5,7 +5,6 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-
 class ChatStories extends StatelessWidget {
   const ChatStories({super.key});
 
@@ -13,8 +12,8 @@ class ChatStories extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: kToolbarHeight * 1.5,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration:  BoxDecoration(
+        color:Theme.of(context).scaffoldBackgroundColor,
       ),
       child: ListView(
         scrollDirection: Axis.horizontal,

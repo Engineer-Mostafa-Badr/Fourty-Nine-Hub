@@ -12,8 +12,6 @@ class GetTrendingRestaurantsUseCase
 
   @override
   Future<Either<Failure, List<RestaurantModel>>> call(LocationParams params) {
-    return _repo.getTrendingRestaurants(lat: params.lat , lng: params.lng);
+    return _repo.getTrendingRestaurants(lat: params.lat, lng: params.lng);
   }
 }
-
-

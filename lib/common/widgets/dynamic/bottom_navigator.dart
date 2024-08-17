@@ -1,175 +1,212 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/ride_request_view.dart';
-import 'sizer.dart';
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import '../../../res/assets/assets.dart';
 import '../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import '../../../res/style/styles.dart';
-import '../stateless/labels/label.dart';
+
+import '../../theme/cubit/cubit.dart';
+import 'bottom_painter.dart';
 
 class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
   final int mainCategory;
   final int index;
 
-  const BottomNavigator(
-      {super.key, required this.mainCategory, required this.index});
+  const BottomNavigator({
+    super.key,
+    required this.mainCategory,
+    required this.index
+  });
 
   @override
   Widget build(BuildContext context) {
+
     List<BottomItemModel> pages = mainCategory == 3
         ? <BottomItemModel>[
-            BottomItemModel(
-                icon: FontAwesomeIcons.microphone,
-                label: 'Voice',
-                index: 0,
-                image: Assets.voiceLive,
-                action: () => context.push(Routes.CLUBHOUSE)),
-            BottomItemModel(
-                icon: FontAwesomeIcons.stream,
-                label: 'Live',
-                index: 0,
-                image: Assets.live,
-                action: () => context.push(Routes.LIVE)),
-            BottomItemModel(
-                icon: Icons.video_call,
-                label: 'Meet',
-                index: 0,
-                image: Assets.zoomMeeting,
-                action: () => context.push(Routes.MEETINGROOM)),
-            BottomItemModel(
-                icon: Icons.video_call,
-                label: 'Broadcast',
-                index: 0,
-                image: Assets.radio,
-                action: () => context.push(Routes.CLUBHOUSE)),
-          ]
+      BottomItemModel(
+          icon: FontAwesomeIcons.microphone,
+          height: 30,
+          label: 'voice'.localize,
+          index: 0,
+          image: Assets.voiceLive,
+          route: Routes.CLUBHOUSE),
+      BottomItemModel(
+          icon: FontAwesomeIcons.stream,
+          label: 'live'.localize,
+          index: 0,
+          height: 25,
+          image: Assets.live,
+          route: Routes.LIVE),
+      BottomItemModel(
+          icon: Icons.video_call,
+          label: 'meet'.localize,
+          index: 0,
+          height: 25,
+          image: Assets.zoomMeeting,
+          route: Routes.ZOOM),
+      BottomItemModel(
+          icon: Icons.video_call,
+          label: 'cast'.localize,
+          index: 0,
+          height: 25,
+          image: Assets.radio,
+          route: Routes.CLUBHOUSE),
+    ]
         : mainCategory == 2
-            ? <BottomItemModel>[
-                BottomItemModel(
-                    icon: FontAwesomeIcons.twitter,
-                    label: 'Tweet',
-                    index: 0,
-                    image: Assets.twitter,
-                    action: () => context.push(Routes.TWITTER)),
-                BottomItemModel(
-                    icon: FontAwesomeIcons.list,
-                    label: 'Reels',
-                    index: 1,
-                    image: Assets.reels,
-                    action: () => context.push(Routes.REELS)),
-                // BottomItemModel(icon: FontAwesomeIcons.home, label: '', index: 2),
-                BottomItemModel(
-                    icon: Icons.chat,
-                    label: 'Chat',
-                    index: 3,
-                    image: Assets.message,
-                    action: () => context.push(Routes.CHAT)),
-                BottomItemModel(
-                    icon: FontAwesomeIcons.car,
-                    label: 'Find',
-                    index: 4,
-                    image: Assets.social,
-                    action: () => context.push(Routes.Tinder)),
-              ]
-            : <BottomItemModel>[
-                BottomItemModel(
-                    icon: FontAwesomeIcons.bowlFood,
-                    label: 'Meal',
-                    index: 0,
-                    image: Assets.food,
-                    action: () => context.push(Routes.FOOD)),
-                BottomItemModel(
-                    icon: FontAwesomeIcons.kitMedical,
-                    label: 'Health',
-                    index: 1,
-                    image: Assets.health,
-                    action: () => context.push(Routes.VISITA)),
-                // BottomItemModel(icon: FontAwesomeIcons.home, label: '', index: 2),
-                BottomItemModel(
-                    icon: Icons.delivery_dining,
-                    label: 'Shipping',
-                    index: 3,
-                    image: Assets.shipping,
-                    action: () => context.push(Routes.SHIPPING)),
-                BottomItemModel(
-                    icon: FontAwesomeIcons.car,
-                    label: 'Ride',
-                    index: 4,
-                    image: Assets.ride,
-                    action: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RideRequestView()))),
-              ];
-    return AnimatedBottomNavigationBar.builder(
-        itemCount: pages.length,
-        height: kToolbarHeight * .9,
-        tabBuilder: (int index, bool isActive) {
-          final item = pages[index];
-          return Center(
-            child: InkWell(
-              onTap: () => item.action(),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(item.image,
-                      height: 20, semanticsLabel: item.label),
-                  Label(text: item.label),
-                ],
-              ),
-            ),
-          );
-        },
-        activeIndex: 2,
-        gapLocation: GapLocation.center,
-        notchSmoothness: NotchSmoothness.softEdge, // leftCornerRadius: 32,
-        // rightCornerRadius: 0,
-        onTap: (index) {});
-    //other params
+        ? <BottomItemModel>[
+      BottomItemModel(
+          icon: FontAwesomeIcons.twitter,
+          label: 'tweet'.localize,
+          index: 0,
+          image: Assets.twitter,
+          route: Routes.TWITTER),
+      BottomItemModel(
+          icon: FontAwesomeIcons.list,
+          label: 'reels'.localize,
+          index: 1,
+          image: Assets.reels,
+          route: Routes.REELS),
+      BottomItemModel(
+          icon: Icons.chat,
+          label: 'chat'.localize,
+          index: 3,
+          image: Assets.message,
+          route: Routes.CHAT),
+      BottomItemModel(
+          icon: FontAwesomeIcons.car,
+          label: 'find'.localize,
+          index: 4,
+          image: Assets.social,
+          route: Routes.Tinder),
+    ]
+        : <BottomItemModel>[
+      BottomItemModel(
+          icon: FontAwesomeIcons.bowlFood,
+          label: 'meal'.localize,
+          index: 0,
+          image: Assets.food,
+          route: Routes.FOOD),
+      BottomItemModel(
+          icon: FontAwesomeIcons.kitMedical,
+          label: 'health'.localize,
+          index: 1,
+          image: Assets.health,
+          route: Routes.VISITA),
+      BottomItemModel(
+          icon: Icons.delivery_dining,
+          label: LocaleKeys.shipping.localize,
+          index: 3,
+          image: Assets.shipping,
+          route: Routes.SHIPPING),
+      BottomItemModel(
+          icon: FontAwesomeIcons.car,
+          label: LocaleKeys.ride.tr(),
+          index: 4,
+          image: Assets.ride,
+          route: Routes.RIDE),
+    ];
+
+    return CustomBottomNavigationBar(
+      currentIndex: index,
+      onTap: (index) {
+        final selectedItem = pages[index];
+        if (selectedItem.route != ModalRoute.of(context)?.settings.name) {
+          selectedItem.action(context);
+        }
+      },
+      items: pages,
+    );
   }
 
-  Widget button({required BottomItemModel item}) {
-    return Expanded(
-      child: InkWell(
-        onTap: () {},
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              item.icon,
-              color: Colors.white,
-            ),
-            const Sizer(
-              height: 4,
-            ),
-            Label(
-                text: item.label,
-                style: Styles.mediumText(color: Colors.white)),
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class CustomBottomNavigationBar extends StatefulWidget {
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+  final List<BottomItemModel> items;
+
+  const CustomBottomNavigationBar({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
+    required this.items,
+  });
+
+  @override
+  _CustomBottomNavigationBarState createState() =>
+      _CustomBottomNavigationBarState();
+}
+
+class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
+    with SingleTickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: BottomBarPainter(
+        color: Colors.black,
+      ),
+      child: Container(
+        padding: const EdgeInsets.only(bottom: 20, top: 10),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          boxShadow: const [
+            BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2)
           ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: List.generate(widget.items.length, (index) {
+              int index1= context.isArabic? 2:1;
+              int index2= context.isArabic? 1:2;
+                return GestureDetector(
+                  onTap: () {
+                    widget.onTap(index);
+                  },
+                  child: Padding(
+                    padding: index == index1
+                        ? const EdgeInsets.only(right: 10)
+                        : index == index2
+                        ? const EdgeInsets.only(left: 30)
+                        : EdgeInsets.zero,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(
+                          widget.items[index].image,
+                          height: widget.items[index].height,
+                          semanticsLabel: widget.items[index].label,
+                          color:context.read<ThemeCubit>().isDarkTheme? Colors.white:null,
+                        ),
+                        Text(
+                          widget.items[index].label,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ),
         ),
       ),
     );
   }
-
-  Widget navigatorItem({required BottomItemModel item}) {
-    return Expanded(
-        child: Column(
-      children: [
-        Icon(item.icon),
-        Label(
-          text: item.label,
-          style: Styles.mediumText(),
-        )
-      ],
-    ));
-  }
-
-  @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
 
 class BottomItemModel {
@@ -177,13 +214,19 @@ class BottomItemModel {
   final String label;
   final int index;
   final String image;
-  final Function action;
+  final String route;
+  final double height;
 
   BottomItemModel({
     required this.icon,
     required this.label,
     required this.index,
     required this.image,
-    required this.action,
+    required this.route,
+    this.height = 20,
   });
+
+  void action(BuildContext context) {
+    context.push(route);
+  }
 }

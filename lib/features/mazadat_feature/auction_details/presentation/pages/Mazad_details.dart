@@ -9,7 +9,7 @@ import 'package:fourtyninehub/features/mazadat_feature/auction_details/presentat
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
-import '../../../../../common/widgets/stateless/dynamic/CarouselSlider.dart';
+import '../../../../../common/widgets/stateless/dynamic/carousel_slider.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
@@ -61,18 +61,21 @@ class _MazadDetailsState extends State<MazadDetails> {
               ? AppButton(
                   margin: 10,
                   label: Labels.endAuction,
+                  color: AppColors.AUTH_CONTAINER_COLOR,
                   onPressed: () => controller.endAuction(id: widget.id))
               : ((state.auction?.isMine ?? false) &&
                       (state.auction?.isFinished ?? false))
                   ? AppButton(
-                      margin: 10,
+              color: AppColors.AUTH_CONTAINER_COLOR,
+              margin: 10,
                       label: Labels.biddings,
                       onPressed: () {
                         controller.showAuctionRequests(
                             id: widget.id, context: context);
                       })
                   : AppButton(
-                      margin: 10,
+              color: AppColors.AUTH_CONTAINER_COLOR,
+              margin: 10,
                       label: Labels.placeBidding,
                       onPressed: () {
                         bottomSheet(
@@ -124,12 +127,12 @@ class _MazadDetailsState extends State<MazadDetails> {
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 decoration: BoxDecoration(
                     color: index.isEven
-                        ? AppColors.LIGHT_GRAY_COLOR
-                        : Colors.white),
+                        ? AppColors.AUTH_CONTAINER_COLOR
+                        : AppColors.AUTH_CONTAINER_COLOR),
                 child: Row(
                   children: [
-                    Expanded(child: Label(text: detail.label)),
-                    Expanded(child: Label(text: detail.value)),
+                    Expanded(child: Label(text: detail.label,color: AppColors.QUANTITY_COLOR,)),
+                    Expanded(child: Label(text: detail.value,color: AppColors.QUANTITY_COLOR,)),
                   ],
                 ),
               );

@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_entity.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../common/widgets/stateless/images/profile_image.dart';
-import '../../../../../common/widgets/stateless/labels/ReadMoreLabel.dart';
-import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../data/models/reel_model.dart';
+import '../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 

@@ -11,7 +11,6 @@ import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../domain/entities/users_list_entity.dart';
-import '../widgets/list_item_card.dart';
 
 class ListsView extends StatelessWidget {
   const ListsView({super.key});

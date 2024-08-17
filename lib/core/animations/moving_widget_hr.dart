@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class MovingWidgetHr extends StatefulWidget {
   final String asset;
-  final String label;
-  const MovingWidgetHr({super.key, required this.asset, required this.label});
+  // final String label;
+  const MovingWidgetHr({super.key, required this.asset, });
 
   @override
   State<MovingWidgetHr> createState() => _MovingWidgetHrState();
@@ -27,7 +26,7 @@ class _MovingWidgetHrState extends State<MovingWidgetHr> {
 
   @override
   Widget build(BuildContext context) {
-    initWidth = (MediaQuery.of(context).size.width / 2 - 70);
+    initWidth = 100;
     return Container(
       padding: const EdgeInsets.all(5),
       // margin: const EdgeInsets.all(5),

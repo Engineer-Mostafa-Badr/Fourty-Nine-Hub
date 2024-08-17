@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/res/style/const.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';

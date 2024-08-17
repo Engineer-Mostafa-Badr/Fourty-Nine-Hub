@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 
-
 import 'package:fourtyninehub/core/error/failure.dart';
 
 import 'package:fourtyninehub/features/account_taps/contact_us/domain/entities/contact_us_entity.dart';

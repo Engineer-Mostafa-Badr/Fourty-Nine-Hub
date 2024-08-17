@@ -13,10 +13,25 @@ class SubscriptionInterceptor extends Interceptor {
       List<WalletTypes> wallets = (response.data['paymentMethod'] as List)
           .map((e) => (e as String).toWalletType)
           .toList();
-
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
           subCategoryId: response.data['subCategoryId'], wallets: wallets);
     }
     super.onResponse(response, handler);
+  }
+
+  @override
+  Future<void> onError(
+      DioException err, ErrorInterceptorHandler handler) async {
+    if (err.type == DioExceptionType.badResponse &&
+        err.response?.data['endPointSubscription'] != null &&
+        err.response?.data['endPointSubscription'] == true &&
+        err.response?.data['userSubscription'] == false) {
+      List<WalletTypes> wallets = (err.response?.data['paymentMethod'] as List)
+          .map((e) => (e as String).toWalletType)
+          .toList();
+      await serviceLocator<SubscriptionController>().showSubscriptionPlans(
+          subCategoryId: err.response?.data['subCategoryId'], wallets: wallets);
+    }
+    super.onError(err, handler);
   }
 }

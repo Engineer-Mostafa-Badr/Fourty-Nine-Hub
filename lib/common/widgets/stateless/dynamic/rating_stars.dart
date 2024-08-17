@@ -25,9 +25,8 @@ class RatingStars extends StatelessWidget {
         itemBuilder: (context, index) => Icon(
           Icons.star,
           size: iconSize,
-          
           color: rating > (index)
-              ? color?? AppColors.PRIMARY_COLOR
+              ? color ?? AppColors.PRIMARY_COLOR
               : AppColors.GREY_DARK_COLOR,
         ),
         itemCount: maxRating,

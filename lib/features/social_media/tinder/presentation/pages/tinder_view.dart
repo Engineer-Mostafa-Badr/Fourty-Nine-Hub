@@ -1,254 +1,232 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
-import '../../../../../res/style/app_colors.dart';
-import '../../../../../res/style/styles.dart';
-import '../cubit/tinder_cubit.dart';
-import '../cubit/tinder_state.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_card_stack.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_sub_category_card.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:intl/intl.dart';
+
+const kToolbarHeightFactor = 0.80;
+const kDefaultPadding = 8.0;
 
 class TinderView extends StatelessWidget {
   const TinderView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TinderViewCubit()
-        ..fetchUserData()
-        ..fetchSubCategoryData(),
-      child: BlocBuilder<TinderViewCubit, TinderViewState>(
-        builder: (context, state) {
-          return SharedScaffold(
-            body: state.userData.isEmpty
-                ? const Center(child: CircularProgressIndicator())
-                : Stack(
-                    children: [
-                      SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Align(
-                                alignment: Alignment.topLeft,
-                                child: Label(
-                                  text: 'Find',
-                                  style: Styles.headerText(),
-                                ),
-                              ),
-                            ),
-                            const Divider(),
-                            SizedBox(
-                              height: 160,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: state.subCategoryData.length,
-                                  itemBuilder: (context, index) {
-                                    return Card(
-                                      clipBehavior: Clip.hardEdge,
-                                      color: Colors.transparent,
-                                      child: FittedBox(
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                  image: NetworkImage(state
-                                                      .subCategoryData[index]
-                                                      .picture
-                                                      .toString()))),
-                                          width: 160,
-                                          height: 160,
-                                          child: Align(
-                                            alignment: Alignment.bottomCenter,
-                                            child: Container(
-                                              width: double.infinity,
-                                              color: Colors.white54,
-                                              child: Text(
-                                                '${state.subCategoryData[index].nameEn}',
-                                                textAlign: TextAlign.center,
-                                                textScaler:
-                                                    const TextScaler.linear(
-                                                        1.2),
-                                                style: Styles.headerText(
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                            const Divider(),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height -
-                                  kToolbarHeight -
-                                  150,
-                              child: Stack(
-                                children:
-                                    state.userData.asMap().entries.map((entry) {
-                                  int index = entry.key;
-                                  UserData user = entry.value;
-                                  return _buildCard(
-                                      context, index, user.pictures, user);
-                                }).toList(),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 50,
-                            )
-                          ],
-                        ),
-                      ),
-                      PositionedDirectional(
-                        bottom: 10,
-                        end: 10,
-                        child: FloatingActionButton(
-                          backgroundColor: Colors.red,
-                          onPressed: () {},
-                          shape: const CircleBorder(),
-                          child: const Icon(
-                            Icons.add_photo_alternate_outlined,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-            mainCategoryId: 2,
+    log('TinderView built');
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => TinderViewCubit()),
+        BlocProvider<ChatRoomCubit>(
+          create: (_) => serviceLocator(),
+        ),
+        BlocProvider(create: (context) => context.read<UserCubit>()),
+      ],
+      child: const TinderScreen(),
+    );
+  }
+
+  // UserCubit _createUserCubit() {
+  //   return UserCubit(serviceLocator(), serviceLocator(), serviceLocator(),
+  //       serviceLocator(), serviceLocator(), serviceLocator());
+  // }
+}
+
+class TinderScreen extends StatefulWidget {
+  const TinderScreen({super.key});
+
+  @override
+  State<TinderScreen> createState() => _TinderScreenState();
+}
+
+class _TinderScreenState extends State<TinderScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _initializeTinderData();
+  }
+
+  void _initializeTinderData() {
+    final userCubit = context.read<UserCubit>();
+    userCubit.giveMeTokenForTinder().then((_) {
+      final tinderCubit = context.read<TinderViewCubit>();
+      final token = userCubit.state.token?.accessToken ?? '';
+      if (token.isNotEmpty) {
+        tinderCubit
+          ..fetchUserData(accessToken: token, gender: 'female')
+          ..fetchSubCategoryData(accessToken: token)
+          ..fetchFavorites(token);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    log('TinderScreen built');
+    return SharedScaffold(
+      body: AuthHelper().isLoggedIn()
+          ? _buildLoggedInContent(context)
+          : const Center(child: Text('No user yet')),
+      mainCategoryId: 2,
+    );
+  }
+
+  Widget _buildLoggedInContent(BuildContext context) {
+    final tinderCubit = context.watch<TinderViewCubit>();
+    final userCubit = context.watch<UserCubit>();
+
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            _buildHeader(),
+            TinderCardStack(userCubit: userCubit),
+             const Padding(
+              padding: EdgeInsets.only(top: 8.0,bottom: 2),
+              child: Divider(color: Colors.grey, height: 1),
+            ),
+            _buildSubCategoryList(context, tinderCubit, userCubit),
+            const SizedBox(height: 50),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: Label(
+          text: 'Find',
+          style: Styles.headerText(fontSize: 18),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSubCategoryList(
+      BuildContext context, TinderViewCubit tinderCubit, UserCubit userCubit) {
+    return SizedBox(
+      height: 225,
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        scrollDirection: Axis.horizontal,
+        itemCount: tinderCubit.state.subCategoryData.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 0),
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: TinderSubCategoryCard(
+              subCategoryCardData: tinderCubit.state.subCategoryData[index],
+              userCubit: userCubit,
+              index: index,
+            ),
           );
         },
       ),
     );
   }
+}
 
-  Widget _buildCard(
-      BuildContext context, int index, List<String> images, UserData user) {
-    final cubit = context.read<TinderViewCubit>();
-    final state = cubit.state;
-    bool isFrontCard = index == state.currentIndex;
+class PersonInfoWidget extends StatefulWidget {
+  final UserData cardUser;
+  final UserCubit userCubit;
 
-    return Positioned(
-      left: 0,
-      right: 0,
-      top: 0,
-      bottom: 0,
-      child: isFrontCard
-          ? GestureDetector(
-              onPanStart: (details) {
-                cubit.updatePanStart(details.globalPosition);
-              },
-              onPanUpdate: (details) {
-                final position = details.globalPosition - state.startDragOffset;
-                final rotation = position.dx /
-                    (position.dy > state.startDragOffset.dy - 180 ? 500 : -500);
-                cubit.updatePanUpdate(position, rotation);
-              },
-              onPanEnd: (details) {
-                if (state.position.dx > 250 ||
-                    state.position.dx < -250 ||
-                    state.position.dy > 250 ||
-                    state.position.dy < -250) {
-                  cubit.swipeAway();
-                } else {
-                  cubit.resetPan();
-                }
-              },
-              onTapUp: (details) {
-                double tapPosition = details.localPosition.dx;
-                double screenWidth = MediaQuery.of(context).size.width;
+  const PersonInfoWidget({
+    super.key,
+    required this.cardUser,
+    required this.userCubit,
+  });
 
-                if (tapPosition < screenWidth / 2) {
-                  cubit.previousStory();
-                } else {
-                  cubit.nextStory();
-                }
-              },
-              child: Transform.translate(
-                offset: state.position,
-                child: Transform.rotate(
-                  angle: state.rotation,
-                  child:
-                      _cardWidget(context, images: user.pictures, user: user),
-                ),
-              ),
-            )
-          : const Offstage(),
+  @override
+  State<PersonInfoWidget> createState() => _PersonInfoWidgetState();
+}
+
+class _PersonInfoWidgetState extends State<PersonInfoWidget> {
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
+
+  void _fetchUserData() {
+    final tinderCubit = context.read<TinderViewCubit>();
+    final token = widget.userCubit.state.token?.accessToken;
+    if (token != null) {
+      tinderCubit
+        ..fetchLastSeen(userId: widget.cardUser.id ?? '', accessToken: token)
+        ..checkUserNearby(
+            cardUserId: widget.cardUser.id ?? '', accessToken: token);
+      log('Fetched user data in PersonInfoWidget');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tinderCubit = context.watch<TinderViewCubit>();
+
+    return _buildPersonInfo(
+      context,
+      widget.cardUser,
+      tinderCubit: tinderCubit,
+      userCubit: widget.userCubit,
     );
   }
 
-  Widget _cardWidget(
-    BuildContext context, {
-    required List<String> images,
-    required UserData user,
-  }) {
-    final state = context.read<TinderViewCubit>().state;
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
-        clipBehavior: Clip.hardEdge,
-        elevation: 4,
-        child: Stack(
+  Widget _buildPersonInfo(BuildContext context, UserData cardUser,
+      {required TinderViewCubit tinderCubit, required UserCubit userCubit}) {
+    return Positioned(
+      bottom: kToolbarHeight,
+      left: kDefaultPadding,
+      right: kDefaultPadding,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Hero(
-              tag: 'userHero-${user.id}', // Ensure each hero tag is unique
-
-              child: Image.network(
-                (images.isNotEmpty)
-                    ? images[state.currentStoryIndex]
-                    : UIConst.profilePlaceHolder,
-                errorBuilder: (context, error, stackTrace) => Image.network(
-                  UIConst.profilePlaceHolder,
-                  fit: BoxFit.fitHeight,
-                  height: double.infinity,
-                ),
-                fit: BoxFit.fitHeight,
-                height: double.infinity,
+            Row(
+              children: [
+                _buildStatusBadge(
+                    tinderCubit.state.lastSeenModel?.data?.status),
+                const SizedBox(width: 10),
+                _buildNearbyBadge(
+                    tinderCubit.state.isUserNearby?.data?.isNearBy),
+              ],
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(
+                capitalizeAndSplit(
+                    '${cardUser.firstName ?? ''} ${cardUser.lastName ?? ''}'),
+                style: Styles.headerText(
+                    color: AppColors.PRIMARY_COLOR,
+                    fontWeight: FontWeight.bold),
               ),
-            ),
-            Positioned(
-              top: 10,
-              left: 10,
-              right: 10,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(images.length, (dotIndex) {
-                  return Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: (dotIndex == state.currentStoryIndex)
-                            ? Colors.red
-                            : Colors.white54,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                  );
-                }),
+              subtitle: Text(
+                _getLastSeenText(
+                    tinderCubit.state.lastSeenModel?.data?.lastSeen),
+                style: Styles.mediumText(
+                    color: AppColors.PRIMARY_COLOR,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
               ),
-            ),
-            Positioned(
-              bottom: kToolbarHeight * 1.2,
-              right: 20,
-              left: 20,
-              child: _buildPersonInfo(context: context, user: user),
-            ),
-            Positioned(
-              bottom: 8,
-              right: 10,
-              left: 10,
-              child: _buildActions(context),
             ),
           ],
         ),
@@ -256,91 +234,64 @@ class TinderView extends StatelessWidget {
     );
   }
 
-  Widget _buildPersonInfo(
-      {required BuildContext context, required UserData user}) {
-    return InkWell(
-      onTap: () => context.push(Routes.OTHERSACCOUNT),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const BadgedLabel(
-                  color: AppColors.SECONDARY_COLOR,
-                  label: 'Nearby',
-                ),
-                Label(
-                  text:
-                      "${user.user.first.firstName} ${user.user.first.lastName}",
-                  style: Styles.headerText(color: Colors.white, fontSize: 26),
-                ),
-                Row(
-                  children: [
-                    Icon(
-                      user.user.first.gender == 'male'
-                          ? Icons.male
-                          : Icons.female,
-                      color: Colors.white,
-                    ),
-                    const Sizer(),
-                    Label(
-                      text: user.user.first.birthday ?? '',
-                      style: Styles.mediumText(color: Colors.white),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          const Icon(
-            Icons.arrow_upward_rounded,
-            color: Colors.white,
-          ),
-        ],
-      ),
+  Widget _buildStatusBadge(String? status) {
+    return BadgedLabel(
+      color: AppColors.WHATS_APP_COLOR,
+      label: status ?? 'N/A',
     );
   }
 
-  Widget _buildActions(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _buildFloatingActionButton(context, Icons.person, null),
-        _buildFloatingActionButton(context, Icons.chat, null,
-            color: Colors.red),
-        _buildFloatingActionButton(context, Icons.card_giftcard, () {},
-            color: AppColors.ACCENT_COLOR),
-        _buildFloatingActionButton(context, Icons.report, () {
-          showModalBottomSheet(
-            context: context,
-            builder: (context) => SizedBox(
-              height: MediaQuery.of(context).size.height / 1.5,
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                // child: ReportView(id: '2'),
-              ),
-            ),
-          );
-        }, color: AppColors.PRIMARY_COLOR),
-      ],
+  Widget _buildNearbyBadge(bool? isNearby) {
+    return BadgedLabel(
+      color: AppColors.SECONDARY_COLOR,
+      label: isNearby == true ? 'Nearby' : 'Not Nearby',
     );
   }
 
-  Widget _buildFloatingActionButton(
-      BuildContext context, IconData icon, VoidCallback? onPressed,
-      {Color? color}) {
-    return FloatingActionButton.small(
-      onPressed: onPressed,
-      backgroundColor: color,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-      child: Icon(
-        icon,
-        color: color != null ? Colors.white : null,
-      ),
-    );
+  String _getLastSeenText(String? lastSeen) {
+    return lastSeen != null
+        ? "Last seen ${getTimeAgo(lastSeen)}"
+        : "Last seen N/A";
   }
 }
-//rommana1
+
+String getTimeAgo(String lastSeen) {
+  DateTime lastSeenTime = DateTime.parse(lastSeen);
+  DateTime now = DateTime.now().toUtc();
+
+  Duration difference = now.difference(lastSeenTime);
+
+  if (difference.inDays > 7) {
+    DateFormat dateFormat = DateFormat('EEEE, MMMM d, yyyy');
+    DateFormat timeFormat = DateFormat('h:mm a');
+    String formattedDate = dateFormat.format(lastSeenTime);
+    String formattedTime = timeFormat.format(lastSeenTime);
+    return 'Date: $formattedDate\nTime: $formattedTime';
+  } else if (difference.inMinutes < 1) {
+    return "Just now";
+  } else if (difference.inMinutes == 1) {
+    return "1 minute ago";
+  } else if (difference.inMinutes < 60) {
+    return "${difference.inMinutes} minutes ago";
+  } else if (difference.inHours == 1) {
+    return "1 hour ago";
+  } else {
+    return "${difference.inHours} hours ago";
+  }
+}
+
+String capitalizeAndSplit(String text) {
+  return text.split(' ').map((word) => word.capitalize()).join(' ');
+}
+
+void closeAllBottomSheets(BuildContext context) {
+  Navigator.of(context).popUntil((route) {
+    return route is! ModalBottomSheetRoute;
+  });
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${substring(1)}";
+  }
+}

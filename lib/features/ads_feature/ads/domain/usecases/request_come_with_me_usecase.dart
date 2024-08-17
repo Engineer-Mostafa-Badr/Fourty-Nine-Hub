@@ -17,11 +17,10 @@ class RequestParams {
   final String subCategoryId;
   final String phone;
   RequestParams({
-    required this.subCategoryId, 
-    required this.phone, 
+    required this.subCategoryId,
+    required this.phone,
   });
-   Map<String, dynamic> toJson() => {
-        
+  Map<String, dynamic> toJson() => {
         "phone": phone,
       };
 }

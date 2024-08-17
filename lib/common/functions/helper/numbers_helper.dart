@@ -1,4 +1,3 @@
-import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:intl/intl.dart';
 
 abstract class NumbersHelper {

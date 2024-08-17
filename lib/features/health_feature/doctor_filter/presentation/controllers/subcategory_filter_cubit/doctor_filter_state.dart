@@ -13,8 +13,7 @@ final class DoctorSubcategoryFilterLoaded extends DoctorSubcategoryFilterState {
   DoctorSubcategoryFilterLoaded({required this.subCategories});
 }
 
-class Entity {
-}
+class Entity {}
 
 final class DoctorSubcategoryFilterError extends DoctorSubcategoryFilterState {
   final String message;

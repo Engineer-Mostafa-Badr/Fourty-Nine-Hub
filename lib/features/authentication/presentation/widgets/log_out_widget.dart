@@ -8,11 +8,15 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import '../../../../routes/routes.dart';
 
-class LogoutWidget extends StatelessWidget {
+class LogoutWidget extends StatefulWidget {
   const LogoutWidget({super.key});
 
+  @override
+  State<LogoutWidget> createState() => _LogoutWidgetState();
+}
+
+class _LogoutWidgetState extends State<LogoutWidget> {
   @override
   Widget build(BuildContext context) {
     final controller = context.read<UserCubit>();
@@ -42,7 +46,11 @@ class LogoutWidget extends StatelessWidget {
                 label: 'Logout',
                 onPressed: () {
                   controller.logout();
-                  context.go(Routes.HOME);
+                  context.pop();
+                  context.pop();
+                  setState(() {
+                    
+                  });
                 },
               ),
             ),

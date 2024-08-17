@@ -4,9 +4,7 @@ import 'package:fourtyninehub/features/mazadat_feature/auction_details/domain/re
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
-
-class GetAuctionRequestsUseCase
-    extends UseCase<List<BiddingEntity>, String> {
+class GetAuctionRequestsUseCase extends UseCase<List<BiddingEntity>, String> {
   final AuctionDetailsRepo _repo;
   GetAuctionRequestsUseCase(this._repo);
 
