@@ -16,8 +16,10 @@ abstract class RestaurantsRemoteDataSource {
     required double lat,
     required double lng,
   });
+  Future<Either<Failure, int>> numOfRestaurants();
   Future<Either<Failure, List<RestaurantEntity>>> getSubCategoryRestaurants(
       {required String id});
+  Future<Either<Failure, bool>> isResturant();
 }
 
 class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
@@ -65,5 +67,19 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
         (data) => Right((data['data']['restaurant'] as List)
             .map((e) => RestaurantModel.fromJson(e))
             .toList()));
+  }
+
+  @override
+  Future<Either<Failure, int>> numOfRestaurants() async {
+    final response = await _apiConsumer.get(EndPoints.getNumOfResturants);
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['data'] as int));
+  }
+
+  @override
+  Future<Either<Failure, bool>> isResturant() async {
+    final response = await _apiConsumer.get(EndPoints.isResturant);
+    return response.fold(
+        (l) => Left(l), (data) => Right(data['data']['isRestaurant'] as bool));
   }
 }

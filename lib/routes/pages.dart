@@ -20,9 +20,10 @@ import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentat
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit/food_cart_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/create_resturant_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/all_doctor_reservations/all_doctor_reservations_cubit.dart';
@@ -669,6 +670,14 @@ class AppPages {
             },
             routes: [
               GoRoute(
+                path: Paths.CREATERESTURANT,
+                name: Routes.CREATERESTURANT,
+                builder: (context, state) => BlocProvider<CreateResturantCubit>(
+                  create: (context) => serviceLocator(),
+                  child: const CreateResturantView(),
+                ),
+              ),
+              GoRoute(
                 path: Paths.VISITAEMERGENCY,
                 name: Routes.VISITAEMERGENCY,
                 builder: (context, state) => BlocProvider<HealthEmergencyCubit>(
@@ -969,7 +978,7 @@ class AppPages {
               create: (context) => serviceLocator<CreateDoctorCubit>(),
             ),
           ], child: const RegisterShippingScreen()),
-        )
+        ),
       ],
     ),
   ]);

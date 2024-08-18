@@ -11,6 +11,7 @@ class RestaurantModel extends RestaurantEntity {
       {required super.id,
       required super.name,
       super.reviews,
+      super.numberOfContent,
       required super.description,
       required super.image,
       required super.available,
@@ -19,13 +20,18 @@ class RestaurantModel extends RestaurantEntity {
       required super.rate,
       required super.numberOfReviews,
       super.cuisine,
+      super.isFavorite,
       required super.locations});
 
   factory RestaurantModel.fromJson(Map<String, dynamic> json) {
     return RestaurantModel(
         id: json['_id'],
-        name: getLang() == 'ar' ? json['name_en'] : json['name_en'],
-        description: json['desc'],
+        name: getLang() == 'ar'
+            ? json['name_ar'] ?? (json['name_en'])
+            : json['name'],
+        description: json['desc'] ?? "",
+        isFavorite: json['isFavorite'] ?? false,
+        numberOfContent: json['numberOfAds'] ?? 0,
         image: json['media'] != null
             ? (json['media'] as List)
                 .map((e) => e['mediaKey'] as String)
@@ -57,6 +63,12 @@ class RestaurantModel extends RestaurantEntity {
     data['name'] = name;
     data['description'] = description;
     data['image'] = image;
+    if (isFavorite != null) {
+      data['isFavorite'] = isFavorite;
+    }
+    if (numberOfContent != null) {
+      data['numberOfAds'] = numberOfContent;
+    }
 
     data['available'] = available;
     data['delivery_time'] = deliveryTime;

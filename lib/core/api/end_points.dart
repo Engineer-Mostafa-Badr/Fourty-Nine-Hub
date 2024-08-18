@@ -20,6 +20,7 @@ class EndPoints {
   static const refreshToken = '/auth/refresh/token';
   static const getParentMainCategories = '/category/parent';
   static const getMainCategories = '/category/parent/get-all-main';
+  static String getBannerByID({required String id}) => '/categories/main/$id';
   static const getMainCategoriesWithoutSubcategories = '/categories/main';
   static String getMainCategoryDetails(String id) => '/categories/main/$id';
   static String addMainCategoryToFavorite(String id) =>
@@ -37,6 +38,9 @@ class EndPoints {
   static String report({required String subCategoryId}) =>
       '/report?subCategory=$subCategoryId';
   static const documentRequest = '/twitter/document-request?subCategory=66a3583454e6e337915514db';
+  static const report = '/report?subCategory=66a3583454e6e337915514db';
+  static const documentRequest =
+      '/twitter/document-request?subCategory=66a3583454e6e337915514db';
   // ride
   //shipping
   static String bannerData = "$developmentBaseUrl/loading/driver/subcategory";
@@ -327,6 +331,10 @@ class EndPoints {
   static String subCategoryRestaurants(String id) {
     return '/restaurants/subcategory/$id';
   }
+
+  static String getNumOfResturants = '/restaurants/num-of-restaurants';
+  static String isResturant = '/restaurants/check-user-have-restaurant';
+  static String createRestaurant = '/restaurants/create-restaurant';
 
   static String restaurantDetails(String id) {
     return '/restaurants/$id';

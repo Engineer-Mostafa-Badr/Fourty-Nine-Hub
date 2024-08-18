@@ -8,6 +8,9 @@ import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/data/datasources/restaurant_dashboard_remote_datasource.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/data/repositories/restaurant_dashboard_repo_impl.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_orders_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_num_of_resturant_use_case.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/is_resturant_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
@@ -47,9 +50,21 @@ class FoodServiceLocator {
         () => RestaurantDashboardRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<FoodCartRepo>(
         () => FoodCartRepoImpl(serviceLocator()));
-
+    serviceLocator.registerFactory<CreateResturantCubit>(
+      () => CreateResturantCubit(
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+      )..loadData(),
+    );
     serviceLocator
         .registerFactory<RestaurantsListCubit>(() => RestaurantsListCubit(
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
@@ -84,6 +99,11 @@ class FoodServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<GetNumOfResturantUseCase>(
+      () => GetNumOfResturantUseCase(
+        serviceLocator(),
+      ),
+    );
     serviceLocator.registerLazySingleton<AddToCartUseCase>(
       () => AddToCartUseCase(
         serviceLocator(),
@@ -92,6 +112,11 @@ class FoodServiceLocator {
 
     serviceLocator.registerLazySingleton<GetSubCategoryRestaurantsUseCases>(
       () => GetSubCategoryRestaurantsUseCases(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<IsResturantUsecase>(
+      () => IsResturantUsecase(
         serviceLocator(),
       ),
     );

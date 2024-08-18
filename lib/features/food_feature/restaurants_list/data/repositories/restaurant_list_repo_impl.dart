@@ -28,4 +28,14 @@ class RestaurantListRepoImpl implements RestaurantListRepo {
       {required String id}) {
     return _remoteDataSource.getSubCategoryRestaurants(id: id);
   }
+
+  @override
+  Future<Either<Failure, int>> numOfRestaurants() {
+    return _remoteDataSource.numOfRestaurants();
+  }
+
+  @override
+  Future<Either<Failure, bool>> isResturant() {
+    return _remoteDataSource.isResturant();
+  }
 }
