@@ -23,7 +23,6 @@ class MainCategoryBanner extends StatefulWidget {
     this.canRegister = false,
     this.onRegister,
     required this.category,
-
     this.color = Colors.white,
     this.onFavorite,
   });
@@ -87,7 +86,8 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 widget.canRegister ? const Spacer() : const SizedBox.shrink(),
                 Label(
                   text: widget.category.name,
-                  style: Styles.headerText(color: Colors.white),
+                  style:
+                      Styles.headerText(color: AppColors.AUTH_CONTAINER_COLOR),
                 ),
                 const Spacer(),
                 Column(
@@ -108,57 +108,18 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                     ),
                     const Sizer(height: 20),
                     Label(
-                      text:
-                          '${widget.category.total.toShortScale} ${Labels.ads}',
+                      text: widget.category.total.toShortScale == '1'
+                          ? '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}'
+                          : '${widget.category.total.toShortScale} ${LocaleKeys.Ads.localize}',
                       style: Styles.mediumText(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: widget.color,
-                      ),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.AUTH_CONTAINER_COLOR),
                     )
                   ],
                 ),
               ],
             ),
-          Row(
-            children: [
-              _buildRegisterButton(),
-              widget.canRegister ? const Spacer() : const SizedBox.shrink(),
-              Label(
-                text: widget.category.name,
-                style: Styles.headerText(color: AppColors.AUTH_CONTAINER_COLOR),
-              ),
-              const Spacer(),
-              Column(
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      final result = widget.onFavorite?.call();
-                      if (result != null && result != _isFavorite) {
-                        setState(() {
-                          _isFavorite = result;
-                        });
-                      }
-                    },
-                    child: Icon(
-                      _isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: AppColors.SECONDARY_COLOR,
-                    ),
-                  ),
-                  const Sizer(height: 20),
-                  Label(
-                    text:  widget.category.total.toShortScale == '1'
-                        ? '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}'
-                        : '${widget.category.total.toShortScale} ${LocaleKeys.Ads.localize}',
-                    style: Styles.mediumText(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.AUTH_CONTAINER_COLOR
-                    ),
-                  )
-                ],
-              ),
-            ],
           ),
         ],
       ),
