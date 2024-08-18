@@ -18,6 +18,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   final AttachTokenUseCase _attachTokenUseCase;
   final SignOutUseCase _signOutUseCase;
   final CacheService cacheService;
+
   // final UserRepository repository;
   bool _isTokenAttached = false;
 
@@ -31,6 +32,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
       : super(const BasicState());
 
   bool get isLoggedIn => cacheService.isLogin() ?? false;
+
   bool isSameAccount(String anotherId) {
     if (isLoggedIn) {
       return state.data?.id == anotherId;
@@ -43,24 +45,27 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     final result = await _getUserUseCase(const NoParams());
     emit(
       result.fold(
-            (failure) {
+        (failure) {
           return state.copyWith(
             status: StateStatus.error,
             failure: failure,
           );
         },
-            (user) {
+        (user) {
           return state.copyWith(status: StateStatus.success, data: user);
         },
       ),
     );
   }
 
+  String? token;
+
   void attachToken() async {
     final result = await _getTokensUseCase(const NoParams());
     result.fold(
-          (_) {},
-          (tokens) {
+      (_) {},
+      (tokens) {
+        token = tokens!.accessToken.toString();
         _attachTokenUseCase(tokens);
         _isTokenAttached = true;
         getUser();
@@ -77,16 +82,18 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
 
     emit(const BasicState());
   }
-  setLogin(bool value){
+
+  setLogin(bool value) {
     cacheService.setLogin(value);
   }
+
   Future<void> giveMeTokenForTinder() async {
     final result = await _getTokensUseCase(const NoParams());
 
     // UserTokensEntity? token;
     result.fold(
-          (_) {},
-          (tokens) {
+      (_) {},
+      (tokens) {
         _attachTokenUseCase(tokens);
         _isTokenAttached = true;
         // token = tokens!;

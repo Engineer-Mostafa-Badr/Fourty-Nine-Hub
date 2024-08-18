@@ -6,8 +6,8 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
@@ -23,7 +23,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class UserTweets extends StatefulWidget {
   const UserTweets({super.key, required this.userData});
-  final UserEntity userData;
+  final UserProfileEntity userData;
   @override
   State<UserTweets> createState() => _UserTweetsState();
 }
@@ -47,8 +47,8 @@ class _UserTweetsState extends State<UserTweets> {
       }, builder: (context, state) {
         final controller = context.read<TwitterCubit>();
         return RefreshIndicator(
-          onRefresh: () async => controller.loadUserTweets(widget.userData.id),
-          child:state.status == StateStatus.success? PagedListView<int, TwitterPostEntity>(
+          onRefresh: () async => controller.onRefreshUserTweets(),
+          child:PagedListView<int, TwitterPostEntity>(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
             pagingController: controller.userTweetsPagingController,
             shrinkWrap: true,
@@ -69,7 +69,9 @@ class _UserTweetsState extends State<UserTweets> {
                       ));
                 },
                 itemBuilder: (context, item, index) {
-                  return TwitterPostCard(
+                  final user = context.read<UserCubit>().state.data;
+                  return state.status == StateStatus.success? TwitterPostCard(
+                    fromProfile: user?.id==widget.userData.id,
                     post: controller.userTweetsPagingController.itemList![index],
                     onReact: () {
                       controller.onReact(
@@ -131,7 +133,7 @@ class _UserTweetsState extends State<UserTweets> {
                           context,
                           controller
                               .userTweetsPagingController.itemList![index].mainPost.id,
-                          state.newCommentId ?? '',widget.userData);
+                          state.newCommentId ?? '');
                     },
                     onReport: (TwitterReportParams params) {
                       controller.onReport(params);
@@ -141,6 +143,11 @@ class _UserTweetsState extends State<UserTweets> {
                     hidePost: (String id){
                       controller.hidePost(context: context, postId: id);
                     },
+                  ):Center(
+                    child: Label(text: getFailureMessage(
+                      state.failure ?? const UnknownFailure(),
+                      context,
+                    )),
                   );
                 },
                 noMoreItemsIndicatorBuilder: (context) => Container(),
@@ -149,11 +156,6 @@ class _UserTweetsState extends State<UserTweets> {
                     child: const CupertinoActivityIndicator()),
                 newPageProgressIndicatorBuilder: (context) =>
                 const CupertinoActivityIndicator()),
-          ):Center(
-            child: Label(text: getFailureMessage(
-              state.failure ?? const UnknownFailure(),
-              context,
-            )),
           ),
         );
       }),

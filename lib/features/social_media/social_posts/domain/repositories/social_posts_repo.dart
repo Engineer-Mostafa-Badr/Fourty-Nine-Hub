@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import '../../../../../core/error/failure.dart';
@@ -15,11 +17,13 @@ abstract class SocialPostsRepo {
   Future<Either<Failure, List<PostEntity>>> getAdvertisement({required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getTweet({required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getUserPosts(
-      {required String userId});
+      {required UserPostsParams params});
   Future<Either<Failure, bool>> reactOnPost({required PostReactParams params});
   Future<Either<Failure, bool>> reactOnComment({required PostReactParams params});
   Future<Either<Failure, CommentEntity>> commentOnPost(
       {required PostCommentParams params});
+  Future<Either<Failure, UserProfileEntity>> getUserProfile(
+      {required String params});
   Future<Either<Failure, CommentEntity>> replyOnComment(
       {required ReplyOnCommentParams params});
   Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends(
@@ -34,7 +38,10 @@ abstract class SocialPostsRepo {
   Future<Either<Failure, bool>> deletePost({required String postId});
   Future<Either<Failure, bool>> deleteComment({required String commentId});
   Future<Either<Failure, bool>> friendRequest({required String userId});
+  Future<Either<Failure, bool>> removeFriendRequest({required String userId});
+  Future<Either<Failure, bool>> blockUser({required String userId});
   Future<Either<Failure, bool>> followRequest({required String userId});
+  Future<Either<Failure, bool>> unFollow({required String userId});
   Future<Either<Failure, bool>> sendGreetMessage({required String userId});
   Future<Either<Failure, bool>> removeSuggestUser({required String userId});
   Future<Either<Failure, bool>> hidePost({required String postId});

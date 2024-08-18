@@ -1,15 +1,6 @@
 
-import 'dart:developer';
-
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/confirm_password_text_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/password_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -23,9 +14,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../common/widgets/stateless/appbar/back_appbar.dart';
-import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../common/widgets/stateless/buttons/default_button.dart';
-import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -62,7 +51,6 @@ class _LoginViewState extends State<LoginView> {
       },
       child: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) {
-          log(state.toString(),name: 'Login Success =================================');
           if (state is LoginError) {
             context.pop();
             showErrorMessage(
@@ -73,19 +61,20 @@ class _LoginViewState extends State<LoginView> {
               ),
             );
           } else if (state is LoginSuccess) {
+            // context.pop();
+            context.go(Routes.HOME);
+            context.pop();
             context.read<UserCubit>().setLogin(true);
-            context.read<GetWalletCubit>().getWallet();
-            // context.pop();
-            // context.pop();
             context.read<UserCubit>().getUser();
-            context.push(Routes.HOME);
+            context.read<GetWalletCubit>().getWallet();
+
             showSuccessMessage(context, 'welcome back');
           } else if (state is LoginLoading) {
             // showAdaptiveDialog(
             //     context: context,
             //     builder: (context) => const Center(
             //           child: CircularProgressIndicator.adaptive(),
-            //         ));3
+            //         ));
           } else if (state is LoginError) {
             context.pop();
           }

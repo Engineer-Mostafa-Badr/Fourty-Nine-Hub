@@ -32,7 +32,6 @@ class TinderCardStack extends StatelessWidget {
     super.key,
     required this.userCubit,
   });
-
   @override
   Widget build(BuildContext context) {
     final TinderViewCubit tinderCubit = context.watch<TinderViewCubit>();
@@ -405,8 +404,12 @@ class TinderCardStack extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => UserProfilePage(
-          userCubit: userCubit,
+        builder: (context) => BlocProvider.value(
+          value:
+          TinderViewCubit(),
+          child: UserProfilePage(
+            userCubit: userCubit,
+          ),
         ),
       ),
     );

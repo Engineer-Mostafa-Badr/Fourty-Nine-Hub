@@ -163,8 +163,11 @@ class _TwitterViewState extends State<TwitterView> {
                         onShare: () {
                           controller.onShare(
                             postId:
-                            controller.postsPagingController.itemList![index].id,
+                            controller.postsPagingController.itemList![index].isShared==true?controller.postsPagingController.itemList![index].mainPost!.id:controller.postsPagingController.itemList![index].id,
                           );
+                          if(state.shareSuccess==true){
+                            showSuccessMessage(context, "Post shared successfully");
+                          }
                           setState(() {});
                         },
                         showPostComments: (String v) {

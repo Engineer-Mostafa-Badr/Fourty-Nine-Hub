@@ -7,17 +7,18 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/add_main_category_to_favorites_usecase.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/remove_main_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:shimmer/shimmer.dart';
 
 class MainCategoryBanner extends StatefulWidget {
   final MainCategoryEntity category;
   final bool canRegister;
   final Function()? onRegister;
+  final bool? Function()? onFavorite;
+  
+
   final Color? color;
 
   const MainCategoryBanner({
@@ -26,6 +27,7 @@ class MainCategoryBanner extends StatefulWidget {
     this.onRegister,
     required this.category,
     this.color = Colors.white,
+    this.onFavorite,
   });
 
   @override
@@ -46,74 +48,66 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          color: Colors.transparent,
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: CachedNetworkImageProvider(
-              widget.category.banner,
-            ),
-            // colorFilter: ColorFilter.mode(
-            //   Colors.black.withOpacity(0.3), // Adjust the opacity as needed
-            //   BlendMode.darken,
-            // ),
-          )),
-      child: Row(
+        borderRadius: BorderRadius.circular(5),
+        color: Colors.transparent,
+      ),
+      child: Stack(
         children: [
-          _buildRegisterButton(),
-          widget.canRegister ? const Spacer() : const SizedBox.shrink(),
-          Label(
-            text: widget.category.name,
-            style: Styles.headerText(color: AppColors.AUTH_CONTAINER_COLOR),
-          ),
-          const Spacer(),
-          Column(
-            children: [
-              InkWell(
-                onTap: () async {
-                  if (_isFavorite) {
-                    final result = await serviceLocator<
-                            RemoveMainCategoryFromFavoritesUseCase>()
-                        .call(widget.category.id);
-                    result.fold(
-                      (l) => showErrorMessage(
-                          context, "Can't remove from favorite"),
-                      (r) {
-                        setState(() {
-                          _isFavorite = false;
-                        });
-                      },
-                    );
-                  } else {
-                    final result = await serviceLocator<
-                            AddMainCategoryToFavoritesUseCase>()
-                        .call(widget.category.id);
-                    result.fold(
-                      (l) => showErrorMessage(context, "Can't add to favorite"),
-                      (r) {
-                        setState(() {
-                          _isFavorite = true;
-                        });
-                      },
-                    );
-                  }
-                },
-                child: Icon(
-                  _isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: AppColors.SECONDARY_COLOR,
-                ),
+          Positioned.fill(
+              child: CachedNetworkImage(
+            imageUrl: widget.category.banner,
+            fit: BoxFit.fill,
+            placeholder: (context, url) => Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                color: Colors.white,
               ),
-              const Sizer(height: 20),
+            ),
+            errorWidget: (context, url, error) {
+              debugPrint(
+                  'error while displaying images in the url $url ${error.toString()}');
+              return const Icon(Icons.error, color: Colors.red);
+            },
+          )),
+          Row(
+            children: [
+              _buildRegisterButton(),
+              widget.canRegister ? const Spacer() : const SizedBox.shrink(),
               Label(
-                text: widget.category.total.toShortScale == '1'
-                    ? '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}'
-                    : '${widget.category.total.toShortScale} ${LocaleKeys.Ads.localize}',
-                style: Styles.mediumText(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: widget.color,
-                ),
-              )
+                text: widget.category.name,
+                style: Styles.headerText(color: AppColors.AUTH_CONTAINER_COLOR),
+              ),
+              const Spacer(),
+              Column(
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      final result = widget.onFavorite?.call();
+                      if (result != null && result != _isFavorite) {
+                        setState(() {
+                          _isFavorite = result;
+                        });
+                      }
+                    },
+                    child: Icon(
+                      _isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: AppColors.SECONDARY_COLOR,
+                    ),
+                  ),
+                  const Sizer(height: 20),
+                  Label(
+                    text:  widget.category.total.toShortScale == '1'
+                        ? '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}'
+                        : '${widget.category.total.toShortScale} ${LocaleKeys.Ads.localize}',
+                    style: Styles.mediumText(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+
+                    ),
+                  )
+                ],
+              ),
             ],
           ),
         ],
