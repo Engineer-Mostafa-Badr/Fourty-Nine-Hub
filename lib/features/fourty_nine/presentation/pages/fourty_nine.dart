@@ -1,24 +1,14 @@
-import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/local_storage/local_storage_consumer.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
-import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
-import 'package:fourtyninehub/features/fourty_nine/data/data_sources/remote_data_source/fourty_nine_remote_data_source.dart';
-import 'package:fourtyninehub/features/fourty_nine/data/repositories/fourty_nine_repository_impl.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/repositories/fourty_nine_repository.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
@@ -34,14 +24,12 @@ import '../../../../common/widgets/stateless/buttons/app_button.dart';
 
 import '../../../../core/enums/ride_services_enum.dart';
 import '../../../../core/localization/locale_keys.g.dart';
-import '../../../../core/localization/locales.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/dynamic/wallet_widget.dart';
 import '../../../../res/style/app_colors.dart';
-import '../../../../service_locator/service_locator.dart';
 import '../widgets/announce_widget.dart';
 
 class FourtyNineView extends StatefulWidget {

@@ -1,23 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/pages/fourty_nine.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/states/basic_state.dart';
-import '../../../../features/fourty_nine/domain/entities/main_category_entity.dart';
-import '../../../../features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import '../../../../routes/pages.dart';
 import '../buttons/iconAppButton.dart';
 import '../labels/label.dart';
 

@@ -1,31 +1,17 @@
-import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'core/api/api_consumer.dart';
-import 'core/data/datasources/json_parser.dart';
-import 'core/local_storage/local_storage_consumer.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
-import 'features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
-import 'features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'features/fourty_nine/data/data_sources/remote_data_source/fourty_nine_remote_data_source.dart';
-import 'features/fourty_nine/data/repositories/fourty_nine_repository_impl.dart';
-import 'features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
-import 'features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'routes/pages.dart';
 
-//import 'package:admob_flutter/admob_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
