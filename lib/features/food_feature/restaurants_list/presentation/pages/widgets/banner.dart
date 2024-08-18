@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/presentatio
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 
 class MealBanner extends StatelessWidget {
   const MealBanner({super.key});
@@ -14,6 +15,21 @@ class MealBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
       builder: (context, state) {
+        if (state.isLoading) {
+          return Shimmer.fromColors(
+            baseColor: Colors.grey[100]!,
+            highlightColor: Colors.white,
+            child: Container(
+              height: 150,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10)
+              ),
+              
+            ),
+          );
+        }
         if (state.mainCategory != null) {
           return MainCategoryBanner(
               color: AppColors.ACCENT_COLOR,

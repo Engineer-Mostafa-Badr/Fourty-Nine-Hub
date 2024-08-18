@@ -99,7 +99,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
           route: Routes.VISITA),
       BottomItemModel(
           icon: Icons.delivery_dining,
-          label: LocaleKeys.shipping.localize,
+          label: LocaleKeys.ship.localize,
           index: 3,
           image: Assets.shipping,
           route: Routes.SHIPPING),
