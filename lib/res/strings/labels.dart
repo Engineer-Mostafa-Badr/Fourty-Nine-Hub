@@ -38,6 +38,7 @@ abstract class Labels {
   static const bookNow = 'Book Now';
   static const availableTimes = 'Available Times';
   static const available = 'Available';
+  static const shouldLoginFirst = 'Should Login First';
   static const requestsHistory = 'Requests History';
   static const bookingApproved = 'Booking Approved Successfully!';
   static const success = 'Done Successfully!';

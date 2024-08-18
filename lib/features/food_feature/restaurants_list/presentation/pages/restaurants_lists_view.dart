@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/banner.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/meal_categories.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/resturant_dashboard_banner.dart';
@@ -27,59 +28,67 @@ class RestaurantsListsView extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
             builder: (context, state) {
+              final user = context.read<UserCubit>();
+
               if (state.isLoading) {
                 return const Center(
                   child: CircularProgressIndicator.adaptive(),
                 );
               }
-              return Stack(
-                children: [
-                  ListView(
-                    children: [
-                      const MealBanner(),
-                      const Sizer(),
-                      const ResturantDashboardButton(),
-                      const Sizer(),
-                      if (state.categories?.isNotEmpty ?? false)
-                        const MealCategories(),
-                      if (state.subCategories?.isNotEmpty ?? false) ...[
-                        Label(
-                          text: Labels.restaurantsForSelectedMeal,
-                          style: Styles.headerText(),
-                        ),
-                        const Sizer(),
-                        _buildHorizontalRestaurants(),
-                      ],
-                      const Sizer(),
-                      const Sizer(),
-                      if (state.nearByRestaurants?.isNotEmpty ?? false) ...[
-                        Label(
-                            text: 'All Restaurants',
-                            style: Styles.headerText()),
-                        const Sizer(),
-                        _buildVerticalRestaurants(),
-                      ],
-                    ],
-                  ),
-
-                  /// numOfRestaurants
-                  if (state.numOfRestaurants != null)
-                    Positioned(
-                      bottom: 10,
-                      right: 10,
-                      child: FloatingActionButton(
-                        tooltip: Labels.resturants,
-                        backgroundColor: AppColors.PRIMARY_COLOR,
-                        onPressed: () {},
-                        child: Text(
-                          "${state.numOfRestaurants}",
-                          style: Styles.mediumText(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      ),
+              return user.state.data == null
+                  ? const Center(
+                      child: Text(Labels.shouldLoginFirst),
                     )
-                ],
-              );
+                  : Stack(
+                      children: [
+                        ListView(
+                          children: [
+                            const MealBanner(),
+                            const Sizer(),
+                            const ResturantDashboardButton(),
+                            const Sizer(),
+                            if (state.mealCategories?.isNotEmpty ?? false)
+                              const MealCategories(),
+                            if (state.subCategories?.isNotEmpty ?? false) ...[
+                              Label(
+                                text: Labels.restaurantsForSelectedMeal,
+                                style: Styles.headerText(),
+                              ),
+                              const Sizer(),
+                              _buildHorizontalRestaurants(),
+                            ],
+                            const Sizer(),
+                            const Sizer(),
+                            if (state.allRestaurant?.isNotEmpty ??
+                                false) ...[
+                              Label(
+                                  text: 'All Restaurants',
+                                  style: Styles.headerText()),
+                              const Sizer(),
+                              _buildVerticalRestaurants(),
+                            ],
+                          ],
+                        ),
+
+                        /// numOfRestaurants
+                        if (state.numOfRestaurants != null)
+                          Positioned(
+                            bottom: 10,
+                            right: 10,
+                            child: FloatingActionButton(
+                              tooltip: Labels.resturants,
+                              backgroundColor: AppColors.PRIMARY_COLOR,
+                              onPressed: () {},
+                              child: Text(
+                                "${state.numOfRestaurants}",
+                                style: Styles.mediumText(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          )
+                      ],
+                    );
             },
           ),
         ),
@@ -115,7 +124,7 @@ class RestaurantsListsView extends StatelessWidget {
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) =>
-                  RestaurantCard(item: state.subCategories![index]),
+                  RestaurantCard(item: state.allRestaurant![index]),
               separatorBuilder: (context, index) => const Sizer(),
               itemCount: state.subCategories?.length ?? 0));
     });
@@ -129,7 +138,7 @@ class RestaurantsListsView extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) => RestaurantCard(
                 isVert: false,
-                item: state.nearByRestaurants![index],
+                item: state.allRestaurant![index],
               ),
           separatorBuilder: (context, index) => const Sizer(),
           itemCount: state.nearByRestaurants?.length ?? 0);

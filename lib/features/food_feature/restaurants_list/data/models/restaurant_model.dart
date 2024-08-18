@@ -45,7 +45,11 @@ class RestaurantModel extends RestaurantEntity {
         available: json['available'] ?? false,
         deliveryTime: json['delivery_time'] ?? '0',
         deliveryFee: json['delivery_fee'] ?? '0',
-        rate: json['totalRating'] ?? 5,
+        rate: json['totalRating'] != null
+            ? (json['totalRating'] is int
+                ? json['totalRating'].toDouble()
+                : json['totalRating'])
+            : 5.0,
         numberOfReviews: json['numberOfReviews'] ?? 0,
         cuisine: json['cuisine'] != null
             ? CuisineModel.fromJson(json['cuisine'])

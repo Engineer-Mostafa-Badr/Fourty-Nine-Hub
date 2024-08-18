@@ -15,7 +15,7 @@ class MealCategories extends StatelessWidget {
         builder: (context, state) {
       final controller = context.read<RestaurantsListCubit>();
 
-      if (state.categories != null && state.categories!.isNotEmpty) {
+      if (state.mealCategories != null && state.mealCategories!.isNotEmpty) {
         return SizedBox(
           height: 200,
           child: Column(
@@ -34,8 +34,8 @@ class MealCategories extends StatelessWidget {
                       onTap: (String id) {
                         controller.getSubCategoryRestaurants(id: id);
                       },
-                      subCategory: state.categories?[index]),
-                  itemCount: state.categories?.length ?? 0,
+                      subCategory: state.mealCategories?[index]),
+                  itemCount: state.mealCategories?.length ?? 0,
                 ),
               ),
             ],

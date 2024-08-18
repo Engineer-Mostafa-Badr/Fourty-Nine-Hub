@@ -10,6 +10,6 @@ class IsResturantUsecase extends UseCase<bool, NoParams> {
 
   @override
   Future<Either<Failure, bool>> call(NoParams params) {
-    return _repo.isResturant();
+    return _repo.isRestaurant();
   }
 }
