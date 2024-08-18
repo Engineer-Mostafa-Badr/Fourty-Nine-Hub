@@ -47,9 +47,8 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
       ),
       body: BlocProvider<TwitterCubit>(
         create: (_) {
-          final user = context.read<UserCubit>().state.data;
-          return serviceLocator()..getTwitterPost(context, widget.postId, '', user);
-        },
+          return serviceLocator()..getTwitterPost(context, widget.postId, '',);
+          },
         child: BlocConsumer<TwitterCubit, TwitterState>(
           buildWhen: (current , previous)=>previous.status== StateStatus.success,
           listener: (context,state){

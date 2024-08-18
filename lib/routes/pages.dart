@@ -1,4 +1,3 @@
-import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
@@ -109,6 +108,8 @@ import '../features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
+import '../features/fourty_nine/presentation/pages/main_categories_cards_view.dart';
+import '../features/fourty_nine/presentation/pages/main_categories_taps_view.dart';
 import '../features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
 import '../features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import '../features/health_feature/health/presentation/pages/health_view.dart';
@@ -150,6 +151,7 @@ import '../features/ride/trip_details/presentation/pages/trip_details_view.dart'
 import '../features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
 import '../features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
+import '../features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
@@ -183,6 +185,20 @@ class AppPages {
         child: const FourtyNineView(),
       ),
       routes: <RouteBase>[
+        // FLIP CARDS
+        GoRoute(
+          path: Paths.MAINCATEGORIESCARDS,
+          name: Routes.MAINCATEGORIESCARDS,
+          builder: (context, state) => const MainCategoriesFlipCardsView(),
+        ),
+        //GRID VIEW
+        GoRoute(
+          path: Paths.MAINCATEGORIESTREE,
+          name: Routes.MAINCATEGORIESTREE,
+          builder: (context, state) => BlocProvider(
+            create:(context)=> serviceLocator<MainCategoriesTapsCubit>(),
+            child: const MainCategoriesGridView()),
+        ),
         GoRoute(
             path: Paths.SUBCATEGORIES,
             name: Routes.SUBCATEGORIES,
@@ -348,7 +364,7 @@ class AppPages {
         GoRoute(
           path: Paths.WINNERS,
           name: Routes.WINNERS,
-          builder: (context, state) => Winners(),
+          builder: (context, state) => const Winners(),
         ),
         GoRoute(
           path: Paths.QURAAN,
@@ -518,14 +534,19 @@ class AppPages {
               GoRoute(
                 path: Paths.OTHERSACCOUNT,
                 name: Routes.OTHERSACCOUNT,
-                builder: (context, state) => const OtherAccountView(),
+                builder: (context, state) {
+                  final id = state.extra as String?;
+                  return BlocProvider<SocialPostsCubit>(
+                      create: (_)=>serviceLocator()..getUserProfile(id: id??''),
+                      child: OtherAccountView(userId: id??'',));
+                },
               ),
               GoRoute(
                   path: Paths.REELS,
                   name: Routes.REELS,
                   builder: (context, state) => MultiBlocProvider(
                         providers: [
-                          BlocProvider<ExploreReelsCubit>(
+                          BlocProvider<ReelsCubit>(
                             create: (_) => serviceLocator(),
                           ),
                         ],
@@ -541,7 +562,7 @@ class AppPages {
               GoRoute(
                   path: Paths.TINDER,
                   name: Routes.Tinder,
-                  builder: (context, state) => const TinderView()),
+                  builder: (context, state) =>  const TinderView()),
 
               GoRoute(
                 path: Paths.LIVE,

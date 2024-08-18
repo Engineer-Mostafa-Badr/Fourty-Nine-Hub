@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../common/widgets/dynamic/drawer.dart';
@@ -57,18 +58,49 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         children: [
+          //carousel slider
           const AnnounceWidget(),
+          //wallet
           const WalletWidget(),
           const Sizer(),
+          //admob
           const GoogleAddsBanner(),
           const Sizer(),
-          _buildMazadatWidget(),
+          //pick me and come with U
+          _pickMeAndComeWithUWidget(),
           const Sizer(),
+          //auction
+          _auctionAndInstallmentWidget(),
+          const Sizer(),
+          //cats layout
           _buildMainCategoriesViews(),
           const Sizer(),
+          //main cats
           BlocBuilder<MainCategoriesCubit,
               BasicState<List<MainCategoryEntity>>>(
             builder: (context, state) {
+              if (state.isLoading) {
+                return Shimmer.fromColors(
+                  baseColor: Colors.grey[100]!,
+                  highlightColor: Colors.white24,
+                  child: Column(
+                    children: List.generate(
+                        6,
+                        (index) => Container(
+                              height: 100,
+                              width: double.infinity,
+                              margin: const EdgeInsets.symmetric(horizontal: 5),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: Colors.grey),
+                              ),
+                            )),
+                  ),
+                );
+              }
               if (state.isSuccess && state.data != null) {
                 return ListView.separated(
                   itemCount: state.data?.length ?? 0,
@@ -145,105 +177,132 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     );
   }
 
-  Widget _buildMazadatWidget() {
-    return Column(
-      children: [
-        BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
-          builder: (context, state) {
-            if (state.status == StateStatus.success &&
-                state.data != null &&
-                state.data!.isNotEmpty) {
-              return Row(
-                children: [
-                  Expanded(
-                    child: _buildRideSubCategoryItem(
-                      service: state.data![0].service,
-                      image: state.data![0].image,
-                    ),
-                  ),
-                  const Sizer(),
-                  Expanded(
-                    child: _buildRideSubCategoryItem(
-                      service: state.data![1].service,
-                      image: state.data![1].image,
-                    ),
-                  )
-                ],
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
-          },
-        ),
-        const Sizer(),
-        Row(
-          children: [
-            Expanded(
-              child: InkWell(
-                onTap: () => context.go(Routes.MAZADAT),
-                child: SizedBox(
-                  height: kToolbarHeight * .5,
-                  width: kToolbarHeight * 2,
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: AppButton(
+  BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
+      _pickMeAndComeWithUWidget() {
+    return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
+      builder: (context, state) {
+        if (state.status == StateStatus.loading) {
+          return Row(
+            children: List.generate(
+                2,
+                (index) => Expanded(
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey[100]!,
+                        highlightColor: Colors.white24,
+                        child: Container(
+                          width: 100,
+                          height: kToolbarHeight * 1.3,
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          decoration: BoxDecoration(
                             color: Colors.white,
-                            label: 'Auction',
-                            style: const TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                            icon: Icons.group,
-                            iconSize: 22,
-                            onPressed: () => context.push(Routes.MAZADAT)),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                        ),
                       ),
-                      const Positioned(
-                          bottom: 5,
-                          left: 5,
-                          child: Icon(
-                            Icons.star,
-                            size: 10,
-                            color: AppColors.ACCENT_COLOR,
-                          )),
-                      const Positioned(
-                          top: 0,
-                          left: 10,
-                          child: Icon(
-                            Icons.star,
-                            size: 10,
-                            color: AppColors.ACCENT_COLOR,
-                          )),
-                      const Positioned(
-                          top: 15,
-                          right: 10,
-                          child: Icon(
-                            Icons.star,
-                            size: 10,
-                            color: AppColors.ACCENT_COLOR,
-                          ))
-                    ],
-                  ),
+                    )),
+          );
+        } else if (state.status == StateStatus.success) {
+          return Row(
+            children: [
+              Expanded(
+                child: _buildRideSubCategoryItem(
+                  service: state.data![0].service,
+                  image: state.data![0].image,
                 ),
               ),
+              const Sizer(),
+              Expanded(
+                child: _buildRideSubCategoryItem(
+                  service: state.data![1].service,
+                  image: state.data![1].image,
+                ),
+              )
+            ],
+          );
+        } else {
+          return Container(
+            padding:
+                //EdgeInsets.all
+                const EdgeInsets.symmetric(horizontal: 10),
+            child: const Text(
+              'No Ride Subcategories',
+              style: TextStyle(fontSize: 18),
             ),
-            const Sizer(),
-            Expanded(
-              child: AppButton(
-                  padding: 5,
-                  color: Colors.white,
-                  height: kToolbarHeight * .5,
-                  label: 'Installments',
-                  style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                  icon: Icons.list,
-                  iconSize: 22,
-                  onPressed: () => context.push(Routes.INSTALLMENT)),
-            )
-          ],
+          );
+        }
+      },
+    );
+  }
+
+  Row _auctionAndInstallmentWidget() {
+    return Row(
+      children: [
+        Expanded(
+          child: InkWell(
+            onTap: () => context.go(Routes.MAZADAT),
+            child: SizedBox(
+              height: kToolbarHeight * .5,
+              width: kToolbarHeight * 2,
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: AppButton(
+                        color: Colors.white,
+                        label: 'Auction',
+                        style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                        icon: Icons.group,
+                        iconSize: 22,
+                        onPressed: () => context.push(Routes.MAZADAT)),
+                  ),
+                  const Positioned(
+                      bottom: 5,
+                      left: 5,
+                      child: Icon(
+                        Icons.star,
+                        size: 10,
+                        color: AppColors.ACCENT_COLOR,
+                      )),
+                  const Positioned(
+                      top: 0,
+                      left: 10,
+                      child: Icon(
+                        Icons.star,
+                        size: 10,
+                        color: AppColors.ACCENT_COLOR,
+                      )),
+                  const Positioned(
+                      top: 15,
+                      right: 10,
+                      child: Icon(
+                        Icons.star,
+                        size: 10,
+                        color: AppColors.ACCENT_COLOR,
+                      ))
+                ],
+              ),
+            ),
+          ),
         ),
+        const Sizer(),
+        Expanded(
+          child: AppButton(
+              padding: 5,
+              color: Colors.white,
+              height: kToolbarHeight * .5,
+              label: 'Installments',
+              style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+              icon: Icons.list,
+              iconSize: 22,
+              onPressed: () => context.push(Routes.INSTALLMENT)),
+        )
       ],
     );
   }

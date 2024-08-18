@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:shimmer/shimmer.dart';
 
 class MainCategoryBanner extends StatefulWidget {
   final MainCategoryEntity category;
@@ -42,51 +43,62 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         color: Colors.transparent,
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: CachedNetworkImageProvider(
-            widget.category.banner,
-          ),
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.3),
-            BlendMode.darken,
-          ),
-        ),
       ),
-      child: Row(
+      child: Stack(
         children: [
-          _buildRegisterButton(),
-          widget.canRegister ? const Spacer() : const SizedBox.shrink(),
-          Label(
-            text: widget.category.name,
-            style: Styles.headerText(color: Colors.white),
-          ),
-          const Spacer(),
-          Column(
-            children: [
-              InkWell(
-                onTap: () async {
-                  final result = widget.onFavorite?.call();
-                  if (result != null && result != _isFavorite) {
-                    setState(() {
-                      _isFavorite = result;
-                    });
-                  }
-                },
-                child: Icon(
-                  _isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: AppColors.SECONDARY_COLOR,
-                ),
+          Positioned.fill(
+              child: CachedNetworkImage(
+            imageUrl: widget.category.banner,
+            fit: BoxFit.fill,
+            placeholder: (context, url) => Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                color: Colors.white,
               ),
-              const Sizer(height: 20),
+            ),
+            errorWidget: (context, url, error) {
+              debugPrint(
+                  'error while displaying images in the url $url ${error.toString()}');
+              return const Icon(Icons.error, color: Colors.red);
+            },
+          )),
+          Row(
+            children: [
+              _buildRegisterButton(),
+              widget.canRegister ? const Spacer() : const SizedBox.shrink(),
               Label(
-                text: '${widget.category.total.toShortScale} ${Labels.ads}',
-                style: Styles.mediumText(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              )
+                text: widget.category.name,
+                style: Styles.headerText(color: Colors.white),
+              ),
+              const Spacer(),
+              Column(
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      final result = widget.onFavorite?.call();
+                      if (result != null && result != _isFavorite) {
+                        setState(() {
+                          _isFavorite = result;
+                        });
+                      }
+                    },
+                    child: Icon(
+                      _isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: AppColors.SECONDARY_COLOR,
+                    ),
+                  ),
+                  const Sizer(height: 20),
+                  Label(
+                    text: '${widget.category.total.toShortScale} ${Labels.ads}',
+                    style: Styles.mediumText(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                     
+                    ),
+                  )
+                ],
+              ),
             ],
           ),
         ],

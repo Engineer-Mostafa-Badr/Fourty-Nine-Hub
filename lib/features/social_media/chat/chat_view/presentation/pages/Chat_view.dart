@@ -309,6 +309,7 @@ class _ChatViewState extends State<ChatView> {
     initSocketConnection();
   }
 
+
   initSocketConnection() {
     chatCubit = context.read<ChatsCubit>()..initSocketConnection();
     chatCubit.initChat();

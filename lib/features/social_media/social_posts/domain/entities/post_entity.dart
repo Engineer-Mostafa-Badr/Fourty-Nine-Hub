@@ -18,6 +18,7 @@ class PostEntity {
   bool? isWow;
   bool? isSad;
   bool? isAngry;
+  bool? isHaha;
   final dynamic user;
   FeelingEntity? feeling;
   ActivityEntity? activity;
@@ -27,6 +28,7 @@ class PostEntity {
   final num sharesCount;
   num? likesCount;
   num? loveCount;
+  num? hahaCount;
   num? wowCount;
   num? sadCount;
   num? angryCount;
@@ -72,6 +74,7 @@ class PostEntity {
     this.isSad = false,
     this.isAngry = false,
     this.isDocumentation = false,
+    this.isHaha = false,
     this.commentsCount = 0,
     this.sharesCount = 0,
     this.likesCount = 0,
@@ -79,6 +82,7 @@ class PostEntity {
     this.wowCount = 0,
     this.sadCount = 0,
     this.angryCount = 0,
+    this.hahaCount = 0,
     this.totalCount = 0,
     this.createdAt,
     this.feeling,
@@ -100,13 +104,15 @@ class PostEntity {
   });
 }
 
-enum Reactions { like, love, wow, sad, angry }
+enum Reactions { like,haha, love, wow, sad, angry }
 
 extension ReactionX on Reactions {
   String value() {
     switch (this) {
       case Reactions.like:
         return 'like';
+      case Reactions.haha:
+        return 'haha';
       case Reactions.love:
         return 'love';
       case Reactions.wow:
@@ -121,6 +127,8 @@ extension ReactionX on Reactions {
     switch (this) {
       case Reactions.like:
         return 'Like';
+      case Reactions.haha:
+        return 'Haha';
       case Reactions.love:
         return 'Love';
       case Reactions.wow:
@@ -135,6 +143,8 @@ extension ReactionX on Reactions {
     switch (this) {
       case Reactions.like:
         return Assets.like;
+      case Reactions.haha:
+        return Assets.hand;
       case Reactions.love:
         return Assets.heart;
       case Reactions.wow:

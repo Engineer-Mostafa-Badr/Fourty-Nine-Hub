@@ -32,7 +32,6 @@ class TinderCardStack extends StatelessWidget {
     super.key,
     required this.userCubit,
   });
-
   @override
   Widget build(BuildContext context) {
     final TinderViewCubit tinderCubit = context.watch<TinderViewCubit>();
