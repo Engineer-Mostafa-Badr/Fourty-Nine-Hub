@@ -103,7 +103,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                     style: Styles.mediumText(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-
+                      color: AppColors.AUTH_CONTAINER_COLOR
                     ),
                   )
                 ],

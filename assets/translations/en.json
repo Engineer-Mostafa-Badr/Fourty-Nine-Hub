@@ -39,5 +39,15 @@
   "call": "Call",
   "clinicVisit": "Clinic Visit",
   "emergency": "Emergency",
-  "homeVisit": "Home Visit"
+  "homeVisit": "Home Visit",
+  "firstName": "First Name",
+  "phoneNumber": "Phone Number",
+  "speciality": "Speciality",
+  "address": "Address",
+  "confirm": "Confirm",
+  "doctorList": "Doctor List",
+  "noDoctorsFound": "No doctors found",
+  "governorate": "Governorate",
+  "city": "City",
+  "emptyFieldNotValid": "Empty Field Not Valid"
 }

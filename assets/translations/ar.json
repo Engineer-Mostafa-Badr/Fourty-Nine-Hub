@@ -39,5 +39,15 @@
   "call": "الاتصال",
   "clinicVisit": "زيارة العيادة",
   "emergency": "الطوارئ",
-  "homeVisit": "زيارة منزلية"
+  "homeVisit": "زيارة منزلية",
+  "firstName": "الاسم الأول",
+  "phoneNumber": "رقم الهاتف",
+  "speciality": "التخصص",
+  "address": "العنوان",
+  "confirm": "تاكيد",
+  "doctorList": "قائمة الأطباء",
+  "noDoctorsFound": "لم يتم العثور على أطباء",
+  "governorate": "المحافظة",
+  "city": "المدينة",
+  "emptyFieldNotValid": "حقل فارغ غير صالح"
 }

@@ -55,7 +55,17 @@ class CodegenLoader extends AssetLoader{
   "call": "الاتصال",
   "clinicVisit": "زيارة العيادة",
   "emergency": "الطوارئ",
-  "homeVisit": "زيارة منزلية"
+  "homeVisit": "زيارة منزلية",
+  "firstName": "الاسم الأول",
+  "phoneNumber": "رقم الهاتف",
+  "speciality": "التخصص",
+  "address": "العنوان",
+  "confirm": "تاكيد",
+  "doctorList": "قائمة الأطباء",
+  "noDoctorsFound": "لم يتم العثور على أطباء",
+  "governorate": "المحافظة",
+  "city": "المدينة",
+  "emptyFieldNotValid": "حقل فارغ غير صالح"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -98,7 +108,17 @@ static const Map<String,dynamic> en = {
   "call": "Call",
   "clinicVisit": "Clinic Visit",
   "emergency": "Emergency",
-  "homeVisit": "Home Visit"
+  "homeVisit": "Home Visit",
+  "firstName": "First Name",
+  "phoneNumber": "Phone Number",
+  "speciality": "Speciality",
+  "address": "Address",
+  "confirm": "Confirm",
+  "doctorList": "Doctor List",
+  "noDoctorsFound": "No doctors found",
+  "governorate": "Governorate",
+  "city": "City",
+  "emptyFieldNotValid": "Empty Field Not Valid"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

@@ -42,5 +42,15 @@ abstract class  LocaleKeys {
   static const clinicVisit = 'clinicVisit';
   static const emergency = 'emergency';
   static const homeVisit = 'homeVisit';
+  static const firstName = 'firstName';
+  static const phoneNumber = 'phoneNumber';
+  static const speciality = 'speciality';
+  static const address = 'address';
+  static const confirm = 'confirm';
+  static const doctorList = 'doctorList';
+  static const noDoctorsFound = 'noDoctorsFound';
+  static const governorate = 'governorate';
+  static const city = 'city';
+  static const emptyFieldNotValid = 'emptyFieldNotValid';
 
 }
