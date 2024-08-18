@@ -49,5 +49,18 @@
   "noDoctorsFound": "لم يتم العثور على أطباء",
   "governorate": "المحافظة",
   "city": "المدينة",
-  "emptyFieldNotValid": "حقل فارغ غير صالح"
+  "emptyFieldNotValid": "حقل فارغ غير صالح",
+  "login": "تسجيل الدخول",
+  "register": "تسجيل",
+  "emailOrPhone": "البريد الإلكتروني أو الهاتف",
+  "password": "كلمة المرور",
+  "forgetPassword": "نسيت كلمة المرور",
+  "lastName": "اللقب",
+  "gender": "الجنس",
+  "code": "رمز الإحالة (اختياري)",
+  "female": "أنثى",
+  "male": "ذكر",
+  "conditions": "الشروط والأحكام",
+  "iAcceptAll": "أوافق على جميع",
+  "terms": "يرجى قبول الشروط والأحكام للمواصلة."
 }

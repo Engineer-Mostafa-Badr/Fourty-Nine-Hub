@@ -65,7 +65,20 @@ class CodegenLoader extends AssetLoader{
   "noDoctorsFound": "لم يتم العثور على أطباء",
   "governorate": "المحافظة",
   "city": "المدينة",
-  "emptyFieldNotValid": "حقل فارغ غير صالح"
+  "emptyFieldNotValid": "حقل فارغ غير صالح",
+  "login": "تسجيل الدخول",
+  "register": "تسجيل",
+  "emailOrPhone": "البريد الإلكتروني أو الهاتف",
+  "password": "كلمة المرور",
+  "forgetPassword": "نسيت كلمة المرور",
+  "lastName": "اللقب",
+  "gender": "الجنس",
+  "code": "رمز الإحالة (اختياري)",
+  "female": "أنثى",
+  "male": "ذكر",
+  "conditions": "الشروط والأحكام",
+  "iAcceptAll": "أوافق على جميع",
+  "terms": "يرجى قبول الشروط والأحكام للمواصلة."
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -118,7 +131,20 @@ static const Map<String,dynamic> en = {
   "noDoctorsFound": "No doctors found",
   "governorate": "Governorate",
   "city": "City",
-  "emptyFieldNotValid": "Empty Field Not Valid"
+  "emptyFieldNotValid": "Empty Field Not Valid",
+  "login": "Login",
+  "register": "Register",
+  "emailOrPhone": "Email Or Phone",
+  "password": "Password",
+  "forgetPassword": "Forget Password",
+  "lastName": "Last Name",
+  "gender": "Gender",
+  "code": "Referral Code(Optional)",
+  "female": "Female",
+  "male": "Male",
+  "conditions": "Terms,Rules & Conditions",
+  "iAcceptAll": "I Accept All",
+  "terms": "Please accept the terms and conditions to continue."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

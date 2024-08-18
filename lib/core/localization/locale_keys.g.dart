@@ -52,5 +52,16 @@ abstract class  LocaleKeys {
   static const governorate = 'governorate';
   static const city = 'city';
   static const emptyFieldNotValid = 'emptyFieldNotValid';
+  static const login = 'login';
+  static const register = 'register';
+  static const emailOrPhone = 'emailOrPhone';
+  static const password = 'password';
+  static const forgetPassword = 'forgetPassword';
+  static const lastName = 'lastName';
+  static const gender = 'gender';
+  static const code = 'code';
+  static const conditions = 'conditions';
+  static const iAcceptAll = 'iAcceptAll';
+  static const terms = 'terms';
 
 }

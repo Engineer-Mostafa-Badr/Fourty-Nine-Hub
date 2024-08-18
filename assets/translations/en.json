@@ -49,5 +49,18 @@
   "noDoctorsFound": "No doctors found",
   "governorate": "Governorate",
   "city": "City",
-  "emptyFieldNotValid": "Empty Field Not Valid"
+  "emptyFieldNotValid": "Empty Field Not Valid",
+  "login": "Login",
+  "register": "Register",
+  "emailOrPhone": "Email Or Phone",
+  "password": "Password",
+  "forgetPassword": "Forget Password",
+  "lastName": "Last Name",
+  "gender": "Gender",
+  "code": "Referral Code(Optional)",
+  "female": "Female",
+  "male": "Male",
+  "conditions": "Terms,Rules & Conditions",
+  "iAcceptAll": "I Accept All",
+  "terms": "Please accept the terms and conditions to continue."
 }
