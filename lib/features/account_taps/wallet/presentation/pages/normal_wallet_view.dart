@@ -114,7 +114,8 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                             : Icons.arrow_drop_up_rounded),
                         Label(
                           text: 'Show More',
-                          style: Styles.smallText(color: Theme.of(context).primaryColor),
+                          style: Styles.smallText(
+                              color: Theme.of(context).primaryColor),
                         ),
                       ],
                     ),

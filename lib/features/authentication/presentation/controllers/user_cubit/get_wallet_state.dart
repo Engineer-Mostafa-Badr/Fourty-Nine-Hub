@@ -2,7 +2,7 @@ import 'package:fourtyninehub/features/authentication/data/models/wallet_model.d
 
 class GetWalletState {}
 
-class GetWalletInitial extends GetWalletState{}
+class GetWalletInitial extends GetWalletState {}
 
 class SuccessGetWallet extends GetWalletState {
   final WalletModel model;
@@ -10,4 +10,4 @@ class SuccessGetWallet extends GetWalletState {
   SuccessGetWallet({required this.model});
 }
 
-class FilauerGetWallatState extends GetWalletState{}
+class FilauerGetWallatState extends GetWalletState {}

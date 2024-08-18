@@ -34,7 +34,6 @@ class LiveStreamHomeScreen extends StatelessWidget {
       scrollDirection: Axis.vertical,
       itemCount: 3,
       itemBuilder: (context, index) => const LiveCard(),
-      
     );
   }
 }

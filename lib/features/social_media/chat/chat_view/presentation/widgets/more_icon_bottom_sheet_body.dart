@@ -130,17 +130,17 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
   Future<bool?> showDialogToCreateLockChatPassword(BuildContext context) async {
     TextEditingController passwordController = TextEditingController(text: '');
     return await showDialog(
-
       context: context,
       builder: ((context) => AlertDialog(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5.0),
             ),
             title: Label(
                 text: 'Lock chats password please',
                 style: Styles.headerText(
-                    fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColor)),
             content: Material(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxHeight: 100.0),

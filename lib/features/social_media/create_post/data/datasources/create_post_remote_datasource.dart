@@ -25,16 +25,16 @@ class CreatePostRemoteDataSourceImpl implements CreatePostRemoteDataSource {
   CreatePostRemoteDataSourceImpl(this._jsonParser, this._apiConsumer);
   @override
   Future<Either<Failure, List<ActivityEntity>>> getActivitiesList() async {
-      // final response = await _jsonParser.get(Jsons.activities);
-      // return response.fold(
-      //     (l) => Left(l),
-      //         (data) => Right((data['data']['items'] as List)
-      //         .map((e) => ActivityModel.fromJson(e))
-      //         .toList()));
+    // final response = await _jsonParser.get(Jsons.activities);
+    // return response.fold(
+    //     (l) => Left(l),
+    //         (data) => Right((data['data']['items'] as List)
+    //         .map((e) => ActivityModel.fromJson(e))
+    //         .toList()));
     final response = await _apiConsumer.get(EndPoints.activities);
     return response.fold(
-            (l) => Left(l),
-            (data) => Right((data['data'] as List)
+        (l) => Left(l),
+        (data) => Right((data['data'] as List)
             .map((e) => ActivityModel.fromJson(e))
             .toList()));
   }
@@ -49,8 +49,8 @@ class CreatePostRemoteDataSourceImpl implements CreatePostRemoteDataSource {
     //         .toList()));
     final response = await _apiConsumer.get(EndPoints.feelings);
     return response.fold(
-            (l) => Left(l),
-            (data) => Right((data['data'] as List)
+        (l) => Left(l),
+        (data) => Right((data['data'] as List)
             .map((e) => FeelingModel.fromJson(e))
             .toList()));
   }

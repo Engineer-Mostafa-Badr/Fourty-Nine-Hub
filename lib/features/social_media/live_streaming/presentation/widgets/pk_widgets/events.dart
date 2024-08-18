@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import '../zego/zego_uikit_prebuilt_live_streaming.dart';
 
-class PKEvents extends ChangeNotifier{
-   PKEvents({
+class PKEvents extends ChangeNotifier {
+  PKEvents({
     required this.requestIDNotifier,
     required this.requestingHostsMapRequestIDNotifier,
   });

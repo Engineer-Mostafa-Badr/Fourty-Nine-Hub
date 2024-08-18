@@ -117,20 +117,17 @@ class _CreatePostViewState extends State<CreatePostView> {
           padding: const EdgeInsets.all(10),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: state.images!.length == 1 ? 1 : 2),
-          itemCount:
-              state.images!.length < 4 ? state.images!.length : 4,
+          itemCount: state.images!.length < 4 ? state.images!.length : 4,
           itemBuilder: (context, index) => InkWell(
                 onTap: () {
-                  if (index != 3 ||
-                      (index == 3 && state.images!.length == 4)) {
+                  if (index != 3 || (index == 3 && state.images!.length == 4)) {
                     showDialog(
                         context: context,
                         builder: (context) => ImageDetailsScreen(
                               image: state.images![index].file.path,
                               isFile: true,
                               onRemoveImage: () {
-                                controller
-                                    .removePhoto(state.images![index]);
+                                controller.removePhoto(state.images![index]);
                                 context.pop();
                               },
                             ));

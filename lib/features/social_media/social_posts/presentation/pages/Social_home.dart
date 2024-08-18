@@ -34,7 +34,8 @@ class SocialHomeView extends StatefulWidget {
   State<SocialHomeView> createState() => _SocialHomeViewState();
 }
 
-class _SocialHomeViewState extends State<SocialHomeView> with SingleTickerProviderStateMixin{
+class _SocialHomeViewState extends State<SocialHomeView>
+    with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
@@ -45,7 +46,7 @@ class _SocialHomeViewState extends State<SocialHomeView> with SingleTickerProvid
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-          appBar:  const HomeAppbar(
+          appBar: const HomeAppbar(
             isWithBackArrow: true,
           ),
           drawer: const DrawerWidget(),
@@ -56,21 +57,23 @@ class _SocialHomeViewState extends State<SocialHomeView> with SingleTickerProvid
           floatingActionButton: const FloatingButton(
             changeView: 2,
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
               builder: (context, state) {
             return context.read<UserCubit>().isLoggedIn
-                ? NestedAppbar(
-                appBars: [
-                     SliverAppBar(
-                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                ? NestedAppbar(appBars: [
+                    SliverAppBar(
+                      backgroundColor:
+                          Theme.of(context).scaffoldBackgroundColor,
                       automaticallyImplyLeading: false,
                       floating: true,
                       // pinned: true,
                       flexibleSpace: const CreatePostBanner(),
                     ),
                     SliverAppBar(
-                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                      backgroundColor:
+                          Theme.of(context).scaffoldBackgroundColor,
                       automaticallyImplyLeading: false,
                       // floating: true,
                       pinned: true,
@@ -83,9 +86,8 @@ class _SocialHomeViewState extends State<SocialHomeView> with SingleTickerProvid
                     children: [
                       GestureDetector(
                           onTap: () => context.push(Routes.LOGIN),
-                          child: Label(
-                              text: 'Login',
-                              style: Styles.headerText())),
+                          child:
+                              Label(text: 'Login', style: Styles.headerText())),
                       Label(
                           text: ', To continue in using chat services',
                           style: Styles.headerText()),
@@ -98,24 +100,30 @@ class _SocialHomeViewState extends State<SocialHomeView> with SingleTickerProvid
   Widget _buildTabBar() {
     final user = context.read<UserCubit>().state.data;
     return Container(
-      padding: const EdgeInsets.all(10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: List.generate(2, (i) => GestureDetector(
-          onTap: (){
-            if(i==1){
-              context.push(Routes.OTHERSACCOUNT,extra: user?.id);
-            }
-          },
-          child: Container(
-            decoration: i==0?const BoxDecoration(
-              border: Border(bottom: BorderSide(color: Colors.blue,width: 2))
-            ):null,
-              child: Icon(i==0?Icons.home:Icons.person,color: i==0?Colors.blue:Theme.of(context).primaryColor,)
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: List.generate(
+            2,
+            (i) => GestureDetector(
+              onTap: () {
+                if (i == 1) {
+                  context.push(Routes.OTHERSACCOUNT, extra: user?.id);
+                }
+              },
+              child: Container(
+                  decoration: i == 0
+                      ? const BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(color: Colors.blue, width: 2)))
+                      : null,
+                  child: Icon(
+                    i == 0 ? Icons.home : Icons.person,
+                    color:
+                        i == 0 ? Colors.blue : Theme.of(context).primaryColor,
+                  )),
+            ),
           ),
-        ),
-      ),
-    ));
+        ));
   }
-
 }

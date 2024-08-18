@@ -66,7 +66,7 @@ class HealthEmergencyView extends StatelessWidget {
               const HealthEmergencySubCategoriesDropdown(),
               const Sizer(height: 30),
               DefaultTextFormField(
-                hintColor: AppColors.QUANTITY_COLOR,
+                  hintColor: AppColors.QUANTITY_COLOR,
                   currentFocusNode: emergencyCubit.locationFocusNode,
                   currentController: emergencyCubit.locationController,
                   isRequired: true,

@@ -1,4 +1,3 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -141,8 +140,8 @@ class _LoginViewState extends State<LoginView> {
                       ),
                       selectedAuth == AuthType.LOGIN
                           ? LoginWidget(
-                        loginCubit: loginCubit,
-                      )
+                              loginCubit: loginCubit,
+                            )
                           : const RegisterWidget()
                     ],
                   ),
@@ -150,27 +149,27 @@ class _LoginViewState extends State<LoginView> {
                     alignment: Alignment.bottomCenter,
                     child: selectedAuth == AuthType.REGISTER
                         ? DefaultButton(
-                      label: 'Register',
-                      width: double.infinity,
-                      onPressed: () {
-                        if (registerCubit.accept) {
-                          registerCubit.register;
-                        } else {
-                          showErrorMessage(
-                              context,
-                              getFailureMessage(
-                                  const ServerFailure(
-                                      message:
-                                      "Please accept the terms and conditions to continue."),
-                                  context));
-                        }
-                      },
-                    )
+                            label: 'Register',
+                            width: double.infinity,
+                            onPressed: () {
+                              if (registerCubit.accept) {
+                                registerCubit.register;
+                              } else {
+                                showErrorMessage(
+                                    context,
+                                    getFailureMessage(
+                                        const ServerFailure(
+                                            message:
+                                                "Please accept the terms and conditions to continue."),
+                                        context));
+                              }
+                            },
+                          )
                         : DefaultButton(
-                      width: double.infinity,
-                      label: 'Login',
-                      onPressed: loginCubit.login,
-                    ),
+                            width: double.infinity,
+                            label: 'Login',
+                            onPressed: loginCubit.login,
+                          ),
                   )
                 ],
               ),
@@ -183,9 +182,9 @@ class _LoginViewState extends State<LoginView> {
 
   chooseAuthWidget(
       {required bool active,
-        required String text,
-        required BorderRadius borderRadius,
-        void Function()? onTap}) {
+      required String text,
+      required BorderRadius borderRadius,
+      void Function()? onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -227,10 +226,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20),
-          style: const TextStyle(
-            fontSize: 16,
-            color: AppColors.QUANTITY_COLOR
-          ),
+          style: const TextStyle(fontSize: 16, color: AppColors.QUANTITY_COLOR),
           controller: widget.loginCubit.emailTextController,
           // label: 'E-mail or phone number',
           hint: 'Email Or Phone',
@@ -244,10 +240,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20),
-          style: const TextStyle(
-            fontSize: 16,
-            color: AppColors.QUANTITY_COLOR
-          ),
+          style: const TextStyle(fontSize: 16, color: AppColors.QUANTITY_COLOR),
           controller: widget.loginCubit.passwordTextController,
           // label: 'Password',
           hint: "Password",
@@ -379,53 +372,51 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             child: Column(
               children: [
                 FormTextField(
-                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: AppColors.QUANTITY_COLOR
-                  ),
+                      fontSize: 16, color: AppColors.QUANTITY_COLOR),
                   controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
                   hint: 'First Name',
-                  prefix:
-                  const Icon(Icons.person_2_rounded, color: AppColors.QUANTITY_COLOR),
+                  prefix: const Icon(Icons.person_2_rounded,
+                      color: AppColors.QUANTITY_COLOR),
                   action: (v) {},
                 ),
                 const Sizer(
                   height: 30,
                 ),
                 FormTextField(
-                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: AppColors.QUANTITY_COLOR
-                  ),
+                      fontSize: 16, color: AppColors.QUANTITY_COLOR),
                   controller: registerCubit.lastNameController,
                   // label: 'E-mail or phone number',
                   hint: 'Last Name',
-                  prefix:
-                  const Icon(Icons.person_2_rounded, color: AppColors.QUANTITY_COLOR),
+                  prefix: const Icon(Icons.person_2_rounded,
+                      color: AppColors.QUANTITY_COLOR),
                   action: (v) {},
                 ),
                 const Sizer(
                   height: 30,
                 ),
                 FormTextField(
-                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: AppColors.QUANTITY_COLOR
-                  ),
+                      fontSize: 16, color: AppColors.QUANTITY_COLOR),
                   controller: registerCubit.emailTextController,
                   // label: 'E-mail or phone number',
                   hint: 'Email Or Phone',
-                  prefix: const Icon(Icons.email, color: AppColors.QUANTITY_COLOR),
+                  prefix:
+                      const Icon(Icons.email, color: AppColors.QUANTITY_COLOR),
                   action: (v) {},
                 ),
                 const Sizer(
@@ -459,7 +450,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                       : Colors.white,
                                   textColor: registerCubit.isMale
                                       ? Colors.white
-                                      : Theme.of(context).scaffoldBackgroundColor,
+                                      : Theme.of(context)
+                                          .scaffoldBackgroundColor,
                                   label: 'Male')),
                           const SizedBox(
                             width: 7,
@@ -490,13 +482,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 ),
                 const Sizer(height: 30),
                 FormTextField(
-                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: AppColors.QUANTITY_COLOR
-                  ),
+                      fontSize: 16, color: AppColors.QUANTITY_COLOR),
                   controller: registerCubit.passwordTextController,
                   // label: 'Password',
                   hint: "Password",
@@ -518,13 +509,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30,
                 ),
                 FormTextField(
-                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: AppColors.QUANTITY_COLOR
-                  ),
+                      fontSize: 16, color: AppColors.QUANTITY_COLOR),
                   controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
                   hint: 'Referral Code(Optional)',
@@ -538,7 +528,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     ),
                     child: const Icon(
                       Icons.person,
-                      color:AppColors.QUANTITY_COLOR,
+                      color: AppColors.QUANTITY_COLOR,
                     ),
                   ),
                   action: (v) {},

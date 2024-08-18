@@ -1,3 +1,1 @@
-class PaginationController {
-  
-}
+class PaginationController {}

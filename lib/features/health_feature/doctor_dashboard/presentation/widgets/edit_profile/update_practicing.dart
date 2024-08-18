@@ -19,7 +19,9 @@ class UpdateDoctorPracticingCirtificateCard extends StatelessWidget {
           context: context,
           widget: EditDoctorDocsView(
             onSubmit: (DoctorDocsParams doctorDocsParams) {
-              context.read<EditDoctorProfileCubit>().updatePracticingCirtificate(doctorDocsParams);
+              context
+                  .read<EditDoctorProfileCubit>()
+                  .updatePracticingCirtificate(doctorDocsParams);
             },
           ),
         );

@@ -46,7 +46,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
           width: double.infinity,
           padding:
               const EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 20),
-          decoration:  BoxDecoration(
+          decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10),
@@ -178,7 +178,8 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                           child: Label(
                         text: state.toAddress?.address ??
                             'Select drop off location',
-                        style: Styles.mediumText(color: AppColors.QUANTITY_COLOR),
+                        style:
+                            Styles.mediumText(color: AppColors.QUANTITY_COLOR),
                         maxLines: 1,
                       )),
                     ],

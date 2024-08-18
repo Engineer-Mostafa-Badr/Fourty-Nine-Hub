@@ -30,6 +30,7 @@ class MeetingEndFailureState extends MeetingState {}
 class MeetingSurfaceShownState extends MeetingState {
   const MeetingSurfaceShownState();
 }
+
 class MeetingSurfaceHinddenState extends MeetingState {
   const MeetingSurfaceHinddenState();
 }

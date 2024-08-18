@@ -130,7 +130,6 @@ class _ZegoLiveStreamingLivePageSurfaceState
 
   Widget body(MeetingState state) {
     return BlocBuilder<MeetingCubit, MeetingState>(
-      
       builder: (context, state) {
         return LayoutBuilder(builder: (context, constraints) {
           return Stack(

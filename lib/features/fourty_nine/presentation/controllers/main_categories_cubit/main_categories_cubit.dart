@@ -15,7 +15,6 @@ class MainCategoriesCubit extends Cubit<BasicState<List<MainCategoryEntity>>> {
     this._getMainCategoriesUseCase,
   ) : super(const BasicState());
 
-
   Future<void> loadData() async {
     if (_fourtyNineSharedData.mainCategories.isEmpty) {
       emit(state.copyWith(status: StateStatus.loading));

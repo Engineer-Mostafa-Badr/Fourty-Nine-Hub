@@ -20,12 +20,14 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   final SocialPostsRemoteDataSource _remoteDataSource;
   SocialPostsRepoImpl(this._remoteDataSource);
   @override
-  Future<Either<Failure, List<PostEntity>>> getFeed({required TwitterFeedParams params}) {
+  Future<Either<Failure, List<PostEntity>>> getFeed(
+      {required TwitterFeedParams params}) {
     return _remoteDataSource.getFeed(params: params);
   }
 
   @override
-  Future<Either<Failure, List<PostEntity>>> getAdvertisement({required TwitterFeedParams params}) {
+  Future<Either<Failure, List<PostEntity>>> getAdvertisement(
+      {required TwitterFeedParams params}) {
     return _remoteDataSource.getAdvertisement(params: params);
   }
 
@@ -41,7 +43,8 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> reactOnComment({required PostReactParams params}) {
+  Future<Either<Failure, bool>> reactOnComment(
+      {required PostReactParams params}) {
     return _remoteDataSource.reactOnComment(params: params);
   }
 
@@ -69,11 +72,12 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
 
   @override
   Future<Either<Failure, bool>> hidePost({required String postId}) {
-    return _remoteDataSource.hidePost(postId  : postId);
+    return _remoteDataSource.hidePost(postId: postId);
   }
 
   @override
-  Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends({required SuggestedFriendsParams params}) {
+  Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends(
+      {required SuggestedFriendsParams params}) {
     return _remoteDataSource.suggestedFriends(params: params);
   }
 
@@ -101,43 +105,48 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   Future<Either<Failure, bool>> unFollow({required String userId}) {
     return _remoteDataSource.unFollow(userId: userId);
   }
+
   @override
   Future<Either<Failure, bool>> sendGreetMessage({required String userId}) {
     return _remoteDataSource.sendGreetMessage(userId: userId);
   }
+
   @override
   Future<Either<Failure, bool>> removeSuggestUser({required String userId}) {
     return _remoteDataSource.removeSuggestUser(userId: userId);
   }
 
-
   @override
   Future<Either<Failure, bool>> sharePost({required String postId}) {
-    return _remoteDataSource.sharePost( params: postId);
+    return _remoteDataSource.sharePost(params: postId);
   }
 
   @override
-  Future<Either<Failure, List<CommentEntity>>> getPostCommentReplies({required PostCommentsParams params}) {
+  Future<Either<Failure, List<CommentEntity>>> getPostCommentReplies(
+      {required PostCommentsParams params}) {
     return _remoteDataSource.getPostCommentReplies(params: params);
   }
+
   @override
-  Future<Either<Failure, CommentEntity>> replyOnComment({required ReplyOnCommentParams params}) {
+  Future<Either<Failure, CommentEntity>> replyOnComment(
+      {required ReplyOnCommentParams params}) {
     return _remoteDataSource.replyOnComment(params: params);
   }
 
   @override
-  Future<Either<Failure, List<PostEntity>>> getTweet({required TwitterFeedParams params}) {
+  Future<Either<Failure, List<PostEntity>>> getTweet(
+      {required TwitterFeedParams params}) {
     return _remoteDataSource.getTweet(params: params);
   }
 
   @override
   Future<Either<Failure, PostEntity>> getPost({required String postId}) {
     return _remoteDataSource.getPost(postId: postId);
-
   }
 
   @override
-  Future<Either<Failure, UserProfileEntity>> getUserProfile({required String params}) {
+  Future<Either<Failure, UserProfileEntity>> getUserProfile(
+      {required String params}) {
     return _remoteDataSource.getUserProfile(userId: params);
   }
 }

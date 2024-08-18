@@ -34,8 +34,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.showChat = true,
     this.isIconWhite = false,
     this.showLanguage = false,
-    this.color=AppColors.PRIMARY_COLOR,
-
+    this.color = AppColors.PRIMARY_COLOR,
   });
 
   @override
@@ -71,9 +70,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               height: 35,
               padding: const EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: AppColors.AUTH_CONTAINER_COLOR
-              ),
+                  borderRadius: BorderRadius.circular(20),
+                  color: AppColors.AUTH_CONTAINER_COLOR),
               child: InkWell(
                 borderRadius: BorderRadius.circular(20),
                 onTap: () {},
@@ -86,7 +84,10 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                     const SizedBox(width: 5),
                     Expanded(
-                      child: Label(text: 'Search', style: Styles.mediumText(color: AppColors.QUANTITY_COLOR)),
+                      child: Label(
+                          text: 'Search',
+                          style: Styles.mediumText(
+                              color: AppColors.QUANTITY_COLOR)),
                     ),
                   ],
                 ),
@@ -101,11 +102,12 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: TextAppButton(
                   label: LocaleKeys.lang.tr(),
-                  style: Styles.mediumText(color: AppColors.SECONDARY_COLOR,fontSize: 20),
+                  style: Styles.mediumText(
+                      color: AppColors.SECONDARY_COLOR, fontSize: 20),
                   onPressed: () {
                     context.locale == Locales.english
                         ? changeLang(locale: Locales.arabic)
-                        :  changeLang(locale: Locales.english);
+                        : changeLang(locale: Locales.english);
                   })),
           Stack(
             children: [

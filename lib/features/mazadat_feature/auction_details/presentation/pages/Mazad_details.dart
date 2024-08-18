@@ -66,16 +66,16 @@ class _MazadDetailsState extends State<MazadDetails> {
               : ((state.auction?.isMine ?? false) &&
                       (state.auction?.isFinished ?? false))
                   ? AppButton(
-              color: AppColors.AUTH_CONTAINER_COLOR,
-              margin: 10,
+                      color: AppColors.AUTH_CONTAINER_COLOR,
+                      margin: 10,
                       label: Labels.biddings,
                       onPressed: () {
                         controller.showAuctionRequests(
                             id: widget.id, context: context);
                       })
                   : AppButton(
-              color: AppColors.AUTH_CONTAINER_COLOR,
-              margin: 10,
+                      color: AppColors.AUTH_CONTAINER_COLOR,
+                      margin: 10,
                       label: Labels.placeBidding,
                       onPressed: () {
                         bottomSheet(
@@ -131,8 +131,16 @@ class _MazadDetailsState extends State<MazadDetails> {
                         : AppColors.AUTH_CONTAINER_COLOR),
                 child: Row(
                   children: [
-                    Expanded(child: Label(text: detail.label,color: AppColors.QUANTITY_COLOR,)),
-                    Expanded(child: Label(text: detail.value,color: AppColors.QUANTITY_COLOR,)),
+                    Expanded(
+                        child: Label(
+                      text: detail.label,
+                      color: AppColors.QUANTITY_COLOR,
+                    )),
+                    Expanded(
+                        child: Label(
+                      text: detail.value,
+                      color: AppColors.QUANTITY_COLOR,
+                    )),
                   ],
                 ),
               );

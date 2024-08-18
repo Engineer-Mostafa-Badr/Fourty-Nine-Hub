@@ -32,7 +32,10 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
               currentFocusNode: doctorSubcategoryFilter.searchFocusNode,
               currentController: doctorSubcategoryFilter.searchController,
               hint: Labels.search,
-              prefixIcon:  const Icon(Icons.search,color: AppColors.QUANTITY_COLOR,),
+              prefixIcon: const Icon(
+                Icons.search,
+                color: AppColors.QUANTITY_COLOR,
+              ),
               onChanged: (value) => doctorSubcategoryFilter.search(value),
             ),
             const Sizer(

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
-import 'package:fourtyninehub/features/trip_join/presentation/views/button.dart';
+import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/button.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class DestinationTextFieldAndFindButon extends StatelessWidget {
   const DestinationTextFieldAndFindButon({
@@ -18,6 +19,11 @@ class DestinationTextFieldAndFindButon extends StatelessWidget {
             child: DefaultTextFormField(
               currentController: TextEditingController(),
               hint: 'Find your destination point..!',
+              suffixIcon: const Icon(
+                Icons.check,
+                color: AppColors.CHECK_MARK_COLOR,
+                size: 30,
+              ),
             ),
           ),
           const Sizer(width: 5),

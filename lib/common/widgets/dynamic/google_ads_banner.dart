@@ -25,10 +25,11 @@ class GoogleAddsBanner extends StatelessWidget {
                 spreadRadius: 5,
               )
             ]),
-        child: const Center(child: Label(text: 'Ads',style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold
-        ),))
+        child: const Center(
+            child: Label(
+          text: 'Ads',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ))
         // AdmobBanner(
         //         adUnitId: UIConst.adHomeUnitId,
         //         adSize: AdmobBannerSize.BANNER,

@@ -17,7 +17,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unlock_chat_usecase.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 
-
 part 'chats_state.dart';
 
 class ChatsCubit extends Cubit<ChatsState> {
@@ -90,7 +89,6 @@ class ChatsCubit extends Cubit<ChatsState> {
             .map((e) => _chats.update(e.sId!, (value) => e, ifAbsent: () => e))
             .toList();
 
-
         // to listen typing and online emit event status
         List<UserStatusParams> userStatusParams = [];
         for (var item in _chats.values) {
@@ -105,8 +103,8 @@ class ChatsCubit extends Cubit<ChatsState> {
 
         unReadMessage = data.totalUnread ?? 0;
 
-        return emit
-            .call(state.copyWith(chats: data.chats, status: ChatsStates.initState));
+        return emit.call(
+            state.copyWith(chats: data.chats, status: ChatsStates.initState));
       });
     }
   }

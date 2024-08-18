@@ -4,7 +4,8 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/social_posts_repo.dart';
 
-class GetInstagramUserReelsUseCase extends UseCase<List<PostEntity>, UserReelsParams> {
+class GetInstagramUserReelsUseCase
+    extends UseCase<List<PostEntity>, UserReelsParams> {
   final InstagramRepo _repo;
   GetInstagramUserReelsUseCase(this._repo);
   @override
@@ -23,8 +24,8 @@ class UserReelsParams {
     required this.userId,
   });
   Map<String, dynamic> toJson() => {
-    'page': page,
-    'limit': limit,
-    // 'subCategory':'66b77e77bb35968b535dc944'
-  };
+        'page': page,
+        'limit': limit,
+        // 'subCategory':'66b77e77bb35968b535dc944'
+      };
 }

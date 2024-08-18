@@ -36,7 +36,8 @@ class EndPoints {
   // static const report = '/report?subCategory=66a3583454e6e337915514db';
   static String report({required String subCategoryId}) =>
       '/report?subCategory=$subCategoryId';
-  static const documentRequest = '/twitter/document-request?subCategory=66a3583454e6e337915514db';
+  static const documentRequest =
+      '/twitter/document-request?subCategory=66a3583454e6e337915514db';
   // ride
   //shipping
   static String bannerData = "$developmentBaseUrl/loading/driver/subcategory";
@@ -175,6 +176,7 @@ class EndPoints {
   static String getReels(TwitterFeedParams params) {
     return '/reels/explore?limit=${params.limit}&page=${params.page}';
   }
+
   static String getUserReels(UserReelsParams params) {
     return '/reels/users/${params.userId}?limit=${params.limit}&page=${params.page}';
   }

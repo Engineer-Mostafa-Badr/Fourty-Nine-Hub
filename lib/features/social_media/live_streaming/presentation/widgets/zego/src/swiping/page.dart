@@ -18,7 +18,6 @@ import 'login_notifier.dart';
 
 // Project imports:
 
-
 /// The encapsulation layer of the "Live Streaming Widget" includes the
 /// functionality of swiping up and down to switch between live streams.
 class ZegoLiveStreamingSwipingPage extends StatefulWidget {

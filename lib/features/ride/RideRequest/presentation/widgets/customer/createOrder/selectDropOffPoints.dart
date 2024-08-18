@@ -39,7 +39,7 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
         return Container(
           height: height * .7,
           padding: const EdgeInsets.all(10),
-          decoration:  BoxDecoration(
+          decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(15), topLeft: Radius.circular(15))),
@@ -58,8 +58,8 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                     },
                     child: const CircleAvatar(
                         child: Icon(
-                          Icons.clear,
-                        )),
+                      Icons.clear,
+                    )),
                   )
                 ],
               ),
@@ -85,9 +85,7 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                     Expanded(
                         child: Text(
                       state.fromAddress?.address ?? 'Select Pickup location',
-                      style: const TextStyle(
-                        color: AppColors.QUANTITY_COLOR
-                      ),
+                      style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                       maxLines: 1,
                     )),
                   ],

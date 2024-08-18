@@ -1,4 +1,3 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -194,9 +193,8 @@ class _RegisterViewState extends State<RegisterView> {
                     children: [
                       Expanded(
                         child: AppButton(
-                          style: const TextStyle(
-                              color: AppColors.QUANTITY_COLOR
-                          ),
+                          style:
+                              const TextStyle(color: AppColors.QUANTITY_COLOR),
                           label: 'Google',
                           backColor: AppColors.LIGHT_GRAY_COLOR,
                           textColor: Colors.black,
@@ -207,9 +205,8 @@ class _RegisterViewState extends State<RegisterView> {
                       const Sizer(),
                       Expanded(
                         child: AppButton(
-                          style: const TextStyle(
-                              color: AppColors.QUANTITY_COLOR
-                          ),
+                          style:
+                              const TextStyle(color: AppColors.QUANTITY_COLOR),
                           label: 'Facebook',
                           backColor: AppColors.LIGHT_GRAY_COLOR,
                           textColor: Colors.black,
@@ -246,6 +243,6 @@ class _RegisterViewState extends State<RegisterView> {
       ),
     );
   }
-  void _toggleLogin() => setState(() => _obscureTextLogin = !_obscureTextLogin);
 
+  void _toggleLogin() => setState(() => _obscureTextLogin = !_obscureTextLogin);
 }

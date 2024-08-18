@@ -20,13 +20,14 @@ class ProfileImage extends StatelessWidget {
       this.size = 15,
       this.withBorder = false,
       this.imageURL,
-      this.borderColor = AppColors.SECONDARY_COLOR, this.fromProfile=false});
+      this.borderColor = AppColors.SECONDARY_COLOR,
+      this.fromProfile = false});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if(fromProfile==false){
+        if (fromProfile == false) {
           context.push(Routes.OTHERSACCOUNT);
         }
       },

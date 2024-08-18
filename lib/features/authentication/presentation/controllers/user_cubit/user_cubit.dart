@@ -65,9 +65,9 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     result.fold(
       (_) {},
       (tokens) {
-        if(tokens ==null){
+        if (tokens == null) {
           return;
-        }else {
+        } else {
           token = tokens.accessToken.toString();
         }
         _attachTokenUseCase(tokens);

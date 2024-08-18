@@ -29,7 +29,8 @@ class DashboardBanner extends StatelessWidget {
                   TextSpan(
                     text: '$title ',
                     style: Styles.mediumText(
-                        color: Theme.of(context).scaffoldBackgroundColor, fontWeight: FontWeight.bold),
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        fontWeight: FontWeight.bold),
                   ),
                   TextSpan(
                     text: subTitle,
@@ -39,7 +40,7 @@ class DashboardBanner extends StatelessWidget {
                   ),
                 ])),
               ),
-               Icon(
+              Icon(
                 Icons.arrow_forward_ios_outlined,
                 color: Theme.of(context).scaffoldBackgroundColor,
               ),

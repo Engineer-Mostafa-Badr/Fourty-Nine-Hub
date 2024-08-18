@@ -58,7 +58,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                       Labels.regular,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: !_isPremium ? Colors.white : Theme.of(context).primaryColor,
+                        color: !_isPremium
+                            ? Colors.white
+                            : Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

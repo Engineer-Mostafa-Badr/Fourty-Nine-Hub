@@ -58,8 +58,9 @@ class DoctorTodayAppointmentsWidget extends StatelessWidget {
               } else {
                 return Center(
                     child: Text(
-                      'No Appointments',
-                  style: Styles.headerText(color: Theme.of(context).scaffoldBackgroundColor),
+                  'No Appointments',
+                  style: Styles.headerText(
+                      color: Theme.of(context).scaffoldBackgroundColor),
                 ));
               }
             },
@@ -77,10 +78,9 @@ class DoctorAppointmentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(appointment.type.translatedName,
-      style: TextStyle(
-        color: Theme.of(context).primaryColor
-      ),
+      title: Text(
+        appointment.type.translatedName,
+        style: TextStyle(color: Theme.of(context).primaryColor),
       ),
       subtitle: Text(appointment.time),
     );

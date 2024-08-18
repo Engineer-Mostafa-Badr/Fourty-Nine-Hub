@@ -31,7 +31,8 @@ class DefaultTextFormField extends MainTextFormField {
     final String? Function(String?)? validator,
     super.onChanged,
   }) : super(
-          validator: validator ?? (isRequired ? Validator().validateEmptyField : null),
+          validator:
+              validator ?? (isRequired ? Validator().validateEmptyField : null),
           hintText: hint + (isRequired ? '*' : ''),
           textCapitalization: TextCapitalization.words,
           maxLength: maxLines,

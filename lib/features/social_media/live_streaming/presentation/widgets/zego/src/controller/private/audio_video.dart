@@ -1,4 +1,3 @@
-
 import '../../../zego_uikit_prebuilt_live_streaming.dart';
 import '../audio_video.dart';
 
@@ -17,9 +16,12 @@ class ZegoLiveStreamingControllerAudioVideoImplPrivateImpl {
   final _microphone = ZegoLiveStreamingControllerAudioVideoMicrophoneImpl();
   final _camera = ZegoLiveStreamingControllerAudioVideoCameraImpl();
   final _audioOutput = ZegoLiveStreamingControllerAudioVideoAudioOutputImpl();
-  ZegoLiveStreamingControllerAudioVideoMicrophoneImpl get microphone => _microphone;
+  ZegoLiveStreamingControllerAudioVideoMicrophoneImpl get microphone =>
+      _microphone;
   ZegoLiveStreamingControllerAudioVideoCameraImpl get camera => _camera;
-  ZegoLiveStreamingControllerAudioVideoAudioOutputImpl get audioOutput => _audioOutput;
+  ZegoLiveStreamingControllerAudioVideoAudioOutputImpl get audioOutput =>
+      _audioOutput;
+
   /// Please do not call this interface. It is the internal logic of Prebuilt.
   void initByPrebuilt({
     required ZegoUIKitPrebuiltLiveStreamingConfig? config,

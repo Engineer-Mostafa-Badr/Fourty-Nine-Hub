@@ -7,8 +7,8 @@ import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_
 class PostModel extends PostEntity {
   PostModel(
       {required super.id,
-          super.content,
-          super.createdAt,
+      super.content,
+      super.createdAt,
       required super.type,
       super.angryCount,
       super.commentsCount,
@@ -50,7 +50,7 @@ class PostModel extends PostEntity {
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
         id: json['_id'],
-        content: json['content']??'',
+        content: json['content'] ?? '',
         type: json['type'] ?? '',
         images: json['media'] != null
             ? List<String>.from(
@@ -80,13 +80,15 @@ class PostModel extends PostEntity {
             ? FeelingModel.fromJson(json['feeling'])
             : null,
         mainPost: json['mainPost'] != null
-            ? MainPostModel.fromJson(json['mainPost'] )
+            ? MainPostModel.fromJson(json['mainPost'])
             : null,
-        user: json['user'] == null?null:json['user'] is String
-            ? json['user']
-            : TwitterUserModel.fromJson(json['user']),
-        privacy: json['privacy']??0,
-        commentPrivacy: json['commentPrivacy']??0,
+        user: json['user'] == null
+            ? null
+            : json['user'] is String
+                ? json['user']
+                : TwitterUserModel.fromJson(json['user']),
+        privacy: json['privacy'] ?? 0,
+        commentPrivacy: json['commentPrivacy'] ?? 0,
         sharesCount: json['sharesCount'] ?? 0,
         likesCount: json['likesCount'] ?? 0,
         loveCount: json['loveCount'] ?? 0,
@@ -95,14 +97,18 @@ class PostModel extends PostEntity {
         angryCount: json['angryCount'] ?? 0,
         hahaCount: json['hahaCount'] ?? 0,
         totalCount: json['totalCount'] ?? 0,
-        createdAt:json['createdAt']!=null? DateTime.parse(json['createdAt']):null,
+        createdAt: json['createdAt'] != null
+            ? DateTime.parse(json['createdAt'])
+            : null,
         shares: json['shares'] != null ? List<String>.from(json['shares']) : [],
         commentsCount: json['commentsCount'] ?? 0,
         comments:
             json['comments'] != null ? List<String>.from(json['comments']) : [],
-        love:json['love']==null?null: (json['love'] as List)
-            .map((e) => TwitterUserModel.fromJson(e))
-            .toList(),
+        love: json['love'] == null
+            ? null
+            : (json['love'] as List)
+                .map((e) => TwitterUserModel.fromJson(e))
+                .toList(),
         photo: json['photo'] ?? '',
         backgroundColor: json['background_color']);
   }

@@ -33,33 +33,34 @@ class FormTextField extends StatefulWidget {
   final TextStyle? textStyle;
   const FormTextField(
       {super.key,
-        this.initialValue,
-        this.hintStyle,
-        this.action,
-        this.obsecure,
-        this.borderRadius,
-        this.prefix,
-        this.noBorder = false,
-        this.constraints,
-        this.fillColor,
-        this.hint,
-        this.label,
-        this.info,
-        this.autofill,
-        this.suffix,
-        this.type,
-        this.isEmail,
-        this.enabled,
-        this.onConfirm,
-        this.textAlignVertical,
-        this.extraValidationMessage,
-        this.extraValidation,
-        this.onTap,
-        this.height,
-        this.maxLines,
-        this.style,
-        this.required,
-        this.controller, this.textStyle});
+      this.initialValue,
+      this.hintStyle,
+      this.action,
+      this.obsecure,
+      this.borderRadius,
+      this.prefix,
+      this.noBorder = false,
+      this.constraints,
+      this.fillColor,
+      this.hint,
+      this.label,
+      this.info,
+      this.autofill,
+      this.suffix,
+      this.type,
+      this.isEmail,
+      this.enabled,
+      this.onConfirm,
+      this.textAlignVertical,
+      this.extraValidationMessage,
+      this.extraValidation,
+      this.onTap,
+      this.height,
+      this.maxLines,
+      this.style,
+      this.required,
+      this.controller,
+      this.textStyle});
 
   @override
   State<FormTextField> createState() => _FormTextFieldState();
@@ -76,10 +77,11 @@ class _FormTextFieldState extends State<FormTextField> {
           height: widget.maxLines != null
               ? null
               : validate
-              ? (widget.height ?? kToolbarHeight) * 1.5
-              : widget.height ?? kToolbarHeight,
+                  ? (widget.height ?? kToolbarHeight) * 1.5
+                  : widget.height ?? kToolbarHeight,
           child: TextFormField(
-            style:widget.textStyle?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
+            style: widget.textStyle ??
+                Styles.mediumText(color: AppColors.QUANTITY_COLOR),
             textAlignVertical: widget.textAlignVertical,
             maxLines: widget.maxLines ?? 1,
             onFieldSubmitted: (v) {
@@ -131,21 +133,21 @@ class _FormTextFieldState extends State<FormTextField> {
               enabledBorder: widget.noBorder
                   ? InputBorder.none
                   : OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: AppColors.LIGHT_GRAY_COLOR,
-                ),
-                borderRadius:
-                widget.borderRadius ?? BorderRadius.circular(10),
-              ),
+                      borderSide: const BorderSide(
+                        color: AppColors.LIGHT_GRAY_COLOR,
+                      ),
+                      borderRadius:
+                          widget.borderRadius ?? BorderRadius.circular(10),
+                    ),
               focusedBorder: widget.noBorder
                   ? InputBorder.none
                   : OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: AppColors.PRIMARY_COLOR,
-                ),
-                borderRadius:
-                widget.borderRadius ?? BorderRadius.circular(10),
-              ),
+                      borderSide: const BorderSide(
+                        color: AppColors.PRIMARY_COLOR,
+                      ),
+                      borderRadius:
+                          widget.borderRadius ?? BorderRadius.circular(10),
+                    ),
               errorBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
                   color: Colors.red,
@@ -155,12 +157,12 @@ class _FormTextFieldState extends State<FormTextField> {
               focusedErrorBorder: widget.noBorder
                   ? InputBorder.none
                   : OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.red,
-                ),
-                borderRadius:
-                widget.borderRadius ?? BorderRadius.circular(10),
-              ),
+                      borderSide: const BorderSide(
+                        color: Colors.red,
+                      ),
+                      borderRadius:
+                          widget.borderRadius ?? BorderRadius.circular(10),
+                    ),
             ),
           ),
         ),
@@ -178,9 +180,9 @@ class _FormTextFieldState extends State<FormTextField> {
                 const Sizer(),
                 Expanded(
                     child: Label(
-                      text: widget.info ?? '',
-                      style: Styles.smallText(color: Colors.grey),
-                    ))
+                  text: widget.info ?? '',
+                  style: Styles.smallText(color: Colors.grey),
+                ))
               ],
             ),
           )

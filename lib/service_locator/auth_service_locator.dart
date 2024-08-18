@@ -99,14 +99,9 @@ class AuthServiceLocator {
       ),
     );
     serviceLocator.registerSingleton(
-      UserCubit(
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator()
-      )..attachToken(),
+      UserCubit(serviceLocator(), serviceLocator(), serviceLocator(),
+          serviceLocator(), serviceLocator(), serviceLocator())
+        ..attachToken(),
     );
 
     serviceLocator.registerFactory(

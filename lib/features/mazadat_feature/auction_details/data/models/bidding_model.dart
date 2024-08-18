@@ -1,4 +1,3 @@
-
 import '../../../../authentication/data/models/user_model.dart';
 import '../../domain/entities/bidding_entity.dart';
 
