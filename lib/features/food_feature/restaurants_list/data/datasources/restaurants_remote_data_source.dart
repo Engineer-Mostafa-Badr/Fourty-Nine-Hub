@@ -110,6 +110,6 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
         .get(EndPoints.getAllRestaurantWithMenu(params: params));
     return response.fold(
             (failure) => Left(failure),
-            (data) => Right(List.from(data["data"].map((e)=> Restaurant2Model.fromJson(e)).toList)));
+            (data) => Right(List<Restaurant2Model>.from(data["data"].map((e)=> Restaurant2Model.fromJson(e)).toList)));
   }
 }

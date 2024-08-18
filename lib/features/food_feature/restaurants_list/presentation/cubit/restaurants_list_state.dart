@@ -1,11 +1,12 @@
 part of 'restaurants_list_cubit.dart';
 
-enum RestaurantsListStates { initState, loading, error }
+enum RestaurantsListStates { initState, loading, error,success }
 
 extension RestaurantsListStateX on RestaurantsListState {
   bool get isInitial => status == RestaurantsListStates.initState;
   bool get isLoading => status == RestaurantsListStates.loading;
   bool get isError => status == RestaurantsListStates.error;
+  bool get isSuccess => status == RestaurantsListStates.success;
 }
 
 @immutable

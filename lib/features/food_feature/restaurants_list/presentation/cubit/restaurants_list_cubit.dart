@@ -54,14 +54,19 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
   final service = MainServicesEnum.food;
 
   // final user = UserCubit.to.state.data;
-
+@override
+  void onChange(Change<RestaurantsListState> change) {
+    print(change.currentState.status);
+    print(change.nextState.status);
+    super.onChange(change);
+  }
   void loadData() async {
     Future.wait([
       _getMainCategoryDetails(),
       _isDoctor(),
       _getMealCategoriesWithCountRestaurants(),
       _getAllRestaurant(),
-      getNearByRestaurants(),
+      // getNearByRestaurants(),
       // getNearByRestaurants(),
       getNumOfRestaurants(),
     ]);
@@ -129,12 +134,15 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
   }
 
   Future<void> getSubCategoryRestaurants({required String id}) async {
+    emit(state.copyWith(
+      status: RestaurantsListStates.loading,
+    ));
     final response = await _getSubCategoryRestaurantsUseCases(id);
     response.fold(
         (failure) => emit(state.copyWith(
             failure: failure, status: RestaurantsListStates.error)), (data) {
       emit(state.copyWith(
-          subCategories: data, status: RestaurantsListStates.initState));
+          subCategories: data, status: RestaurantsListStates.success));
     });
   }
 
