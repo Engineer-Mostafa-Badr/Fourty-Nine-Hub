@@ -21,10 +21,10 @@ class MainPostModel extends MainPostEntity {
         id: json['_id'],
         content: json['content']??'',
         type: json['type'] ?? '',
-        // images: json['media'] != null
-        //     ? List<String>.from(
-        //         json['media'].map((mediaItem) => mediaItem['photo']))
-        //     : null,
+        images: json['media'] != null
+            ? List<String>.from(
+                json['media'].map((mediaItem) => mediaItem['photo']))
+            : null,
         isShared: json['isShared'] ?? false,
         isDocumentation: json['twitter_documentation'] ?? false,
         activity: json['activity'] != null

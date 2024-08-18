@@ -174,10 +174,13 @@ class _UserPostCardState extends State<UserPostCard> {
                         ),
                       Expanded(
                         child: _buildReactionPlaceHolder(
-                            icon: Icons.chat_rounded,
+                            icon: Icons.share,
                             label: 'Share',
-                            onTap: () {
-                              controller.onShare(postId: myPost.id);
+                            onTap: () async{
+                              var result = await controller.onShare(postId: myPost.isShared==true?myPost.mainPost!.id:myPost.id);
+                              if(result == true){
+                                showSuccessMessage(context, 'Post shared successfully');
+                              }
                             }),
                       ),
                     ],
@@ -214,10 +217,9 @@ class _UserPostCardState extends State<UserPostCard> {
 
   Widget _buildPostOptions({required bool fromDetails,required PostEntity post}) {
     return SizedBox(
-      height: widget.isMyPost ? 150 : 80,
+      height:  150 ,
       child: Column(
         children: [
-          if (widget.isMyPost)
             listTile(
                 icon: Icons.delete,
                 title: 'Delete Post',

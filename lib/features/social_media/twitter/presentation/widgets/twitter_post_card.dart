@@ -263,7 +263,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
       children: [
         if (label != null) ReadMoreLabel(text: label),
         const Sizer(),
-        if ((widget.post.images?.isNotEmpty ?? false))
+        if ((widget.post.images!.isNotEmpty ))
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.42,
             child: GridView.builder(
@@ -333,22 +333,8 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               ),
             ),
           ),
-        if (image != '')
-          Container(
-            height: 200,
-            width: double.infinity,
-            decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    spreadRadius: 12,
-                    blurRadius: 8,
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(25),
-                image: DecorationImage(
-                    image: NetworkImage(image!), fit: BoxFit.fill)),
-          ),
+
+
       ],
     );
   }
@@ -531,7 +517,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             ],
           ),
         ),
-        IconButton(
+        if(post.isShared==false)...[IconButton(
           onPressed: () {
             bottomSheet(
               context: context,
@@ -554,7 +540,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 widget:
                     _buildPostOptions(isMyPost: (post.user.id == user!.id)));
           },
-        ),
+        ),]
       ],
     );
   }

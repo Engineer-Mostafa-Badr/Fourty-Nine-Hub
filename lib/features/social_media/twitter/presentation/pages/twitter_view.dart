@@ -23,6 +23,7 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_post_comments.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -69,7 +70,7 @@ class _TwitterViewState extends State<TwitterView> {
           }),
         ),
         PositionedDirectional(
-          bottom: 70,
+          bottom: 10,
           end: 10,
           child: FloatingActionButton(
             backgroundColor: Colors.red,
@@ -178,31 +179,34 @@ class _TwitterViewState extends State<TwitterView> {
                           bottomSheet(
                             context: context,
                             isScrollControlled: true,
-                            widget: TwitterPostComments(
-                              comments: const [],
-                              postId: controller.postsPagingController.itemList![index].id,
-                              user: user,
-                              onAddComment: (TwitterPostCommentParams params) =>
-                                  controller.onPostComment(params: params),
-                              onAddReply: (TwitterCommentReplyParams params) {
-                                controller.onCommentReply(params: params);
-                              },
-                              onCommentReact: (TwitterCommentReactParams params) {
-                                controller.onCommentReact(params: params);
-                              },
-                              onGetReplies: (String id, TwitterPostCommentEntity comment) async {
-                                // getCommentReplies(
-                                //   context: context,
-                                //   commentId: id,
-                                //   comment: comment,
-                                //   postId: postId, userData: userData,
-                                // );
-                              },
-                              newCommentId: '',
-                              state: state,
-                              onReport: (TwitterReportParams params) {
-                                controller.onReport(params);
-                              },
+                            widget: BlocProvider.value(
+                              value: serviceLocator<TwitterCubit>()..loadComments(context, controller.postsPagingController.itemList![index].id),
+                              child: TwitterPostComments(
+                                comments: const [],
+                                postId: controller.postsPagingController.itemList![index].id,
+                                user: user,
+                                onAddComment: (TwitterPostCommentParams params) =>
+                                    controller.onPostComment(params: params),
+                                onAddReply: (TwitterCommentReplyParams params) {
+                                  controller.onCommentReply(params: params);
+                                },
+                                onCommentReact: (TwitterCommentReactParams params) {
+                                  controller.onCommentReact(params: params);
+                                },
+                                onGetReplies: (String id, TwitterPostCommentEntity comment) async {
+                                  // getCommentReplies(
+                                  //   context: context,
+                                  //   commentId: id,
+                                  //   comment: comment,
+                                  //   postId: postId, userData: userData,
+                                  // );
+                                },
+                                newCommentId: '',
+                                state: state,
+                                onReport: (TwitterReportParams params) {
+                                  controller.onReport(params);
+                                },
+                              ),
                             ),
 
                           );

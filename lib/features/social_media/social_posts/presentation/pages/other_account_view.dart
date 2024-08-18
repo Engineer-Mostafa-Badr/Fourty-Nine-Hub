@@ -145,7 +145,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     ),
                   ],
                 ),
-                SliverAppBar(
+                if(state.profileData?.isBlock==false)SliverAppBar(
                   automaticallyImplyLeading: false,
                   floating: false,
                   backgroundColor: Colors.white,
@@ -170,7 +170,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                       ]),
                 ),
               ],
-              body: _buildAccountPages(state.profileData!),
+              body: state.profileData?.isBlock==false?_buildAccountPages(state.profileData!):const Center(child: Label(text: 'You have blocked this user.',),),
             );
           }
         ),

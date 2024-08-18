@@ -465,7 +465,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     });
   }
 
-  void deletePost(
+  Future<void> deletePost(
       {required BuildContext context, required String postId}) async {
     final response = await _deletePostUseCase(postId);
     response.fold(
@@ -499,7 +499,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     return result;
   }
 
-  void hidePost({required BuildContext context, required String postId}) async {
+  Future<void> hidePost({required BuildContext context, required String postId}) async {
     final response = await _hidePostUseCase(postId);
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),

@@ -52,7 +52,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons> with Sing
             value: null,
             icon: _buildReactionPlaceholder(),
           ),
-          itemsSpacing: 10,
+          itemsSpacing: 0,
           itemSize: const Size(40, 40),
           reactions: _buildReactionsList(),
           selectedReaction:

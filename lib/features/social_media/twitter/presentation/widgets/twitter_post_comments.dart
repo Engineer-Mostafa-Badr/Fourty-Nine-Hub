@@ -48,136 +48,138 @@ class TwitterPostComments extends StatefulWidget {
 
 class _TwitterPostCommentsState extends State<TwitterPostComments> {
   final commentTextController = TextEditingController();
-  final replyTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<TwitterCubit>(
-      create: (_)=>serviceLocator()..loadComments(context, widget.postId),
-      child: BlocBuilder<TwitterCubit,TwitterState>(
-        builder: (context,state) {
-          final controller = context.read<TwitterCubit>();
-          return Scaffold(
-            // backgroundColor: Colors.white,
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              elevation: 0,
-              iconTheme: const IconThemeData(color: Colors.grey),
-              title: Label(
-                  text: '${controller.commentsPagingController.itemList?.length??0} Comments',
-                  style: Styles.mediumText()),
-              leading: IconButton(
-                  onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
-              centerTitle: true,
-            ),
-            body: Column(
-              children: [
-                Expanded(
-                  child: PagedListView<int, TwitterPostCommentEntity>(
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
-                    pagingController: controller.commentsPagingController,
-                    shrinkWrap: true,
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    builderDelegate: PagedChildBuilderDelegate<TwitterPostCommentEntity>(
-                        noItemsFoundIndicatorBuilder: (context) {
-                          print(controller.commentsPagingController.itemList?.length);
-                          return const Padding(
-                              padding: EdgeInsets.only(top: 200),
-                              child: Center(
-                                child: Text(
-                                  "No Comments",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                  ),
+    return BlocBuilder<TwitterCubit,TwitterState>(
+      builder: (context,state) {
+        final controller = context.read<TwitterCubit>();
+        return Scaffold(
+          // backgroundColor: Colors.white,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            iconTheme: const IconThemeData(color: Colors.grey),
+            title: Label(
+                text: '${controller.commentsPagingController.itemList?.length??0} Comments',
+                style: Styles.mediumText()),
+            leading: IconButton(
+                onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
+            centerTitle: true,
+          ),
+          body: Column(
+            children: [
+              Expanded(
+                child: PagedListView<int, TwitterPostCommentEntity>(
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                  pagingController: controller.commentsPagingController,
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  builderDelegate: PagedChildBuilderDelegate<TwitterPostCommentEntity>(
+                      noItemsFoundIndicatorBuilder: (context) {
+                        print(controller.commentsPagingController.itemList?.length);
+                        return const Padding(
+                            padding: EdgeInsets.only(top: 200),
+                            child: Center(
+                              child: Text(
+                                "No Comments",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
                                 ),
-                              ));
-                        },
-                        itemBuilder: (context, item, index) {
+                              ),
+                            ));
+                      },
+                      itemBuilder: (context, item, index) {
 
-                          return _buildCommentCard(comment: controller.commentsPagingController.itemList![index], onReplyReact: (String id) {
-                            controller.onCommentReact(
-                                params:
-                                TwitterCommentReactParams(commentId: id,react: 'love',),);
-                          }, onReport: (TwitterReportParams params) {
-                            controller.onReport(params);
-                          });
-                        },
-                        noMoreItemsIndicatorBuilder: (context) => Container(),
-                        firstPageProgressIndicatorBuilder: (context) => Container(
-                            margin: const EdgeInsets.only(top: 150),
-                            child: const CupertinoActivityIndicator()),
-                        newPageProgressIndicatorBuilder: (context) =>
-                        const CupertinoActivityIndicator()),
-                  ),
+                        return _buildCommentCard(comment: controller.commentsPagingController.itemList![index], onReplyReact: (String id) {
+                          controller.onCommentReact(
+                              params:
+                              TwitterCommentReactParams(commentId: id,react: 'love',),);
+                        }, onReport: (TwitterReportParams params) {
+                          controller.onReport(params);
+                        }, onAddReply: (TwitterCommentReplyParams params) async{
+                          var result = await controller.onCommentReply(
+                            params:TwitterCommentReplyParams(postId: widget.postId,reply: controller.commentsPagingController.itemList![index].id,content: params.content),
+                          );
+
+                          return result;
+                        });
+                      },
+                      noMoreItemsIndicatorBuilder: (context) => Container(),
+                      firstPageProgressIndicatorBuilder: (context) => Container(
+                          margin: const EdgeInsets.only(top: 150),
+                          child: const CupertinoActivityIndicator()),
+                      newPageProgressIndicatorBuilder: (context) =>
+                      const CupertinoActivityIndicator()),
                 ),
+              ),
 
-                // Expanded(
-                //   child: ListView.separated(
-                //       itemBuilder: (context, index) => _buildCommentCard(
-                //           comment: widget.comments[index], showReplies: showReplies, onShowReplies:()async{
-                //           widget.comments[index].showReplies = true;
-                //
-                //           await widget.onGetReplies(widget.comments[index].id,widget.comments[index]);
-                //           // widget.comments[index].replies?.addAll(controller.replies);
-                //           setState(() {});
-                //       }),
-                //       separatorBuilder: (context, index) => const Sizer(),
-                //       itemCount: widget.comments.length),
-                // ),
-                Container(
-                    height: kToolbarHeight,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                    ),
-                    child: Row(
-                      children: [
-                        const ProfileImage(accountId: 0),
-                        const Sizer(),
-                        Expanded(
-                            child: FormTextField(
-                                hint: 'Type your comment ....',
-                                height: kToolbarHeight * .7,
-                                action: (v) {
-                                  setState(() {});
-                                },
-                                controller: commentTextController)),
-                        const Sizer(),
-                        if (commentTextController.text.isNotEmpty)
-                          IconAppButton(
-                              icon: Icons.send,
-                              isCircle: true,
-                              onPressed: () async{
-                                TwitterPostCommentModel data = await widget.onAddComment(
-                                  TwitterPostCommentParams(
-                                      postId: widget.postId, content: commentTextController.text),
-                                );
-                                final user = context.read<UserCubit>().state.data;
-
-                                controller.commentsPagingController.itemList?.insert(
-                                    0,
-                                    TwitterPostCommentModel(
-                                        id: data.id,
-                                        content: commentTextController.text,
-                                        post: widget.postId,
-                                        createdAt: data.createdAt,
-                                        adminIgnore: data.adminIgnore,
-                                        user: TwitterUserModel(
-                                          image: user?.profilePicture??'', id: user?.id??'', firstName: user?.firstName??'', lastName: user?.lastName??'', createdAt: DateTime.now(), email: user?.email??'', isDocumented: false,
-                                        ),
-                                        love: data.love,loveCount: data.loveCount, isReact: data.isReact));
-                                commentTextController.clear();
-                                FocusScope.of(context).unfocus();
+              // Expanded(
+              //   child: ListView.separated(
+              //       itemBuilder: (context, index) => _buildCommentCard(
+              //           comment: widget.comments[index], showReplies: showReplies, onShowReplies:()async{
+              //           widget.comments[index].showReplies = true;
+              //
+              //           await widget.onGetReplies(widget.comments[index].id,widget.comments[index]);
+              //           // widget.comments[index].replies?.addAll(controller.replies);
+              //           setState(() {});
+              //       }),
+              //       separatorBuilder: (context, index) => const Sizer(),
+              //       itemCount: widget.comments.length),
+              // ),
+              Container(
+                  height: kToolbarHeight,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  child: Row(
+                    children: [
+                      const ProfileImage(accountId: 0),
+                      const Sizer(),
+                      Expanded(
+                          child: FormTextField(
+                              hint: 'Type your comment ....',
+                              height: kToolbarHeight * .7,
+                              action: (v) {
                                 setState(() {});
-                              })
-                      ],
-                    )),
-              ],
-            ),
-          );
-        }
-      ),
+                              },
+                              controller: commentTextController)),
+                      const Sizer(),
+                      if (commentTextController.text.isNotEmpty)
+                        IconAppButton(
+                            icon: Icons.send,
+                            isCircle: true,
+                            onPressed: () async{
+                              TwitterPostCommentModel data = await widget.onAddComment(
+                                TwitterPostCommentParams(
+                                    postId: widget.postId, content: commentTextController.text),
+                              );
+                              final user = context.read<UserCubit>().state.data;
+
+                              controller.commentsPagingController.itemList?.insert(
+                                  0,
+                                  TwitterPostCommentModel(
+                                      id: data.id,
+                                      content: commentTextController.text,
+                                      post: widget.postId,
+                                      createdAt: data.createdAt,
+                                      adminIgnore: data.adminIgnore,
+                                      user: TwitterUserModel(
+                                        image: user?.profilePicture??'', id: user?.id??'', firstName: user?.firstName??'', lastName: user?.lastName??'', createdAt: DateTime.now(), email: user?.email??'', isDocumented: false,
+                                      ),
+                                      love: data.love,loveCount: data.loveCount, isReact: data.isReact));
+                              commentTextController.clear();
+                              FocusScope.of(context).unfocus();
+                              setState(() {});
+                            })
+                    ],
+                  )),
+            ],
+          ),
+        );
+      }
     );
   }
 
@@ -190,7 +192,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
   }
 
   Widget _buildCommentCard(
-      {required TwitterPostCommentEntity comment,required Function(String) onReplyReact,required Function(TwitterReportParams) onReport}) {
+      {required TwitterPostCommentEntity comment,required Function(String) onReplyReact,required Function(TwitterReportParams) onReport,required Function(TwitterCommentReplyParams) onAddReply}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -208,18 +210,20 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
              bottomSheet(
                        context: context,
                        isScrollControlled: true,
-                       widget: TwitterCommentReplies(
-                         replies: const [],
-                         onAddReply: (TwitterCommentReplyParams params) {
-                         },
-                         commentId: comment.id,
-                         postId: comment.post,
-                         onReplyReact: (String id) {
-                           onReplyReact(id);
-                         },
-                         onReport: (TwitterReportParams params) {
-                           onReport(params);
-                         },
+                       widget: BlocProvider.value(
+                         value: serviceLocator<TwitterCubit>()..loadReplies(context,comment.id),
+                         child: TwitterCommentReplies(
+                           replies: const [],
+                           onAddReply: (TwitterCommentReplyParams params) =>onAddReply(params),
+                           commentId: comment.id,
+                           postId: comment.post,
+                           onReplyReact: (String id) {
+                             onReplyReact(id);
+                           },
+                           onReport: (TwitterReportParams params) {
+                             onReport(params);
+                           },
+                         ),
                        ),
                      );
             print(comment.showReplies);

@@ -181,7 +181,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                           onPressed: () async {
                             CommentEntity data = await widget.onAddComment(
                               PostCommentParams(
-                                  postId: widget.postId, content: commentTextController.text),
+                                  postId: state.postDetails!.id, content: commentTextController.text),
                             );
                             final user = context.read<UserCubit>().state.data;
                             controller.commentsPagingController.itemList?.insert(

@@ -74,21 +74,34 @@ class _UserTweetsState extends State<UserTweets> {
                   return state.status == StateStatus.success? TwitterPostCard(
                     fromProfile: user?.id==widget.userData.id,
                     post: controller.userTweetsPagingController.itemList![index],
-                    onReact: () {
-                      controller.onReact(
+                    onReact: () async{
+                      var result = await controller.onReact(
                           params: TwitterPostReactParams(
                               postId: controller
                                   .userTweetsPagingController.itemList![index].id,
                               react: 'love'));
-                      controller.userTweetsPagingController.itemList?[index].isReact =
-                      !controller
-                          .userTweetsPagingController.itemList![index].isReact!;
+                      if(result==true){
+                        if(controller.userTweetsPagingController.itemList?[index].isReact==false){
+                          controller.userTweetsPagingController.itemList?[index].isReact=true;
+                          controller.userTweetsPagingController.itemList?[index].loveCount=(controller.userTweetsPagingController.itemList![index].loveCount!+1);
+                          setState(() {
+
+                          });
+                        }else{
+                          controller.userTweetsPagingController.itemList?[index].isReact=false;
+                          controller.userTweetsPagingController.itemList?[index].loveCount=(controller.userTweetsPagingController.itemList![index].loveCount!-1);
+                          setState(() {
+
+                          });
+                        }
+                      }
                     },
                     shareSuccess: state.shareSuccess,
                     onShare: () {
+                      var tweet=controller.userTweetsPagingController.itemList![index];
                       controller.onShare(
                         postId:
-                        controller.userTweetsPagingController.itemList![index].id,
+                        tweet.isShared==true?tweet.mainPost.id:tweet.id,
                       );
                       setState(() {});
                     },
@@ -104,10 +117,16 @@ class _UserTweetsState extends State<UserTweets> {
                           comments: const [],
                           postId: controller.userTweetsPagingController.itemList![index].id,
                           user: user,
-                          onAddComment: (TwitterPostCommentParams params) =>
-                              controller.onPostComment(params: params),
+                          onAddComment: (TwitterPostCommentParams params) async{
+                            var result = await controller.onPostComment(params: params);
+                            controller.userTweetsPagingController.itemList?.firstWhere((element) => element.id==params.postId).commentsCount=(controller.userTweetsPagingController.itemList!.firstWhere((element) => element.id==params.postId).commentsCount!+1);
+                            setState(() {});
+                            return result;
+                          },
                           onAddReply: (TwitterCommentReplyParams params) {
                             controller.onCommentReply(params: params);
+                            controller.userTweetsPagingController.itemList?.firstWhere((element) => element.id==params.postId).commentsCount=(controller.userTweetsPagingController.itemList!.firstWhere((element) => element.id==params.postId).commentsCount!+1);
+                            setState(() {});
                           },
                           onCommentReact: (TwitterCommentReactParams params) {
                             controller.onCommentReact(params: params);

@@ -587,23 +587,11 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                 children: [
                                   Stack(
                                     children: [
-                                      Container(
-                                        margin:
-                                            const EdgeInsetsDirectional.only(
-                                                end: 10, bottom: 10),
-                                        padding: const EdgeInsets.all(10),
-                                        child: ImageFromInternet(image: images[index],),
-                                      ),
+                                      ImageFromInternet(image: images[index],),
                                       if (index == 3 && images.length > 4)
                                         Container(
-                                          margin:
-                                              const EdgeInsetsDirectional.only(
-                                                  end: 10, bottom: 10),
-                                          // padding: const EdgeInsets.all(10),
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
                                             color:
                                                 Colors.black.withOpacity(0.5),
                                           ),

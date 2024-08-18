@@ -329,24 +329,4 @@ class InstagramCubit extends Cubit<InstagramState> {
   }
 
 
-
-  //
-  //
-  //
-  // Future<void> _getExploreReels(int page) async {
-  //   final result = await _getExploreReelsUseCase(page);
-  //   result.fold(
-  //         (failure) {
-  //       exploreReelsPagingController.error = failure;
-  //     },
-  //         (reels) {
-  //       if (reels.length < EndPoints.pageSize) {
-  //         exploreReelsPagingController.appendLastPage(reels);
-  //       } else {
-  //         exploreReelsPagingController.appendPage(reels, page + 1);
-  //       }
-  //     },
-  //   );
-  // }
-
 }

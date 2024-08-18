@@ -1,13 +1,8 @@
 import 'package:dartz/dartz.dart';
-
 import 'package:fourtyninehub/core/error/failure.dart';
-
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
-
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
-
 import '../../domain/repositories/create_post_repo.dart';
 import '../datasources/create_post_remote_datasource.dart';
 
@@ -30,7 +25,7 @@ class CreatePostRepoImpl implements CreatePostRepo {
   }
 
   @override
-  Future<Either<Failure, TwitterPostEntity>> createTwitterPost(
+  Future<Either<Failure, bool>> createTwitterPost(
       {required CreateTwitterPostParams params}) {
     return _remoteDataSource.createTwitterPost(params: params);
   }
