@@ -18,6 +18,7 @@ class GoogleApiConsumer extends ApiConsumer {
     Map<String, dynamic>? data,
   }) async {
     try {
+      // dio.options.baseUrl ;
       final result = await dio.get(
         url,
         data: data,

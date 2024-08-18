@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:fourtyninehub/features/trip_join/domain/entities/location_entity.dart';
+
 import 'address_component.dart';
 import 'geometry.dart';
 
-class LocationModel {
+class LocationModel extends LocationEntity {
   List<AddressComponent>? addressComponents;
   String? formattedAddress;
   Geometry? geometry;
@@ -18,7 +20,11 @@ class LocationModel {
     this.partialMatch,
     this.placeId,
     this.types,
-  });
+  }) : super(
+          id: placeId,
+          coordinates: [geometry?.location?.lat, geometry?.location?.lng],
+          address: formattedAddress,
+        );
 
   @override
   String toString() {
@@ -30,9 +36,7 @@ class LocationModel {
             ?.map((e) => AddressComponent.fromMap(e as Map<String, dynamic>))
             .toList(),
         formattedAddress: data['formatted_address'] as String?,
-        geometry: data['geometry'] == null
-            ? null
-            : Geometry.fromMap(data['geometry'] as Map<String, dynamic>),
+        geometry: data['geometry'] == null ? null : Geometry.fromMap(data['geometry'] as Map<String, dynamic>),
         partialMatch: data['partial_match'] as bool?,
         placeId: data['place_id'] as String?,
         types: data['types'] as List<String>?,
