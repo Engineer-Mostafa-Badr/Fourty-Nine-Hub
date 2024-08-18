@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card_selected.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 
@@ -198,11 +199,17 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   minLines: 6,
                   maxLines: 6,
                   maxLength: 100,
+                  style: const TextStyle(
+                    color: AppColors.QUANTITY_COLOR
+                  ),
                   decoration: InputDecoration(
+                      fillColor: AppColors.AUTH_CONTAINER_COLOR,
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                          borderRadius: BorderRadius.circular(12),
+                      ),
                       enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                          borderRadius: BorderRadius.circular(12),
+                      ),
                       disabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12)),
                       focusedErrorBorder: OutlineInputBorder(
@@ -210,7 +217,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12)),
                       hintText: Labels.description,
-                      hintStyle: const TextStyle(fontSize: 12)),
+                      hintStyle: const TextStyle(fontSize: 12,color: AppColors.QUANTITY_COLOR)),
                 ),
                 const SizedBox(
                   height: 20,

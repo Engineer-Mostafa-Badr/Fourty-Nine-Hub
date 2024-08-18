@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/entities/
 import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/select_activity_view.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/show_all_images.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
@@ -91,11 +92,12 @@ class _CreatePostViewState extends State<CreatePostView> {
         builder: (context, state) {
       return Container(
           padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              color: Color(int.parse(state.backColor.substring(1), radix: 16))),
           child: TextField(
             maxLines: 4,
             maxLength: 150,
+            style: const TextStyle(
+              color: AppColors.QUANTITY_COLOR
+            ),
             onChanged: (c) {
               if (c.length == 150) {
                 showErrorMessage(
@@ -104,7 +106,9 @@ class _CreatePostViewState extends State<CreatePostView> {
             },
             controller:
                 context.read<CreatePostCubit>().postContentTextController,
-            decoration: const InputDecoration(hintText: 'Type Here ... '),
+            decoration: const InputDecoration(hintText: 'Type Here ... ',hintStyle: TextStyle(
+              color: AppColors.QUANTITY_COLOR
+            ),fillColor: Colors.white),
           ));
     });
   }

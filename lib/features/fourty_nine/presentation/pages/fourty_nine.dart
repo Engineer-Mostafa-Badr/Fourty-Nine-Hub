@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,6 +24,7 @@ import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
 
 import '../../../../core/enums/ride_services_enum.dart';
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -46,6 +48,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     return Scaffold(
       appBar: const HomeAppbar(
         isWithBackArrow: false,
+        language: true,
       ),
       bottomNavigationBar: const BottomNavigator(
         mainCategory: 1,
@@ -251,7 +254,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   Positioned.fill(
                     child: AppButton(
                         color: Colors.white,
-                        label: 'Auction',
+                        label: LocaleKeys.auction.tr(),
                         style: const TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
@@ -295,7 +298,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               padding: 5,
               color: Colors.white,
               height: kToolbarHeight * .5,
-              label: 'Installments',
+              label: LocaleKeys.installments.tr(),
               style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
@@ -372,7 +375,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         height: 20,
                       ),
                       Label(
-                        text: '1 Ads',
+                        text: '4 ${LocaleKeys.Ads.tr()}',
                         style: Styles.mediumText(
                             color: Colors.white, fontSize: 15),
                       ),

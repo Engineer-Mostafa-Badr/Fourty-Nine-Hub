@@ -55,10 +55,10 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                 Label(
                     text: widget.comment.user.firstName,
                     style: Styles.mediumText(
-                        fontWeight: FontWeight.bold, color: widget.textColor)),
+                        fontWeight: FontWeight.bold)),
                 Label(
                     text: widget.comment.sinceTime,
-                    style: Styles.mediumText(color: widget.textColor)),
+                    style: Styles.mediumText()),
               ],
             )),
             IconButton(
@@ -69,9 +69,8 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                         id: widget.comment.id, categoryId: '',
                       ));
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.more_vert,
-                  color: widget.textColor,
                 )),
           ],
         ),
@@ -79,7 +78,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
         Label(
           textAlign: TextAlign.start,
           text: widget.comment.content,
-          style: Styles.mediumText(color: widget.textColor),
+          style: Styles.mediumText(),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,

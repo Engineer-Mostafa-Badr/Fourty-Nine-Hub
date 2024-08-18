@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -21,7 +23,8 @@ class MainCategoryBanner extends StatefulWidget {
     this.canRegister = false,
     this.onRegister,
     required this.category,
-  this.color,
+
+    this.color = Colors.white,
     this.onFavorite,
   });
 
@@ -71,7 +74,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
               widget.canRegister ? const Spacer() : const SizedBox.shrink(),
               Label(
                 text: widget.category.name,
-                style: Styles.headerText(color: Colors.white),
+                style: Styles.headerText(color: AppColors.AUTH_CONTAINER_COLOR),
               ),
               const Spacer(),
               Column(
@@ -92,11 +95,13 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                   ),
                   const Sizer(height: 20),
                   Label(
-                    text: '${widget.category.total.toShortScale} ${Labels.ads}',
+                    text:  widget.category.total.toShortScale == '1'
+                        ? '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}'
+                        : '${widget.category.total.toShortScale} ${LocaleKeys.Ads.localize}',
                     style: Styles.mediumText(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                     color: widget.color,
+                      color: AppColors.AUTH_CONTAINER_COLOR
                     ),
                   )
                 ],

@@ -23,6 +23,7 @@ class PrivacyMultiSelectItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Theme.of(context).scaffoldBackgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -77,7 +78,7 @@ class PrivacyMultiSelectItem extends StatelessWidget {
                   ),
                   Icon(
                     getPrivacyIcon(),
-                    color: AppColors.PRIMARY_COLOR,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ],
               ),

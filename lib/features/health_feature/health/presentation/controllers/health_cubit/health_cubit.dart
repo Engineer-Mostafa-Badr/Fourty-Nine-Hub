@@ -14,6 +14,8 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/contro
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/is_doctor_usecase.dart';
+import '../../../../create_doctor/domain/entities/governorate_entity.dart';
+import '../../../../create_doctor/domain/usecases/get_governorates.dart';
 import '../../../domain/entities/appointment_booking_entity.dart';
 
 part 'health_state.dart';
@@ -26,6 +28,7 @@ class HealthCubit extends Cubit<HealthState> {
   final ToggleFavoriteSubcategoryUseCase _toggleFavoriteSubcategoryUseCase;
   final IsDoctorUsecase _isDoctorUseCase;
   final GetMainCategoryDetailsUseCase _getMainCategoryDetailsUseCase;
+  final GetGovernoratesUseCase _getGovernoratesUseCase;
   HealthCubit(
       this._getUserUpcomingAppointmentsUseCase,
       this._healthShare,
@@ -33,7 +36,7 @@ class HealthCubit extends Cubit<HealthState> {
       this._getMedicalServicesUseCase,
       this._toggleFavoriteSubcategoryUseCase,
       this._isDoctorUseCase,
-      this._getMainCategoryDetailsUseCase)
+      this._getMainCategoryDetailsUseCase, this._getGovernoratesUseCase)
       : super(const HealthState());
 
   final List<HealthBookingFilterModel> services = [
@@ -61,6 +64,7 @@ class HealthCubit extends Cubit<HealthState> {
     await getSubCategories();
     await getServices();
     await getMyBookings();
+    await getGovernorates();
   }
 
   Future<void> _getMainCategoryDetails() async {
@@ -100,7 +104,7 @@ class HealthCubit extends Cubit<HealthState> {
   }
 
   Future<void> getSubCategories({bool reload = false}) async {
-    if (_healthShare.subCategories.isEmpty || reload) {
+   // if (_healthShare.subCategories.isEmpty || reload) {
       final response =
           await _getHealthSubcategoriesUseCase.call(const NoParams());
       response.fold(
@@ -111,9 +115,26 @@ class HealthCubit extends Cubit<HealthState> {
         emit(state.copyWith(
             status: HealthStates.initState, subCategories: data));
       });
-    } else {
-      emit(state.copyWith(subCategories: _healthShare.subCategories));
-    }
+    // } else {
+    //   emit(state.copyWith(subCategories: _healthShare.subCategories));
+    // }
+  }
+
+  Future<void> getGovernorates() async {
+    // if (_healthShare.subCategories.isEmpty || reload) {
+    final response =
+    await _getGovernoratesUseCase.call(const NoParams());
+    response.fold(
+            (failure) => emit(
+            state.copyWith(failure: failure, status: HealthStates.error)),
+            (data) {
+          _healthShare.governorates = data;
+          emit(state.copyWith(
+              status: HealthStates.initState, governorates: data));
+        });
+    // } else {
+    //   emit(state.copyWith(subCategories: _healthShare.subCategories));
+    // }
   }
 
   Future<void> toggleFavoriteSubcategory(String subcategoryId) async {

@@ -5,7 +5,9 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/governorate_filter_cubit/doctor_governorate_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/widgets/governorate_list_title.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+
+import '../../../../../core/localization/locale_keys.g.dart';
 
 class DoctorGovernorateFilterView extends StatelessWidget {
   const DoctorGovernorateFilterView({super.key});
@@ -15,8 +17,8 @@ class DoctorGovernorateFilterView extends StatelessWidget {
     final doctorGovernorateFilter =
         context.read<DoctorGovernorateFilterCubit>();
     return Scaffold(
-      appBar: const BackAppBar(
-        label: Labels.governorate,
+      appBar:  BackAppBar(
+        label: LocaleKeys.governorate.localize,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(
@@ -29,30 +31,54 @@ class DoctorGovernorateFilterView extends StatelessWidget {
             DefaultTextFormField(
               currentFocusNode: doctorGovernorateFilter.searchFocusNode,
               currentController: doctorGovernorateFilter.searchController,
-              hint: Labels.search,
+              hint: LocaleKeys.search.localize,
               prefixIcon: const Icon(Icons.search),
               onChanged: (value) => doctorGovernorateFilter.search(value),
             ),
             const Sizer(
               height: 30,
             ),
+            // BlocBuilder<HealthCubit, HealthState>(builder: (context, state) {
+            //   if (state.governorates != null && state.governorates!.isNotEmpty) {
+            //     return Expanded(
+            //         child: ListView.separated(
+            //           itemCount: state.governorates!.length,
+            //           separatorBuilder: (context, index) => const Divider(),
+            //           itemBuilder: (context, index) => GovernorateListTitle(
+            //               governorate: state.governorates![index]),
+            //         ));
+            //   } else {
+            //     return const SizedBox.shrink();
+            //   }
+            // }),
             BlocBuilder<DoctorGovernorateFilterCubit,
                 DoctorGovernorateFilterState>(
               builder: (context, state) {
-                switch (state) {
-                  case DoctorGovernorateFilterLoaded _:
-                    return Expanded(
-                        child: ListView.separated(
-                      itemCount: state.governorates.length,
-                      separatorBuilder: (context, index) => const Divider(),
-                      itemBuilder: (context, index) => GovernorateListTitle(
-                          governorate: state.governorates[index]),
-                    ));
-                  case DoctorGovernorateFilterError _:
-                    return Center(child: Text(state.message));
-                  default:
-                    return const Center(child: CircularProgressIndicator());
+                if(state is DoctorGovernorateFilterLoaded){
+                      return Expanded(
+                          child: ListView.separated(
+                            itemCount: state.governorates.length,
+                            separatorBuilder: (context, index) => const Divider(),
+                            itemBuilder: (context, index) => GovernorateListTitle(
+                                governorate: state.governorates[index]),
+                          ));
+                }else {
+                  return const SizedBox.shrink();
                 }
+                // switch (state) {
+                //   case DoctorGovernorateFilterLoaded _:
+                //     return Expanded(
+                //         child: ListView.separated(
+                //           itemCount: state.governorates.length,
+                //           separatorBuilder: (context, index) => const Divider(),
+                //           itemBuilder: (context, index) => GovernorateListTitle(
+                //               governorate: state.governorates[index]),
+                //         ));
+                //   case DoctorGovernorateFilterError _:
+                //     return Center(child: Text(state.message));
+                //   default:
+                //     return const Center(child: CircularProgressIndicator());
+                // }
               },
             ),
           ],

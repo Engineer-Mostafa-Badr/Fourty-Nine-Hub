@@ -11,7 +11,7 @@ class InstallmentOrdersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HomeAppbar(),
+      appBar:  HomeAppbar(),
       drawer: const DrawerWidget(),
      
       body: Padding(

@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -23,6 +25,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   final bool isIconWhite;
   final bool showLanguage;
   final Color color;
+  final bool language;
 
   const HomeAppbar({
     super.key,
@@ -34,8 +37,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.showChat = true,
     this.isIconWhite = false,
     this.showLanguage = false,
-    this.color=AppColors.PRIMARY_COLOR,
-
+    this.language = false,
+    this.color = AppColors.PRIMARY_COLOR,  this.language=false,
   });
 
   @override
@@ -71,9 +74,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               height: 35,
               padding: const EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: AppColors.AUTH_CONTAINER_COLOR
-              ),
+                  borderRadius: BorderRadius.circular(20),
+                  color: AppColors.AUTH_CONTAINER_COLOR),
               child: InkWell(
                 borderRadius: BorderRadius.circular(20),
                 onTap: () {},
@@ -86,7 +88,10 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                     const SizedBox(width: 5),
                     Expanded(
-                      child: Label(text: 'Search', style: Styles.mediumText(color: AppColors.QUANTITY_COLOR)),
+                      child: Label(
+                          text: LocaleKeys.search.localize,
+                          style: Styles.mediumText(
+                              color: AppColors.QUANTITY_COLOR)),
                     ),
                   ],
                 ),
@@ -97,15 +102,19 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             TextButton(
                 onPressed: () {},
                 child: Label(text: 'Register', style: Styles.mediumText())),
+         if(language)
           Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: TextAppButton(
                   label: LocaleKeys.lang.tr(),
-                  style: Styles.mediumText(color: AppColors.SECONDARY_COLOR,fontSize: 20),
+                  style: Styles.mediumText(
+                      color: AppColors.SECONDARY_COLOR, fontSize: 20),
                   onPressed: () {
-                    context.locale == Locales.english
-                        ? changeLang(locale: Locales.arabic)
-                        :  changeLang(locale: Locales.english);
+                    if (context.locale == Locales.english) {
+                      changeLang(locale: Locales.arabic);
+                    } else {
+                      changeLang(locale: Locales.english);
+                    }
                   })),
           Stack(
             children: [

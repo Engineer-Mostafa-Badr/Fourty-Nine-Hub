@@ -1,0 +1,67 @@
+// DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
+
+abstract class  LocaleKeys {
+  static const join = 'join';
+  static const arabic = 'arabic';
+  static const english = 'english';
+  static const newMeeting = 'newMeeting';
+  static const meal = 'meal';
+  static const darkMode = 'darkMode';
+  static const lightMode = 'lightMode';
+  static const voice = 'voice';
+  static const meet = 'meet';
+  static const cast = 'cast';
+  static const tweet = 'tweet';
+  static const reels = 'reels';
+  static const chat = 'chat';
+  static const find = 'find';
+  static const live = 'live';
+  static const health = 'health';
+  static const ship = 'ship';
+  static const ride = 'ride';
+  static const lang = 'lang';
+  static const search = 'search';
+  static const Ads = 'Ads';
+  static const ads = 'ads';
+  static const wallet = 'wallet';
+  static const gift = 'gift';
+  static const balance = 'balance';
+  static const pickMe = 'pickMe';
+  static const tripJoin = 'tripJoin';
+  static const auction = 'auction';
+  static const installments = 'installments';
+  static const Craft = 'Craft';
+  static const homeService = 'homeService';
+  static const homeEssentials = 'homeEssentials';
+  static const Scenery = 'Scenery';
+  static const specialities = 'specialities';
+  static const medicalService = 'medicalService';
+  static const doctor = 'doctor';
+  static const doctors = 'doctors';
+  static const call = 'call';
+  static const clinicVisit = 'clinicVisit';
+  static const emergency = 'emergency';
+  static const homeVisit = 'homeVisit';
+  static const firstName = 'firstName';
+  static const phoneNumber = 'phoneNumber';
+  static const speciality = 'speciality';
+  static const address = 'address';
+  static const confirm = 'confirm';
+  static const doctorList = 'doctorList';
+  static const noDoctorsFound = 'noDoctorsFound';
+  static const governorate = 'governorate';
+  static const city = 'city';
+  static const emptyFieldNotValid = 'emptyFieldNotValid';
+  static const login = 'login';
+  static const register = 'register';
+  static const emailOrPhone = 'emailOrPhone';
+  static const password = 'password';
+  static const forgetPassword = 'forgetPassword';
+  static const lastName = 'lastName';
+  static const gender = 'gender';
+  static const code = 'code';
+  static const conditions = 'conditions';
+  static const iAcceptAll = 'iAcceptAll';
+  static const terms = 'terms';
+
+}
