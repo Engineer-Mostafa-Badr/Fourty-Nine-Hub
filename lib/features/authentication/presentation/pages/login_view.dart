@@ -16,7 +16,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
-\import '../../../../common/widgets/stateless/buttons/default_button.dart';
+import '../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../core/error/failure.dart';

@@ -37,8 +37,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.showChat = true,
     this.isIconWhite = false,
     this.showLanguage = false,
-    this.language = false,
-    this.color = AppColors.PRIMARY_COLOR,  this.language=false,
+    
+    this.color = AppColors.PRIMARY_COLOR, this.language = false,
   });
 
   @override
@@ -102,20 +102,20 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             TextButton(
                 onPressed: () {},
                 child: Label(text: 'Register', style: Styles.mediumText())),
-         if(language)
-          Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: TextAppButton(
-                  label: LocaleKeys.lang.tr(),
-                  style: Styles.mediumText(
-                      color: AppColors.SECONDARY_COLOR, fontSize: 20),
-                  onPressed: () {
-                    if (context.locale == Locales.english) {
-                      changeLang(locale: Locales.arabic);
-                    } else {
-                      changeLang(locale: Locales.english);
-                    }
-                  })),
+          if(language)
+            Container(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: TextAppButton(
+                    label: LocaleKeys.lang.tr(),
+                    style: Styles.mediumText(
+                        color: AppColors.SECONDARY_COLOR, fontSize: 20),
+                    onPressed: () {
+                      if (context.locale == Locales.english) {
+                        changeLang(locale: Locales.arabic);
+                      } else {
+                        changeLang(locale: Locales.english);
+                      }
+                    })),
           Stack(
             children: [
               IconButton(
