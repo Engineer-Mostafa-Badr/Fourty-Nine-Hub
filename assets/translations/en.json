@@ -32,6 +32,12 @@
   "homeService": "Home Service",
   "homeEssentials": "Home Essentials",
   "Scenery": "Scenery",
-  "hello": "مرحبا",
-  "welcome": "أهلا وسهلا"
+  "specialities": "Specialities",
+  "medicalService": "Medical Service",
+  "doctor": "Doctor",
+  "doctors": "Doctors",
+  "call": "Call",
+  "clinicVisit": "Clinic Visit",
+  "emergency": "Emergency",
+  "homeVisit": "Home Visit"
 }

@@ -34,5 +34,13 @@ abstract class  LocaleKeys {
   static const homeService = 'homeService';
   static const homeEssentials = 'homeEssentials';
   static const Scenery = 'Scenery';
+  static const specialities = 'specialities';
+  static const medicalService = 'medicalService';
+  static const doctor = 'doctor';
+  static const doctors = 'doctors';
+  static const call = 'call';
+  static const clinicVisit = 'clinicVisit';
+  static const emergency = 'emergency';
+  static const homeVisit = 'homeVisit';
 
 }

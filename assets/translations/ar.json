@@ -32,6 +32,12 @@
   "homeService": "خدمه منزليه",
   "homeEssentials": "مستلزمات منزل",
   "Scenery": " ديكور",
-  "hello": "Hello",
-  "welcome": "Welcome"
+  "specialities": "التخصصات",
+  "medicalService": "الخدمات الطبية",
+  "doctor": "دكتور",
+  "doctors": "دكاتره",
+  "call": "الاتصال",
+  "clinicVisit": "زيارة العيادة",
+  "emergency": "الطوارئ",
+  "homeVisit": "زيارة منزلية"
 }

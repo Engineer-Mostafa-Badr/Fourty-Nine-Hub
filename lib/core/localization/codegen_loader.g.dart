@@ -47,7 +47,15 @@ class CodegenLoader extends AssetLoader{
   "Craft": "حرفه",
   "homeService": "خدمه منزليه",
   "homeEssentials": "مستلزمات منزل",
-  "Scenery": " ديكور"
+  "Scenery": " ديكور",
+  "specialities": "التخصصات",
+  "medicalService": "الخدمات الطبية",
+  "doctor": "دكتور",
+  "doctors": "دكاتره",
+  "call": "الاتصال",
+  "clinicVisit": "زيارة العيادة",
+  "emergency": "الطوارئ",
+  "homeVisit": "زيارة منزلية"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -82,7 +90,15 @@ static const Map<String,dynamic> en = {
   "Craft": "Craft",
   "homeService": "Home Service",
   "homeEssentials": "Home Essentials",
-  "Scenery": "Scenery"
+  "Scenery": "Scenery",
+  "specialities": "Specialities",
+  "medicalService": "Medical Service",
+  "doctor": "Doctor",
+  "doctors": "Doctors",
+  "call": "Call",
+  "clinicVisit": "Clinic Visit",
+  "emergency": "Emergency",
+  "homeVisit": "Home Visit"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
