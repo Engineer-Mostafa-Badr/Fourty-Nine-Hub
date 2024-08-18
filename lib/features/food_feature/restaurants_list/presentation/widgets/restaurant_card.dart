@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -9,14 +10,14 @@ import '../../../../../routes/routes.dart';
 import '../../domain/entities/restaurant_entity.dart';
 
 class RestaurantCard extends StatelessWidget {
-  final RestaurantEntity item;
+  final Restaurant? item;
   final bool isVert;
-  const RestaurantCard({super.key, this.isVert = true, required this.item});
+  const RestaurantCard({super.key, this.isVert = true, this.item});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () => context.push(Routes.RESTAURANTDETAILS, extra: item.id),
+        onTap: () => context.push(Routes.RESTAURANTDETAILS, extra: item?.id),
         child: isVert ? _buildVerticalCard() : _buildHorizontalCard());
   }
 
@@ -34,7 +35,7 @@ class RestaurantCard extends StatelessWidget {
                   Positioned.fill(
                     child: SquareImage(
                       radius: 5,
-                      url: item.image.first,
+                      url: item?.restaurantMedia?.first.mediaKey,
                     ),
                   ),
                   Positioned(
@@ -57,11 +58,11 @@ class RestaurantCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                  text: item.name,
+                  text: item?.name??"",
                   style: Styles.mediumText(fontWeight: FontWeight.w400),
                 ),
                 Label(
-                  text: item.description,
+                  text:"",// item?.description??"",
                   style: Styles.mediumText(
                     color: Colors.grey,
                   ),
@@ -75,10 +76,10 @@ class RestaurantCard extends StatelessWidget {
                     ),
                     const Sizer(),
                     Label(
-                        text: '${item.rate}',
+                        text: '${item?.totalRating}',
                         style: Styles.mediumText(fontWeight: FontWeight.w500)),
                     Label(
-                        text: '(${item.numberOfReviews}+)',
+                        text: '(${item?.numberOfReviews}+)',
                         style: Styles.mediumText()),
                   ],
                 )
@@ -99,7 +100,7 @@ class RestaurantCard extends StatelessWidget {
           width: kToolbarHeight,
           child: SquareImage(
             radius: 5,
-            url: item.image.first,
+            url: item?.restaurantMedia?.first.mediaKey,
           ),
         ),
         const Sizer(),
@@ -108,11 +109,11 @@ class RestaurantCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Label(
-              text: item.name,
+              text: item?.name??"",
               style: Styles.mediumText(fontWeight: FontWeight.w400),
             ),
             Label(
-                text: item.description,
+                text: "",//item?.description,
                 style: Styles.mediumText(color: Colors.grey)),
             Row(
               children: [
@@ -122,10 +123,10 @@ class RestaurantCard extends StatelessWidget {
                 ),
                 const Sizer(),
                 Label(
-                    text: '${item.rate} ',
+                    text: '${item?.totalRating} ',
                     style: Styles.mediumText(fontWeight: FontWeight.w500)),
                 Label(
-                    text: '(${item.numberOfReviews}+)',
+                    text: '(${item?.numberOfReviews}+)',
                     style: Styles.mediumText()),
               ],
             ),

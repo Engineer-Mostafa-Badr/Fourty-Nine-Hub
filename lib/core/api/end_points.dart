@@ -37,8 +37,9 @@ class EndPoints {
   // static const report = '/report?subCategory=66a3583454e6e337915514db';
   static String report({required String subCategoryId}) =>
       '/report?subCategory=$subCategoryId';
-  static const documentRequest = '/twitter/document-request?subCategory=66a3583454e6e337915514db';
- 
+  static const documentRequest =
+      '/twitter/document-request?subCategory=66a3583454e6e337915514db';
+
   // ride
   //shipping
   static String bannerData = "$developmentBaseUrl/loading/driver/subcategory";
@@ -177,6 +178,7 @@ class EndPoints {
   static String getReels(TwitterFeedParams params) {
     return '/reels/explore?limit=${params.limit}&page=${params.page}';
   }
+
   static String getUserReels(UserReelsParams params) {
     return '/reels/users/${params.userId}?limit=${params.limit}&page=${params.page}';
   }
@@ -333,7 +335,11 @@ class EndPoints {
   static String getNumOfResturants = '/restaurants/num-of-restaurants';
   static String isResturant = '/restaurants/check-user-have-restaurant';
   static String createRestaurant = '/restaurants/create-restaurant';
-
+  static String getMealsWithCountRestaurant({PostCommentsParams? params}) =>
+      '/restaurants/subcategories-count-restaurant${params?.page != null || params?.userId != null ? "?page=${params?.page}&userId=${params?.userId}" : ""}';
+  static String getAllRestaurantWithMenu({PostCommentsParams? params}) =>
+      '/restaurants/subcategories-count-restaurant${params?.page != null  ? "?page=${params?.page}" : ""}';
+//?page=1&userId=
   static String restaurantDetails(String id) {
     return '/restaurants/$id';
   }

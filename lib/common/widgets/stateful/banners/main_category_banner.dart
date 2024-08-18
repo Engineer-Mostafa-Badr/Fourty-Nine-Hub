@@ -44,7 +44,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         color: Colors.transparent,
@@ -52,22 +52,74 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       child: Stack(
         children: [
           Positioned.fill(
-              child: CachedNetworkImage(
-            imageUrl: widget.category.banner,
-            fit: BoxFit.fill,
-            placeholder: (context, url) => Shimmer.fromColors(
-              baseColor: Colors.grey[300]!,
-              highlightColor: Colors.grey[100]!,
-              child: Container(
-                color: Colors.white,
+              child: ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: CachedNetworkImage(
+              imageUrl: widget.category.banner,
+              fit: BoxFit.fill,
+              placeholder: (context, url) => Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Container(
+                  color: Colors.white,
+                ),
               ),
+              errorWidget: (context, url, error) {
+                debugPrint(
+                    'error while displaying images in the url $url ${error.toString()}');
+                return const Icon(Icons.error, color: Colors.red);
+              },
             ),
-            errorWidget: (context, url, error) {
-              debugPrint(
-                  'error while displaying images in the url $url ${error.toString()}');
-              return const Icon(Icons.error, color: Colors.red);
-            },
           )),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * .09,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.black38,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5),
+            child: Row(
+              children: [
+                _buildRegisterButton(),
+                widget.canRegister ? const Spacer() : const SizedBox.shrink(),
+                Label(
+                  text: widget.category.name,
+                  style: Styles.headerText(color: Colors.white),
+                ),
+                const Spacer(),
+                Column(
+                  children: [
+                    InkWell(
+                      onTap: () async {
+                        final result = widget.onFavorite?.call();
+                        if (result != null && result != _isFavorite) {
+                          setState(() {
+                            _isFavorite = result;
+                          });
+                        }
+                      },
+                      child: Icon(
+                        _isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: AppColors.SECONDARY_COLOR,
+                      ),
+                    ),
+                    const Sizer(height: 20),
+                    Label(
+                      text:
+                          '${widget.category.total.toShortScale} ${Labels.ads}',
+                      style: Styles.mediumText(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: widget.color,
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
           Row(
             children: [
               _buildRegisterButton(),

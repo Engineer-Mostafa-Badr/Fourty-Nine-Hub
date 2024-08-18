@@ -1,12 +1,12 @@
 name: fourtyninehub
 description: "A new Flutter project."
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # of the product and file versions while build-number is used as the build suffix.
 version: 1.0.4+4
 
 environment:
-  sdk: '>=3.3.0 <4.0.0'
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   cached_network_image: 3.3.1
@@ -74,18 +74,13 @@ dependencies:
   # for behaviour subject
   rxdart:
 
-  
-
   #for loading
   # skeletons: ^0.0.3
-  
 
   lottie: ^3.1.2
 
-
-
   json_annotation: ^4.8.1
-  
+
 dev_dependencies:
   flutter_lints: ^4.0.0
   flutter_test:
@@ -102,7 +97,7 @@ icons_launcher:
       enable: true
 flutter:
   uses-material-design: true
-  generate: true
+  # generate: true
   assets:
     - assets/images/
     - assets/json/

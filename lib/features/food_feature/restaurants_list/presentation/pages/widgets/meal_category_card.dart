@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-
 import '../../../../../../common/theme/cubit/cubit.dart';
 import '../../../../../../res/style/app_colors.dart';
 
 class MealCategoryCard extends StatelessWidget {
-  final SubCategoryEntity? subCategory;
+  final FoodCategoryEntity? subCategory;
   final Function(String) onTap;
 
   const MealCategoryCard({super.key, this.subCategory, required this.onTap});
@@ -39,7 +39,7 @@ class MealCategoryCard extends StatelessWidget {
                     child: SquareImage(
                       fit: BoxFit.fitWidth,
                       radius: 10,
-                      url: subCategory?.image,
+                      url: subCategory?.picture,
                     ),
                   ),
                   Positioned(
@@ -76,11 +76,14 @@ class MealCategoryCard extends StatelessWidget {
                   ],
                 ),
                 Label(
-                  text: subCategory?.name ?? "",
+                  text: (getLang() == "ar"
+                          ? subCategory?.nameAr
+                          : subCategory?.nameEn) ??
+                      "",
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
                 ),
                 Label(
-                  text: '${subCategory?.numberOfContent ?? "0"} Resturants',
+                  text: '${subCategory?.numberOfRestaurant ?? "0"} Resturants',
                   style: Styles.mediumText(),
                 ),
               ],
