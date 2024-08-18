@@ -17,9 +17,22 @@ abstract class  LocaleKeys {
   static const find = 'find';
   static const live = 'live';
   static const health = 'health';
-  static const shipping = 'shipping';
+  static const ship = 'ship';
   static const ride = 'ride';
   static const lang = 'lang';
   static const search = 'search';
+  static const Ads = 'Ads';
+  static const ads = 'ads';
+  static const wallet = 'wallet';
+  static const gift = 'gift';
+  static const balance = 'balance';
+  static const pickMe = 'pickMe';
+  static const tripJoin = 'tripJoin';
+  static const auction = 'auction';
+  static const installments = 'installments';
+  static const Craft = 'Craft';
+  static const homeService = 'homeService';
+  static const homeEssentials = 'homeEssentials';
+  static const Scenery = 'Scenery';
 
 }

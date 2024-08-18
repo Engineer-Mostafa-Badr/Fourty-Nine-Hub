@@ -31,10 +31,23 @@ class CodegenLoader extends AssetLoader{
   "find": "ايجاد",
   "live": "لابف",
   "health": "صحه",
-  "shipping": "تحميله",
+  "ship": "تحميله",
   "ride": "توصيله",
-  "lang": "EN",
-  "search": "بحث"
+  "lang": "E",
+  "search": "بحث",
+  "Ads": "اعلانات",
+  "ads": "اعلان",
+  "wallet": "محفظه",
+  "gift": "هدايا",
+  "balance": "رصيد",
+  "pickMe": "وصلني معاك",
+  "tripJoin": "جاي معاك",
+  "auction": "مزاد",
+  "installments": "تقسيط",
+  "Craft": "حرفه",
+  "homeService": "خدمه منزليه",
+  "homeEssentials": "مستلزمات منزل",
+  "Scenery": " ديكور"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -53,10 +66,23 @@ static const Map<String,dynamic> en = {
   "find": "Find",
   "live": "Live",
   "health": "Health",
-  "shipping": "Shipping",
+  "ship": "Ship",
   "ride": "Ride",
   "lang": "ع",
-  "search": "Search"
+  "search": "Search",
+  "Ads": "Ads",
+  "ads": "Ads",
+  "wallet": "Wallet",
+  "gift": "Gift",
+  "balance": "Balance",
+  "pickMe": "Pick Me",
+  "tripJoin": "Trip Join",
+  "auction": "Auction",
+  "installments": "Installments",
+  "Craft": "Craft",
+  "homeService": "Home Service",
+  "homeEssentials": "Home Essentials",
+  "Scenery": "Scenery"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

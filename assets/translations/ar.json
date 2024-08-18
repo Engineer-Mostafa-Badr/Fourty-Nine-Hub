@@ -17,6 +17,21 @@
   "health": "صحه",
   "ship": "تحميله",
   "ride": "توصيله",
-  "lang": "EN",
-  "search": "بحث"
+  "lang": "E",
+  "search": "بحث",
+  "Ads": "اعلانات",
+  "ads": "اعلان",
+  "wallet": "محفظه",
+  "gift": "هدايا",
+  "balance": "رصيد",
+  "pickMe": "وصلني معاك",
+  "tripJoin": "جاي معاك",
+  "auction": "مزاد",
+  "installments": "تقسيط",
+  "Craft": "حرفه",
+  "homeService": "خدمه منزليه",
+  "homeEssentials": "مستلزمات منزل",
+  "Scenery": " ديكور",
+  "hello": "Hello",
+  "welcome": "Welcome"
 }

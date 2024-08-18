@@ -1,6 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
+import '../../../core/localization/locale_keys.g.dart';
 import '../../../res/style/app_colors.dart';
 
 class GoogleAddsBanner extends StatelessWidget {
@@ -25,7 +29,8 @@ class GoogleAddsBanner extends StatelessWidget {
                 spreadRadius: 5,
               )
             ]),
-        child: const Center(child: Label(text: 'Ads',style: TextStyle(
+        child:  Center(child: Label(text: LocaleKeys.Ads.tr(),
+          style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold
         ),))
