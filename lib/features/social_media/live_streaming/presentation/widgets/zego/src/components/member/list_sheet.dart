@@ -85,8 +85,8 @@ class _ZegoLiveStreamingMemberListSheetState
       stream: ZegoUIKitPrebuiltLiveStreamingController().user.stream(
             includeFakeUser: widget.config.showFakeUser,
           ),
-      showCameraState: false,
-      showMicrophoneState: false,
+      showCameraState: true,
+      showMicrophoneState: true,
       pseudoUsers: ZegoUIKitPrebuiltLiveStreamingController()
           .user
           .private
