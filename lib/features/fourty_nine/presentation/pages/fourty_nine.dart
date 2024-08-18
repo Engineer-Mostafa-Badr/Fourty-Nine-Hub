@@ -2,34 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
-
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../common/widgets/dynamic/google_ads_banner.dart';
-import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
-import '../../../../common/widgets/stateless/buttons/app_button.dart';
-
-import '../../../../core/enums/ride_services_enum.dart';
-import '../../../../res/style/styles.dart';
-import '../../../../routes/routes.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/dynamic/wallet_widget.dart';
+import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
+import '../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../core/enums/ride_services_enum.dart';
 import '../../../../res/style/app_colors.dart';
-
-import '../widgets/ads_text_banner.dart';
+import '../../../../res/style/styles.dart';
+import '../../../../routes/routes.dart';
 import '../widgets/announce_widget.dart';
 
 class FourtyNineView extends StatefulWidget {
@@ -67,8 +62,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           const Sizer(),
           _buildMainCategoriesViews(),
           const Sizer(),
-          BlocBuilder<MainCategoriesCubit,
-              BasicState<List<MainCategoryEntity>>>(
+          BlocBuilder<MainCategoriesCubit, BasicState<List<MainCategoryEntity>>>(
             builder: (context, state) {
               if (state.isSuccess && state.data != null) {
                 return ListView.separated(
@@ -78,14 +72,12 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
-                        context.push(Routes.SUBCATEGORIES,
-                            extra: state.data![index]);
+                        context.push(Routes.SUBCATEGORIES, extra: state.data![index]);
                       },
                       child: MainCategoryBanner(category: state.data![index]),
                     );
                   },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Sizer(),
+                  separatorBuilder: (BuildContext context, int index) => const Sizer(),
                 );
               } else {
                 return const SizedBox.shrink();
@@ -151,15 +143,14 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       children: [
         BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
           builder: (context, state) {
-            if (state.status == StateStatus.success &&
-                state.data != null &&
-                state.data!.isNotEmpty) {
+            if (state.status == StateStatus.success && state.data != null && state.data!.isNotEmpty) {
               return Row(
                 children: [
                   Expanded(
                     child: _buildRideSubCategoryItem(
                       service: state.data![0].service,
                       image: state.data![0].image,
+                      // route: Routes.TRIP_JOIN,
                     ),
                   ),
                   const Sizer(),
@@ -167,6 +158,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     child: _buildRideSubCategoryItem(
                       service: state.data![1].service,
                       image: state.data![1].image,
+                      route: Routes.TRIP_JOIN,
                     ),
                   )
                 ],
@@ -191,10 +183,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         child: AppButton(
                             color: Colors.white,
                             label: 'Auction',
-                            style: const TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
+                            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white),
                             icon: Icons.group,
                             iconSize: 22,
                             onPressed: () => context.push(Routes.MAZADAT)),
@@ -235,10 +224,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   color: Colors.white,
                   height: kToolbarHeight * .5,
                   label: 'Installments',
-                  style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                  style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white),
                   icon: Icons.list,
                   iconSize: 22,
                   onPressed: () => context.push(Routes.INSTALLMENT)),
@@ -252,9 +238,11 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   Widget _buildRideSubCategoryItem({
     required RideServicesEnum service,
     required String image,
+    String? route,
   }) {
     return InkWell(
-      onTap: () => context.push(Routes.ADS, extra: service.value()),
+      // onTap: () => context.push(Routes.ADS, extra: service.value()),
+      onTap: () => route != null ? context.push(route) : null,
       child: Container(
         height: kToolbarHeight * 1.3,
         padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
@@ -284,8 +272,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                       url: image,
                     ),
                     Container(
-                      color: Colors.black
-                          .withOpacity(0.3), // Darken the background
+                      color: Colors.black.withOpacity(0.3), // Darken the background
                     ),
                   ],
                 ),
@@ -314,8 +301,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                       ),
                       Label(
                         text: '1 Ads',
-                        style: Styles.mediumText(
-                            color: Colors.white, fontSize: 15),
+                        style: Styles.mediumText(color: Colors.white, fontSize: 15),
                       ),
                     ],
                   ),

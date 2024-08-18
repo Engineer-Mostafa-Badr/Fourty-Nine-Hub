@@ -7,7 +7,7 @@ import 'abstract/main_text_form_field.dart';
 class DefaultTextFormField extends MainTextFormField {
   DefaultTextFormField({
     super.key,
-     super.currentFocusNode,
+    super.currentFocusNode,
     super.nextFocusNode,
     required super.currentController,
     required final String hint,
@@ -31,8 +31,7 @@ class DefaultTextFormField extends MainTextFormField {
     final String? Function(String?)? validator,
     super.onChanged,
   }) : super(
-          validator:
-              validator ?? (isRequired ? Validator().validateEmptyField : null),
+          validator: validator ?? (isRequired ? Validator().validateEmptyField : null),
           hintText: hint + (isRequired ? '*' : ''),
           textCapitalization: TextCapitalization.words,
           maxLength: maxLines,

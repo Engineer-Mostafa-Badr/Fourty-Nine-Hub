@@ -51,4 +51,5 @@ abstract class Assets {
   static String doctorCall = 'assets/images/doctor_call.png';
   static String doctorClinicVisit = 'assets/images/doctor_clinic.png';
   static String profileIcon = 'assets/images/profile_icon.png';
+  static String tripViewIllustration = 'assets/images/trip_view.png';
 }
