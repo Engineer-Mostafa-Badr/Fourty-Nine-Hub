@@ -7,8 +7,9 @@ import 'package:video_player/video_player.dart';
 
 class InstagramReelCard extends StatefulWidget {
   final PostEntity item;
+  final bool? playVideo;
 
-  const InstagramReelCard({super.key, required this.item});
+  const InstagramReelCard({super.key, required this.item, this.playVideo=true});
 
   @override
   State<InstagramReelCard> createState() => _InstagramReelCardState();
@@ -35,7 +36,7 @@ class _InstagramReelCardState extends State<InstagramReelCard> {
 
     // _controller!.setLooping(true);
     _controller!.initialize();
-    _controller!.play();
+    if(widget.playVideo==true)_controller!.play();
   }
 
   @override

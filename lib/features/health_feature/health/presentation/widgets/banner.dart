@@ -16,7 +16,7 @@ class HealthBanner extends StatelessWidget {
       builder: (context, state) {
         if (state.mainCategory != null) {
           return MainCategoryBanner(
-              color: AppColors.QUANTITY_COLOR,
+             
               category: state.mainCategory!,
               canRegister: state.isDoctor == true ? false : true,
               onRegister: () {

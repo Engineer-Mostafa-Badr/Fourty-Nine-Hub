@@ -112,9 +112,9 @@ class _ZegoLiveStreamingLivePageSurfaceState
             }
           },
           onTap: () {
-            print(
-                'camera state before ${ZegoUIKit().getCameraStateNotifier(ZegoUIKit().getLocalUser().id).value}');
             cubit.toggleSurfaceShown();
+            // print('surface shown ${cubit.surfaceShown}');
+            // print('state is ${cubit.state.toString()}');
 
             // print(
             //     'camera state after ${ZegoUIKit().getCameraStateNotifier(ZegoUIKit().getLocalUser().id).value}');
@@ -129,24 +129,27 @@ class _ZegoLiveStreamingLivePageSurfaceState
   }
 
   Widget body(MeetingState state) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return Stack(
-        children: [
-          durationTimeBoard(),
-          state == const MeetingSurfaceShownState(surfaceShown: true)
-              ? topBar()
-              : Container(),
-          state == const MeetingSurfaceShownState(surfaceShown: true)
-              ? bottomBar()
-              : Container(),
-          messageList(),
-          foreground(
-            constraints.maxWidth,
-            constraints.maxHeight,
-          ),
-        ],
-      );
-    });
+    return BlocBuilder<MeetingCubit, MeetingState>(
+      
+      builder: (context, state) {
+        return LayoutBuilder(builder: (context, constraints) {
+          return Stack(
+            children: [
+              durationTimeBoard(),
+              if (state is MeetingSurfaceShownState) ...[
+                topBar(),
+                bottomBar(),
+              ],
+              messageList(),
+              foreground(
+                constraints.maxWidth,
+                constraints.maxHeight,
+              ),
+            ],
+          );
+        });
+      },
+    );
   }
 
   Widget topBar() {

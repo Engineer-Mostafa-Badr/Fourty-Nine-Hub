@@ -2,6 +2,15 @@ abstract class Assets {
   static String spinWheel = 'assets/images/spin.png';
   static String icon = 'assets/images/icon.png';
 
+  // lottie
+  static String loveReaction = 'assets/lottie/love_reaction.json';
+  static String likeReaction = 'assets/lottie/like_reaction.json';
+  static String hahaReaction = 'assets/lottie/haha_reaction.json';
+  static String angryReaction = 'assets/lottie/angry_reaction.json';
+  static String sadReaction = 'assets/lottie/sad_reaction.json';
+  static String wowReaction = 'assets/lottie/OMG_reaction.json';
+
+
   // navigator
   static String logo = 'assets/images/logo_600.png';
   static String tinder = 'assets/images/tinder.svg';
@@ -31,6 +40,7 @@ abstract class Assets {
   // reactions
   static String like = 'assets/images/reactions/like.png';
   static String heart = 'assets/images/reactions/heart.png';
+  static String haha = 'assets/images/reactions/haha.png';
   static String wow = 'assets/images/reactions/wow.png';
   static String sad = 'assets/images/reactions/sad.png';
   static String angry = 'assets/images/reactions/angry.png';

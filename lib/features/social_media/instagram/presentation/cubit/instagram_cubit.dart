@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_reels_usecase.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
@@ -28,8 +29,9 @@ class InstagramCubit extends Cubit<InstagramState> {
   final ReplyOnCommentUseCase _replyOnCommentUseCase;
   final CommentReactUseCase _commentReactUseCase;
   final GetInstagramReelsUseCase _instagramReelsUseCase;
+  final GetInstagramUserReelsUseCase _userReelsUseCase;
 
-  InstagramCubit(this._getFeedUseCase, this._advertisementUseCase, this._postReactUseCase, this._getPostCommentsUseCase, this._getPostCommentRepliesUseCase, this._postCommentUseCase, this._replyOnCommentUseCase, this._commentReactUseCase, this._instagramReelsUseCase) : super(InstagramState());
+  InstagramCubit(this._getFeedUseCase, this._advertisementUseCase, this._postReactUseCase, this._getPostCommentsUseCase, this._getPostCommentRepliesUseCase, this._postCommentUseCase, this._replyOnCommentUseCase, this._commentReactUseCase, this._instagramReelsUseCase, this._userReelsUseCase) : super(InstagramState());
 
 
   void loadData() async {
@@ -38,6 +40,17 @@ class InstagramCubit extends Cubit<InstagramState> {
       print("initStatePageKey : $pageKey");
       getFeed(pageKey);
     });
+  }
+  void loadUserReels(String userId) async {
+    await getUserReels(1,userId);
+    userReelsPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getUserReels(pageKey,userId);
+    });
+  }
+
+  refreshUserReels() async {
+    userReelsPagingController.refresh();
   }
 
   void loadComments(BuildContext context,String postId) async {
@@ -62,6 +75,9 @@ class InstagramCubit extends Cubit<InstagramState> {
 
 
   final PagingController<int, PostEntity> feedPagingController =
+  PagingController(firstPageKey: 1);
+
+  final PagingController<int, PostEntity> userReelsPagingController =
   PagingController(firstPageKey: 1);
 
 
@@ -132,6 +148,28 @@ class InstagramCubit extends Cubit<InstagramState> {
     return reels;
   }
 
+  getUserReels(int page,String userId)async{
+    final response = await _userReelsUseCase(UserReelsParams(limit: 10, page: page, userId: userId));
+    response.fold(
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (data) async{
+
+          final isLastPage = data.length < 10;
+          if (page == 1) {
+            print("page == 1 $page");
+            userReelsPagingController.itemList = [];
+          }
+          if (isLastPage) {
+            print("isLastPage = $isLastPage");
+            userReelsPagingController.appendLastPage(data);
+          } else {
+            print("isNotLastPage = $isLastPage");
+            final nextPageKey = page + 1;
+            userReelsPagingController.appendPage(data, nextPageKey);
+          }
+          emit(state.copyWith(posts: data, status: StateStatus.success));
+        });
+  }
 
   void changeIndex(int index){
     emit(state.copyWith(pageIndex: index));

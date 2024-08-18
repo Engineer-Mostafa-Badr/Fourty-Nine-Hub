@@ -5,8 +5,8 @@ import 'package:fourtyninehub/common/widgets/dynamic/wallet_widget.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/shared/fourty_nine_shared_data.dart';
 
-class MainCategoriesCardsView extends StatelessWidget {
-  const MainCategoriesCardsView({super.key});
+class MainCategoriesFlipCardsView extends StatelessWidget {
+  const MainCategoriesFlipCardsView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class MainCategoriesCardsView extends StatelessWidget {
     return Scaffold(
       appBar: const BackAppBar(),
       body: Padding(
-        padding:  const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         child: Column(
           children: [
             const WalletWidget(),
@@ -63,7 +63,8 @@ class MainCategoriesCardsView extends StatelessWidget {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         mainCategories[index].name,

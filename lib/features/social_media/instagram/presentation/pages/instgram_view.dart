@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_global_posts.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -39,14 +40,7 @@ class InstagramView extends StatelessWidget {
                 return context.read<UserCubit>().isLoggedIn
                     ? Column(
                   children: [
-                    const TabBar(tabs: [
-                      Tab(
-                        icon: Icon(Icons.grid_4x4_outlined),
-                      ),
-                      Tab(
-                        icon: Icon(Icons.person),
-                      ),
-                    ]),
+                    _buildTabBar(context),
                     Expanded(
                       child: TabBarView(children: [
                         _buildInstagramWidget(),
@@ -78,9 +72,33 @@ class InstagramView extends StatelessWidget {
     );
   }
 
+  Widget _buildTabBar(BuildContext context) {
+    final user = context.read<UserCubit>().state.data;
+    return Container(
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: List.generate(2, (i) => GestureDetector(
+            onTap: (){
+              if(i==1){
+                context.push(Routes.OTHERSACCOUNT,extra: user?.id);
+              }
+            },
+            child: Container(
+                decoration: i==0?const BoxDecoration(
+                    border: Border(bottom: BorderSide(color: Colors.blue,width: 2))
+                ):null,
+                child: Icon(i==0?Icons.grid_4x4_outlined:Icons.person,color: i==0?Colors.blue:AppColors.DARK_GRAY_COLOR,)
+            ),
+          ),
+          ),
+        ));
+  }
+
   Widget _buildInstagramWidget() {
     return const InstagramGlobalPosts();
   }
+
 
 
 }
