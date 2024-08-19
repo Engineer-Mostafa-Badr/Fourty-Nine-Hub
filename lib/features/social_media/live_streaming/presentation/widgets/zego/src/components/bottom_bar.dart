@@ -164,7 +164,7 @@ class ZoomMicrophoneBuilder extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ZegoToggleMicrophoneButton(
-                  buttonSize: const Size(40.zW, 40.zH),
+                  buttonSize:  Size(40.zW, 40.zH),
                   iconSize: const Size(100, 100),
                   normalIcon: ButtonIcon(
                     icon: const Icon(

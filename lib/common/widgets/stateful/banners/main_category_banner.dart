@@ -64,8 +64,8 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 ),
               ),
               errorWidget: (context, url, error) {
-                debugPrint(
-                    'error while displaying images in the url $url ${error.toString()}');
+                // debugPrint(
+                //     'error while displaying images in the url $url ${error.toString()}');
                 return const Icon(Icons.error, color: Colors.red);
               },
             ),

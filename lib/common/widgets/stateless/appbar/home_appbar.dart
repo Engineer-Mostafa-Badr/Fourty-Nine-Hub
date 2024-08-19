@@ -36,7 +36,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.showChat = true,
     this.isIconWhite = false,
     this.showLanguage = false,
-    
+
     this.color = AppColors.PRIMARY_COLOR, this.language = false,
   });
 
