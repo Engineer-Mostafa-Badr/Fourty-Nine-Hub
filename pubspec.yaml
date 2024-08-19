@@ -102,6 +102,7 @@ flutter:
     - assets/images/
     - assets/json/
     - assets/translations/
+    - assets/settings/
     - assets/images/reactions/
     # - assets/images/lion.png
     # - assets/images/butterfly.png
