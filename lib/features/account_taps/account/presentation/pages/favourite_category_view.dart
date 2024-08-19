@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_category_entity.dart';
 import '../../../../../core/states/basic_state.dart';
 import '../../../../../res/strings/labels.dart';

@@ -12,12 +12,13 @@ class MeetingCubit extends Cubit<MeetingState> {
   final AddRoomUseCase addRoomUseCase;
   final JoinRoomUseCase joinRoomUseCase;
   final EndRoomUseCase endRoomUseCase;
-@override
+  @override
   void onChange(Change<MeetingState> change) {
     debugPrint('change is ${change.currentState}');
     debugPrint('change next ${change.nextState}');
     super.onChange(change);
   }
+
   void addRoom(String roomId) {
     // emit(MeetingCreateLoadingState());
     addRoomUseCase(MeetingParams(id: roomId))
@@ -34,19 +35,22 @@ class MeetingCubit extends Cubit<MeetingState> {
 
   void endRoom(String roomId) {
     emit(MeetingEndLoadingState());
-    endRoomUseCase(MeetingParams(id: roomId))
-        .then((value) {
-          print('room Ended');
-          emit(MeetingEndSuccessState());
-        })
-        .catchError((error) {
-          print('room Not Ended');
-          emit(MeetingEndFailureState());
-        });
+    endRoomUseCase(MeetingParams(id: roomId)).then((value) {
+      print('room Ended');
+      emit(MeetingEndSuccessState());
+    }).catchError((error) {
+      print('room Not Ended');
+      emit(MeetingEndFailureState());
+    });
   }
+
   bool surfaceShown = true;
-  void toggleSurfaceShown(){
+  void toggleSurfaceShown() {
     surfaceShown = !surfaceShown;
-    emit(MeetingSurfaceShownState(surfaceShown: surfaceShown));
+    if (surfaceShown) {
+      emit(const MeetingSurfaceShownState());
+    } else {
+      emit(const MeetingSurfaceHinddenState());
+    }
   }
 }

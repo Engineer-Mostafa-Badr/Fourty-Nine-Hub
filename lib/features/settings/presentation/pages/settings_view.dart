@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -23,7 +23,6 @@ class SettingsView extends StatelessWidget {
           children: [
             listTileWidget(
               icon: Icons.notifications_active_outlined,
-
               trailing: FutureBuilder(
                   future: Permission.notification.isGranted,
                   builder: (context, snap) {
@@ -33,7 +32,7 @@ class SettingsView extends StatelessWidget {
                         // activeTrackColor: Colors.grey,
                         value: isGranted,
                         onChanged: (v) async =>
-                        await Permission.notification.request());
+                            await Permission.notification.request());
                   }),
               label: 'Enable Notifications',
               onTap: () async => await Permission.notification.request(),
@@ -49,15 +48,14 @@ class SettingsView extends StatelessWidget {
                   ),
                   title: theme is DarkThemeModeStates
                       ? const Text(
-                    'dark mode',
-                    style: TextStyle(
-                        color: AppColors.AUTH_CONTAINER_COLOR),
-                  )
+                          'dark mode',
+                          style:
+                              TextStyle(color: AppColors.AUTH_CONTAINER_COLOR),
+                        )
                       : const Text(
-                    'light mode',
-                    style:
-                    TextStyle(color: AppColors.QUANTITY_COLOR),
-                  ),
+                          'light mode',
+                          style: TextStyle(color: AppColors.QUANTITY_COLOR),
+                        ),
                   value: ThemeCubit.get(context).isDarkTheme,
                   activeColor: Colors.grey,
                   activeTrackColor: AppColors.AUTH_CONTAINER_COLOR,
@@ -101,9 +99,9 @@ class SettingsView extends StatelessWidget {
 
   Widget listTileWidget(
       {required IconData icon,
-        required Widget trailing,
-        required String label,
-        required Function onTap}) {
+      required Widget trailing,
+      required String label,
+      required Function onTap}) {
     return ListTile(
       leading: Icon(
         icon,

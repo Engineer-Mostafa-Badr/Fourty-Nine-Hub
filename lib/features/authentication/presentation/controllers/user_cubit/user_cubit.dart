@@ -7,11 +7,15 @@ import 'package:fourtyninehub/features/authentication/domain/entities/user_entit
 import 'package:fourtyninehub/features/authentication/domain/use_cases/attach_token_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../domain/use_cases/get_user_use_case.dart';
 import '../../../domain/use_cases/sign_out_usecase.dart';
 
 class UserCubit extends Cubit<BasicState<UserEntity>> {
+  static UserCubit to = AppPages
+      .router.routerDelegate.navigatorKey.currentContext!
+      .read<UserCubit>();
   final GetUserUseCase _getUserUseCase;
   final GetTokensUseCase _getTokensUseCase;
   final SaveTokensUseCase _saveTokensUseCase;
@@ -65,7 +69,11 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     result.fold(
       (_) {},
       (tokens) {
-        token = tokens!.accessToken.toString();
+        if (tokens == null) {
+          return;
+        } else {
+          token = tokens.accessToken.toString();
+        }
         _attachTokenUseCase(tokens);
         _isTokenAttached = true;
         getUser();

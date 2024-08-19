@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/subcategory_filter_cubit/doctor_filter_cubit.dart';
@@ -34,6 +34,7 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
               currentController: doctorSubcategoryFilter.searchController,
               hint: LocaleKeys.search.localize,
               prefixIcon:  const Icon(Icons.search,color: AppColors.QUANTITY_COLOR,),
+
               onChanged: (value) => doctorSubcategoryFilter.search(value),
             ),
             const Sizer(

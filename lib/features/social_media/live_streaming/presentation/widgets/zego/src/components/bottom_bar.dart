@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:zego_uikit/zego_uikit.dart';
 
@@ -91,6 +92,7 @@ class _ZegoLiveStreamingBottomBarState
         ZegoUIKit().getMicrophoneStateNotifier(ZegoUIKit().getLocalUser().id);
     final cameraState =
         ZegoUIKit().getCameraStateNotifier(ZegoUIKit().getLocalUser().id);
+    final screenShareState = ZegoUIKit().getScreenSharingStateNotifier();
     final needUserMuteMode =
         (!widget.config.coHost.stopCoHostingWhenMicCameraOff) ||
             ZegoLiveStreamingPKBattleStateCombineNotifier.instance.state.value;
@@ -125,6 +127,12 @@ class _ZegoLiveStreamingBottomBarState
             ),
             ZoomChatBuilder(
               widget: widget,
+            ),
+            ZoomSharescreenBuilder(
+              shareScreenState: screenShareState,
+            ),
+            ZoomShareCodeButton(
+              liveId: ZegoUIKit().getRoom().id,
             ),
           ],
         ),
@@ -333,7 +341,7 @@ class ZoomChatBuilder extends StatelessWidget {
                 icon: const Icon(
                   Icons.message_rounded,
                   color: Colors.white,
-                  size: 30,
+                  // size: 30,
                 ),
               ),
             ),
@@ -356,36 +364,41 @@ class ZoomChatBuilder extends StatelessWidget {
 class ZoomSharescreenBuilder extends StatelessWidget {
   const ZoomSharescreenBuilder({
     super.key,
-    required this.cameraState,
-    required this.cameraDefaultOn,
+    required this.shareScreenState,
   });
 
-  final ValueNotifier<bool> cameraState;
-  final bool cameraDefaultOn;
+  final ValueNotifier<bool> shareScreenState;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0).add(EdgeInsets.only(left: 5.zW)),
       child: ValueListenableBuilder<bool>(
-          valueListenable: cameraState,
-          builder: (context, cameraOn, child) {
+          valueListenable: shareScreenState,
+          builder: (context, screenShareOn, child) {
             return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ZegoScreenSharingToggleButton(
                   buttonSize: const Size(30, 30),
-                  iconSize: const Size(100, 100),
-                  onPressed: (isScreenSharing) {},
+                  // iconSize: const Size(120, 120),
                   iconStartSharing: ButtonIcon(
-                    icon: const Icon(Icons.screen_share_outlined),
+                    icon: const Icon(
+                      Icons.screen_share_outlined,
+                      color: Colors.green,
+                      // size: 35,
+                    ),
                   ),
                   iconStopSharing: ButtonIcon(
-                    icon: const Icon(Icons.stop_screen_share_outlined),
+                    icon: const Icon(
+                      Icons.stop_screen_share_outlined,
+                      color: Colors.white,
+                      // size: 35,
+                    ),
                   ),
                 ),
                 Text(
-                  cameraState.value ? 'Share' : 'Stop Share',
+                  !screenShareOn ? 'Share' : 'Stop Share',
                   style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w200,
@@ -394,6 +407,36 @@ class ZoomSharescreenBuilder extends StatelessWidget {
               ],
             );
           }),
+    );
+  }
+}
+
+class ZoomShareCodeButton extends StatelessWidget {
+  const ZoomShareCodeButton({super.key, required this.liveId});
+
+  final String liveId;
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: ZegoLiveStreamingMenuBarExtendButton(
+            child: IconButton(
+          icon: const Icon(
+            Icons.share,
+            size: 25,
+            color: Colors.white,
+          ),
+          onPressed: () => Clipboard.setData(ClipboardData(text: liveId)).then(
+            (value) => ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Live id Copied to clipboard $liveId'),
+              ),
+            ),
+          ),
+        )),
+      ),
     );
   }
 }
