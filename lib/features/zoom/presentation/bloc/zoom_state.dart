@@ -1,10 +1,36 @@
-part of 'zoom_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class ZoomState extends Equatable {
-  const ZoomState();
+
+abstract class MeetingState extends Equatable {
+  const MeetingState();
 
   @override
   List<Object> get props => [];
 }
 
-class ZoomInitial extends ZoomState {}
+class MeetingInitial extends MeetingState {}
+
+class MeetingCreateLoadingState extends MeetingState {}
+
+class MeetingCreateSuccessState extends MeetingState {}
+
+class MeetingCreateFailureState extends MeetingState {}
+
+class MeetingJoinLoadingState extends MeetingState {}
+
+class MeetingJoinSuccessState extends MeetingState {}
+
+class MeetingJoinFailureState extends MeetingState {}
+
+class MeetingEndLoadingState extends MeetingState {}
+
+class MeetingEndSuccessState extends MeetingState {}
+
+class MeetingEndFailureState extends MeetingState {}
+
+class MeetingSurfaceShownState extends MeetingState{
+  final bool surfaceShown;
+
+  const MeetingSurfaceShownState({required this.surfaceShown});
+
+}

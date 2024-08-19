@@ -3,6 +3,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/address_sear
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/driver_review_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/report_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/ride_offer_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../../core/error/failure.dart';
@@ -43,4 +44,6 @@ abstract class RideRequestRepo {
       {required ExpectedPriceParams params});
   Future<Either<Failure, List<CarTypeModel>>> getCarTypes(
       {required String subCategoryId});
+
+  Future<Either<Failure, List<RideThumbnailEntity>>> getThumbnails();
 }

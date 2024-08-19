@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
@@ -10,12 +9,21 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_
 import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/password_text_form_field.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/confirm_password_text_field.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_form_field.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/password_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -32,8 +40,15 @@ import '../../../../res/style/styles.dart';
 import '../controllers/login_cubit/login_cubit.dart';
 
 class LoginView extends StatefulWidget {
+class LoginView extends StatefulWidget {
   const LoginView({super.key});
 
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  AuthType selectedAuth = AuthType.LOGIN;
   @override
   State<LoginView> createState() => _LoginViewState();
 }
@@ -460,6 +475,22 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                             width: 7,
                           ),
                           Expanded(
+                            child: BadgedLabel(
+                              onTap: () {
+                                registerCubit.isMale = false;
+
+                                setState(() {});
+                              },
+                              height: kToolbarHeight * .7,
+                              isCentered: true,
+                              isBordered: true,
+                              textColor: registerCubit.isMale
+                                  ? Colors.black
+                                  : Colors.white,
+                              color: registerCubit.isMale
+                                  ? Colors.white
+                                  : AppColors.PRIMARY_COLOR,
+                              label: 'Female',
                             child: BadgedLabel(
                               onTap: () {
                                 registerCubit.isMale = false;

@@ -26,7 +26,8 @@ abstract class AppColors {
 
   static const BARRIER_COLOR = Color(0x800E1E4E);
   static const ACCENT_COLOR = Color.fromARGB(255, 244, 174, 62);
-  static const BACKGROUND_COLOR = Color.fromARGB(255, 238, 238, 238);
+  // static const BACKGROUND_COLOR = Color.fromARGB(255, 238, 238, 238);
+  static const BACKGROUND_COLOR = Color(0xFFFFFFFF);
   static const GREY_LIGHT_COLOR = Color(0xFFF3F3F3);
   static const GREY_NORMAL_COLOR = Color(0xFFB9B9B9);
   static const GREY_DARK_COLOR = Color(0xFF707070);

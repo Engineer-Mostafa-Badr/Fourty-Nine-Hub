@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/CarouselSlider.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/carousel_slider.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
@@ -15,15 +15,17 @@ class AnnounceWidget extends StatelessWidget {
     return BlocBuilder<SliderCubit, BasicState<List<SliderItemEntity>>>(
         builder: (context, state) {
       if (state.data?.isEmpty ?? true) {
+        // print('data is empty');
         return const SizedBox();
+      } else {
+        return CarouselSliderWidget(
+            height: 100,
+            autoPlay: true,
+            widgets: state.data?.map((e) {
+                  return _buildAnnounceItem(item: e);
+                }).toList() ??
+                []);
       }
-      return CarouselSliderWidget(
-          height: kToolbarHeight * 2,
-          autoPlay: true,
-          widgets: state.data?.map((e) {
-                return _buildAnnounceItem(item: e);
-              }).toList() ??
-              []);
     });
   }
 

@@ -19,15 +19,19 @@ class GetDoctorDetailsUseCase
 class GetDoctorDetailsParams {
   final String doctorId;
   final String subCategoryId;
-  final BookingTypes bookingType;
+  final BookingTypes? bookingType;
   GetDoctorDetailsParams({
     required this.doctorId,
     required this.subCategoryId,
-    required this.bookingType,
+    this.bookingType,
   });
 
-  Map<String, dynamic> toJson() => {
-        'subCategoryId': subCategoryId,
-        'type': bookingType.name,
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['subCategoryId'] = subCategoryId;
+    if (bookingType != null) {
+      data['type'] = bookingType?.name;
+    }
+    return data;
+  }
 }

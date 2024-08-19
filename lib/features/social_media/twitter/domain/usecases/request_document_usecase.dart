@@ -16,9 +16,10 @@ class TwitterDocumentationParams {
   final List<String> mediaIds;
   final String name;
 
-  TwitterDocumentationParams({
-    required this.mediaIds,
-    required this.name,
-  });
-  Map<String, dynamic> toJson() => {'mediaIds': mediaIds, 'name': name};
+  TwitterDocumentationParams({required this.mediaIds, required this.name,});
+  Map<String, dynamic> toJson() => {
+    'mediaIds': mediaIds,
+    'name': name,
+    'subCategory':'66a3583454e6e337915514db'
+  };
 }

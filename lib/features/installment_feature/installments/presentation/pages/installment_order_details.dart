@@ -7,7 +7,7 @@ import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/images/profile_image.dart';
-import '../../../../../common/widgets/stateless/labels/ReadMoreLabel.dart';
+import '../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import '../../../../../common/widgets/stateless/labels/badged_label.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -22,12 +22,6 @@ class InstallmentOrderDetails extends StatelessWidget {
     return Scaffold(
       appBar: const HomeAppbar(),
       drawer: const DrawerWidget(),
-      bottomNavigationBar: const BottomNavigator(
-        mainCategory: 1,
-        index: 2,
-      ),
-      floatingActionButton: const FloatingButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(

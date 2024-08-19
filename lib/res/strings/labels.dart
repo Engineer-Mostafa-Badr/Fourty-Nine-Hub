@@ -72,6 +72,8 @@ abstract class Labels {
   static const doctorDashboard = 'Doctor Dashboard';
   static const doctorDashboardBannerDiscription =
       'New Bookings are waiting you, go to doctor dashboard and explore more!';
+  static const driverDashboardBannerDiscription =
+      'New Bookings are waiting you, go to driver dashboard and explore more!';
   static const homeVist = 'Home Vist';
   static const clinicVist = 'Clinic Vist';
   static const call = 'Call';
@@ -166,6 +168,4 @@ abstract class Labels {
   static const license = 'License';
   static const model = 'Model';
   static const submit = 'Submit';
-  static const driverDashboardBannerDiscription =
-      'New Bookings are waiting you, go to driver dashboard and explore more!';
 }

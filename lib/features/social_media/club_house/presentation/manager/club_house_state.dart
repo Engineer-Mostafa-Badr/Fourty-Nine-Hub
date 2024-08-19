@@ -8,3 +8,4 @@ abstract class ClubHouseState extends Equatable {
 }
 
 class ClubHouseInitial extends ClubHouseState {}
+

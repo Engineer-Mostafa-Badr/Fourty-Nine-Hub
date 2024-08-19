@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
 
-import '../../../../common/models/public/pagination_params.dart';
 import '../../../../core/error/failure.dart';
 import '../entities/parent_main_category_entity.dart';
 
@@ -11,6 +11,13 @@ abstract class FourtyNineRepository {
       getParentMainCategories();
 
   Future<Either<Failure, List<MainCategoryEntity>>> getMainCategories(
-      {required PaginationParams params});
+      PaginationParams params);
+
+  Future<Either<Failure, MainCategoryEntity>> getMainCategoryDetails(String id);
+
+  Future<Either<Failure, bool>> addMainCategoryToFavorites(String id);
+
+  Future<Either<Failure, bool>> removeMainCategoryFromFavorites(String id);
+
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems();
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../widgets/doctor_card.dart';
 
 class DoctorsListView extends StatefulWidget {
@@ -31,7 +31,9 @@ class _DoctorsListViewState extends State<DoctorsListView> {
         }
       },
       child: Scaffold(
-        appBar: const HomeAppbar(),
+        appBar: const BackAppBar(
+          label: Labels.doctorsList,
+        ),
         body: BlocBuilder<DoctorsListCubit, DoctorsListState>(
             builder: (context, state) {
           switch (state) {

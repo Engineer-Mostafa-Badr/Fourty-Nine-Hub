@@ -1,4 +1,6 @@
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 
 class EndPoints {
@@ -16,14 +18,21 @@ class EndPoints {
   static const refreshToken = '/auth/refresh/token';
   static const getParentMainCategories = '/category/parent';
   static const getMainCategories = '/category/parent/get-all-main';
+  static const getMainCategoriesWithoutSubcategories = '/categories/main';
+  static String getMainCategoryDetails(String id) => '/categories/main/$id';
+  static String addMainCategoryToFavorite(String id) =>
+      '/favorite-category/$id';
+  static String deleteMainCategoryFromFavorite(String id) =>
+      '/favorite-category/$id';
+
   static const getWheel = '/wheels/random';
   static const spinWheel = '/wheels/spin/';
   static const wheelWallet = '/wheel/wallets/my/wallet';
   static const sendForgetPasswordOTP = '/auth/forgot-password';
   static const verifyForgetPasswordOTP = '/auth/verify/otp';
   static const createNewForgetPassword = '/auth/reset-password';
-  static const report = '/report';
-  static const documentRequest = '/twitter/document-request';
+  static const report = '/report?subCategory=66a3583454e6e337915514db';
+  static const documentRequest = '/twitter/document-request?subCategory=66a3583454e6e337915514db';
   // ride
   //shipping
   static String bannerData = "$developmentBaseUrl/loading/driver/subcategory";
@@ -47,19 +56,38 @@ class EndPoints {
       '/health/book-appointment-premium/$appointmentId';
   static String getDoctorReviewsForUsers(String doctorId) =>
       '/health/doctor/rate/$doctorId';
-  static String getDoctorDetails(String doctorId) => '/health/doctor/$doctorId';
+  static String getDoctorDetails(String doctorId) =>
+      '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
   static const getHealthSubcategories = '/health/subCategories-health-with-ads';
   static const getMedicalServices =
       '/health/subCategories-medicalServices-with-ads';
   static const String getUpcomingUserAppointments = '/health/book-appointment';
   static const String getHealthRequestsHistory =
       '/health/history-patient-booking';
-  static String remainingDaysOfDoctorPracticing(String doctorId) =>
-      '/health/dashboard/remaining-days-of-doctor-id/$doctorId';
-  static String remainingDaysOfDoctorID(String doctorId) =>
-      '/health/dashboard/remaining-days-of-doctor-practicing-id/$doctorId';
-  static String remainingDaysOfDoctorSubscription(String doctorId) =>
-      '/health/dashboard/remaining-days-of-doctor-subscription/$doctorId';
+  static const remainingDaysOfDoctorPracticing =
+      '/health/dashboard/remaining-days-of-doctor-id';
+  static const remainingDaysOfDoctorID =
+      '/health/dashboard/remaining-days-of-doctor-practicing-id';
+  static const remainingDaysOfDoctorSubscription =
+      '/health/dashboard/remaining-days-of-doctor-subscription';
+  static const getDoctorAppointmentsByDay = '/health/doctor/booking-day';
+  static const getDoctorUnhandledAppointments = '/health/book-requests';
+  static const isDoctor = '/health/check-doctor-or-not';
+  static const getDoctorTotalEarnedMoney =
+      '/health/dashboard/total-earned-money';
+  static String doctorAcceptAppointment(String appointmentId) =>
+      '/health/book-appointment/approve/$appointmentId';
+  static String doctorRejectAppointment(String appointmentId) =>
+      '/health/book-appointment/reject/$appointmentId';
+  static const getAllDoctorReservations =
+      '/health/dashboard/number-of-reservations';
+  static const getDoctorProfile = '/health/doctor-profile';
+  static const updateDoctorProfilePhoto = '/health/doctor/picture';
+  static const updateDoctorPractcing =
+      '/health/doctor-upload-license-practicing';
+  static const updateDoctorID = '/health/doctor-upload-license-id';
+  static String deleteDoctor(String doctorId) => '/health/doctor/$doctorId';
+
   // reels
   static const getExploreReels = '/reels/explore';
 
@@ -67,7 +95,7 @@ class EndPoints {
   static const expectedPrice = '/ride/trips/expected/price';
   static const carTypes = '/cars';
   static String subCategories({required String mainCategoryId}) {
-    return '/categories/subcategories/$mainCategoryId?page=1&limit=30';
+    return '/categories/subcategories/$mainCategoryId';
   }
 
   static const riderInfoRegister = '/ride/riders/register';
@@ -93,6 +121,7 @@ class EndPoints {
   static const getMyPickMeTrips = '/ride/pick-me/trip/requests';
   static const getAllComeWithMeAds = '/ride/come-with-you/get-all';
   static const getAllPickMeAds = '/ride/pick-me/get-all';
+  static const getRideThumbnails = '/ride/come-with-me/get-thumbnails';
   static String deletePickMeTrips(String id) {
     return '/ride/pick-me/Delete/$id';
   }
@@ -115,18 +144,36 @@ class EndPoints {
 
   static const createFacebookPost = '/facebook/post';
   static const createTwitterPost = '/twitter/post';
-  static const getFeedPosts = '/facebook/feed';
+  // static const getFeedPosts = '/facebook/feed';
+  static const activities = '/facebook/post/activities';
+  static const feelings = '/facebook/post/feelings';
   static const getTwitterFeedPosts = '/twitter/feed';
   static String userPosts(String userId) {
-    return '/facebook/post/user/$userId?limit=20&page=1&type=1';
+    return '/facebook/post/user/$userId?limit=20&page=1&type=1&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String userSuggests(SuggestedFriendsParams params) {
-    return '/users/suggest?limit=${params.limit}&page=${params.page}';
+    return '/users/suggest?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String userTweets(GetUserTweetsParams params) {
-    return '/twitter/post/user/${params.userId}?limit=10&page=${params.page}&type=1';
+    return '/twitter/post/user/${params.userId}?limit=10&page=${params.page}&type=1&subCategory=66a3583454e6e337915514db';
+  }
+
+  static String getFeedPosts(TwitterFeedParams params) {
+    return '/facebook/feed?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
+  }
+
+  static String getInstagramPosts(TwitterFeedParams params) {
+    return '/instagram/feed?limit=${params.limit}&page=${params.page}';
+  }
+
+  static String getReels(TwitterFeedParams params) {
+    return '/reels/explore?limit=${params.limit}&page=${params.page}';
+  }
+
+  static String getAdvertisement(TwitterFeedParams params) {
+    return '/advertisementCompany?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String acceptTripRider(String id) {
@@ -170,63 +217,87 @@ class EndPoints {
   }
 
   static String reactOnPost(String postId) {
-    return '/facebook/post/react/$postId';
+    return '/facebook/post/react/$postId?subCategory=66b77e77bb35968b535dc944';
+  }
+
+  static String reactOnComment(String postId) {
+    return '/facebook/comment/react/$postId';
   }
 
   static String reactOnTwitterPost(String postId) {
-    return '/twitter/post/react/$postId';
+    return '/twitter/post/react/$postId?subCategory=66a3583454e6e337915514db';
   }
 
   static String reactOnTwitterComment(String commentId) {
-    return '/twitter/comment/react/$commentId';
+    return '/twitter/comment/react/$commentId?subCategory=66a3583454e6e337915514db';
   }
 
   static String shareTwitterPost(String postId) {
-    return '/twitter/post/share/$postId';
+    return '/twitter/post/share/$postId?subCategory=66a3583454e6e337915514db';
+  }
+
+  static String shareFacebookPost(String postId) {
+    return '/facebook/post/share/$postId?subCategory=66b77e77bb35968b535dc944';
   }
 
   static String commentOnPost(String postId) {
-    return '/facebook/comment/create-comment/$postId';
+    return '/facebook/comment/create-comment/$postId?subCategory=66b77e77bb35968b535dc944';
   }
 
   static String commentOnTwitterPost(String postId) {
-    return '/twitter/comment/create-comment/$postId';
+    return '/twitter/comment/create-comment/$postId?subCategory=66b77e77bb35968b535dc944';
   }
 
-  static String getPostComments(String postId) {
-    return '/facebook/comment/get-post-comments/$postId';
+  static String getPostComments(PostCommentsParams params) {
+    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
   }
 
-  static String getTwitterPostComments(String postId) {
-    return '/twitter/comment/get-post-comments/$postId';
+  static String getPostCommentReplies(PostCommentsParams params) {
+    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
   }
 
-  static String getTwitterCommentReplies(String commentId) {
-    return '/twitter/comment/get-comment-replies/$commentId';
+  static String getTwitterPostComments(PostCommentsParams params) {
+    return '/twitter/comment/get-post-comments/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=66a3583454e6e337915514db';
+  }
+
+  static String getTwitterCommentReplies(PostCommentsParams params) {
+    return '/twitter/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=66a3583454e6e337915514db';
   }
 
   static String deletePost(String postId) {
-    return '/facebook/post/$postId';
+    return '/facebook/post/$postId?subCategory=66b77e77bb35968b535dc944';
+  }
+
+  static String deleteComment(String commentId) {
+    return '/facebook/comment/delete-comment/$commentId?subCategory=66b77e77bb35968b535dc944';
   }
 
   static String hidePost(String postId) {
-    return '/facebook/post/hide/$postId';
+    return '/facebook/post/hide/$postId?subCategory=66b77e77bb35968b535dc944';
+  }
+
+  static String deleteTwitterPost(String postId) {
+    return '/twitter/post/$postId?subCategory=66a3583454e6e337915514db';
+  }
+
+  static String hideTwitterPost(String postId) {
+    return '/twitter/post/hide/$postId?subCategory=66a3583454e6e337915514db';
   }
 
   static String friendRequest(String userId) {
-    return '/friends/sendFriendRequest/$userId';
+    return '/friends/sendFriendRequest/$userId?subCategory=66b77e77bb35968b535dc944';
   }
 
   static String followRequest(String userId) {
-    return '/follow/make-follow/$userId';
+    return '/follow/make-follow/$userId?subCategory=66b77e77bb35968b535dc944';
   }
 
   static String greetMessage(String userId) {
-    return '/users/greet/$userId';
+    return '/users/greet/$userId?subCategory=66b77e77bb35968b535dc944';
   }
 
   static String removeSuggestUser(String userId) {
-    return '/friends/remove-user-suggest/$userId';
+    return '/friends/remove-user-suggest/$userId?subCategory=66b77e77bb35968b535dc944';
   }
 
   // food
@@ -325,6 +396,21 @@ class EndPoints {
     return '/chat/get-chat/$chatId';
   }
 
+  //club voice
+  static String allClubVoiceRooms = '/clubvoice';
+  static String createClubVoiceRoom = '/clubvoice';
+  static String joinVoiceRoom(String id) => '/clubvoice/join/$id';
+  static String endVoiceRoom(String id) => '/clubvoice/$id';
+  static String leaveVoiceRoom(String id) => '/clubvoice/leave/$id';
+  static String searchVoiceRooms(String subject) =>
+      '/clubvoice?search=$subject';
+
+  //meeting
+  static String createMeeting = '/room-id';
+  static String joinMeeting(String id) => '/room-id/join/$id';
+  static String endMeeting(String id) => '/room-id/finish/$id';
+  static String deleteChatMessage = '/chat/message';
+
   static String changeChatMuteState(String chatId) {
     return '/chat/mute-chat/$chatId';
   }
@@ -343,4 +429,16 @@ class EndPoints {
   static String subscribe = '/subscription/subscribe';
 
   static String getActiveSubscriptionAmounts = '/payment-amount/active';
+
+  static String lockChat(String chatId) {
+    return '/chat/lock-chat/$chatId';
+  }
+
+  static String unLockChat(String chatId) {
+    return '/chat/unlock-chat/$chatId';
+  }
+
+  static String updateUnLockChatPassword() {
+    return '/chat/update-lock-chat';
+  }
 }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fourtyninehub/core/utils/localization.dart';
-import 'package:size_helper/size_helper.dart';
 
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
@@ -20,12 +18,14 @@ abstract class MainTextFormField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final bool expanded;
   final int? maxLines;
+  final int? minLines;
   final EdgeInsetsGeometry? contentPadding;
   final Color? borderColor;
   final Color? hintColor;
   final bool enableSuggestions;
   final bool showScrollbar;
   final bool? obscureText;
+  final bool readOnly;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final ValueChanged<String>? onChanged;
@@ -39,6 +39,8 @@ abstract class MainTextFormField extends StatefulWidget {
   const MainTextFormField(
       {super.key,
       required this.currentFocusNode,
+      this.minLines,
+      this.readOnly = false,
       this.nextFocusNode,
       required this.currentController,
       required this.hintText,
@@ -76,7 +78,6 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    _currentDir ??= context.isArabic ? TextDirection.rtl : TextDirection.ltr;
     Widget textFieldWidget = TextFormField(
         onTap: widget.onTap ??
             () {
@@ -102,21 +103,13 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         maxLength: widget.maxLength,
         expands: widget.expanded,
         enableSuggestions: widget.enableSuggestions,
-        style: widget.style ??
-            context
-                .sizeHelper(
-                    mobileLarge: Theme.of(context).textTheme.bodySmall!,
-                    tabletSmall: Theme.of(context).textTheme.bodySmall!,
-                    tabletNormal: Theme.of(context).textTheme.bodySmall!,
-                    desktopSmall: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(fontSize: 21.0))
-                .copyWith(color: Colors.black),
+        style: const TextStyle(),
         textCapitalization: widget.textCapitalization,
         textAlignVertical:
             widget.expanded ? const TextAlignVertical(y: -0.8) : null,
         obscureText: widget.obscureText ?? false,
+        minLines: widget.minLines,
+        readOnly: widget.readOnly,
         decoration: InputDecoration(
           fillColor: widget.fillColor ??
               (widget.enabled ? Colors.white : Colors.white),
@@ -124,29 +117,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
           contentPadding:
               widget.contentPadding ?? const EdgeInsets.fromLTRB(16, 0, 16, 0),
           hintText: widget.hintText,
-          hintStyle: context
-              .sizeHelper(
-                mobileLarge: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(fontSize: 10.0),
-                tabletSmall: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(fontSize: 12.0),
-                tabletNormal: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(fontSize: 12.0),
-                desktopSmall: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(fontSize: 20.0),
-              )
-              .copyWith(
-                  color: widget.hintColor ??
-                      widget.borderColor ??
-                      AppColors.GREY_DARK_COLOR),
+          hintStyle: const TextStyle(),
           suffixIcon: widget.suffixIcon,
           prefixIcon: widget.prefixIcon,
           enabledBorder: OutlineInputBorder(

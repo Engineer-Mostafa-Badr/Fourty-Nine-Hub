@@ -36,7 +36,12 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentatio
 import 'package:fourtyninehub/features/fourty_nine/data/data_sources/remote_data_source/fourty_nine_remote_data_source.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/repositories/fourty_nine_repository_impl.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/repositories/fourty_nine_repository.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/add_main_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/remove_main_category_to_favorites_usecase.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:get_it/get_it.dart';
 import '../features/account_taps/contact_us/domain/repositories/contact_us_repo.dart';
 import '../features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
@@ -53,11 +58,8 @@ import '../features/ads_feature/create_ad/domain/repositories/create_ad_repo.dar
 import '../features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import '../features/fourty_nine/domain/use_cases/get_parent_main_categories_use_case.dart';
 import '../features/fourty_nine/domain/use_cases/get_slider_items_usecase.dart';
-import '../features/fourty_nine/presentation/controllers/main_categories_cubit/parent_main_categories_cubit.dart';
-import '../features/fourty_nine/presentation/controllers/parent_main_categories_cubit/main_categories_cubit.dart';
-import '../features/fourty_nine/presentation/controllers/registable_sub_categories_cubit/registable_subcategories_cubit.dart';
+import '../features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import '../features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
-import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 
 class FourtyNineServiceLocator {
   static void execute(GetIt serviceLocator) {
@@ -139,6 +141,22 @@ class FourtyNineServiceLocator {
     // use cases
     serviceLocator.registerLazySingleton<GetParentMainCategoriesUseCase>(
       () => GetParentMainCategoriesUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator
+        .registerLazySingleton<RemoveMainCategoryFromFavoritesUseCase>(
+      () => RemoveMainCategoryFromFavoritesUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<AddMainCategoryToFavoritesUseCase>(
+      () => AddMainCategoryToFavoritesUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<GetMainCategoryDetailsUseCase>(
+      () => GetMainCategoryDetailsUseCase(
         serviceLocator(),
       ),
     );
@@ -276,13 +294,19 @@ class FourtyNineServiceLocator {
     );
 
     // cubits
-    serviceLocator.registerSingleton(
-      ParentMainCategoriesCubit(
-        serviceLocator(),
-      )..getParentMainCategories(),
-    );
+
     serviceLocator.registerSingleton(
       SliderCubit(
+        serviceLocator(),
+      )..loadData(),
+    );
+    serviceLocator.registerFactory<ThumbnailsCubit>(
+      () => ThumbnailsCubit(
+        serviceLocator(),
+      )..loadData(),
+    );
+    serviceLocator.registerFactory<MainCategoriesTapsCubit>(
+      () => MainCategoriesTapsCubit(
         serviceLocator(),
       )..loadData(),
     );
@@ -291,11 +315,7 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       )..loadData(),
     );
-    serviceLocator.registerSingleton(
-      RegistableSubCategoriesCubit(
-        serviceLocator(),
-      )..loadData(),
-    );
+
     serviceLocator.registerFactory<MyAddsCubit>(
       () => MyAddsCubit(
         serviceLocator(),
@@ -315,12 +335,9 @@ class FourtyNineServiceLocator {
     serviceLocator.registerFactory<MainCategoriesCubit>(
       () => MainCategoriesCubit(
         serviceLocator(),
-      )..getMainCategories(),
+      )..loadData(),
     );
 
-    serviceLocator.registerSingleton(SubcategoriesCubit(
-      serviceLocator(),
-    ));
     serviceLocator.registerFactory<AdsCubit>(
       () => AdsCubit(
         serviceLocator(),

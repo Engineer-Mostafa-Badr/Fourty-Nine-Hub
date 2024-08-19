@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../stateless/labels/ReadMoreLabel.dart';
+import '../../stateless/labels/read_more_label.dart';
 import '../../stateless/labels/label.dart';
 import '../../../../res/style/styles.dart';
 

@@ -25,6 +25,8 @@ abstract class Assets {
   static String walking = 'assets/images/walking.gif';
   static String image = 'assets/images/image.png';
   static String empty = 'assets/images/image.png';
+  static String threeDots = 'assets/images/three_dots.svg';
+  static String mobile = 'assets/images/mobile_icon.svg';
 
   // reactions
   static String like = 'assets/images/reactions/like.png';
@@ -48,19 +50,5 @@ abstract class Assets {
   static String doctorHomeVisit = 'assets/images/doctor_home_visit.png';
   static String doctorCall = 'assets/images/doctor_call.png';
   static String doctorClinicVisit = 'assets/images/doctor_clinic.png';
-
-  //drawer
-  static String contact_us_icon = 'assets/settings/contact_us_icon.svg';
-  static String dashbboard_icon = 'assets/settings/dashbboard_icon.svg';
-  static String favorite_ad_icon = 'assets/settings/favorite_ad_icon.svg';
-  static String favorite_main_category_icon = 'assets/settings/favorite_main_category_icon.svg';
-  static String favorite_sub_category_icon = 'assets/settings/favorite_sub_category_icon.svg';
-  static String lists_icon = 'assets/settings/lists_icon.svg';
-  static String my_ads_icon = 'assets/settings/my_ads_icon.svg';
-  static String privacy_icon = 'assets/settings/privacy_icon.svg';
-  static String settings_icon = 'assets/settings/settings_icon.svg';
-  static String share_app_icon = 'assets/settings/share_app_icon.svg';
-  static String sign_out_icon = 'assets/settings/sign_out_icon.svg';
-  static String wallet_icon = 'assets/settings/wallet_icon.svg';
-
+  static String profileIcon = 'assets/images/profile_icon.png';
 }

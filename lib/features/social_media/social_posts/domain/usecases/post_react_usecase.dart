@@ -21,5 +21,6 @@ class PostReactParams {
   });
   Map<String, dynamic> toJson() => {
         'react': react,
+    // 'subCategory':'66b77e77bb35968b535dc944'
       };
 }

@@ -1,8 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/authentication/data/repositories/wallet_repository.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_state.dart';
+
+import '../../../data/repositories/wallet_repository.dart';
 
 class GetWalletCubit extends Cubit<GetWalletState> {
   final WalletRepository repository;
@@ -11,16 +12,15 @@ class GetWalletCubit extends Cubit<GetWalletState> {
     // log("4444444444444444444444444444");
     var response = await repository.getWallet();
     response.fold(
-      (error) {
+          (error) {
         log(error.toString(), name: "WalletError");
         emit(FilauerGetWallatState());
       },
-      (data) {
+          (data) {
         log(data.toString(), name: "WalletError");
         emit(SuccessGetWallet(model: data));
       },
     );
   }
 }
-
 

@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_address.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_day_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
@@ -32,6 +33,10 @@ class DoctorEntity {
   final String createdAt;
   final String updatedAt;
   final List<AppointmentEntity> appointments;
+  final List<DoctorDayEntity> clinicDays;
+  final List<DoctorDayEntity> callDays;
+  final List<DoctorDayEntity> homeVisitDays;
+
 
   DoctorEntity({
     required this.id,
@@ -59,6 +64,9 @@ class DoctorEntity {
     required this.createdAt,
     required this.updatedAt,
     required this.appointments,
+    required this.clinicDays,
+    required this.callDays,
+    required this.homeVisitDays,
   }) : _waitingTime = waitingTime;
 
   String get priceToShow {

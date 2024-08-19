@@ -7,7 +7,6 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/address_field.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/description_filed.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/phone_field.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/subcategory.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/location/cities_dropdowns.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/location/governorate_dropdown.dart';
@@ -22,6 +21,11 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/presentation
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/name_filed.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/options_checkbox.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/pickers/photo/doctor_photo_picker.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+
+import '../../../../../common/widgets/stateless/labels/label.dart';
 
 class CreateDoctorView extends StatelessWidget {
   const CreateDoctorView({super.key});
@@ -56,19 +60,24 @@ class CreateDoctorView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Label(
+                    text: Labels.doctor,
+                    style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
                 const CreateDoctorSubcategoryDropdown(),
                 const Sizer(height: 20),
                 CreateDoctorOptionsCheckbox(),
                 const Sizer(height: 20),
                 const CreateDoctorNameField(),
                 const Sizer(height: 20),
-                const CreateDoctorPhoneField(),
-                const Sizer(height: 20),
                 const CreateDoctorProfilePhotoPicker(),
                 const Sizer(height: 20),
                 const CreateDoctorIDPhotoPicker(),
                 const Sizer(height: 20),
-                const CreateDoctorIDExpiryDatePicker(),
+                CreateDoctorIDExpiryDatePicker(
+                  onDateSelected: (date) {
+                    context.read<CreateDoctorCubit>().pickIDExpiryDate(date!);
+                  },
+                ),
                 const Sizer(height: 20),
                 const CreateDoctorLicensePhotoPicker(),
                 const Sizer(height: 20),
@@ -76,7 +85,15 @@ class CreateDoctorView extends StatelessWidget {
                 const Sizer(height: 20),
                 const CreateDoctorDescriptionField(),
                 const Sizer(height: 20),
-                const CreateDoctorGovernorateDropdown(),
+                CreateDoctorGovernorateDropdown(
+                  onSelected: (value) {
+                    if (value != null) {
+                      context
+                          .read<CreateDoctorCubit>()
+                          .selectGovernorate(value);
+                    }
+                  },
+                ),
                 const Sizer(height: 20),
                 const CreateDoctorCitiesDropdowns(),
                 const Sizer(height: 20),

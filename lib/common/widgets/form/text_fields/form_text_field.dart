@@ -1,4 +1,3 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -33,33 +32,33 @@ class FormTextField extends StatefulWidget {
   final BoxConstraints? constraints;
   const FormTextField(
       {super.key,
-      this.initialValue,
-      this.hintStyle,
-      this.action,
-      this.obsecure,
-      this.borderRadius,
-      this.prefix,
-      this.noBorder = false,
-      this.constraints,
-      this.fillColor,
-      this.hint,
-      this.label,
-      this.info,
-      this.autofill,
-      this.suffix,
-      this.type,
-      this.isEmail,
-      this.enabled,
-      this.onConfirm,
-      this.textAlignVertical,
-      this.extraValidationMessage,
-      this.extraValidation,
-      this.onTap,
-      this.height,
-      this.maxLines,
-      this.style,
-      this.required,
-      this.controller});
+        this.initialValue,
+        this.hintStyle,
+        this.action,
+        this.obsecure,
+        this.borderRadius,
+        this.prefix,
+        this.noBorder = false,
+        this.constraints,
+        this.fillColor,
+        this.hint,
+        this.label,
+        this.info,
+        this.autofill,
+        this.suffix,
+        this.type,
+        this.isEmail,
+        this.enabled,
+        this.onConfirm,
+        this.textAlignVertical,
+        this.extraValidationMessage,
+        this.extraValidation,
+        this.onTap,
+        this.height,
+        this.maxLines,
+        this.style,
+        this.required,
+        this.controller});
 
   @override
   State<FormTextField> createState() => _FormTextFieldState();
@@ -76,8 +75,8 @@ class _FormTextFieldState extends State<FormTextField> {
           height: widget.maxLines != null
               ? null
               : validate
-                  ? (widget.height ?? kToolbarHeight) * 1.5
-                  : widget.height ?? kToolbarHeight,
+              ? (widget.height ?? kToolbarHeight) * 1.5
+              : widget.height ?? kToolbarHeight,
           child: TextFormField(
             style: Styles.mediumText(),
             textAlignVertical: widget.textAlignVertical,
@@ -89,6 +88,7 @@ class _FormTextFieldState extends State<FormTextField> {
             },
             validator: (value) {
               validate = true;
+              final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
 
               setState(() {});
               if ((value == null || value.isEmpty) &&
@@ -96,7 +96,7 @@ class _FormTextFieldState extends State<FormTextField> {
                 return 'Required';
               } else if (widget.extraValidation ?? false) {
                 return widget.extraValidationMessage ?? '';
-              } else if (!EmailValidator.validate(value!.trim()) &&
+              } else if (!emailRegExp.hasMatch(value!.trim()) &&
                   (widget.isEmail ?? false)) {
                 return 'Enter correct email format';
               } else {
@@ -130,21 +130,21 @@ class _FormTextFieldState extends State<FormTextField> {
               enabledBorder: widget.noBorder
                   ? InputBorder.none
                   : OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: AppColors.LIGHT_GRAY_COLOR,
-                      ),
-                      borderRadius:
-                          widget.borderRadius ?? BorderRadius.circular(10),
-                    ),
+                borderSide: const BorderSide(
+                  color: AppColors.LIGHT_GRAY_COLOR,
+                ),
+                borderRadius:
+                widget.borderRadius ?? BorderRadius.circular(10),
+              ),
               focusedBorder: widget.noBorder
                   ? InputBorder.none
                   : OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: AppColors.PRIMARY_COLOR,
-                      ),
-                      borderRadius:
-                          widget.borderRadius ?? BorderRadius.circular(10),
-                    ),
+                borderSide: const BorderSide(
+                  color: AppColors.PRIMARY_COLOR,
+                ),
+                borderRadius:
+                widget.borderRadius ?? BorderRadius.circular(10),
+              ),
               errorBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
                   color: Colors.red,
@@ -154,12 +154,12 @@ class _FormTextFieldState extends State<FormTextField> {
               focusedErrorBorder: widget.noBorder
                   ? InputBorder.none
                   : OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.red,
-                      ),
-                      borderRadius:
-                          widget.borderRadius ?? BorderRadius.circular(10),
-                    ),
+                borderSide: const BorderSide(
+                  color: Colors.red,
+                ),
+                borderRadius:
+                widget.borderRadius ?? BorderRadius.circular(10),
+              ),
             ),
           ),
         ),
@@ -177,9 +177,9 @@ class _FormTextFieldState extends State<FormTextField> {
                 const Sizer(),
                 Expanded(
                     child: Label(
-                  text: widget.info ?? '',
-                  style: Styles.smallText(color: Colors.grey),
-                ))
+                      text: widget.info ?? '',
+                      style: Styles.smallText(color: Colors.grey),
+                    ))
               ],
             ),
           )

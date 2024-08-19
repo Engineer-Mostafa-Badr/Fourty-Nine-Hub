@@ -26,10 +26,11 @@ class TwitterReportParams {
     required this.categoryId,
   });
   Map<String, dynamic> toJson() => {
-        'category': category,
-        'userId': userId,
-        'reason': reason,
-        'content': content,
-        'categoryId': categoryId,
-      };
+    'category': category,
+    'userId': userId,
+    'reason': reason,
+    'content': content,
+    'categoryId': categoryId,
+    'subCategory':'66a3583454e6e337915514db'
+  };
 }

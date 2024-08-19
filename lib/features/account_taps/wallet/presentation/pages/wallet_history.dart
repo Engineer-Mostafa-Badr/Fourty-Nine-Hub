@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../common/functions/helper/local_auth.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -46,9 +45,9 @@ class WalletHistory extends StatelessWidget {
             ),
             MaterialButton(
               onPressed: () async {
-                if (await LocalAuth().checkBiometrics()) {
-                  context.push(Routes.PAYMENT);
-                }
+                // if (await LocalAuth().checkBiometrics()) {
+                //   context.push(Routes.PAYMENT);
+                // }
               },
               color: Colors.red,
               textColor: Colors.white,

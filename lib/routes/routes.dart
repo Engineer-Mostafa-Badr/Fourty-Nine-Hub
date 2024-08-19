@@ -2,6 +2,8 @@ abstract class Routes {
   Routes._();
 
   static const HOME = '/';
+  static const MAINCATEGORIESCARDS = '/MainCategoriesCards';
+  static const MAINCATEGORIESTREE = '/MainCategoriesTree';
   static const SUBCATEGORIES = '/Subcategories';
   static const ADS = '/Subcategories/ADS';
   static const ADdetails = '/Subcategories/ADS/AD-Details';
@@ -19,14 +21,15 @@ abstract class Routes {
   static const REELS = '/Social/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
   static const TWITTER = '/Social/Twitter';
-  static const TWITTERPOSTDETAILS = 'TwitterPostDetails';
+  static const TWITTERPOSTDETAILS = '/Social/Twitter/TwitterPostDetails';
   static const CREATEPOST = '/Social/CreatePost';
 
   static const Tinder = '/Social/Tinder';
   static const LIVE = '/Social/Live';
+  static const LIVEView = '/Social/Live/LiveView';
   static const CLUBHOUSE = '/Social/ClubHouse';
   static const CLUBHOUSECHAT = '/Social/ClubHouse/ClubHouseChat';
-  static const CLUBHOUSEROOM = '/Social/ClubHouse/ClubHouseRoom';
+  static const AUDIOSTREAMSCREEN = '/Social/ClubHouse/ClubHouseRoom';
   static const CHAT = '/Chat';
   static const CHATROOM = '/ChatRoom';
   static const MAZADAT = '/Mazadat';
@@ -34,16 +37,27 @@ abstract class Routes {
   static const VISITAEMERGENCY = '/Visita/VisitaEmergency';
   static const CREATEDOCTOR = '/Visita/CreateDoctor';
   static const FILTERDOCTORSUBCATEGORY = '/Visita/FilterDoctorSubcategory';
+  static const FILTERDOCTORAREA =
+      '/Visita/FilterDoctorSubcategory/FilterDoctorCity/FilterDoctorArea';
+  static const VISITADOCTORLISTBYLOCATION =
+      '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate/FilterDoctorCity/VisitaDoctorsList';
+  static const VISITADOCTORLISTBYCALL =
+      '/Visita/FilterDoctorSubcategory/VisitaDoctorsList';
   static const FILTERDOCTORGOVERNORATE = '/Visita/FilterDoctorGovernorate';
+
   static const FILTERDOCTORCITY = '/Visita/FilterDoctorCity';
+
   static const VISITADOCTORLIST = '/Visita/VisitaDoctorsList';
   static const EDITDOCTORPROFILE = '/Visita/EditDoctorProfile';
   static const VISITADOCTORDETAILS = '/Visita/DoctorDetails';
   static const VISITABOOKING = '/Visita/VisitaBooking';
   static const DOCTORDASHBOARD = '/Visita/DoctorDashboard';
-  static const EDITDOCTORDOCS = '/Visita/EditDoctorDocs';
   static const EDITDOCTORPERSONALINFO = '/Visita/EditDoctorPersonalInfo';
-  static const DOCTORHISTORY = '/Visita/DoctorHistory';
+  static const DOCTORSTATISTICS = '/Visita/DoctorStatistics';
+  static const DOCTORTODAYAPPOINTMENTS = '/Visita/DoctorTodayAppointments';
+  static const DOCTORUNHANDLEDAPPOINTMENTS =
+      '/Visita/DoctorUnhandledAppointments';
+  static const ALLDOCTORRESERVATIONS = '/Visita/AllDoctorReservations';
   static const FOOD = '/Food';
 
   static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
@@ -100,12 +114,15 @@ abstract class Routes {
   static const SETTINGS = '/Account/Settings';
   static const PAYMENT = '/Payment';
   static const SUBSCRIPTIONPLANS = '/SubscriptionPlans';
+  static const SHIPPING_REGISTER = '/shippingRegister';
 }
 
 abstract class Paths {
   Paths._();
 
   static const HOME = '/';
+  static const MAINCATEGORIESCARDS = 'MainCategoriesCards';
+  static const MAINCATEGORIESTREE = 'MainCategoriesTree';
   static const SUBCATEGORIES = 'Subcategories';
   static const ADS = 'ADS';
   static const ADdetails = 'AD-Details';
@@ -132,6 +149,7 @@ abstract class Paths {
   static const CREATEPOST = 'CreatePost';
   static const TINDER = 'Tinder';
   static const LIVE = 'Live';
+  static const LIVEVIEW = 'LiveView';
   static const CLUBHOUSE = 'ClubHouse';
   static const CLUBHOUSECHAT = 'ClubHouseChat';
   static const CLUBHOUSEROOM = 'ClubHouseRoom';
@@ -144,11 +162,14 @@ abstract class Paths {
   static const EDITDOCTORPROFILE = 'EditDoctorProfile';
   static const FILTERDOCTORSUBCATEGORY = 'FilterDoctorSubcategory';
   static const FILTERDOCTORGOVERNORATE = 'FilterDoctorGovernorate';
-  static const EDITDOCTORDOCS = 'EditDoctorDocs';
   static const FILTERDOCTORCITY = 'FilterDoctorCity';
+  static const FILTERDOCTORAREA = 'FilterDoctorArea';
   static const DOCTORDASHBOARD = 'DoctorDashboard';
   static const EDITDOCTORPERSONALINFO = 'EditDoctorPersonalInfo';
-  static const DOCTORHISTORY = 'DoctorHistory';
+  static const DOCTORSTATISTICS = 'DoctorStatistics';
+  static const DOCTORTODAYAPPOINTMENTS = 'DoctorTodayAppointments';
+  static const DOCTORUNHANDLEDAPPOINTMENTS = 'DoctorUnhandledAppointments';
+  static const ALLDOCTORRESERVATIONS = 'AllDoctorReservations';
   static const FOOD = 'Food';
   static const CusineRestaurants = 'Cusine-Restaurants';
   static const RestaurantDashboard = 'RestaurantDashboard';
@@ -199,4 +220,5 @@ abstract class Paths {
   static const AZKAAR = 'Azkaar';
   static const PAYMENT = 'Payment';
   static const SUBSCRIPTIONPLANS = 'SubscriptionPlans';
+  static const SHIPPING_REGISTER = 'shippingRegister';
 }

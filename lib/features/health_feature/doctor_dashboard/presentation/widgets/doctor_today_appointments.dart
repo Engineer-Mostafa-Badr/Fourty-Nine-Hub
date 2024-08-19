@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class DoctorTodayAppointmentsWidget extends StatelessWidget {
   const DoctorTodayAppointmentsWidget({super.key});
@@ -24,25 +30,55 @@ class DoctorTodayAppointmentsWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             color: Colors.white,
           ),
-          child: Column(
-            children: [
-              ListView.separated(
-                shrinkWrap: true,
-                itemCount: 2,
-                itemBuilder: (context, index) {
-                  return const ListTile(
-                    title: Text('Clinic'),
-                    subtitle: Text('9:00 - 10:00 AM'),
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(),
-              ),
-              AppButton(label: Labels.viewMore, onPressed: () {})
-            ],
+          child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
+            buildWhen: (previous, current) =>
+                current is DoctorDashboardInitial ||
+                current is DoctorDashboardTodayAppointments,
+            builder: (context, state) {
+              if (state is DoctorDashboardTodayAppointments &&
+                  state.appointments.isNotEmpty) {
+                return Column(
+                  children: [
+                    ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: state.appointments.length,
+                      itemBuilder: (context, index) => DoctorAppointmentCard(
+                        appointment: state.appointments[index],
+                      ),
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const Divider(),
+                    ),
+                    AppButton(
+                        label: Labels.viewMore,
+                        onPressed: () {
+                          context.push(Routes.DOCTORTODAYAPPOINTMENTS);
+                        })
+                  ],
+                );
+              } else {
+                return Center(
+                    child: Text(
+                      'No Appointments',
+                  style: Styles.headerText(),
+                ));
+              }
+            },
           ),
         ),
       ],
+    );
+  }
+}
+
+class DoctorAppointmentCard extends StatelessWidget {
+  final DoctorAppointmentEntity appointment;
+  const DoctorAppointmentCard({super.key, required this.appointment});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(appointment.type.translatedName),
+      subtitle: Text(appointment.time),
     );
   }
 }

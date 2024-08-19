@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
@@ -57,9 +58,7 @@ class ImageValidation extends StatelessWidget {
             if (field.hasError)
               Column(
                 children: [
-                  SizedBox(
-                    height: 8,
-                  ),
+                  const SizedBox(height: 8),
                   Text(
                     field.errorText ?? "",
                     style: Styles.mediumText(color: Colors.red),

@@ -58,6 +58,7 @@ class BaseApiConsumer extends ApiConsumer {
   void attachToken(UserTokensEntity? token) {
     log(token?.accessToken.toString() ?? "Token", name: "Token");
     _token = token;
+    log("${token?.accessToken}", name: "Token");
     if (token != null) {
       _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
     }

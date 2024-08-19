@@ -149,7 +149,7 @@ class ShippingCubit extends Cubit<ShippingState> {
   //   request.headers['Content-Type'] = 'image/png';  // استخدم نوع الملف المناسب
   //   request.headers['x-amz-acl'] = 'private';       // إذا كنت تستخدم هذا النوع في الـ signedUrl
   //   request.bodyBytes = await imageFile.readAsBytes();
-
+    
   //   final response = await request.send();
 
   //   if (response.statusCode == 200) {

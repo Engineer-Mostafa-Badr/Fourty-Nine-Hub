@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -5,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_place
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreateDoctorProfilePhotoPicker extends StatefulWidget {
   const CreateDoctorProfilePhotoPicker({super.key});
@@ -38,7 +40,7 @@ class _CreateDoctorProfilePhotoPickerState
             builder: (context, state) {
               if (state is CreateDoctorUploadProfileImage) {
                 return ImagePickerPlaceholder(
-                  image: state.file,
+                  image: XFile(state.file.path),
                 );
               }
               return const ImagePickerPlaceholder();

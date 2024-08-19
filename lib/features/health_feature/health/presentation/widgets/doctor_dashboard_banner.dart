@@ -12,7 +12,7 @@ class DoctorDashboardBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HealthCubit, HealthState>(
       builder: (context, state) {
-        if (state.isDoctor) {
+        if (state.isDoctor == true) {
           return const DashboardBanner(
             title: Labels.doctorDashboard,
             subTitle: Labels.doctorDashboardBannerDiscription,

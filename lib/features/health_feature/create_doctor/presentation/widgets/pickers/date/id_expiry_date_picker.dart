@@ -37,9 +37,8 @@ class CreateDoctorIDExpiryDatePicker extends StatelessWidget {
             if (field.hasError)
               Column(
                 children: [
-                  SizedBox(
-                    height: 8,
-                  ),
+        const SizedBox(height: 8),
+
                   Text(
                     field.errorText ?? "",
                     style: Styles.mediumText(color: Colors.red),

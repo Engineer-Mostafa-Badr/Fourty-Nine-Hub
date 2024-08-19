@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter/foundation.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/car_type_model.dart';
 import 'package:fourtyninehub/features/register/driver_register/data/models/rider_info_model.dart';
@@ -10,8 +11,7 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import '../../../../../core/enums/main_services_enum.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../ride/RideRequest/domain/usecases/request/get_car_types_use_case.dart';
-import '../../../../ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
-import '../../../../subcategories/data/models/sub_category_model.dart';
+import '../../../../subcategories/domain/usecases/get_sub_categories_use_case.dart';
 
 part 'driver_register_state.dart';
 
@@ -31,7 +31,9 @@ class DriverRegisterCubit extends Cubit<DriverRegisterState> {
     emit(state.copyWith(status: DriverRegisterStatuses.loading));
     try {
       // -------------------------------load subcategories ---------------------------
-      final subCategories = await _getSubCategoriesUseCase.call(id);
+      final subCategories = await _getSubCategoriesUseCase.call(
+          GetSubCategoriesParams(
+              mainCategoryId: id, paginationParams: PaginationParams.basic()));
       subCategories.fold((failure) {
         emit(state.copyWith(
           failure: failure,

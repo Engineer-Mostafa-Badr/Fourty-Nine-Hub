@@ -1,4 +1,5 @@
-import 'package:email_validator/email_validator.dart';
+import 'dart:developer';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +11,7 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_for
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -24,14 +26,9 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../controllers/user_cubit/user_cubit.dart';
 
-class RegisterView extends StatefulWidget {
+class RegisterView extends StatelessWidget {
   const RegisterView({super.key});
 
-  @override
-  State<RegisterView> createState() => _RegisterViewState();
-}
-
-class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     final registerCubit = context.read<RegisterCubit>();
@@ -46,6 +43,7 @@ class _RegisterViewState extends State<RegisterView> {
             extra: registerCubit.emailTextController.text,
           );
         } else if (state is RegisterSuccess) {
+          context.read<UserCubit>().setLogin(true);
           context.read<UserCubit>().getUser();
           context.go(Routes.HOME);
         }
@@ -89,7 +87,10 @@ class _RegisterViewState extends State<RegisterView> {
                     suffixIcon: const Icon(Icons.email),
                     hint: 'Email',
                     validator: (v) {
-                      if (!EmailValidator.validate(v!)) {
+                      String pattern =
+                          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+                      RegExp regex = RegExp(pattern);
+                      if (!regex.hasMatch(v!)) {
                         return 'invalid email';
                       }
                       return null;
@@ -99,6 +100,8 @@ class _RegisterViewState extends State<RegisterView> {
                   PasswordTextFormField(
                     currentFocusNode: registerCubit.passwordFocusNode,
                     currentController: registerCubit.passwordTextController,
+                    nextFocusNode: registerCubit.confirmPasswordFocusNode,
+                    hint: 'Password',
                   ),
                   const Sizer(),
                   ConfirmPasswordTextFormField(
@@ -108,55 +111,63 @@ class _RegisterViewState extends State<RegisterView> {
                     passwordController: registerCubit.passwordTextController,
                   ),
                   const Sizer(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Gender : ', style: Styles.headerText(fontSize: 14)),
-                      Row(
+                  StatefulBuilder(
+                    builder: (context, setState) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                              child: BadgedLabel(
+                          Text('Gender : ',
+                              style: Styles.headerText(fontSize: 14)),
+                          Row(
+                            children: [
+                              Expanded(
+                                  child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          registerCubit.isMale = true;
+                                        });
+                                      },
+                                      child: BadgedLabel(
+                                          color: registerCubit.isMale
+                                              ? AppColors.PRIMARY_COLOR
+                                              : Colors.white,
+                                          textColor: registerCubit.isMale
+                                              ? Colors.white
+                                              : Colors.black,
+                                          label: 'Male'))),
+                              Expanded(
+                                child: InkWell(
                                   onTap: () {
-                                    registerCubit.isMale = true;
-
-                                    setState(() {});
+                                    setState(() {
+                                      registerCubit.isMale = false;
+                                    });
                                   },
-                                  height: kToolbarHeight * .7,
-                                  isCentered: true,
-                                  color: registerCubit.isMale
-                                      ? AppColors.PRIMARY_COLOR
-                                      : Colors.white,
-                                  textColor: registerCubit.isMale
-                                      ? Colors.white
-                                      : Colors.black,
-                                  label: 'Male')),
-                          Expanded(
-                            child: BadgedLabel(
-                              onTap: () {
-                                registerCubit.isMale = false;
-
-                                setState(() {});
-                              },
-                              height: kToolbarHeight * .7,
-                              isCentered: true,
-                              textColor: registerCubit.isMale
-                                  ? Colors.black
-                                  : Colors.white,
-                              color: registerCubit.isMale
-                                  ? Colors.white
-                                  : AppColors.PRIMARY_COLOR,
-                              label: 'Female',
-                            ),
+                                  child: BadgedLabel(
+                                    textColor: registerCubit.isMale
+                                        ? Colors.black
+                                        : Colors.white,
+                                    color: registerCubit.isMale
+                                        ? Colors.white
+                                        : AppColors.PRIMARY_COLOR,
+                                    label: 'Female',
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
-                      ),
-                    ],
+                      );
+                    },
                   ),
                   const Sizer(height: 30),
                   DefaultButton(
                     label: 'Register',
                     width: double.infinity,
                     onPressed: registerCubit.register,
+                    // onPressed: () async {
+                    //   var r = await getDeviceId();
+                    //   log(r.toString());
+                    // },
                   ),
                   const Sizer(),
                   const Sizer(),
@@ -194,7 +205,7 @@ class _RegisterViewState extends State<RegisterView> {
                       children: [
                         TextSpan(
                           text: "Does have account? ",
-                          style: Styles.headerText(
+                          style: Styles.mediumText(
                             color: Colors.grey,
                           ),
                         ),
@@ -202,7 +213,7 @@ class _RegisterViewState extends State<RegisterView> {
                           text: "Login",
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => context.push(Routes.LOGIN),
-                          style: Styles.headerText(
+                          style: Styles.mediumText(
                             color: Colors.black,
                           ),
                         ),

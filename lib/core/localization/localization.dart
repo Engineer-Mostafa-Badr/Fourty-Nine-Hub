@@ -17,3 +17,4 @@ String arEn(BuildContext context, String? ar, String en) {
 extension Localization on BuildContext {
   bool get isArabic => Localizations.localeOf(this).languageCode == 'ar';
 }
+

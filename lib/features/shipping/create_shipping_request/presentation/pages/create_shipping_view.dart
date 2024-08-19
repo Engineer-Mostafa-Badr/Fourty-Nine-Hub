@@ -7,9 +7,6 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/service/cache_service.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/common/dashboard_banner.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
@@ -17,7 +14,6 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/shipping_banner.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card_selected.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -29,19 +25,12 @@ import '../../../../ride/RideRequest/domain/entity/address_search_params_entity.
 
 class CreateShippingView extends StatefulWidget {
   const CreateShippingView({super.key});
-  // final ShippingCubit cubit;
   @override
   State<CreateShippingView> createState() => _CreateShippingViewState();
 }
 
+
 class _CreateShippingViewState extends State<CreateShippingView> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    context.read<ShippingCubit>().getBannerData();
-    // widget.cubit.getBannerData();
-  }
 
   TextEditingController receiptPoint = TextEditingController();
   TextEditingController deliveryPoint = TextEditingController();
@@ -75,7 +64,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   },
                 ),
                 const Sizer(),
-                const DashboardBanner(
+                 const DashboardBanner(
                   title: Labels.driverDashboard,
                   subTitle: Labels.driverDashboardBannerDiscription,
                   route: Routes.DOCTORDASHBOARD,
@@ -132,9 +121,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                               if (field.hasError)
                                 Column(
                                   children: [
-                                    SizedBox(
-                                      height: 8,
-                                    ),
+                                    const SizedBox(height: 8,),
                                     Text(
                                       field.errorText ?? "",
                                       style:
@@ -273,7 +260,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       height: 25,
                     )),
                     const SizedBox(width: 10),
-                    const Flexible(
+                     const Flexible(
                         flex: 3,
                         child: Text(Labels.theApplicationDoesNot,
                             textAlign: TextAlign.start,
@@ -293,7 +280,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       width: 25,
                       height: 25,
                     )),
-                    const SizedBox(width: 10),
+                const SizedBox(width: 10),
 
                     // const Gap(10),
                     const Flexible(
@@ -319,7 +306,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       height: 25,
                     )),
                     // const Gap(10),
-                    const SizedBox(width: 10),
+                const SizedBox(width: 10),
                     const Flexible(
                       flex: 3,
                       child: Text(
@@ -345,7 +332,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                           onPressed: () {}),
                     ),
                     // const Gap(6),
-                    const SizedBox(width: 6),
+                const SizedBox(width: 6),
                     Flexible(
                       child: AppButton(
                           height: 60,
@@ -354,7 +341,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                           style: Styles.headerText(color: Colors.white),
                           onPressed: () async {
                             // String token = ApiConsumer().attachToken(token)
-                            // log(token, name: "Token");
+    // log(token, name: "Token");
 
                             // if (formKey.currentState!.validate()) {}
                           }),

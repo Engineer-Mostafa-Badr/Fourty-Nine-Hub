@@ -1,17 +1,18 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/enums/main_services_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/address_search_params_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/params/expected_price_params.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/ride_request_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_expected_price_use_case.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_ride_sub_categories_use_case.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/enums/ride_services_enum.dart';
 import '../../../../../routes/routes.dart';
-import '../../../../subcategories/data/models/sub_category_model.dart';
 import '../../data/models/car_type_model.dart';
 import '../../data/models/google_search_results.dart';
 import '../../domain/entity/address_search_params_entity.dart';
@@ -45,7 +46,10 @@ class RiderequestCubit extends Cubit<RiderequestState> {
   Future<void> loadData() async {
     emit(state.copyWith(status: RideRequestStatusesEnum.loading));
     // -------------------------------load subcategories ---------------------------
-    final subCategories = await _getSubCategoriesUseCase.call(service.value());
+    final subCategories = await _getSubCategoriesUseCase.call(
+        GetSubCategoriesParams(
+            mainCategoryId: service.id,
+            paginationParams: PaginationParams.basic()));
     subCategories.fold((failure) {
       emit(state.copyWith(
         failure: failure,
@@ -73,7 +77,7 @@ class RiderequestCubit extends Cubit<RiderequestState> {
 
   // change subCategory selection
   void changeSubCategorySelection({
-    required SubCategoryModel item,
+    required SubCategoryEntity item,
   }) =>
       emit(state.copyWith(subCategory: item));
 
