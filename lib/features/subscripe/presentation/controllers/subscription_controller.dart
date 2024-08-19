@@ -14,6 +14,7 @@ import '../../domain/usecases/subscribe_usecase.dart';
 import '../widgets/subscription_plans.dart';
 
 class SubscriptionController {
+  //to pass current context
   final BuildContext context =
       AppPages.router.configuration.navigatorKey.currentContext!;
   final CheckIfUserSubscribedUseCase _checkIfUserSubscribedUseCase;
@@ -60,6 +61,7 @@ class SubscriptionController {
             ), (plans) {
       bottomSheet(
           context: context,
+          backColor: Theme.of(context).scaffoldBackgroundColor,
           widget: SubscriptionPlansWidget(
             subscribePlans: plans,
             subCategoryId: subCategoryId,

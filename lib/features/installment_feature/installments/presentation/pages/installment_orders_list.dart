@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../../common/widgets/dynamic/drawer.dart';
-import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../widgets/public/order_card.dart';
@@ -13,7 +11,7 @@ class InstallmentOrdersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HomeAppbar(),
+      appBar:  HomeAppbar(),
       drawer: const DrawerWidget(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

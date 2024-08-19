@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/change_react.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/react_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/block_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_post_usecase.dart';
@@ -17,12 +19,16 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comment_replies_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/hide_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/remove_friend_request_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/remove_suggest_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/send_greet_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/share_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/un_follow_user_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/user_profile_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../domain/entities/post_entity.dart';
@@ -46,6 +52,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final SuggestedFriendsUseCase _suggestedFriendsUseCase;
   final FriedRequestUseCase _friedRequestUseCase;
   final FollowUserUseCase _followUserUseCase;
+  final UnFollowUserUseCase _unFollowUserUseCase;
   final SendGreetMessageUseCase _sendGreetMessageUseCase;
   final RemoveSuggestUserUseCase _removeSuggestUserUseCase;
   final SharePostUseCase _sharePostUseCase;
@@ -55,6 +62,9 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final FaceTweetUseCase _getTwitterFeedUseCase;
   final FaceAdvertisementUseCase _advertisementUseCase;
   final GetPostUseCase _getPostUseCase;
+  final UserProfileUseCase _userProfileUseCase;
+  final RemoveFriedRequestUseCase _removeFriedRequestUseCase;
+  final BlocUserUseCase _blocUserUseCase;
 
   SocialPostsCubit(
     this._getFeedUseCase,
@@ -75,8 +85,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._replyOnCommentUseCase,
     this._getTwitterFeedUseCase,
     this._advertisementUseCase,
-    this._getPostUseCase,
-    this._deleteCommentUseCase,
+    this._getPostUseCase, this._deleteCommentUseCase, this._userProfileUseCase, this._unFollowUserUseCase, this._removeFriedRequestUseCase, this._blocUserUseCase,
   ) : super(const SocialPostsState());
 
   void loadData() async {
@@ -129,11 +138,21 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   }
 
   void refreshPosts(List<PostEntity>? posts) {
-    emit(state.copyWith(posts: posts, status: StateStatus.initial));
-    feedPagingController.itemList?.clear();
-    feedPagingController.itemList?.addAll(posts!);
+    feedPagingController.refresh();
   }
 
+
+  void loadUserPosts(String userId)async{
+    await getMyPosts(1,userId);
+    userPostsPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getMyPosts(pageKey,userId);
+    });
+  }
+
+  void refreshUserPosts() {
+    userPostsPagingController.refresh();
+  }
 // get feed posts
   Future<void> getFeed(int page) async {
     final response =
@@ -217,6 +236,8 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       PagingController(firstPageKey: 1);
   final PagingController<int, PostEntity> feedPagingController =
       PagingController(firstPageKey: 1);
+  final PagingController<int, PostEntity> userPostsPagingController =
+      PagingController(firstPageKey: 1);
   // get suggested friends
   Future<void> getSuggestedFriends(int page) async {
     final response = await _suggestedFriendsUseCase(
@@ -242,32 +263,64 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   }
 
   // get feed posts
-  Future<void> getMyPosts({required BuildContext context}) async {
-    final user = context.read<UserCubit>().state.data;
-    if (user != null) {
-      final response = await _getUserPostsUseCase(user.id);
+  Future<void> getMyPosts(int page,String userId) async {
+    // final user = context.read<UserCubit>().state.data;
+      final response = await _getUserPostsUseCase(UserPostsParams(page: page,limit: pageSize,userId: userId));
+      response.fold(
+          (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+          (data) {
+            final isLastPage = data.length < pageSize;
+            if (page == 1) {
+              print("page == 1 $page");
+              userPostsPagingController.itemList = [];
+            }
+            if (isLastPage) {
+              print("isLastPage = $isLastPage");
+              userPostsPagingController.appendLastPage(data);
+            } else {
+              print("isNotLastPage = $isLastPage");
+              final nextPageKey = page + 1;
+              userPostsPagingController.appendPage(data, nextPageKey);
+            }
+            emit(state.copyWith(myPosts: data, status: StateStatus.success));
+          });
+
+  }
+
+  // get user profile
+  Future<void> getUserProfile({required String id}) async {
+    emit(state.copyWith(status: StateStatus.loading));
+      final response = await _userProfileUseCase(id);
       response.fold(
           (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
           (data) =>
-              emit(state.copyWith(myPosts: data, status: StateStatus.initial)));
-    }
+              emit(state.copyWith(profileData: data, status: StateStatus.success)));
+
   }
 
 // react on a post
-  Future<bool> onReact(
-      {required PostReactParams params, required String from}) async {
+  Future<bool> onReact({required PostReactParams params,required String from}) async {
     var response = await _postReactUseCase(params);
     bool value = false;
     response.fold(
         (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
         (r) {
-      if (from == 'details') {
-      } else {
-        print("reeact${params.react}");
+
+      if(from=='details'){
+        // changeReaction(state.postDetails, params.react);
+
+      }else if(from == 'userPosts'){
+      var currentUserPost = userPostsPagingController.itemList
+          ?.firstWhere((element) => element.id == params.postId);
+      changeReaction(currentUserPost, params.react);
+      }else{
         var currentPost = feedPagingController.itemList
             ?.firstWhere((element) => element.id == params.postId);
         changeReaction(currentPost, params.react);
+        changeReaction(state.postDetails, params.react);
+        // changeReaction(currentUserPost, params.react);
+
       }
       value = r;
       emit(state.copyWith(status: StateStatus.success));
@@ -424,24 +477,22 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     });
   }
 
+
   Future<bool> deleteComment(
-      {required BuildContext context,
-      required String commentId,
-      required String postId,
-      required String from}) async {
+      {required BuildContext context, required String commentId,required String postId,required String from}) async {
     final response = await _deleteCommentUseCase(commentId);
     bool result = false;
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
-      result = r;
-      if (from == 'feed') {
-        var currentPost = feedPagingController.itemList
-            ?.firstWhere((element) => element.id == postId);
-        print("commmmmment count${currentPost?.commentsCount}");
+          result=r;
+          if(from =='feed'){
+            var currentPost = feedPagingController.itemList
+                ?.firstWhere((element) => element.id == postId);
+            print("commmmmment count${currentPost?.commentsCount}");
 
-        currentPost?.commentsCount = (currentPost.commentsCount! - 1);
-      }
+            currentPost?.commentsCount = (currentPost.commentsCount! - 1);
+          }
       emit(state.copyWith(status: StateStatus.success));
       showSuccessMessage(context, "Comment delete successfully");
     });
@@ -472,17 +523,56 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     return isAdd;
   }
 
-  Future<bool> followRequest(
+  Future<bool> removeFriendRequest(
       {required BuildContext context, required String userId}) async {
-    final response = await _followUserUseCase(userId);
-    bool isAdd = false;
+    final response = await _removeFriedRequestUseCase(userId);
+    bool isRemoved = false;
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
-      isAdd = r;
+      isRemoved = r;
       emit(state.copyWith(friendRequest: r, status: StateStatus.success));
     });
-    return isAdd;
+    return isRemoved;
+  }
+
+  Future<bool> blockUser(
+      {required BuildContext context, required String userId}) async {
+    final response = await _blocUserUseCase(userId);
+    bool isBlocked = false;
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+      isBlocked = r;
+      emit(state.copyWith(status: StateStatus.success));
+    });
+    return isBlocked;
+  }
+
+  Future<bool> followRequest(
+      {required BuildContext context, required String userId}) async {
+    final response = await _followUserUseCase(userId);
+    bool isFollow = false;
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+          isFollow = r;
+      emit(state.copyWith(friendRequest: r, status: StateStatus.success));
+    });
+    return isFollow;
+  }
+
+  Future<bool> unFollowRequest(
+      {required BuildContext context, required String userId}) async {
+    final response = await _unFollowUserUseCase(userId);
+    bool unFollow = false;
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+          unFollow = r;
+      emit(state.copyWith(status: StateStatus.success));
+    });
+    return unFollow;
   }
 
   Future<bool> sendGreetMessage(
@@ -528,4 +618,32 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     });
     return value;
   }
+
+
+  List<ReactEntity> reacts=[
+    ReactEntity(
+      image: Assets.wowReaction,
+      react: 'wow',
+    ),
+    ReactEntity(
+      image: Assets.loveReaction,
+      react: 'love',
+    ),
+    ReactEntity(
+      image: Assets.sadReaction,
+      react: 'sad',
+    ),
+    ReactEntity(
+      image: Assets.angryReaction,
+      react: 'angry',
+    ),
+    ReactEntity(
+      image: Assets.hahaReaction,
+      react: 'haha',
+    ),
+    ReactEntity(
+      image: Assets.likeReaction,
+      react: 'likes',
+    ),
+  ];
 }

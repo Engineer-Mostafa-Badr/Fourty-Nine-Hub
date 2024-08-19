@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
@@ -14,10 +15,12 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../common/theme/cubit/cubit.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/style/app_colors.dart';
 
 class HealthSubCategoryCard extends StatelessWidget {
   final HealthSubcategoryEntity subCategory;
+
   const HealthSubCategoryCard({super.key, required this.subCategory});
 
   @override
@@ -86,7 +89,9 @@ class HealthSubCategoryCard extends StatelessWidget {
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
                 ),
                 Label(
-                  text: '${subCategory.numberOfContent.toShortScale} doctors',
+                  text: subCategory.numberOfContent.toShortScale == '1'
+                      ? '${subCategory.numberOfContent.toShortScale} ${LocaleKeys.doctor.localize}'
+                      : '${subCategory.numberOfContent.toShortScale} ${LocaleKeys.doctors.localize}',
                   style: Styles.mediumText(),
                 ),
               ],

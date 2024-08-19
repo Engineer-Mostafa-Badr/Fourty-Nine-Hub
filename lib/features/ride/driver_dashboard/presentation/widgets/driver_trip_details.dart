@@ -12,7 +12,6 @@ import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/buttons/progress_button.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
 import '../../../../requests_history/data/models/trip_model.dart';
 
 class DriverTripDetails extends StatelessWidget {

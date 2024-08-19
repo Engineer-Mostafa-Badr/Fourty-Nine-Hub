@@ -1,3 +1,7 @@
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+
+import '../localization/locale_keys.g.dart';
+
 class Validator {
   String? validateEmail(String? email) {
     if (email == null || email.isEmpty) {
@@ -51,7 +55,7 @@ class Validator {
 
   String? validateUserName(String? userName) {
     if (userName == null || userName.trim().isEmpty) {
-      return 'Empty Field Not Valid';
+      return LocaleKeys.emptyFieldNotValid.localize;
     } else if (userName.length < 2) {
       return 'Must Be At Least_2';
     }
@@ -77,7 +81,7 @@ class Validator {
   }
 
   String? validateEmptyField(String? text) =>
-      text == null || text.isEmpty ? "Empty Field Not Valid" : null;
+      text == null || text.isEmpty ?LocaleKeys.emptyFieldNotValid.localize : null;
 
   String? validateEmptyValue(String? value) =>
       value == null ? "Empty Field Not Valid" : null;

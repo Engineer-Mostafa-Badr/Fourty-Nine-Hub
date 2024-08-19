@@ -3,10 +3,13 @@ import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/post_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/suggest_user_model.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/data/models/user_profile_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
@@ -16,21 +19,17 @@ import '../../domain/usecases/post_react_usecase.dart';
 import '../models/comment_model.dart';
 
 abstract class SocialPostsRemoteDataSource {
-  Future<Either<Failure, List<PostEntity>>> getFeed(
-      {required TwitterFeedParams params});
-  Future<Either<Failure, List<PostEntity>>> getTweet(
-      {required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getFeed({required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getTweet({required TwitterFeedParams params});
   Future<Either<Failure, PostEntity>> getPost({required String postId});
-  Future<Either<Failure, List<PostEntity>>> getAdvertisement(
-      {required TwitterFeedParams params});
+  Future<Either<Failure, UserProfileEntity>> getUserProfile({required String userId});
+  Future<Either<Failure, List<PostEntity>>> getAdvertisement({required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getUserPosts(
-      {required String userId});
+      {required UserPostsParams params});
 
   Future<Either<Failure, bool>> reactOnPost({required PostReactParams params});
-  Future<Either<Failure, bool>> reactOnComment(
-      {required PostReactParams params});
-  Future<Either<Failure, CommentEntity>> replyOnComment(
-      {required ReplyOnCommentParams params});
+  Future<Either<Failure, bool>> reactOnComment({required PostReactParams params});
+  Future<Either<Failure, CommentEntity>> replyOnComment({required ReplyOnCommentParams params});
   Future<Either<Failure, CommentEntity>> commentOnPost(
       {required PostCommentParams params});
   Future<Either<Failure, List<CommentEntity>>> getPostComments(
@@ -43,22 +42,24 @@ abstract class SocialPostsRemoteDataSource {
   Future<Either<Failure, bool>> deleteComment({required String commentId});
   Future<Either<Failure, bool>> hidePost({required String postId});
   Future<Either<Failure, bool>> friendRequest({required String userId});
+  Future<Either<Failure, bool>> removeFriendRequest({required String userId});
+  Future<Either<Failure, bool>> blockUser({required String userId});
   Future<Either<Failure, bool>> followRequest({required String userId});
+  Future<Either<Failure, bool>> unFollow({required String userId});
   Future<Either<Failure, bool>> sendGreetMessage({required String userId});
   Future<Either<Failure, bool>> removeSuggestUser({required String userId});
-  Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends(
-      {required SuggestedFriendsParams params});
-  Future<Either<Failure, bool>> sharePost({required params});
+  Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends({required SuggestedFriendsParams params});
+  Future<Either<Failure, bool>> sharePost({required  params});
 }
 
 class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   final ApiConsumer _apiConsumer;
   SocialPostsRemoteDataSourceImpl(this._apiConsumer);
   @override
-  Future<Either<Failure, List<PostEntity>>> getFeed(
-      {required TwitterFeedParams params}) async {
-    final response = await _apiConsumer.get(EndPoints.getFeedPosts(params),
-        data: {'subCategory': '66b77e77bb35968b535dc944'});
+  Future<Either<Failure, List<PostEntity>>> getFeed({required TwitterFeedParams params}) async {
+    final response = await _apiConsumer.get(EndPoints.getFeedPosts(params),data: {
+      'subCategory':'66b77e77bb35968b535dc944'
+    });
 
     return response.fold((l) {
       return Left(l);
@@ -71,8 +72,7 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<PostEntity>>> getAdvertisement(
-      {required TwitterFeedParams params}) async {
+  Future<Either<Failure, List<PostEntity>>> getAdvertisement({required TwitterFeedParams params}) async {
     final response = await _apiConsumer.get(EndPoints.getAdvertisement(params));
 
     return response.fold((l) {
@@ -97,12 +97,12 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
 
   @override
   Future<Either<Failure, List<PostEntity>>> getUserPosts(
-      {required String userId}) async {
-    final response = await _apiConsumer.get(EndPoints.userPosts(userId));
+      {required UserPostsParams params}) async {
+    final response = await _apiConsumer.get(EndPoints.userPosts(params),);
     return response.fold(
         (l) => Left(l),
         (data) => Right(
-            (data['data'] as List).map((e) => PostModel.fromJson(e)).toList()));
+            (data['data']['posts'] as List).map((e) => PostModel.fromJson(e)).toList()));
   }
 
   @override
@@ -126,8 +126,7 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
       {required PostCommentParams params}) async {
     final response = await _apiConsumer
         .post(EndPoints.commentOnPost(params.postId), data: params.toJson());
-    return response.fold(
-        (l) => Left(l), (data) => Right(CommentModel.fromJson(data['data'])));
+    return response.fold((l) => Left(l), (data) => Right(CommentModel.fromJson(data['data'])));
   }
 
   @override
@@ -144,8 +143,7 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   @override
   Future<Either<Failure, List<CommentEntity>>> getPostCommentReplies(
       {required PostCommentsParams params}) async {
-    final response =
-        await _apiConsumer.get(EndPoints.getPostCommentReplies(params));
+    final response = await _apiConsumer.get(EndPoints.getPostCommentReplies(params));
     return response.fold(
         (l) => Left(l),
         (data) => Right((data['data']['replies'] as List)
@@ -160,10 +158,8 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> deleteComment(
-      {required String commentId}) async {
-    final response =
-        await _apiConsumer.delete(EndPoints.deleteComment(commentId));
+  Future<Either<Failure, bool>> deleteComment({required String commentId}) async {
+    final response = await _apiConsumer.delete(EndPoints.deleteComment(commentId));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
@@ -174,65 +170,76 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends(
-      {required SuggestedFriendsParams params}) async {
+  Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends({required SuggestedFriendsParams params}) async{
     final response = await _apiConsumer.get(EndPoints.userSuggests(params));
     return response.fold(
-        (l) => Left(l),
-        (data) => Right((data['data'] as List)
+            (l) => Left(l),
+            (data) => Right((data['data'] as List)
             .map((e) => SuggestUserModel.fromJson(e))
             .toList()));
   }
 
   @override
-  Future<Either<Failure, bool>> friendRequest({required String userId}) async {
+  Future<Either<Failure, bool>> friendRequest({required String userId}) async{
     final response = await _apiConsumer.post(EndPoints.friendRequest(userId));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, bool>> followRequest({required String userId}) async {
+  Future<Either<Failure, bool>> removeFriendRequest({required String userId}) async{
+    final response = await _apiConsumer.delete(EndPoints.removeFriendRequest(userId));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> blockUser({required String userId}) async{
+    final response = await _apiConsumer.put(EndPoints.blocUser(userId));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> followRequest({required String userId}) async{
     final response = await _apiConsumer.post(EndPoints.followRequest(userId));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, bool>> sendGreetMessage(
-      {required String userId}) async {
+  Future<Either<Failure, bool>> unFollow({required String userId}) async{
+    final response = await _apiConsumer.delete(EndPoints.removeFollow(userId));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> sendGreetMessage({required String userId}) async{
+    final response = await _apiConsumer.post(EndPoints.greetMessage(userId),data: {
+      "message":"Greet"
+    });
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> removeSuggestUser({required String userId}) async{
+    final response = await _apiConsumer.post(EndPoints.removeSuggestUser(userId));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> sharePost({required params}) async{
     final response = await _apiConsumer
-        .post(EndPoints.greetMessage(userId), data: {"message": "Greet"});
+        .post(EndPoints.shareFacebookPost(params));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, bool>> removeSuggestUser(
-      {required String userId}) async {
-    final response =
-        await _apiConsumer.post(EndPoints.removeSuggestUser(userId));
-    return response.fold((l) => Left(l), (data) => Right(data['status']));
-  }
-
-  @override
-  Future<Either<Failure, bool>> sharePost({required params}) async {
-    final response =
-        await _apiConsumer.post(EndPoints.shareFacebookPost(params));
-    return response.fold((l) => Left(l), (data) => Right(data['status']));
-  }
-
-  @override
-  Future<Either<Failure, CommentEntity>> replyOnComment(
-      {required ReplyOnCommentParams params}) async {
+  Future<Either<Failure, CommentEntity>> replyOnComment({required ReplyOnCommentParams params}) async{
     final response = await _apiConsumer
         .post(EndPoints.commentOnPost(params.postId), data: params.toJson());
-    return response.fold(
-        (l) => Left(l), (data) => Right(CommentModel.fromJson(data['data'])));
+    return response.fold((l) => Left(l), (data) => Right(CommentModel.fromJson(data['data'])));
   }
 
   @override
-  Future<Either<Failure, List<PostEntity>>> getTweet(
-      {required TwitterFeedParams params}) async {
-    final response = await _apiConsumer.get(
-        "${EndPoints.getTwitterFeedPosts}?page=${params.page}&limit=${params.limit}");
+  Future<Either<Failure, List<PostEntity>>> getTweet({required TwitterFeedParams params}) async {
+    final response = await _apiConsumer.get("${EndPoints.getTwitterFeedPosts}?page=${params.page}&limit=${params.limit}");
 
     return response.fold((l) {
       return Left(l);
@@ -243,4 +250,12 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
       return Right(list);
     });
   }
+
+  @override
+  Future<Either<Failure, UserProfileEntity>> getUserProfile({required String userId}) async{
+    final response = await _apiConsumer
+        .get(EndPoints.getUserProfile(userId),);
+    return response.fold((l) => Left(l), (data) => Right(UserProfileModel.fromJson(data['data'])));
+  }
+
 }

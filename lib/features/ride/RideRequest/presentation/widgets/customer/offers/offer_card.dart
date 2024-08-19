@@ -26,11 +26,11 @@ class OfferCard extends StatelessWidget {
               const Sizer(),
               Expanded(
                 child: RichText(
-                    text: TextSpan(children: [
+                    text: const TextSpan(children: [
                   TextSpan(
                       text: 'Farouk Shahin',
                       style: TextStyle(color: Colors.black)),
-                  const WidgetSpan(
+                  WidgetSpan(
                       child: Icon(
                     Icons.star_rounded,
                     color: Colors.orange,
@@ -44,7 +44,7 @@ class OfferCard extends StatelessWidget {
                 ])),
               ),
               RichText(
-                  text: TextSpan(children: [
+                  text: const TextSpan(children: [
                 TextSpan(text: '2\n', style: TextStyle(color: Colors.black)),
                 TextSpan(text: '30km', style: TextStyle(color: Colors.black)),
               ]))

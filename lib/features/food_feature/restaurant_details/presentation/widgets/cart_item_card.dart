@@ -60,7 +60,7 @@ class CartItemCard extends StatelessWidget {
                 ...meal.selectedAddOn.map((e) {
                   return WidgetSpan(
                       child: BadgedLabel(
-                          margin: 5, color: Colors.green, label: '${e.name}'));
+                          margin: 5, color: Colors.green, label: e.name));
                 })
               ])),
             ],

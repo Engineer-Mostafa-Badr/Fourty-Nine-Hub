@@ -29,16 +29,11 @@ import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/expected_p
 
 class ExpectedPriceModel extends ExpectedPriceEntity {
   ExpectedPriceModel({
-    bool status = true,
-    required double price,
-    required double distance,
-    required double duration,
-  }) : super(
-          status: status,
-          price: price,
-          distance: distance,
-          duration: duration,
-        );
+    super.status,
+    required double super.price,
+    required double super.distance,
+    required double super.duration,
+  });
 
   factory ExpectedPriceModel.fromJson(Map<String, dynamic> json) {
     return ExpectedPriceModel(

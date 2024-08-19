@@ -17,14 +17,14 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 /// @nodoc
 class ZegoLiveStreamingPopUpSheetMenu extends StatefulWidget {
   const ZegoLiveStreamingPopUpSheetMenu({
-    Key? key,
+    super.key,
     required this.targetUser,
     required this.popupItems,
     required this.translationText,
     required this.hostManager,
     required this.connectManager,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   final List<ZegoLiveStreamingPopupItem> popupItems;
   final ZegoUIKitUser targetUser;

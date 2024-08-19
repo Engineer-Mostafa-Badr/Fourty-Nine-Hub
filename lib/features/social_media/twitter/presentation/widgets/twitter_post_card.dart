@@ -1,15 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
@@ -25,6 +24,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.da
 // ignore: must_be_immutable
 class TwitterPostCard extends StatefulWidget {
   bool isLiked;
+  bool? fromProfile;
   final TwitterPostEntity post;
   final Function onReact;
   final Function getPost;
@@ -38,6 +38,7 @@ class TwitterPostCard extends StatefulWidget {
     super.key,
     this.isLiked = false,
     this.shareSuccess = false,
+    this.fromProfile = false,
     required this.post,
     required this.onReact,
     required this.showPostComments,
@@ -75,7 +76,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
   Widget build(BuildContext context) {
     bool isShared = widget.post.isShared!;
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration:  BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
       child: Container(
         padding: EdgeInsets.all(isShared == true ? 10 : 0),
         decoration: const BoxDecoration(color: Colors.white),
@@ -98,7 +99,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InkWell(
-                    onTap: () {
+                    onTap: widget.post.isShared==true?() {
                       print("objectH");
                       // context.push(Routes.TWITTERPOSTDETAILS,extra: widget.post.mainPost.id);
 
@@ -112,7 +113,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                             showPostComments: (id) {},
                             onReport: (TwitterReportParams params) {},
                           ));
-                    },
+                    }:null,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -362,11 +363,17 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
     return Row(
       children: [
         post.user.image != ''
-            ? ProfileImage(
+            ? UserProfileImage(
                 accountId: 0,
                 imageURL: post.user.image,
+                fromProfile: widget.fromProfile,
+          userId: post.user.id,
               )
-            : const ProfileImage(accountId: 0),
+            : UserProfileImage(
+                accountId: 0,
+                fromProfile: widget.fromProfile,
+          userId: post.user.id,
+              ),
         const Sizer(),
         Label(
             text: "${post.user.firstName} ${post.user.lastName}",
@@ -486,8 +493,17 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
           child: Row(
             children: [
               post.user.image != ''
-                  ? ProfileImage(accountId: 0, imageURL: post.user.image)
-                  : ProfileImage(accountId: 0),
+                  ? UserProfileImage(
+                      accountId: 0,
+                      imageURL: post.user.image,
+                      fromProfile: widget.fromProfile,
+                userId: post.user.id,
+                    )
+                  : UserProfileImage(
+                      accountId: 0,
+                      fromProfile: widget.fromProfile,
+                userId: post.user.id,
+                    ),
               const Sizer(),
               Label(
                   text: post.isShared == true
@@ -498,9 +514,9 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               if (post.user.isDocumented == true && post.isShared == false ||
                   (post.mainPost?.user.isDocumented == true &&
                       post.isShared == true))
-                const Icon(
+                 Icon(
                   Icons.verified,
-                  color: AppColors.PRIMARY_COLOR,
+                  color: Theme.of(context).primaryColor,
                 ),
               const Sizer(),
               SizedBox(

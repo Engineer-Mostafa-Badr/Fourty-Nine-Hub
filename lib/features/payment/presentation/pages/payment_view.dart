@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
 
@@ -8,8 +8,8 @@ class PaymentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const BackAppBar(
+    return const Scaffold(
+      appBar: BackAppBar(
         label: 'Payment',
       ),
       body: Center(

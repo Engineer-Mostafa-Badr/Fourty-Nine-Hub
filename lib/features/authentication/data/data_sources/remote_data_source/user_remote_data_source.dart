@@ -21,7 +21,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<Either<Failure, UserModel>> getUser() async {
     final result = await _apiConsumer.get(EndPoints.getProfile);
-
+    log(result.toString(), name: "UserDataLog");
     return result.fold((failure) => Left(failure), (response) {
       final user = UserModel.fromJson(
         response['data'],

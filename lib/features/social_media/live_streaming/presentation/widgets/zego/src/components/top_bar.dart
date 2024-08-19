@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:win32/win32.dart';
 
 // Package imports:
 import 'package:zego_uikit/zego_uikit.dart';
@@ -131,11 +130,16 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
   Widget closeButton() {
     return widget.config.topMenuBar.showCloseButton
         ? ZegoLiveStreamingLeaveButton(
-            buttonSize: Size(52.zR, 52.zR),
-            iconSize: Size(24.zR, 24.zR),
+            // buttonSize: Size(52.zR, 52.zR),
+            // iconSize: Size(24.zR, 24.zR),
             icon: ButtonIcon(
-              icon: const Icon(Icons.close, color: Colors.white),
-              backgroundColor: ZegoUIKitDefaultTheme.buttonBackgroundColor,
+              icon: const Center(
+                child: Text(
+                  'End',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              backgroundColor: Colors.red,
             ),
             config: widget.config,
             events: widget.events,
@@ -170,6 +174,22 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                 ),
               ),
             ),
+            SizedBox(width: 32.zR),
+            ZegoSwitchAudioOutputButton(
+              defaultUseSpeaker: widget.config.useSpeakerWhenJoining,
+              speakerIcon: ButtonIcon(
+                icon: widget.config.bottomMenuBar.buttonStyle
+                    ?.switchAudioOutputToSpeakerButtonIcon,
+              ),
+              headphoneIcon: ButtonIcon(
+                icon: widget.config.bottomMenuBar.buttonStyle
+                    ?.switchAudioOutputToHeadphoneButtonIcon,
+              ),
+              bluetoothIcon: ButtonIcon(
+                icon: widget.config.bottomMenuBar.buttonStyle
+                    ?.switchAudioOutputToBluetoothButtonIcon,
+              ),
+            )
             // IconButton(
             //   onPressed: () {},
             //   icon: const Icon(

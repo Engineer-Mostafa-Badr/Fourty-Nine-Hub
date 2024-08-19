@@ -1,11 +1,7 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 class ShowPostsImages extends StatefulWidget {

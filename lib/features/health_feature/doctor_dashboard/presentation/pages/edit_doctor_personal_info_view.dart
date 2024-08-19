@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/personal_info/edit_doctor_address.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/personal_info/edit_doctor_name_field.dart';
@@ -14,7 +14,6 @@ class EditDoctorPersonalInfoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: const BackAppBar(
         label: Labels.edit,
       ),

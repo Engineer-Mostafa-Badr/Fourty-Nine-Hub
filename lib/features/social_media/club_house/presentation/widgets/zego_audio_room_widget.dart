@@ -36,7 +36,7 @@ class _ZegoAudioRoomWidgetState extends State<ZegoAudioRoomWidget> {
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.symmetric(horizontal: 15),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: ZegoUIKitPrebuiltLiveAudioRoom(

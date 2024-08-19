@@ -47,7 +47,7 @@ class WaitingOffers extends StatelessWidget {
               )
             ],
           )),
-          OfferControl(),
+          const OfferControl(),
         ],
       ),
     );

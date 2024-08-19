@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+
 import '../../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../routes/routes.dart';

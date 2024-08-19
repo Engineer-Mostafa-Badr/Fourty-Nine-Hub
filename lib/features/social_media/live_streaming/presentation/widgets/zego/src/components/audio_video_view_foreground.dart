@@ -31,7 +31,7 @@ class ZegoLiveStreamingAudioVideoForeground extends StatelessWidget {
   final bool showUserNameOnView;
 
   const ZegoLiveStreamingAudioVideoForeground({
-    Key? key,
+    super.key,
     this.user,
     required this.size,
     required this.isPluginEnabled,
@@ -42,7 +42,7 @@ class ZegoLiveStreamingAudioVideoForeground extends StatelessWidget {
     this.showMicrophoneStateOnView = true,
     this.showCameraStateOnView = true,
     this.showUserNameOnView = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -8,7 +8,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import '../../../../routes/routes.dart';
 
 class LogoutWidget extends StatefulWidget {
   const LogoutWidget({super.key});

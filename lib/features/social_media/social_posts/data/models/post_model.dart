@@ -2,7 +2,6 @@ import 'package:fourtyninehub/features/social_media/create_post/data/models/acti
 import 'package:fourtyninehub/features/social_media/create_post/data/models/feeling_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/main_post_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_main_post_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
 
 class PostModel extends PostEntity {
@@ -18,6 +17,7 @@ class PostModel extends PostEntity {
       super.likesCount,
       super.loveCount,
       super.totalCount,
+      super.hahaCount,
       super.sadCount,
       super.commentPrivacy,
       super.privacy,
@@ -27,6 +27,7 @@ class PostModel extends PostEntity {
       super.isWow,
       super.isSad,
       super.isAngry,
+      super.isHaha,
       super.activity,
       super.feeling,
       super.backgroundColor,
@@ -70,6 +71,7 @@ class PostModel extends PostEntity {
         isWow: json['isWow'] ?? false,
         isSad: json['isSad'] ?? false,
         isAngry: json['isAngry'] ?? false,
+        isHaha: json['isHaha'] ?? false,
         isDocumentation: json['twitter_documentation'] ?? false,
         activity: json['activity'] != null
             ? ActivityModel.fromJson(json['activity'])
@@ -93,6 +95,7 @@ class PostModel extends PostEntity {
         wowCount: json['wowCount'] ?? 0,
         sadCount: json['sadCount'] ?? 0,
         angryCount: json['angryCount'] ?? 0,
+        hahaCount: json['hahaCount'] ?? 0,
         totalCount: json['totalCount'] ?? 0,
         createdAt: json['createdAt'] != null
             ? DateTime.parse(json['createdAt'])

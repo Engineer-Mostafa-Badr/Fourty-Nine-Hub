@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../zego_uikit_prebuilt_live_streaming.dart';
 import '../../components/utils/dialogs.dart';
-import '../../config.dart';
 import '../../core/core_managers.dart';
 import '../../core/host_manager.dart';
-import '../../events.dart';
-import '../../events.defines.dart';
 
 /// @nodoc
 mixin ZegoLiveStreamingControllerRoomPrivate {

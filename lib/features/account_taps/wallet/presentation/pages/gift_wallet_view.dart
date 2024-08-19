@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/competition_card.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../res/strings/labels.dart';

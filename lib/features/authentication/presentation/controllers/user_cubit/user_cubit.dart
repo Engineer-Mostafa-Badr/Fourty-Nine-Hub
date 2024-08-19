@@ -4,21 +4,25 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
-import 'package:fourtyninehub/features/authentication/domain/repositories/user_repository.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/attach_token_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../domain/use_cases/get_user_use_case.dart';
 import '../../../domain/use_cases/sign_out_usecase.dart';
 
 class UserCubit extends Cubit<BasicState<UserEntity>> {
+  static UserCubit to = AppPages
+      .router.routerDelegate.navigatorKey.currentContext!
+      .read<UserCubit>();
   final GetUserUseCase _getUserUseCase;
   final GetTokensUseCase _getTokensUseCase;
   final SaveTokensUseCase _saveTokensUseCase;
   final AttachTokenUseCase _attachTokenUseCase;
   final SignOutUseCase _signOutUseCase;
   final CacheService cacheService;
+
   // final UserRepository repository;
   bool _isTokenAttached = false;
 
@@ -32,6 +36,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
       : super(const BasicState());
 
   bool get isLoggedIn => cacheService.isLogin() ?? false;
+
   bool isSameAccount(String anotherId) {
     if (isLoggedIn) {
       return state.data?.id == anotherId;
@@ -57,11 +62,18 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     );
   }
 
+  String? token;
+
   void attachToken() async {
     final result = await _getTokensUseCase(const NoParams());
     result.fold(
       (_) {},
       (tokens) {
+        if (tokens == null) {
+          return;
+        } else {
+          token = tokens.accessToken.toString();
+        }
         _attachTokenUseCase(tokens);
         _isTokenAttached = true;
         getUser();

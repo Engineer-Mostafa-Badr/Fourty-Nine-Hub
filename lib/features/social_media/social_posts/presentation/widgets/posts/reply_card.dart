@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
@@ -71,7 +70,7 @@ class _ReplyCardState extends State<ReplyCard> {
                   Icons.more_vert,
                   color: widget.textColor,
                 )),
-            Sizer(),
+            const Sizer(),
             GestureDetector(
                 onTap: () {
                   widget.onDeleteReply(widget.reply.id);
@@ -91,7 +90,8 @@ class _ReplyCardState extends State<ReplyCard> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            BuildReactionsButtons(post: widget.reply, from: 'comments'),
+            BuildReactionsButtons(post: widget.reply,
+                from: 'comments',),
           ],
         ),
       ],

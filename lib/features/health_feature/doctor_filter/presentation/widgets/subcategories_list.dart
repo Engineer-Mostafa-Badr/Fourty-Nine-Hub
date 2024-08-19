@@ -16,7 +16,7 @@ class DoctorsSubcategoriesFilterList extends StatelessWidget {
             return Expanded(
                 child: ListView.separated(
               itemCount: state.subCategories.length,
-              separatorBuilder: (context, index) => const Divider(),
+              separatorBuilder: (context, index) =>   const SizedBox(height: 10,),
               itemBuilder: (context, index) =>
                   SubcategoryListTitle(specialty: state.subCategories[index]),
             ));

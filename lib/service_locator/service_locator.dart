@@ -6,14 +6,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fourtyninehub/core/api/api_client_helper.dart';
 import 'package:fourtyninehub/core/api/api_client_helper_imp.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
-import 'package:fourtyninehub/core/api/interceptors/auth_interceptor.dart';
 import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
-import 'package:fourtyninehub/service_locator/reels_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
 import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
@@ -87,7 +86,12 @@ class DI {
         ]),
     );
 
+//tinder getIt register
+    serviceLocator
+        .registerLazySingleton<TinderViewCubit>(() => TinderViewCubit());
+
     // api consumer
+
     serviceLocator.registerLazySingleton<ApiConsumer>(
       () => BaseApiConsumer(
         serviceLocator(),
@@ -122,7 +126,7 @@ class DI {
     // Wheel
     WheelServiceLocator.execute(serviceLocator);
     // Reels
-    ReelsServiceLocator.execute(serviceLocator);
+    // ReelsServiceLocator.execute(serviceLocator);
     // food
     FoodServiceLocator.execute(serviceLocator: serviceLocator);
     // auction

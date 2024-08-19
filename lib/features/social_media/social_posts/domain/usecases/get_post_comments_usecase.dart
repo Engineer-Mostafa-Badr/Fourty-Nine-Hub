@@ -16,16 +16,27 @@ class GetPostCommentsUseCase
 }
 
 class PostCommentsParams {
-  final int page;
-  final int limit;
-  final String postId;
-  PostCommentsParams({
-    required this.page,
-    required this.limit,
-    required this.postId,
+  final int? page;
+  final int? limit;
+  final String? postId;
+  final String? userId;
+  const PostCommentsParams({
+    this.page,
+    this.limit,
+    this.userId,
+    this.postId,
   });
-  Map<String, dynamic> toJson() => {
-        'page': page,
-        'limit': limit,
-      };
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> data = {};
+    if (page != null) {
+      data['page'] = page;
+    }
+    if (limit != null) {
+      data['limit'] = limit;
+    }
+    if (postId != null) {
+      data['postId'] = postId;
+    }
+    return data;
+  }
 }

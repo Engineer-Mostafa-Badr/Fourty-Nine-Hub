@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../common/theme/cubit/cubit.dart';

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
 import '../widgets/doctor_card.dart';
 
 class DoctorsListView extends StatefulWidget {
@@ -31,8 +32,8 @@ class _DoctorsListViewState extends State<DoctorsListView> {
         }
       },
       child: Scaffold(
-        appBar: const BackAppBar(
-          label: Labels.doctorsList,
+        appBar:  BackAppBar(
+          label:LocaleKeys.doctorList.localize,
         ),
         body: BlocBuilder<DoctorsListCubit, DoctorsListState>(
             builder: (context, state) {
@@ -49,7 +50,7 @@ class _DoctorsListViewState extends State<DoctorsListView> {
                     separatorBuilder: (context, index) => const Sizer(),
                     itemCount: state.doctors.length);
               } else {
-                return const Center(child: Text(Labels.noDoctors));
+                return  Center(child: Text(LocaleKeys.noDoctorsFound.localize));
               }
 
             default:

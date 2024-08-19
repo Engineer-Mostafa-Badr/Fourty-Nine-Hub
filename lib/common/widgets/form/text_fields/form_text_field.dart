@@ -31,36 +31,37 @@ class FormTextField extends StatefulWidget {
   final TextStyle? hintStyle;
   final BorderRadius? borderRadius;
   final BoxConstraints? constraints;
+  final TextStyle? textStyle;
   const FormTextField(
       {super.key,
-      this.initialValue,
-      this.hintStyle,
-      this.action,
-      this.validator,
-      this.obsecure,
-      this.borderRadius,
-      this.prefix,
-      this.noBorder = false,
-      this.constraints,
-      this.fillColor,
-      this.hint,
-      this.label,
-      this.info,
-      this.autofill,
-      this.suffix,
-      this.type,
-      this.isEmail,
-      this.enabled,
-      this.onConfirm,
-      this.textAlignVertical,
-      this.extraValidationMessage,
-      this.extraValidation,
-      this.onTap,
-      this.height,
-      this.maxLines,
-      this.style,
-      this.required,
-      this.controller});
+        this.initialValue,
+        this.hintStyle,
+        this.action,
+        this.obsecure,
+        this.borderRadius,
+        this.prefix,
+        this.noBorder = false,
+        this.constraints,
+        this.fillColor,
+        this.hint,
+        this.label,
+        this.info,
+        this.autofill,
+        this.suffix,
+        this.type,
+        this.isEmail,
+        this.enabled,
+        this.onConfirm,
+        this.textAlignVertical,
+        this.extraValidationMessage,
+        this.extraValidation,
+        this.onTap,
+        this.height,
+        this.maxLines,
+        this.style,
+        this.validator,
+        this.required,
+        this.controller,this.textStyle});
 
   @override
   State<FormTextField> createState() => _FormTextFieldState();
@@ -80,7 +81,7 @@ class _FormTextFieldState extends State<FormTextField> {
                   ? (widget.height ?? kToolbarHeight) * 1.5
                   : widget.height ?? kToolbarHeight,
           child: TextFormField(
-            style: Styles.mediumText(),
+            style:widget.textStyle?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
             textAlignVertical: widget.textAlignVertical,
             maxLines: widget.maxLines ?? 1,
             onFieldSubmitted: (v) {

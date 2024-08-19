@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -18,95 +17,110 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
   final int mainCategory;
   final int index;
 
-  const BottomNavigator(
-      {super.key, required this.mainCategory, required this.index});
+  const BottomNavigator({
+    super.key,
+    required this.mainCategory,
+    required this.index,
+  });
 
   @override
   Widget build(BuildContext context) {
     List<BottomItemModel> pages = mainCategory == 3
         ? <BottomItemModel>[
-            BottomItemModel(
-                icon: FontAwesomeIcons.microphone,
-                height: 30,
-                label: 'voice'.localize,
-                index: 0,
-                image: Assets.voiceLive,
-                route: Routes.CLUBHOUSE),
-            BottomItemModel(
-                icon: FontAwesomeIcons.stream,
-                label: 'live'.localize,
-                index: 0,
-                height: 25,
-                image: Assets.live,
-                route: Routes.LIVE),
-            BottomItemModel(
-                icon: Icons.video_call,
-                label: 'meet'.localize,
-                index: 0,
-                height: 25,
-                image: Assets.zoomMeeting,
-                route: Routes.ZOOM),
-            BottomItemModel(
-                icon: Icons.video_call,
-                label: 'cast'.localize,
-                index: 0,
-                height: 25,
-                image: Assets.radio,
-                route: Routes.CLUBHOUSE),
-          ]
+      BottomItemModel(
+        icon: FontAwesomeIcons.microphone,
+        height: 30,
+        label: 'voice',  // Translated text
+        index: 0,
+        image: Assets.voiceLive,
+        route: Routes.CLUBHOUSE,
+      ),
+      BottomItemModel(
+        icon: FontAwesomeIcons.stream,
+        label: 'live',  // Translated text
+        index: 0,
+        height: 25,
+        image: Assets.live,
+        route: Routes.LIVE,
+      ),
+      BottomItemModel(
+        icon: Icons.video_call,
+        label: 'meet',  // Translated text
+        index: 0,
+        height: 25,
+        image: Assets.zoomMeeting,
+        route: Routes.ZOOM,
+      ),
+      BottomItemModel(
+        icon: Icons.video_call,
+        label: 'cast',  // Translated text
+        index: 0,
+        height: 25,
+        image: Assets.radio,
+        route: Routes.CLUBHOUSE,
+      ),
+    ]
         : mainCategory == 2
-            ? <BottomItemModel>[
-                BottomItemModel(
-                    icon: FontAwesomeIcons.twitter,
-                    label: 'tweet'.localize,
-                    index: 0,
-                    image: Assets.twitter,
-                    route: Routes.TWITTER),
-                BottomItemModel(
-                    icon: FontAwesomeIcons.list,
-                    label: 'reels'.localize,
-                    index: 1,
-                    image: Assets.reels,
-                    route: Routes.REELS),
-                BottomItemModel(
-                    icon: Icons.chat,
-                    label: 'chat'.localize,
-                    index: 3,
-                    image: Assets.message,
-                    route: Routes.CHAT),
-                BottomItemModel(
-                    icon: FontAwesomeIcons.car,
-                    label: 'find'.localize,
-                    index: 4,
-                    image: Assets.social,
-                    route: Routes.Tinder),
-              ]
-            : <BottomItemModel>[
-                BottomItemModel(
-                    icon: FontAwesomeIcons.bowlFood,
-                    label: 'meal'.localize,
-                    index: 0,
-                    image: Assets.food,
-                    route: Routes.FOOD),
-                BottomItemModel(
-                    icon: FontAwesomeIcons.kitMedical,
-                    label: 'health'.localize,
-                    index: 1,
-                    image: Assets.health,
-                    route: Routes.VISITA),
-                BottomItemModel(
-                    icon: Icons.delivery_dining,
-                    label: LocaleKeys.shipping.localize,
-                    index: 3,
-                    image: Assets.shipping,
-                    route: Routes.SHIPPING),
-                BottomItemModel(
-                    icon: FontAwesomeIcons.car,
-                    label: LocaleKeys.ride.tr(),
-                    index: 4,
-                    image: Assets.ride,
-                    route: Routes.RIDE),
-              ];
+        ? <BottomItemModel>[
+      BottomItemModel(
+        icon: FontAwesomeIcons.twitter,
+        label: 'tweet',  // Translated text
+        index: 0,
+        image: Assets.twitter,
+        route: Routes.TWITTER,
+      ),
+      BottomItemModel(
+        icon: FontAwesomeIcons.list,
+        label: 'reels',  // Translated text
+        index: 1,
+        image: Assets.reels,
+        route: Routes.REELS,
+      ),
+      BottomItemModel(
+        icon: Icons.chat,
+        label: 'chat',  // Translated text
+        index: 3,
+        image: Assets.message,
+        route: Routes.CHAT,
+      ),
+      BottomItemModel(
+        icon: FontAwesomeIcons.car,
+        label: 'find',  // Translated text
+        index: 4,
+        image: Assets.social,
+        route: Routes.Tinder,
+      ),
+    ]
+        : <BottomItemModel>[
+      BottomItemModel(
+        icon: FontAwesomeIcons.bowlFood,
+        label: 'meal',  // Translated text
+        index: 0,
+        image: Assets.food,
+        route: Routes.FOOD,
+      ),
+      BottomItemModel(
+        icon: FontAwesomeIcons.kitMedical,
+        label: 'health',  // Translated text
+        index: 1,
+        image: Assets.health,
+        route: Routes.VISITA,
+      ),
+      BottomItemModel(
+        icon: Icons.delivery_dining,
+        label: 'ship',  // Using generated key for translation
+        index: 3,
+        image: Assets.shipping,
+        route: Routes.SHIPPING,
+      ),
+      BottomItemModel(
+        icon: FontAwesomeIcons.car,
+        label: 'ride',  // Using generated key for translation
+        index: 4,
+        image: Assets.ride,
+        route: Routes.RIDE,
+      ),
+    ];
 
     return CustomBottomNavigationBar(
       currentIndex: index,
@@ -149,11 +163,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: BottomBarPainter(
@@ -183,8 +192,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                     padding: index == index1
                         ? const EdgeInsets.only(right: 10)
                         : index == index2
-                            ? const EdgeInsets.only(left: 30)
-                            : EdgeInsets.zero,
+                        ? const EdgeInsets.only(left: 30)
+                        : EdgeInsets.zero,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -197,7 +206,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                               : null,
                         ),
                         Text(
-                          widget.items[index].label,
+                          widget.items[index].label.localize,
                         ),
                       ],
                     ),

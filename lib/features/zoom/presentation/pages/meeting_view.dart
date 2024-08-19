@@ -22,8 +22,7 @@ class MeetingView extends StatelessWidget {
     // init signalling service
 
     return Scaffold(
-      backgroundColor: AppColors.GRAY_LIGHT_COLOR3,
-      appBar: const HomeAppbar(
+      appBar:  HomeAppbar(
         isWithBackArrow: true,
       ),
       drawer: const DrawerWidget(),

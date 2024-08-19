@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,9 +45,9 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     });
   }
 
-  _joinRoom(String chatId) async {
-    _socketService.joinRoom(chatId);
-  }
+  // _joinRoom(String chatId) async {
+  //   _socketService.joinRoom(chatId);
+  // }
 
   // BehaviorSubject<List<MessageEntity>> messages =
   //     BehaviorSubject<List<MessageEntity>>();
@@ -76,10 +77,29 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     listenToNewMessages();
   }
 
-  sendMessage({required String message, String? replyMessageId}) {
+  Future<void> sendMessage(
+      {required String message, String? replyMessageId}) async {
     if (chatId != null) {
       _socketService.sendMessage(
           message: message, chatId: chatId!, replyMessageId: replyMessageId);
+      // emit.call(state.copyWith(
+      //     chatData: chatMessagesModel,
+      //     chatMessages: chatMessages.reversed.toList(),
+      //     status: ChatRoomStates.initState));
+    } else {
+      debugPrint("Error chat id not found");
+    }
+  }
+
+  Future<void> sendMessageFromTinder(
+      {required String message,
+      String? replyMessageId,
+      required chatID}) async {
+    if (chatID != null) {
+      _socketService.sendMessage(
+          message: message, chatId: chatID!, replyMessageId: replyMessageId);
+
+      log("anonymous message sent =================");
       // emit.call(state.copyWith(
       //     chatData: chatMessagesModel,
       //     chatMessages: chatMessages.reversed.toList(),
@@ -122,7 +142,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   listenToMessageTyping() {
     _socketService.socketChatTypingStream.listen((event) {
-      debugPrint("chatListen ${event}");
+      debugPrint("chatListen $event");
 
       List<TypingAndOnlineModel> chatsIds = event ?? [];
       chatsIds.map((e) {}).toList();

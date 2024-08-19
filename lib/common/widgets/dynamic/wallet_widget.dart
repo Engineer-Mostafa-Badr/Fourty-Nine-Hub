@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/enums/wallet_types_enums.dart';
+import '../../../core/localization/locale_keys.g.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/styles.dart';
 import '../stateless/labels/label.dart';
@@ -56,7 +58,7 @@ class WalletWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                    text: 'Balance',
+                    text: LocaleKeys.balance.tr(),
                     style: Styles.mediumText(
                       fontWeight: FontWeight.bold,
                     )),
@@ -87,7 +89,7 @@ class WalletWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                    text: 'Gift',
+                    text: LocaleKeys.gift.tr(),
                     style: Styles.mediumText(
                       fontWeight: FontWeight.bold,
                     )),
@@ -118,7 +120,7 @@ class WalletWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                    text: 'Wallet',
+                    text: LocaleKeys.wallet.tr(),
                     style: Styles.mediumText(
                       fontWeight: FontWeight.bold,
                     )),

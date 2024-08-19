@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 
@@ -14,11 +14,11 @@ class ChooseRegisterSubcategories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BackAppBar(
+      appBar: const BackAppBar(
         label: 'Choose Options',
       ),
       body: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 5,
           ),
           itemCount: subCategories.length,

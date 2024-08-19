@@ -1,8 +1,6 @@
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
 import '../../../../../core/utils/duration_helper.dart';
-import '../../../../../res/assets/assets.dart';
 
 class MainPostEntity {
   final String id;

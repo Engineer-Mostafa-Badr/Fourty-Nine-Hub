@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -37,7 +34,7 @@ class ChatCard extends StatelessWidget {
                   width: kToolbarHeight * .7,
                   child: isSecret
                       ? const CircleAvatar(
-                          backgroundColor: Colors.white,
+                          backgroundColor: Colors.red,
                           child: Icon(
                             FontAwesomeIcons.ghost,
                             color: Colors.grey,
@@ -54,6 +51,7 @@ class ChatCard extends StatelessWidget {
 
                             Image.asset(
                               Assets.profileIcon,
+                              color: Theme.of(context).primaryColor,
                             ),
 
                             Positioned(
@@ -95,7 +93,7 @@ class ChatCard extends StatelessWidget {
                               : chatItemModel!.seen!
                                   ? const Icon(
                                       FontAwesomeIcons.checkDouble,
-                                      color: AppColors.PRIMARY_COLOR,
+                                      color: AppColors.GREY_DARK_COLOR,
                                       size: 14,
                                     )
                                   : const SizedBox(),
@@ -118,8 +116,8 @@ class ChatCard extends StatelessWidget {
                                   color: chatItemModel!.typing!
                                       ? AppColors.SPLASH_BLACK_COLOR
                                       : chatItemModel!.seen!
-                                          ? AppColors.GREY_DARK_COLOR
-                                          : AppColors.SPLASH_BLACK_COLOR,
+                                          ? AppColors.DARK_GRAY_COLOR
+                                          : AppColors.DARK_GRAY_COLOR,
                                 )),
                           ),
 
@@ -187,7 +185,7 @@ class ChatCard extends StatelessWidget {
           Container(
             height: 0.4,
             width: MediaQuery.of(context).size.width,
-            color: Colors.black,
+            color: AppColors.GREY_DARK_COLOR,
           ),
         ],
       ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_entity.dart';
 
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../res/strings/labels.dart';

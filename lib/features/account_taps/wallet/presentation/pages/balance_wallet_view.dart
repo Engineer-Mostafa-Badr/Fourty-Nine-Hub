@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
@@ -13,7 +13,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
-import '../../domain/entities/wallet_entity.dart';
 import '../widgets/wallet_history_card.dart';
 
 class BalanceWalletView extends StatelessWidget {
