@@ -95,7 +95,9 @@ class CodegenLoader extends AssetLoader{
   "contactUs": "اتصل بنا",
   "logout": "تسجيل الخروج",
   "luckyWheel": "عجلة الحظ",
-  "feelLucky": "هل تشعر بالحظ؟"
+  "feelLucky": "هل تشعر بالحظ؟",
+  "restaurants": "مطعم",
+  "meals": "وجبات الطعام"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -178,7 +180,9 @@ static const Map<String,dynamic> en = {
   "contactUs": "Contact Us",
   "logout": "logout",
   "luckyWheel": "Lucky Wheel",
-  "feelLucky": "Do You feel lucky?"
+  "feelLucky": "Do You feel lucky?",
+  "restaurants": "Restaurants",
+  "meals": "Meals"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

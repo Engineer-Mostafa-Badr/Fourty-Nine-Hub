@@ -80,5 +80,7 @@ abstract class  LocaleKeys {
   static const logout = 'logout';
   static const luckyWheel = 'luckyWheel';
   static const feelLucky = 'feelLucky';
+  static const restaurants = 'restaurants';
+  static const meals = 'meals';
 
 }

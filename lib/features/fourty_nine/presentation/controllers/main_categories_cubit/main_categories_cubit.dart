@@ -43,4 +43,6 @@ class MainCategoriesCubit extends Cubit<BasicState<List<MainCategoryEntity>>> {
           data: _fourtyNineSharedData.mainCategories));
     }
   }
+
+
 }
