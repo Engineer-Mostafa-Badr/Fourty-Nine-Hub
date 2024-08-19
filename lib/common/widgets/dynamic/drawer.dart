@@ -6,6 +6,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/global/capitalize_first_letter_of_words.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_subcategory_view.dart';
@@ -48,27 +51,27 @@ class DrawerWidget extends StatelessWidget {
                   // walletCircularProgress(context: context), gemy3617@gmail.com
                   drawerListTile(
                       icon: FontAwesomeIcons.bullhorn,
-                      label: 'Advertise Your Company',
+                      label: LocaleKeys.advertiseYourCompany.localize,
                       onTap: () => context.push(Routes.CREATECOMPANYAD)),
 
                   drawerListTile(
                       icon: FontAwesomeIcons.quran,
-                      label: Labels.quraan,
+                      label:LocaleKeys.quraan.localize,
                       onTap: () => context.push(Routes.QURAAN)),
                   drawerListTile(
                       icon: FontAwesomeIcons.book,
-                      label: Labels.azkar,
+                      label: LocaleKeys.azkar.localize,
                       onTap: () => context.push(Routes.AZKAAR)),
 
                   drawerListTile(
                       icon: Icons.star_rounded,
-                      label: 'Favourite Categories',
+                      label: LocaleKeys.favouriteCategories.localize,
                       requireLogin: true,
                       onTap: () => context.push(Routes.FAVOURITECATEGORIES)),
 
                   drawerListTile(
                       icon: Icons.favorite,
-                      label: 'Favourite Sub Categories',
+                      label: LocaleKeys.favouriteSubCategories.localize,
                       requireLogin: true,
                       onTap: () => Navigator.push(
                           context,
@@ -77,53 +80,53 @@ class DrawerWidget extends StatelessWidget {
                           ))),
                   drawerListTile(
                       icon: FontAwesomeIcons.adn,
-                      label: 'Favourite Ads',
+                      label: LocaleKeys.favouriteAds.localize,
                       requireLogin: true,
                       onTap: () => context.push(Routes.FAVOURITE)),
                   drawerListTile(
                       icon: Icons.history,
-                      label: 'Requests History',
+                      label: LocaleKeys.requestHistory.localize,
                       requireLogin: true,
                       onTap: () => context.push(Routes.REQUESTSHISTORY)),
 
                   drawerListTile(
                       icon: Icons.list,
-                      label: 'Lists',
+                      label: LocaleKeys.lists.localize,
                       requireLogin: true,
                       onTap: () => context.push(Routes.Lists)),
                   drawerListTile(
                       icon: Icons.ads_click,
-                      label: 'My Ads',
+                      label: LocaleKeys.myAds.localize,
                       requireLogin: true,
                       onTap: () => context.push(Routes.MYADDS)),
                   // drawerListTile(icon: Icons.list, label: 'Requests', onTap: () {}),
                   drawerListTile(
                       icon: Icons.settings,
-                      label: 'Settings',
+                      label: LocaleKeys.settings.localize,
                       onTap: () => context.push(Routes.SETTINGS)),
 
                   drawerListTile(
                       icon: Icons.privacy_tip,
-                      label: 'Privacy',
+                      label: LocaleKeys.privacy.localize,
                       onTap: () => context.push(Routes.PRIVACY)),
 
                   drawerListTile(
                       icon: Icons.policy_outlined,
-                      label: 'Policies',
+                      label: LocaleKeys.policies.localize,
                       onTap: () => context.push(Routes.POLICY)),
                   drawerListTile(
                       icon: Icons.share,
-                      label: 'Share App',
+                      label: LocaleKeys.shareApp.localize,
                       onTap: () => context.push(Routes.SHAREAPP)),
                   drawerListTile(
                       icon: Icons.message,
-                      label: 'Contact Us',
+                      label: LocaleKeys.contactUs.localize,
                       onTap: () => context.push(Routes.CONTACTUS)),
 
                   drawerListTile(
                       icon: Icons.logout,
                       requireLogin: true,
-                      label: 'Logout',
+                      label: LocaleKeys.logout.localize,
                       onTap: () {
                         bottomSheet(
                             context: context, widget: const LogoutWidget());
@@ -153,7 +156,7 @@ class DrawerWidget extends StatelessWidget {
                   icon: Icons.person,
                   onPressed: () => context.push(Routes.LOGIN),
                 ),
-                Label(text: 'Login', style: Styles.mediumText()),
+                Label(text: LocaleKeys.login.localize, style: Styles.mediumText()),
               ],
             ),
           ),
@@ -164,7 +167,7 @@ class DrawerWidget extends StatelessWidget {
                     isCircle: true,
                     icon: Icons.person_add,
                     onPressed: () => context.push(Routes.REGISTER)),
-                Label(text: 'Register', style: Styles.mediumText()),
+                Label(text: LocaleKeys.register.localize, style: Styles.mediumText()),
               ],
             ),
           ),
@@ -324,11 +327,11 @@ class DrawerWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Label(
-                      text: 'Lucky Wheel',
-                      style: Styles.mediumText(fontWeight: FontWeight.bold,color: Theme.of(context).scaffoldBackgroundColor)),
+                      text: LocaleKeys.luckyWheel.localize,
+                      style: Styles.mediumText(fontWeight: FontWeight.bold,color: Theme.of(context).primaryColor)),
                   Label(
-                      text: 'Do You feel lucky?',
-                      style: Styles.mediumText(fontWeight: FontWeight.w400,color: Theme.of(context).scaffoldBackgroundColor)),
+                      text: LocaleKeys.feelLucky.localize,
+                      style: Styles.mediumText(fontWeight: FontWeight.w400,color: Theme.of(context).primaryColor)),
                 ],
               ),
             ),

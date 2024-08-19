@@ -108,9 +108,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                     ),
                     const Sizer(height: 20),
                     Label(
-                      text: widget.category.total.toShortScale == '1'
-                          ? '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}'
-                          : '${widget.category.total.toShortScale} ${LocaleKeys.Ads.localize}',
+                      text: '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
                       style: Styles.mediumText(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,

@@ -63,5 +63,22 @@ abstract class  LocaleKeys {
   static const conditions = 'conditions';
   static const iAcceptAll = 'iAcceptAll';
   static const terms = 'terms';
+  static const advertiseYourCompany = 'advertiseYourCompany';
+  static const quraan = 'quraan';
+  static const azkar = 'azkar';
+  static const favouriteCategories = 'favouriteCategories';
+  static const favouriteSubCategories = 'favouriteSubCategories';
+  static const favouriteAds = 'favouriteAds';
+  static const requestHistory = 'requestHistory';
+  static const lists = 'lists';
+  static const myAds = 'myAds';
+  static const settings = 'settings';
+  static const privacy = 'privacy';
+  static const policies = 'policies';
+  static const shareApp = 'shareApp';
+  static const contactUs = 'contactUs';
+  static const logout = 'logout';
+  static const luckyWheel = 'luckyWheel';
+  static const feelLucky = 'feelLucky';
 
 }

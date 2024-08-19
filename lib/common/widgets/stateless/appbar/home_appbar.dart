@@ -8,7 +8,6 @@ import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -111,9 +110,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                         color: AppColors.SECONDARY_COLOR, fontSize: 20),
                     onPressed: () {
                       if (context.locale == Locales.english) {
-                        changeLang(locale: Locales.arabic);
+                        changeLang(locale: Locales.arabic, context: context);
                       } else {
-                        changeLang(locale: Locales.english);
+                        changeLang(locale: Locales.english, context: context);
                       }
                     })),
           Stack(

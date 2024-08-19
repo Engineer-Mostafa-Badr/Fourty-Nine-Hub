@@ -78,7 +78,24 @@ class CodegenLoader extends AssetLoader{
   "male": "ذكر",
   "conditions": "الشروط والأحكام",
   "iAcceptAll": "أوافق على جميع",
-  "terms": "يرجى قبول الشروط والأحكام للمواصلة."
+  "terms": "يرجى قبول الشروط والأحكام للمواصلة.",
+  "advertiseYourCompany": "أعلن عن شركتك",
+  "quraan": "القرآن الكريم",
+  "azkar": "الأذكار",
+  "favouriteCategories": "الفئات المفضلة",
+  "favouriteSubCategories": "الفئات الفرعية المفضلة",
+  "favouriteAds": "الإعلانات المفضلة",
+  "requestHistory": " سجل الطلبات",
+  "lists": "القوائم",
+  "myAds": "إعلاناتي",
+  "settings": "الإعدادات",
+  "privacy": "الخصوصية",
+  "policies": "السياسات",
+  "shareApp": "مشاركة التطبيق",
+  "contactUs": "اتصل بنا",
+  "logout": "تسجيل الخروج",
+  "luckyWheel": "عجلة الحظ",
+  "feelLucky": "هل تشعر بالحظ؟"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -144,7 +161,24 @@ static const Map<String,dynamic> en = {
   "male": "Male",
   "conditions": "Terms,Rules & Conditions",
   "iAcceptAll": "I Accept All",
-  "terms": "Please accept the terms and conditions to continue."
+  "terms": "Please accept the terms and conditions to continue.",
+  "advertiseYourCompany": "Advertise Your Company",
+  "quraan": "Quraan",
+  "azkar": "Azkar",
+  "favouriteCategories": "Favourite Categories",
+  "favouriteSubCategories": "Favourite Sub Categories",
+  "favouriteAds": "Favourite Ads",
+  "requestHistory": "Requests History",
+  "lists": "Lists",
+  "myAds": "My Ads",
+  "settings": "Settings",
+  "privacy": "Privacy",
+  "policies": "Policies",
+  "shareApp": "Share App",
+  "contactUs": "Contact Us",
+  "logout": "logout",
+  "luckyWheel": "Lucky Wheel",
+  "feelLucky": "Do You feel lucky?"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
