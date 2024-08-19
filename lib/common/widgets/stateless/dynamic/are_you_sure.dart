@@ -50,7 +50,7 @@ class AreYouSure extends StatelessWidget {
         children: [
           Expanded(
               child: AppButton(
-                color: AppColors.AUTH_CONTAINER_COLOR,
+                  color: AppColors.AUTH_CONTAINER_COLOR,
                   label: 'Ok',
                   onPressed: () {
                     action();

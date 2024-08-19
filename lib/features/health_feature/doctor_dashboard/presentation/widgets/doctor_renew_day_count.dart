@@ -40,7 +40,8 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                     }
                     return _Item(
                       numerOfDays: days,
-                      label: Labels.subscription, onTap: (){},
+                      label: Labels.subscription,
+                      onTap: () {},
                     );
                   },
                 ),
@@ -58,7 +59,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                     }
                     return _Item(
                       numerOfDays: days,
-                      label: Labels.id, onTap: (){},
+                      label: Labels.id, onTap: () {},
                       // onTap: () => context.push(Routes.EDITDOCTORDOCS),
                     );
                   },
@@ -77,7 +78,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                     }
                     return _Item(
                       numerOfDays: days,
-                      label: Labels.practiceCertification, onTap: (){},
+                      label: Labels.practiceCertification, onTap: () {},
                       // onTap: () => context.push(Routes.EDITDOCTORDOCS),
                     );
                   },
@@ -95,12 +96,16 @@ class _Item extends StatelessWidget {
   final String numerOfDays;
   final String label;
   final Function onTap;
-  const _Item({required this.numerOfDays, required this.label, required this.onTap,});
+  const _Item({
+    required this.numerOfDays,
+    required this.label,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         onTap();
       },
       child: Column(
@@ -111,7 +116,8 @@ class _Item extends StatelessWidget {
           ),
           Label(
             text: label,
-            style: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
+            style: Styles.mediumText(
+                color: Theme.of(context).scaffoldBackgroundColor),
           ),
         ],
       ),

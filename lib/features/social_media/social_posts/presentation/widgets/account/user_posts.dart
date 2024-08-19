@@ -21,20 +21,20 @@ class UserPosts extends StatefulWidget {
 }
 
 class _UserPostsState extends State<UserPosts> {
-
   bool showReacts = false;
 
-  closeReacts(){
+  closeReacts() {
     setState(() {
-      showReacts=false;
+      showReacts = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<SocialPostsCubit>(
-      create: (_)=>serviceLocator()..loadUserPosts(widget.userData.id),
-      child: BlocConsumer<SocialPostsCubit, SocialPostsState>(listener: (context, state) {
+      create: (_) => serviceLocator()..loadUserPosts(widget.userData.id),
+      child: BlocConsumer<SocialPostsCubit, SocialPostsState>(
+          listener: (context, state) {
         if (state.status == StateStatus.error) {
           showErrorMessage(
             context,
@@ -48,8 +48,8 @@ class _UserPostsState extends State<UserPosts> {
         final controller = context.read<SocialPostsCubit>();
         return RefreshIndicator(
           onRefresh: () async => controller.refreshUserPosts(),
-          child:GestureDetector(
-            onTap: (){
+          child: GestureDetector(
+            onTap: () {
               closeReacts();
             },
             child: PagedListView<int, PostEntity>(
@@ -60,7 +60,8 @@ class _UserPostsState extends State<UserPosts> {
                   parent: AlwaysScrollableScrollPhysics()),
               builderDelegate: PagedChildBuilderDelegate<PostEntity>(
                   noItemsFoundIndicatorBuilder: (context) {
-                    print(controller.userPostsPagingController.itemList?.length);
+                    print(
+                        controller.userPostsPagingController.itemList?.length);
                     return const Padding(
                         padding: EdgeInsets.only(top: 200),
                         child: Center(
@@ -75,43 +76,48 @@ class _UserPostsState extends State<UserPosts> {
                   },
                   itemBuilder: (context, item, index) {
                     final user = context.read<UserCubit>().state.data;
-                    final post = controller.userPostsPagingController.itemList![index];
-                    showReacts=false;
-                    return state.status == StateStatus.success? UserPostCard(
-                      // showReacts: showReacts,
-                      post: post,
-                      onReact: (params)async{
-                        // var result = await widget.onReact(params);
-                        // changeReaction(state.postDetails, params.react);
-                        // setState(() {
-                        //
-                        // });
-                        // return result;
-                      },
-                      deletePost: (params){},
-                      hidePost: (params){},
-                      showPostDetails: (params){},
-                      showPostComments: (params){},
-                      onShare: (String id) {},
-                      from: 'posts',
-                      isMyPost:
-                      user?.id == state.postDetails?.user.id, index: 0, onSelectReact: (int i) {
-                        print(controller.reacts[i].react);
-                        closeReacts();
-                    },
-                    ):Center(
-                      child: Label(text: getFailureMessage(
-                        state.failure ?? const UnknownFailure(),
-                        context,
-                      )),
-                    );
+                    final post =
+                        controller.userPostsPagingController.itemList![index];
+                    showReacts = false;
+                    return state.status == StateStatus.success
+                        ? UserPostCard(
+                            // showReacts: showReacts,
+                            post: post,
+                            onReact: (params) async {
+                              // var result = await widget.onReact(params);
+                              // changeReaction(state.postDetails, params.react);
+                              // setState(() {
+                              //
+                              // });
+                              // return result;
+                            },
+                            deletePost: (params) {},
+                            hidePost: (params) {},
+                            showPostDetails: (params) {},
+                            showPostComments: (params) {},
+                            onShare: (String id) {},
+                            from: 'posts',
+                            isMyPost: user?.id == state.postDetails?.user.id,
+                            index: 0,
+                            onSelectReact: (int i) {
+                              print(controller.reacts[i].react);
+                              closeReacts();
+                            },
+                          )
+                        : Center(
+                            child: Label(
+                                text: getFailureMessage(
+                              state.failure ?? const UnknownFailure(),
+                              context,
+                            )),
+                          );
                   },
                   noMoreItemsIndicatorBuilder: (context) => Container(),
                   firstPageProgressIndicatorBuilder: (context) => Container(
                       margin: const EdgeInsets.only(top: 150),
                       child: const CupertinoActivityIndicator()),
                   newPageProgressIndicatorBuilder: (context) =>
-                  const CupertinoActivityIndicator()),
+                      const CupertinoActivityIndicator()),
             ),
           ),
         );

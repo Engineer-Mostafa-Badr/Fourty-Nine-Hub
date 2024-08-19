@@ -1,4 +1,4 @@
-class UserProfileEntity  {
+class UserProfileEntity {
   final String id;
   final String firstName;
   final String lastName;
@@ -16,9 +16,10 @@ class UserProfileEntity  {
   bool? isBlock;
 
   String get fullName => '$firstName $lastName';
-  bool  isMyAccount(String anotherId){
+  bool isMyAccount(String anotherId) {
     return id == anotherId;
   }
+
   UserProfileEntity({
     required this.id,
     required this.firstName,
@@ -30,12 +31,10 @@ class UserProfileEntity  {
     required this.friendsCount,
     required this.followersCount,
     required this.followingCount,
-    this.isFollowed=false,
-    this.areFriends=false,
-    this.isDocument=false,
-    this.sentFriendRequest=false,
-    this.isBlock=false,
+    this.isFollowed = false,
+    this.areFriends = false,
+    this.isDocument = false,
+    this.sentFriendRequest = false,
+    this.isBlock = false,
   });
-
-
 }

@@ -201,124 +201,126 @@ class _ReportViewState extends State<ReportView> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: BlocProvider<TwitterCubit>(
-        create: (_) => serviceLocator(),
-        child: BlocBuilder<TwitterCubit, TwitterState>(
-          builder: (context, state) {
-            final controller = context.read<TwitterCubit>();
-            return Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Label(
-                      text: "Report",
-                      style: Styles.headerText(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+        backgroundColor: Colors.transparent,
+        body: BlocProvider<TwitterCubit>(
+            create: (_) => serviceLocator(),
+            child: BlocBuilder<TwitterCubit, TwitterState>(
+                builder: (context, state) {
+              final controller = context.read<TwitterCubit>();
+              return Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Label(
+                        text: "Report",
+                        style: Styles.headerText(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Icon(
-                      Icons.report_gmailerrorred_rounded,
-                      color: AppColors.SECONDARY_COLOR,
-                      size: 30,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Expanded(
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: reports.length,
-                    separatorBuilder: (context, i) => const SizedBox(
-                      height: 10,
-                    ),
-                    itemBuilder: (context, i) {
-                      return Row(
-                        children: [
-                          Expanded(
-                            child: Label(
-                              text: reports[i].displayTitleEn,
-                              style: Styles.headerText(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.DARK_GRAY_COLOR,
-                              ),
-                              maxLines: 3,
-                            ),
-                          ),
-                          Checkbox(
-                            value: selectedReport == reports[i],
-                            onChanged: (v) {
-                              setState(() {
-                                selectedReport = v! ? reports[i] : null;
-                              });
-                            },
-                            activeColor: AppColors.SECONDARY_COLOR,
-                          ),
-                        ],
-                      );
-                    },
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Icon(
+                        Icons.report_gmailerrorred_rounded,
+                        color: AppColors.SECONDARY_COLOR,
+                        size: 30,
+                      ),
+                    ],
                   ),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: FormTextField(
-                        hint: 'Type report reason ....',
-                        height: kToolbarHeight * .7,
-                        action: (v) {
-                          setState(() {});
-                        },
-                        controller: reportTextController,
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Expanded(
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: reports.length,
+                      separatorBuilder: (context, i) => const SizedBox(
+                        height: 10,
                       ),
-                    ),
-                    if (reportTextController.text.isNotEmpty)
-                      IconAppButton(
-                        icon: Icons.send,
-                        isCircle: true,
-                        onPressed: () async {
-                          if (selectedReport == null) {
-                            showErrorMessage(context, "Please select reason!");
-                          } else {
-                            var response = await controller.onReport(
-                              TwitterReportParams(
-                                userId: widget.id,
-                                category: selectedReport!.name,
-                                content: reportTextController.text,
-                                categoryId: widget.categoryId,
-                                reason: selectedReport!.name,
+                      itemBuilder: (context, i) {
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: Label(
+                                text: reports[i].displayTitleEn,
+                                style: Styles.headerText(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.DARK_GRAY_COLOR,
+                                ),
+                                maxLines: 3,
                               ),
-                            );
-                          if(context.mounted)
-                              {if (response == true) {
-                                showSuccessMessage(
-                                  context,
-                                  "Report sent successfully",
-                                );
-                                context.pop();
-                              } else {
-                                showErrorMessage(
-                                  context,
-                                  getFailureMessage(
-                                    state.failure ?? const UnknownFailure(),
+                            ),
+                            Checkbox(
+                              value: selectedReport == reports[i],
+                              onChanged: (v) {
+                                setState(() {
+                                  selectedReport = v! ? reports[i] : null;
+                                });
+                              },
+                              activeColor: AppColors.SECONDARY_COLOR,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: FormTextField(
+                          hint: 'Type report reason ....',
+                          height: kToolbarHeight * .7,
+                          action: (v) {
+                            setState(() {});
+                          },
+                          controller: reportTextController,
+                        ),
+                      ),
+                      if (reportTextController.text.isNotEmpty)
+                        IconAppButton(
+                          icon: Icons.send,
+                          isCircle: true,
+                          onPressed: () async {
+                            if (selectedReport == null) {
+                              showErrorMessage(
+                                  context, "Please select reason!");
+                            } else {
+                              var response = await controller.onReport(
+                                TwitterReportParams(
+                                  userId: widget.id,
+                                  category: selectedReport!.name,
+                                  content: reportTextController.text,
+                                  categoryId: widget.categoryId,
+                                  reason: selectedReport!.name,
+                                ),
+                              );
+                              if (context.mounted) {
+                                if (response == true) {
+                                  showSuccessMessage(
                                     context,
-                                  ),
-                                );
+                                    "Report sent successfully",
+                                  );
+                                  context.pop();
+                                } else {
+                                  showErrorMessage(
+                                    context,
+                                    getFailureMessage(
+                                      state.failure ?? const UnknownFailure(),
+                                      context,
+                                    ),
+                                  );
+                                }
                               }
-                            }}
+                            }
                           },
                         ),
                     ],
                   ),
                 ],
               );
-  })));
+            })));
   }
 }

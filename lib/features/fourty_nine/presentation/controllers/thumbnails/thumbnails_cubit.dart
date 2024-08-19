@@ -5,7 +5,7 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/get_ride_thumbnails.dart';
 
-class   ThumbnailsCubit extends Cubit<BasicState<List<RideThumbnailEntity>>> {
+class ThumbnailsCubit extends Cubit<BasicState<List<RideThumbnailEntity>>> {
   final GetRideThumbnailsUseCase _getRideThumbnailsUseCase;
 
   ThumbnailsCubit(this._getRideThumbnailsUseCase) : super(const BasicState());

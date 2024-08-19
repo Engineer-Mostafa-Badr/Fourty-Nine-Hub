@@ -55,7 +55,9 @@ class UserPostCard extends StatefulWidget {
       required this.showPostDetails,
       required this.showPostComments,
       required this.onShare,
-      required this.from, required this.index, required this.onSelectReact});
+      required this.from,
+      required this.index,
+      required this.onSelectReact});
 
   @override
   State<UserPostCard> createState() => _UserPostCardState();
@@ -76,119 +78,119 @@ class _UserPostCardState extends State<UserPostCard> {
 
   @override
   Widget build(BuildContext context) {
-      return BlocConsumer<SocialPostsCubit, SocialPostsState>(
-          listener: (context, state) {
-        if (state.status == StateStatus.error) {
-          showErrorMessage(
+    return BlocConsumer<SocialPostsCubit, SocialPostsState>(
+        listener: (context, state) {
+      if (state.status == StateStatus.error) {
+        showErrorMessage(
+          context,
+          getFailureMessage(
+            state.failure ?? const UnknownFailure(),
             context,
-            getFailureMessage(
-              state.failure ?? const UnknownFailure(),
-              context,
-            ),
-          );
-        }
-      }, builder: (context, state) {
-        final controller = context.read<SocialPostsCubit>();
-            var myPost =widget.post;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          ),
+        );
+      }
+    }, builder: (context, state) {
+      final controller = context.read<SocialPostsCubit>();
+      var myPost = widget.post;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildAccountHeader(context: context, post: myPost),
+          // Label(text: myPost.mainPost?.content??''),
+          if (myPost.content!.isNotEmpty)
+            _buildContentWidget(
+                content: myPost.content ?? '',
+                backgroundColor: myPost.backgroundColor,
+                images: myPost.images ?? []),
+          Container(
+            margin: EdgeInsets.all(myPost.isShared == true ? 10 : 0),
+            padding: EdgeInsets.all(myPost.isShared == true ? 10 : 0),
+            decoration: BoxDecoration(
+                border: myPost.isShared == true ? Border.all() : null),
+            child: Column(
               children: [
-                _buildAccountHeader(context: context, post: myPost),
-                // Label(text: myPost.mainPost?.content??''),
-                if(myPost.content!.isNotEmpty)_buildContentWidget(content: myPost.content??'',backgroundColor: myPost.backgroundColor,images: myPost.images??[]),
-                Container(
-                  margin: EdgeInsets.all(myPost.isShared==true?10:0),
-                  padding: EdgeInsets.all(myPost.isShared==true?10:0),
-                  decoration: BoxDecoration(
-                    border: myPost.isShared==true?Border.all():null
-                  ),
-                  child: Column(
-                    children: [
-                      if (myPost.type != 'advertisement'&&myPost.isShared==true)
-                        _buildMainAccountHeader(context: context, post: myPost.mainPost!),
-                      if(myPost.isShared==true)_buildContentWidget(content: myPost.mainPost?.content??'',backgroundColor: null,images: myPost.mainPost?.images??[]),
-
-
-                    ],
-                  ),
-                ),
-                Row(
+                if (myPost.type != 'advertisement' && myPost.isShared == true)
+                  _buildMainAccountHeader(
+                      context: context, post: myPost.mainPost!),
+                if (myPost.isShared == true)
+                  _buildContentWidget(
+                      content: myPost.mainPost?.content ?? '',
+                      backgroundColor: null,
+                      images: myPost.mainPost?.images ?? []),
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              if (myPost.likesCount != 0)
+                _buildCounterWidget(
+                    value: myPost.likesCount!, image: Assets.like),
+              if (myPost.hahaCount != 0)
+                _buildCounterWidget(
+                    value: myPost.hahaCount!, image: Assets.haha),
+              if (myPost.loveCount != 0)
+                _buildCounterWidget(
+                    value: myPost.loveCount!, image: Assets.heart),
+              if (myPost.wowCount != 0)
+                _buildCounterWidget(value: myPost.wowCount!, image: Assets.wow),
+              if (myPost.sadCount != 0)
+                _buildCounterWidget(value: myPost.sadCount!, image: Assets.sad),
+              if (myPost.angryCount != 0)
+                _buildCounterWidget(
+                    value: myPost.angryCount!, image: Assets.angry),
+              const Spacer(),
+              InkWell(
+                onTap: () => widget.showPostComments(myPost.id),
+                child: Row(
                   children: [
-                    if (myPost.likesCount != 0)
-                      _buildCounterWidget(
-                          value: myPost.likesCount!, image: Assets.like),
-                    if (myPost.hahaCount != 0)
-                      _buildCounterWidget(
-                          value: myPost.hahaCount!, image: Assets.haha),
-                    if (myPost.loveCount != 0)
-                      _buildCounterWidget(
-                          value: myPost.loveCount!, image: Assets.heart),
-                    if (myPost.wowCount != 0)
-                      _buildCounterWidget(
-                          value: myPost.wowCount!, image: Assets.wow),
-                    if (myPost.sadCount != 0)
-                      _buildCounterWidget(
-                          value: myPost.sadCount!, image: Assets.sad),
-                    if (myPost.angryCount != 0)
-                      _buildCounterWidget(
-                          value: myPost.angryCount!,
-                          image: Assets.angry),
-                    const Spacer(),
-                    InkWell(
-                      onTap: () => widget.showPostComments(myPost.id),
-                      child: Row(
-                        children: [
-                          Label(
-                            text: myPost.commentsCount.toString(),
-                            style: Styles.mediumText(),
-                          ),
-                          const Sizer(
-                            width: 5,
-                          ),
-                          Label(
-                            text: 'Comments',
-                            style: Styles.mediumText(),
-                          )
-                        ],
-                      ),
+                    Label(
+                      text: myPost.commentsCount.toString(),
+                      style: Styles.mediumText(),
                     ),
+                    const Sizer(
+                      width: 5,
+                    ),
+                    Label(
+                      text: 'Comments',
+                      style: Styles.mediumText(),
+                    )
                   ],
                 ),
-                const Divider(
-                  color: AppColors.LIGHT_GRAY_COLOR,
+              ),
+            ],
+          ),
+          const Divider(
+            color: AppColors.LIGHT_GRAY_COLOR,
+          ),
+          SizedBox(
+            height: kToolbarHeight * .6,
+            child: Row(
+              children: [
+                Expanded(
+                  child: BuildReactionsButtons(
+                      post: widget.post, from: 'userPosts'),
                 ),
-                SizedBox(
-                  height: kToolbarHeight * .6,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: BuildReactionsButtons(post: widget.post, from: 'userPosts'),
-                      ),
-                      if (widget.from == 'posts')
-                        Expanded(
-                          child: _buildReactionPlaceHolder(
-                              icon: Icons.chat_bubble_outline_rounded,
-                              label: 'Comment',
-                              onTap: () =>
-                                  widget.showPostComments(myPost.id)),
-                        ),
-                      Expanded(
-                        child: _buildReactionPlaceHolder(
-                            icon: Icons.chat_rounded,
-                            label: 'Share',
-                            onTap: () {
-                              controller.onShare(postId: myPost.id);
-                            }),
-                      ),
-                    ],
+                if (widget.from == 'posts')
+                  Expanded(
+                    child: _buildReactionPlaceHolder(
+                        icon: Icons.chat_bubble_outline_rounded,
+                        label: 'Comment',
+                        onTap: () => widget.showPostComments(myPost.id)),
                   ),
+                Expanded(
+                  child: _buildReactionPlaceHolder(
+                      icon: Icons.chat_rounded,
+                      label: 'Share',
+                      onTap: () {
+                        controller.onShare(postId: myPost.id);
+                      }),
                 ),
               ],
-            );
-
-
-      });
-
+            ),
+          ),
+        ],
+      );
+    });
   }
 
   Widget _buildCounterWidget({
@@ -212,7 +214,8 @@ class _UserPostCardState extends State<UserPostCard> {
     );
   }
 
-  Widget _buildPostOptions({required bool fromDetails,required PostEntity post}) {
+  Widget _buildPostOptions(
+      {required bool fromDetails, required PostEntity post}) {
     return SizedBox(
       height: widget.isMyPost ? 150 : 80,
       child: Column(
@@ -274,11 +277,11 @@ class _UserPostCardState extends State<UserPostCard> {
     return Row(
       children: [
         InkWell(
-        onTap: () {
-      if(widget.fromProfile==false){
-        context.push(Routes.OTHERSACCOUNT,extra: post.user.id);
-      }
-    },
+          onTap: () {
+            if (widget.fromProfile == false) {
+              context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+            }
+          },
           child: CircleAvatar(
             backgroundColor: Colors.white,
             backgroundImage: NetworkImage((post.user.image.isNotEmpty)
@@ -291,20 +294,22 @@ class _UserPostCardState extends State<UserPostCard> {
             child: Row(
           children: [
             InkWell(
-          onTap: () {
-    if(widget.fromProfile==false){
-    context.push(Routes.OTHERSACCOUNT,extra: post.user.id);
-    }
-    },
+              onTap: () {
+                if (widget.fromProfile == false) {
+                  context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                }
+              },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextAppButton(
                       label: post.user.firstName,
                       onPressed: () {
-                      if(widget.fromProfile==false){
-                      context.push(Routes.OTHERSACCOUNT,extra: post.user.id);
-                      }}),
+                        if (widget.fromProfile == false) {
+                          context.push(Routes.OTHERSACCOUNT,
+                              extra: post.user.id);
+                        }
+                      }),
                   RichText(
                       text: TextSpan(children: [
                     TextSpan(
@@ -323,14 +328,14 @@ class _UserPostCardState extends State<UserPostCard> {
             _buildActivityFeelingWidget(post),
           ],
         )),
-        if (post.user.id==user?.id)
+        if (post.user.id == user?.id)
           IconAppButton(
             icon: Icons.clear,
             onPressed: () {
               bottomSheet(
                   context: context,
-                  widget:
-                      _buildPostOptions(fromDetails: widget.from == 'details', post: post));
+                  widget: _buildPostOptions(
+                      fromDetails: widget.from == 'details', post: post));
             },
           ),
       ],
@@ -345,8 +350,8 @@ class _UserPostCardState extends State<UserPostCard> {
       children: [
         InkWell(
           onTap: () {
-            if(widget.fromProfile==false){
-              context.push(Routes.OTHERSACCOUNT,extra: post.user.id);
+            if (widget.fromProfile == false) {
+              context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
             }
           },
           child: CircleAvatar(
@@ -362,8 +367,8 @@ class _UserPostCardState extends State<UserPostCard> {
           children: [
             InkWell(
               onTap: () {
-                if(widget.fromProfile==false){
-                  context.push(Routes.OTHERSACCOUNT,extra: post.user.id);
+                if (widget.fromProfile == false) {
+                  context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                 }
               },
               child: Column(
@@ -371,11 +376,12 @@ class _UserPostCardState extends State<UserPostCard> {
                 children: [
                   TextAppButton(
                       label: post.user.firstName,
-                    onPressed: () {
-                      if(widget.fromProfile==false){
-                        context.push(Routes.OTHERSACCOUNT,extra: post.user.id);
-                      }
-                    }),
+                      onPressed: () {
+                        if (widget.fromProfile == false) {
+                          context.push(Routes.OTHERSACCOUNT,
+                              extra: post.user.id);
+                        }
+                      }),
                   RichText(
                       text: TextSpan(children: [
                     TextSpan(
@@ -398,9 +404,11 @@ class _UserPostCardState extends State<UserPostCard> {
     );
   }
 
-  Widget _buildContentWidget({String? backgroundColor,required String content,List<String>? images}) {
-    return (backgroundColor != null &&
-                backgroundColor != '#FFFFFFFF') &&
+  Widget _buildContentWidget(
+      {String? backgroundColor,
+      required String content,
+      List<String>? images}) {
+    return (backgroundColor != null && backgroundColor != '#FFFFFFFF') &&
             images!.isEmpty
         ? Container(
             width: double.infinity,
@@ -408,14 +416,15 @@ class _UserPostCardState extends State<UserPostCard> {
             alignment: Alignment.center,
             margin: const EdgeInsets.symmetric(vertical: 10),
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-            color: backgroundColor != null &&
-                    images.isEmpty
-                ? Color(int.parse(backgroundColor.substring(1),
-                    radix: 16))
+            color: backgroundColor != null && images.isEmpty
+                ? Color(int.parse(backgroundColor.substring(1), radix: 16))
                 : Colors.white,
             child: ReadMoreLabel(
-              text: content ,
-              style: Styles.headerText(color: Colors.black, fontSize: 24,fontWeight: FontWeight.bold),
+              text: content,
+              style: Styles.headerText(
+                  color: Colors.black,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold),
             ),
           )
         : Container(
@@ -425,7 +434,7 @@ class _UserPostCardState extends State<UserPostCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ReadMoreLabel(text: content ),
+                ReadMoreLabel(text: content),
                 const SizedBox(
                   height: 10,
                 ),
@@ -437,12 +446,11 @@ class _UserPostCardState extends State<UserPostCard> {
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: images!.length == 1 ? 1 : 2),
-                        itemCount:
-                            images.length < 4 ? images.length : 4,
+                        itemCount: images.length < 4 ? images.length : 4,
                         itemBuilder: (context, index) => InkWell(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
                               onTap: () {
                                 if (index != 3 ||
                                     (index == 3 && images.length == 4)) {
@@ -462,7 +470,7 @@ class _UserPostCardState extends State<UserPostCard> {
                                       context: context,
                                       builder: (context) {
                                         return ShowPostsImages(
-                                          images: images ,
+                                          images: images,
                                           onRemoveImage:
                                               (UploadFileEntity image) {
                                             // controller.removePhoto(image);
@@ -480,7 +488,9 @@ class _UserPostCardState extends State<UserPostCard> {
                                             const EdgeInsetsDirectional.only(
                                                 end: 10, bottom: 10),
                                         padding: const EdgeInsets.all(10),
-                                        child: ImageFromInternet(image: images[index],),
+                                        child: ImageFromInternet(
+                                          image: images[index],
+                                        ),
                                       ),
                                       if (index == 3 && images.length > 4)
                                         Container(
@@ -497,8 +507,7 @@ class _UserPostCardState extends State<UserPostCard> {
                                           ),
                                           child: Center(
                                             child: Label(
-                                              text:
-                                                  "+${images.length - 4}",
+                                              text: "+${images.length - 4}",
                                               style: Styles.headerText(
                                                 color: Colors.white,
                                               ),
@@ -550,7 +559,6 @@ class _UserPostCardState extends State<UserPostCard> {
       );
     }
   }
-
 
   Widget _buildActivityFeelingWidget(PostEntity post) {
     return Padding(

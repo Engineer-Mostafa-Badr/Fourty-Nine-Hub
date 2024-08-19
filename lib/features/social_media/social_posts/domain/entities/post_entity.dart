@@ -103,7 +103,7 @@ class PostEntity {
   });
 }
 
-enum Reactions { like,haha, love, wow, sad, angry }
+enum Reactions { like, haha, love, wow, sad, angry }
 
 extension ReactionX on Reactions {
   String value() {

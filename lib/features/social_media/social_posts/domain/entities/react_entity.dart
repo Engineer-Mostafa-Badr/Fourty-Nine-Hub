@@ -1,4 +1,4 @@
-class ReactEntity{
+class ReactEntity {
   final String image;
   final String react;
 

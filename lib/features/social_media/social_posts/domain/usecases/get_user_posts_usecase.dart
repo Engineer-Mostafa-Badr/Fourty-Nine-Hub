@@ -13,7 +13,7 @@ class GetUserPostsUseCase extends UseCase<List<PostEntity>, UserPostsParams> {
   }
 }
 
-class UserPostsParams{
+class UserPostsParams {
   final int page;
   final int limit;
   final String userId;
@@ -23,7 +23,7 @@ class UserPostsParams{
     required this.userId,
   });
   Map<String, dynamic> toJson() => {
-    'page': page,
-    'limit': limit,
-  };
+        'page': page,
+        'limit': limit,
+      };
 }

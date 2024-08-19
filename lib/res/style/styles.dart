@@ -4,7 +4,7 @@ abstract class Styles {
 // text
   static TextStyle smallText(
       {double fontSize = 10,
-      Color? color ,
+      Color? color,
       TextDecoration? decoration,
       List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {

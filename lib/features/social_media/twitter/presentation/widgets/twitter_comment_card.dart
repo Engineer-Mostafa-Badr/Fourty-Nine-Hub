@@ -22,7 +22,8 @@ class TwitterCommentCard extends StatefulWidget {
       required this.comment,
       required this.onCommentReact,
       required this.onCommentReply,
-      required this.onReport, this.fromProfile=false});
+      required this.onReport,
+      this.fromProfile = false});
 
   @override
   State<TwitterCommentCard> createState() => _TwitterCommentCardState();
@@ -36,17 +37,19 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
       children: [
         Row(
           children: [
-            widget.comment.user.image==''?  UserProfileImage(
-              accountId: 0,
-              withBorder: false,
-              fromProfile: widget.fromProfile,
-              userId: widget.comment.user.id,
-            ):UserProfileImage(
-              accountId: 0,
-              imageURL: widget.comment.user.image,
-              fromProfile: widget.fromProfile,
-              userId: widget.comment.user.id,
-            ),
+            widget.comment.user.image == ''
+                ? UserProfileImage(
+                    accountId: 0,
+                    withBorder: false,
+                    fromProfile: widget.fromProfile,
+                    userId: widget.comment.user.id,
+                  )
+                : UserProfileImage(
+                    accountId: 0,
+                    imageURL: widget.comment.user.image,
+                    fromProfile: widget.fromProfile,
+                    userId: widget.comment.user.id,
+                  ),
             const Sizer(),
             Expanded(
                 child: Column(

@@ -37,7 +37,7 @@ abstract class MainTextFormField extends StatefulWidget {
 
   const MainTextFormField(
       {super.key,
-       this.currentFocusNode,
+      this.currentFocusNode,
       this.minLines,
       this.readOnly = false,
       this.nextFocusNode,
@@ -101,9 +101,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         maxLength: widget.maxLength,
         expands: widget.expanded,
         enableSuggestions: widget.enableSuggestions,
-        style:  const TextStyle(
-          color: AppColors.QUANTITY_COLOR
-        ),
+        style: const TextStyle(color: AppColors.QUANTITY_COLOR),
         textCapitalization: widget.textCapitalization,
         textAlignVertical:
             widget.expanded ? const TextAlignVertical(y: -0.8) : null,
@@ -116,7 +114,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
           contentPadding:
               widget.contentPadding ?? const EdgeInsets.fromLTRB(16, 0, 16, 0),
           hintText: widget.hintText,
-          hintStyle:  const TextStyle(color: AppColors.QUANTITY_COLOR),
+          hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
           suffixIcon: widget.suffixIcon,
           prefixIcon: widget.prefixIcon,
           prefixIconColor: AppColors.QUANTITY_COLOR,

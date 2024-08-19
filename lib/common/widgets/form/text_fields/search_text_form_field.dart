@@ -24,8 +24,8 @@ class SearchTextFormField extends MainTextFormField {
           validator: null,
           fillColor: Colors.white,
           hintColor: hintColor ?? AppColors.PRIMARY_COLOR_DARK,
-          prefixIcon: Icon(Icons.search,
-              color: hintColor ?? AppColors.QUANTITY_COLOR),
+          prefixIcon:
+              Icon(Icons.search, color: hintColor ?? AppColors.QUANTITY_COLOR),
           cursorColor: AppColors.ACCENT_COLOR,
           suffixIcon: icon,
         );

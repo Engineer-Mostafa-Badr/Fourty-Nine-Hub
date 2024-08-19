@@ -38,12 +38,16 @@ class ElevatedAppButton extends StatelessWidget {
                 )),
                 TextSpan(
                     text: label,
-                    style: textStyle ?? Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor))
+                    style: textStyle ??
+                        Styles.mediumText(
+                            color: Theme.of(context).scaffoldBackgroundColor))
               ]),
             )
           : Label(
               text: label,
-              style: textStyle ?? Styles.mediumText(color:Theme.of(context).scaffoldBackgroundColor)),
+              style: textStyle ??
+                  Styles.mediumText(
+                      color: Theme.of(context).scaffoldBackgroundColor)),
     );
   }
 }

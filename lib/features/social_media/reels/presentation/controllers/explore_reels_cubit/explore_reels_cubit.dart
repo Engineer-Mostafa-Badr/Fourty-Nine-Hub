@@ -73,7 +73,8 @@ class ReelsCubit extends Cubit<ReelsState> {
   final ReelsRepository repository;
 
   ReelsCubit({required this.repository})
-      : super(ReelsState(reels: [], isLoading: false, hasReachedMax: false, currentPage: 0));
+      : super(ReelsState(
+            reels: [], isLoading: false, hasReachedMax: false, currentPage: 0));
 
   Future<void> fetchReels() async {
     if (state.isLoading || state.hasReachedMax) return;
@@ -81,12 +82,14 @@ class ReelsCubit extends Cubit<ReelsState> {
     emit(state.copyWith(isLoading: true));
 
     try {
-      final ReelsResponse response = await repository.fetchReels(page: state.currentPage + 1);
+      final ReelsResponse response =
+          await repository.fetchReels(page: state.currentPage + 1);
 
       emit(state.copyWith(
         reels: [...state.reels, ...response.data.reels],
         isLoading: false,
-        hasReachedMax: response.data.pagination.currentPage >= response.data.pagination.pageCount,
+        hasReachedMax: response.data.pagination.currentPage >=
+            response.data.pagination.pageCount,
         currentPage: response.data.pagination.currentPage,
       ));
     } catch (e) {

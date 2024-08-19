@@ -47,12 +47,12 @@ class RestaurantHeader extends StatelessWidget {
                 margin: const EdgeInsets.all(15),
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(
-                          color: Colors.grey, spreadRadius: 6, blurRadius: 10)
-                    ],
-                    color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [
+                    BoxShadow(
+                        color: Colors.grey, spreadRadius: 6, blurRadius: 10)
+                  ],
+                  color: Theme.of(context).scaffoldBackgroundColor,
                 ),
                 child: Column(
                   children: [

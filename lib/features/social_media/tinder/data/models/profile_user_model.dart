@@ -1,6 +1,3 @@
-
-
-
 class ProfileUserModel {
   final bool status;
   final ProfileUserData data;
