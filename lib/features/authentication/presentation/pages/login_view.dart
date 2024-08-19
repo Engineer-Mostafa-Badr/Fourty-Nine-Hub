@@ -105,6 +105,7 @@ class _LoginViewState extends State<LoginView> {
           resizeToAvoidBottomInset: true,
           appBar: const BackAppBar(),
           body: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             controller: scrollController,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
