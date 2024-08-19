@@ -28,7 +28,7 @@ class DefaultTextFormField extends MainTextFormField {
     final Widget? suffixIcon,
     prefixIcon,
     final String? Function(String?)? validator,
-    final ValueChanged<String>? onChanged,
+    final ValueChanged<String>? onChanged,  Color? hintColor,
   }) : super(
           key: key,
           currentController: currentController,

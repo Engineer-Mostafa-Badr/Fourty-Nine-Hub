@@ -8,12 +8,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/global/capitalize_first_letter_of_words.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import 'package:fourtyninehub/core/states/basic_state.dart';
-import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_subcategory_view.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_state.dart';
@@ -24,6 +20,7 @@ import 'package:go_router/go_router.dart';
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
+import '../../../res/style/const.dart';
 import '../../../res/style/styles.dart';
 import '../../../routes/routes.dart';
 import '../stateless/buttons/iconAppButton.dart';
@@ -37,46 +34,30 @@ class DrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context)
-    =>
-        GetWalletCubit(serviceLocator())
-    ,
-    child: BlocBuilder<UserCubit, BasicState<UserEntity>>(
-    builder: (context, state) {
-    var walletCubit = context.read<GetWalletCubit>();
-    return Drawer(
-    child: SafeArea(
-    child: SingleChildScrollView(
-    child: Column(
-    children: [
-    context.read<UserCubit>().isLoggedIn
-    ? _buildAccountHeader(
-    context: context,
-    user: state.data,
-    )
-        : _buildLoginWidget(context: context),
+      create: (context) => GetWalletCubit(serviceLocator()),
+      child: BlocBuilder<UserCubit, BasicState<UserEntity>>(
+        builder: (context, state) {
+          var walletCubit = context.read<GetWalletCubit>();
+          return Drawer(
+            child: SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    context.read<UserCubit>().isLoggedIn
+                        ? _buildAccountHeader(
+                      context: context,
+                      user: state.data,
+                    )
+                        : _buildLoginWidget(context: context),
 
-    competitionSubscription(context: context),
+                    competitionSubscription(context: context),
 
-    // walletCircularProgress(context: context), gemy3617@gmail.com
-    drawerListTile(
-    icon: FontAwesomeIcons.bullhorn,
-    label: LocaleKeys.advertiseYourCompany.localize,
-    onTap: () => context.push(Routes.CREATECOMPANYAD)),
                     // walletCircularProgress(context: context), gemy3617@gmail.com
                     drawerListTile(
                         icon: FontAwesomeIcons.bullhorn,
                         label: 'Advertise Your Company',
                         onTap: () => context.push(Routes.CREATECOMPANYAD)),
 
-    drawerListTile(
-    icon: FontAwesomeIcons.quran,
-    label:LocaleKeys.quraan.localize,
-    onTap: () => context.push(Routes.QURAAN)),
-    drawerListTile(
-    icon: FontAwesomeIcons.book,
-    label: LocaleKeys.azkar.localize,
-    onTap: () => context.push(Routes.AZKAAR)),
                     drawerListTile(
                         icon: FontAwesomeIcons.quran,
                         label: Labels.quraan,
@@ -86,46 +67,22 @@ class DrawerWidget extends StatelessWidget {
                         label: Labels.azkar,
                         onTap: () => context.push(Routes.AZKAAR)),
 
-    drawerListTile(
-    icon: Icons.star_rounded,
-    label: LocaleKeys.favouriteCategories.localize,
-    requireLogin: true,
-    onTap: () => context.push(Routes.FAVOURITECATEGORIES)),
                     drawerListTile(
-                        // icon: Icons.star_rounded,
+                      // icon: Icons.star_rounded,
                         image: Assets.favorite_main_category_icon,
                         label: 'Favourite Categories',
                         requireLogin: true,
                         onTap: () => context.push(Routes.FAVOURITECATEGORIES)),
 
-    drawerListTile(
-    icon: Icons.favorite,
-    label: LocaleKeys.favouriteSubCategories.localize,
-    requireLogin: true,
-    onTap: () => Navigator.push(
-    context,
-    MaterialPageRoute(
-    builder: (context) => const FavSubCategoryView(favoriteSubCategory: [],),
-    ))),
-    drawerListTile(
-    icon: FontAwesomeIcons.adn,
-    label: LocaleKeys.favouriteAds.localize,
-    requireLogin: true,
-    onTap: () => context.push(Routes.FAVOURITE)),
-    drawerListTile(
-    icon: Icons.history,
-    label: LocaleKeys.requestHistory.localize,
-    requireLogin: true,
-    onTap: () => context.push(Routes.REQUESTSHISTORY)),
                     drawerListTile(
-                        // icon: Icons.favorite,
+                      // icon: Icons.favorite,
                         image: Assets.favorite_sub_category_icon,
                         label: 'Favourite Sub Categories',
                         requireLogin: true,
                         onTap: () =>
                             context.push(Routes.FAVOURITESUBCATEGORIES)),
                     drawerListTile(
-                        // icon: FontAwesomeIcons.adn,
+                      // icon: FontAwesomeIcons.adn,
                         image: Assets.favorite_ad_icon,
                         label: 'Favourite Ads',
                         requireLogin: true,
@@ -136,42 +93,27 @@ class DrawerWidget extends StatelessWidget {
                         requireLogin: true,
                         onTap: () => context.push(Routes.REQUESTSHISTORY)),
 
-    drawerListTile(
-    icon: Icons.list,
-    label: LocaleKeys.lists.localize,
-    requireLogin: true,
-    onTap: () => context.push(Routes.Lists)),
-    drawerListTile(
-    icon: Icons.ads_click,
-    label: LocaleKeys.myAds.localize,
-    requireLogin: true,
-    onTap: () => context.push(Routes.MYADDS)),
-    // drawerListTile(icon: Icons.list, label: 'Requests', onTap: () {}),
-    drawerListTile(
-    icon: Icons.settings,
-    label: LocaleKeys.settings.localize,
-    onTap: () => context.push(Routes.SETTINGS)),
                     drawerListTile(
-                        // icon: Icons.list,
+                      // icon: Icons.list,
                         image: Assets.lists_icon,
                         label: 'Lists',
                         requireLogin: true,
                         onTap: () => context.push(Routes.Lists)),
                     drawerListTile(
-                        // icon: Icons.ads_click,
+                      // icon: Icons.ads_click,
                         image: Assets.my_ads_icon,
                         label: 'My Ads',
                         requireLogin: true,
                         onTap: () => context.push(Routes.MYADDS)),
                     // drawerListTile(icon: Icons.list, label: 'Requests', onTap: () {}),
                     drawerListTile(
-                        // icon: Icons.settings,
+                      // icon: Icons.settings,
                         image: Assets.settings_icon,
                         label: 'Settings',
                         onTap: () => context.push(Routes.SETTINGS)),
 
                     drawerListTile(
-                        // icon: Icons.privacy_tip,
+                      // icon: Icons.privacy_tip,
                         image: Assets.privacy_icon,
                         label: 'Privacy',
                         onTap: () => context.push(Routes.PRIVACY)),
@@ -181,18 +123,18 @@ class DrawerWidget extends StatelessWidget {
                         label: 'Policies',
                         onTap: () => context.push(Routes.POLICY)),
                     drawerListTile(
-                        // icon: Icons.share,
+                      // icon: Icons.share,
                         image: Assets.share_app_icon,
                         label: 'Share App',
                         onTap: () => context.push(Routes.SHAREAPP)),
                     drawerListTile(
-                        // icon: Icons.message,
+                      // icon: Icons.message,
                         image: Assets.contact_us_icon,
                         label: 'Contact Us',
                         onTap: () => context.push(Routes.CONTACTUS)),
 
                     drawerListTile(
-                        // icon: Icons.logout,
+                      // icon: Icons.logout,
                         image: Assets.sign_out_icon,
                         requireLogin: true,
                         label: 'Logout',
@@ -226,7 +168,7 @@ class DrawerWidget extends StatelessWidget {
                   icon: Icons.person,
                   onPressed: () => context.push(Routes.LOGIN),
                 ),
-                Label(text: LocaleKeys.login.localize, style: Styles.mediumText()),
+                Label(text: 'Login', style: Styles.mediumText()),
               ],
             ),
           ),
@@ -237,7 +179,7 @@ class DrawerWidget extends StatelessWidget {
                     isCircle: true,
                     icon: Icons.person_add,
                     onPressed: () => context.push(Routes.REGISTER)),
-                Label(text: LocaleKeys.register.localize, style: Styles.mediumText()),
+                Label(text: 'Register', style: Styles.mediumText()),
               ],
             ),
           ),
@@ -335,8 +277,7 @@ class DrawerWidget extends StatelessWidget {
                       child: Center(
                           child: RichText(
                               text: TextSpan(children: [
-                                TextSpan(
-                                    text: '300\n', style: Styles.mediumText()),
+                                TextSpan(text: '300\n', style: Styles.mediumText()),
                                 TextSpan(
                                     text: '/1002',
                                     style: Styles.mediumText(
@@ -352,13 +293,13 @@ class DrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget drawerListTile({required IconData icon,
+  Widget drawerListTile(
       {IconData? icon,
-    required String label,
-    String? description,
-      String? image,
-    bool requireLogin = false,
-    required Function onTap}) {
+        required String label,
+        String? description,
+        String? image,
+        bool requireLogin = false,
+        required Function onTap}) {
     if (requireLogin && !AuthHelper().isLoggedIn()) {
       return const SizedBox();
     }
@@ -366,14 +307,14 @@ class DrawerWidget extends StatelessWidget {
       onTap: () => onTap(),
       leading: image != null && icon == null
           ? Image.asset(
-              image,
-              width: 20,
-              height: 20,
-              fit: BoxFit.cover,
-            )
+        image,
+        width: 20,
+        height: 20,
+        fit: BoxFit.cover,
+      )
           : Icon(
-              icon,
-            ),
+        icon,
+      ),
       title: Label(
           text: label, style: Styles.mediumText(fontWeight: FontWeight.w500)),
       subtitle: (description != null)
@@ -390,12 +331,9 @@ class DrawerWidget extends StatelessWidget {
 
   Widget competitionSubscription({required BuildContext context}) {
     return InkWell(
-      onTap: () =>
-          context.go(
-            context
-                .read<UserCubit>()
-                .isLoggedIn ? Routes.LUCKYWHEEL : Routes.LOGIN,
-          ),
+      onTap: () => context.go(
+        context.read<UserCubit>().isLoggedIn ? Routes.LUCKYWHEEL : Routes.LOGIN,
+      ),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(10),
@@ -410,17 +348,15 @@ class DrawerWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Label(
-                      text: LocaleKeys.luckyWheel.localize,
+                      text: 'Lucky Wheel',
                       style: Styles.mediumText(
-                          fontWeight: FontWeight.bold, color: Theme
-                          .of(context)
-                          .primaryColor)),
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).scaffoldBackgroundColor)),
                   Label(
-                      text: LocaleKeys.feelLucky.localize,
+                      text: 'Do You feel lucky?',
                       style: Styles.mediumText(
-                          fontWeight: FontWeight.w400, color: Theme
-                          .of(context)
-                          .primaryColor)),
+                          fontWeight: FontWeight.w400,
+                          color: Theme.of(context).scaffoldBackgroundColor)),
                 ],
               ),
             ),
@@ -439,11 +375,12 @@ class DrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget counterItem({required IconData icon,
-    required String label,
-    required String value,
-    required context,
-    required Function onTap}) {
+  Widget counterItem(
+      {required IconData icon,
+        required String label,
+        required String value,
+        required context,
+        required Function onTap}) {
     return Expanded(
       child: InkWell(
         onTap: () => onTap(),
@@ -455,17 +392,13 @@ class DrawerWidget extends StatelessWidget {
               child: Icon(
                 icon,
                 // size: ,
-                color: Theme
-                    .of(context)
-                    .scaffoldBackgroundColor,
+                color: Theme.of(context).scaffoldBackgroundColor,
               ),
             ),
             Label(
               text: value,
               style: Styles.mediumText(
-                color: Theme
-                    .of(context)
-                    .primaryColor,
+                color: Theme.of(context).primaryColor,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
@@ -503,15 +436,6 @@ class DrawerWidget extends StatelessWidget {
                 Positioned(
                   bottom: 0,
                   right: 0,
-                  child: InkWell(
-                    onTap: () {
-                      //change the image of user profile
-                    },
-                    child: const Icon(
-                      Icons.camera_enhance_outlined,
-                      color: AppColors.PRIMARY_COLOR,
-                      size: 20,
-                    ),
                   child: Icon(
                     Icons.camera_alt_outlined,
                     color: AppColors.PRIMARY_COLOR,
@@ -547,9 +471,9 @@ class DrawerWidget extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                  context.push(
-                    Routes.WALLET,
-                  );
+                      context.push(
+                        Routes.WALLET,
+                      );
                     },
                     child: Row(
                       children: [
@@ -566,8 +490,7 @@ class DrawerWidget extends StatelessWidget {
                             return Expanded(
                               child: Label(
                                 text:
-                                '${state is SuccessGetWallet ? state.model
-                                    .balance : 0} L.E',
+                                '${state is SuccessGetWallet ? state.model.balance : 0} L.E',
                                 style: Styles.mediumText(
                                     decoration: TextDecoration.underline),
                               ),
@@ -584,7 +507,9 @@ class DrawerWidget extends StatelessWidget {
     );
   }
 
-  getUserType(UserEntity? user,) {
+  getUserType(
+      UserEntity? user,
+      ) {
     if (user?.isDoctor ?? false) {
       return "Doctor";
     } else if (user?.isLoading ?? false) {

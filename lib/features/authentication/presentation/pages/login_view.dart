@@ -188,8 +188,8 @@ class _LoginViewState extends State<LoginView> {
                       label: LocaleKeys.login.localize,
                       onPressed: loginCubit.login,
                     ),
-                  )
                 ],
+                  )
               ),
             ),
           ),

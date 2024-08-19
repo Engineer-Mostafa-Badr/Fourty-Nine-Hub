@@ -38,7 +38,7 @@ class _PasswordTextFormFieldState extends State<PasswordTextFormField> {
       margin: widget.margin,
       child: DefaultTextFormField(
         currentController: widget.currentController,
-        currentFocusNode: widget.currentFocusNode,
+        currentFocusNode: widget.currentFocusNode!,
         nextFocusNode: widget.nextFocusNode,
         margin: widget.margin,
         hint: widget.hint ?? 'Password',
