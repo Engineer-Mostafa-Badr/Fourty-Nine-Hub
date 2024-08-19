@@ -1,11 +1,7 @@
 import 'dart:developer';
-
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/functions/global/capitalize_first_letter_of_words.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 
@@ -20,14 +16,12 @@ import 'package:go_router/go_router.dart';
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
-import '../../../res/style/const.dart';
 import '../../../res/style/styles.dart';
 import '../../../routes/routes.dart';
 import '../stateless/buttons/iconAppButton.dart';
 import '../stateless/labels/label.dart';
 import 'sizer.dart';
 
-// import 'package:fourtyninehub/service_locator/service_locator.dart';
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({super.key});
 
@@ -419,12 +413,12 @@ class DrawerWidget extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-          SizedBox(
+          const SizedBox(
             height: kToolbarHeight * 1.5,
             width: kToolbarHeight * 1.5,
             child: Stack(
               children: [
-                const Positioned.fill(
+                Positioned.fill(
                   child: CircleAvatar(
                     backgroundColor: Colors.transparent,
                     backgroundImage: NetworkImage(
@@ -455,11 +449,11 @@ class DrawerWidget extends StatelessWidget {
                     text: user?.fullName ?? '',
                     style: Styles.mediumText(fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   if (user?.isDocument ?? false)
-                    Icon(
+                    const Icon(
                       Icons.verified,
                       color: AppColors.PRIMARY_COLOR,
                     ),
