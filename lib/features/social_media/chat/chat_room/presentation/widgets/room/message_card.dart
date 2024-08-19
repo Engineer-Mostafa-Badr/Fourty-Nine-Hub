@@ -23,7 +23,8 @@ class MessageCard extends StatelessWidget {
 
     return messageEntity.byMe!
         ? _buildMineMessage(width: width, messageEntity: messageEntity)
-        : _buildOtherMessage(width: width, messageEntity: messageEntity, context: context);
+        : _buildOtherMessage(
+            width: width, messageEntity: messageEntity, context: context);
   }
 
   Widget _buildMineMessage({

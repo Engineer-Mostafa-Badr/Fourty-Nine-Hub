@@ -15,11 +15,11 @@ class CommentModel extends CommentEntity {
       super.totalCount,
       super.sadCount,
       required super.user,
-        super.isLove,
-        super.isLikes,
-        super.isWow,
-        super.isSad,
-        super.isAngry,
+      super.isLove,
+      super.isLikes,
+      super.isWow,
+      super.isSad,
+      super.isAngry,
       super.wowCount});
   factory CommentModel.fromJson(Map<String, dynamic> json) {
     return CommentModel(
@@ -28,17 +28,19 @@ class CommentModel extends CommentEntity {
       post: json['post'],
       isLove: json['isLove'] ?? false,
       isLikes: json['isLikes'] ?? false,
-      user: json['user'] is String? json['user']:TwitterUserModel.fromJson(json['user']),
+      user: json['user'] is String
+          ? json['user']
+          : TwitterUserModel.fromJson(json['user']),
       isWow: json['isWow'] ?? false,
       isSad: json['isSad'] ?? false,
       isAngry: json['isAngry'] ?? false,
-      likesCount: json['likesCount']??0,
-      loveCount: json['loveCount']??0,
-      wowCount: json['wowCount']??0,
-      sadCount: json['sadCount']??0,
-      angryCount: json['angryCount']??0,
-      repliesCount: json['repliesCount']??0,
-      totalCount: json['totalCount']??0,
+      likesCount: json['likesCount'] ?? 0,
+      loveCount: json['loveCount'] ?? 0,
+      wowCount: json['wowCount'] ?? 0,
+      sadCount: json['sadCount'] ?? 0,
+      angryCount: json['angryCount'] ?? 0,
+      repliesCount: json['repliesCount'] ?? 0,
+      totalCount: json['totalCount'] ?? 0,
       createdAt: DateTime.parse(json['createdAt']),
     );
   }

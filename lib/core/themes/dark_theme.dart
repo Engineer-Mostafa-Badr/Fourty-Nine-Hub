@@ -38,9 +38,8 @@ ThemeData darkTheme() {
       primary: AppColors.AUTH_CONTAINER_COLOR,
       secondary: AppColors.AUTH_CONTAINER_COLOR,
     ),
-    drawerTheme: const DrawerThemeData(
-      backgroundColor:  AppColors.QUANTITY_COLOR
-    ),
+    drawerTheme:
+        const DrawerThemeData(backgroundColor: AppColors.QUANTITY_COLOR),
     actionIconTheme: const ActionIconThemeData(),
     bottomAppBarTheme: const BottomAppBarTheme(),
     canvasColor: Colors.black38,
@@ -51,9 +50,10 @@ ThemeData darkTheme() {
     bottomSheetTheme: const BottomSheetThemeData(),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(),
     iconButtonTheme: const IconButtonThemeData(),
-    elevatedButtonTheme:  ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(backgroundColor: Colors.blue,textStyle: const TextStyle(color: Colors.white,fontSize: 20)),
-
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blue,
+          textStyle: const TextStyle(color: Colors.white, fontSize: 20)),
     ),
     textButtonTheme: const TextButtonThemeData(),
     listTileTheme: const ListTileThemeData(),

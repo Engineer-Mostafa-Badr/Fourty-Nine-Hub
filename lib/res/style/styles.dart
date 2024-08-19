@@ -20,7 +20,7 @@ abstract class Styles {
 
   static TextStyle mediumText(
       {double fontSize = 12,
-      Color? color ,
+      Color? color,
       TextDecoration? decoration,
       List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {
@@ -38,13 +38,12 @@ abstract class Styles {
       TextDecoration? decoration,
       TextAlign textAlign = TextAlign.center,
       List<Shadow>? shadows,
-      Color? color ,
+      Color? color,
       FontWeight fontWeight = FontWeight.w600}) {
     return TextStyle(
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      shadows: shadows,
-      color: color
-    );
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        shadows: shadows,
+        color: color);
   }
 }

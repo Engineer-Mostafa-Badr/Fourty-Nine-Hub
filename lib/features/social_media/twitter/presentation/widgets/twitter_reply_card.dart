@@ -33,13 +33,15 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
       children: [
         Row(
           children: [
-            widget.reply.user.image==''? const ProfileImage(
-              accountId: 0,
-              withBorder: false,
-            ):ProfileImage(
-              accountId: 0,
-              imageURL: widget.reply.user.image,
-            ),
+            widget.reply.user.image == ''
+                ? const ProfileImage(
+                    accountId: 0,
+                    withBorder: false,
+                  )
+                : ProfileImage(
+                    accountId: 0,
+                    imageURL: widget.reply.user.image,
+                  ),
             const Sizer(),
             Expanded(
                 child: Column(

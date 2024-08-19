@@ -7,7 +7,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 class DeleteMessageBody extends StatelessWidget {
   final VoidCallback? deleteMessageFunction;
-  const DeleteMessageBody({super.key,this.deleteMessageFunction});
+  const DeleteMessageBody({super.key, this.deleteMessageFunction});
 
   @override
   Widget build(BuildContext context) {

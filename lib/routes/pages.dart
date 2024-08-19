@@ -243,7 +243,7 @@ class AppPages {
                 create: (_) => serviceLocator<RegisterCubit>(),
               ),
             ],
-            child: const LoginView(),
+            child: LoginView(authType: AuthType.LOGIN,),
           ),
         ),
         GoRoute(
@@ -279,9 +279,20 @@ class AppPages {
         GoRoute(
           name: Routes.REGISTER,
           path: Paths.REGISTER,
-          builder: (context, state) => BlocProvider<RegisterCubit>(
-            create: (_) => serviceLocator(),
-            child: const RegisterView(),
+          // builder: (context, state) => BlocProvider<RegisterCubit>(
+          //   create: (_) => serviceLocator(),
+          //   child: 
+          // ),
+          builder: (context, state) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => serviceLocator<LoginCubit>(),
+              ),
+              BlocProvider(
+                create: (_) => serviceLocator<RegisterCubit>(),
+              ),
+            ],
+            child: LoginView(authType: AuthType.REGISTER,),
           ),
           routes: [
             GoRoute(
@@ -932,6 +943,7 @@ class AppPages {
         GoRoute(
           path: Paths.SHIPPING_REGISTER,
           name: Routes.SHIPPING_REGISTER,
+          // builder: (context, state) => RegisterShippingScreen()
           builder: (context, state) => MultiBlocProvider(providers: [
             BlocProvider(
               create: (context) => serviceLocator<ShippingCubit>(),

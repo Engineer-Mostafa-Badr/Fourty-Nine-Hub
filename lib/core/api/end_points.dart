@@ -32,7 +32,8 @@ class EndPoints {
   static const verifyForgetPasswordOTP = '/auth/verify/otp';
   static const createNewForgetPassword = '/auth/reset-password';
   static const report = '/report?subCategory=66a3583454e6e337915514db';
-  static const documentRequest = '/twitter/document-request?subCategory=66a3583454e6e337915514db';
+  static const documentRequest =
+      '/twitter/document-request?subCategory=66a3583454e6e337915514db';
   // ride
   //shipping
   static String bannerData = "$developmentBaseUrl/loading/driver/subcategory";
@@ -41,6 +42,15 @@ class EndPoints {
   static const carLicenseS3 = '/ride/info/car-license';
   static const idLicenseS3 = '/ride/info/id';
   static const mainWallet = '$developmentBaseUrl/main-wallet';
+  static const infoDocuments =
+      '$developmentBaseUrl/loading/driver/info/documents';
+  static const infoId = '$developmentBaseUrl/ride/info/id';
+  static const drivingLicense = '$developmentBaseUrl/ride/info/driving-license';
+  static const carLicense = '$developmentBaseUrl/ride/info/car-license';
+  static const successUpload = '$developmentBaseUrl/ride/info/success-upload';
+  static const successDocuments = '$developmentBaseUrl/ride/info/documents';
+  static const successCarImages =
+      '$developmentBaseUrl/ride/info/success-car-images';
   // health
   static String getCities({required String governorateId}) =>
       '/health/cities/$governorateId';

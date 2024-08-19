@@ -21,11 +21,12 @@ import 'package:go_router/go_router.dart';
 class TwitterPostDetails extends StatefulWidget {
   const TwitterPostDetails(
       {super.key,
-        this.post,
-       this.onReact,
-       this.onShare,
-       this.showPostComments,
-       this.onReport, required this.postId});
+      this.post,
+      this.onReact,
+      this.onShare,
+      this.showPostComments,
+      this.onReport,
+      required this.postId});
   final TwitterPostEntity? post;
   final Function? onReact;
   final String postId;
@@ -48,11 +49,13 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
       body: BlocProvider<TwitterCubit>(
         create: (_) {
           final user = context.read<UserCubit>().state.data;
-          return serviceLocator()..getTwitterPost(context, widget.postId, '', user);
+          return serviceLocator()
+            ..getTwitterPost(context, widget.postId, '', user);
         },
         child: BlocConsumer<TwitterCubit, TwitterState>(
-          buildWhen: (current , previous)=>previous.status== StateStatus.success,
-          listener: (context,state){
+          buildWhen: (current, previous) =>
+              previous.status == StateStatus.success,
+          listener: (context, state) {
             if (state.status == StateStatus.error) {
               showErrorMessage(
                 context,
@@ -65,83 +68,92 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
           },
           builder: (context, state) {
             final controller = context.read<TwitterCubit>();
-            return state.status==StateStatus.success?TwitterPostCard(
-              post: state.postDetails!,
-              onReact: () async{
-                var result = await controller.onReact(
-                  params: TwitterPostReactParams(
-                      react: 'love', postId: state.postDetails!.id),
-                );
-                if(result == true){
-                  if(state.postDetails?.isReact==true){
-                    state.postDetails?.isReact=false;
-                    state.postDetails?.loveCount=(state.postDetails!.loveCount!-1);
-                  }else{
-                    state.postDetails?.isReact=true;
-                    state.postDetails?.loveCount=(state.postDetails!.loveCount!+1);
-                  }
-                }
-              },
-              showPostComments: (i){
-                final user = context.read<UserCubit>().state.data;
+            return state.status == StateStatus.success
+                ? TwitterPostCard(
+                    post: state.postDetails!,
+                    onReact: () async {
+                      var result = await controller.onReact(
+                        params: TwitterPostReactParams(
+                            react: 'love', postId: state.postDetails!.id),
+                      );
+                      if (result == true) {
+                        if (state.postDetails?.isReact == true) {
+                          state.postDetails?.isReact = false;
+                          state.postDetails?.loveCount =
+                              (state.postDetails!.loveCount! - 1);
+                        } else {
+                          state.postDetails?.isReact = true;
+                          state.postDetails?.loveCount =
+                              (state.postDetails!.loveCount! + 1);
+                        }
+                      }
+                    },
+                    showPostComments: (i) {
+                      final user = context.read<UserCubit>().state.data;
 
-                bottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  widget: TwitterPostComments(
-                    comments: [],
-                    postId: state.postDetails!.id,
-                    user: user,
-                    onAddComment: (TwitterPostCommentParams params) async{
-                      var result =await controller.onPostComment(params: params);
-                      state.postDetails?.commentsCount=(state.postDetails!.commentsCount!+1);
-                      setState(() {
-
-                      });
-                      return result;
+                      bottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        widget: TwitterPostComments(
+                          comments: [],
+                          postId: state.postDetails!.id,
+                          user: user,
+                          onAddComment:
+                              (TwitterPostCommentParams params) async {
+                            var result =
+                                await controller.onPostComment(params: params);
+                            state.postDetails?.commentsCount =
+                                (state.postDetails!.commentsCount! + 1);
+                            setState(() {});
+                            return result;
+                          },
+                          onAddReply: (TwitterCommentReplyParams params) {
+                            controller.onCommentReply(params: params);
+                          },
+                          onCommentReact: (TwitterCommentReactParams params) {
+                            controller.onCommentReact(params: params);
+                          },
+                          onGetReplies: (String id,
+                              TwitterPostCommentEntity comment) async {
+                            // getCommentReplies(
+                            //   context: context,
+                            //   commentId: id,
+                            //   comment: comment,
+                            //   postId: postId, userData: userData,
+                            // );
+                          },
+                          newCommentId: '',
+                          state: state,
+                          onReport: (TwitterReportParams params) {
+                            controller.onReport(params);
+                          },
+                          // userData: user,
+                        ),
+                      );
                     },
-                    onAddReply: (TwitterCommentReplyParams params) {
-                      controller.onCommentReply(params: params);
+                    onShare: () {
+                      controller.onShare(postId: state.postDetails!.id);
                     },
-                    onCommentReact: (TwitterCommentReactParams params) {
-                      controller.onCommentReact(params: params);
-                    },
-                    onGetReplies: (String id, TwitterPostCommentEntity comment) async {
-                      // getCommentReplies(
-                      //   context: context,
-                      //   commentId: id,
-                      //   comment: comment,
-                      //   postId: postId, userData: userData,
-                      // );
-                    },
-                    newCommentId: '',
-                    state: state,
-                    onReport: (TwitterReportParams params) {
+                    getPost: () {},
+                    onReport: (TwitterReportParams params) async {
                       controller.onReport(params);
+                      showSuccessMessage(context, "Report sent successfully");
+                      context.pop();
                     },
-                    // userData: user,
-                  ),
-
-                );
-              },
-              onShare: (){
-                controller.onShare(postId: state.postDetails!.id);
-                },
-              getPost: () {},
-              onReport: (TwitterReportParams params) async {
-                controller.onReport(params);
-                showSuccessMessage(context, "Report sent successfully");
-                context.pop();
-              }, deletePost: (String id) {
-                controller.deletePost(context: context, postId: widget.postId);
-                context.pop();
-            }, hidePost: (String id) {
-              controller.deletePost(context: context, postId: widget.postId);
-              context.pop();
-            },
-            ):const Center(
-              child: CircularProgressIndicator(),
-            );
+                    deletePost: (String id) {
+                      controller.deletePost(
+                          context: context, postId: widget.postId);
+                      context.pop();
+                    },
+                    hidePost: (String id) {
+                      controller.deletePost(
+                          context: context, postId: widget.postId);
+                      context.pop();
+                    },
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  );
           },
         ),
       ),

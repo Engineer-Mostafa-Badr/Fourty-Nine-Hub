@@ -44,16 +44,16 @@ class _ShowPostsImagesState extends State<ShowPostsImages> {
               // context.push(Routes.TWITTER);
 
               showDialog(
-                  context: context,
-                  builder: (context) => ImageDetailsScreen(
-                        image: widget.images[index],
-                        fromPost: true,
-                        onRemoveImage: (){
-                          context.pop();
-                          // images.remove(images[index]);
-                        },
-                      ),
-                  );
+                context: context,
+                builder: (context) => ImageDetailsScreen(
+                  image: widget.images[index],
+                  fromPost: true,
+                  onRemoveImage: () {
+                    context.pop();
+                    // images.remove(images[index]);
+                  },
+                ),
+              );
               // context.pop();
             },
             child: Container(

@@ -5,4 +5,3 @@ enum PrivacyStatus {
   followers,
   friendsAndFollowers,
 }
-

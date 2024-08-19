@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../zego/zego_uikit_prebuilt_live_streaming.dart';
 
-
 class PKRequestingList extends StatefulWidget {
   final ValueNotifier<Map<String, List<String>>>
       requestingHostsMapRequestIDNotifier;

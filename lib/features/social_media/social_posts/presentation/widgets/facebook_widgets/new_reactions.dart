@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class ReactionDemo extends StatefulWidget {
@@ -6,7 +5,8 @@ class ReactionDemo extends StatefulWidget {
   _ReactionDemoState createState() => _ReactionDemoState();
 }
 
-class _ReactionDemoState extends State<ReactionDemo> with TickerProviderStateMixin {
+class _ReactionDemoState extends State<ReactionDemo>
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 

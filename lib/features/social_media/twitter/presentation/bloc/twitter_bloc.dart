@@ -46,15 +46,18 @@ class TwitterCubit extends Cubit<TwitterState> {
   TwitterCubit(
     this._getFeedUseCase,
     this._twitterPostReactUseCase,
+    this._hideTwitterPostUseCase,
     this._getTwitterPostCommentsUseCase,
     this._twitterCommentReactUseCase,
     this._twitterSharePostUseCase,
+    this._deleteTwitterPostUseCase,
     this._twitterPostCommentUseCase,
     this._twitterCommentReplyUseCase,
     this._twitterCommentRepliesUseCase,
     this._getTwitterPostUseCase,
     this._twitterReportUseCase,
-    this._requestDocumentUseCase, this._getUserTweetsUseCase, this._deleteTwitterPostUseCase, this._hideTwitterPostUseCase,
+    this._requestDocumentUseCase,
+    this._getUserTweetsUseCase,
   ) : super(const TwitterState());
 
   void loadData() async {
@@ -66,23 +69,23 @@ class TwitterCubit extends Cubit<TwitterState> {
     });
   }
 
-  void loadComments(BuildContext context,String postId) async {
-    await getPostComments(context: context, postId: postId,page: 1);
+  void loadComments(BuildContext context, String postId) async {
+    await getPostComments(context: context, postId: postId, page: 1);
     commentsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getPostComments(context: context, postId: postId,page: pageKey);
+      getPostComments(context: context, postId: postId, page: pageKey);
     });
   }
 
-  void loadReplies(BuildContext context,String commentId) async {
-    await getCommentReplies(context: context, postId: commentId,page: 1);
+  void loadReplies(BuildContext context, String commentId) async {
+    await getCommentReplies(context: context, postId: commentId, page: 1);
     commentsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getCommentReplies(context: context, postId: commentId,page: pageKey);
+      getCommentReplies(context: context, postId: commentId, page: pageKey);
     });
   }
 
-  void onRefresh()async{
+  void onRefresh() async {
     postsPagingController.refresh();
   }
 
@@ -156,7 +159,7 @@ class TwitterCubit extends Cubit<TwitterState> {
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) {
-          emit(state.copyWith(postDetails:data,status: StateStatus.success));
+      emit(state.copyWith(postDetails: data, status: StateStatus.success));
     });
   }
 
@@ -165,13 +168,13 @@ class TwitterCubit extends Cubit<TwitterState> {
     var response = await _twitterPostReactUseCase(params);
     bool result = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (data) {
-              result = data;
-          emit(state.copyWith( status: StateStatus.success));
-          print(data);
-        });
+        (data) {
+      result = data;
+      emit(state.copyWith(status: StateStatus.success));
+      print(data);
+    });
     return result;
   }
 
@@ -224,60 +227,84 @@ class TwitterCubit extends Cubit<TwitterState> {
     );
   }
 
-
-  final PagingController<int, TwitterPostCommentEntity> commentsPagingController =
-  PagingController(firstPageKey: 1);
+  final PagingController<int, TwitterPostCommentEntity>
+      commentsPagingController = PagingController(firstPageKey: 1);
 
   Future<void> getPostComments(
-      {required BuildContext context, required String postId,required int page}) async {
-    final response = await _getTwitterPostCommentsUseCase(PostCommentsParams(page: page,limit: pageSize,postId: postId,),);
+      {required BuildContext context,
+      required String postId,
+      required int page}) async {
+    final response = await _getTwitterPostCommentsUseCase(
+      PostCommentsParams(
+        page: page,
+        limit: pageSize,
+        postId: postId,
+      ),
+    );
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (data) {
-          final isLastPage = data.length < pageSize;
-          if (page == 1) {
-            print("page == 1 $page");
-            commentsPagingController.itemList = [];
-          }
-          if (isLastPage) {
-            print("isLastPage = $isLastPage");
-            commentsPagingController.appendLastPage(data);
-          } else {
-            print("isNotLastPage = $isLastPage");
-            final nextPageKey = page + 1;
-            commentsPagingController.appendPage(data, nextPageKey);
-          }
-          emit(state.copyWith(postComments:data,status: StateStatus.success ,),);
-        });
+        (data) {
+      final isLastPage = data.length < pageSize;
+      if (page == 1) {
+        print("page == 1 $page");
+        commentsPagingController.itemList = [];
+      }
+      if (isLastPage) {
+        print("isLastPage = $isLastPage");
+        commentsPagingController.appendLastPage(data);
+      } else {
+        print("isNotLastPage = $isLastPage");
+        final nextPageKey = page + 1;
+        commentsPagingController.appendPage(data, nextPageKey);
+      }
+      emit(
+        state.copyWith(
+          postComments: data,
+          status: StateStatus.success,
+        ),
+      );
+    });
   }
 
-
-  final PagingController<int, TwitterCommentReplyEntity> repliesPagingController =
-  PagingController(firstPageKey: 1);
+  final PagingController<int, TwitterCommentReplyEntity>
+      repliesPagingController = PagingController(firstPageKey: 1);
 
   Future<void> getCommentReplies(
-      {required BuildContext context, required String postId,required int page}) async {
-    final response = await _twitterCommentRepliesUseCase(PostCommentsParams(page: page,limit: pageSize,postId: postId,),);
+      {required BuildContext context,
+      required String postId,
+      required int page}) async {
+    final response = await _twitterCommentRepliesUseCase(
+      PostCommentsParams(
+        page: page,
+        limit: pageSize,
+        postId: postId,
+      ),
+    );
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (data) {
-          final isLastPage = data.length < pageSize;
-          if (page == 1) {
-            print("page == 1 $page");
-            repliesPagingController.itemList = [];
-          }
-          if (isLastPage) {
-            print("isLastPage = $isLastPage");
-            repliesPagingController.appendLastPage(data);
-          } else {
-            print("isNotLastPage = $isLastPage");
-            final nextPageKey = page + 1;
-            repliesPagingController.appendPage(data, nextPageKey);
-          }
-          emit(state.copyWith(commentReplies:data,status: StateStatus.success ,),);
-        });
+        (data) {
+      final isLastPage = data.length < pageSize;
+      if (page == 1) {
+        print("page == 1 $page");
+        repliesPagingController.itemList = [];
+      }
+      if (isLastPage) {
+        print("isLastPage = $isLastPage");
+        repliesPagingController.appendLastPage(data);
+      } else {
+        print("isNotLastPage = $isLastPage");
+        final nextPageKey = page + 1;
+        repliesPagingController.appendPage(data, nextPageKey);
+      }
+      emit(
+        state.copyWith(
+          commentReplies: data,
+          status: StateStatus.success,
+        ),
+      );
+    });
   }
 
   Future<TwitterPostCommentEntity> onPostComment(
@@ -287,7 +314,13 @@ class TwitterCubit extends Cubit<TwitterState> {
       (failure) =>
           emit(state.copyWith(failure: failure, status: StateStatus.error)),
       (data) {
-        postsPagingController.itemList?.firstWhere((element) => element.id==params.postId).commentsCount=(postsPagingController.itemList!.firstWhere((element) => element.id==params.postId).comments.length+1);
+        postsPagingController.itemList
+            ?.firstWhere((element) => element.id == params.postId)
+            .commentsCount = (postsPagingController.itemList!
+                .firstWhere((element) => element.id == params.postId)
+                .comments
+                .length +
+            1);
         emit(state.copyWith(newComment: data, status: StateStatus.success));
       },
     );
@@ -330,15 +363,15 @@ class TwitterCubit extends Cubit<TwitterState> {
         });
   }
 
-  removePersonalPhoto(){
+  removePersonalPhoto() {
     state.copyWith(personalPhoto: null, status: StateStatus.success);
   }
 
-  removeFrontId(){
+  removeFrontId() {
     state.copyWith(frontId: null, status: StateStatus.success);
   }
 
-  removeBackId(){
+  removeBackId() {
     print('Before: ${state.backId?.mediaId}');
     state.copyWith(backId: null);
     state.copyWith(status: StateStatus.success);
@@ -367,31 +400,26 @@ class TwitterCubit extends Cubit<TwitterState> {
         });
   }
 
-
-
-
   void deletePost(
       {required BuildContext context, required String postId}) async {
     final response = await _deleteTwitterPostUseCase(postId);
-    response.fold(
-            (l) {
-              emit(state.copyWith(failure: l, status: StateStatus.error));
-            },
-            (r) {
-          postsPagingController.itemList?.removeWhere((e)=>e.id==postId);
-          emit(state.copyWith(posts: postsPagingController.itemList));
-          showSuccessMessage(context, "Post delete successfully");
-        });
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: StateStatus.error));
+    }, (r) {
+      postsPagingController.itemList?.removeWhere((e) => e.id == postId);
+      emit(state.copyWith(posts: postsPagingController.itemList));
+      showSuccessMessage(context, "Post delete successfully");
+    });
   }
 
   void hidePost({required BuildContext context, required String postId}) async {
     final response = await _hideTwitterPostUseCase(postId);
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (r) {
-          postsPagingController.itemList?.removeWhere((e)=>e.id==postId);
-          emit(state.copyWith(posts: postsPagingController.itemList));
-          showSuccessMessage(context, "Post hide successfully");
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+      postsPagingController.itemList?.removeWhere((e) => e.id == postId);
+      emit(state.copyWith(posts: postsPagingController.itemList));
+      showSuccessMessage(context, "Post hide successfully");
+    });
   }
 }

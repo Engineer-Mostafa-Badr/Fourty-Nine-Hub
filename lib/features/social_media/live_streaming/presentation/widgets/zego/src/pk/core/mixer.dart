@@ -15,7 +15,6 @@ import 'defines.dart';
 
 // Project imports:
 
-
 class ZegoUIKitPrebuiltLiveStreamingPKServiceMixer {
   ZegoUIKitPrebuiltLiveStreamingPKServiceMixer();
 

@@ -7,17 +7,20 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import '../../../../../core/error/failure.dart';
 
 abstract class InstagramRemoteDataSource {
-  Future<Either<Failure, List<PostEntity>>> getFeed({required TwitterFeedParams params});
-  Future<Either<Failure, List<PostEntity>>> getReels({required TwitterFeedParams params});
-
+  Future<Either<Failure, List<PostEntity>>> getFeed(
+      {required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getReels(
+      {required TwitterFeedParams params});
 }
 
 class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
   final ApiConsumer _apiConsumer;
   InstagramRemoteDataSourceImpl(this._apiConsumer);
   @override
-  Future<Either<Failure, List<PostEntity>>> getFeed({required TwitterFeedParams params}) async {
-    final response = await _apiConsumer.get(EndPoints.getInstagramPosts(params));
+  Future<Either<Failure, List<PostEntity>>> getFeed(
+      {required TwitterFeedParams params}) async {
+    final response =
+        await _apiConsumer.get(EndPoints.getInstagramPosts(params));
 
     return response.fold((l) {
       return Left(l);
@@ -30,7 +33,8 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<PostEntity>>> getReels({required TwitterFeedParams params}) async {
+  Future<Either<Failure, List<PostEntity>>> getReels(
+      {required TwitterFeedParams params}) async {
     final response = await _apiConsumer.get(EndPoints.getReels(params));
 
     return response.fold((l) {
@@ -42,6 +46,4 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
       return Right(list);
     });
   }
-
-
 }

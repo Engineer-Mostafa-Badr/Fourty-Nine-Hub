@@ -44,17 +44,17 @@ class _ShowAllImagesState extends State<ShowAllImages> {
               // context.push(Routes.TWITTER);
 
               showDialog(
-                  context: context,
-                  builder: (context) => ImageDetailsScreen(
-                        image: widget.images[index].file.path,
-                        fromPost: true,
-                        isFile: true,
-                        onRemoveImage: (){
-                          context.pop();
-                          // images.remove(images[index]);
-                        },
-                      ),
-                  );
+                context: context,
+                builder: (context) => ImageDetailsScreen(
+                  image: widget.images[index].file.path,
+                  fromPost: true,
+                  isFile: true,
+                  onRemoveImage: () {
+                    context.pop();
+                    // images.remove(images[index]);
+                  },
+                ),
+              );
               // context.pop();
             },
             child: Stack(
@@ -66,18 +66,17 @@ class _ShowAllImagesState extends State<ShowAllImages> {
                   decoration: BoxDecoration(
                       color: AppColors.DARK_BLUE_COLOR,
                       image: DecorationImage(
-                          image: FileImage(File(widget.images[index].file.path)),
+                          image:
+                              FileImage(File(widget.images[index].file.path)),
                           fit: BoxFit.fill)),
                 ),
                 PositionedDirectional(
                   end: 5,
                   top: 5,
                   child: InkWell(
-                    onTap: () async{
+                    onTap: () async {
                       await widget.onRemoveImage(widget.images[index]);
-                      setState(() {
-
-                      });
+                      setState(() {});
                     },
                     child: Container(
                         height: 30,

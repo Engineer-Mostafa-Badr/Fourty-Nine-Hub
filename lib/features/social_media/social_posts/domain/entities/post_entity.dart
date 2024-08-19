@@ -50,9 +50,8 @@ class PostEntity {
   // num? totalPrice;
   bool? isApproved;
 
-
   DateTime? createdAt;
-   Duration get publishedDuration => DateTime.now().difference(createdAt!);
+  Duration get publishedDuration => DateTime.now().difference(createdAt!);
 
   String get sinceTime =>
       DurationHelper().sinceTime(duration: publishedDuration);
@@ -88,14 +87,14 @@ class PostEntity {
     this.love,
     this.mainPost,
     this.comments,
-    this.isReact=false,
+    this.isReact = false,
     this.advertisementType,
     this.post,
     this.description,
     this.name,
     this.videoMedia,
     this.audioMedia,
-    this.isApproved=false,
+    this.isApproved = false,
     required this.photo,
   });
 }

@@ -14,21 +14,19 @@ class SharedScaffold extends StatelessWidget {
       required this.mainCategoryId,
       this.extendBody = false,
       this.isWithBackArrow = true,
-      required this.body, this.backgroundColor});
+      required this.body,
+      this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: extendBody,
-        backgroundColor: backgroundColor,
-        drawer: const DrawerWidget(),
-    body: body,
-
-
-      appBar:  HomeAppbar(
+      backgroundColor: backgroundColor,
+      drawer: const DrawerWidget(),
+      body: body,
+      appBar: HomeAppbar(
         isWithBackArrow: isWithBackArrow,
       ),
-
     );
   }
 }

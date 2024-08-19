@@ -1,5 +1,5 @@
+import 'dart:developer';
 
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,21 +9,12 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_
 import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/password_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/confirm_password_text_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/password_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -40,25 +31,36 @@ import '../../../../res/style/styles.dart';
 import '../controllers/login_cubit/login_cubit.dart';
 
 class LoginView extends StatefulWidget {
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
-
+  LoginView({super.key, required this.authType});
+  AuthType authType;
   @override
   State<LoginView> createState() => _LoginViewState();
 }
 
 class _LoginViewState extends State<LoginView> {
-  AuthType selectedAuth = AuthType.LOGIN;
+  // AuthType selectedAuth = AuthType.LOGIN;
+  ScrollController scrollController = ScrollController();
   @override
-  State<LoginView> createState() => _LoginViewState();
-}
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    scrollController.dispose();
+    log(widget.authType.toString(),
+        name: "lllllllllllllllllllllllllllllllllllll");
+    // widget.authType = widget.authType;
+    // log(widget.authType.toString(), name: "lllllllllllllllllllllllllllllllllllll");
+  }
 
-class _LoginViewState extends State<LoginView> {
-  AuthType selectedAuth = AuthType.LOGIN;
   @override
   Widget build(BuildContext context) {
     final loginCubit = context.read<LoginCubit>();
     final registerCubit = context.read<RegisterCubit>();
+    if (MediaQuery.of(context).viewInsets.bottom != 0.0) {
+      log("lllllllllllllllllllllllllll");
+      scrollController.jumpTo(409);
+    }
+    log(MediaQuery.of(context).viewInsets.bottom.toString(),
+        name: "OpenKeyboard");
     return BlocListener<RegisterCubit, RegisterState>(
       listener: (context, state) {
         if (state is RegisterError) {
@@ -87,11 +89,11 @@ class _LoginViewState extends State<LoginView> {
               ),
             );
           } else if (state is LoginSuccess) {
+            context.pop();
+            context.pop();
             context.read<UserCubit>().setLogin(true);
             context.read<UserCubit>().getUser();
             context.read<GetWalletCubit>().getWallet();
-            context.pop();
-            context.pop();
             showSuccessMessage(context, 'welcome back');
           } else if (state is LoginLoading) {
             // showAdaptiveDialog(
@@ -104,77 +106,81 @@ class _LoginViewState extends State<LoginView> {
           }
         },
         child: Scaffold(
+          resizeToAvoidBottomInset: true,
           appBar: const BackAppBar(),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Form(
-              key: loginCubit.formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: Stack(
-                children: [
-                  ListView(
-                    children: [
-                      Image.asset(
-                        Assets.logo,
-                        width: 200,
-                        height: 200,
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          chooseAuthWidget(
-                              onTap: () {
-                                setState(() {
-                                  selectedAuth = AuthType.LOGIN;
-                                });
-                              },
-                              active: selectedAuth == AuthType.LOGIN,
-                              text: "Login",
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(50),
-                                bottomLeft: Radius.circular(50),
-                              )),
-                          chooseAuthWidget(
-                              onTap: () {
-                                setState(() {
-                                  selectedAuth = AuthType.REGISTER;
-                                });
-                              },
-                              active: selectedAuth == AuthType.REGISTER,
-                              text: "Regsiter",
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(50),
-                                bottomRight: Radius.circular(50),
-                              )),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      selectedAuth == AuthType.LOGIN
-                          ? LoginWidget(
-                              loginCubit: loginCubit,
-                            )
-                          : RegisterWidget()
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: selectedAuth == AuthType.REGISTER
+          body: SingleChildScrollView(
+            controller: scrollController,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                key: loginCubit.formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  children: [
+                    Image.asset(
+                      Assets.logo,
+                      width: 200,
+                      height: 200,
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        chooseAuthWidget(
+                            onTap: () {
+                              setState(() {
+                                widget.authType = AuthType.LOGIN;
+                              });
+                            },
+                            active: widget.authType == AuthType.LOGIN,
+                            text: "Login",
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(50),
+                              bottomLeft: Radius.circular(50),
+                            )),
+                        chooseAuthWidget(
+                            onTap: () {
+                              setState(() {
+                                widget.authType = AuthType.REGISTER;
+                              });
+                            },
+                            active: widget.authType == AuthType.REGISTER,
+                            text: "Register",
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(50),
+                              bottomRight: Radius.circular(50),
+                            )),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    widget.authType == AuthType.LOGIN
+                        ? LoginWidget(
+                            loginCubit: loginCubit,
+                          )
+                        : const RegisterWidget(),
+                    SizedBox(
+                      height: widget.authType == AuthType.LOGIN
+                          ? MediaQuery.of(context).viewInsets.bottom != 0.0
+                              ? 20
+                              : 100
+                          : 0,
+                    ),
+                    widget.authType == AuthType.REGISTER
                         ? DefaultButton(
                             label: 'Register',
                             width: double.infinity,
                             onPressed: () {
                               if (registerCubit.accept) {
-                                registerCubit.register;
+                                registerCubit.register();
                               } else {
                                 showErrorMessage(
                                     context,
                                     getFailureMessage(
-                                        ServerFailure(
+                                        const ServerFailure(
                                             message:
                                                 "Please accept the terms and conditions to continue."),
                                         context));
@@ -186,8 +192,10 @@ class _LoginViewState extends State<LoginView> {
                             label: 'Login',
                             onPressed: loginCubit.login,
                           ),
-                  )
-                ],
+                    // MediaQuery.of(context).viewInsets.bottom != 0?
+                    // SizedBox(height: 50,):Container()
+                  ],
+                ),
               ),
             ),
           ),
@@ -207,7 +215,7 @@ class _LoginViewState extends State<LoginView> {
         height: 54,
         width: 165,
         decoration: BoxDecoration(
-          color: active ? AppColors.PRIMARY_COLOR : Color(0xFFEEEEEE),
+          color: active ? AppColors.PRIMARY_COLOR : const Color(0xFFEEEEEE),
           borderRadius: borderRadius,
         ),
         child: Center(
@@ -239,10 +247,10 @@ class _LoginWidgetState extends State<LoginWidget> {
     return Column(
       children: [
         FormTextField(
-          constraints: BoxConstraints(maxHeight: 52, minHeight: 52),
-          fillColor: Color(0xFFEEEEEE),
+          constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+          fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20),
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
           ),
           controller: widget.loginCubit.emailTextController,
@@ -255,10 +263,10 @@ class _LoginWidgetState extends State<LoginWidget> {
           height: 30,
         ),
         FormTextField(
-          constraints: BoxConstraints(maxHeight: 52, minHeight: 52),
-          fillColor: Color(0xFFEEEEEE),
+          constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+          fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20),
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
           ),
           controller: widget.loginCubit.passwordTextController,
@@ -281,7 +289,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             TextAppButton(
-                style: TextStyle(color: Colors.red),
+                style: const TextStyle(color: Colors.red),
                 label: 'Forgot Password?',
                 onPressed: () => context.push(Routes.FORGOTPASSWORD)),
           ],
@@ -392,10 +400,11 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             child: Column(
               children: [
                 FormTextField(
-                  constraints: BoxConstraints(maxHeight: 52, minHeight: 52),
-                  fillColor: Color(0xFFEEEEEE),
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                   controller: registerCubit.firstNameController,
@@ -409,10 +418,11 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30,
                 ),
                 FormTextField(
-                  constraints: BoxConstraints(maxHeight: 52, minHeight: 52),
-                  fillColor: Color(0xFFEEEEEE),
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                   controller: registerCubit.lastNameController,
@@ -426,10 +436,11 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30,
                 ),
                 FormTextField(
-                  constraints: BoxConstraints(maxHeight: 52, minHeight: 52),
-                  fillColor: Color(0xFFEEEEEE),
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                   controller: registerCubit.emailTextController,
@@ -471,26 +482,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                       ? Colors.white
                                       : Colors.black,
                                   label: 'Male')),
-                          SizedBox(
+                          const SizedBox(
                             width: 7,
                           ),
                           Expanded(
-                            child: BadgedLabel(
-                              onTap: () {
-                                registerCubit.isMale = false;
-
-                                setState(() {});
-                              },
-                              height: kToolbarHeight * .7,
-                              isCentered: true,
-                              isBordered: true,
-                              textColor: registerCubit.isMale
-                                  ? Colors.black
-                                  : Colors.white,
-                              color: registerCubit.isMale
-                                  ? Colors.white
-                                  : AppColors.PRIMARY_COLOR,
-                              label: 'Female',
                             child: BadgedLabel(
                               onTap: () {
                                 registerCubit.isMale = false;
@@ -516,10 +511,11 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 ),
                 const Sizer(height: 30),
                 FormTextField(
-                  constraints: BoxConstraints(maxHeight: 52, minHeight: 52),
-                  fillColor: Color(0xFFEEEEEE),
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                   controller: registerCubit.passwordTextController,
@@ -543,24 +539,56 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30,
                 ),
                 FormTextField(
-                  constraints: BoxConstraints(maxHeight: 52, minHeight: 52),
-                  fillColor: Color(0xFFEEEEEE),
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
-                  controller: registerCubit.firstNameController,
+                  controller: registerCubit.confirmPasswordTextController,
+                  // label: 'Password',
+                  hint: "Confirm Password",
+                  obsecure: obsecure,
+                  prefix: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        obsecure = !obsecure;
+                      });
+                    },
+                    child: Icon(
+                      obsecure ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  action: (v) {},
+                ),
+                const Sizer(
+                  height: 30,
+                ),
+                FormTextField(
+                  validator: (p0) {
+                    return null;
+                  },
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  fillColor: const Color(0xFFEEEEEE),
+                  borderRadius: BorderRadius.circular(20),
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                  // controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
                   hint: 'Referral Code(Optional)',
                   prefix: Container(
-                    margin: EdgeInsets.all(9),
+                    margin: const EdgeInsets.all(9),
                     width: 20,
                     height: 20,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.grey,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.person,
                       color: Colors.white,
                     ),
@@ -584,7 +612,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     Text(
                       " Terms,Rules & Conditions",
                       style: Styles.mediumText(
-                          color: Color(0xFF4898D6),
+                          color: const Color(0xFF4898D6),
                           fontSize: 16,
                           fontWeight: FontWeight.w600),
                     ),

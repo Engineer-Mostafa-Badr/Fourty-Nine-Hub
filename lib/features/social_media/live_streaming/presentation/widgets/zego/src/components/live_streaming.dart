@@ -303,9 +303,7 @@ class _ZegoUIKitPrebuiltLiveStreamingState extends State<ZegoLiveStreamingPage>
                     ? ValueListenableBuilder<bool>(
                         valueListenable: startedByLocalNotifier,
                         builder: (context, isLiveStarted, _) {
-                          return isLiveStarted
-                              ? livePage()
-                              : previewPage();
+                          return isLiveStarted ? livePage() : previewPage();
                         })
                     : livePage();
               } else {

@@ -7,4 +7,3 @@ class AuthHelper {
     return serviceLocator<UserCubit>().isLoggedIn;
   }
 }
-

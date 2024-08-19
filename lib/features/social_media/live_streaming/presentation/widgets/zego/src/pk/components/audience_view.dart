@@ -11,7 +11,6 @@ import 'common.dart';
 
 // Project imports:
 
-
 /// one stream, more host configs
 class ZegoLiveStreamingPKAudienceView extends StatefulWidget {
   const ZegoLiveStreamingPKAudienceView({

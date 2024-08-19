@@ -19,12 +19,12 @@ class MeetingServiceLocator {
 
     serviceLocator.registerLazySingleton<MeetingRepository>(
       () => MeetingRepositoryImpl(
-         serviceLocator(),
+        serviceLocator(),
       ),
     );
     //usecases
     serviceLocator.registerFactory(() => AddRoomUseCase(serviceLocator()));
-    serviceLocator.registerFactory(() => JoinRoomUseCase (serviceLocator()));
+    serviceLocator.registerFactory(() => JoinRoomUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => EndRoomUseCase(serviceLocator()));
     //cubit
     serviceLocator.registerFactory(() => MeetingCubit(

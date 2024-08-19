@@ -13,4 +13,3 @@ class GetSubCategoriesUseCase extends UseCase<List<SubCategoryModel>, String> {
     return _repo.getSubCategories(mainCategoryId: params);
   }
 }
-

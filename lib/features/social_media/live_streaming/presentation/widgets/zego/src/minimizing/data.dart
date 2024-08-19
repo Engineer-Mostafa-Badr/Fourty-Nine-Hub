@@ -6,7 +6,6 @@ import '../events.dart';
 
 // Project imports:
 
-
 /// @nodoc
 class ZegoLiveStreamingMinimizeData {
   const ZegoLiveStreamingMinimizeData({

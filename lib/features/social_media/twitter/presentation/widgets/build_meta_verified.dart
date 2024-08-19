@@ -49,118 +49,118 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
       body: BlocProvider<TwitterCubit>(
         create: (_) => serviceLocator(),
         child: BlocConsumer<TwitterCubit, TwitterState>(
-          listener: (context,state){},
-          builder: (context,state) {
-            final controller = context.read<TwitterCubit>();
-            return Padding(
-              padding: const EdgeInsets.only(top: 15.0),
-              child: ListView(
-                shrinkWrap: true,
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Label(text: "User name",style: Styles.headerText(
-                      fontSize: 20, color: AppColors.GREY_DARK_COLOR),),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Form(
-                    key: formKey,
-                    child: FormTextField(
-                        hint: 'Type your name ....',
-                        height: kToolbarHeight * .7,
-                        action: (v) {
-                          setState(() {});
-                        },
-
-                        controller: nameTextController),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Label(
-                        text: "Personal Photo",
-                        style: Styles.headerText(
-                            fontSize: 20, color: AppColors.GREY_DARK_COLOR),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      _buildImageCard(
-                        label: '',
-                        onTap: (){
-                          controller.uploadPersonalPhoto();
-                        },
-                        onRemove: (){
-                          controller.removePersonalPhoto();
-                        },
-                        fileData: state.personalPhoto,
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Label(
-                        text: "ID",
-                        style: Styles.headerText(
-                            fontSize: 20, color: AppColors.GREY_DARK_COLOR),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _buildImageCard(
-                              label: '',
-                              text: 'front',
-                              onTap: (){
-                                controller.uploadFrontId();
-                              },
-                                onRemove: (){
-                                controller.removeFrontId();
-                                },
-                              fileData: state.frontId
+            listener: (context, state) {},
+            builder: (context, state) {
+              final controller = context.read<TwitterCubit>();
+              return Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: ListView(
+                  shrinkWrap: true,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Label(
+                      text: "User name",
+                      style: Styles.headerText(
+                          fontSize: 20, color: AppColors.GREY_DARK_COLOR),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Form(
+                      key: formKey,
+                      child: FormTextField(
+                          hint: 'Type your name ....',
+                          height: kToolbarHeight * .7,
+                          action: (v) {
+                            setState(() {});
+                          },
+                          controller: nameTextController),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Label(
+                          text: "Personal Photo",
+                          style: Styles.headerText(
+                              fontSize: 20, color: AppColors.GREY_DARK_COLOR),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        _buildImageCard(
+                          label: '',
+                          onTap: () {
+                            controller.uploadPersonalPhoto();
+                          },
+                          onRemove: () {
+                            controller.removePersonalPhoto();
+                          },
+                          fileData: state.personalPhoto,
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Label(
+                          text: "ID",
+                          style: Styles.headerText(
+                              fontSize: 20, color: AppColors.GREY_DARK_COLOR),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildImageCard(
+                                  label: '',
+                                  text: 'front',
+                                  onTap: () {
+                                    controller.uploadFrontId();
+                                  },
+                                  onRemove: () {
+                                    controller.removeFrontId();
+                                  },
+                                  fileData: state.frontId),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: _buildImageCard(
-                              label: '',
-                              text: 'back',
-                              onTap: (){
-                                controller.uploadBackId();
-                              },
-                                onRemove: (){
-                                print('back');
-                                controller.removeBackId();
-                                },
-                              fileData: state.backId
+                            const SizedBox(
+                              width: 10,
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  _buildButton(onTap:()async{
-                    if(formKey.currentState!.validate()){
-                      if(state.personalPhoto==null){
-                        showErrorMessage(context, "Select Personal Photo");
-                      }else if(state.frontId==null){
-                        showErrorMessage(context, "Select Front ID");
-                      }else if(state.backId==null){
-                        showErrorMessage(context, "Select Back ID");
-                      }else{
-                        List<String> mediaIds =[];
-                        mediaIds.add(state.personalPhoto!.mediaId);
-                        mediaIds.add(state.frontId!.mediaId);
-                        mediaIds.add(state.backId!.mediaId);
+                            Expanded(
+                              child: _buildImageCard(
+                                  label: '',
+                                  text: 'back',
+                                  onTap: () {
+                                    controller.uploadBackId();
+                                  },
+                                  onRemove: () {
+                                    print('back');
+                                    controller.removeBackId();
+                                  },
+                                  fileData: state.backId),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    _buildButton(onTap: () async {
+                      if (formKey.currentState!.validate()) {
+                        if (state.personalPhoto == null) {
+                          showErrorMessage(context, "Select Personal Photo");
+                        } else if (state.frontId == null) {
+                          showErrorMessage(context, "Select Front ID");
+                        } else if (state.backId == null) {
+                          showErrorMessage(context, "Select Back ID");
+                        } else {
+                          List<String> mediaIds = [];
+                          mediaIds.add(state.personalPhoto!.mediaId);
+                          mediaIds.add(state.frontId!.mediaId);
+                          mediaIds.add(state.backId!.mediaId);
 
                           await controller.onRequestVerification(
                               params: TwitterDocumentationParams(
@@ -211,7 +211,11 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
   }
 
   Widget _buildImageCard(
-      {Function()? onTap,Function()? onRemove, required String label, String? text,UploadFileEntity? fileData}) {
+      {Function()? onTap,
+      Function()? onRemove,
+      required String label,
+      String? text,
+      UploadFileEntity? fileData}) {
     return Column(
       children: [
         if (label.isNotEmpty) ...[
@@ -221,36 +225,39 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
           ),
           const Sizer(),
         ],
-        if (fileData ==null) InkWell(
-          onTap: onTap,
-          child: Container(
-            width: double.infinity,
-            height: 200,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(UIConst.radius),
-            ),
-            child: _buildImage(text ?? ''),
-          ),
-        ) else Stack(
-          children: [
-            Container(
+        if (fileData == null)
+          InkWell(
+            onTap: onTap,
+            child: Container(
               width: double.infinity,
-              height: 200, // Set your desired height here
+              height: 200,
               decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
                 borderRadius: BorderRadius.circular(UIConst.radius),
-                image: DecorationImage(
-                  image: FileImage(File(fileData.file.path)),
-                  fit: BoxFit.fill,
+              ),
+              child: _buildImage(text ?? ''),
+            ),
+          )
+        else
+          Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: 200, // Set your desired height here
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(UIConst.radius),
+                  image: DecorationImage(
+                    image: FileImage(File(fileData.file.path)),
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
-            ),
-            // PositionedDirectional(
-            //     top: 5,
-            //     end: 5,
-            //     child: InkWell(onTap: onRemove,child: Icon(Icons.close,color: Colors.red,)))
-          ],
-        )
+              // PositionedDirectional(
+              //     top: 5,
+              //     end: 5,
+              //     child: InkWell(onTap: onRemove,child: Icon(Icons.close,color: Colors.red,)))
+            ],
+          )
       ],
     );
   }

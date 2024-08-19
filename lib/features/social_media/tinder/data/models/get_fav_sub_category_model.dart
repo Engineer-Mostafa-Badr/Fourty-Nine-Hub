@@ -624,7 +624,8 @@ class SubFavoritesResponse {
   factory SubFavoritesResponse.fromJson(Map<String, dynamic> json) {
     return SubFavoritesResponse(
       status: json['status'],
-      data: List<FavoriteItem>.from(json['data'].map((x) => FavoriteItem.fromJson(x))),
+      data: List<FavoriteItem>.from(
+          json['data'].map((x) => FavoriteItem.fromJson(x))),
     );
   }
 

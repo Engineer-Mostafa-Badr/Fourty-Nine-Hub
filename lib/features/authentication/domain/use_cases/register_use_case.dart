@@ -42,7 +42,7 @@ class RegisterParams extends Equatable {
         'confirmPassword': confirmPassword,
         'gender': isMale ? 'male' : 'female',
         'fcm': await getFcmToken(),
-        // 'deviceId': await getDeviceId(),
+        'deviceId': await getDeviceId(),
       };
 
   @override

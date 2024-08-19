@@ -1,19 +1,19 @@
 import 'car_license_behind.dart';
 import 'car_license_front.dart';
 
-class CarLicenseS3RequestModel {
+class CarLicenseS3Model {
   String? expireDate;
   CarLicenseFront? carLicenseFront;
   CarLicenseBehind? carLicenseBehind;
 
-  CarLicenseS3RequestModel({
+  CarLicenseS3Model({
     this.expireDate,
     this.carLicenseFront,
     this.carLicenseBehind,
   });
 
-  factory CarLicenseS3RequestModel.fromJson(Map<String, dynamic> json) {
-    return CarLicenseS3RequestModel(
+  factory CarLicenseS3Model.fromJson(Map<String, dynamic> json) {
+    return CarLicenseS3Model(
       expireDate: json['expireDate'] as String?,
       carLicenseFront: json['carLicenseFront'] == null
           ? null

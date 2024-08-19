@@ -25,7 +25,6 @@ import 'defines.dart';
 
 // Project imports:
 
-
 /// @nodoc
 class ZegoLiveStreamingConnectManager {
   ZegoLiveStreamingConnectManager({

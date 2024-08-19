@@ -12,6 +12,7 @@ dependencies:
   cached_network_image: 3.3.1
   cupertino_icons: ^1.0.6
   dartz: ^0.10.1
+  device_info_plus: ^10.1.2
   dio: 5.4.3+1
   easy_localization: ^3.0.7
   emoji_picker_flutter: any
@@ -90,6 +91,7 @@ flutter:
     # - assets/images/butterfly.png
     # - assets/images/salary.png
     - assets/icons/
+    - assets/settings/
 
 
   #   - images/a_dot_ham.jpeg

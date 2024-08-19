@@ -30,6 +30,4 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       return Right(user);
     });
   }
-
-
 }

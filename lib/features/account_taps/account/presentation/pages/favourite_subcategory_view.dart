@@ -540,8 +540,8 @@ class _FavSubCategoryViewContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SharedScaffold(
       body:
-      // _buildFavoritesGrid(context, favoriteSubCategory)
-      Container(),
+          // _buildFavoritesGrid(context, favoriteSubCategory)
+          Container(),
       // FutureBuilder<FavoritesResponse?>(
       //   future: context
       //       .read<TinderViewCubit>()
@@ -575,17 +575,16 @@ class _FavSubCategoryViewContent extends StatelessWidget {
     );
   }
 
-  List<List<Favorites>> _splitListIntoChunks(List<Favorites> list,
-      int chunkSize) {
+  List<List<Favorites>> _splitListIntoChunks(
+      List<Favorites> list, int chunkSize) {
     return List.generate(
       (list.length / chunkSize).ceil(),
-          (index) =>
-          list.sublist(
-            index * chunkSize,
-            index * chunkSize + chunkSize > list.length
-                ? list.length
-                : index * chunkSize + chunkSize,
-          ),
+      (index) => list.sublist(
+        index * chunkSize,
+        index * chunkSize + chunkSize > list.length
+            ? list.length
+            : index * chunkSize + chunkSize,
+      ),
     );
   }
 
@@ -606,21 +605,18 @@ class _FavSubCategoryViewContent extends StatelessWidget {
   Widget _buildCard(BuildContext context, Favorites favSubCategoryData) {
     return Container(
         width: 200,
-        height: MediaQuery
-            .of(context)
-            .size
-            .height / 4,
+        height: MediaQuery.of(context).size.height / 4,
         padding: const EdgeInsets.all(8.0),
         child: FavTinderSubCategoryCard(
             favSubCategoryCardData: favSubCategoryData,
             tinderViewCubit: context.read<TinderViewCubit>(),
             activeFav: false)
-      // Column(
-      //   children: [
-      //     Text(favSubCategoryData.categoryId?.nameAr ?? 'Unknown Category'),
-      //   ],
-      // ),
-    );
+        // Column(
+        //   children: [
+        //     Text(favSubCategoryData.categoryId?.nameAr ?? 'Unknown Category'),
+        //   ],
+        // ),
+        );
   }
 }
 
@@ -640,27 +636,27 @@ class FavTinderSubCategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return favSubCategoryCardData.categoryId != null
         ? InkWell(
-      onTap: () {},
-      child: Container(
-        width: 200,
-        padding: const EdgeInsets.all(0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Card(
-          clipBehavior: Clip.hardEdge,
-          color: Colors.white,
-          elevation: 2,
-          child: Column(
-            children: [
-              _buildImageSection(context),
-              const Sizer(),
-              _buildInfoSection(context),
-            ],
-          ),
-        ),
-      ),
-    )
+            onTap: () {},
+            child: Container(
+              width: 200,
+              padding: const EdgeInsets.all(0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Card(
+                clipBehavior: Clip.hardEdge,
+                color: Colors.white,
+                elevation: 2,
+                child: Column(
+                  children: [
+                    _buildImageSection(context),
+                    const Sizer(),
+                    _buildInfoSection(context),
+                  ],
+                ),
+              ),
+            ),
+          )
         : const Sizer();
   }
 
@@ -682,16 +678,16 @@ class FavTinderSubCategoryCard extends StatelessWidget {
               right: 5,
               child: activeFav
                   ? IconAppButton(
-                size: 25,
-                icon: Icons.favorite_border,
-                color: Colors.red,
-                onPressed: () => _navigateToDynamicGridView(context),
-              )
+                      size: 25,
+                      icon: Icons.favorite_border,
+                      color: Colors.red,
+                      onPressed: () => _navigateToDynamicGridView(context),
+                    )
                   : const Icon(
-                size: 25,
-                Icons.favorite,
-                color: Colors.red,
-              ),
+                      size: 25,
+                      Icons.favorite,
+                      color: Colors.red,
+                    ),
             )
           ],
         ),
@@ -731,27 +727,25 @@ class FavTinderSubCategoryCard extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        AdsView(
-                          params: AdsViewParams(
-                            mainCategory: MainCategoryEntity(
-                              id: favSubCategoryCardData.categoryId!.sId!,
-                              name: favSubCategoryCardData.categoryId!.nameEn!,
-                              image: favSubCategoryCardData.categoryId!.cover!,
-                              banner: favSubCategoryCardData.categoryId!
-                                  .banner!,
-                              cover: favSubCategoryCardData.categoryId!.cover!,
-                              isFavorite: true,
-                              total: 2,
-                            ),
-                            subCategory: SubCategoryEntity(
-                              id: favSubCategoryCardData.categoryId!.sId!,
-                              name: favSubCategoryCardData.categoryId!.nameEn!,
-                              image: favSubCategoryCardData.categoryId!.cover!,
-                              isFavorite: true,
-                            ),
-                          ),
+                    builder: (context) => AdsView(
+                      params: AdsViewParams(
+                        mainCategory: MainCategoryEntity(
+                          id: favSubCategoryCardData.categoryId!.sId!,
+                          name: favSubCategoryCardData.categoryId!.nameEn!,
+                          image: favSubCategoryCardData.categoryId!.cover!,
+                          banner: favSubCategoryCardData.categoryId!.banner!,
+                          cover: favSubCategoryCardData.categoryId!.cover!,
+                          isFavorite: true,
+                          total: 2,
                         ),
+                        subCategory: SubCategoryEntity(
+                          id: favSubCategoryCardData.categoryId!.sId!,
+                          name: favSubCategoryCardData.categoryId!.nameEn!,
+                          image: favSubCategoryCardData.categoryId!.cover!,
+                          isFavorite: true,
+                        ),
+                      ),
+                    ),
                   ));
             },
           ),
@@ -764,12 +758,11 @@ class FavTinderSubCategoryCard extends StatelessWidget {
     context
         .read<TinderViewCubit>()
         .fetchFavorites(TinderSharedUtils.token)
-        .then((value) =>
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const FavSubCategoryView(),
-          ),
-        ));
+        .then((value) => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const FavSubCategoryView(),
+              ),
+            ));
   }
 }

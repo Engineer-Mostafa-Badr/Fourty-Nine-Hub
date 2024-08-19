@@ -67,10 +67,9 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
           status: ChatRoomStates.initState));
     });
 
-
     Timer(
         const Duration(milliseconds: 200),
-            () => scrollController!
+        () => scrollController!
             .jumpTo(scrollController!.position.maxScrollExtent));
 
     // to listen new message
@@ -114,15 +113,11 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
           chatMessages: chatMessages,
           status: ChatRoomStates.initState));
 
-
       Timer(
           const Duration(milliseconds: 200),
-              () => scrollController!
+          () => scrollController!
               .jumpTo(scrollController!.position.maxScrollExtent));
-
     });
-
-
   }
 
   listenToMessageTyping() {

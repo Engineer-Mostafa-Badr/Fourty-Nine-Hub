@@ -10,21 +10,27 @@ class ReplayMessageWidget extends StatelessWidget {
   final String? anotherUserName;
 
   const ReplayMessageWidget(
-      {this.messageEntity,this.replyMessage,required this.anotherUserName, this.onCancelReplay, super.key});
+      {this.messageEntity,
+      this.replyMessage,
+      required this.anotherUserName,
+      this.onCancelReplay,
+      super.key});
 
   @override
   Widget build(BuildContext context) => IntrinsicHeight(
-    child: Row(
+        child: Row(
           children: [
             Container(
               width: 4,
               color: AppColors.PRIMARY_COLOR,
             ),
-            const SizedBox(width: 8,),
+            const SizedBox(
+              width: 8,
+            ),
             Expanded(child: buildReplayMessage()),
           ],
         ),
-  );
+      );
 
   Widget buildReplayMessage() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,

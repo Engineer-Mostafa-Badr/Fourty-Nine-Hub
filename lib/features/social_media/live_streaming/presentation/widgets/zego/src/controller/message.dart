@@ -1,4 +1,3 @@
-
 import '../../zego_uikit_prebuilt_live_streaming.dart';
 import '../components/message/enable_property.dart';
 import 'private/message.dart';

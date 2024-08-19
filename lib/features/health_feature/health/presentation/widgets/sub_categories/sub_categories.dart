@@ -22,7 +22,7 @@ class HealthSubCategories extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Label(
-                text:'specialities',
+                text: 'specialities',
                 style: Styles.headerText(),
               ),
               const Sizer(),

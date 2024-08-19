@@ -15,7 +15,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/components/utils/pop_up_manager.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/inner_text.dart';
 
-
 /// @nodoc
 class ZegoLiveStreamingAudioVideoForeground extends StatelessWidget {
   final Size size;

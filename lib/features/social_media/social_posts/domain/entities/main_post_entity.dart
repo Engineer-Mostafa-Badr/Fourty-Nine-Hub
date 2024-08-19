@@ -17,11 +17,11 @@ class MainPostEntity {
   String? backgroundColor;
 
   DateTime? createdAt;
-   Duration get publishedDuration => DateTime.now().difference(createdAt!);
+  Duration get publishedDuration => DateTime.now().difference(createdAt!);
 
   String get sinceTime =>
       DurationHelper().sinceTime(duration: publishedDuration);
- 
+
   MainPostEntity({
     required this.id,
     this.content,
@@ -36,5 +36,3 @@ class MainPostEntity {
     this.backgroundColor,
   });
 }
-
-

@@ -24,7 +24,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/pk_combine_notifier.dart';
 
-
 /// @nodoc
 class ZegoLiveStreamingCentralAudioVideoView extends StatefulWidget {
   const ZegoLiveStreamingCentralAudioVideoView({

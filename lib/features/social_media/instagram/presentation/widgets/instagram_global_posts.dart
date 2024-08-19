@@ -156,17 +156,27 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                     .itemList?[index].isLove =
                                                 !controller.feedPagingController
                                                     .itemList![index].isLove!;
-                                            if(controller.feedPagingController
-                                                .itemList?[index].isLove==false){
-                                              controller.feedPagingController
-                                                  .itemList?[index].loveCount=(controller.feedPagingController
-                                                  .itemList![index].loveCount!-1);
-                                            }else{
-                                              controller.feedPagingController
-                                                  .itemList?[index].loveCount=(controller.feedPagingController
-                                                  .itemList![index].loveCount!+1);
+                                            if (controller.feedPagingController
+                                                    .itemList?[index].isLove ==
+                                                false) {
+                                              controller
+                                                  .feedPagingController
+                                                  .itemList?[index]
+                                                  .loveCount = (controller
+                                                      .feedPagingController
+                                                      .itemList![index]
+                                                      .loveCount! -
+                                                  1);
+                                            } else {
+                                              controller
+                                                  .feedPagingController
+                                                  .itemList?[index]
+                                                  .loveCount = (controller
+                                                      .feedPagingController
+                                                      .itemList![index]
+                                                      .loveCount! +
+                                                  1);
                                             }
-
                                           }
                                           setState(() {});
                                         },
@@ -177,13 +187,16 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                             : Colors.grey,
                                         size: 25,
                                       ),
-                                      const Sizer(width: 5,),
+                                      const Sizer(
+                                        width: 5,
+                                      ),
                                       Label(
                                         text: controller.feedPagingController
-                                            .itemList?[index].loveCount
-                                            .toString() ??
+                                                .itemList?[index].loveCount
+                                                .toString() ??
                                             '',
-                                        style: Styles.mediumText(fontWeight: FontWeight.bold),
+                                        style: Styles.mediumText(
+                                            fontWeight: FontWeight.bold),
                                       ),
                                       const Sizer(),
                                       IconAppButton(
@@ -199,32 +212,36 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                       .id,
                                                   onAddComment:
                                                       (PostCommentParams
-                                                              params) async{
-                                                        var result = await controller
-                                                              .onPostComment(
-                                                                  params:
-                                                                      params);
-                                                        controller
+                                                          params) async {
+                                                    var result =
+                                                        await controller
+                                                            .onPostComment(
+                                                                params: params);
+                                                    controller
+                                                        .feedPagingController
+                                                        .itemList![index]
+                                                        .commentsCount = (controller
                                                             .feedPagingController
-                                                            .itemList![index].commentsCount=(controller
-                                                            .feedPagingController
-                                                            .itemList![index].commentsCount!+1);
-                                                        setState(() {
-
-                                                        });
-                                                        return result;
-                                                      }));
+                                                            .itemList![index]
+                                                            .commentsCount! +
+                                                        1);
+                                                    setState(() {});
+                                                    return result;
+                                                  }));
                                         },
                                         color: Colors.grey,
                                         size: 25,
                                       ),
-                                      const Sizer(width: 5,),
+                                      const Sizer(
+                                        width: 5,
+                                      ),
                                       Label(
                                         text: controller.feedPagingController
                                                 .itemList?[index].commentsCount
                                                 .toString() ??
                                             '',
-                                        style: Styles.mediumText(fontWeight: FontWeight.bold),
+                                        style: Styles.mediumText(
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),

@@ -51,4 +51,20 @@ abstract class Assets {
   static String doctorCall = 'assets/images/doctor_call.png';
   static String doctorClinicVisit = 'assets/images/doctor_clinic.png';
   static String profileIcon = 'assets/images/profile_icon.png';
+
+  //drawer
+  static String contact_us_icon = 'assets/settings/contact_us_icon.png';
+  static String dashbboard_icon = 'assets/settings/dashbboard_icon.png';
+  static String favorite_ad_icon = 'assets/settings/favorite_ad_icon.png';
+  static String favorite_main_category_icon =
+      'assets/settings/favorite_main_category_icon.png';
+  static String favorite_sub_category_icon =
+      'assets/settings/favorite_sub_category_icon.png';
+  static String lists_icon = 'assets/settings/lists_icon.png';
+  static String my_ads_icon = 'assets/settings/my_ads_icon.png';
+  static String privacy_icon = 'assets/settings/privacy_icon.png';
+  static String settings_icon = 'assets/settings/settings_icon.png';
+  static String share_app_icon = 'assets/settings/share_app_icon.png';
+  static String sign_out_icon = 'assets/settings/sign_out_icon.png';
+  static String wallet_icon = 'assets/settings/wallet_icon.png';
 }

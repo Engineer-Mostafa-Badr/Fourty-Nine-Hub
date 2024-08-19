@@ -11,7 +11,6 @@ import '../../internal/defines.dart';
 
 // Project imports:
 
-
 /// @nodoc
 class ZegoLiveStreamingSoundEffectButton extends StatefulWidget {
   final List<VoiceChangerType> voiceChangeEffect;

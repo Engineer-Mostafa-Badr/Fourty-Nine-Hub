@@ -105,11 +105,11 @@ class BaseApiConsumer extends ApiConsumer {
         url,
         data: data,
         queryParameters: queryParameters,
-        options: Options(
-          headers: {
-            "Authorization": 'Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjY4ZmJiMWYxLTIzNDgtNDQzOC1iNTk1LTNkOTk2MDJjMjlmYyIsImlhdCI6MTcyMzU3ODk1MCwiZXhwIjo1NTcyMzU3ODk1MCwic3ViIjoiNjZiNDY1OWQxYzljNGIxY2IzNWJmZWU0In0.tu8B1stXjAsJzalYyGXzDgl69InB9axF8z46zdiPIl4"}'
-          }
-        )
+        // options: Options(headers: {
+        //   "Authorization":
+        //       'Bearer ${}'
+        // }
+        // )
       );
       log(url);
       log(_dio.options.headers['Authorization'], name: "Authorization$url");
@@ -185,8 +185,14 @@ class BaseApiConsumer extends ApiConsumer {
         data: data,
         queryParameters: queryParameters,
       );
-      if (result.data['status']) {
-        return Right(result.data as Map<String, dynamic>);
+      log(result.data.toString(), name: "url");
+      if (result.data['success']) {
+        log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
+        if (result.data is Map<String, dynamic>) {
+          return Right(result.data as Map<String, dynamic>);
+        } else {
+          return Right({"data": result.data});
+        }
       } else {
         return Left(ValidationFailure(
             result.data['message'] ?? result.data['error']['message']));

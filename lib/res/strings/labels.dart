@@ -161,7 +161,7 @@ abstract class Labels {
       'You will get 3,650 pounds annually if you subscribe.';
   static const right = 'right';
   static const left = 'left';
-  static const behind = 'behind';
+  static const behind = 'Behind';
   static const inFront = 'In front';
   static const identificationCard = 'ID card';
   static const drivingLicense = 'Driving License';

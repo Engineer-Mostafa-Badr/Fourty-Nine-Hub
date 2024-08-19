@@ -24,7 +24,13 @@ class CommentCard extends StatelessWidget {
   final Function(String) onDeleteReply;
 
   const CommentCard(
-      {super.key, this.textColor = Colors.black, required this.comment, required this.onAddReply, required this.onDeleteComment, required this.onDeleteReply, required this.from});
+      {super.key,
+      this.textColor = Colors.black,
+      required this.comment,
+      required this.onAddReply,
+      required this.onDeleteComment,
+      required this.onDeleteReply,
+      required this.from});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +38,7 @@ class CommentCard extends StatelessWidget {
       create: (_) => serviceLocator(),
       child: BlocBuilder<SocialPostsCubit, SocialPostsState>(
           builder: (context, state) {
-            return Column(
+        return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
@@ -40,7 +46,8 @@ class CommentCard extends StatelessWidget {
                 ProfileImage(
                   accountId: 0,
                   withBorder: false,
-                  imageURL: comment.user.image.isNotEmpty?comment.user.image:null,
+                  imageURL:
+                      comment.user.image.isNotEmpty ? comment.user.image : null,
                 ),
                 const Sizer(),
                 Expanded(
@@ -71,7 +78,7 @@ class CommentCard extends StatelessWidget {
                     )),
                 Sizer(),
                 GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       onDeleteComment(comment.id);
                     },
                     child: Icon(
@@ -113,11 +120,16 @@ class CommentCard extends StatelessWidget {
                           context: context,
                           isScrollControlled: true,
                           widget: BlocProvider.value(
-                            value: serviceLocator<SocialPostsCubit>()..loadReplies(context,comment.id),
+                            value: serviceLocator<SocialPostsCubit>()
+                              ..loadReplies(context, comment.id),
                             child: CommentReplies(
                               replies: const [],
-                              postId: comment.post, commentId: comment.id,
-                              onAddReply: (ReplyOnCommentParams params) =>onAddReply(params), onDeleteReply: (String id)=>onDeleteReply(id), from: from,
+                              postId: comment.post,
+                              commentId: comment.id,
+                              onAddReply: (ReplyOnCommentParams params) =>
+                                  onAddReply(params),
+                              onDeleteReply: (String id) => onDeleteReply(id),
+                              from: from,
                             ),
                           ));
                     })

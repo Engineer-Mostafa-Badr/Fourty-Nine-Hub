@@ -1190,19 +1190,18 @@ class TinderViewCubit extends Cubit<TinderViewState> {
             'https://49dev.com/api/v1/tinder/check-distance/$cardUserId?subCategory=66af974f8bf69f9469944746',
         accessToken: accessToken,
         fromMethod: 'checkUserNearby');
-    
+
     try {
-      log("${response!.body } 7777777777777777777777777777777777");
+      log("${response!.body} 7777777777777777777777777777777777");
 
       final nearByModel = NearByModel.fromJson(jsonDecode(response.body));
       // final isNearby = nearByModel.data?.isNearBy;
       log("${nearByModel}777777777777777777777");
       emit(state.copyWith(
           isUserNearby: nearByModel, isUserNearbyState: DataState.success));
-    }catch(e){
-      log(e.toString()+" nearByModel faild ");
+    } catch (e) {
+      log(e.toString() + " nearByModel faild ");
       emit(state.copyWith(isUserNearbyState: DataState.failure));
-
     }
   }
 
@@ -1220,6 +1219,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       emit(state.copyWith(subCategoryData: subCategoryData));
     }
   }
+
   Future<void> fetchUserData2({
     required String gender,
     required String accessToken,
@@ -1239,7 +1239,8 @@ class TinderViewCubit extends Cubit<TinderViewState> {
           .map<UserData>((data) => UserData.fromJson(data))
           .toList();
 
-      final updatedUserData = List<UserData>.from(state.userData)..addAll(userData);
+      final updatedUserData = List<UserData>.from(state.userData)
+        ..addAll(userData);
 
       emit(state.copyWith(
         userData: updatedUserData,

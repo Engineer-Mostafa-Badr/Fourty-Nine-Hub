@@ -22,9 +22,6 @@ class TwitterFeedParams {
     required this.page,
     required this.limit,
   });
-  Map<String, dynamic> toJson() => {
-    'page': page,
-    'limit': limit,
-    'subCategory':'66b77e77bb35968b535dc944'
-  };
+  Map<String, dynamic> toJson() =>
+      {'page': page, 'limit': limit, 'subCategory': '66b77e77bb35968b535dc944'};
 }

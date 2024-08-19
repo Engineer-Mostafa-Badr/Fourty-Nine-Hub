@@ -63,7 +63,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
             unselectedLabelColor: AppColors.PRIMARY_COLOR,
             indicatorColor: AppColors.SECONDARY_COLOR,
             indicatorSize: TabBarIndicatorSize.tab,
-            tabs:   [
+            tabs: [
               Tab(text: 'Service Provider'),
               Tab(text: 'User'),
             ],

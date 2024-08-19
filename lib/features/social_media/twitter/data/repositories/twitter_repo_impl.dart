@@ -84,7 +84,8 @@ class TwitterRepoImpl implements TwitterRepo {
   }
 
   @override
-  Future<Either<Failure, List<TwitterCommentReplyEntity>>> getCommentReplies({required PostCommentsParams params}) {
+  Future<Either<Failure, List<TwitterCommentReplyEntity>>> getCommentReplies(
+      {required PostCommentsParams params}) {
     return _remoteDataSource.getCommentReplies(params: params);
   }
 

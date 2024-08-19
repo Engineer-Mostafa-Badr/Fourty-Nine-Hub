@@ -18,7 +18,8 @@ class ShippingServiceLocatior {
     );
     //Cubit
     serviceLocator.registerFactory(
-      () => ShippingCubit(repository: serviceLocator(), imageRepository: serviceLocator()),
+      () => ShippingCubit(
+          repository: serviceLocator(), imageRepository: serviceLocator()),
     );
     serviceLocator.registerFactory(
       () => ImagesCubit(repository: serviceLocator()),
@@ -29,8 +30,7 @@ class ShippingServiceLocatior {
           dataSource: serviceLocator(), repository: serviceLocator()),
     );
     serviceLocator.registerLazySingleton(
-      () => ImagesRepository(
-          dataSource: serviceLocator()),
+      () => ImagesRepository(dataSource: serviceLocator()),
     );
   }
 }

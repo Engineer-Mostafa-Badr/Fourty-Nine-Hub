@@ -6,22 +6,23 @@ import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
 
 class MainPostModel extends MainPostEntity {
-  MainPostModel(
-      {required super.id,
-          super.content,
-          super.createdAt,
-      required super.type,
-      super.images,
-      super.isShared,
-      super.activity,
-      super.feeling,
-      super.backgroundColor,
-      super.isDocumentation,
-      required super.user,});
+  MainPostModel({
+    required super.id,
+    super.content,
+    super.createdAt,
+    required super.type,
+    super.images,
+    super.isShared,
+    super.activity,
+    super.feeling,
+    super.backgroundColor,
+    super.isDocumentation,
+    required super.user,
+  });
   factory MainPostModel.fromJson(Map<String, dynamic> json) {
     return MainPostModel(
         id: json['_id'],
-        content: json['content']??'',
+        content: json['content'] ?? '',
         type: json['type'] ?? '',
         // images: json['media'] != null
         //     ? List<String>.from(
@@ -35,10 +36,14 @@ class MainPostModel extends MainPostEntity {
         feeling: json['feeling'] != null
             ? FeelingModel.fromJson(json['feeling'])
             : null,
-        user: json['user'] == null?null:json['user'] is String
-            ? json['user']
-            : TwitterUserModel.fromJson(json['user']),
-        createdAt:json['createdAt']!=null? DateTime.parse(json['createdAt']):null,
+        user: json['user'] == null
+            ? null
+            : json['user'] is String
+                ? json['user']
+                : TwitterUserModel.fromJson(json['user']),
+        createdAt: json['createdAt'] != null
+            ? DateTime.parse(json['createdAt'])
+            : null,
         backgroundColor: json['background_color']);
   }
 }

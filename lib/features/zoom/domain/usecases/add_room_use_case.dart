@@ -5,7 +5,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 
 import '../repositories/meeting_repository.dart';
 
-class AddRoomUseCase extends UseCase<void,MeetingParams>{
+class AddRoomUseCase extends UseCase<void, MeetingParams> {
   final MeetingRepository repository;
 
   AddRoomUseCase(this.repository);
@@ -13,14 +13,7 @@ class AddRoomUseCase extends UseCase<void,MeetingParams>{
   Future<Either<Failure, void>> call(MeetingParams params) {
     return repository.addRoom(params);
   }
-
 }
-
-
-
-
-
-
 
 class MeetingParams extends Equatable {
   final String id;

@@ -75,7 +75,8 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._replyOnCommentUseCase,
     this._getTwitterFeedUseCase,
     this._advertisementUseCase,
-    this._getPostUseCase, this._deleteCommentUseCase,
+    this._getPostUseCase,
+    this._deleteCommentUseCase,
   ) : super(const SocialPostsState());
 
   void loadData() async {
@@ -253,17 +254,16 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   }
 
 // react on a post
-  Future<bool> onReact({required PostReactParams params,required String from}) async {
+  Future<bool> onReact(
+      {required PostReactParams params, required String from}) async {
     var response = await _postReactUseCase(params);
     bool value = false;
     response.fold(
         (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
         (r) {
-
-      if(from=='details'){
-
-      }else{
+      if (from == 'details') {
+      } else {
         print("reeact${params.react}");
         var currentPost = feedPagingController.itemList
             ?.firstWhere((element) => element.id == params.postId);
@@ -424,22 +424,24 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     });
   }
 
-
   Future<bool> deleteComment(
-      {required BuildContext context, required String commentId,required String postId,required String from}) async {
+      {required BuildContext context,
+      required String commentId,
+      required String postId,
+      required String from}) async {
     final response = await _deleteCommentUseCase(commentId);
     bool result = false;
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
-          result=r;
-          if(from =='feed'){
-            var currentPost = feedPagingController.itemList
-                ?.firstWhere((element) => element.id == postId);
-            print("commmmmment count${currentPost?.commentsCount}");
+      result = r;
+      if (from == 'feed') {
+        var currentPost = feedPagingController.itemList
+            ?.firstWhere((element) => element.id == postId);
+        print("commmmmment count${currentPost?.commentsCount}");
 
-            currentPost?.commentsCount = (currentPost.commentsCount! - 1);
-          }
+        currentPost?.commentsCount = (currentPost.commentsCount! - 1);
+      }
       emit(state.copyWith(status: StateStatus.success));
       showSuccessMessage(context, "Comment delete successfully");
     });

@@ -6,7 +6,9 @@ class SendGiftModel {
 
   SendGiftModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
-    error = json['error'] != null ? new SendGiftErrorData.fromJson(json['error']) : null;
+    error = json['error'] != null
+        ? new SendGiftErrorData.fromJson(json['error'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -41,8 +43,9 @@ class SendGiftErrorData {
     name = json['name'];
     httpCode = json['httpCode'];
     message = json['message'];
-    data =
-        json['data'] != null ? new InnerSendGiftData.fromJson(json['data']) : null;
+    data = json['data'] != null
+        ? new InnerSendGiftData.fromJson(json['data'])
+        : null;
     isOperational = json['isOperational'];
     stack = json['stack'];
     domain = json['domain'];

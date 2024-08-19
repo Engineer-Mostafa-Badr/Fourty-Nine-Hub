@@ -161,13 +161,16 @@ class TinderSharedUtils {
   // Method to check if the token has been initialized
   static bool get isTokenInitialized => _token != null;
 
-
   static String capitalizeEachWord(String input) {
     if (input.isEmpty) {
       return input;
     }
-    return input.split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
+    return input
+        .split(' ')
+        .map((word) => word[0].toUpperCase() + word.substring(1))
+        .join(' ');
   }
+
   /// Handles the response from a gift-related operation and displays appropriate UI feedback.
   static void handleGiftResponse(
       {required BuildContext context,
