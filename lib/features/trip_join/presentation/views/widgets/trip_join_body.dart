@@ -17,20 +17,18 @@ class TripJoinBody extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
         child: SingleChildScrollView(
-          child: Form(
-            child: Column(
-              children: [
-                ...welcomeText(),
-                const Sizer(),
-                const IllustrationImage(),
-                const Sizer(height: 20),
-                const StartTextFieldAndFindButon(),
-                const Sizer(),
-                const DestinationTextFieldAndFindButon(),
-                const Sizer(height: 20),
-                const TripJoinGoogleMap(),
-              ],
-            ),
+          child: Column(
+            children: [
+              ...welcomeText(),
+              const Sizer(),
+              const IllustrationImage(),
+              const Sizer(height: 20),
+              const StartTextFieldAndFindButon(),
+              const Sizer(),
+              const DestinationTextFieldAndFindButon(),
+              const Sizer(height: 20),
+              const TripJoinGoogleMap(),
+            ],
           ),
         ),
       ),
