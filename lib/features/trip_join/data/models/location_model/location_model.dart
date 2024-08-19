@@ -11,7 +11,7 @@ class LocationModel extends LocationEntity {
   Geometry? geometry;
   bool? partialMatch;
   String? placeId;
-  List<String>? types;
+  List<dynamic>? types;
 
   LocationModel({
     this.addressComponents,
@@ -39,7 +39,7 @@ class LocationModel extends LocationEntity {
         geometry: data['geometry'] == null ? null : Geometry.fromMap(data['geometry'] as Map<String, dynamic>),
         partialMatch: data['partial_match'] as bool?,
         placeId: data['place_id'] as String?,
-        types: data['types'] as List<String>?,
+        types: data['types'] as List<dynamic>?,
       );
 
   Map<String, dynamic> toMap() => {

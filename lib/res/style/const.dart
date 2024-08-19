@@ -32,5 +32,5 @@ class UIConst {
   //Chat
   static const String chatNormalId = '668e7dc4e8cfec5bcc752afc';
 
-  static const String googleGeocodingApiKey = 'AIzaSyCSzHt1y3RDKvC2D67mF';
+  static const String googleGeocodingApiKey = 'AIzaSyCSzHt1y3RDKvC2D67mF-WJdyZKE9hBIxA';
 }

@@ -3,7 +3,7 @@ import 'dart:convert';
 class AddressComponent {
   String? longName;
   String? shortName;
-  List<String>? types;
+  List<dynamic>? types;
 
   AddressComponent({this.longName, this.shortName, this.types});
 
@@ -16,7 +16,7 @@ class AddressComponent {
     return AddressComponent(
       longName: data['long_name'] as String?,
       shortName: data['short_name'] as String?,
-      types: data['types'] as List<String>?,
+      types: data['types'] as List<dynamic>?,
     );
   }
 
