@@ -968,7 +968,7 @@ class AppPages {
             child: const TripJoinView(),
           ),
         ),
-        ),
+
       ],
     ),
   ]);
