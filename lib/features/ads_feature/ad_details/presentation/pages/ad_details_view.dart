@@ -17,7 +17,8 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+
 import '../../../../../common/widgets/stateless/dynamic/carousel_slider.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';

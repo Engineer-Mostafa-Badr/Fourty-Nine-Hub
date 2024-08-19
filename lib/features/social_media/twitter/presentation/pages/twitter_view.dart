@@ -45,8 +45,6 @@ class _TwitterViewState extends State<TwitterView> {
     return Stack(
       children: [
         SharedScaffold(
-          backgroundColor: Colors.white,
-
           mainCategoryId: 2,
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
               builder: (context, state) {

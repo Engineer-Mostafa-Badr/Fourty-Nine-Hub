@@ -63,7 +63,6 @@ class _UserTweetsState extends State<UserTweets> {
                         child: Text(
                           "No Posts",
                           style: TextStyle(
-                            color: Colors.black,
                             fontSize: 18,
                           ),
                         ),

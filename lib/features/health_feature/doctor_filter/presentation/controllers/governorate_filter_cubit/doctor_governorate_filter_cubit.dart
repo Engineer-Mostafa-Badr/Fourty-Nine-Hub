@@ -22,7 +22,7 @@ class DoctorGovernorateFilterCubit extends Cubit<DoctorGovernorateFilterState> {
   }
 
   Future<void> _getGovernorates() async {
-    if (_shareCubit.governorates.isEmpty) {
+   // if (_shareCubit.governorates.isEmpty) {
       final response = await _getGovernoratesUseCase.call(const NoParams());
       response.fold(
           (failure) => emit(DoctorGovernorateFilterError(Labels.errorHappened)),
@@ -30,9 +30,9 @@ class DoctorGovernorateFilterCubit extends Cubit<DoctorGovernorateFilterState> {
         _shareCubit.governorates = data;
         emit(DoctorGovernorateFilterLoaded(data));
       });
-    } else {
-      emit(DoctorGovernorateFilterLoaded(_shareCubit.governorates));
-    }
+    // } else {
+    //   emit(DoctorGovernorateFilterLoaded(_shareCubit.governorates));
+    // }
   }
 
   void search(String query) {

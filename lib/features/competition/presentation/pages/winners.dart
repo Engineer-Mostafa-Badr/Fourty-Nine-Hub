@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 
 import '../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../common/widgets/stateless/appbar/back_appbar.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/const.dart';

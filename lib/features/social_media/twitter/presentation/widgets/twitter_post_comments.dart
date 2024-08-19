@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twit
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_comment_card.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_comment_replied.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -57,7 +58,6 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
         return Scaffold(
           // backgroundColor: Colors.white,
           appBar: AppBar(
-            backgroundColor: Colors.white,
             elevation: 0,
             iconTheme: const IconThemeData(color: Colors.grey),
             title: Label(
@@ -116,6 +116,52 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                 ),
               ),
 
+                // Expanded(
+                //   child: ListView.separated(
+                //       itemBuilder: (context, index) => _buildCommentCard(
+                //           comment: widget.comments[index], showReplies: showReplies, onShowReplies:()async{
+                //           widget.comments[index].showReplies = true;
+                //
+                //           await widget.onGetReplies(widget.comments[index].id,widget.comments[index]);
+                //           // widget.comments[index].replies?.addAll(controller.replies);
+                //           setState(() {});
+                //       }),
+                //       separatorBuilder: (context, index) => const Sizer(),
+                //       itemCount: widget.comments.length),
+                // ),
+                Container(
+                    height: kToolbarHeight,
+                    decoration:  BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                    ),
+                    child: Row(
+                      children: [
+                        const ProfileImage(accountId: 0),
+                        const Sizer(),
+                        Expanded(
+                            child: FormTextField(
+                              fillColor: AppColors.AUTH_CONTAINER_COLOR,
+                              style: const TextStyle(
+                                color: AppColors.QUANTITY_COLOR
+                              ),
+
+                                hint: 'Type your comment ....',
+                                height: kToolbarHeight * .7,
+                                action: (v) {
+                                  setState(() {});
+                                },
+                                controller: commentTextController)),
+                        const Sizer(),
+                        if (commentTextController.text.isNotEmpty)
+                          IconAppButton(
+                              icon: Icons.send,
+                              isCircle: true,
+                              onPressed: () async{
+                                TwitterPostCommentModel data = await widget.onAddComment(
+                                  TwitterPostCommentParams(
+                                      postId: widget.postId, content: commentTextController.text),
+                                );
+                                final user = context.read<UserCubit>().state.data;
               // Expanded(
               //   child: ListView.separated(
               //       itemBuilder: (context, index) => _buildCommentCard(

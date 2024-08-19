@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../res/style/styles.dart';
-import '../labels/label.dart';
+import '../../stateless/labels/label.dart';
 
 class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool automaticallyImplyLeading;

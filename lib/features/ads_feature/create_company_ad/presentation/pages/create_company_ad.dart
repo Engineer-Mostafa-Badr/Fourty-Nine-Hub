@@ -8,7 +8,8 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/entities/company_ad_entity.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -31,9 +32,10 @@ class CreateCompanyAdView extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                   FormTextField(
+                   const FormTextField(
+                     fillColor: AppColors.AUTH_CONTAINER_COLOR,
                     style:  TextStyle(
-                        color: Theme.of(context).scaffoldBackgroundColor
+                        color: AppColors.QUANTITY_COLOR
                     ),
                     label: 'Slogan',
                     hint: 'Type your slogan (Not more 100 letter)',

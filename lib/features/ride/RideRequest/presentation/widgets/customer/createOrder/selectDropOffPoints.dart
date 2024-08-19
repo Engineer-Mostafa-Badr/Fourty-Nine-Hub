@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:go_router/go_router.dart';
 
@@ -104,7 +107,7 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                   children: [
                     AppButton(
                         margin: 5,
-                        label: 'Search',
+                        label: LocaleKeys.search.localize,
                         color: AppColors.AUTH_CONTAINER_COLOR,
                         width: kToolbarHeight,
                         height: 30,
