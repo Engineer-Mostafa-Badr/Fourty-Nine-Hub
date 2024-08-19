@@ -13,7 +13,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/defines.dart';
 
-
 /// @nodoc
 class ZegoLiveStreamingLeaveButton extends StatefulWidget {
   final ButtonIcon? icon;

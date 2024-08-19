@@ -53,8 +53,8 @@ class ProfileUserData {
       adminIgnore: json['adminIgnore'],
       id: json['_id'],
       userId: UserId.fromJson(json['userId']),
-      pictures:
-      List<ProfilePictureModel>.from(json['pictures'].map((x) => ProfilePictureModel.fromJson(x))),
+      pictures: List<ProfilePictureModel>.from(
+          json['pictures'].map((x) => ProfilePictureModel.fromJson(x))),
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
       followersCount: json['followersCount'],
@@ -135,7 +135,7 @@ class Location {
     return Location(
       type: json['type'],
       coordinates:
-      List<double>.from(json['coordinates'].map((x) => x.toDouble())),
+          List<double>.from(json['coordinates'].map((x) => x.toDouble())),
     );
   }
 

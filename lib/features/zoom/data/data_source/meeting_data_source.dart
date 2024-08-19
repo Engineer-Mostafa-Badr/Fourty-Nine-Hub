@@ -31,13 +31,13 @@ class MeetingDataSourceImpl extends MeetingDataSource {
 
   @override
   Future<Either<Failure, void>> endRoom(MeetingParams params) async {
-   final result = await apiConsumer.put(EndPoints.endMeeting(params.id));
-    return result.fold((l) => Left(l), (r) => Right(r)) ;
+    final result = await apiConsumer.put(EndPoints.endMeeting(params.id));
+    return result.fold((l) => Left(l), (r) => Right(r));
   }
 
   @override
   Future<Either<Failure, void>> joinRoom(MeetingParams params) async {
-   final result = await apiConsumer.put(EndPoints.joinMeeting(params.id));
-   return result.fold((l) => Left(l), (r) => Right(r));
+    final result = await apiConsumer.put(EndPoints.joinMeeting(params.id));
+    return result.fold((l) => Left(l), (r) => Right(r));
   }
 }

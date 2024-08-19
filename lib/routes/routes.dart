@@ -69,6 +69,7 @@ abstract class Routes {
 
   static const FOODCART = '/Food/RetaurantDetails/FoodCart';
   static const SHIPPING = '/Shipping';
+  static const SHIPPING_REGISTER = '/shippingRegister';
   static const RIDE = '/Ride';
   static const CONTACTUS = '/ContactUs';
 
@@ -116,7 +117,6 @@ abstract class Routes {
   static const SETTINGS = '/Account/Settings';
   static const PAYMENT = '/Payment';
   static const SUBSCRIPTIONPLANS = '/SubscriptionPlans';
-  static const SHIPPING_REGISTER = '/shippingRegister';
 }
 
 abstract class Paths {
@@ -177,6 +177,8 @@ abstract class Paths {
   static const CusineRestaurants = 'Cusine-Restaurants';
   static const RestaurantDashboard = 'RestaurantDashboard';
   static const SHIPPING = 'Shipping';
+  static const SHIPPING_REGISTER = 'shippingRegister';
+
   static const RIDE = 'Ride';
   static const CONTACTUS = 'ContactUs';
   static const RIDERDASHBOARD = 'RiderDashboard';
@@ -221,5 +223,4 @@ abstract class Paths {
   static const AZKAAR = 'Azkaar';
   static const PAYMENT = 'Payment';
   static const SUBSCRIPTIONPLANS = 'SubscriptionPlans';
-  static const SHIPPING_REGISTER = 'shippingRegister';
 }

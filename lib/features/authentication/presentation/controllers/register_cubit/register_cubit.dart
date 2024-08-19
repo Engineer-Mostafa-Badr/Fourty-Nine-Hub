@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
@@ -36,15 +38,16 @@ class RegisterCubit extends Cubit<RegisterState> {
   double? welcomeGift;
 
   RegisterCubit(
-      this._registerUseCase,
-      this._getWelcomeGiftUseCase,
-      this._saveTokens,
-      this._attachToken,
-      this._googleSignInUseCase,
-      this._facebookSignInUseCase,
-      ) : super(RegisterInitial());
+    this._registerUseCase,
+    this._getWelcomeGiftUseCase,
+    this._saveTokens,
+    this._attachToken,
+    this._googleSignInUseCase,
+    this._facebookSignInUseCase,
+  ) : super(RegisterInitial());
 
   Future<void> register() async {
+                              log("message");
     if (state is RegisterLoading) return;
     if (formKey.currentState!.validate()) {
       emit(RegisterLoading());
@@ -60,8 +63,8 @@ class RegisterCubit extends Cubit<RegisterState> {
       );
       emit(
         result.fold(
-              (failure) => RegisterError(failure),
-              (_) => OTPSent(),
+          (failure) => RegisterError(failure),
+          (_) => OTPSent(),
         ),
       );
     }
@@ -73,8 +76,8 @@ class RegisterCubit extends Cubit<RegisterState> {
     final result = await _googleSignInUseCase(const NoParams());
     emit(
       result.fold(
-            (failure) => RegisterError(failure),
-            (userToken) {
+        (failure) => RegisterError(failure),
+        (userToken) {
           _attachToken(userToken); // attach to dio
           _saveTokens(userToken); // save to local storage
           return RegisterSuccess();
@@ -89,8 +92,8 @@ class RegisterCubit extends Cubit<RegisterState> {
     final result = await _facebookSignInUseCase(const NoParams());
     emit(
       result.fold(
-            (failure) => RegisterError(failure),
-            (userToken) {
+        (failure) => RegisterError(failure),
+        (userToken) {
           _attachToken(userToken); // attach to dio
           _saveTokens(userToken); // save to local storage
           return RegisterSuccess();
@@ -102,8 +105,8 @@ class RegisterCubit extends Cubit<RegisterState> {
   void getWelcomeGift() async {
     final result = await _getWelcomeGiftUseCase(const NoParams());
     result.fold(
-          (_) {},
-          (gift) => welcomeGift = gift,
+      (_) {},
+      (gift) => welcomeGift = gift,
     );
   }
 }

@@ -11,7 +11,6 @@ import 'common.dart';
 
 // Project imports:
 
-
 class ZegoLiveStreamingPKHostView extends StatefulWidget {
   const ZegoLiveStreamingPKHostView({
     super.key,

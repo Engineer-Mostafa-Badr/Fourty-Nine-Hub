@@ -96,6 +96,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         keyboardType: widget.keyboardType,
         inputFormatters: widget.inputFormatters,
         enabled: widget.enabled,
+        readOnly: widget.readOnly,
         maxLines: widget.maxLines,
         maxLength: widget.maxLength,
         expands: widget.expanded,
@@ -108,7 +109,6 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
             widget.expanded ? const TextAlignVertical(y: -0.8) : null,
         obscureText: widget.obscureText ?? false,
         minLines: widget.minLines,
-        readOnly: widget.readOnly,
         decoration: InputDecoration(
           fillColor: widget.fillColor ??
               (widget.enabled ? Colors.white : Colors.white),

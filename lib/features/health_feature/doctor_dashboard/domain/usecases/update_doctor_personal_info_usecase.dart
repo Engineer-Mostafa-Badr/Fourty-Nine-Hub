@@ -15,6 +15,4 @@ class UpdateDoctorPersonalInfoUsecase
   }
 }
 
-class DoctorPersonalInfoParams{
-  
-}
+class DoctorPersonalInfoParams {}

@@ -11,7 +11,6 @@ import 'beauty_effect_sheet.dart';
 
 // Project imports:
 
-
 /// @nodoc
 class ZegoLiveStreamingBeautyEffectButton extends StatefulWidget {
   // ignore: use_super_parameters

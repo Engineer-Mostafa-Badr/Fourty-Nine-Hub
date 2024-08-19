@@ -10,7 +10,6 @@ import 'logout_notifier.dart';
 
 // Project imports:
 
-
 /// @nodoc
 class ZegoLiveStreamingSwipingRoomLoadingBuilder extends StatefulWidget {
   const ZegoLiveStreamingSwipingRoomLoadingBuilder({

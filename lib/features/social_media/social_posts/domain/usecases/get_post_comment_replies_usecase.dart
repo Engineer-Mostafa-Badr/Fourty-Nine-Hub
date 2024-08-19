@@ -5,11 +5,13 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/social_posts_repo.dart';
 
-class GetPostCommentRepliesUseCase extends UseCase<List<CommentEntity>, PostCommentsParams> {
+class GetPostCommentRepliesUseCase
+    extends UseCase<List<CommentEntity>, PostCommentsParams> {
   final SocialPostsRepo _repo;
   GetPostCommentRepliesUseCase(this._repo);
   @override
-  Future<Either<Failure, List<CommentEntity>>> call(PostCommentsParams params) async {
+  Future<Either<Failure, List<CommentEntity>>> call(
+      PostCommentsParams params) async {
     return await _repo.getPostCommentReplies(params: params);
   }
 }

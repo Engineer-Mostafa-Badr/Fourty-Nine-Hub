@@ -54,8 +54,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
         final response = await _createTwitterPostUseCase(
             CreateTwitterPostParams(
                 content: postContentTextController.text,
-                mediaIds:
-                selectedImages??[]));
+                mediaIds: selectedImages ?? []));
         response.fold(
             (l) => emit(
                 state.copyWith(failure: l, status: CreatePostStates.error)),
@@ -111,14 +110,15 @@ class CreatePostCubit extends Cubit<CreatePostState> {
           final images = state.images ?? [];
 
           images.add(data);
-          selectedImages=images.map((e)=>e.mediaId).toList();
+          selectedImages = images.map((e) => e.mediaId).toList();
           print("selectedImages${selectedImages?.length}");
           print(images.length);
           emit(state.copyWith(
-              images: images,backColor: '#FFFFFFFF', status: CreatePostStates.success));
+              images: images,
+              backColor: '#FFFFFFFF',
+              status: CreatePostStates.success));
         });
     print("length${state.images?.length}");
-
   }
 
   removePhoto(UploadFileEntity? image) {

@@ -390,119 +390,119 @@
 //     );
 //   }
 
-  // Widget _buildContentInstagram({
-  //   String? label,
-  //   String? image,
-  // }) {
-  //   return Column(
-  //     children: [
-  //       const Sizer(),
-  //       SizedBox(
-  //         height: kToolbarHeight * 4,
-  //         child: PageView.builder(
-  //             controller: pageController,
-  //             scrollDirection: Axis.horizontal,
-  //             itemCount: images.length,
-  //             itemBuilder: (context, index) {
-  //               return SocialImageViewer(
-  //                 image: images[index],
-  //                 index: index + 1,
-  //                 length: images.length,
-  //                 onDoubleTap: () {
-  //                   widget.isLiked = !widget.isLiked;
-  //                   setState(() {});
-  //                 },
-  //               );
-  //             }),
-  //       ),
-  //       const Sizer(
-  //         height: 5,
-  //       ),
-  //       Padding(
-  //         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             Expanded(
-  //               child: Row(
-  //                 mainAxisAlignment: MainAxisAlignment.start,
-  //                 children: [
-  //                   IconAppButton(
-  //                     icon: widget.isLiked
-  //                         ? Icons.favorite
-  //                         : Icons.favorite_border,
-  //                     onPressed: () {
-  //                       widget.isLiked = !widget.isLiked;
-  //                       setState(() {});
-  //                     },
-  //                     color: widget.isLiked ? Colors.red : Colors.grey,
-  //                     size: 25,
-  //                   ),
-  //                   const Sizer(),
-  //                   IconAppButton(
-  //                     icon: Icons.chat_bubble_outline_rounded,
-  //                     onPressed: () {
-  //                       bottomSheet(
-  //                         context: context,
-  //                         isScrollControlled: true,
-  //                         widget: const PostComments(),
-  //                       );
-  //                     },
-  //                     color: Colors.grey,
-  //                     size: 25,
-  //                   ),
-  //                   const Sizer(),
-  //                   IconAppButton(
-  //                     icon: Icons.send_rounded,
-  //                     color: Colors.grey,
-  //                     onPressed: () => context.push(Routes.CHAT),
-  //                     size: 25,
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //             Expanded(
-  //               child: Center(
-  //                 child: SizedBox(
-  //                   height: 8,
-  //                   child: ListView.separated(
-  //                       shrinkWrap: true,
-  //                       scrollDirection: Axis.horizontal,
-  //                       itemCount: images.length,
-  //                       separatorBuilder: (context, index) => const Sizer(
-  //                             width: 3,
-  //                           ),
-  //                       itemBuilder: (context, index) {
-  //                         return CircleAvatar(
-  //                           radius: 4,
-  //                           backgroundColor:
-  //                               pageController.page?.toInt() == index
-  //                                   ? AppColors.SECONDARY_COLOR
-  //                                   : AppColors.PRIMARY_COLOR,
-  //                         );
-  //                       }),
-  //                 ),
-  //               ),
-  //             ),
-  //             Expanded(
-  //               child: Row(
-  //                 mainAxisAlignment: MainAxisAlignment.end,
-  //                 children: [
-  //                   IconAppButton(
-  //                     icon: Icons.bookmark_outline,
-  //                     color: Colors.grey,
-  //                     onPressed: () {},
-  //                     size: 25,
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       )
-  //     ],
-  //   );
-  // }
+// Widget _buildContentInstagram({
+//   String? label,
+//   String? image,
+// }) {
+//   return Column(
+//     children: [
+//       const Sizer(),
+//       SizedBox(
+//         height: kToolbarHeight * 4,
+//         child: PageView.builder(
+//             controller: pageController,
+//             scrollDirection: Axis.horizontal,
+//             itemCount: images.length,
+//             itemBuilder: (context, index) {
+//               return SocialImageViewer(
+//                 image: images[index],
+//                 index: index + 1,
+//                 length: images.length,
+//                 onDoubleTap: () {
+//                   widget.isLiked = !widget.isLiked;
+//                   setState(() {});
+//                 },
+//               );
+//             }),
+//       ),
+//       const Sizer(
+//         height: 5,
+//       ),
+//       Padding(
+//         padding: const EdgeInsets.symmetric(horizontal: 10.0),
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             Expanded(
+//               child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.start,
+//                 children: [
+//                   IconAppButton(
+//                     icon: widget.isLiked
+//                         ? Icons.favorite
+//                         : Icons.favorite_border,
+//                     onPressed: () {
+//                       widget.isLiked = !widget.isLiked;
+//                       setState(() {});
+//                     },
+//                     color: widget.isLiked ? Colors.red : Colors.grey,
+//                     size: 25,
+//                   ),
+//                   const Sizer(),
+//                   IconAppButton(
+//                     icon: Icons.chat_bubble_outline_rounded,
+//                     onPressed: () {
+//                       bottomSheet(
+//                         context: context,
+//                         isScrollControlled: true,
+//                         widget: const PostComments(),
+//                       );
+//                     },
+//                     color: Colors.grey,
+//                     size: 25,
+//                   ),
+//                   const Sizer(),
+//                   IconAppButton(
+//                     icon: Icons.send_rounded,
+//                     color: Colors.grey,
+//                     onPressed: () => context.push(Routes.CHAT),
+//                     size: 25,
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             Expanded(
+//               child: Center(
+//                 child: SizedBox(
+//                   height: 8,
+//                   child: ListView.separated(
+//                       shrinkWrap: true,
+//                       scrollDirection: Axis.horizontal,
+//                       itemCount: images.length,
+//                       separatorBuilder: (context, index) => const Sizer(
+//                             width: 3,
+//                           ),
+//                       itemBuilder: (context, index) {
+//                         return CircleAvatar(
+//                           radius: 4,
+//                           backgroundColor:
+//                               pageController.page?.toInt() == index
+//                                   ? AppColors.SECONDARY_COLOR
+//                                   : AppColors.PRIMARY_COLOR,
+//                         );
+//                       }),
+//                 ),
+//               ),
+//             ),
+//             Expanded(
+//               child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.end,
+//                 children: [
+//                   IconAppButton(
+//                     icon: Icons.bookmark_outline,
+//                     color: Colors.grey,
+//                     onPressed: () {},
+//                     size: 25,
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ],
+//         ),
+//       )
+//     ],
+//   );
+// }
 
 //   Widget _buildAccountRow({
 //     required BuildContext context,

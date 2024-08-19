@@ -20,7 +20,8 @@ class ReplyCard extends StatefulWidget {
     this.textColor = Colors.black,
     required this.reply,
     required this.onReplyReact,
-    required this.onReport, required this.onDeleteReply,
+    required this.onReport,
+    required this.onDeleteReply,
   });
 
   @override
@@ -38,7 +39,9 @@ class _ReplyCardState extends State<ReplyCard> {
             ProfileImage(
               accountId: 0,
               withBorder: false,
-              imageURL: widget.reply.user.image.isNotEmpty?widget.reply.user.image:null,
+              imageURL: widget.reply.user.image.isNotEmpty
+                  ? widget.reply.user.image
+                  : null,
             ),
             const Sizer(),
             Expanded(
@@ -59,8 +62,8 @@ class _ReplyCardState extends State<ReplyCard> {
                   bottomSheet(
                       context: context,
                       widget: ReportView(
-                        id: widget.reply.id, categoryId: '66a3583454e6e337915514db',
-
+                        id: widget.reply.id,
+                        categoryId: '66a3583454e6e337915514db',
                       ));
                 },
                 child: Icon(

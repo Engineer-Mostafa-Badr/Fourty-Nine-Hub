@@ -25,9 +25,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       automaticallyImplyLeading: automaticallyImplyLeading,
       title: label != null
-          ? Label(
-              text: label ?? '',
-              style: Styles.headerText())
+          ? Label(text: label ?? '', style: Styles.headerText())
           : null,
       actions: actions,
     );

@@ -5,7 +5,7 @@ import '../../../../res/style/styles.dart';
 import 'label.dart';
 
 class BadgedLabel extends StatelessWidget {
-  final Color color, textColor;
+  final Color color, textColor, borderColor;
   final String label;
   final double radius;
   final TextStyle? style;
@@ -21,6 +21,7 @@ class BadgedLabel extends StatelessWidget {
       this.height,
       this.width,
       this.style,
+      this.borderColor = AppColors.PRIMARY_COLOR,
       this.onTap,
       this.margin,
       this.radius = 10,
@@ -42,8 +43,9 @@ class BadgedLabel extends StatelessWidget {
           margin: EdgeInsets.all(margin ?? 0),
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
           decoration: BoxDecoration(
-              color: isBordered ? color: color,
-              border: isBordered ? Border.all(color: color, width: .5) : null,
+              color: isBordered ? Colors.white : color,
+              border:
+                  isBordered ? Border.all(color: borderColor, width: .5) : null,
               borderRadius: BorderRadius.circular(radius)),
           child: isCentered
               ? Center(

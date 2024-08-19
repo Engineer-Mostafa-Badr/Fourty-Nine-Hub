@@ -18,7 +18,6 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 
-
 class FacebookTweetCard extends StatelessWidget {
   const FacebookTweetCard({super.key, required this.post});
   final PostEntity post;
@@ -69,7 +68,8 @@ class FacebookTweetCard extends StatelessWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    if(post.content!.isNotEmpty||post.images!.isNotEmpty)_buildContent(context: context, post: post),
+                    if (post.content!.isNotEmpty || post.images!.isNotEmpty)
+                      _buildContent(context: context, post: post),
                     const SizedBox(
                       height: 10,
                     )
@@ -77,15 +77,18 @@ class FacebookTweetCard extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                         border: isShared == true ? Border.all() : null,
-                        borderRadius: BorderRadius.circular(15)
-                    ),
+                        borderRadius: BorderRadius.circular(15)),
                     child: Column(
                       children: [
                         _buildAccountHeader(
-                            context: context, user: isShared==true&&post.mainPost!=null?post.mainPost?.user:post.user),
-                        isShared==true?_buildMainContent(
-                            context: context, post: post.mainPost!):_buildContent(
-                            context: context, post: post),
+                            context: context,
+                            user: isShared == true && post.mainPost != null
+                                ? post.mainPost?.user
+                                : post.user),
+                        isShared == true
+                            ? _buildMainContent(
+                                context: context, post: post.mainPost!)
+                            : _buildContent(context: context, post: post),
                       ],
                     ),
                   ),
@@ -163,7 +166,7 @@ class FacebookTweetCard extends StatelessWidget {
           ),
           if ((post.images?.isNotEmpty ?? false))
             SizedBox(
-              height: MediaQuery.of(context).size.height*0.42,
+              height: MediaQuery.of(context).size.height * 0.42,
               child: GridView.builder(
                   padding: const EdgeInsets.all(10),
                   shrinkWrap: true,
@@ -203,8 +206,9 @@ class FacebookTweetCard extends StatelessWidget {
                           children: [
                             Stack(
                               children: [
-                                ImageFromInternet(image: post.images?[index]??'',),
-
+                                ImageFromInternet(
+                                  image: post.images?[index] ?? '',
+                                ),
                                 if (index == 3 && post.images!.length > 4)
                                   Container(
                                     margin: const EdgeInsetsDirectional.only(
@@ -247,7 +251,7 @@ class FacebookTweetCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ReadMoreLabel(text: post.content??''),
+          ReadMoreLabel(text: post.content ?? ''),
           const SizedBox(
             height: 10,
           ),

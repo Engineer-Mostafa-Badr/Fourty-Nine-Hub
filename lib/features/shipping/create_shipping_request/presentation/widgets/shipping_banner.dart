@@ -35,7 +35,6 @@ class ShippingBanner extends StatelessWidget {
         children: [
           Column(
             children: [
-
               const Icon(
                 Icons.favorite_border,
                 color: AppColors.SECONDARY_COLOR,
@@ -61,7 +60,7 @@ class ShippingBanner extends StatelessWidget {
                 context.push(Routes.SHIPPING_REGISTER);
               } else {
                 context.push(Routes.SHIPPING_REGISTER);
-                // context.push(Routes.REGISTER);
+                // context.push(Routes.LOGIN);
               }
             },
             child: Text(

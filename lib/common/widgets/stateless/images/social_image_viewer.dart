@@ -26,9 +26,17 @@ class SocialImageViewer extends StatelessWidget {
       highlightColor: Colors.transparent,
       hoverColor: Colors.transparent,
       splashColor: Colors.transparent,
-      onTap: ()=>showDialog(context: context,builder: (context)=>ImageDetailsScreen(image: image, fromPost: true,isFile: false,onRemoveImage: (){
-        context.pop();
-      },),),
+      onTap: () => showDialog(
+        context: context,
+        builder: (context) => ImageDetailsScreen(
+          image: image,
+          fromPost: true,
+          isFile: false,
+          onRemoveImage: () {
+            context.pop();
+          },
+        ),
+      ),
       onDoubleTap: () => onDoubleTap != null ? onDoubleTap!() : null,
       child: SizedBox(
           height: height ?? kToolbarHeight * 3,
@@ -42,19 +50,20 @@ class SocialImageViewer extends StatelessWidget {
               //   ),
               // ),
               ImageFromInternet(image: image),
-              if(length>1)Positioned(
-                  top: 10,
-                  right: 10,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    // height: kToolbarHeight * .5,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.grey),
-                    child: Label(
-                        text: '$index/$length',
-                        style: Styles.mediumText(color: Colors.white)),
-                  ))
+              if (length > 1)
+                Positioned(
+                    top: 10,
+                    right: 10,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      // height: kToolbarHeight * .5,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.grey),
+                      child: Label(
+                          text: '$index/$length',
+                          style: Styles.mediumText(color: Colors.white)),
+                    ))
             ],
           )),
     );

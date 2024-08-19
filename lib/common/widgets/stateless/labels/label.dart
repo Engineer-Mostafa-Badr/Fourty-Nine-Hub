@@ -8,14 +8,13 @@ class Label extends StatelessWidget {
   final TextAlign? textAlign;
   final int? maxLines;
   final Color? color;
-  const Label({
-    super.key,
-    required this.text,
-    this.style,
-    this.textAlign,
-    this.maxLines,
-    this.color
-  });
+  const Label(
+      {super.key,
+      required this.text,
+      this.style,
+      this.textAlign,
+      this.maxLines,
+      this.color});
 
   @override
   Widget build(BuildContext context) {
