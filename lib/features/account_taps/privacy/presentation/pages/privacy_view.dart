@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../domain/entities/privacy_status_enum.dart';
 import '../widgets/privacy_muti_select_item.dart';

@@ -8,6 +8,7 @@ class HealthState {
   final List<BookedAppointmentEntity>? myBookings;
   final List<HealthSubcategoryEntity>? subCategories;
   final List<HealthSubcategoryEntity>? medicalServices;
+  final List<GovernorateEntity>? governorates;
   final MainCategoryEntity? mainCategory;
   final bool? isDoctor;
   const HealthState(
@@ -17,7 +18,9 @@ class HealthState {
       this.myBookings,
       this.isDoctor,
       this.subCategories,
-      this.medicalServices});
+      this.medicalServices,
+        this.governorates,
+      });
   HealthState copyWith({
     HealthStates? status,
     Failure? failure,
@@ -26,6 +29,7 @@ class HealthState {
     List<BookedAppointmentEntity>? myBookings,
     List<HealthSubcategoryEntity>? subCategories,
     List<HealthSubcategoryEntity>? medicalServices,
+    List<GovernorateEntity>? governorates,
   }) {
     return HealthState(
         status: status ?? this.status,
@@ -34,6 +38,8 @@ class HealthState {
         myBookings: myBookings ?? this.myBookings,
         mainCategory: mainCategory ?? this.mainCategory,
         isDoctor: isDoctor ?? this.isDoctor,
-        subCategories: subCategories ?? this.subCategories);
+        subCategories: subCategories ?? this.subCategories,
+      governorates: governorates ?? this.governorates,
+    );
   }
 }

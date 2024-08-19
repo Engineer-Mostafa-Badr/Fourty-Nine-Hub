@@ -1,15 +1,11 @@
 
-import 'package:flutter/gestures.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/confirm_password_text_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/password_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
@@ -20,11 +16,11 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
-import '../../../../common/widgets/stateless/appbar/back_appbar.dart';
-import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../common/widgets/stateless/buttons/default_button.dart';
-import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../core/error/failure.dart';
+import '../../../../core/localization/locales.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../controllers/login_cubit/login_cubit.dart';
@@ -117,11 +113,15 @@ class _LoginViewState extends State<LoginView> {
                                 });
                               },
                               active: selectedAuth == AuthType.LOGIN,
-                              text: "Login",
-                              borderRadius: const BorderRadius.only(
+                              text: LocaleKeys.login.localize,
+                              borderRadius:context.locale == Locales.english? const BorderRadius.only(
                                 topLeft: Radius.circular(50),
                                 bottomLeft: Radius.circular(50),
-                              )),
+                              ):const BorderRadius.only(
+                                topRight: Radius.circular(50),
+                                bottomRight: Radius.circular(50),
+                              ),
+                          ),
                           chooseAuthWidget(
                               onTap: () {
                                 setState(() {
@@ -129,11 +129,15 @@ class _LoginViewState extends State<LoginView> {
                                 });
                               },
                               active: selectedAuth == AuthType.REGISTER,
-                              text: "Register",
-                              borderRadius: const BorderRadius.only(
+                              text: LocaleKeys.register.localize,
+                              borderRadius:context.locale == Locales.english? const BorderRadius.only(
                                 topRight: Radius.circular(50),
                                 bottomRight: Radius.circular(50),
-                              )),
+                              ):const BorderRadius.only(
+                                topLeft: Radius.circular(50),
+                                bottomLeft: Radius.circular(50),
+                              ),
+                          ),
                         ],
                       ),
                       const SizedBox(
@@ -150,7 +154,7 @@ class _LoginViewState extends State<LoginView> {
                     alignment: Alignment.bottomCenter,
                     child: selectedAuth == AuthType.REGISTER
                         ? DefaultButton(
-                      label: 'Register',
+                      label: LocaleKeys.register.localize,
                       width: double.infinity,
                       onPressed: () {
                         if (registerCubit.accept) {
@@ -159,16 +163,16 @@ class _LoginViewState extends State<LoginView> {
                           showErrorMessage(
                               context,
                               getFailureMessage(
-                                  const ServerFailure(
+                                   ServerFailure(
                                       message:
-                                      "Please accept the terms and conditions to continue."),
+                                      LocaleKeys.terms.localize),
                                   context));
                         }
                       },
                     )
                         : DefaultButton(
                       width: double.infinity,
-                      label: 'Login',
+                      label: LocaleKeys.login.localize,
                       onPressed: loginCubit.login,
                     ),
                   )
@@ -233,7 +237,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           ),
           controller: widget.loginCubit.emailTextController,
           // label: 'E-mail or phone number',
-          hint: 'Email Or Phone',
+          hint: LocaleKeys.emailOrPhone.localize,
           prefix: const Icon(Icons.email, color: AppColors.QUANTITY_COLOR),
           action: (v) {},
         ),
@@ -250,7 +254,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           ),
           controller: widget.loginCubit.passwordTextController,
           // label: 'Password',
-          hint: "Password",
+          hint: LocaleKeys.password.localize,
           obsecure: obsecure,
           prefix: GestureDetector(
             onTap: () {
@@ -269,7 +273,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           children: [
             TextAppButton(
                 style: const TextStyle(color: Colors.red),
-                label: 'Forgot Password?',
+                label: '${LocaleKeys.forgetPassword.localize} ؟',
                 onPressed: () => context.push(Routes.FORGOTPASSWORD)),
           ],
         ),
@@ -388,7 +392,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   ),
                   controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
-                  hint: 'First Name',
+                  hint: LocaleKeys.firstName.localize,
                   prefix:
                   const Icon(Icons.person_2_rounded, color: AppColors.QUANTITY_COLOR),
                   action: (v) {},
@@ -406,7 +410,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   ),
                   controller: registerCubit.lastNameController,
                   // label: 'E-mail or phone number',
-                  hint: 'Last Name',
+                  hint: LocaleKeys.lastName.localize,
                   prefix:
                   const Icon(Icons.person_2_rounded, color: AppColors.QUANTITY_COLOR),
                   action: (v) {},
@@ -424,7 +428,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   ),
                   controller: registerCubit.emailTextController,
                   // label: 'E-mail or phone number',
-                  hint: 'Email Or Phone',
+                  hint: LocaleKeys.emailOrPhone.localize,
                   prefix: const Icon(Icons.email, color: AppColors.QUANTITY_COLOR),
                   action: (v) {},
                 ),
@@ -436,7 +440,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Flexible(
-                        child: Text('Gender',
+                        child: Text(LocaleKeys.gender.localize,
                             style: Styles.headerText(
                                 fontSize: 17,
                                 color: Theme.of(context).primaryColor,
@@ -456,10 +460,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                   isBordered: !registerCubit.isMale,
                                   color: registerCubit.isMale
                                       ? AppColors.PRIMARY_COLOR
-                                      : Colors.white,
+                                      : Colors.transparent,
                                   textColor: registerCubit.isMale
-                                      ? Colors.white
-                                      : Theme.of(context).scaffoldBackgroundColor,
+                                      ? AppColors.AUTH_CONTAINER_COLOR
+                                      : Theme.of(context).primaryColor,
                                   label: 'Male')),
                           const SizedBox(
                             width: 7,
@@ -475,10 +479,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                               isCentered: true,
                               isBordered: true,
                               textColor: registerCubit.isMale
-                                  ? Colors.black
-                                  : Theme.of(context).primaryColor,
+                                  ? Theme.of(context).primaryColor
+                                  : AppColors.AUTH_CONTAINER_COLOR,
                               color: registerCubit.isMale
-                                  ? Colors.white
+                                  ? Colors.transparent
                                   : AppColors.PRIMARY_COLOR,
                               label: 'Female',
                             ),
@@ -499,7 +503,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   ),
                   controller: registerCubit.passwordTextController,
                   // label: 'Password',
-                  hint: "Password",
+                  hint: LocaleKeys.password.localize,
                   obsecure: obsecure,
                   prefix: GestureDetector(
                     onTap: () {
@@ -527,7 +531,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   ),
                   controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
-                  hint: 'Referral Code(Optional)',
+                  hint: LocaleKeys.code.localize,
                   prefix: Container(
                     margin: const EdgeInsets.all(9),
                     width: 20,
@@ -553,12 +557,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "I Accept All",
+                      '${LocaleKeys.iAcceptAll.localize} ',
                       style: Styles.mediumText(
                           fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     Text(
-                      " Terms,Rules & Conditions",
+                      LocaleKeys.conditions.localize,
                       style: Styles.mediumText(
                           color: const Color(0xFF4898D6),
                           fontSize: 16,

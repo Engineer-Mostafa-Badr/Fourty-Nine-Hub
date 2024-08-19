@@ -6,12 +6,12 @@ import 'package:fourtyninehub/common/functions/global/loading_custom.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/chat_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/room/delete_message_body.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/delete_message_body.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import '../widgets/room/chat_room_app_bar.dart';
-import '../widgets/room/send_message_widget.dart';
+import '../widgets/chat_room_app_bar.dart';
+import '../widgets/send_message_widget.dart';
 
 class ChatRoom extends StatefulWidget {
   final String? chatId;

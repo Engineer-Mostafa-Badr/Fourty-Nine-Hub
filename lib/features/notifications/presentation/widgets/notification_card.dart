@@ -16,7 +16,6 @@ class NotificationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(5),
-      decoration: const BoxDecoration(color: Colors.white),
       child: Row(
         children: [
           const SizedBox(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import '../banners/back_appbar.dart';
 
 class WebViewScaffold extends StatefulWidget {
   final String url;

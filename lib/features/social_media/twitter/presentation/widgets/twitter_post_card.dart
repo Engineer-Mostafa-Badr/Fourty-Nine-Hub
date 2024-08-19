@@ -76,7 +76,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
   Widget build(BuildContext context) {
     bool isShared = widget.post.isShared!;
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration:  BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
       child: Container(
         padding: EdgeInsets.all(isShared == true ? 10 : 0),
         decoration: const BoxDecoration(color: Colors.white),
@@ -514,9 +514,9 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               if (post.user.isDocumented == true && post.isShared == false ||
                   (post.mainPost?.user.isDocumented == true &&
                       post.isShared == true))
-                const Icon(
+                 Icon(
                   Icons.verified,
-                  color: AppColors.PRIMARY_COLOR,
+                  color: Theme.of(context).primaryColor,
                 ),
               const Sizer(),
               SizedBox(

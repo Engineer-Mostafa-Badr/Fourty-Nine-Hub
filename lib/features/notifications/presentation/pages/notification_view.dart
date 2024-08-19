@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/notifications/data/models/notification_model.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_card.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 
 import '../../../../res/assets/assets.dart';
@@ -36,6 +37,9 @@ class NotificationView extends StatelessWidget {
                       style: Styles.headerText(),
                     ),
                     TextAppButton(
+                      style: const TextStyle(
+                        color: AppColors.SECONDARY_COLOR
+                      ),
                         label: 'Clear All',
                         onPressed: () {
                           showAreYouSure(

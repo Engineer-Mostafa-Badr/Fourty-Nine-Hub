@@ -6,6 +6,8 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
@@ -16,6 +18,7 @@ import 'package:go_router/go_router.dart';
 
 class HealthMedicalServiceCard extends StatelessWidget {
   final HealthSubcategoryEntity subCategory;
+
   const HealthMedicalServiceCard({super.key, required this.subCategory});
 
   @override
@@ -60,7 +63,9 @@ class HealthMedicalServiceCard extends StatelessWidget {
                           icon: subCategory.isFavorite
                               ? Icons.favorite
                               : Icons.favorite_border,
-                          color: ThemeCubit.get(context).isDarkTheme?AppColors.QUANTITY_COLOR:AppColors.PRIMARY_COLOR_DARK,
+                          color: ThemeCubit.get(context).isDarkTheme
+                              ? AppColors.QUANTITY_COLOR
+                              : AppColors.PRIMARY_COLOR_DARK,
                           onPressed: () {
                             context
                                 .read<HealthCubit>()
@@ -80,7 +85,8 @@ class HealthMedicalServiceCard extends StatelessWidget {
                       style: Styles.mediumText(fontWeight: FontWeight.bold),
                     ),
                     Label(
-                      text: '${subCategory.numberOfContent.toShortScale} ads',
+                      text:
+                          '${subCategory.numberOfContent.toShortScale} ${LocaleKeys.ads.localize}',
                       style: Styles.mediumText(),
                     ),
                   ],

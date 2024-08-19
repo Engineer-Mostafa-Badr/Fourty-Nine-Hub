@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/entities/
 import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/select_activity_view.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/show_all_images.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
@@ -91,11 +92,12 @@ class _CreatePostViewState extends State<CreatePostView> {
         builder: (context, state) {
       return Container(
           padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              color: Color(int.parse(state.backColor.substring(1), radix: 16))),
           child: TextField(
             maxLines: 4,
             maxLength: 150,
+            style: const TextStyle(
+              color: AppColors.QUANTITY_COLOR
+            ),
             onChanged: (c) {
               if (c.length == 150) {
                 showErrorMessage(
@@ -104,7 +106,9 @@ class _CreatePostViewState extends State<CreatePostView> {
             },
             controller:
                 context.read<CreatePostCubit>().postContentTextController,
-            decoration: const InputDecoration(hintText: 'Type Here ... '),
+            decoration: const InputDecoration(hintText: 'Type Here ... ',hintStyle: TextStyle(
+              color: AppColors.QUANTITY_COLOR
+            ),fillColor: Colors.white),
           ));
     });
   }
@@ -117,20 +121,17 @@ class _CreatePostViewState extends State<CreatePostView> {
           padding: const EdgeInsets.all(10),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: state.images!.length == 1 ? 1 : 2),
-          itemCount:
-              state.images!.length < 4 ? state.images!.length : 4,
+          itemCount: state.images!.length < 4 ? state.images!.length : 4,
           itemBuilder: (context, index) => InkWell(
                 onTap: () {
-                  if (index != 3 ||
-                      (index == 3 && state.images!.length == 4)) {
+                  if (index != 3 || (index == 3 && state.images!.length == 4)) {
                     showDialog(
                         context: context,
                         builder: (context) => ImageDetailsScreen(
                               image: state.images![index].file.path,
                               isFile: true,
                               onRemoveImage: () {
-                                controller
-                                    .removePhoto(state.images![index]);
+                                controller.removePhoto(state.images![index]);
                                 context.pop();
                               },
                             ));

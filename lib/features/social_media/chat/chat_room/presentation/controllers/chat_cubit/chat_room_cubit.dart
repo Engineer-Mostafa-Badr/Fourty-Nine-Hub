@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/file_picker_helper.dart';
+import 'package:fourtyninehub/common/widgets/stateful/picker/image_picker.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
@@ -14,6 +17,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entiti
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/deleteMessage_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/getChatMessages_usecase.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'chat_view_state.dart';
 
@@ -30,6 +34,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   String? userToken;
   String? userId;
   String? chatId;
+  final ImagePicker _imagePicker = ImagePicker();
+  final FilePicker _filePicker = FilePicker.platform;
 
   ChatRoomCubit(
     this._getTokensUseCase,
@@ -159,6 +165,48 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         DeleteMessageParams(chatId: chatId, messageId: messageId);
     await _deleteChatMessageUseCase.call(deleteMessageParams);
     getChatMessages(chatId);
+  }
+
+  Future<void> pickDocuments() async {
+    try {
+      // Pick document files only
+      FilePickerResult? result = await _filePicker.pickFiles(
+        type: FileType.custom,
+        allowMultiple: true,
+        allowedExtensions: [
+          'doc',
+          'docx',
+          'pdf',
+          'txt',
+          'xls',
+          'xlsx',
+          'ppt',
+          'pptx'
+        ],
+      );
+
+      if (result != null) {
+        // File picked successfully
+
+        for (var file in result.files) {
+          debugPrint('Picked file: ${file.name}');
+        }
+        // Handle the file (e.g., upload, read, etc.)
+      } else {
+        // User canceled the picker
+        debugPrint('File picking canceled');
+      }
+    } catch (e) {
+      debugPrint('Error picking file: $e');
+    }
+  }
+
+  Future<void> pickFromCamera() async {
+    try {
+     _imagePicker.pickImage(source: ImageSource.gallery);
+    } catch (e) {
+      debugPrint('Error picking file: $e');
+    }
   }
 
   @override

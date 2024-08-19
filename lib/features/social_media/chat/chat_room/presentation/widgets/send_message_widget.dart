@@ -416,11 +416,13 @@
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/room/Attachment_types.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/room/emoji_keyboard.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/Attachment_types.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/emoji_keyboard.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:social_media_recorder/screen/social_media_recorder.dart';
 
@@ -548,7 +550,11 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
         color: Colors.grey,
       ),
       onPressed: () {
-        bottomSheet(context: context, widget: const AttachmentTypes());
+        bottomSheet(
+            context: context,
+            widget: AttachmentTypes(
+              chatRoomCubit: context.read<ChatRoomCubit>(),
+            ));
       },
     );
   }
