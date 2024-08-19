@@ -19,11 +19,16 @@
   "ride": "توصيله",
   "lang": "EN",
   "search": "بحث",
-  "message":"مرسالة",
-  "send":"ارسال",
-  "cancel":"الغاء",
-  "delete":"حذف",
-  "yes":"نعم",
-  "no":"لا",
-  "sendTo":"ارسال الى"
+  "message": "مرسالة",
+  "send": "ارسال",
+  "cancel": "الغاء",
+  "delete": "حذف",
+  "yes": "نعم",
+  "no": "لا",
+  "sendTo": "ارسال الى",
+  "document": "وثيقه",
+  "camera": "كاميرا",
+  "gallery": "معرض",
+  "location": "موقع",
+  "contact": "جهة اتصال"
 }

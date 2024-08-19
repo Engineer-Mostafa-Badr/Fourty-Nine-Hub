@@ -19,11 +19,16 @@
   "ride": "Ride",
   "lang": "ع",
   "search": "Search",
-  "message":"Message",
-  "send":"Send",
-  "cancel":"Cancel",
-  "delete":"Delete",
-  "yes":"Yes",
-  "no":"No",
-  "sendTo":"Send To"
+  "message": "Message",
+  "send": "Send",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "yes": "Yes",
+  "no": "No",
+  "sendTo": "Send To",
+  "document": "Document",
+  "camera": "Camera",
+  "gallery": "Gallery",
+  "location": "Location",
+  "contact": "Contact"
 }

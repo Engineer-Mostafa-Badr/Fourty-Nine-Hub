@@ -13,21 +13,25 @@ class AttachmentTypes extends StatelessWidget {
           const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
       children: [
         _buildAttachmentTypeItem(
-            color: Colors.purple, label: 'Document', icon: Icons.file_copy),
+            color: Colors.purple,
+            label: 'Document',
+            icon: Icons.insert_drive_file_outlined),
         _buildAttachmentTypeItem(
             color: Colors.redAccent, label: 'Camera', icon: Icons.camera_alt),
         _buildAttachmentTypeItem(
-            color: Colors.purpleAccent, label: 'Gallery', icon: Icons.image),
+            color: Colors.purpleAccent,
+            label: 'Gallery',
+            icon: Icons.image_outlined),
         _buildAttachmentTypeItem(
-            color: Colors.orange,
+            color: Colors.orange[600]!,
             label: 'Audio',
-            icon: Icons.audio_file_outlined),
+            icon: Icons.headphones_rounded),
         _buildAttachmentTypeItem(
-            color: Colors.greenAccent,
+            color: Colors.green,
             label: 'Location',
             icon: Icons.location_on_rounded),
         _buildAttachmentTypeItem(
-            color: Colors.blue, label: 'Contact', icon: Icons.person),
+            color: Colors.lightBlue, label: 'Contact', icon: Icons.person),
       ],
     );
   }
