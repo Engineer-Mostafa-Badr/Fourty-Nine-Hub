@@ -565,33 +565,34 @@ class _ZegoLiveStreamingPreviewPageState
                   color: Colors.grey,
                   height: 1,
                 ),
-                ValueListenableBuilder<bool>(
-                  valueListenable: usePersonalIdNotifier,
-                  builder: (BuildContext context, bool value, Widget? child) {
-                    return SwitchListTile(
-                      title: const Expanded(
-                        child: Text(
-                          "Use personal meeting ID (PMI)",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                      ),
-                      subtitle: Text(
-                        widget.liveID,
-                        style:
-                            const TextStyle(color: Colors.grey, fontSize: 20),
-                      ),
-                      value: value,
-                      onChanged: (v) {
-                        usePersonalIdNotifier.value = v;
-                        print('use id notifier ${usePersonalIdNotifier.value}');
-                      },
-                      activeColor: Colors.white,
-                      activeTrackColor: Colors.red,
-                    );
-                  },
-                ),
+                // ValueListenableBuilder<bool>(
+                //   valueListenable: usePersonalIdNotifier,
+                //   builder: (BuildContext context, bool value, Widget? child) {
+                //     return SwitchListTile(
+                //       title: const Expanded(
+                //         child: Text(
+                //           "Use personal meeting ID (PMI)",
+                //           maxLines: 1,
+                //           overflow: TextOverflow.ellipsis,
+                //           style: TextStyle(color: Colors.white, fontSize: 18),
+                //         ),
+                //       ),
+                //       subtitle: Text(
+                //         widget.liveID,
+                //         style:
+                //             const TextStyle(color: Colors.grey, fontSize: 20),
+                //       ),
+                //       value: value,
+                //       onChanged: (v) {
+                //         usePersonalIdNotifier.value = v;
+                //         print('use id notifier ${usePersonalIdNotifier.value}');
+                //       },
+                //       activeColor: Colors.white,
+                //       activeTrackColor: Colors.red,
+                //     );
+                //   },
+                // ),
+             
               ],
             ),
           ),

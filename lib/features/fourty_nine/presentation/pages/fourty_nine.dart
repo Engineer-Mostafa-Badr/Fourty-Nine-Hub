@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -194,7 +195,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         baseColor: Colors.grey[100]!,
                         highlightColor: Colors.white24,
                         child: Container(
-                          width: 100,
+                          width: 100.zW,
                           height: kToolbarHeight * 1.3,
                           margin: const EdgeInsets.symmetric(horizontal: 5),
                           padding: const EdgeInsets.symmetric(horizontal: 5),
