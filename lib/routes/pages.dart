@@ -24,6 +24,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/presentatio
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/create_resturant_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
@@ -84,6 +85,7 @@ import 'package:fourtyninehub/features/subcategories/presentation/pages/subcateg
 import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_location_cordinates_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/presentation/views/avaiable_trips_view.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/trip_join_view.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/meeting_dialogue.dart';
@@ -114,7 +116,6 @@ import '../features/authentication/presentation/pages/forgot_password/enter_emai
 import '../features/authentication/presentation/pages/forgot_password/forget_password_otp_verification_view.dart';
 import '../features/authentication/presentation/pages/login_view.dart';
 import '../features/authentication/presentation/pages/register/register_verify_otp.dart';
-import '../features/authentication/presentation/pages/register/register_view.dart';
 import '../features/azkaar/presentation/pages/azkar_view.dart';
 import '../features/competition/presentation/pages/competition_view.dart';
 import '../features/competition/presentation/pages/winners.dart';
@@ -169,8 +170,6 @@ import '../features/zoom/presentation/pages/meeting_room.dart';
 import '../features/zoom/presentation/pages/meeting_view.dart';
 import '../service_locator/service_locator.dart';
 import 'routes.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
-
 
 class AppPages {
   AppPages._();
@@ -266,7 +265,9 @@ class AppPages {
                 create: (_) => serviceLocator<WalletCubit>(),
               ),
             ],
-            child: LoginView(authType: AuthType.LOGIN,),
+            child: LoginView(
+              authType: AuthType.LOGIN,
+            ),
           ),
         ),
         GoRoute(
@@ -313,7 +314,9 @@ class AppPages {
                 create: (_) => serviceLocator<RegisterCubit>(),
               ),
             ],
-            child: LoginView(authType: AuthType.REGISTER,),
+            child: LoginView(
+              authType: AuthType.REGISTER,
+            ),
           ),
           routes: [
             GoRoute(
@@ -968,7 +971,12 @@ class AppPages {
             child: const TripJoinView(),
           ),
         ),
-
+        // ___________________ Available Trips ______________
+        GoRoute(
+          path: Paths.AVAILABLE_TRIPS,
+          name: Routes.AVAILABLE_TRIPS,
+          builder: (context, state) => const AvailableTripsView(),
+        ),
       ],
     ),
   ]);

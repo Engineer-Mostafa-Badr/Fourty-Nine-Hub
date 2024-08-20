@@ -23,35 +23,60 @@ class _TripJoinGoogleMapState extends State<TripJoinGoogleMap> {
   List<Marker> markers = [];
   @override
   Widget build(BuildContext context) {
-    final startingCubit = context.watch<StartingLocationCubit>();
-    final destinationCubit = context.watch<DestinationLocationCubit>();
-    markers = _getMarkers(startingCubit, destinationCubit);
-    _animateToMarkers();
-    return SizedBox(
-      width: double.infinity,
-      height: 400,
-      child: GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition: markers.isEmpty ? _egyptLocation : CameraPosition(target: markers[0].position),
-        onMapCreated: (GoogleMapController controller) {
-          _googleMapController.complete(controller);
-        },
-        zoomControlsEnabled: true,
-        zoomGesturesEnabled: true,
-        myLocationEnabled: true,
-        myLocationButtonEnabled: true,
-        markers: markers.toSet(),
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<StartingLocationCubit, StartingLocationState>(
+          listener: (context, state) {
+            if (state is StartingLocationSuccess) {
+              Future.delayed(const Duration(seconds: 1)).then(
+                (value) => _animateToMarkers(state),
+              );
+            }
+          },
+        ),
+        BlocListener<DestinationLocationCubit, DestinationLocationState>(
+          listener: (context, state) {
+            if (state is DestinationLocationSuccess) {
+              Future.delayed(const Duration(seconds: 1)).then(
+                (value) => _animateToMarkers(state),
+              );
+            }
+          },
+        ),
+      ],
+      child: SizedBox(
+        width: double.infinity,
+        height: 400,
+        child: Builder(builder: (context) {
+          final startingCubit = context.watch<StartingLocationCubit>();
+          final destinationCubit = context.watch<DestinationLocationCubit>();
+          markers = _getMarkers(startingCubit, destinationCubit);
+          return GoogleMap(
+            mapType: MapType.normal,
+            initialCameraPosition: markers.isEmpty ? _egyptLocation : CameraPosition(target: markers[0].position),
+            onMapCreated: (GoogleMapController controller) {
+              _googleMapController.complete(controller);
+            },
+            zoomControlsEnabled: true,
+            zoomGesturesEnabled: true,
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
+            markers: markers.toSet(),
+          );
+        }),
       ),
     );
   }
 
-  void _animateToMarkers() {
-    if (markers.length == 2) {
-      _animateTo(markers[1].position);
+  void _animateToMarkers(var state) {
+    double lat = 0;
+    double long = 0;
+    if (state is StartingLocationSuccess || state is DestinationLocationSuccess) {
+      lat = state.locationEntity.coordinates?[0]?.toDouble() ?? 0;
+      long = state.locationEntity.coordinates?[1]?.toDouble() ?? 0;
     }
-    if (markers.isNotEmpty) {
-      _animateTo(markers[0].position);
-    }
+
+    _animateTo(LatLng(lat, long));
   }
 
   Future<void> _animateTo(LatLng latLng) async {

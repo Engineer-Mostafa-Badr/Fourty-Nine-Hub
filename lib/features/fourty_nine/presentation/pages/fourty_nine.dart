@@ -24,17 +24,11 @@ import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/dynamic/wallet_widget.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
-
 import '../../../../core/enums/ride_services_enum.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../common/widgets/dynamic/wallet_widget.dart';
-import '../../../../res/style/app_colors.dart';
-
 import '../widgets/announce_widget.dart';
 
 class FourtyNineView extends StatefulWidget {
@@ -82,8 +76,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           _buildMainCategoriesViews(),
           const Sizer(),
           //main cats
-          BlocBuilder<MainCategoriesCubit,
-              BasicState<List<MainCategoryEntity>>>(
+          BlocBuilder<MainCategoriesCubit, BasicState<List<MainCategoryEntity>>>(
             builder: (context, state) {
               if (state.isLoading) {
                 return Shimmer.fromColors(
@@ -96,8 +89,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                               height: 100,
                               width: double.infinity,
                               margin: const EdgeInsets.symmetric(horizontal: 5),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 5),
+                              padding: const EdgeInsets.symmetric(horizontal: 5),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10),
@@ -115,14 +107,12 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
-                        context.push(Routes.SUBCATEGORIES,
-                            extra: state.data![index]);
+                        context.push(Routes.SUBCATEGORIES, extra: state.data![index]);
                       },
                       child: MainCategoryBanner(category: state.data![index]),
                     );
                   },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Sizer(),
+                  separatorBuilder: (BuildContext context, int index) => const Sizer(),
                 );
               } else {
                 return const SizedBox.shrink();
@@ -183,8 +173,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     );
   }
 
-  BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-      _pickMeAndComeWithUWidget() {
+  BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>> _pickMeAndComeWithUWidget() {
     return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
       builder: (context, state) {
         if (state.status == StateStatus.loading) {
@@ -223,7 +212,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 child: _buildRideSubCategoryItem(
                   service: state.data![1].service,
                   image: state.data![1].image,
-                  route: Routes.TRIP_JOIN,
+                  route: Routes.AVAILABLE_TRIPS,
                 ),
               )
             ],
@@ -258,10 +247,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     child: AppButton(
                         color: Colors.white,
                         label: LocaleKeys.auction.tr(),
-                        style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                        style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white),
                         icon: Icons.group,
                         iconSize: 22,
                         onPressed: () => context.push(Routes.MAZADAT)),
@@ -302,10 +288,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               color: Colors.white,
               height: kToolbarHeight * .5,
               label: LocaleKeys.installments.tr(),
-              style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
+              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white),
               icon: Icons.list,
               iconSize: 22,
               onPressed: () => context.push(Routes.INSTALLMENT)),
@@ -351,8 +334,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                       url: image,
                     ),
                     Container(
-                      color: Colors.black
-                          .withOpacity(0.3), // Darken the background
+                      color: Colors.black.withOpacity(0.3), // Darken the background
                     ),
                   ],
                 ),
@@ -381,8 +363,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                       ),
                       Label(
                         text: '4 ${LocaleKeys.Ads.tr()}',
-                        style: Styles.mediumText(
-                            color: Colors.white, fontSize: 15),
+                        style: Styles.mediumText(color: Colors.white, fontSize: 15),
                       ),
                     ],
                   ),
