@@ -104,9 +104,8 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     emit(state.copyWith(selectedActivity: item));
   }
 
-  uploadPhoto() async{
+  uploadPhoto() async {
     final UploadFile upload = UploadFile();
-    print("objectName11111");
     await upload.uploadImage(
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) {
@@ -116,18 +115,16 @@ class CreatePostCubit extends Cubit<CreatePostState> {
           final images = state.images ?? [];
 
           images.add(data);
-          selectedImages = images.map((e) => e.mediaId).toList();
+          selectedImages=images.map((e)=>e.mediaId).toList();
           print("selectedImages${selectedImages?.length}");
-          print("images${images.length}");
           print(images.length);
           emit(state.copyWith(
-              images: images,
-              backColor: '#FFFFFFFF',
-              status: CreatePostStates.success));
-        }
-        );
+              images: images,backColor: '#FFFFFFFF', status: CreatePostStates.success));
+        });
     print("length${state.images?.length}");
+
   }
+
 
   removePhoto(UploadFileEntity? image) {
     final images = state.images;
