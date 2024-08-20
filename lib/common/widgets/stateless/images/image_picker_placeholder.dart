@@ -1,15 +1,13 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ImagePickerPlaceholder extends StatelessWidget {
   final String? tilte;
   final double? height;
   final double? width;
-  final XFile? image;
+  final Widget? image;
   final Color? iconColor;
   final Color? borderColor;
   const ImagePickerPlaceholder(
@@ -47,8 +45,9 @@ class ImagePickerPlaceholder extends StatelessWidget {
           _buildTitle(),
         ],
       );
+    } else {
+      return image!;
     }
-    return Image.file(File(image!.path));
   }
 
   Widget _buildTitle() {

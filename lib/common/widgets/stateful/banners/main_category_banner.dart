@@ -16,14 +16,12 @@ class MainCategoryBanner extends StatefulWidget {
   final bool canRegister;
   final Function()? onRegister;
   final bool? Function()? onFavorite;
-  final Color? color;
 
   const MainCategoryBanner({
     super.key,
     this.canRegister = false,
     this.onRegister,
     required this.category,
-    this.color = Colors.white,
     this.onFavorite,
   });
 
@@ -108,7 +106,9 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                     ),
                     const Sizer(height: 20),
                     Label(
-                      text: '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
+                      text: widget.category.total.toShortScale == '1'
+                          ? '${widget.category.total.toShortScale} ${LocaleKeys.ad.localize}'
+                          : '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
                       style: Styles.mediumText(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,

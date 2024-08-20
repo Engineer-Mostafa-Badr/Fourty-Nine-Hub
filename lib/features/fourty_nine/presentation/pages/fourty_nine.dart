@@ -380,7 +380,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         height: 20,
                       ),
                       Label(
-                        text: '4 ${LocaleKeys.Ads.tr()}',
+                        text: '4 ${LocaleKeys.ads.tr()}',
                         style: Styles.mediumText(
                             color: Colors.white, fontSize: 15),
                       ),

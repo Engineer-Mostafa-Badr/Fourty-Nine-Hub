@@ -471,6 +471,12 @@ class EndPoints {
     return '/chat/update-lock-chat';
   }
 
-  // trip join gecoding google api url
-  static String geocodingUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
+  static String getChatGroups = '/chat/group/get-groups/';
+  static String seenHistoryEndpoint(String chatId) {
+    return '/chat/last-seen-logs/$chatId';
+  }
+
+  static String geocodingUrl =
+      'https://maps.googleapis.com/maps/api/geocode/json';
+
 }

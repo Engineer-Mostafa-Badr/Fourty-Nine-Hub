@@ -33,6 +33,7 @@ pubspec.lock
 .pub/
 /build/
 *.lock
+*.g.dart
 
 # Symbolication related
 app.*.symbols
