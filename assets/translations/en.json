@@ -63,5 +63,7 @@
   "conditions": "Terms,Rules & Conditions",
   "iAcceptAll": "I Accept All",
   "terms": "Please accept the terms and conditions to continue.",
-  "message":"Message"
+  "message":"Message",
+  "photo":"Photo",
+  "video":"Video"
 }

@@ -79,7 +79,9 @@ class CodegenLoader extends AssetLoader{
   "conditions": "الشروط والأحكام",
   "iAcceptAll": "أوافق على جميع",
   "terms": "يرجى قبول الشروط والأحكام للمواصلة.",
-  "message": "مراسلة"
+  "message": "مراسلة",
+  "photo": "صوره",
+  "video": "فيديو"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -146,7 +148,9 @@ static const Map<String,dynamic> en = {
   "conditions": "Terms,Rules & Conditions",
   "iAcceptAll": "I Accept All",
   "terms": "Please accept the terms and conditions to continue.",
-  "message": "Message"
+  "message": "Message",
+  "photo": "Photo",
+  "video": "Video"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

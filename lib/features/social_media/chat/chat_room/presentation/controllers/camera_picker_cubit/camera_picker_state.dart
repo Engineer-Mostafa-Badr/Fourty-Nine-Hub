@@ -1,20 +1,25 @@
 part of 'camera_picker_cubit.dart';
 
 enum CameraPickerStatus {
-  init,
-  showCameraPreview,
+  notInitialized,
+  initialized,
+  updateCameraView,
   showPhotoButton,
   showStartVideoButton,
   showStopVideoButton,
   toggleFlashMode,
+  updateMediaList,
 }
 
 class CameraPickerState {
   final CameraPickerStatus status;
   final CameraController? controller;
+  final List<XFile> mediaList;
+
   CameraPickerState({
-    this.status = CameraPickerStatus.init,
+    this.status = CameraPickerStatus.notInitialized,
     this.controller,
+    this.mediaList = const [],
   });
 
   CameraPickerState copyWith({
