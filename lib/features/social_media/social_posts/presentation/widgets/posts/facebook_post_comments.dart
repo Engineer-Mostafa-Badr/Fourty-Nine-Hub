@@ -123,7 +123,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                     Expanded(
                         child: FormTextField(
                             hint: 'Type your comment ....',
-                            height: kToolbarHeight * .7,
+                            // height: kToolbarHeight * .7,
                             action: (v) {
                               setState(() {});
                             },

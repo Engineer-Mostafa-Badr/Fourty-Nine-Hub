@@ -96,6 +96,10 @@ class _CreatePostViewState extends State<CreatePostView> {
         builder: (context, state) {
           return Container(
               padding: const EdgeInsets.all(10),
+              color: state.backColor.isNotEmpty
+                  ? Color(int.parse(state.backColor.substring(1),
+                  radix: 16))
+                  : Colors.white,
               child: TextField(
                 maxLines: 4,
                 maxLength: 150,

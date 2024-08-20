@@ -15,12 +15,14 @@ class ReplyCard extends StatefulWidget {
   final Function(String) onReplyReact;
   final Function(String) onDeleteReply;
   final Function(TwitterReportParams) onReport;
+
   const ReplyCard({
     super.key,
     this.textColor = Colors.black,
     required this.reply,
     required this.onReplyReact,
-    required this.onReport, required this.onDeleteReply,
+    required this.onReport,
+    required this.onDeleteReply,
   });
 
   @override
@@ -38,7 +40,9 @@ class _ReplyCardState extends State<ReplyCard> {
             ProfileImage(
               accountId: 0,
               withBorder: false,
-              imageURL: widget.reply.user.image.isNotEmpty?widget.reply.user.image:null,
+              imageURL: widget.reply.user.image.isNotEmpty
+                  ? widget.reply.user.image
+                  : null,
             ),
             const Sizer(),
             Expanded(
@@ -59,8 +63,8 @@ class _ReplyCardState extends State<ReplyCard> {
                   bottomSheet(
                       context: context,
                       widget: ReportView(
-                        id: widget.reply.id, categoryId: '66a3583454e6e337915514db',
-
+                        id: widget.reply.id,
+                        categoryId: '66a3583454e6e337915514db',
                       ));
                 },
                 child: Icon(
@@ -79,9 +83,8 @@ class _ReplyCardState extends State<ReplyCard> {
           ],
         ),
         const Sizer(),
-        Label(
-          textAlign: TextAlign.start,
-          text: widget.reply.content,
+        Text(
+          widget.reply.content,
           style: Styles.mediumText(color: widget.textColor),
         ),
         Row(
@@ -89,7 +92,7 @@ class _ReplyCardState extends State<ReplyCard> {
           children: [
             BuildReactionsButtons(
               post: widget.reply,
-                from: 'comments',
+              from: 'comments',
             ),
           ],
         ),

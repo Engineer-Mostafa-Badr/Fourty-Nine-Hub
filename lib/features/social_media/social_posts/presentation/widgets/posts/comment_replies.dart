@@ -118,7 +118,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                     Expanded(
                         child: FormTextField(
                             hint: 'Type your reply ....',
-                            height: kToolbarHeight * .7,
+                            // height: kToolbarHeight * .7,
                             action: (v) {
                               setState(() {});
                             },

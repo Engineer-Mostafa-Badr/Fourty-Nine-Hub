@@ -23,7 +23,13 @@ class CommentCard extends StatelessWidget {
   final Function(String) onDeleteReply;
 
   const CommentCard(
-      {super.key, this.textColor = Colors.black, required this.comment, required this.onAddReply, required this.onDeleteComment, required this.onDeleteReply, required this.from});
+      {super.key,
+      this.textColor = Colors.black,
+      required this.comment,
+      required this.onAddReply,
+      required this.onDeleteComment,
+      required this.onDeleteReply,
+      required this.from});
 
   @override
   Widget build(BuildContext context) {
@@ -35,22 +41,23 @@ class CommentCard extends StatelessWidget {
             ProfileImage(
               accountId: 0,
               withBorder: false,
-              imageURL: comment.user.image.isNotEmpty?comment.user.image:null,
+              imageURL:
+                  comment.user.image.isNotEmpty ? comment.user.image : null,
             ),
             const Sizer(),
             Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Label(
-                        text: comment.user.firstName,
-                        style: Styles.mediumText(
-                            fontWeight: FontWeight.bold, color: textColor)),
-                    Label(
-                        text: comment.sinceTime,
-                        style: Styles.mediumText(color: textColor)),
-                  ],
-                )),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Label(
+                    text: comment.user.firstName,
+                    style: Styles.mediumText(
+                        fontWeight: FontWeight.bold, color: textColor)),
+                Label(
+                    text: comment.sinceTime,
+                    style: Styles.mediumText(color: textColor)),
+              ],
+            )),
             GestureDetector(
                 onTap: () {
                   bottomSheet(
@@ -66,7 +73,7 @@ class CommentCard extends StatelessWidget {
                 )),
             const Sizer(),
             GestureDetector(
-                onTap: (){
+                onTap: () {
                   onDeleteComment(comment.id);
                 },
                 child: Icon(
@@ -77,9 +84,10 @@ class CommentCard extends StatelessWidget {
           ],
         ),
         const Sizer(),
-        Label(
-          textAlign: TextAlign.start,
-          text: comment.content,
+        Text(
+
+           comment.content,
+
           style: Styles.mediumText(color: textColor),
         ),
         Row(
@@ -108,11 +116,16 @@ class CommentCard extends StatelessWidget {
                       context: context,
                       isScrollControlled: true,
                       widget: BlocProvider.value(
-                        value: serviceLocator<SocialPostsCubit>()..loadReplies(context,comment.id),
+                        value: serviceLocator<SocialPostsCubit>()
+                          ..loadReplies(context, comment.id),
                         child: CommentReplies(
                           replies: const [],
-                          postId: comment.post, commentId: comment.id,
-                          onAddReply: (ReplyOnCommentParams params) =>onAddReply(params), onDeleteReply: (String id)=>onDeleteReply(id), from: from,
+                          postId: comment.post,
+                          commentId: comment.id,
+                          onAddReply: (ReplyOnCommentParams params) =>
+                              onAddReply(params),
+                          onDeleteReply: (String id) => onDeleteReply(id),
+                          from: from,
                         ),
                       ));
                 })
