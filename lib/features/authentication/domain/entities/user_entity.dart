@@ -31,11 +31,11 @@ class UserEntity extends Equatable {
     required this.friendsCount,
     required this.followersCount,
     required this.followingCount,
-    this.isRider=false,
-    this.isDoctor=false,
-    this.isRestaurant=false,
-    this.isLoading=false,
-    this.isDocument=false,
+    this.isRider = false,
+    this.isDoctor = false,
+    this.isRestaurant = false,
+    this.isLoading = false,
+    this.isDocument = false,
   });
 
   @override

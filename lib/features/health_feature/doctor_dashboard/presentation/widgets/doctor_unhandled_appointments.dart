@@ -67,7 +67,8 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
                 return Center(
                     child: Text(
                   'No Appointments',
-                  style: Styles.headerText(color: Theme.of(context).scaffoldBackgroundColor),
+                  style: Styles.headerText(
+                      color: Theme.of(context).scaffoldBackgroundColor),
                 ));
               }
             },

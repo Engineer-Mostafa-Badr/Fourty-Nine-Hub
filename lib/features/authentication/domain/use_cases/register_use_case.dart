@@ -5,6 +5,8 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/utils/fcm.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
 
+import '../../../../core/utils/device_id.dart';
+
 class RegisterUseCase extends UseCase<void, RegisterParams> {
   final AuthRepository _repository;
 
@@ -41,7 +43,7 @@ class RegisterParams extends Equatable {
         'confirmPassword': confirmPassword,
         'gender': isMale ? 'male' : 'female',
         'fcm': await getFcmToken(),
-        // 'deviceId': await getDeviceId(),
+        'deviceId': await getDeviceId(),
       };
 
   @override

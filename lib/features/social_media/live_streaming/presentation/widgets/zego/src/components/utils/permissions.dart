@@ -11,7 +11,6 @@ import 'package:zego_uikit/zego_uikit.dart';
 
 // Project imports:
 
-
 /// @nodoc
 Future<void> checkPermissions({
   required BuildContext context,

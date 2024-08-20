@@ -8,8 +8,7 @@ class ZegoResponseEntity extends Equatable {
     required this.roomId,
     required this.status,
   });
-  
 
   @override
-  List<Object> get props => [roomId,status];
+  List<Object> get props => [roomId, status];
 }

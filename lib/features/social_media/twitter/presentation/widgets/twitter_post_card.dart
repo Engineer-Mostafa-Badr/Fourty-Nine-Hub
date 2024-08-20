@@ -99,21 +99,23 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InkWell(
-                    onTap: widget.post.isShared==true?() {
-                      print("objectH");
-                      // context.push(Routes.TWITTERPOSTDETAILS,extra: widget.post.mainPost.id);
+                    onTap: widget.post.isShared == true
+                        ? () {
+                            print("objectH");
+                            // context.push(Routes.TWITTERPOSTDETAILS,extra: widget.post.mainPost.id);
 
-                      bottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          widget: TwitterPostDetails(
-                            postId: isShared == true
-                                ? widget.post.mainPost.id
-                                : widget.post.id,
-                            showPostComments: (id) {},
-                            onReport: (TwitterReportParams params) {},
-                          ));
-                    }:null,
+                            bottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                widget: TwitterPostDetails(
+                                  postId: isShared == true
+                                      ? widget.post.mainPost.id
+                                      : widget.post.id,
+                                  showPostComments: (id) {},
+                                  onReport: (TwitterReportParams params) {},
+                                ));
+                          }
+                        : null,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -351,12 +353,12 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 accountId: 0,
                 imageURL: post.user.image,
                 fromProfile: widget.fromProfile,
-          userId: post.user.id,
+                userId: post.user.id,
               )
             : UserProfileImage(
                 accountId: 0,
                 fromProfile: widget.fromProfile,
-          userId: post.user.id,
+                userId: post.user.id,
               ),
         const Sizer(),
         Label(
@@ -481,12 +483,12 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                       accountId: 0,
                       imageURL: post.user.image,
                       fromProfile: widget.fromProfile,
-                userId: post.user.id,
+                      userId: post.user.id,
                     )
                   : UserProfileImage(
                       accountId: 0,
                       fromProfile: widget.fromProfile,
-                userId: post.user.id,
+                      userId: post.user.id,
                     ),
               const Sizer(),
               Label(

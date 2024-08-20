@@ -32,7 +32,10 @@ class FacebookPostComments extends StatefulWidget {
       required this.postId,
       // required this.comments,
       required this.onAddComment,
-      required this.onCommentReply, required this.onDeleteComment, required this.onDeleteReply, required this.from});
+      required this.onCommentReply,
+      required this.onDeleteComment,
+      required this.onDeleteReply,
+      required this.from});
 
   @override
   State<FacebookPostComments> createState() => _FacebookPostCommentsState();
@@ -89,14 +92,15 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                       return _buildCommentCard(
                         comment: controller
                             .commentsPagingController.itemList![index],
-                        onDeleteComment: (String id) async{
+                        onDeleteComment: (String id) async {
                           var result = await widget.onDeleteComment(id);
-                          if(result==true){
-                            controller.commentsPagingController.itemList?.removeWhere((e) => e.id == id);
+                          if (result == true) {
+                            controller.commentsPagingController.itemList
+                                ?.removeWhere((e) => e.id == id);
                             setState(() {});
                           }
-
-                        }, onDeleteReply: (String id)=>widget.onDeleteReply(id),
+                        },
+                        onDeleteReply: (String id) => widget.onDeleteReply(id),
                       );
                     },
                     noMoreItemsIndicatorBuilder: (context) => Container(),
@@ -178,7 +182,8 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
 
   Widget _buildCommentCard(
       {required CommentEntity comment,
-      required Function(String) onDeleteComment,required Function(String) onDeleteReply}) {
+      required Function(String) onDeleteComment,
+      required Function(String) onDeleteReply}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -186,7 +191,9 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
           comment: comment,
           onAddReply: (ReplyOnCommentParams params) =>
               widget.onCommentReply(params),
-          onDeleteComment: (String id) => onDeleteComment(id), onDeleteReply: (String id)=>onDeleteReply(id), from: widget.from,
+          onDeleteComment: (String id) => onDeleteComment(id),
+          onDeleteReply: (String id) => onDeleteReply(id),
+          from: widget.from,
         ),
         if (comment.repliesCount != 0)
           Container(

@@ -17,7 +17,6 @@ class BookingDoctorProfileWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16.0),
       margin: const EdgeInsets.symmetric(vertical: 5),
-
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         color: Colors.white,

@@ -1,6 +1,6 @@
 part of 'chat_cubit.dart';
 
-enum ChatsStates { initState, loading, error ,typing }
+enum ChatsStates { initState, loading, error, typing }
 
 extension ChatMessagesStateX on ChatsState {
   bool get isInitial => status == ChatsStates.initState;

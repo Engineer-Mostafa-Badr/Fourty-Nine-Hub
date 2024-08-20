@@ -159,16 +159,16 @@ class _ZegoLiveStreamingMemberButtonState
   }
 
   Widget icon() {
-    return const Icon(
+    return Icon(
       Icons.people_outline,
       color: Colors.white,
-      size: 30,
+      size: 40.zH,
     );
   }
 
   Widget memberCount() {
     return SizedBox(
-      height: 50.zR,
+      height: 25.zR,
       child: Center(
         child: ValueListenableBuilder<int>(
           valueListenable:
@@ -176,9 +176,9 @@ class _ZegoLiveStreamingMemberButtonState
           builder: (context, memberCount, _) {
             return Text(
               memberCount.toString(),
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
-                // fontSize: 24.zR,
+                fontSize: 18.zR,
                 fontWeight: FontWeight.w400,
               ),
             );

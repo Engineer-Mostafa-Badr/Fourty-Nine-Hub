@@ -1,4 +1,3 @@
-
 class UserModel {
   final bool status;
   final List<UserData> data;
@@ -60,17 +59,16 @@ class UserData {
       email: json['email'],
       birthday: json['birthday'],
       gender: json['gender'],
-      location: json['location'] != null
-          ? Location.fromJson(json['location'])
-          : null,
+      location:
+          json['location'] != null ? Location.fromJson(json['location']) : null,
       profilePicture: json['profilePicture'],
       followersCount: json['followersCount'] ?? 0,
       followingCount: json['followingCount'] ?? 0,
       friendsCount: json['friendsCount'] ?? 0,
       pictures: json['pictures'] != null
           ? List<TinderUserPicture>.from(
-        json['pictures'].map((x) => TinderUserPicture.fromJson(x)),
-      )
+              json['pictures'].map((x) => TinderUserPicture.fromJson(x)),
+            )
           : [],
     );
   }
@@ -106,7 +104,7 @@ class Location {
     return Location(
       type: json['type'],
       coordinates:
-      List<double>.from(json['coordinates'].map((x) => x.toDouble())),
+          List<double>.from(json['coordinates'].map((x) => x.toDouble())),
     );
   }
 

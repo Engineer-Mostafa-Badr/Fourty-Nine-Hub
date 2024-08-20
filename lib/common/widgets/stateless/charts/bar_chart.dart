@@ -18,7 +18,7 @@ class CustomBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       size: const Size(300, 200),
-      painter: BarChartPainter(context,data: data),
+      painter: BarChartPainter(context, data: data),
     );
   }
 }
@@ -73,7 +73,7 @@ class BarChartPainter extends CustomPainter {
       final labelPainter = TextPainter(
         text: TextSpan(
           text: data[i].label,
-          style: TextStyle( color: Theme.of(context).primaryColor,fontSize: 12),
+          style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12),
         ),
         textDirection: TextDirection.ltr,
       );

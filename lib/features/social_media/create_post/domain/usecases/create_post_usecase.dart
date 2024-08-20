@@ -19,19 +19,20 @@ class PostParams {
   final String? activity;
   final String? privacy;
   final List<String>? mediaId;
-  PostParams(
-      {required this.content,
-      this.color,
-      this.activity,
-      this.feeling,
-      this.privacy,
-        this.mediaId,});
+  PostParams({
+    required this.content,
+    this.color,
+    this.activity,
+    this.feeling,
+    this.privacy,
+    this.mediaId,
+  });
   Map<String, dynamic> toJson() => {
-        'content': content??'',
-    if(feeling!=null)'feeling': feeling,
-        if(activity!=null)'activity': activity,
-    if(color!=null)'background_color': color,
+        'content': content ?? '',
+        if (feeling != null) 'feeling': feeling,
+        if (activity != null) 'activity': activity,
+        if (color != null) 'background_color': color,
         'media': mediaId,
-        'publicationType': privacy??'public',
+        'publicationType': privacy ?? 'public',
       };
 }

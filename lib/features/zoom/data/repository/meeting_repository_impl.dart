@@ -7,7 +7,7 @@ import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.da
 
 import '../../domain/repositories/meeting_repository.dart';
 
-class MeetingRepositoryImpl extends MeetingRepository{
+class MeetingRepositoryImpl extends MeetingRepository {
   final MeetingDataSource meetingDataSource;
 
   MeetingRepositoryImpl(this.meetingDataSource);

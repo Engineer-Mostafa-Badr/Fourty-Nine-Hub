@@ -40,13 +40,13 @@ class _ImageDetailsScreenState extends State<ImageDetailsScreen> {
           },
           icon: widget.fromPost == true
               ? const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          )
+                  Icons.arrow_back,
+                  color: Colors.black,
+                )
               : const Icon(
-            Icons.close,
-            color: Colors.black,
-          ),
+                  Icons.close,
+                  color: Colors.black,
+                ),
         ),
       ),
       body: GestureDetector(
@@ -56,7 +56,8 @@ class _ImageDetailsScreenState extends State<ImageDetailsScreen> {
         },
         onScaleUpdate: (ScaleUpdateDetails details) {
           setState(() {
-            _scale = (_previousScale * details.scale).clamp(_minScale, _maxScale);
+            _scale =
+                (_previousScale * details.scale).clamp(_minScale, _maxScale);
 
             if (_scale > _minScale) {
               final Offset delta = details.focalPoint - _previousPosition;
@@ -95,11 +96,12 @@ class _ImageDetailsScreenState extends State<ImageDetailsScreen> {
                 ..scale(_scale),
               child: widget.fromPost == false || widget.isFile == true
                   ? Image.file(
-                File(widget.image),
-                fit: BoxFit.contain,
-              )
-                  :
-              ImageFromInternet(image: widget.image,),
+                      File(widget.image),
+                      fit: BoxFit.contain,
+                    )
+                  : ImageFromInternet(
+                      image: widget.image,
+                    ),
 
               // Image.network(
               //   widget.image,

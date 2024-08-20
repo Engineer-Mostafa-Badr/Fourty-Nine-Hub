@@ -16,18 +16,20 @@ class UserProfileImage extends StatelessWidget {
 
   const UserProfileImage(
       {super.key,
-        required this.accountId,
-        this.size = 15,
-        this.withBorder = false,
-        this.imageURL,
-        this.borderColor = AppColors.SECONDARY_COLOR, this.fromProfile=false, required this.userId});
+      required this.accountId,
+      this.size = 15,
+      this.withBorder = false,
+      this.imageURL,
+      this.borderColor = AppColors.SECONDARY_COLOR,
+      this.fromProfile = false,
+      required this.userId});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if(fromProfile==false){
-          context.push(Routes.OTHERSACCOUNT,extra: userId);
+        if (fromProfile == false) {
+          context.push(Routes.OTHERSACCOUNT, extra: userId);
         }
       },
       child: CircleAvatar(
@@ -36,7 +38,8 @@ class UserProfileImage extends StatelessWidget {
         child: CircleAvatar(
           radius: size,
           backgroundColor: Colors.white,
-          backgroundImage: CachedNetworkImageProvider(imageURL?? UIConst.profilePlaceHolder),
+          backgroundImage: CachedNetworkImageProvider(
+              imageURL ?? UIConst.profilePlaceHolder),
         ),
       ),
     );

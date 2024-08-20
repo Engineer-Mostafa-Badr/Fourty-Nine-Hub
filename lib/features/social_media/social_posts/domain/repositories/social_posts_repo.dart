@@ -13,13 +13,17 @@ import '../usecases/post_comment_usecase.dart';
 import '../usecases/post_react_usecase.dart';
 
 abstract class SocialPostsRepo {
-  Future<Either<Failure, List<PostEntity>>> getFeed({required TwitterFeedParams params});
-  Future<Either<Failure, List<PostEntity>>> getAdvertisement({required TwitterFeedParams params});
-  Future<Either<Failure, List<PostEntity>>> getTweet({required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getFeed(
+      {required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getAdvertisement(
+      {required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getTweet(
+      {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getUserPosts(
       {required UserPostsParams params});
   Future<Either<Failure, bool>> reactOnPost({required PostReactParams params});
-  Future<Either<Failure, bool>> reactOnComment({required PostReactParams params});
+  Future<Either<Failure, bool>> reactOnComment(
+      {required PostReactParams params});
   Future<Either<Failure, CommentEntity>> commentOnPost(
       {required PostCommentParams params});
   Future<Either<Failure, UserProfileEntity>> getUserProfile(
@@ -33,8 +37,7 @@ abstract class SocialPostsRepo {
   Future<Either<Failure, List<CommentEntity>>> getPostCommentReplies(
       {required PostCommentsParams params});
 
-  Future<Either<Failure, PostEntity>> getPost(
-      {required String postId});
+  Future<Either<Failure, PostEntity>> getPost({required String postId});
   Future<Either<Failure, bool>> deletePost({required String postId});
   Future<Either<Failure, bool>> deleteComment({required String commentId});
   Future<Either<Failure, bool>> friendRequest({required String userId});

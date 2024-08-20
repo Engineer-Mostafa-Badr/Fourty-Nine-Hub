@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/requests_history/domain/entities/trip_entity.dart';
 
-
 import 'started_trip_widget.dart';
 import 'trip_offers_widget.dart';
 

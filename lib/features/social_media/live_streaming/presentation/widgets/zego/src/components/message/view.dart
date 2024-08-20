@@ -7,13 +7,11 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:zego_uikit/zego_uikit.dart';
 
-
 // Project imports:
 import '../../config.dart';
 import '../../controller.dart';
 import '../../events.dart';
 import '../../inner_text.dart';
-
 
 /// @nodoc
 class ZegoLiveStreamingInRoomLiveMessageView extends StatefulWidget {

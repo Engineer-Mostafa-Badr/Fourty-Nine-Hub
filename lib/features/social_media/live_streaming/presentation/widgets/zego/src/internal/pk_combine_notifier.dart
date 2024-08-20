@@ -9,7 +9,6 @@ import '../pk/core/service/defines.dart';
 
 // Project imports:
 
-
 class ZegoLiveStreamingPKBattleStateCombineNotifier {
   factory ZegoLiveStreamingPKBattleStateCombineNotifier() => instance;
   static final ZegoLiveStreamingPKBattleStateCombineNotifier instance =
