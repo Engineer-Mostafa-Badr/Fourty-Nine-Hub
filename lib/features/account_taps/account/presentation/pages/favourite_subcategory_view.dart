@@ -514,7 +514,6 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_vi
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/shared/tinder_shared_utils.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -830,8 +829,7 @@ class _FavSubCategoryViewContentState
     final userCubit = context.read<UserCubit>();
     userCubit.giveMeTokenForTinder().then((_) {
       final tinderCubit = context.read<TinderViewCubit>();
-      final token = userCubit.state.token?.accessToken ?? '';
-      tinderCubit.fetchFavorites(token);
+      tinderCubit.fetchFavorites();
     });
   }
 
@@ -1072,7 +1070,7 @@ class FavTinderSubCategoryCard extends StatelessWidget {
   void _navigateToDynamicGridView(BuildContext context) {
     context
         .read<TinderViewCubit>()
-        .fetchFavorites(TinderSharedUtils.token)
+        .fetchFavorites()
         .then((value) => Navigator.push(
               context,
               MaterialPageRoute(

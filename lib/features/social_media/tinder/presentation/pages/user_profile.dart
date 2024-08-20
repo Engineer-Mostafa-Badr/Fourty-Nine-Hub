@@ -29,7 +29,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
     if (userCubit.state.data?.id != null && userCubit.state.token?.accessToken != null) {
       tinderCubit.fetchUserProfile(
         userId: userCubit.state.data!.id,
-        token: userCubit.state.token!.accessToken,
       );
     } else {
       log('User ID or access token is null.');
@@ -112,11 +111,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
         onUploaded: (uploadedFile) {
           tinderCubit.uploadPictures(
             pictures: [uploadedFile.mediaId],
-            accessToken: userCubit.state.token!.accessToken,
           ).then((_) {
             tinderCubit.fetchUserProfile(
               userId: userCubit.state.data!.id,
-              token: userCubit.state.token!.accessToken,
             );
           });
         },
@@ -164,7 +161,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     return Column(
       children: [
         Text(
-          capitalizeAndSplit("${user.userId.firstName} ${user.userId.lastName}"),
+          capitalizeAndSplit2Parts("${user.userId.firstName} ${user.userId.lastName}"),
           style: Styles.headerText(
             color: AppColors.PRIMARY_COLOR,
             fontSize: 38,
@@ -342,7 +339,7 @@ String capitalize(String name) {
   return name[0].toUpperCase() + name.substring(1).toLowerCase();
 }
 
-String capitalizeAndSplit(String name) {
+String capitalizeAndSplit2Parts(String name) {
   if (name.isEmpty) return name;
   List<String> parts = name.split(' ').take(2).toList();
   return parts.map(capitalize).join(' ');

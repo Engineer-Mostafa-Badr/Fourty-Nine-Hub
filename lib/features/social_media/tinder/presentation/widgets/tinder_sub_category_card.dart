@@ -338,17 +338,16 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
                 size: 25,
                 icon: Icons.favorite,
                 color: containsSpecificId(
-                    tinderCubit.state.getFavCategoryModel?.data ?? [],
-                    subCategoryId)
+                        tinderCubit.state.getFavCategoryModel?.data ?? [],
+                        subCategoryId)
                     ? Colors.redAccent
                     : Colors.grey,
                 onPressed: () {
                   final token = widget.userCubit.state.token?.accessToken;
                   if (token != null) {
                     tinderCubit
-                        .addFavoriteCategory(
-                        accessToken: token, categoryId: subCategoryId)
-                        .then((value) => tinderCubit.fetchFavorites(token));
+                        .addFavoriteCategory(categoryId: subCategoryId)
+                        .then((value) => tinderCubit.fetchFavorites());
                   }
                 },
               ),
@@ -397,23 +396,22 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        BlocProvider(
-                          create: (context) => TinderViewCubit(),
-                          child: TinderSubCategoryAdsView(
-                            params: TinderSubAdsViewParams(
-                              subCategory: SubCategoryEntity(
-                                id: subCategoryId,
-                                name: subCategoryName,
-                                image: subCategoryPicture,
-                                isFavorite: containsSpecificId(
-                                    tinderCubit.state.getFavCategoryModel
-                                        ?.data ?? [],
-                                    subCategoryId),
-                              ),
-                            ),
+                    builder: (context) => BlocProvider(
+                      create: (context) => TinderViewCubit(),
+                      child: TinderSubCategoryAdsView(
+                        params: TinderSubAdsViewParams(
+                          subCategory: SubCategoryEntity(
+                            id: subCategoryId,
+                            name: subCategoryName,
+                            image: subCategoryPicture,
+                            isFavorite: containsSpecificId(
+                                tinderCubit.state.getFavCategoryModel?.data ??
+                                    [],
+                                subCategoryId),
                           ),
                         ),
+                      ),
+                    ),
                   ),
                 );
               }

@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/anonymous_chat_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/main_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/normal_chat_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:http/http.dart' as http;
 
 import '../../data/models/gift_model.dart';
@@ -19,7 +21,9 @@ import 'tinder_state.dart';
 class TinderViewCubit extends Cubit<TinderViewState> {
   TinderViewCubit() : super(TinderViewState.initial());
 
-  Future<void> fetchMainCategoryById(String id, String token) async {
+  final String token = serviceLocator<UserCubit>().token??'';
+
+  Future<void> fetchMainCategoryById(String id) async {
     emit(state.copyWith(mainCategoryResponseState: DataState.initial));
     final url = 'https://49dev.com/api/v1/categories/main/$id';
 
@@ -48,7 +52,6 @@ class TinderViewCubit extends Cubit<TinderViewState> {
   Future<bool> startNormalChat({
     required String receiverId,
     required String subCategoryId,
-    required String accessToken,
   }) async {
     emit(state.copyWith(normalChatResponseState: DataState.initial));
     final url =
@@ -58,7 +61,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       final response = await http.post(
         Uri.parse(url),
         headers: {
-          'Authorization': 'Bearer $accessToken',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
@@ -130,7 +133,6 @@ class TinderViewCubit extends Cubit<TinderViewState> {
 
   Future<bool> startAnonymousChat({
     required String receiverId,
-    required String accessToken,
   }) async {
     emit(state.copyWith(anonymousChatResponseState: DataState.initial));
     final url =
@@ -140,7 +142,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       final response = await http.post(
         Uri.parse(url),
         headers: {
-          'Authorization': 'Bearer $accessToken',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
@@ -168,7 +170,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
   }
 
   Future<void> fetchUserProfile(
-      {required String userId, required String token}) async {
+      {required String userId}) async {
     emit(state.copyWith(profileUserState: DataState.initial));
     try {
       final uri =
@@ -207,7 +209,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     // return null;
   }
 
-  Future<void> fetchFavorites(String accessToken) async {
+  Future<void> fetchFavorites() async {
     emit(state.copyWith(getFavCategoryListState: DataState.initial));
 
     const url = 'https://49dev.com/api/v1/favorite-sub-category';
@@ -216,7 +218,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       final response = await http.get(
         Uri.parse(url),
         headers: {
-          'Authorization': 'Bearer $accessToken',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
@@ -272,7 +274,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     }
   }
 
-  Future<void> addFavoriteCategory({accessToken, String? categoryId}) async {
+  Future<void> addFavoriteCategory({String? categoryId}) async {
     emit(state.copyWith(addCategoryModelState: DataState.initial));
 
     final url = 'https://49dev.com/api/v1/favorite-sub-category/$categoryId';
@@ -282,7 +284,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       final response = await http.post(
         Uri.parse(url),
         headers: {
-          'Authorization': 'Bearer $accessToken',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
@@ -343,11 +345,10 @@ class TinderViewCubit extends Cubit<TinderViewState> {
 
   Future<void> fetchLastSeen({
     required String userId,
-    required String accessToken,
   }) async {
     final response = await _makeGetRequest(
         url: 'https://49dev.com/api/v1/users/last-seen/$userId?status=online',
-        accessToken: accessToken,
+        accessToken: token,
         fromMethod: 'fetchLastSeen');
     log("${response!.body} response from fetchLastSeen ");
     try {
@@ -388,7 +389,6 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     required String receiverId,
     required String giftId,
     required String subCategoryId,
-    required String accessToken,
   }) async {
     const url =
         'https://49dev.com/api/v1/tinder/sendGifts?subCategory=66af974f8bf69f9469944746';
@@ -401,7 +401,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       final response = await http.post(
         Uri.parse(url),
         headers: {
-          'Authorization': 'Bearer $accessToken',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
         body: jsonEncode(data),
@@ -429,10 +429,10 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     // }
   }
 
-  Future<List<GiftData>?> fetchGifts({required String accessToken}) async {
+  Future<List<GiftData>?> fetchGifts() async {
     final response = await _makeGetRequest(
         url: 'https://49dev.com/api/v1/dashboard-gifts?limit=10',
-        accessToken: accessToken,
+        accessToken: token,
         fromMethod: 'fetchGifts');
 
     // log('${response!.body}giftApi111111111111111111111111');
@@ -445,7 +445,6 @@ class TinderViewCubit extends Cubit<TinderViewState> {
 
   Future<void> checkUserNearby({
     required String cardUserId,
-    required String accessToken,
   }) async {
     // final url = 'https://49dev.com/api/v1/tinder/check-distance/$cardUserId';
     // final url =
@@ -455,7 +454,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     final response = await _makeGetRequest(
         url:
             'https://49dev.com/api/v1/tinder/check-distance/$cardUserId?subCategory=66af974f8bf69f9469944746',
-        accessToken: accessToken,
+        accessToken: token,
         fromMethod: 'checkUserNearby');
 
     try {
@@ -473,11 +472,11 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     }
   }
 
-  Future<void> fetchSubCategoryData({required String accessToken}) async {
+  Future<void> fetchSubCategoryData() async {
     const url = 'https://49dev.com/api/v1/tinder/subCategories';
 
     final response = await _makeGetRequest(
-        url: url, accessToken: accessToken, fromMethod: 'fetchSubCategoryData');
+        url: url, accessToken: token, fromMethod: 'fetchSubCategoryData');
 
     if (response != null) {
       final List<dynamic> responseData = jsonDecode(response.body)['data'];
@@ -490,7 +489,6 @@ class TinderViewCubit extends Cubit<TinderViewState> {
 
   Future<void> fetchUserData2({
     required String gender,
-    required String accessToken,
     required int page,
   }) async {
     emit(state.copyWith(userDataState: DataState.initial));
@@ -499,7 +497,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
         'https://49dev.com/api/v1/tinder/?gender=$gender&page=$page&limit=20&subCategory=66af974f8bf69f9469944746';
 
     final response = await _makeGetRequest(
-        url: url, accessToken: accessToken, fromMethod: 'fetchUserData');
+        url: url, accessToken: token, fromMethod: 'fetchUserData');
 
     if (response != null) {
       final List<dynamic> responseData = jsonDecode(response.body)['data'];
@@ -521,7 +519,6 @@ class TinderViewCubit extends Cubit<TinderViewState> {
 
   Future<void> fetchUserData({
     required String gender,
-    required String accessToken,
   }) async {
     emit(state.copyWith(userDataState: DataState.initial, userData: []));
 
@@ -530,7 +527,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     // 'https://49dev.com/api/v1/tinder/?gender=$gender&page=1&limit=50&subCategory=66af974f8bf69f9469944746';
 
     final response = await _makeGetRequest(
-        url: url, accessToken: accessToken, fromMethod: 'fetchUserData');
+        url: url, accessToken: token, fromMethod: 'fetchUserData');
 
     if (response != null) {
       final List<dynamic> responseData = jsonDecode(response.body)['data'];
@@ -546,7 +543,6 @@ class TinderViewCubit extends Cubit<TinderViewState> {
 
   Future<void> uploadPictures({
     required List<String> pictures,
-    required String accessToken,
   }) async {
     emit(state.copyWith(uploadImageState: DataState.initial));
 
@@ -555,7 +551,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
 
     final response = await _makePostRequest(
       url: url,
-      accessToken: accessToken,
+      accessToken: token,
       body: jsonEncode({'pictures': pictures}),
     );
     emit(state.copyWith(uploadImageState: DataState.initial));

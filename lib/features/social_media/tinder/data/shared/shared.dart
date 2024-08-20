@@ -247,7 +247,6 @@ class BottomSheetContentState extends State<BottomSheetContent> {
           subCategoryId: '66af974f8bf69f9469944746',
           giftId: gift.sId ?? '',
           // currentUserToken: TinderSharedUtils.token,
-          accessToken: userCubit.state.token!.accessToken,
         );
 
     TinderSharedUtils.handleGiftResponse(

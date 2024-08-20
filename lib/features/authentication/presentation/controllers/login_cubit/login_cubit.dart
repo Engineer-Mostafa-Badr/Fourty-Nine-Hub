@@ -34,6 +34,8 @@ class LoginCubit extends Cubit<LoginState> {
     this._appleSignInUseCase,
   ) : super(LoginInitial());
 
+  String? token;
+
   Future<void> login() async {
     if (formKey.currentState!.validate()) {
       emit(LoginLoading());
@@ -48,6 +50,7 @@ class LoginCubit extends Cubit<LoginState> {
           (failure) => LoginError(failure),
           (userToken) {
             print(userToken);
+            token = userToken.accessToken.toString();
             _attachToken(userToken); // attach to dio
             _saveTokens(userToken); // save to local storage
             return LoginSuccess();
@@ -65,6 +68,8 @@ class LoginCubit extends Cubit<LoginState> {
       result.fold(
         (failure) => LoginError(failure),
         (userToken) {
+          token = userToken.accessToken.toString();
+
           _attachToken(userToken); // attach to dio
           _saveTokens(userToken); // save to local storage
           return LoginSuccess();
@@ -81,6 +86,8 @@ class LoginCubit extends Cubit<LoginState> {
       result.fold(
         (failure) => LoginError(failure),
         (userToken) {
+          token = userToken.accessToken.toString();
+
           _attachToken(userToken); // attach to dio
           _saveTokens(userToken); // save to local storage
           return LoginSuccess();
@@ -97,6 +104,8 @@ class LoginCubit extends Cubit<LoginState> {
       result.fold(
         (failure) => LoginError(failure),
         (userToken) {
+          token = userToken.accessToken.toString();
+
           _attachToken(userToken); // attach to dio
           _saveTokens(userToken); // save to local storage
           return LoginSuccess();

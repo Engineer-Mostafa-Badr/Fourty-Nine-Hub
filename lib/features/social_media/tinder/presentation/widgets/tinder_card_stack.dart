@@ -32,6 +32,7 @@ class TinderCardStack extends StatelessWidget {
     super.key,
     required this.userCubit,
   });
+
   @override
   Widget build(BuildContext context) {
     final TinderViewCubit tinderCubit = context.watch<TinderViewCubit>();
@@ -40,44 +41,39 @@ class TinderCardStack extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     // Check if there are any users to display
-    final hasCards = tinderCubit.state.userData.isNotEmpty;
     return SizedBox(
       height: screenHeight * 2.5 / 4,
-      child: !hasCards
-          ? const Center(child: CircularProgressIndicator())
-          : CardSwiper(
-              cardsCount: tinderCubit.state.userData.length,
-              onSwipe: (previousIndex, currentIndex, direction) {
-                if (currentIndex != null) {
-                  // Fetch updated data on every swipe
-                  final userId =
-                      tinderCubit.state.userData[currentIndex].id ?? '';
-                  if (userId.isNotEmpty) {
-                    tinderCubit
-                      ..fetchLastSeen(
-                        accessToken: userCubit.state.token?.accessToken ?? '',
-                        userId: userId,
-                      )
-                      ..checkUserNearby(
-                        cardUserId: userId,
-                        accessToken: userCubit.state.token?.accessToken ?? '',
-                      );
-                  }
-                }
-                return true;
-              },
-              cardBuilder: (context, index, horizontalOffsetPercentage,
-                  verticalOffsetPercentage) {
-                return _cardWidget(context, tinderCubit.state.userData[index],
-                    tinderCubit: tinderCubit, innerUserCubit: userCubit);
-              },
-              onEnd: () {
-                // Handle end of the card stack
-              },
-              padding: const EdgeInsets.all(4.0),
-              scale: 0.88,
-              duration: const Duration(milliseconds: 150),
-            ),
+      child: CardSwiper(
+        cardsCount: tinderCubit.state.userData.length,
+        onSwipe: (previousIndex, currentIndex, direction) {
+          if (currentIndex != null) {
+            // Fetch updated data on every swipe
+            final userId = tinderCubit.state.userData[currentIndex].id ?? '';
+            if (userId.isNotEmpty) {
+              tinderCubit
+                ..fetchLastSeen(
+
+                  userId: userId,
+                )
+                ..checkUserNearby(
+                  cardUserId: userId,
+                );
+            }
+          }
+          return true;
+        },
+        cardBuilder: (context, index, horizontalOffsetPercentage,
+            verticalOffsetPercentage) {
+          return _cardWidget(context, tinderCubit.state.userData[index],
+              tinderCubit: tinderCubit, innerUserCubit: userCubit);
+        },
+        onEnd: () {
+          // Handle end of the card stack
+        },
+        padding: const EdgeInsets.all(4.0),
+        scale: 0.88,
+        duration: const Duration(milliseconds: 150),
+      ),
     );
   }
 
@@ -352,9 +348,9 @@ class TinderCardStack extends StatelessWidget {
                 child: Stack(
                   children: [
                     BottomSheetContent(
-                      userCubit: userCubit,
-                      accessToken: userCubit.state.token?.accessToken ?? '',cardUser:cardUser
-                    ),
+                        userCubit: userCubit,
+                        accessToken: userCubit.state.token?.accessToken ?? '',
+                        cardUser: cardUser),
                     Positioned(
                       bottom: 5,
                       right: 5,
@@ -405,8 +401,7 @@ class TinderCardStack extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) => BlocProvider.value(
-          value:
-          TinderViewCubit(),
+          value: TinderViewCubit(),
           child: UserProfilePage(
             userCubit: userCubit,
           ),
@@ -432,7 +427,6 @@ class TinderCardStack extends StatelessWidget {
     final gender = user.gender;
     tinderCubit.fetchUserData(
       gender: gender == 'female' ? 'female' : 'male',
-      accessToken: userCubit.state.token?.accessToken ?? '',
     );
   }
 
@@ -587,7 +581,6 @@ class TinderCardStack extends StatelessWidget {
             tinderCubit
                 .startAnonymousChat(
               receiverId: cardUser.id ?? '',
-              accessToken: userCubit.state.token?.accessToken ?? '',
             )
                 .then((value) {
               final chatId =
@@ -611,7 +604,6 @@ class TinderCardStack extends StatelessWidget {
                 .startNormalChat(
               receiverId: cardUser.id ?? '',
               subCategoryId: '62c8be6f8e28a58a3edf5f4f',
-              accessToken: userCubit.state.token?.accessToken ?? '',
             )
                 .then((value) {
               final chatId =

@@ -1,14 +1,15 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_card_stack.dart';
@@ -33,6 +34,7 @@ class TinderView extends StatelessWidget {
         BlocProvider(create: (context) => serviceLocator<ChatRoomCubit>()),
         BlocProvider(create: (context) => serviceLocator<UserCubit>()),
         BlocProvider(create: (context) => serviceLocator<ChatsCubit>()),
+        // BlocProvider(create: (context) => serviceLocator<LoginCubit>()),
       ],
       child: const TinderScreen(),
     );
@@ -59,26 +61,36 @@ class _TinderScreenState extends State<TinderScreen> {
   }
 
   void _initializeTinderData() {
-    final userCubit = context.read<UserCubit>();
-    userCubit.giveMeTokenForTinder().then((_) {
-      final tinderCubit = context.read<TinderViewCubit>();
-      final token = userCubit.state.token?.accessToken ?? '';
-      if (token.isNotEmpty) {
-        tinderCubit
-          ..fetchUserData(accessToken: token, gender: 'female')
-          ..fetchSubCategoryData(accessToken: token)
-          ..fetchFavorites(token);
-      }
-    });
+    context.read<TinderViewCubit>()
+      ..fetchUserData(gender: 'female')
+      ..fetchSubCategoryData()
+      ..fetchFavorites();
   }
 
   @override
   Widget build(BuildContext context) {
     log('TinderScreen built');
     return SharedScaffold(
-      body: AuthHelper().isLoggedIn()
-          ? _buildLoggedInContent(context)
-          : const Center(child: Text('No user yet')),
+      body: Builder(builder: (context) {
+        //---------------------------------------------
+        log("${serviceLocator<UserCubit>().token}============================================================================");
+        if (context.read<TinderViewCubit>().state.userData.isEmpty) {
+          showSnackBarAfterBuild(context, message: 'Check the login page.');
+          return const Center(
+            child: CupertinoActivityIndicator(radius: 25),
+          );
+        }
+
+        if (serviceLocator<UserCubit>().token == null ||
+            serviceLocator<UserCubit>().token!.isEmpty) {
+          showSnackBarAfterBuild(context, message: 'Check the login page.');
+
+          return const Center(
+            child: CupertinoActivityIndicator(radius: 25),
+          );
+        }
+        return _buildLoggedInContent(context);
+      }),
       mainCategoryId: 2,
     );
   }
@@ -170,9 +182,12 @@ class _PersonInfoWidgetState extends State<PersonInfoWidget> {
     final token = widget.userCubit.state.token?.accessToken;
     if (token != null) {
       tinderCubit
-        ..fetchLastSeen(userId: widget.cardUser.id ?? '', accessToken: token)
+        ..fetchLastSeen(
+          userId: widget.cardUser.id ?? '',
+        )
         ..checkUserNearby(
-            cardUserId: widget.cardUser.id ?? '', accessToken: token);
+          cardUserId: widget.cardUser.id ?? '',
+        );
       log('Fetched user data in PersonInfoWidget');
     }
   }
@@ -628,3 +643,4 @@ extension StringExtension on String {
   }
 }
 */
+//20/8
