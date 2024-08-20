@@ -560,9 +560,14 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     final response = await _blocUserUseCase(userId);
     bool isBlocked = false;
     response.fold(
-        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (l) {
+          print("isBlocked$isBlocked");
+          emit(state.copyWith(failure: l, status: StateStatus.error));
+        },
         (r) {
+          print("objectRight");
       isBlocked = r;
+      print("isBlocked$isBlocked");
       emit(state.copyWith(status: StateStatus.success));
     });
     return isBlocked;
