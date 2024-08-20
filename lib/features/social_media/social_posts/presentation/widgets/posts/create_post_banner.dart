@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../res/style/styles.dart';
+import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 
 class CreatePostBanner extends StatelessWidget {
   const CreatePostBanner({super.key});
@@ -19,7 +22,11 @@ class CreatePostBanner extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const ProfileImage(accountId: 0),
+          UserProfileImage(
+            userId: context.read<UserCubit>().state.data!.id,
+            imageURL: context.read<UserCubit>().state.data!.profilePicture,
+            accountId: 0,
+          ),
           const Sizer(
             width: 10,
           ),
