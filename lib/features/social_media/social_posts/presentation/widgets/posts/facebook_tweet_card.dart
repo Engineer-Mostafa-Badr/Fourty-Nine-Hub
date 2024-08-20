@@ -162,74 +162,71 @@ class FacebookTweetCard extends StatelessWidget {
             height: 10,
           ),
           if ((post.images?.isNotEmpty ?? false))
-            SizedBox(
-              height: MediaQuery.of(context).size.height*0.42,
-              child: GridView.builder(
-                  padding: const EdgeInsets.all(10),
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: post.images!.length == 1 ? 1 : 2),
-                  itemCount: post.images!.length < 4 ? post.images!.length : 4,
-                  itemBuilder: (context, index) => InkWell(
-                        onTap: () {
-                          if (index != 3 ||
-                              (index == 3 && post.images!.length == 4)) {
-                            showDialog(
-                                context: context,
-                                builder: (context) => ImageDetailsScreen(
-                                      image: post.images![index],
-                                      fromPost: true,
-                                      onRemoveImage: () {
-                                        // controller
-                                        //     .removePhoto(post.images![index]);
-                                        context.pop();
-                                      },
-                                    ));
-                          } else {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return ShowPostsImages(
-                                    images: post.images ?? [],
-                                    onRemoveImage: (UploadFileEntity image) {
-                                      // controller.removePhoto(image);
+            GridView.builder(
+                padding: const EdgeInsets.all(10),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: post.images!.length == 1 ? 1 : 2),
+                itemCount: post.images!.length < 4 ? post.images!.length : 4,
+                itemBuilder: (context, index) => InkWell(
+                      onTap: () {
+                        if (index != 3 ||
+                            (index == 3 && post.images!.length == 4)) {
+                          showDialog(
+                              context: context,
+                              builder: (context) => ImageDetailsScreen(
+                                    image: post.images![index],
+                                    fromPost: true,
+                                    onRemoveImage: () {
+                                      // controller
+                                      //     .removePhoto(post.images![index]);
+                                      context.pop();
                                     },
-                                  );
-                                });
-                          }
-                        },
-                        child: Stack(
-                          children: [
-                            Stack(
-                              children: [
-                                ImageFromInternet(image: post.images?[index]??'',),
+                                  ));
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return ShowPostsImages(
+                                  images: post.images ?? [],
+                                  onRemoveImage: (UploadFileEntity image) {
+                                    // controller.removePhoto(image);
+                                  },
+                                );
+                              });
+                        }
+                      },
+                      child: Stack(
+                        children: [
+                          Stack(
+                            children: [
+                              ImageFromInternet(image: post.images?[index]??'',),
 
-                                if (index == 3 && post.images!.length > 4)
-                                  Container(
-                                    margin: const EdgeInsetsDirectional.only(
-                                        end: 10, bottom: 10),
-                                    // padding: const EdgeInsets.all(10),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      // borderRadius: BorderRadius.circular(15),
-                                      color: Colors.black.withOpacity(0.5),
-                                    ),
-                                    child: Center(
-                                      child: Label(
-                                        text: "+${post.images!.length - 4}",
-                                        style: Styles.headerText(
-                                          color: Colors.white,
-                                        ),
+                              if (index == 3 && post.images!.length > 4)
+                                Container(
+                                  margin: const EdgeInsetsDirectional.only(
+                                      end: 10, bottom: 10),
+                                  // padding: const EdgeInsets.all(10),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    // borderRadius: BorderRadius.circular(15),
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                  child: Center(
+                                    child: Label(
+                                      text: "+${post.images!.length - 4}",
+                                      style: Styles.headerText(
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )),
-            ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )),
         ],
       ),
     );

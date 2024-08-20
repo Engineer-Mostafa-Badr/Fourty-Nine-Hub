@@ -258,78 +258,76 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
     String? label,
     String? image,
   }) {
+    var myImages=widget.post.isShared==true?widget.post.mainPost.images:widget.post.images;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (label != null) ReadMoreLabel(text: label),
         const Sizer(),
-        if ((widget.post.images!.isNotEmpty ))
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.42,
-            child: GridView.builder(
-              padding: const EdgeInsets.all(10),
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: widget.post.images!.length == 1 ? 1 : 2),
-              itemCount: widget.post.images!.length < 4
-                  ? widget.post.images!.length
-                  : 4,
-              itemBuilder: (context, index) => InkWell(
-                onTap: () {
-                  if (index != 3 ||
-                      (index == 3 && widget.post.images!.length == 4)) {
-                    showDialog(
-                        context: context,
-                        builder: (context) => ImageDetailsScreen(
-                              image: widget.post.images![index],
-                              fromPost: true,
-                              onRemoveImage: () {
-                                // controller
-                                //     .removePhoto(post.images![index]);
-                                context.pop();
-                              },
-                            ));
-                  } else {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return ShowPostsImages(
-                            images: widget.post.images ?? [],
-                            onRemoveImage: (UploadFileEntity image) {
-                              // controller.removePhoto(image);
+        if (myImages!.isNotEmpty)
+          GridView.builder(
+            padding: const EdgeInsets.all(10),
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: myImages.length == 1 ? 1 : 2),
+            itemCount: myImages.length < 4
+                ? myImages.length
+                : 4,
+            itemBuilder: (context, index) => InkWell(
+              onTap: () {
+                if (index != 3 ||
+                    (index == 3 && myImages!.length == 4)) {
+                  showDialog(
+                      context: context,
+                      builder: (context) => ImageDetailsScreen(
+                            image: myImages![index],
+                            fromPost: true,
+                            onRemoveImage: () {
+                              // controller
+                              //     .removePhoto(post.images![index]);
+                              context.pop();
                             },
-                          );
-                        });
-                  }
-                },
-                child: Stack(
-                  children: [
-                    Stack(
-                      children: [
-                        ImageFromInternet(
-                          image: widget.post.images?[index] ?? '',
-                        ),
-                        if (index == 3 && widget.post.images!.length > 4)
-                          Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              // borderRadius: BorderRadius.circular(15),
-                              color: Colors.black.withOpacity(0.5),
-                            ),
-                            child: Center(
-                              child: Label(
-                                text: "+${widget.post.images!.length - 4}",
-                                style: Styles.headerText(
-                                  color: Colors.white,
-                                ),
+                          ));
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return ShowPostsImages(
+                          images: myImages ?? [],
+                          onRemoveImage: (UploadFileEntity image) {
+                            // controller.removePhoto(image);
+                          },
+                        );
+                      });
+                }
+              },
+              child: Stack(
+                children: [
+                  Stack(
+                    children: [
+                      ImageFromInternet(
+                        image: myImages?[index] ?? '',
+                      ),
+                      if (index == 3 && myImages!.length > 4)
+                        Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            // borderRadius: BorderRadius.circular(15),
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                          child: Center(
+                            child: Label(
+                              text: "+${myImages!.length - 4}",
+                              style: Styles.headerText(
+                                color: Colors.white,
                               ),
                             ),
                           ),
-                      ],
-                    ),
-                  ],
-                ),
+                        ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),

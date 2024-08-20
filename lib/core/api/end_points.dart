@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
@@ -157,6 +158,10 @@ class EndPoints {
   static const getTwitterFeedPosts = '/twitter/feed';
   static String userPosts(UserPostsParams params) {
     return '/facebook/post/user/${params.userId}?limit=${params.limit}&page=${params.page}&type=1&subCategory=66b77e77bb35968b535dc944';
+  }
+
+  static String getFriendsFollowers(FriendsFollowersParams params) {
+    return '/friends/friends-followers?search=${params.search}&limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
   }
 
   static String userSuggests(SuggestedFriendsParams params) {

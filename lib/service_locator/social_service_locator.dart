@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/social_media/create_post/data/datasources
 import 'package:fourtyninehub/features/social_media/create_post/domain/repositories/create_post_repo.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/create_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_activities_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_feelings_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
@@ -252,6 +253,11 @@ class SocialServiceLocator {
       serviceLocator(),
     ));
 
+    serviceLocator
+        .registerLazySingleton<FriendsFollowersUseCase>(() => FriendsFollowersUseCase(
+      serviceLocator(),
+    ));
+
 
 
     serviceLocator
@@ -319,6 +325,7 @@ class SocialServiceLocator {
 
 
     serviceLocator.registerFactory<CreatePostCubit>(() => CreatePostCubit(
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),

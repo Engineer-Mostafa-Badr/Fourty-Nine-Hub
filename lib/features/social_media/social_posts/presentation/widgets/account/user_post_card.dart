@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
@@ -10,11 +11,17 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/post_details_page.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -96,20 +103,63 @@ class _UserPostCardState extends State<UserPostCard> {
                 _buildAccountHeader(context: context, post: myPost),
                 // Label(text: myPost.mainPost?.content??''),
                 if(myPost.content!.isNotEmpty)_buildContentWidget(content: myPost.content??'',backgroundColor: myPost.backgroundColor,images: myPost.images??[]),
-                Container(
-                  margin: EdgeInsets.all(myPost.isShared==true?10:0),
-                  padding: EdgeInsets.all(myPost.isShared==true?10:0),
-                  decoration: BoxDecoration(
-                    border: myPost.isShared==true?Border.all():null
-                  ),
-                  child: Column(
-                    children: [
-                      if (myPost.type != 'advertisement'&&myPost.isShared==true)
-                        _buildMainAccountHeader(context: context, post: myPost.mainPost!),
-                      if(myPost.isShared==true)_buildContentWidget(content: myPost.mainPost?.content??'',backgroundColor: null,images: myPost.mainPost?.images??[]),
+                GestureDetector(
+                  onTap: (){
+                    if(widget.post.isShared==true){
+                      bottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          widget: BlocProvider.value(
+                            value:serviceLocator<SocialPostsCubit>()..loadPostDetails(context, widget.post.mainPost!.id),
+                            child: PostDetailsPage(
+                                comments: const [],
+                                postId: widget.post.mainPost!.id,
+                                deletePost: (String postId) =>
+                                    controller.deletePost(context: context, postId: postId),
+                                hidePost: (String postId) =>
+                                    controller.hidePost(context: context, postId: postId),
+                                onAddComment: (PostCommentParams params) =>
+                                    controller.onPostComment(params: params, from: 'details'),
+                                onReact: (params) => controller.onReact(params: params, from: 'posts'),
+                                showPostComments: (postId) {},
+                                showPostDetails: (PostEntity post) {},
+                                // post: controller.feedPagingController.itemList![index],
+
+                                onCommentReply: (ReplyOnCommentParams params) {
+                                  return controller.replyOnComment(
+                                    params:ReplyOnCommentParams(
+                                        postId: params.postId, content: params.content,commentId: params.commentId), from: 'details',
+                                  );
+                                }, onDeleteComment: (String id)async {
+                              return await controller.deleteComment(
+                                  context: context,
+                                  commentId: id, postId: widget.post.mainPost!.id, from: 'feed');
+                              // print(result);
+
+                            }, onDeleteReply: (String id) async{
+                              return await controller.deleteComment(
+                                  context: context,
+                                  commentId: id, postId: widget.post.mainPost!.id, from: 'feed');
+                            }
+                            ),
+                          ));
+                    }
+                  },
+                  child: Container(
+                    margin: EdgeInsets.all(myPost.isShared==true?10:0),
+                    padding: EdgeInsets.all(myPost.isShared==true?10:0),
+                    decoration: BoxDecoration(
+                      border: myPost.isShared==true?Border.all():null
+                    ),
+                    child: Column(
+                      children: [
+                        if (myPost.type != 'advertisement'&&myPost.isShared==true)
+                          _buildMainAccountHeader(context: context, post: myPost.mainPost!),
+                        if(myPost.isShared==true)_buildContentWidget(content: myPost.mainPost?.content??'',backgroundColor: null,images: myPost.mainPost?.images??[]),
 
 
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 Row(
@@ -477,23 +527,11 @@ class _UserPostCardState extends State<UserPostCard> {
                                 children: [
                                   Stack(
                                     children: [
-                                      Container(
-                                        margin:
-                                            const EdgeInsetsDirectional.only(
-                                                end: 10, bottom: 10),
-                                        padding: const EdgeInsets.all(10),
-                                        child: ImageFromInternet(image: images[index],),
-                                      ),
+                                      ImageFromInternet(image: images[index],),
                                       if (index == 3 && images.length > 4)
                                         Container(
-                                          margin:
-                                              const EdgeInsetsDirectional.only(
-                                                  end: 10, bottom: 10),
-                                          // padding: const EdgeInsets.all(10),
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
                                             color:
                                                 Colors.black.withOpacity(0.5),
                                           ),

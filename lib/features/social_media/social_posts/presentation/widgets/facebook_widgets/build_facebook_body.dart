@@ -93,11 +93,11 @@ class FacebookBody extends StatelessWidget {
                                         onAddComment:
                                             (PostCommentParams params) {
                                           return controller.onPostComment(
-                                              params: params);
+                                              params: params, from: 'feed');
                                         }, onCommentReply: (ReplyOnCommentParams params) {
                                         return controller.replyOnComment(
                                           params:ReplyOnCommentParams(
-                                              postId: params.postId, content: params.content,commentId: params.commentId),
+                                              postId: params.postId, content: params.content,commentId: params.commentId), from: 'feed',
                                         );
                                       }, onDeleteComment: (String id)async {
                                         return await controller.deleteComment(
@@ -128,7 +128,7 @@ class FacebookBody extends StatelessWidget {
                                             hidePost: (String postId) =>
                                                 controller.hidePost(context: context, postId: postId),
                                             onAddComment: (PostCommentParams params) =>
-                                                controller.onPostComment(params: params),
+                                                controller.onPostComment(params: params, from: 'details'),
                                             onReact: (params) => controller.onReact(params: params, from: 'posts'),
                                             showPostComments: (postId) {},
                                             showPostDetails: (PostEntity post) {},
@@ -137,7 +137,7 @@ class FacebookBody extends StatelessWidget {
                                             onCommentReply: (ReplyOnCommentParams params) {
                                               return controller.replyOnComment(
                                                 params:ReplyOnCommentParams(
-                                                    postId: params.postId, content: params.content,commentId: params.commentId),
+                                                    postId: params.postId, content: params.content,commentId: params.commentId), from: 'details',
                                               );
                                             }, onDeleteComment: (String id)async {
                                           return await controller.deleteComment(

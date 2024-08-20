@@ -107,7 +107,6 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildAccountHeader(context: context, post: myPost),
-                  // Label(text: myPost.mainPost?.content??''),
                   if(myPost.content!.isNotEmpty)_buildContentWidget(content: myPost.content??'',backgroundColor: myPost.backgroundColor,images: myPost.images??[]),
                   Container(
                     margin: EdgeInsets.all(myPost.isShared==true?10:0),
@@ -223,6 +222,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     if (myPost.likesCount != 0)
                       _buildCounterWidget(
                           value: myPost.likesCount!, image: Assets.like),
+                    if (myPost.hahaCount != 0)
+                      _buildCounterWidget(
+                          value: myPost.hahaCount!, image: Assets.haha),
                     if (myPost.loveCount != 0)
                       _buildCounterWidget(
                           value: myPost.loveCount!, image: Assets.heart),

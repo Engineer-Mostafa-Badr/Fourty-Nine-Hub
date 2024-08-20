@@ -10,6 +10,8 @@ class CreatePostState {
   final ActivityEntity? selectedActivity;
   final FeelingEntity? selectedFeeling;
   final List<UploadFileEntity>? images;
+  final List<PostUserEntity>? users;
+  final List<String>? selectedUsers;
   final String? selectedPrivacy;
   final String backColor;
   const CreatePostState(
@@ -22,6 +24,8 @@ class CreatePostState {
       this.backColor = "#FFFFFFFF",
       this.selectedActivity,
       this.selectedFeeling,
+      this.users,
+      this.selectedUsers,
       this.selectedPrivacy});
   CreatePostState copyWith({
     CreatePostStates? status,
@@ -32,6 +36,8 @@ class CreatePostState {
     ActivityEntity? selectedActivity,
     FeelingEntity? selectedFeeling,
     String? selectedPrivacy,
+    List<PostUserEntity>? users,
+    List<String>? selectedUsers,
     String? backColor,
   }) {
     return CreatePostState(
@@ -44,6 +50,8 @@ class CreatePostState {
       selectedFeeling: selectedFeeling ?? this.selectedFeeling,
       selectedPrivacy: selectedPrivacy ?? this.selectedPrivacy,
       backColor: backColor ?? this.backColor,
+      users: users ?? this.users,
+      selectedUsers: selectedUsers ?? this.selectedUsers,
     );
   }
 }

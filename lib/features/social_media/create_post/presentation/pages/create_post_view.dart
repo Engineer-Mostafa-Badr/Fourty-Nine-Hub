@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_friends.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -61,8 +63,12 @@ class _CreatePostViewState extends State<CreatePostView> {
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Row(
                     children: [
+                      BadgedLabel(label: state.selectedUsers?.length.toString()??''),
+
                       if (state.selectedFeeling != null)
                         BadgedLabel(label: state.selectedFeeling!.name),
+                      if (state.selectedUsers != null&&state.selectedUsers!=[])
+                        BadgedLabel(label: state.selectedUsers?[0]??''),
                       const Sizer(),
                       if (state.selectedActivity != null)
                         BadgedLabel(label: state.selectedActivity!.name),
@@ -297,6 +303,39 @@ class _CreatePostViewState extends State<CreatePostView> {
               icon: const Icon(
                 Icons.emoji_emotions_outlined,
                 color: Colors.orangeAccent,
+                size: 30,
+              )),
+        if (widget.social != 'twitter')
+          IconButton(
+              onPressed: () {
+                bottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    widget: BuildSearchFriends(onSelect: (String id) {
+                      setState(() {
+
+                      });
+                      controller.selectUsers(id);
+                      setState(() {
+
+                      });
+                    }, onSearch: (String v) async{
+                      controller.usersPagingController.itemList = [];
+                      await controller.loadUsers(v);
+                      print(
+                          "length:${controller.usersPagingController.itemList?.length}");
+                      setState(() {
+
+                      });
+                    },
+                    users: state.users,
+                      pagination: controller.usersPagingController,
+                    ),
+                );
+              },
+              icon: const Icon(
+                Icons.people,
+                color: Colors.grey,
                 size: 30,
               )),
         if (widget.social != 'twitter')

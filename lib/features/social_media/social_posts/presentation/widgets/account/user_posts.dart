@@ -106,14 +106,14 @@ class _UserPostsState extends State<UserPosts> {
                               onAddComment:
                                   (PostCommentParams params) async{
                                 var result = await controller.onPostComment(
-                                    params: params);
+                                    params: params, from: 'feed');
                                 var currentPost=controller.userPostsPagingController.itemList?.firstWhere((element) => element.id==params.postId);
                                 currentPost?.commentsCount=(currentPost.commentsCount!+1);
                                 return result;
                               }, onCommentReply: (ReplyOnCommentParams params) async{
                               var result = await controller.replyOnComment(
                                 params:ReplyOnCommentParams(
-                                    postId: params.postId, content: params.content,commentId: params.commentId),
+                                    postId: params.postId, content: params.content,commentId: params.commentId), from: 'feed',
                               );
                               var currentPost=controller.userPostsPagingController.itemList?.firstWhere((element) => element.id==params.postId);
                               currentPost?.commentsCount=(currentPost.commentsCount!+1);

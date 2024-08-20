@@ -1,9 +1,31 @@
-changeReaction(dynamic
-currentPost,String react) async {
+changeReaction(dynamic currentPost,String react) async {
   try {
-    if(react=='sad'){
+    if(react=='likes'||react=='like'){
+      if(currentPost?.isLikes==false){
+        if(currentPost?.isLove==true){
+          currentPost?.isLove=false;
+          currentPost?.loveCount=(currentPost.loveCount!-1);
+        }else if(currentPost?.isSad==true){
+          currentPost?.isSad=false;
+          currentPost?.sadCount=(currentPost.sadCount!-1);
+        }else if(currentPost?.isWow==true){
+          currentPost?.isWow=false;
+          currentPost?.wowCount=(currentPost.wowCount!-1);
+        }else if(currentPost?.isAngry==true){
+          currentPost?.isAngry=false;
+          currentPost?.angryCount=(currentPost.angryCount!-1);
+        }else if(currentPost?.isHaha==true){
+          currentPost?.isHaha=false;
+          currentPost?.hahaCount=(currentPost.hahaCount!-1);
+        }
+        currentPost?.isLikes==true;
+        currentPost?.likesCount=(currentPost.likesCount!+1);
+      }else{
+        currentPost?.isLikes==false;
+        currentPost?.likesCount=(currentPost.likesCount!-1);
+      }
+    }else if(react=='sad'){
       if(currentPost?.isSad==false){
-        print("saddddd");
         if(currentPost?.isLikes==true){
           currentPost?.isLikes=false;
           currentPost?.likesCount=(currentPost.likesCount!-1);
@@ -73,30 +95,6 @@ currentPost,String react) async {
       }else{
         currentPost?.isWow==false;
         currentPost?.wowCount=(currentPost.wowCount!-1);
-      }
-    }else if(react=='likes'||react=='like'){
-      if(currentPost?.isLikes==false){
-        if(currentPost?.isLove==true){
-          currentPost?.isLove=false;
-          currentPost?.loveCount=(currentPost.loveCount!-1);
-        }else if(currentPost?.isSad==true){
-          currentPost?.isSad=false;
-          currentPost?.sadCount=(currentPost.sadCount!-1);
-        }else if(currentPost?.isWow==true){
-          currentPost?.isWow=false;
-          currentPost?.wowCount=(currentPost.wowCount!-1);
-        }else if(currentPost?.isAngry==true){
-          currentPost?.isAngry=false;
-          currentPost?.angryCount=(currentPost.angryCount!-1);
-        }else if(currentPost?.isHaha==true){
-          currentPost?.isHaha=false;
-          currentPost?.hahaCount=(currentPost.hahaCount!-1);
-        }
-        currentPost?.isLikes==true;
-        currentPost?.likesCount=(currentPost.likesCount!+1);
-      }else{
-        currentPost?.isLikes==false;
-        currentPost?.likesCount=(currentPost.likesCount!-1);
       }
     }else if(react=='angry'){
       if(currentPost?.isAngry==false){

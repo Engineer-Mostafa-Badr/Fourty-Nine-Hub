@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
@@ -112,37 +113,40 @@ class _UserTweetsState extends State<UserTweets> {
                       bottomSheet(
                         context: context,
                         isScrollControlled: true,
-                        widget: TwitterPostComments(
-                          comments: const [],
-                          postId: controller.userTweetsPagingController.itemList![index].id,
-                          user: user,
-                          onAddComment: (TwitterPostCommentParams params) async{
-                            var result = await controller.onPostComment(params: params);
-                            controller.userTweetsPagingController.itemList?.firstWhere((element) => element.id==params.postId).commentsCount=(controller.userTweetsPagingController.itemList!.firstWhere((element) => element.id==params.postId).commentsCount!+1);
-                            setState(() {});
-                            return result;
-                          },
-                          onAddReply: (TwitterCommentReplyParams params) {
-                            controller.onCommentReply(params: params);
-                            controller.userTweetsPagingController.itemList?.firstWhere((element) => element.id==params.postId).commentsCount=(controller.userTweetsPagingController.itemList!.firstWhere((element) => element.id==params.postId).commentsCount!+1);
-                            setState(() {});
-                          },
-                          onCommentReact: (TwitterCommentReactParams params) {
-                            controller.onCommentReact(params: params);
-                          },
-                          onGetReplies: (String id, TwitterPostCommentEntity comment) async {
-                            // getCommentReplies(
-                            //   context: context,
-                            //   commentId: id,
-                            //   comment: comment,
-                            //   postId: postId, userData: userData,
-                            // );
-                          },
-                          newCommentId: '',
-                          state: state,
-                          onReport: (TwitterReportParams params) {
-                            controller.onReport(params);
-                          },
+                        widget: BlocProvider.value(
+                          value: serviceLocator<TwitterCubit>()..loadComments(context, controller.userTweetsPagingController.itemList![index].id),
+                          child: TwitterPostComments(
+                            comments: const [],
+                            postId: controller.userTweetsPagingController.itemList![index].id,
+                            user: user,
+                            onAddComment: (TwitterPostCommentParams params) async{
+                              var result = await controller.onPostComment(params: params);
+                              controller.userTweetsPagingController.itemList?.firstWhere((element) => element.id==params.postId).commentsCount=(controller.userTweetsPagingController.itemList!.firstWhere((element) => element.id==params.postId).commentsCount!+1);
+                              setState(() {});
+                              return result;
+                            },
+                            onAddReply: (TwitterCommentReplyParams params) {
+                              controller.onCommentReply(params: params);
+                              controller.userTweetsPagingController.itemList?.firstWhere((element) => element.id==params.postId).commentsCount=(controller.userTweetsPagingController.itemList!.firstWhere((element) => element.id==params.postId).commentsCount!+1);
+                              setState(() {});
+                            },
+                            onCommentReact: (TwitterCommentReactParams params) {
+                              controller.onCommentReact(params: params);
+                            },
+                            onGetReplies: (String id, TwitterPostCommentEntity comment) async {
+                              // getCommentReplies(
+                              //   context: context,
+                              //   commentId: id,
+                              //   comment: comment,
+                              //   postId: postId, userData: userData,
+                              // );
+                            },
+                            newCommentId: '',
+                            state: state,
+                            onReport: (TwitterReportParams params) {
+                              controller.onReport(params);
+                            },
+                          ),
                         ),
 
                       );

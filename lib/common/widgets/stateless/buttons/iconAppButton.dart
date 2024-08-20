@@ -32,6 +32,7 @@ class IconAppButton extends StatelessWidget {
     return InkWell(
       onTap: () => onPressed(),
       child: Container(
+        alignment: Alignment.center,
           height: height ?? kToolbarHeight * .6,
           width: width,
           margin: EdgeInsets.all(margin ?? 0),
@@ -47,14 +48,14 @@ class IconAppButton extends StatelessWidget {
       return CircleAvatar(
         child: Icon(
           icon,
-          size: size ?? 30,
+          size: size ?? 20,
         ),
       );
     } else {
       return Icon(
         icon,
         color: color,
-        size: size ?? 30,
+        size: size ?? 20,
       );
     }
   }

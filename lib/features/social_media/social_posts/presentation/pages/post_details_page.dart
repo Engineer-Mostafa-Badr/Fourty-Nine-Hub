@@ -98,8 +98,6 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                   post: state.postDetails!,
                                   onReact: (params)async{
                                     var result = await widget.onReact(params);
-                                    // changeReaction(state.postDetails, params.react);
-                                    // setState(() {});
                                     return result;
                                   },
                                   deletePost: widget.deletePost,

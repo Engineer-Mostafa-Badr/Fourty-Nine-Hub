@@ -87,8 +87,10 @@ class _ReplyCardState extends State<ReplyCard> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            BuildReactionsButtons(post: widget.reply,
-                from: 'comments',),
+            BuildReactionsButtons(
+              post: widget.reply,
+                from: 'comments',
+            ),
           ],
         ),
       ],
