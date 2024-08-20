@@ -41,7 +41,7 @@ class _LoginViewState extends State<LoginView> {
     scrollController.dispose();
     log(widget.authType.toString(),
         name: "lllllllllllllllllllllllllllllllllllll");
-    // widget.authType = widget.authType;
+    // wid, required AuthType authTypeget.authType = widget.authType;
     // log(widget.authType.toString(), name: "lllllllllllllllllllllllllllllllllllll");
   }
 

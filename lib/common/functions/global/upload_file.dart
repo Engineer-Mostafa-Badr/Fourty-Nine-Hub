@@ -38,10 +38,11 @@ class UploadFile {
             final confirmUploadResponse = await serviceLocator<ApiConsumer>()
                 .put(EndPoints.confirmUpload(mediaId));
             confirmUploadResponse.fold((l) {
+              print("object22222");
               return Left(l);
             }, (data) {
+              print("object111");
               onUploaded(UploadFileEntity(mediaId: mediaId, file: file));
-
               return const Right(true);
             });
           });

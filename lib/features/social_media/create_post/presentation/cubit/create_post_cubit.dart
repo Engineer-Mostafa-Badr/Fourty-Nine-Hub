@@ -106,6 +106,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
 
   uploadPhoto() async {
     final UploadFile upload = UploadFile();
+    print("objectssssssssss");
     await upload.uploadImage(
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) {
