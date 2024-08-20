@@ -16,7 +16,7 @@ class UploadFile {
       {bool isGallery = true,
       required String subCategoryId,
       required Function(UploadFileEntity) onUploaded}) async {
-    final file = await FilePickerHelper()
+    await FilePickerHelper()
         .pickMedia(isGallery: isGallery)
         .then((file) async {
       if (file != null) {

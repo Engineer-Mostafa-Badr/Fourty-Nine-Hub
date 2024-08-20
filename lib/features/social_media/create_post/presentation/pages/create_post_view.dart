@@ -261,8 +261,8 @@ class _CreatePostViewState extends State<CreatePostView> {
         builder: (context, state) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         IconButton(
-            onPressed: () {
-              controller.uploadPhoto();
+            onPressed: () async{
+              await controller.uploadPhoto();
             },
             icon: const Icon(
               Icons.image,
