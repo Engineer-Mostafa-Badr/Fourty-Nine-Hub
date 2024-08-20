@@ -1,6 +1,12 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/components/utils/toast.dart';
+
+import '../../../../../../../routes/pages.dart';
 
 part 'camera_picker_state.dart';
 
@@ -11,17 +17,30 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
   int _selectedCamera = 0;
   final List<XFile> _mediaList = [];
   final Duration _videoDuration = const Duration(minutes: 2);
-  late List<CameraDescription> _cameras;
+  List<CameraDescription> _cameras = [];
+
+  @override
+  void onChange(Change<CameraPickerState> change) {
+    log('state is ${change.currentState}');
+    log('state next ${change.nextState}');
+    super.onChange(change);
+  }
 
   Future<void> init() async {
-    _cameras = await availableCameras();
-    _controller =
-        CameraController(_cameras[_selectedCamera], ResolutionPreset.medium);
+    try {
+      _cameras = await availableCameras();
+      _controller =
+          CameraController(_cameras[_selectedCamera], ResolutionPreset.medium);
 
-    await _controller.initialize();
-    await _controller.setFlashMode(FlashMode.off);
-    emit(state.copyWith(
-        controller: _controller, status: CameraPickerStatus.initialized));
+      await _controller.initialize();
+      await _controller.setFlashMode(FlashMode.off);
+      emit(state.copyWith(
+          controller: _controller, status: CameraPickerStatus.initialized));
+    } catch (e) {
+      showErrorMessage(
+          AppPages.router.configuration.navigatorKey.currentContext!, ' $e');
+      throw '$e';
+    }
   }
 
   void flipCamera() {
@@ -44,12 +63,14 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
   Future<void> takePicture() async {
     // emit(CameraPickerLoading());
     try {
-      final XFile image = await state.controller!.takePicture();
+      final XFile image = await _controller.takePicture();
       _mediaList.add(image);
-      emit(state.copyWith(status: CameraPickerStatus.updateMediaList, mediaList: _mediaList));
+      emit(state.copyWith(
+          status: CameraPickerStatus.updateMediaList, mediaList: _mediaList));
       // emit(CameraPickerLoaded());
     } catch (e) {
-      debugPrint('==================================== Error taking picture: $e');
+      debugPrint(
+          '==================================== Error taking picture: $e');
       // emit(CameraPickerError(e.toString()));
     }
   }

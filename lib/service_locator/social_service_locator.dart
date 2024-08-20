@@ -430,8 +430,8 @@ class SocialServiceLocator {
         () => GetSeenHistoryUseCase(
               serviceLocator(),
             ));
-      serviceLocator(),
-    ));
+
+
 
     serviceLocator.registerLazySingleton<ChangeChatMuteStateUseCase>(
             () => ChangeChatMuteStateUseCase(

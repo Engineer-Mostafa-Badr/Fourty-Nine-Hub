@@ -6,6 +6,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 class AttachmentTypes extends StatelessWidget {
   final ChatRoomCubit chatRoomCubit;
+
   const AttachmentTypes({super.key, required this.chatRoomCubit});
 
   @override
