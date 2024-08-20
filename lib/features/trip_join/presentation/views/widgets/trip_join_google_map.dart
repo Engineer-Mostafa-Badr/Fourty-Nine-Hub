@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class TripJoinGoogleMap extends StatefulWidget {
@@ -15,6 +17,9 @@ class TripJoinGoogleMap extends StatefulWidget {
 
 class _TripJoinGoogleMapState extends State<TripJoinGoogleMap> {
   final Completer<GoogleMapController> _googleMapController = Completer<GoogleMapController>();
+  PolylinePoints polylinePoints = PolylinePoints();
+  Map<PolylineId, Polyline> polylines = {};
+  List<LatLng> polylineCoordinates = [];
 
   static const CameraPosition _egyptLocation = CameraPosition(
     target: LatLng(30.033333, 31.233334),
@@ -28,18 +33,22 @@ class _TripJoinGoogleMapState extends State<TripJoinGoogleMap> {
         BlocListener<StartingLocationCubit, StartingLocationState>(
           listener: (context, state) {
             if (state is StartingLocationSuccess) {
-              Future.delayed(const Duration(seconds: 1)).then(
-                (value) => _animateToMarkers(state),
-              );
+              Future.delayed(const Duration(seconds: 1))
+                  .then(
+                    (value) => _animateToMarkers(state),
+                  )
+                  .then((value) => _makeLines());
             }
           },
         ),
         BlocListener<DestinationLocationCubit, DestinationLocationState>(
           listener: (context, state) {
             if (state is DestinationLocationSuccess) {
-              Future.delayed(const Duration(seconds: 1)).then(
-                (value) => _animateToMarkers(state),
-              );
+              Future.delayed(const Duration(seconds: 1))
+                  .then(
+                    (value) => _animateToMarkers(state),
+                  )
+                  .then((value) => _makeLines());
             }
           },
         ),
@@ -61,11 +70,54 @@ class _TripJoinGoogleMapState extends State<TripJoinGoogleMap> {
             zoomGesturesEnabled: true,
             myLocationEnabled: true,
             myLocationButtonEnabled: true,
+            liteModeEnabled: false,
+            mapToolbarEnabled: true,
+            rotateGesturesEnabled: true,
+            scrollGesturesEnabled: true,
+            tiltGesturesEnabled: true,
             markers: markers.toSet(),
+            polylines: Set<Polyline>.of(polylines.values),
           );
         }),
       ),
     );
+  }
+
+  _addPolyLine() {
+    PolylineId id = const PolylineId("poly");
+    Polyline polyline = Polyline(
+      polylineId: id,
+      color: Colors.red,
+      points: polylineCoordinates,
+    );
+    polylines[id] = polyline;
+    setState(() {});
+  }
+
+  void _makeLines() async {
+    if (markers.length != 2) {
+      return;
+    }
+    await polylinePoints
+        .getRouteBetweenCoordinates(
+      UIConst.googleGeocodingApiKey,
+      PointLatLng(
+        markers[0].position.latitude,
+        markers[0].position.longitude,
+      ), //Starting LATLANG
+      PointLatLng(
+        markers[1].position.latitude,
+        markers[1].position.longitude,
+      ), //End LATLANG
+      travelMode: TravelMode.driving,
+    )
+        .then((value) {
+      for (var point in value.points) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      }
+    }).then((value) {
+      _addPolyLine();
+    });
   }
 
   void _animateToMarkers(var state) {
