@@ -42,7 +42,7 @@ class CreatePostBanner extends StatelessWidget {
             width: 10,
           ),
           InkWell(
-            onTap: () => context.push(Routes.QURAAN),
+            onTap: () => context.push(Routes.REELS),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -40,13 +41,13 @@ class _OtherAccountViewState extends State<OtherAccountView> {
       child: Scaffold(
         // backgroundColor: Colors.,
         // appBar: const HomeAppbar(),
-        drawer: const DrawerWidget(),
-        bottomNavigationBar: const BottomNavigator(
-          mainCategory: 0,
-          index: 2,
-        ),
-        floatingActionButton: const FloatingButton(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // drawer: const DrawerWidget(),
+        // bottomNavigationBar: const BottomNavigator(
+        //   mainCategory: 0,
+        //   index: 2,
+        // ),
+        // floatingActionButton: const FloatingButton(),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: BlocBuilder<SocialPostsCubit, SocialPostsState>(
             builder: (context, state) {
           final controller = context.read<SocialPostsCubit>();
@@ -308,9 +309,10 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                 )),
               ],
             )),
-            Positioned(
+            PositionedDirectional(
                 bottom: 20,
-                left: 10,
+                start: 10,
+
                 child: CircleAvatar(
                   radius: 30,
                   backgroundColor: AppColors.SECONDARY_COLOR,

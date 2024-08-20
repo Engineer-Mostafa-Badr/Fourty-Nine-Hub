@@ -669,4 +669,9 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       react: 'likes',
     ),
   ];
+
+  void triggerBlock(){
+
+  }
+
 }
