@@ -32,7 +32,7 @@ class WalletWidget extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: margin ?? 0),
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-          color:Theme.of(context).scaffoldBackgroundColor,
+          color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(10),
           boxShadow: const [
             BoxShadow(
@@ -60,13 +60,12 @@ class WalletWidget extends StatelessWidget {
                 Label(
                     text: LocaleKeys.balance.tr(),
                     style: Styles.mediumText(
-                        fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.bold,
                     )),
                 Label(
                     text: '900',
                     style: Styles.mediumText(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18)),
+                        fontWeight: FontWeight.bold, fontSize: 18)),
               ],
             ),
           )),
@@ -92,19 +91,19 @@ class WalletWidget extends StatelessWidget {
                 Label(
                     text: LocaleKeys.gift.tr(),
                     style: Styles.mediumText(
-                        fontWeight: FontWeight.bold,)),
+                      fontWeight: FontWeight.bold,
+                    )),
                 Label(
                     text: '300',
                     style: Styles.mediumText(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18)),
+                        fontWeight: FontWeight.bold, fontSize: 18)),
               ],
             ),
           )),
           Container(
             width: .5,
             margin: const EdgeInsets.symmetric(horizontal: 5),
-           // color: Colors.grey,
+            // color: Colors.grey,
             height: kToolbarHeight * .6,
           ),
           const CircleAvatar(
@@ -123,12 +122,12 @@ class WalletWidget extends StatelessWidget {
                 Label(
                     text: LocaleKeys.wallet.tr(),
                     style: Styles.mediumText(
-                        fontWeight: FontWeight.bold,)),
+                      fontWeight: FontWeight.bold,
+                    )),
                 Label(
                     text: '400',
                     style: Styles.mediumText(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18)),
+                        fontWeight: FontWeight.bold, fontSize: 18)),
               ],
             ),
           )),

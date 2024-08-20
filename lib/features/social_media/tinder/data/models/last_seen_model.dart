@@ -1,5 +1,3 @@
-
-
 class LastSeenModel {
   bool? status;
   Data? data;

@@ -28,7 +28,7 @@ class ReelsRepository {
   // final String token =
   //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjI1MjMwYjNmLWRiNmMtNDc0ZC1iOGMyLTM2OGU4YzI4NGEyYyIsImlhdCI6MTcyMzgzODkyMywiZXhwIjo1NTcyMzgzODkyMywic3ViIjoiNjZhNDBmN2Q4OGRjMjJkY2RiZDE0MjQwIn0.t99anZes1_ff-X2Y-avdzViB1Imm_1p_K7aMoP34PKk";
 
-  final String token = serviceLocator<UserCubit>().token??'';
+  final String token = serviceLocator<UserCubit>().token ?? '';
 
   Future<ReelsResponse> fetchReels({int page = 1, int limit = 3}) async {
     log(token + "78888888888888888888");

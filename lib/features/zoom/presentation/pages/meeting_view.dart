@@ -77,9 +77,9 @@ class MeetingView extends StatelessWidget {
 
   Widget _buildMeetingItem(
       {required Color color,
-        required String label,
-        required IconData icon,
-        required Function onTap}) {
+      required String label,
+      required IconData icon,
+      required Function onTap}) {
     return InkWell(
       onTap: () => onTap(),
       child: Column(

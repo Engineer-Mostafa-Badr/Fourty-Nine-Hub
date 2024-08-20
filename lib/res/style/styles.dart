@@ -5,7 +5,7 @@ abstract class Styles {
 // text
   static TextStyle smallText(
       {double fontSize = 10,
-      Color? color ,
+      Color? color,
       TextDecoration? decoration,
       List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {
@@ -44,7 +44,6 @@ abstract class Styles {
         fontSize: fontSize,
         fontWeight: fontWeight,
         shadows: shadows,
-        color: color ?? AppColors.PRIMARY_COLOR,
-        decoration: decoration);
+        color: color);
   }
 }

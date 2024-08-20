@@ -12,8 +12,8 @@ class ChatStories extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: kToolbarHeight * 1.5,
-      decoration:  BoxDecoration(
-        color:Theme.of(context).scaffoldBackgroundColor,
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
       ),
       child: ListView(
         scrollDirection: Axis.horizontal,

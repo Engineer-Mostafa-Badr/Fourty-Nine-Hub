@@ -23,52 +23,48 @@ class InstagramView extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-          appBar:  const HomeAppbar(
+          appBar: const HomeAppbar(
             isWithBackArrow: true,
           ),
           drawer: const DrawerWidget(),
           floatingActionButton: const FloatingButton(
             changeView: 3,
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           bottomNavigationBar: const BottomNavigator(
             mainCategory: 3,
             index: 2,
           ),
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
               builder: (context, state) {
-                return context.read<UserCubit>().isLoggedIn
-                    ? Column(
-                  children: [
-                    _buildTabBar(context),
-                    Expanded(
-                      child: TabBarView(children: [
-                        _buildInstagramWidget(),
-                        const MyAccountView(),
-                      ]),
-                    )
-                  ],
-                )
-                    : Center(
+            return context.read<UserCubit>().isLoggedIn
+                ? Column(
+                    children: [
+                      _buildTabBar(context),
+                      Expanded(
+                        child: TabBarView(children: [
+                          _buildInstagramWidget(),
+                          const MyAccountView(),
+                        ]),
+                      )
+                    ],
+                  )
+                : Center(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                            onTap: () => context.push(Routes.LOGIN),
-                            child: Label(
-                                text: 'Login',
-                                style: Styles.headerText(color: Colors.blue))),
-                        Label(
-                            text: ', To continue in using chat services',
-                            style: Styles.headerText()),
-                      ],
-                    ));
-              })
-
-
-
-
-      ),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                          onTap: () => context.push(Routes.LOGIN),
+                          child: Label(
+                              text: 'Login',
+                              style: Styles.headerText(color: Colors.blue))),
+                      Label(
+                          text: ', To continue in using chat services',
+                          style: Styles.headerText()),
+                    ],
+                  ));
+          })),
     );
   }
 
@@ -78,19 +74,25 @@ class InstagramView extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: List.generate(2, (i) => GestureDetector(
-            onTap: (){
-              if(i==1){
-                context.push(Routes.OTHERSACCOUNT,extra: user?.id);
-              }
-            },
-            child: Container(
-                decoration: i==0?const BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Colors.blue,width: 2))
-                ):null,
-                child: Icon(i==0?Icons.grid_4x4_outlined:Icons.person,color: i==0?Colors.blue:AppColors.DARK_GRAY_COLOR,)
+          children: List.generate(
+            2,
+            (i) => GestureDetector(
+              onTap: () {
+                if (i == 1) {
+                  context.push(Routes.OTHERSACCOUNT, extra: user?.id);
+                }
+              },
+              child: Container(
+                  decoration: i == 0
+                      ? const BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(color: Colors.blue, width: 2)))
+                      : null,
+                  child: Icon(
+                    i == 0 ? Icons.grid_4x4_outlined : Icons.person,
+                    color: i == 0 ? Colors.blue : AppColors.DARK_GRAY_COLOR,
+                  )),
             ),
-          ),
           ),
         ));
   }
@@ -98,7 +100,4 @@ class InstagramView extends StatelessWidget {
   Widget _buildInstagramWidget() {
     return const InstagramGlobalPosts();
   }
-
-
-
 }

@@ -100,7 +100,7 @@ class _CamView extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () {
-                  onDone?.call(controller.state.mediaList);
+                  onDone?.call(controller.state.mediaList ?? []);
                   context.pop();
                 },
                 icon: const Icon(
@@ -219,6 +219,7 @@ class _ImagesList extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             flex: 2,
@@ -227,10 +228,11 @@ class _ImagesList extends StatelessWidget {
                   current.status == CameraPickerStatus.updateMediaList,
               builder: (context, state) {
                 return ListView.builder(
-                  itemCount: state.mediaList.length,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state.mediaList?.length ?? 0,
                   itemBuilder: (context, index) {
                     return Image.file(
-                      File(state.mediaList[index].path),
+                      File(state.mediaList![index].path),
                       // height: 100,
                       width: 100,
                     );
@@ -242,6 +244,8 @@ class _ImagesList extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ElevatedAppButton(
                   label: LocaleKeys.photo,

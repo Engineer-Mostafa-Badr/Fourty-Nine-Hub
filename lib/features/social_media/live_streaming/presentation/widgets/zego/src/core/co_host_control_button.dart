@@ -17,7 +17,6 @@ import 'host_manager.dart';
 
 // Project imports:
 
-
 /// @nodoc
 class ZegoLiveStreamingCoHostControlButton extends StatefulWidget {
   const ZegoLiveStreamingCoHostControlButton({

@@ -106,7 +106,11 @@ class AdCard extends StatelessWidget {
 
   Widget _buildTag() {
     // super premium
-    return const Icon(Icons.workspace_premium_outlined, size: 20,color: AppColors.SECONDARY_COLOR,);
+    return const Icon(
+      Icons.workspace_premium_outlined,
+      size: 20,
+      color: AppColors.SECONDARY_COLOR,
+    );
     // premium
     // regular
   }

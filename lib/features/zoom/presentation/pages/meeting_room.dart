@@ -22,7 +22,7 @@ class MeetingRoom extends StatelessWidget {
     print('live id is $liveID');
     final String userId = Random().nextInt(1000).toString();
     zegoUIKitPrebuiltLiveStreamingHostConfig(MeetingCubit cubit) =>
-        (ZegoUIKitPrebuiltLiveStreamingConfig.host()
+        (ZegoUIKitPrebuiltLiveStreamingConfig.host()..slideSurfaceToHide = false
           ..layout = ZegoLayout.gallery(
             showScreenSharingFullscreenModeToggleButtonRules:
                 ZegoShowFullscreenModeToggleButtonRules.alwaysShow,
@@ -41,6 +41,7 @@ class MeetingRoom extends StatelessWidget {
               ZegoLiveStreamingMenuBarButtonName.chatButton
             ],
           )
+
           ..bottomMenuBar.showInRoomMessageButton = false
           ..slideSurfaceToHide = true
           ..bottomMenuBar.hostExtendButtons = [

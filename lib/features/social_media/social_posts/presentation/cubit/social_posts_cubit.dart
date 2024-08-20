@@ -85,7 +85,12 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._replyOnCommentUseCase,
     this._getTwitterFeedUseCase,
     this._advertisementUseCase,
-    this._getPostUseCase, this._deleteCommentUseCase, this._userProfileUseCase, this._unFollowUserUseCase, this._removeFriedRequestUseCase, this._blocUserUseCase,
+    this._getPostUseCase,
+    this._deleteCommentUseCase,
+    this._userProfileUseCase,
+    this._unFollowUserUseCase,
+    this._removeFriedRequestUseCase,
+    this._blocUserUseCase,
   ) : super(const SocialPostsState());
 
   void loadData() async {
@@ -141,18 +146,18 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     feedPagingController.refresh();
   }
 
-
-  void loadUserPosts(String userId)async{
-    await getMyPosts(1,userId);
+  void loadUserPosts(String userId) async {
+    await getMyPosts(1, userId);
     userPostsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getMyPosts(pageKey,userId);
+      getMyPosts(pageKey, userId);
     });
   }
 
   void refreshUserPosts() {
     userPostsPagingController.refresh();
   }
+
 // get feed posts
   Future<void> getFeed(int page) async {
     final response =
@@ -263,64 +268,61 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   }
 
   // get feed posts
-  Future<void> getMyPosts(int page,String userId) async {
+  Future<void> getMyPosts(int page, String userId) async {
     // final user = context.read<UserCubit>().state.data;
-      final response = await _getUserPostsUseCase(UserPostsParams(page: page,limit: pageSize,userId: userId));
-      response.fold(
-          (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-          (data) {
-            final isLastPage = data.length < pageSize;
-            if (page == 1) {
-              print("page == 1 $page");
-              userPostsPagingController.itemList = [];
-            }
-            if (isLastPage) {
-              print("isLastPage = $isLastPage");
-              userPostsPagingController.appendLastPage(data);
-            } else {
-              print("isNotLastPage = $isLastPage");
-              final nextPageKey = page + 1;
-              userPostsPagingController.appendPage(data, nextPageKey);
-            }
-            emit(state.copyWith(myPosts: data, status: StateStatus.success));
-          });
-
+    final response = await _getUserPostsUseCase(
+        UserPostsParams(page: page, limit: pageSize, userId: userId));
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) {
+      final isLastPage = data.length < pageSize;
+      if (page == 1) {
+        print("page == 1 $page");
+        userPostsPagingController.itemList = [];
+      }
+      if (isLastPage) {
+        print("isLastPage = $isLastPage");
+        userPostsPagingController.appendLastPage(data);
+      } else {
+        print("isNotLastPage = $isLastPage");
+        final nextPageKey = page + 1;
+        userPostsPagingController.appendPage(data, nextPageKey);
+      }
+      emit(state.copyWith(myPosts: data, status: StateStatus.success));
+    });
   }
 
   // get user profile
   Future<void> getUserProfile({required String id}) async {
     emit(state.copyWith(status: StateStatus.loading));
-      final response = await _userProfileUseCase(id);
-      response.fold(
-          (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-          (data) =>
-              emit(state.copyWith(profileData: data, status: StateStatus.success)));
-
+    final response = await _userProfileUseCase(id);
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) => emit(
+            state.copyWith(profileData: data, status: StateStatus.success)));
   }
 
 // react on a post
-  Future<bool> onReact({required PostReactParams params,required String from}) async {
+  Future<bool> onReact(
+      {required PostReactParams params, required String from}) async {
     var response = await _postReactUseCase(params);
     bool value = false;
     response.fold(
         (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
         (r) {
-
-      if(from=='details'){
+      if (from == 'details') {
         // changeReaction(state.postDetails, params.react);
-
-      }else if(from == 'userPosts'){
-      var currentUserPost = userPostsPagingController.itemList
-          ?.firstWhere((element) => element.id == params.postId);
-      changeReaction(currentUserPost, params.react);
-      }else{
+      } else if (from == 'userPosts') {
+        var currentUserPost = userPostsPagingController.itemList
+            ?.firstWhere((element) => element.id == params.postId);
+        changeReaction(currentUserPost, params.react);
+      } else {
         var currentPost = feedPagingController.itemList
             ?.firstWhere((element) => element.id == params.postId);
         changeReaction(currentPost, params.react);
         changeReaction(state.postDetails, params.react);
         // changeReaction(currentUserPost, params.react);
-
       }
       value = r;
       emit(state.copyWith(status: StateStatus.success));
@@ -477,22 +479,24 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     });
   }
 
-
   Future<bool> deleteComment(
-      {required BuildContext context, required String commentId,required String postId,required String from}) async {
+      {required BuildContext context,
+      required String commentId,
+      required String postId,
+      required String from}) async {
     final response = await _deleteCommentUseCase(commentId);
     bool result = false;
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
-          result=r;
-          if(from =='feed'){
-            var currentPost = feedPagingController.itemList
-                ?.firstWhere((element) => element.id == postId);
-            print("commmmmment count${currentPost?.commentsCount}");
+      result = r;
+      if (from == 'feed') {
+        var currentPost = feedPagingController.itemList
+            ?.firstWhere((element) => element.id == postId);
+        print("commmmmment count${currentPost?.commentsCount}");
 
-            currentPost?.commentsCount = (currentPost.commentsCount! - 1);
-          }
+        currentPost?.commentsCount = (currentPost.commentsCount! - 1);
+      }
       emit(state.copyWith(status: StateStatus.success));
       showSuccessMessage(context, "Comment delete successfully");
     });
@@ -556,7 +560,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
-          isFollow = r;
+      isFollow = r;
       emit(state.copyWith(friendRequest: r, status: StateStatus.success));
     });
     return isFollow;
@@ -569,7 +573,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
-          unFollow = r;
+      unFollow = r;
       emit(state.copyWith(status: StateStatus.success));
     });
     return unFollow;
@@ -619,8 +623,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     return value;
   }
 
-
-  List<ReactEntity> reacts=[
+  List<ReactEntity> reacts = [
     ReactEntity(
       image: Assets.wowReaction,
       react: 'wow',

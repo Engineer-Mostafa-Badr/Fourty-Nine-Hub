@@ -62,7 +62,7 @@ class ZegoUIKitPrebuiltLiveStreaming extends StatefulWidget {
   /// You can listen to events that you are interested in here.
   final ZegoUIKitPrebuiltLiveStreamingEvents? events;
 
-  /// to diffrentiate between zoom and live feature
+  /// to differentiate between zoom and live feature
   final bool isLiveStream;
 
   @override

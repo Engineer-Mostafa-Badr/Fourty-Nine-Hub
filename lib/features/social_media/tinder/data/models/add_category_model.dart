@@ -25,9 +25,8 @@ class Data {
   Data({this.favorite});
 
   Data.fromJson(Map<String, dynamic> json) {
-    favorite = json['favorite'] != null
-        ? Favorite.fromJson(json['favorite'])
-        : null;
+    favorite =
+        json['favorite'] != null ? Favorite.fromJson(json['favorite']) : null;
   }
 
   Map<String, dynamic> toJson() {

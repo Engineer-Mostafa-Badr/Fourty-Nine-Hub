@@ -164,7 +164,7 @@ class ZoomMicrophoneBuilder extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ZegoToggleMicrophoneButton(
-                  buttonSize: const Size(30, 30),
+                  buttonSize:  Size(40.zW, 40.zH),
                   iconSize: const Size(100, 100),
                   normalIcon: ButtonIcon(
                     icon: const Icon(
@@ -193,10 +193,10 @@ class ZoomMicrophoneBuilder extends StatelessWidget {
                 ),
                 Text(
                   micState.value ? 'Mute' : 'Unmute',
-                  style: const TextStyle(
+                  style: TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.w200,
-                      fontSize: 12),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 20.zSP),
                 )
               ],
             );
@@ -226,7 +226,7 @@ class ZoomCameraBuilder extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ZegoToggleCameraButton(
-                  buttonSize: const Size(30, 30),
+                  buttonSize: Size(40.zW, 40.zH),
                   iconSize: const Size(100, 100),
                   normalIcon: ButtonIcon(
                     icon: const Icon(
@@ -254,10 +254,10 @@ class ZoomCameraBuilder extends StatelessWidget {
                 ),
                 Text(
                   cameraState.value ? 'Start Video' : 'Stop Video',
-                  style: const TextStyle(
+                  style: TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.w200,
-                      fontSize: 12),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 20.zSP),
                 )
               ],
             );
@@ -301,10 +301,12 @@ class ZoomParticipantsBuilder extends StatelessWidget {
             avatarBuilder: widget.config.avatarBuilder,
             itemBuilder: widget.config.memberList.itemBuilder,
           ),
-          const Text(
+          Text(
             'Participants',
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w200, fontSize: 12),
+                color: Colors.white,
+                fontWeight: FontWeight.w400,
+                fontSize: 20.zSP),
           )
         ],
       ),
@@ -338,22 +340,22 @@ class ZoomChatBuilder extends StatelessWidget {
               buttonSize: const Size(40, 40),
               iconSize: const Size(40, 40),
               enabledIcon: ButtonIcon(
-                icon: const Icon(
+                icon: Icon(
                   Icons.message_rounded,
                   color: Colors.white,
-                  // size: 30,
+                  size: 30.zH,
                 ),
               ),
             ),
-            const Positioned(
-              bottom: 5,
+            Positioned(
+              bottom: 8.zH,
               right: 5,
               child: Text(
                 'Chat',
                 style: TextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.w200,
-                    fontSize: 12),
+                    fontWeight: FontWeight.w400,
+                    fontSize: 25.zSP),
               ),
             )
           ],
@@ -380,7 +382,7 @@ class ZoomSharescreenBuilder extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ZegoScreenSharingToggleButton(
-                  buttonSize: const Size(30, 30),
+                  buttonSize: Size(35.zW, 35.zH),
                   // iconSize: const Size(120, 120),
                   iconStartSharing: ButtonIcon(
                     icon: const Icon(
@@ -397,12 +399,15 @@ class ZoomSharescreenBuilder extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(
-                  !screenShareOn ? 'Share' : 'Stop Share',
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w200,
-                      fontSize: 12),
+                Padding(
+                  padding: EdgeInsets.only(top: 5.zH),
+                  child: Text(
+                    !screenShareOn ? 'Share' : 'Stop Share',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 25.zSP),
+                  ),
                 )
               ],
             );
@@ -420,12 +425,12 @@ class ZoomShareCodeButton extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
+        padding: EdgeInsets.only(bottom: 8.0.zW),
         child: ZegoLiveStreamingMenuBarExtendButton(
             child: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.share,
-            size: 25,
+            size: 35.zH,
             color: Colors.white,
           ),
           onPressed: () => Clipboard.setData(ClipboardData(text: liveId)).then(

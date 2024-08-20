@@ -117,35 +117,43 @@ class ChatsCubit extends Cubit<ChatsState> {
                   (e) => _chats.update(e.sId!, (value) => e, ifAbsent: () => e))
               .toList();
 
-          // in case groups we do not need refresh data status
-          if (index != 5) {
-            refreshChatData(data);
-          }
-        },
-      );
-    }
-  }
-
-  refreshChatData(ChatItemModel data) async {
-    // to listen typing and online emit event status
-    userStatusParams = [];
-    for (var item in _chats.values) {
-      userStatusParams
-          .add(UserStatusParams(chatId: item.sId!, userId: item.userId!));
-    }
+        // to listen typing and online emit event status
+        List<UserStatusParams> userStatusParams = [];
+        for (var item in _chats.values) {
+          userStatusParams
+              .add(UserStatusParams(chatId: item.sId!, userId: item.userId!));
+        }
 
     await Future.delayed(const Duration(seconds: 1));
     sendUserStatus(userStatusParams);
     _socketService.listenToUserStatus();
     unReadMessage = data.totalUnread ?? 0;
 
-    if (data.chats?.length == 0) {
-      return emit.call(ChatsState(chats: [], status: ChatsStates.initState));
-    } else {
-      return emit.call(
-          state.copyWith(chats: data.chats, status: ChatsStates.initState));
+        return emit.call(
+            state.copyWith(chats: data.chats, status: ChatsStates.initState));
+      });
     }
   }
+
+  listenToNewMessages() {
+    _socketService.socketMessageStream.listen((event) {
+      debugPrint("Last message chat cubit ${event.text}");
+      _chats[event.chatId]?.lastMessageText = event.text;
+      emit.call(state.copyWith(
+          chats: _chats.values.toList(), status: ChatsStates.initState));
+    });
+  }
+
+
+  //   listenToNewMessages() {
+  //   _socketService.socketMessageStream.listen((event) {
+  //     if (!_chats.values.isEmpty) {
+  //       _chats[event.chatId]?.lastMessageText = event.text;
+  //       emit.call(state.copyWith(
+  //           chats: _chats.values.toList(), status: ChatsStates.initState));
+  //     }
+  //   });
+  // }
 
   changeChatMuteState(String chatId) async {
     final response = await _changeChatMuteStateUseCase.call(chatId);
@@ -290,15 +298,8 @@ class ChatsCubit extends Cubit<ChatsState> {
     });
   }
 
-  listenToNewMessages() {
-    _socketService.socketMessageStream.listen((event) {
-      if (!_chats.values.isEmpty) {
-        _chats[event.chatId]?.lastMessageText = event.text;
-        emit.call(state.copyWith(
-            chats: _chats.values.toList(), status: ChatsStates.initState));
-      }
-    });
-  }
+
+
 
   sendUserStatus(List<UserStatusParams> params) {
     Timer? timer;

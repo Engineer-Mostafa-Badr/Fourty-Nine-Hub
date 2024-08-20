@@ -48,9 +48,7 @@ class _LogoutWidgetState extends State<LogoutWidget> {
                   controller.logout();
                   context.pop();
                   context.pop();
-                  setState(() {
-                    
-                  });
+                  setState(() {});
                 },
               ),
             ),

@@ -14,7 +14,6 @@ import 'swiping/config.dart';
 
 // Project imports:
 
-
 /// Configuration for initializing the Live Streaming
 ///
 /// This class is used as the [ZegoUIKitPrebuiltLiveStreaming.config] parameter for the constructor of [ZegoUIKitPrebuiltLiveStreaming].
@@ -227,7 +226,9 @@ class ZegoUIKitPrebuiltLiveStreamingConfig {
   ZegoUIKitPrebuiltLiveStreamingConfig.host({List<IZegoUIKitPlugin>? plugins})
       : role = ZegoLiveStreamingRole.host,
         plugins = plugins ?? [],
-        turnOnCameraWhenJoining = ZegoUIKit().getCameraStateNotifier(ZegoUIKit().getLocalUser().id).value,
+        turnOnCameraWhenJoining = ZegoUIKit()
+            .getCameraStateNotifier(ZegoUIKit().getLocalUser().id)
+            .value,
         useFrontFacingCamera = true,
         turnOnMicrophoneWhenJoining = true,
         useSpeakerWhenJoining = true,

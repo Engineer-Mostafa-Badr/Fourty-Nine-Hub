@@ -2,7 +2,6 @@
 
 // Project imports:
 
-
 import '../defines.dart';
 import '../inner_text.dart';
 import '../pk/core/event/defines.dart';

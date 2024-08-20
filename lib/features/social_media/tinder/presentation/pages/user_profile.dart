@@ -26,7 +26,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
     final tinderCubit = context.read<TinderViewCubit>()..resetStoryIndex();
     final userCubit = widget.userCubit;
 
-    if (userCubit.state.data?.id != null && userCubit.state.token?.accessToken != null) {
+    if (userCubit.state.data?.id != null &&
+        userCubit.state.token?.accessToken != null) {
       tinderCubit.fetchUserProfile(
         userId: userCubit.state.data!.id,
         token: userCubit.state.token!.accessToken,
@@ -90,17 +91,20 @@ class _UserProfilePageState extends State<UserProfilePage> {
     return SizedBox(
       width: MediaQuery.of(context).size.width - 16,
       height: MediaQuery.of(context).size.height * 0.60,
-      child: SwipeCardDemo(userImages: tinderCubit.state.profileUserData!.pictures),
+      child: SwipeCardDemo(
+          userImages: tinderCubit.state.profileUserData!.pictures),
     );
   }
 
-  FloatingActionButton _buildFloatingActionButton(BuildContext context, TinderViewCubit tinderCubit) {
+  FloatingActionButton _buildFloatingActionButton(
+      BuildContext context, TinderViewCubit tinderCubit) {
     return FloatingActionButton(
       heroTag: 'upload_image',
       onPressed: () async => _handleImageUpload(tinderCubit),
       backgroundColor: Colors.red,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-      child: const Icon(Icons.add_photo_alternate_outlined, color: Colors.white),
+      child:
+          const Icon(Icons.add_photo_alternate_outlined, color: Colors.white),
     );
   }
 
@@ -164,7 +168,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
     return Column(
       children: [
         Text(
-          capitalizeAndSplit("${user.userId.firstName} ${user.userId.lastName}"),
+          capitalizeAndSplit(
+              "${user.userId.firstName} ${user.userId.lastName}"),
           style: Styles.headerText(
             color: AppColors.PRIMARY_COLOR,
             fontSize: 38,
@@ -258,7 +263,8 @@ class SwipeCardDemoState extends State<SwipeCardDemo> {
 
   void _previousStory() {
     setState(() {
-      _currentStoryIndex = (_currentStoryIndex > 0) ? _currentStoryIndex - 1 : 0;
+      _currentStoryIndex =
+          (_currentStoryIndex > 0) ? _currentStoryIndex - 1 : 0;
     });
   }
 
@@ -284,7 +290,7 @@ class SwipeCardDemoState extends State<SwipeCardDemo> {
   Widget _buildCard() {
     final imageUrl = widget.userImages.isNotEmpty
         ? widget.userImages.reversed.toList()[_currentStoryIndex]?.mediaKey ??
-        UIConst.profilePlaceHolder
+            UIConst.profilePlaceHolder
         : UIConst.profilePlaceHolder;
 
     return Card(
@@ -293,7 +299,8 @@ class SwipeCardDemoState extends State<SwipeCardDemo> {
       child: Stack(
         children: [
           Hero(
-            tag: 'userHero-${widget.userImages.reversed.toList()[_currentStoryIndex]?.id}',
+            tag:
+                'userHero-${widget.userImages.reversed.toList()[_currentStoryIndex]?.id}',
             child: Image.network(
               imageUrl,
               errorBuilder: (context, error, stackTrace) => Image.network(

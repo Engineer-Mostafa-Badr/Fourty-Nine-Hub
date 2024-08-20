@@ -1,10 +1,17 @@
-import 'package:fourtyninehub/core/api/api_client_helper.dart';
+import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 
 class ShippingDataSource {
-  ApiClientHelper api;
+  ApiConsumer api;
   ShippingDataSource({required this.api});
-  Future getBannerData() {
-    return api.get(url: EndPoints.bannerData, token: true);
+  Future<Either<Failure, Map<String, dynamic>>> getBannerData() {
+    return api.get(EndPoints.bannerData);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getS3(
+      {required String endpoint, Map<String, dynamic>? data}) {
+    return api.put(endpoint, data: data);
   }
 }

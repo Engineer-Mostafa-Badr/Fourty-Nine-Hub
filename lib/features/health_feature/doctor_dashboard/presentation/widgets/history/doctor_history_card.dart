@@ -37,8 +37,7 @@ class DoctorHistoryCard extends StatelessWidget {
               Expanded(
                 child: Label(
                   text: title,
-                  style: Styles.headerText(
-                  ),
+                  style: Styles.headerText(),
                 ),
               ),
               const Sizer(
@@ -46,8 +45,7 @@ class DoctorHistoryCard extends StatelessWidget {
               ),
               Label(
                 text: (totalValue).toShortScale,
-                style: Styles.headerText(
-                ),
+                style: Styles.headerText(),
               ),
             ],
           ),

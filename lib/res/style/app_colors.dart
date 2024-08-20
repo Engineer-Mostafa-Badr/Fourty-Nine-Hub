@@ -35,6 +35,7 @@ abstract class AppColors {
   static const WHATS_APP_COLOR = Color(0xFF55CD6C);
   static const Arrow_Icon_color = Color(0xff374957);
   static const AUTH_CONTAINER_COLOR = Colors.white;
+  static const CHECK_MARK_COLOR = Color(0xFF55CD6C);
 
   static const BLACK_GRAY_GRADIENT = LinearGradient(
     begin: Alignment.topCenter,

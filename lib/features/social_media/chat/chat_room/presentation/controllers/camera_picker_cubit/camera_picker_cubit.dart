@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter/widgets.dart';
 
 part 'camera_picker_state.dart';
 
@@ -8,6 +9,7 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
 
   late CameraController _controller;
   int _selectedCamera = 0;
+  final List<XFile> _mediaList = [];
   final Duration _videoDuration = const Duration(minutes: 2);
   late List<CameraDescription> _cameras;
 
@@ -43,10 +45,11 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
     // emit(CameraPickerLoading());
     try {
       final XFile image = await state.controller!.takePicture();
-      state.mediaList.add(image);
-      emit(state.copyWith(status: CameraPickerStatus.updateMediaList));
+      _mediaList.add(image);
+      emit(state.copyWith(status: CameraPickerStatus.updateMediaList, mediaList: _mediaList));
       // emit(CameraPickerLoaded());
     } catch (e) {
+      debugPrint('==================================== Error taking picture: $e');
       // emit(CameraPickerError(e.toString()));
     }
   }
@@ -59,7 +62,7 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
 
   Future<void> stopVideoRecording() async {
     final XFile video = await _controller.stopVideoRecording();
-    state.mediaList.add(video);
+    _mediaList.add(video);
   }
 
   @override

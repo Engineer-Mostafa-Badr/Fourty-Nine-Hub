@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/defines.dart';
 
+import '../defines.dart';
 
 /// @nodoc
 class ZegoLiveStreamingLeaveButton extends StatefulWidget {
@@ -79,7 +80,7 @@ class _ZegoLiveStreamingLeaveButtonState
       icon: widget.icon,
       clickableNotifier: hangupButtonClickableNotifier,
       onLeaveConfirmation: (context) async {
-        /// prevent controller's leave function call after leave button click
+        /*/// prevent controller's leave function call after leave button click
         widget.isLeaveRequestingNotifier?.value = true;
 
         final endConfirmationEvent = ZegoLiveStreamingLeaveConfirmationEvent(
@@ -109,13 +110,125 @@ class _ZegoLiveStreamingLeaveButtonState
         } else {
           /// restore controller's leave status
           widget.isLeaveRequestingNotifier?.value = false;
-        }
+        }*/
+        bool canLeave = await showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                backgroundColor: Colors.white,
+                title: Row(
+                  children: [
+                    const Icon(Icons.warning_amber_rounded,
+                        color: Colors.redAccent),
+                    SizedBox(width: 10.zW),
+                    const Text(
+                      "Leave Meeting",
+                      style: TextStyle(
+                        color: Colors.redAccent,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Are you sure you want to:",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25.zSP,
+                      ),
+                    ),
+                    SizedBox(height: 10.zH),
+                    if (widget.config.role == ZegoLiveStreamingRole.host)
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(
+                              MediaQuery.sizeOf(context).width * 0.4, 56.zH),
+                          backgroundColor: Colors.redAccent,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.zR),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.zW, vertical: 10.zH),
+                        ),
+                        child: const Text("End Meeting for All"),
+                        onPressed: () async {
+                          final users = ZegoUIKit().getAllUsers();
+                          for (var user in users) {
+                            await ZegoUIKit().removeUserFromRoom([user.id]);
+                          }
+                          Navigator.of(context).pop(true);
+                          Navigator.of(context).pop(true);
+                          // widget.defaultEndAction;
+                          // Add your logic to end the meeting for all participants here
+                        },
+                      ),
+                    SizedBox(height: 10.zH),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize:
+                            Size(MediaQuery.sizeOf(context).width * 0.4, 56.zH),
+                        backgroundColor: Colors.orangeAccent,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.zW, vertical: 10.zH),
+                      ),
+                      child: const Text("Just Leave the Meeting"),
+                      onPressed: () {
+                        Navigator.of(context).pop(true);
+                        Navigator.of(context).pop(true);
+                        // Add your logic to leave the meeting here
+                        // widget.defaultEndAction;
+                      },
+                    ),
+                    SizedBox(height: 10.zH),
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          // minimumSize: Size(MediaQuery.sizeOf(context).width*0.4,56.zH),
+                          backgroundColor: Colors.grey[200],
+                          foregroundColor: Colors.black87,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.zR),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.zW, vertical: 10.zH),
+                        ),
+                        child: const Text(
+                          "Cancel",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueAccent),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            });
 
         return canLeave;
       },
       onPress: () async {
         final endEvent = ZegoLiveStreamingEndEvent(
-          reason: ZegoLiveStreamingEndReason.localLeave,
+          reason: widget.config.role == ZegoLiveStreamingRole.host
+              ? ZegoLiveStreamingEndReason.hostEnd
+              : ZegoLiveStreamingEndReason.localLeave,
           isFromMinimizing: ZegoLiveStreamingMiniOverlayPageState.minimizing ==
               ZegoUIKitPrebuiltLiveStreamingController().minimize.state,
         );

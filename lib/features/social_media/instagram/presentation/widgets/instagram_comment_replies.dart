@@ -24,12 +24,16 @@ class InstagramCommentReplies extends StatefulWidget {
   final String commentId;
   final String postId;
   final Function(ReplyOnCommentParams) onAddReply;
-  const InstagramCommentReplies(
-      {super.key, required this.onAddReply, required this.commentId, required this.postId,
-      });
+  const InstagramCommentReplies({
+    super.key,
+    required this.onAddReply,
+    required this.commentId,
+    required this.postId,
+  });
 
   @override
-  State<InstagramCommentReplies> createState() => _InstagramCommentRepliesState();
+  State<InstagramCommentReplies> createState() =>
+      _InstagramCommentRepliesState();
 }
 
 class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
@@ -38,134 +42,138 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<InstagramCubit>(
-      create: (_)=>serviceLocator()..loadReplies(context,widget.commentId),
-      child: BlocBuilder<InstagramCubit,InstagramState>(
-          builder: (context,state) {
-            final controller = context.read<InstagramCubit>();
-            return Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.white,
-                elevation: 0,
-                iconTheme: const IconThemeData(color: Colors.grey),
-                title: Label(
-                    text: '${controller.repliesPagingController.itemList?.length??0} Replies',
-                    style: Styles.mediumText()),
-                leading: IconButton(
-                    onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
-                centerTitle: true,
-              ),
-              body: Column(
-                children: [
-                  Expanded(
-                    child: PagedListView<int, CommentEntity>(
-                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
-                      pagingController: controller.repliesPagingController,
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(
-                          parent: AlwaysScrollableScrollPhysics()),
-                      builderDelegate: PagedChildBuilderDelegate<CommentEntity>(
-                          noItemsFoundIndicatorBuilder: (context) {
-                            print(controller.repliesPagingController.itemList?.length);
-                            return const Padding(
-                                padding: EdgeInsets.only(top: 200),
-                                child: Center(
-                                  child: Text(
-                                    "No Replies",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ));
-                          },
-                          itemBuilder: (context, item, index) {
-
-                            return _buildCommentCard(reply: controller.repliesPagingController.itemList![index]);
-                          },
-                          noMoreItemsIndicatorBuilder: (context) => Container(),
-                          firstPageProgressIndicatorBuilder: (context) => Container(
-                              margin: const EdgeInsets.only(top: 150),
-                              child: const CupertinoActivityIndicator()),
-                          newPageProgressIndicatorBuilder: (context) =>
+      create: (_) => serviceLocator()..loadReplies(context, widget.commentId),
+      child: BlocBuilder<InstagramCubit, InstagramState>(
+          builder: (context, state) {
+        final controller = context.read<InstagramCubit>();
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            iconTheme: const IconThemeData(color: Colors.grey),
+            title: Label(
+                text:
+                    '${controller.repliesPagingController.itemList?.length ?? 0} Replies',
+                style: Styles.mediumText()),
+            leading: IconButton(
+                onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
+            centerTitle: true,
+          ),
+          body: Column(
+            children: [
+              Expanded(
+                child: PagedListView<int, CommentEntity>(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                  pagingController: controller.repliesPagingController,
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  builderDelegate: PagedChildBuilderDelegate<CommentEntity>(
+                      noItemsFoundIndicatorBuilder: (context) {
+                        print(controller
+                            .repliesPagingController.itemList?.length);
+                        return const Padding(
+                            padding: EdgeInsets.only(top: 200),
+                            child: Center(
+                              child: Text(
+                                "No Replies",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ));
+                      },
+                      itemBuilder: (context, item, index) {
+                        return _buildCommentCard(
+                            reply: controller
+                                .repliesPagingController.itemList![index]);
+                      },
+                      noMoreItemsIndicatorBuilder: (context) => Container(),
+                      firstPageProgressIndicatorBuilder: (context) => Container(
+                          margin: const EdgeInsets.only(top: 150),
+                          child: const CupertinoActivityIndicator()),
+                      newPageProgressIndicatorBuilder: (context) =>
                           const CupertinoActivityIndicator()),
-                    ),
+                ),
+              ),
+              Container(
+                  height: kToolbarHeight,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
                   ),
-
-                  Container(
-                      height: kToolbarHeight,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                      ),
-                      child: Row(
-                        children: [
-                          const ProfileImage(accountId: 0),
-                          const Sizer(),
-                          Expanded(
-                              child: FormTextField(
-                                  hint: 'Type your reply ....',
-                                  height: kToolbarHeight * .7,
-                                  action: (v) {
-                                    setState(() {});
-                                  },
-                                  controller: replyTextController)),
-                          const Sizer(),
-                          if (replyTextController.text.isNotEmpty)
-                            IconAppButton(
-                              icon: Icons.send,
-                              isCircle: true,
-                              onPressed: () async {
-                                CommentEntity data = await controller.replyOnComment(
-                                  params:ReplyOnCommentParams(
-                                      postId: widget.postId, content: replyTextController.text,commentId: widget.commentId),
-                                );
-                                final user = context.read<UserCubit>().state.data;
-                                print("add");
-                                controller.repliesPagingController.itemList?.insert(
-                                  0,
-                                  CommentModel(
-                                    id: data.id,
-                                    content: replyTextController.text,
-                                    post: widget.postId,
-                                    createdAt: DateTime.now(),
-                                    loveCount: data.loveCount,
-                                    angryCount: data.angryCount,
-                                    likesCount: data.likesCount,
-                                    repliesCount: data.repliesCount,
-                                    sadCount: data.sadCount,
-                                    wowCount: data.wowCount,
-                                    totalCount: data.totalCount,
-                                    isAngry: false,
-                                    isLikes: false,
-                                    isLove: false,
-                                    isSad: false,
-                                    isWow: false,
-                                    user: TwitterUserEntity(
-                                      id: user!.id,
-                                      firstName: user.firstName,
-                                      lastName: user.lastName,
-                                      createdAt: DateTime.now(),
-                                      image: user.profilePicture ?? '',
-                                      email: user.email ?? '',
-                                      isDocumented: false,
-                                    ),
-                                  ),
-                                );
-                                print("add");
-                                replyTextController.clear();
-                                FocusScope.of(context).unfocus();
+                  child: Row(
+                    children: [
+                      const ProfileImage(accountId: 0),
+                      const Sizer(),
+                      Expanded(
+                          child: FormTextField(
+                              hint: 'Type your reply ....',
+                              height: kToolbarHeight * .7,
+                              action: (v) {
                                 setState(() {});
                               },
-                            )
-                        ],
-                      )),
-                ],
-              ),
-            );
-          }
-      ),
+                              controller: replyTextController)),
+                      const Sizer(),
+                      if (replyTextController.text.isNotEmpty)
+                        IconAppButton(
+                          icon: Icons.send,
+                          isCircle: true,
+                          onPressed: () async {
+                            CommentEntity data =
+                                await controller.replyOnComment(
+                              params: ReplyOnCommentParams(
+                                  postId: widget.postId,
+                                  content: replyTextController.text,
+                                  commentId: widget.commentId),
+                            );
+                            final user = context.read<UserCubit>().state.data;
+                            print("add");
+                            controller.repliesPagingController.itemList?.insert(
+                              0,
+                              CommentModel(
+                                id: data.id,
+                                content: replyTextController.text,
+                                post: widget.postId,
+                                createdAt: DateTime.now(),
+                                loveCount: data.loveCount,
+                                angryCount: data.angryCount,
+                                likesCount: data.likesCount,
+                                repliesCount: data.repliesCount,
+                                sadCount: data.sadCount,
+                                wowCount: data.wowCount,
+                                totalCount: data.totalCount,
+                                isAngry: false,
+                                isLikes: false,
+                                isLove: false,
+                                isSad: false,
+                                isWow: false,
+                                user: TwitterUserEntity(
+                                  id: user!.id,
+                                  firstName: user.firstName,
+                                  lastName: user.lastName,
+                                  createdAt: DateTime.now(),
+                                  image: user.profilePicture ?? '',
+                                  email: user.email ?? '',
+                                  isDocumented: false,
+                                ),
+                              ),
+                            );
+                            print("add");
+                            replyTextController.clear();
+                            FocusScope.of(context).unfocus();
+                            setState(() {});
+                          },
+                        )
+                    ],
+                  )),
+            ],
+          ),
+        );
+      }),
     );
   }
-
 
   Widget _buildCommentCard({required CommentEntity reply}) {
     return Column(

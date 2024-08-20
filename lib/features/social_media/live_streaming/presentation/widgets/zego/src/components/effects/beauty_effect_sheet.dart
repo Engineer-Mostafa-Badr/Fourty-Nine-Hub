@@ -12,7 +12,6 @@ import 'effect_grid.dart';
 
 // Project imports:
 
-
 /// @nodoc
 class ZegoLiveStreamingBeautyEffectSheet extends StatefulWidget {
   final ZegoUIKitPrebuiltLiveStreamingInnerText translationText;

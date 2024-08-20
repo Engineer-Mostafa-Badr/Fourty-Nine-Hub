@@ -9,7 +9,6 @@ import 'defines.dart';
 
 // Project imports:
 
-
 /// @nodoc
 class ZegoLiveStreamingDisableChatButton extends StatefulWidget {
   final Size? iconSize;

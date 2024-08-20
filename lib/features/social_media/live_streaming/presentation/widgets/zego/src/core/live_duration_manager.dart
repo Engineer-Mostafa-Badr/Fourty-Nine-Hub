@@ -9,6 +9,7 @@ import 'package:zego_uikit/zego_uikit.dart';
 
 // Project imports:
 import 'host_manager.dart';
+
 /// @nodoc
 class ZegoLiveStreamingDurationManager {
   final ZegoLiveStreamingHostManager hostManager;

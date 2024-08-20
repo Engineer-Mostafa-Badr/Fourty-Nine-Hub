@@ -352,9 +352,9 @@ class TinderCardStack extends StatelessWidget {
                 child: Stack(
                   children: [
                     BottomSheetContent(
-                      userCubit: userCubit,
-                      accessToken: userCubit.state.token?.accessToken ?? '',cardUser:cardUser
-                    ),
+                        userCubit: userCubit,
+                        accessToken: userCubit.state.token?.accessToken ?? '',
+                        cardUser: cardUser),
                     Positioned(
                       bottom: 5,
                       right: 5,
@@ -405,8 +405,7 @@ class TinderCardStack extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) => BlocProvider.value(
-          value:
-          TinderViewCubit(),
+          value: TinderViewCubit(),
           child: UserProfilePage(
             userCubit: userCubit,
           ),

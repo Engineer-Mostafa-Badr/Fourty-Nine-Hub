@@ -55,55 +55,56 @@ class _ChatRoomState extends State<ChatRoom> {
           // ),
           body: Column(
             children: [
-              BlocBuilder<ChatRoomCubit, ChatRoomState>(
-                  builder: (context, state) {
-                return state.isLoading
-                    ? LoadingCustom.customThreeBounce(context)
-                    : const Expanded(
-                        child: SizedBox(),
-                        // child: ListView.separated(
-                        //   addAutomaticKeepAlives: true,
-                        //   controller: chatRoomCubit.scrollController,
-                        //   // reverse: true,
-                        //   // physics: const NeverScrollableScrollPhysics(),
-                        //   itemBuilder: (context, index) => SwipeTo(
-                        //     onRightSwipe: (message) {
-                        //       replayMessage(state.chatMessages![index]);
-                        //     },
-                        //     child: GestureDetector(
-                        //       onLongPress: () {
-                        //         _showReplyDialog(
-                        //           context,
-                        //           messageEntity: state.chatMessages![index],
-                        //           replyFunction: () {
-                        //             Navigator.of(context).pop();
-                        //             replayMessage(state.chatMessages![index]);
-                        //           },
-                        //           deleteFunction: () {
-                        //             Navigator.of(context).pop();
-                        //             deleteMessage(
-                        //                 chatId:
-                        //                     state.chatMessages![index].chatId!,
-                        //                 messageId:
-                        //                     state.chatMessages![index].sId!);
-                        //           },
-                        //         );
-                        //       },
-                        //       child: MessageCard(
-                        //         messageEntity: state.chatMessages![index],
-                        //         anotherUserName:
-                        //             state.chatData?.chat?.contact?.name ??
-                        //                 'No name',
-                        //       ),
-                        //     ),
-                        //   ),
-                        //   separatorBuilder: (context, index) => const Sizer(
-                        //     height: 3,
-                        //   ),
-                        //   itemCount: state.chatMessages?.length ?? 0,
-                        // ),
-                      );
-              }),
+              Spacer(),
+              // BlocBuilder<ChatRoomCubit, ChatRoomState>(
+              //     builder: (context, state) {
+              //   return state.isLoading
+              //       ? LoadingCustom.customThreeBounce(context)
+              //       : const Expanded(
+              //           child: SizedBox(),
+              //           // child: ListView.separated(
+              //           //   addAutomaticKeepAlives: true,
+              //           //   controller: chatRoomCubit.scrollController,
+              //           //   // reverse: true,
+              //           //   // physics: const NeverScrollableScrollPhysics(),
+              //           //   itemBuilder: (context, index) => SwipeTo(
+              //           //     onRightSwipe: (message) {
+              //           //       replayMessage(state.chatMessages![index]);
+              //           //     },
+              //           //     child: GestureDetector(
+              //           //       onLongPress: () {
+              //           //         _showReplyDialog(
+              //           //           context,
+              //           //           messageEntity: state.chatMessages![index],
+              //           //           replyFunction: () {
+              //           //             Navigator.of(context).pop();
+              //           //             replayMessage(state.chatMessages![index]);
+              //           //           },
+              //           //           deleteFunction: () {
+              //           //             Navigator.of(context).pop();
+              //           //             deleteMessage(
+              //           //                 chatId:
+              //           //                     state.chatMessages![index].chatId!,
+              //           //                 messageId:
+              //           //                     state.chatMessages![index].sId!);
+              //           //           },
+              //           //         );
+              //           //       },
+              //           //       child: MessageCard(
+              //           //         messageEntity: state.chatMessages![index],
+              //           //         anotherUserName:
+              //           //             state.chatData?.chat?.contact?.name ??
+              //           //                 'No name',
+              //           //       ),
+              //           //     ),
+              //           //   ),
+              //           //   separatorBuilder: (context, index) => const Sizer(
+              //           //     height: 3,
+              //           //   ),
+              //           //   itemCount: state.chatMessages?.length ?? 0,
+              //           // ),
+              //         );
+              // }),
               SendMessageWidget(
                 // focusNode: focusNode,
                 // replayMessage: _replayMessage,

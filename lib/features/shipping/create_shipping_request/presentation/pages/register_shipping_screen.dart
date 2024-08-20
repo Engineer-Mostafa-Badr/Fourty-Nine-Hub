@@ -7,9 +7,15 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_form_field.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/phone_number_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/name_filed.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/phone_field.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/location/cities_dropdowns.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/location/governorate_dropdown.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/pickers/date/id_expiry_date_picker.dart';
@@ -21,6 +27,8 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RegisterShippingScreen extends StatefulWidget {
@@ -39,6 +47,12 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
   TextEditingController lastNameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<ShippingCubit>().getBannerData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +86,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   child: BlocBuilder<ShippingCubit, ShippingState>(
                     builder: (context, state) {
                       if (state is SuccessGetBannerState) {
+                        log(state.toString(), name: "llllllllllllllllllllll");
+
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -214,7 +230,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   "Car Pictures",
                   style: Styles.headerText(
                     fontSize: 20,
-                    color: AppColors.PRIMARY_COLOR_DARK,
+                    color: AppColors.PRIMARY_COLOR,
                   ),
                 ),
                 // const Gap(20),
@@ -275,6 +291,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                     shippingcubit.model.carImageBehind == null);
                           },
                           onTap: (image) {
+                            log(image.toString());
                             shippingcubit.pickImageCarBehind(image: image);
                           },
                         ),
@@ -297,52 +314,81 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                 ),
                 // const Gap(30),
                 const SizedBox(height: 30),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                      color: const Color(0xFFE0E0E0),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        // flex: 2,
-                        child: Text(
-                          Labels.identificationCard,
-                          style: Styles.headerText(fontSize: 20),
-                        ),
-                      ),
-                      const Spacer(),
+                // Container(
+                //   width: double.infinity,
+                //   padding: const EdgeInsets.all(20),
+                //   decoration: BoxDecoration(
+                //       color: const Color(0xFFE0E0E0),
+                //       borderRadius: BorderRadius.circular(10)),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Flexible(
+                //         // flex: 2,
+                //         child: Text(
+                //           Labels.identificationCard,
+                //           style: Styles.headerText(fontSize: 20),
+                //         ),
+                //       ),
+                //       const Spacer(),
 
-                      // Gap(30),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          // ImagePickerPlaceholder(
-                          //   tilte: Labels.behind,
-                          //   iconColor: Colors.grey,
+                //       // Gap(30),
+                //       Column(
+                //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //         children: [
+                //           // ImagePickerPlaceholder(
+                //           //   tilte: Labels.behind,
+                //           //   // iconColor: Colors.grey,
+                //           // ),
+                //           ImageValidation(
+                //             // iconColor: Colors.grey,
+                //             hint: Labels.behind,
+                //             validator: (value) {
+                //               return shippingcubit.validation(
+                //                   message: "This field is required.",
+                //                   condition:
+                //                       shippingcubit.model.idImageBehind ==
+                //                           null);
+                //             },
+                //             onTap: (image) {
+                //               shippingcubit.pickImageIdBehind(image: image);
+                //             },
+                //           ),
+                //           // Gap(15),
+                //           const SizedBox(
+                //             height: 15,
+                //           ),
+                          // ImageValidation(
+                          //   // iconColor: Colors.grey,
+                          //   hint: Labels.inFront,
+                          //   validator: (value) {
+                          //     return shippingcubit.validation(
+                          //         message: "This field is required.",
+                          //         condition:
+                          //             shippingcubit.model.idImageInFront ==
+                          //                 null);
+                          //   },
+                          //   onTap: (image) {
+                          //     shippingcubit.pickImageIdInFront(image: image);
+                          //   },
                           // ),
-                          ImageValidation(
-                            iconColor: Colors.grey,
-                            hint: Labels.behind,
-                            validator: (value) {
-                              return shippingcubit.validation(
-                                  message: "This field is required.",
-                                  condition:
-                                      shippingcubit.model.idImageBehind ==
-                                          null);
-                            },
-                            onTap: (image) {
-                              shippingcubit.pickImageIdBehind(image: image);
-                            },
-                          ),
-                          // Gap(15),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          ImageValidation(
-                            iconColor: Colors.grey,
+                        // ],
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Label(
+          text: "ID",
+          style: Styles.headerText(),
+        ),
+        const Sizer(),
+        Row(
+          children: [
+            ImageValidation(
+                            // iconColor: Colors.grey,
                             hint: Labels.inFront,
                             validator: (value) {
                               return shippingcubit.validation(
@@ -355,11 +401,25 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                               shippingcubit.pickImageIdInFront(image: image);
                             },
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+            const Sizer(),
+            ImageValidation(
+                            // iconColor: Colors.grey,
+                            hint: Labels.behind,
+                            validator: (value) {
+                              return shippingcubit.validation(
+                                  message: "This field is required.",
+                                  condition:
+                                      shippingcubit.model.idImageInFront ==
+                                          null);
+                            },
+                            onTap: (image) {
+                              shippingcubit.pickImageIdBehind(image: image);
+                            },
+                          ),
+          ],
+        ),
+      ],
+    ),
                 // const Gap(20),
                 const SizedBox(
                   height: 20,
@@ -378,77 +438,121 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                 const SizedBox(
                   height: 40,
                 ),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                      color: const Color(0xFFE0E0E0),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Row(
-                    children: [
-                      Flexible(
-                        child: Text(
-                          Labels.drivingLicense,
-                          style: Styles.headerText(fontSize: 20),
-                        ),
-                      ),
-                      const Spacer(),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          // ImagePickerPlaceholder(
-                          //   tilte: Labels.behind,
-                          //   iconColor: Colors.grey,
-                          // ),
-                          // Gap(15),
-                          // ImagePickerPlaceholder(
-                          //     tilte: Labels.inFront, iconColor: Colors.grey),
-                          ImageValidation(
-                            iconColor: Colors.grey,
-                            hint: Labels.behind,
-                            validator: (value) {
-                              return shippingcubit.validation(
-                                  message: "This field is required.",
-                                  condition:
-                                      shippingcubit.model.drivingImageBehind ==
-                                          null);
-                            },
-                            onTap: (image) {
-                              shippingcubit.pickImageDrivingBehind(
-                                  image: image);
-                            },
-                          ),
-                          // Gap(15),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          ImageValidation(
-                            iconColor: Colors.grey,
+                // Container(
+                //   width: double.infinity,
+                //   padding: const EdgeInsets.all(20),
+                //   decoration: BoxDecoration(
+                //       color: const Color(0xFFE0E0E0),
+                //       borderRadius: BorderRadius.circular(10)),
+                //   child: Row(
+                //     children: [
+                //       Flexible(
+                //         child: Text(
+                //           Labels.drivingLicense,
+                //           style: Styles.headerText(fontSize: 20),
+                //         ),
+                //       ),
+                //       const Spacer(),
+                //       Column(
+                //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //         children: [
+                //           // ImagePickerPlaceholder(
+                //           //   tilte: Labels.behind,
+                //           //   // iconColor: Colors.grey,
+                //           // ),
+                //           // Gap(15),
+                //           // ImagePickerPlaceholder(
+                //           //     tilte: Labels.inFront, iconColor: Colors.grey),
+                //           ImageValidation(
+                //             // iconColor: Colors.grey,
+                //             hint: Labels.behind,
+                //             validator: (value) {
+                //               return shippingcubit.validation(
+                //                   message: "This field is required.",
+                //                   condition:
+                //                       shippingcubit.model.drivingImageBehind ==
+                //                           null);
+                //             },
+                //             onTap: (image) {
+                //               shippingcubit.pickImageDrivingBehind(
+                //                   image: image);
+                //             },
+                //           ),
+                //           // Gap(15),
+                //           const SizedBox(
+                //             height: 15,
+                //           ),
+                //           ImageValidation(
+                //             // iconColor: Colors.grey,
+                //             hint: Labels.inFront,
+                //             validator: (value) {
+                //               return shippingcubit.validation(
+                //                   message: "This field is required.",
+                //                   condition:
+                //                       shippingcubit.model.drivingImageInFront ==
+                //                           null);
+                //             },
+                //             onTap: (image) {
+                //               shippingcubit.pickImageDrivingInFront(
+                //                   image: image);
+                //             },
+                //           ),
+                //         ],
+                //       ),
+                //     ],
+                //   ),
+                // ),
+
+                Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Label(
+          text: Labels.drivingLicense,
+          style: Styles.headerText(),
+        ),
+        const Sizer(),
+        Row(
+          children: [
+            ImageValidation(
+                            // iconColor: Colors.grey,
                             hint: Labels.inFront,
                             validator: (value) {
                               return shippingcubit.validation(
                                   message: "This field is required.",
                                   condition:
-                                      shippingcubit.model.drivingImageInFront ==
+                                      shippingcubit.model.idImageInFront ==
                                           null);
                             },
                             onTap: (image) {
-                              shippingcubit.pickImageDrivingInFront(
-                                  image: image);
+                              shippingcubit.pickImageIdInFront(image: image);
                             },
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+            const Sizer(),
+            ImageValidation(
+                            // iconColor: Colors.grey,
+                            hint: Labels.behind,
+                            validator: (value) {
+                              return shippingcubit.validation(
+                                  message: "This field is required.",
+                                  condition:
+                                      shippingcubit.model.idImageInFront ==
+                                          null);
+                            },
+                            onTap: (image) {
+                              shippingcubit.pickImageLicenseBehind(image: image);
+                            },
+                          ),
+          ],
+        ),
+      ],
+    ),
                 // const Gap(20),
                 const SizedBox(
                   height: 20,
                 ),
                 CreateDoctorIDExpiryDatePicker(
                   onDateSelected: (date) {
-                    context.read<ShippingCubit>().pickIDExpiryDate(date!);
+                    context.read<ShippingCubit>().pickDrivingExpiryDate(date!);
                   },
                   validator: (value) {
                     return shippingcubit.validation(
@@ -461,69 +565,115 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                 const SizedBox(
                   height: 40,
                 ),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                      color: const Color(0xFFE0E0E0),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          Labels.license,
-                          style: Styles.headerText(fontSize: 20),
-                        ),
-                      ),
-                      const Spacer(),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ImageValidation(
-                            iconColor: Colors.grey,
-                            hint: Labels.behind,
-                            validator: (value) {
-                              return shippingcubit.validation(
-                                  message: "This field is required.",
-                                  condition:
-                                      shippingcubit.model.licenseImageBehind ==
-                                          null);
-                            },
-                            onTap: (image) {
-                              shippingcubit.pickImageLicenseBehind(
-                                  image: image);
-                            },
-                          ),
-                          // Gap(15),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          ImageValidation(
-                            iconColor: Colors.grey,
+                // Container(
+                //   width: double.infinity,
+                //   padding: const EdgeInsets.all(20),
+                //   decoration: BoxDecoration(
+                //       color: const Color(0xFFE0E0E0),
+                //       borderRadius: BorderRadius.circular(10)),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Flexible(
+                //         child: Text(
+                //           Labels.license,
+                //           style: Styles.headerText(fontSize: 20),
+                //         ),
+                //       ),
+                //       const Spacer(),
+                //       Column(
+                //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //         children: [
+                //           ImageValidation(
+                //             // iconColor: Colors.grey,
+                //             hint: Labels.behind,
+                //             validator: (value) {
+                //               return shippingcubit.validation(
+                //                   message: "This field is required.",
+                //                   condition:
+                //                       shippingcubit.model.drivingImageInFront ==
+                //                           null);
+                //             },
+                //             onTap: (image) {
+                //               shippingcubit.pickImageDrivingInFront(
+                //                   image: image);
+                //             },
+                //           ),
+                //           // Gap(15),
+                //           const SizedBox(
+                //             height: 15,
+                //           ),
+                //           ImageValidation(
+                //             // iconColor: Colors.grey,
+                //             hint: Labels.inFront,
+                //             validator: (value) {
+                //               return shippingcubit.validation(
+                //                   message: "This field is required.",
+                //                   condition:
+                //                       shippingcubit.model.drivingImageBehind ==
+                //                           null);
+                //             },
+                //             onTap: (image) {
+                //               shippingcubit.pickImageDrivingBehind(
+                //                   image: image);
+                //             },
+                //           ),
+                //         ],
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // const Gap(20),
+                Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Label(
+          text: Labels.license,
+          style: Styles.headerText(),
+        ),
+        const Sizer(),
+        Row(
+          children: [
+            ImageValidation(
+                            // // iconColor: Colors.grey,
                             hint: Labels.inFront,
                             validator: (value) {
                               return shippingcubit.validation(
                                   message: "This field is required.",
                                   condition:
-                                      shippingcubit.model.licenseImageInFront ==
+                                      shippingcubit.model.idImageInFront ==
                                           null);
                             },
                             onTap: (image) {
-                              shippingcubit.pickImageLicenseInFront(
-                                  image: image);
+                              shippingcubit.pickImageLicenseInFront(image: image);
                             },
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                // const Gap(20),
+            const Sizer(),
+            ImageValidation(
+                            // iconColor: Colors.grey,
+                            hint: Labels.behind,
+                            validator: (value) {
+                              return shippingcubit.validation(
+                                  message: "This field is required.",
+                                  condition:
+                                      shippingcubit.model.idImageInFront ==
+                                          null);
+                            },
+                            onTap: (image) {
+                              shippingcubit.pickImageLicenseBehind(image: image);
+                            },
+                          ),
+          ],
+        ),
+      ],
+    ),
                 const SizedBox(
                   height: 20,
                 ),
                 CreateDoctorIDExpiryDatePicker(
+                  onDateSelected: (date) {
+                    shippingcubit.pickLicenseExpiryDate(date!);
+                  },
                   validator: (value) {
                     return shippingcubit.validation(
                         message: "This field is required.",
@@ -640,7 +790,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       // if (formKey.currentState!.validate()) {
                       //   log("333333333333333333333333333333333");
                       // }
-                      context.read<ShippingCubit>().getS3Id();
+                      // context.read<ShippingCubit>().getUserS3Imag();
+                      context.go(Routes.CREATEDOCTOR);
                     },
                   ),
                   // child: Container(

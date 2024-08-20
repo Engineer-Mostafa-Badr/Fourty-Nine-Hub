@@ -42,10 +42,16 @@ class _ReadMoreLabelState extends State<ReadMoreLabel> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       child: secondHalf!.isEmpty
-          ? Text(firstHalf!,style: widget.style,)
+          ? Text(
+              firstHalf!,
+              style: widget.style,
+            )
           : Column(
               children: <Widget>[
-                Text(flag ? ("${firstHalf!}...") : (firstHalf! + secondHalf!),style: widget.style,),
+                Text(
+                  flag ? ("${firstHalf!}...") : (firstHalf! + secondHalf!),
+                  style: widget.style,
+                ),
                 InkWell(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
