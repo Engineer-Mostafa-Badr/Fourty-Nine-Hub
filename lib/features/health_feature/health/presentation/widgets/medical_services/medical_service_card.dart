@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
@@ -87,7 +86,7 @@ class HealthMedicalServiceCard extends StatelessWidget {
                     ),
                     Label(
                       text:
-                          '${subCategory.numberOfContent.toShortScale} ${LocaleKeys.Ads.localize}',
+                          '${subCategory.numberOfContent.toShortScale} ${LocaleKeys.ads.localize}',
                       style: Styles.mediumText(),
                     ),
                   ],

@@ -22,4 +22,6 @@ extension ContextExtensions on BuildContext {
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
 
   bool get isArabic => Localizations.localeOf(this).languageCode == 'ar';
+
+  FocusScopeNode get foucsScopeNode => FocusScope.of(this);
 }

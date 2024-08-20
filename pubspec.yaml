@@ -61,7 +61,7 @@ dependencies:
   swipe_to: ^1.0.6
   transparent_image: ^2.0.1
   url_launcher: 6.2.6
-  video_player: ^2.8.6
+  video_player: ^2.9.1
   webview_flutter: ^4.8.0
   win32: ^5.4.0
   zego_uikit_prebuilt_live_audio_room: ^3.7.5
@@ -83,6 +83,8 @@ dependencies:
   lottie: ^3.1.2
 
   json_annotation: ^4.8.1
+  file_picker: ^6.2.1
+  camera: ^0.11.0+2
 
 dev_dependencies:
   flutter_lints: ^4.0.0

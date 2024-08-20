@@ -32,7 +32,7 @@ class FoodOrderCard extends StatelessWidget {
             const Sizer(),
             _buildAddressWidget(),
             Label(
-              text: LocaleKeys.meals.localize,
+              text: LocaleKeys.meal.localize,
               style: Styles.mediumText(fontWeight: FontWeight.bold),
             ),
             _buildMealsWidget(),

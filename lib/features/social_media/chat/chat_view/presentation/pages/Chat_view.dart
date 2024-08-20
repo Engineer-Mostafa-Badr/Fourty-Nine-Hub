@@ -311,7 +311,7 @@ class _ChatViewState extends State<ChatView> {
 
   initSocketConnection() {
     chatCubit = context.read<ChatsCubit>()..initSocketConnection();
-    chatCubit.getChats(index: widget.initialTabIndex);
+    chatCubit.initChat();
   }
 
   final List<String> groups = [
@@ -376,22 +376,30 @@ class _ChatViewState extends State<ChatView> {
 
   Widget _buildCategoriesLabels() {
     return TabBar(
-      onTap: (index) {
-        context.read<ChatsCubit>().getChats(index: index);
+        labelColor: AppColors.PRIMARY_COLOR,
+        indicatorColor: Colors.red,
+        onTap: (index) {
+          if(context.read<UserCubit>().isLoggedIn){
+            context.read<ChatsCubit>().getChats(index: index);
 
-        // if this locked chat we request password
-        if (index == 8) {
-          showDialogToConfirmChatLockPassword(context);
-        }
-      },
-      tabAlignment: TabAlignment.start,
-      isScrollable: true,
-      tabs: groups.map((e) {
-        return Tab(
-          text: e,
-        );
-      }).toList(),
-    );
+            // if this locked chat we request password
+            if (index == 8) {
+              showDialogToConfirmChatLockPassword(context);
+            }
+          }
+        },
+        tabAlignment: TabAlignment.start,
+        isScrollable: true,
+        tabs: groups.map((e) {
+          return const Tab(
+            text: 'there was error here look at code and solve it',
+            // text: chatCubit.selectedTabIndex == groups.indexOf(e)
+            //     ? unReadMessages == 0
+            //         ? e
+            //         : "$e($unReadMessages)"
+            //     : e,
+          );
+        }).toList());
   }
 
   Widget _buildCategoriesViews() {
@@ -531,4 +539,7 @@ class _ChatViewState extends State<ChatView> {
           )),
     );
   }
+
+
+
 }

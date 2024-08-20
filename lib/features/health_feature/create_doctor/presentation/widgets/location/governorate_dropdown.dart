@@ -11,7 +11,6 @@ class CreateDoctorGovernorateDropdown extends StatelessWidget {
   final String? Function(Object? value)? validator;
   @override
   Widget build(BuildContext context) {
-    final createDoctorCubit = context.read<CreateDoctorCubit>();
     return BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
       buildWhen: (previous, current) =>
           current is CreateDoctorGovernoratesLoaded,

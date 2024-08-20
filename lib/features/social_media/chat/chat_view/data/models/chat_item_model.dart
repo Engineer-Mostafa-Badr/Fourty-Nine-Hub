@@ -10,6 +10,11 @@ class ChatItemModel {
       json['chats'].forEach((v) {
         chats!.add(ChatModel.fromJson(v));
       });
+    }else if (json['groups'] != null) {
+      chats = <ChatModel>[];
+      json['groups'].forEach((v) {
+        chats!.add(ChatModel.fromJson(v));
+      });
     }
     totalUnread = json['totalUnread'];
   }
@@ -30,6 +35,8 @@ class ChatModel {
   int? unreadCount;
   String? userId;
   String? formattedUpdatedAt;
+  String? userAvatar;
+  String? backgroundImage;
 
   ChatModel({
     this.sId,
@@ -44,7 +51,9 @@ class ChatModel {
     this.lastSeenCount,
     this.unreadCount,
     this.userId,
+    this.userAvatar,
     this.formattedUpdatedAt,
+    this.backgroundImage,
   });
 
   ChatModel.fromJson(Map<String, dynamic> json) {
@@ -60,6 +69,8 @@ class ChatModel {
     unreadCount = json['unreadCount'];
     userId = json['userId'];
     formattedUpdatedAt = json['formattedUpdatedAt'];
+    userAvatar = json['avatar'];
+    backgroundImage = json['backgroundImage'];
     typing = false;
     online = false;
   }
