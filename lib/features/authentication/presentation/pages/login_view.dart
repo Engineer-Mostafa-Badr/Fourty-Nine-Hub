@@ -133,10 +133,13 @@ class _LoginViewState extends State<LoginView> {
                             },
                             active: widget.authType == AuthType.LOGIN,
                             text: "Login",
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(50),
-                              bottomLeft: Radius.circular(50),
-                            )),
+                          borderRadius:context.locale == Locales.english? const BorderRadius.only(
+                            topLeft: Radius.circular(50),
+                            bottomLeft: Radius.circular(50),
+                          ):const BorderRadius.only(
+                            topRight: Radius.circular(50),
+                            bottomRight: Radius.circular(50),
+                          ),),
                         chooseAuthWidget(
                             onTap: () {
                               setState(() {
@@ -145,10 +148,13 @@ class _LoginViewState extends State<LoginView> {
                             },
                             active: widget.authType == AuthType.REGISTER,
                             text: "Register",
-                            borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(50),
-                              bottomRight: Radius.circular(50),
-                            )),
+                          borderRadius:context.locale == Locales.english? const BorderRadius.only(
+                            topRight: Radius.circular(50),
+                            bottomRight: Radius.circular(50),
+                          ):const BorderRadius.only(
+                            topLeft: Radius.circular(50),
+                            bottomLeft: Radius.circular(50),
+                          ),),
                       ],
                     ),
                     const SizedBox(
