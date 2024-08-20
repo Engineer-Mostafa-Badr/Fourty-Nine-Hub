@@ -19,6 +19,7 @@ import '../../data/models/near_by_model.dart';
 import 'tinder_state.dart';
 
 class TinderViewCubit extends Cubit<TinderViewState> {
+
   TinderViewCubit() : super(TinderViewState.initial());
 
   final String token = serviceLocator<UserCubit>().token??'';
@@ -407,6 +408,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
         body: jsonEncode(data),
       );
 
+      log(response.body);
       return response.body;
     } catch (e) {
       log('Error posting data: $e');

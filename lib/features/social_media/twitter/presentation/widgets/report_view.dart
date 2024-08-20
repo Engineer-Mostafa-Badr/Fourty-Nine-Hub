@@ -167,7 +167,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/reports_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/shared/tinder_shared_utils.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -175,17 +175,14 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
-
 class ReportView extends StatefulWidget {
   const ReportView({
     super.key,
     required this.id,
-    required this.categoryId,
+    required String categoryId,
   });
 
   final String id;
-  final String categoryId;
 
   @override
   State<ReportView> createState() => _ReportViewState();
@@ -201,13 +198,17 @@ class _ReportViewState extends State<ReportView> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-        backgroundColor: Colors.transparent,
-        body: BlocProvider<TwitterCubit>(
-            create: (_) => serviceLocator(),
-            child: BlocBuilder<TwitterCubit, TwitterState>(
-                builder: (context, state) {
-              final controller = context.read<TwitterCubit>();
-              return Column(
+      backgroundColor: Colors.transparent,
+      body: BlocProvider<TwitterCubit>(
+        create: (_) => serviceLocator(),
+        child: BlocBuilder<TwitterCubit, TwitterState>(
+          builder: (context, state) {
+            final controller = context.read<TwitterCubit>();
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.05,
+              ),
+              child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -215,7 +216,7 @@ class _ReportViewState extends State<ReportView> {
                       Label(
                         text: "Report",
                         style: Styles.headerText(
-                          fontSize: 24,
+                          fontSize: screenWidth * 0.07,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
@@ -245,19 +246,22 @@ class _ReportViewState extends State<ReportView> {
                           children: [
                             Expanded(
                               child: Label(
-                                text: reports[i].displayTitleEn,
+                                text: capitalizeAndSplit(
+                                    reports[i].name),
                                 style: Styles.headerText(
+                                  fontSize: screenWidth * 0.05,
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.DARK_GRAY_COLOR,
                                 ),
                                 maxLines: 3,
                               ),
                             ),
-                            Checkbox(
-                              value: selectedReport == reports[i],
-                              onChanged: (v) {
+                            Radio<ReportsEnum>(
+                              value: reports[i],
+                              groupValue: selectedReport,
+                              onChanged: (ReportsEnum? value) {
                                 setState(() {
-                                  selectedReport = v! ? reports[i] : null;
+                                  selectedReport = value;
                                 });
                               },
                               activeColor: AppColors.SECONDARY_COLOR,
@@ -268,19 +272,58 @@ class _ReportViewState extends State<ReportView> {
                     ),
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: FormTextField(
-                          hint: 'Type report reason ....',
-                          height: kToolbarHeight * .7,
-                          action: (v) {
+                        child: TextField(
+                          style: Styles.headerText(
+                            fontSize: MediaQuery.of(context).size.width * 0.04,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.DARK_BLUE_COLOR,
+                          ),
+                          // hint: 'Type report reason...',
+                          // height: MediaQuery.of(context).size.height * 0.07,
+                          // action: (v) {
+                          //   setState(() {});
+                          // },
+                          onChanged: (value) {
                             setState(() {});
                           },
                           controller: reportTextController,
+
+                          decoration: InputDecoration(
+                            fillColor: AppColors.UNSELECTED_GRAY_COLOR,
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical:
+                                  MediaQuery.of(context).size.height * 0.02,
+                              horizontal: 16.0,
+                            ),
+                            hintText: 'Type report reason...',
+                            hintStyle: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.04,
+                              color: AppColors.BARRIER_COLOR,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderSide: const BorderSide(
+                                  color: AppColors.LIGHT_GRAY_COLOR),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderSide: const BorderSide(
+                                  color: AppColors.PRIMARY_COLOR),
+                            ),
+                          ),
                         ),
+                      ),
+                      const SizedBox(
+                        width: 8,
                       ),
                       if (reportTextController.text.isNotEmpty)
                         IconAppButton(
+                          height: screenWidth * 0.1,
+                          width: screenWidth * 0.1,
                           icon: Icons.send,
                           isCircle: true,
                           onPressed: () async {
@@ -293,26 +336,25 @@ class _ReportViewState extends State<ReportView> {
                                   userId: widget.id,
                                   category: selectedReport!.name,
                                   content: reportTextController.text,
-                                  categoryId: widget.categoryId,
+                                  categoryId: '66a3583454e6e337915514db',
                                   reason: selectedReport!.name,
                                 ),
                               );
-                              if (context.mounted) {
-                                if (response == true) {
-                                  showSuccessMessage(
+
+                              if (response == true) {
+                                showSuccessMessage(
+                                  context,
+                                  "Report sent successfully",
+                                );
+                                context.pop();
+                              } else {
+                                showErrorMessage(
+                                  context,
+                                  getFailureMessage(
+                                    state.failure ?? const UnknownFailure(),
                                     context,
-                                    "Report sent successfully",
-                                  );
-                                  context.pop();
-                                } else {
-                                  showErrorMessage(
-                                    context,
-                                    getFailureMessage(
-                                      state.failure ?? const UnknownFailure(),
-                                      context,
-                                    ),
-                                  );
-                                }
+                                  ),
+                                );
                               }
                             }
                           },
@@ -320,7 +362,11 @@ class _ReportViewState extends State<ReportView> {
                     ],
                   ),
                 ],
-              );
-            })));
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }

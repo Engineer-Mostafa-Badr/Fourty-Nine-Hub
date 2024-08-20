@@ -1,64 +1,24 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/shared/tinder_shared_utils.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
-
-class OutlineText extends StatelessWidget {
-  final String text;
-  final double strokeWidth;
-  final Color strokeColor;
-  final TextStyle textStyle;
-  final TextScaler textScaler;
-
-  const OutlineText({
-    this.textScaler = const TextScaler.linear(1),
-    super.key,
-    required this.text,
-    this.strokeWidth = 2.5,
-    this.strokeColor = Colors.black,
-    required this.textStyle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // Stroke text
-        Text(
-          text,
-          style: textStyle.copyWith(
-            foreground: Paint()
-              ..color = strokeColor
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = strokeWidth,
-          ),
-        ),
-        // Original text
-        Text(
-          text,
-          style: textStyle,
-          textScaler: textScaler,
-        ),
-      ],
-    );
-  }
-}
+import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class BottomSheetContent extends StatefulWidget {
-  final String accessToken;
-  final UserCubit userCubit;
-  final UserData cardUser;
+  final String? receiverId;
 
-  const BottomSheetContent(
-      {super.key,
-      required this.accessToken,
-      required this.userCubit,
-      required this.cardUser});
+  const BottomSheetContent({
+    super.key,
+    required this.receiverId,
+  });
 
   @override
   BottomSheetContentState createState() => BottomSheetContentState();
@@ -76,67 +36,49 @@ class BottomSheetContentState extends State<BottomSheetContent> {
   }
 
   void _fetchInitialGifts() {
-    context.read<GiftsCubit>().fetchGifts(accessToken: widget.accessToken);
+    context.read<GiftsCubit>().fetchGifts();
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      context.read<GiftsCubit>().fetchGifts(accessToken: widget.accessToken);
+      context.read<GiftsCubit>().fetchGifts();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final tinderCubit = context.watch<TinderViewCubit>();
-    final userCubit = context.watch<UserCubit>();
+    const crossAxisCount = 4; // Adjusts grid based on screen size
 
     return BlocBuilder<GiftsCubit, GiftsState>(
       builder: (context, state) {
         if (state is GiftsInitial) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: CircularProgressIndicator(color: Colors.white),
+          );
         } else if (state is GiftsLoaded) {
-          // return GridView.builder(
-          //   controller: _scrollController,
-          //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          //     crossAxisCount: 2,
-          //     childAspectRatio: 1,
-          //   ),
-          //   itemCount: state.gifts.length + 1,
-          //   // Add one for the loading indicator
-          //   itemBuilder: (context, index) {
-          //     if (index < state.gifts.length) {
-          //       final gift = state.gifts[index];
-          //       return Card(
-          //         child: Center(child: Text(gift.nameEn ?? '')),
-          //       );
-          //     } else {
-          //       // Loading indicator at the bottom
-          //       return const Center(child: CircularProgressIndicator());
-          //     }
-          //   },
-          // );
           return GridView.builder(
             controller: _scrollController,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              childAspectRatio: 3 / 4,
+              crossAxisCount: crossAxisCount,
+              childAspectRatio: 1 / 1.5, // Adjust aspect ratio
             ),
             itemCount: state.gifts.length + 1,
             shrinkWrap: true,
-            // Add one for the loading indicator
             itemBuilder: (context, index) {
               if (index < state.gifts.length) {
                 return _buildGiftItem(context, state.gifts[index],
-                    tinderCubit: tinderCubit, userCubit: userCubit);
+                    receiverId: widget.receiverId);
               } else {
-                // Loading indicator at the bottom
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                    child: CircularProgressIndicator(color: Colors.white));
               }
             },
           );
         } else if (state is GiftsError) {
-          return Center(child: Text(state.message));
+          return Center(
+              child: Text(state.message,
+                  style: const TextStyle(color: Colors.white)));
         } else {
           return Container();
         }
@@ -145,39 +87,38 @@ class BottomSheetContentState extends State<BottomSheetContent> {
   }
 
   Widget _buildGiftItem(BuildContext context, GiftData gift,
-      {required UserCubit userCubit, required TinderViewCubit tinderCubit}) {
+      {required String? receiverId}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: FittedBox(
-        child: InkWell(
-          onTap: () => _handleGiftTap(context, gift,
-              userCubit: userCubit, tinderCubit: tinderCubit),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildGiftImage(gift),
-              const SizedBox(height: 8),
-              Text(
+      child: InkWell(
+        onTap: () => _handleGiftTap(context, gift, receiverId: receiverId),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildGiftImage(gift),
+            const SizedBox(height: 8),
+            FittedBox(
+              child: Text(
                 gift.nameEn ?? 'No Name',
                 textAlign: TextAlign.center,
+                maxLines: 1,
                 style: const TextStyle(fontSize: 16, color: Colors.white),
               ),
-              const SizedBox(height: 4),
-              Text(
+            ),
+            const SizedBox(height: 4),
+            FittedBox(
+              child: Text(
                 '${gift.value ?? 0} 💰',
                 style: const TextStyle(color: Colors.white),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   Widget _buildGiftImage(GiftData gift) {
-    // const String svgUrl =
-    //     'https://49hub-reels.s3.eu-central-1.amazonaws.com/gifts/Sail%20Away.svg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZI2LDRJFLQMKAMUH%2F20240811%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20240811T192725Z&X-Amz-Expires=3600&X-Amz-Signature=2e2b255cec93eb38bdd7521d8bb44dce238e611919b41810f2677dacdab755d6&X-Amz-SignedHeaders=host&x-id=GetObject';
-
     return SvgPicture.network(
       gift.picture!,
       fit: BoxFit.scaleDown,
@@ -189,68 +130,157 @@ class BottomSheetContentState extends State<BottomSheetContent> {
       width: 50,
       height: 50,
     );
-    // : Image.asset(
-    //     'assets/images/icon.png',
-    //     width: 50,
-    //     height: 50,
-    //   );
-
-    //   Image.network(
-    //   gift.picture,
-    //   loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-    //     if (loadingProgress == null) {
-    //       return child;
-    //     } else {
-    //       return Center(
-    //         child: CircularProgressIndicator(
-    //           value: loadingProgress.expectedTotalBytes != null
-    //               ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
-    //               : null,
-    //         ),
-    //       );
-    //     }
-    //   },
-    //   errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-    //     return Center(child: Text('Failed to load image'));
-    //   },
-    // );
-    // //------------------------------
-    //   gift.picture != null
-    //       ? Image.network(
-    //           gift.picture!,
-    //           width: 50,
-    //           height: 50,
-    //           loadingBuilder: (context, child, loadingProgress) =>
-    //               Image.asset(
-    //             'assets/images/icon.png',
-    //             width: 50,
-    //             height: 50,
-    //           ),
-    //           errorBuilder: (context, error, stackTrace) => Image.asset(
-    //             'assets/images/icon.png',
-    //             width: 50,
-    //             height: 50,
-    //           ),
-    //         )
-    //       : Image.asset(
-    //           'assets/images/icon.png',
-    //           width: 50,
-    //           height: 50,
-    //         );
   }
 
   Future<void> _handleGiftTap(BuildContext context, GiftData gift,
-      {required UserCubit userCubit,
-      required TinderViewCubit tinderCubit}) async {
+      {required String? receiverId}) async {
     final data = await context.read<TinderViewCubit>().sendGift(
-          receiverId: widget.cardUser.id!,
+          receiverId: receiverId!,
           subCategoryId: '66af974f8bf69f9469944746',
           giftId: gift.sId ?? '',
-          // currentUserToken: TinderSharedUtils.token,
         );
 
-    TinderSharedUtils.handleGiftResponse(
-        context: context, response: data!, gift: gift);
+    _handleGiftResponse(context: context, response: data!, gift: gift);
+  }
+
+  void _handleGiftResponse({
+    required BuildContext context,
+    required String response,
+    required GiftData gift,
+  }) {
+    const insufficientFundsMessage =
+        'You do not have enough money in your wallet.';
+    const successMessage = 'has been sent successfully!';
+
+    switch (response) {
+      case '{"success":false,"error":{"name":"Bad Request","httpCode":400,"message":"You does not have enough money in the wallet","data":{},"isOperational":true,"stack":"","domain":"49dev.com"}}':
+        _showDialog(
+          context: context,
+          icon: Icons.money_off,
+          title: 'Insufficient Funds',
+          message: insufficientFundsMessage,
+          isError: true,
+        );
+        break;
+      case '{"status":true,"message":"sent Gift Successfully"}':
+        _showDialog(
+          context: context,
+          icon: Icons.card_giftcard,
+          title: 'Gift Sent',
+          message: '$successMessage\nAmount deducted: ¥${gift.value}',
+          isError: false,
+          gift: gift,
+        );
+        break;
+      default:
+        _showDialog(
+          context: context,
+          icon: Icons.error,
+          title: 'Error',
+          message: 'Unexpected response format.',
+          isError: true,
+        );
+        break;
+    }
+  }
+
+  void _showDialog({
+    required BuildContext context,
+    required IconData icon,
+    required String title,
+    required String message,
+    required bool isError,
+    GiftData? gift,
+  }) {
+    final primaryColor = isError ? Colors.red : Colors.green;
+    final buttonColor = isError ? Colors.red : Colors.indigo;
+
+    Navigator.pop(context);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+          title: title == 'Gift Sent'
+              ? const SizedBox.shrink()
+              : _buildDialogTitle(icon, title, primaryColor),
+          content: title == 'Gift Sent'
+              ? _buildGiftContent(gift!, message)
+              : _buildMessageContent(message),
+          actions: _buildDialogActions(context, isError, buttonColor),
+          actionsAlignment: MainAxisAlignment.end,
+        );
+      },
+    );
+  }
+
+  Widget _buildDialogTitle(IconData icon, String title, Color primaryColor) {
+    return Row(
+      children: [
+        Icon(icon, color: primaryColor, size: 30),
+        const SizedBox(width: 10),
+        Text(title),
+      ],
+    );
+  }
+
+  Widget _buildGiftContent(GiftData gift, String message) {
+    return Wrap(
+      children: [
+        SvgPicture.network(
+          gift.picture ?? '',
+          fit: BoxFit.scaleDown,
+          placeholderBuilder: (BuildContext context) =>
+              Image.asset('assets/images/icon.png', width: 50, height: 50),
+          width: 50,
+          height: 50,
+        ),
+        Text(
+          "${gift.nameEn} gift $message",
+          style: const TextStyle(fontSize: 16, color: Colors.black87),
+          textAlign: TextAlign.left,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMessageContent(String message) {
+    return Text(
+      message,
+      style: const TextStyle(fontSize: 16, color: Colors.black87),
+      textAlign: TextAlign.left,
+    );
+  }
+
+  List<Widget> _buildDialogActions(
+      BuildContext context, bool isError, Color buttonColor) {
+    return [
+      TextButton(
+        onPressed: () => Navigator.of(context).pop(),
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.white,
+          backgroundColor: buttonColor,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        ),
+        child: const Text('OK', style: TextStyle(fontSize: 16)),
+      ),
+      if (isError)
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.indigo,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0)),
+          ),
+          child: const Text('Charge Wallet'),
+        ),
+    ];
   }
 
   @override
@@ -258,4 +288,101 @@ class BottomSheetContentState extends State<BottomSheetContent> {
     _scrollController.dispose();
     super.dispose();
   }
+}
+
+void showGiftBottomSheet(BuildContext context, {required String? receiverId}) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (context) => MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => GiftsCubit()),
+        BlocProvider(create: (_) => serviceLocator<TinderViewCubit>()),
+        BlocProvider(create: (_) => serviceLocator<UserCubit>()),
+      ],
+      child: DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        minChildSize: 0.4,
+        maxChildSize: 0.9,
+        expand: false,
+        builder: (BuildContext context, ScrollController scrollController) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.8),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: kToolbarHeight * 0.80,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.4),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(20)),
+                  ),
+                  child: const FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      'Send a gift 🎁',
+                      style: TextStyle(
+                          color: AppColors.ACCENT_COLOR,
+                          fontWeight: FontWeight.w300),
+                      textAlign: TextAlign.center,
+                      textScaler: TextScaler.linear(1.6),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Stack(
+                    children: [
+                      BottomSheetContent(receiverId: receiverId),
+                      Positioned(
+                        bottom: 5,
+                        right: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: OutlinedButton(
+                            style: const ButtonStyle(
+                              side: MaterialStatePropertyAll(BorderSide(
+                                  width: 1.5, color: AppColors.ACCENT_COLOR)),
+                              iconColor: MaterialStatePropertyAll(Colors.white),
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Colors.black),
+                            ),
+                            onPressed: () {
+                              serviceLocator<SubscriptionController>()
+                                  .showActiveSubscriptionAmounts(
+                                      walletType: WalletTypes.balance);
+                            },
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  '💳 Recharge',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.white),
+                                  textScaler: TextScaler.linear(1.2),
+                                ),
+                                Icon(Icons.arrow_right),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    ),
+  );
 }

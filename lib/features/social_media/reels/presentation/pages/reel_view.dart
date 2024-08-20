@@ -856,7 +856,9 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_card_stack.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -998,7 +1000,7 @@ class ReelsScreenState extends State<ReelsScreen> {
     return BlocBuilder<ReelsCubit, ReelsState>(
       builder: (context, state) {
         if (state.reels.isEmpty) {
-          showSnackBarAfterBuild(context, message: 'Check the login page.');
+          // showSnackBarAfterBuild(context, message: 'Check the login page.');
           return const Center(
             child: CupertinoActivityIndicator(radius: 25),
           );
@@ -1344,7 +1346,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
     return Row(
       children: [
         Text(
-          capitalizeAndSplit2Parts(
+          capitalizeAndSplit(
               '${widget.reel.user.firstName} ${widget.reel.user.lastName}'),
           textScaler: const TextScaler.linear(1.5),
           style: const TextStyle(
@@ -1460,7 +1462,9 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
             () {
           // _showGiftBottomSheet22(context, receiverId: widget.reel.user.id);
         }),
-        _buildActionButton(FontAwesomeIcons.gift, widget.reel.saveCount, () {}),
+        _buildActionButton(FontAwesomeIcons.gift, widget.reel.saveCount, () {
+          showGiftBottomSheet(context, receiverId: widget.reel.user.id);
+        }),
       ],
     );
   }

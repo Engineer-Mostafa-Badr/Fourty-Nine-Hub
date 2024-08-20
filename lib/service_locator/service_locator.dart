@@ -220,7 +220,9 @@ class DI {
     serviceLocator.registerLazySingleton<Dio>(
       () => Dio(
         BaseOptions(
-          baseUrl: kReleaseMode ? EndPoints.productionBaseUrl : EndPoints.developmentBaseUrl,
+          baseUrl: kReleaseMode
+              ? EndPoints.productionBaseUrl
+              : EndPoints.developmentBaseUrl,
           connectTimeout: const Duration(seconds: 60),
           headers: {
             'Accept': 'application/json',
@@ -252,9 +254,14 @@ class DI {
       () => ReelsCubit(repository: serviceLocator<ReelsRepository>()),
     );
 
+    // Register the ReelsCubit
+    serviceLocator.registerFactory<TinderViewCubit>(
+      () => TinderViewCubit(),
+    );
+
     // Register other dependencies...
-    serviceLocator
-        .registerLazySingleton<TinderViewCubit>(() => TinderViewCubit());
+    // serviceLocator
+    //     .registerLazySingleton<TinderViewCubit>(() => TinderViewCubit());
 
     serviceLocator.registerLazySingleton<ApiConsumer>(
       () => BaseApiConsumer(

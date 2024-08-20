@@ -120,7 +120,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        capitalizeAndSplit2Parts(widget.audio.audioName),
+                        capitalizeAndSplit(widget.audio.audioName),
                         softWrap: true,
                         style: const TextStyle(
                           fontSize: 18,
@@ -129,7 +129,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
-                      Text(capitalizeAndSplit2Parts(widget.audio.username),
+                      Text(capitalizeAndSplit(widget.audio.username),
                           style: const TextStyle(color: Colors.white)),
                       Text('${widget.audio.reelsCount} reels',
                           style: const TextStyle(color: Colors.white)),

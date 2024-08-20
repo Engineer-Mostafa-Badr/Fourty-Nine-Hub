@@ -631,7 +631,7 @@ class CommentWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  capitalizeAndSplit2Parts(
+                  capitalizeAndSplit(
                       '${commentData.user.firstName} ${commentData.user.lastName}'),
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
