@@ -1,7 +1,5 @@
 import 'dart:io';
-
 import 'package:camera/camera.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
@@ -23,10 +21,7 @@ class CameraPicker extends StatelessWidget {
           body: Column(
             children: [
               Expanded(flex: 5, child: _CamView(onDone: onDone)),
-              Expanded(
-                flex: 1,
-                child: _ImagesList(),
-              ),
+              Expanded(flex: 1, child: _ImagesList()),
             ],
           ),
         ),
@@ -120,7 +115,9 @@ class _CamView extends StatelessWidget {
                     current.status == CameraPickerStatus.showStartVideoButton,
                 builder: (context, state) {
                   return IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      controller.takePicture();
+                    },
                     icon: _pickIcon(state.status),
                   );
                 },
@@ -160,95 +157,105 @@ class _CamView extends StatelessWidget {
   }
 
   Widget _pickIcon(CameraPickerStatus status) {
-    if (status == CameraPickerStatus.showStopVideoButton) {
-      return const SizedBox(
-        height: 100,
-        width: 100,
-        child: Center(
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Positioned.fill(
-                child: Icon(
-                  Icons.circle_outlined,
-                  size: 100,
-                ),
-              ),
-              Positioned.fill(
-                child: Icon(
-                  Icons.square_rounded,
-                  size: 50,
-                  color: AppColors.SECONDARY_COLOR,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    } else {
-      return const SizedBox(
-        height: 100,
-        width: 100,
-        child: Center(
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Positioned.fill(
-                child: Icon(
-                  Icons.circle_outlined,
-                  size: 100,
-                  color: Colors.white,
-                ),
-              ),
-              Positioned.fill(
-                child: Icon(
-                  Icons.circle,
-                  size: 50,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
+    // if (status == CameraPickerStatus.showStopVideoButton) {
+    //   return const SizedBox(
+    //     height: 100,
+    //     width: 100,
+    //     child: Center(
+    //       child: Stack(
+    //         alignment: Alignment.center,
+    //         children: [
+    //           Positioned.fill(
+    //             child: Icon(
+    //               Icons.circle_outlined,
+    //               size: 100,
+    //             ),
+    //           ),
+    //           Positioned.fill(
+    //             child: Icon(
+    //               Icons.square_rounded,
+    //               size: 50,
+    //               color: AppColors.SECONDARY_COLOR,
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   );
+    // } else {
+    //   return const SizedBox(
+    //     height: 100,
+    //     width: 100,
+    //     child: Center(
+    //       child: Stack(
+    //         alignment: Alignment.center,
+    //         children: [
+    //           Positioned.fill(
+    //             child: Icon(
+    //               Icons.circle_outlined,
+    //               size: 100,
+    //               color: Colors.white,
+    //             ),
+    //           ),
+    //           Positioned.fill(
+    //             child: Icon(
+    //               Icons.circle,
+    //               size: 50,
+    //               color: Colors.white,
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   );
+    // }
+    return const Icon(Icons.circle, size: 100);
   }
 }
 
 class _ImagesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          flex: 2,
-          child: BlocBuilder<CameraPickerCubit, CameraPickerState>(
-            buildWhen: (previous, current) =>
-                current.status == CameraPickerStatus.updateMediaList,
-            builder: (context, state) {
-              return ListView.builder(
-                itemCount: state.mediaList.length,
-                itemBuilder: (context, index) {
-                  return Image.file(
-                    File(state.mediaList[index].path),
-                    height: 100,
-                    width: 100,
-                  );
-                },
-              );
-            },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+      child: Column(
+        children: [
+          Expanded(
+            flex: 2,
+            child: BlocBuilder<CameraPickerCubit, CameraPickerState>(
+              buildWhen: (previous, current) =>
+                  current.status == CameraPickerStatus.updateMediaList,
+              builder: (context, state) {
+                return ListView.builder(
+                  itemCount: state.mediaList.length,
+                  itemBuilder: (context, index) {
+                    return Image.file(
+                      File(state.mediaList[index].path),
+                      // height: 100,
+                      width: 100,
+                    );
+                  },
+                );
+              },
+            ),
           ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Row(
-            children: [
-              ElevatedAppButton(label: LocaleKeys.photo.tr(), onPressed: () {}),
-              ElevatedAppButton(label: LocaleKeys.video.tr(), onPressed: () {}),
-            ],
+          Expanded(
+            flex: 1,
+            child: Row(
+              children: [
+                ElevatedAppButton(
+                  label: LocaleKeys.photo,
+                  onPressed: () {},
+                ),
+                ElevatedAppButton(
+                  label: LocaleKeys.video,
+                  onPressed: () {},
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

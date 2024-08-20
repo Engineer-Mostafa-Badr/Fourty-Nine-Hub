@@ -17,6 +17,7 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
         CameraController(_cameras[_selectedCamera], ResolutionPreset.medium);
 
     await _controller.initialize();
+    await _controller.setFlashMode(FlashMode.off);
     emit(state.copyWith(
         controller: _controller, status: CameraPickerStatus.initialized));
   }
@@ -41,8 +42,9 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
   Future<void> takePicture() async {
     // emit(CameraPickerLoading());
     try {
-      final XFile image = await _controller.takePicture();
+      final XFile image = await state.controller!.takePicture();
       state.mediaList.add(image);
+      emit(state.copyWith(status: CameraPickerStatus.updateMediaList));
       // emit(CameraPickerLoaded());
     } catch (e) {
       // emit(CameraPickerError(e.toString()));
