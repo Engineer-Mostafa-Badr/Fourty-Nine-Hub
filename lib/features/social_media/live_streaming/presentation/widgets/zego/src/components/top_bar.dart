@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/minimizing/mini_button.dart';
 import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
 
+import '../../../../../../../../res/assets/assets.dart';
 import '../../../../../../../../res/style/app_colors.dart';
 
 /// @nodoc
@@ -82,37 +83,43 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
       decoration: BoxDecoration(
         color: widget.config.topMenuBar.backgroundColor ?? Colors.transparent,
       ),
-      height: widget.config.topMenuBar.height ?? 80.zR,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      height: widget.config.topMenuBar.height ?? 160.zH,
+      child: Column(
         children: [
-          hostAvatar(),
-          const Expanded(child: SizedBox()),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              minimizingButton(),
-              SizedBox(width: 20.zR),
-              if (widget.isLiveStream)
-                ZegoLiveStreamingMemberButton(
-                  config: widget.config.memberList,
-                  events: widget.events.memberList,
-                  isCoHostEnabled: widget.isCoHostEnabled,
-                  hostManager: widget.hostManager,
-                  connectManager: widget.connectManager,
-                  popUpManager: widget.popUpManager,
-                  translationText: widget.translationText,
-                  builder: widget.config.memberButton.builder,
-                  icon: widget.config.memberButton.icon,
-                  backgroundColor: widget.config.memberButton.backgroundColor,
-                  avatarBuilder: widget.config.avatarBuilder,
-                  itemBuilder: widget.config.memberList.itemBuilder,
-                ),
-              SizedBox(width: 20.zW),
-              closeButton(),
-              SizedBox(width: 33.zW),
+              hostAvatar(),
+              // const Expanded(child: SizedBox()),
+              Align(alignment: Alignment.center,child: Image.asset(Assets.logo,height: 50.zH,),),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  minimizingButton(),
+                  SizedBox(width: 20.zR),
+                  if (widget.isLiveStream)
+                    ZegoLiveStreamingMemberButton(
+                      config: widget.config.memberList,
+                      events: widget.events.memberList,
+                      isCoHostEnabled: widget.isCoHostEnabled,
+                      hostManager: widget.hostManager,
+                      connectManager: widget.connectManager,
+                      popUpManager: widget.popUpManager,
+                      translationText: widget.translationText,
+                      builder: widget.config.memberButton.builder,
+                      icon: widget.config.memberButton.icon,
+                      backgroundColor: widget.config.memberButton.backgroundColor,
+                      avatarBuilder: widget.config.avatarBuilder,
+                      itemBuilder: widget.config.memberList.itemBuilder,
+                    ),
+                  SizedBox(width: 20.zW),
+                  closeButton(),
+                  SizedBox(width: 33.zW),
+                ],
+              ),
             ],
           ),
+          Divider()
         ],
       ),
     );

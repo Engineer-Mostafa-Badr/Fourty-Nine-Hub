@@ -2,6 +2,9 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
 
 import 'package:zego_uikit/zego_uikit.dart';
 
@@ -16,6 +19,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/defines.dart';
 
+import '../../../../../../../../core/messages/messages.dart';
 import '../inner_text.dart';
 import '../internal/pk_combine_notifier.dart';
 import 'member/button.dart';
@@ -106,6 +110,7 @@ class _ZegoLiveStreamingBottomBarState
         ),
         height: widget.config.bottomMenuBar.height ?? 120.zR,
         child: ListView(
+          padding: EdgeInsets.symmetric(horizontal:  20.zW),
           scrollDirection: Axis.horizontal,
           children: [
             //mic
@@ -133,6 +138,9 @@ class _ZegoLiveStreamingBottomBarState
             ),
             ZoomShareCodeButton(
               liveId: ZegoUIKit().getRoom().id,
+            ),
+            ZoomWhiteBoardButton(
+              config: widget.config,
             ),
           ],
         ),
@@ -164,7 +172,7 @@ class ZoomMicrophoneBuilder extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ZegoToggleMicrophoneButton(
-                  buttonSize:  Size(40.zW, 40.zH),
+                  buttonSize: Size(40.zW, 40.zH),
                   iconSize: const Size(100, 100),
                   normalIcon: ButtonIcon(
                     icon: const Icon(
@@ -268,6 +276,7 @@ class ZoomCameraBuilder extends StatelessWidget {
 
 class ZoomIconButtons {
   final Widget button;
+
   ZoomIconButtons({
     required this.button,
   });
@@ -275,6 +284,7 @@ class ZoomIconButtons {
 
 class ZoomParticipantsBuilder extends StatelessWidget {
   final ZegoLiveStreamingBottomBar widget;
+
   const ZoomParticipantsBuilder({
     super.key,
     required this.widget,
@@ -316,6 +326,7 @@ class ZoomParticipantsBuilder extends StatelessWidget {
 
 class ZoomChatBuilder extends StatelessWidget {
   final ZegoLiveStreamingBottomBar widget;
+
   const ZoomChatBuilder({
     super.key,
     required this.widget,
@@ -420,6 +431,7 @@ class ZoomShareCodeButton extends StatelessWidget {
   const ZoomShareCodeButton({super.key, required this.liveId});
 
   final String liveId;
+
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -434,14 +446,29 @@ class ZoomShareCodeButton extends StatelessWidget {
             color: Colors.white,
           ),
           onPressed: () => Clipboard.setData(ClipboardData(text: liveId)).then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Live id Copied to clipboard $liveId'),
-              ),
-            ),
-          ),
+              (value) => showSuccessMessage(
+                  context, 'Room Code \'$liveId copied successfully')),
         )),
       ),
+    );
+  }
+}
+
+class ZoomWhiteBoardButton extends StatelessWidget {
+  final ZegoUIKitPrebuiltLiveStreamingConfig config;
+
+  const ZoomWhiteBoardButton({super.key, required this.config});
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoLiveStreamingMenuBarExtendButton(
+      child: IconButton(
+          icon: SvgPicture.asset(
+            'assets/images/white_board.svg',
+          ),
+          onPressed: () {
+            context.read<MeetingCubit>().openWhiteBoard();
+          }),
     );
   }
 }

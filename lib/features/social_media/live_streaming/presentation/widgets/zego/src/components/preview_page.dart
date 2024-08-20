@@ -568,13 +568,11 @@ class _ZegoLiveStreamingPreviewPageState
                 valueListenable: usePersonalIdNotifier,
                 builder: (BuildContext context, bool value, Widget? child) {
                   return SwitchListTile(
-                    title: const Expanded(
-                      child: Text(
-                        "Use personal meeting ID (PMI)",
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle( fontSize: 18,fontWeight: FontWeight.bold),
-                      ),
+                    title: Text(
+                      "Use personal meeting ID (PMI)",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle( fontSize: 18,fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
                       widget.liveID,

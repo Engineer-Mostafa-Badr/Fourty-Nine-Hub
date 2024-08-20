@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/end_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/join_room_use_case.dart';
 
+import '../../../../routes/pages.dart';
 import 'zoom_state.dart';
 
 class MeetingCubit extends Cubit<MeetingState> {
@@ -12,6 +15,7 @@ class MeetingCubit extends Cubit<MeetingState> {
   final AddRoomUseCase addRoomUseCase;
   final JoinRoomUseCase joinRoomUseCase;
   final EndRoomUseCase endRoomUseCase;
+
   @override
   void onChange(Change<MeetingState> change) {
     debugPrint('change is ${change.currentState}');
@@ -45,12 +49,24 @@ class MeetingCubit extends Cubit<MeetingState> {
   }
 
   bool surfaceShown = true;
+
   void toggleSurfaceShown() {
     surfaceShown = !surfaceShown;
     if (surfaceShown) {
-      emit(const MeetingSurfaceShownState());
+      emit(MeetingSurfaceShownState());
     } else {
-      emit(const MeetingSurfaceHinddenState());
+      emit( MeetingSurfaceHiddenState());
+    }
+  }
+
+  Future<void> openWhiteBoard() async {
+    if (!ZegoUIKit.instance.getScreenSharingStateNotifier().value) {
+      await ZegoUIKit().startSharingScreen();
+      emit(OpenWhiteBoardState());
+    } else {
+      showErrorMessage(
+          AppPages.router.configuration.navigatorKey.currentContext!,
+          'White Board is already opened!');
     }
   }
 }

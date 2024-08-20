@@ -146,7 +146,7 @@ class TinderCardStack extends StatelessWidget {
                   subtitle: Text(
                     state.lastSeenModel?.data?.lastSeen != null
                         ? "Last seen ${getTimeAgo(state.lastSeenModel!.data!.lastSeen ?? '')}"
-                        : "Last seen N/A",
+                        : "Last seen Yesterday",
                     style: Styles.mediumText(
                         color: AppColors.PRIMARY_COLOR,
                         fontWeight: FontWeight.bold,

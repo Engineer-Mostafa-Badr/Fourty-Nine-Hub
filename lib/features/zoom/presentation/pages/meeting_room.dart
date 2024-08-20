@@ -23,10 +23,10 @@ class MeetingRoom extends StatelessWidget {
     final String userId = Random().nextInt(1000).toString();
     zegoUIKitPrebuiltLiveStreamingHostConfig(MeetingCubit cubit) =>
         (ZegoUIKitPrebuiltLiveStreamingConfig.host()..slideSurfaceToHide = false
-          ..layout = ZegoLayout.gallery(
-            showScreenSharingFullscreenModeToggleButtonRules:
-                ZegoShowFullscreenModeToggleButtonRules.alwaysShow,
-            showNewScreenSharingViewInFullscreenMode: false,
+          ..layout = ZegoLayout.pictureInPicture(
+            // showScreenSharingFullscreenModeToggleButtonRules:
+            //     ZegoShowFullscreenModeToggleButtonRules.alwaysShow,
+            // showNewScreenSharingViewInFullscreenMode: false,
           )
           ..turnOnCameraWhenJoining = ZegoUIKit()
               .getCameraStateNotifier(ZegoUIKit().getLocalUser().id)
