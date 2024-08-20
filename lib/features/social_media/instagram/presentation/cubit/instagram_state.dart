@@ -12,7 +12,15 @@ class InstagramState {
   final List<CommentEntity>? postComments;
 
   InstagramState(
-      {this.advertisementsPage=0,this.newPage=0,this.pageIndex=0, this.posts, this.status, this.failure,this.newComment,this.postComments,this.count=0});
+      {this.advertisementsPage = 0,
+      this.newPage = 0,
+      this.pageIndex = 0,
+      this.posts,
+      this.status,
+      this.failure,
+      this.newComment,
+      this.postComments,
+      this.count = 0});
   InstagramState copyWith({
     StateStatus? status,
     Failure? failure,
@@ -37,4 +45,3 @@ class InstagramState {
     );
   }
 }
-

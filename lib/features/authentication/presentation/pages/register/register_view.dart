@@ -1,4 +1,3 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +14,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 
 import '../../../../../common/widgets/form/text_fields/password_text_form_field.dart';
-import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -194,9 +194,8 @@ class _RegisterViewState extends State<RegisterView> {
                     children: [
                       Expanded(
                         child: AppButton(
-                          style: const TextStyle(
-                              color: AppColors.QUANTITY_COLOR
-                          ),
+                          style:
+                              const TextStyle(color: AppColors.QUANTITY_COLOR),
                           label: 'Google',
                           backColor: AppColors.LIGHT_GRAY_COLOR,
                           textColor: Colors.black,
@@ -207,9 +206,8 @@ class _RegisterViewState extends State<RegisterView> {
                       const Sizer(),
                       Expanded(
                         child: AppButton(
-                          style: const TextStyle(
-                              color: AppColors.QUANTITY_COLOR
-                          ),
+                          style:
+                              const TextStyle(color: AppColors.QUANTITY_COLOR),
                           label: 'Facebook',
                           backColor: AppColors.LIGHT_GRAY_COLOR,
                           textColor: Colors.black,
@@ -246,6 +244,6 @@ class _RegisterViewState extends State<RegisterView> {
       ),
     );
   }
-  void _toggleLogin() => setState(() => _obscureTextLogin = !_obscureTextLogin);
 
+  void _toggleLogin() => setState(() => _obscureTextLogin = !_obscureTextLogin);
 }

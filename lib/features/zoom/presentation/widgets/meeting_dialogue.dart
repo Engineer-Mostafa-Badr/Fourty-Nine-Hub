@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../routes/routes.dart';
@@ -19,6 +20,7 @@ void showMeetingDialogue(BuildContext context) {
       return BlocProvider.value(
         value: serviceLocator<MeetingCubit>(),
         child: AlertDialog(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           title: const Text(
             'Meeting Options: ',
             textAlign: TextAlign.center,
@@ -39,15 +41,21 @@ void showMeetingDialogue(BuildContext context) {
                 child: TextField(
                   controller: meetingIdController,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Meeting ID',
                     hintText: 'Meeting ID',
-                    prefixIcon: const Icon(Icons.meeting_room),
-                    border: const OutlineInputBorder(
+                    labelStyle: TextStyle(
+                        color: AppColors.QUANTITY_COLOR
+                    ),
+                    hintStyle: TextStyle(
+                      color: AppColors.QUANTITY_COLOR
+                    ),
+                    prefixIcon: Icon(Icons.meeting_room,color: AppColors.QUANTITY_COLOR,),
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),
                     filled: true,
-                    fillColor: Colors.grey[200],
+                    fillColor: AppColors.AUTH_CONTAINER_COLOR,
                   ),
                 ),
               ),

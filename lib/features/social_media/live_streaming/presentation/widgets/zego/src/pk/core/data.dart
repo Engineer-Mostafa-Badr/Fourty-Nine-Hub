@@ -14,7 +14,6 @@ import 'event/defines.dart';
 
 // Project imports:
 
-
 extension ZegoUIKitPrebuiltLiveStreamingPKUserList
     on List<ZegoLiveStreamingPKUser> {
   String toSimpleString() {

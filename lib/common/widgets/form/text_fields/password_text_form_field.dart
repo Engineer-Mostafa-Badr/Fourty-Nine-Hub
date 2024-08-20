@@ -8,12 +8,14 @@ import 'default_text_form_field.dart';
 class PasswordTextFormField extends StatefulWidget {
   const PasswordTextFormField({
     super.key,
-     this.currentFocusNode,
+    this.currentFocusNode,
     this.nextFocusNode,
     required this.currentController,
     this.margin,
     this.hint,
-    this.validator, this.prefixIcon, this.suffixIcon,
+    this.validator,
+    this.prefixIcon,
+    this.suffixIcon,
   });
 
   final FocusNode? currentFocusNode;
@@ -38,7 +40,7 @@ class _PasswordTextFormFieldState extends State<PasswordTextFormField> {
       margin: widget.margin,
       child: DefaultTextFormField(
         currentController: widget.currentController,
-        currentFocusNode: widget.currentFocusNode,
+        currentFocusNode: widget.currentFocusNode!,
         nextFocusNode: widget.nextFocusNode,
         margin: widget.margin,
         hint: widget.hint ?? 'Password',
@@ -46,7 +48,7 @@ class _PasswordTextFormFieldState extends State<PasswordTextFormField> {
         borderColor: AppColors.PRIMARY_COLOR,
         maxLines: 1,
         suffixIcon: widget.suffixIcon,
-        prefixIcon:widget.prefixIcon,
+        prefixIcon: widget.prefixIcon,
         validator: widget.validator ?? Validator().validatePassword,
       ),
     );

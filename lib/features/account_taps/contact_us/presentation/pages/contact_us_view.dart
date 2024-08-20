@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -27,7 +27,7 @@ class ContactUsView extends StatelessWidget {
           label: 'Contact Us',
         ),
         bottomNavigationBar: AppButton(
-          color: AppColors.AUTH_CONTAINER_COLOR,
+            color: AppColors.AUTH_CONTAINER_COLOR,
             label: 'Send',
             margin: 10,
             onPressed: () => controller.createContactUs()),
@@ -40,18 +40,14 @@ class ContactUsView extends StatelessWidget {
                 const Label(text: '49Hub Team is ready to help'),
                 const Sizer(),
                 FormTextField(
-                  textStyle: TextStyle(
-                    color: Theme.of(context).primaryColor
-                  ),
+                  textStyle: TextStyle(color: Theme.of(context).primaryColor),
                   label: 'Phone (Optional)',
                   required: false,
                   controller: controller.phoneController,
                 ),
                 const Sizer(),
                 FormTextField(
-                  textStyle: TextStyle(
-                      color: Theme.of(context).primaryColor
-                  ),
+                  textStyle: TextStyle(color: Theme.of(context).primaryColor),
                   hint: 'Message',
                   maxLines: 3,
                   controller: controller.messageController,

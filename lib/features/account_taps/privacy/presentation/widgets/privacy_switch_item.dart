@@ -20,6 +20,7 @@ class PrivacySwitchItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Theme.of(context).scaffoldBackgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -30,11 +31,11 @@ class PrivacySwitchItem extends StatelessWidget {
             Expanded(
                 child: Label(
               text: label,
-              style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+              style: Styles.mediumText(),
             )),
             Label(
               text: (privacy == PrivacyStatus.public ? 'On' : 'Off'),
-              style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+              style: Styles.mediumText(),
             ),
             Switch(
               value: privacy == PrivacyStatus.public,

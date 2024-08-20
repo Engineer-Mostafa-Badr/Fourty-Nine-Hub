@@ -1,5 +1,6 @@
 abstract class Labels {
   static const currency = 'L.E';
+  static const welcomRegiesterResturant = 'Welcome to Resturant Registeration';
   static const highestBid = 'Highest bid';
   static const bid = 'bid';
   static const biddings = 'Biddings';
@@ -37,6 +38,7 @@ abstract class Labels {
   static const bookNow = 'Book Now';
   static const availableTimes = 'Available Times';
   static const available = 'Available';
+  static const shouldLoginFirst = 'Should Login First';
   static const requestsHistory = 'Requests History';
   static const bookingApproved = 'Booking Approved Successfully!';
   static const success = 'Done Successfully!';
@@ -67,15 +69,20 @@ abstract class Labels {
   static const giftWallet = 'Gift';
   static const adDetails = 'AD Details';
   static const health = 'Health';
+  static const meals = 'Meals';
   static const ads = 'Ads';
   static const register = 'Register';
   static const doctorDashboard = 'Doctor Dashboard';
+  static const restaurantDashboard = 'Restaurant Dashboard';
   static const doctorDashboardBannerDiscription =
       'New Bookings are waiting you, go to doctor dashboard and explore more!';
+  static const resturantDashboardBannerDiscription =
+      'New Bookings are waiting you, go to resturant dashboard and explore more!';
   static const driverDashboardBannerDiscription =
       'New Bookings are waiting you, go to driver dashboard and explore more!';
   static const homeVist = 'Home Vist';
   static const clinicVist = 'Clinic Vist';
+  static const restaurantsForSelectedMeal = 'Restaurants For Selected Meal';
   static const call = 'Call';
   static const emergency = 'Emergency';
   static const address = 'Address';
@@ -132,6 +139,7 @@ abstract class Labels {
   static const todayAppointments = 'Today Appointments';
   static const unhandledAppointments = 'Unhandled Appointments';
   static const accept = 'Accept';
+  static const resturants = "resturants";
   static const reject = 'Reject';
   static const editProfile = 'Edit Profile';
   static const update = 'Update';
@@ -161,7 +169,7 @@ abstract class Labels {
       'You will get 3,650 pounds annually if you subscribe.';
   static const right = 'right';
   static const left = 'left';
-  static const behind = 'behind';
+  static const behind = 'Behind';
   static const inFront = 'In front';
   static const identificationCard = 'ID card';
   static const drivingLicense = 'Driving License';

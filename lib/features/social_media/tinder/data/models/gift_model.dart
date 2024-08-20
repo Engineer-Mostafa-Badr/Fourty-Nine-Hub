@@ -1,4 +1,3 @@
-
 class GiftApi {
   bool? status;
   List<GiftData>? data;

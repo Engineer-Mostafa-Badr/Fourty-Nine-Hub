@@ -12,7 +12,6 @@ import 'defines.dart';
 
 // Project imports:
 
-
 /// @nodoc
 typedef ZegoLiveStreamingMiniOverlayMachineStateChanged = void Function(
   ZegoLiveStreamingMiniOverlayPageState,

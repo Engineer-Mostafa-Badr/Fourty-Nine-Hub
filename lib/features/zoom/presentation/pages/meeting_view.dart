@@ -22,8 +22,7 @@ class MeetingView extends StatelessWidget {
     // init signalling service
 
     return Scaffold(
-      backgroundColor: AppColors.GRAY_LIGHT_COLOR3,
-      appBar: const HomeAppbar(
+      appBar:  HomeAppbar(
         isWithBackArrow: true,
       ),
       drawer: const DrawerWidget(),
@@ -78,9 +77,9 @@ class MeetingView extends StatelessWidget {
 
   Widget _buildMeetingItem(
       {required Color color,
-        required String label,
-        required IconData icon,
-        required Function onTap}) {
+      required String label,
+      required IconData icon,
+      required Function onTap}) {
     return InkWell(
       onTap: () => onTap(),
       child: Column(

@@ -47,9 +47,8 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
       ),
       body: BlocProvider<TwitterCubit>(
         create: (_) {
-          final user = context.read<UserCubit>().state.data;
-          return serviceLocator()..getTwitterPost(context, widget.postId, '', user);
-        },
+          return serviceLocator()..getTwitterPost(context, widget.postId, '',);
+          },
         child: BlocConsumer<TwitterCubit, TwitterState>(
           buildWhen: (current , previous)=>previous.status== StateStatus.success,
           listener: (context,state){
@@ -88,38 +87,41 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
                 bottomSheet(
                   context: context,
                   isScrollControlled: true,
-                  widget: TwitterPostComments(
-                    comments: const [],
-                    postId: state.postDetails!.id,
-                    user: user,
-                    onAddComment: (TwitterPostCommentParams params) async{
-                      var result =await controller.onPostComment(params: params);
-                      state.postDetails?.commentsCount=(state.postDetails!.commentsCount!+1);
-                      setState(() {
+                  widget: BlocProvider.value(
+                    value: serviceLocator<TwitterCubit>()..loadComments(context, state.postDetails!.id),
+                    child: TwitterPostComments(
+                      comments: const [],
+                      postId: state.postDetails!.id,
+                      user: user,
+                      onAddComment: (TwitterPostCommentParams params) async{
+                        var result =await controller.onPostComment(params: params);
+                        state.postDetails?.commentsCount=(state.postDetails!.commentsCount!+1);
+                        setState(() {
 
-                      });
-                      return result;
-                    },
-                    onAddReply: (TwitterCommentReplyParams params) {
-                      controller.onCommentReply(params: params);
-                    },
-                    onCommentReact: (TwitterCommentReactParams params) {
-                      controller.onCommentReact(params: params);
-                    },
-                    onGetReplies: (String id, TwitterPostCommentEntity comment) async {
-                      // getCommentReplies(
-                      //   context: context,
-                      //   commentId: id,
-                      //   comment: comment,
-                      //   postId: postId, userData: userData,
-                      // );
-                    },
-                    newCommentId: '',
-                    state: state,
-                    onReport: (TwitterReportParams params) {
-                      controller.onReport(params);
-                    },
-                    // userData: user,
+                        });
+                        return result;
+                      },
+                      onAddReply: (TwitterCommentReplyParams params) {
+                        controller.onCommentReply(params: params);
+                      },
+                      onCommentReact: (TwitterCommentReactParams params) {
+                        controller.onCommentReact(params: params);
+                      },
+                      onGetReplies: (String id, TwitterPostCommentEntity comment) async {
+                        // getCommentReplies(
+                        //   context: context,
+                        //   commentId: id,
+                        //   comment: comment,
+                        //   postId: postId, userData: userData,
+                        // );
+                      },
+                      newCommentId: '',
+                      state: state,
+                      onReport: (TwitterReportParams params) {
+                        controller.onReport(params);
+                      },
+                      // userData: user,
+                    ),
                   ),
 
                 );

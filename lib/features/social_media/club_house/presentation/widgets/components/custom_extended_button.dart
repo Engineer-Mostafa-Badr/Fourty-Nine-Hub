@@ -5,7 +5,10 @@ class CustomExtendedButton extends StatelessWidget {
   final IconData icon;
   final Color color;
   const CustomExtendedButton(
-      {super.key, required this.onTap, required this.icon, required this.color});
+      {super.key,
+      required this.onTap,
+      required this.icon,
+      required this.color});
 
   @override
   Widget build(BuildContext context) {

@@ -28,7 +28,8 @@ class RideRequestView extends StatelessWidget {
                   child: BlocBuilder<RiderequestCubit, RiderequestState>(
                     builder: (context, state) {
                       final rideCubit = context.read<RiderequestCubit>();
-                      if (state.fromAddress != null && state.toAddress != null) {
+                      if (state.fromAddress != null &&
+                          state.toAddress != null) {
                         return MapPicker(
                           lat: state.fromAddress?.lat,
                           lng: state.fromAddress?.lng,
@@ -59,8 +60,7 @@ class RideRequestView extends StatelessWidget {
             ],
           )),
           BlocProvider.value(
-              value:
-                  serviceLocator<RiderequestCubit>(),
+              value: serviceLocator<RiderequestCubit>(),
               child: const RideOptionsBottomSheet()),
         ],
       ),

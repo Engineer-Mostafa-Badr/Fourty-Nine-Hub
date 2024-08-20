@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
 
@@ -265,10 +266,14 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
   Future<Either<Failure, List<RideThumbnailEntity>>> getThumbnails() async {
     final response = await _apiConsumer.get(EndPoints.getRideThumbnails);
 
-    return response.fold(
-        (failure) => Left(failure),
-        (data) => Right((data['data'] as List)
-            .map((e) => RideThumbnailModel.fromJson(e))
-            .toList()));
+    return response.fold((failure) {
+      debugPrint(failure.toString());
+      return Left(failure);
+    }, (data) {
+      debugPrint(data.toString());
+      return Right((data['data'] as List)
+          .map((e) => RideThumbnailModel.fromJson(e))
+          .toList());
+    });
   }
 }

@@ -37,10 +37,10 @@ class TwitterPostComments extends StatefulWidget {
   // final UserEntity userData;
   const TwitterPostComments(
       {super.key,
-      required this.postId,
-      required this.comments,
-      required this.onAddComment,
-      required this.onCommentReact, required this.onAddReply, required this.onGetReplies, required this.newCommentId, required this.state, this.user, required this.onReport, });
+        required this.postId,
+        required this.comments,
+        required this.onAddComment,
+        required this.onCommentReact, required this.onAddReply, required this.onGetReplies, required this.newCommentId, required this.state, this.user, required this.onReport, });
 
   @override
   State<TwitterPostComments> createState() => _TwitterPostCommentsState();
@@ -48,13 +48,10 @@ class TwitterPostComments extends StatefulWidget {
 
 class _TwitterPostCommentsState extends State<TwitterPostComments> {
   final commentTextController = TextEditingController();
-  final replyTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<TwitterCubit>(
-      create: (_)=>serviceLocator()..loadComments(context, widget.postId),
-      child: BlocBuilder<TwitterCubit,TwitterState>(
+    return BlocBuilder<TwitterCubit,TwitterState>(
         builder: (context,state) {
           final controller = context.read<TwitterCubit>();
           return Scaffold(
@@ -98,10 +95,16 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
 
                           return _buildCommentCard(comment: controller.commentsPagingController.itemList![index], onReplyReact: (String id) {
                             controller.onCommentReact(
-                                params:
-                                TwitterCommentReactParams(commentId: id,react: 'love',),);
+                              params:
+                              TwitterCommentReactParams(commentId: id,react: 'love',),);
                           }, onReport: (TwitterReportParams params) {
                             controller.onReport(params);
+                          }, onAddReply: (TwitterCommentReplyParams params) async{
+                            var result = await controller.onCommentReply(
+                              params:TwitterCommentReplyParams(postId: widget.postId,reply: controller.commentsPagingController.itemList![index].id,content: params.content),
+                            );
+
+                            return result;
                           });
                         },
                         noMoreItemsIndicatorBuilder: (context) => Container(),
@@ -128,8 +131,8 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                 // ),
                 Container(
                     height: kToolbarHeight,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
                     ),
                     child: Row(
                       children: [
@@ -177,20 +180,19 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
             ),
           );
         }
-      ),
     );
   }
 
   void onCommentAdded(String id,) async {
     await widget.onAddComment(
       TwitterPostCommentParams(
-          postId: widget.postId, content: commentTextController.text,),
+        postId: widget.postId, content: commentTextController.text,),
     );
 
   }
 
   Widget _buildCommentCard(
-      {required TwitterPostCommentEntity comment,required Function(String) onReplyReact,required Function(TwitterReportParams) onReport}) {
+      {required TwitterPostCommentEntity comment,required Function(String) onReplyReact,required Function(TwitterReportParams) onReport,required Function(TwitterCommentReplyParams) onAddReply}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -199,32 +201,34 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
 
           onCommentReact: (){
             widget.onCommentReact(
-              TwitterCommentReactParams(commentId: comment.id, react: 'love')
+                TwitterCommentReactParams(commentId: comment.id, react: 'love')
             );
             comment.isReact=!comment.isReact!;
           },
           onCommentReply: () {
-             widget.onGetReplies(comment.id,comment);
-             bottomSheet(
-                       context: context,
-                       isScrollControlled: true,
-                       widget: TwitterCommentReplies(
-                         replies: const [],
-                         onAddReply: (TwitterCommentReplyParams params) {
-                         },
-                         commentId: comment.id,
-                         postId: comment.post,
-                         onReplyReact: (String id) {
-                           onReplyReact(id);
-                         },
-                         onReport: (TwitterReportParams params) {
-                           onReport(params);
-                         },
-                       ),
-                     );
+            widget.onGetReplies(comment.id,comment);
+            bottomSheet(
+              context: context,
+              isScrollControlled: true,
+              widget: BlocProvider.value(
+                value: serviceLocator<TwitterCubit>()..loadReplies(context,comment.id),
+                child: TwitterCommentReplies(
+                  replies: const [],
+                  onAddReply: (TwitterCommentReplyParams params) =>onAddReply(params),
+                  commentId: comment.id,
+                  postId: comment.post,
+                  onReplyReact: (String id) {
+                    onReplyReact(id);
+                  },
+                  onReport: (TwitterReportParams params) {
+                    onReport(params);
+                  },
+                ),
+              ),
+            );
             print(comment.showReplies);
           }, onReport: (TwitterReportParams params) {
-            widget.onReport(params);
+          widget.onReport(params);
         },
         ),
       ],

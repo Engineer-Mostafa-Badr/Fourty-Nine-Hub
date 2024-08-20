@@ -92,16 +92,16 @@ class CategoryId {
 
   CategoryId(
       {this.sId,
-        this.banner,
-        this.cover,
-        this.index,
-        this.createdAt,
-        this.updatedAt,
-        this.nameAr,
-        this.nameEn,
-        this.nameCode,
-        this.isHidden,
-        this.enableInstallmentAndAuction});
+      this.banner,
+      this.cover,
+      this.index,
+      this.createdAt,
+      this.updatedAt,
+      this.nameAr,
+      this.nameEn,
+      this.nameCode,
+      this.isHidden,
+      this.enableInstallmentAndAuction});
 
   CategoryId.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -172,42 +172,43 @@ class UserId {
 
   UserId(
       {this.location,
-        this.sId,
-        this.socketId,
-        this.firstName,
-        this.lastName,
-        this.email,
-        this.birthday,
-        this.hashedPassword,
-        this.gender,
-        this.adminIgnore,
-        this.following,
-        this.blockedUsers,
-        this.hiddenPosts,
-        this.followers,
-        this.referralId,
-        this.isLocked,
-        this.lockedDate,
-        this.isRider,
-        this.isDoctor,
-        this.isRestaurant,
-        this.isLoading,
-        this.language,
-        this.isEmailVerified,
-        this.isPhoneVerified,
-        this.isDeleted,
-        this.countryCode,
-        this.auctionUsers,
-        this.installmentsUsers,
-        this.twitterDocumentation,
-        this.username,
-        this.createdAt,
-        this.updatedAt,
-        this.chatPassword,
-        this.id});
+      this.sId,
+      this.socketId,
+      this.firstName,
+      this.lastName,
+      this.email,
+      this.birthday,
+      this.hashedPassword,
+      this.gender,
+      this.adminIgnore,
+      this.following,
+      this.blockedUsers,
+      this.hiddenPosts,
+      this.followers,
+      this.referralId,
+      this.isLocked,
+      this.lockedDate,
+      this.isRider,
+      this.isDoctor,
+      this.isRestaurant,
+      this.isLoading,
+      this.language,
+      this.isEmailVerified,
+      this.isPhoneVerified,
+      this.isDeleted,
+      this.countryCode,
+      this.auctionUsers,
+      this.installmentsUsers,
+      this.twitterDocumentation,
+      this.username,
+      this.createdAt,
+      this.updatedAt,
+      this.chatPassword,
+      this.id});
 
   UserId.fromJson(Map<String, dynamic> json) {
-    location = json['location'] != null ? Location.fromJson(json['location']) : null;
+    location =
+        json['location'] != null ? Location.fromJson(json['location']) : null;
     sId = json['_id'];
     socketId = json['socketId'];
     firstName = json['firstName'];
@@ -218,10 +219,16 @@ class UserId {
     gender = json['gender'];
     adminIgnore = json['adminIgnore'];
 
-    following = json['following'] != null ? List<dynamic>.from(json['following']) : [];
-    blockedUsers = json['blockedUsers'] != null ? List<dynamic>.from(json['blockedUsers']) : [];
-    hiddenPosts = json['hiddenPosts'] != null ? List<dynamic>.from(json['hiddenPosts']) : [];
-    followers = json['followers'] != null ? List<dynamic>.from(json['followers']) : [];
+    following =
+        json['following'] != null ? List<dynamic>.from(json['following']) : [];
+    blockedUsers = json['blockedUsers'] != null
+        ? List<dynamic>.from(json['blockedUsers'])
+        : [];
+    hiddenPosts = json['hiddenPosts'] != null
+        ? List<dynamic>.from(json['hiddenPosts'])
+        : [];
+    followers =
+        json['followers'] != null ? List<dynamic>.from(json['followers']) : [];
 
     referralId = json['referralId'];
     isLocked = json['isLocked'];
@@ -235,8 +242,12 @@ class UserId {
     isPhoneVerified = json['isPhoneVerified'];
     isDeleted = json['isDeleted'];
     countryCode = json['countryCode'];
-    auctionUsers = json['auction_users'] != null ? List<String>.from(json['auction_users']) : [];
-    installmentsUsers = json['installments_users'] != null ? List<String>.from(json['installments_users']) : [];
+    auctionUsers = json['auction_users'] != null
+        ? List<String>.from(json['auction_users'])
+        : [];
+    installmentsUsers = json['installments_users'] != null
+        ? List<String>.from(json['installments_users'])
+        : [];
     twitterDocumentation = json['twitter_documentation'];
     username = json['username'];
     createdAt = json['createdAt'];
@@ -295,7 +306,9 @@ class Location {
 
   Location.fromJson(Map<String, dynamic> json) {
     type = json['type'];
-    coordinates = json['coordinates'] != null ? List<double>.from(json['coordinates']) : [];
+    coordinates = json['coordinates'] != null
+        ? List<double>.from(json['coordinates'])
+        : [];
   }
 
   Map<String, dynamic> toJson() {

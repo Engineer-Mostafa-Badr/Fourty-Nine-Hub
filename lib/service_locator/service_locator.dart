@@ -174,6 +174,7 @@ import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
 import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
+import 'package:fourtyninehub/service_locator/trip_join_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -219,9 +220,7 @@ class DI {
     serviceLocator.registerLazySingleton<Dio>(
       () => Dio(
         BaseOptions(
-          baseUrl: kReleaseMode
-              ? EndPoints.productionBaseUrl
-              : EndPoints.developmentBaseUrl,
+          baseUrl: kReleaseMode ? EndPoints.productionBaseUrl : EndPoints.developmentBaseUrl,
           connectTimeout: const Duration(seconds: 60),
           headers: {
             'Accept': 'application/json',
@@ -312,5 +311,7 @@ class DI {
     SubscriptionServiceLocator.execute(serviceLocator: serviceLocator);
     // Shipping
     ShippingServiceLocatior.execute(serviceLocator: serviceLocator);
+    // trip join
+    TripJoinServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

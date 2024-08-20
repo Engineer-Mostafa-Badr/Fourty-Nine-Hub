@@ -37,7 +37,6 @@ class DoctorEntity {
   final List<DoctorDayEntity> callDays;
   final List<DoctorDayEntity> homeVisitDays;
 
-
   DoctorEntity({
     required this.id,
     required this.lastName,

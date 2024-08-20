@@ -10,22 +10,25 @@ class SocialPostsState {
   final List<SuggestUserEntity>? suggestedFriends;
   final bool? friendRequest;
   final CommentEntity? newComment;
+  final UserProfileEntity? profileData;
   final List<CommentEntity>? postComments;
   final int? tweetPage;
   final int? advertisementsPage;
-  const SocialPostsState(
-      {this.status = StateStatus.loading,
-      this.friendRequest,
-      this.failure,
-      this.posts,
-      this.myPosts,
-      this.myTweets,
-      this.suggestedFriends,
-      this.newComment,
-      this.postComments,
-      this.postDetails,
-      this.tweetPage = 0,
-      this.advertisementsPage = 0});
+  const SocialPostsState({
+    this.status = StateStatus.loading,
+    this.friendRequest,
+    this.failure,
+    this.posts,
+    this.myPosts,
+    this.myTweets,
+    this.suggestedFriends,
+    this.newComment,
+    this.postComments,
+    this.postDetails,
+    this.tweetPage = 0,
+    this.advertisementsPage = 0,
+    this.profileData,
+  });
   SocialPostsState copyWith({
     StateStatus? status,
     Failure? failure,
@@ -39,6 +42,7 @@ class SocialPostsState {
     int? advertisementsPage,
     CommentEntity? newComment,
     PostEntity? postDetails,
+    UserProfileEntity? profileData,
   }) {
     return SocialPostsState(
       status: status ?? this.status,
@@ -53,6 +57,7 @@ class SocialPostsState {
       advertisementsPage: advertisementsPage ?? this.advertisementsPage,
       postComments: postComments ?? this.postComments,
       postDetails: postDetails ?? this.postDetails,
+      profileData: profileData ?? this.profileData,
     );
   }
 }

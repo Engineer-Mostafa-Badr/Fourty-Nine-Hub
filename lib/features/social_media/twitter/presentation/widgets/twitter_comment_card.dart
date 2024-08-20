@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
-import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 
@@ -14,6 +14,7 @@ class TwitterCommentCard extends StatefulWidget {
   final TwitterPostCommentEntity comment;
   final Function onCommentReact;
   final Function onCommentReply;
+  final bool? fromProfile;
   final Function(TwitterReportParams) onReport;
   const TwitterCommentCard(
       {super.key,
@@ -21,7 +22,8 @@ class TwitterCommentCard extends StatefulWidget {
       required this.comment,
       required this.onCommentReact,
       required this.onCommentReply,
-      required this.onReport});
+      required this.onReport,
+      this.fromProfile = false});
 
   @override
   State<TwitterCommentCard> createState() => _TwitterCommentCardState();
@@ -36,13 +38,17 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
         Row(
           children: [
             widget.comment.user.image == ''
-                ? const ProfileImage(
+                ? UserProfileImage(
                     accountId: 0,
                     withBorder: false,
+                    fromProfile: widget.fromProfile,
+                    userId: widget.comment.user.id,
                   )
-                : ProfileImage(
+                : UserProfileImage(
                     accountId: 0,
                     imageURL: widget.comment.user.image,
+                    fromProfile: widget.fromProfile,
+                    userId: widget.comment.user.id,
                   ),
             const Sizer(),
             Expanded(
@@ -52,10 +58,10 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                 Label(
                     text: widget.comment.user.firstName,
                     style: Styles.mediumText(
-                        fontWeight: FontWeight.bold, color: widget.textColor)),
+                        fontWeight: FontWeight.bold)),
                 Label(
                     text: widget.comment.sinceTime,
-                    style: Styles.mediumText(color: widget.textColor)),
+                    style: Styles.mediumText()),
               ],
             )),
             IconButton(
@@ -63,12 +69,12 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                   bottomSheet(
                       context: context,
                       widget: ReportView(
-                        id: widget.comment.id, categoryId: '',
+                        id: widget.comment.id,
+                        categoryId: '',
                       ));
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.more_vert,
-                  color: widget.textColor,
                 )),
           ],
         ),
@@ -76,7 +82,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
         Label(
           textAlign: TextAlign.start,
           text: widget.comment.content,
-          style: Styles.mediumText(color: widget.textColor),
+          style: Styles.mediumText(),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,

@@ -18,6 +18,7 @@ class PostEntity {
   bool? isWow;
   bool? isSad;
   bool? isAngry;
+  bool? isHaha;
   final dynamic user;
   FeelingEntity? feeling;
   ActivityEntity? activity;
@@ -27,6 +28,7 @@ class PostEntity {
   final num sharesCount;
   num? likesCount;
   num? loveCount;
+  num? hahaCount;
   num? wowCount;
   num? sadCount;
   num? angryCount;
@@ -50,13 +52,12 @@ class PostEntity {
   // num? totalPrice;
   bool? isApproved;
 
-
   DateTime? createdAt;
-   Duration get publishedDuration => DateTime.now().difference(createdAt!);
+  Duration get publishedDuration => DateTime.now().difference(createdAt!);
 
   String get sinceTime =>
       DurationHelper().sinceTime(duration: publishedDuration);
- 
+
   PostEntity({
     required this.id,
     this.content,
@@ -72,6 +73,7 @@ class PostEntity {
     this.isSad = false,
     this.isAngry = false,
     this.isDocumentation = false,
+    this.isHaha = false,
     this.commentsCount = 0,
     this.sharesCount = 0,
     this.likesCount = 0,
@@ -79,6 +81,7 @@ class PostEntity {
     this.wowCount = 0,
     this.sadCount = 0,
     this.angryCount = 0,
+    this.hahaCount = 0,
     this.totalCount = 0,
     this.createdAt,
     this.feeling,
@@ -88,25 +91,27 @@ class PostEntity {
     this.love,
     this.mainPost,
     this.comments,
-    this.isReact=false,
+    this.isReact = false,
     this.advertisementType,
     this.post,
     this.description,
     this.name,
     this.videoMedia,
     this.audioMedia,
-    this.isApproved=false,
+    this.isApproved = false,
     required this.photo,
   });
 }
 
-enum Reactions { like, love, wow, sad, angry }
+enum Reactions { like, haha, love, wow, sad, angry }
 
 extension ReactionX on Reactions {
   String value() {
     switch (this) {
       case Reactions.like:
         return 'like';
+      case Reactions.haha:
+        return 'haha';
       case Reactions.love:
         return 'love';
       case Reactions.wow:
@@ -117,10 +122,13 @@ extension ReactionX on Reactions {
         return 'angry';
     }
   }
+
   String label() {
     switch (this) {
       case Reactions.like:
         return 'Like';
+      case Reactions.haha:
+        return 'Haha';
       case Reactions.love:
         return 'Love';
       case Reactions.wow:
@@ -131,10 +139,13 @@ extension ReactionX on Reactions {
         return 'Angry';
     }
   }
+
   String image() {
     switch (this) {
       case Reactions.like:
         return Assets.like;
+      case Reactions.haha:
+        return Assets.hand;
       case Reactions.love:
         return Assets.heart;
       case Reactions.wow:

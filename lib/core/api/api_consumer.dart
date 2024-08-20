@@ -56,6 +56,7 @@ class BaseApiConsumer extends ApiConsumer {
 
   @override
   void attachToken(UserTokensEntity? token) {
+    log(token?.accessToken.toString() ?? "Token", name: "Token");
     _token = token;
     log("${token?.accessToken}", name: "Token");
     if (token != null) {
@@ -104,7 +105,14 @@ class BaseApiConsumer extends ApiConsumer {
         url,
         data: data,
         queryParameters: queryParameters,
+        // options: Options(headers: {
+        //   "Authorization":
+        //       'Bearer ${}'
+        // }
+        // )
       );
+      log(url);
+      log(_dio.options.headers['Authorization'], name: "Authorization$url");
       if (result.data['status']) {
         return Right(result.data as Map<String, dynamic>);
       } else {
@@ -177,8 +185,14 @@ class BaseApiConsumer extends ApiConsumer {
         data: data,
         queryParameters: queryParameters,
       );
+      log(result.data.toString(), name: "url");
       if (result.data['status']) {
-        return Right(result.data as Map<String, dynamic>);
+        log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
+        if (result.data is Map<String, dynamic>) {
+          return Right(result.data as Map<String, dynamic>);
+        } else {
+          return Right({"data": result.data});
+        }
       } else {
         return Left(ValidationFailure(
             result.data['message'] ?? result.data['error']['message']));

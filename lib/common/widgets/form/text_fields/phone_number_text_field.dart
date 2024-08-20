@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 
 class CustomPhoneTextFormField extends StatefulWidget {
@@ -60,21 +62,22 @@ class _CustomPhoneTextFormFieldState extends State<CustomPhoneTextFormField> {
             child: Container(
               decoration: BoxDecoration(
                 color: widget.fillColor ?? Colors.white,
-                  borderRadius: BorderRadius.circular(10.0),
+                borderRadius: BorderRadius.circular(10.0),
                 border: Border.all(color: widget.codeColor ?? Colors.grey),
               ),
               child: DropdownButton<String>(
                 value: _selectedCountryCode,
-                icon: const Icon(Icons.arrow_drop_down, color: AppColors.QUANTITY_COLOR,),
+                icon: const Icon(
+                  Icons.arrow_drop_down,
+                  color: AppColors.QUANTITY_COLOR,
+                ),
                 isExpanded: true,
                 onChanged: (String? newValue) {
                   setState(() {
                     _selectedCountryCode = newValue!;
                   });
                 },
-                style: const TextStyle(
-                  color: AppColors.QUANTITY_COLOR
-                ),
+                style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                 items: <String>[
                   '+1',
                   '+44',
@@ -104,7 +107,7 @@ class _CustomPhoneTextFormFieldState extends State<CustomPhoneTextFormField> {
                     (widget.isEnabled ? Colors.white : Colors.grey),
                 filled: true,
                 contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                hintText: widget.hint ?? 'Phone Number',
+                hintText: widget.hint ?? LocaleKeys.phoneNumber.localize,
                 hintStyle: textStyle.copyWith(color: AppColors.QUANTITY_COLOR),
                 counterText: '',
                 border: const OutlineInputBorder(

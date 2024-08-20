@@ -73,17 +73,15 @@ class ClubVoiceCubit extends Cubit<ClubVoiceState> {
         .catchError((onError) => emit(
             const RehashRoomState(requestState: ZegoRequestState.failure)));
   }
+
   List<ClubVoiceRoomEntity> searchedRooms = [];
   void searchRoom(String roomSubject) {
     searchClubVoiceUseCase(SearchParams(roomSubject: roomSubject))
         .then((value) {
-          
-          emit(const RehashRoomState(requestState: ZegoRequestState.success));
-        })
-        .catchError((onError) {
-          emit(
-            const RehashRoomState(requestState: ZegoRequestState.failure));
-        });
+      emit(const RehashRoomState(requestState: ZegoRequestState.success));
+    }).catchError((onError) {
+      emit(const RehashRoomState(requestState: ZegoRequestState.failure));
+    });
   }
 
   int roomsLength = 0;

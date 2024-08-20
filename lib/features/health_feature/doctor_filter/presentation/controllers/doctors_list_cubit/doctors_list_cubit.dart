@@ -28,6 +28,4 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
     response.fold((failure) => emit(DoctorsListError(Labels.errorHappened)),
         (data) => emit(DoctorsListLoaded(data)));
   }
-
-  
 }

@@ -11,6 +11,7 @@ class ProfileImage extends StatelessWidget {
   final double size;
   final Color borderColor;
   final bool withBorder;
+  final bool? fromProfile;
   final int accountId;
 
   const ProfileImage(
@@ -19,12 +20,17 @@ class ProfileImage extends StatelessWidget {
       this.size = 15,
       this.withBorder = false,
       this.imageURL,
-      this.borderColor = AppColors.SECONDARY_COLOR});
+      this.borderColor = AppColors.SECONDARY_COLOR,
+      this.fromProfile = false});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.OTHERSACCOUNT),
+      onTap: () {
+        if (fromProfile == false) {
+          context.push(Routes.OTHERSACCOUNT);
+        }
+      },
       child: CircleAvatar(
         radius: withBorder ? size + 2 : size,
         backgroundColor: borderColor,

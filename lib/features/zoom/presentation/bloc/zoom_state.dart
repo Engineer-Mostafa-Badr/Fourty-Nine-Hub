@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-
 abstract class MeetingState extends Equatable {
   const MeetingState();
 
@@ -28,9 +27,10 @@ class MeetingEndSuccessState extends MeetingState {}
 
 class MeetingEndFailureState extends MeetingState {}
 
-class MeetingSurfaceShownState extends MeetingState{
-  final bool surfaceShown;
+class MeetingSurfaceShownState extends MeetingState {
+  const MeetingSurfaceShownState();
+}
 
-  const MeetingSurfaceShownState({required this.surfaceShown});
-
+class MeetingSurfaceHinddenState extends MeetingState {
+  const MeetingSurfaceHinddenState();
 }

@@ -3,7 +3,7 @@ class DurationHelper {
     return duration.inDays > 0
         ? "${duration.inDays} Days"
         : duration.inHours > 0
-            ? "${duration.inHours} Hrs"
+            ? "${duration.inHours} H"
             : "${duration.inMinutes} Min";
   }
 }

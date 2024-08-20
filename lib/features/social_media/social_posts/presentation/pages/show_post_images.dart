@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -40,16 +39,16 @@ class _ShowPostsImagesState extends State<ShowPostsImages> {
               // context.push(Routes.TWITTER);
 
               showDialog(
-                  context: context,
-                  builder: (context) => ImageDetailsScreen(
-                        image: widget.images[index],
-                        fromPost: true,
-                        onRemoveImage: (){
-                          context.pop();
-                          // images.remove(images[index]);
-                        },
-                      ),
-                  );
+                context: context,
+                builder: (context) => ImageDetailsScreen(
+                  image: widget.images[index],
+                  fromPost: true,
+                  onRemoveImage: () {
+                    context.pop();
+                    // images.remove(images[index]);
+                  },
+                ),
+              );
               // context.pop();
             },
             child: Container(

@@ -19,7 +19,6 @@ ThemeData lightTheme() {
       displayMedium: TextStyle(color: AppColors.QUANTITY_COLOR),
       // displaySmall: TextStyle(color: AppColors.DARK_GRAY_COLOR),
     ),
-    
     iconTheme: const IconThemeData(
       color: AppColors.QUANTITY_COLOR,
     ),
@@ -27,20 +26,17 @@ ThemeData lightTheme() {
       buttonColor: AppColors.QUANTITY_COLOR,
     ),
     inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: AppColors.QUANTITY_COLOR,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.0),
-        borderSide: const BorderSide(
-          color: AppColors.DIVIDER_GRAY_COLOR2,
-        ),
-      )
-    ),
+        filled: true,
+        fillColor: AppColors.QUANTITY_COLOR,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(
+            color: AppColors.DIVIDER_GRAY_COLOR2,
+          ),
+        )),
     dividerColor: AppColors.DIVIDER_GRAY_COLOR,
-    
-    drawerTheme: const DrawerThemeData(
-      backgroundColor: AppColors.AUTH_CONTAINER_COLOR
-    ),
+    drawerTheme:
+        const DrawerThemeData(backgroundColor: AppColors.AUTH_CONTAINER_COLOR),
     actionIconTheme: const ActionIconThemeData(),
     bottomAppBarTheme: const BottomAppBarTheme(),
     canvasColor: Colors.black38,
@@ -51,13 +47,14 @@ ThemeData lightTheme() {
     bottomSheetTheme: const BottomSheetThemeData(),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(),
     iconButtonTheme: const IconButtonThemeData(),
-    elevatedButtonTheme:  ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(backgroundColor: Colors.red,),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.red,
+      ),
     ),
     textButtonTheme: const TextButtonThemeData(),
     listTileTheme: const ListTileThemeData(),
     dividerTheme: const DividerThemeData(),
     tabBarTheme: const TabBarTheme(),
-
   );
 }

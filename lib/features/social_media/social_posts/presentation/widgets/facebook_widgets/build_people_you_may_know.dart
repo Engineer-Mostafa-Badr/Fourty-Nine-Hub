@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -13,6 +11,8 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/cu
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class BuildPeopleYouMayKnow extends StatefulWidget {
@@ -77,7 +77,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                       ),
                       Container(
                         alignment: AlignmentDirectional.topStart,
-                        height: 272,
+                        height: 350,
                         child: PagedListView<int, SuggestUserEntity>(
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.symmetric(
@@ -98,6 +98,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                           child: Label(
                                             text: "No friends suggested",
                                             style: TextStyle(
+                                              color: Colors.black,
                                               fontSize: 18,
                                             ),
                                           ),
@@ -107,294 +108,293 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                     SuggestUserEntity item = controller
                                         .suggestUserPagingController
                                         .itemList![index];
-                                    return Stack(
-                                      children: [
-                                        Container(
-                                          width: 200,
-                                          margin:
-                                              const EdgeInsetsDirectional.only(
-                                                  end: 10),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            border: Border.all(
-                                                color:
-                                                    AppColors.DARK_GRAY_COLOR),
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              ImageFromInternet(
+                                    return InkWell(
+                                      onTap: () {
+                                        context.push(Routes.OTHERSACCOUNT,
+                                            extra: controller
+                                                .suggestUserPagingController
+                                                .itemList?[index]
+                                                .id);
+                                      },
+                                      child: Container(
+                                        width: 260,
+                                        padding:
+                                            const EdgeInsets.only(bottom: 10),
+                                        margin:
+                                            const EdgeInsetsDirectional.only(
+                                                end: 10),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          border: Border.all(
+                                              color: AppColors.DARK_GRAY_COLOR),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: ImageFromInternet(
                                                 image: item.profilePicture,
-                                                height: 150,
-                                                width: 250,
+                                                // height: 220,
+                                                width: 300,
                                                 borderRadius:
                                                     const BorderRadius.only(
                                                   topLeft: Radius.circular(20),
                                                   topRight: Radius.circular(20),
                                                 ),
                                               ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8.0),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    Label(
-                                                      text:
-                                                          "${item.firstName} ${item.lastName}",
-                                                      maxLines: 1,
-                                                      style:
-                                                          Styles.mediumText(),
-                                                    ),
-                                                    SizedBox(
-                                                      height: item.sendWelcomeSuccessfully ==
-                                                              true
-                                                          ? 30
-                                                          : item.followSuccessfully ==
-                                                                      true &&
-                                                                  item.addedSuccessfully ==
-                                                                      true
-                                                              ? 20
-                                                              : 30,
-                                                    ),
-                                                    item.sendWelcomeSuccessfully ==
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Label(
+                                                    text:
+                                                        "${item.firstName} ${item.lastName}",
+                                                    maxLines: 1,
+                                                    style: Styles.mediumText(),
+                                                  ),
+                                                  SizedBox(
+                                                    height: item.sendWelcomeSuccessfully ==
                                                             true
-                                                        ? Label(
-                                                            text:
-                                                                "Message sent successfully",
-                                                            style: Styles
-                                                                .mediumText(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        14),
-                                                          )
-                                                        : Row(
-                                                            children: [
+                                                        ? 30
+                                                        : item.followSuccessfully ==
+                                                                    true &&
+                                                                item.addedSuccessfully ==
+                                                                    true
+                                                            ? 20
+                                                            : 30,
+                                                  ),
+                                                  item.sendWelcomeSuccessfully ==
+                                                          true
+                                                      ? Label(
+                                                          text:
+                                                              "Message sent successfully",
+                                                          style:
+                                                              Styles.mediumText(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: 14),
+                                                        )
+                                                      : Row(
+                                                          children: [
+                                                            Expanded(
+                                                              child: InkWell(
+                                                                onTap:
+                                                                    () async {
+                                                                  if (item.addedSuccessfully ==
+                                                                      false) {
+                                                                    var response = await controller.friendRequest(
+                                                                        context:
+                                                                            context,
+                                                                        userId:
+                                                                            item.id);
+                                                                    print(item
+                                                                        .addedSuccessfully);
+
+                                                                    if (response ==
+                                                                        true) {
+                                                                      item.addedSuccessfully =
+                                                                          true;
+                                                                      setState(
+                                                                          () {});
+                                                                      print(item
+                                                                          .addedSuccessfully);
+                                                                    }
+                                                                  } else if (item
+                                                                              .addedSuccessfully ==
+                                                                          true &&
+                                                                      item.followSuccessfully ==
+                                                                          false) {
+                                                                    var response = await controller.followRequest(
+                                                                        context:
+                                                                            context,
+                                                                        userId:
+                                                                            item.id);
+                                                                    if (response ==
+                                                                        true) {
+                                                                      item.followSuccessfully =
+                                                                          true;
+                                                                      setState(
+                                                                          () {});
+                                                                    }
+                                                                  } else if (item
+                                                                              .addedSuccessfully ==
+                                                                          true &&
+                                                                      item.followSuccessfully ==
+                                                                          true) {
+                                                                    showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (BuildContext
+                                                                              context) {
+                                                                        return AlertDialog(
+                                                                          backgroundColor:
+                                                                              AppColors.BACKGROUND_COLOR,
+                                                                          surfaceTintColor:
+                                                                              AppColors.BACKGROUND_COLOR,
+                                                                          title:
+                                                                              Label(
+                                                                            text:
+                                                                                'Enter greet message',
+                                                                            style:
+                                                                                Styles.headerText(),
+                                                                          ),
+                                                                          content:
+                                                                              TextFormField(
+                                                                            controller:
+                                                                                messageController,
+                                                                            decoration:
+                                                                                InputDecoration(hintText: "Greet message", hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
+                                                                          ),
+                                                                          actions: <Widget>[
+                                                                            TextButton(
+                                                                              onPressed: () {
+                                                                                Navigator.of(context).pop(); // Close the dialog
+                                                                              },
+                                                                              child: Label(
+                                                                                text: 'Cancel',
+                                                                                style: Styles.headerText(),
+                                                                              ),
+                                                                            ),
+                                                                            ElevatedButton(
+                                                                              onPressed: () async {
+                                                                                await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id);
+                                                                                controller.suggestUserPagingController.itemList?.removeWhere((element) => element.id == controller.suggestUserPagingController.itemList?[index].id);
+                                                                                showSuccessMessage(context, 'Message send successfully');
+                                                                                Navigator.of(context).pop();
+                                                                                setState(() {});
+                                                                              },
+                                                                              child: Label(
+                                                                                text: 'Send',
+                                                                                style: Styles.headerText(),
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        );
+                                                                      },
+                                                                    );
+                                                                  }
+                                                                },
+                                                                child: item.sendWelcomeSuccessfully ==
+                                                                        true
+                                                                    ? Label(
+                                                                        text:
+                                                                            'Message send successfully',
+                                                                        style: Styles
+                                                                            .headerText(),
+                                                                      )
+                                                                    : Container(
+                                                                        height:
+                                                                            30,
+                                                                        alignment:
+                                                                            Alignment.center,
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          border: item.followSuccessfully == true
+                                                                              ? Border.all()
+                                                                              : null,
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(5),
+                                                                          color: item.addedSuccessfully == false
+                                                                              ? AppColors.PRIMARY_COLOR
+                                                                              : item.addedSuccessfully == true && item.followSuccessfully == false
+                                                                                  ? AppColors.PRIMARY_COLOR_DARK
+                                                                                  : Colors.white,
+                                                                        ),
+                                                                        child:
+                                                                            Label(
+                                                                          text: item.addedSuccessfully == false
+                                                                              ? 'Add Friend'
+                                                                              : item.addedSuccessfully == true && item.followSuccessfully == false
+                                                                                  ? 'Follow'
+                                                                                  : "Send greet message",
+                                                                          style: Styles.mediumText(
+                                                                              color: item.followSuccessfully == true ? AppColors.PRIMARY_COLOR_DARK : Colors.white,
+                                                                              fontSize: 14,
+                                                                              fontWeight: FontWeight.bold),
+                                                                        ),
+                                                                      ),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            if (item.addedSuccessfully ==
+                                                                false)
                                                               Expanded(
                                                                 child: InkWell(
                                                                   onTap:
                                                                       () async {
-                                                                    if (item.addedSuccessfully ==
-                                                                        false) {
-                                                                      var response = await controller.friendRequest(
-                                                                          context:
-                                                                              context,
-                                                                          userId:
-                                                                              item.id);
-                                                                      print(item
-                                                                          .addedSuccessfully);
-
-                                                                      if (response ==
-                                                                          true) {
-                                                                        item.addedSuccessfully =
-                                                                            true;
-                                                                        setState(
-                                                                            () {});
-                                                                        print(item
-                                                                            .addedSuccessfully);
-                                                                      }
-                                                                    } else if (item.addedSuccessfully ==
-                                                                            true &&
-                                                                        item.followSuccessfully ==
-                                                                            false) {
-                                                                      var response = await controller.followRequest(
-                                                                          context:
-                                                                              context,
-                                                                          userId:
-                                                                              item.id);
-                                                                      if (response ==
-                                                                          true) {
-                                                                        item.followSuccessfully =
-                                                                            true;
-                                                                        setState(
-                                                                            () {});
-                                                                      }
-                                                                    } else if (item.addedSuccessfully ==
-                                                                            true &&
-                                                                        item.followSuccessfully ==
-                                                                            true) {
-                                                                      var response = await controller.sendGreetMessage(
-                                                                          context:
-                                                                              context,
-                                                                          userId:
-                                                                              item.id);
-                                                                      if (response ==
-                                                                          true) {
-                                                                        item.sendWelcomeSuccessfully =
-                                                                            true;
-                                                                        setState(
-                                                                            () {});
-                                                                      }
+                                                                    bool data = await controller.removeSuggestUser(
+                                                                        context:
+                                                                            context,
+                                                                        userId:
+                                                                            item.id);
+                                                                    if (data ==
+                                                                        true) {
+                                                                      controller
+                                                                          .suggestUserPagingController
+                                                                          .itemList
+                                                                          ?.removeWhere((e) =>
+                                                                              e.id ==
+                                                                              controller.suggestUserPagingController.itemList?[index].id);
+                                                                      setState(
+                                                                          () {});
                                                                     }
                                                                   },
-                                                                  child: item.addedSuccessfully == true &&
-                                                                          item.followSuccessfully ==
-                                                                              true
-                                                                      ? Container(
-                                                                          height:
-                                                                              kToolbarHeight,
-                                                                          decoration:
-                                                                              const BoxDecoration(
-                                                                            color:
-                                                                                Colors.white,
-                                                                          ),
-                                                                          child:
-                                                                              Row(
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.center,
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.end,
-                                                                            children: [
-                                                                              Expanded(
-                                                                                  child: FormTextField(
-                                                                                      hint: 'hello message ....',
-                                                                                      height: kToolbarHeight * .7,
-                                                                                      action: (v) {
-                                                                                        setState(() {});
-                                                                                      },
-                                                                                      controller: messageController)),
-                                                                              const Sizer(),
-                                                                              if (messageController.text.isNotEmpty)
-                                                                                IconAppButton(
-                                                                                  icon: Icons.send,
-                                                                                  isCircle: true,
-                                                                                  onPressed: () async {
-                                                                                    var response = await controller.sendGreetMessage(context: context, userId: item.id);
-                                                                                    if (response == true) {
-                                                                                      item.sendWelcomeSuccessfully = true;
-                                                                                      setState(() {});
-                                                                                    }
-                                                                                  },
-                                                                                )
-                                                                            ],
-                                                                          ))
-                                                                      : Container(
-                                                                          height:
-                                                                              30,
-                                                                          alignment:
-                                                                              Alignment.center,
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            border: item.followSuccessfully == true
-                                                                                ? Border.all()
-                                                                                : null,
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(5),
-                                                                            color: item.addedSuccessfully == false
-                                                                                ? AppColors.PRIMARY_COLOR
-                                                                                : item.addedSuccessfully == true && item.followSuccessfully == false
-                                                                                    ? AppColors.PRIMARY_COLOR_DARK
-                                                                                    : Colors.white,
-                                                                          ),
-                                                                          child:
-                                                                              Label(
-                                                                            text: item.addedSuccessfully == false
-                                                                                ? 'Add Friend'
-                                                                                : item.addedSuccessfully == true && item.followSuccessfully == false
-                                                                                    ? 'Follow'
-                                                                                    : "Greet",
-                                                                            style: Styles.mediumText(
-                                                                                color: item.followSuccessfully == true ? AppColors.AUTH_CONTAINER_COLOR : AppColors.AUTH_CONTAINER_COLOR,
-                                                                                fontSize: 14,
-                                                                                fontWeight: FontWeight.bold),
-                                                                          ),
-                                                                        ),
-                                                                ),
-                                                              ),
-                                                              const SizedBox(
-                                                                width: 10,
-                                                              ),
-                                                              if (item.addedSuccessfully ==
-                                                                  false)
-                                                                Expanded(
                                                                   child:
-                                                                      InkWell(
-                                                                    onTap:
-                                                                        () async {
-                                                                      bool data = await controller.removeSuggestUser(
-                                                                          context:
-                                                                              context,
-                                                                          userId:
-                                                                              item.id);
-                                                                      if (data ==
-                                                                          true) {
-                                                                        controller
-                                                                            .suggestUserPagingController
-                                                                            .itemList
-                                                                            ?.removeWhere((e) =>
-                                                                                e.id ==
-                                                                                controller.suggestUserPagingController.itemList?[index].id);
-                                                                        setState(
-                                                                            () {});
-                                                                      }
-                                                                    },
+                                                                      Container(
+                                                                    height: 30,
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              5),
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    ),
                                                                     child:
-                                                                        Container(
-                                                                      height:
-                                                                          30,
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(5),
-                                                                        color: Colors
-                                                                            .grey,
-                                                                      ),
-                                                                      child:
-                                                                          Label(
-                                                                        text:
-                                                                            'Remove',
-                                                                        style: Styles.mediumText(
-                                                                            fontSize:
-                                                                                14,
-                                                                            fontWeight:
-                                                                                FontWeight.bold),
-                                                                      ),
+                                                                        Label(
+                                                                      text:
+                                                                          'Remove',
+                                                                      style: Styles.mediumText(
+                                                                          color: Colors
+                                                                              .black,
+                                                                          fontSize:
+                                                                              14,
+                                                                          fontWeight:
+                                                                              FontWeight.bold),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              // Expanded(
-                                                              //     child: DefaultButton(
-                                                              //         onPressed: () {}))
-                                                            ],
-                                                          ),
-                                                  ],
-                                                ),
+                                                              ),
+                                                            // Expanded(
+                                                            //     child: DefaultButton(
+                                                            //         onPressed: () {}))
+                                                          ],
+                                                        ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                        ),
-                                        PositionedDirectional(
-                                          end: 15,
-                                          top: 5,
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              controller
-                                                  .suggestUserPagingController
-                                                  .itemList
-                                                  ?.remove(controller
-                                                      .suggestUserPagingController
-                                                      .itemList![index]);
-                                              setState(() {});
-                                            },
-                                            child: const Icon(
-                                              Icons.close,
-                                              color: Colors.red,
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                      ],
+                                      ),
                                     );
                                   },
                                   noMoreItemsIndicatorBuilder: (context) =>

@@ -954,10 +954,11 @@ class FavTinderSubCategoryCard extends StatelessWidget {
         padding: const EdgeInsets.all(0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
+          color: Theme.of(context).scaffoldBackgroundColor
         ),
         child: Card(
           clipBehavior: Clip.hardEdge,
-          color: Colors.white,
+          color: Theme.of(context).scaffoldBackgroundColor,
           elevation: 2,
           child: Column(
             children: [

@@ -4,18 +4,19 @@ import 'package:go_router/go_router.dart';
 
 class DashboardBanner extends StatelessWidget {
   final String title;
-  final String subTitle;
-  final String route;
+  final String? subTitle;
+  final String? route;
   const DashboardBanner(
-      {super.key,
-      required this.subTitle,
-      required this.title,
-      required this.route});
+      {super.key, this.subTitle, required this.title, this.route});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(route),
+      onTap: () {
+        if (route != null) {
+          context.push(route!);
+        }
+      },
       child: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
@@ -29,7 +30,8 @@ class DashboardBanner extends StatelessWidget {
                   TextSpan(
                     text: '$title ',
                     style: Styles.mediumText(
-                        color: Theme.of(context).scaffoldBackgroundColor, fontWeight: FontWeight.bold),
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        fontWeight: FontWeight.bold),
                   ),
                   TextSpan(
                     text: subTitle,
@@ -39,7 +41,7 @@ class DashboardBanner extends StatelessWidget {
                   ),
                 ])),
               ),
-               Icon(
+              Icon(
                 Icons.arrow_forward_ios_outlined,
                 color: Theme.of(context).scaffoldBackgroundColor,
               ),

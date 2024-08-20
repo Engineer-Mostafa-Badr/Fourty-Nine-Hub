@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 // Package imports:
 import 'package:zego_uikit/zego_uikit.dart';
@@ -107,9 +108,9 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                   avatarBuilder: widget.config.avatarBuilder,
                   itemBuilder: widget.config.memberList.itemBuilder,
                 ),
-              SizedBox(width: 20.zR),
+              SizedBox(width: 20.zW),
               closeButton(),
-              SizedBox(width: 33.zR),
+              SizedBox(width: 33.zW),
             ],
           ),
         ],
@@ -130,15 +131,24 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
   Widget closeButton() {
     return widget.config.topMenuBar.showCloseButton
         ? ZegoLiveStreamingLeaveButton(
-            buttonSize: Size(52.zR, 52.zR),
-            iconSize: Size(24.zR, 24.zR),
+            // buttonSize: Size(52.zR, 52.zR),
+            // iconSize: Size(24.zR, 24.zR),
             icon: ButtonIcon(
-              icon: const Icon(Icons.close, color: Colors.white),
-              backgroundColor: ZegoUIKitDefaultTheme.buttonBackgroundColor,
+              icon: Center(
+                child: Text(
+                  widget.config.role == ZegoLiveStreamingRole.host
+                      ? 'End'
+                      : 'Leave',
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+              backgroundColor: Colors.red,
             ),
             config: widget.config,
-            events: widget.events,
-            defaultEndAction: widget.defaultEndAction,
+            events: ZegoUIKitPrebuiltLiveStreamingEvents(),
+            defaultEndAction:
+               widget.defaultEndAction
+            ,
             defaultLeaveConfirmationAction:
                 widget.defaultLeaveConfirmationAction,
             hostManager: widget.hostManager,
@@ -159,16 +169,102 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
         return Row(
           children: [
             SizedBox(width: 32.zR),
+            //leave confirmation
             SizedBox(
               height: 68.zR,
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        backgroundColor: Colors.white,
+                        title: Row(
+                          children: [
+                            const Icon(Icons.exit_to_app,
+                                color: Colors.redAccent),
+                            SizedBox(width: 10.zW),
+                            const Text(
+                              "Leave Meeting",
+                              style: TextStyle(
+                                color: Colors.redAccent,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        actionsAlignment: MainAxisAlignment.spaceEvenly,
+                        content: Text(
+                          "Are you sure you want to leave the meeting?",
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 25.zSP,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        actions: <Widget>[
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.grey[200],
+                              foregroundColor: Colors.black87,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.zR),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20.zW, vertical: 10.zH),
+                            ),
+                            child: const Text("Cancel"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.redAccent,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.zR),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20.zW, vertical: 10.zH),
+                            ),
+                            child: const Text("Leave"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                              // Add your leave meeting logic here
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
                 icon: const Icon(
                   Icons.arrow_back_ios,
                   color: AppColors.AUTH_CONTAINER_COLOR,
                 ),
               ),
             ),
+            SizedBox(width: 32.zR),
+            ZegoSwitchAudioOutputButton(
+              defaultUseSpeaker: widget.config.useSpeakerWhenJoining,
+              speakerIcon: ButtonIcon(
+                icon: widget.config.bottomMenuBar.buttonStyle
+                    ?.switchAudioOutputToSpeakerButtonIcon,
+              ),
+              headphoneIcon: ButtonIcon(
+                icon: widget.config.bottomMenuBar.buttonStyle
+                    ?.switchAudioOutputToHeadphoneButtonIcon,
+              ),
+              bluetoothIcon: ButtonIcon(
+                icon: widget.config.bottomMenuBar.buttonStyle
+                    ?.switchAudioOutputToBluetoothButtonIcon,
+              ),
+            )
             // IconButton(
             //   onPressed: () {},
             //   icon: const Icon(

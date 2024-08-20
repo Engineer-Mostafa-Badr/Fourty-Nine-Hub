@@ -6,11 +6,11 @@ class ChatsRequestParams {
   bool? isUnread;
   String? lockChatPassword;
   ChatsRequestParams({
-     this.privacyId,
-     this.categoryId,
-     this.archived,
-     this.isLocked,
-     this.isUnread,
-     this.lockChatPassword,
+    this.privacyId,
+    this.categoryId,
+    this.archived,
+    this.isLocked,
+    this.isUnread,
+    this.lockChatPassword,
   });
 }
