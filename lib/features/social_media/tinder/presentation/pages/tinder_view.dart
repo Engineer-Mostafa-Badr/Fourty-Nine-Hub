@@ -153,7 +153,7 @@ class _TinderScreenState extends State<TinderScreen> {
               return Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: BlocProvider.value(
-                  value: serviceLocator<TinderViewCubit>(),
+                  value: serviceLocator<TinderViewCubit>()..fetchFavorites(),
                   child: TinderSubCategoryCard(
                     subCategoryCardData: state.subCategoryData[index],
                     index: index,
