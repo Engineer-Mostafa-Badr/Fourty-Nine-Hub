@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="169" height="147.874" viewBox="0 0 169 147.874">
+  <g id="Group_2633" data-name="Group 2633" transform="translate(-162 -1128.17)">
+    <circle id="Ellipse_109" data-name="Ellipse 109" cx="18" cy="18" r="18" transform="translate(283 1200)" fill="#f43e49"/>
+    <path id="Icon_awesome-wallet" data-name="Icon awesome-wallet" d="M152.232,33.937H26.406a5.281,5.281,0,1,1,0-10.562h126.75a5.28,5.28,0,0,0,5.281-5.281A15.844,15.844,0,0,0,142.594,2.25H21.125A21.123,21.123,0,0,0,0,23.375V129a21.123,21.123,0,0,0,21.125,21.125H152.232c9.249,0,16.768-7.107,16.768-15.844v-84.5C169,41.044,161.481,33.937,152.232,33.937Zm-14.92,68.656a10.562,10.562,0,1,1,10.563-10.562A10.564,10.564,0,0,1,137.313,102.593Z" transform="translate(162 1125.92)" fill="#0b1035"/>
+    <path id="Icon_awesome-wallet-2" data-name="Icon awesome-wallet" d="M26.406,33.937a5.281,5.281,0,1,1,0-10.562h126.75a5.28,5.28,0,0,0,5.281-5.281A15.844,15.844,0,0,0,142.594,2.25H21.125A21.123,21.123,0,0,0,0,23.375V33.937Z" transform="translate(162 1125.92)" fill="#f43e49"/>
+  </g>
+</svg>

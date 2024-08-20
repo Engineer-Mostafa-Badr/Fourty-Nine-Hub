@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="89.15"
+     height="87.15"
+     viewBox="0 0 89.15 87.15">
+    <g id="post"
+       transform="translate(2)">
+        <rect id="Rectangle_1640"
+              data-name="Rectangle 1640"
+              width="63.504"
+              height="76.605"
+              rx="6.096"
+              transform="translate(21.353 2.293)"
+              fill="#f43e49"
+              stroke="#0b1035"
+              stroke-linecap="round"
+              stroke-width="4.586" />
+        <path id="Path_1009"
+              data-name="Path 1009"
+              d="M14.991,16H72.162V60.467a20.881,20.881,0,0,1-12.7,19.057H2.286c6.581-4.789,13.445-9.388,12.7-19.057Z"
+              transform="translate(-2 5.34)"
+              fill="#fff"
+              stroke="#0b1035"
+              stroke-linejoin="round"
+              stroke-width="4.571"
+              fill-rule="evenodd" />
+        <path id="Path_1010"
+              data-name="Path 1010"
+              d="M90.082,1090.418a13.154,13.154,0,1,1-13.154-13.155,13.154,13.154,0,0,1,13.154,13.155Z"
+              transform="translate(-39.578 -1065.648)"
+              fill="#0b1035" />
+    </g>
+</svg>

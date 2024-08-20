@@ -1,0 +1,240 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/post_details_page.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_people_you_may_know.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/Stories.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_card.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_comments.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+
+class FacebookBody extends StatelessWidget {
+  const FacebookBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<SocialPostsCubit>(
+      create: (_) => serviceLocator()..loadData(),
+      child: BlocConsumer<SocialPostsCubit, SocialPostsState>(
+          listener: (context, state) {
+        if (state.status == StateStatus.error) {
+          showErrorMessage(
+            context,
+            getFailureMessage(
+              state.failure!,
+              context,
+            ),
+          );
+        }
+      }, builder: (context, state) {
+        final controller = context.read<SocialPostsCubit>();
+        return RefreshIndicator(
+          onRefresh: () async => controller.onRefresh(),
+          child: CustomScrollView(
+            slivers: [
+              const SliverToBoxAdapter(
+                child: Stories(),
+              ),
+              const SliverToBoxAdapter(
+                child: BuildPeopleYouMayKnow(),
+              ),
+              BlocBuilder<SocialPostsCubit, SocialPostsState>(
+                builder: (context, state) {
+                  final controller = context.read<SocialPostsCubit>();
+                  return PagedSliverList<int, PostEntity>(
+                    pagingController: controller.feedPagingController,
+                    builderDelegate: PagedChildBuilderDelegate<PostEntity>(
+                      noItemsFoundIndicatorBuilder: (context) {
+                        return const Center(
+                          child: Text(
+                            "No Posts",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                            ),
+                          ),
+                        );
+                      },
+                      itemBuilder: (context, item, index) {
+                        final user = context.read<UserCubit>().state.data;
+                        return Column(
+                          children: [
+                            FacebookPostCard(
+                              deletePost: (String postId) => controller
+                                  .deletePost(context: context, postId: postId),
+                              hidePost: (String postId) => controller.hidePost(
+                                  context: context, postId: postId),
+                              post: controller
+                                  .feedPagingController.itemList![index],
+                              onReact: (PostReactParams item) => controller
+                                  .onReact(params: item, from: 'posts'),
+                              showPostComments: (String v) {
+                                bottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    widget: BlocProvider.value(
+                                      value: serviceLocator<SocialPostsCubit>()
+                                        ..loadComments(
+                                            context,
+                                            controller.feedPagingController
+                                                .itemList![index].id),
+                                      child: FacebookPostComments(
+                                        postId: controller.feedPagingController
+                                            .itemList![index].id,
+                                        onAddComment:
+                                            (PostCommentParams params) {
+                                          return controller.onPostComment(
+                                              params: params);
+                                        },
+                                        onCommentReply:
+                                            (ReplyOnCommentParams params) {
+                                          return controller.replyOnComment(
+                                            params: ReplyOnCommentParams(
+                                                postId: params.postId,
+                                                content: params.content,
+                                                commentId: params.commentId),
+                                          );
+                                        },
+                                        onDeleteComment: (String id) async {
+                                          return await controller.deleteComment(
+                                              context: context,
+                                              commentId: id,
+                                              postId: controller
+                                                  .feedPagingController
+                                                  .itemList![index]
+                                                  .id,
+                                              from: 'feed');
+                                          // print(result);
+                                        },
+                                        onDeleteReply: (String id) async {
+                                          return await controller.deleteComment(
+                                              context: context,
+                                              commentId: id,
+                                              postId: controller
+                                                  .feedPagingController
+                                                  .itemList![index]
+                                                  .id,
+                                              from: 'feed');
+                                        },
+                                        from: 'feed',
+                                      ),
+                                    ));
+                              },
+                              showPostDetails: (PostEntity post) => bottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  widget: BlocProvider.value(
+                                    value: serviceLocator<SocialPostsCubit>()
+                                      ..loadPostDetails(
+                                          context,
+                                          controller
+                                                      .feedPagingController
+                                                      .itemList![index]
+                                                      .isShared ==
+                                                  true
+                                              ? controller.feedPagingController
+                                                  .itemList![index].mainPost!.id
+                                              : controller.feedPagingController
+                                                  .itemList![index].id),
+                                    child: PostDetailsPage(
+                                        comments: const [],
+                                        postId: controller.feedPagingController
+                                            .itemList![index].id,
+                                        deletePost: (String postId) =>
+                                            controller.deletePost(
+                                                context: context,
+                                                postId: postId),
+                                        hidePost: (String postId) =>
+                                            controller.hidePost(
+                                                context: context,
+                                                postId: postId),
+                                        onAddComment: (PostCommentParams
+                                                params) =>
+                                            controller.onPostComment(
+                                                params: params),
+                                        onReact: (params) => controller.onReact(
+                                            params: params, from: 'posts'),
+                                        showPostComments: (postId) {},
+                                        showPostDetails: (PostEntity post) {},
+                                        // post: controller.feedPagingController.itemList![index],
+
+                                        onCommentReply:
+                                            (ReplyOnCommentParams params) {
+                                          return controller.replyOnComment(
+                                            params: ReplyOnCommentParams(
+                                                postId: params.postId,
+                                                content: params.content,
+                                                commentId: params.commentId),
+                                          );
+                                        },
+                                        onDeleteComment: (String id) async {
+                                          return await controller.deleteComment(
+                                              context: context,
+                                              commentId: id,
+                                              postId: controller
+                                                  .feedPagingController
+                                                  .itemList![index]
+                                                  .id,
+                                              from: 'feed');
+                                          // print(result);
+                                        },
+                                        onDeleteReply: (String id) async {
+                                          return await controller.deleteComment(
+                                              context: context,
+                                              commentId: id,
+                                              postId: controller
+                                                  .feedPagingController
+                                                  .itemList![index]
+                                                  .id,
+                                              from: 'feed');
+                                        }),
+                                  )),
+                              isMyPost: controller.feedPagingController
+                                          .itemList?[index].user !=
+                                      null
+                                  ? (user?.id ==
+                                      controller.feedPagingController
+                                          .itemList?[index].user.id)
+                                  : false,
+                              onShare: (String id) {
+                                controller.onShare(postId: id);
+                              },
+                              from: 'posts',
+                              index: index,
+                            ),
+                            Container(
+                              width: double.infinity,
+                              height: 5,
+                              color: AppColors.TXTFIELD_GRAY_COLOR2,
+                            ),
+                          ],
+                        );
+                      },
+                      noMoreItemsIndicatorBuilder: (context) => Container(),
+                      firstPageProgressIndicatorBuilder: (context) =>
+                          const CupertinoActivityIndicator(),
+                      newPageProgressIndicatorBuilder: (context) =>
+                          const CupertinoActivityIndicator(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      }),
+    );
+  }
+}

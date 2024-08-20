@@ -1,0 +1,28 @@
+{
+    "status":true,
+    "message":null, 
+    "data":{
+        "categories_list":[
+            {
+                "id":1,
+                "type":"subcategory",
+                "item":{
+                    "id":1,
+                    "name":"Ride",
+                    "total":4,
+                    "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY61A56uaiLPMPRTANVI_mGgAlTGcQIuf4NF2dCdLTKw&s"
+                }
+            },
+            {
+                "id":2,
+                "type":"subcategory",
+                "item":{
+                    "id":2,
+                    "name":"Shipping",
+                    "total":2,
+                    "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY61A56uaiLPMPRTANVI_mGgAlTGcQIuf4NF2dCdLTKw&s"
+                }
+            }
+        ]
+    }
+}

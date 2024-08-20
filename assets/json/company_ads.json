@@ -1,0 +1,42 @@
+{
+    "status":true,
+    "message":null, 
+    "data":[
+        {
+            "id":"sdsda",
+            "title":"Add AD banner 64 x 368",
+            "allow_video":false,
+            "options":[
+                {
+                    "title":"Your AD will show up between users posts",
+                    "subtitle":"Your AD will appear 3 times per day",
+                    "price":120
+                },
+                {
+                    "title":"Your AD will show up next to 49 Hub logo banner",
+                    "subtitle":"Your AD will appear 10 times per day for 1 month",
+                    "price":20
+
+                }
+            ]
+        },
+        {
+            "id":"sdsda",
+            "title":"Add AD banner 64 x 368",
+            "allow_video":false,
+            "options":[
+                {
+                    "title":"Your AD will show up between users posts",
+                    "subtitle":"Your AD will appear 3 times per day",
+                    "price":30
+                },
+                {
+                    "title":"Your AD will show up next to 49 Hub logo banner",
+                    "subtitle":"Your AD will appear 10 times per day for 1 month",
+                    "price":100
+
+                }
+            ]
+        }
+    ]
+}

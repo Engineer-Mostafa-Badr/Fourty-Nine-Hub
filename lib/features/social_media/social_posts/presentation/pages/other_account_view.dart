@@ -1,0 +1,401 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_posts.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_reels.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_tweets.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
+import '../../../../../common/widgets/dynamic/drawer.dart';
+import '../../../../../common/widgets/dynamic/floating_button.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../res/style/const.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../../res/style/app_colors.dart';
+
+class OtherAccountView extends StatefulWidget {
+  const OtherAccountView({super.key, required this.userId});
+  final String userId;
+
+  @override
+  State<OtherAccountView> createState() => _OtherAccountViewState();
+}
+
+class _OtherAccountViewState extends State<OtherAccountView> {
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        // backgroundColor: Colors.,
+        // appBar: const HomeAppbar(),
+        drawer: const DrawerWidget(),
+        bottomNavigationBar: const BottomNavigator(
+          mainCategory: 0,
+          index: 2,
+        ),
+        floatingActionButton: const FloatingButton(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        body: BlocBuilder<SocialPostsCubit, SocialPostsState>(
+            builder: (context, state) {
+          final controller = context.read<SocialPostsCubit>();
+          final loginUser = context.read<UserCubit>().state.data;
+          return state.status == StateStatus.loading
+              ? const Center(
+                  child: CupertinoActivityIndicator(),
+                )
+              : state.status == StateStatus.error
+                  ? Center(
+                      child: Text(getFailureMessage(
+                        state.failure!,
+                        context,
+                      )),
+                    )
+                  : NestedAppbar(
+                      appBars: [
+                        SliverAppBar(
+                          floating: true,
+                          expandedHeight: kToolbarHeight * 5,
+                          automaticallyImplyLeading: false,
+                          backgroundColor: Colors.white,
+                          flexibleSpace: _buildAccountCounter(
+                              context: context,
+                              user: state.profileData!,
+                              onFollow: () async {
+                                if (state.profileData?.isFollowed == true) {
+                                  var result = await controller.unFollowRequest(
+                                      context: context,
+                                      userId: state.profileData!.id);
+                                  if (result == true) {
+                                    state.profileData?.isFollowed = false;
+                                    setState(() {});
+                                  }
+                                } else {
+                                  var result = await controller.followRequest(
+                                      context: context,
+                                      userId: state.profileData!.id);
+                                  if (result == true) {
+                                    state.profileData?.isFollowed = true;
+                                    setState(() {});
+                                  }
+                                }
+                              },
+                              onAddFriend: () async {
+                                // print("object");
+                                if (state.profileData?.areFriends == true) {
+                                } else {
+                                  if (state.profileData?.sentFriendRequest ==
+                                      true) {
+                                    var result =
+                                        await controller.removeFriendRequest(
+                                            context: context,
+                                            userId: state.profileData!.id);
+                                    if (result == true) {
+                                      state.profileData?.sentFriendRequest =
+                                          false;
+                                      setState(() {});
+                                    }
+                                  } else {
+                                    var result = await controller.friendRequest(
+                                        context: context,
+                                        userId: state.profileData!.id);
+                                    if (result == true) {
+                                      state.profileData?.sentFriendRequest =
+                                          true;
+                                      setState(() {});
+                                    }
+                                  }
+                                }
+                              }),
+                          iconTheme: const IconThemeData(color: Colors.white),
+                          leading: IconButton(
+                              onPressed: () => context.pop(),
+                              icon: const Icon(Icons.arrow_back)),
+                          actions: [
+                            // IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+                            if (loginUser?.id != state.profileData?.id)
+                              PopupMenuButton(
+                                icon: const Icon(
+                                  Icons.more_vert,
+                                  color: Colors.white,
+                                ),
+                                itemBuilder: (context) {
+                                  return [
+                                    PopupMenuItem<int>(
+                                      value: 4,
+                                      child: const Text("Report"),
+                                      onTap: () {
+                                        bottomSheet(
+                                            context: context,
+                                            widget: ReportView(
+                                              id: widget.userId,
+                                              categoryId:
+                                                  '66b77e77bb35968b535dc944',
+                                            ));
+                                      },
+                                    ),
+                                    PopupMenuItem<int>(
+                                      value: 5,
+                                      child: Text(
+                                          state.profileData?.isBlock == true
+                                              ? 'UnBlock'
+                                              : 'Block'),
+                                      onTap: () async {
+                                        // context.pop();
+                                        var result = await controller.blockUser(
+                                            context: context,
+                                            userId: widget.userId);
+                                        if (result == true) {
+                                          if (state.profileData?.isBlock ==
+                                              false) {
+                                            state.profileData?.isBlock = true;
+                                            showSuccessMessage(context,
+                                                'Blocked user successfully.');
+                                          } else {
+                                            state.profileData?.isBlock = false;
+                                            showSuccessMessage(context,
+                                                'Unblocked user successfully.');
+                                          }
+                                        }
+                                      },
+                                    ),
+                                  ];
+                                },
+                              ),
+                          ],
+                        ),
+                        SliverAppBar(
+                          automaticallyImplyLeading: false,
+                          floating: false,
+                          backgroundColor: Colors.white,
+                          pinned: true,
+                          title: TabBar(
+                              labelStyle: Styles.mediumText(),
+                              isScrollable: true,
+                              tabAlignment: TabAlignment.center,
+                              tabs: const [
+                                Tab(
+                                  text: 'Posts',
+                                ),
+                                Tab(
+                                  text: 'Tweets',
+                                ),
+                                Tab(
+                                  text: 'Reels',
+                                ),
+                                // Tab(
+                                //   text: 'Media',
+                                // ),
+                              ]),
+                        ),
+                      ],
+                      body: _buildAccountPages(state.profileData!),
+                    );
+        }),
+      ),
+    );
+  }
+
+  Widget _buildAccountCounter(
+      {required BuildContext context,
+      required UserProfileEntity user,
+      required Function onFollow,
+      required Function onAddFriend}) {
+    final loginUser = context.read<UserCubit>().state.data;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+            child: Stack(
+          children: [
+            Positioned.fill(
+                child: Column(
+              children: [
+                Expanded(
+                    flex: 3,
+                    child: Image.network(
+                      user.profileCover!.isNotEmpty
+                          ? user.profileCover!
+                          : UIConst.socialImagePlaceHolder,
+                      fit: BoxFit.fill,
+                      width: double.infinity,
+                    )),
+                Expanded(
+                    child: Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: loginUser?.id == user.id
+                      ? Container()
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            PopupMenuButton(
+                                icon: Container(
+                                  height: kToolbarHeight * .5,
+                                  width: kToolbarHeight * 1.5,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: AppColors.SECONDARY_COLOR,
+                                  ),
+                                  child: Center(
+                                      child: Label(
+                                    text: 'Chat',
+                                    style:
+                                        Styles.mediumText(color: Colors.white),
+                                  )),
+                                ),
+                                itemBuilder: (context) {
+                                  return const [
+                                    PopupMenuItem<int>(
+                                      value: 0,
+                                      child: Text("Normal"),
+                                    ),
+                                    PopupMenuItem<int>(
+                                      value: 1,
+                                      child: Text("Anonymous"),
+                                    ),
+                                  ];
+                                },
+                                onSelected: (value) {
+                                  context.push(Routes.CHAT);
+                                }),
+                            AppButton(
+                                height: kToolbarHeight * .5,
+                                width: kToolbarHeight * 1.5,
+                                backColor: user.isFollowed == true
+                                    ? AppColors.DARK_GRAY_COLOR
+                                    : null,
+                                label: user.isFollowed == true
+                                    ? 'unFollow'
+                                    : 'Follow',
+                                onPressed: () {
+                                  onFollow();
+                                }),
+                            const Sizer(),
+                            AppButton(
+                                height: kToolbarHeight * .5,
+                                width: kToolbarHeight *
+                                    (user.sentFriendRequest == true
+                                        ? 1.8
+                                        : 1.5),
+                                backColor: user.areFriends == true ||
+                                        user.sentFriendRequest == true
+                                    ? AppColors.DARK_GRAY_COLOR
+                                    : null,
+                                label: user.areFriends == true
+                                    ? 'friends'
+                                    : user.sentFriendRequest == true
+                                        ? 'Remove request'
+                                        : 'Add friend',
+                                onPressed: () {
+                                  onAddFriend();
+                                })
+                          ],
+                        ),
+                )),
+              ],
+            )),
+            Positioned(
+                bottom: 20,
+                left: 10,
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundColor: AppColors.SECONDARY_COLOR,
+                  child: CircleAvatar(
+                    radius: 28,
+                    backgroundColor: Colors.white,
+                    backgroundImage: NetworkImage(user.profilePicture ?? ''),
+                  ),
+                ))
+          ],
+        )),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Label(
+                      text: "${user.firstName} ${user.lastName}",
+                      style: Styles.headerText(fontWeight: FontWeight.w600)),
+                  const Sizer(
+                    width: 5,
+                  ),
+                  const Icon(
+                    Icons.verified,
+                    size: 20,
+                    color: AppColors.SECONDARY_COLOR,
+                  )
+                ],
+              ),
+              Label(
+                  text: '@${user.email.split('@')[0]}',
+                  style: Styles.mediumText(color: Colors.grey)),
+              const Sizer(),
+              Row(
+                children: [
+                  _buildCounter(
+                    value: '${user.friendsCount} ',
+                    label: 'Friends',
+                  ),
+                  const Sizer(),
+                  _buildCounter(
+                    value: '${user.followersCount} ',
+                    label: 'Follower',
+                  ),
+                  const Sizer(),
+                  _buildCounter(
+                    value: '${user.followingCount} ',
+                    label: 'Following',
+                  ),
+                ],
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildCounter({required String value, required String label}) {
+    return RichText(
+        text: TextSpan(children: [
+      TextSpan(
+          text: value,
+          style: Styles.mediumText(
+              color: Colors.black, fontWeight: FontWeight.w500)),
+      TextSpan(
+          text: label,
+          style: Styles.mediumText(
+            color: Colors.grey,
+          )),
+    ]));
+  }
+
+  Widget _buildAccountPages(UserProfileEntity userData) {
+    return TabBarView(children: [
+      UserPosts(
+        userData: userData,
+      ),
+      UserTweets(userData: userData),
+
+      // const HighLightsSection(),
+
+      UserReels(userData: userData),
+      // const MediaSection(),
+    ]);
+  }
+}
