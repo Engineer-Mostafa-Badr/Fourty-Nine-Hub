@@ -35,7 +35,7 @@ class _PickDateAndTimeWidgetState extends State<PickDateAndTimeWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Enter Journey Date',
+                    'Journey Date',
                     style: Styles.headerText(),
                   ),
                   InkWell(
@@ -73,7 +73,7 @@ class _PickDateAndTimeWidgetState extends State<PickDateAndTimeWidget> {
           },
         ),
         Text(
-          'Enter Journey Time',
+          'Journey Time',
           style: Styles.headerText(),
         ),
         InkWell(
