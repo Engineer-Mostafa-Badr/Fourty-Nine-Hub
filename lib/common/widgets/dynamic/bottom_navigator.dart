@@ -201,9 +201,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                           widget.items[index].image,
                           height: widget.items[index].height *1.8.zH,
                           semanticsLabel: widget.items[index].label,
-                          color: context.read<ThemeCubit>().isDarkTheme
-                              ? Colors.white
-                              : null,
+                          // color: context.read<ThemeCubit>().isDarkTheme
+                          //     ? Colors.white
+                          //     : null,
                         ),
                         Text(
                           widget.items[index].label.localize,

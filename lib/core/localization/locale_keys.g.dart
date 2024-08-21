@@ -83,5 +83,19 @@ abstract class  LocaleKeys {
   static const restaurants = 'restaurants';
   static const meals = 'meals';
   static const noRideSubcategories = 'noRideSubcategories';
+  static const enableNotifications = 'enableNotifications';
+  static const changePassword = 'changePassword';
+  static const disableAccount = 'disableAccount';
+  static const deleteAccount = 'deleteAccount';
+  static const alert = 'alert';
+  static const disable = 'disable';
+  static const delete = 'delete';
+  static const specialAds = 'specialAds';
+  static const friends = 'friends';
+  static const more = 'more';
+  static const Doctor = 'Doctor';
+  static const loadingDriver = 'loadingDriver';
+  static const Restaurant = 'Restaurant';
+  static const driver = 'driver';
 
 }

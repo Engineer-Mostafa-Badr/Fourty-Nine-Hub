@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -18,8 +21,8 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BackAppBar(
-          label: 'Settings',
+        appBar: BackAppBar(
+          label: LocaleKeys.settings.localize,
         ),
         body: Column(
           children: [
@@ -30,13 +33,13 @@ class SettingsView extends StatelessWidget {
                   builder: (context, snap) {
                     final isGranted = snap.data ?? false;
                     return Switch(
-                        // activeColor: Colors.blue,
-                        // activeTrackColor: Colors.grey,
+                         activeColor: AppColors.SECONDARY_COLOR,
+                        activeTrackColor: Colors.grey,
                         value: isGranted,
                         onChanged: (v) async =>
                             await Permission.notification.request());
                   }),
-              label: 'Enable Notifications',
+              label: LocaleKeys.enableNotifications.localize,
               onTap: () async => await Permission.notification.request(),
             ),
             BlocBuilder<ThemeCubit, ThemeStates>(
@@ -46,21 +49,21 @@ class SettingsView extends StatelessWidget {
                     theme is DarkThemeModeStates
                         ? Icons.dark_mode_outlined
                         : Icons.light_mode_outlined,
-                    size: 28,
+                    size: 40.zH,
                   ),
                   title: theme is DarkThemeModeStates
-                      ?  Text(
-                          'light mode',
-                          style: Styles.
-                          headerText(color: AppColors.AUTH_CONTAINER_COLOR,fontWeight: FontWeight.w400),
+                      ? Text(
+                          LocaleKeys.lightMode.localize,
+                          style: Styles.mediumText(
+                              fontSize: 32, fontWeight: FontWeight.w400),
                         )
-                      :  Text(
-                          'dark mode',
-                          style:Styles.
-                              headerText(color: AppColors.QUANTITY_COLOR,fontWeight: FontWeight.w400),
+                      : Text(
+                          LocaleKeys.darkMode.localize,
+                          style: Styles.mediumText(
+                              fontSize: 32, fontWeight: FontWeight.w400),
                         ),
                   value: ThemeCubit.get(context).isDarkTheme,
-                  activeColor: Colors.grey,
+                  activeColor: AppColors.SECONDARY_COLOR,
                   activeTrackColor: AppColors.AUTH_CONTAINER_COLOR,
                   onChanged: (value) {
                     if (theme is LightThemeModeStates) {
@@ -75,25 +78,28 @@ class SettingsView extends StatelessWidget {
             ),
             listTileWidget(
                 icon: Icons.password,
-                trailing: const Icon(Icons.arrow_forward_ios_outlined),
-                label: 'Change Password',
+                trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.zH),
+                label: LocaleKeys.changePassword.localize,
                 onTap: () => context.push(Routes.FORGOTPASSWORD)),
             listTileWidget(
                 icon: Icons.no_accounts,
-                trailing: const Icon(Icons.arrow_forward_ios_outlined),
-                label: 'Disable Account',
+                trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.zH),
+                label: LocaleKeys.disableAccount.localize,
                 onTap: () => showAreYouSure(
-                    title: 'Alert!',
-                    subTitle: 'Are you sure you want to disable your account?',
+                    title: LocaleKeys.alert.localize,
+                    subTitle: LocaleKeys.disable.localize,
                     action: () => context.go(Routes.LOGIN),
                     context: context)),
             listTileWidget(
                 icon: Icons.account_circle_outlined,
-                trailing: const Icon(Icons.arrow_forward_ios_outlined),
-                label: 'Delete Account',
+                trailing: Icon(
+                  Icons.arrow_forward_ios_outlined,
+                  size: 40.zH,
+                ),
+                label: LocaleKeys.deleteAccount.localize,
                 onTap: () => showAreYouSure(
-                    title: 'Alert!',
-                    subTitle: 'Are you sure you want to delete your account?',
+                    title: LocaleKeys.alert.localize,
+                    subTitle: LocaleKeys.delete.localize,
                     action: () => context.go(Routes.LOGIN),
                     context: context)),
           ],
@@ -108,9 +114,11 @@ class SettingsView extends StatelessWidget {
     return ListTile(
       leading: Icon(
         icon,
-        size: 25,
+        size: 40.zH,
       ),
-      title: Label(text: label,style: Styles.headerText(fontWeight: FontWeight.w400),),
+      title: Label(
+          text: label,
+          style: Styles.mediumText(fontSize: 32, fontWeight: FontWeight.w400)),
       onTap: () => onTap(),
       trailing: trailing,
     );
