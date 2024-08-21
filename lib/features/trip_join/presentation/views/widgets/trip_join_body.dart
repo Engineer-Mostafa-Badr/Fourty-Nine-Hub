@@ -5,8 +5,7 @@ import 'package:fourtyninehub/features/trip_join/presentation/cubits/destination
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/destination_text_field_and_find_button.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/start_text_field_and_find_button.dart';
-import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/trip_info.dart';
-import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/trip_join_additional_information.dart';
+import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/trip_and_car_information.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/trip_join_google_map.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/welcome_text.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -56,16 +55,10 @@ class _TripJoinBodyState extends State<TripJoinBody> {
               Builder(builder: (context) {
                 context.watch<StartingLocationCubit>();
                 context.watch<DestinationLocationCubit>();
-                return const Visibility(
-                  // visible: startingCubit.startingLocation != null && destinationCubit.destinationLocation != null,
-                  visible: true,
-                  child: Column(
-                    children: [
-                      TripJoinAdditionalInformation(),
-                      Sizer(height: 20),
-                      TripInfo(),
-                    ],
-                  ),
+                return Visibility(
+                  visible: startingCubit.startingLocation != null && destinationCubit.destinationLocation != null,
+                  // visible: true,
+                  child: const TripAndCarInformation(),
                 );
               })
             ],
