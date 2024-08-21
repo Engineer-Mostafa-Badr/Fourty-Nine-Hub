@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
 
 abstract class Styles {
 // text
   static TextStyle smallText(
-      {double fontSize = 10,
+      {double fontSize = 22,
       Color? color,
       TextDecoration? decoration,
       List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
-        fontSize: fontSize,
+        fontSize: fontSize.zW,
         color: color,
         decoration: decoration,
         shadows: shadows,
@@ -18,13 +19,13 @@ abstract class Styles {
   }
 
   static TextStyle mediumText(
-      {double fontSize = 12,
+      {double fontSize = 28,
       Color? color,
       TextDecoration? decoration,
       List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
-        fontSize: fontSize,
+        fontSize: fontSize.zW,
         color: color,
         // overflow: TextOverflow.ellipsis,
         shadows: shadows,
@@ -33,14 +34,14 @@ abstract class Styles {
   }
 
   static TextStyle headerText(
-      {double fontSize = 16,
+      {double fontSize = 36,
       TextDecoration? decoration,
       TextAlign textAlign = TextAlign.center,
       List<Shadow>? shadows,
       Color? color,
       FontWeight fontWeight = FontWeight.w600}) {
     return TextStyle(
-        fontSize: fontSize,
+        fontSize: fontSize.zW,
         fontWeight: fontWeight,
         shadows: shadows,
         color: color);

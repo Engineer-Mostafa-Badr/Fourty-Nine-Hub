@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_bann
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
@@ -30,10 +31,6 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../common/widgets/dynamic/wallet_widget.dart';
-import '../../../../res/style/app_colors.dart';
 
 import '../widgets/announce_widget.dart';
 
@@ -93,14 +90,14 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     children: List.generate(
                         6,
                         (index) => Container(
-                              height: 100,
+                          height: MediaQuery.of(context).size.height * .15.zH,
                               width: double.infinity,
                               margin: const EdgeInsets.symmetric(horizontal: 5),
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 5),
                               decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
+                                color: AppColors.AUTH_CONTAINER_COLOR,
+                                borderRadius: BorderRadius.circular(20.zR),
                                 border: Border.all(color: Colors.grey),
                               ),
                             )),
@@ -140,26 +137,26 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         border: Border.all(
           color: AppColors.PRIMARY_COLOR,
         ),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20.zR),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20.zR),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildItemTabBar(
               SvgPicture.asset(
                 Assets.threeDots,
-                height: 20,
-                width: 20,
+                height: 34.zH,
+                width: 34.zW,
               ),
               Routes.MAINCATEGORIESTREE,
             ),
             _buildItemTabBar(
               SvgPicture.asset(
                 Assets.mobile,
-                height: 20,
-                width: 20,
+                height: 34.zH,
+                width: 34.zW,
               ),
               Routes.MAINCATEGORIESCARDS,
             ),
@@ -176,7 +173,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     return InkWell(
       onTap: () => context.push(routeName),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 5),
+        padding:  EdgeInsets.symmetric(vertical: 6.zW, horizontal: 10.zH),
         decoration: const BoxDecoration(),
         child: icon,
       ),
@@ -197,12 +194,12 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         highlightColor: Colors.white24,
                         child: Container(
                           width: 100.zW,
-                          height: kToolbarHeight * 1.3,
+                          height: kToolbarHeight * 2.zH,
                           margin: const EdgeInsets.symmetric(horizontal: 5),
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
+                            color: AppColors.AUTH_CONTAINER_COLOR,
+                            borderRadius: BorderRadius.circular(20.zR),
                             border: Border.all(color: Colors.grey),
                           ),
                         ),
@@ -233,9 +230,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             padding:
                 //EdgeInsets.all
                 const EdgeInsets.symmetric(horizontal: 10),
-            child: const Text(
-              'No Ride Subcategories',
-              style: TextStyle(fontSize: 18),
+            child: Text(
+              LocaleKeys.noRideSubcategories.localize,
+              style: TextStyle(fontSize: 32.zW, fontWeight: FontWeight.w500),
             ),
           );
         }
@@ -250,44 +247,43 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           child: InkWell(
             onTap: () => context.go(Routes.MAZADAT),
             child: SizedBox(
-              height: kToolbarHeight * .5,
-              width: kToolbarHeight * 2,
+              height: kToolbarHeight * .8.zH,
               child: Stack(
                 children: [
                   Positioned.fill(
                     child: AppButton(
-                        color: Colors.white,
-                        label: LocaleKeys.auction.tr(),
-                        style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        label: LocaleKeys.auction.localize,
+                        style: Styles.mediumText(
+                          color: AppColors.AUTH_CONTAINER_COLOR,
+                          fontWeight: FontWeight.bold,
+                        ),
                         icon: Icons.group,
-                        iconSize: 22,
+                        iconSize: 30.zH,
                         onPressed: () => context.push(Routes.MAZADAT)),
                   ),
-                  const Positioned(
+                  Positioned(
                       bottom: 5,
                       left: 5,
                       child: Icon(
                         Icons.star,
-                        size: 10,
+                        size: 20.zH,
                         color: AppColors.ACCENT_COLOR,
                       )),
-                  const Positioned(
+                  Positioned(
                       top: 0,
                       left: 10,
                       child: Icon(
                         Icons.star,
-                        size: 10,
+                        size: 20.zH,
                         color: AppColors.ACCENT_COLOR,
                       )),
-                  const Positioned(
+                  Positioned(
                       top: 15,
                       right: 10,
                       child: Icon(
                         Icons.star,
-                        size: 10,
+                        size: 20.zH,
                         color: AppColors.ACCENT_COLOR,
                       ))
                 ],
@@ -299,15 +295,15 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         Expanded(
           child: AppButton(
               padding: 5,
-              color: Colors.white,
-              height: kToolbarHeight * .5,
-              label: LocaleKeys.installments.tr(),
-              style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
+              color: AppColors.AUTH_CONTAINER_COLOR,
+              height: kToolbarHeight * .8.zH,
+              label: LocaleKeys.installments.localize,
+              style: Styles.mediumText(
+                color: AppColors.AUTH_CONTAINER_COLOR,
+                fontWeight: FontWeight.bold,
+              ),
               icon: Icons.list,
-              iconSize: 22,
+              iconSize: 30.zH,
               onPressed: () => context.push(Routes.INSTALLMENT)),
         )
       ],
@@ -323,11 +319,11 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       // onTap: () => context.push(Routes.ADS, extra: service.value()),
       onTap: () => route != null ? context.push(route) : null,
       child: Container(
-        height: kToolbarHeight * 1.3,
+        height: kToolbarHeight * 2.zH,
         padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(10.zR),
           boxShadow: const [
             BoxShadow(
               color: Color.fromARGB(255, 249, 159, 162),
@@ -342,7 +338,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           children: [
             Positioned.fill(
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(10.zR),
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
@@ -364,27 +360,34 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 children: [
                   Label(
                     text: service.title(),
-                    style: Styles.headerText(color: Colors.white),
+                    style: Styles.mediumText(
+                      color: AppColors.AUTH_CONTAINER_COLOR,
+                      fontSize: 34,
+                    ),
                   ),
                   const Spacer(),
-                  Column(
-                    children: [
-                      InkWell(
-                        onTap: () async {},
-                        child: const Icon(
-                          Icons.favorite_border,
-                          color: AppColors.SECONDARY_COLOR,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 2
+                    ),
+                    child: Column(
+                      children: [
+                        InkWell(
+                          onTap: () async {},
+                          child:  Icon(
+                            Icons.favorite_border,
+                            color: AppColors.SECONDARY_COLOR,
+                            size: 38.zH,
+                          ),
                         ),
-                      ),
-                      const Sizer(
-                        height: 20,
-                      ),
-                      Label(
-                        text: '4 ${LocaleKeys.Ads.tr()}',
-                        style: Styles.mediumText(
-                            color: Colors.white, fontSize: 15),
-                      ),
-                    ],
+                        const Spacer(),
+                        Label(
+                          text: '4 ${LocaleKeys.ads.tr()}',
+                          style: Styles.smallText(
+                              color: Colors.white,),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

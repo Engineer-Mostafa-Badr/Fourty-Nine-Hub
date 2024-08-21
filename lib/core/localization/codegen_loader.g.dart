@@ -97,7 +97,8 @@ class CodegenLoader extends AssetLoader{
   "luckyWheel": "عجلة الحظ",
   "feelLucky": "هل تشعر بالحظ؟",
   "restaurants": "مطعم",
-  "meals": "وجبات الطعام"
+  "meals": "وجبات الطعام",
+  "noRideSubcategories": "لا توجد فئات فرعية"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -182,7 +183,8 @@ static const Map<String,dynamic> en = {
   "luckyWheel": "Lucky Wheel",
   "feelLucky": "Do You feel lucky?",
   "restaurants": "Restaurants",
-  "meals": "Meals"
+  "meals": "Meals",
+  "noRideSubcategories": "No Ride Subcategories"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

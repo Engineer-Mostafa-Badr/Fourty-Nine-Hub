@@ -10,6 +10,8 @@ import '../../../../common/theme/cubit/states.dart';
 import '../../../../res/style/app_colors.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../../../res/style/styles.dart';
+
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
 
@@ -47,14 +49,15 @@ class SettingsView extends StatelessWidget {
                     size: 28,
                   ),
                   title: theme is DarkThemeModeStates
-                      ? const Text(
-                          'dark mode',
-                          style:
-                              TextStyle(color: AppColors.AUTH_CONTAINER_COLOR),
-                        )
-                      : const Text(
+                      ?  Text(
                           'light mode',
-                          style: TextStyle(color: AppColors.QUANTITY_COLOR),
+                          style: Styles.
+                          headerText(color: AppColors.AUTH_CONTAINER_COLOR,fontWeight: FontWeight.w400),
+                        )
+                      :  Text(
+                          'dark mode',
+                          style:Styles.
+                              headerText(color: AppColors.QUANTITY_COLOR,fontWeight: FontWeight.w400),
                         ),
                   value: ThemeCubit.get(context).isDarkTheme,
                   activeColor: Colors.grey,
@@ -107,7 +110,7 @@ class SettingsView extends StatelessWidget {
         icon,
         size: 25,
       ),
-      title: Label(text: label),
+      title: Label(text: label,style: Styles.headerText(fontWeight: FontWeight.w400),),
       onTap: () => onTap(),
       trailing: trailing,
     );

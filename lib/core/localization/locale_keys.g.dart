@@ -82,5 +82,6 @@ abstract class  LocaleKeys {
   static const feelLucky = 'feelLucky';
   static const restaurants = 'restaurants';
   static const meals = 'meals';
+  static const noRideSubcategories = 'noRideSubcategories';
 
 }

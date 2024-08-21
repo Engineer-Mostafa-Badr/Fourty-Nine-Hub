@@ -1,12 +1,12 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import '../../../res/assets/assets.dart';
+import '../../../res/style/styles.dart';
 import '../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -190,16 +190,16 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                   },
                   child: Padding(
                     padding: index == index1
-                        ? const EdgeInsets.only(right: 10)
+                        ?   EdgeInsets.only(right: 30.zW)
                         : index == index2
-                        ? const EdgeInsets.only(left: 30)
+                        ?  EdgeInsets.only(left: 60.zW)
                         : EdgeInsets.zero,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         SvgPicture.asset(
                           widget.items[index].image,
-                          height: widget.items[index].height,
+                          height: widget.items[index].height *1.8.zH,
                           semanticsLabel: widget.items[index].label,
                           color: context.read<ThemeCubit>().isDarkTheme
                               ? Colors.white
@@ -207,6 +207,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                         ),
                         Text(
                           widget.items[index].label.localize,
+                          style: Styles.smallText(fontSize: 25),
                         ),
                       ],
                     ),
