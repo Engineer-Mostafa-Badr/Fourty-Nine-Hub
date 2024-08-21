@@ -78,24 +78,25 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
               color: Colors.black38,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(5),
-            child: Row(
-              children: [
-                _buildRegisterButton(),
-                widget.canRegister ? const Spacer() : const SizedBox.shrink(),
-                Label(
-                  text: widget.category.name,
-                  style: Styles.mediumText(
-                    color: AppColors.AUTH_CONTAINER_COLOR,
-                    fontSize: 34,
-                    fontWeight: FontWeight.bold
+          SizedBox(
+            height: MediaQuery.of(context).size.height * .15.zH,
+            child: Padding(
+              padding: const EdgeInsets.all(5),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _buildRegisterButton(),
+                  widget.canRegister ? const Spacer() : const SizedBox.shrink(),
+                  Label(
+                    text: widget.category.name,
+                    style: Styles.mediumText(
+                      color: AppColors.AUTH_CONTAINER_COLOR,
+                      fontSize: 34,
+                      fontWeight: FontWeight.bold
+                    ),
                   ),
-                ),
-                const Spacer(),
-                SizedBox(
-                  height: 175.zH, // Set a fixed height or use constraints
-                  child: Column(
+                  const Spacer(),
+                  Column(
                     children: [
                       InkWell(
                         onTap: () async {
@@ -122,11 +123,8 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                       ),
                     ],
                   ),
-                ),
-
-
-
-              ],
+                ],
+              ),
             ),
           ),
         ],
