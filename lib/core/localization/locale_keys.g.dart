@@ -99,5 +99,9 @@ abstract class  LocaleKeys {
   static const driver = 'driver';
   static const sureLogout = 'sureLogout';
   static const no = 'no';
+  static const welcomeBack = 'welcomeBack';
+  static const oTP = 'oTP';
+  static const required = 'required';
+  static const emailFormat = 'emailFormat';
 
 }

@@ -54,7 +54,7 @@
   "register": "Register",
   "emailOrPhone": "Email Or Phone",
   "password": "Password",
-  "forgetPassword": "Forget Password",
+  "forgetPassword": "Forget Password?",
   "lastName": "Last Name",
   "gender": "Gender",
   "code": "Referral Code(Optional)",
@@ -98,5 +98,9 @@
   "Restaurant":"Restaurant",
   "driver":"Driver",
   "sureLogout":"Are you sure you want to logout?",
-  "no":"No"
+  "no":"No",
+  "welcomeBack":"Welcome Back",
+  "oTP":"OTP Sent successfully",
+  "required":"Required",
+  "emailFormat":"Enter correct email format"
 }

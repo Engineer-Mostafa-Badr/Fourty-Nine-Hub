@@ -310,7 +310,7 @@ class DrawerWidget extends StatelessWidget {
     }
     return Padding(
       padding: EdgeInsets.only(
-        bottom: 20.zH
+        top: 20.zH
       ),
       child: ListTile(
         onTap: () => onTap(),

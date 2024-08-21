@@ -70,7 +70,7 @@ class CodegenLoader extends AssetLoader{
   "register": "تسجيل",
   "emailOrPhone": "البريد الإلكتروني أو الهاتف",
   "password": "كلمة المرور",
-  "forgetPassword": "نسيت كلمة المرور",
+  "forgetPassword": "نسيت كلمة المرور؟",
   "lastName": "اللقب",
   "gender": "الجنس",
   "code": "رمز الإحالة (اختياري)",
@@ -114,7 +114,11 @@ class CodegenLoader extends AssetLoader{
   "Restaurant": "مطعم",
   "driver": "سائق",
   "sureLogout": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
-  "no": "لا"
+  "no": "لا",
+  "welcomeBack": "مرحبًا بعودتك",
+  "oTP": "تم إرسال OTP بنجاح",
+  "required": "مطلوب",
+  "emailFormat": "أدخل تنسيق البريد الإلكتروني الصحيح"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -172,7 +176,7 @@ static const Map<String,dynamic> en = {
   "register": "Register",
   "emailOrPhone": "Email Or Phone",
   "password": "Password",
-  "forgetPassword": "Forget Password",
+  "forgetPassword": "Forget Password?",
   "lastName": "Last Name",
   "gender": "Gender",
   "code": "Referral Code(Optional)",
@@ -216,7 +220,11 @@ static const Map<String,dynamic> en = {
   "Restaurant": "Restaurant",
   "driver": "Driver",
   "sureLogout": "Are you sure you want to logout?",
-  "no": "No"
+  "no": "No",
+  "welcomeBack": "Welcome Back",
+  "oTP": "OTP Sent successfully",
+  "required": "Required",
+  "emailFormat": "Enter correct email format"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
