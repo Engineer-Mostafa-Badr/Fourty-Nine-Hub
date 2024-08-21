@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/widgets.dart';
@@ -10,7 +12,8 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
   late CameraController _controller;
   int _selectedCamera = 0;
   final List<XFile> _mediaList = [];
-  final Duration _videoDuration = const Duration(minutes: 2);
+  final Duration _maxVideoLength = const Duration(minutes: 2);
+  Timer? _videoTimer;
   late List<CameraDescription> _cameras;
 
   Future<void> init() async {
@@ -42,32 +45,50 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
   }
 
   Future<void> takePicture() async {
-    // emit(CameraPickerLoading());
     try {
-      final XFile image = await state.controller!.takePicture();
+      final XFile image = await _controller.takePicture();
       _mediaList.add(image);
-      emit(state.copyWith(status: CameraPickerStatus.updateMediaList, mediaList: _mediaList));
-      // emit(CameraPickerLoaded());
+      emit(state.copyWith(
+          status: CameraPickerStatus.updateMediaList, mediaList: _mediaList));
     } catch (e) {
-      debugPrint('==================================== Error taking picture: $e');
-      // emit(CameraPickerError(e.toString()));
+      debugPrint(
+          '==================================== Error taking picture: $e');
     }
   }
 
   Future<void> startVideoRecording() async {
     await _controller.startVideoRecording();
-    await Future.delayed(_videoDuration);
-    await stopVideoRecording();
+    emit(state.copyWith(status: CameraPickerStatus.startVideo));
+   _videoTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      if (timer.tick == _maxVideoLength.inSeconds) {
+        await stopVideoRecording();
+        timer.cancel();
+      } else {
+        emit(state.copyWith(currentVideoLength: Duration(seconds: timer.tick)));
+      }
+    });
   }
 
   Future<void> stopVideoRecording() async {
     final XFile video = await _controller.stopVideoRecording();
+    emit(state.copyWith(status: CameraPickerStatus.endVideo));
     _mediaList.add(video);
   }
+
+  void emitPhotoPickMode() {
+    emit(state.copyWith(pickMode: PickMode.photo));
+  }
+
+  void emitVideoPickMode() {
+    emit(state.copyWith(pickMode: PickMode.video));
+  }
+
+  Duration get maxVideoLength => _maxVideoLength;
 
   @override
   Future<void> close() {
     _controller.dispose();
+    _videoTimer?.cancel();
     return super.close();
   }
 }
