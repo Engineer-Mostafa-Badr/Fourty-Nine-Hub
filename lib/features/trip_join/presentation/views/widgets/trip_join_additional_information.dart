@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/card.dart';
+import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/pick_date_time_widget.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/repeated_check_box.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/seats_number.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -24,6 +25,7 @@ class TripJoinAdditionalInformation extends StatelessWidget {
         const Sizer(),
         const SeatsNumberWidget(),
         const Sizer(),
+        const PickDateAndTimeWidget(),
       ],
     );
   }

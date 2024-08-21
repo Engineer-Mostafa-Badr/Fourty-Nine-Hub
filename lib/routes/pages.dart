@@ -85,6 +85,7 @@ import 'package:fourtyninehub/features/subcategories/presentation/pages/subcateg
 import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_location_cordinates_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/avaiable_trips_view.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/trip_join_view.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
@@ -967,6 +968,7 @@ class AppPages {
                   fetchLocationCordinatesUseCase: serviceLocator<FetchLocationCordinatesUseCase>(),
                 ),
               ),
+              BlocProvider(create: (_) => TripJoinViewCubit()),
             ],
             child: const TripJoinView(),
           ),
