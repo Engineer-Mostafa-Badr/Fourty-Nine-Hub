@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 
 void bottomSheet(
     {required BuildContext context,
@@ -12,12 +13,12 @@ void bottomSheet(
       builder: (context) {
         return Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(20),
+          padding:  EdgeInsets.all(30.zW),
           // margin: const EdgeInsets.all(kToolbarHeight),
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.zR),
+              topRight: Radius.circular(20.zR),
             ),
             color: backColor,
           ),

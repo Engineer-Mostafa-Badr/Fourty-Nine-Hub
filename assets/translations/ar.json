@@ -96,6 +96,9 @@
   "Doctor":"طبيب",
   "loadingDriver":"سائق نقل",
   "Restaurant":"مطعم",
-  "driver":"سائق"
+  "driver":"سائق",
+  "sureLogout":"هل أنت متأكد أنك تريد تسجيل الخروج؟",
+  "no":"لا"
+
 
 }

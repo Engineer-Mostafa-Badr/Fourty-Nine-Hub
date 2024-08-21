@@ -97,5 +97,7 @@ abstract class  LocaleKeys {
   static const loadingDriver = 'loadingDriver';
   static const Restaurant = 'Restaurant';
   static const driver = 'driver';
+  static const sureLogout = 'sureLogout';
+  static const no = 'no';
 
 }

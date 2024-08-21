@@ -77,7 +77,7 @@
   "policies": "Policies",
   "shareApp": "Share App",
   "contactUs": "Contact Us",
-  "logout": "logout",
+  "logout": "Logout",
   "luckyWheel": "Lucky Wheel",
   "feelLucky": "Do You feel lucky?",
   "restaurants": "Restaurants",
@@ -96,5 +96,7 @@
   "Doctor":"Doctor",
   "loadingDriver":"Loading Driver",
   "Restaurant":"Restaurant",
-  "driver":"Driver"
+  "driver":"Driver",
+  "sureLogout":"Are you sure you want to logout?",
+  "no":"No"
 }

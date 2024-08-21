@@ -112,7 +112,9 @@ class CodegenLoader extends AssetLoader{
   "Doctor": "طبيب",
   "loadingDriver": "سائق نقل",
   "Restaurant": "مطعم",
-  "driver": "سائق"
+  "driver": "سائق",
+  "sureLogout": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+  "no": "لا"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -193,7 +195,7 @@ static const Map<String,dynamic> en = {
   "policies": "Policies",
   "shareApp": "Share App",
   "contactUs": "Contact Us",
-  "logout": "logout",
+  "logout": "Logout",
   "luckyWheel": "Lucky Wheel",
   "feelLucky": "Do You feel lucky?",
   "restaurants": "Restaurants",
@@ -212,7 +214,9 @@ static const Map<String,dynamic> en = {
   "Doctor": "Doctor",
   "loadingDriver": "Loading Driver",
   "Restaurant": "Restaurant",
-  "driver": "Driver"
+  "driver": "Driver",
+  "sureLogout": "Are you sure you want to logout?",
+  "no": "No"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

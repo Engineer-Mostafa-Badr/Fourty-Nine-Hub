@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
@@ -137,6 +136,7 @@ class DrawerWidget extends StatelessWidget {
                         label: LocaleKeys.logout.localize,
                         onTap: () {
                           bottomSheet(
+                            backColor: Theme.of(context).scaffoldBackgroundColor,
                               context: context, widget: const LogoutWidget());
                         }),
                   ],
@@ -161,6 +161,8 @@ class DrawerWidget extends StatelessWidget {
             child: Column(
               children: [
                 IconAppButton(
+                  width: 100.zW,
+                  height: 100.zH,
                   isCircle: true,
                   icon: Icons.person,
                   onPressed: () => context.push(Routes.LOGIN),
@@ -175,6 +177,8 @@ class DrawerWidget extends StatelessWidget {
             child: Column(
               children: [
                 IconAppButton(
+                    width: 100.zW,
+                    height: 100.zH,
                     isCircle: true,
                     icon: Icons.person_add,
                     onPressed: () => context.push(Routes.REGISTER)),
@@ -361,12 +365,12 @@ class DrawerWidget extends StatelessWidget {
                       text: LocaleKeys.luckyWheel.localize,
                       style: Styles.mediumText(
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).scaffoldBackgroundColor)),
+                          color: AppColors.QUANTITY_COLOR)),
                   Label(
                       text: LocaleKeys.feelLucky.localize,
                       style: Styles.mediumText(
                           fontWeight: FontWeight.w400,
-                          color: Theme.of(context).scaffoldBackgroundColor)),
+                          color: AppColors.QUANTITY_COLOR)),
                 ],
               ),
             ),
@@ -402,7 +406,7 @@ class DrawerWidget extends StatelessWidget {
               child: Icon(
                 icon,
                  size: 40.zW,
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: AppColors.QUANTITY_COLOR,
               ),
             ),
             Label(
@@ -462,7 +466,7 @@ class DrawerWidget extends StatelessWidget {
               Row(
                 children: [
                   Label(
-                    text: user?.fullName ?? '',
+                    text: _getFirstTwoWords(user?.fullName ?? ''),
                     style: Styles.mediumText(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
@@ -501,7 +505,7 @@ class DrawerWidget extends StatelessWidget {
                         return Expanded(
                           child: Label(
                             text:
-                                '${state is SuccessGetWallet ? state.model.balance : 0} L.E',
+                                '${state is SuccessGetWallet ? state.model.balance : 0}',
                             style: Styles.mediumText(
                                 decoration: TextDecoration.underline),
                           ),
@@ -516,6 +520,17 @@ class DrawerWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _getFirstTwoWords(String fullName) {
+    List<String> words = fullName.split(" ");
+
+    // Capitalize the first letter of each word
+    words = words.map((word) {
+      return word[0].toUpperCase() + word.substring(1).toLowerCase();
+    }).toList();
+
+    return words.length > 1 ? '${words[0]} ${words[1]}' : words[0];
   }
 
   getUserType(
