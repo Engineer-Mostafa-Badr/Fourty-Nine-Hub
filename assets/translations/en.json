@@ -84,5 +84,7 @@
   "luckyWheel": "Lucky Wheel",
   "feelLucky": "Do You feel lucky?",
   "restaurants": "Restaurants",
-  "meals": "Meals"
+  "meals": "Meals",
+  "openAppSettings": "Open App Settings",
+  "pleaseAllowPermissions": "Please allow permissions"
 }

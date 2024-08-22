@@ -1,16 +1,24 @@
+import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
+import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/camera_picker_cubit/camera_picker_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:video_thumbnail/video_thumbnail.dart' as thumbnail;
 
 class CameraPicker extends StatelessWidget {
   final void Function(List<XFile> media)? onDone;
+
   const CameraPicker({super.key, this.onDone});
 
   @override
@@ -33,7 +41,9 @@ class CameraPicker extends StatelessWidget {
 
 class _CamView extends StatelessWidget {
   final void Function(List<XFile> media)? onDone;
+
   const _CamView({required this.onDone});
+
   @override
   Widget build(BuildContext context) {
     final controller = context.read<CameraPickerCubit>();
@@ -43,12 +53,15 @@ class _CamView extends StatelessWidget {
           child: BlocBuilder<CameraPickerCubit, CameraPickerState>(
             buildWhen: (previous, current) =>
                 current.status == CameraPickerStatus.initialized ||
-                current.status == CameraPickerStatus.updateCameraView,
+                current.status == CameraPickerStatus.loadingCamera ||
+                current.status == CameraPickerStatus.flipCamera,
             builder: (context, state) {
-              if (state.controller != null) {
+              if (state.controller != null &&
+                  state.status != CameraPickerStatus.loadingCamera) {
                 return CameraPreview(state.controller!);
               } else {
-                return const SizedBox.shrink();
+                return const Icon(Icons.camera,
+                    color: AppColors.GREY_DARK_COLOR, size: 150);
               }
             },
           ),
@@ -57,134 +70,145 @@ class _CamView extends StatelessWidget {
           top: 20,
           right: 0,
           left: 0,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                onPressed: () {
-                  context.pop();
-                },
-                icon: const Icon(
-                  Icons.close,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _BaseIcon(
+                  icon: Icons.close,
+                  onTap: () => context.pop(),
                 ),
-              ),
-              BlocBuilder<CameraPickerCubit, CameraPickerState>(
-                buildWhen: (previous, current) =>
-                    current.pickMode == PickMode.video ||
-                    current.status == CameraPickerStatus.updateVideoLength,
-                builder: (context, state) {
-                  if (state.currentVideoLength != null) {
-                    return Text(
-                      '${state.currentVideoLength!.inSeconds ~/ 60} : ${state.currentVideoLength!.inSeconds % 60}',
-                    );
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                },
-              ),
-              IconButton(
-                onPressed: () {
-                  controller.toggleFlashMode();
-                },
-                icon: BlocBuilder<CameraPickerCubit, CameraPickerState>(
-                  buildWhen: (previous, current) =>
-                      current.status == CameraPickerStatus.initialized ||
-                      current.status == CameraPickerStatus.toggleFlashMode,
+                BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   builder: (context, state) {
-                    if (state.controller != null) {
-                      return Icon(
-                        _flashIcon(state.controller!.value.flashMode),
+                    if (state.status == CameraPickerStatus.startVideo) {
+                      return _VideoTimer(duration: controller.maxVideoLength);
+                    } else if (state.pickMode == PickMode.video &&
+                        state.controller != null) {
+                      return Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: AppColors.GREY_DARK_COLOR.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          '00 : 00',
+                          style: Styles.mediumText(color: Colors.white),
+                        ),
                       );
                     } else {
                       return const SizedBox.shrink();
                     }
                   },
                 ),
-              ),
-            ],
+                BlocBuilder<CameraPickerCubit, CameraPickerState>(
+                  builder: (context, state) {
+                    if (state.controller != null &&
+                        state.status != CameraPickerStatus.startVideo) {
+                      return _BaseIcon(
+                        icon: _flashIcon(
+                          state.controller!.value.flashMode,
+                        ),
+                        onTap: () => controller.toggleFlashMode(),
+                      );
+                    } else {
+                      return const SizedBox(width: 20);
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
         Positioned(
           bottom: 20,
           right: 0,
           left: 0,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                onPressed: () {
-                  onDone?.call(controller.state.mediaList ?? []);
-                  context.pop();
-                },
-                icon: const Icon(
-                  Icons.check,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                BlocBuilder<CameraPickerCubit, CameraPickerState>(
+                  builder: (context, state) {
+                    if (state.status != CameraPickerStatus.startVideo &&
+                        state.controller != null) {
+                      return _BaseIcon(
+                        icon: Icons.check,
+                        onTap: () {
+                          onDone?.call(controller.state.mediaList ?? []);
+                          context.pop();
+                        },
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
                 ),
-              ),
-              BlocBuilder<CameraPickerCubit, CameraPickerState>(
-                buildWhen: (previous, current) =>
-                    current.pickMode != previous.pickMode ||
-                    current.status == CameraPickerStatus.updateVideoLength,
-                builder: (context, state) {
-                  if (state.pickMode == PickMode.photo) {
-                    return IconButton(
-                      onPressed: () {
-                        controller.takePicture();
-                      },
-                      icon: const Icon(Icons.circle, size: 100),
-                    );
-                  } else if (state.status == CameraPickerStatus.startVideo &&
-                      state.currentVideoLength != null) {
-                    return InkWell(
-                      onTap: () {
-                        controller.stopVideoRecording();
-                      },
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          CircularProgressIndicator(
-                            value: 1 -
-                                (state.currentVideoLength!.inSeconds /
-                                    controller.maxVideoLength.inSeconds),
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                                AppColors.SECONDARY_COLOR),
-                            backgroundColor: Colors.white,
-                            strokeWidth: 8.0,
-                          ),
-                          const Icon(
+                BlocBuilder<CameraPickerCubit, CameraPickerState>(
+                  builder: (context, state) {
+                    if (state.controller != null &&
+                        state.controller!.value.isInitialized) {
+                      if (state.pickMode == PickMode.photo) {
+                        return IconButton(
+                          onPressed: () {
+                            controller.takePicture();
+                          },
+                          icon: _pickIcon,
+                        );
+                      } else if (state.status ==
+                          CameraPickerStatus.startVideo) {
+                        return InkWell(
+                          onTap: () {
+                            controller.stopVideoRecording();
+                          },
+                          child:
+                              // Stack(
+                              //   alignment: Alignment.center,
+                              //   children: [
+                              //     _VideoCircularIndicator(
+                              //         duration: controller.maxVideoLength),
+                              const Icon(
                             Icons.square_rounded,
                             color: AppColors.SECONDARY_COLOR,
                             size: 60,
                           ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    return IconButton(
-                      onPressed: () {
-                        controller.startVideoRecording();
-                      },
-                      icon: const Icon(Icons.circle, size: 100),
-                    );
-                  }
-                },
-              ),
-              BlocBuilder<CameraPickerCubit, CameraPickerState>(
-                buildWhen: (previous, current) =>
-                    current.status == CameraPickerStatus.initialized,
-                builder: (context, state) {
-                  return IconButton(
-                    onPressed: () {
-                      controller.flipCamera();
-                    },
-                    icon: const Icon(
-                      Icons.rotate_left_rounded,
-                    ),
-                  );
-                },
-              ),
-            ],
+                          //   ],
+                          // ),
+                        );
+                      } else {
+                        return IconButton(
+                          onPressed: () {
+                            controller.startVideoRecording();
+                          },
+                          icon: _pickIcon,
+                        );
+                      }
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                ),
+                BlocBuilder<CameraPickerCubit, CameraPickerState>(
+                  builder: (context, state) {
+                    if (state.controller != null &&
+                        state.status != CameraPickerStatus.startVideo) {
+                      return _BaseIcon(
+                        onTap: () {
+                          CliLogger.info('Flip camera');
+                          controller.flipCamera();
+                        },
+                        icon: Icons.rotate_left_rounded,
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -203,6 +227,9 @@ class _CamView extends StatelessWidget {
         return Icons.flashlight_on_rounded;
     }
   }
+
+  Widget get _pickIcon =>
+      const Icon(Icons.circle, size: 80, color: Colors.white);
 }
 
 class _ImagesList extends StatelessWidget {
@@ -228,17 +255,58 @@ class _ImagesList extends StatelessWidget {
                       itemCount: state.mediaList?.length ?? 0,
                       separatorBuilder: (context, index) => const Sizer(),
                       itemBuilder: (context, index) {
-                        return Container(
-                          width: constraints.maxHeight,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                                image: FileImage(
-                                  File(state.mediaList![index].path),
-                                ),
-                                fit: BoxFit.cover),
-                          ),
-                        );
+                        final file = File(state.mediaList![index].path);
+                        if (file.isPhoto) {
+                          return Container(
+                            width: constraints.maxHeight,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                  image: FileImage(
+                                    File(state.mediaList![index].path),
+                                  ),
+                                  fit: BoxFit.cover),
+                            ),
+                          );
+                        } else {
+                          return FutureBuilder<Uint8List?>(
+                            future: _generateThumbnail(file),
+                            builder:
+                                (context, AsyncSnapshot<Uint8List?> snapshot) {
+                              if (snapshot.hasData &&
+                                  snapshot.data != null &&
+                                  snapshot.data!.isNotEmpty) {
+                                return Container(
+                                  width: constraints.maxHeight,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: DecorationImage(
+                                        image: MemoryImage(snapshot.data!),
+                                        fit: BoxFit.cover),
+                                  ),
+                                  child: const Center(
+                                    child: Icon(
+                                      Icons.play_arrow,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return Shimmer.fromColors(
+                                  baseColor: Colors.grey[300]!,
+                                  highlightColor: Colors.grey[100]!,
+                                  child: Container(
+                                    width: constraints.maxHeight,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          );
+                        }
                       },
                     );
                   },
@@ -287,6 +355,147 @@ class _ImagesList extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  /// generate jpeg thumbnail
+  Future<Uint8List?> _generateThumbnail(File file) async {
+    final thumbnailAsUint8List = await thumbnail.VideoThumbnail.thumbnailData(
+      video: file.path,
+      imageFormat: thumbnail.ImageFormat.JPEG,
+      maxWidth: 320,
+      // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+      quality: 50,
+    );
+    return thumbnailAsUint8List!;
+  }
+}
+
+class _VideoTimer extends StatefulWidget {
+  final Duration duration;
+
+  const _VideoTimer({required this.duration});
+
+  @override
+  State<_VideoTimer> createState() => __VideoTimerState();
+}
+
+class __VideoTimerState extends State<_VideoTimer> {
+  Timer? _timer;
+  String _timerText = '00 : 00';
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (timer.tick < widget.duration.inSeconds) {
+        int minutes = (timer.tick ~/ 60);
+        int seconds = (timer.tick % 60);
+        setState(() {
+          _timerText =
+              '${minutes.toString().padLeft(2, '0')} : ${seconds.toString().padLeft(2, '0')}';
+        });
+        CliLogger.info(_timerText);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: AppColors.SECONDARY_COLOR.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        _timerText,
+        style: Styles.mediumText(color: Colors.white),
+      ),
+    );
+  }
+}
+
+class _VideoCircularIndicator extends StatefulWidget {
+  final Duration duration;
+
+  const _VideoCircularIndicator({required this.duration});
+
+  @override
+  State<_VideoCircularIndicator> createState() =>
+      __VideoCircularIndicatorState();
+}
+
+class __VideoCircularIndicatorState extends State<_VideoCircularIndicator> {
+  Timer? _timer;
+  int _time = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (timer.tick < widget.duration.inSeconds) {
+        setState(() {
+          _time = timer.tick;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CircularProgressIndicator(
+      value: 1 - (_time / widget.duration.inSeconds),
+      valueColor:
+          const AlwaysStoppedAnimation<Color>(AppColors.SECONDARY_COLOR),
+      backgroundColor: Colors.white,
+      strokeWidth: 8.0,
+    );
+  }
+}
+
+class _BaseIcon extends StatelessWidget {
+  final Color? color;
+  final IconData icon;
+  final void Function()? onTap;
+
+  const _BaseIcon({super.key, this.color, required this.icon, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: (color ?? AppColors.GREY_DARK_COLOR).withOpacity(0.5),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Icon(
+          icon,
+          color: Colors.white,
+        ),
       ),
     );
   }

@@ -100,7 +100,8 @@ class CodegenLoader extends AssetLoader{
   "meals": "وجبات الطعام",
   "message": "رسالة",
   "photo": "صورة",
-  "video": "فيديو"
+  "video": "فيديو",
+  "openAppSettings": "فتح إعدادات التطبيق"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -188,7 +189,8 @@ static const Map<String,dynamic> en = {
   "luckyWheel": "Lucky Wheel",
   "feelLucky": "Do You feel lucky?",
   "restaurants": "Restaurants",
-  "meals": "Meals"
+  "meals": "Meals",
+  "openAppSettings": "Open App Settings"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

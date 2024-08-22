@@ -86,5 +86,6 @@ abstract class  LocaleKeys {
   static String message = 'message'.tr();
   static String photo = 'photo'.tr();
   static String video = 'video'.tr();
+  static String openAppSettings = 'openAppSettings'.tr();
 
 }

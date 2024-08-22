@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
@@ -6,6 +7,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 class AttachmentTypes extends StatelessWidget {
   final ChatRoomCubit chatRoomCubit;
+
   const AttachmentTypes({super.key, required this.chatRoomCubit});
 
   @override
@@ -27,7 +29,16 @@ class AttachmentTypes extends StatelessWidget {
           color: Colors.redAccent,
           label: 'Camera',
           icon: Icons.camera_alt,
-          onTap: () {
+          onTap: () async {
+            // List<CameraDescription> _cameras = await availableCameras();
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => CameraExampleHome(
+            //       cameras: _cameras,
+            //     ),
+            //   ),
+            // );
             showDialog(
                 context: context, builder: (context) => const CameraPicker());
           },
@@ -35,10 +46,13 @@ class AttachmentTypes extends StatelessWidget {
         _buildAttachmentTypeItem(
             color: Colors.purpleAccent,
             label: 'Gallery',
+            onTap: ()=> chatRoomCubit.pickMedia(),
             icon: Icons.image_outlined),
         _buildAttachmentTypeItem(
             color: Colors.orange[600]!,
             label: 'Audio',
+            onTap: ()=> chatRoomCubit.pickAudio(),
+
             icon: Icons.headphones_rounded),
         _buildAttachmentTypeItem(
             color: Colors.green,

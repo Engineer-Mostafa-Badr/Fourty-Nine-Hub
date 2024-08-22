@@ -82,6 +82,7 @@ dependencies:
   json_annotation: ^4.8.1
   file_picker: ^6.2.1
   camera: ^0.11.0+2
+  video_thumbnail: ^0.5.3
 
 dev_dependencies:
   flutter_lints: ^4.0.0
