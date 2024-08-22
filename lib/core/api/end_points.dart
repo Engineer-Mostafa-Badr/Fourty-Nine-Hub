@@ -466,4 +466,5 @@ class EndPoints {
   // gecoding google api url
   static String geocodingUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
   static String tripJoinExpectedPrice = "/ride/come-with-you/trip/expectedPrice";
+  static String getCarBrand = "/ride/riders/brands";
 }

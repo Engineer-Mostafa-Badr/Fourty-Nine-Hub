@@ -82,10 +82,12 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/tw
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
+import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_car_brand.dart';
 import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_location_cordinates_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_price_distance_usecase.dart';
-import 'package:fourtyninehub/features/trip_join/presentation/cubits/cubit/fetch_price_distance_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/presentation/cubits/fetch_car_brands/fetch_car_brands_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/presentation/cubits/fetch_price_distance/fetch_price_distance_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/avaiable_trips_view.dart';
@@ -973,6 +975,11 @@ class AppPages {
               BlocProvider(
                 create: (_) => FetchPriceDistanceCubit(
                   fetchPriceDistanceUsecase: serviceLocator<FetchPriceDistanceUsecase>(),
+                ),
+              ),
+              BlocProvider(
+                create: (_) => FetchCarBrandsCubit(
+                  fetchCarBrandUseCase: serviceLocator<FetchCarBrandUseCase>(),
                 ),
               ),
               BlocProvider(create: (_) => TripJoinViewCubit()),

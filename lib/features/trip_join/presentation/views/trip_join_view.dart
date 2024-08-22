@@ -17,6 +17,7 @@ class TripJoinView extends StatelessWidget {
     //   startLocation: const LatLng(29.962565, 31.261392),
     //   destiantionLocation: const LatLng(30.098281, 31.329383),
     // );
+    // context.read<FetchCarBrandsCubit>().fetchCarBrand(search: 'niss');
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
