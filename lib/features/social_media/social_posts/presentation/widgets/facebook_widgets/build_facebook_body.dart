@@ -111,7 +111,10 @@ class FacebookBody extends StatelessWidget {
                                             context: context,
                                             commentId: id, postId: controller.feedPagingController
                                             .itemList![index].id, from: 'feed');
-                                      }, from: 'feed',),
+                                      }, from: 'feed', onEditComment: (PostCommentParams params) async{
+                                        var result = await controller.editComment(params: params);
+                                        return result;
+                                      },),
                                     ));
                               },
                               showPostDetails: (PostEntity post) =>
@@ -151,7 +154,10 @@ class FacebookBody extends StatelessWidget {
                                               context: context,
                                               commentId: id, postId: controller.feedPagingController
                                               .itemList![index].id, from: 'feed');
-                                        }
+                                        }, onEditComment: (PostCommentParams params) async{
+                                          var result = await controller.editComment(params: params);
+                                          return result;
+                                        },
                                         ),
                                       )),
                               isMyPost: controller.feedPagingController

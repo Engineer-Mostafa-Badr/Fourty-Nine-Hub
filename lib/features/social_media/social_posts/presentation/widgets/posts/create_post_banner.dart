@@ -22,9 +22,11 @@ class CreatePostBanner extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          UserProfileImage(
+          context.read<UserCubit>().state.data!=null?UserProfileImage(
             userId: context.read<UserCubit>().state.data!.id,
             imageURL: context.read<UserCubit>().state.data!.profilePicture,
+            accountId: 0,
+          ):const ProfileImage(
             accountId: 0,
           ),
           const Sizer(

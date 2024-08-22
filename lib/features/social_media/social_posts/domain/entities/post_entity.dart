@@ -8,9 +8,11 @@ import '../../../../../res/assets/assets.dart';
 class PostEntity {
   final String id;
   String? content;
+  String? location;
   final String photo;
   final String type;
   final List<String>? images;
+  final List<TwitterUserModel>? users;
   final bool isShared;
   bool? isDocumentation;
   bool? isLove;
@@ -61,8 +63,10 @@ class PostEntity {
   PostEntity({
     required this.id,
     this.content,
+    this.location,
     required this.type,
     this.images,
+    this.users,
     required this.user,
     this.commentPrivacy = 1,
     this.privacy = 1,

@@ -36,6 +36,9 @@ abstract class SocialPostsRemoteDataSource {
       {required PostReactParams params});
   Future<Either<Failure, CommentEntity>> replyOnComment(
       {required ReplyOnCommentParams params});
+
+  Future<Either<Failure, bool>> editComment(
+      {required PostCommentParams params});
   Future<Either<Failure, CommentEntity>> commentOnPost(
       {required PostCommentParams params});
   Future<Either<Failure, List<CommentEntity>>> getPostComments(
@@ -283,5 +286,17 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
     );
     return response.fold((l) => Left(l),
         (data) => Right(UserProfileModel.fromJson(data['data'])));
+  }
+
+  @override
+  Future<Either<Failure, bool>> editComment({required PostCommentParams params})async {
+    final response = await _apiConsumer.put(
+      EndPoints.editComment(params),
+      data: {
+        'content':params.content
+      }
+    );
+    return response.fold((l) => Left(l),
+            (data) => Right(data['status']));
   }
 }

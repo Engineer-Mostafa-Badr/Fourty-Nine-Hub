@@ -30,6 +30,8 @@ abstract class SocialPostsRepo {
       {required String params});
   Future<Either<Failure, CommentEntity>> replyOnComment(
       {required ReplyOnCommentParams params});
+  Future<Either<Failure, bool>> editComment(
+      {required PostCommentParams params});
   Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends(
       {required SuggestedFriendsParams params});
   Future<Either<Failure, List<CommentEntity>>> getPostComments(
