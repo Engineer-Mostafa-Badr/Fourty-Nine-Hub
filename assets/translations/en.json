@@ -102,5 +102,13 @@
   "welcomeBack":"Welcome Back",
   "oTP":"OTP Sent successfully",
   "required":"Required",
-  "emailFormat":"Enter correct email format"
+  "emailFormat":"Enter correct email format",
+  "email":"E-mail",
+  "typeHere":"Type here",
+  "sendOTP":"Send OTP",
+  "forget": "Forget Password",
+  "verify": "Verify",
+  "emailOtp": "Email OTP",
+  "verification": "Verification",
+  "checkVerification": "Please check your email to see the verification code "
 }

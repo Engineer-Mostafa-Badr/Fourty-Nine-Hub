@@ -118,7 +118,15 @@ class CodegenLoader extends AssetLoader{
   "welcomeBack": "مرحبًا بعودتك",
   "oTP": "تم إرسال OTP بنجاح",
   "required": "مطلوب",
-  "emailFormat": "أدخل تنسيق البريد الإلكتروني الصحيح"
+  "emailFormat": "أدخل تنسيق البريد الإلكتروني الصحيح",
+  "email": "البريد الإلكتروني",
+  "typeHere": "اكتب هنا",
+  "sendOTP": "أرسل OTP",
+  "forget": "نسيت كلمة المرور",
+  "verify": "التحقق",
+  "emailOtp": "إرسال OTP عبر البريد الإلكتروني",
+  "verification": "التحقق",
+  "checkVerification": "يرجى التحقق من بريدك الإلكتروني لمعرفة رمز التحقق"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -224,7 +232,15 @@ static const Map<String,dynamic> en = {
   "welcomeBack": "Welcome Back",
   "oTP": "OTP Sent successfully",
   "required": "Required",
-  "emailFormat": "Enter correct email format"
+  "emailFormat": "Enter correct email format",
+  "email": "E-mail",
+  "typeHere": "Type here",
+  "sendOTP": "Send OTP",
+  "forget": "Forget Password",
+  "verify": "Verify",
+  "emailOtp": "Email OTP",
+  "verification": "Verification",
+  "checkVerification": "Please check your email to see the verification code "
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

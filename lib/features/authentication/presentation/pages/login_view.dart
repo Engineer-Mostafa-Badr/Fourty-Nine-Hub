@@ -20,7 +20,6 @@ import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
-import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/localization/locales.dart';
 import '../../../../res/style/app_colors.dart';
@@ -294,7 +293,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             TextAppButton(
-                style: Styles.smallText(color: AppColors.SECONDARY_COLOR),
+                style: Styles.smallText(color: Theme.of(context).primaryColor),
                 label: LocaleKeys.forgetPassword.localize,
                 onPressed: () => context.push(Routes.FORGOTPASSWORD)),
           ],

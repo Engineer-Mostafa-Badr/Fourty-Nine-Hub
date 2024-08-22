@@ -103,5 +103,13 @@ abstract class  LocaleKeys {
   static const oTP = 'oTP';
   static const required = 'required';
   static const emailFormat = 'emailFormat';
+  static const email = 'email';
+  static const typeHere = 'typeHere';
+  static const sendOTP = 'sendOTP';
+  static const forget = 'forget';
+  static const verify = 'verify';
+  static const emailOtp = 'emailOtp';
+  static const verification = 'verification';
+  static const checkVerification = 'checkVerification';
 
 }
