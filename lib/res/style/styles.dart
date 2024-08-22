@@ -44,6 +44,7 @@ abstract class Styles {
         fontSize: fontSize,
         fontWeight: fontWeight,
         shadows: shadows,
+        decorationColor: color,
         color: color);
   }
 }

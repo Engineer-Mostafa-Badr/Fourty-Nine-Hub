@@ -2,14 +2,14 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/models/activity_model.dart';
+import 'package:fourtyninehub/features/social_media/create_post/data/models/place_model.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/models/post_user_model.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/data/models/user_profile_model.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import '../../../../../core/api/end_points.dart';
 import '../../../../../core/error/failure.dart';
 import '../models/feeling_model.dart';
@@ -19,6 +19,7 @@ abstract class CreatePostRemoteDataSource {
   Future<Either<Failure, List<ActivityEntity>>> getActivitiesList();
   Future<Either<Failure, bool>> postData({required Map<String, dynamic> data});
   Future<Either<Failure, List<PostUserEntity>>> getFriendsFollowers({required FriendsFollowersParams params});
+  Future<Either<Failure, List<PlaceEntity>>> getPlaces({required FriendsFollowersParams params});
   Future<Either<Failure, bool>> createTwitterPost(
       {required CreateTwitterPostParams params});
 }
@@ -88,6 +89,16 @@ class CreatePostRemoteDataSourceImpl implements CreatePostRemoteDataSource {
             (l) => Left(l),
             (data) => Right((data['data']['users'] as List)
             .map((e) => PostUserModel.fromJson(e))
+            .toList()));
+  }
+
+  @override
+  Future<Either<Failure, List<PlaceEntity>>> getPlaces({required FriendsFollowersParams params}) async{
+    final response = await _apiConsumer.get(EndPoints.getPlaces(params));
+    return response.fold(
+            (l) => Left(l),
+            (data) => Right((data['data']['results'] as List)
+            .map((e) => PlaceModel.fromJson(e))
             .toList()));
   }
 }

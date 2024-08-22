@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_reaction_button/flutter_reaction_button.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
@@ -338,9 +339,10 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Icon(
+        FaIcon(
           Icons.thumb_up_alt_outlined,
           color: Colors.grey,
+          size: 18,
         ),
         if (widget.from == 'posts') ...[
           Label(text: 'Like', style: Styles.mediumText(color: Colors.grey)),

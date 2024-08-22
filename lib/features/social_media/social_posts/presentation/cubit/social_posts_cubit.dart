@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/edit_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_advertisement_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_tweet_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/follow_user_usecase.dart';
@@ -65,6 +66,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final UserProfileUseCase _userProfileUseCase;
   final RemoveFriedRequestUseCase _removeFriedRequestUseCase;
   final BlocUserUseCase _blocUserUseCase;
+  final EditCommentUseCase _editCommentUseCase;
 
   SocialPostsCubit(
     this._getFeedUseCase,
@@ -90,7 +92,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._userProfileUseCase,
     this._unFollowUserUseCase,
     this._removeFriedRequestUseCase,
-    this._blocUserUseCase,
+    this._blocUserUseCase, this._editCommentUseCase,
   ) : super(const SocialPostsState());
 
   void loadData() async {
@@ -350,6 +352,19 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
           ?.firstWhere((element) => element.id == params.postId);
       changeReaction(currentComment, params.react);
       changeReaction(currentReply, params.react);
+      value = r;
+    });
+    return value;
+  }
+
+  // edit on a comment
+  Future<bool> editComment({required PostCommentParams params}) async {
+    var response = await _editCommentUseCase(params);
+    bool value = false;
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: StateStatus.error)),
+        (r) {
       value = r;
     });
     return value;
