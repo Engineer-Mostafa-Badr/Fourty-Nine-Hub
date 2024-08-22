@@ -27,10 +27,9 @@ class MeetingEndSuccessState extends MeetingState {}
 
 class MeetingEndFailureState extends MeetingState {}
 
-class MeetingSurfaceShownState extends MeetingState {
-  const MeetingSurfaceShownState();
-}
+class MeetingSurfaceShownState extends MeetingState {}
 
-class MeetingSurfaceHinddenState extends MeetingState {
-  const MeetingSurfaceHinddenState();
-}
+class MeetingSurfaceHiddenState extends MeetingState {}
+
+class OpenWhiteBoardState extends MeetingState {}
+// class CloseWhiteBoardState extends MeetingState {}

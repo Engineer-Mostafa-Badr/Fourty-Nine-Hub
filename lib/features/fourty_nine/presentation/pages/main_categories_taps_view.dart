@@ -20,7 +20,7 @@ class MainCategoriesGridView extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         child: Column(
           children: [
-            const WalletWidget(),
+            // const WalletWidget(),
             const SizedBox(height: 10),
             SizedBox(
               height: 30,

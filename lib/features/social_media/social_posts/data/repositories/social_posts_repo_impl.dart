@@ -149,4 +149,10 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
       {required String params}) {
     return _remoteDataSource.getUserProfile(userId: params);
   }
+
+  @override
+  Future<Either<Failure, bool>> editComment({required PostCommentParams params}) {
+    return _remoteDataSource.editComment(params: params);
+
+  }
 }

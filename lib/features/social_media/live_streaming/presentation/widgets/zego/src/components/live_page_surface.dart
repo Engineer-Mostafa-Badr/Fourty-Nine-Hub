@@ -98,7 +98,8 @@ class _ZegoLiveStreamingLivePageSurfaceState
       builder: (context, state) {
         var cubit = context.read<MeetingCubit>();
         return GestureDetector(
-          behavior: HitTestBehavior.translucent, // 添加此行
+          behavior: HitTestBehavior.translucent,
+          // 添加此行
 
           onHorizontalDragUpdate: (DragUpdateDetails details) {
             _animationController.value +=
@@ -112,7 +113,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
             }
           },
           onTap: () {
-            cubit.toggleSurfaceShown();
+            // cubit.toggleSurfaceShown();
             // print('surface shown ${cubit.surfaceShown}');
             // print('state is ${cubit.state.toString()}');
 
@@ -129,26 +130,20 @@ class _ZegoLiveStreamingLivePageSurfaceState
   }
 
   Widget body(MeetingState state) {
-    return BlocBuilder<MeetingCubit, MeetingState>(
-      builder: (context, state) {
-        return LayoutBuilder(builder: (context, constraints) {
-          return Stack(
-            children: [
-              durationTimeBoard(),
-              if (state is MeetingSurfaceShownState) ...[
-                topBar(),
-                bottomBar(),
-              ],
-              messageList(),
-              foreground(
-                constraints.maxWidth,
-                constraints.maxHeight,
-              ),
-            ],
-          );
-        });
-      },
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      return Stack(
+        children: [
+          durationTimeBoard(),
+          topBar(),
+          bottomBar(),
+          messageList(),
+          foreground(
+            constraints.maxWidth,
+            constraints.maxHeight,
+          ),
+        ],
+      );
+    });
   }
 
   Widget topBar() {

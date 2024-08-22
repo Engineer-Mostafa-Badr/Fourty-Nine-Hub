@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
@@ -41,13 +41,13 @@ class _OtherAccountViewState extends State<OtherAccountView> {
       child: Scaffold(
         // backgroundColor: Colors.,
         // appBar: const HomeAppbar(),
-        drawer: const DrawerWidget(),
-        bottomNavigationBar: const BottomNavigator(
-          mainCategory: 0,
-          index: 2,
-        ),
-        floatingActionButton: const FloatingButton(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // drawer: const DrawerWidget(),
+        // bottomNavigationBar: const BottomNavigator(
+        //   mainCategory: 0,
+        //   index: 2,
+        // ),
+        // floatingActionButton: const FloatingButton(),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: BlocBuilder<SocialPostsCubit, SocialPostsState>(
             builder: (context, state) {
           final controller = context.read<SocialPostsCubit>();
@@ -56,14 +56,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
               ? const Center(
                   child: CupertinoActivityIndicator(),
                 )
-              : state.status == StateStatus.error
-                  ? Center(
-                      child: Text(getFailureMessage(
-                        state.failure!,
-                        context,
-                      )),
-                    )
-                  : NestedAppbar(
+              : NestedAppbar(
                       appBars: [
                         SliverAppBar(
                           floating: true,
@@ -157,7 +150,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                         var result = await controller.blockUser(
                                             context: context,
                                             userId: widget.userId);
+                                        print("result:${result}");
                                         if (result == true) {
+                                          print("object");
                                           if (state.profileData?.isBlock ==
                                               false) {
                                             state.profileData?.isBlock = true;
@@ -176,32 +171,39 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               ),
                           ],
                         ),
-                        SliverAppBar(
-                          automaticallyImplyLeading: false,
-                          floating: false,
-                          backgroundColor: Colors.white,
-                          pinned: true,
-                          title: TabBar(
-                              labelStyle: Styles.mediumText(),
-                              isScrollable: true,
-                              tabAlignment: TabAlignment.center,
-                              tabs: const [
-                                Tab(
-                                  text: 'Posts',
-                                ),
-                                Tab(
-                                  text: 'Tweets',
-                                ),
-                                Tab(
-                                  text: 'Reels',
-                                ),
-                                // Tab(
-                                //   text: 'Media',
-                                // ),
-                              ]),
-                        ),
+                        if (state.profileData?.isBlock == false)
+                          SliverAppBar(
+                            automaticallyImplyLeading: false,
+                            floating: false,
+                            backgroundColor: Colors.white,
+                            pinned: true,
+                            title: TabBar(
+                                labelStyle: Styles.mediumText(),
+                                isScrollable: true,
+                                tabAlignment: TabAlignment.center,
+                                tabs: const [
+                                  Tab(
+                                    text: 'Posts',
+                                  ),
+                                  Tab(
+                                    text: 'Tweets',
+                                  ),
+                                  Tab(
+                                    text: 'Reels',
+                                  ),
+                                  // Tab(
+                                  //   text: 'Media',
+                                  // ),
+                                ]),
+                          ),
                       ],
-                      body: _buildAccountPages(state.profileData!),
+                      body: state.profileData?.isBlock == false
+                          ? _buildAccountPages(state.profileData!)
+                          : const Center(
+                              child: Label(
+                                text: 'You have blocked this user.',
+                              ),
+                            ),
                     );
         }),
       ),
@@ -307,9 +309,10 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                 )),
               ],
             )),
-            Positioned(
+            PositionedDirectional(
                 bottom: 20,
-                left: 10,
+                start: 10,
+
                 child: CircleAvatar(
                   radius: 30,
                   backgroundColor: AppColors.SECONDARY_COLOR,
