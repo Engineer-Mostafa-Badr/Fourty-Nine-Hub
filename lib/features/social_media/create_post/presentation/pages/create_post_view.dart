@@ -95,9 +95,7 @@ class _CreatePostViewState extends State<CreatePostView> {
           child: TextField(
             maxLines: 4,
             maxLength: 150,
-            style: const TextStyle(
-              color: AppColors.QUANTITY_COLOR
-            ),
+            style: const TextStyle(color: AppColors.QUANTITY_COLOR),
             onChanged: (c) {
               if (c.length == 150) {
                 showErrorMessage(
@@ -106,9 +104,10 @@ class _CreatePostViewState extends State<CreatePostView> {
             },
             controller:
                 context.read<CreatePostCubit>().postContentTextController,
-            decoration: const InputDecoration(hintText: 'Type Here ... ',hintStyle: TextStyle(
-              color: AppColors.QUANTITY_COLOR
-            ),fillColor: Colors.white),
+            decoration: const InputDecoration(
+                hintText: 'Type Here ... ',
+                hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
+                fillColor: Colors.white),
           ));
     });
   }

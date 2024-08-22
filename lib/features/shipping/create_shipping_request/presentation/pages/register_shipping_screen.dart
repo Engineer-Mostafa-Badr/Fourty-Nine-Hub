@@ -358,68 +358,66 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                 //           const SizedBox(
                 //             height: 15,
                 //           ),
-                          // ImageValidation(
-                          //   // iconColor: Colors.grey,
-                          //   hint: Labels.inFront,
-                          //   validator: (value) {
-                          //     return shippingcubit.validation(
-                          //         message: "This field is required.",
-                          //         condition:
-                          //             shippingcubit.model.idImageInFront ==
-                          //                 null);
-                          //   },
-                          //   onTap: (image) {
-                          //     shippingcubit.pickImageIdInFront(image: image);
-                          //   },
-                          // ),
-                        // ],
+                // ImageValidation(
+                //   // iconColor: Colors.grey,
+                //   hint: Labels.inFront,
+                //   validator: (value) {
+                //     return shippingcubit.validation(
+                //         message: "This field is required.",
+                //         condition:
+                //             shippingcubit.model.idImageInFront ==
+                //                 null);
+                //   },
+                //   onTap: (image) {
+                //     shippingcubit.pickImageIdInFront(image: image);
+                //   },
+                // ),
+                // ],
                 //       ),
                 //     ],
                 //   ),
                 // ),
                 Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(
-          text: "ID",
-          style: Styles.headerText(),
-        ),
-        const Sizer(),
-        Row(
-          children: [
-            ImageValidation(
-                            // iconColor: Colors.grey,
-                            hint: Labels.inFront,
-                            validator: (value) {
-                              return shippingcubit.validation(
-                                  message: "This field is required.",
-                                  condition:
-                                      shippingcubit.model.idImageInFront ==
-                                          null);
-                            },
-                            onTap: (image) {
-                              shippingcubit.pickImageIdInFront(image: image);
-                            },
-                          ),
-            const Sizer(),
-            ImageValidation(
-                            // iconColor: Colors.grey,
-                            hint: Labels.behind,
-                            validator: (value) {
-                              return shippingcubit.validation(
-                                  message: "This field is required.",
-                                  condition:
-                                      shippingcubit.model.idImageInFront ==
-                                          null);
-                            },
-                            onTap: (image) {
-                              shippingcubit.pickImageIdBehind(image: image);
-                            },
-                          ),
-          ],
-        ),
-      ],
-    ),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Label(
+                      text: "ID",
+                      style: Styles.headerText(),
+                    ),
+                    const Sizer(),
+                    Row(
+                      children: [
+                        ImageValidation(
+                          // iconColor: Colors.grey,
+                          hint: Labels.inFront,
+                          validator: (value) {
+                            return shippingcubit.validation(
+                                message: "This field is required.",
+                                condition:
+                                    shippingcubit.model.idImageInFront == null);
+                          },
+                          onTap: (image) {
+                            shippingcubit.pickImageIdInFront(image: image);
+                          },
+                        ),
+                        const Sizer(),
+                        ImageValidation(
+                          // iconColor: Colors.grey,
+                          hint: Labels.behind,
+                          validator: (value) {
+                            return shippingcubit.validation(
+                                message: "This field is required.",
+                                condition:
+                                    shippingcubit.model.idImageInFront == null);
+                          },
+                          onTap: (image) {
+                            shippingcubit.pickImageIdBehind(image: image);
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
                 // const Gap(20),
                 const SizedBox(
                   height: 20,
@@ -504,48 +502,46 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                 // ),
 
                 Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(
-          text: Labels.drivingLicense,
-          style: Styles.headerText(),
-        ),
-        const Sizer(),
-        Row(
-          children: [
-            ImageValidation(
-                            // iconColor: Colors.grey,
-                            hint: Labels.inFront,
-                            validator: (value) {
-                              return shippingcubit.validation(
-                                  message: "This field is required.",
-                                  condition:
-                                      shippingcubit.model.idImageInFront ==
-                                          null);
-                            },
-                            onTap: (image) {
-                              shippingcubit.pickImageIdInFront(image: image);
-                            },
-                          ),
-            const Sizer(),
-            ImageValidation(
-                            // iconColor: Colors.grey,
-                            hint: Labels.behind,
-                            validator: (value) {
-                              return shippingcubit.validation(
-                                  message: "This field is required.",
-                                  condition:
-                                      shippingcubit.model.idImageInFront ==
-                                          null);
-                            },
-                            onTap: (image) {
-                              shippingcubit.pickImageLicenseBehind(image: image);
-                            },
-                          ),
-          ],
-        ),
-      ],
-    ),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Label(
+                      text: Labels.drivingLicense,
+                      style: Styles.headerText(),
+                    ),
+                    const Sizer(),
+                    Row(
+                      children: [
+                        ImageValidation(
+                          // iconColor: Colors.grey,
+                          hint: Labels.inFront,
+                          validator: (value) {
+                            return shippingcubit.validation(
+                                message: "This field is required.",
+                                condition:
+                                    shippingcubit.model.idImageInFront == null);
+                          },
+                          onTap: (image) {
+                            shippingcubit.pickImageIdInFront(image: image);
+                          },
+                        ),
+                        const Sizer(),
+                        ImageValidation(
+                          // iconColor: Colors.grey,
+                          hint: Labels.behind,
+                          validator: (value) {
+                            return shippingcubit.validation(
+                                message: "This field is required.",
+                                condition:
+                                    shippingcubit.model.idImageInFront == null);
+                          },
+                          onTap: (image) {
+                            shippingcubit.pickImageLicenseBehind(image: image);
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
                 // const Gap(20),
                 const SizedBox(
                   height: 20,
@@ -625,48 +621,46 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                 // ),
                 // const Gap(20),
                 Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(
-          text: Labels.license,
-          style: Styles.headerText(),
-        ),
-        const Sizer(),
-        Row(
-          children: [
-            ImageValidation(
-                            // // iconColor: Colors.grey,
-                            hint: Labels.inFront,
-                            validator: (value) {
-                              return shippingcubit.validation(
-                                  message: "This field is required.",
-                                  condition:
-                                      shippingcubit.model.idImageInFront ==
-                                          null);
-                            },
-                            onTap: (image) {
-                              shippingcubit.pickImageLicenseInFront(image: image);
-                            },
-                          ),
-            const Sizer(),
-            ImageValidation(
-                            // iconColor: Colors.grey,
-                            hint: Labels.behind,
-                            validator: (value) {
-                              return shippingcubit.validation(
-                                  message: "This field is required.",
-                                  condition:
-                                      shippingcubit.model.idImageInFront ==
-                                          null);
-                            },
-                            onTap: (image) {
-                              shippingcubit.pickImageLicenseBehind(image: image);
-                            },
-                          ),
-          ],
-        ),
-      ],
-    ),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Label(
+                      text: Labels.license,
+                      style: Styles.headerText(),
+                    ),
+                    const Sizer(),
+                    Row(
+                      children: [
+                        ImageValidation(
+                          // // iconColor: Colors.grey,
+                          hint: Labels.inFront,
+                          validator: (value) {
+                            return shippingcubit.validation(
+                                message: "This field is required.",
+                                condition:
+                                    shippingcubit.model.idImageInFront == null);
+                          },
+                          onTap: (image) {
+                            shippingcubit.pickImageLicenseInFront(image: image);
+                          },
+                        ),
+                        const Sizer(),
+                        ImageValidation(
+                          // iconColor: Colors.grey,
+                          hint: Labels.behind,
+                          validator: (value) {
+                            return shippingcubit.validation(
+                                message: "This field is required.",
+                                condition:
+                                    shippingcubit.model.idImageInFront == null);
+                          },
+                          onTap: (image) {
+                            shippingcubit.pickImageLicenseBehind(image: image);
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
                 const SizedBox(
                   height: 20,
                 ),

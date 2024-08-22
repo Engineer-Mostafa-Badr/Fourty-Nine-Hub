@@ -44,13 +44,12 @@ void showMeetingDialogue(BuildContext context) {
                   decoration: const InputDecoration(
                     labelText: 'Meeting ID',
                     hintText: 'Meeting ID',
-                    labelStyle: TextStyle(
-                        color: AppColors.QUANTITY_COLOR
+                    labelStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
+                    hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
+                    prefixIcon: Icon(
+                      Icons.meeting_room,
+                      color: AppColors.QUANTITY_COLOR,
                     ),
-                    hintStyle: TextStyle(
-                      color: AppColors.QUANTITY_COLOR
-                    ),
-                    prefixIcon: Icon(Icons.meeting_room,color: AppColors.QUANTITY_COLOR,),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),

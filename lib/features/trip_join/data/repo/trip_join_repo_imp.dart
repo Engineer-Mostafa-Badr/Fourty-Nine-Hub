@@ -1,15 +1,20 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/trip_join/data/remote_data_source/fetch_location_remote_datasource.dart';
-import 'package:fourtyninehub/features/trip_join/domain/entities/location_entity.dart';
+import 'package:fourtyninehub/features/trip_join/data/remote_data_source/trip_join_remote_datasource.dart';
+import 'package:fourtyninehub/features/trip_join/domain/entities/trip_info_entity.dart';
 import 'package:fourtyninehub/features/trip_join/domain/repo/trip_join_repo.dart';
+import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
 
 class TripJoinRepoImp implements TripJoinRepo {
-  final FetchLocationRemoteDataSource fetchLocationRemoteDataSource;
+  final TripJoinRemoteDataSource tripJoinRemoteDataSource;
 
-  TripJoinRepoImp({required this.fetchLocationRemoteDataSource});
+  TripJoinRepoImp({required this.tripJoinRemoteDataSource});
   @override
-  Future<Either<Failure, LocationEntity>> fetchLocationCordinations({required String address}) {
-    return fetchLocationRemoteDataSource.fetchLocationCordinations(address: address);
+  Future<Either<Failure, TripInfoEntity>> fetchDistancePrice(
+      {required LatLng startLocation, required LatLng destinationLocation}) {
+    return tripJoinRemoteDataSource.fetchPriceDistance(
+      startLocation: startLocation,
+      destinationLocation: destinationLocation,
+    );
   }
 }

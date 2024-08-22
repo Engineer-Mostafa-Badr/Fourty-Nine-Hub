@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class PickDateAndTimeWidget extends StatefulWidget {
@@ -27,7 +28,8 @@ class _PickDateAndTimeWidgetState extends State<PickDateAndTimeWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         BlocBuilder<TripJoinViewCubit, TripJoinViewState>(
-          buildWhen: (previous, current) => current is TripJoinViewShowDateState,
+          buildWhen: (previous, current) =>
+              current is TripJoinViewShowDateState,
           builder: (context, state) {
             return Visibility(
               visible: !context.read<TripJoinViewCubit>().showDate,
@@ -36,7 +38,7 @@ class _PickDateAndTimeWidgetState extends State<PickDateAndTimeWidget> {
                 children: [
                   Text(
                     'Journey Date',
-                    style: Styles.headerText(),
+                    style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
                   ),
                   InkWell(
                     onTap: () async {
@@ -74,7 +76,7 @@ class _PickDateAndTimeWidgetState extends State<PickDateAndTimeWidget> {
         ),
         Text(
           'Journey Time',
-          style: Styles.headerText(),
+          style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
         ),
         InkWell(
           onTap: () async {

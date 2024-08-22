@@ -74,7 +74,7 @@ class SubCategoryCard extends StatelessWidget {
                           text: item.name,
                           style: Styles.mediumText(fontWeight: FontWeight.bold),
                         ),
-                         Label(text: '0 ${LocaleKeys.ads.localize}')
+                        Label(text: '0 ${LocaleKeys.ads.localize}')
                       ],
                     ),
                   ),

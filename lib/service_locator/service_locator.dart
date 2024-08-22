@@ -62,7 +62,9 @@ class DI {
     serviceLocator.registerLazySingleton<Dio>(
       () => Dio(
         BaseOptions(
-          baseUrl: kReleaseMode ? EndPoints.productionBaseUrl : EndPoints.developmentBaseUrl,
+          baseUrl: kReleaseMode
+              ? EndPoints.productionBaseUrl
+              : EndPoints.developmentBaseUrl,
           connectTimeout: const Duration(seconds: 60),
           headers: {
             'Accept': 'application/json',
@@ -85,7 +87,8 @@ class DI {
     );
 
 //tinder getIt register
-    serviceLocator.registerLazySingleton<TinderViewCubit>(() => TinderViewCubit());
+    serviceLocator
+        .registerLazySingleton<TinderViewCubit>(() => TinderViewCubit());
 
     // api consumer
 

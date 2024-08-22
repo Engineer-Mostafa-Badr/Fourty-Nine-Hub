@@ -146,9 +146,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
             ),
             config: widget.config,
             events: ZegoUIKitPrebuiltLiveStreamingEvents(),
-            defaultEndAction:
-               widget.defaultEndAction
-            ,
+            defaultEndAction: widget.defaultEndAction,
             defaultLeaveConfirmationAction:
                 widget.defaultLeaveConfirmationAction,
             hostManager: widget.hostManager,

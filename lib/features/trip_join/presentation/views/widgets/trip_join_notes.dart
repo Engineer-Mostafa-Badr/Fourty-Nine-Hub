@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class TripJoinNotes extends StatelessWidget {
@@ -15,7 +16,7 @@ class TripJoinNotes extends StatelessWidget {
       children: [
         Text(
           'Notes',
-          style: Styles.headerText(),
+          style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
         ),
         DefaultTextFormField(
           currentController: TextEditingController(),

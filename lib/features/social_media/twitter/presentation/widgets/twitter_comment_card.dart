@@ -57,11 +57,9 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
               children: [
                 Label(
                     text: widget.comment.user.firstName,
-                    style: Styles.mediumText(
-                        fontWeight: FontWeight.bold)),
+                    style: Styles.mediumText(fontWeight: FontWeight.bold)),
                 Label(
-                    text: widget.comment.sinceTime,
-                    style: Styles.mediumText()),
+                    text: widget.comment.sinceTime, style: Styles.mediumText()),
               ],
             )),
             IconButton(

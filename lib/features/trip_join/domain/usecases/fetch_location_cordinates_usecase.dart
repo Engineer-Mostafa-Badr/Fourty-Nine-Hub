@@ -2,17 +2,18 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/trip_join/domain/entities/location_entity.dart';
-import 'package:fourtyninehub/features/trip_join/domain/repo/trip_join_repo.dart';
+import 'package:fourtyninehub/features/trip_join/domain/repo/trip_join_google_api_repo.dart';
 
 class FetchLocationCordinatesUseCase {
-  final TripJoinRepo tripJoinRepo;
+  final TripJoinGoogleApiRepo tripJoinGoogleApiRepo;
 
   FetchLocationCordinatesUseCase({
-    required this.tripJoinRepo,
+    required this.tripJoinGoogleApiRepo,
   });
 
   Future<Either<Failure, LocationEntity>> call(
       {required String address}) async {
-    return await tripJoinRepo.fetchLocationCordinations(address: address);
+    return await tripJoinGoogleApiRepo.fetchLocationCordinations(
+        address: address);
   }
 }

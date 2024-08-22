@@ -7,7 +7,7 @@ import 'abstract/main_text_form_field.dart';
 class DefaultTextFormField extends MainTextFormField {
   DefaultTextFormField({
     Key? key,
-     final FocusNode? currentFocusNode,
+    final FocusNode? currentFocusNode,
     final FocusNode? nextFocusNode,
     required final TextEditingController currentController,
     required final String hint,
@@ -28,7 +28,8 @@ class DefaultTextFormField extends MainTextFormField {
     final Widget? suffixIcon,
     prefixIcon,
     final String? Function(String?)? validator,
-    final ValueChanged<String>? onChanged,  Color? hintColor,
+    final ValueChanged<String>? onChanged,
+    Color? hintColor,
   }) : super(
           key: key,
           currentController: currentController,

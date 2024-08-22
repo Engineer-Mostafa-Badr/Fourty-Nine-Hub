@@ -58,11 +58,11 @@ class RestaurantCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                  text: item?.name??"",
+                  text: item?.name ?? "",
                   style: Styles.mediumText(fontWeight: FontWeight.w400),
                 ),
                 Label(
-                  text:"",// item?.description??"",
+                  text: "", // item?.description??"",
                   style: Styles.mediumText(
                     color: Colors.grey,
                   ),
@@ -109,11 +109,11 @@ class RestaurantCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Label(
-              text: item?.name??"",
+              text: item?.name ?? "",
               style: Styles.mediumText(fontWeight: FontWeight.w400),
             ),
             Label(
-                text: "",//item?.description,
+                text: "", //item?.description,
                 style: Styles.mediumText(color: Colors.grey)),
             Row(
               children: [

@@ -49,7 +49,8 @@ class _SeatsNumberWidgetState extends State<SeatsNumberWidget> {
                   .toList()),
         ),
         const Sizer(),
-        Text('Number of seats available', style: Styles.headerText())
+        Text('Number of seats available',
+            style: Styles.headerText(color: AppColors.SECONDARY_COLOR))
       ],
     );
   }

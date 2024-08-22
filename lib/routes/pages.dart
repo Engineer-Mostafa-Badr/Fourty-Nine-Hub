@@ -83,6 +83,8 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/t
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_location_cordinates_usecase.dart';
+import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_price_distance_usecase.dart';
+import 'package:fourtyninehub/features/trip_join/presentation/cubits/cubit/fetch_price_distance_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
@@ -966,6 +968,11 @@ class AppPages {
               BlocProvider(
                 create: (_) => DestinationLocationCubit(
                   fetchLocationCordinatesUseCase: serviceLocator<FetchLocationCordinatesUseCase>(),
+                ),
+              ),
+              BlocProvider(
+                create: (_) => FetchPriceDistanceCubit(
+                  fetchPriceDistanceUsecase: serviceLocator<FetchPriceDistanceUsecase>(),
                 ),
               ),
               BlocProvider(create: (_) => TripJoinViewCubit()),

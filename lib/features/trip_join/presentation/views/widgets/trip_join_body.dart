@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/star
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/trip_and_car_information.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/trip_join_google_map.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/welcome_text.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class TripJoinBody extends StatefulWidget {
@@ -44,10 +45,10 @@ class _TripJoinBodyState extends State<TripJoinBody> {
               const Sizer(),
               const TripJoinGoogleMap(),
               const Sizer(height: 20),
-              Text('Starting Point', style: Styles.headerText()),
+              Text('Starting Point', style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
               const StartTextFieldAndFindButon(),
               const Sizer(height: 20),
-              Text('Destination Point', style: Styles.headerText()),
+              Text('Destination Point', style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
               const DestinationTextFieldAndFindButon(),
               const Sizer(),
               const Divider(),

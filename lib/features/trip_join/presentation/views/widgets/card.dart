@@ -42,7 +42,8 @@ class CustomCard extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               title,
-              style: Styles.headerText(fontWeight: FontWeight.bold, color: Colors.white),
+              style: Styles.headerText(
+                  fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ),
           Padding(

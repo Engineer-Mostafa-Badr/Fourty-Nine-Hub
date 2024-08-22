@@ -54,12 +54,13 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
   final service = MainServicesEnum.food;
 
   // final user = UserCubit.to.state.data;
-@override
+  @override
   void onChange(Change<RestaurantsListState> change) {
     print(change.currentState.status);
     print(change.nextState.status);
     super.onChange(change);
   }
+
   void loadData() async {
     Future.wait([
       _getMainCategoryDetails(),

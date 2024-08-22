@@ -1,6 +1,6 @@
 part of 'restaurants_list_cubit.dart';
 
-enum RestaurantsListStates { initState, loading, error,success }
+enum RestaurantsListStates { initState, loading, error, success }
 
 extension RestaurantsListStateX on RestaurantsListState {
   bool get isInitial => status == RestaurantsListStates.initState;
@@ -50,7 +50,6 @@ class RestaurantsListState {
     List<RestaurantEntity>? trendingRestaurants,
     List<SubCategoryEntity>? categories,
     List<FoodCategoryEntity>? mealCategories,
-
   }) {
     return RestaurantsListState(
       status: status ?? this.status,

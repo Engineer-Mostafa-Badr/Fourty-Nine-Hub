@@ -17,7 +17,7 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
     final doctorSubcategoryFilter =
         context.read<DoctorSubcategoryFilterCubit>();
     return Scaffold(
-      appBar:  BackAppBar(
+      appBar: BackAppBar(
         label: LocaleKeys.speciality.localize,
       ),
       body: Padding(
@@ -33,8 +33,10 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
               currentFocusNode: doctorSubcategoryFilter.searchFocusNode,
               currentController: doctorSubcategoryFilter.searchController,
               hint: LocaleKeys.search.localize,
-              prefixIcon:  const Icon(Icons.search,color: AppColors.QUANTITY_COLOR,),
-
+              prefixIcon: const Icon(
+                Icons.search,
+                color: AppColors.QUANTITY_COLOR,
+              ),
               onChanged: (value) => doctorSubcategoryFilter.search(value),
             ),
             const Sizer(

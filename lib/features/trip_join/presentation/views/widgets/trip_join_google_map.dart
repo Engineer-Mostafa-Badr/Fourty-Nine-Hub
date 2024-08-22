@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:fourtyninehub/features/trip_join/presentation/cubits/cubit/fetch_price_distance_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -21,11 +22,25 @@ class _TripJoinGoogleMapState extends State<TripJoinGoogleMap> {
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
 
+  late StartingLocationCubit startingLocationCubit;
+  late DestinationLocationCubit destinationLocationCubit;
+  late FetchPriceDistanceCubit fetchPriceDistanceCubit;
+
+  @override
+  void initState() {
+    startingLocationCubit = context.read<StartingLocationCubit>();
+    destinationLocationCubit = context.read<DestinationLocationCubit>();
+    fetchPriceDistanceCubit = context.read<FetchPriceDistanceCubit>();
+    super.initState();
+  }
+
   static const CameraPosition _egyptLocation = CameraPosition(
     target: LatLng(30.033333, 31.233334),
     zoom: 14.4746,
   );
+
   List<Marker> markers = [];
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocListener(
@@ -33,6 +48,7 @@ class _TripJoinGoogleMapState extends State<TripJoinGoogleMap> {
         BlocListener<StartingLocationCubit, StartingLocationState>(
           listener: (context, state) {
             if (state is StartingLocationSuccess) {
+              _fetchPriceAndDistance();
               Future.delayed(const Duration(seconds: 1))
                   .then(
                     (value) => _animateToMarkers(state),
@@ -44,6 +60,7 @@ class _TripJoinGoogleMapState extends State<TripJoinGoogleMap> {
         BlocListener<DestinationLocationCubit, DestinationLocationState>(
           listener: (context, state) {
             if (state is DestinationLocationSuccess) {
+              _fetchPriceAndDistance();
               Future.delayed(const Duration(seconds: 1))
                   .then(
                     (value) => _animateToMarkers(state),
@@ -81,6 +98,23 @@ class _TripJoinGoogleMapState extends State<TripJoinGoogleMap> {
         }),
       ),
     );
+  }
+
+  _fetchPriceAndDistance() {
+    if (startingLocationCubit.startingLocation != null && destinationLocationCubit.destinationLocation != null) {
+      LatLng startLocation = LatLng(
+        startingLocationCubit.startingLocation!.coordinates![0]!.toDouble(),
+        startingLocationCubit.startingLocation!.coordinates![1]!.toDouble(),
+      );
+      LatLng destinatonLocation = LatLng(
+        destinationLocationCubit.destinationLocation!.coordinates![0]!.toDouble(),
+        destinationLocationCubit.destinationLocation!.coordinates![1]!.toDouble(),
+      );
+      fetchPriceDistanceCubit.fetchPriceDistance(
+        startLocation: startLocation,
+        destiantionLocation: destinatonLocation,
+      );
+    }
   }
 
   _addPolyLine() {

@@ -13,6 +13,10 @@ class TripJoinView extends StatelessWidget {
     // context
     //     .read<DestinationLocationCubit>()
     //     .getDestinationLocation(address: 'المنصورة شارع الجمهورية بجوار قصر البارون');
+    // serviceLocator<FetchPriceDistanceUsecase>().call(
+    //   startLocation: const LatLng(29.962565, 31.261392),
+    //   destiantionLocation: const LatLng(30.098281, 31.329383),
+    // );
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
