@@ -34,6 +34,7 @@ class OtherAccountView extends StatefulWidget {
 }
 
 class _OtherAccountViewState extends State<OtherAccountView> {
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -42,12 +43,12 @@ class _OtherAccountViewState extends State<OtherAccountView> {
         // backgroundColor: Colors.,
         // appBar: const HomeAppbar(),
         drawer: const DrawerWidget(),
-        bottomNavigationBar: const BottomNavigator(
-          mainCategory: 0,
-          index: 2,
-        ),
-        floatingActionButton: const FloatingButton(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // bottomNavigationBar: const BottomNavigator(
+        //   mainCategory: 0,
+        //   index: 2,
+        // ),
+        // floatingActionButton: const FloatingButton(),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: BlocBuilder<SocialPostsCubit, SocialPostsState>(
             builder: (context, state) {
           final controller = context.read<SocialPostsCubit>();

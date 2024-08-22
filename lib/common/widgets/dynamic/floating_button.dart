@@ -42,8 +42,8 @@ class FloatingButton extends StatelessWidget {
         )
             : Image.asset(
           Assets.logo,
-          height: 60.zH, // Adjust size as needed
-          width: 60.zH,  // Adjust size as needed
+          height: 50.zH, // Adjust size as needed
+          width: 50.zH,  // Adjust size as needed
         ),
       ),
     );

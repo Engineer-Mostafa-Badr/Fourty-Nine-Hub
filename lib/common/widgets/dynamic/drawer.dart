@@ -505,7 +505,7 @@ class DrawerWidget extends StatelessWidget {
                         return Expanded(
                           child: Label(
                             text:
-                                '${state is SuccessGetWallet ? state.model.balance : 0}',
+                                '${state is SuccessGetWallet ? state.model.balance : 1}',
                             style: Styles.mediumText(
                                 decoration: TextDecoration.underline),
                           ),

@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
@@ -42,6 +43,36 @@ class FourtyNineView extends StatefulWidget {
 }
 
 class _FourtyNineViewState extends State<FourtyNineView> {
+  ScrollController scrollController = ScrollController();
+  bool _isScrollingDown = false;
+
+  @override
+  void initState() {
+    scrollController;
+    scrollController.addListener(() {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (!_isScrollingDown) {
+          setState(() {
+            _isScrollingDown = true;
+          });
+        }
+      } else {
+        if (_isScrollingDown) {
+          setState(() {
+            _isScrollingDown = false;
+          });
+        }
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,16 +80,21 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         isWithBackArrow: false,
         language: true,
       ),
-      bottomNavigationBar: const BottomNavigator(
+      bottomNavigationBar: BottomNavigator(
+        scrollController: scrollController,
+        isScrollingDown: _isScrollingDown,
         mainCategory: 1,
         index: 2,
       ),
-      floatingActionButton: const FloatingButton(
+      floatingActionButton: _isScrollingDown
+          ? null
+          : const FloatingButton(
         changeView: 1,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       drawer: const DrawerWidget(),
       body: ListView(
+        controller: scrollController,
         padding:  EdgeInsets.symmetric(horizontal: 20.zW),
         children: [
           //carousel slider
@@ -90,23 +126,23 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   child: Column(
                     children: List.generate(
                         6,
-                        (index) => Padding(
+                            (index) => Padding(
                           padding:  EdgeInsets.only(
-                            bottom: 15.zH
+                              bottom: 15.zH
                           ),
                           child: Container(
-                                height:
-                                    MediaQuery.of(context).size.height * .15.zH,
-                                width: double.infinity,
-                                margin: EdgeInsets.symmetric(horizontal: 10.zW),
-                                padding:
-                                     EdgeInsets.symmetric(horizontal: 10.zW),
-                                decoration: BoxDecoration(
-                                  color: AppColors.AUTH_CONTAINER_COLOR,
-                                  borderRadius: BorderRadius.circular(20.zR),
-                                  border: Border.all(color: Colors.grey),
-                                ),
-                              ),
+                            height:
+                            MediaQuery.of(context).size.height * .15.zH,
+                            width: double.infinity,
+                            margin: EdgeInsets.symmetric(horizontal: 10.zW),
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 10.zW),
+                            decoration: BoxDecoration(
+                              color: AppColors.AUTH_CONTAINER_COLOR,
+                              borderRadius: BorderRadius.circular(20.zR),
+                              border: Border.all(color: Colors.grey),
+                            ),
+                          ),
                         )),
                   ),
                 );
@@ -126,7 +162,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) =>
-                      const Sizer(),
+                  const Sizer(),
                 );
               } else {
                 return const SizedBox.shrink();
@@ -178,9 +214,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   }
 
   Widget _buildItemTabBar(
-    Widget icon,
-    String routeName,
-  ) {
+      Widget icon,
+      String routeName,
+      ) {
     return InkWell(
       onTap: () => context.push(routeName),
       child: Container(
@@ -192,30 +228,30 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   }
 
   BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-      _pickMeAndComeWithUWidget() {
+  _pickMeAndComeWithUWidget() {
     return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
       builder: (context, state) {
         if (state.status == StateStatus.loading) {
           return Row(
             children: List.generate(
                 2,
-                (index) => Expanded(
-                      child: Shimmer.fromColors(
-                        baseColor: Colors.grey[100]!,
-                        highlightColor: Colors.white24,
-                        child: Container(
-                          width: 100.zW,
-                          height: kToolbarHeight * 2.zH,
-                          margin: const EdgeInsets.symmetric(horizontal: 5),
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          decoration: BoxDecoration(
-                            color: AppColors.AUTH_CONTAINER_COLOR,
-                            borderRadius: BorderRadius.circular(20.zR),
-                            border: Border.all(color: Colors.grey),
-                          ),
-                        ),
+                    (index) => Expanded(
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.grey[100]!,
+                    highlightColor: Colors.white24,
+                    child: Container(
+                      width: 100.zW,
+                      height: kToolbarHeight * 2.zH,
+                      margin: const EdgeInsets.symmetric(horizontal: 5),
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      decoration: BoxDecoration(
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        borderRadius: BorderRadius.circular(20.zR),
+                        border: Border.all(color: Colors.grey),
                       ),
-                    )),
+                    ),
+                  ),
+                )),
           );
         } else if (state.status == StateStatus.success) {
           return Row(
@@ -239,8 +275,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         } else {
           return Container(
             padding:
-                //EdgeInsets.all
-                const EdgeInsets.symmetric(horizontal: 10),
+            //EdgeInsets.all
+            const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               LocaleKeys.noRideSubcategories.localize,
               style: TextStyle(fontSize: 32.zW, fontWeight: FontWeight.w500),
@@ -258,7 +294,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             LocaleKeys.auction.localize, () => context.push(Routes.MAZADAT),Icons.group),
         const Sizer(),
         itemAuctionAndInstallmentWidget(
-        LocaleKeys.installments.localize, () => context.push(Routes.INSTALLMENT),Icons.list),
+            LocaleKeys.installments.localize, () => context.push(Routes.INSTALLMENT),Icons.list),
       ],
     );
   }
