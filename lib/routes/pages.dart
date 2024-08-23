@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit/food_cart_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
@@ -270,6 +271,9 @@ class AppPages {
               ),
               BlocProvider(
                 create: (_) => serviceLocator<WalletCubit>(),
+              ),
+              BlocProvider(
+                create: (_) => serviceLocator<GetWalletCubit>(),
               ),
             ],
             child: LoginView(
