@@ -5,11 +5,10 @@ import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/notifications/data/models/notification_model.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
 
+import '../../../../core/data/models/notification_model.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/styles.dart';
 
@@ -33,19 +32,19 @@ class NotificationView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Label(
-                      text: 'Notifications',
+                      text: 'Moaz',
+                      //   text: state.notificationModel.data!.docs![0].bodyTranslationCode!,
                       style: Styles.headerText(),
                     ),
                     TextAppButton(
-                      style: const TextStyle(
-                        color: AppColors.SECONDARY_COLOR
-                      ),
+                        style: const TextStyle(
+                            color: AppColors.SECONDARY_COLOR),
                         label: 'Clear All',
                         onPressed: () {
                           showAreYouSure(
                               title: 'Alert',
                               subTitle:
-                                  'Are you sure you want to clear all notifications?',
+                              'Are you sure you want to clear all notifications?',
                               action: () {},
                               context: context);
                         }),
@@ -72,10 +71,10 @@ class NotificationView extends StatelessWidget {
                 ]),
                 Expanded(
                     child: TabBarView(children: [
-                  _buildNotificationWidget(notificationList: []),
-                  _buildNotificationWidget(notificationList: []),
-                  _buildNotificationWidget(notificationList: []),
-                ]))
+                      _buildNotificationWidget(notificationList: []),
+                      _buildNotificationWidget(notificationList: []),
+                      _buildNotificationWidget(notificationList: []),
+                    ]))
               ],
             ),
           ),
@@ -91,10 +90,11 @@ class NotificationView extends StatelessWidget {
           itemBuilder: (context, index) {
             return NotificationCard(
               item: NotificationModel(
-                  id: 0,
-                  message: UIConst.placeholderText,
-                  itemId: 0,
-                  createdAt: DateTime.now()),
+                  // id: 0,
+                  // message: UIConst.placeholderText,
+                  // itemId: 0,
+                  // createdAt: DateTime.now(),
+                  ),
             );
           },
           separatorBuilder: (context, index) => const Divider(),

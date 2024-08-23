@@ -5,8 +5,9 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dar
 import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/notifications/data/models/notification_model.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+
+import '../../../../core/data/models/notification_model.dart';
 
 class NotificationCard extends StatelessWidget {
   final NotificationModel item;
@@ -46,7 +47,7 @@ class NotificationCard extends StatelessWidget {
           const Sizer(),
           Expanded(
               child: Label(
-            text: item.message,
+            text:' item.message',
             maxLines: 2,
           )),
           Column(
