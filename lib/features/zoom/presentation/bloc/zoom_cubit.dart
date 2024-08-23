@@ -84,4 +84,15 @@ class MeetingCubit extends Cubit<MeetingState> {
   void closeWhiteBoard() {
     emit(state.copyWith(status: MeetingStates.initial));
   }
+
+  bool isMinimized = false;
+  void toggleMinimized() {
+    isMinimized = !isMinimized;
+    emit(state.copyWith(status: MeetingStates.success));
+  }
+
+  void minimize() {
+    isMinimized = true;
+    emit(state.copyWith(status: MeetingStates.minimizing));
+  }
 }

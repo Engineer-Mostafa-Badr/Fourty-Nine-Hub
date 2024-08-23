@@ -178,7 +178,6 @@ class AppPages {
   AppPages._();
 
   static final router = GoRouter(
-    
     routes: <RouteBase>[
       GoRoute(
         path: Routes.HOME,
@@ -955,7 +954,10 @@ class AppPages {
                     final extras = state.extra as ZegoArgs;
 
                     return MeetingRoom(
-                        liveID: extras.liveId, isHost: extras.isHost);
+                      liveID: extras.liveId,
+                      isHost: extras.isHost,
+                      shareScreen: extras.shareScreen,
+                    );
                   },
                 ),
               ]),

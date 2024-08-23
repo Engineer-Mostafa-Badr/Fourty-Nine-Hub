@@ -11,15 +11,31 @@ import 'package:go_router/go_router.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../../../social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 
-class MeetingRoom extends StatelessWidget {
-  const MeetingRoom({super.key, required this.liveID, required this.isHost});
+class MeetingRoom extends StatefulWidget {
+  const MeetingRoom(
+      {super.key,
+      required this.liveID,
+      required this.isHost,
+      this.shareScreen = false});
 
   final String liveID;
   final bool isHost;
+  final bool shareScreen;
+
+  @override
+  State<MeetingRoom> createState() => _MeetingRoomState();
+}
+
+class _MeetingRoomState extends State<MeetingRoom> {
+  @override
+  void didChangeDependencies() {
+    _turnOnShareScreenWhenJoining();
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
-    print('live id is $liveID');
+    print('live id is ${widget.liveID}');
     final String userId = Random().nextInt(1000).toString();
     zegoUIKitPrebuiltLiveStreamingHostConfig() =>
         (ZegoUIKitPrebuiltLiveStreamingConfig.host()
@@ -67,10 +83,10 @@ class MeetingRoom extends StatelessWidget {
               userID: userId,
               isLiveStream: false,
               userName: 'user_$userId',
-              liveID: liveID,
+              liveID: widget.liveID,
 
               // Modify your custom configurations here.
-              config: isHost
+              config: widget.isHost
                   ? zegoUIKitPrebuiltLiveStreamingHostConfig()
                   : zegoUIKitPrebuiltLiveStreamingConfig(),
             );
@@ -78,5 +94,14 @@ class MeetingRoom extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _turnOnShareScreenWhenJoining() async {
+    print('share screen mode');
+    print('share screen mode ${widget.shareScreen}');
+    if (widget.shareScreen) {
+      await ZegoUIKit().startSharingScreen();
+      ZegoUIKit().getScreenSharingStateNotifier().value = true;
+    }
   }
 }

@@ -1,12 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/controller.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/core/core_managers.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/live_streaming.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/pages/meeting_view.dart';
 
 // Package imports:
 import 'package:zego_uikit/zego_uikit.dart';
@@ -26,7 +23,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
 import '../../../../../../../../res/assets/assets.dart';
 import '../../../../../../../../res/style/app_colors.dart';
-import '../../../../../../../zoom/presentation/pages/meeting_room.dart';
 
 /// @nodoc
 class ZegoLiveStreamingTopBar extends StatefulWidget {
@@ -193,75 +189,8 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
               height: 68.zR,
               child: IconButton(
                 onPressed: () {
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (BuildContext context) {
-                  //     return AlertDialog(
-                  //       shape: RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.circular(20.0),
-                  //       ),
-                  //       backgroundColor: Colors.white,
-                  //       title: Row(
-                  //         children: [
-                  //           const Icon(Icons.exit_to_app,
-                  //               color: Colors.redAccent),
-                  //           SizedBox(width: 10.zW),
-                  //           const Text(
-                  //             "Leave Meeting",
-                  //             style: TextStyle(
-                  //               color: Colors.redAccent,
-                  //               fontWeight: FontWeight.bold,
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //       actionsAlignment: MainAxisAlignment.spaceEvenly,
-                  //       content: Text(
-                  //         "Are you sure you want to leave the meeting?",
-                  //         style: TextStyle(
-                  //           color: Colors.black87,
-                  //           fontSize: 25.zSP,
-                  //           fontWeight: FontWeight.w600,
-                  //         ),
-                  //       ),
-                  //       actions: <Widget>[
-                  //         ElevatedButton(
-                  //           style: ElevatedButton.styleFrom(
-                  //             backgroundColor: Colors.grey[200],
-                  //             foregroundColor: Colors.black87,
-                  //             shape: RoundedRectangleBorder(
-                  //               borderRadius: BorderRadius.circular(10.zR),
-                  //             ),
-                  //             padding: EdgeInsets.symmetric(
-                  //                 horizontal: 20.zW, vertical: 10.zH),
-                  //           ),
-                  //           child: const Text("Cancel"),
-                  //           onPressed: () {
-                  //             Navigator.of(context).pop();
-                  //           },
-                  //         ),
-                  //         ElevatedButton(
-                  //           style: ElevatedButton.styleFrom(
-                  //             backgroundColor: Colors.redAccent,
-                  //             foregroundColor: Colors.white,
-                  //             shape: RoundedRectangleBorder(
-                  //               borderRadius: BorderRadius.circular(10.zR),
-                  //             ),
-                  //             padding: EdgeInsets.symmetric(
-                  //                 horizontal: 20.zW, vertical: 10.zH),
-                  //           ),
-                  //           child: const Text("Leave"),
-                  //           onPressed: () {
-                  //             Navigator.of(context).pop();
-                  //             Navigator.of(context).pop();
-                  //             // Add your leave meeting logic here
-                  //           },
-                  //         ),
-                  //       ],
-                  //     );
-                  //   },
-                  // );
-                  // showOverlayRequest();
+                  Navigator.of(context).pop(true);
+                  Navigator.of(context).pop(true);
                 },
                 icon: const Icon(
                   Icons.arrow_back_ios,
@@ -291,5 +220,17 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
     );
   }
 
-  
+  void minimizeAndNavigate() {
+    var cubit = context.read<MeetingCubit>();
+
+    cubit.minimize();
+
+    // Navigate to another screen after minimizing
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MeetingView()),
+      );
+    });
+  }
 }
