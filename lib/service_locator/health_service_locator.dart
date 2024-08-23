@@ -88,11 +88,11 @@ class HealthServiceLocator {
         serviceLocator(),
       ),
     );
-    serviceLocator.registerLazySingleton<NotificationRepo>(
-          () => NotificationRepoImpl(
-        serviceLocator(),
-      ),
-    );
+    // serviceLocator.registerLazySingleton<NotificationRepo>(
+    //       () => NotificationRepoImpl(
+    //     serviceLocator(),
+    //   ),
+    // );
 
     serviceLocator.registerLazySingleton<CreateDoctorRemoteDataSource>(
         () => CreateDoctorRemoteDataSourceImpl(serviceLocator()));
