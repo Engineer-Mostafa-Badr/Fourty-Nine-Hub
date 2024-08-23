@@ -5,8 +5,10 @@ import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/trip_join/data/models/car_brand_model.dart';
+import 'package:fourtyninehub/features/trip_join/data/models/car_type_model.dart';
 import 'package:fourtyninehub/features/trip_join/data/models/trip_join_model.dart';
 import 'package:fourtyninehub/features/trip_join/domain/entities/car_brand_entity.dart';
+import 'package:fourtyninehub/features/trip_join/domain/entities/car_model_entity.dart';
 import 'package:fourtyninehub/features/trip_join/domain/entities/trip_info_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -16,6 +18,7 @@ abstract class TripJoinRemoteDataSource {
     required LatLng destinationLocation,
   });
   Future<Either<Failure, List<CarBrandEntity>>> fetchCarBrand({required String search});
+  Future<Either<Failure, List<CarModelEntity>>> fetchCarModel({required String brand});
 }
 
 class TripJoinRemoteDataSourceImp implements TripJoinRemoteDataSource {
@@ -61,6 +64,25 @@ class TripJoinRemoteDataSourceImp implements TripJoinRemoteDataSource {
         List<CarBrandEntity> brands = data['data'].map<CarBrandEntity>((json) => CarBrandModel.fromJson(json)).toList();
         log(brands.toString());
         return Right(brands);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<CarModelEntity>>> fetchCarModel({required String brand}) async {
+    final response = await apiConsumer.get(
+      EndPoints.getCarModelByBrand,
+      queryParameters: {
+        'brand': brand,
+      },
+    );
+
+    return response.fold(
+      (failure) => Left(failure),
+      (data) {
+        List<CarModelEntity> models = data['data'].map<CarModelEntity>((json) => CarTypeModel.fromJson(json)).toList();
+        log(models.toString());
+        return Right(models);
       },
     );
   }

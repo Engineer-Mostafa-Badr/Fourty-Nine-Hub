@@ -48,6 +48,7 @@ class TripInfo extends StatelessWidget {
               children: [
                 Icon(Icons.directions_car, color: AppColors.SECONDARY_COLOR),
                 Icon(Icons.local_gas_station, color: AppColors.SECONDARY_COLOR),
+                Icon(Icons.local_gas_station, color: AppColors.SECONDARY_COLOR),
               ],
             ),
             const Sizer(),
@@ -59,21 +60,29 @@ class TripInfo extends StatelessWidget {
                   style: Styles.headerText(),
                 ),
                 Text(
-                  'Price',
+                  'Price/Passenger',
+                  style: Styles.headerText(),
+                ),
+                Text(
+                  'Total Trip Price',
                   style: Styles.headerText(),
                 ),
               ],
             ),
-            const Sizer(),
+            const Spacer(),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${distance / 1000}KM',
+                  '${distance / 1000} KM',
                   style: Styles.headerText(),
                 ),
                 Text(
-                  '${price}LE',
+                  '$price',
+                  style: Styles.headerText(),
+                ),
+                Text(
+                  '$price',
                   style: Styles.headerText(),
                 ),
               ],

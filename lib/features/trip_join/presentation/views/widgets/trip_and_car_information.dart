@@ -20,7 +20,7 @@ class TripAndCarInformation extends StatelessWidget {
         const Sizer(height: 20),
         const TripInfoBuilder(),
         const Sizer(height: 20),
-        CustomButton(onTap: () {}, title: 'Publish The Trip', height: 50),
+        CustomButton(onTap: () {}, title: 'Publish', height: 50),
         const Sizer(height: 20),
       ],
     );
