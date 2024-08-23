@@ -6,13 +6,14 @@ class DashboardBanner extends StatelessWidget {
   final String title;
   final String? subTitle;
   final String? route;
+  final void Function()? onTap;
   const DashboardBanner(
-      {super.key, this.subTitle, required this.title, this.route});
+      {super.key, this.subTitle, required this.title, this.route, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
+      onTap: onTap?? () {
         if (route != null) {
           context.push(route!);
         }

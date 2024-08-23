@@ -8,6 +8,7 @@ class RegisterRequestModel {
   String? firstName;
   String? lastName;
   File? image;
+  File? plate;
   File? carImageRight;
   File? carImageLeft;
   File? carImageBehind;

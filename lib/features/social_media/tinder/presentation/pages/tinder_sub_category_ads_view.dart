@@ -55,7 +55,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
     final tinderCubit = context.watch<TinderViewCubit>();
 
     return Scaffold(
-      appBar:  HomeAppbar(),
+      appBar: HomeAppbar(),
       body: LayoutBuilder(
         builder: (context, constraints) {
           final isSmallScreen = constraints.maxWidth < 600;
@@ -63,108 +63,106 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
           final textSize = isSmallScreen ? 14.0 : 18.0;
           final iconSize = isSmallScreen ? 24.0 : 30.0;
 
-          return tinderCubit.state.mainCategoryResponse?.data !=null?
-          Column(
-            children: [
-              const Sizer(),
-              Container(
-
-                padding: EdgeInsets.symmetric(
-                    vertical: padding, horizontal: padding),
-                decoration: BoxDecoration(
-
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.yellow,
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      tinderCubit.state.mainCategoryResponse?.data.mainCategory
-                              .banner ??
-                          '',
-
-                    ),
-                  ),
-                ),
-                child: Row(
+          return tinderCubit.state.mainCategoryResponse?.data != null
+              ? Column(
                   children: [
-                    Expanded(
-                      child: Column(
+                    const Sizer(),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          vertical: padding, horizontal: padding),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.yellow,
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(
+                            tinderCubit.state.mainCategoryResponse?.data
+                                    .mainCategory.banner ??
+                                '',
+                          ),
+                        ),
+                      ),
+                      child: Row(
                         children: [
-                          InkWell(
-                            onTap: () {},
-                            child: Icon(
-                              Icons.favorite,
-                              size: iconSize,
-                              color: widget.params.subCategory.isFavorite
-                                  ? AppColors.SECONDARY_COLOR
-                                  : AppColors.GREY_DARK_COLOR,
+                          Expanded(
+                            child: Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {},
+                                  child: Icon(
+                                    Icons.favorite,
+                                    size: iconSize,
+                                    color: widget.params.subCategory.isFavorite
+                                        ? AppColors.SECONDARY_COLOR
+                                        : AppColors.GREY_DARK_COLOR,
+                                  ),
+                                ),
+                                const Sizer(),
+                                Text(
+                                  '${tinderCubit.state.mainCategoryResponse!.data.mainCategory.numberOfAds} ${Labels.ads}',
+                                  style: Styles.mediumText(
+                                      color: Colors.white, fontSize: textSize),
+                                )
+                              ],
                             ),
                           ),
-                          const Sizer(),
-                          Text(
-                            '${tinderCubit.state.mainCategoryResponse!.data
-                                .mainCategory.numberOfAds} ${Labels.ads}',
-                            style: Styles.mediumText(
-                                color: Colors.white, fontSize: textSize),
-                          )
+                          const Spacer(),
+                          Expanded(
+                            child: FittedBox(
+                              child: Text(
+                                tinderCubit.state.mainCategoryResponse!.data
+                                    .mainCategory.nameEn,
+                                style: Styles.headerText(
+                                    // color: AppColors.PRIMARY_COLOR,
+                                    color: Colors.white,
+                                    fontSize: textSize,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
                         ],
                       ),
                     ),
-                    const Spacer(),
+                    const Sizer(),
+                    Label(
+                      text: widget.params.subCategory.name,
+                      style: Styles.headerText(
+                          fontSize: textSize, color: AppColors.SECONDARY_COLOR),
+                    ),
+                    const Sizer(),
+                    Builder(builder: (context) {
+                      String provider =
+                          getServiceName(widget.params.subCategory.name);
+                      String user = getUserName(widget.params.subCategory.name);
+                      return TabBar(
+                        controller: _tabController,
+                        labelColor: AppColors.SECONDARY_COLOR,
+                        unselectedLabelColor: AppColors.PRIMARY_COLOR,
+                        indicatorColor: AppColors.SECONDARY_COLOR,
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        tabs: [
+                          Tab(text: provider),
+                          Tab(text: user),
+                        ],
+                      );
+                    }),
                     Expanded(
-                      child: FittedBox(
-                        child: Text(
-                          tinderCubit.state.mainCategoryResponse!.data
-                              .mainCategory.nameEn,
-                          style: Styles.headerText(
-                              // color: AppColors.PRIMARY_COLOR,
-                              color: Colors.white,
-                              fontSize: textSize,
-                              fontWeight: FontWeight.bold),
-                        ),
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          Center(
+                              child: Text(
+                                  'Provider: ${getServiceName(widget.params.subCategory.name)}')),
+                          Center(
+                              child: Text(
+                                  'User: ${getUserName(widget.params.subCategory.name)}')),
+                        ],
                       ),
                     ),
-                    const Spacer(),
                   ],
-                ),
-              ),
-              const Sizer(),
-              Label(
-                text: widget.params.subCategory.name,
-                style: Styles.headerText(fontSize: textSize,color: AppColors.SECONDARY_COLOR),
-              ),
-              const Sizer(),
-              Builder(builder: (context) {
-                String provider =
-                    getServiceName(widget.params.subCategory.name);
-                String user = getUserName(widget.params.subCategory.name);
-                return TabBar(
-                  controller: _tabController,
-                  labelColor: AppColors.SECONDARY_COLOR,
-                  unselectedLabelColor: AppColors.PRIMARY_COLOR,
-                  indicatorColor: AppColors.SECONDARY_COLOR,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  tabs: [
-                    Tab(text: provider),
-                    Tab(text: user),
-                  ],
-                );
-              }),
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    Center(
-                        child: Text(
-                            'Provider: ${getServiceName(widget.params.subCategory.name)}')),
-                    Center(
-                        child: Text(
-                            'User: ${getUserName(widget.params.subCategory.name)}')),
-                  ],
-                ),
-              ),
-            ],
-          ):const Center(child: CircularProgressIndicator());
+                )
+              : const Center(child: CircularProgressIndicator());
         },
       ),
     );

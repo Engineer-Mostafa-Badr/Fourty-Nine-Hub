@@ -34,8 +34,7 @@ class HealthMedicalServices extends StatelessWidget {
                   separatorBuilder: (context, index) => const Sizer(),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) => HealthMedicalServiceCard(
-                      subCategory: state.medicalServices![index],
-
+                    subCategory: state.medicalServices![index],
                   ),
                   itemCount: state.medicalServices!.length,
                 ),

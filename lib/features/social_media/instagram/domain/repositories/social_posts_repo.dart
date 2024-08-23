@@ -5,7 +5,10 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import '../../../../../core/error/failure.dart';
 
 abstract class InstagramRepo {
-  Future<Either<Failure, List<PostEntity>>> getFeed({required TwitterFeedParams params});
-  Future<Either<Failure, List<PostEntity>>> getReels({required TwitterFeedParams params});
-  Future<Either<Failure, List<PostEntity>>> getUserReels({required UserReelsParams params});
+  Future<Either<Failure, List<PostEntity>>> getFeed(
+      {required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getReels(
+      {required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getUserReels(
+      {required UserReelsParams params});
 }

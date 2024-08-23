@@ -110,88 +110,87 @@ class _LoginViewState extends State<LoginView> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Form(
-                key: loginCubit.formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: Column(
-                  children: [
-                    Image.asset(
-                      Assets.logo,
-                      width: 200,
-                      height: 200,
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        chooseAuthWidget(
-                            onTap: () {
-                              setState(() {
-                                widget.authType = AuthType.LOGIN;
-                              });
-                            },
-                            active: widget.authType == AuthType.LOGIN,
-                            text: "Login",
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(50),
-                              bottomLeft: Radius.circular(50),
-                            )),
-                        chooseAuthWidget(
-                            onTap: () {
-                              setState(() {
-                                widget.authType = AuthType.REGISTER;
-                              });
-                            },
-                            active: widget.authType == AuthType.REGISTER,
-                            text: "Register",
-                            borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(50),
-                              bottomRight: Radius.circular(50),
-                            )),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    widget.authType == AuthType.LOGIN
-                        ? LoginWidget(
-                            loginCubit: loginCubit,
-                          )
-                        : const RegisterWidget(),
-                    SizedBox(
-                      height: widget.authType == AuthType.LOGIN
-                          ? MediaQuery.of(context).viewInsets.bottom != 0.0
-                              ? 20
-                              : 100
-                          : 0,
-                    ),
-                    widget.authType == AuthType.REGISTER
-                        ? DefaultButton(
-                            label: LocaleKeys.register.localize,
-                            width: double.infinity,
-                            onPressed: () {
-                              if (registerCubit.accept) {
-                                registerCubit.register();
-                              } else {
-                                showErrorMessage(
-                                    context,
-                                    getFailureMessage(
-                                        const ServerFailure(
-                                            message:
-                                                "Please accept the terms and conditions to continue."),
-                                        context));
-                              }
-                            },
-                          )
-                        : DefaultButton(
-                      width: double.infinity,
-                      label: LocaleKeys.login.localize,
-                      onPressed: loginCubit.login,
-                    ),
-                ],
-                  )
-              ),
+                  key: loginCubit.formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        Assets.logo,
+                        width: 200,
+                        height: 200,
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          chooseAuthWidget(
+                              onTap: () {
+                                setState(() {
+                                  widget.authType = AuthType.LOGIN;
+                                });
+                              },
+                              active: widget.authType == AuthType.LOGIN,
+                              text: "Login",
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(50),
+                                bottomLeft: Radius.circular(50),
+                              )),
+                          chooseAuthWidget(
+                              onTap: () {
+                                setState(() {
+                                  widget.authType = AuthType.REGISTER;
+                                });
+                              },
+                              active: widget.authType == AuthType.REGISTER,
+                              text: "Register",
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(50),
+                                bottomRight: Radius.circular(50),
+                              )),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      widget.authType == AuthType.LOGIN
+                          ? LoginWidget(
+                              loginCubit: loginCubit,
+                            )
+                          : const RegisterWidget(),
+                      SizedBox(
+                        height: widget.authType == AuthType.LOGIN
+                            ? MediaQuery.of(context).viewInsets.bottom != 0.0
+                                ? 20
+                                : 100
+                            : 0,
+                      ),
+                      widget.authType == AuthType.REGISTER
+                          ? DefaultButton(
+                              label: LocaleKeys.register.localize,
+                              width: double.infinity,
+                              onPressed: () {
+                                if (registerCubit.accept) {
+                                  registerCubit.register();
+                                } else {
+                                  showErrorMessage(
+                                      context,
+                                      getFailureMessage(
+                                          const ServerFailure(
+                                              message:
+                                                  "Please accept the terms and conditions to continue."),
+                                          context));
+                                }
+                              },
+                            )
+                          : DefaultButton(
+                              width: double.infinity,
+                              label: LocaleKeys.login.localize,
+                              onPressed: loginCubit.login,
+                            ),
+                    ],
+                  )),
             ),
           ),
         ),
@@ -245,10 +244,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20),
-          style: const TextStyle(
-            fontSize: 16,
-            color: AppColors.QUANTITY_COLOR
-          ),
+          style: const TextStyle(fontSize: 16, color: AppColors.QUANTITY_COLOR),
           controller: widget.loginCubit.emailTextController,
           // label: 'E-mail or phone number',
           hint: LocaleKeys.emailOrPhone.localize,
@@ -262,10 +258,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20),
-          style: const TextStyle(
-            fontSize: 16,
-            color: AppColors.QUANTITY_COLOR
-          ),
+          style: const TextStyle(fontSize: 16, color: AppColors.QUANTITY_COLOR),
           controller: widget.loginCubit.passwordTextController,
           // label: 'Password',
           hint: LocaleKeys.password.localize,
@@ -402,9 +395,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: AppColors.QUANTITY_COLOR
-                  ),
+                      fontSize: 16, color: AppColors.QUANTITY_COLOR),
                   controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
                   hint: LocaleKeys.firstName.localize,
@@ -421,9 +412,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: AppColors.QUANTITY_COLOR
-                  ),
+                      fontSize: 16, color: AppColors.QUANTITY_COLOR),
                   controller: registerCubit.lastNameController,
                   // label: 'E-mail or phone number',
                   hint: LocaleKeys.lastName.localize,
@@ -440,13 +429,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: AppColors.QUANTITY_COLOR
-                  ),
+                      fontSize: 16, color: AppColors.QUANTITY_COLOR),
                   controller: registerCubit.emailTextController,
                   // label: 'E-mail or phone number',
                   hint: LocaleKeys.emailOrPhone.localize,
-                  prefix: const Icon(Icons.email, color: AppColors.QUANTITY_COLOR),
+                  prefix:
+                      const Icon(Icons.email, color: AppColors.QUANTITY_COLOR),
                   action: (v) {},
                 ),
                 const Sizer(
@@ -516,9 +504,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: AppColors.QUANTITY_COLOR
-                  ),
+                      fontSize: 16, color: AppColors.QUANTITY_COLOR),
                   controller: registerCubit.passwordTextController,
                   // label: 'Password',
                   hint: LocaleKeys.password.localize,
@@ -545,9 +531,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: AppColors.QUANTITY_COLOR
-                  ),
+                      fontSize: 16, color: AppColors.QUANTITY_COLOR),
                   controller: registerCubit.confirmPasswordTextController,
                   // label: 'Password',
                   hint: "Confirm Password",
@@ -592,7 +576,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     ),
                     child: const Icon(
                       Icons.person,
-                      color:AppColors.QUANTITY_COLOR,
+                      color: AppColors.QUANTITY_COLOR,
                     ),
                   ),
                   action: (v) {},

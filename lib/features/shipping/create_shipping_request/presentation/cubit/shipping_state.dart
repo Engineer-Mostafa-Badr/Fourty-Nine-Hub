@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
 
 class ShippingState {}
@@ -11,9 +13,9 @@ class SuccessGetBannerState extends ShippingState {
 }
 
 class FailureShippingState extends ShippingState {
-  final String message;
+  final Failure failure;
 
-  FailureShippingState({required this.message});
+  FailureShippingState({required this.failure});
 }
 
 class SucccessGetIdS3 extends ShippingState {
@@ -21,3 +23,50 @@ class SucccessGetIdS3 extends ShippingState {
 
   // SucccessGetIdS3({required this.model});
 }
+
+class SuccessFavorite extends ShippingState {}
+
+class SuccessCreateTrip extends ShippingState {
+  final String message;
+
+  SuccessCreateTrip({required this.message});
+}
+
+class FaliureState extends ShippingState {
+  final String message;
+
+  FaliureState({required this.message});
+}
+
+class SuccessRegisterState extends ShippingState {
+  final String message;
+
+  SuccessRegisterState({required this.message});
+}
+
+class SuccessGetAllTripState extends ShippingState {
+  final List<AllTripModel> allTripList;
+
+  SuccessGetAllTripState({required this.allTripList});
+}
+
+class SuccessAcceptOfferState extends ShippingState {
+  final String message;
+
+  SuccessAcceptOfferState({required this.message});
+}
+
+class SuccessSendNewOfferState extends ShippingState {
+  final String message;
+
+  SuccessSendNewOfferState({required this.message});
+}
+
+class SuccessAcceptPremiumOfferState extends ShippingState {
+  final String message;
+
+  SuccessAcceptPremiumOfferState({required this.message});
+}
+
+
+class LoadingShippingState extends ShippingState{}

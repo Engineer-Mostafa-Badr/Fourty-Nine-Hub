@@ -23,10 +23,7 @@ class MealBanner extends StatelessWidget {
               height: 150,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10)
-              ),
-              
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
             ),
           );
         }

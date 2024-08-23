@@ -14,20 +14,21 @@ class SocialPostsState {
   final List<CommentEntity>? postComments;
   final int? tweetPage;
   final int? advertisementsPage;
-  const SocialPostsState(
-      {this.status = StateStatus.loading,
-      this.friendRequest,
-      this.failure,
-      this.posts,
-      this.myPosts,
-      this.myTweets,
-      this.suggestedFriends,
-      this.newComment,
-      this.postComments,
-      this.postDetails,
-      this.tweetPage = 0,
-      this.advertisementsPage = 0,
-        this.profileData,});
+  const SocialPostsState({
+    this.status = StateStatus.loading,
+    this.friendRequest,
+    this.failure,
+    this.posts,
+    this.myPosts,
+    this.myTweets,
+    this.suggestedFriends,
+    this.newComment,
+    this.postComments,
+    this.postDetails,
+    this.tweetPage = 0,
+    this.advertisementsPage = 0,
+    this.profileData,
+  });
   SocialPostsState copyWith({
     StateStatus? status,
     Failure? failure,

@@ -124,9 +124,7 @@ class FacebookTweetCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextAppButton(
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor
-                ),
+                  style: TextStyle(color: Theme.of(context).primaryColor),
                   label: user.firstName,
                   onPressed: () => () => context.push(Routes.OTHERSACCOUNT)),
               RichText(

@@ -4,11 +4,13 @@ class SubCategory {
   String? subCategoryNameEn;
   String? picture;
   int? driverCount;
+  bool? isFavorite;
 
   SubCategory({
     this.subCategoryId,
     this.subCategoryNameAr,
     this.subCategoryNameEn,
+    this.isFavorite,
     this.picture,
     this.driverCount,
   });
@@ -18,6 +20,7 @@ class SubCategory {
         subCategoryNameAr: json['subCategoryNameAr'] as String?,
         subCategoryNameEn: json['subCategoryNameEn'] as String?,
         picture: json['picture'] as String?,
+        isFavorite: json['isFavorite'] as bool?,
         driverCount: json['driverCount'] as int?,
       );
 

@@ -43,20 +43,35 @@ class EndPoints {
   // ride
   //shipping
   static String bannerData = "$developmentBaseUrl/loading/driver/subcategory";
-  static const drivingLicenseS3 = '/ride/info/driving-license';
-  static const carImageS3 = '/ride/info/car-images';
-  static const carLicenseS3 = '/ride/info/car-license';
-  static const idLicenseS3 = '/ride/info/id';
+  static String registerDriver = "$developmentBaseUrl//loading/driver/register";
+  static String favoriteSubCategory =
+      "$developmentBaseUrl/favorite-sub-category";
+  static String createLoadingTrip =
+      "$developmentBaseUrl/loading/trip/createLoadingTrip";
+  static const drivingLicenseS3 = '/loading/driver/info/driving-license';
+  static const carImageS3 =
+      '$developmentBaseUrl/loading/driver/info/car-images';
+  static const carLicenseS3 = '/loading/driver/info/car-license';
+  // static const idLicenseS3 = '/ride/info/id';
   static const mainWallet = '$developmentBaseUrl/main-wallet';
-  static const infoDocuments =
-      '$developmentBaseUrl/loading/driver/info/documents';
-  static const infoId = '$developmentBaseUrl/ride/info/id';
-  static const drivingLicense = '$developmentBaseUrl/ride/info/driving-license';
-  static const carLicense = '$developmentBaseUrl/ride/info/car-license';
-  static const successUpload = '$developmentBaseUrl/ride/info/success-upload';
-  static const successDocuments = '$developmentBaseUrl/ride/info/documents';
-  static const successCarImages =
-      '$developmentBaseUrl/ride/info/success-car-images';
+  static const getAllTripBySubCategory =
+      '$developmentBaseUrl/loading/trip/subcategory';
+  static const infoDocuments = '/loading/driver/info/documents';
+  static const carPlate = '/loading/driver/info/car-plate';
+  static const infoId = '$developmentBaseUrl/loading/driver/info/id';
+  static const drivingLicense =
+      '$developmentBaseUrl/loading/driver/info/driving-license';
+  static const carLicense =
+      '$developmentBaseUrl/loading/driver/info/car-license';
+  static const successUpload = '/loading/driver/info/success-upload';
+  // static const successDocuments = '$developmentBaseUrl/loading/driver/info/documents';
+  static const successCarImages = '$developmentBaseUrl/driver/info/success-car-images';
+  //trip
+  static const sendOffer = '$developmentBaseUrl/loading/trip/sendOffer';
+  static const sendOfferPremium = '$developmentBaseUrl/loading/trip/sendOffer-premium';
+  static const acceptLoadingTripOffer = '$developmentBaseUrl/loading/trip/acceptLoadingTripOffer';
+  static const mediasignedUrl = '$developmentBaseUrl/dashboard/media/signed-url';
+  static const mediaconfirm = '$developmentBaseUrl/dashboard/media/confirm';
   // health
   static String getCities({required String governorateId}) =>
       '/health/cities/$governorateId';
@@ -347,7 +362,7 @@ class EndPoints {
   static String getMealsWithCountRestaurant({PostCommentsParams? params}) =>
       '/restaurants/subcategories-count-restaurant${params?.page != null || params?.userId != null ? "?page=${params?.page}&userId=${params?.userId}" : ""}';
   static String getAllRestaurantWithMenu({PostCommentsParams? params}) =>
-      '/restaurants/subcategories-count-restaurant${params?.page != null  ? "?page=${params?.page}" : ""}';
+      '/restaurants/subcategories-count-restaurant${params?.page != null ? "?page=${params?.page}" : ""}';
 //?page=1&userId=
   static String restaurantDetails(String id) {
     return '/restaurants/$id';

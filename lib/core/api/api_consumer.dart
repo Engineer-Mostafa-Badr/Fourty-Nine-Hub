@@ -44,7 +44,7 @@ abstract class ApiConsumer {
 }
 
 class BaseApiConsumer extends ApiConsumer {
-  final Dio _dio;
+  Dio _dio;
   final AuthLocalDataSource _authLocalDataSource;
 
   UserTokensEntity? _token;
@@ -56,11 +56,18 @@ class BaseApiConsumer extends ApiConsumer {
 
   @override
   void attachToken(UserTokensEntity? token) {
-    log(token?.accessToken.toString() ?? "Token", name: "Token");
+    log(token?.accessToken.toString() ?? "Token", name: "TOKETOKEN");
     _token = token;
-    log("${token?.accessToken}", name: "Token");
+    // log("${token?.accessToken}", name: "Token");
     if (token != null) {
-      _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
+      _dio = Dio(
+        BaseOptions(
+          headers: {'Authorization': 'Bearer ${token.accessToken}'}
+        )
+      );
+      // _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
+      // _dio.options.headers['Authorization'] =
+      //     'Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjUyNWNiOGE1LWY0MDYtNDljMC1hMjc1LWQwMWM2OTIyN2UwNiIsImlhdCI6MTcyMzkxMjQ0MywiZXhwIjo1NTcyMzkxMjQ0Mywic3ViIjoiNjZiNDY1OWQxYzljNGIxY2IzNWJmZWU0In0.i3W6jdhIRhOK8JSpaKNHBrl5bFCU4YtV8ca74-EdkqY"}';
     }
   }
 
@@ -105,14 +112,20 @@ class BaseApiConsumer extends ApiConsumer {
         url,
         data: data,
         queryParameters: queryParameters,
+        // options: Options(
+        //   headers: {
+        //     "Authorization":
+        //         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjUyNWNiOGE1LWY0MDYtNDljMC1hMjc1LWQwMWM2OTIyN2UwNiIsImlhdCI6MTcyMzkxMjQ0MywiZXhwIjo1NTcyMzkxMjQ0Mywic3ViIjoiNjZiNDY1OWQxYzljNGIxY2IzNWJmZWU0In0.i3W6jdhIRhOK8JSpaKNHBrl5bFCU4YtV8ca74-EdkqY"
+        //   },
+        // ),
         // options: Options(headers: {
         //   "Authorization":
         //       'Bearer ${}'
         // }
         // )
       );
-      log(url);
-      log(_dio.options.headers['Authorization'], name: "Authorization$url");
+      // log(url);
+      // log(_dio.options.headers['Authorization'], name: "Authorization$url");
       if (result.data['status']) {
         return Right(result.data as Map<String, dynamic>);
       } else {
@@ -148,8 +161,14 @@ class BaseApiConsumer extends ApiConsumer {
         url,
         data: formData ?? data,
         queryParameters: queryParameters,
+        // options: Options(
+        //   headers: {
+        //     "Authorization":
+        //         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjUyNWNiOGE1LWY0MDYtNDljMC1hMjc1LWQwMWM2OTIyN2UwNiIsImlhdCI6MTcyMzkxMjQ0MywiZXhwIjo1NTcyMzkxMjQ0Mywic3ViIjoiNjZiNDY1OWQxYzljNGIxY2IzNWJmZWU0In0.i3W6jdhIRhOK8JSpaKNHBrl5bFCU4YtV8ca74-EdkqY"
+        //   },
+        // ),
       );
-
+// [''] = ';
       if (result.data['status']) {
         return Right(result.data as Map<String, dynamic>);
       } else {
@@ -180,24 +199,35 @@ class BaseApiConsumer extends ApiConsumer {
     Map<String, dynamic>? queryParameters,
   }) async {
     try {
+      // log(url, name: "kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+      // log(data.toString(), name: "kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+      // log(_dio..toString(), name: "kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
       final result = await _dio.put(
         url,
         data: data,
         queryParameters: queryParameters,
+        // options: Options(headers: {
+        //   "Authorization":
+        //       "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjUyNWNiOGE1LWY0MDYtNDljMC1hMjc1LWQwMWM2OTIyN2UwNiIsImlhdCI6MTcyMzkxMjQ0MywiZXhwIjo1NTcyMzkxMjQ0Mywic3ViIjoiNjZiNDY1OWQxYzljNGIxY2IzNWJmZWU0In0.i3W6jdhIRhOK8JSpaKNHBrl5bFCU4YtV8ca74-EdkqY"
+        // }
+        // )
       );
-      log(result.data.toString(), name: "url");
-      if (result.data['success']) {
-        log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
-        if (result.data is Map<String, dynamic>) {
-          return Right(result.data as Map<String, dynamic>);
-        } else {
-          return Right({"data": result.data});
-        }
+      // log(result.data.toString(), name: "kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+      if (result.data['status']) {
+        // log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
+        // if (result.data is Map<String, dynamic>) {
+        return Right(result.data);
+        // } else {
+        //   return Right({"data": result.data});
+        // }
       } else {
         return Left(ValidationFailure(
             result.data['message'] ?? result.data['error']['message']));
       }
     } catch (e) {
+      log(e.toString(),
+          name:
+              "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
       if (e is DioException &&
           e.response?.statusCode == 401 &&
           isTokenAttached) {

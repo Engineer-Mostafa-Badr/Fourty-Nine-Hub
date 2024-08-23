@@ -60,7 +60,7 @@ void showSuccessMessage(BuildContext context, String message) {
             Expanded(
               child: Text(
                 message,
-                style:  const TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   color: AppColors.QUANTITY_COLOR,
                 ),

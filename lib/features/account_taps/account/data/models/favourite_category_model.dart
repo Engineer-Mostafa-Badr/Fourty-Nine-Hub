@@ -1,4 +1,3 @@
-
 import '../../../../fourty_nine/data/models/main_category_model.dart';
 import '../../domain/entities/favourite_category_entity.dart';
 

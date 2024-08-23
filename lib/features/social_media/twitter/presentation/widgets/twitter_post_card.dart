@@ -76,7 +76,8 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
   Widget build(BuildContext context) {
     bool isShared = widget.post.isShared!;
     return Container(
-      decoration:  BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
+      decoration:
+          BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
       child: Container(
         padding: EdgeInsets.all(isShared == true ? 10 : 0),
         decoration: const BoxDecoration(color: Colors.white),
@@ -99,21 +100,23 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InkWell(
-                    onTap: widget.post.isShared==true?() {
-                      print("objectH");
-                      // context.push(Routes.TWITTERPOSTDETAILS,extra: widget.post.mainPost.id);
+                    onTap: widget.post.isShared == true
+                        ? () {
+                            print("objectH");
+                            // context.push(Routes.TWITTERPOSTDETAILS,extra: widget.post.mainPost.id);
 
-                      bottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          widget: TwitterPostDetails(
-                            postId: isShared == true
-                                ? widget.post.mainPost.id
-                                : widget.post.id,
-                            showPostComments: (id) {},
-                            onReport: (TwitterReportParams params) {},
-                          ));
-                    }:null,
+                            bottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                widget: TwitterPostDetails(
+                                  postId: isShared == true
+                                      ? widget.post.mainPost.id
+                                      : widget.post.id,
+                                  showPostComments: (id) {},
+                                  onReport: (TwitterReportParams params) {},
+                                ));
+                          }
+                        : null,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -367,12 +370,12 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 accountId: 0,
                 imageURL: post.user.image,
                 fromProfile: widget.fromProfile,
-          userId: post.user.id,
+                userId: post.user.id,
               )
             : UserProfileImage(
                 accountId: 0,
                 fromProfile: widget.fromProfile,
-          userId: post.user.id,
+                userId: post.user.id,
               ),
         const Sizer(),
         Label(
@@ -497,12 +500,12 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                       accountId: 0,
                       imageURL: post.user.image,
                       fromProfile: widget.fromProfile,
-                userId: post.user.id,
+                      userId: post.user.id,
                     )
                   : UserProfileImage(
                       accountId: 0,
                       fromProfile: widget.fromProfile,
-                userId: post.user.id,
+                      userId: post.user.id,
                     ),
               const Sizer(),
               Label(
@@ -514,7 +517,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               if (post.user.isDocumented == true && post.isShared == false ||
                   (post.mainPost?.user.isDocumented == true &&
                       post.isShared == true))
-                 Icon(
+                Icon(
                   Icons.verified,
                   color: Theme.of(context).primaryColor,
                 ),

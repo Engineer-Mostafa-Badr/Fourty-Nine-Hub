@@ -21,7 +21,7 @@ class DetailsCounterWidget extends StatelessWidget {
       height: kToolbarHeight * 2,
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(20),
-      decoration:  BoxDecoration(
+      decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(10),
@@ -68,9 +68,8 @@ class DetailsCounterWidget extends StatelessWidget {
                           [],
                       const Sizer(),
                       TextAppButton(
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor
-                        ),
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
                           label: '${auction.biddings?.length} ${Labels.bid}',
                           onPressed: () {
                             bottomSheet(

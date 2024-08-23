@@ -1,4 +1,3 @@
-
 import '../../domain/entities/selected_meal_entity.dart';
 
 class SelectedMealModel extends SelectedMealEntity {

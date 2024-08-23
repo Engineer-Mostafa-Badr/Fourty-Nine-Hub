@@ -76,7 +76,8 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   }
 
   @override
-  Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends({required SuggestedFriendsParams params}) {
+  Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends(
+      {required SuggestedFriendsParams params}) {
     return _remoteDataSource.suggestedFriends(params: params);
   }
 
@@ -104,10 +105,12 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   Future<Either<Failure, bool>> unFollow({required String userId}) {
     return _remoteDataSource.unFollow(userId: userId);
   }
+
   @override
   Future<Either<Failure, bool>> sendGreetMessage({required String userId}) {
     return _remoteDataSource.sendGreetMessage(userId: userId);
   }
+
   @override
   Future<Either<Failure, bool>> removeSuggestUser({required String userId}) {
     return _remoteDataSource.removeSuggestUser(userId: userId);
@@ -142,7 +145,8 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   }
 
   @override
-  Future<Either<Failure, UserProfileEntity>> getUserProfile({required String params}) {
+  Future<Either<Failure, UserProfileEntity>> getUserProfile(
+      {required String params}) {
     return _remoteDataSource.getUserProfile(userId: params);
   }
 }

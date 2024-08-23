@@ -1,4 +1,3 @@
-
 class NearByModel {
   bool? status;
   Data? data;

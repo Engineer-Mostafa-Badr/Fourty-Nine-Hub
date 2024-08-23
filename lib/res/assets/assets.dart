@@ -10,7 +10,6 @@ abstract class Assets {
   static String sadReaction = 'assets/lottie/sad_reaction.json';
   static String wowReaction = 'assets/lottie/OMG_reaction.json';
 
-
   // navigator
   static String logo = 'assets/images/logo_600.png';
   static String tinder = 'assets/images/tinder.svg';

@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
           designSize: const Size(750, 1334),
           minTextAdapt: true,
           splitScreenMode: true,
-          builder: (context,child) {
+          builder: (context, child) {
             return BlocBuilder<ThemeCubit, ThemeStates>(
               builder: (BuildContext context, state) {
                 return MaterialApp.router(

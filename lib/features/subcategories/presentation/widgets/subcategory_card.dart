@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 
@@ -16,16 +18,21 @@ import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../domain/entities/sub_category_entity.dart';
 
-class SubCategoryCard extends StatelessWidget {
+class SubCategoryCard extends StatefulWidget {
   final SubCategoryEntity item;
   final MainCategoryEntity mainCategory;
   const SubCategoryCard(
       {super.key, required this.item, required this.mainCategory});
 
   @override
+  State<SubCategoryCard> createState() => _SubCategoryCardState();
+}
+
+class _SubCategoryCardState extends State<SubCategoryCard> {
+  @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.ADS, extra: item.id),
+      onTap: () => context.push(Routes.ADS, extra: widget.item.id),
       child: Container(
         width: kToolbarHeight * 2.5,
         height: kToolbarHeight * 3,
@@ -50,14 +57,26 @@ class SubCategoryCard extends StatelessWidget {
                     child: SquareImage(
                       fit: BoxFit.cover,
                       radius: 5,
-                      url: item.image,
+                      url: widget.item.image,
                     ),
                   ),
                   Positioned(
                       top: 5,
                       right: 5,
                       child: IconAppButton(
-                          icon: Icons.favorite_outline, onPressed: () {}))
+                          icon: widget.item.isFavorite
+                              ? Icons.favorite
+                              : Icons.favorite_outline,
+                          color: widget.item.isFavorite
+                              ? Colors.red
+                              : Colors.black,
+                          onPressed: () {
+                            log('llllll');
+                            setState(() {
+                              widget.item.isFavorite =
+                                  widget.mainCategory.isFavorite;
+                            });
+                          }))
                 ],
               ),
             ),
@@ -71,10 +90,10 @@ class SubCategoryCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Label(
-                          text: item.name,
+                          text: widget.item.name,
                           style: Styles.mediumText(fontWeight: FontWeight.bold),
                         ),
-                         Label(text: '0 ${LocaleKeys.ads.localize}')
+                        Label(text: '0 ${LocaleKeys.ads.localize}')
                       ],
                     ),
                   ),
@@ -85,8 +104,8 @@ class SubCategoryCard extends StatelessWidget {
                         if (AuthHelper().isLoggedIn()) {
                           context.push(Routes.CREATEAD,
                               extra: CategorizationEntity(
-                                  mainCategory: mainCategory,
-                                  subCategory: item));
+                                  mainCategory: widget.mainCategory,
+                                  subCategory: widget.item));
                         } else {
                           context.push(Routes.LOGIN);
                         }

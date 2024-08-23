@@ -9,7 +9,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:lottie/lottie.dart';
 
 class BuildReactionsButtons extends StatefulWidget {
-  const BuildReactionsButtons({super.key, required this.post, required this.from});
+  const BuildReactionsButtons(
+      {super.key, required this.post, required this.from});
   final dynamic post;
   final String from;
 
@@ -17,7 +18,8 @@ class BuildReactionsButtons extends StatefulWidget {
   State<BuildReactionsButtons> createState() => _BuildReactionsButtonsState();
 }
 
-class _BuildReactionsButtonsState extends State<BuildReactionsButtons> with SingleTickerProviderStateMixin {
+class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
 
   @override
@@ -55,110 +57,172 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons> with Sing
           itemsSpacing: 10,
           itemSize: const Size(40, 40),
           reactions: _buildReactionsList(),
-          selectedReaction:
-              Reaction<String>(
-                value: null,
-                icon: _buildReactionPlaceholder(),
-              ),
+          selectedReaction: Reaction<String>(
+            value: null,
+            icon: _buildReactionPlaceholder(),
+          ),
           child: _buildCurrentReaction(),
         );
       },
     );
   }
 
-  Future<void> _handleReactionChange(Reaction<String> reaction, SocialPostsCubit controller) async {
-    if ((reaction.value == 'like' || reaction.value == 'likes') && widget.post.isLikes == false) {
-      var response = widget.from == 'posts'||widget.from=='userPosts'
-          ? await controller.onReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''), from: widget.from)
-          : await controller.onCommentReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''));
+  Future<void> _handleReactionChange(
+      Reaction<String> reaction, SocialPostsCubit controller) async {
+    if ((reaction.value == 'like' || reaction.value == 'likes') &&
+        widget.post.isLikes == false) {
+      var response = widget.from == 'posts' || widget.from == 'userPosts'
+          ? await controller.onReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
+          : await controller.onCommentReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isLikes: true);
         setState(() {});
       }
-    } else if ((reaction.value == 'like' || reaction.value == 'likes') && widget.post.isLikes == true) {
-      var response = widget.from == 'posts'||widget.from=='userPosts'
-          ? await controller.onReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''), from: widget.from)
-          : await controller.onCommentReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''));
+    } else if ((reaction.value == 'like' || reaction.value == 'likes') &&
+        widget.post.isLikes == true) {
+      var response = widget.from == 'posts' || widget.from == 'userPosts'
+          ? await controller.onReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
+          : await controller.onCommentReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isLikes: false);
         setState(() {});
       }
     } else if (reaction.value == 'love' && widget.post.isLove == false) {
-      var response = widget.from == 'posts'||widget.from=='userPosts'
-          ? await controller.onReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''), from: widget.from)
-          : await controller.onCommentReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''));
+      var response = widget.from == 'posts' || widget.from == 'userPosts'
+          ? await controller.onReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
+          : await controller.onCommentReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isLove: true);
         setState(() {});
       }
     } else if (reaction.value == 'love' && widget.post.isLove == true) {
-      var response = widget.from == 'posts'||widget.from=='userPosts'
-          ? await controller.onReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''), from: widget.from)
-          : await controller.onCommentReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''));
+      var response = widget.from == 'posts' || widget.from == 'userPosts'
+          ? await controller.onReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
+          : await controller.onCommentReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isLove: false);
         setState(() {});
       }
     } else if (reaction.value == 'wow' && widget.post.isWow == false) {
-      var response = widget.from == 'posts'||widget.from=='userPosts'
-          ? await controller.onReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''), from: widget.from)
-          : await controller.onCommentReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''));
+      var response = widget.from == 'posts' || widget.from == 'userPosts'
+          ? await controller.onReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
+          : await controller.onCommentReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isWow: true);
         setState(() {});
       }
     } else if (reaction.value == 'wow' && widget.post.isWow == true) {
-      var response = widget.from == 'posts'||widget.from=='userPosts'
-          ? await controller.onReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''), from: widget.from)
-          : await controller.onCommentReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''));
+      var response = widget.from == 'posts' || widget.from == 'userPosts'
+          ? await controller.onReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
+          : await controller.onCommentReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isWow: false);
         setState(() {});
       }
     } else if (reaction.value == 'sad' && widget.post.isSad == false) {
-      var response = widget.from == 'posts'||widget.from=='userPosts'
-          ? await controller.onReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''), from: widget.from)
-          : await controller.onCommentReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''));
+      var response = widget.from == 'posts' || widget.from == 'userPosts'
+          ? await controller.onReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
+          : await controller.onCommentReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isSad: true);
         setState(() {});
       }
     } else if (reaction.value == 'sad' && widget.post.isSad == true) {
-      var response = widget.from == 'posts'||widget.from=='userPosts'
-          ? await controller.onReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''), from: widget.from)
-          : await controller.onCommentReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''));
+      var response = widget.from == 'posts' || widget.from == 'userPosts'
+          ? await controller.onReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
+          : await controller.onCommentReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isSad: false);
         setState(() {});
       }
     } else if (reaction.value == 'angry' && widget.post.isAngry == false) {
-      var response = widget.from == 'posts'||widget.from=='userPosts'
-          ? await controller.onReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''), from: widget.from)
-          : await controller.onCommentReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''));
+      var response = widget.from == 'posts' || widget.from == 'userPosts'
+          ? await controller.onReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
+          : await controller.onCommentReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isAngry: true);
         setState(() {});
       }
     } else if (reaction.value == 'angry' && widget.post.isAngry == true) {
-      var response = widget.from == 'posts'||widget.from=='userPosts'
-          ? await controller.onReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''), from: widget.from)
-          : await controller.onCommentReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''));
+      var response = widget.from == 'posts' || widget.from == 'userPosts'
+          ? await controller.onReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
+          : await controller.onCommentReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isAngry: false);
         setState(() {});
       }
     } else if (reaction.value == 'haha' && widget.post.isHaha == false) {
-      var response = widget.from == 'posts'||widget.from=='userPosts'
-          ? await controller.onReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''), from: widget.from)
-          : await controller.onCommentReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''));
+      var response = widget.from == 'posts' || widget.from == 'userPosts'
+          ? await controller.onReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
+          : await controller.onCommentReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isHaha: true);
         setState(() {});
       }
     } else if (reaction.value == 'haha' && widget.post.isHaha == true) {
-      var response = widget.from == 'posts'||widget.from=='userPosts'
-          ? await controller.onReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''), from: widget.from)
-          : await controller.onCommentReact(params: PostReactParams(postId: widget.post.id, react: reaction.value ?? ''));
+      var response = widget.from == 'posts' || widget.from == 'userPosts'
+          ? await controller.onReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
+          : await controller.onCommentReact(
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isHaha: false);
         setState(() {});
@@ -193,37 +257,51 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons> with Sing
       if (isAngry != null) {
         widget.post.isAngry = isAngry;
       }
-      widget.post.totalCount += (isLikes == true || isLove == true || isWow == true || isSad == true || isAngry == true || isHaha == true) ? 1 : -1;
+      widget.post.totalCount += (isLikes == true ||
+              isLove == true ||
+              isWow == true ||
+              isSad == true ||
+              isAngry == true ||
+              isHaha == true)
+          ? 1
+          : -1;
     });
   }
 
   List<Reaction<String>> _buildReactionsList() {
     return <Reaction<String>>[
       Reaction<String>(
-        value: widget.from == 'posts'||widget.from=='userPosts' ? 'likes' : 'like',
-        icon: _buildReactionItem(item: Reactions.like, count: widget.post.totalCount),
+        value: widget.from == 'posts' || widget.from == 'userPosts'
+            ? 'likes'
+            : 'like',
+        icon: _buildReactionItem(
+            item: Reactions.like, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'haha',
-        icon: _buildReactionItem(item: Reactions.haha, count: widget.post.totalCount),
+        icon: _buildReactionItem(
+            item: Reactions.haha, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'love',
-        icon: _buildReactionItem(item: Reactions.love, count: widget.post.totalCount),
+        icon: _buildReactionItem(
+            item: Reactions.love, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'wow',
-        icon: _buildReactionItem(item: Reactions.wow, count: widget.post.totalCount),
+        icon: _buildReactionItem(
+            item: Reactions.wow, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'sad',
-        icon: _buildReactionItem(item: Reactions.sad, count: widget.post.totalCount),
+        icon: _buildReactionItem(
+            item: Reactions.sad, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'angry',
-        icon: _buildReactionItem(item: Reactions.angry, count: widget.post.totalCount),
+        icon: _buildReactionItem(
+            item: Reactions.angry, count: widget.post.totalCount),
       ),
-
     ];
   }
 
@@ -240,17 +318,18 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons> with Sing
           width: from == 'view' ? 30 : 30,
           child: from == 'view'
               ? Image.asset(
-            item.imageAsset(),
-            fit: BoxFit.fill,
-          )
+                  item.imageAsset(),
+                  fit: BoxFit.fill,
+                )
               : Lottie.asset(
-            item.lottieAsset(),
-            fit: BoxFit.fill,
-            onLoaded: (loaded) {},
-          ),
+                  item.lottieAsset(),
+                  fit: BoxFit.fill,
+                  onLoaded: (loaded) {},
+                ),
         ),
-        if(widget.from=='posts'&&from == 'view')...[
-          Label(text: item.name, style: Styles.mediumText(color: Colors.grey)),],
+        if (widget.from == 'posts' && from == 'view') ...[
+          Label(text: item.name, style: Styles.mediumText(color: Colors.grey)),
+        ],
       ],
     );
   }
@@ -263,25 +342,32 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons> with Sing
           Icons.thumb_up_alt_outlined,
           color: Colors.grey,
         ),
-        if(widget.from=='posts')...[
-        Label(text: 'Like', style: Styles.mediumText(color: Colors.grey)),],
+        if (widget.from == 'posts') ...[
+          Label(text: 'Like', style: Styles.mediumText(color: Colors.grey)),
+        ],
       ],
     );
   }
 
   Widget _buildCurrentReaction() {
     if (widget.post.isLikes) {
-      return _buildReactionItem(item: Reactions.like, count: widget.post.totalCount, from: "view");
+      return _buildReactionItem(
+          item: Reactions.like, count: widget.post.totalCount, from: "view");
     } else if (widget.post.isLove) {
-      return _buildReactionItem(item: Reactions.love, count: widget.post.totalCount, from: "view");
+      return _buildReactionItem(
+          item: Reactions.love, count: widget.post.totalCount, from: "view");
     } else if (widget.post.isWow) {
-      return _buildReactionItem(item: Reactions.wow, count: widget.post.totalCount, from: "view");
+      return _buildReactionItem(
+          item: Reactions.wow, count: widget.post.totalCount, from: "view");
     } else if (widget.post.isSad) {
-      return _buildReactionItem(item: Reactions.sad, count: widget.post.totalCount, from: "view");
+      return _buildReactionItem(
+          item: Reactions.sad, count: widget.post.totalCount, from: "view");
     } else if (widget.post.isAngry) {
-      return _buildReactionItem(item: Reactions.angry, count: widget.post.totalCount, from: "view");
+      return _buildReactionItem(
+          item: Reactions.angry, count: widget.post.totalCount, from: "view");
     } else if (widget.post.isHaha) {
-      return _buildReactionItem(item: Reactions.haha, count: widget.post.totalCount, from: "view");
+      return _buildReactionItem(
+          item: Reactions.haha, count: widget.post.totalCount, from: "view");
     } else {
       return _buildReactionPlaceholder();
     }

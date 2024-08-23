@@ -22,7 +22,7 @@ class MeetingView extends StatelessWidget {
     // init signalling service
 
     return Scaffold(
-      appBar:  HomeAppbar(
+      appBar: HomeAppbar(
         isWithBackArrow: true,
       ),
       drawer: const DrawerWidget(),

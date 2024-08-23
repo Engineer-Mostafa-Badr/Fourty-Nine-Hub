@@ -21,6 +21,7 @@ class DefaultButton extends StatefulWidget {
     this.alignment = Alignment.center,
     this.borderRadius = const BorderRadius.all(Radius.circular(20)),
     this.borderColor,
+    this.height,
     this.shadow,
     this.isExpanded = false,
     this.keepButtonSizeOnLoading = false,
@@ -47,6 +48,7 @@ class DefaultButton extends StatefulWidget {
   final Widget? icon;
   final DefaultButtonIconLocation iconLocation;
   final double borderWidth, width;
+  final double? height;
   final bool enabled;
   final Color backgroundColor;
   final List<BoxShadow>? shadow;
@@ -88,6 +90,7 @@ class _DefaultButtonState extends State<DefaultButton>
     return Container(
       margin: widget.margin,
       width: widget.width,
+      height: widget.height,
       child: AnimatedSize(
         duration: const Duration(milliseconds: 300),
         curve: Curves.bounceInOut,

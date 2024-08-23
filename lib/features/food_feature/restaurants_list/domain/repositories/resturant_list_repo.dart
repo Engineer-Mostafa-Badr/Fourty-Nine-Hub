@@ -13,7 +13,8 @@ abstract class RestaurantListRepo {
     required double lat,
     required double lng,
   });
-  Future<Either<Failure, List<Restaurant>>> getAllRestaurantsWithMenu({required PostCommentsParams params});
+  Future<Either<Failure, List<Restaurant>>> getAllRestaurantsWithMenu(
+      {required PostCommentsParams params});
   Future<Either<Failure, bool>> isRestaurant();
 
   Future<Either<Failure, int>> numOfRestaurants();

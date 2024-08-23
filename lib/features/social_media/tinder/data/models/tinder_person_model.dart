@@ -1,4 +1,3 @@
-
 class UserModel {
   final bool status;
   final List<UserData> data;

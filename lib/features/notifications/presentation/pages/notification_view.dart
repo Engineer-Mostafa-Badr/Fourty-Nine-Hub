@@ -37,9 +37,8 @@ class NotificationView extends StatelessWidget {
                       style: Styles.headerText(),
                     ),
                     TextAppButton(
-                      style: const TextStyle(
-                        color: AppColors.SECONDARY_COLOR
-                      ),
+                        style:
+                            const TextStyle(color: AppColors.SECONDARY_COLOR),
                         label: 'Clear All',
                         onPressed: () {
                           showAreYouSure(

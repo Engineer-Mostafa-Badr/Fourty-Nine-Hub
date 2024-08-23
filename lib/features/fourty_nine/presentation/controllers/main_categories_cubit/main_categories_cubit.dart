@@ -15,25 +15,21 @@ class MainCategoriesCubit extends Cubit<BasicState<List<MainCategoryEntity>>> {
     this._getMainCategoriesUseCase,
   ) : super(const BasicState());
 
-
   Future<void> loadData() async {
-     emit(state.copyWith(status: StateStatus.loading));
+    emit(state.copyWith(status: StateStatus.loading));
     if (_fourtyNineSharedData.mainCategories.isEmpty) {
       final result = await _getMainCategoriesUseCase(
           PaginationParams(page: 1, limit: 100));
 
       result.fold(
-
         (failure) => emit(state.copyWith(
           failure: failure,
           status: StateStatus.error,
         )),
         (r) {
-         _fourtyNineSharedData.mainCategories = r;
+          _fourtyNineSharedData.mainCategories = r;
           // emit(state.copyWith(status: StateStatus.loading));
-          emit(state.copyWith(
-              status: StateStatus.success,
-              data: r));
+          emit(state.copyWith(status: StateStatus.success, data: r));
         },
       );
     } else {
@@ -42,22 +38,16 @@ class MainCategoriesCubit extends Cubit<BasicState<List<MainCategoryEntity>>> {
           PaginationParams(page: 1, limit: 100));
 
       result.fold(
-
-            (failure) => emit(state.copyWith(
+        (failure) => emit(state.copyWith(
           failure: failure,
           status: StateStatus.error,
         )),
-            (r) {
+        (r) {
           // _fourtyNineSharedData.mainCategories = r;
           // emit(state.copyWith(status: StateStatus.loading));
-          emit(state.copyWith(
-              status: StateStatus.success,
-              data: r));
+          emit(state.copyWith(status: StateStatus.success, data: r));
         },
       );
-
     }
   }
-
-
 }

@@ -35,7 +35,7 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
   Widget build(BuildContext context) {
     final doctorCityFilter = context.read<DoctorCityFilterCubit>();
     return Scaffold(
-      appBar:  BackAppBar(
+      appBar: BackAppBar(
         label: LocaleKeys.city.localize,
       ),
       body: Padding(

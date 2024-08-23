@@ -31,13 +31,13 @@ class ShareTheApp extends StatelessWidget {
                 children: [
                   Expanded(
                       child: Container(
-                    decoration:
-                         BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor),
                   )),
                   Expanded(
                       child: Container(
-                    decoration:
-                         BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor),
                   )),
                 ],
               ),
@@ -57,7 +57,7 @@ class ShareTheApp extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color:Theme.of(context).scaffoldBackgroundColor,
+                          color: Theme.of(context).scaffoldBackgroundColor,
                           borderRadius: BorderRadius.circular(10),
                           boxShadow: [
                             BoxShadow(color: Theme.of(context).primaryColor)
@@ -97,8 +97,9 @@ class ShareTheApp extends StatelessWidget {
         ),
         const Sizer(),
         AppButton(
-          color: AppColors.AUTH_CONTAINER_COLOR,
-            label: 'Share The App', onPressed: () => controller.shareTheApp()),
+            color: AppColors.AUTH_CONTAINER_COLOR,
+            label: 'Share The App',
+            onPressed: () => controller.shareTheApp()),
       ],
     );
   }

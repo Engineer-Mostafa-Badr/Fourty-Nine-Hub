@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';
+import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
@@ -101,6 +102,8 @@ class DI {
     serviceLocator.registerLazySingleton<ApiClientHelper>(
       () => ApiClientHelperImp(),
     );
+    //cacheService
+    serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     // base repo
     serviceLocator.registerLazySingleton(
       () => BaseRepository(),

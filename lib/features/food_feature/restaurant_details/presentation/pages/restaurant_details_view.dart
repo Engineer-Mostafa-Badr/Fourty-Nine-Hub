@@ -56,7 +56,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
       return Container(
           margin: const EdgeInsets.all(10),
           child: AppButton(
-            color: AppColors.AUTH_CONTAINER_COLOR,
+              color: AppColors.AUTH_CONTAINER_COLOR,
               backColor: state.selectedMeals?.isNotEmpty ?? false
                   ? AppColors.SECONDARY_COLOR
                   : AppColors.SECONDARY_COLOR.withOpacity(.7),

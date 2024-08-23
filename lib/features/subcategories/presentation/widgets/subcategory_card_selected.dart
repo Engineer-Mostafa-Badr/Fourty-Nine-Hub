@@ -1,9 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/favorites/presentation/cubit/favorites_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/favorite_shipping_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -11,8 +17,10 @@ class SubcategoryCardSelected extends StatefulWidget {
   final SubCategoryEntity item;
   final MainCategoryEntity mainCategory;
   final bool selected;
+  final void Function(bool?)? onChanged;
   const SubcategoryCardSelected(
       {super.key,
+      this.onChanged,
       required this.item,
       required this.mainCategory,
       required this.selected});
@@ -23,7 +31,14 @@ class SubcategoryCardSelected extends StatefulWidget {
 }
 
 class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
-  // bool checkbox = false;
+  bool isFav = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isFav = widget.item.isFavorite;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -60,7 +75,18 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
                     top: 5,
                     right: 5,
                     child: IconAppButton(
-                        icon: Icons.favorite_outline, onPressed: () {}))
+                        icon: isFav ? Icons.favorite : Icons.favorite_outline,
+                        color: isFav ? Colors.red : Colors.black,
+                        onPressed: () {
+                          log('llllll');
+                          setState(() {
+                            context
+                                .read<FavoriteShippingCubit>()
+                                .favorite(widget.item.id);
+                            isFav = !isFav;
+                            log(widget.item.isFavorite.toString());
+                          });
+                        }))
               ],
             ),
           ),
@@ -77,14 +103,11 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
                         text: widget.item.name,
                         style: Styles.mediumText(fontWeight: FontWeight.bold),
                       ),
-                      const Label(text: '0 Ads')
+                      Label(text: '${widget.item.numberOfContent ?? 0} Driver')
                     ],
                   ),
                 ),
-                Checkbox(
-                  value: widget.selected,
-                  onChanged: (value) {},
-                )
+                Checkbox(value: widget.selected, onChanged: widget.onChanged)
                 // IconAppButton(
                 //     icon: Icons.,
                 //     size: 20,

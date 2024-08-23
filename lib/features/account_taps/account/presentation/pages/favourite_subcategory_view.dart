@@ -955,9 +955,8 @@ class FavTinderSubCategoryCard extends StatelessWidget {
         width: 200,
         padding: const EdgeInsets.all(0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).scaffoldBackgroundColor
-        ),
+            borderRadius: BorderRadius.circular(10),
+            color: Theme.of(context).scaffoldBackgroundColor),
         child: Card(
           clipBehavior: Clip.hardEdge,
           color: Theme.of(context).scaffoldBackgroundColor,
