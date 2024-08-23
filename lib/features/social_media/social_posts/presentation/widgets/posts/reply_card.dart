@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
@@ -14,6 +17,7 @@ class ReplyCard extends StatefulWidget {
   final CommentEntity reply;
   final Function(String) onReplyReact;
   final Function(String) onDeleteReply;
+  final Function(PostCommentParams) onEditComment;
   final Function(TwitterReportParams) onReport;
 
   const ReplyCard({
@@ -22,7 +26,7 @@ class ReplyCard extends StatefulWidget {
     required this.reply,
     required this.onReplyReact,
     required this.onReport,
-    required this.onDeleteReply,
+    required this.onDeleteReply, required this.onEditComment,
   });
 
   @override
@@ -30,6 +34,9 @@ class ReplyCard extends StatefulWidget {
 }
 
 class _ReplyCardState extends State<ReplyCard> {
+
+  final editTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -74,6 +81,18 @@ class _ReplyCardState extends State<ReplyCard> {
             const Sizer(),
             GestureDetector(
                 onTap: () {
+                  widget.reply.edit=!widget.reply.edit!;
+                  editTextController.text=widget.reply.content;
+                  setState(() {});
+                },
+                child: Icon(
+                  Icons.edit,
+                  color: widget.textColor,
+                  size: 20,
+                )),
+            const Sizer(),
+            GestureDetector(
+                onTap: () {
                   widget.onDeleteReply(widget.reply.id);
                 },
                 child: Icon(
@@ -87,6 +106,31 @@ class _ReplyCardState extends State<ReplyCard> {
           widget.reply.content,
           style: Styles.mediumText(color: widget.textColor),
         ),
+        if(widget.reply.edit==true)Row(
+          children: [
+            Expanded(
+                child: FormTextField(
+                    hint: 'Type your comment ....',
+                    action: (v) {
+                      setState(() {});
+                    },
+                    controller: editTextController)),
+            const Sizer(),
+            if (editTextController.text.isNotEmpty)
+              IconAppButton(
+                  icon: Icons.send,
+                  isCircle: true,
+                  onPressed: () async {
+                    var result = await widget.onEditComment(PostCommentParams(postId: widget.reply.id, content: editTextController.text));
+                    if(result==true){
+                      widget.reply.content=editTextController.text;
+                      widget.reply.edit=false;
+                    }
+                    setState(() {});
+                  })
+          ],
+        ),
+
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

@@ -1,11 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/repositories/create_post_repo.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
-import '../../../twitter/domain/repositories/twitter_repo.dart';
 
 class FriendsFollowersUseCase extends UseCase<List<PostUserEntity>, FriendsFollowersParams> {
   final CreatePostRepo _repo;
@@ -26,7 +23,7 @@ class FriendsFollowersParams {
     required this.page,
   });
   Map<String, dynamic> toJson() => {
-        'String': String,
+        'search': search,
         'limit': limit,
   'page':'page'
       };

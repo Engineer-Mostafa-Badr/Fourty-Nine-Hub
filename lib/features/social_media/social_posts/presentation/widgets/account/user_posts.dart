@@ -136,7 +136,10 @@ class _UserPostsState extends State<UserPosts> {
                               currentPost?.commentsCount=(currentPost.commentsCount!-1);
                               setState(() {});
                               return result;
-                            }, from: 'feed',),
+                            }, from: 'feed', onEditComment: (PostCommentParams params) async{
+                                var result = await controller.editComment(params: params);
+                                return result;
+                            },),
                           ));
                     },
                     onShare: (String id) {},

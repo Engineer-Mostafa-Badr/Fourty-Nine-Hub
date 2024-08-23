@@ -32,6 +32,7 @@ class PostDetailsPage extends StatefulWidget {
   final Function(PostReactParams) onReact;
   final Function(String) showPostComments;
   final Function(PostEntity) showPostDetails;
+  final Function(PostCommentParams) onEditComment;
   final Function(String) deletePost;
   final Function(String) hidePost;
   final Function(ReplyOnCommentParams) onCommentReply;
@@ -46,7 +47,7 @@ class PostDetailsPage extends StatefulWidget {
     required this.showPostDetails,
     required this.comments,
     required this.deletePost,
-    required this.hidePost, required this.onCommentReply, required this.onDeleteComment, required this.onDeleteReply,
+    required this.hidePost, required this.onCommentReply, required this.onDeleteComment, required this.onDeleteReply, required this.onEditComment,
   });
 
   @override
@@ -251,7 +252,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
             setState(() {});
             return result;
           },
-          from: 'feed',
+          from: 'feed', onEditComment: (PostCommentParams params) =>widget.onEditComment(params),
         ),
         if (comment.repliesCount != 0)
           Container(

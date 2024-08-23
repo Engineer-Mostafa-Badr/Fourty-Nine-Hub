@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -13,6 +15,7 @@ class BadgedLabel extends StatelessWidget {
   final Function? onTap;
   final bool isBordered;
   final bool isCentered;
+  final GestureTapCallback? onRemove;
 
   const BadgedLabel(
       {super.key,
@@ -23,6 +26,7 @@ class BadgedLabel extends StatelessWidget {
       this.style,
       this.borderColor = AppColors.PRIMARY_COLOR,
       this.onTap,
+      this.onRemove,
       this.margin,
       this.radius = 10,
       this.isBordered = false,
@@ -41,17 +45,31 @@ class BadgedLabel extends StatelessWidget {
           height: height,
           width: width,
           margin: EdgeInsets.all(margin ?? 0),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+          padding: const EdgeInsetsDirectional.only(end: 8,top: 5),
           decoration: BoxDecoration(
               color: isBordered ? Colors.white : color,
               border:
                   isBordered ? Border.all(color: borderColor, width: .5) : null,
               borderRadius: BorderRadius.circular(radius)),
-          child: isCentered
-              ? Center(
-                  child: _buildLabelWidget(),
-                )
-              : _buildLabelWidget()),
+          child:Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: AlignmentDirectional.topEnd,
+                child: GestureDetector(
+                    onTap: onRemove,
+                    child: const Icon(Icons.close,color: Colors.white,size: 15,)),
+              ),
+             Padding(
+               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+               child:  isCentered
+                   ? Center(
+                 child: _buildLabelWidget(),
+               )
+                   : _buildLabelWidget(),
+             )
+            ],
+          )),
     );
   }
 

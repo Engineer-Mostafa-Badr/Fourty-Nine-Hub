@@ -25,6 +25,7 @@ class FacebookPostComments extends StatefulWidget {
   final String from;
   final Function(PostCommentParams) onAddComment;
   final Function(ReplyOnCommentParams) onCommentReply;
+  final Function(PostCommentParams) onEditComment;
   final Function(String) onDeleteComment;
   final Function(String) onDeleteReply;
   const FacebookPostComments(
@@ -35,7 +36,7 @@ class FacebookPostComments extends StatefulWidget {
       required this.onCommentReply,
       required this.onDeleteComment,
       required this.onDeleteReply,
-      required this.from});
+      required this.from, required this.onEditComment});
 
   @override
   State<FacebookPostComments> createState() => _FacebookPostCommentsState();
@@ -193,7 +194,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
               widget.onCommentReply(params),
           onDeleteComment: (String id) => onDeleteComment(id),
           onDeleteReply: (String id) => onDeleteReply(id),
-          from: widget.from,
+          from: widget.from, onEditComment: (PostCommentParams params)=>widget.onEditComment(params),
         ),
         if (comment.repliesCount != 0)
           Container(
