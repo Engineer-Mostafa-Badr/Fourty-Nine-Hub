@@ -51,15 +51,15 @@ class DrawerWidget extends StatelessWidget {
 
                     // walletCircularProgress(context: context), gemy3617@gmail.com
                     drawerListTile(
-                        icon: FontAwesomeIcons.bullhorn,
+                        image: Assets.microphone,
                         label: LocaleKeys.advertiseYourCompany.localize,
                         onTap: () => context.push(Routes.CREATECOMPANYAD)),
                     drawerListTile(
-                        icon: FontAwesomeIcons.quran,
+                        image: Assets.quran,
                         label: LocaleKeys.quraan.localize,
                         onTap: () => context.push(Routes.QURAAN)),
                     drawerListTile(
-                        icon: FontAwesomeIcons.book,
+                        image: Assets.azkar,
                         label: LocaleKeys.azkar.localize,
                         onTap: () => context.push(Routes.AZKAAR)),
 
@@ -84,7 +84,7 @@ class DrawerWidget extends StatelessWidget {
                         requireLogin: true,
                         onTap: () => context.push(Routes.FAVOURITE)),
                     drawerListTile(
-                        icon: Icons.history,
+                        image: Assets.history,
                         label: LocaleKeys.requestHistory.localize,
                         requireLogin: true,
                         onTap: () => context.push(Routes.REQUESTSHISTORY)),
@@ -115,7 +115,7 @@ class DrawerWidget extends StatelessWidget {
                         onTap: () => context.push(Routes.PRIVACY)),
 
                     drawerListTile(
-                        icon: Icons.policy_outlined,
+                        image: Assets.policy,
                         label: LocaleKeys.policies.localize,
                         onTap: () => context.push(Routes.POLICY)),
                     drawerListTile(
@@ -545,7 +545,7 @@ class DrawerWidget extends StatelessWidget {
     } else if (user?.isRider ?? false) {
       return LocaleKeys.driver.localize;
     } else {
-      return "";
+      return "User";
     }
   }
 }

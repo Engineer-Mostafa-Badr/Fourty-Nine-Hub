@@ -10,6 +10,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../common/theme/cubit/cubit.dart';
 import '../../../../common/theme/cubit/states.dart';
+import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -27,13 +28,13 @@ class SettingsView extends StatelessWidget {
         body: Column(
           children: [
             listTileWidget(
-              icon: Icons.notifications_active_outlined,
+              image: Assets.notification,
               trailing: FutureBuilder(
                   future: Permission.notification.isGranted,
                   builder: (context, snap) {
                     final isGranted = snap.data ?? false;
                     return Switch(
-                         activeColor: AppColors.SECONDARY_COLOR,
+                        activeColor: AppColors.SECONDARY_COLOR,
                         activeTrackColor: Colors.grey,
                         value: isGranted,
                         onChanged: (v) async =>
@@ -45,11 +46,11 @@ class SettingsView extends StatelessWidget {
             BlocBuilder<ThemeCubit, ThemeStates>(
               builder: (BuildContext context, theme) {
                 return SwitchListTile(
-                  secondary: Icon(
-                    theme is DarkThemeModeStates
-                        ? Icons.dark_mode_outlined
-                        : Icons.light_mode_outlined,
-                    size: 40.zH,
+                  secondary: Image.asset(
+                    Assets.theme,
+                    width: 50.zW,
+                    height: 50.zH,
+                    fit: BoxFit.cover,
                   ),
                   title: theme is DarkThemeModeStates
                       ? Text(
@@ -77,12 +78,12 @@ class SettingsView extends StatelessWidget {
               },
             ),
             listTileWidget(
-                icon: Icons.password,
+                image: Assets.password,
                 trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.zH),
                 label: LocaleKeys.changePassword.localize,
                 onTap: () => context.push(Routes.FORGOTPASSWORD)),
             listTileWidget(
-                icon: Icons.no_accounts,
+                image: Assets.noPerson,
                 trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.zH),
                 label: LocaleKeys.disableAccount.localize,
                 onTap: () => showAreYouSure(
@@ -91,7 +92,7 @@ class SettingsView extends StatelessWidget {
                     action: () => context.go(Routes.LOGIN),
                     context: context)),
             listTileWidget(
-                icon: Icons.account_circle_outlined,
+                image: Assets.person,
                 trailing: Icon(
                   Icons.arrow_forward_ios_outlined,
                   size: 40.zH,
@@ -107,14 +108,15 @@ class SettingsView extends StatelessWidget {
   }
 
   Widget listTileWidget(
-      {required IconData icon,
+      {required String image,
       required Widget trailing,
       required String label,
       required Function onTap}) {
     return ListTile(
-      leading: Icon(
-        icon,
-        size: 40.zH,
+      leading: Image.asset(
+        image,
+        width: 50.zW,
+        height: 50.zH,
       ),
       title: Label(
           text: label,

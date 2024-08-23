@@ -119,21 +119,15 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     })),
           Stack(
             children: [
-              IconButton(
-                icon:  Icon(
-                  Icons.notifications_none,
-                  size: 50.zH,
-                ),
-                onPressed: () => context.push(Routes.NOTIFICATIONS),
-                // color: inNotifications
-                //     ? AppColors.SPLASH_BLACK_COLOR
-                //     : isDetailsCardService
-                //         ? AppColors.PRIMARY_COLOR
-                //         : color,
+              Image.asset(
+                Assets.notification,
+                width: 50.zW,
+                height: 50.zH,
+                fit: BoxFit.cover,
               ),
               Positioned(
-                top: 10,
-                right: 5,
+                bottom: 18.zH,
+                left: 20.zW,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     vertical: 3,
