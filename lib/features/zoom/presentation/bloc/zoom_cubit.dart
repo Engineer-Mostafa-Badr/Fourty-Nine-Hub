@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/zoom/domain/entities/room_response.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/end_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/join_room_use_case.dart';
@@ -36,10 +39,14 @@ class MeetingCubit extends Cubit<MeetingState> {
 
   void joinRoom(String roomId) {
     emit(state.copyWith(status: MeetingStates.loading));
-    joinRoomUseCase(MeetingParams(id: roomId))
-        .then((value) => emit(state.copyWith(status: MeetingStates.success)))
-        .catchError(
-            (error) => emit(state.copyWith(status: MeetingStates.failure)));
+    joinRoomUseCase(MeetingParams(id: roomId)).then((result) {
+      emit(state.copyWith(status: MeetingStates.success));
+    }).catchError((error) {
+      emit(state.copyWith(status: MeetingStates.failure));
+      showErrorMessage(
+          AppPages.router.configuration.navigatorKey.currentContext!,
+          error.toString());
+    });
   }
 
   void endRoom(String roomId) {

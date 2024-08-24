@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -80,19 +81,19 @@ void showMeetingDialogue(BuildContext context, {bool shareScreen = false}) {
                       return;
                     } else {
                       await joinRoom(cubit, liveId);
-                      if (context.mounted) {
+                      if (state.isSuccess && context.mounted) {
                         context.push(
                           Routes.MEETINGROOM,
-                          extra:
-                              ZegoArgs(liveId, false, shareScreen: shareScreen?true:false),
+                          extra: ZegoArgs(liveId, false,
+                              shareScreen: shareScreen ? true : false),
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content:
-                                Text('Joining meeting with ID: $meetingId'),
-                          ),
+                        showSuccessMessage(
+                          context,
+                          'Joining meeting with ID: $meetingId',
                         );
                         context.pop();
+                      } else {
+                        if (context.mounted) context.pop();
                       }
                     }
                   },

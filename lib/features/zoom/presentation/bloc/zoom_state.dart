@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
+import 'package:fourtyninehub/features/zoom/domain/entities/room_response.dart';
 
 enum MeetingStates {
   initial,
@@ -21,15 +22,24 @@ extension MeetingStateX on MeetingState {
 
 class MeetingState extends Equatable {
   final MeetingStates? status;
+  final RoomResponseError? errorMessage;
   const MeetingState({
     this.status = MeetingStates.initial,
+    this.errorMessage,
   });
 
   MeetingState copyWith({
     MeetingStates? status,
+    RoomResponseError? errorMessage,
   }) =>
-      MeetingState(status: status);
+      MeetingState(
+        status: status,
+        errorMessage: errorMessage ?? this.errorMessage,
+      );
 
   @override
-  List<Object?> get props => [status];
+  List<Object?> get props => [
+        status,
+        errorMessage,
+      ];
 }

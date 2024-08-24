@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 
 enum DrawMode { freeDraw, rectangle, circle, triangle }
@@ -9,13 +10,16 @@ class Shape {
   final DrawMode drawMode;
   final Offset start;
   final Offset end;
+  final Color color;
   final List<Offset>? points; // For freeDraw mode
 
-  Shape(
-      {required this.drawMode,
-      this.start = Offset.zero,
-      this.end = Offset.zero,
-      this.points});
+  Shape({
+    required this.drawMode,
+    this.start = Offset.zero,
+    required this.color,
+    this.end = Offset.zero,
+    this.points,
+  });
 }
 
 class WhiteBoardView extends StatefulWidget {
@@ -31,7 +35,17 @@ class WhiteBoardViewState extends State<WhiteBoardView> {
   DrawMode _drawMode = DrawMode.freeDraw;
   Offset? _startPoint;
   final List<Shape> _undoneShapes = [];
+  Color _selectedColor = Colors.black; // Default color
 
+  final List<Color> _colors = [
+    Colors.black,
+    Colors.red,
+    Colors.green,
+    Colors.blue,
+    Colors.yellow,
+    Colors.orange,
+    Colors.purple,
+  ];
   @override
   Widget build(BuildContext context) {
     void undo() {
@@ -43,6 +57,7 @@ class WhiteBoardViewState extends State<WhiteBoardView> {
     }
 
     void redo() {
+      print('test');
       if (_undoneShapes.isNotEmpty) {
         setState(() {
           _shapes.add(_undoneShapes.removeLast());
@@ -54,16 +69,35 @@ class WhiteBoardViewState extends State<WhiteBoardView> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          centerTitle: true,
-          title: const Text('Whiteboard'),
+          // centerTitle: true,
+          title: const Text(
+            'Whiteboard',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.undo),
+              style: IconButton.styleFrom(
+                  backgroundColor: _selectedColor, shape: const CircleBorder()),
+              icon: Icon(
+                Icons.undo,
+                color: Colors.white,
+                size: 40.zH,
+              ),
               onPressed: undo,
             ),
-            IconButton(
-              icon: const Icon(Icons.redo),
-              onPressed: redo,
+            Padding(
+              padding: const EdgeInsets.only(right: 30),
+              child: IconButton(
+                style: IconButton.styleFrom(
+                    backgroundColor: _selectedColor,
+                    shape: const CircleBorder()),
+                icon: Icon(
+                  Icons.redo,
+                  color: Colors.white,
+                  size: 40.zH,
+                ),
+                onPressed: redo,
+              ),
             ),
           ],
         ),
@@ -92,14 +126,19 @@ class WhiteBoardViewState extends State<WhiteBoardView> {
               if (_drawMode == DrawMode.freeDraw) {
                 // Save free draw points
                 _shapes.add(Shape(
-                    drawMode: DrawMode.freeDraw, points: List.from(_points)));
+                  drawMode: DrawMode.freeDraw,
+                  points: List.from(_points),
+                  color: _selectedColor,
+                ));
                 _points.clear(); // Clear points after saving
               } else if (_startPoint != null && _points.isNotEmpty) {
                 // Save the shape
                 _shapes.add(Shape(
-                    drawMode: _drawMode,
-                    start: _startPoint!,
-                    end: _points.last!));
+                  drawMode: _drawMode,
+                  start: _startPoint!,
+                  end: _points.last!,
+                  color: _selectedColor,
+                ));
                 _points.clear(); // Clear points after saving the shape
               }
               // Clear the redo list as we have drawn a new shape
@@ -114,54 +153,96 @@ class WhiteBoardViewState extends State<WhiteBoardView> {
         bottomNavigationBar: Padding(
           padding: EdgeInsets.only(
               bottom: 120.0.zR), // Adds 20 pixels of space below the bottom bar
-          child: BottomAppBar(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.brush),
-                  onPressed: () {
-                    setState(() {
-                      _drawMode = DrawMode.freeDraw;
-                    });
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 40.0,
+                padding: EdgeInsets.all(5.zR),
+                margin: EdgeInsets.all(5.zR),
+                decoration: BoxDecoration(
+                    border: Border.all(color: _selectedColor, width: 5.zR),
+                    borderRadius: BorderRadius.circular(20.zR)),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _colors.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedColor = _colors[index];
+                        });
+                      },
+                      child: Container(
+                        width: 50.zR,
+                        height: 50.zR,
+                        margin: EdgeInsets.symmetric(horizontal: 5.zW),
+                        decoration: BoxDecoration(
+                          color: _colors[index],
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: _selectedColor == _colors[index]
+                                ? Colors.black
+                                : Colors.white,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                    );
                   },
                 ),
-                IconButton(
-                  icon: const Icon(Icons.crop_square),
-                  onPressed: () {
-                    setState(() {
-                      _drawMode = DrawMode.rectangle;
-                    });
-                  },
+              ),
+              BottomAppBar(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.brush),
+                      onPressed: () {
+                        setState(() {
+                          _drawMode = DrawMode.freeDraw;
+                        });
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.crop_square),
+                      onPressed: () {
+                        setState(() {
+                          _drawMode = DrawMode.rectangle;
+                        });
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.circle),
+                      onPressed: () {
+                        setState(() {
+                          _drawMode = DrawMode.circle;
+                        });
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.change_history),
+                      onPressed: () {
+                        setState(() {
+                          _drawMode = DrawMode.triangle;
+                        });
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        setState(() {
+                          _points.clear(); // Clear the board
+                          _shapes.clear();
+                          _undoneShapes.clear();
+                        });
+                      },
+                    ),
+                  ],
                 ),
-                IconButton(
-                  icon: const Icon(Icons.circle),
-                  onPressed: () {
-                    setState(() {
-                      _drawMode = DrawMode.circle;
-                    });
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.change_history),
-                  onPressed: () {
-                    setState(() {
-                      _drawMode = DrawMode.triangle;
-                    });
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    setState(() {
-                      _points.clear(); // Clear the board
-                      _shapes.clear();
-                      _undoneShapes.clear();
-                    });
-                  },
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -186,6 +267,7 @@ class WhiteboardPainter extends CustomPainter {
 
     // Draw saved shapes and free draw lines
     for (Shape shape in shapes) {
+      paint.color = shape.color; // Use the shape's color
       if (shape.drawMode == DrawMode.freeDraw) {
         drawFreeDraw(canvas, shape.points!, paint);
       } else {
@@ -197,6 +279,7 @@ class WhiteboardPainter extends CustomPainter {
     if (drawMode != DrawMode.freeDraw &&
         points.isNotEmpty &&
         points.length == 2) {
+      paint.color = shapes.isNotEmpty ? shapes.last.color : Colors.black;
       Offset start = points.first!;
       Offset end = points.last!;
       drawShape(canvas, start, end, drawMode, paint);

@@ -189,8 +189,8 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
               height: 68.zR,
               child: IconButton(
                 onPressed: () {
-                  Navigator.of(context).pop(true);
-                  Navigator.of(context).pop(true);
+                  Navigator.of(context).pop();
+                  // Navigator.of(context).pop(true);
                 },
                 icon: const Icon(
                   Icons.arrow_back_ios,
