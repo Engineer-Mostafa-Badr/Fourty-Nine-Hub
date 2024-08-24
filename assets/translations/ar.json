@@ -85,5 +85,14 @@
   "message":"رسالة",
   "photo":"صورة",
   "video":"فيديو",
-  "openAppSettings":"فتح إعدادات التطبيق"
+  "openAppSettings":"فتح إعدادات التطبيق",
+  "allowAccessToYourCamera": "السماح بالوصول للكاميرا",
+  "allowAccessToYourMicrophone": "السماح بالوصول للميكروفون",
+  "document": "مستند",
+  "camera": "كاميرا",
+  "microphone": "ميكروفون",
+  "gallery": "المعرض",
+  "audio": "الصوت",
+  "location": "الموقع",
+  "contact": "جهة اتصال"
 }

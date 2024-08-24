@@ -87,5 +87,14 @@ abstract class  LocaleKeys {
   static String photo = 'photo'.tr();
   static String video = 'video'.tr();
   static String openAppSettings = 'openAppSettings'.tr();
+  static String allowAccessToYourCamera = 'allowAccessToYourCamera'.tr();
+  static String allowAccessToYourMicrophone = 'allowAccessToYourMicrophone'.tr();
+  static String document = 'document'.tr();
+  static String camera = 'camera'.tr();
+  static String microphone = 'microphone'.tr();
+  static String gallery = 'gallery'.tr();
+  static String audio = 'audio'.tr();
+  static String location = 'location'.tr();
+  static String contact = 'contact'.tr();
 
 }

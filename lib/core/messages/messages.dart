@@ -116,7 +116,8 @@ void showSuccessDialog(BuildContext context, String text) => showDialog(
       ),
     );
 
-void showPermissionDialog({required String message}) => showDialog(
+Future<void> showPermissionDialog({required String message}) async =>
+    await showDialog(
       context: AppPages.router.configuration.navigatorKey.currentContext!,
       builder: (_) => AlertDialog(
         shape: RoundedRectangleBorder(
@@ -140,7 +141,6 @@ void showPermissionDialog({required String message}) => showDialog(
             label: LocaleKeys.openAppSettings,
             onPressed: () async {
               await openAppSettings();
-
               AppPages.router.configuration.navigatorKey.currentContext!.pop();
             },
           ),

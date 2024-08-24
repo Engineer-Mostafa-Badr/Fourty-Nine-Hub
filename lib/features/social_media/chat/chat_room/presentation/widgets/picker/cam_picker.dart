@@ -8,11 +8,13 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/camera_picker_cubit/camera_picker_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_thumbnail/video_thumbnail.dart' as thumbnail;
 
@@ -39,11 +41,16 @@ class CameraPicker extends StatelessWidget {
   }
 }
 
-class _CamView extends StatelessWidget {
+class _CamView extends StatefulWidget {
   final void Function(List<XFile> media)? onDone;
 
   const _CamView({required this.onDone});
 
+  @override
+  State<_CamView> createState() => _CamViewState();
+}
+
+class _CamViewState extends State<_CamView> {
   @override
   Widget build(BuildContext context) {
     final controller = context.read<CameraPickerCubit>();
@@ -51,14 +58,17 @@ class _CamView extends StatelessWidget {
       children: [
         Positioned.fill(
           child: BlocBuilder<CameraPickerCubit, CameraPickerState>(
-            buildWhen: (previous, current) =>
-                current.status == CameraPickerStatus.initialized ||
-                current.status == CameraPickerStatus.loadingCamera ||
-                current.status == CameraPickerStatus.flipCamera,
             builder: (context, state) {
               if (state.controller != null &&
                   state.status != CameraPickerStatus.loadingCamera) {
                 return CameraPreview(state.controller!);
+              } else if (state.status ==
+                  CameraPickerStatus.needCameraPermission) {
+                return _permissionButton(LocaleKeys.allowAccessToYourCamera);
+              } else if (state.status ==
+                  CameraPickerStatus.needMicrophonePermission) {
+                return _permissionButton(
+                    LocaleKeys.allowAccessToYourMicrophone);
               } else {
                 return const Icon(Icons.camera,
                     color: AppColors.GREY_DARK_COLOR, size: 150);
@@ -76,9 +86,17 @@ class _CamView extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _BaseIcon(
-                  icon: Icons.close,
-                  onTap: () => context.pop(),
+                BlocBuilder<CameraPickerCubit, CameraPickerState>(
+                  builder: (context, state) {
+                    if (state.status != CameraPickerStatus.startVideo) {
+                      return _BaseIcon(
+                        icon: Icons.close,
+                        onTap: () => context.pop(),
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
                 ),
                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   builder: (context, state) {
@@ -113,7 +131,7 @@ class _CamView extends StatelessWidget {
                         onTap: () => controller.toggleFlashMode(),
                       );
                     } else {
-                      return const SizedBox(width: 20);
+                      return const SizedBox.shrink();
                     }
                   },
                 ),
@@ -138,7 +156,7 @@ class _CamView extends StatelessWidget {
                       return _BaseIcon(
                         icon: Icons.check,
                         onTap: () {
-                          onDone?.call(controller.state.mediaList ?? []);
+                          widget.onDone?.call(controller.state.mediaList ?? []);
                           context.pop();
                         },
                       );
@@ -165,18 +183,18 @@ class _CamView extends StatelessWidget {
                             controller.stopVideoRecording();
                           },
                           child:
-                              // Stack(
-                              //   alignment: Alignment.center,
-                              //   children: [
-                              //     _VideoCircularIndicator(
-                              //         duration: controller.maxVideoLength),
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  _VideoCircularIndicator(
+                                      duration: controller.maxVideoLength),
                               const Icon(
-                            Icons.square_rounded,
-                            color: AppColors.SECONDARY_COLOR,
-                            size: 60,
+                                Icons.square_rounded,
+                                color: AppColors.SECONDARY_COLOR,
+                                size: 60,
+                              ),
+                            ],
                           ),
-                          //   ],
-                          // ),
                         );
                       } else {
                         return IconButton(
@@ -230,6 +248,46 @@ class _CamView extends StatelessWidget {
 
   Widget get _pickIcon =>
       const Icon(Icons.circle, size: 80, color: Colors.white);
+
+  Widget _permissionButton(String label) {
+    return InkWell(
+        onTap: () async {
+          openAppSettings().then((value) {
+            if (value) {
+              context.read<CameraPickerCubit>().init();
+            }
+          });
+        },
+        child: Center(
+          child: Text(label, style: Styles.headerText()),
+        ));
+  }
+}
+
+class _BaseIcon extends StatelessWidget {
+  final Color? color;
+  final IconData icon;
+  final void Function()? onTap;
+
+  const _BaseIcon({super.key, this.color, required this.icon, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: (color ?? AppColors.GREY_DARK_COLOR).withOpacity(0.5),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Icon(
+          icon,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
 }
 
 class _ImagesList extends StatelessWidget {
@@ -393,7 +451,7 @@ class __VideoTimerState extends State<_VideoTimer> {
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (timer.tick < widget.duration.inSeconds) {
+      if (timer.tick <= widget.duration.inSeconds) {
         int minutes = (timer.tick ~/ 60);
         int seconds = (timer.tick % 60);
         setState(() {
@@ -449,7 +507,7 @@ class __VideoCircularIndicatorState extends State<_VideoCircularIndicator> {
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (timer.tick < widget.duration.inSeconds) {
+      if (timer.tick <= widget.duration.inSeconds) {
         setState(() {
           _time = timer.tick;
         });
@@ -465,37 +523,15 @@ class __VideoCircularIndicatorState extends State<_VideoCircularIndicator> {
 
   @override
   Widget build(BuildContext context) {
-    return CircularProgressIndicator(
-      value: 1 - (_time / widget.duration.inSeconds),
-      valueColor:
-          const AlwaysStoppedAnimation<Color>(AppColors.SECONDARY_COLOR),
-      backgroundColor: Colors.white,
-      strokeWidth: 8.0,
-    );
-  }
-}
-
-class _BaseIcon extends StatelessWidget {
-  final Color? color;
-  final IconData icon;
-  final void Function()? onTap;
-
-  const _BaseIcon({super.key, this.color, required this.icon, this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: (color ?? AppColors.GREY_DARK_COLOR).withOpacity(0.5),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Icon(
-          icon,
-          color: Colors.white,
-        ),
+    return SizedBox(
+      height: 80,
+      width: 80,
+      child: CircularProgressIndicator(
+        value: 1 - (_time / widget.duration.inSeconds),
+        valueColor:
+            const AlwaysStoppedAnimation<Color>(Colors.white),
+        // color: AppColors.SECONDARY_COLOR,
+        backgroundColor: AppColors.SECONDARY_COLOR,
       ),
     );
   }

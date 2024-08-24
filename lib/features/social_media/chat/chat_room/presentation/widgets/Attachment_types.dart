@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/picker/cam_picker.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -19,7 +20,7 @@ class AttachmentTypes extends StatelessWidget {
       children: [
         _buildAttachmentTypeItem(
           color: Colors.purple,
-          label: 'Document',
+          label: LocaleKeys.document,
           icon: Icons.insert_drive_file_outlined,
           onTap: () {
             chatRoomCubit.pickDocuments();
@@ -27,39 +28,31 @@ class AttachmentTypes extends StatelessWidget {
         ),
         _buildAttachmentTypeItem(
           color: Colors.redAccent,
-          label: 'Camera',
+          label: LocaleKeys.camera,
           icon: Icons.camera_alt,
           onTap: () async {
-            // List<CameraDescription> _cameras = await availableCameras();
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => CameraExampleHome(
-            //       cameras: _cameras,
-            //     ),
-            //   ),
-            // );
             showDialog(
                 context: context, builder: (context) => const CameraPicker());
           },
         ),
         _buildAttachmentTypeItem(
             color: Colors.purpleAccent,
-            label: 'Gallery',
-            onTap: ()=> chatRoomCubit.pickMedia(),
+            label: LocaleKeys.gallery,
+            onTap: () => chatRoomCubit.pickMedia(),
             icon: Icons.image_outlined),
         _buildAttachmentTypeItem(
             color: Colors.orange[600]!,
-            label: 'Audio',
-            onTap: ()=> chatRoomCubit.pickAudio(),
-
+            label: LocaleKeys.audio,
+            onTap: () => chatRoomCubit.pickAudio(),
             icon: Icons.headphones_rounded),
         _buildAttachmentTypeItem(
             color: Colors.green,
-            label: 'Location',
+            label: LocaleKeys.location,
             icon: Icons.location_on_rounded),
         _buildAttachmentTypeItem(
-            color: Colors.lightBlue, label: 'Contact', icon: Icons.person),
+            color: Colors.lightBlue,
+            label: LocaleKeys.contact,
+            icon: Icons.person),
       ],
     );
   }

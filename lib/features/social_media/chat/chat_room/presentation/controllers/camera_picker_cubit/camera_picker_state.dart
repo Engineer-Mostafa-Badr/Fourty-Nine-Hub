@@ -9,8 +9,8 @@ enum CameraPickerStatus {
   endVideo,
   toggleFlashMode,
   updateMediaList,
-  photoMode,
-  videoMode,
+  needCameraPermission,
+  needMicrophonePermission,
 }
 
 enum PickMode { photo, video }

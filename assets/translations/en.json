@@ -86,5 +86,14 @@
   "restaurants": "Restaurants",
   "meals": "Meals",
   "openAppSettings": "Open App Settings",
-  "pleaseAllowPermissions": "Please allow permissions"
+  "pleaseAllowPermissions": "Please allow permissions",
+  "allowAccessToYourCamera": "Allow access to your camera",
+  "allowAccessToYourMicrophone": "Allow access to your microphone",
+  "document": "Document",
+  "camera": "Camera",
+  "microphone": "Microphone",
+  "gallery": "Gallery",
+  "audio": "Audio",
+  "location": "Location",
+  "contact": "Contact"
 }

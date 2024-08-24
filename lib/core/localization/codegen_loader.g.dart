@@ -101,7 +101,16 @@ class CodegenLoader extends AssetLoader{
   "message": "رسالة",
   "photo": "صورة",
   "video": "فيديو",
-  "openAppSettings": "فتح إعدادات التطبيق"
+  "openAppSettings": "فتح إعدادات التطبيق",
+  "allowAccessToYourCamera": "السماح بالوصول للكاميرا",
+  "allowAccessToYourMicrophone": "السماح بالوصول للميكروفون",
+  "document": "مستند",
+  "camera": "كاميرا",
+  "microphone": "ميكروفون",
+  "gallery": "المعرض",
+  "audio": "الصوت",
+  "location": "الموقع",
+  "contact": "جهة اتصال"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -190,7 +199,17 @@ static const Map<String,dynamic> en = {
   "feelLucky": "Do You feel lucky?",
   "restaurants": "Restaurants",
   "meals": "Meals",
-  "openAppSettings": "Open App Settings"
+  "openAppSettings": "Open App Settings",
+  "pleaseAllowPermissions": "Please allow permissions",
+  "allowAccessToYourCamera": "Allow access to your camera",
+  "allowAccessToYourMicrophone": "Allow access to your microphone",
+  "document": "Document",
+  "camera": "Camera",
+  "microphone": "Microphone",
+  "gallery": "Gallery",
+  "audio": "Audio",
+  "location": "Location",
+  "contact": "Contact"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
