@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -95,7 +97,12 @@ class MeetingView extends StatelessWidget {
       ),
     );
   }
-
+String get genRandNo {
+    int min = 10000000;
+    int max = 99999999;
+    final String liveId = '${min + Random().nextInt(max - min)}';
+    return liveId;
+  }
   Future<void> newMeeting(MeetingCubit cubit) async {
     cubit.addRoom(genRandNo);
   }

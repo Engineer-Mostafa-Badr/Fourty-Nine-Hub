@@ -84,5 +84,16 @@
   "meals": "وجبات الطعام",
   "message":"رسالة",
   "photo":"صورة",
-  "video":"فيديو"
+  "video":"فيديو",
+  "openAppSettings":"فتح إعدادات التطبيق",
+  "allowAccessToYourCamera": "السماح بالوصول للكاميرا",
+  "allowAccessToYourMicrophone": "السماح بالوصول للميكروفون",
+  "document": "مستند",
+  "camera": "كاميرا",
+  "microphone": "ميكروفون",
+  "gallery": "المعرض",
+  "audio": "الصوت",
+  "location": "الموقع",
+  "contact": "جهة اتصال",
+  "pickPhotoOrVideo": "اختر صورة او فيديو"
 }

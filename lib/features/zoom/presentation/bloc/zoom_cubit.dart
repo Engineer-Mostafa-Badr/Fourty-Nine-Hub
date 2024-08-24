@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
-import 'package:fourtyninehub/features/zoom/domain/entities/room_response.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/end_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/join_room_use_case.dart';
@@ -19,12 +18,12 @@ class MeetingCubit extends Cubit<MeetingState> {
   final JoinRoomUseCase joinRoomUseCase;
   final EndRoomUseCase endRoomUseCase;
 
-  @override
-  void onChange(Change<MeetingState> change) {
-    debugPrint('change is ${change.currentState}');
-    debugPrint('change next ${change.nextState}');
-    super.onChange(change);
-  }
+  // @override
+  // void onChange(Change<MeetingState> change) {
+  //   debugPrint('change is ${change.currentState}');
+  //   debugPrint('change next ${change.nextState}');
+  //   super.onChange(change);
+  // }
 
   void addRoom(String roomId) {
     emit(state.copyWith(status: MeetingStates.loading));
@@ -40,12 +39,26 @@ class MeetingCubit extends Cubit<MeetingState> {
   void joinRoom(String roomId) {
     emit(state.copyWith(status: MeetingStates.loading));
     joinRoomUseCase(MeetingParams(id: roomId)).then((result) {
-      emit(state.copyWith(status: MeetingStates.success));
+      if (result!.statusCode == 200) {
+        emit(state.copyWith(status: MeetingStates.success));
+      } else {
+        final String errorMessage = result.data['error']['message'] ?? '';
+        final Map<String, dynamic> localizedMessage = json.decode(errorMessage);
+        print('state is ${localizedMessage['en']}');
+        emit(state.copyWith(
+          status: MeetingStates.failure,
+          errorMessage: (localizedMessage['en'] ?? 'Room not registered'),
+        ));
+        showErrorMessage(
+          AppPages.router.configuration.navigatorKey.currentContext!,
+          state.errorMessage!.message,
+        );
+      }
     }).catchError((error) {
       emit(state.copyWith(status: MeetingStates.failure));
-      showErrorMessage(
-          AppPages.router.configuration.navigatorKey.currentContext!,
-          error.toString());
+      // showErrorMessage(
+      //     AppPages.router.configuration.navigatorKey.currentContext!,
+      //     error.toString());
     });
   }
 
