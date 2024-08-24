@@ -28,6 +28,7 @@ class ImagePickerPlaceholder extends StatelessWidget {
     return Container(
       width: height ?? 100,
       height: width ?? 100,
+      alignment: Alignment.center,
       decoration: BoxDecoration(
         border: Border.all(color: borderColor ?? Colors.black),
         borderRadius: BorderRadius.circular(UIConst.radius),
@@ -40,6 +41,7 @@ class ImagePickerPlaceholder extends StatelessWidget {
     if (image == null) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(
             Icons.camera_alt,
@@ -60,6 +62,9 @@ class ImagePickerPlaceholder extends StatelessWidget {
     if (title == null || title!.isEmpty) {
       return const SizedBox.shrink();
     }
-    return Text(title!);
+    return Text(
+      title!,
+      textAlign: TextAlign.center,
+    );
   }
 }

@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,7 +26,7 @@ class _CreateRestaurantProfilePhotoPickerState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Label(
-          text: "Photo For Restaurant",
+          text: LocaleKeys.photoForRestaurant.localize,
           style: Styles.headerText(),
         ),
         const Sizer(),

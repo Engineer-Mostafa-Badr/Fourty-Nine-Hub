@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,7 +19,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Label(
-          text: "The commercial register",
+          text: LocaleKeys.theCommercialRegister.localize,
           style: Styles.headerText(),
         ),
         const Sizer(),
@@ -37,8 +39,8 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                       image: XFile(state.file.path),
                     );
                   }
-                  return const ImagePickerPlaceholder(
-                    title: 'First Page',
+                  return ImagePickerPlaceholder(
+                    title: LocaleKeys.firstPage.localize,
                   );
                 },
               ),
@@ -61,8 +63,8 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                       ),
                     );
                   }
-                  return const ImagePickerPlaceholder(
-                    title: 'Second Page',
+                  return ImagePickerPlaceholder(
+                    title: LocaleKeys.secondPage.localize,
                   );
                 },
               ),
@@ -82,8 +84,8 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                       image: XFile(state.file.path),
                     );
                   }
-                  return const ImagePickerPlaceholder(
-                    title: 'Thired Page',
+                  return ImagePickerPlaceholder(
+                    title: LocaleKeys.thirdPage.localize,
                   );
                 },
               ),

@@ -3,16 +3,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_menu_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/register_resturant/location/cities_dropdowns.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/register_resturant/location/governorate_dropdown.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/register_resturant/mneu/show_menu.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/register_resturant/name/name_filed.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/register_resturant/photo/license_photo_picker.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/register_resturant/photo/restaurant_photo_picker.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/register_resturant/subcategory.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/register_resturant/submit_button.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -52,7 +55,7 @@ class CreateResturantView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                    text: Labels.welcomRegiesterResturant,
+                    text: LocaleKeys.welcomeToResturantRegisteration.localize,
                     style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
                 const Sizer(height: 20),
                 const CreateResturantSubcategoryDropdown(),
@@ -77,14 +80,20 @@ class CreateResturantView extends StatelessWidget {
                 const Sizer(height: 20),
 
                 /// mneu
+                BlocProvider(
+                  create: (_) => RestaurantMenuCubit(),
+                  child: ShowMneu(),
+                ),
                 const Sizer(height: 20),
-                const AppInfoText(
-                    text:
-                        "The application does not deduct any percentage from the service provider."),
+
+                AppInfoText(
+                    text: LocaleKeys
+                        .theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider
+                        .localize),
                 const Sizer(height: 20),
-                const AppInfoText(
-                    text:
-                        'You will get EGP 3,650 per year if you subscribe daily.'),
+                AppInfoText(
+                    text: LocaleKeys
+                        .youWillGetEGP3650PerYearIfYouSubscribeDaily.localize),
                 const Sizer(height: 20),
                 const CreateRestaurantSubmitButton(),
               ],

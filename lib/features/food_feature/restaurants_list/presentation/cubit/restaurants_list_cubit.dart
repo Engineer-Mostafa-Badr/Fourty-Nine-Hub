@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
@@ -66,21 +67,25 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
   void loadData() async {
     await AppPages.router.routerDelegate.navigatorKey.currentContext!
         .read<UserCubit>()
-        .getUser();
-    if (AppPages.router.routerDelegate.navigatorKey.currentContext!
-            .read<UserCubit>()
-            .state
-            .data !=
-        null) {
-      user = UserCubit.to.state.data;
-    } else {}
-
+        .getUser()
+        .then((Either<Failure, UserEntity>? value) {
+      print("then");
+      if (value != null) {
+        value.fold(
+          (failure) => print("failure user: $failure"),
+          (u) {
+            emit(state.copyWith(status: RestaurantsListStates.initState));
+            user = u;
+          },
+        );
+      }
+    });
     Future.wait([
-      _getAllRestaurant(),
-      _getMainCategoryDetails(),
-      _isDoctor(),
       _getMealCategoriesWithCountRestaurants(),
-      getNumOfRestaurants(),
+      _getNumOfRestaurants(),
+      _getAllRestaurant(),
+      _isDoctor(),
+      _getMainCategoryDetails(),
     ]);
   }
 
@@ -107,9 +112,11 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
 
   Future<void> getBannerById() async {
     final response = await _getBannerByIdUseCase.call(id: service.id);
-    response.fold(
-        (failure) => emit(state.copyWith(
-            failure: failure, status: RestaurantsListStates.error)),
+    response.fold((failure) {
+      log("failure: $failure");
+      emit(state.copyWith(
+          failure: failure, status: RestaurantsListStates.error));
+    },
         (data) => emit(state.copyWith(
             banner: data, status: RestaurantsListStates.initState)));
   }
@@ -124,7 +131,7 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
             allRestaurant: data, status: RestaurantsListStates.initState)));
   }
 
-  Future<void> getNumOfRestaurants() async {
+  Future<void> _getNumOfRestaurants() async {
     final response = await _getNumOfResturantUseCase.call();
     response.fold(
         (failure) => emit(state.copyWith(
@@ -151,31 +158,31 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
   UserEntity? user;
 
   Future<void> _getMealCategoriesWithCountRestaurants() async {
-    if (user != null) {
-      final response = await _getMealCategoriesWithCountRestaurantsUseCase(
-          params: PostCommentsParams(
-        page: 1,
-        userId: user?.id,
-      ));
-      response.fold(
-          (failure) => emit(state.copyWith(
-              failure: failure, status: RestaurantsListStates.error)), (data) {
-        emit(state.copyWith(
-            mealCategories: data, status: RestaurantsListStates.initState));
-        if (state.mealCategories?.isNotEmpty ?? false) {
-          getSubCategoryRestaurants(id: state.mealCategories?.first.id ?? "");
-        }
-      });
-    }
+    final response = await _getMealCategoriesWithCountRestaurantsUseCase(
+        params: PostCommentsParams(
+      page: 1,
+      userId: user?.id,
+    ));
+    response.fold(
+        (failure) => emit(state.copyWith(
+            failure: failure, status: RestaurantsListStates.error)), (data) {
+      emit(state.copyWith(
+          mealCategories: data, status: RestaurantsListStates.initState));
+      if (state.mealCategories?.isNotEmpty ?? false) {
+        getSubCategoryRestaurants(id: state.mealCategories?.first.id ?? "");
+      }
+    });
   }
 
   Future<void> _getMainCategoryDetails() async {
+    print("user: $user");
     if (user != null) {
       final response = await _getMainCategoryDetailsUseCase(service.id);
-      response.fold(
-          (failure) => emit(state.copyWith(
-              failure: failure, status: RestaurantsListStates.error)),
-          (data) => emit(state.copyWith(mainCategory: data)));
+      response.fold((failure) {
+        log("failure: $failure");
+        emit(state.copyWith(
+            failure: failure, status: RestaurantsListStates.error));
+      }, (data) => emit(state.copyWith(mainCategory: data)));
     } else {
       getBannerById();
     }

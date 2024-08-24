@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usec
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_num_of_resturant_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/is_resturant_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/restaurant_shared_data.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_menu_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
 import 'package:get_it/get_it.dart';
 
@@ -58,6 +59,8 @@ class FoodServiceLocator {
         () => FoodCartRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<CreateRestaurantUseCase>(
         () => CreateRestaurantUseCase());
+    serviceLocator.registerLazySingleton<RestaurantMenuCubit>(
+        () => RestaurantMenuCubit());
     serviceLocator.registerLazySingleton<RestaurantSharedData>(
         () => RestaurantSharedData());
     serviceLocator.registerFactory<CreateRestaurantCubit>(

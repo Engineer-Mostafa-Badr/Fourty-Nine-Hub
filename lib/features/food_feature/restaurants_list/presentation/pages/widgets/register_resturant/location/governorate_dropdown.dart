@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 class CreateRestaurantGovernorateDropdown extends StatelessWidget {
   const CreateRestaurantGovernorateDropdown(
@@ -45,7 +47,7 @@ class CreateRestaurantGovernorateDropdown extends StatelessWidget {
                         )),
                       ),
                       width: MediaQuery.of(context).size.width * 0.9,
-                      hintText: "Governorate",
+                      hintText: LocaleKeys.selectGovernorate.localize,
                       dropdownMenuEntries: state.governorates
                           .map((e) =>
                               DropdownMenuEntry(value: e, label: e.nameEn))

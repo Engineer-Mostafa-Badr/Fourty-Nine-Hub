@@ -2,14 +2,14 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/enums/week_days.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_meal_categories_with_count_restaurants_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/restaurant_shared_data.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_day_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_cities.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
@@ -95,62 +95,31 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
     );
   }
 
-  final CreateRestaurantParams _createRestaurantParams =
+  final CreateRestaurantParams createRestaurantParams =
       CreateRestaurantParams();
-
-  // =============================== Timetables ===============================
-  List<DoctorDayEntity> clinicTimetable = [
-    DoctorDayEntity(day: WeekDays.saturday),
-    DoctorDayEntity(day: WeekDays.sunday),
-    DoctorDayEntity(day: WeekDays.monday),
-    DoctorDayEntity(day: WeekDays.tuesday),
-    DoctorDayEntity(day: WeekDays.wednesday),
-    DoctorDayEntity(day: WeekDays.thursday),
-    DoctorDayEntity(day: WeekDays.friday),
-  ];
-
-  List<DoctorDayEntity> callTimetable = [
-    DoctorDayEntity(day: WeekDays.saturday),
-    DoctorDayEntity(day: WeekDays.sunday),
-    DoctorDayEntity(day: WeekDays.monday),
-    DoctorDayEntity(day: WeekDays.tuesday),
-    DoctorDayEntity(day: WeekDays.wednesday),
-    DoctorDayEntity(day: WeekDays.thursday),
-    DoctorDayEntity(day: WeekDays.friday),
-  ];
-
-  List<DoctorDayEntity> homeVisitTimetable = [
-    DoctorDayEntity(day: WeekDays.saturday),
-    DoctorDayEntity(day: WeekDays.sunday),
-    DoctorDayEntity(day: WeekDays.monday),
-    DoctorDayEntity(day: WeekDays.tuesday),
-    DoctorDayEntity(day: WeekDays.wednesday),
-    DoctorDayEntity(day: WeekDays.thursday),
-    DoctorDayEntity(day: WeekDays.friday),
-  ];
 
   // ================================ dropdowns ===============================
   Future<void> selectGovernorate(GovernorateEntity value) async {
-    _createRestaurantParams.government = value.id;
+    createRestaurantParams.government = value.id;
     await _getCities(value.id);
   }
 
   void selectCity(CityEntity value) {
-    _createRestaurantParams.city = value.id;
+    createRestaurantParams.city = value.id;
   }
 
   void selectSubcategory(FoodCategoryEntity subCategoryModel) {
-    _createRestaurantParams.subcategoryId = subCategoryModel.id ?? "";
+    createRestaurantParams.subcategoryId = subCategoryModel.id ?? "";
   }
 
   // ================================= upload images =================================
   Future<void> _uploadImage(
       {required dynamic Function(UploadFileEntity) onUploaded}) async {
-    if (_createRestaurantParams.subcategoryId != null ||
-        _createRestaurantParams.subcategoryId != "") {
+    if (createRestaurantParams.subcategoryId != null ||
+        createRestaurantParams.subcategoryId != "") {
       emit(CreateResturantLoading("Uploading Image..."));
       await UploadFile().uploadImage(
-        subCategoryId: _createRestaurantParams.subcategoryId ?? "",
+        subCategoryId: createRestaurantParams.subcategoryId ?? "",
         onUploaded: (value) {
           onUploaded(value);
         },
@@ -165,29 +134,15 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
 
   Future<void> uploadProfileImage() async {
     await _uploadImage(onUploaded: (media) {
-      _createRestaurantParams.restaurantMedia?.add(media.mediaId);
+      createRestaurantParams.restaurantMedia?.add(media.mediaId);
       restaurantImages.add(media.file);
       emit(CreateRestaurantUploadProfileImage(restaurantImages));
     });
   }
 
-  Future<void> uploadIdFrontImage() async {
-    await _uploadImage(onUploaded: (media) {
-      _createRestaurantParams.ownerIdFrontMedia = media.mediaId;
-      emit(CreateRestaurantUploadIdFrontImage(media.file));
-    });
-  }
-
-  Future<void> uploadIdBehindImage() async {
-    await _uploadImage(onUploaded: (media) {
-      _createRestaurantParams.ownerIdBackMedia = media.mediaId;
-      emit(CreateResturantUploadIdBehindImage(media.file));
-    });
-  }
-
   Future<void> uploadLicenseFirstPageImage() async {
     await _uploadImage(onUploaded: (media) {
-      _createRestaurantParams.licenseMedia?.add(media.mediaId);
+      createRestaurantParams.licenseMedia?.add(media.mediaId);
       emit(CreateRestaurantUploadLicenseFirstPageImage(media.file));
     });
   }
@@ -195,7 +150,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   Future<void> uploadLicenseSecondPageImage() async {
     await _uploadImage(onUploaded: (media) {
       restaurantImages.add(media.file);
-      _createRestaurantParams.licenseMedia?.add(media.mediaId);
+      createRestaurantParams.licenseMedia?.add(media.mediaId);
       emit(CreateRestaurantUploadLicenseSecondPageImage(media.file));
     });
   }
@@ -203,13 +158,9 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   Future<void> uploadLicenseThiredPageImage() async {
     await _uploadImage(onUploaded: (media) {
       restaurantImages.add(media.file);
-      _createRestaurantParams.licenseMedia?.add(media.mediaId);
+      createRestaurantParams.licenseMedia?.add(media.mediaId);
       emit(CreateRestaurantUploadLicenseThiredPageImage(media.file));
     });
-  }
-
-  void _saveTextEditingControllers() {
-    _createRestaurantParams.name = name.text;
   }
 
   final name = TextEditingController();

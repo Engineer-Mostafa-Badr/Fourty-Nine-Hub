@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
+
 class CreateRestaurantUseCase /* extends UseCase<bool, CreateResturantParams> */ {
   // final CreateDoctorRepo _createDoctorRepo;
   // CreateDoctorUseCase(this._createDoctorRepo);
@@ -26,6 +28,7 @@ class CreateRestaurantParams {
   String? expireOwnerIdMedia = "";
   String? ownerIdBackMedia = "";
   String? ownerIdFrontMedia = "";
+  List<RestaurantMneuModel>? mneu;
   CreateRestaurantParams({
     this.name,
     this.subcategoryId,
@@ -41,6 +44,7 @@ class CreateRestaurantParams {
     this.expireOwnerIdMedia,
     this.ownerIdBackMedia,
     this.ownerIdFrontMedia,
+    this.mneu,
   });
 
   CreateRestaurantParams copyWith({
@@ -58,6 +62,7 @@ class CreateRestaurantParams {
     String? expireOwnerIdMedia,
     String? ownerIdBackMedia,
     String? ownerIdFrontMedia,
+    List<RestaurantMneuModel>? mneu,
   }) {
     return CreateRestaurantParams(
       name: name ?? this.name,
@@ -74,6 +79,7 @@ class CreateRestaurantParams {
       expireOwnerIdMedia: expireOwnerIdMedia ?? this.expireOwnerIdMedia,
       ownerIdBackMedia: ownerIdBackMedia ?? this.ownerIdBackMedia,
       ownerIdFrontMedia: ownerIdFrontMedia ?? this.ownerIdFrontMedia,
+      mneu: mneu ?? this.mneu,
     );
   }
 
@@ -122,6 +128,9 @@ class CreateRestaurantParams {
     if (ownerIdFrontMedia != null) {
       result.addAll({'ownerIdFrontMedia': ownerIdFrontMedia});
     }
+    if (mneu != null) {
+      result.addAll({'mneu': mneu!.map((x) => x.toJson()).toList()});
+    }
 
     return result;
   }
@@ -142,6 +151,10 @@ class CreateRestaurantParams {
       expireOwnerIdMedia: map['expireOwnerIdMedia'],
       ownerIdBackMedia: map['ownerIdBackMedia'],
       ownerIdFrontMedia: map['ownerIdFrontMedia'],
+      mneu: map['mneu'] != null
+          ? List<RestaurantMneuModel>.from(
+              map['mneu']?.map((x) => RestaurantMneuModel.fromJson(x)))
+          : null,
     );
   }
 
@@ -152,7 +165,7 @@ class CreateRestaurantParams {
 
   @override
   String toString() {
-    return 'CreateRestaurantParams(name: $name, subcategoryId: $subcategoryId, restaurantMedia: $restaurantMedia, licenseMedia: $licenseMedia, government: $government, city: $city, deliveryTime: $deliveryTime, deliveryFee: $deliveryFee, countryCode: $countryCode, workTo: $workTo, workFrom: $workFrom, expireOwnerIdMedia: $expireOwnerIdMedia, ownerIdBackMedia: $ownerIdBackMedia, ownerIdFrontMedia: $ownerIdFrontMedia)';
+    return 'CreateRestaurantParams(name: $name, subcategoryId: $subcategoryId, restaurantMedia: $restaurantMedia, licenseMedia: $licenseMedia, government: $government, city: $city, deliveryTime: $deliveryTime, deliveryFee: $deliveryFee, countryCode: $countryCode, workTo: $workTo, workFrom: $workFrom, expireOwnerIdMedia: $expireOwnerIdMedia, ownerIdBackMedia: $ownerIdBackMedia, ownerIdFrontMedia: $ownerIdFrontMedia, mneu: $mneu)';
   }
 
   @override
@@ -173,7 +186,8 @@ class CreateRestaurantParams {
         other.workFrom == workFrom &&
         other.expireOwnerIdMedia == expireOwnerIdMedia &&
         other.ownerIdBackMedia == ownerIdBackMedia &&
-        other.ownerIdFrontMedia == ownerIdFrontMedia;
+        other.ownerIdFrontMedia == ownerIdFrontMedia &&
+        listEquals(other.mneu, mneu);
   }
 
   @override
@@ -191,6 +205,7 @@ class CreateRestaurantParams {
         workFrom.hashCode ^
         expireOwnerIdMedia.hashCode ^
         ownerIdBackMedia.hashCode ^
-        ownerIdFrontMedia.hashCode;
+        ownerIdFrontMedia.hashCode ^
+        mneu.hashCode;
   }
 }
