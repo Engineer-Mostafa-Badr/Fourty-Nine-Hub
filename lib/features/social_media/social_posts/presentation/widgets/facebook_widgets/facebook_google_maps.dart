@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/data/models/location_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class FacebookUserOnMap extends StatefulWidget {
-  const FacebookUserOnMap({super.key});
-
+  const FacebookUserOnMap({super.key, required this.location});
+  final LocationModel location;
   @override
   State<FacebookUserOnMap> createState() => _FacebookUserOnMapState();
 }
@@ -17,11 +18,11 @@ class _FacebookUserOnMapState extends State<FacebookUserOnMap> {
   
   @override
   void initState() {
-    markers.add(const Marker(
+    markers.add( Marker(
       markerId: MarkerId('0'),
       infoWindow: InfoWindow(title: 'user'),
       // icon: markerIcon,
-      position: LatLng(31.28180815947351, 31.67713459187959),
+      position: LatLng(double.parse(widget.location.lat), double.parse(widget.location.log)),
     ));
     super.initState();
   }
@@ -45,8 +46,8 @@ class _FacebookUserOnMapState extends State<FacebookUserOnMap> {
       mapToolbarEnabled: true,
       zoomGesturesEnabled: true,
       initialCameraPosition:
-          const CameraPosition(
-            target: LatLng(31.28180815947351, 31.67713459187959),
+      CameraPosition(
+            target: LatLng(double.parse(widget.location.lat), double.parse(widget.location.log)),
             zoom: 12
           ),
       markers: markers,

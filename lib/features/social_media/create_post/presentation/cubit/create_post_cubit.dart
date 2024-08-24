@@ -91,7 +91,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
             color: state.backColor,
             activity: state.selectedActivity?.id,
             feeling: state.selectedFeeling?.id,
-            place: state.place?.name,
+            place: state.place,
             privacy: state.selectedPrivacy,
             users: state.selectedUsers?.map((e) => e.id).toList()??[],
           ),

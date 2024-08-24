@@ -185,8 +185,8 @@ class _TwitterViewState extends State<TwitterView> {
                                 user: user,
                                 onAddComment: (TwitterPostCommentParams params) =>
                                     controller.onPostComment(params: params),
-                                onAddReply: (TwitterCommentReplyParams params) {
-                                  controller.onCommentReply(params: params);
+                                onAddReply: (TwitterCommentReplyParams params) async{
+                                  return await controller.onCommentReply(params: params);
                                 },
                                 onCommentReact: (TwitterCommentReactParams params) {
                                   controller.onCommentReact(params: params);
@@ -203,7 +203,10 @@ class _TwitterViewState extends State<TwitterView> {
                                 state: state,
                                 onReport: (TwitterReportParams params) {
                                   controller.onReport(params);
-                                },
+                                }, onEditComment: (TwitterPostCommentParams params)async{
+                                  return await controller.editComment(params: params);
+                              },
+                                onDeleteComment: (id)async=>await controller.deleteComment(context: context, commentId: id, postId: controller.postsPagingController.itemList![index].id, from: 'posts'),
                               ),
                             ),
 
@@ -220,7 +223,10 @@ class _TwitterViewState extends State<TwitterView> {
                           // });
                       }, hidePost: (String id) {
                           controller.hidePost(context: context, postId: id);
+                      }, onDeleteComment: (String id) async{
+                          return await controller.deleteComment(context: context, commentId: id, postId: 'postId', from: 'details');
                       },
+                        onEditComment: (params)async=>await controller.editComment(params: params),
                       );
                     },
                     noMoreItemsIndicatorBuilder: (context) => Container(),

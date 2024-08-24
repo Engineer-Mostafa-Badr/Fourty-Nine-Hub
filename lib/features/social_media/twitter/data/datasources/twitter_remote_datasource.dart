@@ -27,6 +27,8 @@ abstract class TwitterRemoteDataSource {
 
   Future<Either<Failure, bool>> reactOnPost({required params});
   Future<Either<Failure, bool>> reactOnComment({required params});
+  Future<Either<Failure, bool>> deleteComment({required String commentId});
+  Future<Either<Failure, bool>> editComment({required TwitterPostCommentParams params});
   Future<Either<Failure, bool>> sharePost({required params});
   Future<Either<Failure, bool>> addReport(
       {required TwitterReportParams params});
@@ -186,6 +188,19 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   Future<Either<Failure, bool>> requestDocument(
       {required TwitterDocumentationParams params}) async {
     final response = await _apiConsumer.post(EndPoints.documentRequest,
+        data: params.toJson());
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteComment({required String commentId}) async{
+    final response = await _apiConsumer.delete(EndPoints.deleteTwitterComment(commentId),);
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> editComment({required TwitterPostCommentParams params}) async{
+    final response = await _apiConsumer.put(EndPoints.editTwitterComment(params.postId),
         data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }

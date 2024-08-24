@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_comment_card.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/comment_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import 'package:go_router/go_router.dart';
@@ -19,14 +19,17 @@ import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 
 class InstagramPostComments extends StatefulWidget {
-  // final List<CommentEntity> comments;
   final String postId;
   final Function(PostCommentParams) onAddComment;
+  final Function(PostCommentParams) onEditComment;
+  final Function(String) onDeleteComment;
+  final Function(ReplyOnCommentParams) onCommentReply;
+
+  final Function(String) onDeleteReply;
   const InstagramPostComments(
       {super.key,
       required this.postId,
-      // required this.comments,
-      required this.onAddComment,
+      required this.onAddComment, required this.onEditComment, required this.onDeleteComment, required this.onDeleteReply, required this.onCommentReply,
        });
 
   @override
@@ -80,7 +83,18 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                         },
                         itemBuilder: (context, item, index) {
 
-                          return _buildCommentCard(comment: controller.commentsPagingController.itemList![index]);
+                          return _buildCommentCard(
+                              comment: controller.commentsPagingController.itemList![index],
+                            onDeleteComment: (String id) async {
+                              var result = await widget.onDeleteComment(id);
+                              if (result == true) {
+                                controller.commentsPagingController.itemList
+                                    ?.removeWhere((e) => e.id == id);
+                                setState(() {});
+                              }
+                            },
+                            onDeleteReply: (String id) => widget.onDeleteReply(id),
+                          );
                         },
                         noMoreItemsIndicatorBuilder: (context) => Container(),
                         firstPageProgressIndicatorBuilder: (context) => Container(
@@ -161,25 +175,20 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
 
   Widget _buildCommentCard({
     required CommentEntity comment,
+    required Function(String) onDeleteComment,
+    required Function(String) onDeleteReply
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         InstagramCommentCard(
           comment: comment,
+          onAddReply: (ReplyOnCommentParams params) =>
+              widget.onCommentReply(params),
+          onEditComment: (PostCommentParams params)=>widget.onEditComment(params),
+          onDeleteComment: (String id) => onDeleteComment(id),
+          onDeleteReply: (String id) => onDeleteReply(id),
         ),
-        if (comment.repliesCount != 0)
-          Container(
-              margin: const EdgeInsets.only(left: 30),
-              child: TextAppButton(
-                  label: 'show ${comment.repliesCount} replies',
-                  onPressed: () {})
-            // : ListView.builder(
-            //     itemCount: 3,
-            //     shrinkWrap: true,
-            //     physics: const NeverScrollableScrollPhysics(),
-            //     itemBuilder: (context, index) => CommentCard()),
-          )
       ],
     );
   }

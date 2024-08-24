@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_reply_card.dart';
@@ -25,8 +26,10 @@ class TwitterCommentReplies extends StatefulWidget {
   final Function(String) onReplyReact;
   final Function(TwitterCommentReplyParams) onAddReply;
   final Function(TwitterReportParams) onReport;
+  final Function(TwitterPostCommentParams) onEditReply;
+  final Function(String) onDeleteReply;
   const TwitterCommentReplies(
-      {super.key, required this.replies, required this.onReplyReact, required this.onAddReply, required this.commentId, required this.postId, required this.onReport,
+      {super.key, required this.replies, required this.onReplyReact, required this.onAddReply, required this.commentId, required this.postId, required this.onReport, required this.onEditReply, required this.onDeleteReply,
       });
 
   @override
@@ -80,7 +83,14 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                       },
                       itemBuilder: (context, item, index) {
 
-                        return _buildCommentCard(reply: controller.repliesPagingController.itemList![index]);
+                        return _buildCommentCard(reply: controller.repliesPagingController.itemList![index], onDeleteReply: (String id) async{
+                          var result = await widget.onDeleteReply(id);
+                          if (result == true) {
+                            controller.repliesPagingController.itemList
+                                ?.removeWhere((e) => e.id == id);
+                            setState(() {});
+                          }
+                        });
                       },
                       noMoreItemsIndicatorBuilder: (context) => Container(),
                       firstPageProgressIndicatorBuilder: (context) => Container(
@@ -118,6 +128,7 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                                 TwitterCommentReplyParams(postId: widget.postId,reply: widget.commentId,content: replyTextController.text),
                               );
                               print("state.newReply?.id${state.newReply?.id}");
+                              print("state.data?.id${data.id}");
                               controller.repliesPagingController.itemList?.insert(
                                   0,
                                   TwitterCommentReplyModel(
@@ -143,7 +154,7 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
 
 
   Widget _buildCommentCard(
-      {required TwitterCommentReplyEntity reply}) {
+      {required TwitterCommentReplyEntity reply,required Function(String) onDeleteReply}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -152,7 +163,7 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
           reply.isReact=!reply.isReact!;
         }, onReport: (TwitterReportParams params) {
           widget.onReport(params);
-        },),
+        }, onEditReply: (TwitterPostCommentParams params)=>widget.onEditReply(params),onDeleteReply:(id)=>onDeleteReply(id),),
        ],
     );
   }

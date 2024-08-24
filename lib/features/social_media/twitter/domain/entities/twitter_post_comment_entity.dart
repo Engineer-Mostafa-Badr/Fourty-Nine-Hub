@@ -4,7 +4,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 class TwitterPostCommentEntity {
   final String id;
   dynamic user;
-  final String content;
+  String? content;
   final String post;
   // final String image;
   final bool adminIgnore;
@@ -13,6 +13,7 @@ class TwitterPostCommentEntity {
   bool showReplies;
   bool addReply;
   bool? isReact;
+  bool? edit;
   final List<String> love;
   List<TwitterCommentReplyEntity>? replies;
   final DateTime createdAt;
@@ -34,5 +35,6 @@ class TwitterPostCommentEntity {
       this.showReplies = false,
       this.addReply = false,
       this.isReact = false,
+      this.edit = false,
       this.replies});
 }

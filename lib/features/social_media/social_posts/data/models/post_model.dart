@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/features/social_media/create_post/data/models/activity_model.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/models/feeling_model.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/data/models/location_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/main_post_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
@@ -53,7 +54,7 @@ class PostModel extends PostEntity {
     return PostModel(
         id: json['_id'],
         content: json['content'] ?? '',
-        location: json['location']!=null?json['location']??'':null,
+        location: json['location']!=null?LocationModel.fromJson(json['location']):null,
         type: json['type'] ?? '',
         images: json['media'] != null
             ? List<String>.from(
