@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/camera_picker_cubit/camera_picker_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -15,7 +16,8 @@ import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:video_thumbnail/video_thumbnail.dart' as thumbnail;
+
+import 'images_and_videos_slider.dart';
 
 class CameraPicker extends StatelessWidget {
   final void Function(List<XFile> media)? onDone;
@@ -155,8 +157,16 @@ class _CamViewState extends State<_CamView> {
                       return _BaseIcon(
                         icon: Icons.check,
                         onTap: () {
-                          widget.onDone?.call(controller.state.mediaList ?? []);
-                          context.pop();
+                          final media =
+                              context.read<CameraPickerCubit>().state.mediaList;
+                          if(media != null && media.isNotEmpty){
+                            showDialog(
+                                context: context,
+                                builder: (_) => ImagesAndVideosSlider(
+                                    media: media));
+                          }else{
+                            showErrorMessage(context, LocaleKeys.pickPhotoOrVideo);
+                          }
                         },
                       );
                     } else {
@@ -181,12 +191,11 @@ class _CamViewState extends State<_CamView> {
                           onTap: () {
                             controller.stopVideoRecording();
                           },
-                          child:
-                              Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  _VideoCircularIndicator(
-                                      duration: controller.maxVideoLength),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              _VideoCircularIndicator(
+                                  duration: controller.maxVideoLength),
                               const Icon(
                                 Icons.square_rounded,
                                 color: AppColors.SECONDARY_COLOR,
@@ -319,15 +328,12 @@ class _ImagesList extends StatelessWidget {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               image: DecorationImage(
-                                  image: FileImage(
-                                    File(state.mediaList![index].path),
-                                  ),
-                                  fit: BoxFit.cover),
+                                  image: FileImage(file), fit: BoxFit.cover),
                             ),
                           );
                         } else {
                           return FutureBuilder<Uint8List?>(
-                            future: _generateThumbnail(file),
+                            future: file.generateThumbnail(),
                             builder:
                                 (context, AsyncSnapshot<Uint8List?> snapshot) {
                               if (snapshot.hasData &&
@@ -414,18 +420,6 @@ class _ImagesList extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  /// generate jpeg thumbnail
-  Future<Uint8List?> _generateThumbnail(File file) async {
-    final thumbnailAsUint8List = await thumbnail.VideoThumbnail.thumbnailData(
-      video: file.path,
-      imageFormat: thumbnail.ImageFormat.JPEG,
-      maxWidth: 320,
-      // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
-      quality: 50,
-    );
-    return thumbnailAsUint8List!;
   }
 }
 
@@ -527,8 +521,7 @@ class __VideoCircularIndicatorState extends State<_VideoCircularIndicator> {
       width: 80,
       child: CircularProgressIndicator(
         value: 1 - (_time / widget.duration.inSeconds),
-        valueColor:
-            const AlwaysStoppedAnimation<Color>(Colors.white),
+        valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
         // color: AppColors.SECONDARY_COLOR,
         backgroundColor: AppColors.SECONDARY_COLOR,
       ),
