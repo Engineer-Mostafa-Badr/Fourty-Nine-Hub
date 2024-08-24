@@ -80,71 +80,19 @@ class _ZegoLiveStreamingLeaveButtonState
       icon: widget.icon,
       clickableNotifier: hangupButtonClickableNotifier,
       onLeaveConfirmation: (context) async {
-        /*/// prevent controller's leave function call after leave button click
-        widget.isLeaveRequestingNotifier?.value = true;
-
-        final endConfirmationEvent = ZegoLiveStreamingLeaveConfirmationEvent(
-          context: context,
-        );
-        defaultAction() async {
-          return widget.defaultLeaveConfirmationAction(endConfirmationEvent);
-        }
-
-        final canLeave = await widget.events.onLeaveConfirmation?.call(
-              endConfirmationEvent,
-              defaultAction,
-            ) ??
-            true;
-        if (canLeave) {
-          await notifyUserLeaveByMessage();
-
-          if (widget.hostManager.isLocalHost) {
-            /// live is ready to end, host will update if receive property notify
-            /// so need to keep current host value, DISABLE local host value UPDATE
-            widget.hostUpdateEnabledNotifier.value = false;
-            ZegoUIKit().updateRoomProperties({
-              RoomPropertyKey.host.text: '',
-              RoomPropertyKey.liveStatus.text: LiveStatus.ended.index.toString()
-            });
-          }
-        } else {
-          /// restore controller's leave status
-          widget.isLeaveRequestingNotifier?.value = false;
-        }*/
         bool canLeave = await showDialog(
             context: context,
             builder: (context) {
               return AlertDialog(
+                alignment: Alignment.topRight,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
-                backgroundColor: Colors.white,
-                title: Row(
-                  children: [
-                    const Icon(Icons.warning_amber_rounded,
-                        color: Colors.redAccent),
-                    SizedBox(width: 10.zW),
-                    const Text(
-                      "Leave Meeting",
-                      style: TextStyle(
-                        color: Colors.redAccent,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+                backgroundColor: Colors.transparent,
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      "Are you sure you want to:",
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25.zSP,
-                      ),
-                    ),
                     SizedBox(height: 10.zH),
                     if (widget.config.role == ZegoLiveStreamingRole.host)
                       ElevatedButton(
@@ -192,32 +140,7 @@ class _ZegoLiveStreamingLeaveButtonState
                         // widget.defaultEndAction;
                       },
                     ),
-                    SizedBox(height: 10.zH),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          // minimumSize: Size(MediaQuery.sizeOf(context).width*0.4,56.zH),
-                          backgroundColor: Colors.grey[200],
-                          foregroundColor: Colors.black87,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.zR),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.zW, vertical: 10.zH),
-                        ),
-                        child: const Text(
-                          "Cancel",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blueAccent),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
-                      ),
-                    ),
-                  ],
+                    ],
                 ),
               );
             });

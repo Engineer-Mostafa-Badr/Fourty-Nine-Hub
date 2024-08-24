@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
@@ -10,7 +12,7 @@ import '../../../../routes/routes.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../bloc/zoom_state.dart';
 
-void showMeetingDialogue(BuildContext context) {
+void showMeetingDialogue(BuildContext context, {bool shareScreen = false}) {
   TextEditingController meetingIdController = TextEditingController();
   //random num will be 6 digits
   String liveId = genRandNo;
@@ -21,10 +23,10 @@ void showMeetingDialogue(BuildContext context) {
         value: serviceLocator<MeetingCubit>(),
         child: AlertDialog(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          title: const Text(
-            'Meeting Options: ',
+          title: Text(
+            shareScreen ? 'Join with Share Screen' : 'Join a Meeting',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 30.zSP, fontWeight: FontWeight.bold),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -44,13 +46,12 @@ void showMeetingDialogue(BuildContext context) {
                   decoration: const InputDecoration(
                     labelText: 'Meeting ID',
                     hintText: 'Meeting ID',
-                    labelStyle: TextStyle(
-                        color: AppColors.QUANTITY_COLOR
+                    labelStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
+                    hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
+                    prefixIcon: Icon(
+                      Icons.meeting_room,
+                      color: AppColors.QUANTITY_COLOR,
                     ),
-                    hintStyle: TextStyle(
-                      color: AppColors.QUANTITY_COLOR
-                    ),
-                    prefixIcon: Icon(Icons.meeting_room,color: AppColors.QUANTITY_COLOR,),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),
@@ -80,18 +81,19 @@ void showMeetingDialogue(BuildContext context) {
                       return;
                     } else {
                       await joinRoom(cubit, liveId);
-                      if (context.mounted) {
+                      if (state.isSuccess && context.mounted) {
                         context.push(
                           Routes.MEETINGROOM,
-                          extra: ZegoArgs(liveId, false),
+                          extra: ZegoArgs(liveId, false,
+                              shareScreen: shareScreen ? true : false),
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content:
-                                Text('Joining meeting with ID: $meetingId'),
-                          ),
+                        showSuccessMessage(
+                          context,
+                          'Joining meeting with ID: $meetingId',
                         );
                         context.pop();
+                      } else {
+                        if (context.mounted) context.pop();
                       }
                     }
                   },
@@ -130,6 +132,7 @@ Future<void> joinRoom(MeetingCubit cubit, String liveId) async {
 class ZegoArgs {
   final String liveId;
   final bool isHost;
+  final bool shareScreen;
 
-  ZegoArgs(this.liveId, this.isHost);
+  ZegoArgs(this.liveId, this.isHost, {this.shareScreen = false});
 }

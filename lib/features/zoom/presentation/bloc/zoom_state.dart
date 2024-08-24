@@ -1,35 +1,45 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
+import 'package:fourtyninehub/features/zoom/domain/entities/room_response.dart';
 
-abstract class MeetingState extends Equatable {
-  const MeetingState();
-
-  @override
-  List<Object> get props => [];
+enum MeetingStates {
+  initial,
+  loading,
+  success,
+  failure,
+  openWhiteBoard,
+  minimizing
 }
 
-class MeetingInitial extends MeetingState {}
+extension MeetingStateX on MeetingState {
+  bool get isInitial => status == MeetingStates.initial;
+  bool get isLoading => status == MeetingStates.loading;
+  bool get isSuccess => status == MeetingStates.success;
+  bool get isFailure => status == MeetingStates.failure;
+  bool get isOpenWhiteBoard => status == MeetingStates.openWhiteBoard;
+  bool get isMinimizing => status == MeetingStates.minimizing;
+}
 
-class MeetingCreateLoadingState extends MeetingState {}
+class MeetingState extends Equatable {
+  final MeetingStates? status;
+  final RoomResponseError? errorMessage;
+  const MeetingState({
+    this.status = MeetingStates.initial,
+    this.errorMessage,
+  });
 
-class MeetingCreateSuccessState extends MeetingState {}
+  MeetingState copyWith({
+    MeetingStates? status,
+    RoomResponseError? errorMessage,
+  }) =>
+      MeetingState(
+        status: status,
+        errorMessage: errorMessage ?? this.errorMessage,
+      );
 
-class MeetingCreateFailureState extends MeetingState {}
-
-class MeetingJoinLoadingState extends MeetingState {}
-
-class MeetingJoinSuccessState extends MeetingState {}
-
-class MeetingJoinFailureState extends MeetingState {}
-
-class MeetingEndLoadingState extends MeetingState {}
-
-class MeetingEndSuccessState extends MeetingState {}
-
-class MeetingEndFailureState extends MeetingState {}
-
-class MeetingSurfaceShownState extends MeetingState {}
-
-class MeetingSurfaceHiddenState extends MeetingState {}
-
-class OpenWhiteBoardState extends MeetingState {}
-// class CloseWhiteBoardState extends MeetingState {}
+  @override
+  List<Object?> get props => [
+        status,
+        errorMessage,
+      ];
+}
