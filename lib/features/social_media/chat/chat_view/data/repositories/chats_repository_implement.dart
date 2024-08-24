@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/datasources/chats_remote_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/repositories/chats_repository.dart';
@@ -21,6 +22,7 @@ class ChatsRepositoryImplementation extends ChatsRepository {
       isLocked: chatsRequestParams.isLocked!,
       password: chatsRequestParams.lockChatPassword,
       unRead: chatsRequestParams.isUnread!,
+      isServices: chatsRequestParams.isServices!,
     );
   }
 
@@ -46,5 +48,17 @@ class ChatsRepositoryImplementation extends ChatsRepository {
     return _chatsRemoteDataSource.unLockChat(
         chatId: lockChatParams.chatId!,
         password: lockChatParams.lockChatPassword!);
+  }
+  
+  @override
+  Future<Either<Failure, ChatItemModel>> getGroups() {
+    // TODO: implement getGroups
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Either<Failure, List<SeenHistoryModel>>> getSeenHistory({required String chatId}) {
+    // TODO: implement getSeenHistory
+    throw UnimplementedError();
   }
 }

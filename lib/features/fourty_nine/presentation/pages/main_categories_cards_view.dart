@@ -17,7 +17,7 @@ class MainCategoriesFlipCardsView extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         child: Column(
           children: [
-            const WalletWidget(),
+            // const WalletWidget(),
             Flexible(
               child: CardSwiper(
                 cardsCount: mainCategories.length,

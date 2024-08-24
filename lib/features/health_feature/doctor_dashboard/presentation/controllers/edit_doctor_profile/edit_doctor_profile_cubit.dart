@@ -29,10 +29,9 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
     await _getDoctorProfile();
   }
 
+
   Future<void> _getDoctorProfile() async {
-    emit(state.copyWith(status: EditDoctorProfileStateStatus.startLoading));
     final response = await _getDoctorProfileUseCase(const NoParams());
-    emit(state.copyWith(status: EditDoctorProfileStateStatus.endLoading));
 
     response.fold(
         (failure) => emit(state.copyWith(

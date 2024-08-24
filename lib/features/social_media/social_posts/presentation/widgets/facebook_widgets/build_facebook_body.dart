@@ -30,16 +30,16 @@ class FacebookBody extends StatelessWidget {
       create: (_) => serviceLocator()..loadData(),
       child: BlocConsumer<SocialPostsCubit, SocialPostsState>(
           listener: (context, state) {
-        if (state.status == StateStatus.error) {
-          showErrorMessage(
-            context,
-            getFailureMessage(
-              state.failure!,
-              context,
-            ),
-          );
-        }
-      }, builder: (context, state) {
+            if (state.status == StateStatus.error) {
+              showErrorMessage(
+                context,
+                getFailureMessage(
+                  state.failure!,
+                  context,
+                ),
+              );
+            }
+          }, builder: (context, state) {
         final controller = context.read<SocialPostsCubit>();
         return RefreshIndicator(
           onRefresh: () async => controller.onRefresh(),
@@ -80,141 +80,99 @@ class FacebookBody extends StatelessWidget {
                                   context: context, postId: postId),
                               post: controller
                                   .feedPagingController.itemList![index],
-                              onReact: (PostReactParams item) => controller
-                                  .onReact(params: item, from: 'posts'),
+                              onReact: (PostReactParams item) =>
+                                  controller.onReact(params: item, from: 'posts'),
                               showPostComments: (String v) {
                                 bottomSheet(
                                     context: context,
                                     isScrollControlled: true,
                                     widget: BlocProvider.value(
-                                      value: serviceLocator<SocialPostsCubit>()
-                                        ..loadComments(
-                                            context,
-                                            controller.feedPagingController
-                                                .itemList![index].id),
+                                      value: serviceLocator<SocialPostsCubit>()..loadComments(context, controller.feedPagingController
+                                          .itemList![index].id),
                                       child: FacebookPostComments(
                                         postId: controller.feedPagingController
                                             .itemList![index].id,
                                         onAddComment:
                                             (PostCommentParams params) {
                                           return controller.onPostComment(
-                                              params: params);
-                                        },
-                                        onCommentReply:
-                                            (ReplyOnCommentParams params) {
-                                          return controller.replyOnComment(
-                                            params: ReplyOnCommentParams(
-                                                postId: params.postId,
-                                                content: params.content,
-                                                commentId: params.commentId),
-                                          );
-                                        },
-                                        onDeleteComment: (String id) async {
-                                          return await controller.deleteComment(
-                                              context: context,
-                                              commentId: id,
-                                              postId: controller
-                                                  .feedPagingController
-                                                  .itemList![index]
-                                                  .id,
-                                              from: 'feed');
-                                          // print(result);
-                                        },
-                                        onDeleteReply: (String id) async {
-                                          return await controller.deleteComment(
-                                              context: context,
-                                              commentId: id,
-                                              postId: controller
-                                                  .feedPagingController
-                                                  .itemList![index]
-                                                  .id,
-                                              from: 'feed');
-                                        },
-                                        from: 'feed',
-                                      ),
+                                              params: params, from: 'feed');
+                                        }, onCommentReply: (ReplyOnCommentParams params) {
+                                        return controller.replyOnComment(
+                                          params:ReplyOnCommentParams(
+                                              postId: params.postId, content: params.content,commentId: params.commentId), from: 'feed',
+                                        );
+                                      }, onDeleteComment: (String id)async {
+                                        return await controller.deleteComment(
+                                            context: context,
+                                            commentId: id, postId: controller.feedPagingController
+                                            .itemList![index].id, from: 'feed');
+                                        // print(result);
+
+                                      }, onDeleteReply: (String id) async{
+                                        return await controller.deleteComment(
+                                            context: context,
+                                            commentId: id, postId: controller.feedPagingController
+                                            .itemList![index].id, from: 'feed');
+                                      }, from: 'feed', onEditComment: (PostCommentParams params) async{
+                                        var result = await controller.editComment(params: params);
+                                        return result;
+                                      },),
                                     ));
                               },
-                              showPostDetails: (PostEntity post) => bottomSheet(
-                                  context: context,
-                                  isScrollControlled: true,
-                                  widget: BlocProvider.value(
-                                    value: serviceLocator<SocialPostsCubit>()
-                                      ..loadPostDetails(
-                                          context,
-                                          controller
-                                                      .feedPagingController
-                                                      .itemList![index]
-                                                      .isShared ==
-                                                  true
-                                              ? controller.feedPagingController
-                                                  .itemList![index].mainPost!.id
-                                              : controller.feedPagingController
-                                                  .itemList![index].id),
-                                    child: PostDetailsPage(
-                                        comments: const [],
-                                        postId: controller.feedPagingController
-                                            .itemList![index].id,
-                                        deletePost: (String postId) =>
-                                            controller.deletePost(
-                                                context: context,
-                                                postId: postId),
-                                        hidePost: (String postId) =>
-                                            controller.hidePost(
-                                                context: context,
-                                                postId: postId),
-                                        onAddComment: (PostCommentParams
-                                                params) =>
-                                            controller.onPostComment(
-                                                params: params),
-                                        onReact: (params) => controller.onReact(
-                                            params: params, from: 'posts'),
-                                        showPostComments: (postId) {},
-                                        showPostDetails: (PostEntity post) {},
-                                        // post: controller.feedPagingController.itemList![index],
+                              showPostDetails: (PostEntity post) =>
+                                  bottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      widget: BlocProvider.value(
+                                        value:serviceLocator<SocialPostsCubit>()..loadPostDetails(context, controller.feedPagingController.itemList![index].isShared==true?controller.feedPagingController.itemList![index].mainPost!.id:controller.feedPagingController.itemList![index].id),
+                                        child: PostDetailsPage(
+                                            comments: const [],
+                                            postId: controller.feedPagingController.itemList![index].id,
+                                            deletePost: (String postId) =>
+                                                controller.deletePost(context: context, postId: postId),
+                                            hidePost: (String postId) =>
+                                                controller.hidePost(context: context, postId: postId),
+                                            onAddComment: (PostCommentParams params) =>
+                                                controller.onPostComment(params: params, from: 'details'),
+                                            onReact: (params) => controller.onReact(params: params, from: 'posts'),
+                                            showPostComments: (postId) {},
+                                            showPostDetails: (PostEntity post) {},
+                                            // post: controller.feedPagingController.itemList![index],
 
-                                        onCommentReply:
-                                            (ReplyOnCommentParams params) {
-                                          return controller.replyOnComment(
-                                            params: ReplyOnCommentParams(
-                                                postId: params.postId,
-                                                content: params.content,
-                                                commentId: params.commentId),
-                                          );
-                                        },
-                                        onDeleteComment: (String id) async {
+                                            onCommentReply: (ReplyOnCommentParams params) {
+                                              return controller.replyOnComment(
+                                                params:ReplyOnCommentParams(
+                                                    postId: params.postId, content: params.content,commentId: params.commentId), from: 'details',
+                                              );
+                                            }, onDeleteComment: (String id)async {
                                           return await controller.deleteComment(
                                               context: context,
-                                              commentId: id,
-                                              postId: controller
-                                                  .feedPagingController
-                                                  .itemList![index]
-                                                  .id,
-                                              from: 'feed');
+                                              commentId: id, postId: controller.feedPagingController
+                                              .itemList![index].id, from: 'feed');
                                           // print(result);
-                                        },
-                                        onDeleteReply: (String id) async {
+
+                                        }, onDeleteReply: (String id) async{
                                           return await controller.deleteComment(
                                               context: context,
-                                              commentId: id,
-                                              postId: controller
-                                                  .feedPagingController
-                                                  .itemList![index]
-                                                  .id,
-                                              from: 'feed');
-                                        }),
-                                  )),
+                                              commentId: id, postId: controller.feedPagingController
+                                              .itemList![index].id, from: 'feed');
+                                        }, onEditComment: (PostCommentParams params) async{
+                                          var result = await controller.editComment(params: params);
+                                          return result;
+                                        },
+                                        ),
+                                      )),
                               isMyPost: controller.feedPagingController
-                                          .itemList?[index].user !=
-                                      null
+                                  .itemList?[index].user !=
+                                  null
                                   ? (user?.id ==
-                                      controller.feedPagingController
-                                          .itemList?[index].user.id)
+                                  controller.feedPagingController
+                                      .itemList?[index].user.id)
                                   : false,
                               onShare: (String id) {
                                 controller.onShare(postId: id);
                               },
-                              from: 'posts',
-                              index: index,
+                              from: 'posts', index: index,
                             ),
                             Container(
                               width: double.infinity,
@@ -226,9 +184,9 @@ class FacebookBody extends StatelessWidget {
                       },
                       noMoreItemsIndicatorBuilder: (context) => Container(),
                       firstPageProgressIndicatorBuilder: (context) =>
-                          const CupertinoActivityIndicator(),
+                      const CupertinoActivityIndicator(),
                       newPageProgressIndicatorBuilder: (context) =>
-                          const CupertinoActivityIndicator(),
+                      const CupertinoActivityIndicator(),
                     ),
                   );
                 },

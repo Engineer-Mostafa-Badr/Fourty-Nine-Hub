@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
 abstract class  LocaleKeys {
@@ -21,8 +22,8 @@ abstract class  LocaleKeys {
   static const ride = 'ride';
   static const lang = 'lang';
   static const search = 'search';
-  static const Ads = 'Ads';
   static const ads = 'ads';
+  static const ad = 'ad';
   static const wallet = 'wallet';
   static const gift = 'gift';
   static const balance = 'balance';
@@ -30,10 +31,10 @@ abstract class  LocaleKeys {
   static const tripJoin = 'tripJoin';
   static const auction = 'auction';
   static const installments = 'installments';
-  static const Craft = 'Craft';
+  static const craft = 'Craft';
   static const homeService = 'homeService';
   static const homeEssentials = 'homeEssentials';
-  static const Scenery = 'Scenery';
+  static const scenery = 'Scenery';
   static const specialities = 'specialities';
   static const medicalService = 'medicalService';
   static const doctor = 'doctor';
@@ -117,5 +118,18 @@ abstract class  LocaleKeys {
   static const giftApp = 'giftApp';
   static const clearAll = 'clearAll';
   static const clearNotification = 'clearNotification';
-
+  static String message = 'message'.tr();
+  static String photo = 'photo'.tr();
+  static String video = 'video'.tr();
+  static String openAppSettings = 'openAppSettings'.tr();
+  static String allowAccessToYourCamera = 'allowAccessToYourCamera'.tr();
+  static String allowAccessToYourMicrophone = 'allowAccessToYourMicrophone'.tr();
+  static String document = 'document'.tr();
+  static String camera = 'camera'.tr();
+  static String microphone = 'microphone'.tr();
+  static String gallery = 'gallery'.tr();
+  static String audio = 'audio'.tr();
+  static String location = 'location'.tr();
+  static String contact = 'contact'.tr();
+  static String pickPhotoOrVideo = 'pickPhotoOrVideo'.tr();
 }

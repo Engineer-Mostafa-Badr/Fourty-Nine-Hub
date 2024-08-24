@@ -26,7 +26,7 @@ class ElevatedAppButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: () => onPressed(),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: backColor ?? Theme.of(context).primaryColor,
       ),
       child: icon != null
           ? RichText(

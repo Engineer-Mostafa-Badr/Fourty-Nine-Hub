@@ -24,7 +24,7 @@ class MealCategories extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Label(
-                text: LocaleKeys.meals.localize,
+                text: LocaleKeys.meal.localize,
                 style: Styles.headerText(),
               ),
               const Sizer(),

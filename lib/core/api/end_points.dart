@@ -1,6 +1,8 @@
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
@@ -151,6 +153,14 @@ class EndPoints {
     return '/facebook/post/user/${params.userId}?limit=${params.limit}&page=${params.page}&type=1&subCategory=66b77e77bb35968b535dc944';
   }
 
+  static String getFriendsFollowers(FriendsFollowersParams params) {
+    return '/friends/friends-followers?search=${params.search}&limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
+  }
+
+  static String getPlaces(FriendsFollowersParams params) {
+    return '/friends/get-place?place=${params.search}&subCategory=66b77e77bb35968b535dc944';
+  }
+
   static String userSuggests(SuggestedFriendsParams params) {
     return '/users/suggest?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
   }
@@ -251,6 +261,10 @@ class EndPoints {
     return '/users/profile/$userId?subCategory=66b77e77bb35968b535dc944';
   }
 
+  static String editComment(PostCommentParams params) {
+    return '/facebook/comment/update-comment/${params.postId}?subCategory=66b77e77bb35968b535dc944';
+  }
+
   static String commentOnTwitterPost(String postId) {
     return '/twitter/comment/create-comment/$postId?subCategory=66b77e77bb35968b535dc944';
   }
@@ -289,6 +303,14 @@ class EndPoints {
 
   static String hideTwitterPost(String postId) {
     return '/twitter/post/hide/$postId?subCategory=66a3583454e6e337915514db';
+  }
+
+  static String deleteTwitterComment(String commentId) {
+    return '/twitter/comment/delete-comment/$commentId?subCategory=66a3583454e6e337915514db';
+  }
+
+  static String editTwitterComment(String commentId) {
+    return '/twitter/comment/update-comment/$commentId?subCategory=66a3583454e6e337915514db';
   }
 
   static String friendRequest(String userId) {
@@ -467,6 +489,12 @@ class EndPoints {
     return '/chat/update-lock-chat';
   }
 
-  // trip join gecoding google api url
-  static String geocodingUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
+  static String getChatGroups = '/chat/group/get-groups/';
+  static String seenHistoryEndpoint(String chatId) {
+    return '/chat/last-seen-logs/$chatId';
+  }
+
+  static String geocodingUrl =
+      'https://maps.googleapis.com/maps/api/geocode/json';
+
 }

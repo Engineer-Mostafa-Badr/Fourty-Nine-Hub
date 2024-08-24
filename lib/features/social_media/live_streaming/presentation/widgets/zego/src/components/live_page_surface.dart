@@ -4,6 +4,8 @@ import 'dart:core';
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_state.dart';
 
 // Package imports:
 import 'package:zego_uikit/zego_uikit.dart';
@@ -23,9 +25,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/config.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.defines.dart';
-
-import '../../../../../../../zoom/presentation/bloc/zoom_cubit.dart';
-import '../../../../../../../zoom/presentation/bloc/zoom_state.dart';
 
 /// @nodoc
 class ZegoLiveStreamingLivePageSurface extends StatefulWidget {
@@ -94,51 +93,21 @@ class _ZegoLiveStreamingLivePageSurfaceState
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MeetingCubit, MeetingState>(
-      builder: (context, state) {
-        var cubit = context.read<MeetingCubit>();
-        return GestureDetector(
-          behavior: HitTestBehavior.translucent, // 添加此行
-
-          onHorizontalDragUpdate: (DragUpdateDetails details) {
-            _animationController.value +=
-                details.primaryDelta! / context.size!.width;
-          },
-          onHorizontalDragEnd: (DragEndDetails details) {
-            if (_animationController.value >= 0.5) {
-              _animationController.forward();
-            } else {
-              _animationController.reverse();
-            }
-          },
-          onTap: () {
-            cubit.toggleSurfaceShown();
-            // print('surface shown ${cubit.surfaceShown}');
-            // print('state is ${cubit.state.toString()}');
-
-            // print(
-            //     'camera state after ${ZegoUIKit().getCameraStateNotifier(ZegoUIKit().getLocalUser().id).value}');
-          },
-          child: SlideTransition(
-            position: _animation,
-            child: body(state),
-          ),
-        );
-      },
+    return SlideTransition(
+      position: _animation,
+      child: body,
     );
   }
 
-  Widget body(MeetingState state) {
+  Widget get body {
     return BlocBuilder<MeetingCubit, MeetingState>(
       builder: (context, state) {
         return LayoutBuilder(builder: (context, constraints) {
           return Stack(
             children: [
               durationTimeBoard(),
-              if (state is MeetingSurfaceShownState) ...[
-                topBar(),
-                bottomBar(),
-              ],
+              if (!state.isOpenWhiteBoard) topBar(),
+              bottomBar(),
               messageList(),
               foreground(
                 constraints.maxWidth,

@@ -26,11 +26,13 @@ class UIConst {
   static const String quraanWeb = 'https://surahquran.com/';
   static const String azkar = 'https://www.islambook.com/azkar/';
 
+  static const String whiteBoard = 'https://app.ziteboard.com/';
   static const String appSign = '45ecafc4787be753f178d5cc03f93eccb8167c6280d3697bf3909dbe53b86c54';
   static const int appId = 2045827723;
 
   //Chat
   static const String chatNormalId = '668e7dc4e8cfec5bcc752afc';
+  static const String chatGreetId = '668e7af1e8cfec5bcc752af8';
 
   static const String googleGeocodingApiKey = 'AIzaSyCSzHt1y3RDKvC2D67mF-WJdyZKE9hBIxA';
 }
