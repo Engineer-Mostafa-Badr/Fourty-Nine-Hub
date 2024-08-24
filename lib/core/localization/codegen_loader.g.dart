@@ -110,7 +110,8 @@ class CodegenLoader extends AssetLoader{
   "gallery": "المعرض",
   "audio": "الصوت",
   "location": "الموقع",
-  "contact": "جهة اتصال"
+  "contact": "جهة اتصال",
+  "pickPhotoOrVideo": "اختر صورة او فيديو"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -209,7 +210,8 @@ static const Map<String,dynamic> en = {
   "gallery": "Gallery",
   "audio": "Audio",
   "location": "Location",
-  "contact": "Contact"
+  "contact": "Contact",
+  "pickPhotoOrVideo": "Pick Photo Or Video"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

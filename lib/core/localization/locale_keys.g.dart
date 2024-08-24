@@ -96,5 +96,6 @@ abstract class  LocaleKeys {
   static String audio = 'audio'.tr();
   static String location = 'location'.tr();
   static String contact = 'contact'.tr();
+  static String pickPhotoOrVideo = 'pickPhotoOrVideo'.tr();
 
 }
