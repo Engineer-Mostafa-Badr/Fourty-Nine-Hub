@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/pick
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/repeated_check_box.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/seats_number.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/trip_join_notes.dart';
+import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/upload_documents.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class TripJoinAdditionalInformation extends StatelessWidget {
@@ -30,6 +31,7 @@ class TripJoinAdditionalInformation extends StatelessWidget {
         const PickDateAndTimeWidget(),
         const DriverPhoneNumber(),
         const TripJoinNotes(),
+        const UploadDocuments()
       ],
     );
   }
