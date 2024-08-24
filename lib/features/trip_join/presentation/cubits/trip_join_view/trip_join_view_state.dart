@@ -11,3 +11,9 @@ final class TripJoinViewShowDateState extends TripJoinViewState {
 
   const TripJoinViewShowDateState(this.showDate);
 }
+
+final class TripJoinViewSeatNumberState extends TripJoinViewState {
+  final int numberOfSeats;
+
+  const TripJoinViewSeatNumberState(this.numberOfSeats);
+}

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/features/trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -39,6 +41,7 @@ class _SeatsNumberWidgetState extends State<SeatsNumberWidget> {
               ),
               onChanged: (int? value) {
                 seatsNumber = value ?? 1;
+                context.read<TripJoinViewCubit>().changeNumberOfSeats(value ?? 1);
                 setState(() {});
               },
               items: [1, 2, 3, 4, 5, 6]
@@ -49,8 +52,7 @@ class _SeatsNumberWidgetState extends State<SeatsNumberWidget> {
                   .toList()),
         ),
         const Sizer(),
-        Text('Number of seats available',
-            style: Styles.headerText(color: AppColors.SECONDARY_COLOR))
+        Text('Number of seats available', style: Styles.headerText(color: AppColors.SECONDARY_COLOR))
       ],
     );
   }

@@ -12,7 +12,7 @@ class AvailableTripsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
+        // centerTitle: true,
         title: Text(
           'Available Trips',
           style: Styles.headerText(fontSize: 24),

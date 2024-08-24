@@ -13,16 +13,10 @@ class AvailableTripsBody extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Align(
-                alignment: Alignment.center,
-                child: SizedBox(
-                  width: 250,
-                  child: Text(
-                    'These trips are for users who own cars and they want to share with other users ',
-                    style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+              Text(
+                'These trips are for users who own cars and they want to share with other users ',
+                style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
+                textAlign: TextAlign.start,
               ),
             ],
           ),

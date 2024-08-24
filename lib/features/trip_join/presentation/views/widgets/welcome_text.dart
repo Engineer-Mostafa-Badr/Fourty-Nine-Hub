@@ -7,14 +7,11 @@ List<Widget> welcomeText() {
   return [
     Text(
       'Welcome To Trip Join',
-      style: Styles.headerText(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: AppColors.SECONDARY_COLOR),
+      style: Styles.headerText(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.SECONDARY_COLOR),
     ),
     const Sizer(),
     Text(
-      'You have a car and are looking for someone to join you on your journey.',
+      'You own a car! you are looking for someone to share the trip with you and pay half the price',
       style: Styles.headerText(fontSize: 18, fontWeight: FontWeight.w400),
     ),
   ];
