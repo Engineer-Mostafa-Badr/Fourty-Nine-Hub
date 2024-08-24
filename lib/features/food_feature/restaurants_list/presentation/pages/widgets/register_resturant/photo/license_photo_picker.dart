@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -19,7 +19,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Label(
-          text: LocaleKeys.theCommercialRegister.localize,
+          text: LocaleKeys.theCommercialRegister.tr(),
           style: Styles.headerText(),
         ),
         const Sizer(),
@@ -40,7 +40,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                     );
                   }
                   return ImagePickerPlaceholder(
-                    title: LocaleKeys.firstPage.localize,
+                    title: LocaleKeys.firstPage.tr(),
                   );
                 },
               ),
@@ -64,7 +64,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                     );
                   }
                   return ImagePickerPlaceholder(
-                    title: LocaleKeys.secondPage.localize,
+                    title: LocaleKeys.secondPage.tr(),
                   );
                 },
               ),
@@ -85,7 +85,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                     );
                   }
                   return ImagePickerPlaceholder(
-                    title: LocaleKeys.thirdPage.localize,
+                    title: LocaleKeys.thirdPage.tr(),
                   );
                 },
               ),

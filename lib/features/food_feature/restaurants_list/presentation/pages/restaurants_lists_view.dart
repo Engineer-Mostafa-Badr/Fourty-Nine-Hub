@@ -2,19 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/restaurant_shared_data.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/banner.dart';
+ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+ import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+ import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/banner.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/meal_categories.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/resturant_dashboard_banner.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
+ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -45,7 +41,7 @@ class RestaurantsListsView extends StatelessWidget {
                 return context.watch<RestaurantsListCubit>().user == null
                     ? Center(
                         child: Label(
-                        text: LocaleKeys.needToLogin.localize,
+                        text: LocaleKeys.needToLogin.tr(),
                       ))
                     : Stack(
                         children: [
@@ -116,7 +112,7 @@ class RestaurantsListsView extends StatelessWidget {
                                   state.isSuccess) ...[
                                 Label(
                                   text: LocaleKeys
-                                      .restaurantsForSelectedMeal.localize,
+                                      .restaurantsForSelectedMeal.tr(),
                                   style: Styles.headerText(),
                                 ),
                                 const Sizer(),
@@ -127,7 +123,7 @@ class RestaurantsListsView extends StatelessWidget {
                               if ((state.allRestaurant?.isNotEmpty ??
                                   false)) ...[
                                 Label(
-                                    text: LocaleKeys.allRestaurants.localize,
+                                    text: LocaleKeys.allRestaurants.tr(),
                                     style: Styles.headerText()),
                                 const Sizer(),
                                 _buildAllRestaurants(),
@@ -141,7 +137,7 @@ class RestaurantsListsView extends StatelessWidget {
                               bottom: 10,
                               right: 10,
                               child: FloatingActionButton(
-                                tooltip: LocaleKeys.restaurants.localize,
+                                tooltip: LocaleKeys.restaurants.tr(),
                                 backgroundColor: AppColors.PRIMARY_COLOR,
                                 onPressed: () {},
                                 child: Text(

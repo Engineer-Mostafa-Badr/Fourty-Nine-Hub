@@ -12,6 +12,7 @@ class ImagePickerPlaceholder extends StatelessWidget {
   final XFile? image;
   final Color? iconColor;
   final Color? borderColor;
+
   final BoxFit? fit;
   const ImagePickerPlaceholder(
       {super.key,
@@ -52,9 +53,14 @@ class ImagePickerPlaceholder extends StatelessWidget {
         ],
       );
     }
-    return Image.file(
-      File(image!.path),
-      fit: fit,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(UIConst.radius - 2),
+      child: Image.file(
+        File(image!.path),
+        width: height ?? 100,
+        height: width ?? 100,
+        fit: fit,
+      ),
     );
   }
 

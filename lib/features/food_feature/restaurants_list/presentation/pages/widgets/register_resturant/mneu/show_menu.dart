@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_menu_cubit.dart';
@@ -16,8 +16,8 @@ import 'package:image_picker/image_picker.dart';
 class ShowMneu extends StatelessWidget {
   ShowMneu({super.key});
 
-  final TextEditingController foodNameController = TextEditingController();
-  final TextEditingController priceController = TextEditingController();
+  TextEditingController foodNameController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
   String imagePath = "";
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class ShowMneu extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Label(
-              text: LocaleKeys.mneu.localize,
+              text: LocaleKeys.mneu.tr(),
               style: Styles.headerText(),
             ),
             if (state is RestaurantMenuLoaded) ...[
@@ -40,8 +40,8 @@ class ShowMneu extends StatelessWidget {
                   /// show data
                   ...state.menu.map(
                     (RestaurantMneuModel e) => Container(
-                      height: MediaQuery.of(context).size.width * .6,
-                      width: MediaQuery.of(context).size.width * .4,
+                      height: MediaQuery.of(context).size.width * .2,
+                      width: MediaQuery.of(context).size.width * .42,
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
@@ -70,6 +70,7 @@ class ShowMneu extends StatelessWidget {
                 ],
               ),
             ],
+            const Sizer(),
             Container(
               height: MediaQuery.of(context).size.width * .8,
               width: MediaQuery.of(context).size.width,
@@ -95,7 +96,7 @@ class ShowMneu extends StatelessWidget {
                           );
                         }
                         return ImagePickerPlaceholder(
-                          title: LocaleKeys.photoForMeal.localize,
+                          title: LocaleKeys.photoForMeal.tr(),
                         );
                       },
                     ),

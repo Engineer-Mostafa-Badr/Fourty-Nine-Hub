@@ -5,7 +5,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -86,7 +86,7 @@ class MealCategoryCard extends StatelessWidget {
                 ),
                 Label(
                   text:
-                      '${subCategory?.numberOfRestaurant ?? "0"} ${LocaleKeys.restaurants.localize}',
+                      '${subCategory?.numberOfRestaurant ?? "0"} ${LocaleKeys.restaurants.tr()}',
                   style: Styles.mediumText(),
                 ),
               ],
