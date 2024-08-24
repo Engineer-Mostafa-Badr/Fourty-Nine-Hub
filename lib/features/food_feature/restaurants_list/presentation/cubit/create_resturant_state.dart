@@ -28,6 +28,16 @@ final class CreateRestaurantCitiesLoaded extends CreateRestaurantState {
   CreateRestaurantCitiesLoaded(this.cities);
 }
 
+final class CreateAddMneuToRestaurant extends CreateRestaurantState {
+  final List<RestaurantMneu> mneu;
+  CreateAddMneuToRestaurant(this.mneu);
+}
+
+final class CreateUploadMneuImageLoading extends CreateRestaurantState {
+  final XFile file;
+  CreateUploadMneuImageLoading(this.file);
+}
+
 final class CreateRestaurantCitiesLoading extends CreateRestaurantState {}
 
 final class CreateRestaurantGovernoratesLoaded extends CreateRestaurantState {
@@ -43,16 +53,6 @@ final class CreateResturantSubCategoriesLoaded extends CreateRestaurantState {
 final class CreateRestaurantUploadProfileImage extends CreateRestaurantState {
   final List<XFile> files;
   CreateRestaurantUploadProfileImage(this.files);
-}
-
-final class CreateRestaurantUploadIdFrontImage extends CreateRestaurantState {
-  final XFile file;
-  CreateRestaurantUploadIdFrontImage(this.file);
-}
-
-final class CreateResturantUploadIdBehindImage extends CreateRestaurantState {
-  final XFile file;
-  CreateResturantUploadIdBehindImage(this.file);
 }
 
 final class CreateRestaurantUploadLicenseFirstPageImage
@@ -71,19 +71,4 @@ final class CreateRestaurantUploadLicenseThiredPageImage
     extends CreateRestaurantState {
   final XFile file;
   CreateRestaurantUploadLicenseThiredPageImage(this.file);
-}
-
-final class CreateResturantShowClinic extends CreateRestaurantState {
-  final bool check;
-  CreateResturantShowClinic(this.check);
-}
-
-final class CreateResturantShowCall extends CreateRestaurantState {
-  final bool check;
-  CreateResturantShowCall(this.check);
-}
-
-final class CreateResturantShowHomeVisit extends CreateRestaurantState {
-  final bool check;
-  CreateResturantShowHomeVisit(this.check);
 }

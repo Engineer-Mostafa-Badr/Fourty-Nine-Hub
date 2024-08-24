@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
 
@@ -29,7 +31,7 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
                 visualDensity: VisualDensity.comfortable,
               ),
               width: MediaQuery.of(context).size.width * 0.9,
-              hintText: "Selecte Subcategory",
+              hintText: LocaleKeys.selecteSubcategory.localize,
               dropdownMenuEntries: state.subCategories
                   .map((e) => DropdownMenuEntry<FoodCategoryEntity>(
                       value: e,

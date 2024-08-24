@@ -24,7 +24,7 @@ Restaurant2Model _$Restaurant2ModelFromJson(Map<String, dynamic> json) =>
       deliveryTime: json['deliveryTime'] as String?,
       deliveryFee: (json['deliveryFee'] as num?)?.toInt(),
       menu: (json['MENU'] as List<dynamic>?)
-          ?.map((e) => RestaurantMneuModel.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => RestaurantMneuModel.fromMap(e as Map<String, dynamic>))
           .toList(),
       numberOfReviews: (json['numberOfReviews'] as num?)?.toInt(),
       restaurantMedia: (json['restaurantMedia'] as List<dynamic>?)

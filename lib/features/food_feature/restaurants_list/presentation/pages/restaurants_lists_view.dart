@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/restaurant_shared_data.dart';
@@ -9,7 +11,6 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/presentatio
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/meal_categories.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/resturant_dashboard_banner.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -29,111 +30,132 @@ class RestaurantsListsView extends StatelessWidget {
     return Scaffold(
       body: SharedScaffold(
         mainCategoryId: 1,
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
-            builder: (context, state) {
-              if (state.isLoading) {
-                return const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                );
-              }
-              return Stack(
-                children: [
-                  ListView(
-                    children: [
-                      const MealBanner(),
-                      const Sizer(),
-                      const ResturantDashboardButton(),
-                      const Sizer(),
-                      GestureDetector(
-                        onTap: () {
-                          if (context.read<UserCubit>().isLoggedIn) {
-                            context.push(Routes.SEARCHMEALS);
-                          } else {
-                            context.push(Routes.REGISTER);
-                          }
-                        },
-                        child: Container(
-                            alignment: Alignment.centerLeft,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            height: 36,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(width: .5, color: Colors.grey),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(LocaleKeys.search.tr()),
-                                const Icon(Icons.search, color: Colors.grey),
+        body: RefreshIndicator(
+          onRefresh: () async =>
+              context.read<RestaurantsListCubit>().loadData(),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
+              builder: (context, state) {
+                if (state.isLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  );
+                }
+                return context.watch<RestaurantsListCubit>().user == null
+                    ? Center(
+                        child: Label(
+                        text: LocaleKeys.needToLogin.localize,
+                      ))
+                    : Stack(
+                        children: [
+                          ListView(
+                            children: [
+                              const MealBanner(),
+                              const Sizer(),
+                              const ResturantDashboardButton(),
+                              const Sizer(),
+                              GestureDetector(
+                                onTap: () {
+                                  if (context.read<UserCubit>().isLoggedIn) {
+                                    context.push(Routes.SEARCHMEALS);
+                                  } else {
+                                    context.push(Routes.REGISTER);
+                                  }
+                                },
+                                child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    height: 36,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                          width: .5, color: Colors.grey),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(LocaleKeys.search.tr()),
+                                        const Icon(Icons.search,
+                                            color: Colors.grey),
+                                      ],
+                                    )),
+                              ),
+                              const Sizer(),
+                              if (state.mealCategories?.isNotEmpty ?? false)
+                                const MealCategories(),
+                              if (state.loadingSubCategories) ...[
+                                Shimmer.fromColors(
+                                    baseColor: Colors.grey[100]!,
+                                    highlightColor: Colors.white,
+                                    child: Row(
+                                      children: List.generate(
+                                        2,
+                                        (index) => Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.2,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.2,
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                        ),
+                                      ),
+                                    ))
                               ],
-                            )),
-                      ),
-                      const Sizer(),
-                      if (state.mealCategories?.isNotEmpty ?? false)
-                        const MealCategories(),
-                      if (state.loadingSubCategories) ...[
-                        Shimmer.fromColors(
-                            baseColor: Colors.grey[100]!,
-                            highlightColor: Colors.white,
-                            child: Row(
-                              children: List.generate(
-                                2,
-                                (index) => Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  decoration: BoxDecoration(
+                              if ((state.subCategories?.isNotEmpty ?? false) &&
+                                  state.isSuccess) ...[
+                                Label(
+                                  text: LocaleKeys
+                                      .restaurantsForSelectedMeal.localize,
+                                  style: Styles.headerText(),
+                                ),
+                                const Sizer(),
+                                _buildSubCatigoriesRestaurants(),
+                              ],
+                              const Sizer(),
+                              const Sizer(),
+                              if ((state.allRestaurant?.isNotEmpty ??
+                                  false)) ...[
+                                Label(
+                                    text: LocaleKeys.allRestaurants.localize,
+                                    style: Styles.headerText()),
+                                const Sizer(),
+                                _buildAllRestaurants(),
+                              ],
+                            ],
+                          ),
+
+                          /// numOfRestaurants
+                          if (state.numOfRestaurants != null)
+                            Positioned(
+                              bottom: 10,
+                              right: 10,
+                              child: FloatingActionButton(
+                                tooltip: LocaleKeys.restaurants.localize,
+                                backgroundColor: AppColors.PRIMARY_COLOR,
+                                onPressed: () {},
+                                child: Text(
+                                  "${state.numOfRestaurants}",
+                                  style: Styles.mediumText(
                                       color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10)),
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
-                            ))
-                      ],
-                      if ((state.subCategories?.isNotEmpty ?? false) &&
-                          state.isSuccess) ...[
-                        Label(
-                          text: Labels.restaurantsForSelectedMeal,
-                          style: Styles.headerText(),
-                        ),
-                        const Sizer(),
-                        _buildSubCatigoriesRestaurants(),
-                      ],
-                      const Sizer(),
-                      const Sizer(),
-                      if ((state.allRestaurant?.isNotEmpty ?? false)) ...[
-                        Label(
-                            text: 'All Restaurants',
-                            style: Styles.headerText()),
-                        const Sizer(),
-                        _buildAllRestaurants(),
-                      ],
-                    ],
-                  ),
-
-                  /// numOfRestaurants
-                  if (state.numOfRestaurants != null)
-                    Positioned(
-                      bottom: 10,
-                      right: 10,
-                      child: FloatingActionButton(
-                        tooltip: Labels.resturants,
-                        backgroundColor: AppColors.PRIMARY_COLOR,
-                        onPressed: () {},
-                        child: Text(
-                          "${state.numOfRestaurants}",
-                          style: Styles.mediumText(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    )
-                ],
-              );
-            },
+                            )
+                        ],
+                      );
+              },
+            ),
           ),
         ),
       ),
