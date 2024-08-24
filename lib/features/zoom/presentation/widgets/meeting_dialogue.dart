@@ -15,7 +15,7 @@ import '../bloc/zoom_state.dart';
 void showMeetingDialogue(BuildContext context, {bool shareScreen = false}) {
   TextEditingController meetingIdController = TextEditingController();
   //random num will be 6 digits
-  String liveId = genRandNo;
+
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -64,43 +64,43 @@ void showMeetingDialogue(BuildContext context, {bool shareScreen = false}) {
           ),
           actionsAlignment: MainAxisAlignment.spaceBetween,
           actions: <Widget>[
-            BlocBuilder<MeetingCubit, MeetingState>(
-              builder: (context, state) {
-                final cubit = context.read<MeetingCubit>();
-                return TextButton(
-                  onPressed: () async {
-                    String meetingId = meetingIdController.text.trim();
-                    // Implement the logic to join the meeting using the provided meeting ID.
-                    // For now, just display the meeting ID.
-                    if (meetingId.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Meeting ID cannot be empty'),
-                        ),
-                      );
-                      return;
-                    } else {
-                      await joinRoom(cubit, liveId);
-                      if (state.isSuccess && context.mounted) {
-                        context.push(
-                          Routes.MEETINGROOM,
-                          extra: ZegoArgs(liveId, false,
-                              shareScreen: shareScreen ? true : false),
-                        );
-                        showSuccessMessage(
-                          context,
-                          'Joining meeting with ID: $meetingId',
-                        );
-                        context.pop();
-                      } else {
-                        if (context.mounted) context.pop();
-                      }
-                    }
-                  },
-                  child: const Text('Join Meeting'),
-                );
-              },
-            ),
+            BlocConsumer<MeetingCubit, MeetingState>(
+                listener: (context, state) {
+                  
+                  String meetingId = meetingIdController.text.trim();
+                  if (state.isLoading) {
+                    showLoadingDialog(context);
+                  } else if (state.isSuccess) {
+                    context.pop(); // Close loading dialog
+                    context.push(
+                      Routes.MEETINGROOM,
+                      extra: ZegoArgs(meetingId, false,
+                          shareScreen: shareScreen ? true : false),
+                    );
+                    showSuccessMessage(
+                      context,
+                      'Joining meeting with ID: $meetingId',
+                    );
+                  } else if (state.isFailure) {
+                    context.pop(); // Close loading dialog
+                    context.pop();
+                  }
+                },
+                builder: (context, state) => TextButton(
+                      onPressed: () async {
+                        String meetingId = meetingIdController.text.trim();
+
+                        if (meetingId.isEmpty) {
+                          showErrorMessage(
+                              context, 'Meeting ID cannot be empty');
+                          return;
+                        } else {
+                          var cubit = context.read<MeetingCubit>();
+                          await joinRoom(cubit, meetingId);
+                        }
+                      },
+                      child: const Text('Join Meeting'),
+                    )),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
@@ -115,13 +115,6 @@ void showMeetingDialogue(BuildContext context, {bool shareScreen = false}) {
       );
     },
   );
-}
-
-String get genRandNo {
-  int min = 100000;
-  int max = 999999;
-  final String liveId = '${min + Random().nextInt(max - min)}';
-  return liveId;
 }
 
 Future<void> joinRoom(MeetingCubit cubit, String liveId) async {
