@@ -115,7 +115,6 @@ import '../features/authentication/presentation/pages/forgot_password/enter_emai
 import '../features/authentication/presentation/pages/forgot_password/forget_password_otp_verification_view.dart';
 import '../features/authentication/presentation/pages/login_view.dart';
 import '../features/authentication/presentation/pages/register/register_verify_otp.dart';
-import '../features/authentication/presentation/pages/register/register_view.dart';
 import '../features/azkaar/presentation/pages/azkar_view.dart';
 import '../features/competition/presentation/pages/competition_view.dart';
 import '../features/competition/presentation/pages/winners.dart';
@@ -211,21 +210,21 @@ class AppPages {
             path: Paths.SUBCATEGORIES,
             name: Routes.SUBCATEGORIES,
             builder: (context, state) => BlocProvider.value(
-                  value: serviceLocator<SubcategoriesCubit>(),
-                  child: SubCategoriesView(
-                    mainCategory: state.extra as MainCategoryEntity,
-                  ),
-                ),
+              value: serviceLocator<SubcategoriesCubit>(),
+              child: SubCategoriesView(
+                mainCategory: state.extra as MainCategoryEntity,
+              ),
+            ),
             routes: [
               GoRoute(
                   path: Paths.ADS,
                   name: Routes.ADS,
                   builder: (context, state) => BlocProvider.value(
-                        value: serviceLocator<AdsCubit>(),
-                        child: AdsView(
-                          params: state.extra as AdsViewParams,
-                        ),
-                      ),
+                    value: serviceLocator<AdsCubit>(),
+                    child: AdsView(
+                      params: state.extra as AdsViewParams,
+                    ),
+                  ),
                   routes: [
                     GoRoute(
                         path: Paths.ADdetails,
@@ -288,22 +287,22 @@ class AppPages {
           name: Routes.FORGOTPASSWORDOTP,
           builder: (context, state) =>
               BlocProvider<VerifyForgotPasswordOtpCubit>(
-            create: (_) => serviceLocator(),
-            child: ForgetPasswordOtpVerificationView(
-              email: state.extra as String,
-            ),
-          ),
+                create: (_) => serviceLocator(),
+                child: ForgetPasswordOtpVerificationView(
+                  email: state.extra as String,
+                ),
+              ),
         ),
         GoRoute(
           path: Paths.CREATENEWFORGOTPASSWORD,
           name: Routes.CREATENEWFORGOTPASSWORD,
           builder: (context, state) =>
               BlocProvider<CreateNewForgotPasswordCubit>(
-            create: (_) => serviceLocator(),
-            child: CreateNewForgetPasswordView(
-              email: state.extra as String,
-            ),
-          ),
+                create: (_) => serviceLocator(),
+                child: CreateNewForgetPasswordView(
+                  email: state.extra as String,
+                ),
+              ),
         ),
         GoRoute(
           name: Routes.REGISTER,
@@ -404,11 +403,11 @@ class AppPages {
             path: Paths.WALLET,
             name: Routes.WALLET,
             builder: (context, state) => BlocProvider<WalletCubit>(
-                  create: (_) => serviceLocator(),
-                  child: WalletView(
-                    type: state.extra as WalletTypes,
-                  ),
-                ),
+              create: (_) => serviceLocator(),
+              child: WalletView(
+                type: state.extra as WalletTypes,
+              ),
+            ),
             routes: [
               GoRoute(
                   path: Paths.WALLETHISTORY,
@@ -450,17 +449,17 @@ class AppPages {
                   path: Paths.Lists,
                   name: Routes.Lists,
                   builder: (context, state) => BlocProvider<ListsCubit>(
-                        create: (_) => serviceLocator(),
-                        child: const ListsView(),
-                      )),
+                    create: (_) => serviceLocator(),
+                    child: const ListsView(),
+                  )),
               GoRoute(
                   path: Paths.SHAREAPP,
                   name: Routes.SHAREAPP,
                   //
                   builder: (context, state) => BlocProvider<ShareAppCubit>(
-                        create: (_) => serviceLocator(),
-                        child: const ShareTheApp(),
-                      )),
+                    create: (_) => serviceLocator(),
+                    child: const ShareTheApp(),
+                  )),
               GoRoute(
                   path: Paths.FAVOURITE,
                   name: Routes.FAVOURITE,
@@ -480,19 +479,19 @@ class AppPages {
                 name: Routes.FAVOURITESUBCATEGORIES,
                 builder: (context, state) =>
                     BlocProvider<FavouriteSubCategoryCubit>(
-                  create: (_) => serviceLocator(),
-                  child: const FavSubCategoryView(
-                    favoriteSubCategory: [],
-                  ),
-                ),
+                      create: (_) => serviceLocator(),
+                      child: const FavSubCategoryView(
+                        favoriteSubCategory: [],
+                      ),
+                    ),
               ),
               GoRoute(
                   path: Paths.MYADDS,
                   name: Routes.MYADDS,
                   builder: (context, state) => BlocProvider<MyAddsCubit>(
-                        create: (_) => serviceLocator(),
-                        child: const MyAddsView(),
-                      )),
+                    create: (_) => serviceLocator(),
+                    child: const MyAddsView(),
+                  )),
             ]),
 
         GoRoute(
@@ -561,7 +560,7 @@ class AppPages {
                   final id = state.extra as String?;
                   return BlocProvider<SocialPostsCubit>(
                       create: (_) =>
-                          serviceLocator()..getUserProfile(id: id ?? ''),
+                      serviceLocator()..getUserProfile(id: id ?? ''),
                       child: OtherAccountView(
                         userId: id ?? '',
                       ));
@@ -571,13 +570,13 @@ class AppPages {
                   path: Paths.REELS,
                   name: Routes.REELS,
                   builder: (context, state) => MultiBlocProvider(
-                        providers: [
-                          BlocProvider<ReelsCubit>(
-                            create: (_) => serviceLocator(),
-                          ),
-                        ],
-                        child: const ReelView(),
+                    providers: [
+                      BlocProvider<ReelsCubit>(
+                        create: (_) => serviceLocator(),
                       ),
+                    ],
+                    child: const ReelView(),
+                  ),
                   routes: [
                     GoRoute(
                       path: Paths.MUSICREELS,
@@ -589,9 +588,9 @@ class AppPages {
                   path: Paths.TINDER,
                   name: Routes.Tinder,
                   builder: (context, state) => BlocProvider<TinderViewCubit>(
-                        create: (context) => serviceLocator(),
-                        child: const TinderView(),
-                      )),
+                    create: (context) => serviceLocator(),
+                    child: const TinderView(),
+                  )),
 
               GoRoute(
                 path: Paths.LIVE,
@@ -615,9 +614,9 @@ class AppPages {
                   path: Paths.CLUBHOUSE,
                   name: Routes.CLUBHOUSE,
                   builder: (context, state) => BlocProvider<ClubVoiceCubit>(
-                        create: (context) => serviceLocator()..getAllRooms(),
-                        child: const ClubHouseHome(),
-                      ),
+                    create: (context) => serviceLocator()..getAllRooms(),
+                    child: const ClubHouseHome(),
+                  ),
                   routes: [
                     GoRoute(
                       path: Paths.CLUBHOUSEROOM,
@@ -655,11 +654,11 @@ class AppPages {
                   path: Paths.CREATEAUCTION,
                   name: Routes.CREATEAUCTION,
                   builder: (context, state) => BlocProvider.value(
-                        value: serviceLocator<CreateAuctionCubit>(),
-                        child: CreateAuctionView(
-                          adId: state.extra as String,
-                        ),
-                      )),
+                    value: serviceLocator<CreateAuctionCubit>(),
+                    child: CreateAuctionView(
+                      adId: state.extra as String,
+                    ),
+                  )),
               // OtherAccountView
             ]),
 
@@ -726,27 +725,27 @@ class AppPages {
                 name: Routes.FILTERDOCTORSUBCATEGORY,
                 builder: (context, state) =>
                     BlocProvider<DoctorSubcategoryFilterCubit>(
-                  create: (context) => serviceLocator(),
-                  child: const DoctorSubcategoryFilterView(),
-                ),
+                      create: (context) => serviceLocator(),
+                      child: const DoctorSubcategoryFilterView(),
+                    ),
               ),
               GoRoute(
                 path: Paths.FILTERDOCTORGOVERNORATE,
                 name: Routes.FILTERDOCTORGOVERNORATE,
                 builder: (context, state) =>
                     BlocProvider<DoctorGovernorateFilterCubit>(
-                  create: (context) => serviceLocator(),
-                  child: const DoctorGovernorateFilterView(),
-                ),
+                      create: (context) => serviceLocator(),
+                      child: const DoctorGovernorateFilterView(),
+                    ),
               ),
               GoRoute(
                 path: Paths.FILTERDOCTORCITY,
                 name: Routes.FILTERDOCTORCITY,
                 builder: (context, state) =>
                     BlocProvider<DoctorCityFilterCubit>(
-                  create: (context) => serviceLocator(),
-                  child: const DoctorCityFilterView(),
-                ),
+                      create: (context) => serviceLocator(),
+                      child: const DoctorCityFilterView(),
+                    ),
               ),
               GoRoute(
                 path: Paths.VISITADOCTORLIST,
@@ -775,7 +774,7 @@ class AppPages {
                           create: (_) => serviceLocator(),
                           child: VisitaBooking(
                             doctorDetailsCubit:
-                                (state.extra) as DoctorDetailsCubit,
+                            (state.extra) as DoctorDetailsCubit,
                           ))),
               GoRoute(
                   path: Paths.DOCTORDASHBOARD,
@@ -796,7 +795,7 @@ class AppPages {
                   path: Paths.EDITDOCTORPERSONALINFO,
                   name: Routes.EDITDOCTORPERSONALINFO,
                   builder: (context, state) =>
-                      const EditDoctorPersonalInfoView()),
+                  const EditDoctorPersonalInfoView()),
               GoRoute(
                   path: Paths.DOCTORSTATISTICS,
                   name: Routes.DOCTORSTATISTICS,
@@ -834,9 +833,9 @@ class AppPages {
             path: Paths.FOOD,
             name: Routes.FOOD,
             builder: (context, state) => BlocProvider<RestaurantsListCubit>(
-                  create: (_) => serviceLocator(),
-                  child: const RestaurantsListsView(),
-                ),
+              create: (_) => serviceLocator(),
+              child: const RestaurantsListsView(),
+            ),
             routes: [
               // CusineRestaurantsView
               GoRoute(
@@ -844,36 +843,36 @@ class AppPages {
                 name: Routes.RestaurantDashboard,
                 builder: (context, state) =>
                     BlocProvider<RestaurantDashboardCubit>(
-                  create: (_) => serviceLocator(),
-                  child: const RestaurantDashboardView(),
-                ),
+                      create: (_) => serviceLocator(),
+                      child: const RestaurantDashboardView(),
+                    ),
               ),
               GoRoute(
                 path: Paths.CusineRestaurants,
                 name: Routes.CusineRestaurants,
                 builder: (context, state) =>
                     BlocProvider<CusineRestaurantsCubit>(
-                  create: (_) => serviceLocator(),
-                  child: const CusineRestaurantsView(),
-                ),
+                      create: (_) => serviceLocator(),
+                      child: const CusineRestaurantsView(),
+                    ),
               ),
               GoRoute(
                   path: Paths.RESTAURANTDETAILS,
                   name: Routes.RESTAURANTDETAILS,
                   builder: (context, state) => BlocProvider.value(
-                        value: serviceLocator<RestaurantDetailsCubit>(),
-                        child: RestaurantDetailsView(
-                          id: state.extra as String,
-                        ),
-                      ),
+                    value: serviceLocator<RestaurantDetailsCubit>(),
+                    child: RestaurantDetailsView(
+                      id: state.extra as String,
+                    ),
+                  ),
                   routes: [
                     GoRoute(
                         path: Paths.FOODCART,
                         name: Routes.FOODCART,
                         builder: (context, state) => BlocProvider.value(
-                              value: serviceLocator<FoodCartCubit>(),
-                              child: const FoodCartView(),
-                            ))
+                          value: serviceLocator<FoodCartCubit>(),
+                          child: const FoodCartView(),
+                        ))
                   ])
             ]),
         GoRoute(
@@ -889,7 +888,7 @@ class AppPages {
           name: Routes.SHIPPING,
           builder: (context, state) => BlocProvider<ShippingCubit>(
             create: (context) =>
-                serviceLocator<ShippingCubit>()..getBannerData(),
+            serviceLocator<ShippingCubit>()..getBannerData(),
             child: const CreateShippingView(),
           ),
         ),
@@ -910,9 +909,9 @@ class AppPages {
                   path: Paths.TRIPDETAILS,
                   name: Routes.TRIPDETAILS,
                   builder: (context, state) => BlocProvider<TripDetailsCubit>(
-                        create: (_) => serviceLocator(),
-                        child: const TripDetailsView(),
-                      )),
+                    create: (_) => serviceLocator(),
+                    child: const TripDetailsView(),
+                  )),
               GoRoute(
                   path: Paths.RIDERDASHBOARD,
                   name: Routes.RIDERDASHBOARD,
@@ -938,9 +937,9 @@ class AppPages {
             path: Paths.ZOOM,
             name: Routes.ZOOM,
             builder: (context, state) => BlocProvider<MeetingCubit>(
-                  create: (context) => serviceLocator<MeetingCubit>(),
-                  child: const MeetingView(),
-                ),
+              create: (context) => serviceLocator<MeetingCubit>(),
+              child: const MeetingView(),
+            ),
             routes: [
               // PlayVideo
               GoRoute(
@@ -1017,13 +1016,13 @@ class AppPages {
               BlocProvider(
                 create: (_) => StartingLocationCubit(
                   fetchLocationCordinatesUseCase:
-                      serviceLocator<FetchLocationCordinatesUseCase>(),
+                  serviceLocator<FetchLocationCordinatesUseCase>(),
                 ),
               ),
               BlocProvider(
                 create: (_) => DestinationLocationCubit(
                   fetchLocationCordinatesUseCase:
-                      serviceLocator<FetchLocationCordinatesUseCase>(),
+                  serviceLocator<FetchLocationCordinatesUseCase>(),
                 ),
               ),
             ],
