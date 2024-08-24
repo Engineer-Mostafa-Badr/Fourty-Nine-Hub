@@ -117,7 +117,7 @@ class _ScheduleMeetingBottomSheetState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: Theme.of(context).textTheme.subtitle1),
+          Text(title, style: Theme.of(context).textTheme.bodyMedium),
           const SizedBox(height: 8.0),
           Container(
             padding:

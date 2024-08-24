@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
@@ -22,6 +23,7 @@ import '../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../core/error/failure.dart';
+import '../../../../core/localization/locales.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../controllers/login_cubit/login_cubit.dart';
