@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart'
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
+import 'package:fourtyninehub/features/notifications/presentation/pages/notification_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -117,31 +118,36 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                         changeLang(locale: Locales.english, context: context);
                       }
                     })),
-          Stack(
-            children: [
-              Image.asset(
-                Assets.notification,
-                width: 50.zW,
-                height: 50.zH,
-                fit: BoxFit.cover,
-              ),
-              Positioned(
-                bottom: 18.zH,
-                left: 20.zW,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 3,
-                    horizontal: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(20.zR),
-                  ),
-                  child: Label(
-                      text: '1', style: Styles.smallText(color: Colors.white)),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>NotificationView()));
+            },
+            child: Stack(
+              children: [
+                Image.asset(
+                  Assets.notification,
+                  width: 35.zW,
+                  height: 35.zH,
+                  fit: BoxFit.cover,
                 ),
-              ),
-            ],
+                Positioned(
+                  bottom: 18.zH,
+                  left: 16.zW,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 3,
+                      horizontal: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(20.zR),
+                    ),
+                    child: Label(
+                        text: '1', style: Styles.smallText(color: Colors.white)),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

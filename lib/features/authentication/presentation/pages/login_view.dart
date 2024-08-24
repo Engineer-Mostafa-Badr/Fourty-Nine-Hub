@@ -24,7 +24,6 @@ import '../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/localization/locales.dart';
-import '../../../../core/utils/const.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../controllers/login_cubit/login_cubit.dart';
@@ -64,7 +63,7 @@ class _LoginViewState extends State<LoginView> {
     log(MediaQuery.of(context).viewInsets.bottom.toString(),
         name: "OpenKeyboard");
     return BlocListener<RegisterCubit, RegisterState>(
-      listener: (context, state) {
+      listener: (context, state) async{
         if (state is RegisterError) {
           showErrorMessage(context, getFailureMessage(state.failure, context));
         } else if (state is OTPSent) {

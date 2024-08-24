@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/register_
 
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
+import '../../../domain/entities/user_tokens_entity.dart';
 import '../../../domain/use_cases/attach_token_use_case.dart';
 import '../../../domain/use_cases/facebook_sign_in_use_case.dart';
 import '../../../domain/use_cases/get_welcome_gift_use_case.dart';
@@ -80,7 +81,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         (userToken) {
           _attachToken(userToken); // attach to dio
           _saveTokens(userToken); // save to local storage
-          return RegisterSuccess();
+          return RegisterSuccess(userTokensEntity: userToken);
         },
       ),
     );
@@ -96,7 +97,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         (userToken) {
           _attachToken(userToken); // attach to dio
           _saveTokens(userToken); // save to local storage
-          return RegisterSuccess();
+          return RegisterSuccess(userTokensEntity: userToken);
         },
       ),
     );
