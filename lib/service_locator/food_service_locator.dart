@@ -14,7 +14,9 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usec
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_num_of_resturant_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/is_resturant_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/restaurant_shared_data.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/search_restaurants_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/search_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
@@ -145,8 +147,22 @@ class FoodServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<SearchRestaurantsCubit>(
+      () => SearchRestaurantsCubit(
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+      )..loadData(),
+    );
     serviceLocator.registerLazySingleton<RemoveFromCartUseCase>(
       () => RemoveFromCartUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<SearchRestaurantsUseCase>(
+      () => SearchRestaurantsUseCase(
         serviceLocator(),
       ),
     );

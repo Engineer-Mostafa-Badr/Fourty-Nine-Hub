@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/meal_category_card.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 
 class MealCategories extends StatelessWidget {
   const MealCategories({super.key});
@@ -23,11 +19,6 @@ class MealCategories extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Label(
-                text: LocaleKeys.meals.localize,
-                style: Styles.headerText(),
-              ),
-              const Sizer(),
               Expanded(
                 child: ListView.separated(
                   separatorBuilder: (context, index) => const Sizer(),

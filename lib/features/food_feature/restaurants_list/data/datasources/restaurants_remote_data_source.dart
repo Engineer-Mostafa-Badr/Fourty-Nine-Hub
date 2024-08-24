@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -18,6 +16,11 @@ abstract class RestaurantsRemoteDataSource {
           {required PostCommentsParams params});
   Future<Either<Failure, List<Restaurant2Model>>> getAllRestaurantsWithMenu(
       {required PostCommentsParams params});
+  Future<Either<Failure, List<Restaurant2Model>>> searchRestaurants(
+      {required String city,
+      required String subCategory,
+      required String government,
+      PostCommentsParams? params});
   Future<Either<Failure, List<RestaurantModel>>> getNearByReasturants({
     required double lat,
     required double lng,
@@ -111,6 +114,24 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
       {required PostCommentsParams params}) async {
     final response = await _apiConsumer
         .get(EndPoints.getAllRestaurantWithMenu(params: params));
+    return response.fold(
+      (failure) => Left(failure),
+      (data) => Right(
+        List.from(
+          data["data"].map((e) => Restaurant2Model.fromJson(e)).toList(),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<Restaurant2Model>>> searchRestaurants(
+      {required String city,
+      required String subCategory,
+      required String government,
+      PostCommentsParams? params}) async {
+    final response =
+        await _apiConsumer.get(EndPoints.searchRestaurants(params: params));
     return response.fold(
       (failure) => Left(failure),
       (data) => Right(

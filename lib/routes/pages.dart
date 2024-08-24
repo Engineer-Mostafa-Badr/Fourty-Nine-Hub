@@ -21,7 +21,9 @@ import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/create_resturant_view.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/searsh_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
@@ -855,23 +857,33 @@ class AppPages {
                 ),
               ),
               GoRoute(
-                  path: Paths.RESTAURANTDETAILS,
-                  name: Routes.RESTAURANTDETAILS,
-                  builder: (context, state) => BlocProvider.value(
-                        value: serviceLocator<RestaurantDetailsCubit>(),
-                        child: RestaurantDetailsView(
-                          id: state.extra as String,
-                        ),
-                      ),
-                  routes: [
-                    GoRoute(
-                        path: Paths.FOODCART,
-                        name: Routes.FOODCART,
-                        builder: (context, state) => BlocProvider.value(
-                              value: serviceLocator<FoodCartCubit>(),
-                              child: const FoodCartView(),
-                            ))
-                  ])
+                path: Paths.RESTAURANTDETAILS,
+                name: Routes.RESTAURANTDETAILS,
+                builder: (context, state) => BlocProvider.value(
+                  value: serviceLocator<RestaurantDetailsCubit>(),
+                  child: RestaurantDetailsView(
+                    id: state.extra as String,
+                  ),
+                ),
+                routes: [
+                  GoRoute(
+                    path: Paths.FOODCART,
+                    name: Routes.FOODCART,
+                    builder: (context, state) => BlocProvider.value(
+                      value: serviceLocator<FoodCartCubit>(),
+                      child: const FoodCartView(),
+                    ),
+                  ),
+                  GoRoute(
+                    path: Paths.SearchMeals,
+                    name: Routes.SEARCHMEALS,
+                    builder: (context, state) => BlocProvider.value(
+                      value: serviceLocator<SearchRestaurantsCubit>(),
+                      child: const SearchRestaurantView(),
+                    ),
+                  ),
+                ],
+              ),
             ]),
         GoRoute(
           path: Paths.CONTACTUS,

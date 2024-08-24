@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/food_category_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 
@@ -55,5 +54,19 @@ class RestaurantListRepoImpl implements RestaurantListRepo {
   Future<Either<Failure, List<Restaurant2Model>>> getAllRestaurantsWithMenu(
       {required PostCommentsParams params}) {
     return _remoteDataSource.getAllRestaurantsWithMenu(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<Restaurant2Model>>> searchRestaurants(
+      {required String city,
+      required String subCategory,
+      required String government,
+      PostCommentsParams? params}) {
+    return _remoteDataSource.searchRestaurants(
+      city: city,
+      subCategory: subCategory,
+      government: government,
+      params: params,
+    );
   }
 }

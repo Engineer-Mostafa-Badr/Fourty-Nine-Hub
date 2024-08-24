@@ -74,6 +74,7 @@ abstract class  LocaleKeys {
   static const lists = 'lists';
   static const myAds = 'myAds';
   static const settings = 'settings';
+  static const somethingWentWrong = 'somethingWentWrong';
   static const privacy = 'privacy';
   static const policies = 'policies';
   static const shareApp = 'shareApp';

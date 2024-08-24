@@ -7,5 +7,5 @@ class RestaurantSharedData {
 
   List<GovernorateEntity> governorates = [];
 
-  final DoctorSearchParams doctorSearchParams = DoctorSearchParams();
+  final DoctorSearchParams restaurantSearchParams = DoctorSearchParams();
 }
