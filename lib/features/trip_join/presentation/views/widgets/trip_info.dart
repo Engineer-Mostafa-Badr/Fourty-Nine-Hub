@@ -53,7 +53,7 @@ class TripInfo extends StatelessWidget {
                 Sizer(),
                 Icon(Icons.money, color: AppColors.SECONDARY_COLOR),
                 Sizer(),
-                Icon(Icons.local_gas_station, color: AppColors.SECONDARY_COLOR),
+                Icon(Icons.hail, color: AppColors.SECONDARY_COLOR),
               ],
             ),
             const Sizer(),

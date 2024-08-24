@@ -21,6 +21,7 @@ class FetchCarBrandsCubit extends Cubit<FetchCarBrandsState> {
         FetchCarBrandsFailed(Labels.errorHappened),
       ),
       (List<CarBrandEntity> brands) {
+        carBrandsList = [];
         carBrandsList = brands;
         emit(
           FetchCarBrandsSuccess(brands),

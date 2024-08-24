@@ -6,9 +6,11 @@ import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/trip_join/data/models/car_brand_model.dart';
 import 'package:fourtyninehub/features/trip_join/data/models/car_type_model.dart';
+import 'package:fourtyninehub/features/trip_join/data/models/car_year_type_model.dart';
 import 'package:fourtyninehub/features/trip_join/data/models/trip_join_model.dart';
 import 'package:fourtyninehub/features/trip_join/domain/entities/car_brand_entity.dart';
 import 'package:fourtyninehub/features/trip_join/domain/entities/car_model_entity.dart';
+import 'package:fourtyninehub/features/trip_join/domain/entities/car_year_type_entity.dart';
 import 'package:fourtyninehub/features/trip_join/domain/entities/trip_info_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -19,6 +21,7 @@ abstract class TripJoinRemoteDataSource {
   });
   Future<Either<Failure, List<CarBrandEntity>>> fetchCarBrand({required String search});
   Future<Either<Failure, List<CarModelEntity>>> fetchCarModel({required String brand});
+  Future<Either<Failure, List<CarYearTypeEntity>>> fetchCarYearType({required String brand, required String model});
 }
 
 class TripJoinRemoteDataSourceImp implements TripJoinRemoteDataSource {
@@ -81,6 +84,27 @@ class TripJoinRemoteDataSourceImp implements TripJoinRemoteDataSource {
       (failure) => Left(failure),
       (data) {
         List<CarModelEntity> models = data['data'].map<CarModelEntity>((json) => CarTypeModel.fromJson(json)).toList();
+        log(models.toString());
+        return Right(models);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<CarYearTypeEntity>>> fetchCarYearType(
+      {required String brand, required String model}) async {
+    final response = await apiConsumer.get(
+      EndPoints.getCarYearType,
+      queryParameters: {
+        'model': model,
+        'brand': brand,
+      },
+    );
+    return response.fold(
+      (failure) => Left(failure),
+      (data) {
+        List<CarYearTypeModel> models =
+            data['data'].map<CarYearTypeModel>((json) => CarYearTypeModel.fromJson(json)).toList();
         log(models.toString());
         return Right(models);
       },

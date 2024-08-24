@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/trip_join/domain/repo/trip_join_google_ap
 import 'package:fourtyninehub/features/trip_join/domain/repo/trip_join_repo.dart';
 import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_car_brand_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_car_model_usecase.dart';
+import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_car_year_type_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_location_cordinates_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_price_distance_usecase.dart';
 import 'package:get_it/get_it.dart';
@@ -69,6 +70,9 @@ class TripJoinServiceLocator {
     );
     serviceLocator.registerLazySingleton<FetchCarModelUseCase>(
       () => FetchCarModelUseCase(tripJoinRepo: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<FetchCarYearTypeUseCase>(
+      () => FetchCarYearTypeUseCase(tripJoinRepo: serviceLocator()),
     );
   }
 }

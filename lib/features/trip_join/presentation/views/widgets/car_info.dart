@@ -4,6 +4,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/fetch_car_brands/fetch_car_brands_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/fetch_car_models/fetch_car_models_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/presentation/cubits/fetch_car_year_type/fetch_car_year_type_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -20,10 +21,12 @@ class CarInfo extends StatefulWidget {
 class _CarInfoState extends State<CarInfo> {
   late FetchCarBrandsCubit fetchCarBrandsCubit;
   late FetchCarModelsCubit fetchCarModelsCubit;
+  late FetchCarYearTypeCubit fetchCarYearTypeCubit;
   @override
   void initState() {
     fetchCarBrandsCubit = context.read<FetchCarBrandsCubit>();
     fetchCarModelsCubit = context.read<FetchCarModelsCubit>();
+    fetchCarYearTypeCubit = context.read<FetchCarYearTypeCubit>();
     super.initState();
   }
 
@@ -38,27 +41,31 @@ class _CarInfoState extends State<CarInfo> {
           builder: (context, controller, focusNode) {
             controller.text = fetchCarBrandsCubit.brand ?? '';
             return TextField(
-                controller: controller,
-                focusNode: focusNode,
-                // autofocus: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-                  fillColor: Colors.transparent,
-                  hintText: 'Brand',
-                ));
+              controller: controller,
+              focusNode: focusNode,
+              // autofocus: true,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                fillColor: Colors.transparent,
+                hintText: 'Brand',
+              ),
+              onChanged: (value) {
+                fetchCarBrandsCubit.brand = value;
+                // print(' ============ $value');
+                fetchCarModelsCubit.fetchCarModel(brand: value);
+                fetchCarBrandsCubit.fetchCarBrand(search: value);
+              },
+            );
           },
           itemBuilder: (context, value) {
             return ListTile(title: Text(value));
           },
           onSelected: (value) {
             fetchCarBrandsCubit.brand = value;
-            fetchCarModelsCubit.fetchCarModel(brand: value);
             setState(() {});
           },
           suggestionsCallback: (search) async {
-            if (search.length % 3 == 0 || search.length == 1) {
-              fetchCarBrandsCubit.fetchCarBrand(search: search);
-            }
+            // fetchCarBrandsCubit.brand = search;
             return fetchCarBrandsCubit.carBrandsList.map((e) => e?.brand ?? '').toList();
           },
         ),
@@ -68,29 +75,31 @@ class _CarInfoState extends State<CarInfo> {
           builder: (context, controller, focusNode) {
             controller.text = fetchCarModelsCubit.model ?? '';
             return TextField(
-                controller: controller,
-                focusNode: focusNode,
-                // autofocus: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-                  fillColor: Colors.transparent,
-                  hintText: 'Model',
-                ));
+              controller: controller,
+              focusNode: focusNode,
+              // autofocus: true,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                fillColor: Colors.transparent,
+                hintText: 'Model',
+              ),
+              onChanged: (value) {
+                fetchCarModelsCubit.model = value;
+                if (value.length == 1) {
+                  fetchCarModelsCubit.fetchCarModel(brand: fetchCarBrandsCubit.brand ?? '');
+                }
+              },
+            );
           },
           itemBuilder: (context, value) {
             return ListTile(title: Text(value));
           },
           onSelected: (value) {
-            print(' ============== $value');
+            // print(' ============== $value');
             fetchCarModelsCubit.model = value;
             setState(() {});
           },
           suggestionsCallback: (search) async {
-            // if (search.length <= 1) {
-            //   print('============ brand');
-            //   print(fetchCarBrandsCubit.brand);
-            //   fetchCarModelsCubit.fetchCarModel(brand: fetchCarBrandsCubit.brand ?? '');
-            // }
             return fetchCarModelsCubit.carModels
                 .map((e) => e?.model ?? '')
                 .where((element) => element.toLowerCase().contains(search.toLowerCase()))
@@ -101,22 +110,39 @@ class _CarInfoState extends State<CarInfo> {
         Text('Year', style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
         TypeAheadField<String>(
           builder: (context, controller, focusNode) {
+            controller.text = fetchCarYearTypeCubit.year ?? '';
             return TextField(
-                controller: controller,
-                focusNode: focusNode,
-                // autofocus: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-                  fillColor: Colors.transparent,
-                  hintText: 'Year',
-                ));
+              controller: controller,
+              focusNode: focusNode,
+              // autofocus: true,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                fillColor: Colors.transparent,
+                hintText: 'Year',
+              ),
+              keyboardType: TextInputType.number,
+              onChanged: (value) {
+                fetchCarYearTypeCubit.year = value;
+              },
+            );
           },
           itemBuilder: (context, value) {
             return ListTile(title: Text(value));
           },
-          onSelected: (value) {},
+          onSelected: (value) {
+            fetchCarYearTypeCubit.year = value;
+            setState(() {});
+          },
           suggestionsCallback: (search) {
-            return ['Toyota', 'Kia', 'Hyndai'];
+            fetchCarYearTypeCubit.getCarYears(
+              brand: fetchCarBrandsCubit.brand ?? '',
+              model: fetchCarModelsCubit.model ?? '',
+            );
+            return fetchCarYearTypeCubit.carYears.map((e) => e?.year ?? '2000').toList();
+            // return fetchCarYearTypeCubit.carYears
+            //     .map((e) => e?.year ?? '')
+            //     .where((element) => element.toLowerCase().contains(search.toLowerCase()))
+            //     .toList();
           },
         ),
         const Sizer(),

@@ -468,4 +468,5 @@ class EndPoints {
   static String tripJoinExpectedPrice = "/ride/come-with-you/trip/expectedPrice";
   static String getCarBrand = "/ride/riders/brands";
   static String getCarModelByBrand = "/ride/riders/models";
+  static String getCarYearType = "/ride/riders/car-years-and-types";
 }

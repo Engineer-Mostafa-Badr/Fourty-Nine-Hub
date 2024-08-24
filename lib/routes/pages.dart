@@ -84,11 +84,13 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/t
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_car_brand_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_car_model_usecase.dart';
+import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_car_year_type_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_location_cordinates_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_price_distance_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/fetch_car_brands/fetch_car_brands_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/fetch_car_models/fetch_car_models_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/presentation/cubits/fetch_car_year_type/fetch_car_year_type_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/fetch_price_distance/fetch_price_distance_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
@@ -987,6 +989,11 @@ class AppPages {
               BlocProvider(
                 create: (_) => FetchCarModelsCubit(
                   fetchCarModelUseCase: serviceLocator<FetchCarModelUseCase>(),
+                ),
+              ),
+              BlocProvider(
+                create: (_) => FetchCarYearTypeCubit(
+                  fetchCarYearTypeUseCase: serviceLocator<FetchCarYearTypeUseCase>(),
                 ),
               ),
               BlocProvider(create: (_) => TripJoinViewCubit()),

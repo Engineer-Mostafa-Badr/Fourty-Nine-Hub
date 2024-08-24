@@ -19,6 +19,8 @@ class FetchCarModelsCubit extends Cubit<FetchCarModelsState> {
         FetchCarModelsFailed(Labels.errorHappened),
       ),
       (List<CarModelEntity> models) {
+        print(' ============  inside cubit $models');
+        carModels = [];
         carModels = models;
         emit(
           FetchCarModelsSuccess(models),
