@@ -1408,6 +1408,8 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
           imagePath: widget.reel.audio.audioPicture,
           onPressed: () {
             _pauseVideo();
+            _videoPlayerController.dispose();
+            _chewieController?.dispose();
             Navigator.push(
               context,
               MaterialPageRoute(

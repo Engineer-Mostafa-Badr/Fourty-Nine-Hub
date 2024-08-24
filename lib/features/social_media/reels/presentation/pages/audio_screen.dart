@@ -150,6 +150,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                       backgroundColor: MaterialStatePropertyAll(
                           AppColors.PRIMARY_COLOR_DARK)),
                   onPressed: () {
+                    _player.dispose();
                     Navigator.push(
                         context,
                         MaterialPageRoute(

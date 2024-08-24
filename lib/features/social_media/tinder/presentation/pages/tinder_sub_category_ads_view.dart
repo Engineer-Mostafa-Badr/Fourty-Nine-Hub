@@ -35,11 +35,9 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
   void initState() {
     super.initState();
 
-    context.read<UserCubit>().giveMeTokenForTinder().then((value) {
       context.read<TinderViewCubit>().fetchMainCategoryById(
             '62c8b5b09332225799fe335e',
           );
-    });
 
     _tabController = TabController(length: 2, vsync: this);
   }

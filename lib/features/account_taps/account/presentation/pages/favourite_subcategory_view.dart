@@ -826,11 +826,8 @@ class _FavSubCategoryViewContentState
   }
 
   void _initializeTinderData() {
-    final userCubit = context.read<UserCubit>();
-    userCubit.giveMeTokenForTinder().then((_) {
-      final tinderCubit = context.read<TinderViewCubit>();
-      tinderCubit.fetchFavorites();
-    });
+
+      serviceLocator<TinderViewCubit>().fetchFavorites();
   }
 
   @override

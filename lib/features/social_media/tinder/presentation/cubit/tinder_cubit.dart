@@ -19,10 +19,9 @@ import '../../data/models/near_by_model.dart';
 import 'tinder_state.dart';
 
 class TinderViewCubit extends Cubit<TinderViewState> {
-
   TinderViewCubit() : super(TinderViewState.initial());
 
-  final String token = serviceLocator<UserCubit>().token??'';
+  final String token = serviceLocator<UserCubit>().token ?? '';
 
   Future<void> fetchMainCategoryById(String id) async {
     emit(state.copyWith(mainCategoryResponseState: DataState.initial));
@@ -39,6 +38,9 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final mainCategoryResponse = MainCategoryResponse.fromJson(data);
+        log(mainCategoryResponse.data.mainCategory.nameEn.toString() +
+            "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[");
+
         emit(state.copyWith(
             mainCategoryResponseState: DataState.success,
             mainCategoryResponse: mainCategoryResponse));
@@ -170,8 +172,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     }
   }
 
-  Future<void> fetchUserProfile(
-      {required String userId}) async {
+  Future<void> fetchUserProfile({required String userId}) async {
     emit(state.copyWith(profileUserState: DataState.initial));
     try {
       final uri =
@@ -525,9 +526,9 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     emit(state.copyWith(userDataState: DataState.initial, userData: []));
 
     final url =
-        'https://49dev.com/api/v1/b tinder/?gender=$gender&subCategory=66af974f8bf69f9469944746';
-        // 'https://49dev.com/api/v1/tinder/?gender=$gender&page=1&limit=20&subCategory=66af974f8bf69f9469944746';
-    // 'https://49dev.com/api/v1/tinder/?gender=$gender&page=1&limit=50&subCategory=66af974f8bf69f9469944746';
+        // 'https://49dev.com/api/v1/b tinder/?gender=$gender&subCategory=66af974f8bf69f9469944746';
+        'https://49dev.com/api/v1/tinder/?gender=$gender&subCategory=66af974f8bf69f9469944746';
+    // 'https://49dev.com/api/v1/tinder/?gender=$gender&page=1&limit=10&subCategory=66af974f8bf69f9469944746';
 
     final response = await _makeGetRequest(
         url: url, accessToken: token, fromMethod: 'fetchUserData');
@@ -537,6 +538,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       final userData = responseData
           .map<UserData>((data) => UserData.fromJson(data))
           .toList();
+      log(userData.first.lastName.toString()+"------------------------------------------------------------");
       emit(
           state.copyWith(userData: userData, userDataState: DataState.success));
     } else {

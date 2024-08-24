@@ -102,8 +102,15 @@ class _TinderScreenState extends State<TinderScreen> {
           children: [
             _buildHeader(),
             context.watch<TinderViewCubit>().state.userData.isNotEmpty
-                ? BlocProvider.value(
-                    value: serviceLocator<UserCubit>(),
+                ? MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(
+                        value: serviceLocator<UserCubit>(),
+                      ),
+                      // BlocProvider.value(
+                      //   value: serviceLocator<TinderViewCubit>(),
+                      // ),
+                    ],
                     child: const TinderCardStack(),
                   )
                 : SizedBox(
@@ -167,7 +174,5 @@ class _TinderScreenState extends State<TinderScreen> {
     );
   }
 }
-
-
 
 //21/8/2024

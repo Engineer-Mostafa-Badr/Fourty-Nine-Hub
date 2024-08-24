@@ -1,15 +1,23 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'recording_shared.dart';
+
+class Filter {
+  final String name;
+  final ColorFilter? filter;
+  final String? ffmpegFilter;
+
+  Filter(this.name, this.filter, {this.ffmpegFilter});
+}
 
 class OtherVoiceVideoRecordingScreen extends StatefulWidget {
   const OtherVoiceVideoRecordingScreen({super.key});
@@ -30,7 +38,6 @@ class OtherVoiceVideoRecordingScreenState
   bool isRecording = false;
   late AnimationController _animationController;
   final AudioPlayer _audioPlayer = AudioPlayer();
-  final FlutterFFmpeg _flutterFfmpeg = FlutterFFmpeg();
   Timer? _stopTimer;
   Timer? _notifyTimer;
   int _secondsRemaining = 30;
@@ -38,6 +45,99 @@ class OtherVoiceVideoRecordingScreenState
   bool showGalleryBtn = false;
   String voiceUrl =
       'https://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/start.ogg';
+
+  final List<Filter> filters = [
+    // Normal
+    Filter('Normal', null, ffmpegFilter: ''),
+
+    // Sepia
+    Filter('Sepia', const ColorFilter.matrix([
+      0.393, 0.769, 0.189, 0, 0,
+      0.349, 0.686, 0.168, 0, 0,
+      0.272, 0.534, 0.131, 0, 0,
+      0,     0,     0,     1, 0,
+    ]), ffmpegFilter: 'colorchannelmixer=0.393:0.349:0.272:0.769:0.686:0.534:0.189:0.168:0.131'),
+
+    // Grayscale
+    Filter('Grayscale', const ColorFilter.matrix([
+      0.2126, 0.7152, 0.0722, 0, 0,
+      0.2126, 0.7152, 0.0722, 0, 0,
+      0.2126, 0.7152, 0.0722, 0, 0,
+      0,      0,      0,      1, 0,
+    ]), ffmpegFilter: 'colorchannelmixer=0.2126:0.2126:0.2126:0.7152:0.7152:0.7152:0.0722:0.0722:0.0722'),
+
+    // Invert
+    Filter('Invert', const ColorFilter.matrix([
+      -1,  0,  0, 0, 1,
+      0, -1,  0, 0, 1,
+      0,  0, -1, 0, 1,
+      0,  0,  0, 1, 0,
+    ]), ffmpegFilter: 'negate'),
+
+    // Vintage
+    Filter('Vintage', const ColorFilter.matrix([
+      0.9, 0.6, 0.2, 0, 0,
+      0.3, 0.7, 0.2, 0, 0,
+      0.2, 0.3, 0.8, 0, 0,
+      0,   0,   0,   1, 0,
+    ]), ffmpegFilter: 'curves=vintage'),
+
+    // Brighten
+    Filter('Brighten', const ColorFilter.matrix([
+      1.2, 0,   0, 0, 0,
+      0,   1.2, 0, 0, 0,
+      0,   0,   1.2, 0, 0,
+      0,   0,   0, 1, 0,
+    ]), ffmpegFilter: 'eq=brightness=0.2'),
+
+    // Cool
+    Filter('Cool', const ColorFilter.matrix([
+      1, 0, 0, 0, 0,
+      0, 1, 0, 0, 0,
+      0, 0, 1.1, 0, 0,
+      0, 0, 0, 1, 0,
+    ]), ffmpegFilter: 'colorbalance=bs=0.1'),
+
+
+  ];
+
+  Filter? _selectedFilter;
+
+  void _applyFilter(Filter filter) {
+    setState(() {
+      _selectedFilter = filter;
+    });
+  }
+
+  Widget _buildFilterSelector() {
+    return SizedBox(
+      height: 100,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: filters.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () => _applyFilter(filters[index]),
+            child: Container(
+              width: 80,
+              margin: const EdgeInsets.symmetric(horizontal: 5),
+              decoration: BoxDecoration(
+                border: Border.all(color: _selectedFilter == filters[index] ? Colors.blue : Colors.transparent),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.filter, color: Colors.white),
+                  Text(filters[index].name, style: const TextStyle(color: Colors.white)),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -61,13 +161,13 @@ class OtherVoiceVideoRecordingScreenState
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 30),
-    )..addListener(() {
+    )
+      ..addListener(() {
         setState(() {});
       });
   }
 
-  Future<void> _initializeCameraController(
-      CameraDescription cameraDescription) async {
+  Future<void> _initializeCameraController(CameraDescription cameraDescription) async {
     _controller = CameraController(
       cameraDescription,
       ResolutionPreset.high,
@@ -84,12 +184,13 @@ class OtherVoiceVideoRecordingScreenState
     }
   }
 
-  Future<void> _loadAndPlayAudio() async {
+  Future _loadAndPlayAudio() async {
     try {
-      await _audioPlayer.setUrl('$voiceUrl');
+      await _audioPlayer.setUrl(voiceUrl);
       _audioPlayer.setLoopMode(LoopMode.one);
     } catch (e) {
       log("Audio playback error: $e");
+      _showErrorDialog("Failed to load audio: ${e.toString()}");
     }
   }
 
@@ -98,8 +199,7 @@ class OtherVoiceVideoRecordingScreenState
 
     try {
       final directory = await getTemporaryDirectory();
-      videoPath =
-          '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
+      videoPath = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
       await _controller!.startVideoRecording();
       setState(() {
         isRecording = true;
@@ -130,27 +230,17 @@ class OtherVoiceVideoRecordingScreenState
 
   void _stopRecording() async {
     if (!_controller!.value.isRecordingVideo) return;
-
     try {
       final videoFile = await _controller!.stopVideoRecording();
       videoPath = videoFile.path;
       setState(() {
         isRecording = false;
       });
-
       _resetRecordingState();
-
       await _mergeVideoWithAudio();
-
-      if (mergedVideoPath != null) {
-        await GallerySaver.saveVideo(mergedVideoPath!);
-        setState(() {
-          showGalleryBtn = true;
-        });
-      }
     } catch (e) {
       log("Error stopping recording: $e");
-      _showErrorDialog("Failed to stop recording.");
+      _showErrorDialog("Failed to stop recording: ${e.toString()}");
     }
   }
 
@@ -162,33 +252,54 @@ class OtherVoiceVideoRecordingScreenState
     _notifyTimer?.cancel();
   }
 
-  Future<void> _mergeVideoWithAudio() async {
+  Future _mergeVideoWithAudio() async {
     final directory = await getTemporaryDirectory();
-    mergedVideoPath =
-        '${directory.path}/merged_${DateTime.now().millisecondsSinceEpoch}.mp4';
+    mergedVideoPath = '${directory.path}/merged_${DateTime.now().millisecondsSinceEpoch}.mp4';
 
-    final arguments = [
-      '-i',
-      videoPath!,
-      '-i',
-      '$voiceUrl',
-      '-map',
-      '0:v:0',
-      '-map',
-      '1:a:0',
-      '-c:v',
-      'copy',
-      '-c:a',
-      'aac',
+    final filterCommand = _selectedFilter?.ffmpegFilter ?? '';
+
+    // Simplified FFmpeg command with `mpeg4` encoder and without the profile option
+    final commandArgs = [
+      '-i', videoPath!,
+      '-i', voiceUrl,
+      if (filterCommand.isNotEmpty) ...['-vf', filterCommand],
+      '-map', '0:v:0',
+      '-map', '1:a:0',
+      '-c:v', 'mpeg4',  // Use `mpeg4` instead of `libx264`
+      '-b:v', '2M',  // Set video bitrate to maintain quality
+      '-q:v', '2',  // Use quality factor for mpeg4
+      '-c:a', 'aac',
       '-shortest',
-      mergedVideoPath!
+      mergedVideoPath!,
     ];
 
-    await _flutterFfmpeg.executeWithArguments(arguments).then((rc) {
-      log(rc == 0
-          ? "FFmpeg process succeeded with rc $rc"
-          : "FFmpeg process failed with rc $rc");
-    });
+    log("Executing FFmpeg command: ${commandArgs.join(' ')}");
+
+    try {
+      final session = await FFmpegKit.executeWithArguments(commandArgs);
+      final returnCode = await session.getReturnCode();
+      final output = await session.getOutput();
+      log("FFmpeg output: $output");
+
+      if (ReturnCode.isSuccess(returnCode)) {
+        log("FFmpeg process succeeded");
+        final savedSuccessfully = await GallerySaver.saveVideo(mergedVideoPath!);
+        if (savedSuccessfully ?? false) {
+          setState(() {
+            showGalleryBtn = true;
+          });
+        } else {
+          throw Exception("Failed to save video to gallery");
+        }
+      } else {
+        final failStackTrace = await session.getFailStackTrace();
+        throw Exception("FFmpeg process failed with return code $returnCode\n$failStackTrace");
+      }
+    } catch (e) {
+      log("Error in _mergeVideoWithAudio: $e");
+      _showErrorDialog("Failed to process the video: ${e.toString()}");
+      mergedVideoPath = null;
+    }
   }
 
   void _switchCamera() {
@@ -199,7 +310,6 @@ class OtherVoiceVideoRecordingScreenState
   }
 
   void _showErrorDialog(String message) {
-    _stopRecording();
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -222,11 +332,12 @@ class OtherVoiceVideoRecordingScreenState
           backgroundColor: Colors.black,
           body: Center(
               child: CupertinoActivityIndicator(
-            color: Colors.white,
-            radius: 25,
-          )));
+                color: Colors.white,
+                radius: 25,
+              )
+          )
+      );
     }
-    final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -235,14 +346,22 @@ class OtherVoiceVideoRecordingScreenState
           _buildCameraPreview(),
           _buildControls(),
           if (isRecording) _buildTimerPopup(),
-          // _buildSwitchCameraButton(width),
+          Positioned(
+            bottom: 100,
+            left: 0,
+            right: 0,
+            child: _buildFilterSelector(),
+          ),
         ],
       ),
     );
   }
 
   Widget _buildCameraPreview() {
-    return CameraPreview(_controller!);
+    return ColorFiltered(
+      colorFilter: _selectedFilter?.filter ?? const ColorFilter.mode(Colors.transparent, BlendMode.srcOver),
+      child: CameraPreview(_controller!),
+    );
   }
 
   Widget _buildTimerPopup() {
@@ -277,16 +396,16 @@ class OtherVoiceVideoRecordingScreenState
             children: [
               showGalleryBtn
                   ? IconButton(
-                      onPressed: _navigateToPlaybackScreen,
-                      icon: const Icon(
-                        Icons.video_collection,
-                        color: Colors.white,
-                        size: 50,
-                      ),
-                    )
+                onPressed: _navigateToPlaybackScreen,
+                icon: const Icon(
+                  Icons.video_collection,
+                  color: Colors.white,
+                  size: 50,
+                ),
+              )
                   : const SizedBox(
-                      width: 50,
-                    ),
+                width: 50,
+              ),
               GestureDetector(
                 onLongPress: () => _startRecording(),
                 onLongPressEnd: (_) => _stopRecording(),
@@ -304,7 +423,7 @@ class OtherVoiceVideoRecordingScreenState
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: CustomPaint(
-                          painter:  ProgressPainter(
+                          painter: ProgressPainter(
                             progress: _animationController.value,
                             color: Colors.pink,
                           ),
@@ -319,7 +438,6 @@ class OtherVoiceVideoRecordingScreenState
                   ],
                 ),
               ),
-
               _buildSwitchCameraButton(50),
             ],
           ),
@@ -335,7 +453,7 @@ class OtherVoiceVideoRecordingScreenState
         Icons.cameraswitch,
         semanticLabel: 'Switch Camera',
         color: Colors.white,
-        size: width ,
+        size: width,
       ),
     );
   }
@@ -359,3 +477,4 @@ class OtherVoiceVideoRecordingScreenState
     super.dispose();
   }
 }
+
