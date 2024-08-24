@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:just_audio/just_audio.dart';
@@ -148,7 +149,13 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                   style: const ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(
                           AppColors.PRIMARY_COLOR_DARK)),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ReelsRecordingScreen(),
+                        ));
+                  },
                   child: const Text(
                     'Use audio',
                     textScaler: TextScaler.linear(1.1),

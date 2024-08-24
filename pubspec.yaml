@@ -70,9 +70,13 @@ dependencies:
   chewie: ^1.5.0
   visibility_detector: ^0.3.3
   connectivity_plus: ^4.0.1
-  just_audio: ^0.9.31
   audio_video_progress_bar: ^1.0.0
 #  audioplayers: ^6.0.0
+  flutter_ffmpeg: ^0.4.2
+  camera: ^0.10.0
+  path_provider: ^2.0.11
+  gallery_saver: ^2.3.2
+  just_audio:
 
   # for behaviour subject
   rxdart:
@@ -84,8 +88,8 @@ dependencies:
 
   json_annotation: ^4.8.1
   file_picker: ^6.2.1
-  camera: ^0.11.0+2
-
+dependency_overrides:
+  http: ^0.13.3
 dev_dependencies:
   flutter_lints: ^4.0.0
   flutter_test:

@@ -525,7 +525,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     emit(state.copyWith(userDataState: DataState.initial, userData: []));
 
     final url =
-        'https://49dev.com/api/v1/tinder/?gender=$gender&subCategory=66af974f8bf69f9469944746';
+        'https://49dev.com/api/v1/b tinder/?gender=$gender&subCategory=66af974f8bf69f9469944746';
         // 'https://49dev.com/api/v1/tinder/?gender=$gender&page=1&limit=20&subCategory=66af974f8bf69f9469944746';
     // 'https://49dev.com/api/v1/tinder/?gender=$gender&page=1&limit=50&subCategory=66af974f8bf69f9469944746';
 
