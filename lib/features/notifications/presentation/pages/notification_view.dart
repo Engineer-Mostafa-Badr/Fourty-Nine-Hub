@@ -2,16 +2,18 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/wallet_widget.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubit/notifications_state.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
-import '../../../../core/data/models/notification_model.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/utils/api_service.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/styles.dart';
 import '../../data/repository/notification_repo_impl.dart';
@@ -42,25 +44,25 @@ class NotificationView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Label(
-                            //text: state.notificationModel.message!,
-                              text: state.notificationModel.data!.docs![0].bodyTranslationCode!,
+                            text: LocaleKeys.notifications.localize,
+                            //  text: state.notificationModel.data!.docs![0].bodyTranslationCode!,
                             style: Styles.headerText(),
                           ),
                           TextAppButton(
                               style: const TextStyle(
                                   color: AppColors.SECONDARY_COLOR),
-                              label: 'Clear All',
+                              label: LocaleKeys.clearAll.localize,
                               onPressed: () {
                                 showAreYouSure(
-                                    title: 'Alert',
+                                    title: LocaleKeys.alert.localize,
                                     subTitle:
-                                    'Are you sure you want to clear all notifications?',
+                                    LocaleKeys.clearNotification.localize,
                                     action: () {},
                                     context: context);
                               }),
                         ],
                       ),
-                      const WalletWidget(),
+                      const Sizer(),
                       TabBar(tabs: [
                         Tab(
                           icon: SvgPicture.asset(Assets.social,
@@ -81,9 +83,9 @@ class NotificationView extends StatelessWidget {
                       ]),
                       Expanded(
                           child: TabBarView(children: [
-                            _buildNotificationWidget(notificationList: []),
-                            _buildNotificationWidget(notificationList: []),
-                            _buildNotificationWidget(notificationList: []),
+                            const SizedBox.shrink(),
+                            const SizedBox.shrink(),
+                            _buildNotificationWidget(state: state),
                           ]))
                     ],
                   ),
@@ -95,23 +97,19 @@ class NotificationView extends StatelessWidget {
   }
 
   Widget _buildNotificationWidget({
-    required List<NotificationModel> notificationList,
+   // required NotificationDoc notificationDoc,
+    required state,
   }) {
     return RefreshIndicator.adaptive(
       onRefresh: () async {},
       child: ListView.separated(
           itemBuilder: (context, index) {
-            return NotificationCard(
-              item: NotificationModel(
-                  // id: 0,
-                  // message: UIConst.placeholderText,
-                  // itemId: 0,
-                  // createdAt: DateTime.now(),
-                  ),
+            return  NotificationCard(
+              notificationDoc: state.notificationModel.data!.docs[index],
             );
           },
           separatorBuilder: (context, index) => const Divider(),
-          itemCount: 10),
+          itemCount: state.notificationModel.data!.docs!.length),
     );
   }
 }

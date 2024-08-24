@@ -110,6 +110,12 @@ abstract class  LocaleKeys {
   static const verify = 'verify';
   static const emailOtp = 'emailOtp';
   static const verification = 'verification';
+  static const notifications = 'notifications';
   static const checkVerification = 'checkVerification';
+  static const congratulations = 'congratulations';
+  static const close = 'close';
+  static const giftApp = 'giftApp';
+  static const clearAll = 'clearAll';
+  static const clearNotification = 'clearNotification';
 
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -67,6 +69,8 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
 
               // Navigate to the home screen
               context.go(Routes.HOME);
+              context.pop();
+              context.pop();
 
               // Show the success dialog after navigation
               WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -75,6 +79,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                     context: context,
                     builder: (BuildContext context) {
                       return Dialog(
+                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24.0.zR),
                         ),
@@ -84,12 +89,12 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Text(
-                                'Congratulations',
+                                LocaleKeys.congratulations.localize,
                                 style: Styles.headerText(color: AppColors.SECONDARY_COLOR, fontSize: 45),
                               ),
                               SizedBox(height: 16.0.zH),
                               Text(
-                                'You got a gift of 400 pounds as a welcome gift for registering on the 49 app.',
+                                LocaleKeys.giftApp.localize,
                                 textAlign: TextAlign.center,
                                 style: Styles.mediumText(),
                               ),
@@ -99,7 +104,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                                   Navigator.of(context).pop(); // Close the dialog
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.QUANTITY_COLOR,
+                                  backgroundColor: Theme.of(context).primaryColor,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16.0.zR),
                                   ),
@@ -110,8 +115,8 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                                     vertical: 24.0.zH,
                                   ),
                                   child: Text(
-                                    'CLOSE',
-                                    style: TextStyle(color: Colors.white),
+                                    LocaleKeys.close.localize,
+                                    style:  TextStyle(color: Theme.of(context).scaffoldBackgroundColor),
                                   ),
                                 ),
                               ),

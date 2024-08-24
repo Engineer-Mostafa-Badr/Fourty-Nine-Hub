@@ -126,7 +126,13 @@ class CodegenLoader extends AssetLoader{
   "verify": "التحقق",
   "emailOtp": "إرسال OTP عبر البريد الإلكتروني",
   "verification": "التحقق",
-  "checkVerification": "يرجى التحقق من بريدك الإلكتروني لمعرفة رمز التحقق"
+  "notifications": "الإشعارات",
+  "checkVerification": "يرجى التحقق من بريدك الإلكتروني لمعرفة رمز التحقق",
+  "congratulations": "تهانينا",
+  "close": "إغلاق",
+  "giftApp": "لقد حصلت على هدية بقيمة 400 جنيه كهدية ترحيبية للتسجيل في تطبيق 49.",
+  "clearAll": "حذف الكل",
+  "clearNotification": "هل أنت متأكد من أنك تريد مسح جميع الإشعارات؟"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -240,7 +246,13 @@ static const Map<String,dynamic> en = {
   "verify": "Verify",
   "emailOtp": "Email OTP",
   "verification": "Verification",
-  "checkVerification": "Please check your email to see the verification code "
+  "notifications": "Notifications",
+  "checkVerification": "Please check your email to see the verification code ",
+  "congratulations": "Congratulations",
+  "close": "CLOSE",
+  "giftApp": "You got a gift of 400 pounds as a welcome gift for registering on the 49 app.",
+  "clearAll": "Clear All",
+  "clearNotification": "Are you sure you want to clear all notifications?"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
