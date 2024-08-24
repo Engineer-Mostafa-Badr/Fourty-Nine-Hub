@@ -78,6 +78,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
     super.dispose();
   }
 
+  final ValueNotifier<bool> showTopBar = ValueNotifier(true);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -87,51 +88,71 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
         color: widget.config.topMenuBar.backgroundColor ?? Colors.transparent,
       ),
       height: widget.config.topMenuBar.height ?? 160.zH,
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              topBarLeading(),
-              // const Expanded(child: SizedBox()),
-              Align(
-                alignment: Alignment.center,
-                child: Image.asset(
-                  Assets.logo,
-                  height: 50.zH,
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  minimizingButton(),
-                  SizedBox(width: 20.zR),
-                  if (widget.isLiveStream)
-                    ZegoLiveStreamingMemberButton(
-                      config: widget.config.memberList,
-                      events: widget.events.memberList,
-                      isCoHostEnabled: widget.isCoHostEnabled,
-                      hostManager: widget.hostManager,
-                      connectManager: widget.connectManager,
-                      popUpManager: widget.popUpManager,
-                      translationText: widget.translationText,
-                      builder: widget.config.memberButton.builder,
-                      icon: widget.config.memberButton.icon,
-                      backgroundColor:
-                          widget.config.memberButton.backgroundColor,
-                      avatarBuilder: widget.config.avatarBuilder,
-                      itemBuilder: widget.config.memberList.itemBuilder,
-                    ),
-                  SizedBox(width: 20.zW),
-                  closeButton(),
-                  SizedBox(width: 33.zW),
-                ],
-              ),
-            ],
-          ),
-          const Divider()
-        ],
-      ),
+      child: ValueListenableBuilder<bool>(
+          valueListenable: showTopBar,
+          builder: (context, showTopBar, child) {
+            return Column(
+              children: [
+                if (showTopBar)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      topBarLeading(),
+                      // const Expanded(child: SizedBox()),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Image.asset(
+                          Assets.logo,
+                          height: 50.zH,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          minimizingButton(),
+                          SizedBox(width: 20.zR),
+                          if (widget.isLiveStream)
+                            ZegoLiveStreamingMemberButton(
+                              config: widget.config.memberList,
+                              events: widget.events.memberList,
+                              isCoHostEnabled: widget.isCoHostEnabled,
+                              hostManager: widget.hostManager,
+                              connectManager: widget.connectManager,
+                              popUpManager: widget.popUpManager,
+                              translationText: widget.translationText,
+                              builder: widget.config.memberButton.builder,
+                              icon: widget.config.memberButton.icon,
+                              backgroundColor:
+                                  widget.config.memberButton.backgroundColor,
+                              avatarBuilder: widget.config.avatarBuilder,
+                              itemBuilder: widget.config.memberList.itemBuilder,
+                            ),
+                          SizedBox(width: 20.zW),
+                          closeButton(),
+                          SizedBox(width: 33.zW),
+                        ],
+                      ),
+                    ],
+                  )
+                else
+                  Row(
+                    children: [
+                      Container(height: 10, width: 50, color: Colors.white),
+                      Expanded(child: Container()),
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          SizedBox(width: 30),
+                          CloseButton(),
+                          SizedBox(width: 30),
+                        ],
+                      )
+                    ],
+                  ),
+                const Divider()
+              ],
+            );
+          }),
     );
   }
 
@@ -169,6 +190,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
             hostManager: widget.hostManager,
             hostUpdateEnabledNotifier: widget.hostUpdateEnabledNotifier,
             isLeaveRequestingNotifier: widget.isLeaveRequestingNotifier,
+            showTopBar: showTopBar,
           )
         : Container();
   }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
@@ -47,7 +48,11 @@ class MeetingCubit extends Cubit<MeetingState> {
         print('state is ${localizedMessage['en']}');
         emit(state.copyWith(
           status: MeetingStates.failure,
-          errorMessage: (localizedMessage['en'] ?? 'Room not registered'),
+          errorMessage: (localizedMessage[AppPages.router.configuration
+                      .navigatorKey.currentContext!.isArabic
+                  ? 'ar'
+                  : 'en'] ??
+              'Room not registered'),
         ));
         showErrorMessage(
           AppPages.router.configuration.navigatorKey.currentContext!,
