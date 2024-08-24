@@ -142,6 +142,19 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
                                         });
                                       return result;
+                                }, onDeleteComment: (String id) async{
+                                  var result = await widget.onDeleteComment(id);
+                                  state.postDetails?.commentsCount=(state.postDetails!.commentsCount!-1);
+                                  controller.commentsPagingController.itemList?.removeWhere((element) => element.id==id);
+
+                                  setState(() {});
+                                  return result;
+                                }, onDeleteReply: (String id) async {
+                                  var result = await widget.onDeleteReply(id);
+                                  state.postDetails?.commentsCount=(state.postDetails!.commentsCount!-1);
+                                  controller.repliesPagingController.itemList?.removeWhere((element) => element.id==id);
+                                  setState(() {});
+                                  return result;
                                 });
                               },
                               noMoreItemsIndicatorBuilder: (context) =>
@@ -230,7 +243,9 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
   Widget _buildCommentCard({
     required CommentEntity comment,
-    required Function(ReplyOnCommentParams) onCommentReply
+    required Function(ReplyOnCommentParams) onCommentReply,
+    required dynamic Function(String) onDeleteComment,
+    required dynamic Function(String) onDeleteReply
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -242,16 +257,8 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
             setState(() {});
             return result;
           },
-          onDeleteComment: (String id) async{
-            var result = await widget.onDeleteComment(id);
-            setState(() {});
-            return result;
-          },
-          onDeleteReply: (String id)async {
-            var result = await widget.onDeleteReply(id);
-            setState(() {});
-            return result;
-          },
+          onDeleteComment: (String id)=>onDeleteComment(id),
+          onDeleteReply: (String id)=>onDeleteReply(id),
           from: 'feed', onEditComment: (PostCommentParams params) =>widget.onEditComment(params),
         ),
         if (comment.repliesCount != 0)

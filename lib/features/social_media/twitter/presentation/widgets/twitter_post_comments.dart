@@ -28,6 +28,8 @@ class TwitterPostComments extends StatefulWidget {
   final String postId;
   final Function(TwitterPostCommentParams) onAddComment;
   final Function(TwitterCommentReplyParams) onAddReply;
+  final Function(TwitterPostCommentParams) onEditComment;
+  final Function(String) onDeleteComment;
   final Function(String,TwitterPostCommentEntity) onGetReplies;
   final Function(TwitterCommentReactParams ) onCommentReact;
   final Function(TwitterReportParams ) onReport;
@@ -40,7 +42,7 @@ class TwitterPostComments extends StatefulWidget {
         required this.postId,
         required this.comments,
         required this.onAddComment,
-        required this.onCommentReact, required this.onAddReply, required this.onGetReplies, required this.newCommentId, required this.state, this.user, required this.onReport, });
+        required this.onCommentReact, required this.onAddReply, required this.onGetReplies, required this.newCommentId, required this.state, this.user, required this.onReport, required this.onEditComment, required this.onDeleteComment, });
 
   @override
   State<TwitterPostComments> createState() => _TwitterPostCommentsState();
@@ -100,11 +102,16 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                           }, onReport: (TwitterReportParams params) {
                             controller.onReport(params);
                           }, onAddReply: (TwitterCommentReplyParams params) async{
-                            var result = await controller.onCommentReply(
-                              params:TwitterCommentReplyParams(postId: widget.postId,reply: controller.commentsPagingController.itemList![index].id,content: params.content),
-                            );
+                            var result = await widget.onAddReply(params);
 
                             return result;
+                          }, onDeleteComment: (String id) async{
+                            var result = await widget.onDeleteComment(id);
+                            if (result == true) {
+                              controller.commentsPagingController.itemList
+                                  ?.removeWhere((e) => e.id == id);
+                              setState(() {});
+                            }
                           });
                         },
                         noMoreItemsIndicatorBuilder: (context) => Container(),
@@ -192,7 +199,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
   }
 
   Widget _buildCommentCard(
-      {required TwitterPostCommentEntity comment,required Function(String) onReplyReact,required Function(TwitterReportParams) onReport,required Function(TwitterCommentReplyParams) onAddReply}) {
+      {required TwitterPostCommentEntity comment,required Function(String) onReplyReact,required Function(TwitterReportParams) onReport,required Function(TwitterCommentReplyParams) onAddReply,required Function(String) onDeleteComment}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -214,7 +221,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                 value: serviceLocator<TwitterCubit>()..loadReplies(context,comment.id),
                 child: TwitterCommentReplies(
                   replies: const [],
-                  onAddReply: (TwitterCommentReplyParams params) =>onAddReply(params),
+                  onAddReply: (TwitterCommentReplyParams params) async=>await onAddReply(params),
                   commentId: comment.id,
                   postId: comment.post,
                   onReplyReact: (String id) {
@@ -222,14 +229,16 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                   },
                   onReport: (TwitterReportParams params) {
                     onReport(params);
-                  },
+                  }, onEditReply: (TwitterPostCommentParams params) =>widget.onEditComment(params),
+                  onDeleteReply: (id)=>widget.onDeleteComment(id),
                 ),
               ),
             );
             print(comment.showReplies);
           }, onReport: (TwitterReportParams params) {
           widget.onReport(params);
-        },
+        }, onEditComment: (TwitterPostCommentParams params)=>widget.onEditComment(params),
+          onDeleteComment: (id)=>onDeleteComment(id),
         ),
       ],
     );

@@ -1,4 +1,3 @@
-import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
@@ -79,7 +78,6 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/pages/mus
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/trip_join/domain/usecases/fetch_location_cordinates_usecase.dart';
@@ -115,7 +113,6 @@ import '../features/authentication/presentation/pages/forgot_password/enter_emai
 import '../features/authentication/presentation/pages/forgot_password/forget_password_otp_verification_view.dart';
 import '../features/authentication/presentation/pages/login_view.dart';
 import '../features/authentication/presentation/pages/register/register_verify_otp.dart';
-import '../features/authentication/presentation/pages/register/register_view.dart';
 import '../features/azkaar/presentation/pages/azkar_view.dart';
 import '../features/competition/presentation/pages/competition_view.dart';
 import '../features/competition/presentation/pages/winners.dart';
@@ -160,7 +157,6 @@ import '../features/ride/trip_details/presentation/pages/trip_details_view.dart'
 import '../features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
 import '../features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
-import '../features/social_media/live_streaming/presentation/widgets/zego/src/minimizing/overlay_page.dart';
 import '../features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
@@ -169,7 +165,6 @@ import '../features/youtube/presentation/pages/play_video.dart';
 import '../features/youtube/presentation/pages/youtube.dart';
 import '../features/zoom/presentation/pages/meeting_room.dart';
 import '../features/zoom/presentation/pages/meeting_view.dart';
-import '../main.dart';
 import '../service_locator/service_locator.dart';
 import 'routes.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
@@ -547,16 +542,6 @@ class AppPages {
                         create: (_) => serviceLocator(),
                         child: const TwitterView()),
                     routes: [
-                      GoRoute(
-                        path: Paths.TWITTERPOSTDETAILS,
-                        name: Routes.TWITTERPOSTDETAILS,
-                        builder: (context, state) {
-                          final id = state.extra as String?;
-                          return TwitterPostDetails(
-                            postId: id ?? '',
-                          );
-                        },
-                      )
                     ]),
                 GoRoute(
                   path: Paths.OTHERSACCOUNT,

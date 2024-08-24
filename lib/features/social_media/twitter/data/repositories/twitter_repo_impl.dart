@@ -99,4 +99,14 @@ class TwitterRepoImpl implements TwitterRepo {
       {required TwitterDocumentationParams params}) {
     return _remoteDataSource.requestDocument(params: params);
   }
+
+  @override
+  Future<Either<Failure, bool>> deleteComment({required String commentId}) {
+    return _remoteDataSource.deleteComment(commentId: commentId);
+  }
+
+  @override
+  Future<Either<Failure, bool>> editComment({required TwitterPostCommentParams params}) {
+    return _remoteDataSource.editComment(params: params);
+  }
 }

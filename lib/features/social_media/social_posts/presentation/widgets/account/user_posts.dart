@@ -106,7 +106,7 @@ class _UserPostsState extends State<UserPosts> {
                               onAddComment:
                                   (PostCommentParams params) async{
                                 var result = await controller.onPostComment(
-                                    params: params, from: 'feed');
+                                    params: params, from: 'userPosts');
                                 var currentPost=controller.userPostsPagingController.itemList?.firstWhere((element) => element.id==params.postId);
                                 currentPost?.commentsCount=(currentPost.commentsCount!+1);
                                 return result;

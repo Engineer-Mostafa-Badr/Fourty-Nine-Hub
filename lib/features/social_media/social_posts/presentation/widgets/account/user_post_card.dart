@@ -432,12 +432,12 @@ class _UserPostCardState extends State<UserPostCard> {
               ),
           ],
         ),
-        if(post.location!=null&&post.location!.isNotEmpty)Padding(
+        if(post.location!=null)Padding(
           padding: const EdgeInsetsDirectional.only(start: 40.0),
           child: Row(
             children: [
               const Icon(Icons.location_on,size: 20,),
-              Expanded(child: Label(text: post.location??'',style: Styles.mediumText(fontSize: 14),))
+              Expanded(child: Label(text: post.location?.place??'',style: Styles.mediumText(fontSize: 14),))
             ],
           ),
         ),

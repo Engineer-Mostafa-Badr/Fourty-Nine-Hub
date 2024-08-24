@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
@@ -24,6 +25,7 @@ class CommentCard extends StatefulWidget {
   final Function(ReplyOnCommentParams) onAddReply;
   final Function(PostCommentParams) onEditComment;
   final Function(String) onDeleteComment;
+
   final Function(String) onDeleteReply;
 
   const CommentCard(
@@ -45,6 +47,7 @@ class _CommentCardState extends State<CommentCard> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.read<UserCubit>().state.data;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -83,7 +86,8 @@ class _CommentCardState extends State<CommentCard> {
                   Icons.more_vert,
                   color: widget.textColor,
                 )),
-            const Sizer(),
+            if(user?.id==widget.comment.user.id)...[
+              const Sizer(),
             GestureDetector(
                 onTap: () {
                   widget.comment.edit=!widget.comment.edit!;
@@ -94,7 +98,7 @@ class _CommentCardState extends State<CommentCard> {
                   Icons.edit,
                   color: widget.textColor,
                   size: 20,
-                )),
+                )),],
             const Sizer(),
             GestureDetector(
                 onTap: () {

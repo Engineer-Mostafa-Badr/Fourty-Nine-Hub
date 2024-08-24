@@ -304,6 +304,14 @@ class EndPoints {
     return '/twitter/post/hide/$postId?subCategory=66a3583454e6e337915514db';
   }
 
+  static String deleteTwitterComment(String commentId) {
+    return '/twitter/comment/delete-comment/$commentId?subCategory=66a3583454e6e337915514db';
+  }
+
+  static String editTwitterComment(String commentId) {
+    return '/twitter/comment/update-comment/$commentId?subCategory=66a3583454e6e337915514db';
+  }
+
   static String friendRequest(String userId) {
     return '/friends/sendFriendRequest/$userId?subCategory=66b77e77bb35968b535dc944';
   }

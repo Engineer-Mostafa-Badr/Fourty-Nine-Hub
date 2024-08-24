@@ -8,7 +8,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
@@ -145,7 +144,8 @@ class _UserTweetsState extends State<UserTweets> {
                             state: state,
                             onReport: (TwitterReportParams params) {
                               controller.onReport(params);
-                            },
+                            }, onEditComment: (TwitterPostCommentParams params) async=>await controller.editComment(params: params), onDeleteComment: (String id) async=>await controller.deleteComment(context: context, commentId: id, postId: controller
+                              .userTweetsPagingController.itemList![index].mainPost.id, from: 'details'),
                           ),
                         ),
 
@@ -165,7 +165,8 @@ class _UserTweetsState extends State<UserTweets> {
                   },
                     hidePost: (String id){
                       controller.hidePost(context: context, postId: id);
-                    },
+                    }, onDeleteComment: (String id) async=>await controller.deleteComment(context: context, commentId: id, postId: controller
+                      .userTweetsPagingController.itemList![index].mainPost.id, from: 'details'), onEditComment: (TwitterPostCommentParams params) async=>controller.editComment(params: params),
                   ):Center(
                     child: Label(text: getFailureMessage(
                       state.failure ?? const UnknownFailure(),

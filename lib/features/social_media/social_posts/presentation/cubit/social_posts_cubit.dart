@@ -386,11 +386,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         print(feedPagingController.itemList!.length);
         var currentPost = feedPagingController.itemList
             ?.firstWhere((element) => element.id == params.postId);
-        print("commmmmment count${currentPost?.commentsCount}");
+        print("comment count${currentPost?.commentsCount}");
 
         currentPost?.commentsCount = (currentPost.commentsCount! + 1);
       }
-      emit(state.copyWith(newComment: data, status: StateStatus.success));
+      emit(state.copyWith( status: StateStatus.success));
     });
     return model!;
   }
@@ -527,6 +527,10 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         print("commmmmment count${currentPost?.commentsCount}");
 
         currentPost?.commentsCount = (currentPost.commentsCount! - 1);
+      }else{
+        if(state.postDetails!=null){
+          state.postDetails?.commentsCount = (state.postDetails!.commentsCount!-1);
+        }
       }
       emit(state.copyWith(status: StateStatus.success));
       showSuccessMessage(context, "Comment delete successfully");
