@@ -14,12 +14,12 @@ class FoodNameTextFormField extends MainTextFormField {
     super.margin = null,
     super.enabled,
     super.maxLength,
-    super.hintColor,
     super.fillColor,
+    Color? hintColor,
   }) : super(
           validator: Validator().validateUserName,
-          hintText: LocaleKeys.foodName.tr(),
-          keyboardType: TextInputType.text,
+          hintColor: hintColor ?? Colors.grey,
+          hintText: LocaleKeys.itemName.tr(),
           textCapitalization: TextCapitalization.words,
           borderColor: AppColors.GREY_DARK_COLOR,
         );

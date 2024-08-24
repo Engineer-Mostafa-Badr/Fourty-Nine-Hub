@@ -1,8 +1,9 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
@@ -13,6 +14,7 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_cities.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:image_picker/image_picker.dart';
 
 part 'create_resturant_state.dart';
@@ -23,13 +25,13 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
       _getSubSubcategoriesUseCase;
   final GetGovernoratesUseCase _getGovernoratesUseCase;
   final GetCitiesUseCase _getCitiesUseCase;
-  final CreateRestaurantUseCase _createDoctorUseCase;
+  final CreateRestaurantUseCase _createREstaurant;
   CreateRestaurantCubit(
       this._shareCubit,
       this._getSubSubcategoriesUseCase,
       this._getGovernoratesUseCase,
       this._getCitiesUseCase,
-      this._createDoctorUseCase)
+      this._createREstaurant)
       : super(CreateRestaurantInitial());
 
   Future<void> loadData() async {
@@ -38,22 +40,54 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   }
 
   Future<void> submit() async {
-    /*  if (formKey.currentState!.validate()) {
-      _saveTextEditingControllers();
-      _saveWorkDays();
-      String? checkFilledMessage = _createDoctorParams.isFilled();
-      if (checkFilledMessage == null) {
-        emit(CreateResturantLoading("Creating Account..."));
-        final response = await _createDoctorUseCase.call(_createDoctorParams);
-        emit(CreateResturantCloseLoading());
-        response.fold(
-            (failure) => emit(CreateResturantError("Can't Create Doctor")),
-            (data) => emit(CreateResturantSuccess(
-                "You are submit sccessfuly. Please wait admin approve and abroval.")));
-      } else {
-        emit(CreateResturantError(checkFilledMessage));
-      }
-    } */
+    _validationState();
+    print(createRestaurantParams.toJson());
+    if ((createRestaurantParams.name?.isNotEmpty ?? false) &&
+        (createRestaurantParams.government?.isNotEmpty ?? false) &&
+        (createRestaurantParams.city?.isNotEmpty ?? false) &&
+        (createRestaurantParams.licenseMedia?.isNotEmpty ?? false) &&
+        (createRestaurantParams.restaurantMedia?.isNotEmpty ?? false) &&
+        (createRestaurantParams.mneu?.isNotEmpty ?? false)) {
+      saveTextEditingController();
+      emit(CreateResturantLoading("Creating Restaurant..."));
+      final response = await _createREstaurant.call(createRestaurantParams);
+      response.fold((failure) => emit(CreateResturantError(failure.toString())),
+          (data) {
+        emit(CreateRestaurantSuccess(
+            "You have submitted your registration successfully, waiting for administration approval"));
+      });
+    } else {
+      ScaffoldMessenger.of(
+              AppPages.router.routerDelegate.navigatorKey.currentContext!)
+          .showSnackBar(const SnackBar(
+        content: Text("Complete All Fields"),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
+  }
+
+  bool isSubCategory = false;
+
+  _validationState() {
+    isSubCategory = (createRestaurantParams.subcategoryId?.isEmpty ?? true);
+
+    emit(ValidationState(
+      isCity: createRestaurantParams.city?.isEmpty ?? true,
+      isGovernorate: createRestaurantParams.government?.isEmpty ?? true,
+      isName: createRestaurantParams.name?.isEmpty ?? true,
+      isRestaurantPhoto:
+          createRestaurantParams.restaurantMedia?.isEmpty ?? true,
+      isSubCategory: createRestaurantParams.subcategoryId?.isEmpty ?? true,
+      isCommercialPhoto: (createRestaurantParams.licenseMedia?.length ?? 0) < 3,
+      isCommercialFirstPage:
+          (createRestaurantParams.licenseMedia?.length ?? 0) < 1,
+      isCommercialSecondPage:
+          (createRestaurantParams.licenseMedia?.length ?? 1) < 2,
+      isCommercialThirdPage:
+          (createRestaurantParams.licenseMedia?.length ?? 2) < 3,
+      isMneu: createRestaurantParams.mneu?.isEmpty ?? true,
+    ));
   }
 
   Future<void> _getSubCategories() async {
@@ -101,15 +135,18 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   // ================================ dropdowns ===============================
   Future<void> selectGovernorate(GovernorateEntity value) async {
     createRestaurantParams.government = value.id;
+    log("restaurantMediaParms: ${createRestaurantParams.toJson()}");
     await _getCities(value.id);
   }
 
   void selectCity(CityEntity value) {
     createRestaurantParams.city = value.id;
+    log("restaurantMediaParms: ${createRestaurantParams.toJson()}");
   }
 
   void selectSubcategory(FoodCategoryEntity subCategoryModel) {
     createRestaurantParams.subcategoryId = subCategoryModel.id ?? "";
+    log("restaurantMediaParms: ${createRestaurantParams.toJson()}");
   }
 
   // ================================= upload images =================================
@@ -131,42 +168,56 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   }
 
   List<XFile> restaurantImages = [];
+  List<String> restaurantImagesIds = [];
+  List<String> licensRestaurantImagesIds = [];
 
   Future<void> uploadProfileImage() async {
     await _uploadImage(onUploaded: (media) {
-      createRestaurantParams.restaurantMedia?.add(media.mediaId);
       restaurantImages.add(media.file);
+      restaurantImagesIds.add(media.mediaId);
+      createRestaurantParams.restaurantMedia = restaurantImagesIds;
+      log("restaurantImagesIds: ${restaurantImagesIds.length}");
+      log("restaurantMediaParms: ${createRestaurantParams.restaurantMedia?.length}");
       emit(CreateRestaurantUploadProfileImage(restaurantImages));
     });
   }
 
   Future<void> uploadLicenseFirstPageImage() async {
     await _uploadImage(onUploaded: (media) {
-      createRestaurantParams.licenseMedia?.add(media.mediaId);
+      licensRestaurantImagesIds.add(media.mediaId);
+      createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
+      log("licensRestaurantImagesIds: ${licensRestaurantImagesIds.length}");
+      log("licensRestaurantImagesIdsParms: ${createRestaurantParams.licenseMedia?.length}");
       emit(CreateRestaurantUploadLicenseFirstPageImage(media.file));
     });
   }
 
   Future<void> uploadLicenseSecondPageImage() async {
     await _uploadImage(onUploaded: (media) {
-      restaurantImages.add(media.file);
-      createRestaurantParams.licenseMedia?.add(media.mediaId);
+      licensRestaurantImagesIds.add(media.mediaId);
+      createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
+      log("licensRestaurantImagesIds: ${licensRestaurantImagesIds.length}");
+      log("licensRestaurantImagesIdsParms: ${createRestaurantParams.licenseMedia?.length}");
       emit(CreateRestaurantUploadLicenseSecondPageImage(media.file));
     });
   }
 
   Future<void> uploadLicenseThiredPageImage() async {
     await _uploadImage(onUploaded: (media) {
-      restaurantImages.add(media.file);
-      createRestaurantParams.licenseMedia?.add(media.mediaId);
+      licensRestaurantImagesIds.add(media.mediaId);
+      createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
+      log("licensRestaurantImagesIds: ${licensRestaurantImagesIds.length}");
+      log("licensRestaurantImagesIdsParms: ${createRestaurantParams.licenseMedia?.length}");
       emit(CreateRestaurantUploadLicenseThiredPageImage(media.file));
     });
   }
 
   final name = TextEditingController();
   final phoneController = TextEditingController();
-
-  final formKey = GlobalKey<FormState>();
+  saveTextEditingController() {
+    createRestaurantParams.name = name.text;
+    log("restaurantMediaParms: ${createRestaurantParams.toJson()}");
+  }
 
   @override
   Future<void> close() {

@@ -62,6 +62,15 @@ class Validator {
     return null;
   }
 
+  String? validateRestaurantName(String? userName) {
+    if (userName == null || userName.trim().isEmpty) {
+      return "You have to fill Restaurant Name";
+    } else if (userName.length < 2) {
+      return 'Must Be At Least_2';
+    }
+    return null;
+  }
+
   String? validateBirthDate(String? birthdate) {
     if (birthdate == null || birthdate.isEmpty) {
       return 'Empty Field Not Valid';
@@ -80,8 +89,9 @@ class Validator {
     return userAge < allowedAge;
   }
 
-  String? validateEmptyField(String? text) =>
-      text == null || text.isEmpty ?LocaleKeys.emptyFieldNotValid.localize : null;
+  String? validateEmptyField(String? text) => text == null || text.isEmpty
+      ? LocaleKeys.emptyFieldNotValid.localize
+      : null;
 
   String? validateEmptyValue(String? value) =>
       value == null ? "Empty Field Not Valid" : null;

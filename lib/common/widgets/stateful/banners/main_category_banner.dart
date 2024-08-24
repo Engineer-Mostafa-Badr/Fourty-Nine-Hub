@@ -112,8 +112,8 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 const Spacer(),
                 Label(
                   text: Labels.meal,
-                  style:
-                      Styles.headerText(color: AppColors.AUTH_CONTAINER_COLOR),
+                  style: Styles.headerText(
+                      color: AppColors.AUTH_CONTAINER_COLOR, fontSize: 22),
                 ),
                 widget.canRegister ? const Spacer() : const SizedBox.shrink(),
                 _buildRegisterButton(),
@@ -129,8 +129,14 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
     if (widget.canRegister) {
       return InkWell(
         onTap: () => widget.onRegister?.call(),
-        child: Text(Labels.register,
-            style: Styles.mediumText(color: Colors.white)),
+        child: Text(
+          Labels.register,
+          style: Styles.mediumText(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       );
     } else {
       return const SizedBox.shrink();

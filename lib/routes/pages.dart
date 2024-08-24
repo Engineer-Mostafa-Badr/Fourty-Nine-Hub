@@ -829,6 +829,14 @@ class AppPages {
                 ),
             routes: [
               GoRoute(
+                path: Paths.SearchMeals,
+                name: Routes.SEARCHMEALS,
+                builder: (context, state) => BlocProvider.value(
+                  value: serviceLocator<SearchRestaurantsCubit>(),
+                  child: const SearchRestaurantView(),
+                ),
+              ),
+              GoRoute(
                 path: Paths.CREATERESTURANT,
                 name: Routes.CREATERESTURANT,
                 builder: (context, state) =>
@@ -872,14 +880,6 @@ class AppPages {
                     builder: (context, state) => BlocProvider.value(
                       value: serviceLocator<FoodCartCubit>(),
                       child: const FoodCartView(),
-                    ),
-                  ),
-                  GoRoute(
-                    path: Paths.SearchMeals,
-                    name: Routes.SEARCHMEALS,
-                    builder: (context, state) => BlocProvider.value(
-                      value: serviceLocator<SearchRestaurantsCubit>(),
-                      child: const SearchRestaurantView(),
                     ),
                   ),
                 ],

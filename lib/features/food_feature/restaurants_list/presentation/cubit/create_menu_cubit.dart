@@ -10,15 +10,18 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
   RestaurantMenuCubit() : super(RestaurantMenuInitial());
 
   final List<RestaurantMneuModel> _menu = [];
+  List<RestaurantMneuModel> get menu => _menu;
 
   void addMenuItem(BuildContext context, RestaurantMneuModel menuItem) {
     _menu.add(menuItem);
     emit(RestaurantMenuLoaded(List.from(_menu)));
     context.read<CreateRestaurantCubit>().createRestaurantParams.mneu = _menu;
+    print(
+        "params: ${context.read<CreateRestaurantCubit>().createRestaurantParams.toJson()}");
   }
 
-  void removeMenuItem(BuildContext context, int index) {
-    _menu.removeAt(index);
+  void removeMenuItem(BuildContext context, RestaurantMneuModel index) {
+    _menu.remove(index);
     context.read<CreateRestaurantCubit>().createRestaurantParams.mneu = _menu;
     emit(RestaurantMenuLoaded(List.from(_menu)));
   }
@@ -63,6 +66,7 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
 
   final foodNameController = TextEditingController();
   final priceController = TextEditingController();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   Future<void> close() {
     priceController.dispose();

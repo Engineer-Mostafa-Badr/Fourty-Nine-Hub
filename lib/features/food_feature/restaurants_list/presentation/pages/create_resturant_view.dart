@@ -38,7 +38,7 @@ class CreateResturantView extends StatelessWidget {
           case CreateResturantError _:
             showErrorMessage(context, state.message);
             break;
-          case CreateResturantSuccess _:
+          case CreateRestaurantSuccess _:
             showSuccessMessage(context, state.message);
             break;
           default:
@@ -49,55 +49,52 @@ class CreateResturantView extends StatelessWidget {
         appBar: const HomeAppbar(),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(15.0),
-          child: Form(
-            key: context.read<CreateRestaurantCubit>().formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Label(
-                    text: LocaleKeys.welcomeToResturantRegisteration.localize,
-                    style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
-                const Sizer(height: 20),
-                const CreateResturantSubcategoryDropdown(),
-                const Sizer(height: 20),
-                const CreateRestaurantNameField(),
-                const Sizer(height: 20),
-                const CreateRestaurantProfilePhotoPicker(),
-                const Sizer(height: 20),
-                const CreateRestaurantLicensePhotoPicker(),
-                const Sizer(height: 20),
-                CreateRestaurantGovernorateDropdown(
-                  onSelected: (value) {
-                    if (value != null) {
-                      context
-                          .read<CreateRestaurantCubit>()
-                          .selectGovernorate(value);
-                    }
-                  },
-                ),
-                const Sizer(height: 20),
-                const CreateRestaurantCitiesDropdowns(),
-                const Sizer(height: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Label(
+                  text: LocaleKeys.welcomeToResturantRegisteration.localize,
+                  style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
+              const Sizer(height: 20),
+              const CreateResturantSubcategoryDropdown(),
+              const Sizer(height: 20),
+              const CreateRestaurantNameField(),
+              const Sizer(height: 20),
+              const CreateRestaurantProfilePhotoPicker(),
+              const Sizer(height: 20),
+              const CreateRestaurantLicensePhotoPicker(),
+              const Sizer(height: 20),
+              CreateRestaurantGovernorateDropdown(
+                onSelected: (value) {
+                  if (value != null) {
+                    context
+                        .read<CreateRestaurantCubit>()
+                        .selectGovernorate(value);
+                  }
+                },
+              ),
+              const Sizer(height: 20),
+              const CreateRestaurantCitiesDropdowns(),
+              const Sizer(height: 20),
 
-                /// mneu
-                BlocProvider(
-                  create: (_) => RestaurantMenuCubit(),
-                  child: ShowMneu(),
-                ),
-                const Sizer(height: 20),
+              /// mneu
+              BlocProvider(
+                create: (_) => RestaurantMenuCubit(),
+                child: ShowMneu(),
+              ),
+              const Sizer(height: 20),
 
-                AppInfoText(
-                    text: LocaleKeys
-                        .theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider
-                        .localize),
-                const Sizer(height: 20),
-                AppInfoText(
-                    text: LocaleKeys
-                        .youWillGetEGP3650PerYearIfYouSubscribeDaily.localize),
-                const Sizer(height: 20),
-                const CreateRestaurantSubmitButton(),
-              ],
-            ),
+              AppInfoText(
+                  text: LocaleKeys
+                      .theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider
+                      .localize),
+              const Sizer(height: 20),
+              AppInfoText(
+                  text: LocaleKeys
+                      .youWillGetEGP3650PerYearIfYouSubscribeDaily.localize),
+              const Sizer(height: 20),
+              const CreateRestaurantSubmitButton(),
+            ],
           ),
         ),
       ),

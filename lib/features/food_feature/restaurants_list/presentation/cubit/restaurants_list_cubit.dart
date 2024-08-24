@@ -66,7 +66,6 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
         .read<UserCubit>()
         .getUser()
         .then((Either<Failure, UserEntity>? value) {
-      print("then");
       if (value != null) {
         value.fold(
           (failure) => print("failure user: $failure"),

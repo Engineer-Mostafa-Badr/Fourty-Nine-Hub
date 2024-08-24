@@ -11,10 +11,11 @@ class ElevatedAppButton extends StatelessWidget {
   final double? radius;
   final Color? backColor;
   final TextStyle? textStyle;
-
+  final double? fontSize;
   const ElevatedAppButton(
       {super.key,
       this.radius,
+      this.fontSize,
       required this.label,
       required this.onPressed,
       this.icon,
@@ -47,6 +48,7 @@ class ElevatedAppButton extends StatelessWidget {
               text: label,
               style: textStyle ??
                   Styles.mediumText(
+                      fontSize: fontSize ?? 16.0,
                       color: Theme.of(context).scaffoldBackgroundColor)),
     );
   }

@@ -22,43 +22,64 @@ class _CreateRestaurantProfilePhotoPickerState
   @override
   Widget build(BuildContext context) {
     final createRestaurantCubit = context.read<CreateRestaurantCubit>();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(
-          text: LocaleKeys.photoForRestaurant.tr(),
-          style: Styles.headerText(),
-        ),
-        const Sizer(),
-        BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
-          buildWhen: (previous, current) =>
-              current is CreateRestaurantUploadProfileImage ||
-              current is CreateRestaurantInitial,
-          builder: (context, state) {
-            return Wrap(
-              runSpacing: 10,
-              spacing: 10,
-              children: [
-                if (state is CreateRestaurantUploadProfileImage) ...[
-                  ...state.files.map(
-                    (e) => ImagePickerPlaceholder(
-                      title: e.path.split('/').last,
-                      image: XFile(e.path),
-                      fit: BoxFit.cover,
+    return BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
+        builder: (context, state) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Label(
+            text: LocaleKeys.photoForRestaurant.tr(),
+            style: Styles.headerText(),
+          ),
+          const Sizer(),
+          BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
+            buildWhen: (previous, current) =>
+                current is CreateRestaurantUploadProfileImage ||
+                current is CreateRestaurantInitial,
+            builder: (context, state) {
+              return Wrap(
+                runSpacing: 10,
+                spacing: 10,
+                children: [
+                  if (state is CreateRestaurantUploadProfileImage) ...[
+                    ...state.files.map(
+                      (e) => ImagePickerPlaceholder(
+                        title: e.path.split('/').last,
+                        image: XFile(e.path),
+                        fit: BoxFit.cover,
+                      ),
                     ),
+                  ],
+                  InkWell(
+                    onTap: () async {
+                      await createRestaurantCubit.uploadProfileImage();
+                    },
+                    child: BlocBuilder<CreateRestaurantCubit,
+                        CreateRestaurantState>(builder: (context, state) {
+                      return ImagePickerPlaceholder(
+                        borderColor: state is ValidationState &&
+                                (state.isRestaurantPhoto ?? true)
+                            ? Colors.red
+                            : Colors.black,
+                      );
+                    }),
                   ),
                 ],
-                InkWell(
-                  onTap: () async {
-                    await createRestaurantCubit.uploadProfileImage();
-                  },
-                  child: const ImagePickerPlaceholder(),
-                ),
-              ],
-            );
-          },
-        ),
-      ],
-    );
+              );
+            },
+          ),
+          Visibility(
+            visible: state is ValidationState && (state.isName ?? true),
+            child: const Padding(
+              padding: EdgeInsets.only(right: 5, left: 5, top: 5.0),
+              child: Text(
+                "You have to uplaod at least one photo!",
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          )
+        ],
+      );
+    });
   }
 }

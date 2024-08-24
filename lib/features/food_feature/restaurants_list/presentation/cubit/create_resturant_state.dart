@@ -13,14 +13,68 @@ final class CreateResturantCloseLoading extends CreateRestaurantState {}
 
 final class CreateResturantLoaded extends CreateRestaurantState {}
 
-final class CreateResturantSuccess extends CreateRestaurantState {
+final class CreateRestaurantSuccess extends CreateRestaurantState {
   final String message;
-  CreateResturantSuccess(this.message);
+  CreateRestaurantSuccess(this.message);
 }
 
 final class CreateResturantError extends CreateRestaurantState {
   final String message;
   CreateResturantError(this.message);
+}
+
+class ValidationState extends CreateRestaurantState {
+  final bool? isName;
+  final bool? isSubCategory;
+  final bool? isRestaurantPhoto;
+  final bool? isCommercialPhoto;
+  final bool? isCommercialFirstPage;
+  final bool? isCommercialSecondPage;
+  final bool? isCommercialThirdPage;
+  final bool? isGovernorate;
+  final bool? isCity;
+  final bool? isMneu;
+  ValidationState({
+    this.isName,
+    this.isSubCategory,
+    this.isRestaurantPhoto,
+    this.isCommercialPhoto,
+    this.isCommercialFirstPage,
+    this.isCommercialSecondPage,
+    this.isCommercialThirdPage,
+    this.isGovernorate,
+    this.isCity,
+    this.isMneu,
+  });
+
+  ValidationState copyWith({
+    bool? isName,
+    bool? isSubCategory,
+    bool? isRestaurantPhoto,
+    bool? isCommercialPhoto,
+    bool? isCommercialFirstPage,
+    bool? isCommercialSecondPage,
+    bool? isCommercialThirdPage,
+    bool? isGovernorate,
+    bool? isCity,
+    bool? isMneu,
+  }) {
+    return ValidationState(
+      isName: isName ?? this.isName,
+      isSubCategory: isSubCategory ?? this.isSubCategory,
+      isRestaurantPhoto: isRestaurantPhoto ?? this.isRestaurantPhoto,
+      isCommercialPhoto: isCommercialPhoto ?? this.isCommercialPhoto,
+      isCommercialFirstPage:
+          isCommercialFirstPage ?? this.isCommercialFirstPage,
+      isCommercialSecondPage:
+          isCommercialSecondPage ?? this.isCommercialSecondPage,
+      isCommercialThirdPage:
+          isCommercialThirdPage ?? this.isCommercialThirdPage,
+      isGovernorate: isGovernorate ?? this.isGovernorate,
+      isCity: isCity ?? this.isCity,
+      isMneu: isMneu ?? this.isMneu,
+    );
+  }
 }
 
 final class CreateRestaurantCitiesLoaded extends CreateRestaurantState {

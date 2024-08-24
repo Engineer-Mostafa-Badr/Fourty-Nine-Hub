@@ -1,16 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
- import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
- import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
- import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/banner.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/banner.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/meal_categories.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/resturant_dashboard_banner.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
- import 'package:go_router/go_router.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -48,6 +49,28 @@ class RestaurantsListsView extends StatelessWidget {
                           ListView(
                             children: [
                               const MealBanner(),
+                              Visibility(
+                                visible: state.isResturant == false,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    if (context.read<UserCubit>().isLoggedIn) {
+                                      context.push(Routes.CREATERESTURANT);
+                                    } else {
+                                      context.push(Routes.REGISTER);
+                                    }
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5.0),
+                                    child: Text(
+                                      "You can enjoy serving your clints using your restaurant by clicking on the rigester button above.",
+                                      style: Styles.mediumText(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                               const Sizer(),
                               const ResturantDashboardButton(),
                               const Sizer(),
@@ -111,8 +134,8 @@ class RestaurantsListsView extends StatelessWidget {
                               if ((state.subCategories?.isNotEmpty ?? false) &&
                                   state.isSuccess) ...[
                                 Label(
-                                  text: LocaleKeys
-                                      .restaurantsForSelectedMeal.tr(),
+                                  text: LocaleKeys.restaurantsForSelectedMeal
+                                      .tr(),
                                   style: Styles.headerText(),
                                 ),
                                 const Sizer(),

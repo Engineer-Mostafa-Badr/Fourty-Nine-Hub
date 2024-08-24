@@ -15,84 +15,115 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final createRestaurantCubit = context.read<CreateRestaurantCubit>();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(
-          text: LocaleKeys.theCommercialRegister.tr(),
-          style: Styles.headerText(),
-        ),
-        const Sizer(),
-        Row(
-          children: [
-            InkWell(
-              onTap: () async {
-                await createRestaurantCubit.uploadLicenseFirstPageImage();
-              },
-              child: BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
-                buildWhen: (previous, current) =>
-                    current is CreateRestaurantUploadLicenseFirstPageImage ||
-                    current is CreateRestaurantInitial,
-                builder: (context, state) {
-                  if (state is CreateRestaurantUploadLicenseFirstPageImage) {
-                    return ImagePickerPlaceholder(
-                      image: XFile(state.file.path),
-                    );
-                  }
-                  return ImagePickerPlaceholder(
-                    title: LocaleKeys.firstPage.tr(),
-                  );
+    return BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
+        builder: (context, state) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Label(
+            text: LocaleKeys.theCommercialRegister.tr(),
+            style: Styles.headerText(),
+          ),
+          const Sizer(),
+          Row(
+            children: [
+              InkWell(
+                onTap: () async {
+                  await createRestaurantCubit.uploadLicenseFirstPageImage();
                 },
+                child:
+                    BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
+                  buildWhen: (previous, current) =>
+                      current is CreateRestaurantUploadLicenseFirstPageImage ||
+                      current is CreateRestaurantInitial,
+                  builder: (context, state) {
+                    if (state is CreateRestaurantUploadLicenseFirstPageImage) {
+                      return ImagePickerPlaceholder(
+                        fit: BoxFit.cover,
+                        image: XFile(state.file.path),
+                      );
+                    }
+                    return ImagePickerPlaceholder(
+                      borderColor: state is ValidationState &&
+                              (state.isCommercialFirstPage ?? true)
+                          ? Colors.red
+                          : Colors.black,
+                      title: LocaleKeys.firstPage.tr(),
+                    );
+                  },
+                ),
+              ),
+              const Sizer(),
+              InkWell(
+                onTap: () async {
+                  await createRestaurantCubit.uploadLicenseSecondPageImage();
+                },
+                child:
+                    BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
+                  buildWhen: (previous, current) =>
+                      current is CreateRestaurantUploadLicenseSecondPageImage ||
+                      current is CreateRestaurantInitial,
+                  builder: (context, state) {
+                    if (state is CreateRestaurantUploadLicenseSecondPageImage) {
+                      return ImagePickerPlaceholder(
+                        fit: BoxFit.cover,
+                        image: XFile(
+                          state.file.path,
+                        ),
+                      );
+                    }
+                    return ImagePickerPlaceholder(
+                      borderColor: state is ValidationState &&
+                              (state.isCommercialSecondPage ?? true)
+                          ? Colors.red
+                          : Colors.black,
+                      title: LocaleKeys.secondPage.tr(),
+                    );
+                  },
+                ),
+              ),
+              const Sizer(),
+              InkWell(
+                onTap: () async {
+                  await createRestaurantCubit.uploadLicenseThiredPageImage();
+                },
+                child:
+                    BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
+                  buildWhen: (previous, current) =>
+                      current is CreateRestaurantUploadLicenseThiredPageImage ||
+                      current is CreateRestaurantInitial,
+                  builder: (context, state) {
+                    if (state is CreateRestaurantUploadLicenseThiredPageImage) {
+                      return ImagePickerPlaceholder(
+                        fit: BoxFit.cover,
+                        image: XFile(state.file.path),
+                      );
+                    }
+                    return ImagePickerPlaceholder(
+                      borderColor: state is ValidationState &&
+                              (state.isCommercialThirdPage ?? true)
+                          ? Colors.red
+                          : Colors.black,
+                      title: LocaleKeys.thirdPage.tr(),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+          Visibility(
+            visible:
+                state is ValidationState && (state.isCommercialPhoto ?? true),
+            child: const Padding(
+              padding: EdgeInsets.only(right: 5, left: 5, top: 5.0),
+              child: Text(
+                "You have to uplaod the 3 pages of commercial registration!",
+                style: TextStyle(color: Colors.red),
               ),
             ),
-            const Sizer(),
-            InkWell(
-              onTap: () async {
-                await createRestaurantCubit.uploadLicenseSecondPageImage();
-              },
-              child: BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
-                buildWhen: (previous, current) =>
-                    current is CreateRestaurantUploadLicenseSecondPageImage ||
-                    current is CreateRestaurantInitial,
-                builder: (context, state) {
-                  if (state is CreateRestaurantUploadLicenseSecondPageImage) {
-                    return ImagePickerPlaceholder(
-                      fit: BoxFit.cover,
-                      image: XFile(
-                        state.file.path,
-                      ),
-                    );
-                  }
-                  return ImagePickerPlaceholder(
-                    title: LocaleKeys.secondPage.tr(),
-                  );
-                },
-              ),
-            ),
-            const Sizer(),
-            InkWell(
-              onTap: () async {
-                await createRestaurantCubit.uploadLicenseThiredPageImage();
-              },
-              child: BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
-                buildWhen: (previous, current) =>
-                    current is CreateRestaurantUploadLicenseThiredPageImage ||
-                    current is CreateRestaurantInitial,
-                builder: (context, state) {
-                  if (state is CreateRestaurantUploadLicenseThiredPageImage) {
-                    return ImagePickerPlaceholder(
-                      image: XFile(state.file.path),
-                    );
-                  }
-                  return ImagePickerPlaceholder(
-                    title: LocaleKeys.thirdPage.tr(),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
+          )
+        ],
+      );
+    });
   }
 }

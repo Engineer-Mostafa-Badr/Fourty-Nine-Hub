@@ -1,7 +1,11 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import '../../../../../core/api/end_points.dart';
 import '../../../../../res/assets/jsons.dart';
@@ -10,6 +14,7 @@ import '../models/food_category_model.dart';
 import '../models/restaurant_model.dart';
 
 abstract class RestaurantsRemoteDataSource {
+  Future<Either<Failure, bool>> createRestaurant(CreateRestaurantParams params);
   Future<Either<Failure, List<FoodCategoryModel>>> getFoodCategories();
   Future<Either<Failure, List<FoodCategoryModel>>>
       getMealCategoriesWithCountRestaurants(
@@ -139,6 +144,21 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
           data["data"].map((e) => Restaurant2Model.fromJson(e)).toList(),
         ),
       ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> createRestaurant(
+      CreateRestaurantParams params) async {
+    final response = await _apiConsumer.post(EndPoints.createRestaurant,
+        data: params.toMap());
+
+    return response.fold(
+      (failure) => Left(failure),
+      (data) {
+        log(jsonEncode(data));
+        return Right(data['status']);
+      },
     );
   }
 }

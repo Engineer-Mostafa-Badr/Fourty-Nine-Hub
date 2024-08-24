@@ -18,6 +18,7 @@ abstract class  LocaleKeys {
   static const welcomeToResturantRegisteration = 'welcomeToResturantRegisteration';
   static const selecteSubcategory = 'selecteSubcategory';
   static const photoForRestaurant = 'photoForRestaurant';
+  static const searchForFavouriteMeals = 'searchForFavouriteMeals';
   static const firstPage = 'firstPage';
   static const secondPage = 'secondPage';
   static const thirdPage = 'thirdPage';
@@ -27,10 +28,12 @@ abstract class  LocaleKeys {
   static const restaurantDashboard = 'restaurantDashboard';
   static const allRestaurants = 'allRestaurants';
   static const restaurantsForSelectedMeal = 'restaurantsForSelectedMeal';
-  static const foodName = 'foodName';
+  static const itemName = 'itemName';
   static const price = 'price';
+  static const youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove = 'youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove';
   static const photoForMeal = 'photoForMeal';
   static const mneu = 'mneu';
+  static const submit = 'submit';
   static const needToLogin = 'needToLogin';
   static const tweet = 'tweet';
   static const reels = 'reels';

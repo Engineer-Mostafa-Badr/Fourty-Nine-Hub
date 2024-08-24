@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
- import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -22,37 +22,52 @@ class CreateRestaurantGovernorateDropdown extends StatelessWidget {
             validator: validator,
             builder: (field) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  DropdownMenu(
-                      menuHeight: MediaQuery.of(context).size.height / 1.5,
-                      menuStyle: const MenuStyle(
-                        visualDensity: VisualDensity.comfortable,
-                      ),
-                      inputDecorationTheme: InputDecorationTheme(
-                        border: OutlineInputBorder(
+                  BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
+                      builder: (context, st) {
+                    return DropdownMenu(
+                        menuHeight: MediaQuery.of(context).size.height / 1.5,
+                        menuStyle: const MenuStyle(
+                          visualDensity: VisualDensity.comfortable,
+                        ),
+                        inputDecorationTheme: InputDecorationTheme(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
                             borderSide: BorderSide(
-                                color:
-                                    field.hasError ? Colors.red : Colors.grey)),
-                        errorBorder: OutlineInputBorder(
+                                color: st is ValidationState &&
+                                        (st.isSubCategory ?? true)
+                                    ? Colors.red
+                                    : Colors.grey),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
                             borderSide: BorderSide(
-                          color: field.hasError ? Colors.red : Colors.grey,
-                        )),
-                        enabledBorder: OutlineInputBorder(
+                                color: st is ValidationState &&
+                                        (st.isGovernorate ?? true)
+                                    ? Colors.red
+                                    : Colors.grey),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
                             borderSide: BorderSide(
-                          color: field.hasError ? Colors.red : Colors.grey,
-                        )),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                          color: field.hasError ? Colors.red : Colors.grey,
-                        )),
-                      ),
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      hintText: LocaleKeys.selectGovernorate.tr(),
-                      dropdownMenuEntries: state.governorates
-                          .map((e) =>
-                              DropdownMenuEntry(value: e, label: e.nameEn))
-                          .toList(),
-                      onSelected: onSelected),
+                                color: st is ValidationState &&
+                                        (st.isGovernorate ?? true)
+                                    ? Colors.red
+                                    : Colors.grey),
+                          ),
+                        ),
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        hintText: LocaleKeys.selectGovernorate.tr(),
+                        dropdownMenuEntries: state.governorates
+                            .map((e) =>
+                                DropdownMenuEntry(value: e, label: e.nameEn))
+                            .toList(),
+                        onSelected: onSelected);
+                  }),
                   if (field.hasError)
                     Column(
                       children: [
@@ -62,7 +77,21 @@ class CreateRestaurantGovernorateDropdown extends StatelessWidget {
                           style: Styles.mediumText(color: Colors.red),
                         ),
                       ],
-                    )
+                    ),
+                  BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
+                      builder: (context, state) {
+                    return Visibility(
+                      visible: state is ValidationState &&
+                          (state.isGovernorate ?? true),
+                      child: const Padding(
+                        padding: EdgeInsets.only(right: 5, left: 5, top: 5.0),
+                        child: Text(
+                          "You have to selecte your governorate!",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    );
+                  })
                 ],
               );
             },

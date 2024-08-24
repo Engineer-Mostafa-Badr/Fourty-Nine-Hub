@@ -60,7 +60,9 @@ class FoodServiceLocator {
     serviceLocator.registerLazySingleton<FoodCartRepo>(
         () => FoodCartRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<CreateRestaurantUseCase>(
-        () => CreateRestaurantUseCase());
+        () => CreateRestaurantUseCase(
+              serviceLocator(),
+            ));
     serviceLocator.registerLazySingleton<RestaurantMenuCubit>(
         () => RestaurantMenuCubit());
     serviceLocator.registerLazySingleton<RestaurantSharedData>(
@@ -159,6 +161,7 @@ class FoodServiceLocator {
         serviceLocator(),
       )..loadData(),
     );
+
     serviceLocator.registerLazySingleton<RemoveFromCartUseCase>(
       () => RemoveFromCartUseCase(
         serviceLocator(),

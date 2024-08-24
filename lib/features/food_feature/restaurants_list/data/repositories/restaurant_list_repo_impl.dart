@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/food_category_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_entity.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 
 import '../../domain/repositories/resturant_list_repo.dart';
@@ -68,5 +69,11 @@ class RestaurantListRepoImpl implements RestaurantListRepo {
       government: government,
       params: params,
     );
+  }
+
+  @override
+  Future<Either<Failure, bool>> createRestaurant(
+      CreateRestaurantParams params) async {
+    return _remoteDataSource.createRestaurant(params);
   }
 }

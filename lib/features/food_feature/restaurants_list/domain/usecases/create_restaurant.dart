@@ -1,16 +1,19 @@
 import 'dart:convert';
 
+import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/repositories/resturant_list_repo.dart';
 
-class CreateRestaurantUseCase /* extends UseCase<bool, CreateResturantParams> */ {
-  // final CreateDoctorRepo _createDoctorRepo;
-  // CreateDoctorUseCase(this._createDoctorRepo);
-  // @override
-  // Future<Either<Failure, bool>> call(CreateResturantParams params) {
-  //   return _createDoctorRepo.createDoctor(params);
-  // }
+class CreateRestaurantUseCase {
+  final RestaurantListRepo _restaurantRepo;
+  CreateRestaurantUseCase(this._restaurantRepo);
+
+  Future<Either<Failure, bool>> call(CreateRestaurantParams params) async {
+    return _restaurantRepo.createRestaurant(params);
+  }
 }
 
 class CreateRestaurantParams {
