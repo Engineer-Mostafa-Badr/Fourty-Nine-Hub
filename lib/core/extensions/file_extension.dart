@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 enum FileType {
@@ -32,18 +33,33 @@ extension FileTypeChecker on File {
   }
 
   FileType get fileType => _getFileType();
+
   bool get isPhoto => fileType == FileType.image;
+
   bool get isVideo => fileType == FileType.video;
 
-  /// generate jpeg thumbnail
-  Future<Uint8List?> generateThumbnail() async {
-    final thumbnailAsUint8List = await VideoThumbnail.thumbnailData(
-      video: path,
-      imageFormat: ImageFormat.JPEG,
-      maxWidth: 320,
-      // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
-      quality: 50,
-    );
-    return thumbnailAsUint8List!;
+  Future<Uint8List?> generateThumbnail({
+    Map<String, String>? headers,
+    String? thumbnailPath,
+    ImageFormat imageFormat = ImageFormat.JPEG,
+    int maxHeight = 0,
+    int maxWidth = 0,
+    int timeMs = 0,
+    int quality = 10,
+  }) async {
+    try {
+      final thumbnailData = await VideoThumbnail.thumbnailData(
+        video: path,
+        imageFormat: imageFormat,
+        maxHeight: maxHeight,
+        maxWidth: maxWidth,
+        timeMs: timeMs,
+        quality: quality,
+      );
+      return thumbnailData;
+    } catch (e) {
+      CliLogger.error("thumbnail generation error: $e");
+      return null;
+    }
   }
 }

@@ -79,41 +79,48 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
   }
 
   Future<void> startVideoRecording() async {
-    _recordingCompleter = Completer<void>();
-    await _controller?.startVideoRecording();
-    emit(state.copyWith(status: CameraPickerStatus.startVideo));
-    CliLogger.info('Video recording started');
+    try {
+      _recordingCompleter = Completer<void>();
+      await _controller?.startVideoRecording();
+      emit(state.copyWith(status: CameraPickerStatus.startVideo));
+      CliLogger.info('Video recording started');
 
-    await Future.any([
-      Future.delayed(_maxVideoLength),
-      _recordingCompleter!.future,
-    ]);
+      await Future.any([
+        Future.delayed(_maxVideoLength),
+        _recordingCompleter!.future,
+      ]);
 
-    if (!_recordingCompleter!.isCompleted) {
-      CliLogger.info('Video recording stopped automatically');
-      stopVideoRecording();
+      if (!_recordingCompleter!.isCompleted) {
+        CliLogger.info('Video recording stopped automatically');
+        stopVideoRecording();
+      }
+
+      _recordingCompleter = null;
+    } catch (e) {
+      CliLogger.error("Error while starting video recording: $e");
     }
-
-    _recordingCompleter = null;
   }
 
   Future<void> stopVideoRecording() async {
-    if (_recordingCompleter != null && !_recordingCompleter!.isCompleted) {
-      _recordingCompleter!
-          .complete(); // Signal that the recording has been stopped
+    try {
+      if (_recordingCompleter != null && !_recordingCompleter!.isCompleted) {
+        _recordingCompleter!
+            .complete(); // Signal that the recording has been stopped
+      }
+
+      final XFile? video = await _controller?.stopVideoRecording();
+      CliLogger.info(
+          'Video recording stopped : ${video?.path}\nvideo.mimeType: ${video?.mimeType}');
+      emit(state.copyWith(status: CameraPickerStatus.endVideo));
+
+      if (video != null) {
+        _mediaList.add(video);
+        emit(state.copyWith(
+            status: CameraPickerStatus.updateMediaList, mediaList: _mediaList));
+      }
+    } catch (e) {
+      CliLogger.error("Error while stopping video recording: $e");
     }
-
-    final XFile? video = await _controller?.stopVideoRecording();
-    CliLogger.info(
-        'Video recording stopped : ${video?.path}\nvideo.mimeType: ${video?.mimeType}');
-    emit(state.copyWith(status: CameraPickerStatus.endVideo));
-
-    if (video != null) {
-      _mediaList.add(video);
-    }
-
-    emit(state.copyWith(
-        status: CameraPickerStatus.updateMediaList, mediaList: _mediaList));
   }
 
   void emitPhotoPickMode() {
@@ -122,6 +129,10 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
 
   void emitVideoPickMode() {
     emit(state.copyWith(pickMode: PickMode.video));
+  }
+
+  void refreshMediaList(){
+    emit(state.copyWith(status: CameraPickerStatus.updateMediaList, mediaList: _mediaList));
   }
 
   Duration get maxVideoLength => _maxVideoLength;

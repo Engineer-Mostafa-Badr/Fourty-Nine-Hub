@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -159,13 +160,17 @@ class _CamViewState extends State<_CamView> {
                         onTap: () {
                           final media =
                               context.read<CameraPickerCubit>().state.mediaList;
-                          if(media != null && media.isNotEmpty){
+                          if (media != null && media.isNotEmpty) {
                             showDialog(
                                 context: context,
-                                builder: (_) => ImagesAndVideosSlider(
-                                    media: media));
-                          }else{
-                            showErrorMessage(context, LocaleKeys.pickPhotoOrVideo);
+                                builder: (_) =>
+                                    ImagesAndVideosSlider(media: media)).then(
+                                (value) => context
+                                    .read<CameraPickerCubit>()
+                                    .refreshMediaList());
+                          } else {
+                            showErrorMessage(
+                                context, LocaleKeys.pickPhotoOrVideo);
                           }
                         },
                       );
@@ -298,7 +303,12 @@ class _BaseIcon extends StatelessWidget {
   }
 }
 
-class _ImagesList extends StatelessWidget {
+class _ImagesList extends StatefulWidget {
+  @override
+  State<_ImagesList> createState() => _ImagesListState();
+}
+
+class _ImagesListState extends State<_ImagesList> {
   @override
   Widget build(BuildContext context) {
     final controller = context.read<CameraPickerCubit>();
@@ -323,14 +333,11 @@ class _ImagesList extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final file = File(state.mediaList![index].path);
                         if (file.isPhoto) {
-                          return Container(
-                            width: constraints.maxHeight,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                  image: FileImage(file), fit: BoxFit.cover),
-                            ),
-                          );
+                          return _mediaContainer(
+                              image: FileImage(file),
+                              width: constraints.maxHeight,
+                              index: index,
+                              media: state.mediaList!);
                         } else {
                           return FutureBuilder<Uint8List?>(
                             future: file.generateThumbnail(),
@@ -339,21 +346,12 @@ class _ImagesList extends StatelessWidget {
                               if (snapshot.hasData &&
                                   snapshot.data != null &&
                                   snapshot.data!.isNotEmpty) {
-                                return Container(
-                                  width: constraints.maxHeight,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    image: DecorationImage(
-                                        image: MemoryImage(snapshot.data!),
-                                        fit: BoxFit.cover),
-                                  ),
-                                  child: const Center(
-                                    child: Icon(
-                                      Icons.play_arrow,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                );
+                                return _mediaContainer(
+                                    image: MemoryImage(snapshot.data!),
+                                    width: constraints.maxHeight,
+                                    isPhoto: false,
+                                    index: index,
+                                    media: state.mediaList!);
                               } else {
                                 return Shimmer.fromColors(
                                   baseColor: Colors.grey[300]!,
@@ -418,6 +416,40 @@ class _ImagesList extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _mediaContainer(
+      {required ImageProvider image,
+      required double width,
+      required int index,
+      required List<XFile> media,
+      bool isPhoto = true}) {
+    return InkWell(
+      onTap: () {
+        if (mounted) {
+          showDialog(
+              context: context,
+              builder: (_) => ImagesAndVideosSlider(
+                  media: media, initialIndex: index)).then(
+              (value) => context.read<CameraPickerCubit>().refreshMediaList());
+        }
+      },
+      child: Container(
+        width: width,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          image: DecorationImage(image: image, fit: BoxFit.cover),
+        ),
+        child: !isPhoto
+            ? const Center(
+                child: Icon(
+                  Icons.play_arrow,
+                  color: Colors.white,
+                ),
+              )
+            : null,
       ),
     );
   }
