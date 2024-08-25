@@ -63,7 +63,7 @@ class _LoginViewState extends State<LoginView> {
     log(MediaQuery.of(context).viewInsets.bottom.toString(),
         name: "OpenKeyboard");
     return BlocListener<RegisterCubit, RegisterState>(
-      listener: (context, state) async{
+      listener: (context, state) async {
         if (state is RegisterError) {
           showErrorMessage(context, getFailureMessage(state.failure, context));
         } else if (state is OTPSent) {
@@ -79,7 +79,7 @@ class _LoginViewState extends State<LoginView> {
         }
       },
       child: BlocListener<LoginCubit, LoginState>(
-        listener: (context, state) async{
+        listener: (context, state) async {
           if (state is LoginError) {
             showErrorMessage(
               context,
@@ -89,23 +89,29 @@ class _LoginViewState extends State<LoginView> {
               ),
             );
           } else if (state is LoginSuccess) {
+            await TokenManager.saveAccessToken(
+                state.userTokensEntity.accessToken);
+            await TokenManager.saveRefreshToken(
+                state.userTokensEntity.refreshToken);
 
-            await TokenManager.saveAccessToken(state.userTokensEntity.accessToken);
-            await TokenManager.saveRefreshToken(state.userTokensEntity.refreshToken);
-
-            serviceLocator<UserCubit>()..setLogin(true)..attachToken()..getUser().then((value)async{
-              serviceLocator<GetWalletCubit>().getWallet();
-              String? accessToken = await TokenManager.getAccessToken();
-              String? refreshToken = await TokenManager.getRefreshToken();
-              print('/////////////////////////////////////////////////////////////////////////');
-              print('Refresh Token: $refreshToken');
-              print('Access Token: $accessToken');
-              print('/////////////////////////////////////////////////////////////////////////');
-              print(serviceLocator<UserCubit>().state.data.toString());
-              Navigator.pop(context);
-              Navigator.pop(context);
-            });
-             showSuccessMessage(context, LocaleKeys.welcomeBack.localize);
+            serviceLocator<UserCubit>()
+              ..setLogin(true)
+              ..attachToken()
+              ..getUser().then((value) async {
+                serviceLocator<GetWalletCubit>().getWallet();
+                String? accessToken = await TokenManager.getAccessToken();
+                String? refreshToken = await TokenManager.getRefreshToken();
+                print(
+                    '/////////////////////////////////////////////////////////////////////////');
+                print('Refresh Token: $refreshToken');
+                print('Access Token: $accessToken');
+                print(
+                    '/////////////////////////////////////////////////////////////////////////');
+                print(serviceLocator<UserCubit>().state.data.toString());
+                Navigator.pop(context);
+                Navigator.pop(context);
+              });
+            showSuccessMessage(context, LocaleKeys.welcomeBack.localize);
           }
         },
         child: Scaffold(
@@ -495,7 +501,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
                                     setState(() {});
                                   },
-                                  height: kToolbarHeight * .9.zH,
+                                  height: kToolbarHeight,
                                   isCentered: true,
                                   isBordered: !registerCubit.isMale,
                                   color: registerCubit.isMale
@@ -515,7 +521,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
                                 setState(() {});
                               },
-                              height: kToolbarHeight * .9.zW,
+                              height: kToolbarHeight,
                               isCentered: true,
                               isBordered: true,
                               textColor: registerCubit.isMale

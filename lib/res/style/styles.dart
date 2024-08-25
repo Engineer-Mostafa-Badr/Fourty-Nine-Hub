@@ -12,7 +12,7 @@ abstract class Styles {
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
         fontSize: fontSize.zW,
-        color: color ?? AppColors.PRIMARY_COLOR,
+        color: color ,
         decoration: decoration,
         shadows: shadows,
         decorationColor: color ?? AppColors.PRIMARY_COLOR,
@@ -27,7 +27,7 @@ abstract class Styles {
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
         fontSize: fontSize.zW,
-        color: color ?? AppColors.PRIMARY_COLOR,
+        color: color ,
         // overflow: TextOverflow.ellipsis,
         shadows: shadows,
         decoration: decoration,

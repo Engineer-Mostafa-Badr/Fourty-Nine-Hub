@@ -153,7 +153,7 @@ class DrawerWidget extends StatelessWidget {
     required BuildContext context,
   }) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin:  EdgeInsets.symmetric(vertical: 20.zH),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -310,7 +310,7 @@ class DrawerWidget extends StatelessWidget {
     }
     return Padding(
       padding: EdgeInsets.only(
-        top: 20.zH
+        top: 10.zH
       ),
       child: ListTile(
         onTap: () => onTap(),
