@@ -169,14 +169,31 @@ class _UserPostCardState extends State<UserPostCard> {
                   border: myPost.isShared == true ? Border.all() : null),
               child: Column(
                 children: [
-                  if (myPost.type != 'advertisement' && myPost.isShared == true)
+                  if(myPost.type != 'advertisement' &&
+                      myPost.isShared == true&&myPost.mainPost!=null)...[if (myPost.type != 'advertisement' &&
+                      myPost.isShared == true)
                     _buildMainAccountHeader(
                         context: context, post: myPost.mainPost!),
-                  if (myPost.isShared == true)
-                    _buildContentWidget(
-                        content: myPost.mainPost?.content ?? '',
-                        backgroundColor: null,
-                        images: myPost.mainPost?.images ?? []),
+                    if (myPost.isShared == true)
+                      _buildContentWidget(
+                          content: myPost.mainPost?.content ?? '',
+                          backgroundColor: null,
+                          images: myPost.mainPost?.images ?? []),],
+                  if(myPost.type != 'advertisement' &&
+                      myPost.isShared == true&&myPost.mainPost==null)SizedBox(
+                    width: double.infinity,
+                    height: 100,
+                    child: Center(
+                      child: Row(
+                        children: [
+                          const Sizer(),
+                          const Icon(Icons.lock,color: Colors.black,),
+                          const Sizer(),
+                          Label(text: "This content is not available now.",style: Styles.headerText(color: Colors.black,),),
+                        ],
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
