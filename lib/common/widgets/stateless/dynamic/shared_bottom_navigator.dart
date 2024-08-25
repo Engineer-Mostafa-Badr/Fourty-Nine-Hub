@@ -25,7 +25,7 @@ class SharedCommonNavigator extends StatelessWidget {
       bottomNavigationBar: showBottomNavigator
           ? BottomNavigator(
               mainCategory: mainCategory,
-              index: 1,
+              index: 1, scrollController: ScrollController(), isScrollingDown: false,
             )
           : null,
       floatingActionButton: showFloatingButton ? const FloatingButton() : null,

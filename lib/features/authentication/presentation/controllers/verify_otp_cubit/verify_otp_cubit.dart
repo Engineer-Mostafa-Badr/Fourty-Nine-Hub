@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/error/failure.dart';
+import '../../../domain/entities/user_tokens_entity.dart';
 import '../../../domain/use_cases/attach_token_use_case.dart';
 import '../../../domain/use_cases/resend_otp_use_case.dart';
 import '../../../domain/use_cases/save_tokens_use_case.dart';
@@ -34,7 +35,7 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
         (userToken) {
           _attachToken(userToken); // attach to dio
           _saveTokens(userToken); // save to local storage
-          return VerifyOtpSuccess();
+          return VerifyOtpSuccess(userTokensEntity: userToken);
         },
       ),
     );

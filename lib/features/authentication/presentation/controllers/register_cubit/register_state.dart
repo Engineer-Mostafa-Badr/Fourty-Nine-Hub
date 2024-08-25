@@ -15,4 +15,8 @@ final class RegisterError extends RegisterState {
   RegisterError(this.failure);
 }
 
-final class RegisterSuccess extends RegisterState {}
+final class RegisterSuccess extends RegisterState {
+  final UserTokensEntity userTokensEntity;
+
+  RegisterSuccess({required this.userTokensEntity});
+}

@@ -23,7 +23,6 @@ class MeetingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // init signalling service
 
     return Scaffold(
       appBar: const HomeAppbar(
