@@ -14,8 +14,10 @@ import '../../../../../../../common/widgets/dynamic/sizer.dart';
 
 class ImagesAndVideosSlider extends StatefulWidget {
   final List<XFile> media;
+  final int? initialIndex;
 
-  const ImagesAndVideosSlider({super.key, required this.media});
+  const ImagesAndVideosSlider(
+      {super.key, required this.media, this.initialIndex});
 
   @override
   State<ImagesAndVideosSlider> createState() => _ImagesAndVideosSliderState();
@@ -27,7 +29,7 @@ class _ImagesAndVideosSliderState extends State<ImagesAndVideosSlider> {
 
   @override
   void initState() {
-    _selectedIndex = 0;
+    _selectedIndex = widget.initialIndex ?? 0;
     _pageController = PageController(initialPage: _selectedIndex);
     _pageController.addListener(() {
       setState(() {
@@ -72,7 +74,7 @@ class _ImagesAndVideosSliderState extends State<ImagesAndVideosSlider> {
               child: SizedBox(
                 height: 100,
                 child: ListView.separated(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
                   scrollDirection: Axis.horizontal,
                   itemCount: widget.media.length ?? 0,
                   separatorBuilder: (context, index) => const Sizer(),
@@ -142,8 +144,9 @@ class _ImagesAndVideosSliderState extends State<ImagesAndVideosSlider> {
         width: 100,
         height: 100,
         decoration: BoxDecoration(
-          border:
-              _selectedIndex == index ? Border.all(color: Colors.white) : null,
+          border: _selectedIndex == index
+              ? Border.all(color: Colors.white, width: 3)
+              : null,
           borderRadius: BorderRadius.circular(10),
           image: DecorationImage(image: image, fit: BoxFit.cover),
         ),
@@ -178,22 +181,16 @@ class _VideoPlayerScreen extends StatefulWidget {
 
 class _VideoPlayerScreenState extends State<_VideoPlayerScreen> {
   late VideoPlayerController _controller;
-  late Future<void> _initializeVideoPlayerFuture;
 
   @override
   void initState() {
     super.initState();
 
-    // Create and store the VideoPlayerController. The VideoPlayerController
-    // offers several different constructors to play videos from assets, files,
-    // or the internet.
-    _controller = VideoPlayerController.file(widget.videoFile);
-
-    // Initialize the controller and store the Future for later use.
-    _initializeVideoPlayerFuture = _controller.initialize();
+    _controller = VideoPlayerController.file(widget.videoFile)
+      ..initialize().then((value) => setState(() {}));
 
     // Use the controller to loop the video.
-    _controller.setLooping(false);
+    // _controller.setLooping(false);
   }
 
   @override
@@ -206,38 +203,92 @@ class _VideoPlayerScreenState extends State<_VideoPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _initializeVideoPlayerFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          // If the VideoPlayerController has finished initialization, use
-          // the data it provides to limit the aspect ratio of the video.
-          return InkWell(
-            onTap: () {
-              setState(() {
-                // If the video is playing, pause it.
-                if (_controller.value.isPlaying) {
-                  _controller.pause();
-                } else {
-                  // If the video is paused, play it.
-                  _controller.play();
-                }
-              });
-            },
-            child: AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              // Use the VideoPlayer widget to display the video.
-              child: VideoPlayer(_controller),
-            ),
-          );
-        } else {
-          // If the VideoPlayerController is still initializing, show a
-          // loading spinner.
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
+    if (_controller.value.isInitialized) {
+      return InkWell(
+        onTap: () {
+          setState(() {
+            // If the video is playing, pause it.
+            if (_controller.value.isPlaying) {
+              _controller.pause();
+            } else {
+              // If the video is paused, play it.
+              _controller.play();
+            }
+          });
+        },
+        child: AspectRatio(
+          aspectRatio: _controller.value.aspectRatio,
+          // Use the VideoPlayer widget to display the video.
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              VideoPlayer(_controller),
+              if (_controller.value.isPlaying)
+                const Icon(
+                  Icons.pause,
+                  color: Colors.white,
+                ),
+              if (!_controller.value.isPlaying)
+                const Icon(
+                  Icons.play_arrow,
+                  color: Colors.white,
+                ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    // return FutureBuilder(
+    //   future: _initializeVideoPlayerFuture,
+    //   builder: (context, snapshot) {
+    //     if (snapshot.connectionState == ConnectionState.done) {
+    //       // If the VideoPlayerController has finished initialization, use
+    // //       // the data it provides to limit the aspect ratio of the video.
+    //       return InkWell(
+    //         onTap: () {
+    //           setState(() {
+    //             // If the video is playing, pause it.
+    //             if (_controller.value.isPlaying) {
+    //               _controller.pause();
+    //             } else {
+    //               // If the video is paused, play it.
+    //               _controller.play();
+    //             }
+    //           });
+    //         },
+    //         child: AspectRatio(
+    //           aspectRatio: _controller.value.aspectRatio,
+    //           // Use the VideoPlayer widget to display the video.
+    //           child: Stack(
+    //             alignment: Alignment.center,
+    //             children: [
+    //               VideoPlayer(_controller),
+    //               if (_controller.value.isPlaying)
+    //                 const Icon(
+    //                   Icons.pause,
+    //                   color: Colors.white,
+    //                 ),
+    //               if (!_controller.value.isPlaying)
+    //                 const Icon(
+    //                   Icons.play_arrow,
+    //                   color: Colors.white,
+    //                 ),
+    //             ],
+    //           ),
+    //         ),
+    //       );
+    //     } else {
+    //       // If the VideoPlayerController is still initializing, show a
+    //       // loading spinner.
+    //       return const Center(
+    //         child: CircularProgressIndicator(),
+    //       );
+    //     }
+    //   },
+    // );
   }
 }

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 
 class FormTextField extends StatefulWidget {
@@ -78,8 +83,8 @@ class _FormTextFieldState extends State<FormTextField> {
           height: widget.maxLines != null
               ? null
               : validate
-                  ? (widget.height ?? kToolbarHeight) * 1.5
-                  : widget.height ?? kToolbarHeight,
+                  ? (widget.height ?? 100.zH) * 1.5.zH
+                  : widget.height ?? 100.zH,
           child: TextFormField(
             style:widget.textStyle?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
             textAlignVertical: widget.textAlignVertical,
@@ -96,12 +101,12 @@ class _FormTextFieldState extends State<FormTextField> {
               setState(() {});
               if ((value == null || value.isEmpty) &&
                   (widget.required ?? true)) {
-                return 'Required';
+                return LocaleKeys.required.localize;
               } else if (widget.extraValidation ?? false) {
                 return widget.extraValidationMessage ?? '';
               } else if (!emailRegExp.hasMatch(value!.trim()) &&
                   (widget.isEmail ?? false)) {
-                return 'Enter correct email format';
+                return LocaleKeys.emailFormat.localize;
               } else {
                 validate = false;
                 setState(() {});
@@ -126,9 +131,20 @@ class _FormTextFieldState extends State<FormTextField> {
               filled: true,
               fillColor: widget.fillColor ?? Colors.transparent,
               labelText: widget.label,
-              hintStyle: widget.style ?? const TextStyle(fontSize: 12),
-              labelStyle: widget.style ?? const TextStyle(fontSize: 12),
-              prefixIcon: widget.prefix,
+              hintStyle: widget.style ??TextStyle(
+                  fontSize: 30.zW,
+                  color: AppColors.QUANTITY_COLOR
+              ),
+              labelStyle: widget.style ?? TextStyle(
+                  fontSize: 30.zW,
+                  color: AppColors.QUANTITY_COLOR
+              ),
+              prefixIcon: Padding(
+                padding:  EdgeInsets.symmetric(
+                  horizontal: 10.zW
+                ),
+                child: widget.prefix,
+              ),
               suffixIcon: widget.suffix,
               enabledBorder: widget.noBorder
                   ? InputBorder.none

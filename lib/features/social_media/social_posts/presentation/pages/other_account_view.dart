@@ -34,6 +34,7 @@ class OtherAccountView extends StatefulWidget {
 }
 
 class _OtherAccountViewState extends State<OtherAccountView> {
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

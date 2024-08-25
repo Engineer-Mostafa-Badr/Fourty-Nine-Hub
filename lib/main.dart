@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
+import 'core/utils/shared_pref.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'routes/pages.dart';
@@ -20,7 +21,10 @@ void main() async {
   //to cache gift items
   // ZegoGiftManager().cache.cache(giftItemList);
 
+
   //Admob.initialize();
+
+
 
   runApp(
     LocalizationService.rootWidget(
