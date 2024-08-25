@@ -15,4 +15,8 @@ final class LoginError extends LoginState {
   const LoginError(this.failure);
 }
 
-final class LoginSuccess extends LoginState {}
+final class LoginSuccess extends LoginState {
+  final UserTokensEntity userTokensEntity;
+
+  const LoginSuccess({required this.userTokensEntity});
+}
