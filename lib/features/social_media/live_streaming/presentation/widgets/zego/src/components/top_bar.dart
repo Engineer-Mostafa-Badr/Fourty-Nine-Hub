@@ -87,7 +87,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
       decoration: BoxDecoration(
         color: widget.config.topMenuBar.backgroundColor ?? Colors.transparent,
       ),
-      height: widget.config.topMenuBar.height ?? 160.zH,
+      height: widget.config.topMenuBar.height ?? showTopBar.value ? 240.zH : 160.zH,
       child: ValueListenableBuilder<bool>(
           valueListenable: showTopBar,
           builder: (context, showTopBar, child) {
@@ -137,14 +137,55 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                 else
                   Row(
                     children: [
-                      Container(height: 10, width: 50, color: Colors.white),
+                      // Container(height: 10, width: 50, color: Colors.white),
                       Expanded(child: Container()),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          SizedBox(width: 30),
-                          CloseButton(),
-                          SizedBox(width: 30),
+                          // const SizedBox(width: 30),
+                          Column(
+                            children: [
+                              Container(
+                                width: MediaQuery.sizeOf(context).width / 1.3,
+                                height: 60,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  color: Colors.redAccent,
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'End meeting for all',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                width: MediaQuery.sizeOf(context).width / 1.3,
+                                height: 60,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  color: Colors.blueAccent,
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'Leave meeting',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: 30),
                         ],
                       )
                     ],
