@@ -9,7 +9,7 @@ final class CreateResturantLoading extends CreateRestaurantState {
   CreateResturantLoading(this.message);
 }
 
-final class CreateResturantCloseLoading extends CreateRestaurantState {}
+final class CreateRestaurantCloseLoading extends CreateRestaurantState {}
 
 final class CreateResturantLoaded extends CreateRestaurantState {}
 

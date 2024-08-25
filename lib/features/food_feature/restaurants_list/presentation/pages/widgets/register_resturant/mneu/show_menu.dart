@@ -88,6 +88,7 @@ class ShowMneu extends StatelessWidget {
                                     },
                                     child: const Text(
                                       "Remove",
+                                      style: TextStyle(color: Colors.white),
                                     ),
                                   )
                                 ],

@@ -63,7 +63,9 @@ class RestaurantsListsView extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 5.0),
                                     child: Text(
-                                      "You can enjoy serving your clints using your restaurant by clicking on the rigester button above.",
+                                      LocaleKeys
+                                          .youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove
+                                          .tr(),
                                       style: Styles.mediumText(
                                         color: Colors.red,
                                       ),

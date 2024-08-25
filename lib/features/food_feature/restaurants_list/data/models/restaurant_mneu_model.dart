@@ -40,6 +40,9 @@ class RestaurantMneuModel extends RestaurantMneu {
     if (picture != null) {
       result.addAll({'picture': picture!.toJson()});
     }
+    if (photo != null) {
+      result.addAll({'picture': photo});
+    }
 
     return result;
   }
@@ -48,7 +51,6 @@ class RestaurantMneuModel extends RestaurantMneu {
     return RestaurantMneuModel(
       id: map['id'],
       photoPath: map['photoPath'],
-      photo: map['picture'],
       restaurantId: map['restaurantId'],
       foodName: map['foodName'],
       price: map['price']?.toDouble(),

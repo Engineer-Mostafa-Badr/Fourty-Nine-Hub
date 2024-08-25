@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -32,7 +33,7 @@ class CreateResturantView extends StatelessWidget {
           case CreateResturantLoading _:
             showLoadingDialog(context);
             break;
-          case CreateResturantCloseLoading _:
+          case CreateRestaurantCloseLoading _:
             Navigator.pop(context);
             break;
           case CreateResturantError _:
@@ -53,8 +54,9 @@ class CreateResturantView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Label(
-                  text: LocaleKeys.welcomeToResturantRegisteration.localize,
-                  style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
+                text: LocaleKeys.welcomeToResturantRegisteration.tr(),
+                style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
+              ),
               const Sizer(height: 20),
               const CreateResturantSubcategoryDropdown(),
               const Sizer(height: 20),
@@ -87,11 +89,11 @@ class CreateResturantView extends StatelessWidget {
               AppInfoText(
                   text: LocaleKeys
                       .theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider
-                      .localize),
+                      .tr()),
               const Sizer(height: 20),
               AppInfoText(
-                  text: LocaleKeys
-                      .youWillGetEGP3650PerYearIfYouSubscribeDaily.localize),
+                  text: LocaleKeys.youWillGetEGP3650PerYearIfYouSubscribeDaily
+                      .tr()),
               const Sizer(height: 20),
               const CreateRestaurantSubmitButton(),
             ],

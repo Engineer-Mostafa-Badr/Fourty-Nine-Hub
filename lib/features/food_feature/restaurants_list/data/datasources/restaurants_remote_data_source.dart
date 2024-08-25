@@ -135,8 +135,12 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
       required String subCategory,
       required String government,
       PostCommentsParams? params}) async {
-    final response =
-        await _apiConsumer.get(EndPoints.searchRestaurants(params: params));
+    final response = await _apiConsumer
+        .get(EndPoints.searchRestaurants(params: params), data: {
+      "city": city,
+      "subcategoryId": subCategory,
+      "government": government
+    });
     return response.fold(
       (failure) => Left(failure),
       (data) => Right(
@@ -150,13 +154,34 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
   @override
   Future<Either<Failure, bool>> createRestaurant(
       CreateRestaurantParams params) async {
-    final response = await _apiConsumer.post(EndPoints.createRestaurant,
-        data: params.toMap());
+    List<Map<String, dynamic>> mneu = [];
+    params.mneu?.forEach((element) {
+      final toMap = {
+        "foodName": element.foodName,
+        "picture": element.photo,
+        "price": element.price,
+      };
+      mneu.add(toMap);
+    });
+    log("mneu: ${jsonEncode(mneu)}");
+    Map<String, dynamic> data = {
+      "name": params.name,
+      "subcategoryId": params.subcategoryId,
+      "restaurantMedia":
+          List.generate(4, (index) => params.restaurantMedia?.first),
+      "licenseMedia": params.licenseMedia,
+      "government": params.government,
+      "city": params.city,
+      "menu": mneu,
+    };
+    final response =
+        await _apiConsumer.post(EndPoints.createRestaurant, data: data);
 
     return response.fold(
-      (failure) => Left(failure),
+      (Failure failure) {
+        return Left(failure);
+      },
       (data) {
-        log(jsonEncode(data));
         return Right(data['status']);
       },
     );

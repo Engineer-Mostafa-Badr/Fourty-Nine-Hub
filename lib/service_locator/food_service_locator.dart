@@ -158,7 +158,6 @@ class FoodServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
-        serviceLocator(),
       )..loadData(),
     );
 

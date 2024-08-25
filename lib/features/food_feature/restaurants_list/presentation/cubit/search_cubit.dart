@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +21,7 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/useca
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+import 'package:go_router/go_router.dart';
 
 part 'search_state.dart';
 
@@ -29,19 +33,21 @@ class SearchRestaurantsCubit extends Cubit<SearchRestaurantState> {
   final SearchRestaurantsUseCase _searchRestaurantsUseCase;
 
   SearchRestaurantsCubit(
-    super.initialState,
     this._getMealCategoriesWithCountRestaurantsUseCase,
     this._getCitiesUseCase,
     this._getGovernoratesUseCase,
     this._searchRestaurantsUseCase,
-  );
+  ) : super(const SearchRestaurantState());
 
   UserEntity? user;
   String? selectedMealCategory;
   String? selectedGovernment;
   String? selectedCity;
 
-  Future<void> selectGovernorate(GovernorateEntity value) async {
+  Future<void> selectGovernorate(GovernorateEntity? value) async {
+    if (value == null) {
+      return;
+    }
     selectedGovernment = value.id;
     emit(state.copyWith(
       selectedGovernment: value.id,
@@ -50,7 +56,10 @@ class SearchRestaurantsCubit extends Cubit<SearchRestaurantState> {
     _getCities(value.id);
   }
 
-  void selectCity(CityEntity value) {
+  void selectCity(CityEntity? value) {
+    if (value == null) {
+      return;
+    }
     selectedCity = value.id;
     emit(state.copyWith(
       selectedCity: value.id,
@@ -59,12 +68,19 @@ class SearchRestaurantsCubit extends Cubit<SearchRestaurantState> {
     _searchRestaurants();
   }
 
-  void selectSubcategory(FoodCategoryEntity subCategoryModel) {
+  void selectSubcategory(FoodCategoryEntity? subCategoryModel) {
+    if (subCategoryModel == null) {
+      return;
+    }
     selectedMealCategory = subCategoryModel.id ?? "";
     emit(state.copyWith(
         selectedMealCategory: subCategoryModel,
         status: SearchRestaurantStates.loading));
     _getGovernorates();
+  }
+
+  void refreshState() {
+    emit(state.copyWith(status: SearchRestaurantStates.loadingSubCategories));
   }
 
   loadData() async {
@@ -137,5 +153,97 @@ class SearchRestaurantsCubit extends Cubit<SearchRestaurantState> {
       emit(state.copyWith(
           allRestaurant: data, status: SearchRestaurantStates.loadingResult));
     });
+  }
+
+  void searchSubCategories(String value) {
+    if (value.isNotEmpty) {
+      List<FoodCategoryEntity>? filteredCategories = [];
+      filteredCategories = state.mealCategories?.where((category) {
+        return category.nameAr!.toLowerCase().contains(value.toLowerCase()) ||
+            category.nameEn!.toLowerCase().contains(value.toLowerCase());
+      }).toList();
+      emit(state.copyWith(
+        searchMealCategories: filteredCategories,
+        status: SearchRestaurantStates.loadingSearchSubCategory,
+      ));
+    } else {
+      emit(state.copyWith(
+        searchGovernorates: state.searchGovernorates,
+        status: SearchRestaurantStates.loadingSubCategories,
+      ));
+    }
+  }
+
+  void searchResult(String value) {
+    if (value.isNotEmpty) {
+      List<Restaurant>? filteredRestaurants = [];
+      filteredRestaurants = state.allRestaurant?.where((category) {
+        return category.name!.toLowerCase().contains(value.toLowerCase());
+      }).toList();
+      emit(state.copyWith(
+        searchResultRestaurants: filteredRestaurants,
+        status: SearchRestaurantStates.loadingSearchResult,
+      ));
+    } else {
+      emit(state.copyWith(
+        searchResultRestaurants: state.allRestaurant,
+        status: SearchRestaurantStates.loadingResult,
+      ));
+    }
+  }
+
+  void searchGovernorates(String value) {
+    if (value.isNotEmpty) {
+      List<GovernorateEntity>? filteredGovernorates = [];
+      filteredGovernorates = state.governorates?.where((category) {
+        return category.nameAr.toLowerCase().contains(value.toLowerCase()) ||
+            category.nameEn.toLowerCase().contains(value.toLowerCase());
+      }).toList();
+      emit(state.copyWith(
+        searchGovernorates: filteredGovernorates,
+        status: SearchRestaurantStates.loadingSearchGevnorates,
+      ));
+    } else {
+      emit(state.copyWith(
+        searchMealCategories: state.mealCategories,
+        status: SearchRestaurantStates.loadingGovernorates,
+      ));
+    }
+  }
+
+  void searchCities(String value) {
+    if (value.isNotEmpty) {
+      List<CityEntity>? filteredCities = [];
+      filteredCities = state.cities?.where((category) {
+        return category.nameAr.toLowerCase().contains(value.toLowerCase()) ||
+            category.nameEn.toLowerCase().contains(value.toLowerCase());
+      }).toList();
+      emit(state.copyWith(
+        searchCities: filteredCities,
+        status: SearchRestaurantStates.loadingSearchCities,
+      ));
+    } else {
+      emit(state.copyWith(
+        searchCities: state.cities,
+        status: SearchRestaurantStates.loadingCities,
+      ));
+    }
+  }
+
+  back() {
+    if (state.status == SearchRestaurantStates.loadingGovernorates ||
+        state.status == SearchRestaurantStates.loadingSearchGevnorates) {
+      emit(state.copyWith(
+        status: SearchRestaurantStates.loadingSubCategories,
+      ));
+    } else if (state.status == SearchRestaurantStates.loadingCities ||
+        state.status == SearchRestaurantStates.loadingSearchCities) {
+      emit(state.copyWith(status: SearchRestaurantStates.loadingGovernorates));
+    } else if (state.status == SearchRestaurantStates.loadingResult ||
+        state.status == SearchRestaurantStates.loadingSearchResult) {
+      emit(state.copyWith(status: SearchRestaurantStates.loadingCities));
+    } else {
+      AppPages.router.routerDelegate.navigatorKey.currentContext!.pop();
+    }
   }
 }

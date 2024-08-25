@@ -16,7 +16,9 @@ class ResturantDashboardButton extends StatelessWidget {
         if (state.isResturant == true) {
           return DashboardBanner(
             title: '${LocaleKeys.restaurantDashboard.tr()}\n',
-            subTitle: LocaleKeys.restaurantDashboard.tr(),
+            subTitle: LocaleKeys
+                .newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore
+                .tr(),
             route: Routes.RestaurantDashboard,
           );
         } else {
