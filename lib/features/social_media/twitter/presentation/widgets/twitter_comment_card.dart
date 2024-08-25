@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
@@ -14,6 +19,8 @@ class TwitterCommentCard extends StatefulWidget {
   final TwitterPostCommentEntity comment;
   final Function onCommentReact;
   final Function onCommentReply;
+  final Function(TwitterPostCommentParams) onEditComment;
+  final Function(String) onDeleteComment;
   final bool? fromProfile;
   final Function(TwitterReportParams) onReport;
   const TwitterCommentCard(
@@ -23,15 +30,19 @@ class TwitterCommentCard extends StatefulWidget {
       required this.onCommentReact,
       required this.onCommentReply,
       required this.onReport,
-      this.fromProfile = false});
+      this.fromProfile = false, required this.onEditComment, required this.onDeleteComment});
 
   @override
   State<TwitterCommentCard> createState() => _TwitterCommentCardState();
 }
 
 class _TwitterCommentCardState extends State<TwitterCommentCard> {
+
+  final editTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    final user = context.read<UserCubit>().state.data;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -74,13 +85,59 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                 icon: const Icon(
                   Icons.more_vert,
                 )),
+            if(user?.id==widget.comment.user.id)...[
+              // const Sizer(),
+              GestureDetector(
+                  onTap: () {
+                    widget.comment.edit=!widget.comment.edit!;
+                    editTextController.text=widget.comment.content??'';
+                    setState(() {});
+                  },
+                  child: Icon(
+                    Icons.edit,
+                    color: widget.textColor,
+                    size: 20,
+                  )),const Sizer()],
+            GestureDetector(
+                onTap: () {
+                  widget.onDeleteComment(widget.comment.id);
+                },
+                child: Icon(
+                  Icons.close,
+                  color: widget.textColor,
+                  size: 20,
+                ))
           ],
         ),
         const Sizer(),
         Label(
           textAlign: TextAlign.start,
-          text: widget.comment.content,
+          text: widget.comment.content??'',
           style: Styles.mediumText(),
+        ),
+        if(widget.comment.edit==true)Row(
+          children: [
+            Expanded(
+                child: FormTextField(
+                    hint: 'Type your comment ....',
+                    action: (v) {
+                      setState(() {});
+                    },
+                    controller: editTextController)),
+            const Sizer(),
+            if (editTextController.text.isNotEmpty)
+              IconAppButton(
+                  icon: Icons.send,
+                  isCircle: true,
+                  onPressed: () async {
+                    var result = await widget.onEditComment(TwitterPostCommentParams(postId: widget.comment.id, content: editTextController.text));
+                    if(result==true){
+                      widget.comment.content=editTextController.text;
+                      widget.comment.edit=false;
+                    }
+                    setState(() {});
+                  })
+          ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,

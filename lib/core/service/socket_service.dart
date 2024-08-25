@@ -184,15 +184,15 @@ class SocketServiceImplementation extends SocketServiceContract {
 
   @override
   listenToUserStatus() {
-    socket.on('usersStatus', (data) {
-      List<TypingAndOnlineModel> chatIdsTyping = [];
-      debugPrint("usersStatus $data");
+    // socket.on('usersStatus', (data) {
+    //   List<TypingAndOnlineModel> chatIdsTyping = [];
+    //   debugPrint("usersStatus $data");
 
-      chatIdsTyping.addAll(List<TypingAndOnlineModel>.from(
-          json.decode(data).map((x) => TypingAndOnlineModel.fromJson(x))));
+    //   chatIdsTyping.addAll(List<TypingAndOnlineModel>.from(
+    //       json.decode(data).map((x) => TypingAndOnlineModel.fromJson(x))));
 
-      _socketChatTyping.add(chatIdsTyping);
-    });
+    //   _socketChatTyping.add(chatIdsTyping);
+    // });
   }
 }
 

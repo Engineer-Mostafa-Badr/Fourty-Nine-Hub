@@ -17,6 +17,7 @@ class TwitterPostCommentModel extends TwitterPostCommentEntity {
     required super.love,
     required super.isReact,
     super.replies,
+    super.edit,
   });
   factory TwitterPostCommentModel.fromJson(Map<String, dynamic> json) {
     return TwitterPostCommentModel(

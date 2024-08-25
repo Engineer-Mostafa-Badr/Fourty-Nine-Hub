@@ -2,12 +2,13 @@ import '../../../../../core/utils/duration_helper.dart';
 
 class CommentEntity {
   final String id;
-  final String content;
+  String content;
   final String post;
   dynamic user;
   bool? isLove;
   bool? isLikes;
   bool? isWow;
+  bool? edit;
   bool? isSad;
   bool? isAngry;
   bool? isHaha;
@@ -44,5 +45,6 @@ class CommentEntity {
     this.isSad = false,
     this.isAngry = false,
     this.isHaha = false,
+    this.edit = false,
   });
 }

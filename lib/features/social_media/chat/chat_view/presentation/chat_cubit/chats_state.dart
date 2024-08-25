@@ -8,6 +8,7 @@ extension ChatMessagesStateX on ChatsState {
   bool get isLoading => status == ChatsStates.loading;
 
   bool get isError => status == ChatsStates.error;
+
   bool get isTyping => status == ChatsStates.typing;
 }
 
@@ -34,4 +35,10 @@ class ChatsState {
       chats: chats ?? this.chats,
     );
   }
+}
+
+class SeenHistoryState extends ChatsState {
+  final List<SeenHistoryModel> seenHistoryData;
+
+  const SeenHistoryState(this.seenHistoryData);
 }

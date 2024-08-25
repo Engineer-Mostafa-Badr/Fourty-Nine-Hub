@@ -29,7 +29,7 @@ class GoogleAddsBanner extends StatelessWidget {
             ]),
         child: Center(
             child: Label(
-          text: LocaleKeys.Ads.tr(),
+          text: LocaleKeys.ads.tr(),
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ))
         // AdmobBanner(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 abstract class Styles {
 // text
@@ -10,10 +11,10 @@ abstract class Styles {
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
         fontSize: fontSize,
-        color: color,
+        color: color ?? AppColors.PRIMARY_COLOR,
         decoration: decoration,
         shadows: shadows,
-        decorationColor: color,
+        decorationColor: color ?? AppColors.PRIMARY_COLOR,
         fontWeight: fontWeight);
   }
 
@@ -25,7 +26,7 @@ abstract class Styles {
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
         fontSize: fontSize,
-        color: color,
+        color: color ?? AppColors.PRIMARY_COLOR,
         // overflow: TextOverflow.ellipsis,
         shadows: shadows,
         decoration: decoration,
@@ -43,6 +44,7 @@ abstract class Styles {
         fontSize: fontSize,
         fontWeight: fontWeight,
         shadows: shadows,
+        decorationColor: color,
         color: color);
   }
 }

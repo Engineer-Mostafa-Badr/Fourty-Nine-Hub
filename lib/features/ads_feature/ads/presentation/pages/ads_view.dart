@@ -49,9 +49,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
       body: Column(
         children: [
           const Sizer(),
-          MainCategoryBanner(
-            category: widget.params.mainCategory,
-          ),
+          MainCategoryBanner(category: widget.params.mainCategory),
           const Sizer(),
           Label(
             text: widget.params.subCategory.name,

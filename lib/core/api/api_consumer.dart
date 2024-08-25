@@ -186,7 +186,7 @@ class BaseApiConsumer extends ApiConsumer {
         queryParameters: queryParameters,
       );
       log(result.data.toString(), name: "url");
-      if (result.data['success']) {
+      if (result.data['status']) {
         log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
         if (result.data is Map<String, dynamic>) {
           return Right(result.data as Map<String, dynamic>);
