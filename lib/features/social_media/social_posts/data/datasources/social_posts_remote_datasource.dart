@@ -289,14 +289,10 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> editComment({required PostCommentParams params})async {
-    final response = await _apiConsumer.put(
-      EndPoints.editComment(params),
-      data: {
-        'content':params.content
-      }
-    );
-    return response.fold((l) => Left(l),
-            (data) => Right(data['status']));
+  Future<Either<Failure, bool>> editComment(
+      {required PostCommentParams params}) async {
+    final response = await _apiConsumer
+        .put(EndPoints.editComment(params), data: {'content': params.content});
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 }

@@ -85,7 +85,10 @@ class MeetingView extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   'Add a calender',
-                  style: TextStyle(color: Colors.blueAccent, fontSize: 16, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                      color: Colors.blueAccent,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
                 ),
               )
             ],
@@ -115,7 +118,10 @@ class MeetingView extends StatelessWidget {
   }
 
   Widget _buildMeetingItem(
-      {required Color color, required String label, required IconData icon, required Function onTap}) {
+      {required Color color,
+      required String label,
+      required IconData icon,
+      required Function onTap}) {
     return InkWell(
       onTap: () => onTap(),
       child: Column(
@@ -125,7 +131,8 @@ class MeetingView extends StatelessWidget {
             // height: 80,
             // width: 80,
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: color),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10), color: color),
             child: Icon(
               icon,
               color: Colors.white,

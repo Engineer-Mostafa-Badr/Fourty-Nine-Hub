@@ -32,7 +32,7 @@ class IconAppButton extends StatelessWidget {
     return InkWell(
       onTap: () => onPressed(),
       child: Container(
-        alignment: Alignment.center,
+          alignment: Alignment.center,
           height: height ?? kToolbarHeight * .6,
           width: width,
           margin: EdgeInsets.all(margin ?? 0),

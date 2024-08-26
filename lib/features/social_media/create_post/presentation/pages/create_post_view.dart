@@ -85,7 +85,8 @@ class _CreatePostViewState extends State<CreatePostView> {
               appBar: BackAppBar(label: 'Create Post', actions: [
                 TextButton(
                     child: const Label(text: 'Post'),
-                    onPressed: () => controller.createPost(context: context, type: widget.social)),
+                    onPressed: () => controller.createPost(
+                        context: context, type: widget.social)),
               ]),
               body: ListView(
                 shrinkWrap: true,
@@ -96,7 +97,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                         onShowPlaces(true);
                       },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 10),
                         child: Row(
                           children: [
                             const Icon(
@@ -112,7 +114,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                                 },
                               ),
                             ),
-                            if (state.place!.name.length < 30) const Flexible(child: SizedBox.shrink()),
+                            if (state.place!.name.length < 30)
+                              const Flexible(child: SizedBox.shrink()),
                           ],
                         ),
                       ),
@@ -122,7 +125,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Row(
                         children: [
-                          if (state.selectedFeeling != null && state.selectedFeeling!.name.isNotEmpty)
+                          if (state.selectedFeeling != null &&
+                              state.selectedFeeling!.name.isNotEmpty)
                             BadgedLabel(
                               label: state.selectedFeeling!.name,
                               onRemove: () {
@@ -130,7 +134,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                               },
                             ),
                           const Sizer(),
-                          if (state.selectedActivity != null && state.selectedActivity!.name.isNotEmpty)
+                          if (state.selectedActivity != null &&
+                              state.selectedActivity!.name.isNotEmpty)
                             BadgedLabel(
                               label: state.selectedActivity!.name,
                               onRemove: () {
@@ -140,7 +145,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                         ],
                       ),
                     ),
-                  if (state.selectedUsers != null && state.selectedUsers!.isNotEmpty) ...[
+                  if (state.selectedUsers != null &&
+                      state.selectedUsers!.isNotEmpty) ...[
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Label(
@@ -159,10 +165,12 @@ class _CreatePostViewState extends State<CreatePostView> {
                           (index) => GestureDetector(
                               onTap: () {},
                               child: BadgedLabel(
-                                label: state.selectedUsers?[index].fullName ?? '',
+                                label:
+                                    state.selectedUsers?[index].fullName ?? '',
                                 width: 100,
                                 onRemove: () {
-                                  controller.onRemoveUser(state.selectedUsers?[index].id ?? '');
+                                  controller.onRemoveUser(
+                                      state.selectedUsers?[index].id ?? '');
                                 },
                               )),
                         ),
@@ -172,12 +180,14 @@ class _CreatePostViewState extends State<CreatePostView> {
                   const Sizer(),
                   _buildCreatePost(),
                   const Sizer(),
-                  if (widget.social != 'twitter' && (state.images == null || state.images!.isEmpty))
+                  if (widget.social != 'twitter' &&
+                      (state.images == null || state.images!.isEmpty))
                     _buildColorsBallet(context: context),
                   const Sizer(),
                   _buildOptions(controller),
                   const Sizer(),
-                  if (state.images != null && state.images!.isNotEmpty) Expanded(child: _buildMediaCard()),
+                  if (state.images != null && state.images!.isNotEmpty)
+                    Expanded(child: _buildMediaCard()),
                 ],
               ),
             ),
@@ -194,7 +204,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                       },
                       icon: const Icon(Icons.arrow_back),
                     ),
-                    title: Label(text: 'Select users', style: Styles.headerText()),
+                    title:
+                        Label(text: 'Select users', style: Styles.headerText()),
                   ),
                   body: const BuildSearchFriends(),
                 ),
@@ -214,7 +225,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                       },
                       icon: const Icon(Icons.arrow_back),
                     ),
-                    title: Label(text: 'Select place', style: Styles.headerText()),
+                    title:
+                        Label(text: 'Select place', style: Styles.headerText()),
                   ),
                   body: BuildSearchPlaces(
                     onSelectPlace: (PlaceEntity place) {
@@ -231,20 +243,25 @@ class _CreatePostViewState extends State<CreatePostView> {
   }
 
   Widget _buildCreatePost() {
-    return BlocBuilder<CreatePostCubit, CreatePostState>(builder: (context, state) {
+    return BlocBuilder<CreatePostCubit, CreatePostState>(
+        builder: (context, state) {
       return Container(
           padding: const EdgeInsets.all(10),
-          color: state.backColor.isNotEmpty ? Color(int.parse(state.backColor.substring(1), radix: 16)) : Colors.white,
+          color: state.backColor.isNotEmpty
+              ? Color(int.parse(state.backColor.substring(1), radix: 16))
+              : Colors.white,
           child: TextField(
             maxLines: 4,
             maxLength: 150,
             style: const TextStyle(color: AppColors.QUANTITY_COLOR),
             onChanged: (c) {
               if (c.length == 150) {
-                showErrorMessage(context, "You can't type more than 150 character");
+                showErrorMessage(
+                    context, "You can't type more than 150 character");
               }
             },
-            controller: context.read<CreatePostCubit>().postContentTextController,
+            controller:
+                context.read<CreatePostCubit>().postContentTextController,
             decoration: const InputDecoration(
                 hintText: 'Type Here ... ',
                 hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
@@ -254,13 +271,15 @@ class _CreatePostViewState extends State<CreatePostView> {
   }
 
   Widget _buildMediaCard() {
-    return BlocBuilder<CreatePostCubit, CreatePostState>(builder: (context, state) {
+    return BlocBuilder<CreatePostCubit, CreatePostState>(
+        builder: (context, state) {
       final controller = context.read<CreatePostCubit>();
       return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.all(10),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: state.images!.length == 1 ? 1 : 2),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: state.images!.length == 1 ? 1 : 2),
           itemCount: state.images!.length < 4 ? state.images!.length : 4,
           itemBuilder: (context, index) => InkWell(
                 onTap: () {
@@ -291,7 +310,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                     Stack(
                       children: [
                         Container(
-                          margin: const EdgeInsetsDirectional.only(end: 10, bottom: 10),
+                          margin: const EdgeInsetsDirectional.only(
+                              end: 10, bottom: 10),
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
@@ -305,7 +325,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                         ),
                         if (index == 3 && state.images!.length > 4)
                           Container(
-                            margin: const EdgeInsetsDirectional.only(end: 10, bottom: 10),
+                            margin: const EdgeInsetsDirectional.only(
+                                end: 10, bottom: 10),
                             // padding: const EdgeInsets.all(10),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -369,7 +390,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                 height: 30,
                 width: 30,
                 decoration: BoxDecoration(
-                    color: Color(int.parse(colors[index].substring(1), radix: 16)),
+                    color:
+                        Color(int.parse(colors[index].substring(1), radix: 16)),
                     border: Border.all(color: Colors.grey, width: .5),
                     borderRadius: BorderRadius.circular(10)),
               ),
@@ -381,7 +403,8 @@ class _CreatePostViewState extends State<CreatePostView> {
   }
 
   Widget _buildOptions(CreatePostCubit controller) {
-    return BlocBuilder<CreatePostCubit, CreatePostState>(builder: (context, state) {
+    return BlocBuilder<CreatePostCubit, CreatePostState>(
+        builder: (context, state) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         IconButton(
             onPressed: () async {
@@ -400,7 +423,9 @@ class _CreatePostViewState extends State<CreatePostView> {
                     context: context,
                     widget: SelectActivity(
                       activities: state.activities ?? [],
-                      onSelected: (ActivityEntity item) => context.read<CreatePostCubit>().selectActivity(item: item),
+                      onSelected: (ActivityEntity item) => context
+                          .read<CreatePostCubit>()
+                          .selectActivity(item: item),
                     ));
               },
               icon: const Icon(
@@ -416,7 +441,9 @@ class _CreatePostViewState extends State<CreatePostView> {
                     context: context,
                     widget: SelectFeelingView(
                       feelings: state.feelings ?? [],
-                      onSelected: (FeelingEntity item) => context.read<CreatePostCubit>().selectedFeeling(item: item),
+                      onSelected: (FeelingEntity item) => context
+                          .read<CreatePostCubit>()
+                          .selectedFeeling(item: item),
                     ));
               },
               icon: const Icon(
@@ -447,7 +474,8 @@ class _CreatePostViewState extends State<CreatePostView> {
         if (widget.social != 'twitter')
           IconButton(
               onPressed: () async {
-                final res = await CustomVerticalSheetItem.normal<PrivacyStatus>(context, [
+                final res = await CustomVerticalSheetItem.normal<PrivacyStatus>(
+                    context, [
                   CustomSheetModel(
                     text: "Public",
                     value: PrivacyStatus.public,

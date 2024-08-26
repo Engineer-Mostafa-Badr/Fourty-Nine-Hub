@@ -6,8 +6,9 @@ import 'package:fourtyninehub/features/social_media/create_post/presentation/cub
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class BuildSearchFriends extends StatefulWidget {
-  const BuildSearchFriends(
-      {super.key,});
+  const BuildSearchFriends({
+    super.key,
+  });
   @override
   State<BuildSearchFriends> createState() => _BuildSearchFriendsState();
 }
@@ -24,14 +25,13 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CreatePostCubit, CreatePostState>(
         builder: (context, state) {
       final controller = context.read<CreatePostCubit>();
       return Padding(
-        padding: const EdgeInsetsDirectional.only(top: 20.0, end: 8,start: 8),
+        padding: const EdgeInsetsDirectional.only(top: 20.0, end: 8, start: 8),
         child: Column(
           children: [
             FormTextField(
@@ -49,7 +49,7 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: state.users?.length??0,
+                itemCount: state.users?.length ?? 0,
                 controller: controller.scrollController,
                 itemBuilder: (context, index) => Container(
                   padding: const EdgeInsets.all(15),
@@ -60,15 +60,14 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
                         children: [
                           CircleAvatar(
                             radius: 30,
-                            backgroundImage: NetworkImage(state.users?[index]
-                                .profilePicture ??
-                                ''),
+                            backgroundImage: NetworkImage(
+                                state.users?[index].profilePicture ?? ''),
                           ),
                           const SizedBox(
                             width: 10,
                           ),
                           Label(
-                            text: state.users?[index].fullName??'',
+                            text: state.users?[index].fullName ?? '',
                             style: Styles.headerText(),
                           ),
                         ],
@@ -76,7 +75,7 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
                       Checkbox(
                           value: state.users?[index].isSelected,
                           onChanged: (v) {
-                            controller.selectUsers(state.users??[],index);
+                            controller.selectUsers(state.users ?? [], index);
                             setState(() {});
                           }),
                     ],
@@ -84,7 +83,6 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
                 ),
               ),
             )
-
           ],
         ),
       );

@@ -17,7 +17,8 @@ class UploadButtonAndInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color color = isSuccess ? Colors.green[400]! : AppColors.SECONDARY_COLOR;
-    String text = isCarImage ? 'Upload Car Image $number' : 'Upload Number plate Image';
+    String text =
+        isCarImage ? 'Upload Car Image $number' : 'Upload Number plate Image';
     IconData icon = isSuccess ? Icons.check : Icons.close;
 
     return InkWell(

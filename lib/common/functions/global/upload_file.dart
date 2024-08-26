@@ -14,8 +14,8 @@ import '../helper/file_picker_helper.dart';
 class UploadFile {
   Future<Either<Failure, bool>?> uploadImage(
       {bool isGallery = true,
-        required String subCategoryId,
-        required Function(UploadFileEntity) onUploaded}) async {
+      required String subCategoryId,
+      required Function(UploadFileEntity) onUploaded}) async {
     final file = await FilePickerHelper()
         .pickMedia(isGallery: isGallery)
         .then((file) async {
@@ -24,7 +24,7 @@ class UploadFile {
         int size = bytes.length;
         // get signed url
         final signedURLResponse =
-        await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
+            await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
           "type": "image/${file.mimeType ?? 'png'}",
           "size": size,
           "subcategoryId": subCategoryId
@@ -32,7 +32,7 @@ class UploadFile {
         // send to w3 storage
         signedURLResponse.fold((l) {}, (data) async {
           await sendBinaryFileData(
-              file: file, signedUrl: data['data']['signedUrl'])
+                  file: file, signedUrl: data['data']['signedUrl'])
               .then((value) async {
             final mediaId = data['data']['mediaId'];
             final confirmUploadResponse = await serviceLocator<ApiConsumer>()

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 
 class CustomCard extends StatelessWidget {
   const CustomCard({
@@ -29,23 +28,23 @@ class CustomCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
-              ),
-              color: AppColors.PRIMARY_COLOR,
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              title,
-              style: Styles.headerText(
-                  fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-          ),
+          // Container(
+          //   width: double.infinity,
+          //   padding: const EdgeInsets.symmetric(vertical: 10),
+          //   decoration: const BoxDecoration(
+          //     borderRadius: BorderRadius.only(
+          //       topLeft: Radius.circular(10),
+          //       topRight: Radius.circular(10),
+          //     ),
+          //     color: AppColors.PRIMARY_COLOR,
+          //   ),
+          //   alignment: Alignment.center,
+          //   child: Text(
+          //     title,
+          //     style: Styles.headerText(
+          //         fontWeight: FontWeight.bold, color: Colors.white),
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(

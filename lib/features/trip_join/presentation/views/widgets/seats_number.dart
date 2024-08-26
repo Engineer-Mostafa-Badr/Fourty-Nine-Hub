@@ -41,7 +41,9 @@ class _SeatsNumberWidgetState extends State<SeatsNumberWidget> {
               ),
               onChanged: (int? value) {
                 seatsNumber = value ?? 1;
-                context.read<TripJoinViewCubit>().changeNumberOfSeats(value ?? 1);
+                context
+                    .read<TripJoinViewCubit>()
+                    .changeNumberOfSeats(value ?? 1);
                 setState(() {});
               },
               items: [1, 2, 3, 4, 5, 6]
@@ -52,7 +54,8 @@ class _SeatsNumberWidgetState extends State<SeatsNumberWidget> {
                   .toList()),
         ),
         const Sizer(),
-        Text('Number of seats available', style: Styles.headerText(color: AppColors.SECONDARY_COLOR))
+        Text('Number of seats available',
+            style: Styles.headerText(color: AppColors.SECONDARY_COLOR))
       ],
     );
   }

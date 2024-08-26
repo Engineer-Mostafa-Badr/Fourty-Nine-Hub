@@ -66,7 +66,6 @@ void showMeetingDialogue(BuildContext context, {bool shareScreen = false}) {
           actions: <Widget>[
             BlocConsumer<MeetingCubit, MeetingState>(
                 listener: (context, state) {
-                  
                   String meetingId = meetingIdController.text.trim();
                   if (state.isLoading) {
                     showLoadingDialog(context);

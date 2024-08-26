@@ -26,11 +26,15 @@ class InstagramPostComments extends StatefulWidget {
   final Function(ReplyOnCommentParams) onCommentReply;
 
   final Function(String) onDeleteReply;
-  const InstagramPostComments(
-      {super.key,
-      required this.postId,
-      required this.onAddComment, required this.onEditComment, required this.onDeleteComment, required this.onDeleteReply, required this.onCommentReply,
-       });
+  const InstagramPostComments({
+    super.key,
+    required this.postId,
+    required this.onAddComment,
+    required this.onEditComment,
+    required this.onDeleteComment,
+    required this.onDeleteReply,
+    required this.onCommentReply,
+  });
 
   @override
   State<InstagramPostComments> createState() => _InstagramPostCommentsState();
@@ -41,143 +45,145 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<InstagramCubit,InstagramState>(
-        builder: (context,state) {
-          final controller = context.read<InstagramCubit>();
-          final user = context.read<UserCubit>().state.data;
-          return Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              elevation: 0,
-              iconTheme: const IconThemeData(color: Colors.grey),
-              title: Label(
-                  text: '${controller.commentsPagingController.itemList?.length??0} Comments',
-                  style: Styles.mediumText()),
-              leading: IconButton(
-                  onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
-              centerTitle: true,
-            ),
-            body:Column(
-              children: [
-                Expanded(
-                  child: PagedListView<int, CommentEntity>(
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
-                    pagingController: controller.commentsPagingController,
-                    shrinkWrap: true,
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    builderDelegate: PagedChildBuilderDelegate<CommentEntity>(
-                        noItemsFoundIndicatorBuilder: (context) {
-                          print(controller.commentsPagingController.itemList?.length);
-                          return const Padding(
-                              padding: EdgeInsets.only(top: 200),
-                              child: Center(
-                                child: Text(
-                                  "No Comments",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ));
+    return BlocBuilder<InstagramCubit, InstagramState>(
+        builder: (context, state) {
+      final controller = context.read<InstagramCubit>();
+      final user = context.read<UserCubit>().state.data;
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          iconTheme: const IconThemeData(color: Colors.grey),
+          title: Label(
+              text:
+                  '${controller.commentsPagingController.itemList?.length ?? 0} Comments',
+              style: Styles.mediumText()),
+          leading: IconButton(
+              onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
+          centerTitle: true,
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: PagedListView<int, CommentEntity>(
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                pagingController: controller.commentsPagingController,
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
+                builderDelegate: PagedChildBuilderDelegate<CommentEntity>(
+                    noItemsFoundIndicatorBuilder: (context) {
+                      print(
+                          controller.commentsPagingController.itemList?.length);
+                      return const Padding(
+                          padding: EdgeInsets.only(top: 200),
+                          child: Center(
+                            child: Text(
+                              "No Comments",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ));
+                    },
+                    itemBuilder: (context, item, index) {
+                      return _buildCommentCard(
+                        comment: controller
+                            .commentsPagingController.itemList![index],
+                        onDeleteComment: (String id) async {
+                          var result = await widget.onDeleteComment(id);
+                          if (result == true) {
+                            controller.commentsPagingController.itemList
+                                ?.removeWhere((e) => e.id == id);
+                            setState(() {});
+                          }
                         },
-                        itemBuilder: (context, item, index) {
-
-                          return _buildCommentCard(
-                              comment: controller.commentsPagingController.itemList![index],
-                            onDeleteComment: (String id) async {
-                              var result = await widget.onDeleteComment(id);
-                              if (result == true) {
-                                controller.commentsPagingController.itemList
-                                    ?.removeWhere((e) => e.id == id);
-                                setState(() {});
-                              }
-                            },
-                            onDeleteReply: (String id) => widget.onDeleteReply(id),
-                          );
-                        },
-                        noMoreItemsIndicatorBuilder: (context) => Container(),
-                        firstPageProgressIndicatorBuilder: (context) => Container(
-                            margin: const EdgeInsets.only(top: 150),
-                            child: const CupertinoActivityIndicator()),
-                        newPageProgressIndicatorBuilder: (context) =>
+                        onDeleteReply: (String id) => widget.onDeleteReply(id),
+                      );
+                    },
+                    noMoreItemsIndicatorBuilder: (context) => Container(),
+                    firstPageProgressIndicatorBuilder: (context) => Container(
+                        margin: const EdgeInsets.only(top: 150),
+                        child: const CupertinoActivityIndicator()),
+                    newPageProgressIndicatorBuilder: (context) =>
                         const CupertinoActivityIndicator()),
-                  ),
-                ),
-                Container(
-                    height: kToolbarHeight,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                    ),
-                    child: Row(
-                      children: [
-                        const ProfileImage(accountId: 0),
-                        const Sizer(),
-                        Expanded(
-                            child: FormTextField(
-                                hint: 'Type your comment ....',
-                                height: kToolbarHeight * .7,
-                                action: (v) {
-                                  setState(() {});
-                                },
-                                controller: commentTextController)),
-                        const Sizer(),
-                        if (commentTextController.text.isNotEmpty)
-                          IconAppButton(
-                              icon: Icons.send,
-                              isCircle: true,
-                              onPressed: ()async{
-                                CommentEntity data = await widget.onAddComment(
-                                  PostCommentParams(
-                                      postId: widget.postId, content: commentTextController.text),
-                                );
-                                controller.commentsPagingController.itemList?.insert(
-                                  0,
-                                  CommentModel(
-                                    id: data.id,
-                                    content: commentTextController.text,
-                                    post: widget.postId,
-                                    createdAt: DateTime.now(),
-                                    loveCount: data.loveCount,
-                                    angryCount: data.angryCount,
-                                    likesCount: data.likesCount,
-                                    repliesCount: data.repliesCount,
-                                    sadCount: data.sadCount,
-                                    wowCount: data.wowCount,
-                                    isAngry: false,
-                                    isLikes: false,
-                                    isLove: false,
-                                    isSad: false,
-                                    isWow: false,
-                                    user: TwitterUserEntity(
-                                      id: user!.id,
-                                      firstName: user.firstName,
-                                      lastName: user.lastName,
-                                      createdAt: DateTime.now(),
-                                      image: user.profilePicture ?? '',
-                                      email: user.email ?? '',
-                                      isDocumented: false,
-                                    ),
-                                  ),
-                                );
-                                commentTextController.clear();
-                                FocusScope.of(context).unfocus();
-                                setState(() {});
-                              })
-                      ],
-                    )),
-              ],
+              ),
             ),
-          );
-        }
-    );
+            Container(
+                height: kToolbarHeight,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: [
+                    const ProfileImage(accountId: 0),
+                    const Sizer(),
+                    Expanded(
+                        child: FormTextField(
+                            hint: 'Type your comment ....',
+                            height: kToolbarHeight * .7,
+                            action: (v) {
+                              setState(() {});
+                            },
+                            controller: commentTextController)),
+                    const Sizer(),
+                    if (commentTextController.text.isNotEmpty)
+                      IconAppButton(
+                          icon: Icons.send,
+                          isCircle: true,
+                          onPressed: () async {
+                            CommentEntity data = await widget.onAddComment(
+                              PostCommentParams(
+                                  postId: widget.postId,
+                                  content: commentTextController.text),
+                            );
+                            controller.commentsPagingController.itemList
+                                ?.insert(
+                              0,
+                              CommentModel(
+                                id: data.id,
+                                content: commentTextController.text,
+                                post: widget.postId,
+                                createdAt: DateTime.now(),
+                                loveCount: data.loveCount,
+                                angryCount: data.angryCount,
+                                likesCount: data.likesCount,
+                                repliesCount: data.repliesCount,
+                                sadCount: data.sadCount,
+                                wowCount: data.wowCount,
+                                isAngry: false,
+                                isLikes: false,
+                                isLove: false,
+                                isSad: false,
+                                isWow: false,
+                                user: TwitterUserEntity(
+                                  id: user!.id,
+                                  firstName: user.firstName,
+                                  lastName: user.lastName,
+                                  createdAt: DateTime.now(),
+                                  image: user.profilePicture ?? '',
+                                  email: user.email ?? '',
+                                  isDocumented: false,
+                                ),
+                              ),
+                            );
+                            commentTextController.clear();
+                            FocusScope.of(context).unfocus();
+                            setState(() {});
+                          })
+                  ],
+                )),
+          ],
+        ),
+      );
+    });
   }
 
-  Widget _buildCommentCard({
-    required CommentEntity comment,
-    required Function(String) onDeleteComment,
-    required Function(String) onDeleteReply
-  }) {
+  Widget _buildCommentCard(
+      {required CommentEntity comment,
+      required Function(String) onDeleteComment,
+      required Function(String) onDeleteReply}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -185,7 +191,8 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
           comment: comment,
           onAddReply: (ReplyOnCommentParams params) =>
               widget.onCommentReply(params),
-          onEditComment: (PostCommentParams params)=>widget.onEditComment(params),
+          onEditComment: (PostCommentParams params) =>
+              widget.onEditComment(params),
           onDeleteComment: (String id) => onDeleteComment(id),
           onDeleteReply: (String id) => onDeleteReply(id),
         ),

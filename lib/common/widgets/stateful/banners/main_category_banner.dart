@@ -84,7 +84,8 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 widget.canRegister ? const Spacer() : const SizedBox.shrink(),
                 Label(
                   text: widget.category.name,
-                  style: Styles.headerText(color: AppColors.AUTH_CONTAINER_COLOR),
+                  style:
+                      Styles.headerText(color: AppColors.AUTH_CONTAINER_COLOR),
                 ),
                 const Spacer(),
                 Column(
@@ -109,7 +110,9 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                           ? '${widget.category.total.toShortScale} ${LocaleKeys.ad.localize}'
                           : '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
                       style: Styles.mediumText(
-                          fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.AUTH_CONTAINER_COLOR),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.AUTH_CONTAINER_COLOR),
                     )
                   ],
                 ),
@@ -125,7 +128,8 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
     if (widget.canRegister) {
       return InkWell(
         onTap: () => widget.onRegister?.call(),
-        child: Text(Labels.register, style: Styles.mediumText(color: Colors.white)),
+        child: Text(Labels.register,
+            style: Styles.mediumText(color: Colors.white)),
       );
     } else {
       return const SizedBox.shrink();

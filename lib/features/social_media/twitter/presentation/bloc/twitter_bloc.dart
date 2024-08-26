@@ -60,7 +60,9 @@ class TwitterCubit extends Cubit<TwitterState> {
     this._requestDocumentUseCase,
     this._getUserTweetsUseCase,
     this._deleteTwitterPostUseCase,
-    this._hideTwitterPostUseCase, this._deleteTwitterCommentUseCase, this._editTwitterCommentUseCase,
+    this._hideTwitterPostUseCase,
+    this._deleteTwitterCommentUseCase,
+    this._editTwitterCommentUseCase,
   ) : super(const TwitterState());
 
   void loadData() async {
@@ -325,10 +327,12 @@ class TwitterCubit extends Cubit<TwitterState> {
             ?.firstWhere((element) => element.id == params.postId)
             .commentsCount = (postsPagingController.itemList!
                 .firstWhere((element) => element.id == params.postId)
-                .commentsCount!+1);
+                .commentsCount! +
+            1);
 
-        if(state.postDetails!=null){
-          state.postDetails?.commentsCount = (state.postDetails!.commentsCount!+1);
+        if (state.postDetails != null) {
+          state.postDetails?.commentsCount =
+              (state.postDetails!.commentsCount! + 1);
         }
         emit(state.copyWith(newComment: data, status: StateStatus.success));
       },
@@ -348,7 +352,7 @@ class TwitterCubit extends Cubit<TwitterState> {
             ?.firstWhere((element) => element.id == params.postId)
             .commentsCount = (postsPagingController.itemList!
                 .firstWhere((element) => element.id == params.postId)
-                .commentsCount!+
+                .commentsCount! +
             1);
         print("newReply${data.id}");
         emit(state.copyWith(newReply: data, status: StateStatus.success));
@@ -443,40 +447,37 @@ class TwitterCubit extends Cubit<TwitterState> {
     var response = await _editTwitterCommentUseCase(params);
     bool value = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (r) {
-          value = r;
-        });
+        (r) {
+      value = r;
+    });
     return value;
   }
 
   Future<bool> deleteComment(
       {required BuildContext context,
-        required String commentId,
-        required String postId,
-        required String from}) async {
+      required String commentId,
+      required String postId,
+      required String from}) async {
     final response = await _deleteTwitterCommentUseCase(commentId);
     bool result = false;
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (r) {
-          result = r;
-          if (from == 'posts') {
-            var currentPost = postsPagingController.itemList
-                ?.firstWhere((element) => element.id == postId);
-            print("commmmmment count${currentPost?.commentsCount}");
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+      result = r;
+      if (from == 'posts') {
+        var currentPost = postsPagingController.itemList
+            ?.firstWhere((element) => element.id == postId);
+        print("commmmmment count${currentPost?.commentsCount}");
 
-            currentPost?.commentsCount = (currentPost.commentsCount! - 1);
-
-          }
-          commentsPagingController.itemList?.removeWhere((element) => element.id==commentId);
-          emit(state.copyWith(status: StateStatus.success));
-          showSuccessMessage(context, "Comment delete successfully");
-        });
+        currentPost?.commentsCount = (currentPost.commentsCount! - 1);
+      }
+      commentsPagingController.itemList
+          ?.removeWhere((element) => element.id == commentId);
+      emit(state.copyWith(status: StateStatus.success));
+      showSuccessMessage(context, "Comment delete successfully");
+    });
     return result;
   }
-
-
-
 }

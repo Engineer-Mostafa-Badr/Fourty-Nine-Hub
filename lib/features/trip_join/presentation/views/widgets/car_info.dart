@@ -36,7 +36,8 @@ class _CarInfoState extends State<CarInfo> {
       title: 'Car Info',
       children: [
         const Sizer(),
-        Text('Car Brand', style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
+        Text('Car Brand',
+            style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
         TypeAheadField<String>(
           builder: (context, controller, focusNode) {
             controller.text = fetchCarBrandsCubit.brand ?? '';
@@ -45,7 +46,8 @@ class _CarInfoState extends State<CarInfo> {
               focusNode: focusNode,
               // autofocus: true,
               decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                 fillColor: Colors.transparent,
                 hintText: 'Brand',
               ),
@@ -66,11 +68,14 @@ class _CarInfoState extends State<CarInfo> {
           },
           suggestionsCallback: (search) async {
             // fetchCarBrandsCubit.brand = search;
-            return fetchCarBrandsCubit.carBrandsList.map((e) => e?.brand ?? '').toList();
+            return fetchCarBrandsCubit.carBrandsList
+                .map((e) => e?.brand ?? '')
+                .toList();
           },
         ),
         const Sizer(),
-        Text('Car Model', style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
+        Text('Car Model',
+            style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
         TypeAheadField<String>(
           builder: (context, controller, focusNode) {
             controller.text = fetchCarModelsCubit.model ?? '';
@@ -79,14 +84,16 @@ class _CarInfoState extends State<CarInfo> {
               focusNode: focusNode,
               // autofocus: true,
               decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                 fillColor: Colors.transparent,
                 hintText: 'Model',
               ),
               onChanged: (value) {
                 fetchCarModelsCubit.model = value;
                 if (value.length == 1) {
-                  fetchCarModelsCubit.fetchCarModel(brand: fetchCarBrandsCubit.brand ?? '');
+                  fetchCarModelsCubit.fetchCarModel(
+                      brand: fetchCarBrandsCubit.brand ?? '');
                 }
               },
             );
@@ -102,12 +109,14 @@ class _CarInfoState extends State<CarInfo> {
           suggestionsCallback: (search) async {
             return fetchCarModelsCubit.carModels
                 .map((e) => e?.model ?? '')
-                .where((element) => element.toLowerCase().contains(search.toLowerCase()))
+                .where((element) =>
+                    element.toLowerCase().contains(search.toLowerCase()))
                 .toList();
           },
         ),
         const Sizer(),
-        Text('Year', style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
+        Text('Year',
+            style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
         TypeAheadField<String>(
           builder: (context, controller, focusNode) {
             controller.text = fetchCarYearTypeCubit.year ?? '';
@@ -116,7 +125,8 @@ class _CarInfoState extends State<CarInfo> {
               focusNode: focusNode,
               // autofocus: true,
               decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                 fillColor: Colors.transparent,
                 hintText: 'Year',
               ),
@@ -138,7 +148,9 @@ class _CarInfoState extends State<CarInfo> {
               brand: fetchCarBrandsCubit.brand ?? '',
               model: fetchCarModelsCubit.model ?? '',
             );
-            return fetchCarYearTypeCubit.carYears.map((e) => e?.year ?? '2000').toList();
+            return fetchCarYearTypeCubit.carYears
+                .map((e) => e?.year ?? '2000')
+                .toList();
             // return fetchCarYearTypeCubit.carYears
             //     .map((e) => e?.year ?? '')
             //     .where((element) => element.toLowerCase().contains(search.toLowerCase()))

@@ -9,10 +9,7 @@ class EditTwitterCommentUseCase
   final TwitterRepo _repo;
   EditTwitterCommentUseCase(this._repo);
   @override
-  Future<Either<Failure, bool>> call(
-      TwitterPostCommentParams params) async {
+  Future<Either<Failure, bool>> call(TwitterPostCommentParams params) async {
     return await _repo.editComment(params: params);
   }
 }
-
-

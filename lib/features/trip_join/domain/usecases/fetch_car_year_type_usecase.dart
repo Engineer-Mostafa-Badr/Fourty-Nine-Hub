@@ -7,7 +7,8 @@ class FetchCarYearTypeUseCase {
   final TripJoinRepo tripJoinRepo;
 
   FetchCarYearTypeUseCase({required this.tripJoinRepo});
-  Future<Either<Failure, List<CarYearTypeEntity>>> call({required String brand, required String model}) {
+  Future<Either<Failure, List<CarYearTypeEntity>>> call(
+      {required String brand, required String model}) {
     return tripJoinRepo.fetchCarYearType(brand: brand, model: model);
   }
 }

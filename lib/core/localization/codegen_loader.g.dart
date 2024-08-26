@@ -213,5 +213,8 @@ class CodegenLoader extends AssetLoader {
     "contact": "Contact",
     "pickPhotoOrVideo": "Pick Photo Or Video"
   };
-  static const Map<String, Map<String, dynamic>> mapLocales = {"ar": ar, "en": en};
+  static const Map<String, Map<String, dynamic>> mapLocales = {
+    "ar": ar,
+    "en": en
+  };
 }

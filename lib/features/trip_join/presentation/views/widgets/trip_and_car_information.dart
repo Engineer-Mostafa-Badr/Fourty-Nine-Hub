@@ -14,11 +14,13 @@ class TripAndCarInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        const TripInfoBuilder(),
+        const Sizer(height: 20),
         const TripJoinAdditionalInformation(),
         const Sizer(height: 20),
         const CarInfo(),
-        const Sizer(height: 20),
-        const TripInfoBuilder(),
+        // const Sizer(height: 20),
+        // const TripInfoBuilder(),
         const Sizer(height: 20),
         CustomButton(onTap: () {}, title: 'Publish', height: 50),
         const Sizer(height: 20),

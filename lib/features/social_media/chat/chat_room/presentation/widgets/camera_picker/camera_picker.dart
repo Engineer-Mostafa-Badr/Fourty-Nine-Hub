@@ -159,13 +159,14 @@ class _CamViewState extends State<_CamView> {
                         onTap: () {
                           final media =
                               context.read<CameraPickerCubit>().state.mediaList;
-                          if(media != null && media.isNotEmpty){
+                          if (media != null && media.isNotEmpty) {
                             showDialog(
                                 context: context,
-                                builder: (_) => ImagesAndVideosSlider(
-                                    media: media));
-                          }else{
-                            showErrorMessage(context, LocaleKeys.pickPhotoOrVideo);
+                                builder: (_) =>
+                                    ImagesAndVideosSlider(media: media));
+                          } else {
+                            showErrorMessage(
+                                context, LocaleKeys.pickPhotoOrVideo);
                           }
                         },
                       );

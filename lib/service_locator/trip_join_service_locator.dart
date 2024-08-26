@@ -38,19 +38,23 @@ class TripJoinServiceLocator {
     );
 
     serviceLocator.registerLazySingleton<GoogleApiConsumer>(
-      () => GoogleApiConsumer(dio: serviceLocator(instanceName: 'dioGoogleApi')),
+      () =>
+          GoogleApiConsumer(dio: serviceLocator(instanceName: 'dioGoogleApi')),
     );
 
     serviceLocator.registerLazySingleton<FetchLocationRemoteDataSource>(
-      () => FetchLocationRemoteDataSourceImp(googleApiConsumer: serviceLocator()),
+      () =>
+          FetchLocationRemoteDataSourceImp(googleApiConsumer: serviceLocator()),
     );
 
     serviceLocator.registerLazySingleton<TripJoinGoogleApiRepo>(
-      () => TripJoinGoogleApiRepoImp(fetchLocationRemoteDataSource: serviceLocator()),
+      () => TripJoinGoogleApiRepoImp(
+          fetchLocationRemoteDataSource: serviceLocator()),
     );
 
     serviceLocator.registerLazySingleton<FetchLocationCordinatesUseCase>(
-      () => FetchLocationCordinatesUseCase(tripJoinGoogleApiRepo: serviceLocator()),
+      () => FetchLocationCordinatesUseCase(
+          tripJoinGoogleApiRepo: serviceLocator()),
     );
 
     //! trip join db injection

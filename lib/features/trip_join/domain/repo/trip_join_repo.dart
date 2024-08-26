@@ -11,7 +11,10 @@ abstract class TripJoinRepo {
     required LatLng startLocation,
     required LatLng destinationLocation,
   });
-  Future<Either<Failure, List<CarBrandEntity>>> fetchCarBrand({required String search});
-  Future<Either<Failure, List<CarModelEntity>>> fetchCarModel({required String brand});
-  Future<Either<Failure, List<CarYearTypeEntity>>> fetchCarYearType({required String brand, required String model});
+  Future<Either<Failure, List<CarBrandEntity>>> fetchCarBrand(
+      {required String search});
+  Future<Either<Failure, List<CarModelEntity>>> fetchCarModel(
+      {required String brand});
+  Future<Either<Failure, List<CarYearTypeEntity>>> fetchCarYearType(
+      {required String brand, required String model});
 }

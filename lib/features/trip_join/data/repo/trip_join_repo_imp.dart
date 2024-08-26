@@ -22,12 +22,14 @@ class TripJoinRepoImp implements TripJoinRepo {
   }
 
   @override
-  Future<Either<Failure, List<CarBrandEntity>>> fetchCarBrand({required String search}) {
+  Future<Either<Failure, List<CarBrandEntity>>> fetchCarBrand(
+      {required String search}) {
     return tripJoinRemoteDataSource.fetchCarBrand(search: search);
   }
 
   @override
-  Future<Either<Failure, List<CarModelEntity>>> fetchCarModel({required String brand}) {
+  Future<Either<Failure, List<CarModelEntity>>> fetchCarModel(
+      {required String brand}) {
     return tripJoinRemoteDataSource.fetchCarModel(brand: brand);
   }
 
@@ -36,6 +38,7 @@ class TripJoinRepoImp implements TripJoinRepo {
     required String brand,
     required String model,
   }) {
-    return tripJoinRemoteDataSource.fetchCarYearType(brand: brand, model: model);
+    return tripJoinRemoteDataSource.fetchCarYearType(
+        brand: brand, model: model);
   }
 }

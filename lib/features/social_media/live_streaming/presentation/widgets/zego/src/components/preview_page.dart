@@ -57,11 +57,13 @@ class ZegoLiveStreamingPreviewPage extends StatefulWidget {
   final bool isLiveStream;
 
   @override
-  State<ZegoLiveStreamingPreviewPage> createState() => _ZegoLiveStreamingPreviewPageState();
+  State<ZegoLiveStreamingPreviewPage> createState() =>
+      _ZegoLiveStreamingPreviewPageState();
 }
 
 /// @nodoc
-class _ZegoLiveStreamingPreviewPageState extends State<ZegoLiveStreamingPreviewPage> {
+class _ZegoLiveStreamingPreviewPageState
+    extends State<ZegoLiveStreamingPreviewPage> {
   @override
   void initState() {
     super.initState();
@@ -112,8 +114,10 @@ class _ZegoLiveStreamingPreviewPageState extends State<ZegoLiveStreamingPreviewP
                     foregroundBuilder: audioVideoViewForeground,
                     backgroundBuilder: audioVideoViewBackground,
                     avatarConfig: ZegoAvatarConfig(
-                      showInAudioMode: widget.config.audioVideoView.showAvatarInAudioMode,
-                      showSoundWavesInAudioMode: widget.config.audioVideoView.showSoundWavesInAudioMode,
+                      showInAudioMode:
+                          widget.config.audioVideoView.showAvatarInAudioMode,
+                      showSoundWavesInAudioMode: widget
+                          .config.audioVideoView.showSoundWavesInAudioMode,
                       builder: widget.config.avatarBuilder,
                     ),
                   ),
@@ -154,7 +158,8 @@ class _ZegoLiveStreamingPreviewPageState extends State<ZegoLiveStreamingPreviewP
         ),
         title: const Text(
           'Start a meeting',
-          style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
       resizeToAvoidBottomInset: false,
@@ -216,7 +221,8 @@ class _ZegoLiveStreamingPreviewPageState extends State<ZegoLiveStreamingPreviewP
         height: height,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: ZegoLiveStreamingImage.assetImage(ZegoLiveStreamingIconUrls.background),
+            image: ZegoLiveStreamingImage.assetImage(
+                ZegoLiveStreamingIconUrls.background),
             fit: BoxFit.cover,
           ),
         ),
@@ -246,7 +252,9 @@ class _ZegoLiveStreamingPreviewPageState extends State<ZegoLiveStreamingPreviewP
           children: [
             Container(
               margin: const EdgeInsets.only(left: 20),
-              decoration: BoxDecoration(color: const Color(0xFFED1C24), borderRadius: BorderRadius.circular(15)),
+              decoration: BoxDecoration(
+                  color: const Color(0xFFED1C24),
+                  borderRadius: BorderRadius.circular(15)),
               child: ZegoTextIconButton(
                 onPressed: () {
                   Navigator.of(
@@ -290,8 +298,10 @@ class _ZegoLiveStreamingPreviewPageState extends State<ZegoLiveStreamingPreviewP
                       icon: const Icon(Icons.switch_camera, size: 20),
                       backgroundColor: Colors.transparent,
                     ),
-                    defaultUseFrontFacingCamera:
-                        ZegoUIKit().getUseFrontFacingCameraStateNotifier(ZegoUIKit().getLocalUser().id).value,
+                    defaultUseFrontFacingCamera: ZegoUIKit()
+                        .getUseFrontFacingCameraStateNotifier(
+                            ZegoUIKit().getLocalUser().id)
+                        .value,
                   ),
                   ZegoToggleCameraButton(
                     buttonSize: buttonSize,
@@ -363,7 +373,8 @@ class _ZegoLiveStreamingPreviewPageState extends State<ZegoLiveStreamingPreviewP
     final buttonSize = Size(88.zR, 88.zR);
     final iconSize = Size(56.zR, 56.zR);
 
-    final beautyButtonPlaceHolder = SizedBox(width: buttonSize.width, height: buttonSize.height);
+    final beautyButtonPlaceHolder =
+        SizedBox(width: buttonSize.width, height: buttonSize.height);
 
     return Align(
       alignment: Alignment.bottomCenter,
@@ -435,7 +446,8 @@ class _ZegoLiveStreamingPreviewPageState extends State<ZegoLiveStreamingPreviewP
       );
     }
 
-    return widget.config.preview.startLiveButtonBuilder?.call(context, () async {
+    return widget.config.preview.startLiveButtonBuilder?.call(context,
+            () async {
           defaultAction.call();
         }) ??
         GestureDetector(
@@ -491,7 +503,10 @@ class _ZegoLiveStreamingPreviewPageState extends State<ZegoLiveStreamingPreviewP
     final isSmallView = (screenSize.width - size.width).abs() > 1;
     return Stack(
       children: [
-        Container(color: isSmallView ? const Color(0xff333437) : const Color(0xff4A4B4D)),
+        Container(
+            color: isSmallView
+                ? const Color(0xff333437)
+                : const Color(0xff4A4B4D)),
         widget.config.audioVideoView.backgroundBuilder?.call(
               context,
               size,
@@ -524,12 +539,14 @@ class _ZegoLiveStreamingPreviewPageState extends State<ZegoLiveStreamingPreviewP
             mainAxisSize: MainAxisSize.min,
             children: [
               ValueListenableBuilder<bool>(
-                  valueListenable: ZegoUIKit().getCameraStateNotifier(ZegoUIKit().getLocalUser().id),
+                  valueListenable: ZegoUIKit()
+                      .getCameraStateNotifier(ZegoUIKit().getLocalUser().id),
                   builder: (context, videoOn, child) {
                     return SwitchListTile(
                       title: const Text(
                         "Video on",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       value: videoOn,
                       onChanged: (v) {
@@ -554,11 +571,15 @@ class _ZegoLiveStreamingPreviewPageState extends State<ZegoLiveStreamingPreviewP
                       "Use personal meeting ID (PMI)",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
                       widget.liveID,
-                      style: const TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
                     ),
                     value: value,
                     onChanged: (v) {
@@ -633,7 +654,8 @@ class _ZegoLiveStreamingPreviewPageState extends State<ZegoLiveStreamingPreviewP
       );
     }
 
-    return widget.config.preview.startLiveButtonBuilder?.call(context, () async {
+    return widget.config.preview.startLiveButtonBuilder?.call(context,
+            () async {
           defaultAction.call();
         }) ??
         GestureDetector(
@@ -675,6 +697,7 @@ class _ZegoLiveStreamingPreviewPageState extends State<ZegoLiveStreamingPreviewP
       ZegoUIKit().turnCameraOn(false);
     }
 
-    ZegoUIKit().getCameraStateNotifier(ZegoUIKit().getLocalUser().id).value = !v;
+    ZegoUIKit().getCameraStateNotifier(ZegoUIKit().getLocalUser().id).value =
+        !v;
   }
 }

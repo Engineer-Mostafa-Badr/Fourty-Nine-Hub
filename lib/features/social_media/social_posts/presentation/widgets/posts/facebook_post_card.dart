@@ -125,36 +125,52 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                       images: myPost.images ?? []),
                 Container(
                   margin: EdgeInsets.all(myPost.isShared == true ? 10 : 0),
-                  padding: EdgeInsets.all((myPost.isShared == true&&myPost.mainPost!=null) ? 10 : 0),
+                  padding: EdgeInsets.all(
+                      (myPost.isShared == true && myPost.mainPost != null)
+                          ? 10
+                          : 0),
                   decoration: BoxDecoration(
                       border: myPost.isShared == true ? Border.all() : null),
                   child: Column(
                     children: [
-                      if(myPost.type != 'advertisement' &&
-                          myPost.isShared == true&&myPost.mainPost!=null)...[if (myPost.type != 'advertisement' &&
-                          myPost.isShared == true)
-                        _buildMainAccountHeader(
-                            context: context, post: myPost.mainPost!),
-                      if (myPost.isShared == true)
-                        _buildContentWidget(
-                            content: myPost.mainPost?.content ?? '',
-                            backgroundColor: null,
-                            images: myPost.mainPost?.images ?? []),],
-                      if(myPost.type != 'advertisement' &&
-                          myPost.isShared == true&&myPost.mainPost==null)SizedBox(
-                        width: double.infinity,
-                        height: 100,
-                        child: Center(
-                          child: Row(
-                            children: [
-                              const Sizer(),
-                              const Icon(Icons.lock,color: Colors.black,),
-                              const Sizer(),
-                              Label(text: "This content is not available now.",style: Styles.headerText(color: Colors.black,),),
-                            ],
+                      if (myPost.type != 'advertisement' &&
+                          myPost.isShared == true &&
+                          myPost.mainPost != null) ...[
+                        if (myPost.type != 'advertisement' &&
+                            myPost.isShared == true)
+                          _buildMainAccountHeader(
+                              context: context, post: myPost.mainPost!),
+                        if (myPost.isShared == true)
+                          _buildContentWidget(
+                              content: myPost.mainPost?.content ?? '',
+                              backgroundColor: null,
+                              images: myPost.mainPost?.images ?? []),
+                      ],
+                      if (myPost.type != 'advertisement' &&
+                          myPost.isShared == true &&
+                          myPost.mainPost == null)
+                        SizedBox(
+                          width: double.infinity,
+                          height: 100,
+                          child: Center(
+                            child: Row(
+                              children: [
+                                const Sizer(),
+                                const Icon(
+                                  Icons.lock,
+                                  color: Colors.black,
+                                ),
+                                const Sizer(),
+                                Label(
+                                  text: "This content is not available now.",
+                                  style: Styles.headerText(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      )
+                        )
                     ],
                   ),
                 ),
@@ -467,16 +483,16 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                             }),
                         RichText(
                             text: TextSpan(children: [
-                              TextSpan(
-                                  text: post.sinceTime,
-                                  style: Styles.mediumText(color: Colors.grey)),
-                              const WidgetSpan(
-                                  child: Icon(
-                                    Icons.group,
-                                    size: 14,
-                                    color: Colors.grey,
-                                  ))
-                            ])),
+                          TextSpan(
+                              text: post.sinceTime,
+                              style: Styles.mediumText(color: Colors.grey)),
+                          const WidgetSpan(
+                              child: Icon(
+                            Icons.group,
+                            size: 14,
+                            color: Colors.grey,
+                          ))
+                        ])),
                       ],
                     ),
                   ),
@@ -484,11 +500,6 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 ],
               ),
             ),
-
-
-
-
-
             if (post.user.id == user?.id)
               IconAppButton(
                 onPressed: () {
@@ -515,22 +526,34 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               ),
           ],
         ),
-        if(post.location!=null)Padding(
-          padding: const EdgeInsetsDirectional.only(start: 40.0),
-          child: InkWell(
-            onTap: (){
-              showDialog(context: context, builder: (_)=> Scaffold(
-                body: FacebookUserOnMap(location: post.location!,),
-              ));
-            },
-            child: Row(
-              children: [
-                const Icon(Icons.location_on,size: 20,),
-                Expanded(child: Label(text: post.location?.place??'',style: Styles.mediumText(fontSize: 14),))
-              ],
+        if (post.location != null)
+          Padding(
+            padding: const EdgeInsetsDirectional.only(start: 40.0),
+            child: InkWell(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (_) => Scaffold(
+                          body: FacebookUserOnMap(
+                            location: post.location!,
+                          ),
+                        ));
+              },
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.location_on,
+                    size: 20,
+                  ),
+                  Expanded(
+                      child: Label(
+                    text: post.location?.place ?? '',
+                    style: Styles.mediumText(fontSize: 14),
+                  ))
+                ],
+              ),
             ),
           ),
-        ),
       ],
     );
   }
@@ -716,7 +739,11 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          FaIcon(icon,color: AppColors.GREY_DARK_COLOR,size: 20,),
+          FaIcon(
+            icon,
+            color: AppColors.GREY_DARK_COLOR,
+            size: 20,
+          ),
           Label(text: label, style: Styles.mediumText(color: Colors.grey))
         ],
       );
@@ -768,8 +795,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   },
                   child: Label(
                     text:
-                    "${post.users![0].firstName} ${post.users![0].lastName} ",
-                    style: Styles.mediumText(decoration: TextDecoration.underline),
+                        "${post.users![0].firstName} ${post.users![0].lastName} ",
+                    style:
+                        Styles.mediumText(decoration: TextDecoration.underline),
                   ),
                 ),
                 if (post.users!.length > 1)
@@ -778,8 +806,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                         showDialog(
                             context: context,
                             builder: (_) => BuildWithUsers(
-                              users: post.users!,
-                            ));
+                                  users: post.users!,
+                                ));
                       },
                       child: Label(
                         text: '+${post.users!.length - 1}',

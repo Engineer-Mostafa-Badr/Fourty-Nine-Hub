@@ -39,9 +39,11 @@ class UploadImagePopup extends StatelessWidget {
                 GestureDetector(
                   onTap: galleryCallback,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                     decoration: BoxDecoration(
-                      border: Border.all(width: 2, color: AppColors.PRIMARY_COLOR),
+                      border:
+                          Border.all(width: 2, color: AppColors.PRIMARY_COLOR),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Row(
@@ -58,9 +60,11 @@ class UploadImagePopup extends StatelessWidget {
                 GestureDetector(
                   onTap: cameraCallback,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                     decoration: BoxDecoration(
-                      border: Border.all(width: 2, color: AppColors.PRIMARY_COLOR),
+                      border:
+                          Border.all(width: 2, color: AppColors.PRIMARY_COLOR),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Row(

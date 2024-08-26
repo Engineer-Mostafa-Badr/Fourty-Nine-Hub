@@ -10,8 +10,10 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class BuildSearchPlaces extends StatefulWidget {
-  const BuildSearchPlaces(
-      {super.key, required this.onSelectPlace,});
+  const BuildSearchPlaces({
+    super.key,
+    required this.onSelectPlace,
+  });
   final Function(PlaceEntity) onSelectPlace;
   @override
   State<BuildSearchPlaces> createState() => _BuildSearchPlacesState();
@@ -31,7 +33,7 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
         builder: (context, state) {
       final controller = context.read<CreatePostCubit>();
       return Padding(
-        padding: const EdgeInsetsDirectional.only(top: 20.0, end: 8,start: 8),
+        padding: const EdgeInsetsDirectional.only(top: 20.0, end: 8, start: 8),
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
@@ -53,7 +55,6 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
                 ],
               ),
             ),
-
             if (controller.placesPagingController.itemList != null &&
                 controller.placesPagingController.itemList!.isNotEmpty)
               PagedSliverList<int, PlaceEntity>(
@@ -64,22 +65,25 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
                   },
                   itemBuilder: (context, item, index) {
                     return GestureDetector(
-                      onTap: (){
-                        widget.onSelectPlace(controller.placesPagingController.itemList![index]);
+                      onTap: () {
+                        widget.onSelectPlace(
+                            controller.placesPagingController.itemList![index]);
                       },
                       child: Container(
                         padding: const EdgeInsets.all(15),
-
                         child: Row(
                           children: [
-                            const Icon(Icons.location_on,size: 25,),
+                            const Icon(
+                              Icons.location_on,
+                              size: 25,
+                            ),
                             SizedBox(
                               width: 10.zW,
                             ),
                             Expanded(
                               child: Label(
                                 text: controller.placesPagingController
-                                    .itemList?[index].name ??
+                                        .itemList?[index].name ??
                                     '',
                                 style: Styles.headerText(),
                                 maxLines: 1,
@@ -92,9 +96,9 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
                   },
                   noMoreItemsIndicatorBuilder: (context) => Container(),
                   firstPageProgressIndicatorBuilder: (context) =>
-                  const CupertinoActivityIndicator(),
+                      const CupertinoActivityIndicator(),
                   newPageProgressIndicatorBuilder: (context) =>
-                  const CupertinoActivityIndicator(),
+                      const CupertinoActivityIndicator(),
                 ),
               ),
           ],

@@ -72,7 +72,7 @@ class _TripJoinGoogleMapState extends State<TripJoinGoogleMap> {
       ],
       child: SizedBox(
         width: double.infinity,
-        height: 400,
+        height: 300,
         child: Builder(builder: (context) {
           final startingCubit = context.watch<StartingLocationCubit>();
           final destinationCubit = context.watch<DestinationLocationCubit>();

@@ -10,7 +10,8 @@ class FetchCarModelsCubit extends Cubit<FetchCarModelsState> {
   final FetchCarModelUseCase fetchCarModelUseCase;
   List<CarModelEntity?> carModels = [];
   String? model;
-  FetchCarModelsCubit({required this.fetchCarModelUseCase}) : super(FetchCarModelsInitial());
+  FetchCarModelsCubit({required this.fetchCarModelUseCase})
+      : super(FetchCarModelsInitial());
   Future<void> fetchCarModel({required String brand}) async {
     emit(FetchCarModelsLoading());
     final response = await fetchCarModelUseCase.call(brand: brand);

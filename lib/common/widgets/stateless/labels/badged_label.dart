@@ -45,29 +45,34 @@ class BadgedLabel extends StatelessWidget {
           height: height,
           width: width,
           margin: EdgeInsets.all(margin ?? 0),
-          padding: const EdgeInsetsDirectional.only(end: 8,top: 5),
+          padding: const EdgeInsetsDirectional.only(end: 8, top: 5),
           decoration: BoxDecoration(
               color: isBordered ? Colors.white : color,
               border:
                   isBordered ? Border.all(color: borderColor, width: .5) : null,
               borderRadius: BorderRadius.circular(radius)),
-          child:Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Align(
                 alignment: AlignmentDirectional.topEnd,
                 child: GestureDetector(
                     onTap: onRemove,
-                    child: const Icon(Icons.close,color: Colors.white,size: 15,)),
+                    child: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 15,
+                    )),
               ),
-             Padding(
-               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-               child:  isCentered
-                   ? Center(
-                 child: _buildLabelWidget(),
-               )
-                   : _buildLabelWidget(),
-             )
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                child: isCentered
+                    ? Center(
+                        child: _buildLabelWidget(),
+                      )
+                    : _buildLabelWidget(),
+              )
             ],
           )),
     );

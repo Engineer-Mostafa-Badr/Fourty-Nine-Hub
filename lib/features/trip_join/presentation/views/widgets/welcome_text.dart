@@ -11,7 +11,7 @@ List<Widget> welcomeText() {
     ),
     const Sizer(),
     Text(
-      'You own a car! you are looking for someone to share the trip with you and pay half the price',
+      'You own a car!\nSomeone will share trip with you / pay half price',
       style: Styles.headerText(fontSize: 18, fontWeight: FontWeight.w400),
     ),
   ];

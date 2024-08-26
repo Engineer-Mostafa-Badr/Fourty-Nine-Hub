@@ -140,7 +140,7 @@ class _ZegoLiveStreamingLeaveButtonState
                         // widget.defaultEndAction;
                       },
                     ),
-                    ],
+                  ],
                 ),
               );
             });

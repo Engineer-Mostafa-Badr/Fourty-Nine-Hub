@@ -24,7 +24,7 @@ class MeetingRepositoryImpl extends MeetingRepository {
   }
 
   @override
-    Future<Response?> join(MeetingParams params) {
+  Future<Response?> join(MeetingParams params) {
     return meetingDataSource.joinRoom(params);
   }
 }
