@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/pages/meeting_view.dart';
 
@@ -78,61 +79,161 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
     super.dispose();
   }
 
+  final ValueNotifier<bool> showTopBar = ValueNotifier(true);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: widget.config.topMenuBar.margin,
-      padding: widget.config.topMenuBar.padding,
-      decoration: BoxDecoration(
-        color: widget.config.topMenuBar.backgroundColor ?? Colors.transparent,
-      ),
-      height: widget.config.topMenuBar.height ?? 160.zH,
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              topBarLeading(),
-              // const Expanded(child: SizedBox()),
-              Align(
-                alignment: Alignment.center,
-                child: Image.asset(
-                  Assets.logo,
-                  height: 50.zH,
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  minimizingButton(),
-                  SizedBox(width: 20.zR),
-                  if (widget.isLiveStream)
-                    ZegoLiveStreamingMemberButton(
-                      config: widget.config.memberList,
-                      events: widget.events.memberList,
-                      isCoHostEnabled: widget.isCoHostEnabled,
-                      hostManager: widget.hostManager,
-                      connectManager: widget.connectManager,
-                      popUpManager: widget.popUpManager,
-                      translationText: widget.translationText,
-                      builder: widget.config.memberButton.builder,
-                      icon: widget.config.memberButton.icon,
-                      backgroundColor:
-                          widget.config.memberButton.backgroundColor,
-                      avatarBuilder: widget.config.avatarBuilder,
-                      itemBuilder: widget.config.memberList.itemBuilder,
-                    ),
-                  SizedBox(width: 20.zW),
-                  closeButton(),
-                  SizedBox(width: 33.zW),
-                ],
-              ),
-            ],
-          ),
-          const Divider()
-        ],
-      ),
-    );
+    return ValueListenableBuilder<bool>(
+        valueListenable: showTopBar,
+        builder: (context, showTopBarValue, child) {
+          return Container(
+            margin: widget.config.topMenuBar.margin,
+            padding: widget.config.topMenuBar.padding,
+            decoration: BoxDecoration(
+              color: widget.config.topMenuBar.backgroundColor ??
+                  Colors.transparent,
+            ),
+            // height: showTopBar ? 160.zH : 240.zH,
+            child: Column(
+              children: [
+                if (showTopBarValue)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      topBarLeading(),
+                      // const Expanded(child: SizedBox()),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Image.asset(
+                          Assets.logo,
+                          height: 50.zH,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          minimizingButton(),
+                          SizedBox(width: 20.zR),
+                          if (widget.isLiveStream)
+                            ZegoLiveStreamingMemberButton(
+                              config: widget.config.memberList,
+                              events: widget.events.memberList,
+                              isCoHostEnabled: widget.isCoHostEnabled,
+                              hostManager: widget.hostManager,
+                              connectManager: widget.connectManager,
+                              popUpManager: widget.popUpManager,
+                              translationText: widget.translationText,
+                              builder: widget.config.memberButton.builder,
+                              icon: widget.config.memberButton.icon,
+                              backgroundColor:
+                                  widget.config.memberButton.backgroundColor,
+                              avatarBuilder: widget.config.avatarBuilder,
+                              itemBuilder: widget.config.memberList.itemBuilder,
+                            ),
+                          SizedBox(width: 20.zW),
+                          closeButton(),
+                          SizedBox(width: 33.zW),
+                        ],
+                      ),
+                    ],
+                  )
+                else
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(child: Container()),
+                          InkWell(
+                            onTap: () {
+                              showTopBar.value = !showTopBar.value;
+                              print(
+                                  'show top bar state is ${showTopBar.value}');
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(15),
+                              margin: const EdgeInsets.only(right: 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.grey[800],
+                              ),
+                              child: const Text(
+                                'Cancel',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Sizer(
+                        height: 15,
+                      ),
+                      if (widget.config.role == ZegoLiveStreamingRole.host)
+                        InkWell(
+                          onTap: () async {
+                            final users = ZegoUIKit().getAllUsers();
+                            for (var user in users) {
+                              await ZegoUIKit().removeUserFromRoom([user.id]);
+                            }
+                            if (context.mounted) {
+                              await context
+                                  .read<MeetingCubit>()
+                                  .endRoom(ZegoUIKit().getRoom().id);
+                              Navigator.of(context).pop(true);
+                            }
+                          },
+                          child: Container(
+                            width: MediaQuery.sizeOf(context).width / 1.3,
+                            height: 60,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.0),
+                              color: Colors.redAccent,
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'End meeting for all',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                      const Sizer(
+                        height: 15,
+                      ),
+                      InkWell(
+                        onTap: () async {
+                          Navigator.of(context).pop(true);
+                        },
+                        child: Container(
+                          width: MediaQuery.sizeOf(context).width / 1.3,
+                          height: 60,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.0),
+                            color: Colors.blueAccent,
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Leave meeting',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                showTopBarValue ? const Divider() : Container()
+              ],
+            ),
+          );
+        });
   }
 
   Widget minimizingButton() {
@@ -169,6 +270,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
             hostManager: widget.hostManager,
             hostUpdateEnabledNotifier: widget.hostUpdateEnabledNotifier,
             isLeaveRequestingNotifier: widget.isLeaveRequestingNotifier,
+            showTopBar: showTopBar,
           )
         : Container();
   }

@@ -1,6 +1,6 @@
 import 'package:fourtyninehub/features/zoom/domain/entities/room_response.dart';
 
-class RoomResponseErrorModel extends RoomResponseError {
+class RoomResponseErrorModel extends RoomResponse {
   const RoomResponseErrorModel(
       {required super.message, required super.success});
   factory RoomResponseErrorModel.fromJson(Map<String, dynamic> map) {

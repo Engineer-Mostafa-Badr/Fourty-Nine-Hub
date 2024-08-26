@@ -161,7 +161,8 @@ class _ZegoLiveStreamingPreviewPageState
         ),
         title: const Text(
           'Start a meeting',
-          style: TextStyle(color: Colors.black, fontSize: 18,fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
       resizeToAvoidBottomInset: false,
@@ -415,6 +416,7 @@ class _ZegoLiveStreamingPreviewPageState
   }
 
   Widget startButton() {
+    print('tapped');
     final permissions = <Permission>[];
     if (widget.config.turnOnCameraWhenJoining) {
       permissions.add(Permission.camera);
@@ -547,7 +549,8 @@ class _ZegoLiveStreamingPreviewPageState
                     return SwitchListTile(
                       title: const Text(
                         "Video on",
-                        style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       value: videoOn,
                       onChanged: (v) {
@@ -568,16 +571,19 @@ class _ZegoLiveStreamingPreviewPageState
                 valueListenable: usePersonalIdNotifier,
                 builder: (BuildContext context, bool value, Widget? child) {
                   return SwitchListTile(
-                    title: Text(
+                    title: const Text(
                       "Use personal meeting ID (PMI)",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle( fontSize: 18,fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
                       widget.liveID,
-                      style:
-                          const TextStyle(color: Colors.grey, fontSize: 16,fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
                     ),
                     value: value,
                     onChanged: (v) {
@@ -589,7 +595,6 @@ class _ZegoLiveStreamingPreviewPageState
                   );
                 },
               ),
-
             ],
           ),
         ),
@@ -627,7 +632,7 @@ class _ZegoLiveStreamingPreviewPageState
     if (widget.config.turnOnMicrophoneWhenJoining) {
       permissions.add(Permission.microphone);
     }
-
+    print('tapped');
     defaultAction() async {
       await checkPermissions(
         context: context,
@@ -664,7 +669,7 @@ class _ZegoLiveStreamingPreviewPageState
             height: 94.zR,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30.zR),
-              color:  Colors.blueAccent[700],
+              color: Colors.blueAccent[700],
             ),
             child: Align(
               alignment: Alignment.center,

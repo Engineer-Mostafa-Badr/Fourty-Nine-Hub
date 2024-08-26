@@ -1,29 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_facebook_body.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/post_details_page.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_people_you_may_know.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_comments.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../widgets/posts/create_post_banner.dart';
 
 class SocialHomeView extends StatefulWidget {
@@ -36,9 +26,35 @@ class SocialHomeView extends StatefulWidget {
 
 class _SocialHomeViewState extends State<SocialHomeView>
     with SingleTickerProviderStateMixin {
+  ScrollController scrollController = ScrollController();
+  bool _isScrollingDown = false;
+
   @override
   void initState() {
+    scrollController;
+    scrollController.addListener(() {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (!_isScrollingDown) {
+          setState(() {
+            _isScrollingDown = true;
+          });
+        }
+      } else {
+        if (_isScrollingDown) {
+          setState(() {
+            _isScrollingDown = false;
+          });
+        }
+      }
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,11 +66,15 @@ class _SocialHomeViewState extends State<SocialHomeView>
             isWithBackArrow: true,
           ),
           drawer: const DrawerWidget(),
-          bottomNavigationBar: const BottomNavigator(
+          bottomNavigationBar:  BottomNavigator(
+            scrollController: scrollController,
+            isScrollingDown: _isScrollingDown,
             mainCategory: 2,
             index: 2,
           ),
-          floatingActionButton: const FloatingButton(
+          floatingActionButton: _isScrollingDown
+              ? null
+              : const FloatingButton(
             changeView: 2,
           ),
           floatingActionButtonLocation:
@@ -79,7 +99,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                       pinned: true,
                       flexibleSpace: _buildTabBar(),
                     )
-                  ], body: const FacebookBody())
+                  ], body:  FacebookBody(scrollController: scrollController,))
                 : Center(
                     child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
