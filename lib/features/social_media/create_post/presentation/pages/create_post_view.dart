@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,8 +7,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_friends.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_places.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -38,46 +42,12 @@ class CreatePostView extends StatefulWidget {
 
 class _CreatePostViewState extends State<CreatePostView> {
 
-  bool viewSelectUser=false;
-  bool viewSelectPlace=false;
-
-  onShowUsers(bool show){
-    setState(() {
-      viewSelectUser=show;
-    });
-  }
-
-  onShowPlaces(bool show){
-    setState(() {
-      viewSelectPlace=show;
-    });
-  }
-
-
-  @override
-  void dispose() {
-    context.read<CreatePostCubit>().scrollController.dispose();
-    super.dispose();
-  }
-
-  Future<bool> onBackPressed() async {
-    SystemNavigator.pop();
-    return true;
-  }
-
   @override
   Widget build(BuildContext context) {
     final controller = context.read<CreatePostCubit>();
     return BlocConsumer<CreatePostCubit, CreatePostState>(
       listener: (context, state) {
         if (state.status == CreatePostStates.error) {
-          // showErrorMessage(
-          //   context,
-          //   getFailureMessage(
-          //     state.failure!,
-          //     context,
-          //   ),
-          // );
         }
       },
       builder: (context, state) {
@@ -95,7 +65,6 @@ class _CreatePostViewState extends State<CreatePostView> {
                 children: [
                   if (state.place != null&&state.place!.name.isNotEmpty)GestureDetector(
                     onTap: (){
-                      onShowPlaces(true);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 10),
@@ -147,7 +116,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                           onTap: (){},
 
                           child: BadgedLabel(label: state.selectedUsers?[index].fullName??'',width: 100,onRemove: (){
-                            controller.onRemoveUser(state.selectedUsers?[index].id??'');
+                            controller.onRemoveUser(state.selectedUsers![index]);
                           },)),),
                     ),
                   ),],
@@ -167,45 +136,6 @@ class _CreatePostViewState extends State<CreatePostView> {
                 ],
               ),
             ),
-            if(viewSelectUser==true)PopScope(
-              onPopInvoked: (e)async=>onBackPressed(),
-              child: Scaffold(
-                appBar: AppBar(
-                  elevation: 0,
-                  centerTitle: true,
-                  leading: IconButton(
-                    onPressed: (){
-                      onShowUsers(false);
-                    },
-                    icon: const Icon(Icons.arrow_back),
-                  ),
-                  title: Label(text:  'Select users', style: Styles.headerText()),
-                ),
-                body: const BuildSearchFriends(),
-              ),
-            ),
-            if(viewSelectPlace==true)WillPopScope(
-              onWillPop: ()async{
-                return false;
-              },
-              child: Scaffold(
-                appBar: AppBar(
-                  elevation: 0,
-                  centerTitle: true,
-                  leading: IconButton(
-                    onPressed: (){
-                      onShowPlaces(false);
-                    },
-                    icon: const Icon(Icons.arrow_back),
-                  ),
-                  title: Label(text:  'Select place', style: Styles.headerText()),
-                ),
-                body: BuildSearchPlaces(onSelectPlace: (PlaceEntity place) {
-                  controller.onSelectPlace(place);
-                  onShowPlaces(false);
-                },),
-              ),
-            )
           ],
         );
       },
@@ -248,7 +178,7 @@ class _CreatePostViewState extends State<CreatePostView> {
           final controller = context.read<CreatePostCubit>();
           return GridView.builder(
             shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               padding: const EdgeInsets.all(10),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: state.images!.length == 1 ? 1 : 2),
@@ -406,6 +336,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                     size: 30,
                   )),
             if (widget.social != 'twitter')
+
               IconButton(
                   onPressed: () {
                     bottomSheet(
@@ -426,7 +357,10 @@ class _CreatePostViewState extends State<CreatePostView> {
             if (widget.social != 'twitter')
               IconButton(
                   onPressed: () {
-                    onShowUsers(true);
+                    showDialog(context: context, builder: (context)=>BuildSearchFriends(onSelectUser: (PostUserEntity user) {
+                      controller.selectUsers(user);
+                      // context.pop(true);
+                    }, controller: controller,));
                   },
                   icon: const Icon(
                     Icons.people,
@@ -436,7 +370,12 @@ class _CreatePostViewState extends State<CreatePostView> {
             if (widget.social != 'twitter')
               IconButton(
                   onPressed: () {
-                    onShowPlaces(true);
+                    showDialog(context: context, builder: (context)=>BuildSearchPlaces(
+                      onSelectPlace: (PlaceEntity place) {
+                        controller.onSelectPlace(place);
+                        context.pop();
+
+                      },controller:controller));
                   },
                   icon: const Icon(
                     Icons.location_on,
