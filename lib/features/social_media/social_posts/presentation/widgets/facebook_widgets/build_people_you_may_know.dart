@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dar
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
@@ -256,8 +257,12 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                               TextFormField(
                                                                             controller:
                                                                                 messageController,
+                                                                            onChanged: (c){
+                                                                              setState(() {});
+                                                                            },
+
                                                                             decoration:
-                                                                                InputDecoration(hintText: "Greet message", hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
+                                                                                InputDecoration(hintText: "Greet message",fillColor: Colors.white, hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
                                                                           ),
                                                                           actions: <Widget>[
                                                                             TextButton(
@@ -269,17 +274,28 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                                 style: Styles.headerText(),
                                                                               ),
                                                                             ),
-                                                                            ElevatedButton(
-                                                                              onPressed: () async {
-                                                                                await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id);
-                                                                                controller.suggestUserPagingController.itemList?.removeWhere((element) => element.id == controller.suggestUserPagingController.itemList?[index].id);
-                                                                                showSuccessMessage(context, 'Message send successfully');
-                                                                                Navigator.of(context).pop();
-                                                                                setState(() {});
+                                                                            InkWell(
+                                                                              onTap: () async {
+                                                                                if(messageController.text.isNotEmpty){
+                                                                                  await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
+                                                                                  controller.suggestUserPagingController.itemList?.removeWhere((element) => element.id == controller.suggestUserPagingController.itemList?[index].id);
+                                                                                  showSuccessMessage(context, 'Message send successfully');
+                                                                                  Navigator.of(context).pop();
+                                                                                  setState(() {});
+                                                                                }
                                                                               },
-                                                                              child: Label(
-                                                                                text: 'Send',
-                                                                                style: Styles.headerText(),
+                                                                              child: Container(
+                                                                                width: 100,
+                                                                                padding: const EdgeInsets.all(5),
+                                                                                decoration: BoxDecoration(
+                                                                                  color: AppColors.PRIMARY_COLOR,
+                                                                                  borderRadius: BorderRadius.circular(15)
+                                                                                ),
+                                                                                alignment: Alignment.center,
+                                                                                child: Label(
+                                                                                  text: 'Send',
+                                                                                  style: Styles.headerText(color: Colors.white),
+                                                                                ),
                                                                               ),
                                                                             ),
                                                                           ],
@@ -320,7 +336,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                               ? 'Add Friend'
                                                                               : item.addedSuccessfully == true && item.followSuccessfully == false
                                                                                   ? 'Follow'
-                                                                                  : "Send greet message",
+                                                                                  : "Send Greet Message",
                                                                           style: Styles.mediumText(
                                                                               color: item.followSuccessfully == true ? AppColors.PRIMARY_COLOR_DARK : Colors.white,
                                                                               fontSize: 14,
