@@ -2,6 +2,7 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/data/dat
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/datasources/shipping_data_source.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/repositories/images_repository.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/repositories/shipping_repository.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/favorite_shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
@@ -41,6 +42,9 @@ class ShippingServiceLocatior {
     );
     serviceLocator.registerFactory(
       () => TripCubit(repository: serviceLocator()),
+    );
+    serviceLocator.registerFactory(
+      () => CallMessageCubit(repository: serviceLocator()),
     );
     //Repo
     serviceLocator.registerLazySingleton(

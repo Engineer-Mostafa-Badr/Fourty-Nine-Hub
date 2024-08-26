@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -7,32 +9,48 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.da
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class TripCardWidget extends StatefulWidget {
-  TripCardWidget({super.key, required this.model, this.buttons = false});
+  TripCardWidget(
+      {super.key,
+      required this.model,
+      this.yourRequest = false,
+      this.buttons = false,
+      this.title,
+      this.priceFontSize = 22});
   final AllTripModel model;
   final bool buttons;
-
+  final double priceFontSize;
+  final bool yourRequest;
+  final String? title;
   @override
   State<TripCardWidget> createState() => _TripCardWidgetState();
 }
 
 class _TripCardWidgetState extends State<TripCardWidget> {
   TextEditingController price = TextEditingController();
+  PageController controller = PageController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     price.text = widget.model.price?.toStringAsFixed(0) ?? "0";
+    context.read<CallMessageCubit>().getCallMessage(
+        ownerId: widget.model.userId?.id ?? "",
+        subcategoryId: widget.model.categoryId?.id ?? "");
   }
 
+  int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     var tripCubit = context.read<TripCubit>();
@@ -51,154 +69,76 @@ class _TripCardWidgetState extends State<TripCardWidget> {
         if (state is FailureShippingState) {
           showErrorMessage(context, getFailureMessage(state.failure, context));
         }
+        if (state is SuccessReportState) {
+          showSuccessMessage(context, 'you have reported this trip.');
+        }
       },
       builder: (context, state) {
         return GestureDetector(
           onTap: () {
-            if (!widget.buttons) {
+            if (!widget.buttons && !widget.yourRequest) {
               context.push(Routes.DRIVERREQUESTSDETIALS, extra: widget.model);
             }
           },
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: BoxDecoration(
-                border: Border.all(color: Colors.black38),
+                border: Border.all(color: Colors.black, width: 3),
                 borderRadius: BorderRadius.circular(10)),
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'New Trip',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          widget.title ?? 'New Ride',
+                          style: TextStyle(
+                            color: AppColors.PRIMARY_COLOR,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ),
+                        ),
+                        Text(
+                          " (${widget.model.status})",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      '${widget.model.price?.toStringAsFixed(0)}',
-                      style: const TextStyle(
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 5),
-                const Divider(),
-                const SizedBox(height: 5),
-                Container(
-                  width: double.infinity,
-                  height: 160,
-                  decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-                const SizedBox(height: 5),
-                const Divider(),
-                const SizedBox(height: 5),
-                Row(
-                  children: [
-                    const Text(
-                      'From: ',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.red),
-                    ),
-                    Expanded(
-                      child: Text(
-                        widget.model.startLocation ?? "",
-                        style: const TextStyle(fontSize: 12),
-                        // overflow: TextOverflow.ellipsis,
-                      ),
+                    Column(
+                      children: [
+                        Text(
+                          '${widget.model.price?.toStringAsFixed(0)}',
+                          style: TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                            fontSize: widget.priceFontSize,
+                          ),
+                        ),
+                        Text("Premium")
+                      ],
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      'To: ',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.red),
-                    ),
-                    Expanded(
-                      child: Text(
-                        widget.model.targetLocation ?? "",
-                        style: const TextStyle(fontSize: 12),
-                        // overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 5),
-                const Divider(),
-                const SizedBox(height: 5),
-                const Text(
-                  'Description:',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.red),
-                ),
-                Text(
-                  widget.model.desc ?? "",
-                  style: const TextStyle(fontSize: 12),
-                  // overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 5),
-                const Divider(),
-                const SizedBox(height: 5),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
                       child: Row(
                         children: [
-                          const Text(
-                            'Date: ',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color: Colors.red),
-                          ),
+                          Icon(Icons.calendar_month),
                           Flexible(
                             child: Text(
-                              widget.model.time!.split(":").first,
-                              style: const TextStyle(fontSize: 12),
-                              // overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          const Text(
-                            'Time: ',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color: Colors.red),
-                          ),
-                          Flexible(
-                            child: Text(
-                              "${widget.model.time!.split(":")[1]}:${widget.model.time!.split(":")[2]}",
-                              style: const TextStyle(
-                                fontSize: 12,
-                              ),
+                              "25 August, 09:47",
+                              style: TextStyle(fontSize: 13),
                             ),
                           ),
                         ],
@@ -206,177 +146,243 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                     ),
                   ],
                 ),
-                if (widget.buttons)
-                  Column(
-                    children: [
-                      const SizedBox(
-                        height: 30,
+                const SizedBox(height: 5),
+                const SizedBox(height: 5),
+                Row(
+                  children: [
+                    Icon(Icons.chat),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Flexible(
+                      child: Text(
+                        widget.model.desc ?? "",
+                        style: const TextStyle(fontSize: 12),
                       ),
-                      // DefaultTextFormField(currentFocusNode: FocusNode(), currentController: TextEditingController(), hint: model.price.toString()),
-                      // SizedBox(height: 15,),
-                      Row(
-                        children: [
-                          // Expanded(
-                          //   child: DefaultButton(
-                          //     height: 50,
-                          //     padding: EdgeInsets.zero,
-                          //     borderRadius: BorderRadius.circular(7),
-                          //     onPressed: () {
-                          // tripCubit.newOffer(
-                          //                     id: model.id ?? "",
-                          //                     price: model.price??0, message: "The request has been successfully approved.");
-                          //     },
-                          //     label: "Accept Offer",
-                          //   ),
-                          // ),
-                          Expanded(
-                            child: AppButton(
-                              style: Styles.mediumText(
-                                  fontSize: 18, color: Colors.white),
-                              label: "Send Offer",
-                              onPressed: () {
-                                tripCubit.newOffer(
-                                    id: widget.model.id ?? "",
-                                    price: widget.model.price ?? 0,
-                                    message:
-                                        "The request has been successfully approved.");
-                              },
-                              backColor: AppColors.PRIMARY_COLOR,
-                              color: Colors.white,
-                              // height: 40,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 5),
+                const SizedBox(height: 5),
+                Row(
+                  children: [
+                    Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.blue, width: 5),
+                          shape: BoxShape.circle),
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Expanded(
+                      child: Text(
+                        widget.model.startLocation ?? "",
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.green, width: 5),
+                          shape: BoxShape.circle),
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Expanded(
+                      child: Text(
+                        widget.model.targetLocation ?? "",
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 5),
+                const SizedBox(height: 10),
+                widget.yourRequest?
+                DefaultButton(
+                  width: double.infinity,
+                  height: 50,
+                  padding: EdgeInsets.symmetric(vertical: 0),
+                  onPressed: () {
+                    
+                  },
+                  label: "Cancel Request",
+                ):
+                Column(
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AppButton(
+                            style: Styles.mediumText(
+                                fontSize: 18, color: Colors.white),
+                            label: "Send Offer",
+                            onPressed: () {
+                              tripCubit.newOffer(
+                                  id: widget.model.id ?? "",
+                                  price: widget.model.price ?? 0,
+                                  message:
+                                      "The request has been successfully approved.");
+                            },
+                            backColor: AppColors.PRIMARY_COLOR,
+                            color: Colors.white,
+                            // height: 40,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: DefaultTextFormField(
+                            currentFocusNode: FocusNode(),
+                            currentController: price,
+                            hint: widget.model.price.toString(),
+                            constraints: const BoxConstraints(
+                              maxHeight: kToolbarHeight * .6,
+                              minHeight: kToolbarHeight * .6,
                             ),
+                            keyboardType: TextInputType.number,
                           ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Expanded(
-                            child: DefaultTextFormField(
-                              currentFocusNode: FocusNode(),
-                              currentController: price,
-                              hint: widget.model.price.toString(),
-                              constraints: BoxConstraints(
-                                maxHeight: kToolbarHeight * .6,
-                                minHeight: kToolbarHeight * .6,
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    BlocBuilder<CallMessageCubit, ShippingState>(
+                      builder: (context, state) {
+                        if (state is FailureShippingState) {
+                          log(getFailureMessage(state.failure, context),
+                              name: "lskdjflskdjfslkdjfslkdjfslkdjf");
+                        }
+                        log(state.toString(),
+                            name: "lskdjflskdjfslkdjfslkdjfslkdjf");
+                        if (state is SuccessGetCallMessageState) {
+                          log(state.data.toString(),
+                              name: "lskdjflskdjfslkdjfslkdjfslkdjf");
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: AppButton(
+                                  label: Labels.call,
+                                  color: Colors.white,
+                                  icon: Icons.call,
+                                  backColor: state.data
+                                      ? AppColors.PRIMARY_COLOR
+                                      : AppColors.DARK_GRAY_COLOR,
+                                  onPressed: () {},
+                                  style: Styles.mediumText(
+                                      fontSize: 18, color: Colors.white),
+                                ),
                               ),
-                              keyboardType: TextInputType.number,
-                            ),
-                          )
-                          // Expanded(
-                          //   child: AppButton(
-                          //     // height: 50,
-                          //     // padding: EdgeInsets.zero,
-                          //     // borderRadius: BorderRadius.circular(7),
-                          //     onPressed: () {
-                          //       showDialog(
-                          //         context: context,
-                          //         builder: (context) {
-                          //           return Dialog(
-                          //             child: Container(
-                          //               padding: const EdgeInsets.all(20),
-                          //               margin: const EdgeInsets.symmetric(
-                          //                   horizontal: 10),
-                          //               width: double.infinity,
-                          //               // height: 150,
-                          //               decoration: BoxDecoration(
-                          //                 color: Colors.white,
-                          //                 borderRadius:
-                          //                     BorderRadius.circular(20),
-                          //               ),
-                          //               child: Column(
-                          //                 mainAxisSize: MainAxisSize.min,
-                          //                 children: [
-                          //                   Text(
-                          //                     "New Offer",
-                          //                     style: Styles.headerText(
-                          //                         fontSize: 20,
-                          //                         color: Colors.red),
-                          //                   ),
-                          //                   const SizedBox(
-                          //                     height: 30,
-                          //                   ),
-                          //                   DefaultTextFormField(
-                          //                     keyboardType:
-                          //                         TextInputType.number,
-                          //                     currentController: price,
-                          //                     currentFocusNode: FocusNode(),
-                          //                     hint: "Price",
-                          //                   ),
-                          //                   const SizedBox(
-                          //                     height: 40,
-                          //                   ),
-                          //                   DefaultButton(
-                          //                     onPressed: () {
-                          //                       tripCubit.newOffer(
-                          //                           id: model.id ?? "",
-                          //                           price: double.parse(
-                          //                               price.text,), message: "Your offer has been sent, please wait for a response.");
-                          //                     },
-                          //                     label: "Send New Offer",
-                          //                     height: 55,
-                          //                     width: double.infinity,
-                          //                     padding: EdgeInsets.zero,
-                          //                   )
-                          //                 ],
-                          //               ),
-                          //             ),
-                          //           );
-                          //         },
-                          //       );
-                          //     },
-                          //     label: "New Offer",
-                          //     // backgroundColor: Colors.red,
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: AppButton(
-                              label: Labels.call,
-                              color: Colors.white,
-                              icon: Icons.call,
-                              backColor: AppColors.DARK_GRAY_COLOR,
-                              onPressed: () {},
-                              style: Styles.mediumText(
-                                  fontSize: 18, color: Colors.white),
-                            ),
-                          ),
-                          const Sizer(),
-                          Expanded(
-                            child: AppButton(
-                              label: Labels.message,
-                              icon: Icons.message,
-                              backColor: AppColors.DARK_GRAY_COLOR,
-                              style: Styles.mediumText(
-                                  fontSize: 18, color: Colors.white),
-                              onPressed: () {},
-                            ),
-                          ),
-                          const Sizer(),
-                          Expanded(
-                            child: AppButton(
-                              label: Labels.report,
-                              icon: Icons.report,
-                              backColor: Colors.red,
-                              style: Styles.mediumText(
-                                  fontSize: 18, color: Colors.white),
-                              onPressed: () {
-                                tripCubit.report();
-                              },
-                            ),
-                          ),
-                          // const Icon(
-                          //   Icons.report,
-                          //   color: Colors.red,
-                          // )
-                        ],
-                      ),
-                    ],
-                  ),
+                              const Sizer(),
+                              Expanded(
+                                child: AppButton(
+                                  label: Labels.message,
+                                  icon: Icons.message,
+                                  backColor: state.data
+                                      ? AppColors.PRIMARY_COLOR
+                                      : AppColors.DARK_GRAY_COLOR,
+                                  style: Styles.mediumText(
+                                      fontSize: 15, color: Colors.white),
+                                  onPressed: () {},
+                                ),
+                              ),
+                              const Sizer(),
+                              Expanded(
+                                child: AppButton(
+                                  label: Labels.report,
+                                  icon: Icons.report,
+                                  backColor: Colors.red,
+                                  style: Styles.mediumText(
+                                      fontSize: 18, color: Colors.white),
+                                  onPressed: () {
+                                    // tripCubit.report(
+                                    //     loadingTripId: widget.model.id ?? "");
+                                    showBottomSheet(
+                                      context: context,
+                                      builder: (context) => Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: ReportView(
+                                          categoryId:
+                                              widget.model.categoryId?.id ?? "",
+                                          id: widget.model.id ?? "",
+                                          loadingTripId: widget.model.id ?? "",
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: AppButton(
+                                  label: Labels.call,
+                                  color: Colors.white,
+                                  icon: Icons.call,
+                                  backColor: AppColors.DARK_GRAY_COLOR,
+                                  onPressed: () {
+                                    launchUrlString("tel://21213123123");
+                                  },
+                                  style: Styles.mediumText(
+                                      fontSize: 18, color: Colors.white),
+                                ),
+                              ),
+                              const Sizer(),
+                              Expanded(
+                                child: AppButton(
+                                  label: Labels.message,
+                                  icon: Icons.message,
+                                  backColor: AppColors.DARK_GRAY_COLOR,
+                                  style: Styles.mediumText(
+                                      fontSize: 18, color: Colors.white),
+                                  onPressed: () {},
+                                ),
+                              ),
+                              const Sizer(),
+                              Expanded(
+                                child: AppButton(
+                                  label: Labels.report,
+                                  icon: Icons.report,
+                                  backColor: Colors.red,
+                                  style: Styles.mediumText(
+                                      fontSize: 15, color: Colors.white),
+                                  onPressed: () {
+                                    showBottomSheet(
+                                      context: context,
+                                      builder: (context) => const ReportView(
+                                        categoryId: "",
+                                        id: "",
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

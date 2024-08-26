@@ -68,5 +68,12 @@ class SuccessAcceptPremiumOfferState extends ShippingState {
   SuccessAcceptPremiumOfferState({required this.message});
 }
 
+class LoadingShippingState extends ShippingState {}
 
-class LoadingShippingState extends ShippingState{}
+class SuccessGetCallMessageState extends ShippingState {
+  final bool data;
+
+  SuccessGetCallMessageState({required this.data});
+}
+
+class SuccessReportState extends ShippingState{}

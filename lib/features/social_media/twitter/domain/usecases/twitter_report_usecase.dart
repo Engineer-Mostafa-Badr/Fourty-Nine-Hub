@@ -18,12 +18,14 @@ class TwitterReportParams {
   final String reason;
   final String content;
   final String categoryId;
+  final String? loadingTripId;
   TwitterReportParams({
     required this.category,
     required this.userId,
     required this.reason,
     required this.content,
     required this.categoryId,
+    this.loadingTripId,
   });
   Map<String, dynamic> toJson() => {
         'category': category,
@@ -31,6 +33,7 @@ class TwitterReportParams {
         'reason': reason,
         'content': content,
         'categoryId': categoryId,
-        'subCategory': '66a3583454e6e337915514db'
+        'subCategory': '66a3583454e6e337915514db',
+        "loadingTripId": loadingTripId
       };
 }

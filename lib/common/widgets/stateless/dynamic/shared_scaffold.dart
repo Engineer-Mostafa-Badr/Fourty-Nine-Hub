@@ -20,6 +20,7 @@ class SharedScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: key,
       extendBody: extendBody,
       backgroundColor: backgroundColor,
       drawer: const DrawerWidget(),

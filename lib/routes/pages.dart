@@ -61,12 +61,14 @@ import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentati
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/favorite_shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/dahsboard_driver_screen.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/driver_requests.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/request_detials_screen.dart';
@@ -88,6 +90,7 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/ti
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/meeting_dialogue.dart';
@@ -434,12 +437,24 @@ class AppPages {
         GoRoute(
             path: Paths.ACCOUNT,
             name: Routes.ACCOUNT,
-            builder: (context, state) => const NotificationView(),
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (context) => serviceLocator<CallMessageCubit>(),),
+                BlocProvider(create: (context) => serviceLocator<TripCubit>(),),
+              ],
+              child: const NotificationView(),
+            ),
             routes: [
               GoRoute(
                   path: Paths.NOTIFICATIONS,
                   name: Routes.NOTIFICATIONS,
-                  builder: (context, state) => const NotificationView()),
+                  builder: (context, state) =>  MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (context) => serviceLocator<CallMessageCubit>(),),
+                BlocProvider(create: (context) => serviceLocator<TripCubit>(),),
+              ],
+              child: const NotificationView(),
+            ),),
               GoRoute(
                   path: Paths.SETTINGS,
                   name: Routes.SETTINGS,
@@ -899,9 +914,13 @@ class AppPages {
               BlocProvider(
                   create: (context) => serviceLocator<FavoriteShippingCubit>()),
               BlocProvider(
-                  create: (context) => serviceLocator<CreateTripCubit>())
+                  create: (context) => serviceLocator<CreateTripCubit>()),
+              BlocProvider(
+                  create: (context) => serviceLocator<CallMessageCubit>()),
+              BlocProvider(
+                  create: (context) => serviceLocator<TripCubit>()),
             ],
-            child: const CreateShippingView(),
+            child: CreateShippingView(selectedId: state.extra as String?,),
           ),
         ),
         GoRoute(
@@ -913,8 +932,25 @@ class AppPages {
                 create: (context) => serviceLocator<GetAllTripCubit>(),
               ),
               BlocProvider(create: (context) => serviceLocator<TripCubit>()),
+              BlocProvider(
+                  create: (context) => serviceLocator<CallMessageCubit>()),
             ],
             child: const DriverRequests(),
+          ),
+        ),
+        GoRoute(
+          path: Paths.DASHBOARDDRIVERSCREEN,
+          name: Routes.DASHBOARDDRIVERSCREEN,
+          builder: (context, state) => MultiBlocProvider(
+            providers: [
+              BlocProvider<GetAllTripCubit>(
+                create: (context) => serviceLocator<GetAllTripCubit>(),
+              ),
+              BlocProvider(create: (context) => serviceLocator<TripCubit>()),
+              BlocProvider(
+                  create: (context) => serviceLocator<CallMessageCubit>()),
+            ],
+            child: DahsboardDriverScreen(),
           ),
         ),
         GoRoute(
@@ -926,6 +962,8 @@ class AppPages {
                 create: (context) => serviceLocator<GetAllTripCubit>(),
               ),
               BlocProvider(create: (context) => serviceLocator<TripCubit>()),
+              BlocProvider(
+                  create: (context) => serviceLocator<CallMessageCubit>()),
             ],
             child: RequestDetialsScreen(
               model: (state.extra as AllTripModel),

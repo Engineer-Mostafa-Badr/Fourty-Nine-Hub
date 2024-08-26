@@ -13,11 +13,12 @@ class DashboardBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap?? () {
-        if (route != null) {
-          context.push(route!);
-        }
-      },
+      onTap: onTap ??
+          () {
+            if (route != null) {
+              context.push(route!);
+            }
+          },
       child: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(

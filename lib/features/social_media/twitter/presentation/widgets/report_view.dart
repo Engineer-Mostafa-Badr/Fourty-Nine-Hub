@@ -181,11 +181,13 @@ class ReportView extends StatefulWidget {
   const ReportView({
     super.key,
     required this.id,
+    this.loadingTripId,
     required this.categoryId,
   });
 
   final String id;
   final String categoryId;
+  final String? loadingTripId;
 
   @override
   State<ReportView> createState() => _ReportViewState();
@@ -295,6 +297,7 @@ class _ReportViewState extends State<ReportView> {
                                   content: reportTextController.text,
                                   categoryId: widget.categoryId,
                                   reason: selectedReport!.name,
+                                  loadingTripId: widget.loadingTripId
                                 ),
                               );
                               if (context.mounted) {

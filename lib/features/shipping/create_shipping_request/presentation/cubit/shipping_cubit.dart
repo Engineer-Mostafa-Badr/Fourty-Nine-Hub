@@ -46,6 +46,7 @@ class ShippingCubit extends Cubit<ShippingState> {
   RegisterRequestModel model = RegisterRequestModel();
   RequestModel requestModel = RequestModel();
   getBannerData() async {
+    emit(LoadingShippingState());
     var response = await repository.getBannerData();
     response.fold(
       (l) {
@@ -98,6 +99,7 @@ class ShippingCubit extends Cubit<ShippingState> {
   pickImageCarInFront({required File image}) {
     model.carImageInFront = image;
   }
+
   pickImagePlate({required File image}) {
     model.plate = image;
   }
@@ -152,14 +154,13 @@ class ShippingCubit extends Cubit<ShippingState> {
 
   getUserS3Imag() async {
     InfoDocumentsModel json = InfoDocumentsModel(
-            document: Document(
+        document: Document(
       name: "criminalRecord",
       type: getFileExtension(model.image!),
       size: await getFileSize(model.image!),
     ));
     var response = await repository.getS3ImageDocuments(
-      endpoint: EndPoints.infoDocuments,
-        json: json.toJson());
+        endpoint: EndPoints.infoDocuments, json: json.toJson());
     response.fold(
       (l) {
         log(model.image.toString(), name: "GetS3Request");
@@ -177,15 +178,14 @@ class ShippingCubit extends Cubit<ShippingState> {
     );
   }
 
-    getPlateS3Imag() async {
-    var response = await repository.getS3ImageDocuments(
-      endpoint: EndPoints.carPlate,
-        json:{
-        "carPlate": {
-            "type": getFileExtension(model.plate!),
-            "size": await getFileSize(model.plate!),
-        }
-});
+  getPlateS3Imag() async {
+    var response = await repository
+        .getS3ImageDocuments(endpoint: EndPoints.carPlate, json: {
+      "carPlate": {
+        "type": getFileExtension(model.plate!),
+        "size": await getFileSize(model.plate!),
+      }
+    });
     response.fold(
       (l) {
         log(model.image.toString(), name: "GetS3Request");
@@ -423,7 +423,9 @@ class ShippingCubit extends Cubit<ShippingState> {
         cacheService.setSubCategoryDriver(
             id: model.subCategoryEntity?.id ?? "");
         cacheService.setDriverId(id: r['data']['_id'] ?? "");
-        emit(SuccessRegisterState(message: "Register Success"));
+        emit(SuccessRegisterState(
+            message:
+                "You have submitted your registration successfully, waiting for administration approval"));
         await getUserS3Imag();
         await getPlateS3Imag();
         await getCarImagesS3();
@@ -432,6 +434,5 @@ class ShippingCubit extends Cubit<ShippingState> {
         await getLicenseS3();
       },
     );
-    
   }
 }

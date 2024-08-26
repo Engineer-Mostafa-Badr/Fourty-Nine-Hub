@@ -5,10 +5,15 @@ import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/features/notifications/data/models/notification_model.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_card.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/trip_card.dart';
+import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/styles.dart';
@@ -50,7 +55,7 @@ class NotificationView extends StatelessWidget {
                         }),
                   ],
                 ),
-                const WalletWidget(),
+                // const WalletWidget(),
                 TabBar(tabs: [
                   Tab(
                     icon: SvgPicture.asset(Assets.social,
@@ -72,7 +77,7 @@ class NotificationView extends StatelessWidget {
                 Expanded(
                     child: TabBarView(children: [
                   _buildNotificationWidget(notificationList: []),
-                  _buildNotificationWidget(notificationList: []),
+                  _buildHandNotificationWidget(notificationList: []),
                   _buildNotificationWidget(notificationList: []),
                 ]))
               ],
@@ -86,18 +91,51 @@ class NotificationView extends StatelessWidget {
   }) {
     return RefreshIndicator.adaptive(
       onRefresh: () async {},
-      child: ListView.separated(
-          itemBuilder: (context, index) {
-            return NotificationCard(
-              item: NotificationModel(
-                  id: 0,
-                  message: UIConst.placeholderText,
-                  itemId: 0,
-                  createdAt: DateTime.now()),
-            );
-          },
-          separatorBuilder: (context, index) => const Divider(),
-          itemCount: 10),
+      child: Container()
+    );
+  }
+   Widget _buildHandNotificationWidget({
+    required List<NotificationModel> notificationList,
+  }) {
+    return RefreshIndicator.adaptive(
+      onRefresh: () async {},
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 7,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+            padding: EdgeInsets.symmetric(horizontal: 25),
+            child: Text("12:12"),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 25),
+            child: Text("12/5/2024"),
+          ),
+            ],
+          ),
+          NotificationDriverCard(
+            priceFontSize: 40,
+                  model: AllTripModel(adminIgnore: false, time: "12:30:45", desc: "lskd", price: 12, targetLocation: "to location", startLocation: "from location"),
+                ),
+          SizedBox(height: 8,),
+          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 25),
+                            child: GestureDetector(
+                              onTap: () {
+                                //هتروح لي صفحه subscription
+                                serviceLocator<SubscriptionController>().showActiveSubscriptionAmounts(walletType: WalletTypes.balance);
+                              },
+                              child: Text(
+                                "Subscribe to send offer / contact the client",
+                                style:
+                                    TextStyle(fontSize: 16, color: Colors.red),
+                              ),
+                            ))
+        ],
+      ),
     );
   }
 }

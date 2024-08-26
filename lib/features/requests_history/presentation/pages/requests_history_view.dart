@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_card.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/cubit/request_history_cubit.dart';
@@ -44,7 +50,7 @@ class HistoryRequestsView extends StatelessWidget {
                               icon: SvgPicture.asset(height: 20, Assets.ride),
                             ),
                             Tab(
-                              text: 'Shipping',
+                              text: 'Ship',
                               icon:
                                   SvgPicture.asset(height: 20, Assets.shipping),
                             ),
@@ -87,15 +93,36 @@ class HistoryRequestsView extends StatelessWidget {
   }
 
   Widget _buildShippingRequests() {
-    return BlocBuilder<RequestHistoryCubit, RequestHistoryState>(
-        builder: (context, state) {
-      return ListView.separated(
-          itemCount: state.shippingRequests?.length ?? 0,
-          separatorBuilder: (context, index) => const Sizer(),
+    // return BlocBuilder<RequestHistoryCubit, RequestHistoryState>(
+    //     builder: (context, state) {
+    //   return ListView.separated(
+    //       itemCount: state.shippingRequests?.length ?? 0,
+    //       separatorBuilder: (context, index) => const Sizer(),
+    //       itemBuilder: (context, index) {
+    //         return ShippingRequestCard(trip: state.shippingRequests![index]);
+    //       });
+    // });r
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => serviceLocator<TripCubit>(),
+          ),
+          BlocProvider(
+            create: (context) => serviceLocator<CallMessageCubit>(),
+          ),
+        ],
+        child: ListView.builder(
           itemBuilder: (context, index) {
-            return ShippingRequestCard(trip: state.shippingRequests![index]);
-          });
-    });
+            return NotificationDriverCard(
+              isHistory: true,
+              priceFontSize: 20,
+              model: AllTripModel(
+                desc: "lksjdf",
+                price: 20
+              ),
+            );
+          },
+        ));
   }
 
   Widget _buildHealthBooking() {

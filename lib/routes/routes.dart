@@ -119,6 +119,7 @@ abstract class Routes {
   static const SUBSCRIPTIONPLANS = '/SubscriptionPlans';
   static const DRIVERREQUESTS = '/DriverRequests';
   static const DRIVERREQUESTSDETIALS = '/DriverRequestsDetials';
+  static const DASHBOARDDRIVERSCREEN = '/DashboardDriverScreen';
 }
 
 abstract class Paths {
@@ -227,4 +228,6 @@ abstract class Paths {
   static const SUBSCRIPTIONPLANS = 'SubscriptionPlans';
   static const DRIVERREQUESTS = 'DriverRequests';
   static const DRIVERREQUESTSDETIALS = 'DriverRequestsDetials';
+  static const DASHBOARDDRIVERSCREEN = 'DashboardDriverScreen';
+
 }

@@ -6,13 +6,13 @@ class MainCategoryEntity extends Equatable {
   final String id;
   final String name;
   final String image;
-  final List<SubCategoryEntity>? subcategories;
+  List<SubCategoryEntity>? subcategories;
   final String banner;
   final String cover;
   final bool isFavorite;
   final int total;
 
-  const MainCategoryEntity({
+  MainCategoryEntity({
     required this.id,
     required this.name,
     required this.image,

@@ -8,13 +8,17 @@ class DatePickerField extends StatefulWidget {
   final String? title;
   final DateTime initialDate;
   final DateTime minDate;
+  final TextStyle? textStyle;
   final DateTime maxDate;
+  final double? borderWidth;
   final Color? borderColor;
   final Function(DateTime?) onDateSelected;
   const DatePickerField(
       {super.key,
       this.title,
+      this.borderWidth,
       required this.initialDate,
+      this.textStyle,
       required this.minDate,
       this.borderColor,
       required this.maxDate,
@@ -48,8 +52,9 @@ class _DatePickerFieldState extends State<DatePickerField> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
         decoration: BoxDecoration(
-          border:
-              Border.all(width: .5, color: widget.borderColor ?? Colors.black),
+          border: Border.all(
+              width: widget.borderWidth ?? .5,
+              color: widget.borderColor ?? Colors.black),
           borderRadius: BorderRadius.circular(UIConst.radius),
         ),
         child: Row(
@@ -58,13 +63,13 @@ class _DatePickerFieldState extends State<DatePickerField> {
               child: _selectedDate == null
                   ? Text(
                       widget.title ?? 'No date selected!',
-                      style:
+                      style: widget.textStyle??
                           Styles.mediumText(color: AppColors.DARK_GRAY_COLOR),
                     )
                   : Text(
                       _selectedDate!.toLocal().toString().split(' ')[0],
                       style:
-                          Styles.mediumText(color: AppColors.DARK_GRAY_COLOR),
+                          Styles.mediumText(color: Colors.black, fontSize: 15),
                     ),
             ),
             const Sizer(),

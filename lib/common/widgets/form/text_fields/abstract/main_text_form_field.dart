@@ -14,6 +14,7 @@ abstract class MainTextFormField extends StatefulWidget {
   final TextCapitalization textCapitalization;
   final EdgeInsetsGeometry? margin;
   final bool enabled;
+  final bool noBoarder;
   final int? maxLength;
   final List<TextInputFormatter>? inputFormatters;
   final bool expanded;
@@ -26,6 +27,7 @@ abstract class MainTextFormField extends StatefulWidget {
   final bool showScrollbar;
   final bool? obscureText;
   final bool readOnly;
+  final double? hintFontSize;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final ValueChanged<String>? onChanged;
@@ -41,9 +43,11 @@ abstract class MainTextFormField extends StatefulWidget {
       this.currentFocusNode,
       this.minLines,
       this.constraints,
+      this.hintFontSize,
       this.readOnly = false,
       this.nextFocusNode,
       required this.currentController,
+      this.noBoarder = false,
       required this.hintText,
       this.keyboardType,
       required this.validator,
@@ -116,23 +120,31 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
           contentPadding:
               widget.contentPadding ?? const EdgeInsets.fromLTRB(16, 0, 16, 0),
           hintText: widget.hintText,
-          hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
+          hintStyle: TextStyle(
+            color: widget.hintColor ?? AppColors.QUANTITY_COLOR,
+            fontSize: widget.hintFontSize,
+          ),
           suffixIcon: widget.suffixIcon,
           prefixIcon: widget.prefixIcon,
           prefixIconColor: AppColors.QUANTITY_COLOR,
           constraints: widget.constraints,
-          enabledBorder: OutlineInputBorder(
-            borderRadius:
-                const BorderRadius.all(Radius.circular(UIConst.radius)),
-            borderSide: BorderSide(
-                color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius:
-                const BorderRadius.all(Radius.circular((UIConst.radius))),
-            borderSide: BorderSide(
-                color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
-          ),
+          enabledBorder: widget.noBoarder
+              ? InputBorder.none
+              : OutlineInputBorder(
+                  borderRadius:
+                      const BorderRadius.all(Radius.circular(UIConst.radius)),
+                  borderSide: BorderSide(
+                      color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
+                ),
+          focusedBorder: widget.noBoarder
+              ? InputBorder.none
+              : OutlineInputBorder(
+                  borderRadius:
+                      const BorderRadius.all(Radius.circular((UIConst.radius))),
+                  borderSide: BorderSide(
+                      color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
+                ),
+          errorStyle: TextStyle(color: Colors.red),
           errorBorder: const OutlineInputBorder(
             borderSide: BorderSide(
               color: Colors.red,
@@ -140,21 +152,26 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
             ),
             borderRadius: BorderRadius.all(Radius.circular(UIConst.radius)),
           ),
-          focusedErrorBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.red,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.all(Radius.circular(UIConst.radius)),
-          ),
+          focusedErrorBorder: widget.noBoarder
+              ? InputBorder.none
+              : const OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.red,
+                    width: 1,
+                  ),
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(UIConst.radius)),
+                ),
           counterText: '',
-          border: InputBorder.none,
-          disabledBorder: OutlineInputBorder(
-            borderRadius:
-                const BorderRadius.all(Radius.circular(UIConst.radius)),
-            borderSide: BorderSide(
-                color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
-          ),
+          border: widget.noBoarder ? InputBorder.none : InputBorder.none,
+          disabledBorder: widget.noBoarder
+              ? InputBorder.none
+              : OutlineInputBorder(
+                  borderRadius:
+                      const BorderRadius.all(Radius.circular(UIConst.radius)),
+                  borderSide: BorderSide(
+                      color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
+                ),
         ),
         validator: widget.validator,
         onChanged: (text) {
@@ -174,10 +191,12 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
       textFieldWidget = Scrollbar(child: textFieldWidget);
     }
 
-    return Container(
-      margin: widget.margin,
-      child: textFieldWidget,
-    );
+    // return Container(
+    //   height: 49,
+    //   margin: widget.margin,
+    //   child: textFieldWidget,
+    // );
+    return textFieldWidget;
   }
 
   TextDirection _getDirection(String v) {
@@ -210,5 +229,3 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
     return TextDirection.ltr;
   }
 }
-
-

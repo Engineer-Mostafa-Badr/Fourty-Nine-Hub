@@ -65,13 +65,19 @@ class EndPoints {
       '$developmentBaseUrl/loading/driver/info/car-license';
   static const successUpload = '/loading/driver/info/success-upload';
   // static const successDocuments = '$developmentBaseUrl/loading/driver/info/documents';
-  static const successCarImages = '$developmentBaseUrl/driver/info/success-car-images';
+  static const successCarImages =
+      '$developmentBaseUrl/driver/info/success-car-images';
   //trip
   static const sendOffer = '$developmentBaseUrl/loading/trip/sendOffer';
-  static const sendOfferPremium = '$developmentBaseUrl/loading/trip/sendOffer-premium';
-  static const acceptLoadingTripOffer = '$developmentBaseUrl/loading/trip/acceptLoadingTripOffer';
-  static const mediasignedUrl = '$developmentBaseUrl/dashboard/media/signed-url';
+  static const reportUrl = '$developmentBaseUrl/report';
+  static const sendOfferPremium =
+      '$developmentBaseUrl/loading/trip/sendOffer-premium';
+  static const acceptLoadingTripOffer =
+      '$developmentBaseUrl/loading/trip/acceptLoadingTripOffer';
+  static const mediasignedUrl =
+      '$developmentBaseUrl/dashboard/media/signed-url';
   static const mediaconfirm = '$developmentBaseUrl/dashboard/media/confirm';
+  static const click = '$developmentBaseUrl/global/click';
   // health
   static String getCities({required String governorateId}) =>
       '/health/cities/$governorateId';

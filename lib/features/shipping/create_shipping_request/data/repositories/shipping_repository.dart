@@ -124,8 +124,8 @@ class ShippingRepository {
     }
 
     var response = await dataSource.createTrip(model: model);
-    
-   return  response.fold(
+
+    return response.fold(
       (l) {
         return left(l);
       },
@@ -138,6 +138,7 @@ class ShippingRepository {
       },
     );
   }
+
   Future<Either<Failure, Map<String, dynamic>>> getAllTripBySubCategory() {
     return dataSource.getAllTripBySubCategory();
   }
@@ -158,8 +159,8 @@ class ShippingRepository {
   }
 
   Future<Either<Failure, Map<String, dynamic>>> report(
-      {required String id, required double price}) {
-    return dataSource.sendOffer(id: id, price: price);
+      {required String loadingTripId}) {
+    return dataSource.report(loadingTripId: loadingTripId,);
   }
 
   Future<Either<Failure, Map<String, dynamic>>> uploadImages(
@@ -187,6 +188,12 @@ class ShippingRepository {
   getFileSize(File file) async {
     final bytes = await file.readAsBytes();
     return bytes.length;
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getCallMessage(
+      {required String ownerId, required String subcategoryId}) {
+    return dataSource.callMessage(
+        ownerId: ownerId, subcategoryId: subcategoryId);
   }
 }
 

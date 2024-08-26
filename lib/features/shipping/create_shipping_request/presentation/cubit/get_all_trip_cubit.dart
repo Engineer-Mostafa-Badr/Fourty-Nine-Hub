@@ -11,6 +11,7 @@ class GetAllTripCubit extends Cubit<ShippingState> {
     var response = await repository.getAllTripBySubCategory();
     response.fold(
       (l) {
+        // log(l.toString(), name: "lskjdflsdkjflskdjflsdkjf")
         emit(FailureShippingState(failure: l));
       },
       (r) {

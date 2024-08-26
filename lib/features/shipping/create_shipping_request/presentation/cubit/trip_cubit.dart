@@ -51,7 +51,15 @@ class TripCubit extends Cubit<ShippingState> {
 
   // call() {}
   // message() {}
-  report() async {
-    // var response = await repository.report();
+  report({required String loadingTripId}) async {
+    var response = await repository.report(loadingTripId: loadingTripId);
+    response.fold(
+      (l) {
+        emit(FailureShippingState(failure: l));
+      },
+      (r) {
+        emit(SuccessReportState());
+      },
+    );
   }
 }

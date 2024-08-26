@@ -24,11 +24,12 @@ class ImagePickerPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: height ?? 100,
-      height: width ?? 100,
+      width: width ?? 100,
+      height: height ?? 100,
       decoration: BoxDecoration(
         border: Border.all(color: borderColor ?? Colors.black),
         borderRadius: BorderRadius.circular(UIConst.radius),
+        image: image != null? DecorationImage(image: FileImage(File(image!.path)), fit: BoxFit.cover): null
       ),
       child: _buildImage(),
     );
@@ -48,7 +49,7 @@ class ImagePickerPlaceholder extends StatelessWidget {
         ],
       );
     }
-    return Image.file(File(image!.path));
+    return Container();
   }
 
   Widget _buildTitle() {

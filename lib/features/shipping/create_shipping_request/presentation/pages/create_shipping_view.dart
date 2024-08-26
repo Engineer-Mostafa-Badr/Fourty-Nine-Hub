@@ -6,22 +6,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/common/dashboard_banner.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/sub_category.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/request_model.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_trip_form.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/shipping_banner.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/trip_card.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card_selected.dart';
+import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -30,35 +41,41 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../../common/widgets/stateful/maps/map_picker.dart';
 import '../../../../ride/RideRequest/domain/entity/address_search_params_entity.dart';
 
 class CreateShippingView extends StatefulWidget {
-  const CreateShippingView({super.key});
+  const CreateShippingView({super.key, this.selectedId});
+  final String? selectedId;
   @override
   State<CreateShippingView> createState() => _CreateShippingViewState();
 }
 
 class _CreateShippingViewState extends State<CreateShippingView> {
-  TextEditingController receiptPoint = TextEditingController();
-  TextEditingController deliveryPoint = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey();
-  TextEditingController decoration = TextEditingController();
-  TextEditingController offerPrice = TextEditingController();
-  TextEditingController phone = TextEditingController();
-  TimeOfDay? time;
-  DateTime? date;
-  SubCategoryEntity? select;
-  List<XFile> tripImages = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showButtonSheetTrip();
+    });
+  }
+
+  // GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     final shippingcubit = context.read<ShippingCubit>();
     return SharedScaffold(
+      // key: scaffoldKey,
       mainCategoryId: 1,
       body: BlocConsumer<CreateTripCubit, ShippingState>(
         listener: (context, state) {
           if (state is SuccessCreateTrip) {
+            context.pushReplacementNamed(Routes.HOME);
             showSuccessMessage(context, state.message);
           }
           if (state is FailureShippingState) {
@@ -84,401 +101,136 @@ class _CreateShippingViewState extends State<CreateShippingView> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    BlocBuilder<ShippingCubit, ShippingState>(
-                      builder: (context, state) {
-                        if (state is SuccessGetBannerState) {
-                          return ShippingBanner(
-                            model: state.model,
-                          );
-                        } else {
-                          return Container();
-                        }
-                      },
-                    ),
-                    const Sizer(),
-                    // لو هو مسجل
-                    if(serviceLocator<CacheService>().getDriverId() != null)
-                    DashboardBanner(
-                      onTap: () => context.push(Routes.DRIVERREQUESTS),
-                      title: Labels.driverDashboard,
-                      subTitle: Labels.driverDashboardBannerDiscription,
-                      route: Routes.DOCTORDASHBOARD,
-                    ),
-                    // لو هو مش مسجل
-                    if(serviceLocator<CacheService>().getDriverId() == null)
-                    GestureDetector(
-                      onTap: () => context.push(Routes.SHIPPING_REGISTER),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: const Text(
-                          "You can enjoy serving your clients using your car by clicking the above register button.",
-                          style: TextStyle(
-                            color: AppColors.PRIMARY_COLOR,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    FormField(
-                      validator: (value) {
-                        return shippingcubit.validation(
-                            message: "This field is required.",
-                            condition:
-                                shippingcubit.requestModel.subcategoryEntity ==
-                                    null);
-                      },
-                      builder: (field) {
-                        return BlocBuilder<ShippingCubit, ShippingState>(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                      minHeight: MediaQuery.of(context).size.height,
+                      minWidth: MediaQuery.of(context).size.width),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      children: [
+                        BlocBuilder<ShippingCubit, ShippingState>(
                           builder: (context, state) {
+                            if (state is LoadingShippingState) {
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColors.PRIMARY_COLOR,
+                                ),
+                              );
+                            }
                             if (state is SuccessGetBannerState) {
                               return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  _buildMainCategoriesWidget(
-                                    category: MainCategoryEntity(
-                                        id: state.model.mainCategory
-                                                ?.mainCategoryId ??
-                                            "",
-                                        name:
-                                            state.model.mainCategory?.nameEn ??
-                                                "",
-                                        image:
-                                            state.model.mainCategory?.cover ??
-                                                "",
-                                        isFavorite: true,
-                                        total: state.model.mainCategory
-                                                ?.driverLength ??
-                                            0,
-                                        cover:
-                                            state.model.mainCategory?.cover ??
-                                                "",
-                                        banner:
-                                            state.model.mainCategory?.banner ??
-                                                "",
-                                        subcategories: state
-                                            .model.subCategories!
-                                            .map(
-                                              (e) => SubCategoryEntity(
-                                                  id: e.subCategoryId!,
-                                                  numberOfContent:
-                                                      e.driverCount,
-                                                  image: e.picture!,
-                                                  isFavorite:
-                                                      e.isFavorite ?? false,
-                                                  name: e.subCategoryNameEn!),
-                                            )
-                                            .toList()),
+                                  ShippingBanner(
+                                    model: state.model,
                                   ),
-                                  if (field.hasError)
-                                    Column(
-                                      children: [
-                                        const SizedBox(
-                                          height: 8,
+                                  const Sizer(),
+                                  // لو هو مسجل
+                                  // if (isDriver(state.model))
+                                  DashboardBanner(
+                                    onTap: () => context
+                                        .push(Routes.DASHBOARDDRIVERSCREEN),
+                                    title: Labels.driverDashboard,
+                                    subTitle:
+                                        Labels.driverDashboardBannerDiscription,
+                                    route: Routes.DOCTORDASHBOARD,
+                                  ),
+                                  // لو هو مش مسجل
+                                  if ((state.model.subCategories?.first
+                                                  .isDriver ??
+                                              false) !=
+                                          true &&
+                                      ((state.model.subCategories?.first
+                                                  .isDriver ??
+                                              false)) !=
+                                          true)
+                                    GestureDetector(
+                                      onTap: () => context
+                                          .push(Routes.SHIPPING_REGISTER),
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: Text(
+                                          "You can enjoy serving your clients using your car by clicking the register button above.",
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                          ),
                                         ),
-                                        Text(
-                                          field.errorText ?? "",
-                                          style: Styles.mediumText(
-                                              color: Colors.red),
-                                        ),
-                                      ],
-                                    )
+                                      ),
+                                    ),
                                 ],
                               );
                             } else {
                               return Container();
                             }
                           },
-                        );
-                      },
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    DefaultTextFormField(
-                      validator: (value) {
-                        return shippingcubit.validation(
-                            message: "This field is required.",
-                            condition: receiptPoint.text.isEmpty);
-                      },
-                      currentController: receiptPoint,
-                      currentFocusNode: FocusNode(),
-                      hint: Labels.receiptPoint,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    DefaultTextFormField(
-                      validator: (value) {
-                        return shippingcubit.validation(
-                            message: "This field is required.",
-                            condition: deliveryPoint.text.isEmpty);
-                      },
-                      currentController: deliveryPoint,
-                      currentFocusNode: FocusNode(),
-                      hint: Labels.deliveryPoint,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    DefaultTextFormField(
-                      validator: (value) {
-                        return shippingcubit.validation(
-                            message: "This field is required.",
-                            condition: time == null);
-                      },
-                      onTap: () async {
-                        TimeOfDay? pickedTime = await showTimePicker(
-                            context: context, initialTime: TimeOfDay.now());
-                        if (pickedTime != null) {
-                          time = pickedTime;
-                        }
-                        setState(() {});
-                      },
-                      readOnly: true,
-                      currentController: TextEditingController(),
-                      currentFocusNode: FocusNode(),
-                      // hint: "نقطة الاستلام",
-                      hint: time != null
-                          ? "${time!.hour}:${time!.minute}"
-                          : Labels.time,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    DefaultTextFormField(
-                      validator: (value) {
-                        return shippingcubit.validation(
-                            message: "This field is required.",
-                            condition: date == null);
-                      },
-                      onTap: () async {
-                        DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime(DateTime.now().year + 150),
-                        );
-                        if (pickedDate != null) {
-                          date = pickedDate;
-                        }
-                        setState(() {});
-                      },
-                      readOnly: true,
-                      currentController: TextEditingController(),
-                      currentFocusNode: FocusNode(),
-                      // hint: "نقطة الاستلام",
-                      hint: date != null
-                          ? "${date!.year}/${date!.month}/${date!.day}"
-                          : "Date",
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        // Spacer(),
+                        // NotFoundOffeRers(),
+                        const RequestOfferCard(),
+                        // Spacer(),
+                        //             Container(
+                        //   padding: EdgeInsets.all(10),
+                        //   width: double.infinity,
+                        //   decoration: BoxDecoration(
+                        //     color: Colors.white,
+                        //     borderRadius: BorderRadius.only(
+                        //       topLeft: Radius.circular(30),
+                        //       topRight: Radius.circular(30),
+                        //     ),
+                        //   ),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     children: [
+                        //       Text("123", style: TextStyle(fontSize: 30, color: AppColors.PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                        //       Row(
+                        //         children: [
+                        //           Container(
+                        //             padding: EdgeInsets.symmetric(horizontal: 4),
+                        //             decoration: BoxDecoration(
+                        //               color: Colors.blue,
+                        //               borderRadius: BorderRadius.circular(8)
+                        //             ),
+                        //             child: Row(
+                        //               mainAxisSize: MainAxisSize.min,
+                        //               children: [
+                        //                 Icon(Icons.history, color: Colors.white,),
+                        //                 Text("Pickup: 10-20 min", style: TextStyle(color: Colors.white),)
+                        //               ],
+                        //             )
+                        //           ),
+                        //           SizedBox(width: 8,),
+                        //           Container(
+                        //         padding: EdgeInsets.symmetric(horizontal: 4),
+                        //         decoration: BoxDecoration(
+                        //           color: Colors.blue,
+                        //           borderRadius: BorderRadius.circular(8)
+                        //         ),
+                        //         child: Row(
+                        //           mainAxisSize: MainAxisSize.min,
+                        //           children: [
+                        //             Icon(Icons.history, color: Colors.white,),
+                        //             Text("I", style: TextStyle(color: Colors.white),)
+                        //           ],
+                        //         )
+                        //       )
+                        //         ],
+                        //       ),
 
-                    TextFormField(
-                      validator: (value) {
-                        return shippingcubit.validation(
-                            message: "This field is required.",
-                            condition: decoration.text.isEmpty);
-                      },
-                      controller: decoration,
-                      minLines: 6,
-                      maxLines: 6,
-                      maxLength: 100,
-                      focusNode: FocusNode(),
-                      style: const TextStyle(color: AppColors.QUANTITY_COLOR),
-                      decoration: InputDecoration(
-                        fillColor: AppColors.AUTH_CONTAINER_COLOR,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        hintText: Labels.description,
-                        hintStyle:
-                            const TextStyle(color: AppColors.QUANTITY_COLOR),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Wrap(
-                        runSpacing: 20,
-                        spacing: 20,
-                        alignment: WrapAlignment.start,
-                        crossAxisAlignment: WrapCrossAlignment.start,
-                        runAlignment: WrapAlignment.start,
-                        
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              var pickedImages =
-                                  await ImagePicker().pickMultiImage();
-                              if (pickedImages.isNotEmpty) {
-                                tripImages = pickedImages;
-                              }
-                              setState(() {});
-                            },
-                            child: Container(
-                              // margin: EdgeInsets.symmetric(horizontal: 20),
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.camera_alt,
-                                  size: 50,
-                                ),
-                              ),
-                            ),
-                          ),
-                          ...List.generate(
-                            tripImages.length,
-                            (index) {
-                              return Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: FileImage(
-                                          File(tripImages[index].path),
-                                        ),
-                                        fit: BoxFit.cover),
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: Center(
-                                    child: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      tripImages.removeAt(index);
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                    size: 30,
-                                  ),
-                                )),
-                              );
-                            },
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    // const CustomTextField(hint: "عرض سعر"),
-                    DefaultTextFormField(
-                      // isRequired: true,
-                      validator: (value) {
-                        return shippingcubit.validation(
-                            message: "This field is required.",
-                            condition: offerPrice.text.isEmpty);
-                      },
-                      currentController: offerPrice,
-                      currentFocusNode: FocusNode(),
-
-                      // hint: "نقطة الاستلام",
-                      hint: Labels.offerPrice,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    // const CustomTextField(hint: "المحمول"),
-                    DefaultTextFormField(
-                      validator: (value) {
-                        return shippingcubit.validation(
-                          message: "This field is required.",
-                          condition: phone.text.isEmpty,
-                        );
-                      },
-                      currentController: phone,
-                      currentFocusNode: FocusNode(),
-                      // hint: "نقطة الاستلام",
-                      hint: Labels.phone,
-                      keyboardType: TextInputType.phone,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    const AppInfoText(
-                      text: Labels.theApplicationDoesNot,
-                    ),
-                    const SizedBox(height: 30),
-                    const AppInfoText(
-                      text: Labels.thePremiumPackageGivesYou,
-                    ),
-                    const SizedBox(height: 30),
-
-                    const AppInfoText(
-                      text: Labels.freeCancellation,
-                    ),
-                    const SizedBox(height: 50),
-                    // const Gap(50),
-                    Row(
-                      children: [
-                        Flexible(
-                          child: AppButton(
-                            height: 60,
-                            label: Labels.premiumRequest,
-                            style: Styles.headerText(color: Colors.white),
-                            onPressed: () {},
-                          ),
-                        ),
-                        // const Gap(6),
-                        const SizedBox(width: 6),
-                        Flexible(
-                          child: AppButton(
-                            height: 60,
-                            backColor: const Color(0xFF0B1135),
-                            label: Labels.request,
-                            style: Styles.headerText(color: Colors.white),
-                            onPressed: () async {
-                              if (formKey.currentState!.validate()) {
-                                context.read<CreateTripCubit>().createTrip(
-                                      model: RequestModel(
-                                        date:
-                                            "${date!.year}/${date!.month}/${date!.day}",
-                                        deliveryPoint: deliveryPoint.text,
-                                        description: decoration.text,
-                                        offerPrice: offerPrice.text,
-                                        tripImages: tripImages,
-                                        phone: phone.text,
-                                        subcategoryEntity: select,
-                                        receiptPoint: receiptPoint.text,
-                                        time: "${time!.hour}:${time!.minute}",
-                                      ),
-                                    );
-                              }
-                            },
-                          ),
-                        ),
+                        //     ],
+                        //   ),
+                        // ),
+                        // CreateTripForm(
+                        //   formKey: formKey,
+                        //   selectedId: widget.selectedId,
+                        // ),
+                        // const Gap(100),
+                        const SizedBox(height: 100),
                       ],
                     ),
-                    // const Gap(100),
-                    const SizedBox(height: 100),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -488,86 +240,43 @@ class _CreateShippingViewState extends State<CreateShippingView> {
     );
   }
 
-  Widget _buildMapWidget({
-    required BuildContext context,
-  }) {
-    final controller = context.read<CreateShippingRequestCubit>();
-    return BlocBuilder<CreateShippingRequestCubit, CreateShippingRequestState>(
-      builder: (context, state) {
-        return MapPicker(
-          lat: state.fromAddress?.lat,
-          lng: state.fromAddress?.lng,
-          onAddressPicked: (AddressSearchParamsEntity v) =>
-              controller.selectPickUpLocation(item: v),
-        );
-      },
-    );
+  bool isDriver(BannerModel model) {
+    if (model.subCategories!.first.isDriver ?? false) {
+      if (model.subCategories!.first.isDriverApproved ?? false) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 
-  Widget _buildMainCategoriesWidget({
-    required MainCategoryEntity category,
-  }) {
-    final shippingCubit = context.read<ShippingCubit>();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(
-          text: category.name,
-          style: Styles.headerText(),
-        ),
-        if (category.subcategories?.isNotEmpty ?? false)
-          SizedBox(
-            height: kToolbarHeight * 3,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      if (select != null) {
-                        if (select!.id == category.subcategories![index].id) {
-                          select = null;
-                        }
-                      } else {
-                        select = category.subcategories![index];
-                      }
-                      if (select != null) {
-                        shippingCubit.seSubCategoryRequest(
-                            subCategory: select!);
-                      }
-                      log(select.toString());
-                    });
-                  },
-                  child: SubcategoryCardSelected(
-                    selected: select == null
-                        ? false
-                        : select!.id == category.subcategories![index].id,
-                    mainCategory: category,
-                    item: category.subcategories![index],
-                    onChanged: (value) {
-                      setState(() {
-                        if (select != null) {
-                          if (select!.id == category.subcategories![index].id) {
-                            select = null;
-                          }
-                        } else {
-                          select = category.subcategories![index];
-                        }
-                        if (select != null) {
-                          shippingCubit.seSubCategoryRequest(
-                              subCategory: select!);
-                        }
-                        log(select.toString());
-                      });
-                    },
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) => const Sizer(),
-              itemCount: category.subcategories?.length ?? 0,
+// BlocProvider(
+//                   create: (context) => ),
+  showButtonSheetTrip() {
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => serviceLocator<TripCubit>()),
+            BlocProvider(
+                create: (context) => serviceLocator<CallMessageCubit>()),
+          ],
+          child: TripCardWidget(
+            yourRequest: true,
+            title: "Your request",
+            buttons: false,
+            model: AllTripModel(
+              phone: 12,
+              time: "lskd",
+              desc: "lksd",
+              price: 10,
             ),
-          )
-      ],
+          ),
+        );
+      },
     );
   }
 }
@@ -613,6 +322,268 @@ class CustomTextField extends StatelessWidget {
         ),
       ),
       textAlign: TextAlign.right,
+    );
+  }
+}
+
+class NotFoundOffers extends StatelessWidget {
+  const NotFoundOffers({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: Text(
+            "Your request has been sent. You'll receive offers shortly.",
+            style: TextStyle(
+              fontSize: 25,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+
+class RequestOfferCard extends StatelessWidget {
+  const RequestOfferCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                // ignore: prefer_const_literals_to_create_immutables
+                                boxShadow: [
+                                  const BoxShadow(color: Colors.black12, blurRadius: 10),
+                                ],
+                                borderRadius: BorderRadius.circular(15)
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("New Offer", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                      Text("12,300", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green),),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 7,),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                    width: 80,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(15)
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10,),
+                                  const Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text("car model", style: TextStyle(fontSize: 15),),
+                                  SizedBox(height: 5,),
+                                      Text("request name", style: TextStyle(fontSize: 15),),
+                                  SizedBox(height: 5,),
+                                  Text("3 Orders", style: TextStyle(fontSize: 15),)
+                                    ],
+                                  ),
+                                  const Spacer(),
+                                  Column(
+                                    children: [
+                                      const Row(
+                                            children: [
+                                              Icon(Icons.star, color: Colors.amber,),
+                                              Text("4.9"),
+                                              Text("(1)", style: TextStyle(color: Colors.grey),),
+                                            ],
+                                          ),
+                                      Text("Premium")
+                                    ],
+                                  )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10,),
+                                  Row(
+                                    children: [
+                                      Flexible(
+                                        child: AppButton(
+                                          color: Colors.white,
+                                          // height: 50,
+                                          // padding: EdgeInsets.symmetric(vertical: 0),
+                                          width: double.infinity,
+                                          onPressed: () {
+                                            
+                                          },
+                                          style: Styles.mediumText(
+                                          fontSize: 18, color: Colors.white),
+                                          label: "Decline",
+                                          // backgroundColor: Colors.red,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10,),
+                                      Flexible(
+                                        child: AppButton(
+                                          // label: Labels.message,
+                                      // icon: Icons.message,
+                                      backColor: AppColors.PRIMARY_COLOR,
+                                      style: Styles.mediumText(
+                                          fontSize: 18, color: Colors.white),
+                                      onPressed: () {},
+                                          label: "Accept",
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10,),
+                                  BlocBuilder<CallMessageCubit, ShippingState>(
+                          builder: (context, state) {
+                            if (state is FailureShippingState) {
+                              log(getFailureMessage(state.failure, context),
+                                  name: "lskdjflskdjfslkdjfslkdjfslkdjf");
+                            }
+                            log(state.toString(),
+                                name: "lskdjflskdjfslkdjfslkdjfslkdjf");
+                            if (state is SuccessGetCallMessageState) {
+                              log(state.data.toString(),
+                                  name: "lskdjflskdjfslkdjfslkdjfslkdjf");
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: AppButton(
+                                      label: Labels.call,
+                                      color: Colors.white,
+                                      icon: Icons.call,
+                                      backColor: state.data
+                                          ? AppColors.PRIMARY_COLOR
+                                          : AppColors.DARK_GRAY_COLOR,
+                                      onPressed: () {},
+                                      style: Styles.mediumText(
+                                          fontSize: 18, color: Colors.white),
+                                    ),
+                                  ),
+                                  const Sizer(),
+                                  Expanded(
+                                    child: AppButton(
+                                      label: Labels.message,
+                                      icon: Icons.message,
+                                      backColor: state.data
+                                          ? AppColors.PRIMARY_COLOR
+                                          : AppColors.DARK_GRAY_COLOR,
+                                      style: Styles.mediumText(
+                                          fontSize: 15, color: Colors.white),
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                  const Sizer(),
+                                  Expanded(
+                                    child: AppButton(
+                                      label: Labels.report,
+                                      icon: Icons.report,
+                                      backColor: Colors.red,
+                                      style: Styles.mediumText(
+                                          fontSize: 18, color: Colors.white),
+                                      onPressed: () {
+                                        // tripCubit.report(
+                                        //     loadingTripId: widget.model.id ?? "");
+                                        // showBottomSheet(
+                                        //   context: context,
+                                        //   builder: (context) => Padding(
+                                        //     padding: const EdgeInsets.all(10),
+                                        //     child: ReportView(
+                                        //       categoryId:
+                                        //           widget.model.categoryId?.id ?? "",
+                                        //       id: widget.model.id ?? "",
+                                        //       loadingTripId: widget.model.id ?? "",
+                                        //     ),
+                                        //   ),
+                                        // );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: AppButton(
+                                      label: Labels.call,
+                                      color: Colors.white,
+                                      icon: Icons.call,
+                                      backColor: AppColors.DARK_GRAY_COLOR,
+                                      onPressed: () {
+                                        launchUrlString("tel://21213123123");
+                                      },
+                                      style: Styles.mediumText(
+                                          fontSize: 18, color: Colors.white),
+                                    ),
+                                  ),
+                                  const Sizer(),
+                                  Expanded(
+                                    child: AppButton(
+                                      label: Labels.message,
+                                      icon: Icons.message,
+                                      backColor: AppColors.DARK_GRAY_COLOR,
+                                      style: Styles.mediumText(
+                                          fontSize: 18, color: Colors.white),
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                  const Sizer(),
+                                  Expanded(
+                                    child: AppButton(
+                                      label: Labels.report,
+                                      icon: Icons.report,
+                                      backColor: Colors.red,
+                                      style: Styles.mediumText(
+                                          fontSize: 15, color: Colors.white),
+                                      onPressed: () {
+                                        showBottomSheet(
+                                          context: context,
+                                          builder: (context) => const ReportView(
+                                            categoryId: "",
+                                            id: "",
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+                          },
+                        ),
+                                ],
+                              ),
+                            ),
+            Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 25),
+                            child: GestureDetector(
+                              onTap: () {
+                                //هتروح لي صفحه subscription
+                                serviceLocator<SubscriptionController>().showActiveSubscriptionAmounts(walletType: WalletTypes.balance);
+                              },
+                              child: Text(
+                                "Subscribe to contact to the driver",
+                                style:
+                                    TextStyle(fontSize: 16, color: Colors.red),
+                              ),
+                            ))
+      ],
     );
   }
 }

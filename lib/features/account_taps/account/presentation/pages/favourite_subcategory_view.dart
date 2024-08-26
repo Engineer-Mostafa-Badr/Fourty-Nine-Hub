@@ -503,6 +503,8 @@
 //   }
 // }
 //refactored
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -519,7 +521,9 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/ti
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 
 // class FavSubCategoryView extends StatelessWidget {
 //   final List<SubCategory> favoriteSubCategory;
@@ -819,6 +823,7 @@ class _FavSubCategoryViewContent extends StatefulWidget {
 
 class _FavSubCategoryViewContentState
     extends State<_FavSubCategoryViewContent> {
+  FavoriteItem? selectedItem;
   @override
   void initState() {
     // TODO: implement initState
@@ -910,19 +915,28 @@ class _FavSubCategoryViewContentState
         scrollDirection: Axis.horizontal,
         child: Row(
           children: subCategoryChunk
-              .map((subCategoryData) => _buildCard(context, subCategoryData))
+              .map((subCategoryData) => _buildCard(
+                      context, subCategoryData, selectedItem == subCategoryData,
+                      (value) {
+                    setState(() {
+                      selectedItem = subCategoryData;
+                    });
+                  }))
               .toList(),
         ),
       ),
     );
   }
 
-  Widget _buildCard(BuildContext context, FavoriteItem favSubCategoryData) {
+  Widget _buildCard(BuildContext context, FavoriteItem favSubCategoryData,
+      bool selectedItem, void Function(bool?)? onChanged) {
     return Container(
         width: 200,
         height: MediaQuery.of(context).size.height / 4,
         padding: const EdgeInsets.all(8.0),
         child: FavTinderSubCategoryCard(
+            selectedItem: selectedItem,
+            onChanged: onChanged,
             favSubCategoryCardData: favSubCategoryData,
             tinderViewCubit: context.read<TinderViewCubit>(),
             activeFav: false)
@@ -935,22 +949,33 @@ class _FavSubCategoryViewContentState
   }
 }
 
-class FavTinderSubCategoryCard extends StatelessWidget {
+class FavTinderSubCategoryCard extends StatefulWidget {
   final FavoriteItem favSubCategoryCardData;
   final bool activeFav;
+  final bool selectedItem;
   final TinderViewCubit tinderViewCubit;
-
+  final void Function(bool?)? onChanged;
   const FavTinderSubCategoryCard({
     super.key,
+    this.onChanged,
     required this.favSubCategoryCardData,
     required this.tinderViewCubit,
     required this.activeFav,
+    required this.selectedItem,
   });
 
   @override
+  State<FavTinderSubCategoryCard> createState() =>
+      _FavTinderSubCategoryCardState();
+}
+
+class _FavTinderSubCategoryCardState extends State<FavTinderSubCategoryCard> {
+  @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        context.push(Routes.SHIPPING, extra: widget.favSubCategoryCardData.subCategoryId.id);
+      },
       child: Container(
         width: 200,
         padding: const EdgeInsets.all(0),
@@ -983,13 +1008,13 @@ class FavTinderSubCategoryCard extends StatelessWidget {
               child: SquareImage(
                 fit: BoxFit.fitWidth,
                 radius: 10,
-                url: favSubCategoryCardData.subCategoryId.picture,
+                url: widget.favSubCategoryCardData.subCategoryId.picture,
               ),
             ),
             Positioned(
               top: 5,
               right: 5,
-              child: activeFav
+              child: widget.activeFav
                   ? IconAppButton(
                       size: 25,
                       icon: Icons.favorite_border,
@@ -1019,7 +1044,7 @@ class FavTinderSubCategoryCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                  text: favSubCategoryCardData.subCategoryId.nameEn,
+                  text: widget.favSubCategoryCardData.subCategoryId.nameEn,
                   style: Styles.headerText(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -1033,37 +1058,41 @@ class FavTinderSubCategoryCard extends StatelessWidget {
               ],
             ),
           ),
-          IconAppButton(
-            icon: Icons.add,
-            isCircle: true,
-            color: Colors.white,
-            backColor: AppColors.PRIMARY_COLOR,
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AdsView(
-                      params: AdsViewParams(
-                        mainCategory: MainCategoryEntity(
-                          id: favSubCategoryCardData.id,
-                          name: favSubCategoryCardData.subCategoryId.nameEn,
-                          image: favSubCategoryCardData.subCategoryId.picture,
-                          banner: favSubCategoryCardData.subCategoryId.picture,
-                          cover: favSubCategoryCardData.subCategoryId.picture,
-                          isFavorite: true,
-                          total: 2,
-                        ),
-                        subCategory: SubCategoryEntity(
-                          id: favSubCategoryCardData.id,
-                          name: favSubCategoryCardData.subCategoryId.nameEn,
-                          image: favSubCategoryCardData.subCategoryId.picture,
-                          isFavorite: true,
-                        ),
-                      ),
-                    ),
-                  ));
-            },
-          ),
+          Checkbox(
+            value: widget.selectedItem,
+            onChanged: widget.onChanged,
+          )
+          // IconAppButton(
+          //   icon: Icons.add,
+          //   isCircle: true,
+          //   color: Colors.white,
+          //   backColor: AppColors.PRIMARY_COLOR,
+          //   onPressed: () {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //           builder: (context) => AdsView(
+          //             params: AdsViewParams(
+          //               mainCategory: MainCategoryEntity(
+          //                 id: favSubCategoryCardData.id,
+          //                 name: favSubCategoryCardData.subCategoryId.nameEn,
+          //                 image: favSubCategoryCardData.subCategoryId.picture,
+          //                 banner: favSubCategoryCardData.subCategoryId.picture,
+          //                 cover: favSubCategoryCardData.subCategoryId.picture,
+          //                 isFavorite: true,
+          //                 total: 2,
+          //               ),
+          //               subCategory: SubCategoryEntity(
+          //                 id: favSubCategoryCardData.id,
+          //                 name: favSubCategoryCardData.subCategoryId.nameEn,
+          //                 image: favSubCategoryCardData.subCategoryId.picture,
+          //                 isFavorite: true,
+          //               ),
+          //             ),
+          //           ),
+          //         ));
+          //   },
+          // ),
         ],
       ),
     );

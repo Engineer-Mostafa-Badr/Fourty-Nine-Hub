@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +33,8 @@ class ShippingBanner extends StatelessWidget {
             borderRadius: BorderRadius.circular(5),
             image: DecorationImage(
               fit: BoxFit.cover,
-              image: CachedNetworkImageProvider(model.mainCategory?.banner ?? ""),
+              image:
+                  CachedNetworkImageProvider(model.mainCategory?.banner ?? ""),
             ),
           ),
         ),
@@ -43,34 +46,39 @@ class ShippingBanner extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
           child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    const Icon(
-                      Icons.favorite_border,
-                      color: AppColors.SECONDARY_COLOR,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  const Icon(
+                    Icons.favorite_border,
+                    color: AppColors.SECONDARY_COLOR,
+                  ),
+                  const Sizer(
+                    height: 20,
+                  ),
+                  Text(
+                    '${model.mainCategory?.driverLength?.toShortScale} ${"Driver"}',
+                    style: Styles.mediumText(
+                      color: Colors.white,
                     ),
-                    const Sizer(
-                      height: 20,
-                    ),
-                    Text(
-                      '${model.mainCategory?.driverLength?.toShortScale} ${"Driver"}',
-                      style: Styles.mediumText(
-                        color: Colors.white,
-                      ),
-                    )
-                  ],
+                  )
+                ],
+              ),
+              // if (isDriver()) Spacer(),
+              Container(
+                margin: EdgeInsets.only(left: 10),
+                child: Text(
+                  "Ship",
+                  style: Styles.headerText(color: Colors.white, fontSize: 22),
                 ),
-                if(serviceLocator<CacheService>().getDriverId() != null)
-                Spacer(),
-                Text(
-                  "Shipping",
-                  style: Styles.headerText(color: Colors.white, fontSize: 20),
-                ),
-                if(serviceLocator<CacheService>().getDriverId() == null)
-                InkWell(
-                  onTap: () {
+              ),
+              // if(serviceLocator<CacheService>().getDriverId() == null)
+              // if (!isDriver())
+              // !isDriver()?
+              InkWell(
+                onTap: () {
+                  if (!isDriver()) {
                     if (context.read<UserCubit>().isLoggedIn) {
                       // context.push(Routes.DRIVERREQUESTS);
                       context.push(Routes.SHIPPING_REGISTER);
@@ -78,18 +86,33 @@ class ShippingBanner extends StatelessWidget {
                       // context.push(Routes.SHIPPING_REGISTER);
                       context.push(Routes.LOGIN);
                     }
-                  },
-                  child: Text(
-                    Labels.register,
-                    style: Styles.mediumText(color: Colors.white),
-                  ),
+                  }
+                },
+                //  isDriver()?Colors.transparent:
+                child: Text(
+                  Labels.register,
+                  style: Styles.mediumText(color: isDriver()?Colors.transparent: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                if(serviceLocator<CacheService>().getDriverId() != null)
-                Spacer()
-              ],
-            ),
+              )
+              // if ((model.subCategories!.first.isDriverApproved ?? false))
+              //   if ((model.subCategories!.first.isDriver ?? false))
+              // if (isDriver()) Spacer()
+            ],
+          ),
         ),
       ],
     );
+  }
+
+  bool isDriver() {
+    if (model.subCategories!.first.isDriver ?? false) {
+      return true;
+    } else {
+      if (model.subCategories!.first.isDriverApproved ?? false) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 }

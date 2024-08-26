@@ -7,33 +7,47 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ImageValidation extends StatelessWidget {
+class ImageValidation extends StatefulWidget {
   const ImageValidation(
       {super.key,
       this.onTap,
       this.validator,
       this.title,
       this.hint,
-      this.iconColor});
+      this.iconColor,
+      this.height,
+      this.noTextError = false,
+      this.textStyle,
+      this.width});
   final void Function(File image)? onTap;
   final String? Function(Object? value)? validator;
   final String? title;
   final String? hint;
   final Color? iconColor;
+  final double? height;
+  final TextStyle? textStyle;
+  final double? width;
+  final bool noTextError;
+  @override
+  State<ImageValidation> createState() => _ImageValidationState();
+}
+
+class _ImageValidationState extends State<ImageValidation> {
+  XFile? image;
   @override
   Widget build(BuildContext context) {
     return FormField(
-      validator: validator,
+      validator: widget.validator,
       builder: (field) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (title != null)
+            if (widget.title != null)
               Column(
                 children: [
                   Label(
-                    text: title ?? "",
-                    style: Styles.headerText(),
+                    text: widget.title ?? "",
+                    style: widget.textStyle ?? Styles.headerText(),
                   ),
                   const Sizer(),
                 ],
@@ -43,17 +57,23 @@ class ImageValidation extends StatelessWidget {
                 var pickedFlie =
                     await ImagePicker().pickImage(source: ImageSource.gallery);
                 if (pickedFlie != null) {
-                  if (onTap != null) {
-                    onTap!(File(pickedFlie.path));
+                  image = pickedFlie;
+                  if (widget.onTap != null) {
+                    widget.onTap!(File(pickedFlie.path));
                   }
                 }
+                setState(() {});
               },
               child: ImagePickerPlaceholder(
+                width: widget.width,
+                height: widget.height,
                 borderColor: field.hasError ? Colors.red : null,
-                tilte: hint,
-                iconColor: iconColor,
+                tilte: widget.hint,
+                image: image,
+                iconColor: widget.iconColor,
               ),
             ),
+            if(!widget.noTextError)
             if (field.hasError)
               Column(
                 children: [

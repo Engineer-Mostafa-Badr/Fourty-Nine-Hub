@@ -5,6 +5,8 @@ class SubCategory {
   String? picture;
   int? driverCount;
   bool? isFavorite;
+  bool? isDriver;
+  bool? isDriverApproved;
 
   SubCategory({
     this.subCategoryId,
@@ -12,6 +14,8 @@ class SubCategory {
     this.subCategoryNameEn,
     this.isFavorite,
     this.picture,
+    this.isDriver,
+    this.isDriverApproved,
     this.driverCount,
   });
 
@@ -21,6 +25,8 @@ class SubCategory {
         subCategoryNameEn: json['subCategoryNameEn'] as String?,
         picture: json['picture'] as String?,
         isFavorite: json['isFavorite'] as bool?,
+        isDriver: (json['isDriver'] as bool?)??false,
+        isDriverApproved: (json['isDriverApproved'] as bool?)??false,
         driverCount: json['driverCount'] as int?,
       );
 

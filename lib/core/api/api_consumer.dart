@@ -60,11 +60,12 @@ class BaseApiConsumer extends ApiConsumer {
     _token = token;
     // log("${token?.accessToken}", name: "Token");
     if (token != null) {
-      _dio = Dio(
-        BaseOptions(
-          headers: {'Authorization': 'Bearer ${token.accessToken}'}
-        )
-      );
+      // _dio = Dio(BaseOptions(headers: {
+      //   'Authorization':
+      //       'Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjUyNWNiOGE1LWY0MDYtNDljMC1hMjc1LWQwMWM2OTIyN2UwNiIsImlhdCI6MTcyMzkxMjQ0MywiZXhwIjo1NTcyMzkxMjQ0Mywic3ViIjoiNjZiNDY1OWQxYzljNGIxY2IzNWJmZWU0In0.i3W6jdhIRhOK8JSpaKNHBrl5bFCU4YtV8ca74-EdkqY"}'
+      // }
+      //     // 'Bearer ${token.accessToken}'}
+      //     ));
       // _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
       // _dio.options.headers['Authorization'] =
       //     'Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjUyNWNiOGE1LWY0MDYtNDljMC1hMjc1LWQwMWM2OTIyN2UwNiIsImlhdCI6MTcyMzkxMjQ0MywiZXhwIjo1NTcyMzkxMjQ0Mywic3ViIjoiNjZiNDY1OWQxYzljNGIxY2IzNWJmZWU0In0.i3W6jdhIRhOK8JSpaKNHBrl5bFCU4YtV8ca74-EdkqY"}';
@@ -112,12 +113,12 @@ class BaseApiConsumer extends ApiConsumer {
         url,
         data: data,
         queryParameters: queryParameters,
-        // options: Options(
-        //   headers: {
-        //     "Authorization":
-        //         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjUyNWNiOGE1LWY0MDYtNDljMC1hMjc1LWQwMWM2OTIyN2UwNiIsImlhdCI6MTcyMzkxMjQ0MywiZXhwIjo1NTcyMzkxMjQ0Mywic3ViIjoiNjZiNDY1OWQxYzljNGIxY2IzNWJmZWU0In0.i3W6jdhIRhOK8JSpaKNHBrl5bFCU4YtV8ca74-EdkqY"
-        //   },
-        // ),
+        options: Options(
+          headers: {
+            "Authorization":
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjUyNWNiOGE1LWY0MDYtNDljMC1hMjc1LWQwMWM2OTIyN2UwNiIsImlhdCI6MTcyMzkxMjQ0MywiZXhwIjo1NTcyMzkxMjQ0Mywic3ViIjoiNjZiNDY1OWQxYzljNGIxY2IzNWJmZWU0In0.i3W6jdhIRhOK8JSpaKNHBrl5bFCU4YtV8ca74-EdkqY"
+          },
+        ),
         // options: Options(headers: {
         //   "Authorization":
         //       'Bearer ${}'
@@ -161,12 +162,12 @@ class BaseApiConsumer extends ApiConsumer {
         url,
         data: formData ?? data,
         queryParameters: queryParameters,
-        // options: Options(
-        //   headers: {
-        //     "Authorization":
-        //         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjUyNWNiOGE1LWY0MDYtNDljMC1hMjc1LWQwMWM2OTIyN2UwNiIsImlhdCI6MTcyMzkxMjQ0MywiZXhwIjo1NTcyMzkxMjQ0Mywic3ViIjoiNjZiNDY1OWQxYzljNGIxY2IzNWJmZWU0In0.i3W6jdhIRhOK8JSpaKNHBrl5bFCU4YtV8ca74-EdkqY"
-        //   },
-        // ),
+        options: Options(
+          headers: {
+            "Authorization":
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjUyNWNiOGE1LWY0MDYtNDljMC1hMjc1LWQwMWM2OTIyN2UwNiIsImlhdCI6MTcyMzkxMjQ0MywiZXhwIjo1NTcyMzkxMjQ0Mywic3ViIjoiNjZiNDY1OWQxYzljNGIxY2IzNWJmZWU0In0.i3W6jdhIRhOK8JSpaKNHBrl5bFCU4YtV8ca74-EdkqY"
+          },
+        ),
       );
 // [''] = ';
       if (result.data['status']) {
@@ -202,16 +203,13 @@ class BaseApiConsumer extends ApiConsumer {
       // log(url, name: "kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
       // log(data.toString(), name: "kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
       // log(_dio..toString(), name: "kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
-      final result = await _dio.put(
-        url,
-        data: data,
-        queryParameters: queryParameters,
-        // options: Options(headers: {
-        //   "Authorization":
-        //       "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjUyNWNiOGE1LWY0MDYtNDljMC1hMjc1LWQwMWM2OTIyN2UwNiIsImlhdCI6MTcyMzkxMjQ0MywiZXhwIjo1NTcyMzkxMjQ0Mywic3ViIjoiNjZiNDY1OWQxYzljNGIxY2IzNWJmZWU0In0.i3W6jdhIRhOK8JSpaKNHBrl5bFCU4YtV8ca74-EdkqY"
-        // }
-        // )
-      );
+      final result = await _dio.put(url,
+          data: data,
+          queryParameters: queryParameters,
+          options: Options(headers: {
+            "Authorization":
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjUyNWNiOGE1LWY0MDYtNDljMC1hMjc1LWQwMWM2OTIyN2UwNiIsImlhdCI6MTcyMzkxMjQ0MywiZXhwIjo1NTcyMzkxMjQ0Mywic3ViIjoiNjZiNDY1OWQxYzljNGIxY2IzNWJmZWU0In0.i3W6jdhIRhOK8JSpaKNHBrl5bFCU4YtV8ca74-EdkqY"
+          }));
       // log(result.data.toString(), name: "kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
       if (result.data['status']) {
         // log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
