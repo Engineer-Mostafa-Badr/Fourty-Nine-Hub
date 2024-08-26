@@ -11,6 +11,7 @@ import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/camera_picker_cubit/camera_picker_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
@@ -72,18 +73,18 @@ class _CamViewState extends State<_CamView> {
                 return _permissionButton(
                     LocaleKeys.allowAccessToYourMicrophone);
               } else {
-                return const Icon(Icons.camera,
-                    color: AppColors.GREY_DARK_COLOR, size: 150);
+                return Icon(Icons.camera,
+                    color: AppColors.GREY_DARK_COLOR, size: 150.zW);
               }
             },
           ),
         ),
         Positioned(
-          top: 20,
+          top: 20.zH,
           right: 0,
           left: 0,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: EdgeInsets.symmetric(horizontal: 8.0.zW),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -107,10 +108,11 @@ class _CamViewState extends State<_CamView> {
                     } else if (state.pickMode == PickMode.video &&
                         state.controller != null) {
                       return Container(
-                        padding: const EdgeInsets.all(8),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.zW, vertical: 8.zH),
                         decoration: BoxDecoration(
                           color: AppColors.GREY_DARK_COLOR.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(20.zR),
                         ),
                         child: Text(
                           '00 : 00',
@@ -142,11 +144,11 @@ class _CamViewState extends State<_CamView> {
           ),
         ),
         Positioned(
-          bottom: 20,
+          bottom: 20.zH,
           right: 0,
           left: 0,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding:  EdgeInsets.symmetric(horizontal: 8.0.zW),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -259,8 +261,7 @@ class _CamViewState extends State<_CamView> {
     }
   }
 
-  Widget get _pickIcon =>
-      const Icon(Icons.circle, size: 80, color: Colors.white);
+  Widget get _pickIcon => Icon(Icons.circle, size: 80.zW, color: Colors.white);
 
   Widget _permissionButton(String label) {
     return InkWell(
@@ -359,7 +360,8 @@ class _ImagesListState extends State<_ImagesList> {
                                   child: Container(
                                     width: constraints.maxHeight,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius:
+                                          BorderRadius.circular(10.zR),
                                       color: Colors.white,
                                     ),
                                   ),
@@ -445,7 +447,7 @@ class _ImagesListState extends State<_ImagesList> {
         child: !isPhoto
             ? const Center(
                 child: Icon(
-                  Icons.play_arrow,
+                  Icons.play_arrow_rounded,
                   color: Colors.white,
                 ),
               )
