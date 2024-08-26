@@ -10,7 +10,6 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_state.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -18,6 +17,7 @@ import 'package:go_router/go_router.dart';
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
+import '../../../res/style/const.dart';
 import '../../../res/style/styles.dart';
 import '../../../routes/routes.dart';
 import '../stateless/buttons/iconAppButton.dart';
@@ -42,9 +42,9 @@ class DrawerWidget extends StatelessWidget {
                   children: [
                     context.read<UserCubit>().isLoggedIn
                         ? _buildAccountHeader(
-                            context: context,
-                            user: state.data,
-                          )
+                      context: context,
+                      user: state.data,
+                    )
                         : _buildLoginWidget(context: context),
 
                     competitionSubscription(context: context),
@@ -64,21 +64,21 @@ class DrawerWidget extends StatelessWidget {
                         onTap: () => context.push(Routes.AZKAAR)),
 
                     drawerListTile(
-                        // icon: Icons.star_rounded,
+                      // icon: Icons.star_rounded,
                         image: Assets.favorite_main_category_icon,
                         label: LocaleKeys.favouriteCategories.localize,
                         requireLogin: true,
                         onTap: () => context.push(Routes.FAVOURITECATEGORIES)),
 
                     drawerListTile(
-                        // icon: Icons.favorite,
+                      // icon: Icons.favorite,
                         image: Assets.favorite_sub_category_icon,
                         label: LocaleKeys.favouriteSubCategories.localize,
                         requireLogin: true,
                         onTap: () =>
                             context.push(Routes.FAVOURITESUBCATEGORIES)),
                     drawerListTile(
-                        // icon: FontAwesomeIcons.adn,
+                      // icon: FontAwesomeIcons.adn,
                         image: Assets.favorite_ad_icon,
                         label: LocaleKeys.favouriteAds.localize,
                         requireLogin: true,
@@ -90,26 +90,26 @@ class DrawerWidget extends StatelessWidget {
                         onTap: () => context.push(Routes.REQUESTSHISTORY)),
 
                     drawerListTile(
-                        // icon: Icons.list,
+                      // icon: Icons.list,
                         image: Assets.lists_icon,
                         label: LocaleKeys.lists.localize,
                         requireLogin: true,
                         onTap: () => context.push(Routes.Lists)),
                     drawerListTile(
-                        // icon: Icons.ads_click,
+                      // icon: Icons.ads_click,
                         image: Assets.my_ads_icon,
                         label: LocaleKeys.myAds.localize,
                         requireLogin: true,
                         onTap: () => context.push(Routes.MYADDS)),
                     // drawerListTile(icon: Icons.list, label: 'Requests', onTap: () {}),
                     drawerListTile(
-                        // icon: Icons.settings,
+                      // icon: Icons.settings,
                         image: Assets.settings_icon,
                         label: LocaleKeys.settings.localize,
                         onTap: () => context.push(Routes.SETTINGS)),
 
                     drawerListTile(
-                        // icon: Icons.privacy_tip,
+                      // icon: Icons.privacy_tip,
                         image: Assets.privacy_icon,
                         label: LocaleKeys.privacy.localize,
                         onTap: () => context.push(Routes.PRIVACY)),
@@ -119,24 +119,24 @@ class DrawerWidget extends StatelessWidget {
                         label: LocaleKeys.policies.localize,
                         onTap: () => context.push(Routes.POLICY)),
                     drawerListTile(
-                        // icon: Icons.share,
+                      // icon: Icons.share,
                         image: Assets.share_app_icon,
                         label: LocaleKeys.shareApp.localize,
                         onTap: () => context.push(Routes.SHAREAPP)),
                     drawerListTile(
-                        // icon: Icons.message,
+                      // icon: Icons.message,
                         image: Assets.contact_us_icon,
                         label: LocaleKeys.contactUs.localize,
                         onTap: () => context.push(Routes.CONTACTUS)),
 
                     drawerListTile(
-                        // icon: Icons.logout,
+                      // icon: Icons.logout,
                         image: Assets.sign_out_icon,
                         requireLogin: true,
                         label: LocaleKeys.logout.localize,
                         onTap: () {
                           bottomSheet(
-                            backColor: Theme.of(context).scaffoldBackgroundColor,
+                              backColor: Theme.of(context).scaffoldBackgroundColor,
                               context: context, widget: const LogoutWidget());
                         }),
                   ],
@@ -255,16 +255,16 @@ class DrawerWidget extends StatelessWidget {
           children: [
             Expanded(
                 child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Label(
-                    text: LocaleKeys.wallet.localize,
-                    style: Styles.mediumText(fontWeight: FontWeight.bold)),
-                Label(
-                    text: 'Earn Money with 49Hub',
-                    style: Styles.mediumText(fontWeight: FontWeight.w400)),
-              ],
-            )),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Label(
+                        text: LocaleKeys.wallet.localize,
+                        style: Styles.mediumText(fontWeight: FontWeight.bold)),
+                    Label(
+                        text: 'Earn Money with 49Hub',
+                        style: Styles.mediumText(fontWeight: FontWeight.w400)),
+                  ],
+                )),
             SizedBox(
               height: kTextTabBarHeight,
               width: kTextTabBarHeight,
@@ -282,13 +282,13 @@ class DrawerWidget extends StatelessWidget {
                       child: Center(
                           child: RichText(
                               text: TextSpan(children: [
-                    TextSpan(text: '300\n', style: Styles.mediumText()),
-                    TextSpan(
-                        text: '/1002',
-                        style: Styles.mediumText(
-                          fontSize: 8,
-                        ))
-                  ]))))
+                                TextSpan(text: '300\n', style: Styles.mediumText()),
+                                TextSpan(
+                                    text: '/1002',
+                                    style: Styles.mediumText(
+                                      fontSize: 8,
+                                    ))
+                              ]))))
                 ],
               ),
             )
@@ -300,31 +300,31 @@ class DrawerWidget extends StatelessWidget {
 
   Widget drawerListTile(
       {IconData? icon,
-      required String label,
-      String? description,
-      String? image,
-      bool requireLogin = false,
-      required Function onTap}) {
+        required String label,
+        String? description,
+        String? image,
+        bool requireLogin = false,
+        required Function onTap}) {
     if (requireLogin && !AuthHelper().isLoggedIn()) {
       return const SizedBox();
     }
     return Padding(
       padding: EdgeInsets.only(
-        top: 10.zH
+          top: 10.zH
       ),
       child: ListTile(
         onTap: () => onTap(),
         leading: image != null && icon == null
             ? Image.asset(
-                image,
-                width: 40.zW,
-                height: 40.zH,
-                fit: BoxFit.cover,
-              )
+          image,
+          width: 40.zW,
+          height: 40.zH,
+          fit: BoxFit.cover,
+        )
             : Icon(
-                icon,
-                size: 40.zW,
-              ),
+          icon,
+          size: 40.zW,
+        ),
         title: Label(
             text: label,
             style: Styles.mediumText(
@@ -332,8 +332,8 @@ class DrawerWidget extends StatelessWidget {
             )),
         subtitle: (description != null)
             ? Label(
-                text: description,
-                style: Styles.mediumText(fontWeight: FontWeight.w300))
+            text: description,
+            style: Styles.mediumText(fontWeight: FontWeight.w300))
             : null,
         trailing: Icon(
           Icons.arrow_forward_ios,
@@ -391,10 +391,10 @@ class DrawerWidget extends StatelessWidget {
 
   Widget counterItem(
       {required IconData icon,
-      required String label,
-      required String value,
-      required context,
-      required Function onTap}) {
+        required String label,
+        required String value,
+        required context,
+        required Function onTap}) {
     return Expanded(
       child: InkWell(
         onTap: () => onTap(),
@@ -405,7 +405,7 @@ class DrawerWidget extends StatelessWidget {
               radius: 45.zW,
               child: Icon(
                 icon,
-                 size: 40.zW,
+                size: 40.zW,
                 color: AppColors.QUANTITY_COLOR,
               ),
             ),
@@ -432,18 +432,17 @@ class DrawerWidget extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-           SizedBox(
+          SizedBox(
             height: kToolbarHeight * 2.5.zH,
             width: kToolbarHeight * 2.5.zW,
             child:  Stack(
               children: [
-                const Positioned.fill(
+                Positioned.fill(
                   child: CircleAvatar(
                     backgroundColor: Colors.transparent,
                     backgroundImage: NetworkImage(
-                        'https://st3.depositphotos.com/9998432/13335/v/450/depositphotos_133352010-stock-illustration-default-placeholder-man-and-woman.jpg'
-                        // user?.profilePicture ?? UIConst.profilePlaceHolder,
-                        ),
+                      user?.profilePicture ?? UIConst.profilePlaceHolder,
+                    ),
                   ),
                 ),
                 Positioned(
@@ -461,63 +460,59 @@ class DrawerWidget extends StatelessWidget {
           const Sizer(),
           Expanded(
               child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Label(
-                    text: _getFirstTwoWords(user?.fullName ?? ''),
-                    style: Styles.mediumText(fontWeight: FontWeight.bold),
+                  Row(
+                    children: [
+                      Label(
+                        text: _getFirstTwoWords(user?.fullName ?? ''),
+                        style: Styles.mediumText(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      if (user?.isDocument ?? false)
+                        Icon(
+                          Icons.verified,
+                          color: AppColors.PRIMARY_COLOR,
+                          size: 40.zW,
+                        ),
+                    ],
                   ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  if (user?.isDocument ?? false)
-                     Icon(
-                      Icons.verified,
-                      color: AppColors.PRIMARY_COLOR,
-                      size: 40.zW,
-                    ),
-                ],
-              ),
-              // Label(
-              //   text: getUserType(user),
-              //   style: Styles.mediumText(),
-              // ),
-               Sizer(height: 10.zH,),
-              InkWell(
-                onTap: () {
-                  context.push(
-                    Routes.WALLET,
-                  );
-                },
-                child: Row(
-                  children: [
-                     Icon(
-                      Icons.wallet,
-                      size: 35.zW,
-                    ),
-                     Sizer(
-                      width: 8.zW,
-                      height: 8.zH,
-                    ),
-                    BlocBuilder<GetWalletCubit, GetWalletState>(
-                      builder: (context, state) {
-                        return Expanded(
+                  // Label(
+                  //   text: getUserType(user),
+                  //   style: Styles.mediumText(),
+                  // ),
+                  Sizer(height: 10.zH,),
+                  InkWell(
+                    onTap: () {
+                      context.push(
+                        Routes.WALLET,
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.wallet,
+                          size: 35.zW,
+                        ),
+                        Sizer(
+                          width: 8.zW,
+                          height: 8.zH,
+                        ),
+                        Expanded(
                           child: Label(
                             text:
-                                '${state is SuccessGetWallet ? state.model.balance : 1}',
+                            '${ user?.wallet ?? 0}',
                             style: Styles.mediumText(
                                 decoration: TextDecoration.underline),
                           ),
-                        );
-                      },
-                    )
-                  ],
-                ),
-              )
-            ],
-          )),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              )),
         ],
       ),
     );
@@ -535,14 +530,14 @@ class DrawerWidget extends StatelessWidget {
   }
 
   getUserType(
-    UserEntity? user,
-  ) {
+      UserEntity? user,
+      ) {
     if (user?.isDoctor ?? false) {
       return LocaleKeys.doctor.localize;
     } else if (user?.isLoading ?? false) {
       return LocaleKeys.loadingDriver.localize;
     } else if (user?.isRestaurant ?? false) {
-        return LocaleKeys.restaurants.localize;
+      return LocaleKeys.restaurants.localize;
     } else if (user?.isRider ?? false) {
       return LocaleKeys.driver.localize;
     } else {

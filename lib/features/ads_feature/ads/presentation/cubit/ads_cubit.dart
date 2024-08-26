@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
@@ -77,7 +76,9 @@ class AdsCubit extends Cubit<AdsState> {
                         profileCover: '',
                         friendsCount: null,
                         followersCount: null,
-                        followingCount: null),
+                        followingCount: null,
+                      wallet: 0
+                    ),
                     active: true,
                     details: [
                       DetailEntiy(label: 'label', type: 'type', value: 'value')

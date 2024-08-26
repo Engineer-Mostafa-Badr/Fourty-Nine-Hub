@@ -501,8 +501,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
                                     setState(() {});
                                   },
-                                  height: kToolbarHeight,
+                                  height: kToolbarHeight.zH,
                                   isCentered: true,
+                                  close: false,
                                   isBordered: !registerCubit.isMale,
                                   color: registerCubit.isMale
                                       ? AppColors.PRIMARY_COLOR
@@ -521,9 +522,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
                                 setState(() {});
                               },
-                              height: kToolbarHeight,
+                              height: kToolbarHeight.zH,
                               isCentered: true,
                               isBordered: true,
+                              close: false,
                               textColor: registerCubit.isMale
                                   ? Theme.of(context).primaryColor
                                   : AppColors.AUTH_CONTAINER_COLOR,
