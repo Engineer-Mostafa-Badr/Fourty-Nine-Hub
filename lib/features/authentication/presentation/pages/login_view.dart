@@ -101,13 +101,13 @@ class _LoginViewState extends State<LoginView> {
                 serviceLocator<GetWalletCubit>().getWallet();
                 String? accessToken = await TokenManager.getAccessToken();
                 String? refreshToken = await TokenManager.getRefreshToken();
-                print(
+                debugPrint(
                     '/////////////////////////////////////////////////////////////////////////');
-                print('Refresh Token: $refreshToken');
-                print('Access Token: $accessToken');
-                print(
+                debugPrint('Refresh Token: $refreshToken');
+                debugPrint('Access Token: $accessToken');
+                debugPrint(
                     '/////////////////////////////////////////////////////////////////////////');
-                print(serviceLocator<UserCubit>().state.data.toString());
+                debugPrint(serviceLocator<UserCubit>().state.data.toString());
                 Navigator.pop(context);
                 Navigator.pop(context);
               });

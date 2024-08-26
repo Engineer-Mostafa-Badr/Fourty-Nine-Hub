@@ -457,6 +457,7 @@ class EndPoints {
   static String createMeeting = '/room-id';
   static String joinMeeting(String id) => '/room-id/join/$id';
   static String endMeeting(String id) => '/room-id/finish/$id';
+  static String getScheduledMeetings(String id) => '/room-id/$id';
   static String deleteChatMessage = '/chat/message';
 
   static String changeChatMuteState(String chatId) {

@@ -524,13 +524,14 @@ class DrawerWidget extends StatelessWidget {
 
   String _getFirstTwoWords(String fullName) {
     List<String> words = fullName.split(" ");
-
-    // Capitalize the first letter of each word
+    if(words.length>1) {
+      // Capitalize the first letter of each word
     words = words.map((word) {
       return word[0].toUpperCase() + word.substring(1).toLowerCase();
     }).toList();
-
+    }
     return words.length > 1 ? '${words[0]} ${words[1]}' : words[0];
+
   }
 
   getUserType(

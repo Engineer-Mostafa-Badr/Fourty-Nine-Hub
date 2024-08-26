@@ -82,10 +82,10 @@ class _ZegoLiveStreamingLeaveButtonState
       icon: widget.icon,
       clickableNotifier: hangupButtonClickableNotifier,
       onLeaveConfirmation: (context) async {
-        return true;
+        widget.showTopBar.value = !widget.showTopBar.value;
+        return false;
       },
       onPress: () async {
-        widget.showTopBar.value = !widget.showTopBar.value;
         final endEvent = ZegoLiveStreamingEndEvent(
           reason: widget.config.role == ZegoLiveStreamingRole.host
               ? ZegoLiveStreamingEndReason.hostEnd
