@@ -87,7 +87,8 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
       decoration: BoxDecoration(
         color: widget.config.topMenuBar.backgroundColor ?? Colors.transparent,
       ),
-      height: widget.config.topMenuBar.height ?? showTopBar.value ? 240.zH : 160.zH,
+      // height: widget.config.topMenuBar.height ?? showTopBar.value ? 240.zH : 160.zH,
+      height: showTopBar.value ? 240.zH : 160.zH,
       child: ValueListenableBuilder<bool>(
           valueListenable: showTopBar,
           builder: (context, showTopBar, child) {
