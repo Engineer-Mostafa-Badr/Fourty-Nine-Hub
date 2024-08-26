@@ -480,10 +480,11 @@ class DrawerWidget extends StatelessWidget {
                     ),
                 ],
               ),
-              Label(
-                text: getUserType(user),
-                style: Styles.mediumText(),
-              ),
+              // Label(
+              //   text: getUserType(user),
+              //   style: Styles.mediumText(),
+              // ),
+               Sizer(height: 10.zH,),
               InkWell(
                 onTap: () {
                   context.push(
