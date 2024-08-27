@@ -36,6 +36,8 @@ class LoginCubit extends Cubit<LoginState> {
       this._appleSignInUseCase,
       ) : super(LoginInitial());
 
+  String? token;
+
   Future<void> login() async {
     if (formKey.currentState!.validate()) {
       emit(LoginLoading());

@@ -31,7 +31,7 @@ class WalletWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: margin ?? 0),
-      padding:  const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(20.zR),
@@ -58,10 +58,10 @@ class WalletWidget extends StatelessWidget {
             '900',
           ),
           Container(
-            width: .8.zW,
+            width: 2.zW,
             margin: const EdgeInsets.symmetric(horizontal: 5),
             color: Colors.grey,
-            height: kToolbarHeight * .8.zH,
+            height: kToolbarHeight * 1.3.zH,
           ),
           CircleAvatar(
             radius: 6.zW,
@@ -69,26 +69,26 @@ class WalletWidget extends StatelessWidget {
           ),
           const Sizer(),
           buildItem(
-                () {
-                  context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
+            () {
+              context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
             },
             LocaleKeys.gift.tr(),
             '300',
           ),
           Container(
-            width: .8.zW,
+            width: 2.zW,
             margin: const EdgeInsets.symmetric(horizontal: 5),
             color: Colors.grey,
-            height: kToolbarHeight * .8.zH,
+            height: kToolbarHeight * 1.3.zH,
           ),
-           CircleAvatar(
+          CircleAvatar(
             radius: 6.zW,
             backgroundColor: AppColors.SECONDARY_COLOR,
           ),
           const Sizer(),
           buildItem(
-                () {
-                  context.push(Routes.WALLET, extra: WalletTypes.mainWallet);
+            () {
+              context.push(Routes.WALLET, extra: WalletTypes.mainWallet);
             },
             LocaleKeys.wallet.tr(),
             '400',
@@ -114,9 +114,7 @@ class WalletWidget extends StatelessWidget {
             Label(
                 text: amount,
                 style: Styles.mediumText(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 32
-                )),
+                    fontWeight: FontWeight.bold, fontSize: 32)),
           ],
         ),
       ));

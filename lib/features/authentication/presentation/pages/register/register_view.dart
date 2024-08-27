@@ -48,6 +48,7 @@ class _RegisterViewState extends State<RegisterView> {
           context.read<UserCubit>().setLogin(true);
           context.read<UserCubit>().getUser();
           context.go(Routes.HOME);
+          context.pop();
         }
       },
       child: Scaffold(

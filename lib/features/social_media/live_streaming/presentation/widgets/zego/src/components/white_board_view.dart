@@ -74,29 +74,42 @@ class WhiteBoardViewState extends State<WhiteBoardView> {
             'Whiteboard',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
+
           actions: [
-            IconButton(
-              style: IconButton.styleFrom(
-                  backgroundColor: _selectedColor, shape: const CircleBorder()),
-              icon: Icon(
-                Icons.undo,
-                color: Colors.white,
-                size: 40.zH,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: InkWell(
+                onTap: undo,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: _selectedColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.undo,
+                    color: Colors.white,
+                    size: 40.zH,
+                  ),
+                ),
               ),
-              onPressed: undo,
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 30),
-              child: IconButton(
-                style: IconButton.styleFrom(
-                    backgroundColor: _selectedColor,
-                    shape: const CircleBorder()),
-                icon: Icon(
-                  Icons.redo,
-                  color: Colors.white,
-                  size: 40.zH,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: InkWell(
+                onTap: redo,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: _selectedColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.redo,
+                    color: Colors.white,
+                    size: 40.zH,
+                  ),
                 ),
-                onPressed: redo,
               ),
             ),
           ],

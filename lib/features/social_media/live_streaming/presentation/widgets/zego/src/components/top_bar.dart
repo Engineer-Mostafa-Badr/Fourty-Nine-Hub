@@ -213,7 +213,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15.0),
-                            color: Colors.blueAccent,
+                            color: AppColors.BARRIER_COLOR,
                           ),
                           child: const Center(
                             child: Text(

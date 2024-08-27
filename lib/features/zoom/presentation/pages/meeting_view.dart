@@ -16,7 +16,6 @@ import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 
 import '../../../../common/widgets/dynamic/drawer.dart';
-import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
@@ -28,10 +27,8 @@ class MeetingView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: const HomeAppbar(
-        isWithBackArrow: true,
-      ),
-      drawer: const DrawerWidget(),
+      appBar: AppBar(),
+      // drawer: const DrawerWidget(),
       body: SingleChildScrollView(
         child: BlocBuilder<MeetingCubit, MeetingState>(
           builder: (_, state) {
@@ -42,11 +39,13 @@ class MeetingView extends StatelessWidget {
                 SizedBox(height: 16.zH),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildMeetingItem(
-                      color: AppColors.ACCENT_COLOR,
-                      label: 'new_meeting'.tr(),
+                      color: AppColors.SECONDARY_COLOR,
+                      label: 'New \n Meeting'.tr(),
                       icon: Icons.video_call,
+                      twoLines: true,
                       onTap: () async {
                         await newMeeting(cubit);
                         if (context.mounted) {
@@ -59,7 +58,7 @@ class MeetingView extends StatelessWidget {
                       },
                     ),
                     _buildMeetingItem(
-                        color: Colors.blueAccent[700]!,
+                        color: AppColors.PRIMARY_COLOR,
                         label: 'join'.tr(),
                         icon: Icons.add_box_rounded,
                         onTap: () {
@@ -67,7 +66,7 @@ class MeetingView extends StatelessWidget {
                           showMeetingDialogue(context);
                         }),
                     _buildMeetingItem(
-                      color: Colors.blueAccent[700]!,
+                      color: AppColors.PRIMARY_COLOR,
                       label: 'Schedule'.tr(),
                       icon: Icons.calendar_today_outlined,
                       onTap: () async {
@@ -75,9 +74,10 @@ class MeetingView extends StatelessWidget {
                       },
                     ),
                     _buildMeetingItem(
-                      color: Colors.blueAccent[700]!,
-                      label: 'ShareScreen'.tr(),
+                      color: AppColors.PRIMARY_COLOR,
+                      label: 'Share\nScreen'.tr(),
                       icon: Icons.screen_share,
+                      twoLines: true,
                       onTap: () {
                         showMeetingDialogue(context, shareScreen: true);
                       },
@@ -88,20 +88,34 @@ class MeetingView extends StatelessWidget {
                 SizedBox(
                   height: 40.zH,
                 ),
-                Align(
-                  alignment: Alignment.center,
-                  child: GestureDetector(
-                    onTap: () {
-                      _showScheduleMeetingBottomSheet(context);
-                    },
-                    child: const Text(
-                      'Add a calender',
-                      style: TextStyle(
-                          color: Colors.blueAccent,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: GestureDetector(
+                        onTap: () {
+                          _showScheduleMeetingBottomSheet(context);
+                        },
+                        child: const Text(
+                          'Add a calender',
+                          style: TextStyle(
+                              color: AppColors.PRIMARY_COLOR,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
                     ),
-                  ),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        onPressed: () {
+                          cubit.getScheduledMeetings();
+                        },
+                        icon: const Icon(Icons.refresh),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 10.zH,
@@ -177,11 +191,20 @@ class MeetingView extends StatelessWidget {
                       ),
                       SizedBox(width: 15.zW),
                       InkWell(
-                        onTap: () {},
+                        onTap: ()
+                        {
+                          context.go(
+                            Routes.MEETINGROOM,
+                            extra: ZegoArgs(
+                              scheduledMeeting.roomId,
+                              true,
+                            )
+                          );
+                        },
                         child: Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: Colors.blueAccent,
+                            color: AppColors.PRIMARY_COLOR,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
@@ -259,11 +282,13 @@ class MeetingView extends StatelessWidget {
     );
   }
 
-  Widget _buildMeetingItem(
-      {required Color color,
-      required String label,
-      required IconData icon,
-      required Function onTap}) {
+  Widget _buildMeetingItem({
+    required Color color,
+    required String label,
+    required IconData icon,
+    required Function onTap,
+    bool twoLines = false,
+  }) {
     return InkWell(
       onTap: () => onTap(),
       child: Column(
@@ -281,8 +306,13 @@ class MeetingView extends StatelessWidget {
               size: 20,
             ),
           ),
-          const Sizer(),
-          Label(text: label, style: Styles.headerText(fontSize: 25))
+          Sizer(
+            height:twoLines ? 10.zH : 30.zH,
+          ),
+          Label(
+              text: label,
+              textAlign: TextAlign.center,
+              style: Styles.headerText(fontSize: 25))
         ],
       ),
     );
