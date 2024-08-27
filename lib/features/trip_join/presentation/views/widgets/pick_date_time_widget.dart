@@ -28,11 +28,10 @@ class _PickDateAndTimeWidgetState extends State<PickDateAndTimeWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         BlocBuilder<TripJoinViewCubit, TripJoinViewState>(
-          buildWhen: (previous, current) =>
-              current is TripJoinViewShowDateState,
+          buildWhen: (previous, current) => current is TripJoinViewShowDateState,
           builder: (context, state) {
             return Visibility(
-              visible: !context.read<TripJoinViewCubit>().showDate,
+              visible: !context.read<TripJoinViewCubit>().repeate,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

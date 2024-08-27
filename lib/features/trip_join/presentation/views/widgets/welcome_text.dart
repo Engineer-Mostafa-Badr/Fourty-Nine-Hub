@@ -7,7 +7,10 @@ List<Widget> welcomeText() {
   return [
     Text(
       'Welcome To Trip Join',
-      style: Styles.headerText(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.SECONDARY_COLOR),
+      style: Styles.headerText(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: AppColors.SECONDARY_COLOR),
     ),
     const Sizer(),
     Text(

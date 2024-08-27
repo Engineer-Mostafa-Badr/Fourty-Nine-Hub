@@ -86,9 +86,11 @@ class TripInfo extends StatelessWidget {
                 ),
                 const Sizer(),
                 BlocBuilder<TripJoinViewCubit, TripJoinViewState>(
-                  buildWhen: (previous, current) => current is TripJoinViewSeatNumberState,
+                  buildWhen: (previous, current) =>
+                      current is TripJoinViewSeatNumberState,
                   builder: (context, state) {
-                    double totalPrice = context.read<TripJoinViewCubit>().numberOfSeats * price;
+                    double totalPrice =
+                        context.read<TripJoinViewCubit>().numberOfSeats * price;
                     return Text(
                       '$totalPrice',
                       style: Styles.headerText(),
@@ -104,7 +106,9 @@ class TripInfo extends StatelessWidget {
             ),
           ],
         ),
-        Text('You will take this price for every passenger join this trip with you', style: Styles.mediumText()),
+        Text(
+            'You will take this price for every passenger join this trip with you',
+            style: Styles.mediumText()),
         const Sizer(),
       ],
     );

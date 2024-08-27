@@ -1,15 +1,12 @@
 import 'package:fourtyninehub/features/trip_join/domain/entities/trip_info_entity.dart';
 
 class TripInfoModel extends TripInfoEntity {
-  String? destinationAddress;
-  String? originAddress;
-
   TripInfoModel({
     super.price,
     super.distance,
     super.duration,
-    this.destinationAddress,
-    this.originAddress,
+    super.destinationAddress,
+    super.originAddress,
   });
 
   @override
