@@ -8,14 +8,14 @@ List<Widget> welcomeText() {
     Text(
       'Welcome To Trip Join',
       style: Styles.headerText(
-          fontSize: 24,
+          // fontSize: 24,
           fontWeight: FontWeight.bold,
           color: AppColors.SECONDARY_COLOR),
     ),
     const Sizer(),
     Text(
       'You own a car!\nSomeone will share trip with you / pay half price',
-      style: Styles.headerText(fontSize: 18, fontWeight: FontWeight.w400),
+      style: Styles.headerText(fontWeight: FontWeight.w400),
     ),
   ];
 }

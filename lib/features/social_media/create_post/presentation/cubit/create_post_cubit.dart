@@ -263,6 +263,11 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     emit(state.copyWith(selectedFeeling: FeelingEntity(name: '', image: '', id: ''), status: CreatePostStates.success));
   }
 
+  onRemoveActivity() {
+    emit(state.copyWith(
+        selectedActivity: ActivityEntity(name: '', image: '', id: ''), status: CreatePostStates.success));
+  }
+
   onRemoveUser(PostUserEntity user) {
     List<PostUserEntity> newUsers = [];
     if (state.selectedUsers != null && state.selectedUsers!.isNotEmpty) {

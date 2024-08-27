@@ -25,7 +25,7 @@ class TripJoinView extends StatelessWidget {
         centerTitle: true,
         title: Text(
           'Trip Join',
-          style: Styles.headerText(fontSize: 24),
+          style: Styles.headerText(),
         ),
       ),
       body: const TripJoinBody(),

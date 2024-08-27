@@ -88,8 +88,7 @@ abstract class LocaleKeys {
   static String video = 'video'.tr();
   static String openAppSettings = 'openAppSettings'.tr();
   static String allowAccessToYourCamera = 'allowAccessToYourCamera'.tr();
-  static String allowAccessToYourMicrophone =
-      'allowAccessToYourMicrophone'.tr();
+  static String allowAccessToYourMicrophone = 'allowAccessToYourMicrophone'.tr();
   static String document = 'document'.tr();
   static String camera = 'camera'.tr();
   static String microphone = 'microphone'.tr();
@@ -98,8 +97,6 @@ abstract class LocaleKeys {
   static String location = 'location'.tr();
   static String contact = 'contact'.tr();
   static String pickPhotoOrVideo = 'pickPhotoOrVideo'.tr();
-<<<<<<< HEAD
-=======
   static String noRideSubcategories = 'noRideSubcategories'.tr();
   static String enableNotifications = 'enableNotifications'.tr();
   static String changePassword = 'changePassword'.tr();
@@ -138,6 +135,4 @@ abstract class LocaleKeys {
   static String clearNoti = 'clearNoti'.tr();
   static String ok = 'ok'.tr();
   static String cancel = 'cancel'.tr();
-
->>>>>>> Merg
 }

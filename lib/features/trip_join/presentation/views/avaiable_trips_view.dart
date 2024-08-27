@@ -15,7 +15,7 @@ class AvailableTripsView extends StatelessWidget {
         // centerTitle: true,
         title: Text(
           'Available Trips',
-          style: Styles.headerText(fontSize: 24),
+          style: Styles.headerText(),
         ),
       ),
       body: const AvailableTripsBody(),
