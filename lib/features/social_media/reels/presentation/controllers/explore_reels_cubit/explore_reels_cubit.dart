@@ -201,8 +201,11 @@ class ReelsCubit extends Cubit<ReelsState> {
     emit(state.copyWith(isLoading: true));
 
     try {
-      final ReelsResponse response =
-          await repository.fetchReels(page: state.currentPage + 1);
+      // Fetch 3 reels at a time
+      final ReelsResponse response = await repository.fetchReels(
+        page: state.currentPage + 1,
+        limit: 3,
+      );
 
       emit(state.copyWith(
         reels: [...state.reels, ...response.data.reels],
