@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,18 +9,21 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/api/api_consumer.dart';
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/const.dart';
 import '../../../res/style/styles.dart';
 import '../../../routes/routes.dart';
+import '../../functions/global/upload_file.dart';
 import '../stateless/buttons/iconAppButton.dart';
 import '../stateless/labels/label.dart';
 import 'sizer.dart';
@@ -436,6 +440,7 @@ class DrawerWidget extends StatelessWidget {
             height: kToolbarHeight * 2.5.zH,
             width: kToolbarHeight * 2.5.zW,
             child:  Stack(
+              alignment: AlignmentDirectional.bottomEnd,
               children: [
                 Positioned.fill(
                   child: CircleAvatar(
@@ -445,13 +450,20 @@ class DrawerWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Icon(
-                    Icons.camera_alt_outlined,
-                    size: 40.zW,
-                    color: Theme.of(context).primaryColor,
+                GestureDetector(
+                  onTap: ()async{
+                   await context.read<UserCubit>().uploadPhoto(isGallery: true);
+                    // After uploading the image, you may want to reload the user data
+                    context.read<UserCubit>().getUser();
+                  },
+                  child: Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Icon(
+                      Icons.camera_alt_outlined,
+                      size: 40.zW,
+                      color: Theme.of(context).primaryColor,
+                    ),
                   ),
                 )
               ],
@@ -544,4 +556,7 @@ class DrawerWidget extends StatelessWidget {
       return "User";
     }
   }
+
+
+
 }
