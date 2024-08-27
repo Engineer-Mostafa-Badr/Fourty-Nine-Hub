@@ -83,7 +83,7 @@ final class CreateRestaurantCitiesLoaded extends CreateRestaurantState {
 }
 
 final class CreateAddMneuToRestaurant extends CreateRestaurantState {
-  final List<RestaurantMneu> mneu;
+  final List<RestaurantMenu> mneu;
   CreateAddMneuToRestaurant(this.mneu);
 }
 

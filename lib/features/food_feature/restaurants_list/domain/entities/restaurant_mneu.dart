@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_media_model.dart';
 
-class RestaurantMneu extends Equatable {
+class RestaurantMenu extends Equatable {
   final String? id;
   final String? restaurantId;
   final String? foodName;
@@ -9,7 +9,7 @@ class RestaurantMneu extends Equatable {
   final RestaurantMediaModel? picture;
   final String? photo;
   final String? menuId;
-  const RestaurantMneu({
+  const RestaurantMenu({
     this.id,
     this.photo,
     this.restaurantId,

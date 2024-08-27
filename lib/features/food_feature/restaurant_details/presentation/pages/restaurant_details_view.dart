@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
+import 'package:fourtyninehub/features/requests_history/presentation/widgets/food_order_card.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 
@@ -9,9 +12,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
-import '../../../restaurant_details/presentation/widgets/meal_card.dart';
 import '../../../restaurant_details/presentation/widgets/restaurant_header.dart';
-import '../../data/models/selected_meal_model.dart';
 import '../cubit/restaurant_details_cubit.dart';
 
 class RestaurantDetailsView extends StatefulWidget {
@@ -76,22 +77,50 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
       return state.meals?.isNotEmpty ?? false
           ? Padding(
               padding: const EdgeInsets.all(10.0),
-              child: GridView.builder(
-                  shrinkWrap: true,
-                  itemCount: state.meals?.length ?? 0,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      crossAxisCount: 2),
-                  itemBuilder: (context, index) {
-                    return MealCard(
-                      restaurantId: widget.id,
-                      addToCart: (SelectedMealModel v) => controller.addToCart(
-                          context: context, selectedMeal: v),
-                      item: state.meals![index],
-                    );
-                  }))
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: state.meals?.length ?? 0,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  RestaurantMenu? meal = state.meals?[index];
+                  return ListTile(
+                    onTap: () {
+                      // controller.selectMeal(meal: meal!, index: index);
+                    },
+                    dense: true,
+                    visualDensity: VisualDensity.comfortable,
+                    title: Text(
+                      meal?.foodName ?? "",
+                      style: Styles.headerText(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.PRIMARY_COLOR),
+                    ),
+                    subtitle: Text(
+                      '${meal?.price} EGP',
+                      style: Styles.headerText(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.ACCENT_COLOR,
+                      ),
+                    ),
+                    leading: SquareImage(
+                      url: meal?.picture?.mediaKey ?? "",
+                      height: 50,
+                      width: 50,
+                    ),
+                    trailing: Checkbox(
+                      value: state.selectedMeals?.contains(meal) ?? false,
+                      onChanged: (value) {
+                        // controller.selectMeal(meal: meal!, index: index);
+                      },
+                      activeColor: AppColors.SECONDARY_COLOR,
+                      checkColor: Colors.white,
+                      visualDensity: VisualDensity.comfortable,
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                  );
+                },
+              ),
+            )
           : const SizedBox();
     });
   }

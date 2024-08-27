@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
@@ -51,7 +50,7 @@ class FoodOrderCard extends StatelessWidget {
           return RichText(
               text: TextSpan(children: [
             TextSpan(
-                text: meal.meal.name,
+                text: meal.meal.foodName ?? "",
                 style: Styles.mediumText(fontWeight: FontWeight.w600)),
             TextSpan(
                 text: ' x ${meal.qty} \n',

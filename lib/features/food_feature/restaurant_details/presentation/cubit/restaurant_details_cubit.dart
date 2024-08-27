@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 
 import '../../../../../core/error/failure.dart';
 

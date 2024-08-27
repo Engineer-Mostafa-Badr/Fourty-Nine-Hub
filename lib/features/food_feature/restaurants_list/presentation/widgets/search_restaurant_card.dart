@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/CarouselSlider.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/search_cubit/search_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -28,7 +27,6 @@ class SearchRestaurantCard extends StatefulWidget {
 }
 
 class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
-  int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -73,44 +71,10 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
                 ],
               ),
             ),
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                CarouselSliderWidget(
-                  onPageChanged: (value) {
-                    setState(() {
-                      currentIndex = value;
-                    });
-                  },
-                  height: MediaQuery.of(context).size.width * 0.72,
-                  widgets: widget.restaurant?.restaurantMedia
-                          ?.map(
-                            (e) => SquareImage(
-                              fit: BoxFit.cover,
-                              width: MediaQuery.of(context).size.width,
-                              radius: 5,
-                              url: e.mediaKey,
-                            ),
-                          )
-                          .toList() ??
-                      [],
-                ),
-                Positioned(
-                  bottom: 20,
-                  child: Row(
-                    children: List.generate(
-                      widget.restaurant?.restaurantMedia?.length ?? 0,
-                      (index) => Icon(
-                        Icons.circle,
-                        color: index == currentIndex
-                            ? Colors.black87
-                            : Colors.black26,
-                        size: 15,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            ImagesProfileForRestaurant(
+              restaurantMedia: widget.restaurant?.restaurantMedia,
+              heightCarousel: MediaQuery.of(context).size.width * 0.72,
+              widthForImages: MediaQuery.of(context).size.width,
             ),
             Container(
               color: Colors.white,

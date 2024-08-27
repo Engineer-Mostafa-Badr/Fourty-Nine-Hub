@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_media_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 
-class RestaurantMneuModel extends RestaurantMneu {
+class RestaurantMneuModel extends RestaurantMenu {
   const RestaurantMneuModel({
     super.id,
     super.restaurantId,
