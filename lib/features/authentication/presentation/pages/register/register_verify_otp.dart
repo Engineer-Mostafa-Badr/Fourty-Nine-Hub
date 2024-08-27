@@ -1,21 +1,27 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/utils/shared_pref.dart';
+import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
+import '../../../../../service_locator/service_locator.dart';
 import '../../controllers/user_cubit/user_cubit.dart';
 
-class RegisterVerifyOTP extends StatelessWidget {
+class RegisterVerifyOTP extends StatefulWidget {
   final String email;
 
   const RegisterVerifyOTP({
@@ -24,10 +30,15 @@ class RegisterVerifyOTP extends StatelessWidget {
   });
 
   @override
+  State<RegisterVerifyOTP> createState() => _RegisterVerifyOTPState();
+}
+
+class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
+  @override
   Widget build(BuildContext context) {
     final verifyOtpCubit = context.read<VerifyOtpCubit>();
     return BlocListener<VerifyOtpCubit, VerifyOtpState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is VerifyOtpError) {
           showErrorMessage(context, getFailureMessage(state.failure, context));
         } else if (state is ResendOtpError) {
@@ -35,9 +46,89 @@ class RegisterVerifyOTP extends StatelessWidget {
         } else if (state is ResendOtpSuccess) {
           showSuccessMessage(context, 'resend otp success');
         } else if (state is VerifyOtpSuccess) {
-          context.read<UserCubit>().setLogin(true);
-          context.read<UserCubit>().getUser();
-          context.push(Routes.HOME);
+          await TokenManager.saveAccessToken(state.userTokensEntity.accessToken);
+          await TokenManager.saveRefreshToken(state.userTokensEntity.refreshToken);
+
+          serviceLocator<UserCubit>()
+            ..setLogin(true)
+            ..attachToken()
+            ..getUser().then((value) async {
+              // Ensure the widget is still mounted before proceeding
+              if (!mounted) return;
+
+              String? accessToken = await TokenManager.getAccessToken();
+              String? refreshToken = await TokenManager.getRefreshToken();
+
+              print(
+                  '/////////////////////////////////////////////////////////////////////////');
+              print('Refresh Token: $refreshToken');
+              print('Access Token: $accessToken');
+              print(
+                  '/////////////////////////////////////////////////////////////////////////');
+              print(serviceLocator<UserCubit>().state.data.toString());
+
+              // Navigate to the home screen
+              context.go(Routes.HOME);
+              context.pop();
+              context.pop();
+
+              // Show the success dialog after navigation
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24.0.zR),
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.all(30.0.zW),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(
+                                LocaleKeys.congratulations.localize,
+                                style: Styles.headerText(color: AppColors.SECONDARY_COLOR, fontSize: 45),
+                              ),
+                              SizedBox(height: 16.0.zH),
+                              Text(
+                                LocaleKeys.giftApp.localize,
+                                textAlign: TextAlign.center,
+                                style: Styles.mediumText(),
+                              ),
+                              SizedBox(height: 40.0.zH),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Close the dialog
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Theme.of(context).primaryColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.0.zR),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 40.0.zW,
+                                    vertical: 24.0.zH,
+                                  ),
+                                  child: Text(
+                                    LocaleKeys.close.localize,
+                                    style:  TextStyle(color: Theme.of(context).scaffoldBackgroundColor),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+              });
+            });
         }
       },
       child: Scaffold(
@@ -46,7 +137,7 @@ class RegisterVerifyOTP extends StatelessWidget {
           margin: const EdgeInsets.all(30),
           width: double.infinity,
           label: 'Verify',
-          onPressed: () => verifyOtpCubit.verifyOTP(email),
+          onPressed: () => verifyOtpCubit.verifyOTP(widget.email),
         ),
         body: Column(
           children: [
@@ -100,7 +191,7 @@ class RegisterVerifyOTP extends StatelessWidget {
                   blurRadius: 10,
                 )
               ],
-              onCompleted: (v) => verifyOtpCubit.verifyOTP(email),
+              onCompleted: (v) => verifyOtpCubit.verifyOTP(widget.email),
               beforeTextPaste: (text) {
                 return true;
               },
@@ -110,7 +201,7 @@ class RegisterVerifyOTP extends StatelessWidget {
               text: 'Didn\'t receive an email?',
             ),
             TextButton(
-              onPressed: () => verifyOtpCubit.resendOTP(email),
+              onPressed: () => verifyOtpCubit.resendOTP(widget.email),
               child: const Label(
                 text: 'Resend',
               ),

@@ -10,7 +10,6 @@ import '../internal/defines.dart';
 
 // Project imports:
 
-
 /// @nodoc
 class ZegoLiveStreamingMinimizingButton extends StatefulWidget {
   const ZegoLiveStreamingMinimizingButton({

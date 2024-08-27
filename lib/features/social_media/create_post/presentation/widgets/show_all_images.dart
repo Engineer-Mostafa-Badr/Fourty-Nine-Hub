@@ -2,10 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 class ShowAllImages extends StatefulWidget {
@@ -44,17 +42,17 @@ class _ShowAllImagesState extends State<ShowAllImages> {
               // context.push(Routes.TWITTER);
 
               showDialog(
-                  context: context,
-                  builder: (context) => ImageDetailsScreen(
-                        image: widget.images[index].file.path,
-                        fromPost: true,
-                        isFile: true,
-                        onRemoveImage: (){
-                          context.pop();
-                          // images.remove(images[index]);
-                        },
-                      ),
-                  );
+                context: context,
+                builder: (context) => ImageDetailsScreen(
+                  image: widget.images[index].file.path,
+                  fromPost: true,
+                  isFile: true,
+                  onRemoveImage: () {
+                    context.pop();
+                    // images.remove(images[index]);
+                  },
+                ),
+              );
               // context.pop();
             },
             child: Stack(
@@ -66,18 +64,17 @@ class _ShowAllImagesState extends State<ShowAllImages> {
                   decoration: BoxDecoration(
                       color: AppColors.DARK_BLUE_COLOR,
                       image: DecorationImage(
-                          image: FileImage(File(widget.images[index].file.path)),
+                          image:
+                              FileImage(File(widget.images[index].file.path)),
                           fit: BoxFit.fill)),
                 ),
                 PositionedDirectional(
                   end: 5,
                   top: 5,
                   child: InkWell(
-                    onTap: () async{
+                    onTap: () async {
                       await widget.onRemoveImage(widget.images[index]);
-                      setState(() {
-
-                      });
+                      setState(() {});
                     },
                     child: Container(
                         height: 30,

@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 abstract class Routes {
   Routes._();
 
@@ -9,6 +11,7 @@ abstract class Routes {
   static const ADdetails = '/Subcategories/ADS/AD-Details';
   static const CREATEAD = '/Subcategories/ADS/CreateAd';
   static const CREATECOMPANYAD = '/Subcategories/ADS/CreateCompanyAd';
+  // static const CAMERA
 
   static const LUCKYWHEEL = '/LuckyWheel';
   static const COMPETITIONS = '/Competitions';
@@ -23,6 +26,8 @@ abstract class Routes {
   static const TWITTER = '/Social/Twitter';
   static const TWITTERPOSTDETAILS = '/Social/Twitter/TwitterPostDetails';
   static const CREATEPOST = '/Social/CreatePost';
+  static const SEARCHFRIENDS = '/Social/CreatePost/SearchFriend';
+  static const SEARCHPLACES = '/Social/CreatePost/SearchPlaces';
 
   static const Tinder = '/Social/Tinder';
   static const LIVE = '/Social/Live';
@@ -63,9 +68,11 @@ abstract class Routes {
   static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
   static const CusineRestaurants = '/Food/Cusine-Restaurants';
   static const RestaurantDashboard = '/Food/RestaurantDashboard';
+  static const CREATERESTURANT = '/Food/CreateResturant';
 
   static const FOODCART = '/Food/RetaurantDetails/FoodCart';
   static const SHIPPING = '/Shipping';
+  static const SHIPPING_REGISTER = '/shippingRegister';
   static const RIDE = '/Ride';
   static const CONTACTUS = '/ContactUs';
 
@@ -113,7 +120,8 @@ abstract class Routes {
   static const SETTINGS = '/Account/Settings';
   static const PAYMENT = '/Payment';
   static const SUBSCRIPTIONPLANS = '/SubscriptionPlans';
-  static const SHIPPING_REGISTER = '/shippingRegister';
+
+  static const TRIP_JOIN = '/TripJoin';
 }
 
 abstract class Paths {
@@ -146,6 +154,8 @@ abstract class Paths {
   static const TWITTER = 'Twitter';
   static const TWITTERPOSTDETAILS = 'TwitterPostDetails';
   static const CREATEPOST = 'CreatePost';
+  static const SEARCHFRIENDS = 'SearchFriend';
+  static const SEARCHPLACES = 'SearchPlaces';
   static const TINDER = 'Tinder';
   static const LIVE = 'Live';
   static const LIVEVIEW = 'LiveView';
@@ -170,9 +180,12 @@ abstract class Paths {
   static const DOCTORUNHANDLEDAPPOINTMENTS = 'DoctorUnhandledAppointments';
   static const ALLDOCTORRESERVATIONS = 'AllDoctorReservations';
   static const FOOD = 'Food';
+  static const CREATERESTURANT = 'CreateResturant';
   static const CusineRestaurants = 'Cusine-Restaurants';
   static const RestaurantDashboard = 'RestaurantDashboard';
   static const SHIPPING = 'Shipping';
+  static const SHIPPING_REGISTER = 'shippingRegister';
+
   static const RIDE = 'Ride';
   static const CONTACTUS = 'ContactUs';
   static const RIDERDASHBOARD = 'RiderDashboard';
@@ -217,5 +230,6 @@ abstract class Paths {
   static const AZKAAR = 'Azkaar';
   static const PAYMENT = 'Payment';
   static const SUBSCRIPTIONPLANS = 'SubscriptionPlans';
-  static const SHIPPING_REGISTER = 'shippingRegister';
+
+  static const TRIP_JOIN = 'TripJoin';
 }

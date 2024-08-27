@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import '../../../zego_uikit_prebuilt_live_streaming.dart';
 import '../../core/connect_manager.dart';
 import '../../core/core_managers.dart';
 import '../../core/host_manager.dart';
-import '../../defines.dart';
 import '../../internal/defines.dart';
 
 /// @nodoc

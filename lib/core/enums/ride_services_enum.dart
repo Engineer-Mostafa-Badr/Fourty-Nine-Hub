@@ -1,6 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart' show describeEnum;
+
+import '../localization/locale_keys.g.dart';
 
 enum RideServicesEnum {
   pickMe,
@@ -78,7 +81,7 @@ extension RideServicesEnumExtension on RideServicesEnum {
   String title() {
     switch (this) {
       case RideServicesEnum.pickMe:
-        return 'Pick Me';
+        return LocaleKeys.pickMe.tr();
       case RideServicesEnum.womenOnly:
         return 'Women Only';
       case RideServicesEnum.captain:
@@ -92,7 +95,7 @@ extension RideServicesEnumExtension on RideServicesEnum {
       case RideServicesEnum.premium:
         return 'Premium';
       case RideServicesEnum.comeWithYou:
-        return 'Trip Join';
+        return LocaleKeys.tripJoin.tr();
       case RideServicesEnum.pickup:
         return 'Pick up';
       case RideServicesEnum.suv:

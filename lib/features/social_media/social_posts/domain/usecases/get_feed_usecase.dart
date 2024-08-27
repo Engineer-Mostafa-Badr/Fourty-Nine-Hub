@@ -9,7 +9,8 @@ class GetFeedUseCase extends UseCase<List<PostEntity>, TwitterFeedParams> {
   final SocialPostsRepo _repo;
   GetFeedUseCase(this._repo);
   @override
-  Future<Either<Failure, List<PostEntity>>> call(TwitterFeedParams params) async {
+  Future<Either<Failure, List<PostEntity>>> call(
+      TwitterFeedParams params) async {
     return await _repo.getFeed(params: params);
   }
 }

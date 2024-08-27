@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import '../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -90,7 +88,7 @@ class YoutubeVideoCard extends StatelessWidget {
                   onPressed: () {
                     bottomSheet(
                       context: context,
-                      widget: Column(
+                      widget: const Column(
                         children: [],
                       ),
                     );
@@ -103,7 +101,7 @@ class YoutubeVideoCard extends StatelessWidget {
   }
 
   Widget _buildHorizontalWidget({required BuildContext context}) {
-    return Row(
+    return const Row(
       children: [],
     );
   }

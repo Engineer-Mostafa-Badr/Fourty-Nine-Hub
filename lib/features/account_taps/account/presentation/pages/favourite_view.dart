@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_ad_entity.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_ads_cubit.dart';
 

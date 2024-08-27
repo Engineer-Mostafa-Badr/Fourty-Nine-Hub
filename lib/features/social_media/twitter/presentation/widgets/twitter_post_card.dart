@@ -1,16 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
@@ -25,6 +25,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.da
 // ignore: must_be_immutable
 class TwitterPostCard extends StatefulWidget {
   bool isLiked;
+  bool? fromProfile;
   final TwitterPostEntity post;
   final Function onReact;
   final Function getPost;
@@ -32,18 +33,23 @@ class TwitterPostCard extends StatefulWidget {
   final Function(String) deletePost;
   final Function(String) hidePost;
   final Function(String) showPostComments;
+  final Function(String) onDeleteComment;
+  final Function(TwitterPostCommentParams) onEditComment;
   final Function(TwitterReportParams) onReport;
   bool? shareSuccess;
   TwitterPostCard({
     super.key,
     this.isLiked = false,
     this.shareSuccess = false,
+    this.fromProfile = false,
     required this.post,
     required this.onReact,
     required this.showPostComments,
     required this.onShare,
     required this.getPost,
-    required this.onReport, required this.deletePost, required this.hidePost,
+    required this.onReport,
+    required this.deletePost,
+    required this.hidePost, required this.onDeleteComment, required this.onEditComment,
   });
 
   @override
@@ -73,7 +79,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
   Widget build(BuildContext context) {
     bool isShared = widget.post.isShared!;
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration:  BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
       child: Container(
         padding: EdgeInsets.all(isShared == true ? 10 : 0),
         decoration: const BoxDecoration(color: Colors.white),
@@ -96,21 +102,23 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InkWell(
-                    onTap: () {
+                    onTap: widget.post.isShared == true
+                        ? () {
+                            print("objectH");
+                            // context.push(Routes.TWITTERPOSTDETAILS,extra: widget.post.mainPost.id);
 
-                        print("objectH");
-                        // context.push(Routes.TWITTERPOSTDETAILS,extra: widget.post.mainPost.id);
-
-                        bottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            widget: TwitterPostDetails(
-                              postId:isShared == true? widget.post.mainPost.id:widget.post.id,
-                              showPostComments: (id) {},
-                              onReport: (TwitterReportParams params) {},
-                            ));
-
-                    },
+                            bottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                widget: TwitterPostDetails(
+                                  postId: isShared == true
+                                      ? widget.post.mainPost.id
+                                      : widget.post.id,
+                                  showPostComments: (id) {},
+                                  onReport: (TwitterReportParams params) {},
+                                ));
+                          }
+                        : null,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -119,7 +127,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                             showOptions: false,
                             post: widget.post,
                             date: widget.post.isShared == true
-                                ? widget.post.mainPost?.sinceTime??''
+                                ? widget.post.mainPost?.sinceTime ?? ''
                                 : widget.post.sinceTime),
                         const SizedBox(
                           height: 10,
@@ -255,95 +263,81 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
     String? label,
     String? image,
   }) {
+    var myImages=widget.post.isShared==true?widget.post.mainPost.images:widget.post.images;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (label != null) ReadMoreLabel(text: label),
         const Sizer(),
-        if ((widget.post.images?.isNotEmpty ?? false))
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.42,
-            child: GridView.builder(
-                padding: const EdgeInsets.all(10),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: widget.post.images!.length == 1 ? 1 : 2),
-                itemCount: widget.post.images!.length < 4
-                    ? widget.post.images!.length
-                    : 4,
-                itemBuilder: (context, index) => InkWell(
-                      onTap: () {
-                        if (index != 3 ||
-                            (index == 3 && widget.post.images!.length == 4)) {
-                          showDialog(
-                              context: context,
-                              builder: (context) => ImageDetailsScreen(
-                                    image: widget.post.images![index],
-                                    fromPost: true,
-                                    onRemoveImage: () {
-                                      // controller
-                                      //     .removePhoto(post.images![index]);
-                                      context.pop();
-                                    },
-                                  ));
-                        } else {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return ShowPostsImages(
-                                  images: widget.post.images ?? [],
-                                  onRemoveImage: (UploadFileEntity image) {
-                                    // controller.removePhoto(image);
-                                  },
-                                );
-                              });
-                        }
-                      },
-                      child: Stack(
-                        children: [
-                          Stack(
-                            children: [
-                              ImageFromInternet(image: widget.post.images?[index]??'',),
-                              if (index == 3 && widget.post.images!.length > 4)
-                                Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    // borderRadius: BorderRadius.circular(15),
-                                    color: Colors.black.withOpacity(0.5),
-                                  ),
-                                  child: Center(
-                                    child: Label(
-                                      text:
-                                          "+${widget.post.images!.length - 4}",
-                                      style: Styles.headerText(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ],
+        if (myImages!.isNotEmpty)
+          GridView.builder(
+            padding: const EdgeInsets.all(10),
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: myImages.length == 1 ? 1 : 2),
+            itemCount: myImages.length < 4
+                ? myImages.length
+                : 4,
+            itemBuilder: (context, index) => InkWell(
+              onTap: () {
+                if (index != 3 ||
+                    (index == 3 && myImages!.length == 4)) {
+                  showDialog(
+                      context: context,
+                      builder: (context) => ImageDetailsScreen(
+                            image: myImages![index],
+                            fromPost: true,
+                            onRemoveImage: () {
+                              // controller
+                              //     .removePhoto(post.images![index]);
+                              context.pop();
+                            },
+                          ));
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return ShowPostsImages(
+                          images: myImages ?? [],
+                          onRemoveImage: (UploadFileEntity image) {
+                            // controller.removePhoto(image);
+                          },
+                        );
+                      });
+                }
+              },
+              child: Stack(
+                children: [
+                  Stack(
+                    children: [
+                      ImageFromInternet(
+                        image: myImages?[index] ?? '',
                       ),
-                    ),),
-          ),
-        if (image != '')
-          Container(
-            height: 200,
-            width: double.infinity,
-            decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    spreadRadius: 12,
-                    blurRadius: 8,
+                      if (index == 3 && myImages!.length > 4)
+                        Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            // borderRadius: BorderRadius.circular(15),
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                          child: Center(
+                            child: Label(
+                              text: "+${myImages!.length - 4}",
+                              style: Styles.headerText(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ],
-                borderRadius: BorderRadius.circular(25),
-                image: DecorationImage(
-                    image: NetworkImage(image!), fit: BoxFit.fill)),
+              ),
+            ),
           ),
+
+
       ],
     );
   }
@@ -358,16 +352,24 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
     return Row(
       children: [
         post.user.image != ''
-            ? ProfileImage(
+            ? UserProfileImage(
                 accountId: 0,
                 imageURL: post.user.image,
+                fromProfile: widget.fromProfile,
+                userId: post.user.id,
               )
-            : const ProfileImage(accountId: 0),
+            : UserProfileImage(
+                accountId: 0,
+                fromProfile: widget.fromProfile,
+                userId: post.user.id,
+              ),
         const Sizer(),
         Label(
             text: "${post.user.firstName} ${post.user.lastName}",
             style: Styles.mediumText(fontWeight: FontWeight.w500)),
-         Sizer(width: 4,),
+        Sizer(
+          width: 4,
+        ),
         if (post.user.isDocumented == true)
           const Icon(
             Icons.verified,
@@ -379,9 +381,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               text: '@${post.user.email.split('@')[0]}',
               style: Styles.mediumText(color: Colors.grey)),
         ),
-        Label(
-            text: ' . $date',
-            style: Styles.mediumText(color: Colors.grey)),
+        Label(text: ' . $date', style: Styles.mediumText(color: Colors.grey)),
         IconButton(
           onPressed: () {
             bottomSheet(
@@ -482,28 +482,37 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
           child: Row(
             children: [
               post.user.image != ''
-                  ? ProfileImage(accountId: 0, imageURL: post.user.image)
-                  : ProfileImage(accountId: 0),
+                  ? UserProfileImage(
+                      accountId: 0,
+                      imageURL: post.user.image,
+                      fromProfile: widget.fromProfile,
+                      userId: post.user.id,
+                    )
+                  : UserProfileImage(
+                      accountId: 0,
+                      fromProfile: widget.fromProfile,
+                      userId: post.user.id,
+                    ),
               const Sizer(),
               Label(
                   text: post.isShared == true
-                      ? post.mainPost?.user.firstName??''
+                      ? post.mainPost?.user.firstName ?? ''
                       : post.user.firstName,
                   style: Styles.mediumText(fontWeight: FontWeight.w500)),
               const Sizer(),
               if (post.user.isDocumented == true && post.isShared == false ||
                   (post.mainPost?.user.isDocumented == true &&
                       post.isShared == true))
-                const Icon(
+                 Icon(
                   Icons.verified,
-                  color: AppColors.PRIMARY_COLOR,
+                  color: Theme.of(context).primaryColor,
                 ),
               const Sizer(),
               SizedBox(
                 width: 100,
                 child: Label(
                     text:
-                        '@${(post.isShared == true&&post.mainPost!=null ? post.mainPost.user.email??'' : post.user.email).split('@')[0]} . $date',
+                        '@${(post.isShared == true && post.mainPost != null ? post.mainPost.user.email ?? '' : post.user.email).split('@')[0]} . $date',
                     maxLines: 1,
                     style: Styles.mediumText(color: Colors.grey)),
               ),
@@ -511,7 +520,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             ],
           ),
         ),
-        IconButton(
+        if(post.isShared==false)...[IconButton(
           onPressed: () {
             bottomSheet(
               context: context,
@@ -534,7 +543,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 widget:
                     _buildPostOptions(isMyPost: (post.user.id == user!.id)));
           },
-        ),
+        ),]
       ],
     );
   }

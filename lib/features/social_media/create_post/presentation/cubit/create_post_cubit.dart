@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_places_usecase.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
+import '../../../../../common/models/public/pagination_params.dart';
 import '../../domain/entities/activity_entity.dart';
 import '../../domain/entities/feeling_entity.dart';
 import '../../domain/usecases/create_post_usecase.dart';
@@ -19,12 +24,28 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   final CreateTwitterPostUseCase _createTwitterPostUseCase;
   final GetActivitiesUseCase _getActivitiesUseCase;
   final GetFeelingsUseCase _getFeelingsUseCase;
+  final FriendsFollowersUseCase _friendsFollowersUseCase;
+  final GetPlacesUseCase _getPlacesUseCase;
   final postContentTextController = TextEditingController();
   CreatePostCubit(this._createPostUseCase, this._getActivitiesUseCase,
-      this._getFeelingsUseCase, this._createTwitterPostUseCase)
+      this._getFeelingsUseCase, this._createTwitterPostUseCase, this._friendsFollowersUseCase, this._getPlacesUseCase)
       : super(const CreatePostState());
 
   List<String>? selectedImages;
+
+  // final scrollController = ScrollController();
+  //
+  // void initScroll(){
+  //   scrollController.addListener(() {
+  //     if (scrollController.position.maxScrollExtent ==
+  //         scrollController.offset &&
+  //         !state.isLast) {
+  //       getFriendsFollowers('');
+  //     }
+  //   });
+  // }
+
+
 
   void loadData() async {
     await getActivities();
@@ -55,8 +76,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
         final response = await _createTwitterPostUseCase(
             CreateTwitterPostParams(
                 content: postContentTextController.text,
-                mediaIds:
-                selectedImages??[]));
+                mediaIds: selectedImages ?? []));
         response.fold(
             (l) => emit(
                 state.copyWith(failure: l, status: CreatePostStates.error)),
@@ -71,7 +91,9 @@ class CreatePostCubit extends Cubit<CreatePostState> {
             color: state.backColor,
             activity: state.selectedActivity?.id,
             feeling: state.selectedFeeling?.id,
+            place: state.place,
             privacy: state.selectedPrivacy,
+            users: state.selectedUsers?.map((e) => e.id).toList()??[],
           ),
         );
         response.fold(
@@ -101,9 +123,10 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     emit(state.copyWith(selectedActivity: item));
   }
 
-  uploadPhoto() {
+  uploadPhoto() async {
     final UploadFile upload = UploadFile();
-    upload.uploadImage(
+    print("objectssssssssss");
+    await upload.uploadImage(
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) {
           print("file name ${data.file}");
@@ -122,10 +145,169 @@ class CreatePostCubit extends Cubit<CreatePostState> {
 
   }
 
+
   removePhoto(UploadFileEntity? image) {
     final images = state.images;
     images?.remove(image);
     emit(state.copyWith(images: images, status: CreatePostStates.success));
     // print(state.fileEntity?.mediaId);
   }
+
+  loadUsers(String search) async {
+    await getFriendsFollowers(1,search);
+    usersPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getFriendsFollowers(pageKey,search);
+    });
+  }
+
+  loadPlaces(String search) async {
+    await getPlaces(1,search);
+    usersPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getPlaces(pageKey,search);
+    });
+  }
+
+  // int pageSize = 4;
+  final PagingController<int, PostUserEntity> usersPagingController =
+ PagingController(firstPageKey: 1);
+
+  PaginationParams paginationParams = PaginationParams.basic();
+  List<PostUserEntity> usersList = [];
+
+  resetPagination(){
+    paginationParams.page= 1;
+    usersList=[];
+    emit(state.copyWith(users: [],isLast: false));
+    print("lennnnnnnnnnnng${state.users?.length}");
+  }
+
+  // Future<void> getFriendsFollowers(String search) async {
+  //   if(paginationParams.page==1){
+  //     resetPagination();
+  //   }
+  //   final response = await _friendsFollowersUseCase(
+  //       FriendsFollowersParams(search: search, limit: paginationParams.limit, page: paginationParams.page));
+  //   response.fold(
+  //           (failure) => emit(state.copyWith(
+  //           failure: failure, status: CreatePostStates.error)),
+  //           (r) {
+  //             paginationParams.page++;
+  //             usersList.addAll(r);
+  //             emit(state.copyWith(users:usersList,isLast: (r.isEmpty || r.length < paginationParams.limit)));
+  //           });
+  // }
+
+  int pageSize = 100;
+  getFriendsFollowers(int page, String search) async {
+    print("paaaaaaaaaaaaaage$page");
+    if (page == 1) {
+      usersPagingController.itemList = [];
+    }
+    final response = await _friendsFollowersUseCase(
+        FriendsFollowersParams(search: search, limit: pageSize, page: page));
+    response.fold(
+          (l) => emit(state.copyWith(failure: l, status: CreatePostStates.error)),
+          (data) {
+        final isLastPage = data.length < pageSize;
+        List<PostUserEntity> fetchUsers = [];
+        if (state.selectedUsers != null && state.selectedUsers!.isNotEmpty) {
+          fetchUsers.clear();
+          print("ssssssssssssssssssssssssssssssssssssssssssss");
+            fetchUsers = data.map((item) {
+              var isSelected = state.selectedUsers!.any((selected) => item.id == selected.id);
+
+              if (isSelected) {
+                item.isSelected = true;
+              }
+
+              return item;
+            }).toList();
+        } else {
+          fetchUsers.clear();
+          fetchUsers = data;
+        }
+        if (isLastPage) {
+          usersPagingController.appendLastPage(fetchUsers);
+        } else {
+          final nextPageKey = page + 1;
+          usersPagingController.appendPage(fetchUsers, nextPageKey);
+        }
+        emit(state.copyWith(status: CreatePostStates.success));
+      },
+    );
+  }
+
+
+  final PagingController<int, PlaceEntity> placesPagingController =
+  PagingController(firstPageKey: 1);
+  Future<void>  getPlaces(int page,String search) async {
+    // emit(state.copyWith(status: St))
+    // final user = context.read<UserCubit>().state.data;
+    final response = await _getPlacesUseCase(
+        FriendsFollowersParams(search: search, limit: pageSize, page: page));
+    response.fold(
+            (l) => emit(state.copyWith(failure: l, status: CreatePostStates.error)),
+            (data) {
+          final isLastPage = data.length < pageSize;
+          if (page == 1) {
+            print("page == 1 $page");
+            placesPagingController.itemList = [];
+          }
+          if (isLastPage) {
+            print("isLastPage = $isLastPage");
+            // List<PlaceEntity> fetchUsers=[];
+              placesPagingController.appendLastPage(data);
+          } else {
+            print("isNotLastPage = $isLastPage");
+            final nextPageKey = page + 1;
+            placesPagingController.appendPage(data,nextPageKey);
+          }
+          emit(state.copyWith(status: CreatePostStates.success));
+        });
+  }
+  onSelectPlace(PlaceEntity place){
+    emit(state.copyWith(place: place,status: CreatePostStates.success));
+    print(state.place?.name);
+  }
+
+
+
+  onRemovePlace(){
+    emit(state.copyWith(place: PlaceEntity(formattedAddress: '', name: '', lat: 0.0, lng: 0.0),status: CreatePostStates.success));
+  }
+
+
+  onRemoveFeeling(){
+    emit(state.copyWith(selectedFeeling: FeelingEntity(name: '',image: '',id: ''),status: CreatePostStates.success));
+  }
+
+  onRemoveActivity(){
+    emit(state.copyWith(selectedActivity: ActivityEntity(name: '',image: '',id: ''),status: CreatePostStates.success));
+  }
+
+  onRemoveUser(PostUserEntity user){
+    List<PostUserEntity> newUsers = [];
+    if(state.selectedUsers!=null&&state.selectedUsers!.isNotEmpty){
+      newUsers.addAll(state.selectedUsers!);
+      newUsers.removeWhere((e)=>e.id==user.id);
+    }
+    emit(state.copyWith(selectedUsers: newUsers,status: CreatePostStates.success));
+  }
+  selectUsers(PostUserEntity user){
+    print(user.isSelected);
+    List<PostUserEntity> users=[];
+    if(state.selectedUsers!=null){
+      users.addAll(state.selectedUsers!);
+    }
+    if(user.isSelected==false){
+      users.add(user);
+    }else{
+      users.removeWhere((e)=>e.id==user.id);
+    }
+    print(users.length);
+    emit(state.copyWith(selectedUsers: users,status: CreatePostStates.success,),);
+  }
+
 }

@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card_selected.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 
@@ -29,9 +30,7 @@ class CreateShippingView extends StatefulWidget {
   State<CreateShippingView> createState() => _CreateShippingViewState();
 }
 
-
 class _CreateShippingViewState extends State<CreateShippingView> {
-
   TextEditingController receiptPoint = TextEditingController();
   TextEditingController deliveryPoint = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey();
@@ -64,7 +63,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   },
                 ),
                 const Sizer(),
-                 const DashboardBanner(
+                const DashboardBanner(
                   title: Labels.driverDashboard,
                   subTitle: Labels.driverDashboardBannerDiscription,
                   route: Routes.DOCTORDASHBOARD,
@@ -121,7 +120,9 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                               if (field.hasError)
                                 Column(
                                   children: [
-                                    const SizedBox(height: 8,),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
                                     Text(
                                       field.errorText ?? "",
                                       style:
@@ -198,11 +199,17 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   minLines: 6,
                   maxLines: 6,
                   maxLength: 100,
+                  style: const TextStyle(
+                    color: AppColors.QUANTITY_COLOR
+                  ),
                   decoration: InputDecoration(
+                      fillColor: AppColors.AUTH_CONTAINER_COLOR,
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                          borderRadius: BorderRadius.circular(12),
+                      ),
                       enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                          borderRadius: BorderRadius.circular(12),
+                      ),
                       disabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12)),
                       focusedErrorBorder: OutlineInputBorder(
@@ -210,7 +217,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12)),
                       hintText: Labels.description,
-                      hintStyle: const TextStyle(fontSize: 12)),
+                      hintStyle: const TextStyle(fontSize: 12,color: AppColors.QUANTITY_COLOR)),
                 ),
                 const SizedBox(
                   height: 20,
@@ -260,7 +267,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       height: 25,
                     )),
                     const SizedBox(width: 10),
-                     const Flexible(
+                    const Flexible(
                         flex: 3,
                         child: Text(Labels.theApplicationDoesNot,
                             textAlign: TextAlign.start,
@@ -280,7 +287,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       width: 25,
                       height: 25,
                     )),
-                const SizedBox(width: 10),
+                    const SizedBox(width: 10),
 
                     // const Gap(10),
                     const Flexible(
@@ -306,7 +313,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       height: 25,
                     )),
                     // const Gap(10),
-                const SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     const Flexible(
                       flex: 3,
                       child: Text(
@@ -332,7 +339,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                           onPressed: () {}),
                     ),
                     // const Gap(6),
-                const SizedBox(width: 6),
+                    const SizedBox(width: 6),
                     Flexible(
                       child: AppButton(
                           height: 60,
@@ -341,7 +348,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                           style: Styles.headerText(color: Colors.white),
                           onPressed: () async {
                             // String token = ApiConsumer().attachToken(token)
-    // log(token, name: "Token");
+                            // log(token, name: "Token");
 
                             // if (formKey.currentState!.validate()) {}
                           }),

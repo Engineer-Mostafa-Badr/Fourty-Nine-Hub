@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../zego_uikit_prebuilt_live_streaming.dart';
 import '../core/core_managers.dart';
-import '../minimizing/defines.dart';
 import '../minimizing/overlay_machine.dart';
 import 'private/minimize.dart';
 

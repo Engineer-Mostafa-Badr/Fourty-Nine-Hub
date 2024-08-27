@@ -24,7 +24,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.white,
+            color: Theme.of(context).primaryColor,
           ),
           child: Row(
             children: [
@@ -41,6 +41,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                     return _Item(
                       numerOfDays: days,
                       label: Labels.subscription,
+                      onTap: () {},
                     );
                   },
                 ),
@@ -58,7 +59,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                     }
                     return _Item(
                       numerOfDays: days,
-                      label: Labels.id,
+                      label: Labels.id, onTap: () {},
                       // onTap: () => context.push(Routes.EDITDOCTORDOCS),
                     );
                   },
@@ -77,7 +78,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                     }
                     return _Item(
                       numerOfDays: days,
-                      label: Labels.practiceCertification,
+                      label: Labels.practiceCertification, onTap: () {},
                       // onTap: () => context.push(Routes.EDITDOCTORDOCS),
                     );
                   },
@@ -94,13 +95,19 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
 class _Item extends StatelessWidget {
   final String numerOfDays;
   final String label;
-  final Function()? onTap;
-  const _Item({required this.numerOfDays, required this.label, this.onTap});
+  final Function onTap;
+  const _Item({
+    required this.numerOfDays,
+    required this.label,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: () {
+        onTap();
+      },
       child: Column(
         children: [
           Label(
@@ -109,7 +116,8 @@ class _Item extends StatelessWidget {
           ),
           Label(
             text: label,
-            style: Styles.mediumText(),
+            style: Styles.mediumText(
+                color: Theme.of(context).scaffoldBackgroundColor),
           ),
         ],
       ),

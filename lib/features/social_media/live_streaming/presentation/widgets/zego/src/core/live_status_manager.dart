@@ -14,6 +14,7 @@ import '../events.dart';
 import '../internal/defines.dart';
 import 'connect_manager.dart';
 import 'host_manager.dart';
+
 /// @nodoc
 class ZegoLiveStreamingStatusManager {
   ZegoLiveStreamingConnectManager? connectManager;

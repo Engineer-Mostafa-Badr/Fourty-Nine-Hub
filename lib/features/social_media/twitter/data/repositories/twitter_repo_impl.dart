@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
@@ -21,12 +20,14 @@ class TwitterRepoImpl implements TwitterRepo {
   final TwitterRemoteDataSource _remoteDataSource;
   TwitterRepoImpl(this._remoteDataSource);
   @override
-  Future<Either<Failure, List<TwitterPostEntity>>> getFeed({required TwitterFeedParams params}) {
+  Future<Either<Failure, List<TwitterPostEntity>>> getFeed(
+      {required TwitterFeedParams params}) {
     return _remoteDataSource.getFeed(params: params);
   }
 
   @override
-  Future<Either<Failure, TwitterPostEntity>> getTwitterPost({required String postId}) {
+  Future<Either<Failure, TwitterPostEntity>> getTwitterPost(
+      {required String postId}) {
     return _remoteDataSource.getTwitterPost(postId: postId);
   }
 
@@ -37,18 +38,20 @@ class TwitterRepoImpl implements TwitterRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> reactOnPost({required TwitterPostReactParams params}) {
+  Future<Either<Failure, bool>> reactOnPost(
+      {required TwitterPostReactParams params}) {
     return _remoteDataSource.reactOnPost(params: params);
   }
 
   @override
-  Future<Either<Failure, bool>> reactOnComment({required TwitterCommentReactParams params}) {
+  Future<Either<Failure, bool>> reactOnComment(
+      {required TwitterCommentReactParams params}) {
     return _remoteDataSource.reactOnComment(params: params);
   }
 
   @override
   Future<Either<Failure, bool>> sharePost({required String postId}) {
-    return _remoteDataSource.sharePost( params: postId);
+    return _remoteDataSource.sharePost(params: postId);
   }
 
   @override
@@ -69,7 +72,6 @@ class TwitterRepoImpl implements TwitterRepo {
     return _remoteDataSource.getPostComments(params: params);
   }
 
-
   @override
   Future<Either<Failure, bool>> deletePost({required String postId}) {
     return _remoteDataSource.deletePost(postId: postId);
@@ -81,22 +83,30 @@ class TwitterRepoImpl implements TwitterRepo {
   }
 
   @override
-  Future<Either<Failure, List<TwitterCommentReplyEntity>>> getCommentReplies({required PostCommentsParams params}) {
+  Future<Either<Failure, List<TwitterCommentReplyEntity>>> getCommentReplies(
+      {required PostCommentsParams params}) {
     return _remoteDataSource.getCommentReplies(params: params);
   }
 
   @override
-  Future<Either<Failure, bool>> addReport({required TwitterReportParams params}) {
+  Future<Either<Failure, bool>> addReport(
+      {required TwitterReportParams params}) {
     return _remoteDataSource.addReport(params: params);
   }
 
   @override
-  Future<Either<Failure, bool>> requestDocument({required TwitterDocumentationParams params}) {
+  Future<Either<Failure, bool>> requestDocument(
+      {required TwitterDocumentationParams params}) {
     return _remoteDataSource.requestDocument(params: params);
-
   }
 
+  @override
+  Future<Either<Failure, bool>> deleteComment({required String commentId}) {
+    return _remoteDataSource.deleteComment(commentId: commentId);
+  }
 
-
-
+  @override
+  Future<Either<Failure, bool>> editComment({required TwitterPostCommentParams params}) {
+    return _remoteDataSource.editComment(params: params);
+  }
 }

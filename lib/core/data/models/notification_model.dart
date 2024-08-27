@@ -1,224 +1,138 @@
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
-
 class NotificationModel {
-  List<Data>? data;
-  int? statusCode;
-  String? message;
-  bool? isSuccess;
-  List<dynamic>? errors;
+  final bool? status;
+  final String? message;
+  final NotificationData? data;
+
   NotificationModel({
-    this.data,
-    this.statusCode,
+    this.status,
     this.message,
-    this.isSuccess,
-    this.errors,
+    this.data,
   });
 
-  NotificationModel copyWith({
-    List<Data>? data,
-    int? statusCode,
-    String? message,
-    bool? isSuccess,
-    List<dynamic>? errors,
-  }) {
+  factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
-      data: data ?? this.data,
-      statusCode: statusCode ?? this.statusCode,
-      message: message ?? this.message,
-      isSuccess: isSuccess ?? this.isSuccess,
-      errors: errors ?? this.errors,
+      status: json['status'] as bool?,
+      message: json['message'] as String?,
+      data: json['data'] != null ? NotificationData.fromJson(json['data']) : null,
     );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'Data': data?.map((x) => x.toMap()).toList(),
-      'StatusCode': statusCode,
-      'Message': message,
-      'IsSuccess': isSuccess,
-      'Errors': errors,
-    };
-  }
-
-  factory NotificationModel.fromMap(Map<String, dynamic> map) {
-    return NotificationModel(
-      data: map['Data'] != null
-          ? List<Data>.from(map['Data']?.map((x) => Data.fromMap(x)))
-          : null,
-      statusCode: map['StatusCode']?.toInt(),
-      message: map['Message'],
-      isSuccess: map['IsSuccess'],
-      errors: List<dynamic>.from(map['Errors']),
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory NotificationModel.fromJson(String source) =>
-      NotificationModel.fromMap(json.decode(source));
-
-  @override
-  String toString() {
-    return 'NotificationModel(data: $data, statusCode: $statusCode, message: $message, isSuccess: $isSuccess, errors: $errors)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is NotificationModel &&
-        listEquals(other.data, data) &&
-        other.statusCode == statusCode &&
-        other.message == message &&
-        other.isSuccess == isSuccess &&
-        listEquals(other.errors, errors);
-  }
-
-  @override
-  int get hashCode {
-    return data.hashCode ^
-        statusCode.hashCode ^
-        message.hashCode ^
-        isSuccess.hashCode ^
-        errors.hashCode;
   }
 }
 
-class Data {
-  int? customerId;
-  String? title;
-  String? body;
-  String? image;
-  dynamic notificationType;
-  dynamic link;
-  dynamic code;
-  dynamic extraData;
-  String? data;
-  String? platForm;
-  String? onDateTime;
-  int? id;
-  Data({
-    this.customerId,
-    this.title,
-    this.body,
-    this.image,
-    required this.notificationType,
-    required this.link,
-    required this.code,
-    required this.extraData,
-    this.data,
-    this.platForm,
-    this.onDateTime,
-    this.id,
+class NotificationData {
+  final List<NotificationDoc>? docs;
+  final int? totalDocs;
+  final int? limit;
+  final int? totalPages;
+  final int? page;
+  final int? pagingCounter;
+  final bool? hasPrevPage;
+  final bool? hasNextPage;
+  final int? prevPage;
+  final int? nextPage;
+
+  NotificationData({
+    this.docs,
+    this.totalDocs,
+    this.limit,
+    this.totalPages,
+    this.page,
+    this.pagingCounter,
+    this.hasPrevPage,
+    this.hasNextPage,
+    this.prevPage,
+    this.nextPage,
   });
 
-  Data copyWith({
-    int? customerId,
-    String? title,
-    String? body,
-    String? image,
-    dynamic notificationType,
-    dynamic link,
-    dynamic code,
-    dynamic extraData,
-    String? data,
-    String? platForm,
-    String? onDateTime,
-    int? id,
-  }) {
-    return Data(
-      customerId: customerId ?? this.customerId,
-      title: title ?? this.title,
-      body: body ?? this.body,
-      image: image ?? this.image,
-      notificationType: notificationType ?? this.notificationType,
-      link: link ?? this.link,
-      code: code ?? this.code,
-      extraData: extraData ?? this.extraData,
-      data: data ?? this.data,
-      platForm: platForm ?? this.platForm,
-      onDateTime: onDateTime ?? this.onDateTime,
-      id: id ?? this.id,
+  factory NotificationData.fromJson(Map<String, dynamic> json) {
+    return NotificationData(
+      docs: json['docs'] != null
+          ? (json['docs'] as List).map((doc) => NotificationDoc.fromJson(doc)).toList()
+          : null,
+      totalDocs: json['totalDocs'] as int?,
+      limit: json['limit'] as int?,
+      totalPages: json['totalPages'] as int?,
+      page: json['page'] as int?,
+      pagingCounter: json['pagingCounter'] as int?,
+      hasPrevPage: json['hasPrevPage'] as bool?,
+      hasNextPage: json['hasNextPage'] as bool?,
+      prevPage: json['prevPage'] as int?,
+      nextPage: json['nextPage'] as int?,
     );
   }
+}
 
-  Map<String, dynamic> toMap() {
-    return {
-      'CustomerId': customerId,
-      'Title': title,
-      'Body': body,
-      'Image': image,
-      'NotificationType': notificationType,
-      'Link': link,
-      'Code': code,
-      'ExtraData': extraData,
-      'Data': data,
-      'PlatForm': platForm,
-      'OnDateTime': onDateTime,
-      'Id': id,
-    };
-  }
+class NotificationDoc {
+  final String? id;
+  final String? userId;
+  final ReceiverId? receiverId;
+  final String? filterType;
+  final String? subcategoryId;
+  final String? mainCategoryId;
+  final bool? read;
+  final String? itemId;
+  final String? titleTranslationCode;
+  final String? bodyTranslationCode;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final int? v;
 
-  factory Data.fromMap(Map<String, dynamic> map) {
-    return Data(
-      customerId: map['CustomerId']?.toInt(),
-      title: map['Title'],
-      body: map['Body'],
-      image: map['Image'],
-      notificationType: map['NotificationType'],
-      link: map['Link'],
-      code: map['Code'],
-      extraData: map['ExtraData'],
-      data: map['Data'],
-      platForm: map['PlatForm'],
-      onDateTime: map['OnDateTime'],
-      id: map['Id']?.toInt(),
+  NotificationDoc({
+    this.id,
+    this.userId,
+    this.receiverId,
+    this.filterType,
+    this.subcategoryId,
+    this.mainCategoryId,
+    this.read,
+    this.itemId,
+    this.titleTranslationCode,
+    this.bodyTranslationCode,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
+  });
+
+  factory NotificationDoc.fromJson(Map<String, dynamic> json) {
+    return NotificationDoc(
+      id: json['_id'] as String?,
+      userId: json['userId'] as String?,
+      receiverId: json['receiverId'] != null
+          ? ReceiverId.fromJson(json['receiverId'])
+          : null,
+      filterType: json['filterType'] as String?,
+      subcategoryId: json['subcategoryId'] as String?,
+      mainCategoryId: json['mainCategoryId'] as String?,
+      read: json['read'] as bool?,
+      itemId: json['itemId'] as String?,
+      titleTranslationCode: json['titleTranslationCode'] as String?,
+      bodyTranslationCode: json['bodyTranslationCode'] as String?,
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'])
+          : null,
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'])
+          : null,
+      v: json['__v'] as int?,
     );
   }
+}
 
-  String toJson() => json.encode(toMap());
+class ReceiverId {
+  final String? id;
+  final String? firstName;
+  final String? lastName;
 
-  factory Data.fromJson(String source) => Data.fromMap(json.decode(source));
+  ReceiverId({
+    this.id,
+    this.firstName,
+    this.lastName,
+  });
 
-  @override
-  String toString() {
-    return 'Data(customerId: $customerId, title: $title, body: $body, image: $image, notificationType: $notificationType, link: $link, code: $code, extraData: $extraData, data: $data, platForm: $platForm, onDateTime: $onDateTime, id: $id)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is Data &&
-        other.customerId == customerId &&
-        other.title == title &&
-        other.body == body &&
-        other.image == image &&
-        other.notificationType == notificationType &&
-        other.link == link &&
-        other.code == code &&
-        other.extraData == extraData &&
-        other.data == data &&
-        other.platForm == platForm &&
-        other.onDateTime == onDateTime &&
-        other.id == id;
-  }
-
-  @override
-  int get hashCode {
-    return customerId.hashCode ^
-        title.hashCode ^
-        body.hashCode ^
-        image.hashCode ^
-        notificationType.hashCode ^
-        link.hashCode ^
-        code.hashCode ^
-        extraData.hashCode ^
-        data.hashCode ^
-        platForm.hashCode ^
-        onDateTime.hashCode ^
-        id.hashCode;
+  factory ReceiverId.fromJson(Map<String, dynamic> json) {
+    return ReceiverId(
+      id: json['_id'] as String?,
+      firstName: json['firstName'] as String?,
+      lastName: json['lastName'] as String?,
+    );
   }
 }

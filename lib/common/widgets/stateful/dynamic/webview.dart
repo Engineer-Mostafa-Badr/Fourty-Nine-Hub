@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import '../banners/back_appbar.dart';
 
 class WebViewScaffold extends StatefulWidget {
   final String url;
@@ -14,10 +16,10 @@ class WebViewScaffold extends StatefulWidget {
 class _WebViewWidgetState extends State<WebViewScaffold> {
   late WebViewController controller;
   @override
-  void initState() {
+  void didChangeDependencies() {
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0x00000000))
+      ..setBackgroundColor(context.theme.scaffoldBackgroundColor)
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {},
@@ -31,7 +33,7 @@ class _WebViewWidgetState extends State<WebViewScaffold> {
         ),
       )
       ..loadRequest(Uri.parse(widget.url));
-    super.initState();
+    super.didChangeDependencies();
   }
 
   @override

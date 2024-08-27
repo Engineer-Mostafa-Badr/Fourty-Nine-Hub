@@ -4,11 +4,11 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 
-
 class InstagramReelCard extends StatefulWidget {
   final PostEntity item;
+  final bool? playVideo;
 
-  const InstagramReelCard({super.key, required this.item});
+  const InstagramReelCard({super.key, required this.item, this.playVideo=false});
 
   @override
   State<InstagramReelCard> createState() => _InstagramReelCardState();
@@ -22,7 +22,7 @@ class _InstagramReelCardState extends State<InstagramReelCard> {
     super.initState();
     _controller = VideoPlayerController.networkUrl(
       Uri.parse(
-        widget.item.videoMedia??'',
+        widget.item.videoMedia ?? '',
       ),
       videoPlayerOptions: VideoPlayerOptions(
         mixWithOthers: true,
@@ -35,7 +35,7 @@ class _InstagramReelCardState extends State<InstagramReelCard> {
 
     // _controller!.setLooping(true);
     _controller!.initialize();
-    _controller!.play();
+    if(widget.playVideo==true)_controller!.play();
   }
 
   @override
@@ -54,11 +54,11 @@ class _InstagramReelCardState extends State<InstagramReelCard> {
             child: _controller == null
                 ? const SizedBox.shrink()
                 : AspectRatio(
-              aspectRatio: _controller!.value.aspectRatio,
-              child: VideoPlayer(
-                _controller!,
-              ),
-            ),
+                    aspectRatio: _controller!.value.aspectRatio,
+                    child: VideoPlayer(
+                      _controller!,
+                    ),
+                  ),
           ),
         ),
         if (_controller?.value.caption.text != null) ...[
@@ -112,22 +112,22 @@ class _ControlsOverlay extends StatelessWidget {
           child: controller.value.isPlaying
               ? const SizedBox.shrink()
               : const ColoredBox(
-            color: Colors.black26,
-            child: Center(
-              child: Icon(
-                Icons.play_arrow,
-                color: Colors.white,
-                size: 100.0,
-                semanticLabel: 'Play',
-              ),
-            ),
-          ),
+                  color: Colors.black26,
+                  child: Center(
+                    child: Icon(
+                      Icons.play_arrow,
+                      color: Colors.white,
+                      size: 100.0,
+                      semanticLabel: 'Play',
+                    ),
+                  ),
+                ),
         ),
         GestureDetector(
           onTap: () {
-            if(controller.value.isPlaying){
+            if (controller.value.isPlaying) {
               controller.pause();
-            }else{
+            } else {
               context.push(Routes.REELS);
               // controller.play();
             }

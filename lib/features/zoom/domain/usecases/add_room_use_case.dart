@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
@@ -5,7 +6,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 
 import '../repositories/meeting_repository.dart';
 
-class AddRoomUseCase extends UseCase<void,MeetingParams>{
+class AddRoomUseCase extends UseCase<void, MeetingParams> {
   final MeetingRepository repository;
 
   AddRoomUseCase(this.repository);
@@ -13,28 +14,32 @@ class AddRoomUseCase extends UseCase<void,MeetingParams>{
   Future<Either<Failure, void>> call(MeetingParams params) {
     return repository.addRoom(params);
   }
-
 }
 
-
-
-
-
-
-
 class MeetingParams extends Equatable {
-  final String id;
-
+  final String meetingId;
+  final DateTime? startedAt;
+  final DateTime? endsAt;
+  final String? title;
   const MeetingParams({
-    required this.id,
+    required this.meetingId,
+    this.startedAt,
+    this.endsAt,
+    this.title,
   });
   //post method data
   Map<String, dynamic> toJson() => {
-        'roomId': id,
+        'roomId': meetingId,
+        'title': title,
+        'startDate': startedAt?.toUtc().toIso8601String(),
+        'endDate': endsAt?.toUtc().toIso8601String(),
       };
 
   @override
   List<Object?> get props => [
-        id,
+        meetingId,
+        startedAt,
+        endsAt,
+        title,
       ];
 }

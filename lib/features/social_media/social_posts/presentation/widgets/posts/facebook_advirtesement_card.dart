@@ -22,7 +22,7 @@ class FacebookAdvertisementCard extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height*0.42,
+            height: MediaQuery.of(context).size.height * 0.42,
             child: GridView.builder(
                 padding: const EdgeInsets.all(10),
                 shrinkWrap: true,
@@ -60,7 +60,10 @@ class FacebookAdvertisementCard extends StatelessWidget {
                       },
                       child: Stack(
                         children: [
-                          ImageFromInternet(image: post.images?[index] ?? '',borderRadius: BorderRadius.circular(15),),
+                          ImageFromInternet(
+                            image: post.images?[index] ?? '',
+                            borderRadius: BorderRadius.circular(15),
+                          ),
 
                           // Container(
                           //   margin: const EdgeInsetsDirectional.only(

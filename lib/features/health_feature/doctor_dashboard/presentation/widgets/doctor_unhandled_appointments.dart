@@ -31,7 +31,7 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.white,
+            color: Theme.of(context).primaryColor,
           ),
           child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
             builder: (context, state) {
@@ -67,7 +67,8 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
                 return Center(
                     child: Text(
                   'No Appointments',
-                  style: Styles.headerText(),
+                  style: Styles.headerText(
+                      color: Theme.of(context).scaffoldBackgroundColor),
                 ));
               }
             },

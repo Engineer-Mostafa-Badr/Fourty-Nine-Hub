@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 
 import 'package:fourtyninehub/features/mazadat_feature/auction_details/domain/usecases/send_bidding_usecase.dart';
@@ -61,10 +61,12 @@ class _MazadDetailsState extends State<MazadDetails> {
               ? AppButton(
                   margin: 10,
                   label: Labels.endAuction,
+                  color: AppColors.AUTH_CONTAINER_COLOR,
                   onPressed: () => controller.endAuction(id: widget.id))
               : ((state.auction?.isMine ?? false) &&
                       (state.auction?.isFinished ?? false))
                   ? AppButton(
+                      color: AppColors.AUTH_CONTAINER_COLOR,
                       margin: 10,
                       label: Labels.biddings,
                       onPressed: () {
@@ -72,6 +74,7 @@ class _MazadDetailsState extends State<MazadDetails> {
                             id: widget.id, context: context);
                       })
                   : AppButton(
+                      color: AppColors.AUTH_CONTAINER_COLOR,
                       margin: 10,
                       label: Labels.placeBidding,
                       onPressed: () {
@@ -124,12 +127,20 @@ class _MazadDetailsState extends State<MazadDetails> {
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 decoration: BoxDecoration(
                     color: index.isEven
-                        ? AppColors.LIGHT_GRAY_COLOR
-                        : Colors.white),
+                        ? AppColors.AUTH_CONTAINER_COLOR
+                        : AppColors.AUTH_CONTAINER_COLOR),
                 child: Row(
                   children: [
-                    Expanded(child: Label(text: detail.label)),
-                    Expanded(child: Label(text: detail.value)),
+                    Expanded(
+                        child: Label(
+                      text: detail.label,
+                      color: AppColors.QUANTITY_COLOR,
+                    )),
+                    Expanded(
+                        child: Label(
+                      text: detail.value,
+                      color: AppColors.QUANTITY_COLOR,
+                    )),
                   ],
                 ),
               );

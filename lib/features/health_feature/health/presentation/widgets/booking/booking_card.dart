@@ -33,7 +33,7 @@ class HealthBookingCard extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
+          color: Theme.of(context).scaffoldBackgroundColor,
           boxShadow: AppColors.SHADOW,
         ),
         child: Column(
@@ -44,7 +44,8 @@ class HealthBookingCard extends StatelessWidget {
               child: Label(
                   text:
                       '${appointment.bookingType.translatedName} ${Labels.booking}: ${appointment.day} - ${appointment.time}',
-                  style: Styles.mediumText()),
+                  style:
+                      Styles.mediumText(color: Theme.of(context).primaryColor)),
             ),
             const Divider(
               color: AppColors.DARK_GRAY_COLOR,
@@ -64,7 +65,8 @@ class HealthBookingCard extends StatelessWidget {
                     children: [
                       Label(
                           text: appointment.doctor.fullName,
-                          style: Styles.mediumText()),
+                          style: Styles.mediumText(
+                              color: Theme.of(context).primaryColor)),
                       Label(
                           text: appointment.doctor.description,
                           style: Styles.mediumText(

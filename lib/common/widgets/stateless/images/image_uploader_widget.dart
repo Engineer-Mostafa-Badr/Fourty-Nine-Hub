@@ -1,15 +1,13 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ImageUploaderWidget extends StatefulWidget {
   final String? tilte;
   final double? height;
   final double? width;
-  final XFile? image;
+  final Widget? image;
   final String subCategoryId;
   final Function(UploadFileEntity)? onUploaded;
   const ImageUploaderWidget({
@@ -27,7 +25,7 @@ class ImageUploaderWidget extends StatefulWidget {
 }
 
 class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
-  late XFile? _image;
+  late Widget? _image;
   @override
   void initState() {
     _image = widget.image;
@@ -42,7 +40,7 @@ class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
           subCategoryId: widget.subCategoryId,
           onUploaded: (value) {
             setState(() {
-              _image = XFile(value.file.path);
+              _image = Image.file(File(value.file.path));
             });
             widget.onUploaded?.call(value);
           },

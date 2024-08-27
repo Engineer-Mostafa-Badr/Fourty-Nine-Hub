@@ -26,7 +26,7 @@ class ElevatedAppButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: () => onPressed(),
       style: ElevatedButton.styleFrom(
-        backgroundColor: backColor ?? AppColors.PRIMARY_COLOR,
+        backgroundColor: backColor ?? Theme.of(context).primaryColor,
       ),
       child: icon != null
           ? RichText(
@@ -38,12 +38,16 @@ class ElevatedAppButton extends StatelessWidget {
                 )),
                 TextSpan(
                     text: label,
-                    style: textStyle ?? Styles.mediumText(color: Colors.white))
+                    style: textStyle ??
+                        Styles.mediumText(
+                            color: Theme.of(context).scaffoldBackgroundColor))
               ]),
             )
           : Label(
               text: label,
-              style: textStyle ?? Styles.mediumText(color: Colors.white)),
+              style: textStyle ??
+                  Styles.mediumText(
+                      color: Theme.of(context).scaffoldBackgroundColor)),
     );
   }
 }

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../installment_list/data/models/installment_plan_model.dart';
-import '../../../installment_list/domain/entities/installment_plan_entity.dart';
 import '../../domain/usecases/create_installment_usecase.dart';
 
 part 'create_installment_state.dart';

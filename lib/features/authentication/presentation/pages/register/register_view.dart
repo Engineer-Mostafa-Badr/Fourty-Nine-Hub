@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,13 +9,13 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_for
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 
 import '../../../../../common/widgets/form/text_fields/password_text_form_field.dart';
-import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -26,9 +24,15 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../controllers/user_cubit/user_cubit.dart';
 
-class RegisterView extends StatelessWidget {
+class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
+  @override
+  State<RegisterView> createState() => _RegisterViewState();
+}
+
+class _RegisterViewState extends State<RegisterView> {
+  bool _obscureTextLogin = true;
   @override
   Widget build(BuildContext context) {
     final registerCubit = context.read<RegisterCubit>();
@@ -101,6 +105,16 @@ class RegisterView extends StatelessWidget {
                     currentFocusNode: registerCubit.passwordFocusNode,
                     currentController: registerCubit.passwordTextController,
                     nextFocusNode: registerCubit.confirmPasswordFocusNode,
+                    suffixIcon: GestureDetector(
+                      onTap: _toggleLogin,
+                      child: Icon(
+                        _obscureTextLogin
+                            ? FontAwesomeIcons.eyeSlash
+                            : FontAwesomeIcons.eye,
+                        size: 18,
+                        color: AppColors.PRIMARY_COLOR,
+                      ),
+                    ),
                     hint: 'Password',
                   ),
                   const Sizer(),
@@ -180,6 +194,8 @@ class RegisterView extends StatelessWidget {
                     children: [
                       Expanded(
                         child: AppButton(
+                          style:
+                              const TextStyle(color: AppColors.QUANTITY_COLOR),
                           label: 'Google',
                           backColor: AppColors.LIGHT_GRAY_COLOR,
                           textColor: Colors.black,
@@ -190,6 +206,8 @@ class RegisterView extends StatelessWidget {
                       const Sizer(),
                       Expanded(
                         child: AppButton(
+                          style:
+                              const TextStyle(color: AppColors.QUANTITY_COLOR),
                           label: 'Facebook',
                           backColor: AppColors.LIGHT_GRAY_COLOR,
                           textColor: Colors.black,
@@ -213,9 +231,7 @@ class RegisterView extends StatelessWidget {
                           text: "Login",
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => context.push(Routes.LOGIN),
-                          style: Styles.mediumText(
-                            color: Colors.black,
-                          ),
+                          style: Styles.mediumText(),
                         ),
                       ],
                     ),
@@ -228,4 +244,6 @@ class RegisterView extends StatelessWidget {
       ),
     );
   }
+
+  void _toggleLogin() => setState(() => _obscureTextLogin = !_obscureTextLogin);
 }

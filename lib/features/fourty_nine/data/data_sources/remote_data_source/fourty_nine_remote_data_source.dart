@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/fourty_nine/data/models/banner_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/main_category_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/parent_main_category_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
@@ -26,6 +27,7 @@ abstract class FourtyNineRemoteDataSource {
   Future<Either<Failure, bool>> addMainCategoryToFavorites(String id);
 
   Future<Either<Failure, bool>> removeMainCategoryFromFavorites(String id);
+  Future<Either<Failure, BannerModel>> getBannerById({required String id});
 }
 
 class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
@@ -100,6 +102,19 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
     return result.fold(
       (failure) => Left(failure),
       (data) => Right(data['status']),
+    );
+  }
+
+  @override
+  Future<Either<Failure, BannerModel>> getBannerById(
+      {required String id}) async {
+    final result = await _apiConsumer.get(
+      EndPoints.getBannerByID(id: id),
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) => Right(BannerModel.fromJson(
+          response['data']["mainCategory"] as Map<String, dynamic>)),
     );
   }
 }

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/competition_entity.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_competitions_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_history_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_usecase.dart';

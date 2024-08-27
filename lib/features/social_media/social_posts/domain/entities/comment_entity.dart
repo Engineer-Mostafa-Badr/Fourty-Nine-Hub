@@ -2,19 +2,22 @@ import '../../../../../core/utils/duration_helper.dart';
 
 class CommentEntity {
   final String id;
-  final String content;
+  String content;
   final String post;
   dynamic user;
   bool? isLove;
   bool? isLikes;
   bool? isWow;
+  bool? edit;
   bool? isSad;
   bool? isAngry;
+  bool? isHaha;
   num? likesCount;
   num? loveCount;
   num? wowCount;
   num? sadCount;
   num? angryCount;
+  num? hahaCount;
   num? repliesCount;
   num? totalCount;
   final DateTime createdAt;
@@ -33,6 +36,7 @@ class CommentEntity {
     this.wowCount = 0,
     this.sadCount = 0,
     this.angryCount = 0,
+    this.hahaCount = 0,
     this.repliesCount = 0,
     this.totalCount = 0,
     this.isLove = false,
@@ -40,5 +44,7 @@ class CommentEntity {
     this.isWow = false,
     this.isSad = false,
     this.isAngry = false,
+    this.isHaha = false,
+    this.edit = false,
   });
 }

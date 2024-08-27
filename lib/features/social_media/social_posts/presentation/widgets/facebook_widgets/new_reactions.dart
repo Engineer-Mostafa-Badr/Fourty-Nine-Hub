@@ -1,12 +1,14 @@
-
 import 'package:flutter/material.dart';
 
 class ReactionDemo extends StatefulWidget {
+  const ReactionDemo({super.key});
+
   @override
   _ReactionDemoState createState() => _ReactionDemoState();
 }
 
-class _ReactionDemoState extends State<ReactionDemo> with TickerProviderStateMixin {
+class _ReactionDemoState extends State<ReactionDemo>
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -15,7 +17,7 @@ class _ReactionDemoState extends State<ReactionDemo> with TickerProviderStateMix
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
     );
     _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
   }
@@ -44,12 +46,12 @@ class _ReactionDemoState extends State<ReactionDemo> with TickerProviderStateMix
             onLongPressStart: _onLongPressStart,
             onLongPressEnd: _onLongPressEnd,
             child: ListTile(
-              leading: CircleAvatar(child: Icon(Icons.person)),
+              leading: const CircleAvatar(child: Icon(Icons.person)),
               title: Text('Post $index'),
               subtitle: Text('This is the content of post $index.'),
               trailing: ScaleTransition(
                 scale: _animation,
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.thumb_up),

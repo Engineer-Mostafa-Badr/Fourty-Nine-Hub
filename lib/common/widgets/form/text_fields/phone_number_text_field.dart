@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../res/style/app_colors.dart';
 
 class CustomPhoneTextFormField extends StatefulWidget {
   final FocusNode currentFocusNode;
@@ -64,13 +67,17 @@ class _CustomPhoneTextFormFieldState extends State<CustomPhoneTextFormField> {
               ),
               child: DropdownButton<String>(
                 value: _selectedCountryCode,
-                icon: Icon(Icons.arrow_drop_down, color: widget.codeColor),
+                icon: const Icon(
+                  Icons.arrow_drop_down,
+                  color: AppColors.QUANTITY_COLOR,
+                ),
                 isExpanded: true,
                 onChanged: (String? newValue) {
                   setState(() {
                     _selectedCountryCode = newValue!;
                   });
                 },
+                style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                 items: <String>[
                   '+1',
                   '+44',
@@ -100,8 +107,8 @@ class _CustomPhoneTextFormFieldState extends State<CustomPhoneTextFormField> {
                     (widget.isEnabled ? Colors.white : Colors.grey),
                 filled: true,
                 contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                hintText: widget.hint ?? 'Phone Number',
-                hintStyle: textStyle.copyWith(color: Colors.black),
+                hintText: widget.hint ?? LocaleKeys.phoneNumber.localize,
+                hintStyle: textStyle.copyWith(color: AppColors.QUANTITY_COLOR),
                 counterText: '',
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),

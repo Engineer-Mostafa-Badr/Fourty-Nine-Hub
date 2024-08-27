@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
@@ -8,6 +13,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../../routes/routes.dart';
 
@@ -18,8 +24,8 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<ForgotPasswordCubit>();
     return Scaffold(
-      appBar: const BackAppBar(
-        label: 'Forgot Password',
+      appBar:  BackAppBar(
+        label: LocaleKeys.forget.localize,
       ),
       body: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
         listener: (context, state) {
@@ -42,22 +48,25 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
         },
         builder: (context, state) {
           return Padding(
-            padding: const EdgeInsets.all(10),
+            padding:  EdgeInsets.all(20.zW),
             child: ListView(
               children: [
+                const Sizer(),
                 Form(
                   key: cubit.emailFormKey,
                   child: FormTextField(
                     controller: cubit.emailController,
-                    label: 'E-mail',
-                    hint: 'Type here',
-                    prefix: const Icon(Icons.person),
+                    label: LocaleKeys.email.localize,
+                    hint: LocaleKeys.typeHere.localize,
+                    style: TextStyle(fontSize: 30.zW,),
+                    prefix:  Icon(Icons.person,color: AppColors.GREY_DARK_COLOR,size: 40.zW,),
                   ),
                 ),
                 const Sizer(),
                 DefaultButton(
-                  label: 'Send OTP',
+                  label: LocaleKeys.sendOTP.localize,
                   onPressed: cubit.sendForgetPasswordOTP,
+                  labelStyle: TextStyle(fontSize: 35.zW,color: AppColors.AUTH_CONTAINER_COLOR),
                 ),
               ],
             ),

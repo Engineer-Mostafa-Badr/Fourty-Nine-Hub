@@ -46,9 +46,9 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
           width: double.infinity,
           padding:
               const EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 20),
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
+          decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10),
                 topRight: Radius.circular(10),
               )),
@@ -82,7 +82,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                               border: Border.all(
                                 color: state.subCategory == subCategory
                                     ? AppColors.SECONDARY_COLOR
-                                    : AppColors.DARK_GRAY_COLOR,
+                                    : Theme.of(context).primaryColor,
                               ),
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -116,6 +116,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                 InkWell(
                   onTap: () {
                     bottomSheet(
+                      //backColor: Theme.of(context).scaffoldBackgroundColor,
                       widget: const SelectDropOffPoints(),
                       isScrollControlled: true,
                       context: context,
@@ -170,14 +171,15 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                     children: [
                       const Icon(
                         Icons.search,
-                        color: Colors.grey,
+                        color: AppColors.QUANTITY_COLOR,
                       ),
                       const Sizer(),
                       Expanded(
                           child: Label(
                         text: state.toAddress?.address ??
                             'Select drop off location',
-                        style: Styles.mediumText(),
+                        style:
+                            Styles.mediumText(color: AppColors.QUANTITY_COLOR),
                         maxLines: 1,
                       )),
                     ],

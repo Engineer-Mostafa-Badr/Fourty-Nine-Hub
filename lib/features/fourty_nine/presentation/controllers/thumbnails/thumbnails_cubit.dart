@@ -15,6 +15,7 @@ class ThumbnailsCubit extends Cubit<BasicState<List<RideThumbnailEntity>>> {
   }
 
   Future<void> _getRideThumbnails() async {
+    emit(state.copyWith(status: StateStatus.loading));
     final result = await _getRideThumbnailsUseCase(const NoParams());
 
     emit(

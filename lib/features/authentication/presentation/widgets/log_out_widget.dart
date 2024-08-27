@@ -3,12 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import '../../../../routes/routes.dart';
 
 class LogoutWidget extends StatefulWidget {
   const LogoutWidget({super.key});
@@ -25,11 +27,11 @@ class _LogoutWidgetState extends State<LogoutWidget> {
       shrinkWrap: true,
       children: [
         Label(
-          text: 'Logout',
+          text: LocaleKeys.logout.localize,
           style: Styles.headerText(),
         ),
         Label(
-          text: 'Are you sure you want to logout?',
+          text: LocaleKeys.sureLogout.localize,
           style: Styles.mediumText(),
         ),
         const Sizer(),
@@ -37,21 +39,23 @@ class _LogoutWidgetState extends State<LogoutWidget> {
           children: [
             Expanded(
                 child: AppButton(
-              label: 'No',
+                  height: 50.zH,
+              label: LocaleKeys.no.localize,
+              color: AppColors.AUTH_CONTAINER_COLOR,
               onPressed: () => context.pop(),
               backColor: AppColors.DARK_GRAY_COLOR,
             )),
             const Sizer(),
             Expanded(
               child: AppButton(
-                label: 'Logout',
+                height: 50.zH,
+                label: LocaleKeys.logout.localize,
+                color: AppColors.AUTH_CONTAINER_COLOR,
                 onPressed: () {
                   controller.logout();
                   context.pop();
                   context.pop();
-                  setState(() {
-                    
-                  });
+                  setState(() {});
                 },
               ),
             ),

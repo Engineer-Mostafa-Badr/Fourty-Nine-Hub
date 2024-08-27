@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/routes/pages.dart';
+import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../common/widgets/stateless/buttons/default_button.dart';
 import '../../common/widgets/stateless/buttons/elevated_button.dart';
@@ -61,7 +67,7 @@ void showSuccessMessage(BuildContext context, String message) {
                 message,
                 style: const TextStyle(
                   fontWeight: FontWeight.w500,
-                  color: Colors.black,
+                  color: AppColors.QUANTITY_COLOR,
                 ),
               ),
             ),
@@ -107,6 +113,38 @@ void showSuccessDialog(BuildContext context, String text) => showDialog(
           top: 20,
           bottom: 40,
         ),
+      ),
+    );
+
+Future<void> showPermissionDialog({required String message}) async =>
+    await showDialog(
+      context: AppPages.router.configuration.navigatorKey.currentContext!,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+        ),
+        content: Text(
+          message,
+          style: const TextStyle(
+            fontSize: 16,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        contentPadding: const EdgeInsets.only(
+          right: 20,
+          left: 20,
+          top: 20,
+          bottom: 40,
+        ),
+        actions: [
+          TextAppButton(
+            label: LocaleKeys.openAppSettings,
+            onPressed: () async {
+              await openAppSettings();
+              AppPages.router.configuration.navigatorKey.currentContext!.pop();
+            },
+          ),
+        ],
       ),
     );
 

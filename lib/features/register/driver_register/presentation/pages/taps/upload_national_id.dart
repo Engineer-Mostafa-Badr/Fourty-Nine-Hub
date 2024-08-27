@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/register/driver_register/presentation/widgets/upload_image.dart';
 
-import '../../../../../../common/widgets/stateless/appbar/back_appbar.dart';
-import '../../../../../../res/style/styles.dart';
 
 class UploadNationalID extends StatelessWidget {
   final int length, index;

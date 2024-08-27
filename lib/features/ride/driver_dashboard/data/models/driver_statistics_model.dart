@@ -19,12 +19,12 @@ class DriverStatisticsModel extends DriverStatisticsEntity {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['all_trips_count'] = this.allTripsCount;
-    data['todays_trips_count'] = this.todaysTripsCount;
-    data['todays_income'] = this.todaysIncome;
-    data['reviews_count'] = this.reviewsCount;
-    data['rating_avg'] = this.ratingAvg;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['all_trips_count'] = allTripsCount;
+    data['todays_trips_count'] = todaysTripsCount;
+    data['todays_income'] = todaysIncome;
+    data['reviews_count'] = reviewsCount;
+    data['rating_avg'] = ratingAvg;
     return data;
   }
 }

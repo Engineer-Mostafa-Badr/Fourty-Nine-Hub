@@ -52,8 +52,9 @@ class NotificationService {
       final code = message.data['Code'];
       final notificationType = message.data['NotificationType'];
 
-      if (notificationType != 'Normal')
+      if (notificationType != 'Normal') {
         _showDialogToNavigate(notificationType, code, link);
+      }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen(
@@ -144,8 +145,9 @@ class _FlutterLocalNotificationHelper {
     String? image,
   }) async {
     String? imagePath;
-    if (image != '')
+    if (image != '') {
       imagePath = image == null ? null : await _downloadAndSaveFile(image);
+    }
     return flutterLocalNotificationsPlugin.show(
       const _NotificationIdGenerator().generate(),
       title,

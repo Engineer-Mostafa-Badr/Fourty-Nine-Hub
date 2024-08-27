@@ -11,7 +11,6 @@ import 'effect_grid.dart';
 
 // Project imports:
 
-
 /// @nodoc
 class ZegoLiveStreamingSoundEffectSheet extends StatefulWidget {
   final ZegoUIKitPrebuiltLiveStreamingInnerText translationText;

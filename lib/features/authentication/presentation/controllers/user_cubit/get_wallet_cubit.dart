@@ -9,18 +9,17 @@ class GetWalletCubit extends Cubit<GetWalletState> {
   final WalletRepository repository;
   GetWalletCubit(this.repository) : super(GetWalletInitial());
   getWallet() async {
-    // log("4444444444444444444444444444");
+    log("4444444444444444444444444444");
     var response = await repository.getWallet();
     response.fold(
-          (error) {
+      (error) {
         log(error.toString(), name: "WalletError");
         emit(FilauerGetWallatState());
       },
-          (data) {
+      (data) {
         log(data.toString(), name: "WalletError");
         emit(SuccessGetWallet(model: data));
       },
     );
   }
 }
-

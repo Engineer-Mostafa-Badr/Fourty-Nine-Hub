@@ -1,6 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // Flutter imports:
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_state.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import 'package:zego_uikit/zego_uikit.dart';
 
@@ -15,8 +23,10 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/defines.dart';
 
+import '../../../../../../../../core/messages/messages.dart';
 import '../inner_text.dart';
 import '../internal/pk_combine_notifier.dart';
+import '../minimizing/mini_button.dart';
 import 'member/button.dart';
 import 'message/input_board_button.dart';
 
@@ -91,6 +101,7 @@ class _ZegoLiveStreamingBottomBarState
         ZegoUIKit().getMicrophoneStateNotifier(ZegoUIKit().getLocalUser().id);
     final cameraState =
         ZegoUIKit().getCameraStateNotifier(ZegoUIKit().getLocalUser().id);
+    final screenShareState = ZegoUIKit().getScreenSharingStateNotifier();
     final needUserMuteMode =
         (!widget.config.coHost.stopCoHostingWhenMicCameraOff) ||
             ZegoLiveStreamingPKBattleStateCombineNotifier.instance.state.value;
@@ -104,6 +115,7 @@ class _ZegoLiveStreamingBottomBarState
         ),
         height: widget.config.bottomMenuBar.height ?? 120.zR,
         child: ListView(
+          padding: EdgeInsets.symmetric(horizontal: 20.zW),
           scrollDirection: Axis.horizontal,
           children: [
             //mic
@@ -126,6 +138,19 @@ class _ZegoLiveStreamingBottomBarState
             ZoomChatBuilder(
               widget: widget,
             ),
+            ZoomSharescreenBuilder(
+              shareScreenState: screenShareState,
+            ),
+            ZoomShareCodeButton(
+              liveId: ZegoUIKit().getRoom().id,
+            ),
+            ZoomWhiteBoardButton(
+              config: widget.config,
+            ),
+            // ZegoLiveStreamingMinimizingButton(
+            //   buttonSize: Size(52.zR, 52.zR),
+            //   iconSize: Size(24.zR, 24.zR),
+            // )
           ],
         ),
       ),
@@ -156,7 +181,7 @@ class ZoomMicrophoneBuilder extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ZegoToggleMicrophoneButton(
-                  buttonSize: const Size(30, 30),
+                  buttonSize: Size(40.zW, 40.zH),
                   iconSize: const Size(100, 100),
                   normalIcon: ButtonIcon(
                     icon: const Icon(
@@ -185,10 +210,10 @@ class ZoomMicrophoneBuilder extends StatelessWidget {
                 ),
                 Text(
                   micState.value ? 'Mute' : 'Unmute',
-                  style: const TextStyle(
+                  style: TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.w200,
-                      fontSize: 12),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 20.zSP),
                 )
               ],
             );
@@ -218,7 +243,7 @@ class ZoomCameraBuilder extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ZegoToggleCameraButton(
-                  buttonSize: const Size(30, 30),
+                  buttonSize: Size(40.zW, 40.zH),
                   iconSize: const Size(100, 100),
                   normalIcon: ButtonIcon(
                     icon: const Icon(
@@ -246,10 +271,10 @@ class ZoomCameraBuilder extends StatelessWidget {
                 ),
                 Text(
                   cameraState.value ? 'Start Video' : 'Stop Video',
-                  style: const TextStyle(
+                  style: TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.w200,
-                      fontSize: 12),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 20.zSP),
                 )
               ],
             );
@@ -260,6 +285,7 @@ class ZoomCameraBuilder extends StatelessWidget {
 
 class ZoomIconButtons {
   final Widget button;
+
   ZoomIconButtons({
     required this.button,
   });
@@ -267,6 +293,7 @@ class ZoomIconButtons {
 
 class ZoomParticipantsBuilder extends StatelessWidget {
   final ZegoLiveStreamingBottomBar widget;
+
   const ZoomParticipantsBuilder({
     super.key,
     required this.widget,
@@ -293,10 +320,12 @@ class ZoomParticipantsBuilder extends StatelessWidget {
             avatarBuilder: widget.config.avatarBuilder,
             itemBuilder: widget.config.memberList.itemBuilder,
           ),
-          const Text(
+          Text(
             'Participants',
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w200, fontSize: 12),
+                color: Colors.white,
+                fontWeight: FontWeight.w400,
+                fontSize: 20.zSP),
           )
         ],
       ),
@@ -306,6 +335,7 @@ class ZoomParticipantsBuilder extends StatelessWidget {
 
 class ZoomChatBuilder extends StatelessWidget {
   final ZegoLiveStreamingBottomBar widget;
+
   const ZoomChatBuilder({
     super.key,
     required this.widget,
@@ -330,22 +360,22 @@ class ZoomChatBuilder extends StatelessWidget {
               buttonSize: const Size(40, 40),
               iconSize: const Size(40, 40),
               enabledIcon: ButtonIcon(
-                icon: const Icon(
+                icon: Icon(
                   Icons.message_rounded,
                   color: Colors.white,
-                  size: 30,
+                  size: 30.zH,
                 ),
               ),
             ),
-            const Positioned(
-              bottom: 5,
+            Positioned(
+              bottom: 8.zH,
               right: 5,
               child: Text(
                 'Chat',
                 style: TextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.w200,
-                    fontSize: 12),
+                    fontWeight: FontWeight.w400,
+                    fontSize: 25.zSP),
               ),
             )
           ],
@@ -356,44 +386,117 @@ class ZoomChatBuilder extends StatelessWidget {
 class ZoomSharescreenBuilder extends StatelessWidget {
   const ZoomSharescreenBuilder({
     super.key,
-    required this.cameraState,
-    required this.cameraDefaultOn,
+    required this.shareScreenState,
   });
 
-  final ValueNotifier<bool> cameraState;
-  final bool cameraDefaultOn;
+  final ValueNotifier<bool> shareScreenState;
 
   @override
   Widget build(BuildContext context) {
+    log('-------------${context.read<MeetingCubit>().state}');
     return Padding(
       padding: const EdgeInsets.all(10.0).add(EdgeInsets.only(left: 5.zW)),
       child: ValueListenableBuilder<bool>(
-          valueListenable: cameraState,
-          builder: (context, cameraOn, child) {
+          valueListenable: shareScreenState,
+          builder: (context, screenShareOn, child) {
+            log('-------------${screenShareOn}');
+            if (!screenShareOn) {
+              context.read<MeetingCubit>().closeWhiteBoard();
+            }
             return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ZegoScreenSharingToggleButton(
-                  buttonSize: const Size(30, 30),
-                  iconSize: const Size(100, 100),
-                  onPressed: (isScreenSharing) {},
+                  buttonSize: Size(35.zW, 35.zH),
+                  // iconSize: const Size(120, 120),
                   iconStartSharing: ButtonIcon(
-                    icon: const Icon(Icons.screen_share_outlined),
+                    icon: const Icon(
+                      Icons.screen_share_outlined,
+                      color: Colors.green,
+                      // size: 35,
+                    ),
                   ),
+
                   iconStopSharing: ButtonIcon(
-                    icon: const Icon(Icons.stop_screen_share_outlined),
+                    icon: const Icon(
+                      Icons.stop_screen_share_outlined,
+                      color: Colors.white,
+                      // size: 35,
+                    ),
                   ),
                 ),
-                Text(
-                  cameraState.value ? 'Share' : 'Stop Share',
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w200,
-                      fontSize: 12),
+                Padding(
+                  padding: EdgeInsets.only(top: 5.zH),
+                  child: Text(
+                    !screenShareOn ? 'Share' : 'Stop Share',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 25.zSP),
+                  ),
                 )
               ],
             );
           }),
+    );
+  }
+}
+
+class ZoomShareCodeButton extends StatelessWidget {
+  const ZoomShareCodeButton({super.key, required this.liveId});
+
+  final String liveId;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: 8.0.zW),
+        child: ZegoLiveStreamingMenuBarExtendButton(
+            child: IconButton(
+          icon: Icon(
+            Icons.share,
+            size: 35.zH,
+            color: Colors.white,
+          ),
+          onPressed: () => Clipboard.setData(ClipboardData(text: liveId)).then(
+              (value) => showSuccessMessage(
+                  context, 'Room Code \'$liveId copied successfully')),
+        )),
+      ),
+    );
+  }
+}
+
+class ZoomWhiteBoardButton extends StatelessWidget {
+  final ZegoUIKitPrebuiltLiveStreamingConfig config;
+
+  const ZoomWhiteBoardButton({super.key, required this.config});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        InkWell(
+            child: SvgPicture.asset(
+              'assets/images/white_board.svg',
+              height: 50.zH,
+              width: 50.zW,
+            ),
+            onTap: () async {
+              await context.read<MeetingCubit>().openWhiteBoard();
+            }),
+        Text(
+          'WhiteBoard',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+            fontSize: 25.zSP,
+          ),
+        )
+      ],
     );
   }
 }

@@ -7,15 +7,15 @@ class SubscriptionInterceptor extends Interceptor {
   @override
   Future<void> onResponse(
       Response response, ResponseInterceptorHandler handler) async {
-    if (response.data['endPointSubscription'] != null &&
-        response.data['endPointSubscription'] == true &&
-        response.data['userSubscription'] == false) {
-      List<WalletTypes> wallets = (response.data['paymentMethod'] as List)
-          .map((e) => (e as String).toWalletType)
-          .toList();
-      await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-          subCategoryId: response.data['subCategoryId'], wallets: wallets);
-    }
+    // if (response.data['endPointSubscription'] != null &&
+    //     response.data['endPointSubscription'] == true &&
+    //     response.data['userSubscription'] == false) {
+    //   List<WalletTypes> wallets = (response.data['paymentMethod'] as List)
+    //       .map((e) => (e as String).toWalletType)
+    //       .toList();
+    //   await serviceLocator<SubscriptionController>().showSubscriptionPlans(
+    //       subCategoryId: response.data['subCategoryId'], wallets: wallets);
+    // }
     super.onResponse(response, handler);
   }
 

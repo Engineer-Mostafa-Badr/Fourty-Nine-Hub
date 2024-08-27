@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/utils/change_react.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
@@ -12,7 +11,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -34,6 +32,7 @@ class PostDetailsPage extends StatefulWidget {
   final Function(PostReactParams) onReact;
   final Function(String) showPostComments;
   final Function(PostEntity) showPostDetails;
+  final Function(PostCommentParams) onEditComment;
   final Function(String) deletePost;
   final Function(String) hidePost;
   final Function(ReplyOnCommentParams) onCommentReply;
@@ -48,7 +47,7 @@ class PostDetailsPage extends StatefulWidget {
     required this.showPostDetails,
     required this.comments,
     required this.deletePost,
-    required this.hidePost, required this.onCommentReply, required this.onDeleteComment, required this.onDeleteReply,
+    required this.hidePost, required this.onCommentReply, required this.onDeleteComment, required this.onDeleteReply, required this.onEditComment,
   });
 
   @override
@@ -77,7 +76,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
             final controller = context.read<SocialPostsCubit>();
 
             if(state.status==StateStatus.loading){
-              return Center(child: CircularProgressIndicator(),);
+              return const Center(child: CircularProgressIndicator(),);
             }else if(state.status==StateStatus.error||state.postDetails==null){
               return Center(
                 child: Label(text: getFailureMessage(
@@ -100,10 +99,6 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                   post: state.postDetails!,
                                   onReact: (params)async{
                                     var result = await widget.onReact(params);
-                                    changeReaction(state.postDetails, params.react);
-                                    setState(() {
-
-                                    });
                                     return result;
                                   },
                                   deletePost: widget.deletePost,
@@ -147,6 +142,19 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
                                         });
                                       return result;
+                                }, onDeleteComment: (String id) async{
+                                  var result = await widget.onDeleteComment(id);
+                                  state.postDetails?.commentsCount=(state.postDetails!.commentsCount!-1);
+                                  controller.commentsPagingController.itemList?.removeWhere((element) => element.id==id);
+
+                                  setState(() {});
+                                  return result;
+                                }, onDeleteReply: (String id) async {
+                                  var result = await widget.onDeleteReply(id);
+                                  state.postDetails?.commentsCount=(state.postDetails!.commentsCount!-1);
+                                  controller.repliesPagingController.itemList?.removeWhere((element) => element.id==id);
+                                  setState(() {});
+                                  return result;
                                 });
                               },
                               noMoreItemsIndicatorBuilder: (context) =>
@@ -185,7 +193,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                           onPressed: () async {
                             CommentEntity data = await widget.onAddComment(
                               PostCommentParams(
-                                  postId: widget.postId, content: commentTextController.text),
+                                  postId: state.postDetails!.id, content: commentTextController.text),
                             );
                             final user = context.read<UserCubit>().state.data;
                             controller.commentsPagingController.itemList?.insert(
@@ -235,7 +243,9 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
   Widget _buildCommentCard({
     required CommentEntity comment,
-    required Function(ReplyOnCommentParams) onCommentReply
+    required Function(ReplyOnCommentParams) onCommentReply,
+    required dynamic Function(String) onDeleteComment,
+    required dynamic Function(String) onDeleteReply
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -247,17 +257,9 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
             setState(() {});
             return result;
           },
-          onDeleteComment: (String id) async{
-            var result = await widget.onDeleteComment(id);
-            setState(() {});
-            return result;
-          },
-          onDeleteReply: (String id)async {
-            var result = await widget.onDeleteReply(id);
-            setState(() {});
-            return result;
-          },
-          from: 'feed',
+          onDeleteComment: (String id)=>onDeleteComment(id),
+          onDeleteReply: (String id)=>onDeleteReply(id),
+          from: 'feed', onEditComment: (PostCommentParams params) =>widget.onEditComment(params),
         ),
         if (comment.repliesCount != 0)
           Container(

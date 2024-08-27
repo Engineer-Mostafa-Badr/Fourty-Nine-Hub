@@ -1,6 +1,7 @@
 // Project imports:
 
 import '../../zego_uikit_prebuilt_live_streaming.dart';
+
 const deprecatedTipsV303 = ', '
     'deprecated since 3.0.3, '
     'will be removed after 3.10.0'

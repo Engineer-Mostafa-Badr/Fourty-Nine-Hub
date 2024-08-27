@@ -6,7 +6,6 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/enti
 import '../../domain/entities/meal_entity.dart';
 import '../../domain/repositories/restaurant_details_repo.dart';
 import '../datasources/restaurant_details_remote_data_source.dart';
-import '../models/meal_model.dart';
 import '../models/selected_meal_model.dart';
 
 class RestaurantDetailsRepoImpl implements RestaurantDetailsRepo {

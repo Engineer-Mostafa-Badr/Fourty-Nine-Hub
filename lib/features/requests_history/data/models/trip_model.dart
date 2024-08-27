@@ -64,12 +64,8 @@ class TripModel extends TripEntity {
     data['price'] = price;
     data['time'] = time;
     data['distance'] = distance;
-    if (calls != null) {
-      data['calls'] = calls!.map((v) => v.toJson()).toList();
-    }
-    if (offers != null) {
-      data['offers'] = offers!.map((v) => v.toJson()).toList();
-    }
+    data['calls'] = calls.map((v) => v.toJson()).toList();
+    data['offers'] = offers.map((v) => v.toJson()).toList();
     if (driver != null) {
       data['driver'] = driver!.toJson();
     }

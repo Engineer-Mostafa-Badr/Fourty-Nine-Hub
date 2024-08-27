@@ -82,7 +82,7 @@ class _ZegoLiveStreamingInRoomMessageInputBoardButtonState
               );
 
         return ZegoTextIconButton(
-          textStyle:  const TextStyle(
+          textStyle: const TextStyle(
               color: Colors.white, fontWeight: FontWeight.w200, fontSize: 12),
           text: 'Chat',
           onPressed: chatLocalEnabled

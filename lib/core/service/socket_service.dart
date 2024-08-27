@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/typing_and_online_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/socket_model.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -67,7 +66,7 @@ class SocketServiceImplementation extends SocketServiceContract {
         // joinRoom('yy');
         // to receive new messages
         socket.on('user:message', (data) {
-          debugPrint("user:message ${data}");
+          debugPrint("user:message $data");
 
           MessageModel messageModel = MessageModel.fromJson(data);
 
@@ -77,7 +76,7 @@ class SocketServiceImplementation extends SocketServiceContract {
 
         // listen to messages that sent from current user
         socket.on('messageSent', (data) {
-          debugPrint("messageSent ${data}");
+          debugPrint("messageSent $data");
 
           MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
 
@@ -88,7 +87,7 @@ class SocketServiceImplementation extends SocketServiceContract {
       });
 
       socket.on('error', (data) {
-        debugPrint("error ${data}");
+        debugPrint("error $data");
         debugPrint(data);
       });
 
@@ -185,15 +184,15 @@ class SocketServiceImplementation extends SocketServiceContract {
 
   @override
   listenToUserStatus() {
-    socket.on('usersStatus', (data) {
-      List<TypingAndOnlineModel> chatIdsTyping = [];
-      debugPrint("usersStatus ${data}");
+    // socket.on('usersStatus', (data) {
+    //   List<TypingAndOnlineModel> chatIdsTyping = [];
+    //   debugPrint("usersStatus $data");
 
-      chatIdsTyping.addAll(List<TypingAndOnlineModel>.from(
-          json.decode(data).map((x) => TypingAndOnlineModel.fromJson(x))));
+    //   chatIdsTyping.addAll(List<TypingAndOnlineModel>.from(
+    //       json.decode(data).map((x) => TypingAndOnlineModel.fromJson(x))));
 
-      _socketChatTyping.add(chatIdsTyping);
-    });
+    //   _socketChatTyping.add(chatIdsTyping);
+    // });
   }
 }
 

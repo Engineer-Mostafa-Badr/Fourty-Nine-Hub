@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
@@ -25,8 +23,6 @@ class ShareTheApp extends StatelessWidget {
     return Scaffold(
         appBar: const BackAppBar(
           label: 'Share App',
-          backColor: AppColors.PRIMARY_COLOR,
-          iconColor: Colors.white,
         ),
         body: Stack(
           children: [
@@ -35,13 +31,13 @@ class ShareTheApp extends StatelessWidget {
                 children: [
                   Expanded(
                       child: Container(
-                    decoration:
-                        const BoxDecoration(color: AppColors.PRIMARY_COLOR),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor),
                   )),
                   Expanded(
                       child: Container(
-                    decoration:
-                        const BoxDecoration(color: AppColors.LIGHT_GRAY_COLOR),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor),
                   )),
                 ],
               ),
@@ -51,24 +47,33 @@ class ShareTheApp extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    margin: const EdgeInsets.symmetric(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
                       horizontal: 20,
                     ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Image.asset(Assets.share),
-                        const Sizer(),
-                        _buildLinkWidget(context: context),
-                        const Sizer(),
-                        _buildStatisticsWidget(context: context),
-                      ],
+                    child: Card(
+                      shadowColor: Theme.of(context).primaryColor,
+                      elevation: 10,
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(color: Theme.of(context).primaryColor)
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Image.asset(Assets.share),
+                            const Sizer(),
+                            _buildLinkWidget(context: context),
+                            const Sizer(),
+                            _buildStatisticsWidget(context: context),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -92,7 +97,9 @@ class ShareTheApp extends StatelessWidget {
         ),
         const Sizer(),
         AppButton(
-            label: 'Share The App', onPressed: () => controller.shareTheApp()),
+            color: AppColors.AUTH_CONTAINER_COLOR,
+            label: 'Share The App',
+            onPressed: () => controller.shareTheApp()),
       ],
     );
   }

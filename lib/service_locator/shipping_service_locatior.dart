@@ -1,4 +1,3 @@
-import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/datasources/images_data_source.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/datasources/shipping_data_source.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/repositories/images_repository.dart';
@@ -18,7 +17,8 @@ class ShippingServiceLocatior {
     );
     //Cubit
     serviceLocator.registerFactory(
-      () => ShippingCubit(repository: serviceLocator(), imageRepository: serviceLocator()),
+      () => ShippingCubit(
+          repository: serviceLocator(), imageRepository: serviceLocator()),
     );
     serviceLocator.registerFactory(
       () => ImagesCubit(repository: serviceLocator()),
@@ -29,8 +29,7 @@ class ShippingServiceLocatior {
           dataSource: serviceLocator(), repository: serviceLocator()),
     );
     serviceLocator.registerLazySingleton(
-      () => ImagesRepository(
-          dataSource: serviceLocator()),
+      () => ImagesRepository(dataSource: serviceLocator()),
     );
   }
 }

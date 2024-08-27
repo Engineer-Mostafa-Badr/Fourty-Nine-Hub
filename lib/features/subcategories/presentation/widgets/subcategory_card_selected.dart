@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 
 class SubcategoryCardSelected extends StatefulWidget {
   final SubCategoryEntity item;
@@ -38,7 +34,7 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
           border: Border.all(
               color: widget.selected ? Colors.red : Colors.transparent,
               width: 1),
-          color: Colors.white,
+          color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(5),
           boxShadow: const [
             BoxShadow(

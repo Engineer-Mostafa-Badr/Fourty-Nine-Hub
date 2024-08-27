@@ -5,11 +5,13 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/social_posts_repo.dart';
 
-class GetInstagramFeedUseCase extends UseCase<List<PostEntity>, TwitterFeedParams> {
+class GetInstagramFeedUseCase
+    extends UseCase<List<PostEntity>, TwitterFeedParams> {
   final InstagramRepo _repo;
   GetInstagramFeedUseCase(this._repo);
   @override
-  Future<Either<Failure, List<PostEntity>>> call(TwitterFeedParams params) async {
+  Future<Either<Failure, List<PostEntity>>> call(
+      TwitterFeedParams params) async {
     return await _repo.getFeed(params: params);
   }
 }

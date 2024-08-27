@@ -4,7 +4,7 @@ import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/chat_cubit/chat_room_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
@@ -32,7 +32,6 @@ class TinderCardStack extends StatelessWidget {
     super.key,
     required this.userCubit,
   });
-
   @override
   Widget build(BuildContext context) {
     final TinderViewCubit tinderCubit = context.watch<TinderViewCubit>();
@@ -147,7 +146,7 @@ class TinderCardStack extends StatelessWidget {
                   subtitle: Text(
                     state.lastSeenModel?.data?.lastSeen != null
                         ? "Last seen ${getTimeAgo(state.lastSeenModel!.data!.lastSeen ?? '')}"
-                        : "Last seen N/A",
+                        : "Last seen Yesterday",
                     style: Styles.mediumText(
                         color: AppColors.PRIMARY_COLOR,
                         fontWeight: FontWeight.bold,
@@ -353,9 +352,9 @@ class TinderCardStack extends StatelessWidget {
                 child: Stack(
                   children: [
                     BottomSheetContent(
-                      userCubit: userCubit,
-                      accessToken: userCubit.state.token?.accessToken ?? '',cardUser:cardUser
-                    ),
+                        userCubit: userCubit,
+                        accessToken: userCubit.state.token?.accessToken ?? '',
+                        cardUser: cardUser),
                     Positioned(
                       bottom: 5,
                       right: 5,
@@ -405,8 +404,11 @@ class TinderCardStack extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => UserProfilePage(
-          userCubit: userCubit,
+        builder: (context) => BlocProvider.value(
+          value: TinderViewCubit(),
+          child: UserProfilePage(
+            userCubit: userCubit,
+          ),
         ),
       ),
     );

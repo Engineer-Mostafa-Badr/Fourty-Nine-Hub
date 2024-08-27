@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateful/maps/map_picker.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/address_search_params_entity.dart';
 import '../../../../../routes/routes.dart';
+import '../../../../../service_locator/service_locator.dart';
 import '../cubit/riderequest_cubit.dart';
 import '../widgets/common/dashboard_banner.dart';
 import '../widgets/customer/createOrder/options_bottom_sheet.dart';
@@ -21,24 +22,29 @@ class RideRequestView extends StatelessWidget {
               child: Stack(
             children: [
               Positioned.fill(
-                child: BlocBuilder<RiderequestCubit, RiderequestState>(
-                  builder: (context, state) {
-                    final rideCubit = context.read<RiderequestCubit>();
-                    if (state.fromAddress != null && state.toAddress != null) {
+                child: BlocProvider(
+                  create: (BuildContext context) =>
+                      serviceLocator<RiderequestCubit>(),
+                  child: BlocBuilder<RiderequestCubit, RiderequestState>(
+                    builder: (context, state) {
+                      final rideCubit = context.read<RiderequestCubit>();
+                      if (state.fromAddress != null &&
+                          state.toAddress != null) {
+                        return MapPicker(
+                          lat: state.fromAddress?.lat,
+                          lng: state.fromAddress?.lng,
+                          destLat: state.toAddress?.lat,
+                          destLng: state.toAddress?.lng,
+                        );
+                      }
                       return MapPicker(
                         lat: state.fromAddress?.lat,
                         lng: state.fromAddress?.lng,
-                        destLat: state.toAddress?.lat,
-                        destLng: state.toAddress?.lng,
+                        onAddressPicked: (AddressSearchParamsEntity v) =>
+                            rideCubit.selectPickUpLocation(item: v),
                       );
-                    }
-                    return MapPicker(
-                      lat: state.fromAddress?.lat,
-                      lng: state.fromAddress?.lng,
-                      onAddressPicked: (AddressSearchParamsEntity v) =>
-                          rideCubit.selectPickUpLocation(item: v),
-                    );
-                  },
+                    },
+                  ),
                 ),
               ),
               const Positioned(
@@ -53,7 +59,9 @@ class RideRequestView extends StatelessWidget {
                   )),
             ],
           )),
-          const RideOptionsBottomSheet(),
+          BlocProvider.value(
+              value: serviceLocator<RiderequestCubit>(),
+              child: const RideOptionsBottomSheet()),
         ],
       ),
     );

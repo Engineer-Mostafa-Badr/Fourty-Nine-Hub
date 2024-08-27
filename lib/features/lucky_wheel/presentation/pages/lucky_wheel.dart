@@ -10,7 +10,7 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_cubit/wheel_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
 
-import '../../../../common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../core/enums/wheel.dart';
 import '../../domain/entities/wheel_item_entity.dart';
 

@@ -4,7 +4,6 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/charts/bar_chart.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class DoctorHistoryCard extends StatelessWidget {
@@ -27,7 +26,7 @@ class DoctorHistoryCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,9 +37,7 @@ class DoctorHistoryCard extends StatelessWidget {
               Expanded(
                 child: Label(
                   text: title,
-                  style: Styles.headerText(
-                    color: AppColors.PRIMARY_COLOR,
-                  ),
+                  style: Styles.headerText(),
                 ),
               ),
               const Sizer(
@@ -48,9 +45,7 @@ class DoctorHistoryCard extends StatelessWidget {
               ),
               Label(
                 text: (totalValue).toShortScale,
-                style: Styles.headerText(
-                  color: AppColors.SECONDARY_COLOR,
-                ),
+                style: Styles.headerText(),
               ),
             ],
           ),

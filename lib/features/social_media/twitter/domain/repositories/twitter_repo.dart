@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
@@ -36,6 +35,8 @@ abstract class TwitterRepo {
   Future<Either<Failure, List<TwitterCommentReplyEntity>>> getCommentReplies(
       {required PostCommentsParams params});
   Future<Either<Failure, bool>> deletePost({required String postId});
+  Future<Either<Failure, bool>> deleteComment({required String commentId});
+  Future<Either<Failure, bool>> editComment({required TwitterPostCommentParams params});
   Future<Either<Failure, bool>> hidePost({required String postId});
   Future<Either<Failure, bool>> addReport(
       {required TwitterReportParams params});

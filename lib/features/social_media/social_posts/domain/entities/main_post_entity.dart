@@ -1,8 +1,6 @@
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
 import '../../../../../core/utils/duration_helper.dart';
-import '../../../../../res/assets/assets.dart';
 
 class MainPostEntity {
   final String id;
@@ -17,11 +15,11 @@ class MainPostEntity {
   String? backgroundColor;
 
   DateTime? createdAt;
-   Duration get publishedDuration => DateTime.now().difference(createdAt!);
+  Duration get publishedDuration => DateTime.now().difference(createdAt!);
 
   String get sinceTime =>
       DurationHelper().sinceTime(duration: publishedDuration);
- 
+
   MainPostEntity({
     required this.id,
     this.content,
@@ -36,5 +34,3 @@ class MainPostEntity {
     this.backgroundColor,
   });
 }
-
-

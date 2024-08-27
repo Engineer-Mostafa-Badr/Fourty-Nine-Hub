@@ -3,7 +3,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-
 // Package imports:
 import 'package:zego_uikit/zego_uikit.dart';
 
@@ -15,18 +14,17 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/components/utils/pop_up_manager.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/inner_text.dart';
 
-
 /// @nodoc
 class ZegoLiveStreamingPopUpSheetMenu extends StatefulWidget {
   const ZegoLiveStreamingPopUpSheetMenu({
-    Key? key,
+    super.key,
     required this.targetUser,
     required this.popupItems,
     required this.translationText,
     required this.hostManager,
     required this.connectManager,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   final List<ZegoLiveStreamingPopupItem> popupItems;
   final ZegoUIKitUser targetUser;

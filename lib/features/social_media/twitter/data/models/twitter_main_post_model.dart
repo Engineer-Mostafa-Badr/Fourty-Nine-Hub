@@ -21,7 +21,11 @@ class TwitterMainPostModel extends TwitterMainPostEntity {
     return TwitterMainPostModel(
       id: json['_id']??'',
       content: json['content']??'',
-      images: json['images'] != null ? List<String>.from(json['images']) : [],
+      // images: json['images'] != null ? List<String>.from(json['images']) : [],
+      images: json['media'] != null
+          ? List<String>.from(
+          json['media'].map((mediaItem) => mediaItem['photo']))
+          : null,
       shares: json['shares'] != null ? List<String>.from(json['shares']) : [],
       love: json['love'] != null ? List<String>.from(json['love']) : [],
       comments: json['comments'] != null ? List<String>.from(json['comments']) : [],

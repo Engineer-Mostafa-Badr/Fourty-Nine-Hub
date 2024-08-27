@@ -87,9 +87,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
         giftButton,
         superGiftButton,
       ]
-      ..bottomMenuBar.hostButtons = [
-      
-      ]
+      ..bottomMenuBar.hostButtons = []
       ..bottomMenuBar.audienceButtons = []
       ..bottomMenuBar.coHostButtons = []
       ..bottomMenuBar.audienceExtendButtons = [
@@ -101,8 +99,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
         ZegoLiveStreamingMenuBarButtonName.coHostControlButton,
         // ZegoLiveStreamingMenuBarButtonName.soundEffectButton,
       ]
-      ..inRoomMessage = ZegoLiveStreamingInRoomMessageConfig( 
-        
+      ..inRoomMessage = ZegoLiveStreamingInRoomMessageConfig(
           resendIcon: const Icon(
         Icons.reply,
         color: Colors.white,
@@ -352,7 +349,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
         child: InkWell(
             onTap: () {
               //send a message and some interaction
-              showSimpleGiftBottomSheet(context,userId);
+              showSimpleGiftBottomSheet(context, userId);
             },
             child: SvgPicture.asset(
               'assets/images/gift.svg',

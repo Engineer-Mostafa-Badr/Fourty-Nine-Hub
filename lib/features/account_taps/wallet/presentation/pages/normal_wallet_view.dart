@@ -5,7 +5,8 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/appbar/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
@@ -13,7 +14,6 @@ import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
-import '../../domain/entities/wallet_entity.dart';
 import '../cubit/wallet_cubit.dart';
 import '../widgets/wallet_card_widget.dart';
 import '../widgets/wallet_history_card.dart';
@@ -115,7 +115,8 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                             : Icons.arrow_drop_up_rounded),
                         Label(
                           text: 'Show More',
-                          style: Styles.smallText(),
+                          style: Styles.smallText(
+                              color: Theme.of(context).primaryColor),
                         ),
                       ],
                     ),

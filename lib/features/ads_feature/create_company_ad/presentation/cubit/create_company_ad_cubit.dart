@@ -1,9 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/entities/company_ad_entity.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/entities/option_entity.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../domain/entities/company_ad_option_entity.dart';

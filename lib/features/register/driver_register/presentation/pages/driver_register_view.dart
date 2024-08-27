@@ -31,16 +31,16 @@ class _DriverRegisterState extends State<DriverRegister> {
         return (await showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                title: Text('Are you sure?'),
-                content: Text('Do you want to close register'),
+                title: const Text('Are you sure?'),
+                content: const Text('Do you want to close register'),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(false),
-                    child: Text('No'),
+                    child: const Text('No'),
                   ),
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(true),
-                    child: Text('Yes'),
+                    child: const Text('Yes'),
                   ),
                 ],
               ),
@@ -56,13 +56,13 @@ class _DriverRegisterState extends State<DriverRegister> {
                   controller.changeSubCategorySelection(item: item),
             );
           } else if (state.riderInfo == null) {
-            return EnterPersonalInfo(
+            return const EnterPersonalInfo(
               length: 5,
               index: 0,
               label: 'Enter Personal Info',
             );
           }
-          return Scaffold();
+          return const Scaffold();
         },
       ),
     );

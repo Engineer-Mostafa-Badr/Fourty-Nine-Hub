@@ -1,10 +1,15 @@
 // Dart imports:
 import 'dart:async';
 import 'dart:core';
+import 'dart:developer';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateful/dynamic/webview.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/components/audio_video_view_foreground.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/components/white_board_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/core/core_managers.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/core/live_status_manager.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/core/plugins.dart';
@@ -24,18 +29,21 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/pk_combine_notifier.dart';
 
+import '../../../../../../../../service_locator/service_locator.dart';
+import '../../../../../../../zoom/presentation/bloc/zoom_cubit.dart';
+import '../../../../../../../zoom/presentation/bloc/zoom_state.dart';
 
 /// @nodoc
 class ZegoLiveStreamingCentralAudioVideoView extends StatefulWidget {
   const ZegoLiveStreamingCentralAudioVideoView({
-    Key? key,
+    super.key,
     required this.config,
     required this.hostManager,
     required this.liveStatusManager,
     required this.popUpManager,
     required this.constraints,
     this.plugins,
-  }) : super(key: key);
+  });
 
   final ZegoUIKitPrebuiltLiveStreamingConfig config;
 
@@ -226,12 +234,34 @@ class ZegoLiveStreamingCentralAudioVideoViewState
                                 ZegoUIKit().getAudioVideoList(),
                                 audioVideoViewCreator,
                               ) ??
-                              defaultAudioVideoContainer(withScreenSharing);
+                              BlocBuilder<MeetingCubit, MeetingState>(
+                                builder: (context, state) {
+                                  if (state.isOpenWhiteBoard &&
+                                      ZegoUIKit()
+                                          .getScreenSharingStateNotifier()
+                                          .value) {
+                                    return whiteBoardContainer();
+                                  } else {
+                                    return defaultAudioVideoContainer(
+                                        withScreenSharing);
+                                  }
+                                },
+                              );
                         },
                       );
                     },
                   )
-                : defaultAudioVideoContainer(withScreenSharing);
+                : BlocBuilder<MeetingCubit, MeetingState>(
+                    builder: (context, state) {
+                      print('loggggg ${state.status}');
+                      if (state.isOpenWhiteBoard &&
+                          ZegoUIKit().getScreenSharingStateNotifier().value) {
+                        return whiteBoardContainer();
+                      } else {
+                        return defaultAudioVideoContainer(withScreenSharing);
+                      }
+                    },
+                  );
 
         if (LiveStatus.living == liveStatusValue) {
           children = audioVideoContainer;
@@ -291,6 +321,10 @@ class ZegoLiveStreamingCentralAudioVideoViewState
           .screenSharing
           .viewController,
     );
+  }
+
+  Widget whiteBoardContainer() {
+    return const WhiteBoardView();
   }
 
   ZegoLayout getAudioVideoContainerLayout(bool withScreenSharing) {
