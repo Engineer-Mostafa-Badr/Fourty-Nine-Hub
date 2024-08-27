@@ -24,6 +24,11 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_feelings_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_places_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
+import 'package:fourtyninehub/features/social_media/edit_profile/data/datasources/edit_profile_remote_datasource.dart';
+import 'package:fourtyninehub/features/social_media/edit_profile/data/repositories/edit_profile_repo_impl.dart';
+import 'package:fourtyninehub/features/social_media/edit_profile/domain/repositories/edit_profile_repo.dart';
+import 'package:fourtyninehub/features/social_media/edit_profile/domain/usecases/edit_profile_usecase.dart';
+import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/datasources/instagram_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/repositories/instagram_repo_impl.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/repositories/social_posts_repo.dart';
@@ -87,6 +92,8 @@ class SocialServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     serviceLocator.registerLazySingleton<CreatePostRemoteDataSource>(() =>
         CreatePostRemoteDataSourceImpl(serviceLocator(), serviceLocator()));
+    serviceLocator.registerLazySingleton<EditProfileRemoteDataSource>(() =>
+        EditProfileRemoteDataSourceImpl(serviceLocator(), serviceLocator()));
     serviceLocator.registerLazySingleton<InstagramRemoteDataSource>(() =>
         InstagramRemoteDataSourceImpl(serviceLocator(),));
     serviceLocator.registerLazySingleton<SocialPostsRemoteDataSource>(
@@ -106,6 +113,8 @@ class SocialServiceLocator {
             () => TwitterRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<InstagramRepo>(
             () => InstagramRepoImpl(serviceLocator()));
+ serviceLocator.registerLazySingleton<EditProfileRepo>(
+            () => EditProfileRepoImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<CreatePostUseCase>(
             () => CreatePostUseCase(serviceLocator()));
@@ -346,6 +355,11 @@ class SocialServiceLocator {
     ));
 
     serviceLocator
+        .registerLazySingleton<EditProfileUseCase>(() => EditProfileUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
         .registerLazySingleton<DeleteTwitterCommentUseCase>(() => DeleteTwitterCommentUseCase(
       serviceLocator(),
     ));
@@ -357,6 +371,10 @@ class SocialServiceLocator {
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
+      serviceLocator(),
+    ));
+
+    serviceLocator.registerFactory<EditProfileCubit>(() => EditProfileCubit(
       serviceLocator(),
     ));
 

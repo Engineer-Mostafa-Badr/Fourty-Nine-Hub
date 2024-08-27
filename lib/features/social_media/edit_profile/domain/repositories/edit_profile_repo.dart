@@ -1,0 +1,9 @@
+import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
+import 'package:fourtyninehub/features/social_media/edit_profile/domain/entities/edit_profile_entity.dart';
+
+abstract class EditProfileRepo {
+  Future<Either<Failure, UserEntity>> editProfile(
+      {required EditProfileEntity params});
+}
