@@ -652,7 +652,7 @@ class TinderCardStack extends StatelessWidget {
         listener: (context, state) {
           // Handle any errors in a centralized place
           log("Error: $state");
-                },
+        },
         builder: (context, state) {
           if (state.userData.isEmpty) {
             return const Center(
@@ -668,11 +668,17 @@ class TinderCardStack extends StatelessWidget {
   Widget _buildCardSwiper(BuildContext context, TinderViewState state) {
     return CardSwiper(
       cardsCount: state.userData.length,
-      numberOfCardsDisplayed: state.userData.length < 3 ? state.userData.length : 2,
+      numberOfCardsDisplayed:
+          state.userData.length < 3 ? state.userData.length : 2,
       scale: 0.9,
       isLoop: true,
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 16),
       onSwipe: (previousIndex, currentIndex, direction) {
+        // Disable swapping if there's only one card
+        if (state.userData.length == 1) {
+          return false; // Prevent swipe
+        }
+
         if (currentIndex != null) {
           _fetchUserDataOnSwipe(context, state.userData[currentIndex].id);
 
@@ -682,10 +688,11 @@ class TinderCardStack extends StatelessWidget {
         }
         return true;
       },
-      cardBuilder: (context, index, horizontalOffsetPercentage, verticalOffsetPercentage) {
+      cardBuilder: (context, index, horizontalOffsetPercentage,
+          verticalOffsetPercentage) {
         return _buildCardWidget(context, state.userData[index]);
       },
-      duration: const Duration(milliseconds: 150),
+      duration: const Duration(milliseconds: 100),
     );
   }
 
@@ -731,8 +738,12 @@ class TinderCardStack extends StatelessWidget {
           fit: BoxFit.scaleDown,
           child: IconButton(
             onPressed: () => _switchDisplayGender(context, user),
-            icon: Icon(context.read<TinderViewCubit>().state.gender == 'male' ? Icons.female : Icons.male,
-                size: 35, color: Colors.black),
+            icon: Icon(
+                context.read<TinderViewCubit>().state.gender == 'male'
+                    ? Icons.female
+                    : Icons.male,
+                size: 35,
+                color: Colors.black),
           ),
         ),
       ),
@@ -754,12 +765,13 @@ class TinderCardStack extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: List.generate(
           user.pictures.length,
-              (dotIndex) => Expanded(
+          (dotIndex) => Expanded(
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 2.0),
               height: 4,
               decoration: BoxDecoration(
-                color: dotIndex == context.read<TinderViewCubit>().state.currentStoryIndex
+                color: dotIndex ==
+                        context.read<TinderViewCubit>().state.currentStoryIndex
                     ? Colors.red
                     : Colors.grey.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(2),
@@ -785,7 +797,7 @@ class TinderCardStack extends StatelessWidget {
             ListTile(
               contentPadding: EdgeInsets.zero,
               title: Text(
-                "${capitalizeAndSplit(cardUser.firstName??'')} ${capitalizeAndSplit(cardUser.lastName??'')}",
+                "${capitalizeAndSplit(cardUser.firstName ?? '')} ${capitalizeAndSplit(cardUser.lastName ?? '')}",
                 textAlign: TextAlign.start,
                 style: Styles.headerText(
                   color: Colors.white,
@@ -813,12 +825,24 @@ class TinderCardStack extends StatelessWidget {
       children: [
         BadgedLabel(
           color: AppColors.WHATS_APP_COLOR,
-          label: context.read<TinderViewCubit>().state.lastSeenModel?.data?.status ?? 'offline',
+          label: context
+                  .read<TinderViewCubit>()
+                  .state
+                  .lastSeenModel
+                  ?.data
+                  ?.status ??
+              'offline',
         ),
         const SizedBox(width: 10),
         BadgedLabel(
           color: AppColors.SECONDARY_COLOR,
-          label: context.read<TinderViewCubit>().state.isUserNearby?.data?.isNearBy == true
+          label: context
+                      .read<TinderViewCubit>()
+                      .state
+                      .isUserNearby
+                      ?.data
+                      ?.isNearBy ==
+                  true
               ? 'Nearby'
               : 'Not Nearby',
         ),
@@ -827,7 +851,8 @@ class TinderCardStack extends StatelessWidget {
   }
 
   Widget _buildLastSeen(BuildContext context) {
-    final lastSeen = context.read<TinderViewCubit>().state.lastSeenModel?.data?.lastSeen;
+    final lastSeen =
+        context.read<TinderViewCubit>().state.lastSeenModel?.data?.lastSeen;
     return Text(
       lastSeen != null ? "Last seen ${getTimeAgo(lastSeen)}" : "",
       style: Styles.mediumText(
@@ -858,34 +883,29 @@ class TinderCardStack extends StatelessWidget {
             _buildActionButton(
               context,
               Icons.person,
-                  () => context.push(Routes.OTHERSACCOUNT,
+              () => context.push(Routes.OTHERSACCOUNT,
                   extra: context.read<UserCubit>().state.data!.id),
               color: AppColors.PRIMARY_COLOR,
             ),
-            _buildActionButton(
-              context,
-              Icons.chat,
-                  () => _showChatTypeDialog(context, cardUser: cardUser),
-              color: Colors.white,
-                iconColor: AppColors.PRIMARY_COLOR
-
-            ),
+            _buildActionButton(context, Icons.chat,
+                () => _showChatTypeDialog(context, cardUser: cardUser),
+                color: Colors.white, iconColor: AppColors.PRIMARY_COLOR),
             _buildActionButton(
               context,
               Icons.add_photo_alternate_outlined,
-                  () => _navigateToUserProfile(context, cardUser),
+              () => _navigateToUserProfile(context, cardUser),
               color: Colors.red,
             ),
             _buildActionButton(
               context,
               Icons.card_giftcard,
-                  () => showGiftBottomSheet(context, receiverId: cardUser.id),
+              () => showGiftBottomSheet(context, receiverId: cardUser.id),
               color: AppColors.ACCENT_COLOR,
             ),
             _buildActionButton(
               context,
               Icons.report,
-                  () => _showReportBottomSheet(context, cardUser),
+              () => _showReportBottomSheet(context, cardUser),
               color: Colors.red,
             ),
           ],
@@ -895,12 +915,12 @@ class TinderCardStack extends StatelessWidget {
   }
 
   Widget _buildActionButton(
-      BuildContext context,
-      IconData icon,
-      VoidCallback onPressed, {
-        Color? color,
-        Color? iconColor,
-      }) {
+    BuildContext context,
+    IconData icon,
+    VoidCallback onPressed, {
+    Color? color,
+    Color? iconColor,
+  }) {
     return FloatingActionButton.small(
       heroTag: UniqueKey(),
       onPressed: onPressed,
@@ -1002,8 +1022,8 @@ class ChatAlertDialogue extends StatelessWidget {
 
   Widget _buildChatOptionCard(BuildContext context,
       {required IconData icon,
-        required String label,
-        required UserData cardUser}) {
+      required String label,
+      required UserData cardUser}) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final iconSize = screenWidth * 0.1;
@@ -1047,7 +1067,8 @@ class ChatAlertDialogue extends StatelessWidget {
 
     if (label == "Anonymous") {
       tinderCubit.startAnonymousChat(receiverId: cardUser.id ?? '').then((_) {
-        final chatId = tinderCubit.state.anonymousChatResponse?.data.chat.id ?? '';
+        final chatId =
+            tinderCubit.state.anonymousChatResponse?.data.chat.id ?? '';
         if (chatId.isNotEmpty) {
           chatsCubit.initSocketConnection();
           _navigateToChatRoom(context, chatId, chatRoomCubit, chatsCubit);
@@ -1118,7 +1139,7 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
   void _previousStory() {
     setState(() {
       _currentStoryIndex =
-      (_currentStoryIndex > 0) ? _currentStoryIndex - 1 : 0;
+          (_currentStoryIndex > 0) ? _currentStoryIndex - 1 : 0;
     });
   }
 
@@ -1173,7 +1194,7 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
               pictures.length,
-                  (dotIndex) => Expanded(
+              (dotIndex) => Expanded(
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 2.0),
                   height: 4,

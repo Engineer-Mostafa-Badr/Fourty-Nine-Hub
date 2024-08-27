@@ -864,7 +864,9 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../twitter/presentation/widgets/report_view.dart';
 import 'audio_screen.dart';
 
 /// ReelView is the main screen that displays a list of reels.
@@ -1000,21 +1002,10 @@ class ReelsScreenState extends State<ReelsScreen> {
     return BlocBuilder<ReelsCubit, ReelsState>(
       builder: (context, state) {
         if (state.reels.isEmpty) {
-          // showSnackBarAfterBuild(context, message: 'Check the login page.');
           return const Center(
             child: CupertinoActivityIndicator(radius: 25),
           );
         }
-
-        if (serviceLocator<UserCubit>().token == null ||
-            serviceLocator<UserCubit>().token!.isEmpty) {
-          showSnackBarAfterBuild(context, message: 'Check the login page.');
-
-          return const Center(
-            child: CupertinoActivityIndicator(radius: 25),
-          );
-        }
-
         return PageView.builder(
           physics: const BouncingScrollPhysics(),
           controller: _pageController,
@@ -1277,7 +1268,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
     return Padding(
       padding: const EdgeInsets.all(0.0),
       child: SizedBox(
-        height: height / 2,
+        height: height * 0.8,
         width: double.infinity,
         child: Stack(
           children: [
@@ -1408,15 +1399,17 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
           imagePath: widget.reel.audio.audioPicture,
           onPressed: () {
             _pauseVideo();
-            _videoPlayerController.dispose();
-            _chewieController?.dispose();
+            // _videoPlayerController.dispose();
+            // _chewieController?.dispose();
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) =>
                     InstagramAudioScreen(audio: widget.reel.audio),
               ),
-            );
+            ).then((value) {
+              // initState();
+            });
           },
         ),
       ],
@@ -1467,6 +1460,16 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
         _buildActionButton(FontAwesomeIcons.gift, widget.reel.saveCount, () {
           showGiftBottomSheet(context, receiverId: widget.reel.user.id);
         }),
+        _buildActionButton(
+            FontAwesomeIcons.circleExclamation, widget.reel.saveCount, () {
+          bottomSheet(
+            context: context,
+            widget: ReportView(
+              id: widget.reel.user.id,
+              categoryId: '66684135dbb427ee42aa0141',
+            ),
+          );
+        }),
       ],
     );
   }
@@ -1497,6 +1500,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
 
   @override
   void dispose() {
+    _pauseVideo();
     _videoPlayerController.dispose();
     _chewieController?.dispose();
     super.dispose();
