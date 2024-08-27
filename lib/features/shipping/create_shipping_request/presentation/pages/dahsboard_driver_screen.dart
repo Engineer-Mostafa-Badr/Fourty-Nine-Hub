@@ -109,83 +109,82 @@ class NewTripWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              width: double.infinity,
-            ),
-            // Text(
-            //   "New Trips",
-            //   style: TextStyle(color: AppColors.PRIMARY_COLOR, fontSize: 25),
-            // ),
-            // SizedBox(height: 30,),
-            BlocBuilder<GetAllTripCubit, ShippingState>(
-              builder: (context, state) {
-                if (state is LoadingShippingState) {
-                  return const Align(
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.PRIMARY_COLOR,
-                      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(
+            width: double.infinity,
+          ),
+          // Text(
+          //   "New Trips",
+          //   style: TextStyle(color: AppColors.PRIMARY_COLOR, fontSize: 25),
+          // ),
+          // SizedBox(height: 30,),
+          BlocBuilder<GetAllTripCubit, ShippingState>(
+            builder: (context, state) {
+              if (state is LoadingShippingState) {
+                return const Align(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.PRIMARY_COLOR,
                     ),
-                  );
-                }
-                if (state is FailureShippingState) {
-                  log(getFailureMessage(state.failure, context),
-                      name: "jjjjjjjjjjjjjjjjjjj");
-                }
-                if (state is SuccessGetAllTripState) {
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        // const SizedBox(
-                        //   height: 30,
-                        // ),
-                        // const SizedBox(
-                        //   height: 40,
-                        // ),
-                        ...List.generate(
-                          state.allTripList.length,
-                          (index) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TripCardWidget(
-                                  model: state.allTripList[index],
-                                ),
-                                Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(horizontal: 35),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        //هتروح لي صفحه subscription
-                                        serviceLocator<SubscriptionController>()
-                                            .showActiveSubscriptionAmounts(
-                                                walletType:
-                                                    WalletTypes.balance);
-                                      },
-                                      child: const Text(
-                                        "Subscribe to send offer / contact the client",
-                                        style: TextStyle(
-                                            fontSize: 16, color: Colors.red),
-                                      ),
-                                    ))
-                              ],
-                            );
-                          },
-                        )
-                      ],
-                    ),
-                  );
-                } else {
-                  return Container();
-                }
-              },
-            )
-          ],
-        ),
-      );
+                  ),
+                );
+              }
+              if (state is FailureShippingState) {
+                log(getFailureMessage(state.failure, context),
+                    name: "jjjjjjjjjjjjjjjjjjj");
+              }
+              if (state is SuccessGetAllTripState) {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      // const SizedBox(
+                      //   height: 30,
+                      // ),
+                      // const SizedBox(
+                      //   height: 40,
+                      // ),
+                      ...List.generate(
+                        state.allTripList.length,
+                        (index) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TripCardWidget(
+                                model: state.allTripList[index],
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 35),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      //هتروح لي صفحه subscription
+                                      serviceLocator<SubscriptionController>()
+                                          .showActiveSubscriptionAmounts(
+                                              walletType: WalletTypes.balance);
+                                    },
+                                    child: const Text(
+                                      "Subscribe to send offer / contact the client",
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.red),
+                                    ),
+                                  ))
+                            ],
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
+          )
+        ],
+      ),
+    );
   }
 }
 // SingleChildScrollView(

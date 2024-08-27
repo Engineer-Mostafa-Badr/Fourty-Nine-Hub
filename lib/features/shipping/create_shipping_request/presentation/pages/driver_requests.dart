@@ -17,8 +17,7 @@ class DriverRequests extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<GetAllTripCubit, ShippingState>(
+    return Scaffold(body: BlocBuilder<GetAllTripCubit, ShippingState>(
       builder: (context, state) {
         if (state is LoadingShippingState) {
           return Align(
@@ -57,7 +56,9 @@ class DriverRequests extends StatelessWidget {
                             child: GestureDetector(
                               onTap: () {
                                 //هتروح لي صفحه subscription
-                                serviceLocator<SubscriptionController>().showActiveSubscriptionAmounts(walletType: WalletTypes.balance);
+                                serviceLocator<SubscriptionController>()
+                                    .showActiveSubscriptionAmounts(
+                                        walletType: WalletTypes.balance);
                               },
                               child: Text(
                                 "Subscribe to send offer / contact the client",

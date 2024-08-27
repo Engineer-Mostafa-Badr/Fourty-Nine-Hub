@@ -1,15 +1,20 @@
+import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/api/api_consumer.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+
 import '../../service/notification_service.dart';
 
 abstract class NotificationDataSource {
   Future<void> initNotification();
   Future<String?> getNotificationMobileAppId();
   Future<void> cancelNotification();
+  Future<Either<Failure, Map<String, dynamic>>> getAllNotification();
 }
 
 class NotificationDataSourceImpl implements NotificationDataSource {
   final NotificationService _notificationService;
-
-  NotificationDataSourceImpl(this._notificationService);
+  final ApiConsumer api;
+  NotificationDataSourceImpl(this._notificationService, this.api);
 
   @override
   Future<void> cancelNotification() => _notificationService.cancelAll();
@@ -20,4 +25,10 @@ class NotificationDataSourceImpl implements NotificationDataSource {
 
   @override
   Future<void> initNotification() => _notificationService.inti();
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> getAllNotification() {
+    return api
+        .get("https://49dev.com/api/v1/notifications?type=app&limit=10&page=1");
+  }
 }

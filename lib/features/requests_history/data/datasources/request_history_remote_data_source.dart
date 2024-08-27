@@ -44,7 +44,7 @@ class RequestHistoryRemoteDataSourceImpl
     final response = await _apiConsumer.get(Jsons.shippingRequests);
     return response.fold(
         (failure) => Left(failure),
-        (data) => Right((data['data']['requests'] as List)
+        (data) => Right((data['data'] as List)
             .map((e) => ShippingRequestModel.fromJson(e))
             .toList()));
   }

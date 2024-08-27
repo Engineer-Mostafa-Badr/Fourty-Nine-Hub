@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_card.dart';
+import 'package:fourtyninehub/features/requests_history/presentation/cubit/get_shipping_request_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
@@ -103,26 +105,43 @@ class HistoryRequestsView extends StatelessWidget {
     //       });
     // });r
     return MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => serviceLocator<TripCubit>(),
-          ),
-          BlocProvider(
-            create: (context) => serviceLocator<CallMessageCubit>(),
-          ),
-        ],
-        child: ListView.builder(
-          itemBuilder: (context, index) {
-            return NotificationDriverCard(
-              isHistory: true,
-              priceFontSize: 20,
-              model: AllTripModel(
-                desc: "lksjdf",
-                price: 20
-              ),
+      providers: [
+        BlocProvider(
+          create: (context) => serviceLocator<TripCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<CallMessageCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<GetShippingRequestCubit>(),
+        ),
+      ],
+      child: BlocBuilder<GetShippingRequestCubit, ShippingState>(
+        builder: (context, state) {
+          if (state is SuccessGetShippingHistoryState) {
+            return ListView.builder(
+              itemCount: state.list.length,
+              itemBuilder: (context, index) {
+                return NotificationDriverCard(
+                  isHistory: true,
+                  priceFontSize: 20,
+                  model: AllTripModel(
+                    desc: state.list[index].desc,
+                    status: state.list[index].status,
+                    price: state.list[index].price,
+                    targetLocation: state.list[index].targetLocation,
+                    startLocation: state.list[index].startLocation,
+                    time: state.list[index].time,
+                  ),
+                );
+              },
             );
-          },
-        ));
+          } else {
+            return Container();
+          }
+        },
+      ),
+    );
   }
 
   Widget _buildHealthBooking() {

@@ -8,3 +8,7 @@ abstract class NotificationsState extends Equatable {
 }
 
 class NotificationsInitial extends NotificationsState {}
+
+class SuccessGetAllNotificationState extends NotificationsState {
+  // final List<NotificationModel> notifications;
+}

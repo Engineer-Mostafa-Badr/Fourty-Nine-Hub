@@ -80,6 +80,7 @@ dependencies:
   lottie: ^3.1.2
 
   json_annotation: ^4.8.1
+  audioplayers: ^6.0.0
 
 dev_dependencies:
   flutter_lints: ^4.0.0
@@ -101,6 +102,7 @@ flutter:
   assets:
     - assets/images/
     - assets/json/
+    - assets/
     - assets/translations/
     - assets/settings/
     - assets/images/reactions/

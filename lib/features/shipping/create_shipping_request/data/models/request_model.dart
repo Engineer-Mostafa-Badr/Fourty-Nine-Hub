@@ -6,8 +6,8 @@ class RequestModel {
   String? deliveryPoint;
   String? time;
   String? date;
-  List? mediaIds;
-  List<XFile>? tripImages;
+  // List? mediaIds;
+  // List<XFile>? tripImages;
   String? description;
   String? offerPrice;
   String? phone;
@@ -15,9 +15,9 @@ class RequestModel {
   RequestModel({
     this.deliveryPoint,
     this.description,
-    this.mediaIds,
+    // this.mediaIds,
     this.offerPrice,
-    this.tripImages,
+    // this.tripImages,
     this.phone,
     this.date,
     this.subcategoryEntity,
@@ -33,7 +33,7 @@ class RequestModel {
       "time": "$date:$time",
       "desc": description,
       "phone": phone,
-      "goodsPicture": mediaIds
+      // "goodsPicture": mediaIds
     };
   }
 }

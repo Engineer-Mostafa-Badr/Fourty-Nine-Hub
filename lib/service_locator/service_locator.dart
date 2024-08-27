@@ -10,10 +10,12 @@ import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dar
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
+import 'package:fourtyninehub/core/service/notification_service.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
+import 'package:fourtyninehub/service_locator/notification_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
 import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
@@ -116,6 +118,8 @@ class DI {
     await AuthServiceLocator.execute(serviceLocator: serviceLocator);
     // Ride Customer
     await RideServiceLocator.execute(serviceLocator: serviceLocator);
+    //Notification
+    await NotificationServiceLocator.execute(serviceLocator: serviceLocator);
     // Subcategories
     SubcategoriesServiceLocator.execute(serviceLocator: serviceLocator);
     // Fourty-Nine

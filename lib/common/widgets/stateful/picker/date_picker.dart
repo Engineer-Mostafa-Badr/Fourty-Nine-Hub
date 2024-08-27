@@ -63,7 +63,7 @@ class _DatePickerFieldState extends State<DatePickerField> {
               child: _selectedDate == null
                   ? Text(
                       widget.title ?? 'No date selected!',
-                      style: widget.textStyle??
+                      style: widget.textStyle ??
                           Styles.mediumText(color: AppColors.DARK_GRAY_COLOR),
                     )
                   : Text(

@@ -64,9 +64,9 @@ class ShippingCubit extends Cubit<ShippingState> {
     model.subCategoryEntity = subCategory;
   }
 
-  getUserImage({required File image}) {
-    model.image = image;
-  }
+  // getUserImage({required File image}) {
+  //   model.image = image;
+  // }
 
   String? validation({required String message, required bool condition}) {
     log((model.subCategoryEntity == null).toString(),
@@ -79,30 +79,30 @@ class ShippingCubit extends Cubit<ShippingState> {
   }
 
   //User
-  pickImageUser({required File image}) {
-    model.image = image;
-  }
+  // pickImageUser({required File image}) {
+  //   model.image = image;
+  // }
 
   //Car
-  pickImageCarRight({required File image}) {
-    model.carImageRight = image;
-  }
+  // pickImageCarRight({required File image}) {
+  //   model.carImageRight = image;
+  // }
 
-  pickImageCarLeft({required File image}) {
-    model.carImageLeft = image;
-  }
+  // pickImageCarLeft({required File image}) {
+  //   model.carImageLeft = image;
+  // }
 
-  pickImageCarBehind({required File image}) {
-    model.carImageBehind = image;
-  }
+  // pickImageCarBehind({required File image}) {
+  //   model.carImageBehind = image;
+  // }
 
   pickImageCarInFront({required File image}) {
     model.carImageInFront = image;
   }
 
-  pickImagePlate({required File image}) {
-    model.plate = image;
-  }
+  // pickImagePlate({required File image}) {
+  //   model.plate = image;
+  // }
 
   //ID
   pickImageIdBehind({required File image}) {
@@ -131,9 +131,9 @@ class ShippingCubit extends Cubit<ShippingState> {
     model.licenseImageInFront = image;
   }
 
-  setGovernorate({required GovernorateEntity governorate}) {
-    model.governorate = governorate;
-  }
+  // setGovernorate({required GovernorateEntity governorate}) {
+  //   model.governorate = governorate;
+  // }
 
   //Request
   seSubCategoryRequest({required SubCategoryEntity subCategory}) {
@@ -152,56 +152,56 @@ class ShippingCubit extends Cubit<ShippingState> {
     model.licenseExpiryDate = date;
   }
 
-  getUserS3Imag() async {
-    InfoDocumentsModel json = InfoDocumentsModel(
-        document: Document(
-      name: "criminalRecord",
-      type: getFileExtension(model.image!),
-      size: await getFileSize(model.image!),
-    ));
-    var response = await repository.getS3ImageDocuments(
-        endpoint: EndPoints.infoDocuments, json: json.toJson());
-    response.fold(
-      (l) {
-        log(model.image.toString(), name: "GetS3Request");
-      },
-      (r) async {
-        log(r.toString(), name: "GetS3Request");
-        await sendBinaryFileData(
-            file: XFile(model.image!.path),
-            signedUrl: r['data']['criminalRecordData']['signedUrl']);
-        successSendImage(
-          endpoint:
-              "${EndPoints.infoDocuments}/${r['data']['criminalRecordData']['mediaId']}",
-        );
-      },
-    );
-  }
+  // getUserS3Imag() async {
+  //   InfoDocumentsModel json = InfoDocumentsModel(
+  //       document: Document(
+  //     name: "criminalRecord",
+  //     type: getFileExtension(model.image!),
+  //     size: await getFileSize(model.image!),
+  //   ));
+  //   var response = await repository.getS3ImageDocuments(
+  //       endpoint: EndPoints.infoDocuments, json: json.toJson());
+  //   response.fold(
+  //     (l) {
+  //       log(model.image.toString(), name: "GetS3Request");
+  //     },
+  //     (r) async {
+  //       log(r.toString(), name: "GetS3Request");
+  //       await sendBinaryFileData(
+  //           file: XFile(model.image!.path),
+  //           signedUrl: r['data']['criminalRecordData']['signedUrl']);
+  //       successSendImage(
+  //         endpoint:
+  //             "${EndPoints.infoDocuments}/${r['data']['criminalRecordData']['mediaId']}",
+  //       );
+  //     },
+  //   );
+  // }
 
-  getPlateS3Imag() async {
-    var response = await repository
-        .getS3ImageDocuments(endpoint: EndPoints.carPlate, json: {
-      "carPlate": {
-        "type": getFileExtension(model.plate!),
-        "size": await getFileSize(model.plate!),
-      }
-    });
-    response.fold(
-      (l) {
-        log(model.image.toString(), name: "GetS3Request");
-      },
-      (r) async {
-        log(r.toString(), name: "GetS3Request");
-        await sendBinaryFileData(
-            file: XFile(model.image!.path),
-            signedUrl: r['data']['drivingLicenseFrontData']['signedUrl']);
-        successSendImage(
-          endpoint:
-              "${EndPoints.infoDocuments}/${r['data']['drivingLicenseFrontData']['mediaId']}",
-        );
-      },
-    );
-  }
+  // getPlateS3Imag() async {
+  //   var response = await repository
+  //       .getS3ImageDocuments(endpoint: EndPoints.carPlate, json: {
+  //     "carPlate": {
+  //       "type": getFileExtension(model.plate!),
+  //       "size": await getFileSize(model.plate!),
+  //     }
+  //   });
+  //   response.fold(
+  //     (l) {
+  //       log(model.image.toString(), name: "GetS3Request");
+  //     },
+  //     (r) async {
+  //       log(r.toString(), name: "GetS3Request");
+  //       await sendBinaryFileData(
+  //           file: XFile(model.image!.path),
+  //           signedUrl: r['data']['drivingLicenseFrontData']['signedUrl']);
+  //       successSendImage(
+  //         endpoint:
+  //             "${EndPoints.infoDocuments}/${r['data']['drivingLicenseFrontData']['mediaId']}",
+  //       );
+  //     },
+  //   );
+  // }
 
   getS3IdImages() async {
     var response = await repository.getS3IDImages(
@@ -238,10 +238,7 @@ class ShippingCubit extends Cubit<ShippingState> {
 
   getCarImagesS3() async {
     List<File> listFile = [
-      model.carImageRight!,
-      model.carImageLeft!,
       model.carImageInFront!,
-      model.carImageBehind!,
     ];
     List<CarImage>? carImagesList = await Future.wait(listFile.map(
       (e) async => CarImage(
@@ -251,7 +248,7 @@ class ShippingCubit extends Cubit<ShippingState> {
     ));
     var response = await repository.getS3CarImages(
       model: CarImagesS3Model(
-        updateImageIndex: [1, 2, 3, 4],
+        updateImageIndex: [1],
         carImages: carImagesList,
       ),
     );
@@ -405,13 +402,15 @@ class ShippingCubit extends Cubit<ShippingState> {
     emit(LoadingShippingState());
     var response = await repository.register(
       model: DriverRegisterRequestModel(
-          carModel: model.model ?? "",
-          categoryId: model.subCategoryEntity?.id ?? "",
-          firstName: model.firstName ?? "",
-          lastName: model.lastName ?? "",
-          governorate: model.governorate?.nameAr ?? "",
-          location: "",
-          phone: model.phone ?? ""),
+        carModel: model.model ?? "",
+        categoryId: model.subCategoryEntity?.id ?? "",
+        firstName: model.firstName ?? "",
+        lastName: model.lastName ?? "",
+        location: "",
+        phone: model.phone ?? "",
+        plateInformation: model.plateInfromation ?? "",
+        idNumber: model.idNumber ?? "",
+      ),
     );
     response.fold(
       (l) {
@@ -426,8 +425,8 @@ class ShippingCubit extends Cubit<ShippingState> {
         emit(SuccessRegisterState(
             message:
                 "You have submitted your registration successfully, waiting for administration approval"));
-        await getUserS3Imag();
-        await getPlateS3Imag();
+        // await getUserS3Imag();
+        // await getPlateS3Imag();
         await getCarImagesS3();
         await getS3IdImages();
         await getDrivingLicenseS3();

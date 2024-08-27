@@ -229,5 +229,4 @@ abstract class Paths {
   static const DRIVERREQUESTS = 'DriverRequests';
   static const DRIVERREQUESTSDETIALS = 'DriverRequestsDetials';
   static const DASHBOARDDRIVERSCREEN = 'DashboardDriverScreen';
-
 }

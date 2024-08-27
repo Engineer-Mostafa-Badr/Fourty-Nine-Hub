@@ -14,7 +14,7 @@ class CallMessageCubit extends Cubit<ShippingState> {
     response.fold(
       (l) {
         log(l.toString(), name: "lksjdflskdjlskdjfslkdfjsf");
-        
+
         emit(FailureShippingState(failure: l));
       },
       (r) {

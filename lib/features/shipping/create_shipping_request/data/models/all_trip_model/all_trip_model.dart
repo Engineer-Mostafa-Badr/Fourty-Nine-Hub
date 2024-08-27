@@ -8,8 +8,8 @@ class AllTripModel {
   bool? adminIgnore;
   String? id;
   dynamic driverId;
-  UserId? userId;
-  CategoryId? categoryId;
+  String? userId;
+  String? categoryId;
   String? startLocation;
   String? targetLocation;
   String? status;
@@ -47,12 +47,8 @@ class AllTripModel {
     return AllTripModel(
       adminIgnore: json['adminIgnore'] as bool?,
       driverId: json['driverId'] as dynamic,
-      userId: json['userId'] == null
-          ? null
-          : UserId.fromJson(json['userId'] as Map<String, dynamic>),
-      categoryId: json['categoryId'] == null
-          ? null
-          : CategoryId.fromJson(json['categoryId'] as Map<String, dynamic>),
+      userId: json['userId'] as String?,
+      categoryId: json['categoryId'] as String?,
       startLocation: json['startLocation'] as String?,
       targetLocation: json['targetLocation'] as String?,
       status: json['status'] as String?,
@@ -78,8 +74,8 @@ class AllTripModel {
         'adminIgnore': adminIgnore,
         '_id': id,
         'driverId': driverId,
-        'userId': userId?.toJson(),
-        'categoryId': categoryId?.toJson(),
+        'userId': userId,
+        'categoryId': categoryId,
         'startLocation': startLocation,
         'targetLocation': targetLocation,
         'status': status,

@@ -55,7 +55,7 @@ class EndPoints {
   // static const idLicenseS3 = '/ride/info/id';
   static const mainWallet = '$developmentBaseUrl/main-wallet';
   static const getAllTripBySubCategory =
-      '$developmentBaseUrl/loading/trip/subcategory';
+      '$developmentBaseUrl/loading/trip/driver/subcategory';
   static const infoDocuments = '/loading/driver/info/documents';
   static const carPlate = '/loading/driver/info/car-plate';
   static const infoId = '$developmentBaseUrl/loading/driver/info/id';
@@ -78,6 +78,11 @@ class EndPoints {
       '$developmentBaseUrl/dashboard/media/signed-url';
   static const mediaconfirm = '$developmentBaseUrl/dashboard/media/confirm';
   static const click = '$developmentBaseUrl/global/click';
+  static const allUserTrips = '$developmentBaseUrl/loading/trip/allUserTrips';
+  static const loadingTripRequests =
+      '$developmentBaseUrl/loading/trip/loadingTripRequests';
+  // static const allUserTrips =
+  //     '$developmentBaseUrl/loading/trip/allUserTrips';
   // health
   static String getCities({required String governorateId}) =>
       '/health/cities/$governorateId';

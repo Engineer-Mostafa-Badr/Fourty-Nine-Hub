@@ -4,7 +4,12 @@ class UserId {
   String? lastName;
   String? email;
 
-  UserId({this.id, this.firstName, this.lastName, this.email,});
+  UserId({
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.email,
+  });
 
   factory UserId.fromJson(Map<String, dynamic> json) => UserId(
         firstName: json['firstName'] as String?,

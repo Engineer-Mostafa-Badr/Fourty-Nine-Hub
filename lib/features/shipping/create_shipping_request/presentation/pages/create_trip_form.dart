@@ -518,7 +518,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                             deliveryPoint: deliveryPoint.text,
                             description: decoration.text,
                             offerPrice: offerPrice.text,
-                            tripImages: tripImages,
+                            // tripImages: tripImages,
                             phone: phone.text,
                             subcategoryEntity: select,
                             receiptPoint: receiptPoint.text,

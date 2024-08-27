@@ -155,32 +155,36 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                                 color: AppColors.PRIMARY_COLOR,
                                                 fontWeight: FontWeight.w600),
                                             border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(10),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
                                                 borderSide: BorderSide(
                                                     color: field.hasError
                                                         ? Colors.red
                                                         : Colors.grey)),
                                             errorBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(10),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
                                                 borderSide: BorderSide(
-                                              color: field.hasError
-                                                  ? Colors.red
-                                                  : Colors.black,
-                                            )),
+                                                  color: field.hasError
+                                                      ? Colors.red
+                                                      : Colors.black,
+                                                )),
                                             enabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(10),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
                                                 borderSide: BorderSide(
-                                              color: field.hasError
-                                                  ? Colors.red
-                                                  : Colors.black,
-                                            )),
+                                                  color: field.hasError
+                                                      ? Colors.red
+                                                      : Colors.black,
+                                                )),
                                             focusedBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(10),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
                                                 borderSide: BorderSide(
-                                              color: field.hasError
-                                                  ? Colors.red
-                                                  : Colors.black,
-                                            )),
+                                                  color: field.hasError
+                                                      ? Colors.red
+                                                      : Colors.black,
+                                                )),
                                           ),
                                           width: MediaQuery.of(context)
                                                   .size
@@ -1216,6 +1220,10 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                             shippingcubit.model.lastName =
                                 lastNameController.text;
                             shippingcubit.model.phone = phoneController.text;
+                            shippingcubit.model.idNumber =
+                                idNumberController.text;
+                            shippingcubit.model.plateInfromation =
+                                plateNumberController.text;
                             context.read<ShippingCubit>().register();
                           }
                         },

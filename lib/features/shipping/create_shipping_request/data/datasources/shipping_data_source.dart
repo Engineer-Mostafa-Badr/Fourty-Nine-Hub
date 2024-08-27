@@ -43,9 +43,9 @@ class ShippingDataSource {
   }
 
   Future<Either<Failure, Map<String, dynamic>>> getAllTripBySubCategory() {
-    return api.get(
-        "${EndPoints.getAllTripBySubCategory}/62c8baad8e28a58a3edf5805");
+    return api.get(EndPoints.getAllTripBySubCategory);
   }
+
 // "${EndPoints.getAllTripBySubCategory}/${cacheService.getSubCategryDriver()}"
   //trip
   Future<Either<Failure, Map<String, dynamic>>> sendOfferPremium(
@@ -103,10 +103,17 @@ class ShippingDataSource {
       "subcategoryId": subcategoryId
     });
   }
-  // Future<Either<Failure, Map<String, dynamic>>>  report(
-  //     {required String id}) {
-  //   log(id);
-  //   return api
-  //       .post(EndPoints.report(subCategoryId: subCategoryId), data: {"loadingRequestId": id});
-  // }
+
+  Future<Either<Failure, Map<String, dynamic>>> getMyTrip() {
+    return api.get(
+      EndPoints.allUserTrips,
+    );
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> loadingTripRequests() async {
+    return api.get(EndPoints.loadingTripRequests);
+  }
+  Future<Either<Failure, Map<String, dynamic>>> getShippingRequests() async {
+    return api.get(EndPoints.allUserTrips);
+  }
 }

@@ -1,18 +1,14 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 class ShippingBanner extends StatelessWidget {
@@ -91,7 +87,10 @@ class ShippingBanner extends StatelessWidget {
                 //  isDriver()?Colors.transparent:
                 child: Text(
                   Labels.register,
-                  style: Styles.mediumText(color: isDriver()?Colors.transparent: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  style: Styles.mediumText(
+                      color: isDriver() ? Colors.transparent : Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
                 ),
               )
               // if ((model.subCategories!.first.isDriverApproved ?? false))
@@ -105,10 +104,10 @@ class ShippingBanner extends StatelessWidget {
   }
 
   bool isDriver() {
-    if (model.subCategories!.first.isDriver ?? false) {
+    if (model.mainCategory!.isDriver ?? false) {
       return true;
     } else {
-      if (model.subCategories!.first.isDriverApproved ?? false) {
+      if (model.mainCategory!.isDriverApproved ?? false) {
         return true;
       } else {
         return false;

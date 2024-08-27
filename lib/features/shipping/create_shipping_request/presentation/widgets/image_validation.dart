@@ -73,17 +73,17 @@ class _ImageValidationState extends State<ImageValidation> {
                 iconColor: widget.iconColor,
               ),
             ),
-            if(!widget.noTextError)
-            if (field.hasError)
-              Column(
-                children: [
-                  const SizedBox(height: 8),
-                  Text(
-                    field.errorText ?? "",
-                    style: Styles.mediumText(color: Colors.red),
-                  ),
-                ],
-              )
+            if (!widget.noTextError)
+              if (field.hasError)
+                Column(
+                  children: [
+                    const SizedBox(height: 8),
+                    Text(
+                      field.errorText ?? "",
+                      style: Styles.mediumText(color: Colors.red),
+                    ),
+                  ],
+                )
           ],
         );
       },

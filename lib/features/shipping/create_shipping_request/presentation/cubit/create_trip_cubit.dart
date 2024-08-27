@@ -23,10 +23,10 @@ class CreateTripCubit extends Cubit<ShippingState> {
               message:
                   "Your request has been sent successfully, waiting for the driver's response"),
         );
-        for (var item in r.images) {
-          await sendBinaryFileData(file: item.image, signedUrl: item.sigendUrl);
-          var confirmResponse = await repository.confirm(id: item.mediaId);
-        }
+        // for (var item in r.images) {
+        //   await sendBinaryFileData(file: item.image, signedUrl: item.sigendUrl);
+        //   var confirmResponse = await repository.confirm(id: item.mediaId);
+        // }
       },
     );
   }

@@ -5,8 +5,12 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/presentation
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class CreateDoctorGovernorateDropdown extends StatelessWidget {
-  const CreateDoctorGovernorateDropdown(
-      {super.key, this.onSelected, this.validator, this.hintStyle,});
+  const CreateDoctorGovernorateDropdown({
+    super.key,
+    this.onSelected,
+    this.validator,
+    this.hintStyle,
+  });
   final void Function(GovernorateEntity? value)? onSelected;
   final String? Function(Object? value)? validator;
   final TextStyle? hintStyle;
@@ -62,8 +66,7 @@ class CreateDoctorGovernorateDropdown extends StatelessWidget {
                       children: [
                         const SizedBox(height: 8),
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                                                horizontal: 15),
+                          padding: EdgeInsets.symmetric(horizontal: 15),
                           child: Text(
                             field.errorText ?? "",
                             style: Styles.mediumText(color: Colors.red),

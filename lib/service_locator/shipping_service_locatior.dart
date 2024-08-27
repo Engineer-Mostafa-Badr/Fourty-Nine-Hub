@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/features/requests_history/presentation/cubit/get_shipping_request_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/datasources/images_data_source.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/datasources/shipping_data_source.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/repositories/images_repository.dart';
@@ -5,7 +6,9 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/data/rep
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/favorite_shipping_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_request_by_my_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_my_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/images_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
@@ -21,6 +24,7 @@ class ShippingServiceLocatior {
     serviceLocator.registerLazySingleton(
       () => ImagesDataSource(api: serviceLocator()),
     );
+
     //Cubit
     serviceLocator.registerFactory(
       () => ShippingCubit(
@@ -30,6 +34,16 @@ class ShippingServiceLocatior {
     );
     serviceLocator.registerFactory(
       () => FavoriteShippingCubit(repository: serviceLocator()),
+    );
+    serviceLocator.registerFactory(
+      () => GetShippingRequestCubit(repository: serviceLocator())..getAllRequest(),
+    );
+    serviceLocator.registerFactory(
+      () => GetMyTripCubit(repository: serviceLocator())..getMyTrip(),
+    );
+    serviceLocator.registerFactory(
+      () => GetAllRequestByMyTripCubit(repository: serviceLocator())
+        ..getAllRequest(),
     );
     serviceLocator.registerFactory(
       () => CreateTripCubit(repository: serviceLocator()),

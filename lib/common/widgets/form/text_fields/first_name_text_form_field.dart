@@ -21,8 +21,8 @@ class FirstNameTextFormField extends MainTextFormField {
     super.hintColor,
     super.fillColor,
   }) : super(
-    // style: ,
-          validator: validator??Validator().validateUserName,
+          // style: ,
+          validator: validator ?? Validator().validateUserName,
           hintText: LocaleKeys.firstName.localize,
           keyboardType: TextInputType.name,
           textCapitalization: TextCapitalization.words,

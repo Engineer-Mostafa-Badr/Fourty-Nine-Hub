@@ -5,26 +5,29 @@ class DriverRegisterRequestModel {
   final String lastName;
   final String location;
   final String phone;
-  final String governorate;
-
-  DriverRegisterRequestModel(
-      {required this.categoryId,
-      required this.carModel,
-      required this.firstName,
-      required this.lastName,
-      required this.location,
-      required this.phone,
-      required this.governorate});
+  final String idNumber;
+  final String plateInformation;
+  DriverRegisterRequestModel({
+    required this.categoryId,
+    required this.carModel,
+    required this.idNumber,
+    required this.plateInformation,
+    required this.firstName,
+    required this.lastName,
+    required this.location,
+    required this.phone,
+  });
 
   Map<String, dynamic> register() {
     return {
       "categoryId": categoryId,
-      "carModel": carModel, // car model string
+      "carModel": carModel,
       "firstName": firstName,
       "lastName": lastName,
       "location": "الشروق",
       "phone": phone,
-      "governorate": governorate
+      "plateInformation": plateInformation,
+      "idNumber": idNumber
     };
   }
 }

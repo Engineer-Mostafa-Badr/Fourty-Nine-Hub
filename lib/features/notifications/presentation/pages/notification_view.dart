@@ -90,11 +90,10 @@ class NotificationView extends StatelessWidget {
     required List<NotificationModel> notificationList,
   }) {
     return RefreshIndicator.adaptive(
-      onRefresh: () async {},
-      child: Container()
-    );
+        onRefresh: () async {}, child: Container());
   }
-   Widget _buildHandNotificationWidget({
+
+  Widget _buildHandNotificationWidget({
     required List<NotificationModel> notificationList,
   }) {
     return RefreshIndicator.adaptive(
@@ -102,38 +101,49 @@ class NotificationView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 7,),
+          SizedBox(
+            height: 7,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25),
-            child: Text("12:12"),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25),
-            child: Text("12/5/2024"),
-          ),
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                child: Text("12:12"),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                child: Text("12/5/2024"),
+              ),
             ],
           ),
           NotificationDriverCard(
             priceFontSize: 40,
-                  model: AllTripModel(adminIgnore: false, time: "12:30:45", desc: "lskd", price: 12, targetLocation: "to location", startLocation: "from location"),
-                ),
-          SizedBox(height: 8,),
+            model: AllTripModel(
+                adminIgnore: false,
+                time: "12:30:45",
+                desc: "lskd",
+                price: 12,
+                targetLocation: "to location",
+                startLocation: "from location"),
+          ),
+          SizedBox(
+            height: 8,
+          ),
           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 25),
-                            child: GestureDetector(
-                              onTap: () {
-                                //هتروح لي صفحه subscription
-                                serviceLocator<SubscriptionController>().showActiveSubscriptionAmounts(walletType: WalletTypes.balance);
-                              },
-                              child: Text(
-                                "Subscribe to send offer / contact the client",
-                                style:
-                                    TextStyle(fontSize: 16, color: Colors.red),
-                              ),
-                            ))
+              padding: EdgeInsets.symmetric(horizontal: 25),
+              child: GestureDetector(
+                onTap: () {
+                  //هتروح لي صفحه subscription
+                  serviceLocator<SubscriptionController>()
+                      .showActiveSubscriptionAmounts(
+                          walletType: WalletTypes.balance);
+                },
+                child: Text(
+                  "Subscribe to send offer / contact the client",
+                  style: TextStyle(fontSize: 16, color: Colors.red),
+                ),
+              ))
         ],
       ),
     );

@@ -91,52 +91,41 @@ class ShippingRepository {
     return dataSource.confirm(id: id);
   }
 
-  Future<Either<Failure, CreateTripReturnModel>> createTrip(
+  Future<Either<Failure, Map<String, dynamic>>> createTrip(
       {required RequestModel model}) async {
     List<S3UploadModel> imagesS3 = [];
     // ignore: unused_local_variable
-    if (model.tripImages != null) {
-      for (var image in model.tripImages!) {
-        var responseUploadImage = await uploadImages(
-            image: image, subcategoryId: model.subcategoryEntity?.id ?? "");
-        await responseUploadImage.fold(
-          (l) async {
-            log(l.toString());
-          },
-          (r) async {
-            var json = r;
-            var mediaId = json['data']['mediaId'];
-            model.mediaIds ??= [];
-            model.mediaIds!.add(mediaId);
-            imagesS3.add(S3UploadModel(image,
-                sigendUrl: json['data']['signedUrl'], mediaId: mediaId));
-            // await confirmResponse.fold(
-            //   (l) async {
-            //     log(l.toString());
-            //   },
-            //   (r) {
+    // if (model.tripImages != null) {
+    //   for (var image in model.tripImages!) {
+    //     var responseUploadImage = await uploadImages(
+    //         image: image, subcategoryId: model.subcategoryEntity?.id ?? "");
+    //     await responseUploadImage.fold(
+    //       (l) async {
+    //         log(l.toString());
+    //       },
+    //       (r) async {
+    //         var json = r;
+    //         var mediaId = json['data']['mediaId'];
+    //         model.mediaIds ??= [];
+    //         model.mediaIds!.add(mediaId);
+    //         imagesS3.add(S3UploadModel(image,
+    //             sigendUrl: json['data']['signedUrl'], mediaId: mediaId));
+    //         // await confirmResponse.fold(
+    //         //   (l) async {
+    //         //     log(l.toString());
+    //         //   },
+    //         //   (r) {
 
-            //   },
-            // );
-          },
-        );
-      }
-    }
+    //         //   },
+    //         // );
+    //       },
+    //     );
+    //   }
+    // }
 
     var response = await dataSource.createTrip(model: model);
 
-    return response.fold(
-      (l) {
-        return left(l);
-      },
-      (r) {
-        CreateTripReturnModel returnModel = CreateTripReturnModel(
-          data: r,
-          images: imagesS3,
-        );
-        return right(returnModel);
-      },
-    );
+    return response;
   }
 
   Future<Either<Failure, Map<String, dynamic>>> getAllTripBySubCategory() {
@@ -160,40 +149,52 @@ class ShippingRepository {
 
   Future<Either<Failure, Map<String, dynamic>>> report(
       {required String loadingTripId}) {
-    return dataSource.report(loadingTripId: loadingTripId,);
-  }
-
-  Future<Either<Failure, Map<String, dynamic>>> uploadImages(
-      {required XFile image, required String subcategoryId}) async {
-    Map<String, dynamic> json = {};
-    String mediaId = "";
-    return dataSource.signedUrl(
-      json: {
-        "type": getFileExtension(File(image.path)),
-        "size": await getFileSize(File(image.path)),
-        "subcategoryId": subcategoryId
-      },
+    return dataSource.report(
+      loadingTripId: loadingTripId,
     );
   }
 
-  getFileExtension(File file) {
-    log("image/${path.extension(file.path).substring(1)}");
-    if (file.existsSync()) {
-      return "image/${path.extension(file.path).substring(1)}";
-    } else {
-      return "image/png";
-    }
+  Future<Either<Failure, Map<String, dynamic>>> getMyTrip() {
+    return dataSource.getMyTrip();
   }
+  // Future<Either<Failure, Map<String, dynamic>>> uploadImages(
+  //     {required XFile image, required String subcategoryId}) async {
+  //   Map<String, dynamic> json = {};
+  //   String mediaId = "";
+  //   return dataSource.signedUrl(
+  //     json: {
+  //       "type": getFileExtension(File(image.path)),
+  //       "size": await getFileSize(File(image.path)),
+  //       "subcategoryId": subcategoryId
+  //     },
+  //   );
+  // }
 
-  getFileSize(File file) async {
-    final bytes = await file.readAsBytes();
-    return bytes.length;
-  }
+  // getFileExtension(File file) {
+  //   log("image/${path.extension(file.path).substring(1)}");
+  //   if (file.existsSync()) {
+  //     return "image/${path.extension(file.path).substring(1)}";
+  //   } else {
+  //     return "image/png";
+  //   }
+  // }
+
+  // getFileSize(File file) async {
+  //   final bytes = await file.readAsBytes();
+  //   return bytes.length;
+  // }
 
   Future<Either<Failure, Map<String, dynamic>>> getCallMessage(
       {required String ownerId, required String subcategoryId}) {
     return dataSource.callMessage(
         ownerId: ownerId, subcategoryId: subcategoryId);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> loadingTripRequests() {
+    return dataSource.loadingTripRequests();
+  }
+  Future<Either<Failure, Map<String, dynamic>>> getShippingRequests() {
+    return dataSource.getShippingRequests();
   }
 }
 
@@ -205,9 +206,9 @@ class S3UploadModel {
   S3UploadModel(this.image, {required this.sigendUrl, required this.mediaId});
 }
 
-class CreateTripReturnModel {
-  final Map<String, dynamic> data;
-  final List<S3UploadModel> images;
+// class CreateTripReturnModel {
+//   final Map<String, dynamic> data;
+//   final List<S3UploadModel> images;
 
-  CreateTripReturnModel({required this.data, required this.images});
-}
+//   CreateTripReturnModel({required this.data, required this.images});
+// }

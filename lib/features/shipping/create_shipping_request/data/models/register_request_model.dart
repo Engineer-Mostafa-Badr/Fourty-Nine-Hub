@@ -7,11 +7,11 @@ class RegisterRequestModel {
   SubCategoryEntity? subCategoryEntity;
   String? firstName;
   String? lastName;
-  File? image;
-  File? plate;
-  File? carImageRight;
-  File? carImageLeft;
-  File? carImageBehind;
+  // File? image;
+  // File? plate;
+  // File? carImageRight;
+  // File? carImageLeft;
+  // File? carImageBehind;
   File? carImageInFront;
   File? idImageBehind;
   File? idImageInFront;
@@ -24,15 +24,15 @@ class RegisterRequestModel {
   DateTime? licenseExpiryDate;
   String? model;
   String? phone;
-  GovernorateEntity? governorate;
+  String? idNumber;
+  String? plateInfromation;
+  // GovernorateEntity? governorate;
   RegisterRequestModel({
     this.subCategoryEntity,
     this.firstName,
     this.lastName,
-    this.image,
-    this.carImageRight,
-    this.carImageLeft,
-    this.carImageBehind,
+    this.idNumber,
+    this.plateInfromation,
     this.carImageInFront,
     this.idImageBehind,
     this.idImageInFront,
@@ -45,6 +45,5 @@ class RegisterRequestModel {
     this.licenseExpiryDate,
     this.model,
     this.phone,
-    this.governorate,
   });
 }

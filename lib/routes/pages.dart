@@ -64,7 +64,9 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/data/mod
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/favorite_shipping_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_request_by_my_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_my_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
@@ -438,23 +440,32 @@ class AppPages {
             path: Paths.ACCOUNT,
             name: Routes.ACCOUNT,
             builder: (context, state) => MultiBlocProvider(
-              providers: [
-                BlocProvider(create: (context) => serviceLocator<CallMessageCubit>(),),
-                BlocProvider(create: (context) => serviceLocator<TripCubit>(),),
-              ],
-              child: const NotificationView(),
-            ),
+                  providers: [
+                    BlocProvider(
+                      create: (context) => serviceLocator<CallMessageCubit>(),
+                    ),
+                    BlocProvider(
+                      create: (context) => serviceLocator<TripCubit>(),
+                    ),
+                  ],
+                  child: const NotificationView(),
+                ),
             routes: [
               GoRoute(
-                  path: Paths.NOTIFICATIONS,
-                  name: Routes.NOTIFICATIONS,
-                  builder: (context, state) =>  MultiBlocProvider(
-              providers: [
-                BlocProvider(create: (context) => serviceLocator<CallMessageCubit>(),),
-                BlocProvider(create: (context) => serviceLocator<TripCubit>(),),
-              ],
-              child: const NotificationView(),
-            ),),
+                path: Paths.NOTIFICATIONS,
+                name: Routes.NOTIFICATIONS,
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => serviceLocator<CallMessageCubit>(),
+                    ),
+                    BlocProvider(
+                      create: (context) => serviceLocator<TripCubit>(),
+                    ),
+                  ],
+                  child: const NotificationView(),
+                ),
+              ),
               GoRoute(
                   path: Paths.SETTINGS,
                   name: Routes.SETTINGS,
@@ -917,10 +928,16 @@ class AppPages {
                   create: (context) => serviceLocator<CreateTripCubit>()),
               BlocProvider(
                   create: (context) => serviceLocator<CallMessageCubit>()),
+              BlocProvider(create: (context) => serviceLocator<TripCubit>()),
               BlocProvider(
-                  create: (context) => serviceLocator<TripCubit>()),
+                  create: (context) =>
+                      serviceLocator<GetAllRequestByMyTripCubit>()),
+              BlocProvider(
+                  create: (context) => serviceLocator<GetMyTripCubit>()),
             ],
-            child: CreateShippingView(selectedId: state.extra as String?,),
+            child: CreateShippingView(
+              selectedId: state.extra as String?,
+            ),
           ),
         ),
         GoRoute(

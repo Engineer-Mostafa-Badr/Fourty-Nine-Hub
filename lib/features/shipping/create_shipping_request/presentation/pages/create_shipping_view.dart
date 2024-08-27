@@ -19,10 +19,13 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/com
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/sub_category.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/request_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_request_by_my_trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_my_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
@@ -59,11 +62,10 @@ class _CreateShippingViewState extends State<CreateShippingView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      showButtonSheetTrip();
-    });
+    context.read<GetMyTripCubit>().getMyTrip();
   }
 
+  bool isButtonSheet = false;
   // GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   @override
@@ -75,7 +77,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
       body: BlocConsumer<CreateTripCubit, ShippingState>(
         listener: (context, state) {
           if (state is SuccessCreateTrip) {
-            context.pushReplacementNamed(Routes.HOME);
+            context.go(Routes.HOME);
             showSuccessMessage(context, state.message);
           }
           if (state is FailureShippingState) {
@@ -118,6 +120,35 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                               );
                             }
                             if (state is SuccessGetBannerState) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (state.model.mainCategory?.haveTrip ??
+                                    false) {
+                                  if (!isButtonSheet) {
+                                    showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) => MultiBlocProvider(
+                                      providers: [
+                                        BlocProvider(
+                                            create: (context) => serviceLocator<
+                                                GetMyTripCubit>()),
+                                        BlocProvider(
+                                            create: (context) =>
+                                                serviceLocator<TripCubit>()),
+                                        BlocProvider(
+                                            create: (context) => serviceLocator<
+                                                GetMyTripCubit>()),
+                                        BlocProvider(
+                                            create: (context) => serviceLocator<
+                                                CallMessageCubit>()),
+                                      ],
+                                      child: showButtonSheetTrip(),
+                                    ),
+                                  );
+                                  }
+                                  isButtonSheet = true;
+                                }
+                              });
+
                               return Column(
                                 children: [
                                   ShippingBanner(
@@ -126,29 +157,40 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                   const Sizer(),
                                   // لو هو مسجل
                                   // if (isDriver(state.model))
-                                  DashboardBanner(
-                                    onTap: () => context
-                                        .push(Routes.DASHBOARDDRIVERSCREEN),
-                                    title: Labels.driverDashboard,
-                                    subTitle:
-                                        Labels.driverDashboardBannerDiscription,
-                                    route: Routes.DOCTORDASHBOARD,
-                                  ),
+                                  if ((state.model.mainCategory?.isDriver ??
+                                          false) &&
+                                      (state.model.mainCategory
+                                              ?.isDriverApproved ??
+                                          false))
+                                    DashboardBanner(
+                                      onTap: () => context
+                                          .push(Routes.DASHBOARDDRIVERSCREEN),
+                                      title: Labels.driverDashboard,
+                                      subTitle: Labels
+                                          .driverDashboardBannerDiscription,
+                                      route: Routes.DOCTORDASHBOARD,
+                                    ),
                                   // لو هو مش مسجل
-                                  if ((state.model.subCategories?.first
-                                                  .isDriver ??
+                                  // if ((state.model.mainCategory?.isDriver ??
+                                  //             false) !=
+                                  //         true &&
+                                  //     ((state.model.mainCategory?.isDriver ??
+                                  //             false)) !=
+                                  //         true)
+                                  if ((state.model.mainCategory?.isDriver ??
                                               false) !=
                                           true &&
-                                      ((state.model.subCategories?.first
-                                                  .isDriver ??
-                                              false)) !=
+                                      (state.model.mainCategory
+                                                  ?.isDriverApproved ??
+                                              false) !=
                                           true)
                                     GestureDetector(
                                       onTap: () => context
                                           .push(Routes.SHIPPING_REGISTER),
                                       child: const Padding(
                                         padding: EdgeInsets.symmetric(
-                                            horizontal: 10),
+                                          horizontal: 10,
+                                        ),
                                         child: Text(
                                           "You can enjoy serving your clients using your car by clicking the register button above.",
                                           style: TextStyle(
@@ -169,64 +211,43 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                         ),
                         // Spacer(),
                         // NotFoundOffeRers(),
-                        const RequestOfferCard(),
-                        // Spacer(),
-                        //             Container(
-                        //   padding: EdgeInsets.all(10),
-                        //   width: double.infinity,
-                        //   decoration: BoxDecoration(
-                        //     color: Colors.white,
-                        //     borderRadius: BorderRadius.only(
-                        //       topLeft: Radius.circular(30),
-                        //       topRight: Radius.circular(30),
-                        //     ),
-                        //   ),
-                        //   child: Column(
-                        //     crossAxisAlignment: CrossAxisAlignment.start,
-                        //     children: [
-                        //       Text("123", style: TextStyle(fontSize: 30, color: AppColors.PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                        //       Row(
-                        //         children: [
-                        //           Container(
-                        //             padding: EdgeInsets.symmetric(horizontal: 4),
-                        //             decoration: BoxDecoration(
-                        //               color: Colors.blue,
-                        //               borderRadius: BorderRadius.circular(8)
-                        //             ),
-                        //             child: Row(
-                        //               mainAxisSize: MainAxisSize.min,
-                        //               children: [
-                        //                 Icon(Icons.history, color: Colors.white,),
-                        //                 Text("Pickup: 10-20 min", style: TextStyle(color: Colors.white),)
-                        //               ],
-                        //             )
-                        //           ),
-                        //           SizedBox(width: 8,),
-                        //           Container(
-                        //         padding: EdgeInsets.symmetric(horizontal: 4),
-                        //         decoration: BoxDecoration(
-                        //           color: Colors.blue,
-                        //           borderRadius: BorderRadius.circular(8)
-                        //         ),
-                        //         child: Row(
-                        //           mainAxisSize: MainAxisSize.min,
-                        //           children: [
-                        //             Icon(Icons.history, color: Colors.white,),
-                        //             Text("I", style: TextStyle(color: Colors.white),)
-                        //           ],
-                        //         )
-                        //       )
-                        //         ],
-                        //       ),
-
-                        //     ],
-                        //   ),
-                        // ),
                         // CreateTripForm(
                         //   formKey: formKey,
-                        //   selectedId: widget.selectedId,
                         // ),
-                        // const Gap(100),
+
+                        // BlocBuilder<GetMyTripCubit, ShippingState>(
+                        //   builder: (context, state) {
+                        //     if (state is SuccessGetMyTripState) {
+
+                        //     }
+                        //     else{
+
+                        //     }
+                        //   },
+                        // )
+                        // CreateTripForm(formKey: formKey),
+                        BlocBuilder<GetAllRequestByMyTripCubit, ShippingState>(
+                          builder: (context, state) {
+                            if (state is SuccessGetLoadingTripRequests) {
+                              if (state.request.isNotEmpty) {
+                                return Column(
+                                  children: [
+                                    ...List.generate(
+                                      state.request.length,
+                                      (index) => RequestOfferCard(
+                                        model: state.request[index],
+                                      ),
+                                    )
+                                  ],
+                                );
+                              } else {
+                                return NotFoundOffers();
+                              }
+                            } else {
+                              return CircularProgressIndicator();
+                            }
+                          },
+                        ),
                         const SizedBox(height: 100),
                       ],
                     ),
@@ -255,27 +276,27 @@ class _CreateShippingViewState extends State<CreateShippingView> {
 // BlocProvider(
 //                   create: (context) => ),
   showButtonSheetTrip() {
-    return showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (context) => serviceLocator<TripCubit>()),
-            BlocProvider(
-                create: (context) => serviceLocator<CallMessageCubit>()),
-          ],
-          child: TripCardWidget(
+    return BlocBuilder<GetMyTripCubit, ShippingState>(
+      builder: (context, state) {
+        log(state.toString(), name: "lksjdflskdjfslkdjflsdkjfd");
+        if (state is SuccessGetMyTripState) {
+          return TripCardWidget(
             yourRequest: true,
             title: "Your request",
             buttons: false,
             model: AllTripModel(
-              phone: 12,
-              time: "lskd",
-              desc: "lksd",
-              price: 10,
+              phone: state.model.phone,
+              time: state.model.time,
+              desc: state.model.desc,
+              price: state.model.price,
+              targetLocation: state.model.targetLocation,
+              startLocation: state.model.startLocation,
+              status: state.model.status
             ),
-          ),
-        );
+          );
+        } else {
+          return Container();
+        }
       },
     );
   }
@@ -348,241 +369,277 @@ class NotFoundOffers extends StatelessWidget {
   }
 }
 
-
 class RequestOfferCard extends StatelessWidget {
-  const RequestOfferCard({super.key});
-
+  const RequestOfferCard({super.key, required this.model});
+  final GetRequestsForLoadingModel model;
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                // ignore: prefer_const_literals_to_create_immutables
-                                boxShadow: [
-                                  const BoxShadow(color: Colors.black12, blurRadius: 10),
-                                ],
-                                borderRadius: BorderRadius.circular(15)
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text("New Offer", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                                      Text("12,300", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green),),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 7,),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                    width: 80,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(15)
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10,),
-                                  const Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text("car model", style: TextStyle(fontSize: 15),),
-                                  SizedBox(height: 5,),
-                                      Text("request name", style: TextStyle(fontSize: 15),),
-                                  SizedBox(height: 5,),
-                                  Text("3 Orders", style: TextStyle(fontSize: 15),)
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  Column(
-                                    children: [
-                                      const Row(
-                                            children: [
-                                              Icon(Icons.star, color: Colors.amber,),
-                                              Text("4.9"),
-                                              Text("(1)", style: TextStyle(color: Colors.grey),),
-                                            ],
-                                          ),
-                                      Text("Premium")
-                                    ],
-                                  )
-                                    ],
-                                  ),
-                                  const SizedBox(height: 10,),
-                                  Row(
-                                    children: [
-                                      Flexible(
-                                        child: AppButton(
-                                          color: Colors.white,
-                                          // height: 50,
-                                          // padding: EdgeInsets.symmetric(vertical: 0),
-                                          width: double.infinity,
-                                          onPressed: () {
-                                            
-                                          },
-                                          style: Styles.mediumText(
-                                          fontSize: 18, color: Colors.white),
-                                          label: "Decline",
-                                          // backgroundColor: Colors.red,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10,),
-                                      Flexible(
-                                        child: AppButton(
-                                          // label: Labels.message,
-                                      // icon: Icons.message,
-                                      backColor: AppColors.PRIMARY_COLOR,
-                                      style: Styles.mediumText(
-                                          fontSize: 18, color: Colors.white),
-                                      onPressed: () {},
-                                          label: "Accept",
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(height: 10,),
-                                  BlocBuilder<CallMessageCubit, ShippingState>(
-                          builder: (context, state) {
-                            if (state is FailureShippingState) {
-                              log(getFailureMessage(state.failure, context),
-                                  name: "lskdjflskdjfslkdjfslkdjfslkdjf");
-                            }
-                            log(state.toString(),
-                                name: "lskdjflskdjfslkdjfslkdjfslkdjf");
-                            if (state is SuccessGetCallMessageState) {
-                              log(state.data.toString(),
-                                  name: "lskdjflskdjfslkdjfslkdjfslkdjf");
-                              return Row(
-                                children: [
-                                  Expanded(
-                                    child: AppButton(
-                                      label: Labels.call,
-                                      color: Colors.white,
-                                      icon: Icons.call,
-                                      backColor: state.data
-                                          ? AppColors.PRIMARY_COLOR
-                                          : AppColors.DARK_GRAY_COLOR,
-                                      onPressed: () {},
-                                      style: Styles.mediumText(
-                                          fontSize: 18, color: Colors.white),
-                                    ),
-                                  ),
-                                  const Sizer(),
-                                  Expanded(
-                                    child: AppButton(
-                                      label: Labels.message,
-                                      icon: Icons.message,
-                                      backColor: state.data
-                                          ? AppColors.PRIMARY_COLOR
-                                          : AppColors.DARK_GRAY_COLOR,
-                                      style: Styles.mediumText(
-                                          fontSize: 15, color: Colors.white),
-                                      onPressed: () {},
-                                    ),
-                                  ),
-                                  const Sizer(),
-                                  Expanded(
-                                    child: AppButton(
-                                      label: Labels.report,
-                                      icon: Icons.report,
-                                      backColor: Colors.red,
-                                      style: Styles.mediumText(
-                                          fontSize: 18, color: Colors.white),
-                                      onPressed: () {
-                                        // tripCubit.report(
-                                        //     loadingTripId: widget.model.id ?? "");
-                                        // showBottomSheet(
-                                        //   context: context,
-                                        //   builder: (context) => Padding(
-                                        //     padding: const EdgeInsets.all(10),
-                                        //     child: ReportView(
-                                        //       categoryId:
-                                        //           widget.model.categoryId?.id ?? "",
-                                        //       id: widget.model.id ?? "",
-                                        //       loadingTripId: widget.model.id ?? "",
-                                        //     ),
-                                        //   ),
-                                        // );
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              );
-                            } else {
-                              return Row(
-                                children: [
-                                  Expanded(
-                                    child: AppButton(
-                                      label: Labels.call,
-                                      color: Colors.white,
-                                      icon: Icons.call,
-                                      backColor: AppColors.DARK_GRAY_COLOR,
-                                      onPressed: () {
-                                        launchUrlString("tel://21213123123");
-                                      },
-                                      style: Styles.mediumText(
-                                          fontSize: 18, color: Colors.white),
-                                    ),
-                                  ),
-                                  const Sizer(),
-                                  Expanded(
-                                    child: AppButton(
-                                      label: Labels.message,
-                                      icon: Icons.message,
-                                      backColor: AppColors.DARK_GRAY_COLOR,
-                                      style: Styles.mediumText(
-                                          fontSize: 18, color: Colors.white),
-                                      onPressed: () {},
-                                    ),
-                                  ),
-                                  const Sizer(),
-                                  Expanded(
-                                    child: AppButton(
-                                      label: Labels.report,
-                                      icon: Icons.report,
-                                      backColor: Colors.red,
-                                      style: Styles.mediumText(
-                                          fontSize: 15, color: Colors.white),
-                                      onPressed: () {
-                                        showBottomSheet(
-                                          context: context,
-                                          builder: (context) => const ReportView(
-                                            categoryId: "",
-                                            id: "",
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }
-                          },
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              // ignore: prefer_const_literals_to_create_immutables
+              boxShadow: [
+                const BoxShadow(color: Colors.black12, blurRadius: 10),
+              ],
+              borderRadius: BorderRadius.circular(15)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "New Offer",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "${model.price}",
+                    style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 7,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(15)),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "car model",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "request name",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "3 Orders",
+                        style: TextStyle(fontSize: 15),
+                      )
+                    ],
+                  ),
+                  const Spacer(),
+                  const Column(
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          Text("4.9"),
+                          Text(
+                            "(1)",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                      Text("Premium")
+                    ],
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Flexible(
+                    child: AppButton(
+                      color: Colors.white,
+                      // height: 50,
+                      // padding: EdgeInsets.symmetric(vertical: 0),
+                      width: double.infinity,
+                      onPressed: () {},
+                      style:
+                          Styles.mediumText(fontSize: 18, color: Colors.white),
+                      label: "Decline",
+                      // backgroundColor: Colors.red,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Flexible(
+                    child: AppButton(
+                      // label: Labels.message,
+                      // icon: Icons.message,
+                      backColor: AppColors.PRIMARY_COLOR,
+                      style:
+                          Styles.mediumText(fontSize: 18, color: Colors.white),
+                      onPressed: () {},
+                      label: "Accept",
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              BlocBuilder<CallMessageCubit, ShippingState>(
+                builder: (context, state) {
+                  if (state is FailureShippingState) {
+                    log(getFailureMessage(state.failure, context),
+                        name: "lskdjflskdjfslkdjfslkdjfslkdjf");
+                  }
+                  log(state.toString(), name: "lskdjflskdjfslkdjfslkdjfslkdjf");
+                  if (state is SuccessGetCallMessageState) {
+                    log(state.data.toString(),
+                        name: "lskdjflskdjfslkdjfslkdjfslkdjf");
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: AppButton(
+                            label: Labels.call,
+                            color: Colors.white,
+                            icon: Icons.call,
+                            backColor: state.data
+                                ? AppColors.PRIMARY_COLOR
+                                : AppColors.DARK_GRAY_COLOR,
+                            onPressed: () {},
+                            style: Styles.mediumText(
+                                fontSize: 18, color: Colors.white),
+                          ),
                         ),
-                                ],
-                              ),
-                            ),
-            Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 25),
-                            child: GestureDetector(
-                              onTap: () {
-                                //هتروح لي صفحه subscription
-                                serviceLocator<SubscriptionController>().showActiveSubscriptionAmounts(walletType: WalletTypes.balance);
-                              },
-                              child: Text(
-                                "Subscribe to contact to the driver",
-                                style:
-                                    TextStyle(fontSize: 16, color: Colors.red),
-                              ),
-                            ))
+                        const Sizer(),
+                        Expanded(
+                          child: AppButton(
+                            label: Labels.message,
+                            icon: Icons.message,
+                            backColor: state.data
+                                ? AppColors.PRIMARY_COLOR
+                                : AppColors.DARK_GRAY_COLOR,
+                            style: Styles.mediumText(
+                                fontSize: 15, color: Colors.white),
+                            onPressed: () {},
+                          ),
+                        ),
+                        const Sizer(),
+                        Expanded(
+                          child: AppButton(
+                            label: Labels.report,
+                            icon: Icons.report,
+                            backColor: Colors.red,
+                            style: Styles.mediumText(
+                                fontSize: 18, color: Colors.white),
+                            onPressed: () {
+                              // tripCubit.report(
+                              //     loadingTripId: widget.model.id ?? "");
+                              // showBottomSheet(
+                              //   context: context,
+                              //   builder: (context) => Padding(
+                              //     padding: const EdgeInsets.all(10),
+                              //     child: ReportView(
+                              //       categoryId:
+                              //           widget.model.categoryId?.id ?? "",
+                              //       id: widget.model.id ?? "",
+                              //       loadingTripId: widget.model.id ?? "",
+                              //     ),
+                              //   ),
+                              // );
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: AppButton(
+                            label: Labels.call,
+                            color: Colors.white,
+                            icon: Icons.call,
+                            backColor: AppColors.DARK_GRAY_COLOR,
+                            onPressed: () {
+                              launchUrlString("tel://21213123123");
+                            },
+                            style: Styles.mediumText(
+                                fontSize: 18, color: Colors.white),
+                          ),
+                        ),
+                        const Sizer(),
+                        Expanded(
+                          child: AppButton(
+                            label: Labels.message,
+                            icon: Icons.message,
+                            backColor: AppColors.DARK_GRAY_COLOR,
+                            style: Styles.mediumText(
+                                fontSize: 18, color: Colors.white),
+                            onPressed: () {},
+                          ),
+                        ),
+                        const Sizer(),
+                        Expanded(
+                          child: AppButton(
+                            label: Labels.report,
+                            icon: Icons.report,
+                            backColor: Colors.red,
+                            style: Styles.mediumText(
+                                fontSize: 15, color: Colors.white),
+                            onPressed: () {
+                              showBottomSheet(
+                                context: context,
+                                builder: (context) => const ReportView(
+                                  categoryId: "",
+                                  id: "",
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+        Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: GestureDetector(
+              onTap: () {
+                //هتروح لي صفحه subscription
+                serviceLocator<SubscriptionController>()
+                    .showActiveSubscriptionAmounts(
+                        walletType: WalletTypes.balance);
+              },
+              child: const Text(
+                "Subscribe to contact to the driver",
+                style: TextStyle(fontSize: 16, color: Colors.red),
+              ),
+            )),
+        const SizedBox(
+          height: 20,
+        ),
       ],
     );
   }

@@ -974,7 +974,8 @@ class _FavTinderSubCategoryCardState extends State<FavTinderSubCategoryCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.push(Routes.SHIPPING, extra: widget.favSubCategoryCardData.subCategoryId.id);
+        context.push(Routes.SHIPPING,
+            extra: widget.favSubCategoryCardData.subCategoryId.id);
       },
       child: Container(
         width: 200,

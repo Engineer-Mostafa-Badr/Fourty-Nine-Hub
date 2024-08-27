@@ -25,8 +25,8 @@ class SubCategory {
         subCategoryNameEn: json['subCategoryNameEn'] as String?,
         picture: json['picture'] as String?,
         isFavorite: json['isFavorite'] as bool?,
-        isDriver: (json['isDriver'] as bool?)??false,
-        isDriverApproved: (json['isDriverApproved'] as bool?)??false,
+        isDriver: (json['isDriver'] as bool?) ?? false,
+        isDriverApproved: (json['isDriverApproved'] as bool?) ?? false,
         driverCount: json['driverCount'] as int?,
       );
 

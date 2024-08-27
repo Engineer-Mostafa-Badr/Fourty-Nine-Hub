@@ -17,7 +17,7 @@ class LastNameTextFormField extends MainTextFormField {
       super.hintColor,
       super.fillColor})
       : super(
-          validator: validator?? Validator().validateUserName,
+          validator: validator ?? Validator().validateUserName,
           hintText: 'Last Name',
           // border
           keyboardType: TextInputType.name,
