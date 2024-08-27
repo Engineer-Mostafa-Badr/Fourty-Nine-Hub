@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/comment_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/reply_card.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
@@ -25,6 +26,7 @@ class CommentReplies extends StatefulWidget {
   final String from;
   final Function(ReplyOnCommentParams) onAddReply;
   final Function(String) onDeleteReply;
+  final Function(PostCommentParams) onEditComment;
   const CommentReplies({
     super.key,
     required this.replies,
@@ -32,7 +34,7 @@ class CommentReplies extends StatefulWidget {
     required this.postId,
     required this.onAddReply,
     required this.onDeleteReply,
-    required this.from,
+    required this.from, required this.onEditComment,
   });
 
   @override
@@ -118,7 +120,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                     Expanded(
                         child: FormTextField(
                             hint: 'Type your reply ....',
-                            height: kToolbarHeight * .7,
+                            // height: kToolbarHeight * .7,
                             action: (v) {
                               setState(() {});
                             },
@@ -194,7 +196,7 @@ class _CommentRepliesState extends State<CommentReplies> {
           onReport: (TwitterReportParams params) {
             // widget.onReport(params);
           },
-          onDeleteReply: (String id) => onDeleteReply(id),
+          onDeleteReply: (String id) => onDeleteReply(id), onEditComment: (PostCommentParams params ) =>widget.onEditComment(params),
         ),
       ],
     );

@@ -21,6 +21,7 @@ class CommentModel extends CommentEntity {
       super.isWow,
       super.isSad,
       super.isAngry,
+      super.edit,
       super.isHaha,
       super.wowCount});
   factory CommentModel.fromJson(Map<String, dynamic> json) {

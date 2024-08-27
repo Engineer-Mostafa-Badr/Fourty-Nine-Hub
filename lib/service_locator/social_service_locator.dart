@@ -22,6 +22,7 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_activities_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_feelings_usecase.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_places_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/datasources/instagram_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/repositories/instagram_repo_impl.dart';
@@ -36,6 +37,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/edit_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_advertisement_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_tweet_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/follow_user_usecase.dart';
@@ -58,7 +60,9 @@ import 'package:fourtyninehub/features/social_media/twitter/data/repositories/tw
 import 'package:fourtyninehub/features/social_media/twitter/domain/repositories/twitter_repo.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/delete_twitter_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/delete_twitter_post_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/edit_twitter_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_post_comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_post_comments_usecase.dart';
@@ -325,8 +329,30 @@ class SocialServiceLocator {
       serviceLocator(),
     ));
 
+    serviceLocator
+        .registerLazySingleton<EditCommentUseCase>(() => EditCommentUseCase(
+      serviceLocator(),
+    ));
+
+
+    serviceLocator
+        .registerLazySingleton<GetPlacesUseCase>(() => GetPlacesUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<EditTwitterCommentUseCase>(() => EditTwitterCommentUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<DeleteTwitterCommentUseCase>(() => DeleteTwitterCommentUseCase(
+      serviceLocator(),
+    ));
+
 
     serviceLocator.registerFactory<CreatePostCubit>(() => CreatePostCubit(
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
@@ -335,6 +361,8 @@ class SocialServiceLocator {
     ));
 
     serviceLocator.registerFactory<InstagramCubit>(() => InstagramCubit(
+      serviceLocator(),
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
@@ -371,8 +399,11 @@ class SocialServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
         ));
     serviceLocator.registerFactory<TwitterCubit>(() => TwitterCubit(
+      serviceLocator(),
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),

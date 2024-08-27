@@ -141,9 +141,9 @@ class _ZegoLiveStreamingPreviewPageState
 
   Scaffold zoomPreviewScreen(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff2d2d2d),
+      // backgroundColor: const Color(0xff2d2d2d),
       appBar: AppBar(
-        backgroundColor: const Color(0xff2d2d2d),
+        // backgroundColor: const Color(0xff2d2d2d),
         centerTitle: true,
         leadingWidth: 80,
         elevation: 0,
@@ -161,7 +161,8 @@ class _ZegoLiveStreamingPreviewPageState
         ),
         title: const Text(
           'Start a meeting',
-          style: TextStyle(color: Colors.white, fontSize: 18),
+          style: TextStyle(
+              color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
       resizeToAvoidBottomInset: false,
@@ -415,6 +416,7 @@ class _ZegoLiveStreamingPreviewPageState
   }
 
   Widget startButton() {
+    print('tapped');
     final permissions = <Permission>[];
     if (widget.config.turnOnCameraWhenJoining) {
       permissions.add(Permission.camera);
@@ -531,70 +533,69 @@ class _ZegoLiveStreamingPreviewPageState
 
     return Column(
       children: [
-        Container(
-          color: const Color(0xff4b4b4b),
-          child: Padding(
-            padding: const EdgeInsets.only(
-              left: 4,
-              top: 4,
-              bottom: 4,
-            ),
-            child: Column(
-              children: [
-                ValueListenableBuilder<bool>(
-                    valueListenable: ZegoUIKit()
-                        .getCameraStateNotifier(ZegoUIKit().getLocalUser().id),
-                    builder: (context, videoOn, child) {
-                      return SwitchListTile(
-                        title: const Text(
-                          "Video on",
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                        value: videoOn,
-                        onChanged: (v) {
-                          print('camera state notifier is $videoOn');
-                          _toggleCamera(v);
-                        },
-                        activeColor: Colors.white,
-                        activeTrackColor: Colors.red,
-                      );
-                    }),
-                Container(
-                  margin: const EdgeInsets.only(left: 20),
-                  width: double.infinity,
-                  color: Colors.grey,
-                  height: 1,
-                ),
-                // ValueListenableBuilder<bool>(
-                //   valueListenable: usePersonalIdNotifier,
-                //   builder: (BuildContext context, bool value, Widget? child) {
-                //     return SwitchListTile(
-                //       title: const Expanded(
-                //         child: Text(
-                //           "Use personal meeting ID (PMI)",
-                //           maxLines: 1,
-                //           overflow: TextOverflow.ellipsis,
-                //           style: TextStyle(color: Colors.white, fontSize: 18),
-                //         ),
-                //       ),
-                //       subtitle: Text(
-                //         widget.liveID,
-                //         style:
-                //             const TextStyle(color: Colors.grey, fontSize: 20),
-                //       ),
-                //       value: value,
-                //       onChanged: (v) {
-                //         usePersonalIdNotifier.value = v;
-                //         print('use id notifier ${usePersonalIdNotifier.value}');
-                //       },
-                //       activeColor: Colors.white,
-                //       activeTrackColor: Colors.red,
-                //     );
-                //   },
-                // ),
-             
-              ],
-            ),
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 4,
+            top: 4,
+            bottom: 4,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ValueListenableBuilder<bool>(
+                  valueListenable: ZegoUIKit()
+                      .getCameraStateNotifier(ZegoUIKit().getLocalUser().id),
+                  builder: (context, videoOn, child) {
+                    return SwitchListTile(
+                      title: const Text(
+                        "Video on",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      value: videoOn,
+                      onChanged: (v) {
+                        print('camera state notifier is $videoOn');
+                        _toggleCamera(v);
+                      },
+                      activeColor: Colors.white,
+                      activeTrackColor: Colors.green,
+                    );
+                  }),
+              Container(
+                margin: const EdgeInsets.only(left: 20),
+                width: double.infinity,
+                color: Colors.grey,
+                height: 1,
+              ),
+              ValueListenableBuilder<bool>(
+                valueListenable: usePersonalIdNotifier,
+                builder: (BuildContext context, bool value, Widget? child) {
+                  return SwitchListTile(
+                    title: const Text(
+                      "Use personal meeting ID (PMI)",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      widget.liveID,
+                      style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    value: value,
+                    onChanged: (v) {
+                      usePersonalIdNotifier.value = v;
+                      print('use id notifier ${usePersonalIdNotifier.value}');
+                    },
+                    activeColor: Colors.white,
+                    activeTrackColor: Colors.green,
+                  );
+                },
+              ),
+            ],
           ),
         ),
         const SizedBox(
@@ -631,7 +632,7 @@ class _ZegoLiveStreamingPreviewPageState
     if (widget.config.turnOnMicrophoneWhenJoining) {
       permissions.add(Permission.microphone);
     }
-
+    print('tapped');
     defaultAction() async {
       await checkPermissions(
         context: context,
@@ -668,7 +669,7 @@ class _ZegoLiveStreamingPreviewPageState
             height: 94.zR,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30.zR),
-              color: const Color(0xff000080),
+              color: Colors.blueAccent[700],
             ),
             child: Align(
               alignment: Alignment.center,

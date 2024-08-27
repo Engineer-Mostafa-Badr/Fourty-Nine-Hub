@@ -7,7 +7,11 @@ final class VerifyOtpInitial extends VerifyOtpState {}
 
 final class VerifyOtpLoading extends VerifyOtpState {}
 
-final class VerifyOtpSuccess extends VerifyOtpState {}
+final class VerifyOtpSuccess extends VerifyOtpState {
+ final UserTokensEntity userTokensEntity;
+
+  VerifyOtpSuccess({required this.userTokensEntity});
+}
 
 final class VerifyOtpError extends VerifyOtpState {
   final Failure failure;

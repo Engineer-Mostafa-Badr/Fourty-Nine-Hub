@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/authentication/data/models/login_model.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/facebook_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
 
+import '../../../domain/entities/user_tokens_entity.dart';
 import '../../../domain/use_cases/apple_sign_in_usecase.dart';
 import '../../../domain/use_cases/attach_token_use_case.dart';
 import '../../../domain/use_cases/login_use_case.dart';
@@ -26,13 +28,13 @@ class LoginCubit extends Cubit<LoginState> {
   final passwordFocusNode = FocusNode();
 
   LoginCubit(
-    this._loginUseCase,
-    this._saveTokens,
-    this._attachToken,
-    this._googleSignInUseCase,
-    this._facebookSignInUseCase,
-    this._appleSignInUseCase,
-  ) : super(LoginInitial());
+      this._loginUseCase,
+      this._saveTokens,
+      this._attachToken,
+      this._googleSignInUseCase,
+      this._facebookSignInUseCase,
+      this._appleSignInUseCase,
+      ) : super(LoginInitial());
 
   String? token;
 
@@ -45,17 +47,15 @@ class LoginCubit extends Cubit<LoginState> {
           password: passwordTextController.text.trim(),
         ),
       );
-      emit(
-        result.fold(
-          (failure) => LoginError(failure),
-          (userToken) {
-            print(userToken);
-            token = userToken.accessToken.toString();
-            _attachToken(userToken); // attach to dio
-            _saveTokens(userToken); // save to local storage
-            return LoginSuccess();
-          },
-        ),
+
+      result.fold(
+            (failure) => emit(LoginError(failure)),
+            (userToken)  {
+              print(userToken);
+          _attachToken(userToken); // attach to dio
+          _saveTokens(userToken); // ensure tokens are saved before proceeding
+          emit(LoginSuccess(userTokensEntity: userToken));
+        },
       );
     }
   }
@@ -64,17 +64,14 @@ class LoginCubit extends Cubit<LoginState> {
     if (state is LoginLoading) return;
     emit(LoginLoading());
     final result = await _googleSignInUseCase(const NoParams());
-    emit(
-      result.fold(
-        (failure) => LoginError(failure),
-        (userToken) {
-          token = userToken.accessToken.toString();
 
-          _attachToken(userToken); // attach to dio
-          _saveTokens(userToken); // save to local storage
-          return LoginSuccess();
-        },
-      ),
+    result.fold(
+          (failure) => emit(LoginError(failure)),
+          (userToken) async {
+        _attachToken(userToken); // attach to dio
+        await _saveTokens(userToken); // ensure tokens are saved before proceeding
+        emit(LoginSuccess(userTokensEntity: userToken));
+      },
     );
   }
 
@@ -82,17 +79,14 @@ class LoginCubit extends Cubit<LoginState> {
     if (state is LoginLoading) return;
     emit(LoginLoading());
     final result = await _appleSignInUseCase(const NoParams());
-    emit(
-      result.fold(
-        (failure) => LoginError(failure),
-        (userToken) {
-          token = userToken.accessToken.toString();
 
-          _attachToken(userToken); // attach to dio
-          _saveTokens(userToken); // save to local storage
-          return LoginSuccess();
-        },
-      ),
+    result.fold(
+          (failure) => emit(LoginError(failure)),
+          (userToken) async {
+        _attachToken(userToken); // attach to dio
+        await _saveTokens(userToken); // ensure tokens are saved before proceeding
+        emit(LoginSuccess(userTokensEntity: userToken));
+      },
     );
   }
 
@@ -100,17 +94,14 @@ class LoginCubit extends Cubit<LoginState> {
     if (state is LoginLoading) return;
     emit(LoginLoading());
     final result = await _facebookSignInUseCase(const NoParams());
-    emit(
-      result.fold(
-        (failure) => LoginError(failure),
-        (userToken) {
-          token = userToken.accessToken.toString();
 
-          _attachToken(userToken); // attach to dio
-          _saveTokens(userToken); // save to local storage
-          return LoginSuccess();
-        },
-      ),
+    result.fold(
+          (failure) => emit(LoginError(failure)),
+          (userToken) async {
+        _attachToken(userToken); // attach to dio
+        await _saveTokens(userToken); // ensure tokens are saved before proceeding
+        emit(LoginSuccess(userTokensEntity: userToken));
+      },
     );
   }
 

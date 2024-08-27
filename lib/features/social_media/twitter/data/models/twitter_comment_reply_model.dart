@@ -11,6 +11,7 @@ class TwitterCommentReplyModel extends TwitterCommentReplyEntity {
     super.loveCount,
     super.repliesCount,
     super.isReact,
+    super.edit,
     required super.image,
     required super.love,
   });

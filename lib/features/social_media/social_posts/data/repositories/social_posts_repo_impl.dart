@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/send_greet_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import '../../domain/repositories/social_posts_repo.dart';
@@ -107,8 +108,8 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> sendGreetMessage({required String userId}) {
-    return _remoteDataSource.sendGreetMessage(userId: userId);
+  Future<Either<Failure, bool>> sendGreetMessage({required SendGreetMessageParams params}) {
+    return _remoteDataSource.sendGreetMessage(params: params);
   }
 
   @override
@@ -148,5 +149,11 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   Future<Either<Failure, UserProfileEntity>> getUserProfile(
       {required String params}) {
     return _remoteDataSource.getUserProfile(userId: params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> editComment({required PostCommentParams params}) {
+    return _remoteDataSource.editComment(params: params);
+
   }
 }

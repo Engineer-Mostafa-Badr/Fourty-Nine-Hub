@@ -32,6 +32,7 @@ class PostDetailsPage extends StatefulWidget {
   final Function(PostReactParams) onReact;
   final Function(String) showPostComments;
   final Function(PostEntity) showPostDetails;
+  final Function(PostCommentParams) onEditComment;
   final Function(String) deletePost;
   final Function(String) hidePost;
   final Function(ReplyOnCommentParams) onCommentReply;
@@ -46,7 +47,7 @@ class PostDetailsPage extends StatefulWidget {
     required this.showPostDetails,
     required this.comments,
     required this.deletePost,
-    required this.hidePost, required this.onCommentReply, required this.onDeleteComment, required this.onDeleteReply,
+    required this.hidePost, required this.onCommentReply, required this.onDeleteComment, required this.onDeleteReply, required this.onEditComment,
   });
 
   @override
@@ -141,6 +142,19 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
                                         });
                                       return result;
+                                }, onDeleteComment: (String id) async{
+                                  var result = await widget.onDeleteComment(id);
+                                  state.postDetails?.commentsCount=(state.postDetails!.commentsCount!-1);
+                                  controller.commentsPagingController.itemList?.removeWhere((element) => element.id==id);
+
+                                  setState(() {});
+                                  return result;
+                                }, onDeleteReply: (String id) async {
+                                  var result = await widget.onDeleteReply(id);
+                                  state.postDetails?.commentsCount=(state.postDetails!.commentsCount!-1);
+                                  controller.repliesPagingController.itemList?.removeWhere((element) => element.id==id);
+                                  setState(() {});
+                                  return result;
                                 });
                               },
                               noMoreItemsIndicatorBuilder: (context) =>
@@ -229,7 +243,9 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
   Widget _buildCommentCard({
     required CommentEntity comment,
-    required Function(ReplyOnCommentParams) onCommentReply
+    required Function(ReplyOnCommentParams) onCommentReply,
+    required dynamic Function(String) onDeleteComment,
+    required dynamic Function(String) onDeleteReply
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,17 +257,9 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
             setState(() {});
             return result;
           },
-          onDeleteComment: (String id) async{
-            var result = await widget.onDeleteComment(id);
-            setState(() {});
-            return result;
-          },
-          onDeleteReply: (String id)async {
-            var result = await widget.onDeleteReply(id);
-            setState(() {});
-            return result;
-          },
-          from: 'feed',
+          onDeleteComment: (String id)=>onDeleteComment(id),
+          onDeleteReply: (String id)=>onDeleteReply(id),
+          from: 'feed', onEditComment: (PostCommentParams params) =>widget.onEditComment(params),
         ),
         if (comment.repliesCount != 0)
           Container(

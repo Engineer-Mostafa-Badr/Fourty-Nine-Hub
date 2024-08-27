@@ -8,7 +8,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
@@ -125,10 +124,11 @@ class _UserTweetsState extends State<UserTweets> {
                               setState(() {});
                               return result;
                             },
-                            onAddReply: (TwitterCommentReplyParams params) {
-                              controller.onCommentReply(params: params);
+                            onAddReply: (TwitterCommentReplyParams params) async{
+                              final result = await controller.onCommentReply(params: params);
                               controller.userTweetsPagingController.itemList?.firstWhere((element) => element.id==params.postId).commentsCount=(controller.userTweetsPagingController.itemList!.firstWhere((element) => element.id==params.postId).commentsCount!+1);
                               setState(() {});
+                              return result;
                             },
                             onCommentReact: (TwitterCommentReactParams params) {
                               controller.onCommentReact(params: params);
@@ -145,6 +145,14 @@ class _UserTweetsState extends State<UserTweets> {
                             state: state,
                             onReport: (TwitterReportParams params) {
                               controller.onReport(params);
+                            }, onEditComment: (TwitterPostCommentParams params) async=>await controller.editComment(params: params), onDeleteComment: (String id) async {
+                              var result =  await controller.deleteComment(context: context, commentId: id, postId: controller
+                              .userTweetsPagingController.itemList![index].mainPost.id, from: 'details');
+                              controller.userTweetsPagingController.itemList![index].commentsCount = ((controller.userTweetsPagingController.itemList![index].commentsCount)!-1);
+                              setState(() {
+
+                              });
+                              return result;
                             },
                           ),
                         ),
@@ -165,7 +173,13 @@ class _UserTweetsState extends State<UserTweets> {
                   },
                     hidePost: (String id){
                       controller.hidePost(context: context, postId: id);
-                    },
+                    }, onDeleteComment: (String id) async {
+                      var result= await controller.deleteComment(context: context, commentId: id, postId: controller
+                      .userTweetsPagingController.itemList![index].mainPost.id, from: 'details');
+                      controller.userTweetsPagingController.itemList?[index].commentsCount=(controller.userTweetsPagingController.itemList![index].commentsCount!-1);
+                      setState(() {});
+                      return result;
+                    }, onEditComment: (TwitterPostCommentParams params) async=>controller.editComment(params: params),
                   ):Center(
                     child: Label(text: getFailureMessage(
                       state.failure ?? const UnknownFailure(),

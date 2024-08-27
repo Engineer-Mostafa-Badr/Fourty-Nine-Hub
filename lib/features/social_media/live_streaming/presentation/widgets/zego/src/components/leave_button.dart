@@ -34,6 +34,7 @@ class ZegoLiveStreamingLeaveButton extends StatefulWidget {
   final ZegoLiveStreamingHostManager hostManager;
   final ValueNotifier<bool> hostUpdateEnabledNotifier;
   final ValueNotifier<bool>? isLeaveRequestingNotifier;
+  final ValueNotifier<bool> showTopBar;
 
   const ZegoLiveStreamingLeaveButton({
     super.key,
@@ -43,6 +44,7 @@ class ZegoLiveStreamingLeaveButton extends StatefulWidget {
     required this.defaultLeaveConfirmationAction,
     required this.hostManager,
     required this.hostUpdateEnabledNotifier,
+    required this.showTopBar,
     this.isLeaveRequestingNotifier,
     this.icon,
     this.iconSize,
@@ -75,154 +77,13 @@ class _ZegoLiveStreamingLeaveButtonState
   @override
   Widget build(BuildContext context) {
     return ZegoLeaveButton(
-      buttonSize: widget.buttonSize,
+      buttonSize: const Size(80, 40),
       iconSize: widget.iconSize,
       icon: widget.icon,
       clickableNotifier: hangupButtonClickableNotifier,
       onLeaveConfirmation: (context) async {
-        /*/// prevent controller's leave function call after leave button click
-        widget.isLeaveRequestingNotifier?.value = true;
-
-        final endConfirmationEvent = ZegoLiveStreamingLeaveConfirmationEvent(
-          context: context,
-        );
-        defaultAction() async {
-          return widget.defaultLeaveConfirmationAction(endConfirmationEvent);
-        }
-
-        final canLeave = await widget.events.onLeaveConfirmation?.call(
-              endConfirmationEvent,
-              defaultAction,
-            ) ??
-            true;
-        if (canLeave) {
-          await notifyUserLeaveByMessage();
-
-          if (widget.hostManager.isLocalHost) {
-            /// live is ready to end, host will update if receive property notify
-            /// so need to keep current host value, DISABLE local host value UPDATE
-            widget.hostUpdateEnabledNotifier.value = false;
-            ZegoUIKit().updateRoomProperties({
-              RoomPropertyKey.host.text: '',
-              RoomPropertyKey.liveStatus.text: LiveStatus.ended.index.toString()
-            });
-          }
-        } else {
-          /// restore controller's leave status
-          widget.isLeaveRequestingNotifier?.value = false;
-        }*/
-        bool canLeave = await showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                backgroundColor: Colors.white,
-                title: Row(
-                  children: [
-                    const Icon(Icons.warning_amber_rounded,
-                        color: Colors.redAccent),
-                    SizedBox(width: 10.zW),
-                    const Text(
-                      "Leave Meeting",
-                      style: TextStyle(
-                        color: Colors.redAccent,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Are you sure you want to:",
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25.zSP,
-                      ),
-                    ),
-                    SizedBox(height: 10.zH),
-                    if (widget.config.role == ZegoLiveStreamingRole.host)
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(
-                              MediaQuery.sizeOf(context).width * 0.4, 56.zH),
-                          backgroundColor: Colors.redAccent,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.zR),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.zW, vertical: 10.zH),
-                        ),
-                        child: const Text("End Meeting for All"),
-                        onPressed: () async {
-                          final users = ZegoUIKit().getAllUsers();
-                          for (var user in users) {
-                            await ZegoUIKit().removeUserFromRoom([user.id]);
-                          }
-                          Navigator.of(context).pop(true);
-                          Navigator.of(context).pop(true);
-                          // widget.defaultEndAction;
-                          // Add your logic to end the meeting for all participants here
-                        },
-                      ),
-                    SizedBox(height: 10.zH),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize:
-                            Size(MediaQuery.sizeOf(context).width * 0.4, 56.zH),
-                        backgroundColor: Colors.orangeAccent,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20.zW, vertical: 10.zH),
-                      ),
-                      child: const Text("Just Leave the Meeting"),
-                      onPressed: () {
-                        Navigator.of(context).pop(true);
-                        Navigator.of(context).pop(true);
-                        // Add your logic to leave the meeting here
-                        // widget.defaultEndAction;
-                      },
-                    ),
-                    SizedBox(height: 10.zH),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          // minimumSize: Size(MediaQuery.sizeOf(context).width*0.4,56.zH),
-                          backgroundColor: Colors.grey[200],
-                          foregroundColor: Colors.black87,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.zR),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.zW, vertical: 10.zH),
-                        ),
-                        child: const Text(
-                          "Cancel",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blueAccent),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            });
-
-        return canLeave;
+        widget.showTopBar.value = !widget.showTopBar.value;
+        return false;
       },
       onPress: () async {
         final endEvent = ZegoLiveStreamingEndEvent(

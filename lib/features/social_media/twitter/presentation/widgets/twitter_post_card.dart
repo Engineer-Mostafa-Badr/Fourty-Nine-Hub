@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/pa
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
@@ -32,6 +33,8 @@ class TwitterPostCard extends StatefulWidget {
   final Function(String) deletePost;
   final Function(String) hidePost;
   final Function(String) showPostComments;
+  final Function(String) onDeleteComment;
+  final Function(TwitterPostCommentParams) onEditComment;
   final Function(TwitterReportParams) onReport;
   bool? shareSuccess;
   TwitterPostCard({
@@ -46,7 +49,7 @@ class TwitterPostCard extends StatefulWidget {
     required this.getPost,
     required this.onReport,
     required this.deletePost,
-    required this.hidePost,
+    required this.hidePost, required this.onDeleteComment, required this.onEditComment,
   });
 
   @override
