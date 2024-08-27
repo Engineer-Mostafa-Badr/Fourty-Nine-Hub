@@ -192,8 +192,6 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
-import '../../../reels/presentation/pages/reel_view.dart';
-
 const kToolbarHeightFactor = 0.80;
 const kDefaultPadding = 8.0;
 
