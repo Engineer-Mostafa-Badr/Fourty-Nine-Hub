@@ -290,7 +290,9 @@ class _TinderScreenState extends State<TinderScreen> {
         alignment: Alignment.topLeft,
         child: Label(
           text: 'Find',
-          style: Styles.headerText(fontSize: 18),
+          style: Styles.headerText(
+            fontSize: MediaQuery.of(context).size.width * 0.1,
+          ),
         ),
       ),
     );
