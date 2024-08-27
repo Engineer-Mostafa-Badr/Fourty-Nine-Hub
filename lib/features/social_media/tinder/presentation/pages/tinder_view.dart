@@ -242,14 +242,9 @@ class _TinderScreenState extends State<TinderScreen> {
     log('TinderScreen built');
     return SharedScaffold(
       body: BlocConsumer<TinderViewCubit, TinderViewState>(
-        listener: (context, state) {
-          final userCubit = serviceLocator<UserCubit>();
-          if (userCubit.token == null || userCubit.token!.isEmpty) {
-            showSnackBarAfterBuild(context, message: 'Check the login page.');
-          }
-        },
+        listener: (context, state) {},
         builder: (context, state) {
-          if (state.userData == null || state.subCategoryData == null) {
+          if (state.userData.isEmpty || state.subCategoryData.isEmpty) {
             return const Center(
               child: CupertinoActivityIndicator(radius: 25),
             );
@@ -272,11 +267,11 @@ class _TinderScreenState extends State<TinderScreen> {
             state.userData.isNotEmpty
                 ? const TinderCardStack()
                 : SizedBox(
-              height: MediaQuery.of(context).size.height * 2.5 / 4,
-              child: const Center(
-                child: CupertinoActivityIndicator(radius: 15),
-              ),
-            ),
+                    height: MediaQuery.of(context).size.height * 2.5 / 4,
+                    child: const Center(
+                      child: CupertinoActivityIndicator(radius: 15),
+                    ),
+                  ),
             const Padding(
               padding: EdgeInsets.only(top: 8.0, bottom: 2),
               child: Divider(color: Colors.grey, height: 1),

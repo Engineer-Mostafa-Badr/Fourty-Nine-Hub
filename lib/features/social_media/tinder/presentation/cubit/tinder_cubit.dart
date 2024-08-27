@@ -857,6 +857,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
   Future<void> fetchGifts() async {
     emit(state.copyWith(giftsState: DataState.initial));
     final giftData = await tinderRepository.fetchGifts();
+    log(giftData.toString()+"dsssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     if (giftData != null) {
       emit(state.copyWith(gifts: giftData, giftsState: DataState.success));
     } else {
