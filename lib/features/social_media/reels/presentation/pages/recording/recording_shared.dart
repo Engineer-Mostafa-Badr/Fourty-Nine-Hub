@@ -8,7 +8,9 @@ import 'my_voice.dart';
 import 'other_voice.dart';
 
 class ReelsRecordingScreen extends StatefulWidget {
-  const ReelsRecordingScreen({super.key});
+  final String voiceUrl;
+
+  const ReelsRecordingScreen({super.key, required this.voiceUrl});
 
   @override
   ReelsRecordingScreenState createState() => ReelsRecordingScreenState();
@@ -38,7 +40,9 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
                   case 1:
                     return const OtherVoiceVideoRecordingScreen();
                   case 2:
-                    return const MixVoiceVideoRecordingScreen();
+                    return MixVoiceVideoRecordingScreen(
+                      voiceUrl: widget.voiceUrl,
+                    );
                 }
                 return const MyVoiceVideoRecordingScreen();
               },

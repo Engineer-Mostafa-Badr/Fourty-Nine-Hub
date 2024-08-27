@@ -788,7 +788,7 @@ class FavSubCategoryView extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => TinderViewCubit(),
+          create: (context) => serviceLocator<TinderViewCubit>(),
         ),
         BlocProvider(
           create: (context) => UserCubit(
@@ -826,14 +826,12 @@ class _FavSubCategoryViewContentState
   }
 
   void _initializeTinderData() {
-
-      serviceLocator<TinderViewCubit>().fetchFavorites();
+    context.read<TinderViewCubit>().fetchFavorites();
   }
 
   @override
   Widget build(BuildContext context) {
     final tinderCubit = context.watch<TinderViewCubit>();
-    context.watch<UserCubit>();
 
     return SharedScaffold(
       // body: _buildFavoritesGrid(context, widget.favoriteSubCategory),
@@ -919,7 +917,6 @@ class _FavSubCategoryViewContentState
         padding: const EdgeInsets.all(8.0),
         child: FavTinderSubCategoryCard(
             favSubCategoryCardData: favSubCategoryData,
-            tinderViewCubit: context.read<TinderViewCubit>(),
             activeFav: false)
         // Column(
         //   children: [
@@ -933,12 +930,10 @@ class _FavSubCategoryViewContentState
 class FavTinderSubCategoryCard extends StatelessWidget {
   final FavoriteItem favSubCategoryCardData;
   final bool activeFav;
-  final TinderViewCubit tinderViewCubit;
 
   const FavTinderSubCategoryCard({
     super.key,
     required this.favSubCategoryCardData,
-    required this.tinderViewCubit,
     required this.activeFav,
   });
 
@@ -950,9 +945,8 @@ class FavTinderSubCategoryCard extends StatelessWidget {
         width: 200,
         padding: const EdgeInsets.all(0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).scaffoldBackgroundColor
-        ),
+            borderRadius: BorderRadius.circular(10),
+            color: Theme.of(context).scaffoldBackgroundColor),
         child: Card(
           clipBehavior: Clip.hardEdge,
           color: Theme.of(context).scaffoldBackgroundColor,

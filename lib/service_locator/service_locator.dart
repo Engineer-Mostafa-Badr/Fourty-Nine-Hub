@@ -168,6 +168,7 @@ import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/repositories/reels_repository_impl.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/repo/tinder_repo.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
@@ -253,11 +254,25 @@ class DI {
     serviceLocator.registerFactory<ReelsCubit>(
       () => ReelsCubit(repository: serviceLocator<ReelsRepository>()),
     );
+    //
+    // // Register the TinderRepository
+    // serviceLocator.registerLazySingleton<TinderRepository>(
+    //   () => TinderRepository(),
+    // );
+    //
+    // // Register the TinderCubit
+    // serviceLocator.registerFactory<TinderViewCubit>(
+    //   () =>
+    //       TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()),
+    // );
 
-    // Register the ReelsCubit
-    serviceLocator.registerFactory<TinderViewCubit>(
-      () => TinderViewCubit(),
-    );
+    // Register the TinderRepository as a singleton
+    serviceLocator
+        .registerLazySingleton<TinderRepository>(() => TinderRepository());
+
+    // Register the TinderViewCubit and inject the TinderRepository dependency
+    serviceLocator.registerFactory<TinderViewCubit>(() =>
+        TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
 
     // Register other dependencies...
     // serviceLocator

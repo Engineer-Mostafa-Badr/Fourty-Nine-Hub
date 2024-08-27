@@ -9,15 +9,8 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../shared/filter_utiles.dart';
 import 'recording_shared.dart';
-
-class Filter {
-  final String name;
-  final ColorFilter? filter;
-  final String? ffmpegFilter;
-
-  Filter(this.name, this.filter, {this.ffmpegFilter});
-}
 
 class OtherVoiceVideoRecordingScreen extends StatefulWidget {
   const OtherVoiceVideoRecordingScreen({super.key});
@@ -46,445 +39,7 @@ class OtherVoiceVideoRecordingScreenState
   String voiceUrl =
       'https://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/start.ogg';
 
-  final List<Filter> filters = [
-    // Normal
-    Filter('Normal', null, ffmpegFilter: ''),
-
-    // Sepia
-    Filter(
-        'Sepia',
-        const ColorFilter.matrix([
-          0.393,
-          0.769,
-          0.189,
-          0,
-          0,
-          0.349,
-          0.686,
-          0.168,
-          0,
-          0,
-          0.272,
-          0.534,
-          0.131,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-        ]),
-        ffmpegFilter:
-            'colorchannelmixer=0.393:0.349:0.272:0.769:0.686:0.534:0.189:0.168:0.131'),
-
-    // Grayscale
-    Filter(
-        'Grayscale',
-        const ColorFilter.matrix([
-          0.2126,
-          0.7152,
-          0.0722,
-          0,
-          0,
-          0.2126,
-          0.7152,
-          0.0722,
-          0,
-          0,
-          0.2126,
-          0.7152,
-          0.0722,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-        ]),
-        ffmpegFilter:
-            'colorchannelmixer=0.2126:0.2126:0.2126:0.7152:0.7152:0.7152:0.0722:0.0722:0.0722'),
-
-    // Invert
-    Filter(
-        'Invert',
-        const ColorFilter.matrix([
-          -1,
-          0,
-          0,
-          0,
-          1,
-          0,
-          -1,
-          0,
-          0,
-          1,
-          0,
-          0,
-          -1,
-          0,
-          1,
-          0,
-          0,
-          0,
-          1,
-          0,
-        ]),
-        ffmpegFilter: 'negate'),
-
-    // Vintage
-    Filter(
-        'Vintage',
-        const ColorFilter.matrix([
-          0.9,
-          0.6,
-          0.2,
-          0,
-          0,
-          0.3,
-          0.7,
-          0.2,
-          0,
-          0,
-          0.2,
-          0.3,
-          0.8,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-        ]),
-        ffmpegFilter: 'curves=vintage'),
-
-    // Brighten
-    Filter(
-        'Brighten',
-        const ColorFilter.matrix([
-          1.2,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1.2,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1.2,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-        ]),
-        ffmpegFilter: 'eq=brightness=0.2'),
-
-    // Cool
-    Filter(
-        'Cool',
-        const ColorFilter.matrix([
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1.1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-        ]),
-        ffmpegFilter: 'colorbalance=bs=0.1'),
-
-    // Warm
-    Filter(
-        'Warm',
-        const ColorFilter.matrix([
-          1.1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0.9,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-        ]),
-        ffmpegFilter: 'colorbalance=rs=0.1'),
-
-    // Soft Glow
-    Filter(
-        'Soft Glow',
-        const ColorFilter.matrix([
-          1.2,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1.2,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1.2,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-        ]),
-        ffmpegFilter: 'eq=contrast=1.2'),
-
-    // Dreamy
-    Filter(
-        'Dreamy',
-        const ColorFilter.matrix([
-          0.9,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0.9,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0.9,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0.1,
-        ]),
-        ffmpegFilter: 'curves=blue'),
-
-    // Pink Haze
-    Filter(
-        'Pink Haze',
-        const ColorFilter.matrix([
-          1.2,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1.1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1.1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-        ]),
-        ffmpegFilter: 'colorbalance=rm=0.1:bm=0.1'),
-
-    // Steel Blue
-    Filter(
-        'Steel Blue',
-        const ColorFilter.matrix([
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1.2,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-        ]),
-        ffmpegFilter: 'colorbalance=bs=0.1'),
-
-    // Rustic
-    Filter(
-        'Rustic',
-        const ColorFilter.matrix([
-          0.9,
-          0.1,
-          0,
-          0,
-          0,
-          0.1,
-          0.8,
-          0.1,
-          0,
-          0,
-          0,
-          0.1,
-          0.9,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-        ]),
-        ffmpegFilter: 'colorchannelmixer=0.9:0.1:0.1:0.1:0.8:0.1:0:0.1:0.9'),
-
-    // Noir
-    Filter(
-        'Noir',
-        const ColorFilter.matrix([
-          0.3,
-          0.3,
-          0.3,
-          0,
-          0,
-          0.3,
-          0.3,
-          0.3,
-          0,
-          0,
-          0.3,
-          0.3,
-          0.3,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-        ]),
-        ffmpegFilter: 'colorchannelmixer=0.3:0.3:0.3'),
-
-    // Psychedelic
-    Filter(
-        'Psychedelic',
-        const ColorFilter.matrix([
-          0.5,
-          0.5,
-          0,
-          0,
-          0,
-          0.5,
-          0,
-          0.5,
-          0,
-          0,
-          0,
-          0.5,
-          0.5,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-        ]),
-        ffmpegFilter: 'hue=H=60:s=1'),
-
-    // Neon Glow
-    Filter(
-        'Neon Glow',
-        const ColorFilter.matrix([
-          1.5,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1.5,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1.5,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-        ]),
-        ffmpegFilter: 'eq=saturation=1.5'),
-
-    // Retro
-    Filter(
-        'Retro',
-        const ColorFilter.matrix([
-          1.0,
-          0.4,
-          0.4,
-          0,
-          0,
-          0.4,
-          1.0,
-          0.4,
-          0,
-          0,
-          0.4,
-          0.4,
-          1.0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-        ]),
-        ffmpegFilter: 'curves=vintage'),
-  ];
-
+  final List<Filter> filters = FilterLibrary.filters;
   Filter? _selectedFilter;
 
   void _applyFilter(Filter filter) {
@@ -515,9 +70,16 @@ class OtherVoiceVideoRecordingScreenState
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.filter, color: Colors.white),
-                  Text(filters[index].name,
-                      style: const TextStyle(color: Colors.white)),
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundImage: AssetImage(
+                      FilterLibrary.filterImagesPaths[index].toString(),
+                    ),
+                  ),
+                  FittedBox(
+                    child: Text(filters[index].name,
+                        style: const TextStyle(color: Colors.white)),
+                  ),
                 ],
               ),
             ),
@@ -646,18 +208,21 @@ class OtherVoiceVideoRecordingScreenState
     mergedVideoPath =
         '${directory.path}/merged_${DateTime.now().millisecondsSinceEpoch}.mp4';
 
-    final filterCommand = _selectedFilter?.ffmpegFilter ?? '';
+    // Combine the horizontal flip with the existing filter command
+    final filterCommand = _selectedFilter?.ffmpegFilter != null
+        ? '${_selectedFilter!.ffmpegFilter},hflip' // Add hflip to the existing filter
+        : 'hflip'; // Just use hflip if no other filter is selected
 
-    // Simplified FFmpeg command with `mpeg4` encoder and without the profile option
+    // Adjusted FFmpeg command with horizontal flip
     final commandArgs = [
       '-i', videoPath!,
       '-i', voiceUrl,
       if (filterCommand.isNotEmpty) ...['-vf', filterCommand],
       '-map', '0:v:0',
       '-map', '1:a:0',
-      '-c:v', 'mpeg4', // Use `mpeg4` instead of `libx264`
-      '-b:v', '2M', // Set video bitrate to maintain quality
-      '-q:v', '2', // Use quality factor for mpeg4
+      '-c:v', 'mpeg4', // Using `mpeg4` for faster encoding
+      '-q:v', '5', // Lower quality for faster processing
+      '-b:v', '1M', // Lower bitrate
       '-c:a', 'aac',
       '-shortest',
       mergedVideoPath!,
@@ -749,7 +314,7 @@ class OtherVoiceVideoRecordingScreenState
 
   Widget _buildCameraPreview() {
     return ColorFiltered(
-      colorFilter: _selectedFilter?.filter ??
+      colorFilter: _selectedFilter?.colorFilter ??
           const ColorFilter.mode(Colors.transparent, BlendMode.srcOver),
       child: CameraPreview(_controller!),
     );
@@ -794,8 +359,10 @@ class OtherVoiceVideoRecordingScreenState
                         size: 50,
                       ),
                     )
-                  : const SizedBox(
-                      width: 50,
+                  : const Center(
+                      child: CupertinoActivityIndicator(
+                        color: Colors.white,
+                      ),
                     ),
               GestureDetector(
                 onLongPress: () => _startRecording(),
