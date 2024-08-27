@@ -11,7 +11,7 @@ abstract class Styles {
       List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
-        fontSize: fontSize.zW,
+        fontSize: fontSize.zSP,
         color: color ,
         decoration: decoration,
         shadows: shadows,
@@ -26,7 +26,7 @@ abstract class Styles {
       List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
-        fontSize: fontSize.zW,
+        fontSize: fontSize.zSP,
         color: color ,
         // overflow: TextOverflow.ellipsis,
         shadows: shadows,
