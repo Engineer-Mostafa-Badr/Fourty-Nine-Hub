@@ -26,11 +26,11 @@ void main() async {
 
   runApp(
     LocalizationService.rootWidget(
-      child: DevicePreview(
-        enabled: !kReleaseMode,
-        builder: (context) => const MyApp(),
-      ),
-      // child: const MyApp(),
+      // child: DevicePreview(
+      //   enabled: !kReleaseMode,
+      //   builder: (context) => const MyApp(),
+      // ),
+      child: const MyApp(),
     ),
   );
 }
@@ -86,7 +86,7 @@ class MyApp extends StatelessWidget {
                   supportedLocales: context.supportedLocales,
                   locale: context.locale,
                   // for device preview package
-                  builder: DevicePreview.appBuilder,
+                  // builder: DevicePreview.appBuilder,
                 );
               },
             );

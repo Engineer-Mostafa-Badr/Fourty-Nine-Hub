@@ -466,7 +466,7 @@ class DrawerWidget extends StatelessWidget {
               Row(
                 children: [
                   Label(
-                    text: _getFirstTwoWords(user?.fullName ?? ''),
+                    text: _getFirstTwoWords(user?.fullName ?? ' '),
                     style: Styles.mediumText(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
@@ -523,18 +523,19 @@ class DrawerWidget extends StatelessWidget {
   }
 
   String _getFirstTwoWords(String fullName) {
-   if(fullName.isNotEmpty){
      List<String> words = fullName.split(" ");
 
-     // Capitalize the first letter of each word
-     words = words.map((word) {
-       return word[0].toUpperCase() + word.substring(1).toLowerCase();
-     }).toList();
 
-     return words.length > 1 ? '${words[0]} ${words[1]}' : words[0];
-   }else{
-     return fullName;
-   }
+        // Capitalize the first letter of each word
+
+         words = words.map((word) {
+           return word[0].toUpperCase() + word.substring(1).toLowerCase();
+         }).toList();
+
+
+        return words.length > 1 ? '${words[0]} ${words[1]}' : words[0];
+
+
   }
 
   getUserType(

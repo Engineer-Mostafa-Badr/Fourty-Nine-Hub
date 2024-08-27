@@ -17,10 +17,13 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:pro_image_editor/pro_image_editor.dart';
 import 'package:shimmer/shimmer.dart';
-
-import 'images_and_videos_slider.dart';
-
+import 'package:video_player/video_player.dart';
+import 'package:zero_story_editor/flutter_story_editor.dart';
+import 'package:zero_story_editor/src/controller/controller.dart';
+import 'package:zero_story_editor/generated/assets.dart';
+part 'images_and_videos_slider.dart';
 class CameraPicker extends StatelessWidget {
   final void Function(List<XFile> media)? onDone;
 
@@ -73,8 +76,8 @@ class _CamViewState extends State<_CamView> {
                 return _permissionButton(
                     LocaleKeys.allowAccessToYourMicrophone);
               } else {
-                return Icon(Icons.camera,
-                    color: AppColors.GREY_DARK_COLOR, size: 150.zW);
+                return const Icon(Icons.camera,
+                    color: AppColors.GREY_DARK_COLOR, size: 150);
               }
             },
           ),
@@ -84,7 +87,7 @@ class _CamViewState extends State<_CamView> {
           right: 0,
           left: 0,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0.zW),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -108,11 +111,10 @@ class _CamViewState extends State<_CamView> {
                     } else if (state.pickMode == PickMode.video &&
                         state.controller != null) {
                       return Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 8.zW, vertical: 8.zH),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           color: AppColors.GREY_DARK_COLOR.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(20.zR),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
                           '00 : 00',
@@ -148,7 +150,7 @@ class _CamViewState extends State<_CamView> {
           right: 0,
           left: 0,
           child: Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 8.0.zW),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -261,7 +263,8 @@ class _CamViewState extends State<_CamView> {
     }
   }
 
-  Widget get _pickIcon => Icon(Icons.circle, size: 80.zW, color: Colors.white);
+  Widget get _pickIcon =>
+      const Icon(Icons.circle, size: 80, color: Colors.white);
 
   Widget _permissionButton(String label) {
     return InkWell(
@@ -360,8 +363,7 @@ class _ImagesListState extends State<_ImagesList> {
                                   child: Container(
                                     width: constraints.maxHeight,
                                     decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(10.zR),
+                                      borderRadius: BorderRadius.circular(10),
                                       color: Colors.white,
                                     ),
                                   ),
