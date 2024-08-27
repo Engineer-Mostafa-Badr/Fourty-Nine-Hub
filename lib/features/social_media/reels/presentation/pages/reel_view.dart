@@ -1206,7 +1206,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
   Widget _buildVideoOrPlaceholder() {
     if (_isInitialized && _chewieController != null) {
       return FittedBox(
-        fit: BoxFit.fill,
+        fit: BoxFit.fitHeight,
         child: SizedBox(
           width: _videoPlayerController.value.size.width,
           height: _videoPlayerController.value.size.height,
@@ -1421,7 +1421,11 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _buildActionButton(FontAwesomeIcons.heart, widget.reel.likeCount, () {
+        _buildActionButton(
+            widget.reel.likeCount == 0
+                ? FontAwesomeIcons.heart
+                : FontAwesomeIcons.solidHeart,
+            widget.reel.likeCount, () {
           context.read<ReelsCubit>().likeReel(widget.reel.id).then((value) {
             if (context.read<ReelsCubit>().state.likeReelResponse!.message ==
                 "Reel liked successfully") {
@@ -1435,7 +1439,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
               --widget.reel.likeCount;
             }
           });
-        }),
+        }, iconColor: Colors.red),
         _buildActionButton(FontAwesomeIcons.comment, widget.reel.commentCount,
             () {
           // showModalBottomSheet(
@@ -1451,17 +1455,28 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
           context.read<ReelsCubit>().getComments(widget.reel.id).then(
               (value) => showCommentsBottomSheet(context, reel: widget.reel));
         }),
-        _buildActionButton(
-            FontAwesomeIcons.share, widget.reel.shareCount, () {}),
-        _buildActionButton(FontAwesomeIcons.bookmark, widget.reel.saveCount,
-            () {
-          // _showGiftBottomSheet22(context, receiverId: widget.reel.user.id);
+        _buildActionButton(FontAwesomeIcons.share, widget.reel.shareCount, () {
+          context
+              .read<ReelsCubit>()
+              .shareReel(widget.reel.id)
+              .then((value) => widget.reel.shareCount++);
         }),
-        _buildActionButton(FontAwesomeIcons.gift, widget.reel.saveCount, () {
+        _buildActionButton(
+            widget.reel.saveCount == 0
+                ? FontAwesomeIcons.bookmark
+                : FontAwesomeIcons.solidBookmark,
+            widget.reel.saveCount, () {
+          context
+              .read<ReelsCubit>()
+              .saveReel(widget.reel.id)
+              .then((value) => widget.reel.saveCount++);
+
+          // _showGiftBottomSheet22(context, receiverId: widget.reel.user.id);
+        }, iconColor: Colors.yellowAccent),
+        _buildActionButton(FontAwesomeIcons.gift, 0, () {
           showGiftBottomSheet(context, receiverId: widget.reel.user.id);
         }),
-        _buildActionButton(
-            FontAwesomeIcons.circleExclamation, widget.reel.saveCount, () {
+        _buildActionButton(FontAwesomeIcons.circleExclamation, 0, () {
           bottomSheet(
             context: context,
             widget: ReportView(
@@ -1475,14 +1490,15 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
   }
 
   /// Builds an individual action button with an icon and a count.
-  Widget _buildActionButton(IconData icon, int count, VoidCallback function) {
+  Widget _buildActionButton(IconData icon, int count, VoidCallback function,
+      {Color? iconColor}) {
     return IconButton(
       onPressed: function,
       icon: Column(
         children: [
           FaIcon(
             icon,
-            color: Colors.white,
+            color: iconColor ?? Colors.white,
             size: 35,
           ),
           const SizedBox(height: 4),

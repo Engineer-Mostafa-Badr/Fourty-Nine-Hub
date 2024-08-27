@@ -140,10 +140,12 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/like_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/models/save_reel_model.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:http/http.dart' as http;
 import '../../../../../core/utils/shared_pref.dart';
 import '../models/new_reels_model.dart';
+import '../models/share_reel_model.dart';
 
 class ReelsRepository {
   String? token;
@@ -211,11 +213,36 @@ class ReelsRepository {
     return null;
   }
 
+  // New method to share a reel
+  Future<ReelShareResponse> shareReel(String reelId) async {
+    final String url = 'https://49dev.com/api/v1/reels/share/$reelId';
+
+    final response = await _makePostRequest(url: url, body: '{}');
+    if (response != null) {
+      log("Reel shared successfully: ${response.body}");
+      return ReelShareResponse.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to share the reel');
+    }
+  }
+
+  // New method to save a reel
+  Future<ReelSaveResponse> saveReel(String reelId) async {
+    final String url = 'https://49dev.com/api/v1/reels/saved/$reelId';
+
+    final response = await _makePostRequest(url: url, body: '{}');
+    if (response != null) {
+      log("Reel saved successfully: ${response.body}");
+      return ReelSaveResponse.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to save the reel');
+    }
+  }
+
   Future<ReelsResponse> fetchReels({int page = 1, int limit = 3}) async {
     final url =
         'https://49dev.com/api/v1/reels/explore?page=$page&limit=$limit';
-    final response =
-    await _makeGetRequest(url: url, fromMethod: 'fetchReels');
+    final response = await _makeGetRequest(url: url, fromMethod: 'fetchReels');
     if (response != null) {
       log("from ReelsRepository");
       return ReelsResponse.fromJson(json.decode(response.body));
@@ -259,7 +286,7 @@ class ReelsRepository {
     final url = 'https://49dev.com/api/v1/reels/comments/$reelId';
 
     final response =
-    await _makeGetRequest(url: url, fromMethod: 'fetchComments');
+        await _makeGetRequest(url: url, fromMethod: 'fetchComments');
     if (response != null) {
       return GetCommentsResponse.fromJson(jsonDecode(response.body));
     } else {

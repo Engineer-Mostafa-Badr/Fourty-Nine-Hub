@@ -36,13 +36,19 @@
 //     return super.close();
 //   }
 // }
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/like_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/models/save_reel_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/models/share_reel_model.dart';
+import 'package:http/http.dart' as http;
 
+import '../../../../../../core/utils/shared_pref.dart';
 import '../../../data/models/new_reels_model.dart';
 import '../../../data/repositories/reels_repository_impl.dart';
 
@@ -57,6 +63,9 @@ class ReelsState {
   final String? likeReelErrorMessage;
   final ReelLikeResponse? likeReelResponse;
 
+  final ReelSaveResponse reelSaveResponse;
+  final ReelShareResponse reelShareResponse;
+
   // New fields related to adding a comment
   final bool isCommenting;
   final String? commentErrorMessage;
@@ -68,6 +77,8 @@ class ReelsState {
   final GetCommentsResponse? fetchedComments;
 
   ReelsState({
+    required this.reelSaveResponse,
+    required this.reelShareResponse,
     required this.reels,
     required this.isLoading,
     required this.hasReachedMax,
@@ -84,6 +95,8 @@ class ReelsState {
   });
 
   ReelsState copyWith({
+    ReelSaveResponse? reelSaveResponse,
+    ReelShareResponse? reelShareResponse,
     List<Reel>? reels,
     bool? isLoading,
     bool? hasReachedMax,
@@ -113,6 +126,8 @@ class ReelsState {
       fetchCommentsErrorMessage:
           fetchCommentsErrorMessage ?? this.fetchCommentsErrorMessage,
       fetchedComments: fetchedComments ?? this.fetchedComments,
+      reelSaveResponse: reelSaveResponse ?? this.reelSaveResponse,
+      reelShareResponse: reelShareResponse ?? this.reelShareResponse,
     );
   }
 }
@@ -122,8 +137,63 @@ class ReelsCubit extends Cubit<ReelsState> {
 
   ReelsCubit({required this.repository})
       : super(ReelsState(
-            reels: [], isLoading: false, hasReachedMax: false, currentPage: 0));
+            reelSaveResponse: ReelSaveResponse(),
+            reelShareResponse: ReelShareResponse(),
+            reels: [],
+            isLoading: false,
+            hasReachedMax: false,
+            currentPage: 0));
 
+//---------------------------------------------------------------------------------------
+
+  Future<void> uploadReel(File videoFile) async {
+    // Step 1: Generate Signed URL
+    final token = await TokenManager.getAccessToken();
+    final response = await http.post(
+      Uri.parse('https://49dev.com/api/v1/reels?subCategory=66684135dbb427ee42aa0141'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        "subcategoryId": "66684135dbb427ee42aa0141",
+        "isAudioOriginal": false,
+        "metadata": {
+          "name": videoFile.path.split('/').last,
+          "size": videoFile.lengthSync(),
+          "type": "video/mp4",
+          "videoWidth": 640,  // Adjust these values according to your video metadata
+          "videoHeight": 360,
+          "inputAudioId": "66ba3fb7baf9033183036cd0"
+        }
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      log(responseData['data']['signedUrl'].toString()+"1111111111111111111111111111111111111111111111111111111111111111111111");
+      final signedUrl = responseData['data']['signedUrl'];
+
+      // Step 2: Upload Video using the Signed URL
+      final uploadResponse = await http.put(
+        Uri.parse(signedUrl),
+        headers: {
+          'Content-Type': 'video/mp4',
+        },
+        body: videoFile.readAsBytesSync(),
+      );
+
+      if (uploadResponse.statusCode == 200) {
+        print('Video uploaded successfully!>>>>1111111111111111111111111111111111111111111111111111111111111111111111');
+      } else {
+        print('Failed to upload video: ${uploadResponse.statusCode}');
+        print('Response body: ${uploadResponse.body}');
+      }
+    } else {
+      print('Failed to generate signed URL: ${response.statusCode}');
+      print('Response body: ${response.body}');
+    }
+  }
 //---------------------------------------------------------------------------------------
   Future<void> fetchReels() async {
     if (state.isLoading || state.hasReachedMax) return;
@@ -143,6 +213,42 @@ class ReelsCubit extends Cubit<ReelsState> {
       ));
     } catch (e) {
       emit(state.copyWith(isLoading: false));
+    }
+  }
+
+//--------------------------------------------------------------------------------------------
+  // New method to save a reel
+  Future<void> saveReel(String reelId) async {
+    try {
+      // Optionally, you can emit a loading state here if you want to show a loader or disable UI interaction
+      final ReelSaveResponse response = await repository.saveReel(reelId);
+
+      // Optionally, you can update the state to reflect that the reel was saved, or show a success message
+      emit(state.copyWith(reelSaveResponse: response
+          // Add any state update logic here if necessary
+          ));
+      log("Reel saved successfully");
+    } catch (e) {
+      log("Error saving reel: $e");
+      // Optionally, emit a state with an error message if needed
+    }
+  }
+
+//--------------------------------------------------------------------------------------------
+  // New method to share a reel
+  Future<void> shareReel(String reelId) async {
+    try {
+      // Optionally, you can emit a loading state here if you want to show a loader or disable UI interaction
+      final ReelShareResponse response = await repository.shareReel(reelId);
+
+      // Optionally, you can update the state to reflect that the reel was shared, or show a success message
+      emit(state.copyWith(reelShareResponse: response
+          // Add any state update logic here if necessary
+          ));
+      log("Reel shared successfully");
+    } catch (e) {
+      log("Error sharing reel: $e");
+      // Optionally, emit a state with an error message if needed
     }
   }
 
