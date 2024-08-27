@@ -38,4 +38,10 @@ class HealthRepoImpl implements HealthRepo {
   Future<Either<Failure, bool>> isDoctor() {
     return _remoteDataSource.isDoctor();
   }
+
+  @override
+  Future<Either<Failure, bool>> isDoctorApproval() {
+    return _remoteDataSource.isDoctorApproval();
+
+  }
 }

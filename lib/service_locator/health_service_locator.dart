@@ -57,9 +57,12 @@ import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_medical_services.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_my_appointment_bookings_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_user_upcoming_appointments.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/is_doctor_approval_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/is_doctor_usecase.dart';
 import 'package:fourtyninehub/features/notifications/data/repository/notification_repo_impl.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:fourtyninehub/features/subcategories/domain/usecases/delete_favorite_category_use_case.dart';
+import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_subcategory.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
@@ -204,6 +207,12 @@ class HealthServiceLocator {
         () => UpdateDoctorProfilePhotoUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<DeleteDoctorAccountUseCase>(
         () => DeleteDoctorAccountUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<IsDoctorApprovalUsecase>(
+        () => IsDoctorApprovalUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<ToggleFavoriteCategoryUseCase>(
+            () => ToggleFavoriteCategoryUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<DeleteFavoriteCategoryUseCase>(
+            () => DeleteFavoriteCategoryUseCase(serviceLocator()));
     // -------------------------- cubits --------------------------
     serviceLocator.registerSingleton<HealthSharedData>(HealthSharedData());
     serviceLocator.registerFactory<DoctorDetailsCubit>(() => DoctorDetailsCubit(
@@ -213,6 +222,9 @@ class HealthServiceLocator {
           serviceLocator(),
         ));
     serviceLocator.registerFactory<HealthCubit>(() => HealthCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

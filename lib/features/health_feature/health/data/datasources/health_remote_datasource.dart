@@ -15,6 +15,7 @@ abstract class HealthRemoteDataSource {
   Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices();
 
   Future<Either<Failure, bool>> isDoctor();
+  Future<Either<Failure, bool>> isDoctorApproval();
 }
 
 class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
@@ -71,4 +72,12 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
     return response.fold(
         (l) => Left(l), (data) => Right(data['data']['isDoctor'] as bool));
   }
+
+  @override
+  Future<Either<Failure, bool>> isDoctorApproval() async{
+    final response = await _apiConsumer.get(EndPoints.isDoctorApproval);
+    return response.fold(
+            (l) => Left(l), (data) => Right(data["data"]["isApproved"] as bool));
+  }
+
 }

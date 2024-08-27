@@ -9,6 +9,9 @@ import 'package:fourtyninehub/features/health_feature/health/domain/entities/hea
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_health_subcategories.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_medical_services.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_user_upcoming_appointments.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/is_doctor_approval_usecase.dart';
+import 'package:fourtyninehub/features/subcategories/domain/usecases/delete_favorite_category_use_case.dart';
+import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_subcategory.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -26,7 +29,10 @@ class HealthCubit extends Cubit<HealthState> {
   final GetHealthSubcategoriesUseCase _getHealthSubcategoriesUseCase;
   final GetMedicalServicesUseCase _getMedicalServicesUseCase;
   final ToggleFavoriteSubcategoryUseCase _toggleFavoriteSubcategoryUseCase;
+  final ToggleFavoriteCategoryUseCase _toggleFavoriteCategoryUseCase;
+  final DeleteFavoriteCategoryUseCase _deleteFavoriteCategoryUseCase;
   final IsDoctorUsecase _isDoctorUseCase;
+  final IsDoctorApprovalUsecase _isDoctorApprovalUsecase;
   final GetMainCategoryDetailsUseCase _getMainCategoryDetailsUseCase;
   final GetGovernoratesUseCase _getGovernoratesUseCase;
   HealthCubit(
@@ -36,7 +42,7 @@ class HealthCubit extends Cubit<HealthState> {
       this._getMedicalServicesUseCase,
       this._toggleFavoriteSubcategoryUseCase,
       this._isDoctorUseCase,
-      this._getMainCategoryDetailsUseCase, this._getGovernoratesUseCase)
+      this._getMainCategoryDetailsUseCase, this._getGovernoratesUseCase, this._isDoctorApprovalUsecase, this._toggleFavoriteCategoryUseCase, this._deleteFavoriteCategoryUseCase)
       : super(const HealthState());
 
   final List<HealthBookingFilterModel> services = [
@@ -61,6 +67,7 @@ class HealthCubit extends Cubit<HealthState> {
   void loadData() async {
     await _getMainCategoryDetails();
     await _isDoctor();
+    await _isDoctorApproval();
     await getSubCategories();
     await getServices();
     await getMyBookings();
@@ -92,6 +99,14 @@ class HealthCubit extends Cubit<HealthState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: HealthStates.error)),
         (data) => emit(state.copyWith(isDoctor: data)));
+  }
+
+  Future<void> _isDoctorApproval() async {
+    final response = await _isDoctorApprovalUsecase.call(const NoParams());
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) => emit(state.copyWith(isApproved: data)));
   }
 
   Future<void> getServices() async {
@@ -142,14 +157,61 @@ class HealthCubit extends Cubit<HealthState> {
     response.fold(
         (failure) =>
             emit(state.copyWith(failure: failure, status: HealthStates.error)),
-        (data) => getSubCategories(reload: true));
+        (data) {
+          return getSubCategories(reload: true);
+        });
   }
 
-  Future<void> toggleFavoriteMedicalService(String subcategoryId) async {
-    final response = await _toggleFavoriteSubcategoryUseCase(subcategoryId);
+  // Future<bool> toggleFavoriteMedicalService(String subcategoryId) async {
+  //   final response = await _toggleFavoriteSubcategoryUseCase(subcategoryId);
+  //   bool result = false;
+  //   response.fold(
+  //       (failure) =>
+  //           emit(state.copyWith(failure: failure, status: HealthStates.error)),
+  //       (data) {
+  //         MainCategoryEntity mainCategoryEntity;
+  //           mainCategoryEntity = state.mainCategory!;
+  //           mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
+  //         emit(state.copyWith(mainCategory: mainCategoryEntity));
+  //         result = state.mainCategory!.isFavorite!;
+  //         print("Salama ${data}");
+  //         return getServices();
+  //       });
+  //   return result;
+  // }
+  Future<bool> toggleFavoriteMedicalService(String subcategoryId) async {
+    final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
+    bool result = false;
     response.fold(
         (failure) =>
             emit(state.copyWith(failure: failure, status: HealthStates.error)),
-        (data) => getServices());
+        (data) {
+          MainCategoryEntity mainCategoryEntity;
+            mainCategoryEntity = state.mainCategory!;
+            mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
+          emit(state.copyWith(mainCategory: mainCategoryEntity));
+          result = state.mainCategory!.isFavorite!;
+          print("Salama ${data}");
+          return getServices();
+        });
+    return result;
+  }
+
+  Future<bool> deleteMedicalService(String subcategoryId) async {
+    final response = await _deleteFavoriteCategoryUseCase(subcategoryId);
+    bool result = false;
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) {
+          MainCategoryEntity mainCategoryEntity;
+            mainCategoryEntity = state.mainCategory!;
+            mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
+          emit(state.copyWith(mainCategory: mainCategoryEntity));
+          result = state.mainCategory!.isFavorite!;
+          print("Salama ${data}");
+          return getServices();
+        });
+    return result;
   }
 }

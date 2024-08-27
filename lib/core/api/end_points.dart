@@ -66,6 +66,7 @@ class EndPoints {
   static const bookEmergency = '/health/book-emergency';
   static String bookRegularAppointment(String appointmentId) => '/health/book-appointment/$appointmentId';
   static String toggleFavoriteSubcategory(String subCategoryId) => '/favorite-sub-category/$subCategoryId';
+  static String toggleFavoriteCategory(String subCategoryId) => '/favorite-category/$subCategoryId';
   static String bookPremiumAppointment(String appointmentId) => '/health/book-appointment-premium/$appointmentId';
   static String getDoctorReviewsForUsers(String doctorId) => '/health/doctor/rate/$doctorId';
   static String getDoctorDetails(String doctorId) => '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
@@ -79,6 +80,7 @@ class EndPoints {
   static const getDoctorAppointmentsByDay = '/health/doctor/booking-day';
   static const getDoctorUnhandledAppointments = '/health/book-requests';
   static const isDoctor = '/health/check-doctor-or-not';
+  static const isDoctorApproval = '/health/check-doctor-approval';
   static const getDoctorTotalEarnedMoney = '/health/dashboard/total-earned-money';
   static String doctorAcceptAppointment(String appointmentId) => '/health/book-appointment/approve/$appointmentId';
   static String doctorRejectAppointment(String appointmentId) => '/health/book-appointment/reject/$appointmentId';

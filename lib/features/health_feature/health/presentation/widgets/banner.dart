@@ -6,15 +6,29 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/contro
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-class HealthBanner extends StatelessWidget {
+class HealthBanner extends StatefulWidget {
   const HealthBanner({super.key});
 
+  @override
+  State<HealthBanner> createState() => _HealthBannerState();
+}
+
+class _HealthBannerState extends State<HealthBanner> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HealthCubit, HealthState>(
       builder: (context, state) {
         if (state.mainCategory != null) {
           return MainCategoryBanner(
+            isFavorite: state.mainCategory!.isFavorite ?? false,
+              onFavorite: () async {
+                // context.read<HealthCubit>().toggleFavoriteMedicalService(state.mainCategory!.id);
+                print(state.mainCategory!.id);
+                setState(() {
+
+                });
+                 return await  state.mainCategory!.isFavorite == true ? context.read<HealthCubit>().deleteMedicalService(state.mainCategory!.id) : context.read<HealthCubit>().toggleFavoriteMedicalService(state.mainCategory!.id);
+              },
               category: state.mainCategory!,
               canRegister: state.isDoctor == true ? false : true,
               onRegister: () {

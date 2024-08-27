@@ -132,12 +132,13 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                           bottomSheet(
                               context: context,
                               widget: ReportView(
-                                categoryId: serviceLocator<HealthSharedData>()
-                                    .doctorSearchParams
-                                    .subCategory
-                                    .id,
-                                id: doctor.id,
-                              ));
+                                  id: doctor.id,
+                                  categoryId: serviceLocator<HealthSharedData>()
+                                      .doctorSearchParams
+                                      .subCategory
+                                      .id,
+                                 ));
+
                         },
                         child: const Icon(
                           Icons.report_gmailerrorred_rounded,
