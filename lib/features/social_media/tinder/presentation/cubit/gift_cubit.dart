@@ -2,22 +2,25 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:http/http.dart' as http;
 
 class GiftsCubit extends Cubit<GiftsState> {
   GiftsCubit() : super(GiftsInitial());
+  final String token = serviceLocator<UserCubit>().token ?? '';
 
   int _currentPage = 1;
   final int _limit = 20;
   bool _isFetching = false;
 
-  void fetchGifts({required String accessToken}) async {
+  void fetchGifts() async {
     if (_isFetching) return;
 
     _isFetching = true;
     try {
-      final newGifts = await _fetchGiftsFromApi(accessToken);
+      final newGifts = await _fetchGiftsFromApi(token);
       emit(GiftsLoaded([...state.gifts, ...newGifts]));
       _currentPage++;
     } catch (e) {
