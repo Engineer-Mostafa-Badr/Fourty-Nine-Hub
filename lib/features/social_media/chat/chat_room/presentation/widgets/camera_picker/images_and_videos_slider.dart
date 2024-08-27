@@ -105,10 +105,10 @@ class _ImagesAndVideosSliderState extends State<ImagesAndVideosSlider> {
                           //       // Here you go with your edited files.
                           //     });
                         }
-                        // showBottomSheet(
-                        //   context: context,
-                        //   builder: (context) => child,
-                        // );
+                        showBottomSheet(
+                          context: context,
+                          builder: (context) => Container(),
+                        );
                       },
                     ),
                   ],

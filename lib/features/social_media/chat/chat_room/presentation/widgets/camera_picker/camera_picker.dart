@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:permission_handler/permission_handler.dart';
+// import 'package:pro_image_editor/pro_image_editor.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
 
