@@ -3,6 +3,8 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../res/style/app_colors.dart';
@@ -51,7 +53,7 @@ class AreYouSure extends StatelessWidget {
           Expanded(
               child: AppButton(
                   color: AppColors.AUTH_CONTAINER_COLOR,
-                  label: 'Ok',
+                  label: LocaleKeys.ok.localize,
                   onPressed: () {
                     action();
                     context.pop();
@@ -61,7 +63,7 @@ class AreYouSure extends StatelessWidget {
               child: AppButton(
                   color: AppColors.QUANTITY_COLOR,
                   backColor: AppColors.LIGHT_GRAY_COLOR,
-                  label: 'Close',
+                  label: LocaleKeys.close.localize,
                   onPressed: () => context.pop())),
         ],
       )

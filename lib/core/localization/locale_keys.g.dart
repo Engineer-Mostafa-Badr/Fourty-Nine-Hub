@@ -132,5 +132,8 @@ abstract class  LocaleKeys {
   static String giftApp = 'giftApp'.tr();
   static String clearAll = 'clearAll'.tr();
   static String clearNotification = 'clearNotification'.tr();
+  static String clearNoti = 'clearNoti'.tr();
+  static String ok = 'ok'.tr();
+  static String cancel = 'cancel'.tr();
 
 }
