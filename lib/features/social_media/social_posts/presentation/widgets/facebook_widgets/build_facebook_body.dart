@@ -21,7 +21,8 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class FacebookBody extends StatelessWidget {
-  const FacebookBody({super.key});
+  const FacebookBody({super.key, required this.scrollController});
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +44,7 @@ class FacebookBody extends StatelessWidget {
         return RefreshIndicator(
           onRefresh: () async => controller.onRefresh(),
           child: CustomScrollView(
+            controller: scrollController,
             slivers: [
               const SliverToBoxAdapter(
                 child: Stories(),

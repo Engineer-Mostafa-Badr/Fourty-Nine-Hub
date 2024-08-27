@@ -1,7 +1,7 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_state.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -34,7 +34,8 @@ class _MeetingRoomState extends State<MeetingRoom> {
   @override
   Widget build(BuildContext context) {
     print('live id is ${widget.liveID}');
-    final String userId = Random().nextInt(1000).toString();
+    final String userId = context.read<UserCubit>().state.data!.id;
+    final String userName = context.read<UserCubit>().state.data!.fullName;
     zegoUIKitPrebuiltLiveStreamingHostConfig() =>
         (ZegoUIKitPrebuiltLiveStreamingConfig.host()
           ..slideSurfaceToHide = false
@@ -80,7 +81,7 @@ class _MeetingRoomState extends State<MeetingRoom> {
               appSign: UIConst.appSign,
               userID: userId,
               isLiveStream: false,
-              userName: 'user_$userId',
+              userName: userName,
               liveID: widget.liveID,
 
               // Modify your custom configurations here.

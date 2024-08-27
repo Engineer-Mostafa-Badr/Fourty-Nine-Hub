@@ -16,6 +16,8 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit/food_cart_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
@@ -70,6 +72,10 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_dialogue.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_friends.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_places.dart';
+import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
+import 'package:fourtyninehub/features/social_media/edit_profile/presentation/pages/edit_profile_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
@@ -77,6 +83,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
@@ -268,6 +275,11 @@ class AppPages {
               providers: [
                 BlocProvider(
                   create: (_) => serviceLocator<LoginCubit>(),
+                ),
+                BlocProvider(
+                  create: (_) => serviceLocator<GetWalletCubit>(),
+                ),BlocProvider(
+                  create: (_) => serviceLocator<UserCubit>(),
                 ),
                 BlocProvider(
                   create: (_) => serviceLocator<RegisterCubit>(),
@@ -527,7 +539,6 @@ class AppPages {
                     );
                   },
                 ),
-
                 GoRoute(
                     path: Paths.TWITTER,
                     name: Routes.TWITTER,
@@ -545,6 +556,15 @@ class AppPages {
                           userId: id ?? '',
                         ));
                   },
+                  routes: [
+                    GoRoute(
+                      path: Paths.EDITPROFILE,
+                      name: Routes.EDITPROFILE,
+                      builder: (context, state) => BlocProvider<EditProfileCubit>(
+                          create: (_) => serviceLocator(),
+                          child: const EditProfileView()),
+                    ),
+                  ]
                 ),
                 GoRoute(
                     path: Paths.REELS,
@@ -885,7 +905,7 @@ class AppPages {
               path: Paths.ZOOM,
               name: Routes.ZOOM,
               builder: (context, state) => BlocProvider<MeetingCubit>(
-                    create: (context) => serviceLocator<MeetingCubit>(),
+                    create: (context) => serviceLocator<MeetingCubit>()..getScheduledMeetings(),
                     child: const MeetingView(),
                   ),
               routes: [

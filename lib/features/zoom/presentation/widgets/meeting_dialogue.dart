@@ -14,7 +14,6 @@ import '../bloc/zoom_state.dart';
 
 void showMeetingDialogue(BuildContext context, {bool shareScreen = false}) {
   TextEditingController meetingIdController = TextEditingController();
-  //random num will be 6 digits
 
   showDialog(
     context: context,
@@ -43,6 +42,7 @@ void showMeetingDialogue(BuildContext context, {bool shareScreen = false}) {
                 child: TextField(
                   controller: meetingIdController,
                   keyboardType: TextInputType.number,
+                  onSubmitted: (String meeetingId) {},
                   decoration: const InputDecoration(
                     labelText: 'Meeting ID',
                     hintText: 'Meeting ID',
@@ -60,6 +60,19 @@ void showMeetingDialogue(BuildContext context, {bool shareScreen = false}) {
                   ),
                 ),
               ),
+              BlocBuilder<MeetingCubit, MeetingState>(
+                builder: (context, state) {
+                  return state.isLoading
+                      ? const Column(
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(height: 16),
+                            Text('Loading...'),
+                          ],
+                        )
+                      : Container();
+                },
+              )
             ],
           ),
           actionsAlignment: MainAxisAlignment.spaceBetween,
@@ -67,9 +80,8 @@ void showMeetingDialogue(BuildContext context, {bool shareScreen = false}) {
             BlocConsumer<MeetingCubit, MeetingState>(
                 listener: (context, state) {
                   String meetingId = meetingIdController.text.trim();
-                  if (state.isLoading) {
-                    showLoadingDialog(context);
-                  } else if (state.isSuccess) {
+
+                  if (state.isSuccess) {
                     context.pop(); // Close loading dialog
                     context.push(
                       Routes.MEETINGROOM,
@@ -81,17 +93,17 @@ void showMeetingDialogue(BuildContext context, {bool shareScreen = false}) {
                       'Joining meeting with ID: $meetingId',
                     );
                   } else if (state.isFailure) {
-                    context.pop(); // Close loading dialog
+                    // context.pop(); // Close loading dialog
                     context.pop();
                   }
                 },
                 builder: (context, state) => TextButton(
                       onPressed: () async {
                         String meetingId = meetingIdController.text.trim();
-
                         if (meetingId.isEmpty) {
                           showErrorMessage(
                               context, 'Meeting ID cannot be empty');
+                          context.pop();
                           return;
                         } else {
                           var cubit = context.read<MeetingCubit>();

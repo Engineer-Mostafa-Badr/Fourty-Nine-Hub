@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -33,7 +34,7 @@ class WalletWidget extends StatelessWidget {
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(20.zR),
           boxShadow: const [
             BoxShadow(
               color: AppColors.GRAY_LIGHT_COLOR3,
@@ -44,95 +45,77 @@ class WalletWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CircleAvatar(
-            radius: 3,
+          CircleAvatar(
+            radius: 6.zW,
             backgroundColor: AppColors.SECONDARY_COLOR,
           ),
           const Sizer(),
-          Expanded(
-              child: InkWell(
-            onTap: () {
+          buildItem(
+            () {
               context.push(Routes.WALLET, extra: WalletTypes.balance);
             },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Label(
-                    text: LocaleKeys.balance.tr(),
-                    style: Styles.mediumText(
-                      fontWeight: FontWeight.bold,
-                    )),
-                Label(
-                    text: '900',
-                    style: Styles.mediumText(
-                        fontWeight: FontWeight.bold, fontSize: 18)),
-              ],
-            ),
-          )),
+            LocaleKeys.balance.tr(),
+            '900',
+          ),
           Container(
-            width: .5,
+            width: 2.zW,
             margin: const EdgeInsets.symmetric(horizontal: 5),
             color: Colors.grey,
-            height: kToolbarHeight * .6,
+            height: kToolbarHeight * 1.3.zH,
           ),
-          const CircleAvatar(
-            radius: 3,
+          CircleAvatar(
+            radius: 6.zW,
             backgroundColor: AppColors.SECONDARY_COLOR,
           ),
           const Sizer(),
-          Expanded(
-              child: InkWell(
-            onTap: () {
+          buildItem(
+            () {
               context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
             },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Label(
-                    text: LocaleKeys.gift.tr(),
-                    style: Styles.mediumText(
-                      fontWeight: FontWeight.bold,
-                    )),
-                Label(
-                    text: '300',
-                    style: Styles.mediumText(
-                        fontWeight: FontWeight.bold, fontSize: 18)),
-              ],
-            ),
-          )),
-          Container(
-            width: .5,
-            margin: const EdgeInsets.symmetric(horizontal: 5),
-            // color: Colors.grey,
-            height: kToolbarHeight * .6,
+            LocaleKeys.gift.tr(),
+            '300',
           ),
-          const CircleAvatar(
-            radius: 3,
+          Container(
+            width: 2.zW,
+            margin: const EdgeInsets.symmetric(horizontal: 5),
+            color: Colors.grey,
+            height: kToolbarHeight * 1.3.zH,
+          ),
+          CircleAvatar(
+            radius: 6.zW,
             backgroundColor: AppColors.SECONDARY_COLOR,
           ),
           const Sizer(),
-          Expanded(
-              child: InkWell(
-            onTap: () {
+          buildItem(
+            () {
               context.push(Routes.WALLET, extra: WalletTypes.mainWallet);
             },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Label(
-                    text: LocaleKeys.wallet.tr(),
-                    style: Styles.mediumText(
-                      fontWeight: FontWeight.bold,
-                    )),
-                Label(
-                    text: '400',
-                    style: Styles.mediumText(
-                        fontWeight: FontWeight.bold, fontSize: 18)),
-              ],
-            ),
-          )),
+            LocaleKeys.wallet.tr(),
+            '400',
+          ),
         ],
       ),
     );
   }
+
+  Widget buildItem(Function function, String title, String amount) => Expanded(
+          child: InkWell(
+        onTap: () {
+          function();
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Label(
+                text: title,
+                style: Styles.mediumText(
+                  fontWeight: FontWeight.bold,
+                )),
+            Label(
+                text: amount,
+                style: Styles.mediumText(
+                    fontWeight: FontWeight.bold, fontSize: 32)),
+          ],
+        ),
+      ));
 }

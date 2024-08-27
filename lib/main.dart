@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
@@ -20,10 +21,20 @@ void main() async {
   //to cache gift items
   // ZegoGiftManager().cache.cache(giftItemList);
 
+
   //Admob.initialize();
+
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
   runApp(
     LocalizationService.rootWidget(
+      // child: DevicePreview(
+      //   enabled: !kReleaseMode,
+      //   builder: (context) => const MyApp(),
+      // ),
       child: const MyApp(),
     ),
   );
@@ -79,6 +90,8 @@ class MyApp extends StatelessWidget {
                   localizationsDelegates: context.localizationDelegates,
                   supportedLocales: context.supportedLocales,
                   locale: context.locale,
+                  // for device preview package
+                  // builder: DevicePreview.appBuilder,
                 );
               },
             );

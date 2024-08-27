@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 
 import '../../../../core/utils/type_defs.dart';
 import '../../../../res/style/app_colors.dart';
@@ -87,7 +88,7 @@ class _DefaultButtonState extends State<DefaultButton>
     ];
     return Container(
       margin: widget.margin,
-      width: widget.width,
+      width: widget.width,height: 110.zH,
       child: AnimatedSize(
         duration: const Duration(milliseconds: 300),
         curve: Curves.bounceInOut,

@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/file_picker_helper.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/entities/company_ad_entity.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -32,9 +31,9 @@ class CreateCompanyAdView extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  const FormTextField(
+                  FormTextField(
                     fillColor: AppColors.AUTH_CONTAINER_COLOR,
-                    style: TextStyle(color: AppColors.QUANTITY_COLOR),
+                    style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                     label: 'Slogan',
                     hint: 'Type your slogan (Not more 100 letter)',
                   ),
@@ -42,18 +41,15 @@ class CreateCompanyAdView extends StatelessWidget {
                   Expanded(
                       child: ListView.separated(
                           itemBuilder: (context, index) {
-                            return _buildOptionWidget(
-                                adOption: state.adOptions![index]);
+                            return _buildOptionWidget(adOption: state.adOptions![index]);
                           },
                           separatorBuilder: (context, index) {
                             return const Sizer();
                           },
                           itemCount: state.adOptions?.length ?? 0)),
                   AppButton(
-                      style: const TextStyle(
-                          color: AppColors.AUTH_CONTAINER_COLOR),
-                      label:
-                          'Proceed to Payment (${controller.totalPrice()} ${Labels.currency})',
+                      style: const TextStyle(color: AppColors.AUTH_CONTAINER_COLOR),
+                      label: 'Proceed to Payment (${controller.totalPrice()} ${Labels.currency})',
                       backColor: (state.selectedOptions?.isEmpty ?? true)
                           ? AppColors.SECONDARY_COLOR.withAlpha(150)
                           : AppColors.SECONDARY_COLOR,
@@ -66,8 +62,7 @@ class CreateCompanyAdView extends StatelessWidget {
   }
 
   Widget _buildOptionWidget({required CompanyAdEntity adOption}) {
-    return BlocBuilder<CreateCompanyAdCubit, CreateCompanyAdState>(
-        builder: (context, state) {
+    return BlocBuilder<CreateCompanyAdCubit, CreateCompanyAdState>(builder: (context, state) {
       final controller = context.read<CreateCompanyAdCubit>();
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,10 +75,7 @@ class CreateCompanyAdView extends StatelessWidget {
                   style: Styles.headerText(),
                 ),
               ),
-              IconAppButton(
-                  icon: Icons.upload,
-                  isCircle: true,
-                  onPressed: () async => FilePickerHelper().pickMedia()),
+              IconAppButton(icon: Icons.upload, isCircle: true, onPressed: () async => FilePickerHelper().pickMedia()),
             ],
           ),
           ListView.builder(
@@ -95,8 +87,7 @@ class CreateCompanyAdView extends StatelessWidget {
                 return Row(
                   children: [
                     Checkbox(
-                        value: controller.optionSelected(option),
-                        onChanged: (v) => controller.onSelection(option)),
+                        value: controller.optionSelected(option), onChanged: (v) => controller.onSelection(option)),
                     Expanded(
                         child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

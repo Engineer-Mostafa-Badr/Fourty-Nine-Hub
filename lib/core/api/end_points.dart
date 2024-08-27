@@ -34,6 +34,7 @@ class EndPoints {
   static const sendForgetPasswordOTP = '/auth/forgot-password';
   static const verifyForgetPasswordOTP = '/auth/verify/otp';
   static const createNewForgetPassword = '/auth/reset-password';
+  static const notifications = '/api/v1/notifications';
   // static const report = '/report?subCategory=66a3583454e6e337915514db';
   static String report({required String subCategoryId}) => '/report?subCategory=$subCategoryId';
   static const documentRequest = '/twitter/document-request?subCategory=66a3583454e6e337915514db';
@@ -144,6 +145,7 @@ class EndPoints {
   static const activities = '/facebook/post/activities';
   static const feelings = '/facebook/post/feelings';
   static const getTwitterFeedPosts = '/twitter/feed';
+  static const editProfile = '/users/profile-data';
   static String userPosts(UserPostsParams params) {
     return '/facebook/post/user/${params.userId}?limit=${params.limit}&page=${params.page}&type=1&subCategory=66b77e77bb35968b535dc944';
   }
@@ -452,6 +454,7 @@ class EndPoints {
   static String createMeeting = '/room-id';
   static String joinMeeting(String id) => '/room-id/join/$id';
   static String endMeeting(String id) => '/room-id/finish/$id';
+  static String getScheduledMeetings(String id) => '/room-id/$id';
   static String deleteChatMessage = '/chat/message';
 
   static String changeChatMuteState(String chatId) {

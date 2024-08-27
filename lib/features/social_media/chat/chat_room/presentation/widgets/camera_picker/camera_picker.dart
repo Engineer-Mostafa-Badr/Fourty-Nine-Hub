@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,14 +11,17 @@ import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/camera_picker_cubit/camera_picker_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:permission_handler/permission_handler.dart';
+// import 'package:pro_image_editor/pro_image_editor.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:video_player/video_player.dart';
 
-import 'images_and_videos_slider.dart';
+part 'images_and_videos_slider.dart';
 
 class CameraPicker extends StatelessWidget {
   final void Function(List<XFile> media)? onDone;
@@ -60,25 +64,20 @@ class _CamViewState extends State<_CamView> {
         Positioned.fill(
           child: BlocBuilder<CameraPickerCubit, CameraPickerState>(
             builder: (context, state) {
-              if (state.controller != null &&
-                  state.status != CameraPickerStatus.loadingCamera) {
+              if (state.controller != null && state.status != CameraPickerStatus.loadingCamera) {
                 return CameraPreview(state.controller!);
-              } else if (state.status ==
-                  CameraPickerStatus.needCameraPermission) {
+              } else if (state.status == CameraPickerStatus.needCameraPermission) {
                 return _permissionButton(LocaleKeys.allowAccessToYourCamera);
-              } else if (state.status ==
-                  CameraPickerStatus.needMicrophonePermission) {
-                return _permissionButton(
-                    LocaleKeys.allowAccessToYourMicrophone);
+              } else if (state.status == CameraPickerStatus.needMicrophonePermission) {
+                return _permissionButton(LocaleKeys.allowAccessToYourMicrophone);
               } else {
-                return const Icon(Icons.camera,
-                    color: AppColors.GREY_DARK_COLOR, size: 150);
+                return const Icon(Icons.camera, color: AppColors.GREY_DARK_COLOR, size: 150);
               }
             },
           ),
         ),
         Positioned(
-          top: 20,
+          top: 20.zH,
           right: 0,
           left: 0,
           child: Padding(
@@ -103,8 +102,7 @@ class _CamViewState extends State<_CamView> {
                   builder: (context, state) {
                     if (state.status == CameraPickerStatus.startVideo) {
                       return _VideoTimer(duration: controller.maxVideoLength);
-                    } else if (state.pickMode == PickMode.video &&
-                        state.controller != null) {
+                    } else if (state.pickMode == PickMode.video && state.controller != null) {
                       return Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
@@ -123,8 +121,7 @@ class _CamViewState extends State<_CamView> {
                 ),
                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   builder: (context, state) {
-                    if (state.controller != null &&
-                        state.status != CameraPickerStatus.startVideo) {
+                    if (state.controller != null && state.status != CameraPickerStatus.startVideo) {
                       return _BaseIcon(
                         icon: _flashIcon(
                           state.controller!.value.flashMode,
@@ -141,7 +138,7 @@ class _CamViewState extends State<_CamView> {
           ),
         ),
         Positioned(
-          bottom: 20,
+          bottom: 20.zH,
           right: 0,
           left: 0,
           child: Padding(
@@ -152,21 +149,16 @@ class _CamViewState extends State<_CamView> {
               children: [
                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   builder: (context, state) {
-                    if (state.status != CameraPickerStatus.startVideo &&
-                        state.controller != null) {
+                    if (state.status != CameraPickerStatus.startVideo && state.controller != null) {
                       return _BaseIcon(
                         icon: Icons.check,
                         onTap: () {
-                          final media =
-                              context.read<CameraPickerCubit>().state.mediaList;
+                          final media = context.read<CameraPickerCubit>().state.mediaList;
                           if (media != null && media.isNotEmpty) {
-                            showDialog(
-                                context: context,
-                                builder: (_) =>
-                                    ImagesAndVideosSlider(media: media));
+                            showDialog(context: context, builder: (_) => ImagesAndVideosSlider(media: media))
+                                .then((value) => context.read<CameraPickerCubit>().refreshMediaList());
                           } else {
-                            showErrorMessage(
-                                context, LocaleKeys.pickPhotoOrVideo);
+                            showErrorMessage(context, LocaleKeys.pickPhotoOrVideo);
                           }
                         },
                       );
@@ -177,8 +169,7 @@ class _CamViewState extends State<_CamView> {
                 ),
                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   builder: (context, state) {
-                    if (state.controller != null &&
-                        state.controller!.value.isInitialized) {
+                    if (state.controller != null && state.controller!.value.isInitialized) {
                       if (state.pickMode == PickMode.photo) {
                         return IconButton(
                           onPressed: () {
@@ -186,8 +177,7 @@ class _CamViewState extends State<_CamView> {
                           },
                           icon: _pickIcon,
                         );
-                      } else if (state.status ==
-                          CameraPickerStatus.startVideo) {
+                      } else if (state.status == CameraPickerStatus.startVideo) {
                         return InkWell(
                           onTap: () {
                             controller.stopVideoRecording();
@@ -195,8 +185,7 @@ class _CamViewState extends State<_CamView> {
                           child: Stack(
                             alignment: Alignment.center,
                             children: [
-                              _VideoCircularIndicator(
-                                  duration: controller.maxVideoLength),
+                              _VideoCircularIndicator(duration: controller.maxVideoLength),
                               const Icon(
                                 Icons.square_rounded,
                                 color: AppColors.SECONDARY_COLOR,
@@ -220,8 +209,7 @@ class _CamViewState extends State<_CamView> {
                 ),
                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   builder: (context, state) {
-                    if (state.controller != null &&
-                        state.status != CameraPickerStatus.startVideo) {
+                    if (state.controller != null && state.status != CameraPickerStatus.startVideo) {
                       return _BaseIcon(
                         onTap: () {
                           CliLogger.info('Flip camera');
@@ -255,8 +243,7 @@ class _CamViewState extends State<_CamView> {
     }
   }
 
-  Widget get _pickIcon =>
-      const Icon(Icons.circle, size: 80, color: Colors.white);
+  Widget get _pickIcon => const Icon(Icons.circle, size: 80, color: Colors.white);
 
   Widget _permissionButton(String label) {
     return InkWell(
@@ -299,7 +286,12 @@ class _BaseIcon extends StatelessWidget {
   }
 }
 
-class _ImagesList extends StatelessWidget {
+class _ImagesList extends StatefulWidget {
+  @override
+  State<_ImagesList> createState() => _ImagesListState();
+}
+
+class _ImagesListState extends State<_ImagesList> {
   @override
   Widget build(BuildContext context) {
     final controller = context.read<CameraPickerCubit>();
@@ -313,8 +305,7 @@ class _ImagesList extends StatelessWidget {
             child: LayoutBuilder(
               builder: (context, constraints) {
                 return BlocBuilder<CameraPickerCubit, CameraPickerState>(
-                  buildWhen: (previous, current) =>
-                      current.status == CameraPickerStatus.updateMediaList,
+                  buildWhen: (previous, current) => current.status == CameraPickerStatus.updateMediaList,
                   builder: (context, state) {
                     return ListView.separated(
                       padding: const EdgeInsets.symmetric(vertical: 5),
@@ -324,37 +315,22 @@ class _ImagesList extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final file = File(state.mediaList![index].path);
                         if (file.isPhoto) {
-                          return Container(
-                            width: constraints.maxHeight,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                  image: FileImage(file), fit: BoxFit.cover),
-                            ),
-                          );
+                          return _mediaContainer(
+                              image: FileImage(file),
+                              width: constraints.maxHeight,
+                              index: index,
+                              media: state.mediaList!);
                         } else {
                           return FutureBuilder<Uint8List?>(
                             future: file.generateThumbnail(),
-                            builder:
-                                (context, AsyncSnapshot<Uint8List?> snapshot) {
-                              if (snapshot.hasData &&
-                                  snapshot.data != null &&
-                                  snapshot.data!.isNotEmpty) {
-                                return Container(
-                                  width: constraints.maxHeight,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    image: DecorationImage(
-                                        image: MemoryImage(snapshot.data!),
-                                        fit: BoxFit.cover),
-                                  ),
-                                  child: const Center(
-                                    child: Icon(
-                                      Icons.play_arrow,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                );
+                            builder: (context, AsyncSnapshot<Uint8List?> snapshot) {
+                              if (snapshot.hasData && snapshot.data != null && snapshot.data!.isNotEmpty) {
+                                return _mediaContainer(
+                                    image: MemoryImage(snapshot.data!),
+                                    width: constraints.maxHeight,
+                                    isPhoto: false,
+                                    index: index,
+                                    media: state.mediaList!);
                               } else {
                                 return Shimmer.fromColors(
                                   baseColor: Colors.grey[300]!,
@@ -385,14 +361,11 @@ class _ImagesList extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
-                  buildWhen: (previous, current) =>
-                      current.pickMode != previous.pickMode,
+                  buildWhen: (previous, current) => current.pickMode != previous.pickMode,
                   builder: (context, state) {
                     return ElevatedAppButton(
                       label: LocaleKeys.photo,
-                      backColor: state.pickMode == PickMode.photo
-                          ? AppColors.SECONDARY_COLOR
-                          : null,
+                      backColor: state.pickMode == PickMode.photo ? AppColors.SECONDARY_COLOR : null,
                       onPressed: () {
                         controller.emitPhotoPickMode();
                       },
@@ -401,14 +374,11 @@ class _ImagesList extends StatelessWidget {
                 ),
                 const Sizer(),
                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
-                  buildWhen: (previous, current) =>
-                      current.pickMode != previous.pickMode,
+                  buildWhen: (previous, current) => current.pickMode != previous.pickMode,
                   builder: (context, state) {
                     return ElevatedAppButton(
                       label: LocaleKeys.video,
-                      backColor: state.pickMode == PickMode.video
-                          ? AppColors.SECONDARY_COLOR
-                          : null,
+                      backColor: state.pickMode == PickMode.video ? AppColors.SECONDARY_COLOR : null,
                       onPressed: () {
                         controller.emitVideoPickMode();
                       },
@@ -419,6 +389,37 @@ class _ImagesList extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _mediaContainer(
+      {required ImageProvider image,
+      required double width,
+      required int index,
+      required List<XFile> media,
+      bool isPhoto = true}) {
+    return InkWell(
+      onTap: () {
+        if (mounted) {
+          showDialog(context: context, builder: (_) => ImagesAndVideosSlider(media: media, initialIndex: index))
+              .then((value) => context.read<CameraPickerCubit>().refreshMediaList());
+        }
+      },
+      child: Container(
+        width: width,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          image: DecorationImage(image: image, fit: BoxFit.cover),
+        ),
+        child: !isPhoto
+            ? const Center(
+                child: Icon(
+                  Icons.play_arrow_rounded,
+                  color: Colors.white,
+                ),
+              )
+            : null,
       ),
     );
   }
@@ -449,8 +450,7 @@ class __VideoTimerState extends State<_VideoTimer> {
         int minutes = (timer.tick ~/ 60);
         int seconds = (timer.tick % 60);
         setState(() {
-          _timerText =
-              '${minutes.toString().padLeft(2, '0')} : ${seconds.toString().padLeft(2, '0')}';
+          _timerText = '${minutes.toString().padLeft(2, '0')} : ${seconds.toString().padLeft(2, '0')}';
         });
         CliLogger.info(_timerText);
       }
@@ -485,8 +485,7 @@ class _VideoCircularIndicator extends StatefulWidget {
   const _VideoCircularIndicator({required this.duration});
 
   @override
-  State<_VideoCircularIndicator> createState() =>
-      __VideoCircularIndicatorState();
+  State<_VideoCircularIndicator> createState() => __VideoCircularIndicatorState();
 }
 
 class __VideoCircularIndicatorState extends State<_VideoCircularIndicator> {

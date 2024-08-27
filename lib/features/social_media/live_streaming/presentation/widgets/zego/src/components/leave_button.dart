@@ -1,17 +1,14 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
-// Package imports:
-import 'package:zego_uikit/zego_uikit.dart';
-
-// Project imports:
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/minimizing/defines.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/config.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/controller.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/core/host_manager.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/config.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.defines.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/defines.dart';
+// Project imports:
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/minimizing/defines.dart';
+// Package imports:
+import 'package:zego_uikit/zego_uikit.dart';
 
 import '../defines.dart';
 
@@ -34,6 +31,7 @@ class ZegoLiveStreamingLeaveButton extends StatefulWidget {
   final ZegoLiveStreamingHostManager hostManager;
   final ValueNotifier<bool> hostUpdateEnabledNotifier;
   final ValueNotifier<bool>? isLeaveRequestingNotifier;
+  final ValueNotifier<bool> showTopBar;
 
   const ZegoLiveStreamingLeaveButton({
     super.key,
@@ -43,6 +41,7 @@ class ZegoLiveStreamingLeaveButton extends StatefulWidget {
     required this.defaultLeaveConfirmationAction,
     required this.hostManager,
     required this.hostUpdateEnabledNotifier,
+    required this.showTopBar,
     this.isLeaveRequestingNotifier,
     this.icon,
     this.iconSize,
@@ -50,12 +49,10 @@ class ZegoLiveStreamingLeaveButton extends StatefulWidget {
   });
 
   @override
-  State<ZegoLiveStreamingLeaveButton> createState() =>
-      _ZegoLiveStreamingLeaveButtonState();
+  State<ZegoLiveStreamingLeaveButton> createState() => _ZegoLiveStreamingLeaveButtonState();
 }
 
-class _ZegoLiveStreamingLeaveButtonState
-    extends State<ZegoLiveStreamingLeaveButton> {
+class _ZegoLiveStreamingLeaveButtonState extends State<ZegoLiveStreamingLeaveButton> {
   final hangupButtonClickableNotifier = ValueNotifier<bool>(true);
 
   @override
@@ -75,77 +72,13 @@ class _ZegoLiveStreamingLeaveButtonState
   @override
   Widget build(BuildContext context) {
     return ZegoLeaveButton(
-      buttonSize: widget.buttonSize,
+      buttonSize: const Size(80, 40),
       iconSize: widget.iconSize,
       icon: widget.icon,
       clickableNotifier: hangupButtonClickableNotifier,
       onLeaveConfirmation: (context) async {
-        bool canLeave = await showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                alignment: Alignment.topRight,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                backgroundColor: Colors.transparent,
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 10.zH),
-                    if (widget.config.role == ZegoLiveStreamingRole.host)
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(
-                              MediaQuery.sizeOf(context).width * 0.4, 56.zH),
-                          backgroundColor: Colors.redAccent,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.zR),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.zW, vertical: 10.zH),
-                        ),
-                        child: const Text("End Meeting for All"),
-                        onPressed: () async {
-                          final users = ZegoUIKit().getAllUsers();
-                          for (var user in users) {
-                            await ZegoUIKit().removeUserFromRoom([user.id]);
-                          }
-                          Navigator.of(context).pop(true);
-                          Navigator.of(context).pop(true);
-                          // widget.defaultEndAction;
-                          // Add your logic to end the meeting for all participants here
-                        },
-                      ),
-                    SizedBox(height: 10.zH),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize:
-                            Size(MediaQuery.sizeOf(context).width * 0.4, 56.zH),
-                        backgroundColor: Colors.orangeAccent,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20.zW, vertical: 10.zH),
-                      ),
-                      child: const Text("Just Leave the Meeting"),
-                      onPressed: () {
-                        Navigator.of(context).pop(true);
-                        Navigator.of(context).pop(true);
-                        // Add your logic to leave the meeting here
-                        // widget.defaultEndAction;
-                      },
-                    ),
-                  ],
-                ),
-              );
-            });
-
-        return canLeave;
+        widget.showTopBar.value = !widget.showTopBar.value;
+        return false;
       },
       onPress: () async {
         final endEvent = ZegoLiveStreamingEndEvent(
@@ -172,8 +105,7 @@ class _ZegoLiveStreamingLeaveButtonState
   }
 
   void oHangUpRequestingChanged() {
-    hangupButtonClickableNotifier.value =
-        !(widget.isLeaveRequestingNotifier?.value ?? true);
+    hangupButtonClickableNotifier.value = !(widget.isLeaveRequestingNotifier?.value ?? true);
   }
 
   Future<void> notifyUserLeaveByMessage() async {

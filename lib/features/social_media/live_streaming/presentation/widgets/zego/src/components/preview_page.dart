@@ -413,6 +413,7 @@ class _ZegoLiveStreamingPreviewPageState
   }
 
   Widget startButton() {
+    print('tapped');
     final permissions = <Permission>[];
     if (widget.config.turnOnCameraWhenJoining) {
       permissions.add(Permission.camera);
@@ -628,7 +629,7 @@ class _ZegoLiveStreamingPreviewPageState
     if (widget.config.turnOnMicrophoneWhenJoining) {
       permissions.add(Permission.microphone);
     }
-
+    print('tapped');
     defaultAction() async {
       await checkPermissions(
         context: context,

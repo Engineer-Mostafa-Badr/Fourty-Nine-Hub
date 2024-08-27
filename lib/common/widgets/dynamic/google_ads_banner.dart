@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 
 import '../../../core/localization/locale_keys.g.dart';
 import '../../../res/style/app_colors.dart';
@@ -12,14 +13,14 @@ class GoogleAddsBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: kToolbarHeight,
+        height: kToolbarHeight * 1.3.zH,
         width: double.infinity,
         margin: EdgeInsets.symmetric(
           horizontal: margin,
         ),
         decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(20.zR),
             boxShadow: const [
               BoxShadow(
                 color: AppColors.GRAY_LIGHT_COLOR3,
@@ -30,7 +31,7 @@ class GoogleAddsBanner extends StatelessWidget {
         child: Center(
             child: Label(
           text: LocaleKeys.ads.tr(),
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 34.zW, fontWeight: FontWeight.bold),
         ))
         // AdmobBanner(
         //         adUnitId: UIConst.adHomeUnitId,

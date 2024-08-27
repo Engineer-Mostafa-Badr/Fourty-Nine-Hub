@@ -15,6 +15,7 @@ class UserProfileModel extends UserProfileEntity {
     super.isFollowed,
     super.areFriends,
     super.isDocument,
+    super.isSenTRequest,
     super.sentFriendRequest,
     super.isBlock,
   });
@@ -36,6 +37,7 @@ class UserProfileModel extends UserProfileEntity {
       areFriends: json['areFriends'] ?? false,
       sentFriendRequest: json['sentFriendRequest'] ?? false,
       isBlock: json['isBlock'] ?? false,
+      isSenTRequest: json['isSenTRequest'] ?? false,
     );
   }
 }

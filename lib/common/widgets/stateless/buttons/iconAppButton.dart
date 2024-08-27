@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 
 class IconAppButton extends StatelessWidget {
   final double? size, height, width, margin, padding, radius;
@@ -48,14 +49,14 @@ class IconAppButton extends StatelessWidget {
       return CircleAvatar(
         child: Icon(
           icon,
-          size: size ?? 20,
+          size: size ?? 50.zH,
         ),
       );
     } else {
       return Icon(
         icon,
         color: color,
-        size: size ?? 20,
+        size: size ?? 45.zH,
       );
     }
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -42,7 +43,7 @@ class AppButton extends StatelessWidget {
         margin: EdgeInsets.all(margin ?? 0),
         padding: EdgeInsets.symmetric(horizontal: padding ?? 0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(radius ?? 5),
+          borderRadius: BorderRadius.circular(radius ?? 10.zR),
           color: backColor ?? AppColors.SECONDARY_COLOR,
         ),
         child: widget ??

@@ -1,26 +1,27 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import '../../../res/assets/assets.dart';
-import '../../../routes/routes.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../theme/cubit/cubit.dart';
+import '../../../res/assets/assets.dart';
+import '../../../routes/routes.dart';
 import 'bottom_painter.dart';
 
 class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
   final int mainCategory;
   final int index;
+  final ScrollController scrollController;
+  final bool isScrollingDown;
 
   const BottomNavigator({
     super.key,
     required this.mainCategory,
     required this.index,
+    required this.scrollController,
+    required this.isScrollingDown,
   });
 
   @override
@@ -30,14 +31,16 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
             BottomItemModel(
               icon: FontAwesomeIcons.microphone,
               height: 30,
-              label: 'voice', // Translated text
+              label: 'voice',
+              // Translated text
               index: 0,
               image: Assets.voiceLive,
               route: Routes.CLUBHOUSE,
             ),
             BottomItemModel(
               icon: FontAwesomeIcons.stream,
-              label: 'live', // Translated text
+              label: 'live',
+              // Translated text
               index: 0,
               height: 25,
               image: Assets.live,
@@ -45,7 +48,8 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
             ),
             BottomItemModel(
               icon: Icons.video_call,
-              label: 'meet', // Translated text
+              label: 'meet',
+              // Translated text
               index: 0,
               height: 25,
               image: Assets.zoomMeeting,
@@ -53,7 +57,8 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
             ),
             BottomItemModel(
               icon: Icons.video_call,
-              label: 'cast', // Translated text
+              label: 'cast',
+              // Translated text
               index: 0,
               height: 25,
               image: Assets.radio,
@@ -64,28 +69,32 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
             ? <BottomItemModel>[
                 BottomItemModel(
                   icon: FontAwesomeIcons.twitter,
-                  label: 'tweet', // Translated text
+                  label: 'tweet',
+                  // Translated text
                   index: 0,
                   image: Assets.twitter,
                   route: Routes.TWITTER,
                 ),
                 BottomItemModel(
                   icon: FontAwesomeIcons.list,
-                  label: 'reels', // Translated text
+                  label: 'reels',
+                  // Translated text
                   index: 1,
                   image: Assets.reels,
                   route: Routes.REELS,
                 ),
                 BottomItemModel(
                   icon: Icons.chat,
-                  label: 'chat', // Translated text
+                  label: 'chat',
+                  // Translated text
                   index: 3,
                   image: Assets.message,
                   route: Routes.CHAT,
                 ),
                 BottomItemModel(
                   icon: FontAwesomeIcons.car,
-                  label: 'find', // Translated text
+                  label: 'find',
+                  // Translated text
                   index: 4,
                   image: Assets.social,
                   route: Routes.Tinder,
@@ -94,28 +103,32 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
             : <BottomItemModel>[
                 BottomItemModel(
                   icon: FontAwesomeIcons.bowlFood,
-                  label: 'meal', // Translated text
+                  label: 'meal',
+                  // Translated text
                   index: 0,
                   image: Assets.food,
                   route: Routes.FOOD,
                 ),
                 BottomItemModel(
                   icon: FontAwesomeIcons.kitMedical,
-                  label: 'health', // Translated text
+                  label: 'health',
+                  // Translated text
                   index: 1,
                   image: Assets.health,
                   route: Routes.VISITA,
                 ),
                 BottomItemModel(
                   icon: Icons.delivery_dining,
-                  label: 'ship', // Using generated key for translation
+                  label: 'ship',
+                  // Using generated key for translation
                   index: 3,
                   image: Assets.shipping,
                   route: Routes.SHIPPING,
                 ),
                 BottomItemModel(
                   icon: FontAwesomeIcons.car,
-                  label: 'ride', // Using generated key for translation
+                  label: 'ride',
+                  // Using generated key for translation
                   index: 4,
                   image: Assets.ride,
                   route: Routes.RIDE,
@@ -131,6 +144,8 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         }
       },
       items: pages,
+      scrollController: scrollController,
+      isScrollingDown: isScrollingDown,
     );
   }
 
@@ -142,81 +157,123 @@ class CustomBottomNavigationBar extends StatefulWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
   final List<BottomItemModel> items;
+  final ScrollController scrollController;
 
-  const CustomBottomNavigationBar({
+  bool isScrollingDown;
+
+  CustomBottomNavigationBar({
     super.key,
     required this.currentIndex,
     required this.onTap,
     required this.items,
+    required this.scrollController,
+    required this.isScrollingDown,
   });
 
   @override
-  _CustomBottomNavigationBarState createState() =>
-      _CustomBottomNavigationBarState();
+  _CustomBottomNavigationBarState createState() => _CustomBottomNavigationBarState(
+        scrollController: scrollController,
+        isScrollingDown: isScrollingDown,
+      );
 }
 
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
-    with SingleTickerProviderStateMixin {
+class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> with SingleTickerProviderStateMixin {
+  final ScrollController scrollController;
+
+  bool isScrollingDown;
+
+  _CustomBottomNavigationBarState({
+    required this.scrollController,
+    required this.isScrollingDown,
+  });
+
   @override
   void initState() {
+    scrollController;
+    scrollController.addListener(() {
+      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+        if (!isScrollingDown) {
+          setState(() {
+            isScrollingDown = true;
+          });
+        }
+      } else {
+        if (isScrollingDown) {
+          setState(() {
+            isScrollingDown = false;
+          });
+        }
+      }
+    });
     super.initState();
   }
 
   @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: BottomBarPainter(
-        color: Colors.black,
-      ),
-      child: Container(
-        padding: const EdgeInsets.only(bottom: 20, top: 10),
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          boxShadow: const [
-            BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2)
-          ],
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: List.generate(widget.items.length, (index) {
-                int index1 = context.isArabic ? 2 : 1;
-                int index2 = context.isArabic ? 1 : 2;
-                return GestureDetector(
-                  onTap: () {
-                    widget.onTap(index);
-                  },
-                  child: Padding(
-                    padding: index == index1
-                        ? const EdgeInsets.only(right: 10)
-                        : index == index2
-                            ? const EdgeInsets.only(left: 30)
-                            : EdgeInsets.zero,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(
-                          widget.items[index].image,
-                          height: widget.items[index].height,
-                          semanticsLabel: widget.items[index].label,
-                          color: context.read<ThemeCubit>().isDarkTheme
-                              ? Colors.white
-                              : null,
+    return AnimatedBuilder(
+      animation: scrollController,
+      builder: (BuildContext context, Widget? child) {
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 400),
+          height: scrollController.position.userScrollDirection == ScrollDirection.reverse ? 0 : 90.zH,
+          child: CustomPaint(
+            painter: BottomBarPainter(
+              color: Colors.black,
+            ),
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 20, top: 10),
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2)],
+              ),
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: List.generate(widget.items.length, (index) {
+                      int index1 = context.isArabic ? 2 : 1;
+                      int index2 = context.isArabic ? 1 : 2;
+                      return GestureDetector(
+                        onTap: () {
+                          widget.onTap(index);
+                        },
+                        child: Padding(
+                          padding: index == index1
+                              ? EdgeInsets.only(right: 30.zW)
+                              : index == index2
+                                  ? EdgeInsets.only(left: 60.zW)
+                                  : EdgeInsets.zero,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Expanded(
+                                child: SvgPicture.asset(
+                                  widget.items[index].image,
+                                  height: widget.items[index].height * 1.8.zH,
+                                  // color: context.read<ThemeCubit>().isDarkTheme
+                                  //     ? Colors.white
+                                  //     : null,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        Text(
-                          widget.items[index].label.localize,
-                        ),
-                      ],
-                    ),
+                      );
+                    }),
                   ),
-                );
-              }),
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
