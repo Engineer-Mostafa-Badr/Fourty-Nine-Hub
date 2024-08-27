@@ -802,7 +802,7 @@ class TinderCardStack extends StatelessWidget {
                 style: Styles.headerText(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: MediaQuery.of(context).size.width * 0.06,
+                  fontSize: MediaQuery.of(context).size.width * 0.13,
                   shadows: [
                     const Shadow(
                       offset: Offset(1.0, 1.0),
@@ -824,7 +824,7 @@ class TinderCardStack extends StatelessWidget {
     return Row(
       children: [
         BadgedLabel(
-          close:false,
+          close: false,
           color: AppColors.WHATS_APP_COLOR,
           label: context
                   .read<TinderViewCubit>()
@@ -860,7 +860,7 @@ class TinderCardStack extends StatelessWidget {
       style: Styles.mediumText(
         color: Colors.white,
         fontWeight: FontWeight.bold,
-        fontSize: 14,
+        fontSize: MediaQuery.of(context).size.width * 0.07,
         shadows: [
           const Shadow(
             offset: Offset(1.0, 1.0),
@@ -982,8 +982,8 @@ class ChatAlertDialogue extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final dialogWidth = MediaQuery.of(context).size.width * 0.75;
-    final dialogHeight = screenHeight * 0.35;
-    final titleFontSize = screenHeight * 0.025;
+    final dialogHeight = screenHeight /4;
+    final titleFontSize = screenHeight * 0.05;
 
     return AlertDialog(
       title: Padding(
@@ -1029,7 +1029,7 @@ class ChatAlertDialogue extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final iconSize = screenWidth * 0.1;
-    final fontSize = screenHeight * 0.023;
+    final fontSize = screenHeight * 0.04;
     final padding = screenHeight * 0.01;
 
     return GestureDetector(

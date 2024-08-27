@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
@@ -126,13 +125,15 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
               Label(
                 text: subCategoryName,
                 style: Styles.headerText(
-                  fontSize: 16,
+                  fontSize: MediaQuery.of(context).size.width * 0.09,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Label(
                 text: '${9355.toShortScale} ads',
-                style: Styles.mediumText(fontSize: 14),
+                style: Styles.mediumText(
+                  fontSize: MediaQuery.of(context).size.width * 0.07,
+                ),
               ),
             ],
           ),
