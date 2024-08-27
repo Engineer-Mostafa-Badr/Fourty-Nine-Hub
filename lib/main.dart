@@ -1,6 +1,4 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
@@ -11,6 +9,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
+import 'core/utils/shared_pref.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'routes/pages.dart';
@@ -22,7 +21,13 @@ void main() async {
   //to cache gift items
   // ZegoGiftManager().cache.cache(giftItemList);
 
+
   //Admob.initialize();
+
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
   runApp(
     LocalizationService.rootWidget(
@@ -70,7 +75,7 @@ class MyApp extends StatelessWidget {
           designSize: const Size(750, 1334),
           minTextAdapt: true,
           splitScreenMode: true,
-          builder: (context, child) {
+          builder: (context,child) {
             return BlocBuilder<ThemeCubit, ThemeStates>(
               builder: (BuildContext context, state) {
                 return MaterialApp.router(

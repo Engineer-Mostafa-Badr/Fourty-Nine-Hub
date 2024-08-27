@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/features/zoom/domain/usecases/get_scheuled_rooms_use_case.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/zoom/data/data_source/meeting_data_source.dart';
@@ -27,8 +28,10 @@ class MeetingServiceLocator {
     serviceLocator.registerFactory(() => AddRoomUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => JoinRoomUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => EndRoomUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => GetScheduledRoomsUseCase(serviceLocator()));
     //cubit
     serviceLocator.registerFactory(() => MeetingCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
