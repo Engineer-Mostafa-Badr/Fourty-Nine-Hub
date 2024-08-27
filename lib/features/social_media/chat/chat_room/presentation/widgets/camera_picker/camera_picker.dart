@@ -11,15 +11,17 @@ import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/camera_picker_cubit/camera_picker_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:permission_handler/permission_handler.dart';
+// import 'package:pro_image_editor/pro_image_editor.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:video_player/video_player.dart';
 
-import 'images_and_videos_slider.dart';
-
+part 'images_and_videos_slider.dart';
 class CameraPicker extends StatelessWidget {
   final void Function(List<XFile> media)? onDone;
 
@@ -79,7 +81,7 @@ class _CamViewState extends State<_CamView> {
           ),
         ),
         Positioned(
-          top: 20,
+          top: 20.zH,
           right: 0,
           left: 0,
           child: Padding(
@@ -142,7 +144,7 @@ class _CamViewState extends State<_CamView> {
           ),
         ),
         Positioned(
-          bottom: 20,
+          bottom: 20.zH,
           right: 0,
           left: 0,
           child: Padding(
@@ -445,7 +447,7 @@ class _ImagesListState extends State<_ImagesList> {
         child: !isPhoto
             ? const Center(
                 child: Icon(
-                  Icons.play_arrow,
+                  Icons.play_arrow_rounded,
                   color: Colors.white,
                 ),
               )

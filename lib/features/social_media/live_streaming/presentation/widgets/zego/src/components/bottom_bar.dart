@@ -141,16 +141,13 @@ class _ZegoLiveStreamingBottomBarState
             ZoomSharescreenBuilder(
               shareScreenState: screenShareState,
             ),
-            ZoomShareCodeButton(
-              liveId: ZegoUIKit().getRoom().id,
-            ),
             ZoomWhiteBoardButton(
               config: widget.config,
             ),
-            // ZegoLiveStreamingMinimizingButton(
-            //   buttonSize: Size(52.zR, 52.zR),
-            //   iconSize: Size(24.zR, 24.zR),
-            // )
+            ZoomShareCodeButton(
+              liveId: ZegoUIKit().getRoom().id,
+            ),
+
           ],
         ),
       ),

@@ -77,7 +77,9 @@ class AdsCubit extends Cubit<AdsState> {
                         profileCover: '',
                         friendsCount: null,
                         followersCount: null,
-                        followingCount: null),
+                        followingCount: null,
+                      wallet: 0
+                    ),
                     active: true,
                     details: [
                       DetailEntiy(label: 'label', type: 'type', value: 'value')

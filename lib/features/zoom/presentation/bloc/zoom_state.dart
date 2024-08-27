@@ -22,7 +22,7 @@ extension MeetingStateX on MeetingState {
 
 class MeetingState extends Equatable {
   final MeetingStates? status;
-  final RoomResponse? errorMessage;
+  final String? errorMessage;
   const MeetingState({
     this.status = MeetingStates.initial,
     this.errorMessage,
@@ -30,7 +30,7 @@ class MeetingState extends Equatable {
 
   MeetingState copyWith({
     MeetingStates? status,
-    RoomResponse? errorMessage,
+    String? errorMessage,
   }) =>
       MeetingState(
         status: status,

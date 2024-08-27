@@ -14,6 +14,8 @@ class BadgedLabel extends StatelessWidget {
   final Function? onTap;
   final bool isBordered;
   final bool isCentered;
+  final bool close;
+
   final GestureTapCallback? onRemove;
 
   const BadgedLabel(
@@ -30,6 +32,7 @@ class BadgedLabel extends StatelessWidget {
       this.radius = 20,
       this.isBordered = false,
       this.isCentered = false,
+      this.close = true,
       this.textColor = Colors.white});
 
   @override
@@ -61,8 +64,10 @@ class BadgedLabel extends StatelessWidget {
             //     borderRadius: BorderRadius.circular(radius),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Align(
+                if(close)
+                 Align(
                   alignment: AlignmentDirectional.topEnd,
                   child: GestureDetector(
                       onTap: onRemove,
@@ -74,7 +79,7 @@ class BadgedLabel extends StatelessWidget {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                       EdgeInsets.symmetric(horizontal: 10.zW, vertical: 3.zW),
                   child: isCentered
                       ? Center(
                           child: _buildLabelWidget(),
