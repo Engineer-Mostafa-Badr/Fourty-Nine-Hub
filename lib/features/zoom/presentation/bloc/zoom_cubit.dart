@@ -72,14 +72,9 @@ class MeetingCubit extends Cubit<MeetingState> {
         ));
         showErrorMessage(
           AppPages.router.configuration.navigatorKey.currentContext!,
-          state.errorMessage!.message,
+          state.errorMessage!,
         );
       }
-    }).catchError((error) {
-      emit(state.copyWith(status: MeetingStates.failure));
-      // showErrorMessage(
-      //     AppPages.router.configuration.navigatorKey.currentContext!,
-      //     error.toString());
     });
   }
 
@@ -104,7 +99,7 @@ class MeetingCubit extends Cubit<MeetingState> {
       value.fold((l) => emit(state.copyWith(status: MeetingStates.failure)),
           (r) {
         scheduledMeetingList = r;
-
+        getScheduledMeetings();
         emit(state.copyWith(status: MeetingStates.success));
       });
     }).catchError((error) {
