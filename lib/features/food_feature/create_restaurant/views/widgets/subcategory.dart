@@ -5,7 +5,7 @@ import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 
 class CreateResturantSubcategoryDropdown extends StatelessWidget {
   const CreateResturantSubcategoryDropdown({super.key});

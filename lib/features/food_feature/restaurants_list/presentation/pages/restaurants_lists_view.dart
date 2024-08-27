@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +17,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
-import '../cubit/restaurants_list_cubit.dart';
+import '../cubit/meal_cubit/restaurants_list_cubit.dart';
 import '../widgets/restaurant_card.dart';
 
 class RestaurantsListsView extends StatelessWidget {
@@ -50,7 +51,8 @@ class RestaurantsListsView extends StatelessWidget {
                             children: [
                               const MealBanner(),
                               Visibility(
-                                visible: state.isResturant == false,
+                                visible:
+                                    state.isResturant?.isRestaurant == false,
                                 child: GestureDetector(
                                   onTap: () {
                                     if (context.read<UserCubit>().isLoggedIn) {
@@ -74,7 +76,11 @@ class RestaurantsListsView extends StatelessWidget {
                                 ),
                               ),
                               const Sizer(),
-                              const ResturantDashboardButton(),
+                              Visibility(
+                                  visible: (state.isResturant?.isRestaurant ??
+                                          false) &&
+                                      (state.isResturant?.approved ?? false),
+                                  child: const ResturantDashboardButton()),
                               const Sizer(),
                               GestureDetector(
                                 onTap: () {

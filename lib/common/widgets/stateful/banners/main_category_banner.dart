@@ -111,7 +111,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 ),
                 const Spacer(),
                 Label(
-                  text: Labels.meal,
+                  text: widget.category.name,
                   style: Styles.headerText(
                       color: AppColors.AUTH_CONTAINER_COLOR, fontSize: 22),
                 ),

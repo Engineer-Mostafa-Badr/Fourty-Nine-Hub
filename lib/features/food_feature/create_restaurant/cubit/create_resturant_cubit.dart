@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -12,6 +11,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/enti
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_meal_categories_with_count_restaurants_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/restaurant_shared_data.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_list_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_cities.dart';
@@ -57,7 +57,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
       emit(CreateResturantLoading(LocaleKeys.creatingRestaurant.tr()));
       final response = await _createREstaurant.call(createRestaurantParams);
       emit(CreateRestaurantCloseLoading());
-      response.fold((failure) {
+      response.fold((Failure failure) {
         if (failure is ServerFailure) {
           emit(CreateResturantError(failure.message));
         } else if (failure is UnauthorizedFailure) {
@@ -69,6 +69,11 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
         emit(CreateRestaurantSuccess(LocaleKeys
             .youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval
             .tr()));
+
+        AppPages.router.routerDelegate.navigatorKey.currentContext!
+            .read<RestaurantsListCubit>()
+            .loadData();
+        AppPages.router.routerDelegate.pop();
       });
     } else {
       ScaffoldMessenger.of(

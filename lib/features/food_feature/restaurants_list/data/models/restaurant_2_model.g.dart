@@ -16,6 +16,14 @@ Restaurant2Model _$Restaurant2ModelFromJson(Map<String, dynamic> json) =>
       city: json['city'] == null
           ? null
           : CityModel.fromJson(json['city'] as Map<String, dynamic>),
+      mainCategoryId: json['mainCategoryId'] == null
+          ? null
+          : FoodCategoryModel.fromJson(
+              json['mainCategoryId'] as Map<String, dynamic>),
+      subcategoryId: json['subcategoryId'] == null
+          ? null
+          : SubCategoryModel.fromJson(
+              json['subcategoryId'] as Map<String, dynamic>),
       government: json['government'] == null
           ? null
           : GovernmentModel.fromJson(
@@ -24,7 +32,7 @@ Restaurant2Model _$Restaurant2ModelFromJson(Map<String, dynamic> json) =>
       deliveryTime: json['deliveryTime'] as String?,
       deliveryFee: (json['deliveryFee'] as num?)?.toInt(),
       menu: (json['MENU'] as List<dynamic>?)
-          ?.map((e) => RestaurantMneuModel.fromMap(e as Map<String, dynamic>))
+          ?.map((e) => RestaurantMneuModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       numberOfReviews: (json['numberOfReviews'] as num?)?.toInt(),
       restaurantMedia: (json['restaurantMedia'] as List<dynamic>?)
@@ -53,4 +61,6 @@ Map<String, dynamic> _$Restaurant2ModelToJson(Restaurant2Model instance) =>
       'numberOfReviews': instance.numberOfReviews,
       'MENU': instance.menu,
       'id': instance.datumId,
+      'subcategoryId': instance.subcategoryId,
+      'mainCategoryId': instance.mainCategoryId,
     };

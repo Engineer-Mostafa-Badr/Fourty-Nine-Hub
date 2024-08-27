@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
@@ -17,7 +18,7 @@ abstract class RestaurantListRepo {
   });
   Future<Either<Failure, List<Restaurant>>> getAllRestaurantsWithMenu(
       {required PostCommentsParams params});
-  Future<Either<Failure, bool>> isRestaurant();
+  Future<Either<Failure, IsRestaurantModel>> isRestaurant();
 
   Future<Either<Failure, int>> numOfRestaurants();
   Future<Either<Failure, List<RestaurantModel>>> getTrendingRestaurants({

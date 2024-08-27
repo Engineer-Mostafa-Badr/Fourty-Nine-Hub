@@ -15,9 +15,9 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usec
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/is_resturant_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/restaurant_shared_data.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/search_restaurants_use_case.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_menu_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/search_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/search_cubit/search_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
@@ -36,7 +36,7 @@ import '../features/food_feature/restaurants_list/domain/repositories/resturant_
 import '../features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_nearby_restaurants_usecase.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_trending_restaurants_usecase.dart';
-import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
+import '../features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_list_cubit.dart';
 
 class FoodServiceLocator {
   static void execute({required GetIt serviceLocator}) async {

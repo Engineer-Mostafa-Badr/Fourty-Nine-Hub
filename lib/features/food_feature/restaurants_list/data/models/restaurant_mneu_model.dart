@@ -47,7 +47,7 @@ class RestaurantMneuModel extends RestaurantMneu {
     return result;
   }
 
-  factory RestaurantMneuModel.fromMap(Map<String, dynamic> map) {
+  factory RestaurantMneuModel.fromJson(Map<String, dynamic> map) {
     return RestaurantMneuModel(
       id: map['id'],
       photoPath: map['photoPath'],
@@ -62,8 +62,8 @@ class RestaurantMneuModel extends RestaurantMneu {
 
   String toJson() => json.encode(toMap());
 
-  factory RestaurantMneuModel.fromJson(String source) =>
-      RestaurantMneuModel.fromMap(json.decode(source));
+  factory RestaurantMneuModel.fromMap(String source) =>
+      RestaurantMneuModel.fromJson(json.decode(source));
 
   @override
   String toString() {

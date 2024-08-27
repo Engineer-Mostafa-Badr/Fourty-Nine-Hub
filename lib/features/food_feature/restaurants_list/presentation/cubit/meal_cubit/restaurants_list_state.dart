@@ -30,7 +30,7 @@ class RestaurantsListState {
   final Banner? banner;
   final int? numOfRestaurants;
   final MainCategoryEntity? mainCategory;
-  final bool? isResturant;
+  final IsRestaurantModel? isResturant;
   final List<Restaurant>? allRestaurant;
   final List<RestaurantEntity>? trendingRestaurants;
   final List<RestaurantEntity>? subCategories;
@@ -59,7 +59,7 @@ class RestaurantsListState {
     int? numOfRestaurants,
     Banner? banner,
     MainCategoryEntity? mainCategory,
-    bool? isRestaurant,
+    IsRestaurantModel? isRestaurant,
     List<RestaurantEntity>? trendingRestaurants,
     List<SubCategoryEntity>? categories,
     List<FoodCategoryEntity>? mealCategories,

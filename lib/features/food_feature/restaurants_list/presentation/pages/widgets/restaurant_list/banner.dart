@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_list_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -34,19 +33,26 @@ class MealBanner extends StatelessWidget {
         if (state.mainCategory != null || state.banner != null) {
           return MainCategoryBanner(
               color: AppColors.ACCENT_COLOR,
-              category: state.mainCategory ??
-                  MainCategoryEntity(
+              category: state.mainCategory != null
+                  ? MainCategoryEntity(
+                      id: state.mainCategory?.id ?? "",
+                      name: LocaleKeys.meal.tr(),
+                      image: state.mainCategory?.image ?? "",
+                      banner: state.mainCategory?.banner ?? "",
+                      cover: state.mainCategory?.cover ?? "",
+                      isFavorite: state.mainCategory?.isFavorite ?? false,
+                      total: state.mainCategory?.total ?? 0,
+                    )
+                  : MainCategoryEntity(
                       id: state.banner?.id ?? "",
-                      name: (getLang() == "ar"
-                              ? state.banner?.nameAr
-                              : state.banner?.nameEn) ??
-                          LocaleKeys.meal.tr(),
+                      name: LocaleKeys.meal.tr(),
                       image: state.banner?.banner ?? "",
                       banner: state.banner?.banner ?? "",
                       cover: state.banner?.cover ?? "",
                       isFavorite: false,
                       total: state.banner?.numberOfAds ?? 0),
-              canRegister: state.isResturant == true ? false : true,
+              canRegister:
+                  state.isResturant?.isRestaurant == true ? false : true,
               onRegister: () {
                 if (context.read<UserCubit>().isLoggedIn) {
                   context.push(Routes.CREATERESTURANT);

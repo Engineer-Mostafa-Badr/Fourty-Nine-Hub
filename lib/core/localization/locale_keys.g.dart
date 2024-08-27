@@ -25,6 +25,9 @@ abstract class  LocaleKeys {
   static const selectGovernorate = 'selectGovernorate';
   static const selectCity = 'selectCity';
   static const newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore = 'newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore';
+  static const premium = 'premium';
+  static const comma = 'comma';
+  static const noResultFound = 'noResultFound';
   static const restaurantDashboard = 'restaurantDashboard';
   static const allRestaurants = 'allRestaurants';
   static const restaurantsForSelectedMeal = 'restaurantsForSelectedMeal';

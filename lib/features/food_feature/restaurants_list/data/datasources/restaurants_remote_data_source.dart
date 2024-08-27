@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
@@ -37,7 +38,7 @@ abstract class RestaurantsRemoteDataSource {
   Future<Either<Failure, int>> numOfRestaurants();
   Future<Either<Failure, List<RestaurantEntity>>> getSubCategoryRestaurants(
       {required String id});
-  Future<Either<Failure, bool>> isRestaurant();
+  Future<Either<Failure, IsRestaurantModel>> isRestaurant();
 }
 
 class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
@@ -95,10 +96,10 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> isRestaurant() async {
+  Future<Either<Failure, IsRestaurantModel>> isRestaurant() async {
     final response = await _apiConsumer.get(EndPoints.isResturant);
-    return response.fold(
-        (l) => Left(l), (data) => Right(data['data']['isRestaurant'] as bool));
+    return response.fold((l) => Left(l),
+        (data) => Right(IsRestaurantModel.fromMap(data['data'])));
   }
 
   @override
@@ -135,12 +136,14 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
       required String subCategory,
       required String government,
       PostCommentsParams? params}) async {
-    final response = await _apiConsumer
-        .get(EndPoints.searchRestaurants(params: params), data: {
+    final data = {
       "city": city,
       "subcategoryId": subCategory,
       "government": government
-    });
+    };
+    log("data: ${jsonEncode(data)}");
+    final response = await _apiConsumer
+        .get(EndPoints.searchRestaurants(params: params), data: data);
     return response.fold(
       (failure) => Left(failure),
       (data) => Right(
@@ -163,17 +166,16 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
       };
       mneu.add(toMap);
     });
-    log("mneu: ${jsonEncode(mneu)}");
     Map<String, dynamic> data = {
       "name": params.name,
       "subcategoryId": params.subcategoryId,
-      "restaurantMedia":
-          List.generate(4, (index) => params.restaurantMedia?.first),
+      "restaurantMedia": params.restaurantMedia,
       "licenseMedia": params.licenseMedia,
       "government": params.government,
       "city": params.city,
       "menu": mneu,
     };
+
     final response =
         await _apiConsumer.post(EndPoints.createRestaurant, data: data);
 

@@ -6,13 +6,18 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/CarouselSlider.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/search_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/search_cubit/search_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/search_restaurant_card.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -37,6 +42,7 @@ class SearchRestaurantView extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
+              /// top
               TextFormField(
                 onChanged: (value) {
                   if (state.status ==
@@ -66,6 +72,8 @@ class SearchRestaurantView extends StatelessWidget {
                   filled: false,
                 ),
               ),
+
+              /// data
               Expanded(
                 child: Builder(
                   builder: (context) {
@@ -85,6 +93,38 @@ class SearchRestaurantView extends StatelessWidget {
                               ),
                             ),
                           ],
+                        ),
+                      );
+                    }
+
+                    /// ------- search sub categories
+                    else if (state.status ==
+                        SearchRestaurantStates.loadingSubCategories) {
+                      return RefreshIndicator(
+                        onRefresh: () async => searchCubit.refreshState(),
+                        child: ListView.builder(
+                          itemCount: state.mealCategories?.length,
+                          itemBuilder: (context, index) {
+                            FoodCategoryEntity? category =
+                                state.mealCategories?[index];
+                            return GestureDetector(
+                              onTap: () =>
+                                  searchCubit.selectSubcategory(category),
+                              child: Row(
+                                children: [
+                                  CachedNetworkImage(
+                                    imageUrl: category?.picture ?? "",
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                  ),
+                                  const Sizer(),
+                                  Text(getLang() == "ar"
+                                      ? (category?.nameAr ?? "")
+                                      : (category?.nameEn ?? "")),
+                                ],
+                              ),
+                            );
+                          },
                         ),
                       );
                     } else if (state.status ==
@@ -116,6 +156,32 @@ class SearchRestaurantView extends StatelessWidget {
                           },
                         ),
                       );
+                    }
+
+                    /// ------- search governorates
+                    else if (state.status ==
+                        SearchRestaurantStates.loadingGovernorates) {
+                      return RefreshIndicator(
+                        onRefresh: () async => searchCubit.refreshState(),
+                        child: ListView.builder(
+                          itemCount: state.governorates?.length,
+                          itemBuilder: (context, index) {
+                            GovernorateEntity? governorate =
+                                state.governorates?[index];
+                            return GestureDetector(
+                              onTap: () =>
+                                  searchCubit.selectGovernorate(governorate),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text((getLang() == "ar"
+                                        ? governorate?.nameAr
+                                        : governorate?.nameEn) ??
+                                    ''),
+                              ),
+                            );
+                          },
+                        ),
+                      );
                     } else if (state.status ==
                         SearchRestaurantStates.loadingSearchGevnorates) {
                       return RefreshIndicator(
@@ -133,6 +199,30 @@ class SearchRestaurantView extends StatelessWidget {
                                 child: Text(getLang() == "ar"
                                     ? (governorate?.nameAr ?? "")
                                     : (governorate?.nameEn ?? "")),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }
+
+                    /// ------- search cities
+                    else if (state.status ==
+                        SearchRestaurantStates.loadingCities) {
+                      return RefreshIndicator(
+                        onRefresh: () async => searchCubit.refreshState(),
+                        child: ListView.builder(
+                          itemCount: state.cities?.length,
+                          itemBuilder: (context, index) {
+                            CityEntity? city = state.cities?[index];
+                            return GestureDetector(
+                              onTap: () => searchCubit.selectCity(city),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text((getLang() == "ar"
+                                        ? city?.nameAr
+                                        : city?.nameAr) ??
+                                    ''),
                               ),
                             );
                           },
@@ -158,77 +248,15 @@ class SearchRestaurantView extends StatelessWidget {
                           },
                         ),
                       );
-                    } else if (state.status ==
-                        SearchRestaurantStates.loadingSubCategories) {
-                      return RefreshIndicator(
-                        onRefresh: () async => searchCubit.refreshState(),
-                        child: ListView.builder(
-                          itemCount: state.mealCategories?.length,
-                          itemBuilder: (context, index) {
-                            FoodCategoryEntity? category =
-                                state.mealCategories?[index];
-                            return GestureDetector(
-                              onTap: () =>
-                                  searchCubit.selectSubcategory(category),
-                              child: Row(
-                                children: [
-                                  CachedNetworkImage(
-                                    imageUrl: category?.picture ?? "",
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                  ),
-                                  const Sizer(),
-                                  Text(getLang() == "ar"
-                                      ? (category?.nameAr ?? "")
-                                      : (category?.nameEn ?? "")),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    } else if (state.status ==
-                        SearchRestaurantStates.loadingGovernorates) {
-                      return RefreshIndicator(
-                        onRefresh: () async => searchCubit.refreshState(),
-                        child: ListView.builder(
-                          itemCount: state.governorates?.length,
-                          itemBuilder: (context, index) {
-                            GovernorateEntity? governorate =
-                                state.governorates?[index];
-                            return GestureDetector(
-                              onTap: () =>
-                                  searchCubit.selectGovernorate(governorate),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text((getLang() == "ar"
-                                        ? governorate?.nameAr
-                                        : governorate?.nameEn) ??
-                                    ''),
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    } else if (state.status ==
-                        SearchRestaurantStates.loadingCities) {
-                      return RefreshIndicator(
-                        onRefresh: () async => searchCubit.refreshState(),
-                        child: ListView.builder(
-                          itemCount: state.cities?.length,
-                          itemBuilder: (context, index) {
-                            CityEntity? city = state.cities?[index];
-                            return GestureDetector(
-                              onTap: () => searchCubit.selectCity(city),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text((getLang() == "ar"
-                                        ? city?.nameAr
-                                        : city?.nameAr) ??
-                                    ''),
-                              ),
-                            );
-                          },
+                    }
+
+                    /// ------- search result
+                    else if ((state.allRestaurant?.isEmpty ?? true) ||
+                        (state.searchRestaurant?.isEmpty ?? false)) {
+                      return Center(
+                        child: Text(
+                          LocaleKeys.noResultFound.tr(),
+                          style: Styles.headerText(),
                         ),
                       );
                     } else if (state.status ==
@@ -240,28 +268,26 @@ class SearchRestaurantView extends StatelessWidget {
                           itemBuilder: (context, index) {
                             Restaurant? restaurant =
                                 state.allRestaurant?[index];
-                            return GestureDetector(
-                              onTap: () {},
-                              child: Row(
-                                children: [
-                                  Positioned.fill(
-                                    child: SquareImage(
-                                      width: MediaQuery.of(context).size.width *
-                                          .3,
-                                      radius: 5,
-                                      url: restaurant
-                                          ?.restaurantMedia?.first.mediaKey,
-                                    ),
-                                  ),
-                                  const Sizer(),
-                                  Text(restaurant?.name ?? ""),
-                                ],
-                              ),
-                            );
+                            return SearchRestaurantCard(restaurant: restaurant);
+                          },
+                        ),
+                      );
+                    } else if (state.status ==
+                        SearchRestaurantStates.loadingSearchResult) {
+                      return RefreshIndicator(
+                        onRefresh: () async => searchCubit.refreshState(),
+                        child: ListView.builder(
+                          itemCount: state.searchRestaurant?.length,
+                          itemBuilder: (context, index) {
+                            Restaurant? restaurant =
+                                state.searchRestaurant?[index];
+                            return SearchRestaurantCard(restaurant: restaurant);
                           },
                         ),
                       );
                     }
+
+                    /// -------------
 
                     return const SizedBox.shrink();
                   },
