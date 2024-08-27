@@ -17,7 +17,6 @@ class HealthBanner extends StatelessWidget {
           return MainCategoryBanner(
               category: state.mainCategory!,
               canRegister: state.isDoctor == true ? false : true,
-              // canRegister: false,
               onRegister: () {
                 if (context.read<UserCubit>().isLoggedIn) {
                   context.push(Routes.CREATEDOCTOR);

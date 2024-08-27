@@ -21,7 +21,14 @@ class HealthView extends StatelessWidget {
           padding:  EdgeInsets.all(16.0.zW),
           children: const [
             HealthBanner(),
-
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text("You can serve your clients as a doctor by clicking on the register button above!",
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            ),
             Sizer(),
             DoctorDashboardBanner(),
             Sizer(),

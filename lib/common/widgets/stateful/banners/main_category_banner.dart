@@ -63,7 +63,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
               child: _buildRegisterButton()),
           Label(
             text: widget.category.name,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 35),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 45.zSP),
           ),
           PositionedDirectional(
             start: 0,
@@ -83,11 +83,10 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                     color: AppColors.SECONDARY_COLOR,
                   ),
                 ),
-                Sizer(height: 10,),
+                Sizer(height: 15.zH,),
                 Label(
                   text: '${widget.category.total.toShortScale} ${Labels.ads}',
                   style: Styles.mediumText(
-                    fontSize: 15,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -105,7 +104,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       return InkWell(
         onTap: () => widget.onRegister?.call(),
         child: Text(Labels.register,
-            style: Styles.mediumText(color: Colors.white,fontSize: 14,fontWeight: FontWeight.bold)),
+            style: Styles.mediumText(color: Colors.white,fontWeight: FontWeight.bold)),
       );
     } else {
       return const SizedBox.shrink();
