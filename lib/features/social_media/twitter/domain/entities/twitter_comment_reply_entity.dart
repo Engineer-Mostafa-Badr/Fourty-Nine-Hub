@@ -2,7 +2,7 @@ import 'package:fourtyninehub/core/utils/duration_helper.dart';
 
 class TwitterCommentReplyEntity {
   final String id;
-  final String content;
+  String? content;
   dynamic user;
   final String post;
   final String image;
@@ -10,6 +10,7 @@ class TwitterCommentReplyEntity {
   num? totalCount;
   final num repliesCount;
   bool? isReact;
+  bool? edit;
   final List<String> love;
   final DateTime createdAt;
   Duration get publishedDuration => DateTime.now().difference(createdAt);
@@ -26,6 +27,7 @@ class TwitterCommentReplyEntity {
     this.loveCount = 0,
     this.totalCount = 0,
     this.isReact = false,
+    this.edit = false,
     required this.love,
     this.repliesCount = 0,
   });

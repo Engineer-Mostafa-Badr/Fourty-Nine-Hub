@@ -11,6 +11,7 @@ abstract class Routes {
   static const ADdetails = '/Subcategories/ADS/AD-Details';
   static const CREATEAD = '/Subcategories/ADS/CreateAd';
   static const CREATECOMPANYAD = '/Subcategories/ADS/CreateCompanyAd';
+  // static const CAMERA
 
   static const LUCKYWHEEL = '/LuckyWheel';
   static const COMPETITIONS = '/Competitions';
@@ -25,6 +26,8 @@ abstract class Routes {
   static const TWITTER = '/Social/Twitter';
   static const TWITTERPOSTDETAILS = '/Social/Twitter/TwitterPostDetails';
   static const CREATEPOST = '/Social/CreatePost';
+  static const SEARCHFRIENDS = '/Social/CreatePost/SearchFriend';
+  static const SEARCHPLACES = '/Social/CreatePost/SearchPlaces';
 
   static const Tinder = '/Social/Tinder';
   static const LIVE = '/Social/Live';
@@ -120,6 +123,8 @@ abstract class Routes {
   static const DRIVERREQUESTS = '/DriverRequests';
   static const DRIVERREQUESTSDETIALS = '/DriverRequestsDetials';
   static const DASHBOARDDRIVERSCREEN = '/DashboardDriverScreen';
+
+  static const TRIP_JOIN = '/TripJoin';
 }
 
 abstract class Paths {
@@ -152,6 +157,8 @@ abstract class Paths {
   static const TWITTER = 'Twitter';
   static const TWITTERPOSTDETAILS = 'TwitterPostDetails';
   static const CREATEPOST = 'CreatePost';
+  static const SEARCHFRIENDS = 'SearchFriend';
+  static const SEARCHPLACES = 'SearchPlaces';
   static const TINDER = 'Tinder';
   static const LIVE = 'Live';
   static const LIVEVIEW = 'LiveView';
@@ -229,4 +236,6 @@ abstract class Paths {
   static const DRIVERREQUESTS = 'DriverRequests';
   static const DRIVERREQUESTSDETIALS = 'DriverRequestsDetials';
   static const DASHBOARDDRIVERSCREEN = 'DashboardDriverScreen';
+
+  static const TRIP_JOIN = 'TripJoin';
 }

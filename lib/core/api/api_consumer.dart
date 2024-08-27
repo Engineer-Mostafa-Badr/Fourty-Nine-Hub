@@ -200,24 +200,19 @@ class BaseApiConsumer extends ApiConsumer {
     Map<String, dynamic>? queryParameters,
   }) async {
     try {
-      // log(url, name: "kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
-      // log(data.toString(), name: "kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
-      // log(_dio..toString(), name: "kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
-      final result = await _dio.put(url,
-          data: data,
-          queryParameters: queryParameters,
-          options: Options(headers: {
-            "Authorization":
-                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjNjZTEyYjY0LTBiMGUtNDVjNi1iZTBkLTk5MWYwNDBiMDI0MCIsImlhdCI6MTcyNDcyMzM3NCwiZXhwIjo1NTcyNDcyMzM3NCwic3ViIjoiNjZjMzQ5ZDdhNjg0YWI0NzNmMWMxZWQ3In0.8N3NfdXD3m5Ll-P-geBZlb5GwEWL6kIFiYiokE71ryI"
-          }));
-      // log(result.data.toString(), name: "kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+      final result = await _dio.put(
+        url,
+        data: data,
+        queryParameters: queryParameters,
+      );
+      log(result.data.toString(), name: "url");
       if (result.data['status']) {
-        // log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
-        // if (result.data is Map<String, dynamic>) {
-        return Right(result.data);
-        // } else {
-        //   return Right({"data": result.data});
-        // }
+        log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
+        if (result.data is Map<String, dynamic>) {
+          return Right(result.data as Map<String, dynamic>);
+        } else {
+          return Right({"data": result.data});
+        }
       } else {
         return Left(ValidationFailure(
             result.data['message'] ?? result.data['error']['message']));

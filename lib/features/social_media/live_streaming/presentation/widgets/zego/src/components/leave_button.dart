@@ -13,6 +13,8 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/defines.dart';
 
+import '../defines.dart';
+
 /// @nodoc
 class ZegoLiveStreamingLeaveButton extends StatefulWidget {
   final ButtonIcon? icon;
@@ -32,6 +34,7 @@ class ZegoLiveStreamingLeaveButton extends StatefulWidget {
   final ZegoLiveStreamingHostManager hostManager;
   final ValueNotifier<bool> hostUpdateEnabledNotifier;
   final ValueNotifier<bool>? isLeaveRequestingNotifier;
+  final ValueNotifier<bool> showTopBar;
 
   const ZegoLiveStreamingLeaveButton({
     super.key,
@@ -41,6 +44,7 @@ class ZegoLiveStreamingLeaveButton extends StatefulWidget {
     required this.defaultLeaveConfirmationAction,
     required this.hostManager,
     required this.hostUpdateEnabledNotifier,
+    required this.showTopBar,
     this.isLeaveRequestingNotifier,
     this.icon,
     this.iconSize,
@@ -73,48 +77,19 @@ class _ZegoLiveStreamingLeaveButtonState
   @override
   Widget build(BuildContext context) {
     return ZegoLeaveButton(
-      buttonSize: widget.buttonSize,
+      buttonSize: const Size(80, 40),
       iconSize: widget.iconSize,
       icon: widget.icon,
       clickableNotifier: hangupButtonClickableNotifier,
       onLeaveConfirmation: (context) async {
-        /// prevent controller's leave function call after leave button click
-        widget.isLeaveRequestingNotifier?.value = true;
-
-        final endConfirmationEvent = ZegoLiveStreamingLeaveConfirmationEvent(
-          context: context,
-        );
-        defaultAction() async {
-          return widget.defaultLeaveConfirmationAction(endConfirmationEvent);
-        }
-
-        final canLeave = await widget.events.onLeaveConfirmation?.call(
-              endConfirmationEvent,
-              defaultAction,
-            ) ??
-            true;
-        if (canLeave) {
-          await notifyUserLeaveByMessage();
-
-          if (widget.hostManager.isLocalHost) {
-            /// live is ready to end, host will update if receive property notify
-            /// so need to keep current host value, DISABLE local host value UPDATE
-            widget.hostUpdateEnabledNotifier.value = false;
-            ZegoUIKit().updateRoomProperties({
-              RoomPropertyKey.host.text: '',
-              RoomPropertyKey.liveStatus.text: LiveStatus.ended.index.toString()
-            });
-          }
-        } else {
-          /// restore controller's leave status
-          widget.isLeaveRequestingNotifier?.value = false;
-        }
-
-        return canLeave;
+        widget.showTopBar.value = !widget.showTopBar.value;
+        return false;
       },
       onPress: () async {
         final endEvent = ZegoLiveStreamingEndEvent(
-          reason: ZegoLiveStreamingEndReason.localLeave,
+          reason: widget.config.role == ZegoLiveStreamingRole.host
+              ? ZegoLiveStreamingEndReason.hostEnd
+              : ZegoLiveStreamingEndReason.localLeave,
           isFromMinimizing: ZegoLiveStreamingMiniOverlayPageState.minimizing ==
               ZegoUIKitPrebuiltLiveStreamingController().minimize.state,
         );

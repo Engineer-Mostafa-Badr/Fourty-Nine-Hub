@@ -1,37 +1,37 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
-
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../common/widgets/dynamic/google_ads_banner.dart';
+import '../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../common/widgets/dynamic/wallet_widget.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
 
 import '../../../../core/enums/ride_services_enum.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../common/widgets/dynamic/wallet_widget.dart';
-import '../../../../res/style/app_colors.dart';
 
 import '../widgets/announce_widget.dart';
 
@@ -43,6 +43,36 @@ class FourtyNineView extends StatefulWidget {
 }
 
 class _FourtyNineViewState extends State<FourtyNineView> {
+  ScrollController scrollController = ScrollController();
+  bool _isScrollingDown = false;
+
+  @override
+  void initState() {
+    scrollController;
+    scrollController.addListener(() {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (!_isScrollingDown) {
+          setState(() {
+            _isScrollingDown = true;
+          });
+        }
+      } else {
+        if (_isScrollingDown) {
+          setState(() {
+            _isScrollingDown = false;
+          });
+        }
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,20 +80,26 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         isWithBackArrow: false,
         language: true,
       ),
-      bottomNavigationBar: const BottomNavigator(
+      bottomNavigationBar: BottomNavigator(
+        scrollController: scrollController,
+        isScrollingDown: _isScrollingDown,
         mainCategory: 1,
         index: 2,
       ),
-      floatingActionButton: const FloatingButton(
+      floatingActionButton: _isScrollingDown
+          ? null
+          : const FloatingButton(
         changeView: 1,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       drawer: const DrawerWidget(),
       body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        controller: scrollController,
+        padding:  EdgeInsets.symmetric(horizontal: 20.zW),
         children: [
           //carousel slider
           const AnnounceWidget(),
+          const Sizer(),
           //wallet
           const WalletWidget(),
           const Sizer(),
@@ -90,18 +126,24 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   child: Column(
                     children: List.generate(
                         6,
-                        (index) => Container(
-                              height: 100,
-                              width: double.infinity,
-                              margin: const EdgeInsets.symmetric(horizontal: 5),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 5),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.grey),
-                              ),
-                            )),
+                            (index) => Padding(
+                          padding:  EdgeInsets.only(
+                              bottom: 15.zH
+                          ),
+                          child: Container(
+                            height:
+                            MediaQuery.of(context).size.height * .15.zH,
+                            width: double.infinity,
+                            margin: EdgeInsets.symmetric(horizontal: 10.zW),
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 10.zW),
+                            decoration: BoxDecoration(
+                              color: AppColors.AUTH_CONTAINER_COLOR,
+                              borderRadius: BorderRadius.circular(20.zR),
+                              border: Border.all(color: Colors.grey),
+                            ),
+                          ),
+                        )),
                   ),
                 );
               }
@@ -120,7 +162,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) =>
-                      const Sizer(),
+                  const Sizer(),
                 );
               } else {
                 return const SizedBox.shrink();
@@ -133,31 +175,35 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   }
 
   Widget _buildMainCategoriesViews() {
-    return DecoratedBox(
+    return Container(
       decoration: BoxDecoration(
-        border: Border.all(
-          color: AppColors.PRIMARY_COLOR,
-        ),
-        borderRadius: BorderRadius.circular(10),
-      ),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(20.zR),
+          boxShadow: const [
+            BoxShadow(
+              color: AppColors.GRAY_LIGHT_COLOR3,
+              blurRadius: 5,
+              spreadRadius: 5,
+            )
+          ]),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20.zR),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildItemTabBar(
               SvgPicture.asset(
                 Assets.threeDots,
-                height: 20,
-                width: 20,
+                height: 34.zH,
+                width: 34.zW,
               ),
               Routes.MAINCATEGORIESTREE,
             ),
             _buildItemTabBar(
               SvgPicture.asset(
                 Assets.mobile,
-                height: 20,
-                width: 20,
+                height: 34.zH,
+                width: 34.zW,
               ),
               Routes.MAINCATEGORIESCARDS,
             ),
@@ -168,13 +214,13 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   }
 
   Widget _buildItemTabBar(
-    Widget icon,
-    String routeName,
-  ) {
+      Widget icon,
+      String routeName,
+      ) {
     return InkWell(
       onTap: () => context.push(routeName),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 5),
+        padding: EdgeInsets.symmetric(vertical: 6.zW, horizontal: 10.zH),
         decoration: const BoxDecoration(),
         child: icon,
       ),
@@ -182,30 +228,30 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   }
 
   BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-      _pickMeAndComeWithUWidget() {
+  _pickMeAndComeWithUWidget() {
     return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
       builder: (context, state) {
         if (state.status == StateStatus.loading) {
           return Row(
             children: List.generate(
                 2,
-                (index) => Expanded(
-                      child: Shimmer.fromColors(
-                        baseColor: Colors.grey[100]!,
-                        highlightColor: Colors.white24,
-                        child: Container(
-                          width: 100.zW,
-                          height: kToolbarHeight * 1.3,
-                          margin: const EdgeInsets.symmetric(horizontal: 5),
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Colors.grey),
-                          ),
-                        ),
+                    (index) => Expanded(
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.grey[100]!,
+                    highlightColor: Colors.white24,
+                    child: Container(
+                      width: 100.zW,
+                      height: kToolbarHeight * 2.zH,
+                      margin: const EdgeInsets.symmetric(horizontal: 5),
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      decoration: BoxDecoration(
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        borderRadius: BorderRadius.circular(20.zR),
+                        border: Border.all(color: Colors.grey),
                       ),
-                    )),
+                    ),
+                  ),
+                )),
           );
         } else if (state.status == StateStatus.success) {
           return Row(
@@ -221,6 +267,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 child: _buildRideSubCategoryItem(
                   service: state.data![1].service,
                   image: state.data![1].image,
+                  route: Routes.TRIP_JOIN,
                 ),
               )
             ],
@@ -228,11 +275,11 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         } else {
           return Container(
             padding:
-                //EdgeInsets.all
-                const EdgeInsets.symmetric(horizontal: 10),
-            child: const Text(
-              'No Ride Subcategories',
-              style: TextStyle(fontSize: 18),
+            //EdgeInsets.all
+            const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(
+              LocaleKeys.noRideSubcategories.localize,
+              style: TextStyle(fontSize: 32.zW, fontWeight: FontWeight.w500),
             ),
           );
         }
@@ -243,86 +290,80 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   Row _auctionAndInstallmentWidget() {
     return Row(
       children: [
-        Expanded(
-          child: InkWell(
-            onTap: () => context.go(Routes.MAZADAT),
-            child: SizedBox(
-              height: kToolbarHeight * .5,
-              width: kToolbarHeight * 2,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: AppButton(
-                        color: Colors.white,
-                        label: LocaleKeys.auction.tr(),
-                        style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                        icon: Icons.group,
-                        iconSize: 22,
-                        onPressed: () => context.push(Routes.MAZADAT)),
-                  ),
-                  const Positioned(
-                      bottom: 5,
-                      left: 5,
-                      child: Icon(
-                        Icons.star,
-                        size: 10,
-                        color: AppColors.ACCENT_COLOR,
-                      )),
-                  const Positioned(
-                      top: 0,
-                      left: 10,
-                      child: Icon(
-                        Icons.star,
-                        size: 10,
-                        color: AppColors.ACCENT_COLOR,
-                      )),
-                  const Positioned(
-                      top: 15,
-                      right: 10,
-                      child: Icon(
-                        Icons.star,
-                        size: 10,
-                        color: AppColors.ACCENT_COLOR,
-                      ))
-                ],
+        itemAuctionAndInstallmentWidget(
+            LocaleKeys.auction.localize, () => context.push(Routes.MAZADAT),Icons.group),
+        const Sizer(),
+        itemAuctionAndInstallmentWidget(
+            LocaleKeys.installments.localize, () => context.push(Routes.INSTALLMENT),Icons.list),
+      ],
+    );
+  }
+
+  Widget itemAuctionAndInstallmentWidget(String label, Function function,IconData icon) {
+    return Expanded(
+      child: InkWell(
+        onTap: () => context.go(Routes.MAZADAT),
+        child: SizedBox(
+          height: kToolbarHeight * .8.zH,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: AppButton(
+                    color: AppColors.AUTH_CONTAINER_COLOR,
+                    label: label,
+                    style: Styles.mediumText(
+                      color: AppColors.AUTH_CONTAINER_COLOR,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    icon: icon,
+                    iconSize: 30.zH,
+                    onPressed: () => function()),
               ),
-            ),
+              Positioned(
+                  bottom: 5,
+                  left: 5,
+                  child: Icon(
+                    Icons.star,
+                    size: 20.zH,
+                    color: AppColors.ACCENT_COLOR,
+                  )),
+              Positioned(
+                  top: 0,
+                  left: 10,
+                  child: Icon(
+                    Icons.star,
+                    size: 20.zH,
+                    color: AppColors.ACCENT_COLOR,
+                  )),
+              Positioned(
+                  top: 15,
+                  right: 10,
+                  child: Icon(
+                    Icons.star,
+                    size: 20.zH,
+                    color: AppColors.ACCENT_COLOR,
+                  ))
+            ],
           ),
         ),
-        const Sizer(),
-        Expanded(
-          child: AppButton(
-              padding: 5,
-              color: Colors.white,
-              height: kToolbarHeight * .5,
-              label: LocaleKeys.installments.tr(),
-              style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-              icon: Icons.list,
-              iconSize: 22,
-              onPressed: () => context.push(Routes.INSTALLMENT)),
-        )
-      ],
+      ),
     );
   }
 
   Widget _buildRideSubCategoryItem({
     required RideServicesEnum service,
     required String image,
+    String? route,
   }) {
     return InkWell(
-      onTap: () => context.push(Routes.ADS, extra: service.value()),
+      // onTap: () => context.push(Routes.ADS, extra: service.value()),
+      onTap: () => route != null ? context.push(route) : null,
       child: Container(
-        height: kToolbarHeight * 1.3,
+        height: kToolbarHeight * 2.zH,
         padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(10.zR),
           boxShadow: const [
             BoxShadow(
               color: Color.fromARGB(255, 249, 159, 162),
@@ -337,7 +378,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           children: [
             Positioned.fill(
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(10.zR),
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
@@ -359,27 +400,33 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 children: [
                   Label(
                     text: service.title(),
-                    style: Styles.headerText(color: Colors.white),
+                    style: Styles.mediumText(
+                      color: AppColors.AUTH_CONTAINER_COLOR,
+                      fontSize: 34,
+                    ),
                   ),
                   const Spacer(),
-                  Column(
-                    children: [
-                      InkWell(
-                        onTap: () async {},
-                        child: const Icon(
-                          Icons.favorite_border,
-                          color: AppColors.SECONDARY_COLOR,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2),
+                    child: Column(
+                      children: [
+                        InkWell(
+                          onTap: () async {},
+                          child: Icon(
+                            Icons.favorite_border,
+                            color: AppColors.SECONDARY_COLOR,
+                            size: 38.zH,
+                          ),
                         ),
-                      ),
-                      const Sizer(
-                        height: 20,
-                      ),
-                      Label(
-                        text: '4 ${LocaleKeys.Ads.tr()}',
-                        style: Styles.mediumText(
-                            color: Colors.white, fontSize: 15),
-                      ),
-                    ],
+                        const Spacer(),
+                        Label(
+                          text: '4 ${LocaleKeys.ads.tr()}',
+                          style: Styles.smallText(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

@@ -9,6 +9,8 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/get_token
 import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 
+import '../../../../../core/utils/shared_pref.dart';
+import '../../../domain/entities/user_tokens_entity.dart';
 import '../../../domain/use_cases/get_user_use_case.dart';
 import '../../../domain/use_cases/sign_out_usecase.dart';
 
@@ -64,21 +66,32 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
 
   String? token;
 
+  // void attachToken() async {
+  //   final result = await _getTokensUseCase(const NoParams());
+  //   result.fold(
+  //     (_) {},
+  //     (tokens) {
+  //       if (tokens == null) {
+  //         return;
+  //       } else {
+  //         token = tokens.accessToken.toString();
+  //       }
+  //       _attachTokenUseCase(tokens);
+  //       _isTokenAttached = true;
+  //       getUser();
+  //     },
+  //   );
+  // }
+
   void attachToken() async {
-    final result = await _getTokensUseCase(const NoParams());
-    result.fold(
-      (_) {},
-      (tokens) {
-        if (tokens == null) {
-          return;
-        } else {
-          token = tokens.accessToken.toString();
-        }
-        _attachTokenUseCase(tokens);
-        _isTokenAttached = true;
-        getUser();
-      },
-    );
+    String? accessToken = await TokenManager.getAccessToken();
+    String? refreshToken = await TokenManager.getRefreshToken();
+    _attachTokenUseCase(UserTokensEntity(
+      accessToken: accessToken!,
+      refreshToken: refreshToken!,
+    ));
+    _isTokenAttached = true;
+    getUser();
   }
 
   void logout() async {

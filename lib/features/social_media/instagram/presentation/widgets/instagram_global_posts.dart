@@ -14,17 +14,20 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_comments.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class InstagramGlobalPosts extends StatefulWidget {
   const InstagramGlobalPosts({
-    super.key,
+    super.key, required this.scrollController,
   });
+  final scrollController;
   @override
   State<InstagramGlobalPosts> createState() => _InstagramGlobalPostsState();
 }
@@ -48,6 +51,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
       return RefreshIndicator(
         onRefresh: () async => controller.onRefresh(),
         child: CustomScrollView(
+         controller: widget.scrollController,
           slivers: [
             const SliverToBoxAdapter(
               child: ChatStories(),
@@ -155,27 +159,17 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                     .itemList?[index].isLove =
                                                 !controller.feedPagingController
                                                     .itemList![index].isLove!;
-                                            if (controller.feedPagingController
-                                                    .itemList?[index].isLove ==
-                                                false) {
-                                              controller
-                                                  .feedPagingController
-                                                  .itemList?[index]
-                                                  .loveCount = (controller
-                                                      .feedPagingController
-                                                      .itemList![index]
-                                                      .loveCount! -
-                                                  1);
-                                            } else {
-                                              controller
-                                                  .feedPagingController
-                                                  .itemList?[index]
-                                                  .loveCount = (controller
-                                                      .feedPagingController
-                                                      .itemList![index]
-                                                      .loveCount! +
-                                                  1);
+                                            if(controller.feedPagingController
+                                                .itemList?[index].isLove==false){
+                                              controller.feedPagingController
+                                                  .itemList?[index].loveCount=(controller.feedPagingController
+                                                  .itemList![index].loveCount!-1);
+                                            }else{
+                                              controller.feedPagingController
+                                                  .itemList?[index].loveCount=(controller.feedPagingController
+                                                  .itemList![index].loveCount!+1);
                                             }
+
                                           }
                                           setState(() {});
                                         },
@@ -186,16 +180,13 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                             : Colors.grey,
                                         size: 25,
                                       ),
-                                      const Sizer(
-                                        width: 5,
-                                      ),
+                                      const Sizer(width: 5,),
                                       Label(
                                         text: controller.feedPagingController
-                                                .itemList?[index].loveCount
-                                                .toString() ??
+                                            .itemList?[index].loveCount
+                                            .toString() ??
                                             '',
-                                        style: Styles.mediumText(
-                                            fontWeight: FontWeight.bold),
+                                        style: Styles.mediumText(fontWeight: FontWeight.bold),
                                       ),
                                       const Sizer(),
                                       IconAppButton(
@@ -204,43 +195,61 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                           bottomSheet(
                                               context: context,
                                               isScrollControlled: true,
-                                              widget: InstagramPostComments(
-                                                  postId: controller
-                                                      .feedPagingController
-                                                      .itemList![index]
-                                                      .id,
-                                                  onAddComment:
-                                                      (PostCommentParams
-                                                          params) async {
-                                                    var result =
-                                                        await controller
-                                                            .onPostComment(
-                                                                params: params);
-                                                    controller
+                                              widget: BlocProvider.value(
+                                                value:serviceLocator<InstagramCubit>()..loadComments(context, controller
+                                                    .feedPagingController
+                                                    .itemList![index].id),
+                                                child: InstagramPostComments(
+                                                    postId: controller
                                                         .feedPagingController
                                                         .itemList![index]
-                                                        .commentsCount = (controller
-                                                            .feedPagingController
-                                                            .itemList![index]
-                                                            .commentsCount! +
-                                                        1);
-                                                    setState(() {});
+                                                        .id,
+                                                    onCommentReply: (ReplyOnCommentParams params) async{
+                                                      var result = await controller.replyOnComment(
+                                                        params:ReplyOnCommentParams(
+                                                            postId: params.postId, content: params.content,commentId: params.commentId),
+                                                      );
+                                                      var currentPost=controller.feedPagingController.itemList?.firstWhere((element) => element.id==params.postId);
+                                                      currentPost?.commentsCount=(currentPost.commentsCount!+1);
+                                                      return result;
+                                                    },
+                                                    onAddComment:
+                                                        (PostCommentParams
+                                                                params) async{
+                                                          var result = await controller
+                                                                .onPostComment(
+                                                                    params:
+                                                                        params);
+                                                          return result;
+                                                        },  onDeleteComment: (String id)async {
+                                                  return await controller.deleteComment(
+                                                      context: context,
+                                                      commentId: id, postId: controller.feedPagingController
+                                                      .itemList![index].id, from: 'feed');
+                                                  // print(result);
+
+                                                }, onDeleteReply: (String id) async{
+                                                  return await controller.deleteComment(
+                                                      context: context,
+                                                      commentId: id, postId: controller.feedPagingController
+                                                      .itemList![index].id, from: 'feed');
+                                                },
+                                                  onEditComment: (PostCommentParams params) async{
+                                                    var result = await controller.editComment(params: params);
                                                     return result;
-                                                  }));
+                                                  },),
+                                              ));
                                         },
                                         color: Colors.grey,
                                         size: 25,
                                       ),
-                                      const Sizer(
-                                        width: 5,
-                                      ),
+                                      const Sizer(width: 5,),
                                       Label(
                                         text: controller.feedPagingController
                                                 .itemList?[index].commentsCount
                                                 .toString() ??
                                             '',
-                                        style: Styles.mediumText(
-                                            fontWeight: FontWeight.bold),
+                                        style: Styles.mediumText(fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),

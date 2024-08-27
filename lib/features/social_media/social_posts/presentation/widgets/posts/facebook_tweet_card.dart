@@ -18,6 +18,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 
+
 class FacebookTweetCard extends StatelessWidget {
   const FacebookTweetCard({super.key, required this.post});
   final PostEntity post;
@@ -68,8 +69,7 @@ class FacebookTweetCard extends StatelessWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    if (post.content!.isNotEmpty || post.images!.isNotEmpty)
-                      _buildContent(context: context, post: post),
+                    if(post.content!.isNotEmpty||post.images!.isNotEmpty)_buildContent(context: context, post: post),
                     const SizedBox(
                       height: 10,
                     )
@@ -77,18 +77,15 @@ class FacebookTweetCard extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                         border: isShared == true ? Border.all() : null,
-                        borderRadius: BorderRadius.circular(15)),
+                        borderRadius: BorderRadius.circular(15)
+                    ),
                     child: Column(
                       children: [
                         _buildAccountHeader(
-                            context: context,
-                            user: isShared == true && post.mainPost != null
-                                ? post.mainPost?.user
-                                : post.user),
-                        isShared == true
-                            ? _buildMainContent(
-                                context: context, post: post.mainPost!)
-                            : _buildContent(context: context, post: post),
+                            context: context, user: isShared==true&&post.mainPost!=null?post.mainPost?.user:post.user),
+                        isShared==true?_buildMainContent(
+                            context: context, post: post.mainPost!):_buildContent(
+                            context: context, post: post),
                       ],
                     ),
                   ),
@@ -163,75 +160,71 @@ class FacebookTweetCard extends StatelessWidget {
             height: 10,
           ),
           if ((post.images?.isNotEmpty ?? false))
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.42,
-              child: GridView.builder(
-                  padding: const EdgeInsets.all(10),
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: post.images!.length == 1 ? 1 : 2),
-                  itemCount: post.images!.length < 4 ? post.images!.length : 4,
-                  itemBuilder: (context, index) => InkWell(
-                        onTap: () {
-                          if (index != 3 ||
-                              (index == 3 && post.images!.length == 4)) {
-                            showDialog(
-                                context: context,
-                                builder: (context) => ImageDetailsScreen(
-                                      image: post.images![index],
-                                      fromPost: true,
-                                      onRemoveImage: () {
-                                        // controller
-                                        //     .removePhoto(post.images![index]);
-                                        context.pop();
-                                      },
-                                    ));
-                          } else {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return ShowPostsImages(
-                                    images: post.images ?? [],
-                                    onRemoveImage: (UploadFileEntity image) {
-                                      // controller.removePhoto(image);
+            GridView.builder(
+                padding: const EdgeInsets.all(10),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: post.images!.length == 1 ? 1 : 2),
+                itemCount: post.images!.length < 4 ? post.images!.length : 4,
+                itemBuilder: (context, index) => InkWell(
+                      onTap: () {
+                        if (index != 3 ||
+                            (index == 3 && post.images!.length == 4)) {
+                          showDialog(
+                              context: context,
+                              builder: (context) => ImageDetailsScreen(
+                                    image: post.images![index],
+                                    fromPost: true,
+                                    onRemoveImage: () {
+                                      // controller
+                                      //     .removePhoto(post.images![index]);
+                                      context.pop();
                                     },
-                                  );
-                                });
-                          }
-                        },
-                        child: Stack(
-                          children: [
-                            Stack(
-                              children: [
-                                ImageFromInternet(
-                                  image: post.images?[index] ?? '',
-                                ),
-                                if (index == 3 && post.images!.length > 4)
-                                  Container(
-                                    margin: const EdgeInsetsDirectional.only(
-                                        end: 10, bottom: 10),
-                                    // padding: const EdgeInsets.all(10),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      // borderRadius: BorderRadius.circular(15),
-                                      color: Colors.black.withOpacity(0.5),
-                                    ),
-                                    child: Center(
-                                      child: Label(
-                                        text: "+${post.images!.length - 4}",
-                                        style: Styles.headerText(
-                                          color: Colors.white,
-                                        ),
+                                  ));
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return ShowPostsImages(
+                                  images: post.images ?? [],
+                                  onRemoveImage: (UploadFileEntity image) {
+                                    // controller.removePhoto(image);
+                                  },
+                                );
+                              });
+                        }
+                      },
+                      child: Stack(
+                        children: [
+                          Stack(
+                            children: [
+                              ImageFromInternet(image: post.images?[index]??'',),
+
+                              if (index == 3 && post.images!.length > 4)
+                                Container(
+                                  margin: const EdgeInsetsDirectional.only(
+                                      end: 10, bottom: 10),
+                                  // padding: const EdgeInsets.all(10),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    // borderRadius: BorderRadius.circular(15),
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                  child: Center(
+                                    child: Label(
+                                      text: "+${post.images!.length - 4}",
+                                      style: Styles.headerText(
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )),
-            ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )),
         ],
       ),
     );
@@ -249,7 +242,7 @@ class FacebookTweetCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ReadMoreLabel(text: post.content ?? ''),
+          ReadMoreLabel(text: post.content??''),
           const SizedBox(
             height: 10,
           ),

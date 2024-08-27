@@ -1,12 +1,13 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import '../../../res/assets/assets.dart';
+import '../../../res/style/styles.dart';
 import '../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,11 +17,15 @@ import 'bottom_painter.dart';
 class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
   final int mainCategory;
   final int index;
+  final ScrollController scrollController;
+ final bool isScrollingDown ;
 
   const BottomNavigator({
     super.key,
     required this.mainCategory,
     required this.index,
+    required this.scrollController,
+     required this.isScrollingDown,
   });
 
   @override
@@ -131,6 +136,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         }
       },
       items: pages,
+      scrollController: scrollController!, isScrollingDown: isScrollingDown!,
     );
   }
 
@@ -142,24 +148,64 @@ class CustomBottomNavigationBar extends StatefulWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
   final List<BottomItemModel> items;
+  final ScrollController scrollController;
 
-  const CustomBottomNavigationBar({
+  bool isScrollingDown;
+
+   CustomBottomNavigationBar({
     super.key,
     required this.currentIndex,
     required this.onTap,
     required this.items,
+    required this.scrollController,
+    required this.isScrollingDown,
   });
 
   @override
   _CustomBottomNavigationBarState createState() =>
-      _CustomBottomNavigationBarState();
+      _CustomBottomNavigationBarState(
+        scrollController: scrollController,
+        isScrollingDown: isScrollingDown,
+      );
 }
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     with SingleTickerProviderStateMixin {
+  final ScrollController scrollController;
+
+  bool isScrollingDown;
+
+  _CustomBottomNavigationBarState({
+    required this.scrollController,
+    required this.isScrollingDown,
+  });
+
   @override
   void initState() {
+    scrollController;
+    scrollController.addListener(() {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (!isScrollingDown) {
+          setState(() {
+            isScrollingDown = true;
+          });
+        }
+      } else {
+        if (isScrollingDown) {
+          setState(() {
+            isScrollingDown = false;
+          });
+        }
+      }
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override

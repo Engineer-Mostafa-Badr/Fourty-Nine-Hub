@@ -76,4 +76,16 @@ abstract class Assets {
   static String share_app_icon = 'assets/settings/share_app_icon.png';
   static String sign_out_icon = 'assets/settings/sign_out_icon.png';
   static String wallet_icon = 'assets/settings/wallet_icon.png';
+  static String tripViewIllustration = 'assets/images/trip_view.png';
+  static String map = 'assets/images/map.png';
+  static String notification = 'assets/49-New-icons/Group 1.png';
+  static String theme = 'assets/49-New-icons/Group 4.png';
+  static String person = 'assets/49-New-icons/Group 6.png';
+  static String noPerson = 'assets/49-New-icons/Group 5.png';
+  static String password = 'assets/49-New-icons/Group 7.png';
+  static String microphone = 'assets/49-New-icons/Untitled-1-01.png';
+  static String quran = 'assets/49-New-icons/Group 2.png';
+  static String azkar = 'assets/49-New-icons/Group 3.png';
+  static String policy = 'assets/49-New-icons/Group 8.png';
+  static String history = 'assets/49-New-icons/Group 9.png';
 }

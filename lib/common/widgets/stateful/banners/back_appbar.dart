@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 
 import '../../../../res/style/styles.dart';
 import '../../stateless/labels/label.dart';
@@ -8,6 +9,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? label;
   final Color? backColor;
   final Color? iconColor;
+  final bool? centerTitle;
   final List<Widget>? actions;
 
   const BackAppBar(
@@ -16,14 +18,17 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.label,
       this.backColor,
       this.iconColor,
-      this.actions});
+      this.actions, this.centerTitle=true});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      centerTitle: true,
+      centerTitle: centerTitle,
       automaticallyImplyLeading: automaticallyImplyLeading,
+      leading: IconButton(onPressed: (){
+        Navigator.of(context).pop();
+      }, icon: Icon(Icons.arrow_back,size: 40.zW,)),
       title: label != null
           ? Label(text: label ?? '', style: Styles.headerText())
           : null,

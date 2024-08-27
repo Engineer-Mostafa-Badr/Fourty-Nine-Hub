@@ -292,12 +292,12 @@ class _ReportViewState extends State<ReportView> {
                             } else {
                               var response = await controller.onReport(
                                 TwitterReportParams(
-                                    userId: widget.id,
-                                    category: selectedReport!.name,
-                                    content: reportTextController.text,
-                                    categoryId: widget.categoryId,
-                                    reason: selectedReport!.name,
-                                    loadingTripId: widget.loadingTripId),
+                                  userId: widget.id,
+                                  category: selectedReport!.name,
+                                  content: reportTextController.text,
+                                  categoryId: widget.categoryId,
+                                  reason: selectedReport!.name,
+                                ),
                               );
                               if (context.mounted) {
                                 if (response == true) {

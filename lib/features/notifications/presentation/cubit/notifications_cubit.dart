@@ -1,19 +1,24 @@
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:fourtyninehub/features/notifications/data/models/notification_model.dart';
-import 'package:fourtyninehub/features/notifications/data/repostiory/notification_repostiory.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubit/notifications_state.dart';
 
-part 'notifications_state.dart';
+import '../../data/repository/notification_repo.dart';
+
 
 class NotificationsCubit extends Cubit<NotificationsState> {
-  final NotificationRepostiory repostiory;
-  NotificationsCubit({required this.repostiory})
-      : super(NotificationsInitial());
-  getAllNotification() async {
-    var response = await repostiory.getAllNotification();
-    response.fold(
-      (l) {},
-      (r) {},
-    );
+  NotificationsCubit(this.notificationRepo) : super(NotificationsInitial());
+
+ final NotificationRepo notificationRepo;
+  static NotificationsCubit get(context)=>BlocProvider.of(context);
+
+  void fetchNotification()async{
+    emit(NotificationsLoadingState());
+   var result=await notificationRepo.fetchNotifications();
+
+    result.fold((failure) {
+      emit(NotificationsErrorState(errMessage: 'failure'));
+     // print(failure.errMessage.toString());
+    }, (notification) {
+      emit(NotificationsSuccessState(notificationModel: notification));
+    });
   }
 }

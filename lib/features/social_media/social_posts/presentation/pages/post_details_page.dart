@@ -32,6 +32,7 @@ class PostDetailsPage extends StatefulWidget {
   final Function(PostReactParams) onReact;
   final Function(String) showPostComments;
   final Function(PostEntity) showPostDetails;
+  final Function(PostCommentParams) onEditComment;
   final Function(String) deletePost;
   final Function(String) hidePost;
   final Function(ReplyOnCommentParams) onCommentReply;
@@ -49,7 +50,7 @@ class PostDetailsPage extends StatefulWidget {
     required this.hidePost,
     required this.onCommentReply,
     required this.onDeleteComment,
-    required this.onDeleteReply,
+    required this.onDeleteReply, required this.onEditComment,
   });
 
   @override
@@ -106,8 +107,6 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                   post: state.postDetails!,
                                   onReact: (params) async {
                                     var result = await widget.onReact(params);
-                                    // changeReaction(state.postDetails, params.react);
-                                    // setState(() {});
                                     return result;
                                   },
                                   deletePost: widget.deletePost,
@@ -250,6 +249,9 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CommentCard(
+          onEditComment: (p0) {
+            
+          },
           comment: comment,
           onAddReply: (ReplyOnCommentParams params) async {
             var result = await onCommentReply(params);

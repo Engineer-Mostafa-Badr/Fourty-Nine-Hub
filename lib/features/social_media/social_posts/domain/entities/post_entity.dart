@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/data/models/location_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
 import '../../../../../core/utils/duration_helper.dart';
@@ -8,9 +9,11 @@ import '../../../../../res/assets/assets.dart';
 class PostEntity {
   final String id;
   String? content;
+  LocationModel? location;
   final String photo;
   final String type;
   final List<String>? images;
+  final List<TwitterUserModel>? users;
   final bool isShared;
   bool? isDocumentation;
   bool? isLove;
@@ -61,8 +64,10 @@ class PostEntity {
   PostEntity({
     required this.id,
     this.content,
+    this.location,
     required this.type,
     this.images,
+    this.users,
     required this.user,
     this.commentPrivacy = 1,
     this.privacy = 1,

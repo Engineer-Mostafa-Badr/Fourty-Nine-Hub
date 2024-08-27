@@ -69,7 +69,7 @@ class _ImageValidationState extends State<ImageValidation> {
                 height: widget.height,
                 borderColor: field.hasError ? Colors.red : null,
                 tilte: widget.hint,
-                image: image,
+                image: Image.file(File(image?.path??"")),
                 iconColor: widget.iconColor,
               ),
             ),

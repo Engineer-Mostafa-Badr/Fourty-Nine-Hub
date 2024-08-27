@@ -56,7 +56,6 @@ class TwitterPostComments extends StatefulWidget {
 
 class _TwitterPostCommentsState extends State<TwitterPostComments> {
   final commentTextController = TextEditingController();
-  final replyTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -229,6 +228,12 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TwitterCommentCard(
+          onDeleteComment: (p0) {
+
+          },
+          onEditComment: (p0) {
+
+          },
           comment: comment,
           onCommentReact: () {
             widget.onCommentReact(TwitterCommentReactParams(
@@ -241,7 +246,13 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
               context: context,
               isScrollControlled: true,
               widget: TwitterCommentReplies(
+                onEditReply: (p0) {
+
+                },
                 replies: const [],
+                onDeleteReply: (p0) {
+
+                },
                 onAddReply: (TwitterCommentReplyParams params) {},
                 commentId: comment.id,
                 postId: comment.post,

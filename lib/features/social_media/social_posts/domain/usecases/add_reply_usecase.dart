@@ -4,8 +4,7 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/social_posts_repo.dart';
 
-class ReplyOnCommentUseCase
-    extends UseCase<CommentEntity, ReplyOnCommentParams> {
+class ReplyOnCommentUseCase extends UseCase<CommentEntity, ReplyOnCommentParams> {
   final SocialPostsRepo _repo;
   ReplyOnCommentUseCase(this._repo);
   @override

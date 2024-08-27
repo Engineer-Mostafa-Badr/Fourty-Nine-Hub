@@ -8,8 +8,7 @@ class InstagramReelCard extends StatefulWidget {
   final PostEntity item;
   final bool? playVideo;
 
-  const InstagramReelCard(
-      {super.key, required this.item, this.playVideo = true});
+  const InstagramReelCard({super.key, required this.item, this.playVideo=false});
 
   @override
   State<InstagramReelCard> createState() => _InstagramReelCardState();

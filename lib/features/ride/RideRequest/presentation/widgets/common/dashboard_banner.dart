@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
@@ -23,7 +24,7 @@ class DashboardBanner extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(10)),
+              borderRadius: BorderRadius.circular(20.zR)),
           child: Row(
             children: [
               Expanded(
@@ -46,6 +47,7 @@ class DashboardBanner extends StatelessWidget {
               Icon(
                 Icons.arrow_forward_ios_outlined,
                 color: Theme.of(context).scaffoldBackgroundColor,
+                size: 35.zW,
               ),
             ],
           )),

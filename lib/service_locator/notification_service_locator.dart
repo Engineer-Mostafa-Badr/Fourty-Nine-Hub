@@ -8,7 +8,7 @@ class NotificationServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     //cubit
     serviceLocator.registerFactory(
-      () => NotificationsCubit(repostiory: serviceLocator()),
+      () => NotificationsCubit(serviceLocator()),
     );
     //datasource
     serviceLocator.registerLazySingleton(
