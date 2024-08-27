@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/common/widgets/stateful/maps/map_picker.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/address_search_params_entity.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../cubit/riderequest_cubit.dart';
@@ -17,7 +21,21 @@ class RideRequestView extends StatelessWidget {
     return SharedScaffold(
       mainCategoryId: 1,
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: MainCategoryBanner(
+            category: MainCategoryEntity.fake(),
+            canRegister:  true ,
+            onRegister: () {
+              if (context.read<UserCubit>().isLoggedIn) {
+                context.push(Routes.CREATERESTURANT);
+              } else {
+                context.push(Routes.REGISTER);
+              }
+            }),
+          ),
           Expanded(
               child: Stack(
             children: [
