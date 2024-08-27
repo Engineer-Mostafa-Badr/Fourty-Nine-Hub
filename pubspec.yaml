@@ -76,7 +76,7 @@ dependencies:
   win32: ^5.4.0
   zego_uikit_prebuilt_live_audio_room: ^3.7.5
   zego_uikit_signaling_plugin: ^2.8.2
-  zero_story_editor: ^0.0.4
+#  zero_story_editor: ^0.0.4
   audio_video_progress_bar: ^1.0.0
 #  audioplayers: ^6.0.0
 #  flutter_ffmpeg: ^0.4.2
