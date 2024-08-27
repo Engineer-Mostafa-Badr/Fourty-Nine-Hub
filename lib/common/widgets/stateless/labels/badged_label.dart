@@ -15,6 +15,7 @@ class BadgedLabel extends StatelessWidget {
   final bool isBordered;
   final bool isCentered;
   final bool close;
+
   final GestureTapCallback? onRemove;
 
   const BadgedLabel(

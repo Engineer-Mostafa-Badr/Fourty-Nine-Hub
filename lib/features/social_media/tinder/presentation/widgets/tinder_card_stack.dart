@@ -824,6 +824,7 @@ class TinderCardStack extends StatelessWidget {
     return Row(
       children: [
         BadgedLabel(
+          close:false,
           color: AppColors.WHATS_APP_COLOR,
           label: context
                   .read<TinderViewCubit>()
@@ -835,6 +836,7 @@ class TinderCardStack extends StatelessWidget {
         ),
         const SizedBox(width: 10),
         BadgedLabel(
+          close: false,
           color: AppColors.SECONDARY_COLOR,
           label: context
                       .read<TinderViewCubit>()
