@@ -17,7 +17,7 @@ abstract class  LocaleKeys {
   static const find = 'find';
   static const live = 'live';
   static const health = 'health';
-  static const shipping = 'shipping';
+  static const ship = 'ship';
   static const ride = 'ride';
   static const lang = 'lang';
   static const search = 'search';

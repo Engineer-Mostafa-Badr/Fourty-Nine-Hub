@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
 
 class MainCategoryBanner extends StatefulWidget {
   final MainCategoryEntity category;
@@ -38,6 +39,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: MediaQuery.sizeOf(context).height * 0.08,
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
@@ -53,41 +55,45 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
           ),
         ),
       ),
-      child: Row(
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          _buildRegisterButton(),
-          widget.canRegister ? const Spacer() : const SizedBox.shrink(),
+          PositionedDirectional(
+            end: 0,
+              child: _buildRegisterButton()),
           Label(
             text: widget.category.name,
-            style: Styles.headerText(color: Colors.white),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 35),
           ),
-          const Spacer(),
-          Column(
-            children: [
-              InkWell(
-                onTap: () async {
-                  final result = widget.onFavorite?.call();
-                  if (result != null && result != _isFavorite) {
-                    setState(() {
-                      _isFavorite = result;
-                    });
-                  }
-                },
-                child: Icon(
-                  _isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: AppColors.SECONDARY_COLOR,
+          PositionedDirectional(
+            start: 0,
+            child: Column(
+              children: [
+                InkWell(
+                  onTap: () async {
+                    final result = widget.onFavorite?.call();
+                    if (result != null && result != _isFavorite) {
+                      setState(() {
+                        _isFavorite = result;
+                      });
+                    }
+                  },
+                  child: Icon(
+                    _isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: AppColors.SECONDARY_COLOR,
+                  ),
                 ),
-              ),
-              const Sizer(height: 20),
-              Label(
-                text: '${widget.category.total.toShortScale} ${Labels.ads}',
-                style: Styles.mediumText(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              )
-            ],
+                Sizer(height: 10,),
+                Label(
+                  text: '${widget.category.total.toShortScale} ${Labels.ads}',
+                  style: Styles.mediumText(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                )
+              ],
+            ),
           ),
         ],
       ),
@@ -99,7 +105,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       return InkWell(
         onTap: () => widget.onRegister?.call(),
         child: Text(Labels.register,
-            style: Styles.mediumText(color: Colors.white)),
+            style: Styles.mediumText(color: Colors.white,fontSize: 14,fontWeight: FontWeight.bold)),
       );
     } else {
       return const SizedBox.shrink();

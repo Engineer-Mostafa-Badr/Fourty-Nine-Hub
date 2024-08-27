@@ -20,6 +20,7 @@ class HealthView extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           children: const [
             HealthBanner(),
+
             Sizer(),
             DoctorDashboardBanner(),
             Sizer(),

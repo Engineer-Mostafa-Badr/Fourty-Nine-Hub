@@ -31,7 +31,7 @@ class CodegenLoader extends AssetLoader{
   "find": "ايجاد",
   "live": "لابف",
   "health": "صحه",
-  "shipping": "تحميله",
+  "ship": "تحميله",
   "ride": "توصيله",
   "lang": "EN",
   "search": "بحث"
@@ -53,7 +53,7 @@ static const Map<String,dynamic> en = {
   "find": "Find",
   "live": "Live",
   "health": "Health",
-  "shipping": "Shipping",
+  "ship": "Ship",
   "ride": "Ride",
   "lang": "ع",
   "search": "Search"
