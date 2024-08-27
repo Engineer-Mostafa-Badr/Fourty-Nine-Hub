@@ -11,6 +11,7 @@ class UserProfileEntity {
   final int? followingCount;
   bool? isFollowed;
   bool? areFriends;
+  bool? isSenTRequest;
   bool? sentFriendRequest;
   bool? isDocument;
   bool? isBlock;
@@ -34,6 +35,7 @@ class UserProfileEntity {
     this.isFollowed = false,
     this.areFriends = false,
     this.isDocument = false,
+    this.isSenTRequest = false,
     this.sentFriendRequest = false,
     this.isBlock = false,
   });

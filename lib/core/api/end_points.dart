@@ -149,6 +149,7 @@ class EndPoints {
   static const activities = '/facebook/post/activities';
   static const feelings = '/facebook/post/feelings';
   static const getTwitterFeedPosts = '/twitter/feed';
+  static const editProfile = '/users/profile-data';
   static String userPosts(UserPostsParams params) {
     return '/facebook/post/user/${params.userId}?limit=${params.limit}&page=${params.page}&type=1&subCategory=66b77e77bb35968b535dc944';
   }

@@ -73,6 +73,8 @@ import 'package:fourtyninehub/features/social_media/club_house/presentation/widg
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_friends.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_places.dart';
+import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
+import 'package:fourtyninehub/features/social_media/edit_profile/presentation/pages/edit_profile_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
@@ -543,7 +545,6 @@ class AppPages {
                     );
                   },
                 ),
-
                 GoRoute(
                     path: Paths.TWITTER,
                     name: Routes.TWITTER,
@@ -564,6 +565,15 @@ class AppPages {
                           userId: id ?? '',
                         ));
                   },
+                  routes: [
+                    GoRoute(
+                      path: Paths.EDITPROFILE,
+                      name: Routes.EDITPROFILE,
+                      builder: (context, state) => BlocProvider<EditProfileCubit>(
+                          create: (_) => serviceLocator(),
+                          child: const EditProfileView()),
+                    ),
+                  ]
                 ),
                 GoRoute(
                     path: Paths.REELS,
