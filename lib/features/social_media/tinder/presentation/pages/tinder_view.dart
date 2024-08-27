@@ -258,6 +258,7 @@ class _TinderScreenState extends State<TinderScreen> {
 
   Widget _buildLoggedInContent(BuildContext context, TinderViewState state) {
     return Container(
+
       color: Theme.of(context).scaffoldBackgroundColor,
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
