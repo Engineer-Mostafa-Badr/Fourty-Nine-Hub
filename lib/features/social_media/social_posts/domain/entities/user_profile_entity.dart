@@ -3,6 +3,11 @@ class UserProfileEntity {
   final String firstName;
   final String lastName;
   final String email;
+  final String bio;
+  final String city;
+  final String country;
+  final String job;
+  final String phone;
   final int? totalView;
   final String? profilePicture;
   final String? profileCover;
@@ -38,5 +43,11 @@ class UserProfileEntity {
     this.isSenTRequest = false,
     this.sentFriendRequest = false,
     this.isBlock = false,
+    required this.bio,
+    required this.city,
+    required this.country,
+    required this.job,
+    required this.phone,
+
   });
 }
