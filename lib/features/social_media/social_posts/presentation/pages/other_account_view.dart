@@ -44,6 +44,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   child: CupertinoActivityIndicator(),
                 )
               : NestedAppbar(
+            scrollController: ScrollController(),
                   appBars: [
                     SliverAppBar(
                       floating: true,
