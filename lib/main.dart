@@ -41,10 +41,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => serviceLocator<UserCubit>(),
         ),
-        // BlocProvider(
-        //   create: (context) =>
-        //       CompetitionCubit(serviceLocator.get<CompetitionRepoImpl>())..fetchCompetition(context),
-        // ),
+        BlocProvider(
+          create: (context) =>
+              CompetitionCubit(serviceLocator.get<CompetitionRepoImpl>())
+                ..fetchCompetition(context)
+                ..fetchWinners(context),
+        ),
         // BlocProvider(
         //   create: (context) => serviceLocator<RiderequestCubit>(),
         // ),

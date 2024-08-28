@@ -13,33 +13,39 @@ class CompetitionCubit extends Cubit<CompetitionState> {
  final CompetitionRepo competitionRepo;
   static CompetitionCubit get(context)=>BlocProvider.of(context);
 
-  Timer? _pollingTimer;
+ // Timer? _pollingTimer;
 
   void fetchCompetition(context)async{
     emit(CompetitionLoadingState());
-    _startPollingCompetition(context);
+    var result =await competitionRepo.fetchCompetition();
+
+    result.fold((failure) {
+      emit(CompetitionErrorState(errMessage: getFailureMessage(failure, context)));
+      print(getFailureMessage(failure, context));
+    }, (competition) {
+      emit(CompetitionSuccessState(competitionModel: competition));
+    });
   //  _startPollingWinners(context);
   }
-  // void fetchWinners(context)async{
-  //   emit(WinnersLoadingState());
-  //   _startPollingWinners(context);
-  // }
+  void fetchWinners(context)async{
+    emit(WinnersLoadingState());
+    var result =await competitionRepo.fetchWinners();
 
-  void _startPollingCompetition(context) {
-    _pollingTimer?.cancel();
-
-    // Start polling every 10 seconds (adjust the interval as needed)
-    _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
-      var result =await competitionRepo.fetchCompetition();
-
-      result.fold((failure) {
-        emit(CompetitionErrorState(errMessage: getFailureMessage(failure, context)));
-        print(getFailureMessage(failure, context));
-      }, (competition) {
-        emit(CompetitionSuccessState(competitionModel: competition));
-      });
+    result.fold((failure) {
+      emit(WinnersErrorState(errMessage: getFailureMessage(failure, context)));
+    }, (winner) {
+      emit(WinnersSuccessState(winnersModel: winner));
     });
   }
+
+  // void _startPollingCompetition(context) {
+  //   _pollingTimer?.cancel();
+  //
+  //   // Start polling every 10 seconds (adjust the interval as needed)
+  //   _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
+  //
+  //   });
+  // }
 
   // void _startPollingWinners(context) {
   //   _pollingTimer?.cancel();
@@ -57,14 +63,14 @@ class CompetitionCubit extends Cubit<CompetitionState> {
   // }
 
 
-  void _stopPolling() {
-    _pollingTimer?.cancel();
-    _pollingTimer = null;
-  }
-
-  @override
-  Future<void> close() {
-    _stopPolling();
-    return super.close();
-  }
+  // void _stopPolling() {
+  //   _pollingTimer?.cancel();
+  //   _pollingTimer = null;
+  // }
+  //
+  // @override
+  // Future<void> close() {
+  //   _stopPolling();
+  //   return super.close();
+  // }
 }

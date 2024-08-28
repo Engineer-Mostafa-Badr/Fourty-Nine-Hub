@@ -10,8 +10,8 @@ class BuildItemListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     int count = model.amount!; // Replace with dynamic value if needed
-     int max = model.competitionId!.withdrawLimit!;  // Replace with dynamic value if needed
+     dynamic count = model.amount!; // Replace with dynamic value if needed
+     dynamic max = model.competitionId!.withdrawLimit!;  // Replace with dynamic value if needed
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
