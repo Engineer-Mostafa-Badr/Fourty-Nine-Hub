@@ -33,57 +33,54 @@ class SavedReelsView extends StatelessWidget {
             }
           }, builder: (context, state) {
         final controller = context.read<InstagramCubit>();
-        return RefreshIndicator(
-          onRefresh: () async => controller.refreshSavedReels(),
-          child: PagedListView<int, PostEntity>(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
-            pagingController: controller.savedReelsPagingController,
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
-            builderDelegate: PagedChildBuilderDelegate<PostEntity>(
-                noItemsFoundIndicatorBuilder: (context) {
-                  print(controller.savedReelsPagingController.itemList?.length);
-                  return const Padding(
-                      padding: EdgeInsets.only(top: 200),
-                      child: Center(
-                        child: Text(
-                          "No Reels",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                          ),
+        return PagedSliverList<int, PostEntity>(
+          // padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+          pagingController: controller.savedReelsPagingController,
+          // shrinkWrap: true,
+          // physics: const BouncingScrollPhysics(
+          //     parent: AlwaysScrollableScrollPhysics()),
+          builderDelegate: PagedChildBuilderDelegate<PostEntity>(
+              noItemsFoundIndicatorBuilder: (context) {
+                print(controller.savedReelsPagingController.itemList?.length);
+                return const Padding(
+                    padding: EdgeInsets.only(top: 200),
+                    child: Center(
+                      child: Text(
+                        "No Reels",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
                         ),
-                      ));
-                },
-                itemBuilder: (context, item, index) {
-                  final post =
-                  controller.savedReelsPagingController.itemList![index];
-                  print(post.videoMedia);
-                  return state.status == StateStatus.success
-                      ? Container(
-                      color: Colors.black,
-                      width: double.infinity,
-                      height: 400,
-                      child: InstagramReelCard(
-                        item: post,
-                        playVideo: false,
-                      ))
-                      : Center(
-                    child: Label(
-                        text: getFailureMessage(
-                          state.failure ?? const UnknownFailure(),
-                          context,
-                        )),
-                  );
-                },
-                noMoreItemsIndicatorBuilder: (context) => Container(),
-                firstPageProgressIndicatorBuilder: (context) => Container(
-                    margin: const EdgeInsets.only(top: 150),
-                    child: const CupertinoActivityIndicator()),
-                newPageProgressIndicatorBuilder: (context) =>
-                const CupertinoActivityIndicator()),
-          ),
+                      ),
+                    ));
+              },
+              itemBuilder: (context, item, index) {
+                final post =
+                controller.savedReelsPagingController.itemList![index];
+                print(post.videoMedia);
+                return state.status == StateStatus.success
+                    ? Container(
+                    color: Colors.black,
+                    width: double.infinity,
+                    height: 400,
+                    child: InstagramReelCard(
+                      item: post,
+                      playVideo: false,
+                    ))
+                    : Center(
+                  child: Label(
+                      text: getFailureMessage(
+                        state.failure ?? const UnknownFailure(),
+                        context,
+                      )),
+                );
+              },
+              noMoreItemsIndicatorBuilder: (context) => Container(),
+              firstPageProgressIndicatorBuilder: (context) => Container(
+                  margin: const EdgeInsets.only(top: 150),
+                  child: const CupertinoActivityIndicator()),
+              newPageProgressIndicatorBuilder: (context) =>
+              const CupertinoActivityIndicator()),
         );
       }),
     );

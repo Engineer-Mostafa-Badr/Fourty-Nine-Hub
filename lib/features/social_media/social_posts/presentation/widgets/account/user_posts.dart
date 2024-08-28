@@ -43,36 +43,36 @@ class _UserPostsState extends State<UserPosts> {
         }
       }, builder: (context, state) {
         final controller = context.read<SocialPostsCubit>();
-        return RefreshIndicator(
-          onRefresh: () async => controller.refreshUserPosts(),
-          child: PagedListView<int, PostEntity>(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
-            pagingController: controller.userPostsPagingController,
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
-            builderDelegate: PagedChildBuilderDelegate<PostEntity>(
-                noItemsFoundIndicatorBuilder: (context) {
-                  print(controller.userPostsPagingController.itemList?.length);
-                  return const Padding(
-                      padding: EdgeInsets.only(top: 200),
-                      child: Center(
-                        child: Text(
-                          "No Posts",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                          ),
+        return PagedSliverList<int, PostEntity>(
+          // padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+          pagingController: controller.userPostsPagingController,
+          // shrinkWrap: true,
+          // physics: const BouncingScrollPhysics(
+          //     parent: AlwaysScrollableScrollPhysics()),
+          builderDelegate: PagedChildBuilderDelegate<PostEntity>(
+              noItemsFoundIndicatorBuilder: (context) {
+                print(controller.userPostsPagingController.itemList?.length);
+                return const Padding(
+                    padding: EdgeInsets.only(top: 200),
+                    child: Center(
+                      child: Text(
+                        "No Posts",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
                         ),
-                      ));
-                },
-                itemBuilder: (context, item, index) {
-                  final user = context.read<UserCubit>().state.data;
-                  final post =
-                      controller.userPostsPagingController.itemList![index];
-                  showReacts = false;
-                  return state.status == StateStatus.success
-                      ? UserPostCard(
+                      ),
+                    ));
+              },
+              itemBuilder: (context, item, index) {
+                final user = context.read<UserCubit>().state.data;
+                final post =
+                    controller.userPostsPagingController.itemList![index];
+                showReacts = false;
+                return state.status == StateStatus.success
+                    ? Padding(
+                      padding: const EdgeInsets.only(top:15.0),
+                      child: UserPostCard(
                           // showReacts: showReacts,
                           post: post,
                           onReact: (params) async {},
@@ -189,22 +189,22 @@ class _UserPostsState extends State<UserPosts> {
                           isMyPost: user?.id == state.postDetails?.user.id,
                           index: 0,
                           onSelectReact: (int i) {},
-                        )
-                      : Center(
-                          child: Label(
-                              text: getFailureMessage(
-                            state.failure ?? const UnknownFailure(),
-                            context,
-                          )),
-                        );
-                },
-                noMoreItemsIndicatorBuilder: (context) => Container(),
-                firstPageProgressIndicatorBuilder: (context) => Container(
-                    margin: const EdgeInsets.only(top: 150),
-                    child: const CupertinoActivityIndicator()),
-                newPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator()),
-          ),
+                        ),
+                    )
+                    : Center(
+                        child: Label(
+                            text: getFailureMessage(
+                          state.failure ?? const UnknownFailure(),
+                          context,
+                        )),
+                      );
+              },
+              noMoreItemsIndicatorBuilder: (context) => Container(),
+              firstPageProgressIndicatorBuilder: (context) => Container(
+                  margin: const EdgeInsets.only(top: 150),
+                  child: const CupertinoActivityIndicator()),
+              newPageProgressIndicatorBuilder: (context) =>
+                  const CupertinoActivityIndicator()),
         );
       }),
     );

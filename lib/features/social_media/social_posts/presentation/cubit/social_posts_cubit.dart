@@ -310,6 +310,9 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
             state.copyWith(profileData: data, status: StateStatus.success)));
   }
 
+  void changeUserPage(int page){
+    emit(state.copyWith(profilePage: page,status: StateStatus.success));
+  }
 // react on a post
   Future<bool> onReact(
       {required PostReactParams params, required String from}) async {
