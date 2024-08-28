@@ -66,6 +66,7 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/Chat_view.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
@@ -269,7 +270,8 @@ class AppPages {
                 ),
                 BlocProvider(
                   create: (_) => serviceLocator<GetWalletCubit>(),
-                ),BlocProvider(
+                ),
+                BlocProvider(
                   create: (_) => serviceLocator<UserCubit>(),
                 ),
                 BlocProvider(
@@ -551,8 +553,7 @@ class AppPages {
                     builder: (context, state) => BlocProvider<TwitterCubit>(
                         create: (_) => serviceLocator(),
                         child: const TwitterView()),
-                    routes: [
-                    ]),
+                    routes: []),
                 GoRoute(
                   path: Paths.OTHERSACCOUNT,
                   name: Routes.OTHERSACCOUNT,
@@ -672,15 +673,27 @@ class AppPages {
 
           // Chat Room
           GoRoute(
-            path: Paths.CHATROOM,
-            name: Routes.CHATROOM,
-            builder: (context, state) => BlocProvider<ChatRoomCubit>(
-              create: (_) => serviceLocator(),
-              child: ChatRoom(
-                chatId: state.extra as String,
-              ),
-            ),
-          ),
+              path: Paths.CHATROOM,
+              name: Routes.CHATROOM,
+              builder: (context, state) => BlocProvider<ChatRoomCubit>(
+                    create: (_) => serviceLocator(),
+                    child: ChatRoom(
+                      chatId: state.extra as String,
+                    ),
+                  ),
+              routes: [
+                GoRoute(
+                  path: Paths.CHATROOMCAMERAPICKER,
+                  name: Routes.CHATROOMCAMERAPICKER,
+                  builder: (context, state) => const CameraPickerView(),
+                ),
+
+                GoRoute(
+                  path: Paths.MEDIASLIDER,
+                  name: Routes.MEDIASLIDER,
+                  builder: (context, state) =>  MediaSliderView(params: (state.extra) as MediaSliderViewParams),
+                ),
+              ]),
 
           // _________________ services ____________
 
@@ -937,7 +950,8 @@ class AppPages {
               path: Paths.ZOOM,
               name: Routes.ZOOM,
               builder: (context, state) => BlocProvider<MeetingCubit>(
-                    create: (context) => serviceLocator<MeetingCubit>()..getScheduledMeetings(),
+                    create: (context) =>
+                        serviceLocator<MeetingCubit>()..getScheduledMeetings(),
                     child: const MeetingView(),
                   ),
               routes: [

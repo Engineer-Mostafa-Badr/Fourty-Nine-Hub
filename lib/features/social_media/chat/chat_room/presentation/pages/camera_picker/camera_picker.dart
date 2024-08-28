@@ -14,20 +14,23 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
-import 'package:zero_story_editor/flutter_story_editor.dart';
-import 'package:zero_story_editor/src/controller/controller.dart';
-import 'package:zero_story_editor/generated/assets.dart';
-part 'images_and_videos_slider.dart';
-class CameraPicker extends StatelessWidget {
+
+import 'video_editor/flutter_story_editor.dart';
+import 'video_editor/src/controller/controller.dart';
+
+part 'media_slider.dart';
+
+class CameraPickerView extends StatelessWidget {
   final void Function(List<XFile> media)? onDone;
 
-  const CameraPicker({super.key, this.onDone});
+  const CameraPickerView({super.key, this.onDone});
 
   @override
   Widget build(BuildContext context) {
@@ -165,13 +168,29 @@ class _CamViewState extends State<_CamView> {
                           final media =
                               context.read<CameraPickerCubit>().state.mediaList;
                           if (media != null && media.isNotEmpty) {
-                            showDialog(
+                            // showDialog(
+                            //     context: context,
+                            //     builder: (_) =>
+                            //         MediaSliderView(media: media)).then(
+                            //     (value) => context
+                            //         .read<CameraPickerCubit>()
+                            // //         .refreshMediaList());
+                            // context
+                            //     .push(Routes.MEDIASLIDER,
+                            //         extra: MediaSliderViewParams(media: media))
+                            //     .then((value) => context
+                            //         .read<CameraPickerCubit>()
+                            //         .refreshMediaList());
+
+                            showBottomSheet(
                                 context: context,
-                                builder: (_) =>
-                                    ImagesAndVideosSlider(media: media)).then(
-                                (value) => context
-                                    .read<CameraPickerCubit>()
-                                    .refreshMediaList());
+                                builder: (_) => FlutterStoryEditor(
+                                    controller: FlutterStoryEditorController(),
+                                    captionController: TextEditingController(),
+                                    selectedFiles: media.map((e) => File(e.path)).toList(),
+                                    onSaveClickListener: (files) {
+                                      // Here you go with your edited files.
+                                    }));
                           } else {
                             showErrorMessage(
                                 context, LocaleKeys.pickPhotoOrVideo);
@@ -336,7 +355,7 @@ class _ImagesListState extends State<_ImagesList> {
                       separatorBuilder: (context, index) => const Sizer(),
                       itemBuilder: (context, index) {
                         final file = File(state.mediaList![index].path);
-                        if (file.isPhoto) {
+                        if (file.isImage) {
                           return _mediaContainer(
                               image: FileImage(file),
                               width: constraints.maxHeight,
@@ -344,7 +363,7 @@ class _ImagesListState extends State<_ImagesList> {
                               media: state.mediaList!);
                         } else {
                           return FutureBuilder<Uint8List?>(
-                            future: file.generateThumbnail(),
+                            future: generateThumbnail(path: file.path),
                             builder:
                                 (context, AsyncSnapshot<Uint8List?> snapshot) {
                               if (snapshot.hasData &&
@@ -433,11 +452,18 @@ class _ImagesListState extends State<_ImagesList> {
     return InkWell(
       onTap: () {
         if (mounted) {
-          showDialog(
-              context: context,
-              builder: (_) => ImagesAndVideosSlider(
-                  media: media, initialIndex: index)).then(
-              (value) => context.read<CameraPickerCubit>().refreshMediaList());
+          // showDialog(
+          //     context: context,
+          //     builder: (_) =>
+          //         MediaSliderView(media: media, initialIndex: index)).then(
+          //     (value) => context.read<CameraPickerCubit>().refreshMediaList());
+          // context
+          //     .push(Routes.MEDIASLIDER,
+          //         extra:
+          //             MediaSliderViewParams(media: media, initialIndex: index))
+          //     .then((value) =>
+          //         context.read<CameraPickerCubit>().refreshMediaList());
+
         }
       },
       child: Container(
