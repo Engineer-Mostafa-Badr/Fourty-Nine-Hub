@@ -149,7 +149,11 @@ class CodegenLoader extends AssetLoader{
   "clearNotification": "هل أنت متأكد من أنك تريد مسح جميع الإشعارات؟",
   "clearNoti": "هل أنت متأكد أنك تريد مسح هذا الإشعار؟",
   "ok": "نعم",
-  "cancel": "الغاء"
+  "cancel": "الغاء",
+  "winners": "الفائزون",
+  "competition": "المسابقات",
+  "count": "العدد: ",
+  "max": "الحد الأقصى: "
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -287,7 +291,11 @@ static const Map<String,dynamic> en = {
   "clearNotification": "Are you sure you want to clear all notifications?",
   "clearNoti": "Are you sure you want to clear notifications?",
   "ok": "Ok",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "winners": "Winners",
+  "competition": "Competitions",
+  "count": "Count: ",
+  "max": "Max: "
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

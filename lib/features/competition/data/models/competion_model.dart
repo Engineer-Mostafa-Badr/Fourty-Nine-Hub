@@ -30,11 +30,11 @@ class CompetitionModel {
 
 class CompetitionData {
   final CompetitionId? competitionId;
-  final int? amount;
+  final int? countOfRequest;
 
   CompetitionData({
     this.competitionId,
-    this.amount,
+    this.countOfRequest,
   });
 
   factory CompetitionData.fromJson(Map<String, dynamic> json) {
@@ -42,42 +42,54 @@ class CompetitionData {
       competitionId: json['competition_id'] == null
           ? null
           : CompetitionId.fromJson(json['competition_id'] as Map<String, dynamic>),
-      amount: json['amount'] as int?,
+      countOfRequest: json['countOfRequest'] as int?,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'competition_id': competitionId?.toJson(),
-      'amount': amount,
+      'countOfRequest': countOfRequest,
     };
   }
 }
 
 class CompetitionId {
   final String? id;
-  final String? name;
-  final int? withdrawLimit;
+  final String? nameAr;
+  final String? nameEn;
+  final String? descriptionEn;
+  final String? descriptionAr;
+  final int? maxRequests;
 
   CompetitionId({
     this.id,
-    this.name,
-    this.withdrawLimit,
+    this.nameAr,
+    this.nameEn,
+    this.descriptionAr,
+    this.descriptionEn,
+    this.maxRequests,
   });
 
   factory CompetitionId.fromJson(Map<String, dynamic> json) {
     return CompetitionId(
       id: json['_id'] as String?,
-      name: json['name'] as String?,
-      withdrawLimit: json['withdrawLimit'] as int?,
+      nameAr: json['nameAr'] as String?,
+      nameEn: json['nameEn'] as String?,
+      descriptionAr: json['descriptionAr'] as String?,
+      descriptionEn: json['descriptionEn'] as String?,
+      maxRequests: json['maxRequests'] as int?,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       '_id': id,
-      'name': name,
-      'withdrawLimit': withdrawLimit,
+      'nameAr': nameAr,
+      'nameEn': nameEn,
+      'descriptionAr': descriptionAr,
+      'descriptionEn': descriptionEn,
+      'maxRequests': maxRequests,
     };
   }
 }

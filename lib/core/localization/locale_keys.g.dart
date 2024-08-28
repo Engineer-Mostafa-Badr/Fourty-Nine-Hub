@@ -135,5 +135,9 @@ abstract class  LocaleKeys {
   static String clearNoti = 'clearNoti'.tr();
   static String ok = 'ok'.tr();
   static String cancel = 'cancel'.tr();
+  static String winners = 'winners';
+  static String competition = 'competition';
+  static String count = 'count';
+  static String max = 'max';
 
 }

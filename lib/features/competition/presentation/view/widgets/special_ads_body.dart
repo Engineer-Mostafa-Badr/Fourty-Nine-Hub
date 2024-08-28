@@ -1,13 +1,10 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/utils/api_service.dart';
-import 'package:fourtyninehub/features/competition/presentation/cubit/competition_cubit.dart';
-import 'package:fourtyninehub/features/competition/presentation/cubit/notifications_state.dart';
 import 'package:fourtyninehub/features/competition/presentation/view/widgets/build_item_list_view.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-import '../../../data/repository/competition_repo_impl.dart';
+import '../../cubit/competition_cubit/competition_cubit.dart';
+import '../../cubit/competition_cubit/competition_state.dart';
 
 class SpecialAdsBody extends StatelessWidget {
   const SpecialAdsBody({super.key});
@@ -29,8 +26,11 @@ class SpecialAdsBody extends StatelessWidget {
           ),
         );
         }else if(state is CompetitionErrorState){
-          return Text(state.errMessage,
-          style: Styles.mediumText(),
+          return Center(
+            child: Text(state.errMessage,
+            textAlign: TextAlign.center,
+            style: Styles.mediumText(),
+            ),
           );
         }return const Center(child: CircularProgressIndicator());
       },

@@ -134,5 +134,9 @@
   "clearNotification": "Are you sure you want to clear all notifications?",
   "clearNoti": "Are you sure you want to clear notifications?",
   "ok": "Ok",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "winners": "Winners",
+  "competition": "Competitions",
+  "count": "Count: ",
+  "max": "Max: "
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/competition/presentation/pages/winners.dart';
 import 'package:fourtyninehub/features/competition/presentation/view/widgets/special_ads_body.dart';
 
@@ -13,18 +15,18 @@ class SpecialAdsView extends StatelessWidget {
     return Scaffold(
       appBar: BackAppBar(
         centerTitle: false,
-        label: Labels.competitions,
+        label: LocaleKeys.competition.localize,
         actions: [
           TextButton(
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Winners()),
+                MaterialPageRoute(builder: (context) => const Winners()),
               );
             },
-            child: const Text(
-              'Winners 🏆',
-              style: TextStyle(fontSize: 17, color: Colors.red),
+            child:  Text(
+              '${LocaleKeys.winners.localize} 🏆',
+              style: const TextStyle(fontSize: 17, color: Colors.red),
             ),
           ),
         ],
