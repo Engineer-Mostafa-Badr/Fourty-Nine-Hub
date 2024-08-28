@@ -17,10 +17,15 @@ class CompetitionCubit extends Cubit<CompetitionState> {
 
   void fetchCompetition(context)async{
     emit(CompetitionLoadingState());
-   _startPolling(context);
+    _startPollingCompetition(context);
+  //  _startPollingWinners(context);
   }
+  // void fetchWinners(context)async{
+  //   emit(WinnersLoadingState());
+  //   _startPollingWinners(context);
+  // }
 
-  void _startPolling(context) {
+  void _startPollingCompetition(context) {
     _pollingTimer?.cancel();
 
     // Start polling every 10 seconds (adjust the interval as needed)
@@ -29,11 +34,27 @@ class CompetitionCubit extends Cubit<CompetitionState> {
 
       result.fold((failure) {
         emit(CompetitionErrorState(errMessage: getFailureMessage(failure, context)));
+        print(getFailureMessage(failure, context));
       }, (competition) {
         emit(CompetitionSuccessState(competitionModel: competition));
       });
     });
   }
+
+  // void _startPollingWinners(context) {
+  //   _pollingTimer?.cancel();
+  //
+  //   // Start polling every 10 seconds (adjust the interval as needed)
+  //   _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
+  //     var result =await competitionRepo.fetchWinners();
+  //
+  //     result.fold((failure) {
+  //       emit(WinnersErrorState(errMessage: getFailureMessage(failure, context)));
+  //     }, (winner) {
+  //       emit(WinnersSuccessState(winnersModel: winner));
+  //     });
+  //   });
+  // }
 
 
   void _stopPolling() {

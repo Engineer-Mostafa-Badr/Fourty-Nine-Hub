@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/competition/data/repository/competition_r
 
 import '../../../../core/error/failure.dart';
 import '../../../../core/utils/shared_pref.dart';
+import '../models/winners_model.dart';
 
 class CompetitionRepoImpl implements CompetitionRepo{
  final ApiService apiService;
@@ -36,5 +37,22 @@ class CompetitionRepoImpl implements CompetitionRepo{
      errors: [e.toString()], // Customize this based on the exception details
    );
  }
+
+  @override
+  Future<Either<Failure, WinnersModel>> fetchWinners() async{
+    try{
+      String? accessToken = await TokenManager.getAccessToken();
+      String? refreshToken = await TokenManager.getRefreshToken();
+      var data=await apiService.get(url: 'api/v1/subscriber/winners',token: accessToken);
+
+      var winner=WinnersModel.fromJson(data);
+
+      return right(winner);
+    }on Exception catch (e) {
+      // Handle general exceptions
+      final failure = _mapExceptionToFailure(e);
+      return left(failure);
+    }
+  }
 
 }

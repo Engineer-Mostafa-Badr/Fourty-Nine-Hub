@@ -100,19 +100,24 @@ class _SocialHomeViewState extends State<SocialHomeView>
                       flexibleSpace: _buildTabBar(),
                     )
                   ], body:  FacebookBody(scrollController: scrollController,))
-                : Center(
-                    child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                          onTap: () => context.push(Routes.LOGIN),
-                          child:
-                              Label(text: 'Login', style: Styles.headerText())),
-                      Label(
-                          text: ', To continue in using chat services',
-                          style: Styles.headerText()),
-                    ],
-                  ));
+                : ListView(
+              controller: scrollController,
+                  children: [
+                    Center(
+                        child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                              onTap: () => context.push(Routes.LOGIN),
+                              child:
+                                  Label(text: 'Login', style: Styles.headerText())),
+                          Label(
+                              text: ', To continue in using chat services',
+                              style: Styles.headerText()),
+                        ],
+                      )),
+                  ],
+                );
           })),
     );
   }

@@ -86,24 +86,29 @@ class _InstagramViewState extends State<InstagramView> {
                 ),
               ],
             )
-                : Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () => context.push(Routes.LOGIN),
-                    child: Label(
-                      text: 'Login',
-                      style: Styles.headerText(color: Colors.blue),
-                    ),
-                  ),
-                  Label(
-                    text: ', To continue using chat services',
-                    style: Styles.headerText(),
-                  ),
-                ],
-              ),
-            );
+                : ListView(
+              controller: scrollController,
+                  children: [
+                    Center(
+                                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () => context.push(Routes.LOGIN),
+                        child: Label(
+                          text: 'Login',
+                          style: Styles.headerText(color: Colors.blue),
+                        ),
+                      ),
+                      Label(
+                        text: ', To continue using chat services',
+                        style: Styles.headerText(),
+                      ),
+                    ],
+                                  ),
+                                ),
+                  ],
+                );
           },
         ),
       ),
