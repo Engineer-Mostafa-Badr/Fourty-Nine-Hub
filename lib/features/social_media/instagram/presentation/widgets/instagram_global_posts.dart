@@ -27,7 +27,7 @@ class InstagramGlobalPosts extends StatefulWidget {
   const InstagramGlobalPosts({
     super.key, required this.scrollController,
   });
-  final scrollController;
+  final ScrollController scrollController;
   @override
   State<InstagramGlobalPosts> createState() => _InstagramGlobalPostsState();
 }

@@ -182,6 +182,10 @@ class EndPoints {
     return '/reels/users/${params.userId}?limit=${params.limit}&page=${params.page}';
   }
 
+  static String getSavedReels(TwitterFeedParams params) {
+    return '/reels/saved?limit=${params.limit}&page=${params.page}';
+  }
+
   static String getAdvertisement(TwitterFeedParams params) {
     return '/advertisementCompany?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
   }
