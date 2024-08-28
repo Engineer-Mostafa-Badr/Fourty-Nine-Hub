@@ -23,6 +23,7 @@ class RestaurantHeader extends StatelessWidget {
           Column(
             children: [
               ImagesProfileForRestaurant(
+                autoPlay: true,
                 restaurantMedia: restaurant.restaurantMedia,
                 heightCarousel: MediaQuery.of(context).size.width * 0.5,
                 widthForImages: MediaQuery.of(context).size.width,

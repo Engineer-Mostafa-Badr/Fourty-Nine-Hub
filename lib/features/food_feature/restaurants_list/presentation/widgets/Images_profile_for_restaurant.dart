@@ -9,10 +9,12 @@ class ImagesProfileForRestaurant extends StatefulWidget {
     this.restaurantMedia,
     this.heightCarousel,
     this.widthForImages,
+    this.autoPlay,
   });
   final List<RestaurantMediaModel>? restaurantMedia;
   final double? heightCarousel;
   final double? widthForImages;
+  final bool? autoPlay;
   @override
   State<ImagesProfileForRestaurant> createState() =>
       _ImagesProfileForRestaurantState();
@@ -27,6 +29,7 @@ class _ImagesProfileForRestaurantState
       alignment: Alignment.center,
       children: [
         CarouselSliderWidget(
+          autoPlay: widget.autoPlay ?? false,
           onPageChanged: (value) {
             setState(() {
               currentIndex = value;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/widgets/build_food_list.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -42,8 +43,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
             if (state.restaurant != null)
               RestaurantHeader(restaurant: state.restaurant!),
             const Divider(),
-            // _buildFilter(),
-            _buildFoodList(context: context),
+            const BuildFoodList(),
           ],
         );
       }),
@@ -66,61 +66,6 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                   context.push(Routes.FOODCART);
                 }
               }));
-    });
-  }
-
-  Widget _buildFoodList({required BuildContext context}) {
-    final controller = context.read<RestaurantDetailsCubit>();
-    return BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
-        builder: (context, state) {
-      return state.meals?.isNotEmpty ?? false
-          ? Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: state.meals?.length ?? 0,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  RestaurantMenu? meal = state.meals?[index];
-                  return ListTile(
-                    onTap: () {
-                      // controller.selectMeal(meal: meal!, index: index);
-                    },
-                    dense: true,
-                    visualDensity: VisualDensity.comfortable,
-                    title: Text(
-                      meal?.foodName ?? "",
-                      style: Styles.headerText(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.PRIMARY_COLOR),
-                    ),
-                    subtitle: Text(
-                      '${meal?.price} EGP',
-                      style: Styles.headerText(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.ACCENT_COLOR,
-                      ),
-                    ),
-                    leading: SquareImage(
-                      url: meal?.picture?.mediaKey ?? "",
-                      height: 50,
-                      width: 50,
-                    ),
-                    trailing: Checkbox(
-                      value: state.selectedMeals?.contains(meal) ?? false,
-                      onChanged: (value) {
-                        // controller.selectMeal(meal: meal!, index: index);
-                      },
-                      activeColor: AppColors.SECONDARY_COLOR,
-                      checkColor: Colors.white,
-                      visualDensity: VisualDensity.comfortable,
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                  );
-                },
-              ),
-            )
-          : const SizedBox();
     });
   }
 
