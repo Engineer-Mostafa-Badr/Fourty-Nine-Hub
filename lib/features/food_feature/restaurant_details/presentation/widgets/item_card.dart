@@ -63,6 +63,11 @@ class _ItemCardState extends State<ItemCard> {
             IconButton(
               icon: const Icon(Icons.remove),
               onPressed: () async {
+                await controller.addToCart(
+                    context: context,
+                    restaurantId: widget.meal?.restaurantId ?? "",
+                    foodId: widget.meal?.id ?? "",
+                    quantity: qty.toString());
                 if (qty > 1) {
                   setState(() {
                     qty--;
