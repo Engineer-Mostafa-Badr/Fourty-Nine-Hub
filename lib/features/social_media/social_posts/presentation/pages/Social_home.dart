@@ -18,7 +18,6 @@ import '../widgets/posts/create_post_banner.dart';
 
 class SocialHomeView extends StatefulWidget {
   final String userId;
-
   const SocialHomeView({super.key, required this.userId});
 
   @override

@@ -7,7 +7,6 @@ import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
-import '../../domain/entities/restaurant_entity.dart';
 
 class RestaurantCard extends StatelessWidget {
   final Restaurant? item;

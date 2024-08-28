@@ -127,8 +127,8 @@ class TinderUserPicture {
 
   factory TinderUserPicture.fromJson(Map<String, dynamic> json) {
     return TinderUserPicture(
-      id: json['_id']??'',
-      mediaKey: json['mediaKey']??'',
+      id: json['_id'] ?? '',
+      mediaKey: json['mediaKey'] ?? '',
     );
   }
 

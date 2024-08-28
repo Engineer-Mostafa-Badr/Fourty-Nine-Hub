@@ -716,8 +716,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       } else {
         _currentPage = page;
         final List<UserData> updatedUserData = isLoadMore
-            ? (List.from(state.userData)
-          ..addAll(userData))
+            ? (List.from(state.userData)..addAll(userData))
             : userData;
         log(gender +
             "/***************************************************************************************************************************************************************");
@@ -735,16 +734,15 @@ class TinderViewCubit extends Cubit<TinderViewState> {
   }
 
   Future<void> loadMoreUserData(String gender) async {
-    log(
-        "*************************************************************************************************************************************************************** "
-            "from loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData ");
+    log("*************************************************************************************************************************************************************** "
+        "from loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData  loadMoreUserData ");
     await fetchUserData(gender: state.gender, isLoadMore: true);
   }
 
   Future<void> fetchMainCategoryById(String id) async {
     emit(state.copyWith(mainCategoryResponseState: DataState.initial));
     final mainCategoryResponse =
-    await tinderRepository.fetchMainCategoryById(id);
+        await tinderRepository.fetchMainCategoryById(id);
     if (mainCategoryResponse != null) {
       emit(state.copyWith(
           mainCategoryResponseState: DataState.success,
@@ -760,7 +758,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
   }) async {
     emit(state.copyWith(normalChatResponseState: DataState.initial));
     final normalChatModel =
-    await tinderRepository.startNormalChat(receiverId, subCategoryId);
+        await tinderRepository.startNormalChat(receiverId, subCategoryId);
     if (normalChatModel != null) {
       emit(state.copyWith(
           normalChatResponse: normalChatModel,
@@ -777,7 +775,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
   }) async {
     emit(state.copyWith(anonymousChatResponseState: DataState.initial));
     final anonymousChatModel =
-    await tinderRepository.startAnonymousChat(receiverId);
+        await tinderRepository.startAnonymousChat(receiverId);
     if (anonymousChatModel != null) {
       emit(state.copyWith(
           anonymousChatResponse: anonymousChatModel,
@@ -843,7 +841,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
   }) async {
     emit(state.copyWith(sendGiftErrorDataState: DataState.initial));
     final response =
-    await tinderRepository.sendGift(receiverId, giftId, subCategoryId);
+        await tinderRepository.sendGift(receiverId, giftId, subCategoryId);
     if (response != null) {
       log(response);
       emit(state.copyWith(sendGiftErrorDataState: DataState.success));
@@ -857,7 +855,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
   Future<void> fetchGifts() async {
     emit(state.copyWith(giftsState: DataState.initial));
     final giftData = await tinderRepository.fetchGifts();
-    log(giftData.toString()+"dsssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    log(giftData.toString() + "dsssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     if (giftData != null) {
       emit(state.copyWith(gifts: giftData, giftsState: DataState.success));
     } else {

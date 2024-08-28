@@ -1,15 +1,15 @@
-import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/entities/meal_entity.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 
 import 'option_entity.dart';
 import 'variation_entity.dart';
 
 class SelectedMealEntity {
   int qty;
-  num price;
+  double price;
   String restaurantId;
   List<SelectedVariationEntity> selectedVariations;
   List<OptionEntity> selectedAddOn;
-  MealEntity meal;
+  RestaurantMenu meal;
   SelectedMealEntity({
     required this.qty,
     required this.price,

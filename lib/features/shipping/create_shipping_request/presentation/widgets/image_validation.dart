@@ -50,7 +50,7 @@ class ImageValidation extends StatelessWidget {
               },
               child: ImagePickerPlaceholder(
                 borderColor: field.hasError ? Colors.red : null,
-                tilte: hint,
+                title: hint,
                 iconColor: iconColor,
               ),
             ),

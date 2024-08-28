@@ -1,7 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/city_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/food_category_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/government_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_media_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
 
 class Restaurant extends Equatable {
   @JsonKey(name: "_id")
@@ -11,7 +16,9 @@ class Restaurant extends Equatable {
   @JsonKey(name: "restaurantMedia")
   final List<RestaurantMediaModel>? restaurantMedia;
   @JsonKey(name: "government")
-  final String? government;
+  final GovernmentModel? government;
+  @JsonKey(name: "city")
+  final CityModel? city;
   @JsonKey(name: "address")
   final String? address;
   @JsonKey(name: "isActive")
@@ -34,11 +41,16 @@ class Restaurant extends Equatable {
   final List<RestaurantMneuModel>? menu;
   @JsonKey(name: "id")
   final String? datumId;
+  @JsonKey(name: "subcategoryId")
+  final SubCategoryModel? subcategoryId;
+  @JsonKey(name: "mainCategoryId")
+  final FoodCategoryModel? mainCategoryId;
   const Restaurant({
     this.id,
     this.name,
     this.restaurantMedia,
     this.government,
+    this.city,
     this.address,
     this.isActive,
     this.workFrom,
@@ -50,6 +62,8 @@ class Restaurant extends Equatable {
     this.numberOfReviews,
     this.menu,
     this.datumId,
+    this.subcategoryId,
+    this.mainCategoryId,
   });
   @override
   List<Object?> get props => [
@@ -58,6 +72,8 @@ class Restaurant extends Equatable {
         restaurantMedia,
         government,
         address,
+        mainCategoryId,
+        subcategoryId,
         isActive,
         workFrom,
         workTo,
@@ -65,6 +81,7 @@ class Restaurant extends Equatable {
         countryCode,
         deliveryTime,
         deliveryFee,
+        city,
         numberOfReviews,
         menu,
         datumId,

@@ -226,7 +226,9 @@ class DI {
     serviceLocator.registerLazySingleton<Dio>(
       () => Dio(
         BaseOptions(
-          baseUrl: kReleaseMode ? EndPoints.productionBaseUrl : EndPoints.developmentBaseUrl,
+          baseUrl: kReleaseMode
+              ? EndPoints.productionBaseUrl
+              : EndPoints.developmentBaseUrl,
           connectTimeout: const Duration(seconds: 60),
           headers: {
             'Accept': 'application/json',
@@ -270,86 +272,84 @@ class DI {
     // );
 
     // Register the TinderRepository as a singleton
-    serviceLocator.registerLazySingleton<TinderRepository>(() => TinderRepository());
-
-
+    serviceLocator
+        .registerLazySingleton<TinderRepository>(() => TinderRepository());
 
     serviceLocator.registerFactory<SocialPostsCubit>(() => SocialPostsCubit(
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-    ));
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
 
     serviceLocator.registerFactory<TwitterCubit>(() => TwitterCubit(
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-    ));
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
 
     serviceLocator.registerFactory<EditProfileCubit>(() => EditProfileCubit(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerFactory<InstagramCubit>(() => InstagramCubit(
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-    ));
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
 
-
-    serviceLocator.registerLazySingleton<GetSavedReelsUseCase>(() => GetSavedReelsUseCase(
-      serviceLocator(),
-    ));
-
+    serviceLocator
+        .registerLazySingleton<GetSavedReelsUseCase>(() => GetSavedReelsUseCase(
+              serviceLocator(),
+            ));
 
     // Register the TinderViewCubit and inject the TinderRepository dependency
-    serviceLocator
-        .registerFactory<TinderViewCubit>(() => TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
+    serviceLocator.registerFactory<TinderViewCubit>(() =>
+        TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
 
     // Register other dependencies...
     // serviceLocator

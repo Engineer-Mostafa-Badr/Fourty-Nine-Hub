@@ -12,15 +12,14 @@ class SendGreetMessageUseCase extends UseCase<bool, SendGreetMessageParams> {
   }
 }
 
-
-class SendGreetMessageParams{
+class SendGreetMessageParams {
   final String userId;
   final String message;
 
   SendGreetMessageParams({required this.userId, required this.message});
 
   Map<String, dynamic> toJson() => {
-    'userId': userId ,
-    'message': message ,
-  };
+        'userId': userId,
+        'message': message,
+      };
 }

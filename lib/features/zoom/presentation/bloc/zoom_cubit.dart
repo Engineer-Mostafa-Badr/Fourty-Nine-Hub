@@ -56,7 +56,7 @@ class MeetingCubit extends Cubit<MeetingState> {
   void joinRoom(String roomId) {
     emit(state.copyWith(status: MeetingStates.loading));
     joinRoomUseCase(MeetingParams(meetingId: roomId)).then((result) {
-      if (result!.statusCode == 200) {
+      if (result.statusCode == 200) {
         emit(state.copyWith(status: MeetingStates.success));
       } else {
         final String errorMessage = result.data['error']['message'] ?? '';
@@ -78,7 +78,7 @@ class MeetingCubit extends Cubit<MeetingState> {
     });
   }
 
-  Future<void> endRoom(String roomId) async{
+  Future<void> endRoom(String roomId) async {
     emit(state.copyWith(status: MeetingStates.loading));
     await endRoomUseCase(MeetingParams(meetingId: roomId)).then((value) {
       print('room Ended');
@@ -86,7 +86,7 @@ class MeetingCubit extends Cubit<MeetingState> {
     }).catchError((error) {
       print('room Not Ended');
       emit(state.copyWith(status: MeetingStates.failure));
-      throw'';
+      throw '';
     });
   }
 

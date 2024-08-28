@@ -310,9 +310,10 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
             state.copyWith(profileData: data, status: StateStatus.success)));
   }
 
-  void changeUserPage(int page){
-    emit(state.copyWith(profilePage: page,status: StateStatus.success));
+  void changeUserPage(int page) {
+    emit(state.copyWith(profilePage: page, status: StateStatus.success));
   }
+
 // react on a post
   Future<bool> onReact(
       {required PostReactParams params, required String from}) async {
@@ -622,8 +623,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   }
 
   Future<bool> sendGreetMessage(
-      {required BuildContext context, required String userId,required String message}) async {
-    final response = await _sendGreetMessageUseCase(SendGreetMessageParams(userId: userId,message: message,));
+      {required BuildContext context,
+      required String userId,
+      required String message}) async {
+    final response = await _sendGreetMessageUseCase(SendGreetMessageParams(
+      userId: userId,
+      message: message,
+    ));
     bool isAdd = false;
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
