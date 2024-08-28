@@ -11,15 +11,16 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_reels.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_tweets.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../../res/style/app_colors.dart';
 
 class OtherAccountView extends StatefulWidget {
   const OtherAccountView({super.key, required this.userId});
@@ -30,14 +31,12 @@ class OtherAccountView extends StatefulWidget {
 }
 
 class _OtherAccountViewState extends State<OtherAccountView> {
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        body: BlocBuilder<SocialPostsCubit, SocialPostsState>(
-            builder: (context, state) {
+        body: BlocBuilder<SocialPostsCubit, SocialPostsState>(builder: (context, state) {
           final controller = context.read<SocialPostsCubit>();
           final loginUser = context.read<UserCubit>().state.data;
           return state.status == StateStatus.loading
@@ -45,160 +44,144 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   child: CupertinoActivityIndicator(),
                 )
               : NestedAppbar(
-                      appBars: [
-                        SliverAppBar(
-                          floating: true,
-                          expandedHeight: kToolbarHeight * 5,
-                          automaticallyImplyLeading: false,
-                          backgroundColor: Colors.white,
-                          flexibleSpace: _buildAccountCounter(
-                              context: context,
-                              user: state.profileData!,
-                              onFollow: () async {
-                                if (state.profileData?.isFollowed == true) {
-                                  var result = await controller.unFollowRequest(
-                                      context: context,
-                                      userId: state.profileData!.id);
-                                  if (result == true) {
-                                    state.profileData?.isFollowed = false;
-                                    setState(() {});
-                                  }
-                                } else {
-                                  var result = await controller.followRequest(
-                                      context: context,
-                                      userId: state.profileData!.id);
-                                  if (result == true) {
-                                    state.profileData?.isFollowed = true;
-                                    setState(() {});
-                                  }
+                  appBars: [
+                    SliverAppBar(
+                      floating: true,
+                      expandedHeight: kToolbarHeight * 5,
+                      automaticallyImplyLeading: false,
+                      backgroundColor: Colors.white,
+                      flexibleSpace: _buildAccountCounter(
+                          context: context,
+                          user: state.profileData!,
+                          onFollow: () async {
+                            if (state.profileData?.isFollowed == true) {
+                              var result =
+                                  await controller.unFollowRequest(context: context, userId: state.profileData!.id);
+                              if (result == true) {
+                                state.profileData?.isFollowed = false;
+                                setState(() {});
+                              }
+                            } else {
+                              var result =
+                                  await controller.followRequest(context: context, userId: state.profileData!.id);
+                              if (result == true) {
+                                state.profileData?.isFollowed = true;
+                                setState(() {});
+                              }
+                            }
+                          },
+                          onAddFriend: () async {
+                            // print("object");
+                            if (state.profileData?.areFriends == true) {
+                            } else {
+                              if (state.profileData?.sentFriendRequest == true) {
+                                var result = await controller.removeFriendRequest(
+                                    context: context, userId: state.profileData!.id);
+                                if (result == true) {
+                                  state.profileData?.sentFriendRequest = false;
+                                  setState(() {});
                                 }
-                              },
-                              onAddFriend: () async {
-                                // print("object");
-                                if (state.profileData?.areFriends == true) {
-                                } else {
-                                  if (state.profileData?.sentFriendRequest ==
-                                      true) {
-                                    var result =
-                                        await controller.removeFriendRequest(
-                                            context: context,
-                                            userId: state.profileData!.id);
-                                    if (result == true) {
-                                      state.profileData?.sentFriendRequest =
-                                          false;
-                                      setState(() {});
-                                    }
-                                  } else {
-                                    var result = await controller.friendRequest(
-                                        context: context,
-                                        userId: state.profileData!.id);
-                                    if (result == true) {
-                                      state.profileData?.sentFriendRequest =
-                                          true;
-                                      setState(() {});
-                                    }
-                                  }
+                              } else {
+                                var result =
+                                    await controller.friendRequest(context: context, userId: state.profileData!.id);
+                                if (result == true) {
+                                  state.profileData?.sentFriendRequest = true;
+                                  setState(() {});
                                 }
-                              }),
-                          iconTheme: const IconThemeData(color: Colors.white),
-                          leading: IconButton(
-                              onPressed: () => context.pop(),
-                              icon: const Icon(Icons.arrow_back)),
-                          actions: [
-                            // IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-                              PopupMenuButton(
-                                icon: const Icon(
-                                  Icons.more_vert,
-                                  color: Colors.white,
-                                ),
-                                itemBuilder: (context) {
-                                  return [
-                                    if (loginUser?.id != state.profileData?.id)PopupMenuItem<int>(
-                                      value: 4,
-                                      child: const Text("Report"),
-                                      onTap: () {
-                                        bottomSheet(
-                                            context: context,
-                                            widget: ReportView(
-                                              id: widget.userId,
-                                              categoryId:
-                                                  '66b77e77bb35968b535dc944',
-                                            ));
-                                      },
-                                    ),
-                                    if (loginUser?.id != state.profileData?.id)PopupMenuItem<int>(
-                                      value: 5,
-                                      child: Text(
-                                          state.profileData?.isBlock == true
-                                              ? 'UnBlock'
-                                              : 'Block'),
-                                      onTap: () async {
-                                        // context.pop();
-                                        var result = await controller.blockUser(
-                                            context: context,
-                                            userId: widget.userId);
-                                        print("result:${result}");
-                                        if (result == true) {
-                                          print("object");
-                                          if (state.profileData?.isBlock ==
-                                              false) {
-                                            state.profileData?.isBlock = true;
-                                            showSuccessMessage(context,
-                                                'Blocked user successfully.');
-                                          } else {
-                                            state.profileData?.isBlock = false;
-                                            showSuccessMessage(context,
-                                                'Unblocked user successfully.');
-                                          }
-                                        }
-                                      },
-                                    ),
-                                    if (loginUser?.id == state.profileData?.id)PopupMenuItem<int>(
-                                      value: 5,
-                                      child: const Text('Edit Profile'),
-                                      onTap: () async {
-                                        context.push(Routes.EDITPROFILE);
-                                      },
-                                    )
-                                  ];
-                                },
-                              ),
-                          ],
-                        ),
-                        if (state.profileData?.isBlock == false)
-                          SliverAppBar(
-                            automaticallyImplyLeading: false,
-                            floating: false,
-                            backgroundColor: Colors.white,
-                            pinned: true,
-                            title: TabBar(
-                                labelStyle: Styles.mediumText(),
-                                isScrollable: true,
-                                tabAlignment: TabAlignment.center,
-                                tabs: const [
-                                  Tab(
-                                    text: 'Posts',
-                                  ),
-                                  Tab(
-                                    text: 'Tweets',
-                                  ),
-                                  Tab(
-                                    text: 'Reels',
-                                  ),
-                                  // Tab(
-                                  //   text: 'Media',
-                                  // ),
-                                ]),
+                              }
+                            }
+                          }),
+                      iconTheme: const IconThemeData(color: Colors.white),
+                      leading: IconButton(onPressed: () => context.pop(), icon: const Icon(Icons.arrow_back)),
+                      actions: [
+                        // IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+                        PopupMenuButton(
+                          icon: const Icon(
+                            Icons.more_vert,
+                            color: Colors.white,
                           ),
+                          itemBuilder: (context) {
+                            return [
+                              if (loginUser?.id != state.profileData?.id)
+                                PopupMenuItem<int>(
+                                  value: 4,
+                                  child: const Text("Report"),
+                                  onTap: () {
+                                    bottomSheet(
+                                        context: context,
+                                        widget: ReportView(
+                                          id: widget.userId,
+                                          categoryId: '66b77e77bb35968b535dc944',
+                                        ));
+                                  },
+                                ),
+                              if (loginUser?.id != state.profileData?.id)
+                                PopupMenuItem<int>(
+                                  value: 5,
+                                  child: Text(state.profileData?.isBlock == true ? 'UnBlock' : 'Block'),
+                                  onTap: () async {
+                                    // context.pop();
+                                    var result = await controller.blockUser(context: context, userId: widget.userId);
+                                    print("result:$result");
+                                    if (result == true) {
+                                      print("object");
+                                      if (state.profileData?.isBlock == false) {
+                                        state.profileData?.isBlock = true;
+                                        showSuccessMessage(context, 'Blocked user successfully.');
+                                      } else {
+                                        state.profileData?.isBlock = false;
+                                        showSuccessMessage(context, 'Unblocked user successfully.');
+                                      }
+                                    }
+                                  },
+                                ),
+                              if (loginUser?.id == state.profileData?.id)
+                                PopupMenuItem<int>(
+                                  value: 5,
+                                  child: const Text('Edit Profile'),
+                                  onTap: () async {
+                                    context.push(Routes.EDITPROFILE);
+                                  },
+                                )
+                            ];
+                          },
+                        ),
                       ],
-                      body: state.profileData?.isBlock == false
-                          ? _buildAccountPages(state.profileData!)
-                          : const Center(
-                              child: Label(
-                                text: 'You have blocked this user.',
+                    ),
+                    if (state.profileData?.isBlock == false)
+                      SliverAppBar(
+                        automaticallyImplyLeading: false,
+                        floating: false,
+                        backgroundColor: Colors.white,
+                        pinned: true,
+                        title: TabBar(
+                            labelStyle: Styles.mediumText(),
+                            isScrollable: true,
+                            tabAlignment: TabAlignment.center,
+                            tabs: const [
+                              Tab(
+                                text: 'Posts',
                               ),
-                            ),
-                    );
+                              Tab(
+                                text: 'Tweets',
+                              ),
+                              Tab(
+                                text: 'Reels',
+                              ),
+                              // Tab(
+                              //   text: 'Media',
+                              // ),
+                            ]),
+                      ),
+                  ],
+                  body: state.profileData?.isBlock == false
+                      ? _buildAccountPages(state.profileData!)
+                      : const Center(
+                          child: Label(
+                            text: 'You have blocked this user.',
+                          ),
+                        ),
+                );
         }),
       ),
     );
@@ -222,9 +205,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                 Expanded(
                     flex: 4,
                     child: Image.network(
-                      user.profileCover!.isNotEmpty
-                          ? user.profileCover!
-                          : UIConst.socialImagePlaceHolder,
+                      user.profileCover!.isNotEmpty ? user.profileCover! : UIConst.socialImagePlaceHolder,
                       fit: BoxFit.fill,
                       width: double.infinity,
                     )),
@@ -237,18 +218,12 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-
                             AppButton(
                                 height: kToolbarHeight * .5,
                                 width: kToolbarHeight * 1.5,
-                                backColor: user.isFollowed == true
-                                    ? AppColors.DARK_GRAY_COLOR
-                                    : null,
-                                label: user.isFollowed == true
-                                    ? 'unFollow'
-                                    : 'Follow',
-                                style:
-                                Styles.mediumText(color: Colors.white),
+                                backColor: user.isFollowed == true ? AppColors.DARK_GRAY_COLOR : null,
+                                label: user.isFollowed == true ? 'unFollow' : 'Follow',
+                                style: Styles.mediumText(color: Colors.white),
                                 onPressed: () {
                                   onFollow();
                                 }),
@@ -261,17 +236,18 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 //         : 1.5),
                                 padding: 5,
                                 backColor: user.areFriends == true ||
-                                        user.sentFriendRequest == true||
+                                        user.sentFriendRequest == true ||
                                         user.isSenTRequest == true
                                     ? AppColors.DARK_GRAY_COLOR
                                     : null,
-                                style:
-                                Styles.mediumText(color: Colors.white),
-                                label: user.isSenTRequest == true?'Accept Request':user.areFriends == true
-                                    ? 'Friends'
-                                    : user.sentFriendRequest == true
-                                        ? 'Remove Request'
-                                        : 'Add Friend',
+                                style: Styles.mediumText(color: Colors.white),
+                                label: user.isSenTRequest == true
+                                    ? 'Accept Request'
+                                    : user.areFriends == true
+                                        ? 'Friends'
+                                        : user.sentFriendRequest == true
+                                            ? 'Remove Request'
+                                            : 'Add Friend',
                                 onPressed: () {
                                   onAddFriend();
                                 })
@@ -283,7 +259,6 @@ class _OtherAccountViewState extends State<OtherAccountView> {
             PositionedDirectional(
                 bottom: 0,
                 start: 10,
-
                 child: CircleAvatar(
                   radius: 60,
                   backgroundColor: AppColors.SECONDARY_COLOR,
@@ -300,7 +275,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Sizer(),
+              const Sizer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -329,10 +304,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         ),
                         child: Center(
                             child: Label(
-                              text: 'Chat',
-                              style:
-                              Styles.mediumText(color: Colors.white),
-                            )),
+                          text: 'Chat',
+                          style: Styles.mediumText(color: Colors.white),
+                        )),
                       ),
                       itemBuilder: (context) {
                         return const [
@@ -349,12 +323,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                       onSelected: (value) {
                         context.push(Routes.CHAT);
                       }),
-
                 ],
               ),
-              Label(
-                  text: '@${user.email.split('@')[0]}',
-                  style: Styles.mediumText(color: Colors.grey)),
+              Label(text: '@${user.email.split('@')[0]}', style: Styles.mediumText(color: Colors.grey)),
               const Sizer(),
               Row(
                 children: [
@@ -384,10 +355,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
   Widget _buildCounter({required String value, required String label}) {
     return RichText(
         text: TextSpan(children: [
-      TextSpan(
-          text: value,
-          style: Styles.mediumText(
-              color: Colors.black, fontWeight: FontWeight.w500)),
+      TextSpan(text: value, style: Styles.mediumText(color: Colors.black, fontWeight: FontWeight.w500)),
       TextSpan(
           text: label,
           style: Styles.mediumText(

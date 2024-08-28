@@ -133,82 +133,82 @@ class _ZegoLiveStreamingLivePageState extends State<ZegoLiveStreamingLivePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: WillPopScope(
-          onWillPop: () async {
-            final endConfirmationEvent = ZegoLiveStreamingLeaveConfirmationEvent(
-              context: context,
-            );
-            defaultAction() async {
-              return widget.defaultLeaveConfirmationAction(endConfirmationEvent);
+      resizeToAvoidBottomInset: false,
+      body: WillPopScope(
+        onWillPop: () async {
+          final endConfirmationEvent = ZegoLiveStreamingLeaveConfirmationEvent(
+            context: context,
+          );
+          defaultAction() async {
+            return widget.defaultLeaveConfirmationAction(endConfirmationEvent);
+          }
+
+          final canLeave = await widget.events.onLeaveConfirmation!(
+            endConfirmationEvent,
+            defaultAction,
+          );
+          if (canLeave) {
+            if (widget.hostManager.isLocalHost) {
+              /// live is ready to end, host will update if receive property notify
+              /// so need to keep current host value, DISABLE local host value UPDATE
+              widget.hostManager.hostUpdateEnabledNotifier.value = false;
+              ZegoUIKit().updateRoomProperties({
+                RoomPropertyKey.host.text: '',
+                RoomPropertyKey.liveStatus.text:
+                    LiveStatus.ended.index.toString()
+              });
             }
-        
-            final canLeave = await widget.events.onLeaveConfirmation!(
-              endConfirmationEvent,
-              defaultAction,
+          }
+          return canLeave;
+        },
+        child: ZegoScreenUtilInit(
+          designSize: const Size(750, 1334),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (context, child) {
+            return clickListener(
+              child: LayoutBuilder(builder: (context, constraints) {
+                return ValueListenableBuilder<ZegoUIKitUser?>(
+                    valueListenable: widget.hostManager.notifier,
+                    builder: (context, host, _) {
+                      return Stack(
+                        children: [
+                          ...background(
+                            constraints.maxWidth,
+                            constraints.maxHeight,
+                          ),
+                          ZegoLiveStreamingCentralAudioVideoView(
+                            config: widget.config,
+                            hostManager: widget.hostManager,
+                            liveStatusManager: widget.liveStatusManager,
+                            popUpManager: widget.popUpManager,
+                            plugins: widget.plugins,
+                            constraints: constraints,
+                          ),
+                          ZegoLiveStreamingLivePageSurface(
+                            config: widget.config,
+                            events: widget.events,
+                            defaultEndAction: widget.defaultEndAction,
+                            defaultLeaveConfirmationAction:
+                                widget.defaultLeaveConfirmationAction,
+                            hostManager: widget.hostManager,
+                            liveStatusManager: widget.liveStatusManager,
+                            liveDurationManager: widget.liveDurationManager,
+                            popUpManager: widget.popUpManager,
+                            connectManager:
+                                ZegoLiveStreamingManagers().connectManager!,
+                            plugins: widget.plugins,
+                            isLiveStream: widget.isLiveStream,
+                          ),
+                        ],
+                      );
+                    });
+              }),
             );
-            if (canLeave) {
-              if (widget.hostManager.isLocalHost) {
-                /// live is ready to end, host will update if receive property notify
-                /// so need to keep current host value, DISABLE local host value UPDATE
-                widget.hostManager.hostUpdateEnabledNotifier.value = false;
-                ZegoUIKit().updateRoomProperties({
-                  RoomPropertyKey.host.text: '',
-                  RoomPropertyKey.liveStatus.text:
-                      LiveStatus.ended.index.toString()
-                });
-              }
-            }
-            return canLeave;
           },
-          child: ZegoScreenUtilInit(
-            designSize: const Size(750, 1334),
-            minTextAdapt: true,
-            splitScreenMode: true,
-            builder: (context, child) {
-              return clickListener(
-                child: LayoutBuilder(builder: (context, constraints) {
-                  return ValueListenableBuilder<ZegoUIKitUser?>(
-                      valueListenable: widget.hostManager.notifier,
-                      builder: (context, host, _) {
-                        return Stack(
-                          children: [
-                            ...background(
-                              constraints.maxWidth,
-                              constraints.maxHeight,
-                            ),
-                            ZegoLiveStreamingCentralAudioVideoView(
-                              config: widget.config,
-                              hostManager: widget.hostManager,
-                              liveStatusManager: widget.liveStatusManager,
-                              popUpManager: widget.popUpManager,
-                              plugins: widget.plugins,
-                              constraints: constraints,
-                            ),
-                            ZegoLiveStreamingLivePageSurface(
-                              config: widget.config,
-                              events: widget.events,
-                              defaultEndAction: widget.defaultEndAction,
-                              defaultLeaveConfirmationAction:
-                                  widget.defaultLeaveConfirmationAction,
-                              hostManager: widget.hostManager,
-                              liveStatusManager: widget.liveStatusManager,
-                              liveDurationManager: widget.liveDurationManager,
-                              popUpManager: widget.popUpManager,
-                              connectManager:
-                                  ZegoLiveStreamingManagers().connectManager!,
-                              plugins: widget.plugins,
-                              isLiveStream: widget.isLiveStream,
-                            ),
-                          ],
-                        );
-                      });
-                }),
-              );
-            },
-          ),
         ),
-      );
+      ),
+    );
   }
 
   void checkFromMinimizing() {

@@ -123,6 +123,7 @@ abstract class Routes {
   static const SUBSCRIPTIONPLANS = '/SubscriptionPlans';
 
   static const TRIP_JOIN = '/TripJoin';
+  static const AVAILABLE_TRIPS = '/AvailableTrips';
 }
 
 abstract class Paths {
@@ -234,4 +235,5 @@ abstract class Paths {
   static const SUBSCRIPTIONPLANS = 'SubscriptionPlans';
 
   static const TRIP_JOIN = 'TripJoin';
+  static const AVAILABLE_TRIPS = 'AvailableTrips';
 }

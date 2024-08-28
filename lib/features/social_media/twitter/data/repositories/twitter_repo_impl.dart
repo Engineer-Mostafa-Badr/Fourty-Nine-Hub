@@ -106,7 +106,8 @@ class TwitterRepoImpl implements TwitterRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> editComment({required TwitterPostCommentParams params}) {
+  Future<Either<Failure, bool>> editComment(
+      {required TwitterPostCommentParams params}) {
     return _remoteDataSource.editComment(params: params);
   }
 }

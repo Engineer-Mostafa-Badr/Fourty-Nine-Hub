@@ -12,10 +12,12 @@ class StartTextFieldAndFindButon extends StatefulWidget {
   });
 
   @override
-  State<StartTextFieldAndFindButon> createState() => _StartTextFieldAndFindButonState();
+  State<StartTextFieldAndFindButon> createState() =>
+      _StartTextFieldAndFindButonState();
 }
 
-class _StartTextFieldAndFindButonState extends State<StartTextFieldAndFindButon> {
+class _StartTextFieldAndFindButonState
+    extends State<StartTextFieldAndFindButon> {
   late TextEditingController startingController;
   late final StartingLocationCubit startingLocationCubit;
   final formKey = GlobalKey<FormState>();
@@ -47,7 +49,9 @@ class _StartTextFieldAndFindButonState extends State<StartTextFieldAndFindButon>
                   return DefaultTextFormField(
                     suffixIcon: _getIcon(state),
                     currentController: startingController,
-                    hint: 'Find your starting Point..!',
+                    label: 'Starting Point',
+                    // hint: 'Find your starting Point..!',
+                    hint: '',
                     validator: _validator,
                   );
                 },
@@ -57,7 +61,8 @@ class _StartTextFieldAndFindButonState extends State<StartTextFieldAndFindButon>
             CustomButton(
               onTap: () {
                 if (formKey.currentState!.validate()) {
-                  startingLocationCubit.getStartingLocation(address: startingController.text);
+                  startingLocationCubit.getStartingLocation(
+                      address: startingController.text);
                 }
               },
               height: 45,

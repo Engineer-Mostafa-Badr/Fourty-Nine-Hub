@@ -152,8 +152,8 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> editComment({required PostCommentParams params}) {
+  Future<Either<Failure, bool>> editComment(
+      {required PostCommentParams params}) {
     return _remoteDataSource.editComment(params: params);
-
   }
 }

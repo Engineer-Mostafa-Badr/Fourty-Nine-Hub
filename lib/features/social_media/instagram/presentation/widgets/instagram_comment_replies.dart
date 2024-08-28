@@ -32,7 +32,9 @@ class InstagramCommentReplies extends StatefulWidget {
     super.key,
     required this.onAddReply,
     required this.commentId,
-    required this.postId, required this.onEditComment, required this.onDeleteReply,
+    required this.postId,
+    required this.onEditComment,
+    required this.onDeleteReply,
   });
 
   @override
@@ -91,22 +93,25 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
                       },
                       itemBuilder: (context, item, index) {
                         return _buildCommentCard(
-                            reply: controller
-                                .repliesPagingController.itemList![index], onDeleteComment: (String id) async {
-                          var result = await widget.onDeleteReply(id);
-                          if (result == true) {
-                            controller.commentsPagingController.itemList
-                                ?.removeWhere((e) => e.id == id);
-                            setState(() {});
-                          }
-                        }, onDeleteReply: (String id) async{
-                          var result=await widget.onDeleteReply(id);
-                          if (result == true) {
-                            controller.repliesPagingController.itemList
-                                ?.removeWhere((e) => e.id == id);
-                            setState(() {});
-                          }
-                        },);
+                          reply: controller
+                              .repliesPagingController.itemList![index],
+                          onDeleteComment: (String id) async {
+                            var result = await widget.onDeleteReply(id);
+                            if (result == true) {
+                              controller.commentsPagingController.itemList
+                                  ?.removeWhere((e) => e.id == id);
+                              setState(() {});
+                            }
+                          },
+                          onDeleteReply: (String id) async {
+                            var result = await widget.onDeleteReply(id);
+                            if (result == true) {
+                              controller.repliesPagingController.itemList
+                                  ?.removeWhere((e) => e.id == id);
+                              setState(() {});
+                            }
+                          },
+                        );
                       },
                       noMoreItemsIndicatorBuilder: (context) => Container(),
                       firstPageProgressIndicatorBuilder: (context) => Container(
@@ -139,9 +144,8 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
                           icon: Icons.send,
                           isCircle: true,
                           onPressed: () async {
-                            CommentEntity data =
-                                await widget.onAddReply(
-                               ReplyOnCommentParams(
+                            CommentEntity data = await widget.onAddReply(
+                              ReplyOnCommentParams(
                                   postId: widget.postId,
                                   content: replyTextController.text,
                                   commentId: widget.commentId),
@@ -193,9 +197,10 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
     );
   }
 
-  Widget _buildCommentCard({required CommentEntity reply,
-    required Function(String) onDeleteComment,
-    required Function(String) onDeleteReply}) {
+  Widget _buildCommentCard(
+      {required CommentEntity reply,
+      required Function(String) onDeleteComment,
+      required Function(String) onDeleteReply}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -204,7 +209,8 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
           onDeleteReply: (String id) => onDeleteReply(id),
           onReplyReact: (String id) {},
           onReport: (TwitterReportParams params) {},
-          onEditComment: (PostCommentParams params)=>widget.onEditComment(params),
+          onEditComment: (PostCommentParams params) =>
+              widget.onEditComment(params),
         ),
       ],
     );

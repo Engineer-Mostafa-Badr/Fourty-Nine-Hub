@@ -27,7 +27,11 @@ class InstagramCommentCard extends StatefulWidget {
   const InstagramCommentCard({
     super.key,
     this.textColor = Colors.black,
-    required this.comment, required this.onEditComment, required this.onDeleteComment, required this.onDeleteReply, required this.onAddReply,
+    required this.comment,
+    required this.onEditComment,
+    required this.onDeleteComment,
+    required this.onDeleteReply,
+    required this.onAddReply,
   });
 
   @override
@@ -35,7 +39,6 @@ class InstagramCommentCard extends StatefulWidget {
 }
 
 class _InstagramCommentCardState extends State<InstagramCommentCard> {
-
   final editTextController = TextEditingController();
 
   @override
@@ -57,18 +60,17 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
             const Sizer(),
             Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Label(
-                        text: widget.comment.user.firstName,
-                        style: Styles.mediumText(
-                            fontWeight: FontWeight.bold,
-                            color: widget.textColor)),
-                    Label(
-                        text: widget.comment.sinceTime,
-                        style: Styles.mediumText(color: widget.textColor)),
-                  ],
-                )),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Label(
+                    text: widget.comment.user.firstName,
+                    style: Styles.mediumText(
+                        fontWeight: FontWeight.bold, color: widget.textColor)),
+                Label(
+                    text: widget.comment.sinceTime,
+                    style: Styles.mediumText(color: widget.textColor)),
+              ],
+            )),
             IconButton(
                 onPressed: () {
                   bottomSheet(
@@ -82,19 +84,21 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                   Icons.more_vert,
                   color: widget.textColor,
                 )),
-            if(user?.id==widget.comment.user.id)...[
+            if (user?.id == widget.comment.user.id) ...[
               // const Sizer(),
               GestureDetector(
                   onTap: () {
-                    widget.comment.edit=!widget.comment.edit!;
-                    editTextController.text=widget.comment.content;
+                    widget.comment.edit = !widget.comment.edit!;
+                    editTextController.text = widget.comment.content;
                     setState(() {});
                   },
                   child: Icon(
                     Icons.edit,
                     color: widget.textColor,
                     size: 20,
-                  )),const Sizer()],
+                  )),
+              const Sizer()
+            ],
             GestureDetector(
                 onTap: () {
                   widget.onDeleteComment(widget.comment.id);
@@ -112,30 +116,34 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
           text: widget.comment.content,
           style: Styles.mediumText(color: widget.textColor),
         ),
-        if(widget.comment.edit==true)Row(
-          children: [
-            Expanded(
-                child: FormTextField(
-                    hint: 'Type your comment ....',
-                    action: (v) {
-                      setState(() {});
-                    },
-                    controller: editTextController)),
-            const Sizer(),
-            if (editTextController.text.isNotEmpty)
-              IconAppButton(
+        if (widget.comment.edit == true)
+          Row(
+            children: [
+              Expanded(
+                  child: FormTextField(
+                      hint: 'Type your comment ....',
+                      action: (v) {
+                        setState(() {});
+                      },
+                      controller: editTextController)),
+              const Sizer(),
+              if (editTextController.text.isNotEmpty)
+                IconAppButton(
                   icon: Icons.send,
                   isCircle: true,
                   onPressed: () async {
-                    var result = await widget.onEditComment(PostCommentParams(postId: widget.comment.id, content: editTextController.text));
-                    if(result==true){
-                      widget.comment.content=editTextController.text;
-                      widget.comment.edit=false;
+                    var result = await widget.onEditComment(PostCommentParams(
+                        postId: widget.comment.id,
+                        content: editTextController.text));
+                    if (result == true) {
+                      widget.comment.content = editTextController.text;
+                      widget.comment.edit = false;
                     }
                     setState(() {});
-                  },),
-          ],
-        ),
+                  },
+                ),
+            ],
+          ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -144,8 +152,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                 if (widget.comment.isLove == true) {
                   // widget.onCommentReact();
                   widget.comment.isLove = false;
-                  widget.comment.loveCount =
-                  (widget.comment.loveCount! - 1);
+                  widget.comment.loveCount = (widget.comment.loveCount! - 1);
                   setState(() {});
                 } else {
                   print("object");
@@ -159,9 +166,8 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                 widget.comment.isLove == false
                     ? Icons.favorite_border
                     : Icons.favorite,
-                color: widget.comment.isLove == false
-                    ? Colors.grey
-                    : Colors.red,
+                color:
+                    widget.comment.isLove == false ? Colors.grey : Colors.red,
               ),
             ),
             Label(text: '${widget.comment.loveCount}'),
@@ -176,8 +182,10 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                       widget: InstagramCommentReplies(
                         postId: widget.comment.post,
                         commentId: widget.comment.id,
-                        onAddReply: (ReplyOnCommentParams params) =>widget.onAddReply(params),
-                        onEditComment: (PostCommentParams params)=>widget.onEditComment(params),
+                        onAddReply: (ReplyOnCommentParams params) =>
+                            widget.onAddReply(params),
+                        onEditComment: (PostCommentParams params) =>
+                            widget.onEditComment(params),
                         onDeleteReply: (String id) => widget.onDeleteReply(id),
                       ));
                 })

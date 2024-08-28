@@ -32,8 +32,8 @@ class _DoctorsListViewState extends State<DoctorsListView> {
         }
       },
       child: Scaffold(
-        appBar:  BackAppBar(
-          label:LocaleKeys.doctorList.localize,
+        appBar: BackAppBar(
+          label: LocaleKeys.doctorList.localize,
         ),
         body: BlocBuilder<DoctorsListCubit, DoctorsListState>(
             builder: (context, state) {
@@ -50,7 +50,7 @@ class _DoctorsListViewState extends State<DoctorsListView> {
                     separatorBuilder: (context, index) => const Sizer(),
                     itemCount: state.doctors.length);
               } else {
-                return  Center(child: Text(LocaleKeys.noDoctorsFound.localize));
+                return Center(child: Text(LocaleKeys.noDoctorsFound.localize));
               }
 
             default:

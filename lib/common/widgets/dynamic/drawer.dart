@@ -1,6 +1,6 @@
 import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,10 +8,7 @@ import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-
 import 'package:fourtyninehub/core/states/basic_state.dart';
-import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -19,14 +16,13 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../../core/api/api_consumer.dart';
+
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/const.dart';
 import '../../../res/style/styles.dart';
 import '../../../routes/routes.dart';
-import '../../functions/global/upload_file.dart';
 import '../stateless/buttons/iconAppButton.dart';
 import '../stateless/labels/label.dart';
 import 'sizer.dart';
@@ -82,8 +78,7 @@ class DrawerWidget extends StatelessWidget {
                         image: Assets.favorite_sub_category_icon,
                         label: LocaleKeys.favouriteSubCategories.localize,
                         requireLogin: true,
-                        onTap: () =>
-                            context.push(Routes.FAVOURITESUBCATEGORIES)),
+                        onTap: () => context.push(Routes.FAVOURITESUBCATEGORIES)),
                     drawerListTile(
                         // icon: FontAwesomeIcons.adn,
                         image: Assets.favorite_ad_icon,
@@ -143,8 +138,7 @@ class DrawerWidget extends StatelessWidget {
                         label: LocaleKeys.logout.localize,
                         onTap: () {
                           bottomSheet(
-                              backColor:
-                                  Theme.of(context).scaffoldBackgroundColor,
+                              backColor: Theme.of(context).scaffoldBackgroundColor,
                               context: context,
                               widget: const LogoutWidget());
                         }),
@@ -176,9 +170,7 @@ class DrawerWidget extends StatelessWidget {
                   icon: Icons.person,
                   onPressed: () => context.push(Routes.LOGIN),
                 ),
-                Label(
-                    text: LocaleKeys.login.localize,
-                    style: Styles.mediumText()),
+                Label(text: LocaleKeys.login.localize, style: Styles.mediumText()),
               ],
             ),
           ),
@@ -191,9 +183,7 @@ class DrawerWidget extends StatelessWidget {
                     isCircle: true,
                     icon: Icons.person_add,
                     onPressed: () => context.push(Routes.REGISTER)),
-                Label(
-                    text: LocaleKeys.register.localize,
-                    style: Styles.mediumText()),
+                Label(text: LocaleKeys.register.localize, style: Styles.mediumText()),
               ],
             ),
           ),
@@ -257,21 +247,15 @@ class DrawerWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: AppColors.LIGHT_GRAY_COLOR),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: AppColors.LIGHT_GRAY_COLOR),
         child: Row(
           children: [
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Label(
-                    text: LocaleKeys.wallet.localize,
-                    style: Styles.mediumText(fontWeight: FontWeight.bold)),
-                Label(
-                    text: 'Earn Money with 49Hub',
-                    style: Styles.mediumText(fontWeight: FontWeight.w400)),
+                Label(text: LocaleKeys.wallet.localize, style: Styles.mediumText(fontWeight: FontWeight.bold)),
+                Label(text: 'Earn Money with 49Hub', style: Styles.mediumText(fontWeight: FontWeight.w400)),
               ],
             )),
             SizedBox(
@@ -338,9 +322,7 @@ class DrawerWidget extends StatelessWidget {
               fontWeight: FontWeight.w500,
             )),
         subtitle: (description != null)
-            ? Label(
-                text: description,
-                style: Styles.mediumText(fontWeight: FontWeight.w300))
+            ? Label(text: description, style: Styles.mediumText(fontWeight: FontWeight.w300))
             : null,
         trailing: Icon(
           Icons.arrow_forward_ios,
@@ -359,9 +341,7 @@ class DrawerWidget extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(20.zW),
         margin: EdgeInsets.all(10.zW),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.zR),
-            color: AppColors.LIGHT_GRAY_COLOR),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.zR), color: AppColors.LIGHT_GRAY_COLOR),
         child: Row(
           children: [
             Expanded(
@@ -370,14 +350,10 @@ class DrawerWidget extends StatelessWidget {
                 children: [
                   Label(
                       text: LocaleKeys.luckyWheel.localize,
-                      style: Styles.mediumText(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.QUANTITY_COLOR)),
+                      style: Styles.mediumText(fontWeight: FontWeight.bold, color: AppColors.QUANTITY_COLOR)),
                   Label(
                       text: LocaleKeys.feelLucky.localize,
-                      style: Styles.mediumText(
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.QUANTITY_COLOR)),
+                      style: Styles.mediumText(fontWeight: FontWeight.w400, color: AppColors.QUANTITY_COLOR)),
                 ],
               ),
             ),
@@ -447,7 +423,7 @@ class DrawerWidget extends StatelessWidget {
               children: [
                 Positioned.fill(
                   child: BlocConsumer<UserCubit, BasicState>(
-                    listener: (context,state){
+                    listener: (context, state) {
                       // if(state.isSuccess){
                       //   context.pop();
                       //   showSuccessMessage(context, 'Picture Uploaded Successfully');
@@ -463,7 +439,7 @@ class DrawerWidget extends StatelessWidget {
                         Shimmer.fromColors(
                           baseColor: Colors.amber,
                           highlightColor: Colors.black,
-                          child:  CircleAvatar(
+                          child: CircleAvatar(
                             child: Container(
                               color: Colors.red,
                             ),
@@ -570,8 +546,7 @@ class DrawerWidget extends StatelessWidget {
                     Expanded(
                       child: Label(
                         text: '${user?.wallet ?? 0}',
-                        style: Styles.mediumText(
-                            decoration: TextDecoration.underline),
+                        style: Styles.mediumText(decoration: TextDecoration.underline),
                       ),
                     )
                   ],
@@ -586,14 +561,13 @@ class DrawerWidget extends StatelessWidget {
 
   String _getFirstTwoWords(String fullName) {
     List<String> words = fullName.split(" ");
-    if(words.length>1) {
+    if (words.length > 1) {
       // Capitalize the first letter of each word
-    words = words.map((word) {
-      return word[0].toUpperCase() + word.substring(1).toLowerCase();
-    }).toList();
+      words = words.map((word) {
+        return word[0].toUpperCase() + word.substring(1).toLowerCase();
+      }).toList();
     }
     return words.length > 1 ? '${words[0]} ${words[1]}' : words[0];
-
   }
 
   getUserType(

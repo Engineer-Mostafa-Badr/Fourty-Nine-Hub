@@ -36,10 +36,8 @@ class EndPoints {
   static const createNewForgetPassword = '/auth/reset-password';
   static const notifications = '/api/v1/notifications';
   // static const report = '/report?subCategory=66a3583454e6e337915514db';
-  static String report({required String subCategoryId}) =>
-      '/report?subCategory=$subCategoryId';
-  static const documentRequest =
-      '/twitter/document-request?subCategory=66a3583454e6e337915514db';
+  static String report({required String subCategoryId}) => '/report?subCategory=$subCategoryId';
+  static const documentRequest = '/twitter/document-request?subCategory=66a3583454e6e337915514db';
 
   // ride
   //shipping
@@ -49,15 +47,13 @@ class EndPoints {
   static const carLicenseS3 = '/ride/info/car-license';
   static const idLicenseS3 = '/ride/info/id';
   static const mainWallet = '$developmentBaseUrl/main-wallet';
-  static const infoDocuments =
-      '$developmentBaseUrl/loading/driver/info/documents';
+  static const infoDocuments = '$developmentBaseUrl/loading/driver/info/documents';
   static const infoId = '$developmentBaseUrl/ride/info/id';
   static const drivingLicense = '$developmentBaseUrl/ride/info/driving-license';
   static const carLicense = '$developmentBaseUrl/ride/info/car-license';
   static const successUpload = '$developmentBaseUrl/ride/info/success-upload';
   static const successDocuments = '$developmentBaseUrl/ride/info/documents';
-  static const successCarImages =
-      '$developmentBaseUrl/ride/info/success-car-images';
+  static const successCarImages = '$developmentBaseUrl/ride/info/success-car-images';
   // health
   static String getCities({required String governorateId}) => '/health/cities/$governorateId';
   static const getGovernorates = '/health/governorate';
@@ -353,7 +349,7 @@ class EndPoints {
   static String getMealsWithCountRestaurant({PostCommentsParams? params}) =>
       '/restaurants/subcategories-count-restaurant${params?.page != null || params?.userId != null ? "?page=${params?.page}&userId=${params?.userId}" : ""}';
   static String getAllRestaurantWithMenu({PostCommentsParams? params}) =>
-      '/restaurants/subcategories-count-restaurant${params?.page != null  ? "?page=${params?.page}" : ""}';
+      '/restaurants/subcategories-count-restaurant${params?.page != null ? "?page=${params?.page}" : ""}';
 //?page=1&userId=
   static String restaurantDetails(String id) {
     return '/restaurants/$id';
@@ -496,7 +492,12 @@ class EndPoints {
     return '/chat/last-seen-logs/$chatId';
   }
 
-  static String geocodingUrl =
-      'https://maps.googleapis.com/maps/api/geocode/json';
-
+  // gecoding google api url
+  static String geocodingUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
+  // trip join
+  static String tripJoinExpectedPrice = "/ride/come-with-you/trip/expectedPrice";
+  static String getCarBrand = "/ride/riders/brands";
+  static String getCarModelByBrand = "/ride/riders/models";
+  static String getCarYearType = "/ride/riders/car-years-and-types";
+  static String publishTripJoin = "/ride/come-with-you";
 }

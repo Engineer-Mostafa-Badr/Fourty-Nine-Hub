@@ -12,22 +12,20 @@ class FacebookUserOnMap extends StatefulWidget {
 }
 
 class _FacebookUserOnMapState extends State<FacebookUserOnMap> {
-
   Completer<GoogleMapController> mapController = Completer();
-  Set<Marker> markers={};
-  
+  Set<Marker> markers = {};
+
   @override
   void initState() {
-    markers.add( Marker(
+    markers.add(Marker(
       markerId: MarkerId('0'),
       infoWindow: InfoWindow(title: 'user'),
       // icon: markerIcon,
-      position: LatLng(double.parse(widget.location.lat), double.parse(widget.location.log)),
+      position: LatLng(
+          double.parse(widget.location.lat), double.parse(widget.location.log)),
     ));
     super.initState();
   }
-  
-
 
   @override
   Widget build(BuildContext context) {
@@ -45,24 +43,21 @@ class _FacebookUserOnMapState extends State<FacebookUserOnMap> {
       buildingsEnabled: true,
       mapToolbarEnabled: true,
       zoomGesturesEnabled: true,
-      initialCameraPosition:
-      CameraPosition(
-            target: LatLng(double.parse(widget.location.lat), double.parse(widget.location.log)),
-            zoom: 12
-          ),
+      initialCameraPosition: CameraPosition(
+          target: LatLng(double.parse(widget.location.lat),
+              double.parse(widget.location.log)),
+          zoom: 12),
       markers: markers,
-
       onMapCreated: (GoogleMapController controller) {
         mapController.complete(controller);
       },
       mapType: MapType.terrain,
-      minMaxZoomPreference: const MinMaxZoomPreference(6,20),
+      minMaxZoomPreference: const MinMaxZoomPreference(6, 20),
       onCameraMove: (position) {
         print("================> position $position");
-        },
-      onCameraMoveStarted: () {},
-      onCameraIdle: () {
       },
+      onCameraMoveStarted: () {},
+      onCameraIdle: () {},
     );
   }
 }

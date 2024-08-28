@@ -10,12 +10,12 @@ String getLang() {
       .router.configuration.navigatorKey.currentContext!.locale.languageCode;
 }
 
-void changeLang({required Locale locale,required BuildContext context}) {
+void changeLang({required Locale locale, required BuildContext context}) {
   // final context = AppPages.router.configuration.navigatorKey.currentContext!;
 
   context.setLocale(locale);
 
-  var categoryCubit= BlocProvider.of<MainCategoriesCubit>(context);
+  var categoryCubit = BlocProvider.of<MainCategoriesCubit>(context);
   categoryCubit.loadData();
   //context.read<MainCategoriesCubit>().loadData();
 }

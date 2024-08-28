@@ -46,10 +46,10 @@ class ShippingRepository {
   Future<Either<Failure, Map<String, dynamic>>> getS3ImageDocuments(
       {required InfoDocumentsModel model}) async {
     // try {
-      return dataSource.getS3(
-        endpoint: EndPoints.infoDocuments,
-        data: model.toJson(),
-      );
+    return dataSource.getS3(
+      endpoint: EndPoints.infoDocuments,
+      data: model.toJson(),
+    );
     // } catch (error) {
     //   return left(ServerFailure(message: error.toString()));
     // }
@@ -75,11 +75,12 @@ class ShippingRepository {
     }
   }
 
-  Future<Either<Failure, Map<String, dynamic>>> getS3DrivingLicense({required DrivnigLicenseS3Model model}) {
-      log(model.toJson().toString(), name: "lllllllllllllllllllllllllll");
-      return dataSource.getS3(
-          endpoint: EndPoints.drivingLicenseS3, data: model.toJson());
-    
+  Future<Either<Failure, Map<String, dynamic>>> getS3DrivingLicense(
+      {required DrivnigLicenseS3Model model}) {
+    log(model.toJson().toString(), name: "lllllllllllllllllllllllllll");
+    return dataSource.getS3(
+        endpoint: EndPoints.drivingLicenseS3, data: model.toJson());
+
     //api/v1/ride/info/driving-license
 //     {
 //     "expireDate": "2024-5-24",
@@ -94,11 +95,12 @@ class ShippingRepository {
 // }
   }
 
- Future<Either<Failure, Map<String, dynamic>>> getS3CarLicense({required CarLicenseS3Model model}) {
+  Future<Either<Failure, Map<String, dynamic>>> getS3CarLicense(
+      {required CarLicenseS3Model model}) {
     // try {
-      log(model.toJson().toString(), name: "lllllllllllllllllllllllllll");
-      return dataSource.getS3(
-          endpoint: EndPoints.carLicenseS3, data: model.toJson());
+    log(model.toJson().toString(), name: "lllllllllllllllllllllllllll");
+    return dataSource.getS3(
+        endpoint: EndPoints.carLicenseS3, data: model.toJson());
     // } catch (error) {
     //   return left(ServerFailure(message: error.toString()));
     // }
@@ -116,11 +118,12 @@ class ShippingRepository {
 // }
   }
 
-  Future<Either<Failure, Map<String, dynamic>>> getS3CarImages({required CarImagesS3Model model}) {
+  Future<Either<Failure, Map<String, dynamic>>> getS3CarImages(
+      {required CarImagesS3Model model}) {
     // try {
-      log(model.toJson().toString(), name: "lllllllllllllllllllllllllll");
-      return dataSource.getS3(
-          endpoint: EndPoints.carImageS3, data: model.toJson());
+    log(model.toJson().toString(), name: "lllllllllllllllllllllllllll");
+    return dataSource.getS3(
+        endpoint: EndPoints.carImageS3, data: model.toJson());
     // } catch (error) {
     //   return left(ServerFailure(message: error.toString()));
     // }
