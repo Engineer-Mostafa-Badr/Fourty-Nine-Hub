@@ -170,6 +170,7 @@ import 'package:fourtyninehub/features/social_media/reels/data/repositories/reel
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/repo/tinder_repo.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
@@ -193,6 +194,7 @@ import 'installment_service_locator.dart';
 import 'meeting_service_locator.dart';
 import 'social_service_locator.dart';
 import 'subscribe_service_locator.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 
 final serviceLocator = GetIt.instance;
 
@@ -266,6 +268,56 @@ class DI {
 
     // Register the TinderRepository as a singleton
     serviceLocator.registerLazySingleton<TinderRepository>(() => TinderRepository());
+
+
+
+    serviceLocator.registerFactory<SocialPostsCubit>(() => SocialPostsCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+    ));
+
+    serviceLocator.registerFactory<TwitterCubit>(() => TwitterCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+    ));
+
 
     // Register the TinderViewCubit and inject the TinderRepository dependency
     serviceLocator

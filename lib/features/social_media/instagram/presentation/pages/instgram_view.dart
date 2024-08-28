@@ -14,7 +14,6 @@ import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
-import '../../../social_posts/presentation/pages/my_account_view.dart';
 
 class InstagramView extends StatefulWidget {
   const InstagramView({super.key});
@@ -87,21 +86,24 @@ class _InstagramViewState extends State<InstagramView> {
               ],
             )
                 : Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () => context.push(Routes.LOGIN),
-                    child: Label(
-                      text: 'Login',
-                      style: Styles.headerText(color: Colors.blue),
+              child: SingleChildScrollView(
+                controller: scrollController,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () => context.push(Routes.LOGIN),
+                      child: Label(
+                        text: 'Login',
+                        style: Styles.headerText(color: Colors.blue),
+                      ),
                     ),
-                  ),
-                  Label(
-                    text: ', To continue using chat services',
-                    style: Styles.headerText(),
-                  ),
-                ],
+                    Label(
+                      text: ', To continue using chat services',
+                      style: Styles.headerText(),
+                    ),
+                  ],
+                ),
               ),
             );
           },

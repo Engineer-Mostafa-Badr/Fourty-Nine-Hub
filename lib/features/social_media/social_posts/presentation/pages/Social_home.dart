@@ -84,7 +84,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
               builder: (context, state) {
             return context.read<UserCubit>().isLoggedIn
                 ? NestedAppbar(
-                    scrollController: scrollController,
+                    scrollController: ScrollController(),
                     appBars: [
                       SliverAppBar(
                         backgroundColor:
@@ -107,18 +107,22 @@ class _SocialHomeViewState extends State<SocialHomeView>
                       scrollController: scrollController,
                     ))
                 : Center(
+                  child: SingleChildScrollView(
+                    controller: scrollController,
                     child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                          onTap: () => context.push(Routes.LOGIN),
-                          child:
-                              Label(text: 'Login', style: Styles.headerText())),
-                      Label(
-                          text: ', To continue in using chat services',
-                          style: Styles.headerText()),
-                    ],
-                  ));
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                            onTap: () => context.push(Routes.LOGIN),
+                            child:
+                            Label(text: 'Login', style: Styles.headerText())),
+                        Label(
+                            text: ', To continue in using chat services',
+                            style: Styles.headerText()),
+                      ],
+                    ),
+                  ),
+                );
           })),
     );
   }
