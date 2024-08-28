@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
 
 class DriverPhoneNumberV2 extends StatefulWidget {
@@ -31,14 +30,33 @@ class _DriverPhoneNumberV2State extends State<DriverPhoneNumberV2> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTextFormField(
-      currentController: TextEditingController(),
-      hint: '',
-      label: 'Phone Number',
+    return TextFormField(
+      // currentController: TextEditingController(),
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+        fillColor: Colors.transparent,
+        label: const Text('Phone Number'),
+        isDense: true, // Added this
+        contentPadding: const EdgeInsets.all(14),
+      ),
       keyboardType: TextInputType.phone,
       onChanged: (value) {
         tripJoinViewCubit.phoneNumber = value;
       },
+      validator: (value) {
+        return _validateMobile(value);
+      },
     );
+  }
+
+  String? _validateMobile(String? value) {
+    String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    RegExp regExp = RegExp(pattern);
+    if (value == null || value.isEmpty) {
+      return 'Please enter mobile number';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Please enter valid mobile number';
+    }
+    return null;
   }
 }

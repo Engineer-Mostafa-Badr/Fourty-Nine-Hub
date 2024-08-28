@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/fetch_car_brands/fetch_car_brands_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/fetch_car_models/fetch_car_models_cubit.dart';
@@ -8,13 +10,14 @@ import 'package:fourtyninehub/features/trip_join/presentation/cubits/publish_tri
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/button.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 
 class PublishButton extends StatefulWidget {
   const PublishButton({
     super.key,
+    required this.formKey,
   });
-
+  final GlobalKey<FormState> formKey;
   @override
   State<PublishButton> createState() => _PublishButtonState();
 }
@@ -41,43 +44,54 @@ class _PublishButtonState extends State<PublishButton> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<PublishTripJoinCubit, PublishTripJoinState>(
-      listener: (context, state) {
-        if (state is PublishTripJoinFailed) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.errorMessage, style: Styles.headerText(color: Colors.white)),
-              backgroundColor: Colors.red[500],
-              duration: const Duration(seconds: 2),
+    return BlocListener<PublishTripJoinCubit, PublishTripJoinState>(
+        listener: (context, state) {
+          if (state is PublishTripJoinSuccess) {
+            Future.delayed(const Duration(seconds: 1)).then((value) {
+              context.pushAndRemoveUntil(Routes.AVAILABLE_TRIPS, (route) => true);
+            });
+          }
+          if (state is PublishTripJoinFailed) {
+            showErrorMessage(context, state.errorMessage);
+          }
+        },
+        child: Stack(
+          children: [
+            CustomButton(
+              height: 50,
+              onTap: () async {
+                if (widget.formKey.currentState!.validate()) {
+                  await fetchData();
+                  // print(' ========= ${publishTripJoinCubit.tripJoinPublishParam}');
+                  await publishTripJoinCubit.publishTripJoin();
+                }
+              },
+              title: 'Publish',
             ),
-          );
-        }
-      },
-      builder: (context, state) {
-        return CustomButton(
-          height: 50,
-          onTap: () async {
-            await fetchData();
-            if ([
-              publishTripJoinCubit.tripJoinPublishParam.vehicleBrand,
-              publishTripJoinCubit.tripJoinPublishParam.vehicleModel
-            ].contains(null)) {
-              if (publishTripJoinCubit.tripJoinPublishParam.vehicleBrand == null) {
-                publishTripJoinCubit.emitFailure('Vechile Brand is Required');
-              }
-              if (publishTripJoinCubit.tripJoinPublishParam.vehicleModel == null) {
-                publishTripJoinCubit.emitFailure('Vechile Model is Required');
-              }
-              return;
-            }
-            print(' ========= ${publishTripJoinCubit.tripJoinPublishParam}');
-            // return;
-            await publishTripJoinCubit.publishTripJoin();
-          },
-          title: 'Publish',
-        );
-      },
-    );
+            Positioned(
+              top: 5,
+              right: 20,
+              child: SizedBox(
+                height: 40,
+                child: BlocBuilder<PublishTripJoinCubit, PublishTripJoinState>(
+                  builder: (context, state) {
+                    if (state is PublishTripJoinLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(color: Colors.white),
+                      );
+                    }
+                    if (state is PublishTripJoinSuccess) {
+                      return Center(
+                        child: Icon(Icons.check, color: Colors.green[400], size: 30),
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                ),
+              ),
+            )
+          ],
+        ));
   }
 
   Future<void> fetchData() async {
