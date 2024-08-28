@@ -1,4 +1,3 @@
-import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/entities/meal_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 
 import 'option_entity.dart';

@@ -45,20 +45,18 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
             status: RestaurantDetailsStates.initState, meals: data)));
   }
 
-  void addToCart(
+  addToCart(
       {required BuildContext context,
-      required SelectedMealModel selectedMeal}) async {
-    final response = await _addToCartUseCase(selectedMeal);
+      required String restaurantId,
+      required String foodId,
+      required String quantity}) async {
+    final response = await _addToCartUseCase(
+        restaurantId: restaurantId, foodId: foodId, quantity: quantity);
     response.fold(
         (l) => emit(
             state.copyWith(failure: l, status: RestaurantDetailsStates.error)),
         (data) {
-      if (data) {
-        List<SelectedMealModel> selectedMeals = state.selectedMeals ?? [];
-        selectedMeals.add(selectedMeal);
-        emit(state.copyWith(selectedMeals: selectedMeals));
-        Navigator.pop(context);
-      }
+      if (data) {}
     });
   }
 
@@ -68,11 +66,11 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
     emit(state.copyWith(selectedMeals: selectedMeals));
   }
 
-  void selectMeal({required RestaurantMenu meal}) {
+  void selectMeal({required RestaurantMenu meal, required int qty}) {
     List<SelectedMealModel> selectedMeals = state.selectedMeals ?? [];
     selectedMeals.add(
       SelectedMealModel(
-        qty: 1,
+        qty: qty,
         price: meal.price ?? 0.0,
         meal: meal,
         restaurantId: meal.restaurantId ?? "",
@@ -81,6 +79,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
       ),
     );
     emit(state.copyWith(selectedMeals: selectedMeals));
+
     log("added: ${state.selectedMeals?.length}");
   }
 

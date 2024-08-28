@@ -11,8 +11,16 @@ class RestaurantDetailsRepoImpl implements RestaurantDetailsRepo {
   final RestaurantRemoteDataSource _remoteDataSource;
   RestaurantDetailsRepoImpl(this._remoteDataSource);
   @override
-  Future<Either<Failure, bool>> addToCart({required SelectedMealModel meal}) {
-    return _remoteDataSource.addToCart(meal: meal);
+  Future<Either<Failure, bool>> addToCart({
+    required String restaurantId,
+    required String foodId,
+    required String quantity,
+  }) {
+    return _remoteDataSource.addToCart(
+      restaurantId: restaurantId,
+      foodId: foodId,
+      quantity: quantity,
+    );
   }
 
   @override

@@ -1,17 +1,18 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/data/models/selected_meal_model.dart';
-
-import '../../../../../../core/abstract/use_case.dart';
 
 import '../repositories/restaurant_details_repo.dart';
 
-class AddToCartUseCase extends UseCase<bool, SelectedMealModel> {
+class AddToCartUseCase {
   final RestaurantDetailsRepo _repo;
   AddToCartUseCase(this._repo);
 
-  @override
-  Future<Either<Failure, bool>> call(SelectedMealModel params) {
-    return _repo.addToCart(meal: params);
+  Future<Either<Failure, bool>> call({
+    required String restaurantId,
+    required String foodId,
+    required String quantity,
+  }) {
+    return _repo.addToCart(
+        restaurantId: restaurantId, foodId: foodId, quantity: quantity);
   }
 }

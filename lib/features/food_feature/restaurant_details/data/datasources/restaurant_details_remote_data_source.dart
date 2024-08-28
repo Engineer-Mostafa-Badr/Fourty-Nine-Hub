@@ -6,14 +6,17 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
 
 import '../../../../../core/api/end_points.dart';
- import '../models/selected_meal_model.dart';
 
 abstract class RestaurantRemoteDataSource {
   Future<Either<Failure, List<RestaurantMneuModel>>> getMeals(
       {required String restaurantId});
   Future<Either<Failure, Restaurant2Model>> getRestaurantDetails(
       {required String restaurantId});
-  Future<Either<Failure, bool>> addToCart({required SelectedMealModel meal});
+  Future<Either<Failure, bool>> addToCart({
+    required String restaurantId,
+    required String foodId,
+    required String quantity,
+  });
 }
 
 class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
@@ -21,9 +24,17 @@ class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
   RestaurantRemoteDataSourceImpl(this._apiConsumer);
   @override
   Future<Either<Failure, bool>> addToCart(
-      {required SelectedMealModel meal}) async {
-    final response =
-        await _apiConsumer.post(EndPoints.addToCart, data: meal.toJson());
+      {required String restaurantId,
+      required String foodId,
+      required String quantity}) async {
+    final data = {
+      'restaurantId': restaurantId,
+      'restaurantItem': {
+        'foodId': foodId,
+        'quantity': quantity,
+      },
+    };
+    final response = await _apiConsumer.post(EndPoints.addToCart, data: data);
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
