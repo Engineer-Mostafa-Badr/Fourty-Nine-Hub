@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../res/strings/labels.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/const.dart';
 import '../../../../res/style/styles.dart';
@@ -14,7 +15,10 @@ class Winners extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(),
+      appBar:  const BackAppBar(
+        centerTitle: false,
+        label: Labels.winners,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: GridView.builder(
@@ -68,9 +72,12 @@ class Winners extends StatelessWidget {
         ),
         const Sizer(),
         Label(
-            text: 'Farouk Shahin',
+            text: 'Moaz Mohamed',
             style: Styles.mediumText(fontWeight: FontWeight.w500)),
-        Label(text: '200\$', style: Styles.mediumText()),
+        Label(
+            text: 'Friends request',
+            style: Styles.smallText()),
+        Label(text: '5000', style: Styles.mediumText()),
       ],
     );
   }
