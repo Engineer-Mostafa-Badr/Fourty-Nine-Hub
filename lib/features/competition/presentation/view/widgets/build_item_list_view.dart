@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/competition/data/models/competion_model.dart';
 
 import '../../../../../res/style/styles.dart';
 import 'donut_chart_painter.dart';
 
 class BuildItemListView extends StatelessWidget {
-  const BuildItemListView({super.key});
+  const BuildItemListView({super.key, required this.model});
+ final CompetitionData model;
 
   @override
   Widget build(BuildContext context) {
-    const int count = 2500; // Replace with dynamic value if needed
-    const int max = 5000;  // Replace with dynamic value if needed
+     int count = model.amount!; // Replace with dynamic value if needed
+     int max = model.competitionId!.withdrawLimit!;  // Replace with dynamic value if needed
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Friends Request',
+          model.competitionId!.name!,
           style: Styles.headerText(),
         ),
         const SizedBox(

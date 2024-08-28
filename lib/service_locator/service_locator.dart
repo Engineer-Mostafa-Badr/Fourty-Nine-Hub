@@ -10,6 +10,8 @@ import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dar
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
+import 'package:fourtyninehub/core/utils/api_service.dart';
+import 'package:fourtyninehub/features/competition/data/repository/competition_repo_impl.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
@@ -86,6 +88,7 @@ class DI {
 
 //tinder getIt register
     serviceLocator.registerLazySingleton<TinderViewCubit>(() => TinderViewCubit());
+    serviceLocator.registerLazySingleton<CompetitionRepoImpl>(() => CompetitionRepoImpl(ApiService(Dio())),);
 
     // api consumer
 

@@ -5,6 +5,8 @@ import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
+import 'package:fourtyninehub/features/competition/data/repository/competition_repo_impl.dart';
+import 'package:fourtyninehub/features/competition/presentation/cubit/competition_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'core/service/cache_service.dart';
@@ -21,10 +23,7 @@ void main() async {
   //to cache gift items
   // ZegoGiftManager().cache.cache(giftItemList);
 
-
   //Admob.initialize();
-
-
 
   runApp(
     LocalizationService.rootWidget(
@@ -42,6 +41,11 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => serviceLocator<UserCubit>(),
+        ),
+        BlocProvider(
+          create: (context) =>
+              CompetitionCubit(serviceLocator.get<CompetitionRepoImpl>())
+                ..fetchCompetition(context),
         ),
         // BlocProvider(
         //   create: (context) => serviceLocator<RiderequestCubit>(),
@@ -68,7 +72,7 @@ class MyApp extends StatelessWidget {
           designSize: const Size(750, 1334),
           minTextAdapt: true,
           splitScreenMode: true,
-          builder: (context,child) {
+          builder: (context, child) {
             return BlocBuilder<ThemeCubit, ThemeStates>(
               builder: (BuildContext context, state) {
                 return MaterialApp.router(
