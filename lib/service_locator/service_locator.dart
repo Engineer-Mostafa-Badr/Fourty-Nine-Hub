@@ -166,6 +166,9 @@ import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dar
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
+import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_saved_reels_usecase.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/repositories/reels_repository_impl.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/repo/tinder_repo.dart';
@@ -315,6 +318,31 @@ class DI {
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
+      serviceLocator(),
+    ));
+
+    serviceLocator.registerFactory<EditProfileCubit>(() => EditProfileCubit(
+      serviceLocator(),
+    ));
+
+    serviceLocator.registerFactory<InstagramCubit>(() => InstagramCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+    ));
+
+
+    serviceLocator.registerLazySingleton<GetSavedReelsUseCase>(() => GetSavedReelsUseCase(
       serviceLocator(),
     ));
 

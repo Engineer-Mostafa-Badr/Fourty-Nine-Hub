@@ -34,6 +34,7 @@ import 'package:fourtyninehub/features/social_media/instagram/data/repositories/
 import 'package:fourtyninehub/features/social_media/instagram/domain/repositories/social_posts_repo.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_reels_usecase.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_saved_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/datasources/social_posts_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/repositories/social_posts_repo.dart';
@@ -301,6 +302,10 @@ class SocialServiceLocator {
           serviceLocator(),
         ));
 
+    serviceLocator.registerLazySingleton<GetSavedReelsUseCase>(() => GetSavedReelsUseCase(
+          serviceLocator(),
+        ));
+
     serviceLocator.registerFactory<CreatePostCubit>(() => CreatePostCubit(
           serviceLocator(),
           serviceLocator(),
@@ -315,6 +320,7 @@ class SocialServiceLocator {
         ));
 
     serviceLocator.registerFactory<InstagramCubit>(() => InstagramCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

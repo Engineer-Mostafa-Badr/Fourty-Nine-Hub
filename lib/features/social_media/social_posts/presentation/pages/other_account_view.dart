@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -7,6 +8,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/saved_reels_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_posts.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_reels.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_tweets.dart';
@@ -32,13 +34,14 @@ class OtherAccountView extends StatefulWidget {
 class _OtherAccountViewState extends State<OtherAccountView> {
   @override
   Widget build(BuildContext context) {
+    final loginUser = context.read<UserCubit>().state.data;
+
     return DefaultTabController(
-      length: 3,
+      length: loginUser?.id==widget.userId? 4:3,
       child: Scaffold(
         body: BlocBuilder<SocialPostsCubit, SocialPostsState>(
             builder: (context, state) {
           final controller = context.read<SocialPostsCubit>();
-          final loginUser = context.read<UserCubit>().state.data;
           return state.status == StateStatus.loading
               ? const Center(
                   child: CupertinoActivityIndicator(),
@@ -47,8 +50,13 @@ class _OtherAccountViewState extends State<OtherAccountView> {
             scrollController: ScrollController(),
                   appBars: [
                     SliverAppBar(
-                      floating: true,
-                      expandedHeight: kToolbarHeight * 5,
+                      floating: false,
+                      expandedHeight: 440,
+                      pinned: false,
+                      // floating: false,
+                      stretch: false,
+                      // pinned: true,
+                      collapsedHeight: 440,
                       automaticallyImplyLeading: false,
                       backgroundColor: Colors.white,
                       flexibleSpace: _buildAccountCounter(
@@ -174,19 +182,19 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             labelStyle: Styles.mediumText(),
                             isScrollable: true,
                             tabAlignment: TabAlignment.center,
-                            tabs: const [
-                              Tab(
+                            tabs: [
+                              const Tab(
                                 text: 'Posts',
                               ),
-                              Tab(
+                              const Tab(
                                 text: 'Tweets',
                               ),
-                              Tab(
+                              const Tab(
                                 text: 'Reels',
                               ),
-                              // Tab(
-                              //   text: 'Media',
-                              // ),
+                              if(context.read<UserCubit>().state.data?.id==widget.userId)const Tab(
+                                text: 'Saved Reels',
+                              ),
                             ]),
                       ),
                   ],
@@ -212,116 +220,118 @@ class _OtherAccountViewState extends State<OtherAccountView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-            child: Stack(
-          children: [
-            Positioned.fill(
-                child: Column(
-              children: [
-                Expanded(
-                    flex: 4,
-                    child: Image.network(
-                      user.profileCover!.isNotEmpty
-                          ? user.profileCover!
-                          : UIConst.socialImagePlaceHolder,
-                      fit: BoxFit.fill,
-                      width: double.infinity,
-                    )),
-                Expanded(
-                    child: Padding(
-                  padding: const EdgeInsetsDirectional.only(top: 3.0,end: 10),
-                  child: loginUser?.id == user.id
-                      ? Container()
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            AppButton(
-                                height: 120,
-                                width: kToolbarHeight * 1.5,
-                                backColor: user.isFollowed == true
-                                    ? AppColors.PRIMARY_COLOR
-                                    : null,
-                                label: user.isFollowed == true
-                                    ? 'unFollow'
-                                    : 'Follow',
-                                style: Styles.mediumText(color: Colors.white),
-                                onPressed: () {
-                                  onFollow();
-                                }),
-                            const Sizer(),
-                            (user.areFriends == true ||
-                                    user.isSenTRequest == true)
-                                ? PopupMenuButton(
-                                  // iconSize: 150,
-                                    itemBuilder: (context) {
-                                      return const [
-                                        PopupMenuItem<int>(
-                                          value: 0,
-                                          child: Text("Normal"),
-                                        ),
-                                        PopupMenuItem<int>(
-                                          value: 1,
-                                          child: Text("Anonymous"),
-                                        ),
-                                      ];
-                                    },
-                                    onSelected: (value) {
-                                      context.push(Routes.CHAT);
-                                    },
+        SizedBox(
+          height:250,
+          child: Stack(
+                    children: [
+          Positioned.fill(
+              child: Column(
+            children: [
+              Expanded(
+                  flex: 4,
+                  child: Image.network(
+                    user.profileCover!.isNotEmpty
+                        ? user.profileCover!
+                        : UIConst.socialImagePlaceHolder,
+                    fit: BoxFit.fill,
+                    width: double.infinity,
+                  )),
+              Expanded(
+                  child: Padding(
+                padding: const EdgeInsetsDirectional.only(top: 3.0,end: 10),
+                child: loginUser?.id == user.id
+                    ? Container()
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          AppButton(
+                              height: 120,
+                              width: kToolbarHeight * 1.5,
+                              backColor: user.isFollowed == true
+                                  ? AppColors.PRIMARY_COLOR
+                                  : null,
+                              label: user.isFollowed == true
+                                  ? 'unFollow'
+                                  : 'Follow',
+                              style: Styles.mediumText(color: Colors.white),
+                              onPressed: () {
+                                onFollow();
+                              }),
+                          const Sizer(),
+                          (user.areFriends == true ||
+                                  user.isSenTRequest == true)
+                              ? PopupMenuButton(
+                                // iconSize: 150,
+                                  itemBuilder: (context) {
+                                    return const [
+                                      PopupMenuItem<int>(
+                                        value: 0,
+                                        child: Text("Normal"),
+                                      ),
+                                      PopupMenuItem<int>(
+                                        value: 1,
+                                        child: Text("Anonymous"),
+                                      ),
+                                    ];
+                                  },
+                                  onSelected: (value) {
+                                    context.push(Routes.CHAT);
+                                  },
 
-                                  child:  Container(
-                                      alignment: Alignment.center,
-                                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                                      decoration:  BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                          color: AppColors.SECONDARY_COLOR),
-                                      child: Text(
-                                        user.areFriends == true
-                                            ? 'Friends'
-                                            : user.isSenTRequest == false
-                                            ? 'Accept Request'
-                                            : '',
-                                        style: Styles.mediumText(
-                                            color: Colors.white),
-                                      )))
-                                : AppButton(
-                                    height: 110,
-                                    padding: 5,
-                                    backColor: user.sentFriendRequest == true
-                                        ? AppColors.PRIMARY_COLOR
-                                        : null,
-                                    style:
-                                        Styles.mediumText(color: Colors.white),
-                                    label: user.isSenTRequest == true
-                                        ? 'Accept Request'
-                                        : user.areFriends == true
-                                            ? 'Friends'
-                                            : user.sentFriendRequest == true
-                                                ? 'Remove Request'
-                                                : 'Add Friend',
-                                    onPressed: () {
-                                      onAddFriend();
-                                    })
-                          ],
-                        ),
-                )),
-              ],
-            )),
-            PositionedDirectional(
-                bottom: 0,
-                start: 10,
+                                child:  Container(
+                                    alignment: Alignment.center,
+                                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                                    decoration:  BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                        color: AppColors.SECONDARY_COLOR),
+                                    child: Text(
+                                      user.areFriends == true
+                                          ? 'Friends'
+                                          : user.isSenTRequest == false
+                                          ? 'Accept Request'
+                                          : '',
+                                      style: Styles.mediumText(
+                                          color: Colors.white),
+                                    )))
+                              : AppButton(
+                                  height: 110,
+                                  padding: 5,
+                                  backColor: user.sentFriendRequest == true
+                                      ? AppColors.PRIMARY_COLOR
+                                      : null,
+                                  style:
+                                      Styles.mediumText(color: Colors.white),
+                                  label: user.isSenTRequest == true
+                                      ? 'Accept Request'
+                                      : user.areFriends == true
+                                          ? 'Friends'
+                                          : user.sentFriendRequest == true
+                                              ? 'Remove Request'
+                                              : 'Add Friend',
+                                  onPressed: () {
+                                    onAddFriend();
+                                  })
+                        ],
+                      ),
+              )),
+            ],
+          )),
+          PositionedDirectional(
+              bottom: 0,
+              start: 10,
+              child: CircleAvatar(
+                radius: 60,
+                backgroundColor: AppColors.SECONDARY_COLOR,
                 child: CircleAvatar(
-                  radius: 60,
-                  backgroundColor: AppColors.SECONDARY_COLOR,
-                  child: CircleAvatar(
-                    radius: 58,
-                    backgroundColor: Colors.white,
-                    backgroundImage: NetworkImage(user.profilePicture ?? ''),
+                  radius: 58,
+                  backgroundColor: Colors.white,
+                  backgroundImage: NetworkImage(user.profilePicture ?? ''),
+                ),
+              ))
+                    ],
                   ),
-                ))
-          ],
-        )),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Column(
@@ -374,8 +384,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                 ],
               ),
               Label(
-                  text: '@${user.email.split('@')[0]}',
-                  style: Styles.mediumText(color: Colors.grey)),
+                  text: 'Biooooooooooooooo',
+                  style: Styles.mediumText(color: Colors.black)),
               const Sizer(),
               Row(
                 children: [
@@ -395,6 +405,30 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   ),
                 ],
               ),
+              const Sizer(),
+              Container(
+                width: double.infinity,
+               padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    border: Border.all(),
+                  borderRadius: BorderRadius.circular(15)
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Label(
+                        text: 'Address:',
+                        style: Styles.headerText(color: Colors.black,fontSize: 30)),
+                    const Sizer(),Label(
+                        text: 'Phone:',
+                        style: Styles.headerText(color: Colors.black,fontSize: 30)),
+                    const Sizer(),Label(
+                        text: 'Job:',
+                        style: Styles.headerText(color: Colors.black,fontSize: 30)),
+                  ],
+                ),
+              ),
+
             ],
           ),
         )
@@ -424,9 +458,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
       ),
       UserTweets(userData: userData),
 
-      // const HighLightsSection(),
 
       UserReels(userData: userData),
+      if(context.read<UserCubit>().state.data?.id==widget.userId)SavedReelsView(userData: userData,),
       // const MediaSection(),
     ]);
   }
