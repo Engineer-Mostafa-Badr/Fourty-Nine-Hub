@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/saved_reels_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_posts.dart';
@@ -48,8 +48,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
               :CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: state.profileData?.isBlock == false
-                    ? Stack(
+                child: Stack(
                   children: [
                     _buildAccountCounter(
                         context: context,
@@ -97,7 +96,29 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               }
                             }
                           }
-                        }),
+                        },
+                    onAcceptFriend: ()async{
+                          bool result = await controller.acceptRejectFriend(params: AcceptRejectFriendRequestParams(userId: widget.userId,status: true));
+                          state.profileData?.isSenTRequest=false;
+                          state.profileData?.areFriends=true;
+                          state.profileData!.friendsCount=state.profileData!.friendsCount!+1;
+                          print(state.profileData?.friendsCount);
+                          setState(() {});
+                          return result;
+                    },
+                    onRejectFriend: ()async{
+                      bool result = await controller.acceptRejectFriend(params: AcceptRejectFriendRequestParams(userId: widget.userId,status: false));
+                      state.profileData?.isSenTRequest=false;
+                      setState(() {});
+                      return result;
+                    }, onDeleteFriend: ()async{
+                      bool result = await controller.deleteFriend(userId: widget.userId);
+                      state.profileData?.areFriends=false;
+                      state.profileData!.friendsCount=state.profileData!.friendsCount!-1;
+                      print(state.profileData?.friendsCount);
+                      setState(() {});
+                      return result;
+                    }),
                     PositionedDirectional(
                       top: 30,
                       end: 10,
@@ -133,7 +154,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   var result = await controller.blockUser(
                                       context: context,
                                       userId: widget.userId);
-                                  print("result:${result}");
+                                  print("result:$result");
                                   if (result == true) {
                                     print("object");
                                     if (state.profileData?.isBlock == false) {
@@ -170,15 +191,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     )
 
                   ],
-                )
-                    : const Center(
-                  child: Label(
-                    text: 'You have blocked this user.',
-                  ),
                 ),
               ),
               SliverToBoxAdapter(
-                child: Column(
+                child: state.profileData?.isBlock == false
+                    ?Column(
                   children: [
                     TabBar(
                         labelStyle: Styles.mediumText(),
@@ -205,15 +222,25 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         ]),
                     // _buildAccountPages(state.profileData!),
                   ],
+                ): const Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 25.0),
+                    child: Label(
+                      text: 'You have blocked this user.',
+                    ),
+                  ),
                 ),
               ),
-              state.profilePage==0?UserPosts(
+              state.profilePage==0&&state.profileData?.isBlock == false?UserPosts(
                 userData: state.profileData!,
-              ):state.profilePage==1?UserTweets(
+              ):state.profilePage==1&&state.profileData?.isBlock == false?UserTweets(
                 userData: state.profileData!,
-              ):state.profilePage==2?UserReels(
+              ):state.profilePage==2&&state.profileData?.isBlock == false?UserReels(
                 userData: state.profileData!,
-              ):SavedReelsView(userData: state.profileData!),
+              ):state.profilePage==2&&state.profileData?.isBlock == false?SavedReelsView(userData: state.profileData!)
+              :const SliverToBoxAdapter(
+                child: SizedBox.shrink(),
+              ),
             ],
           );
         }),
@@ -225,6 +252,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
       {required BuildContext context,
       required UserProfileEntity user,
       required Function onFollow,
+      required Function onAcceptFriend,
+      required Function onRejectFriend,
+      required Function onDeleteFriend,
       required Function onAddFriend}) {
     final loginUser = context.read<UserCubit>().state.data;
     return Column(
@@ -275,19 +305,23 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   ? PopupMenuButton(
                                       // iconSize: 150,
                                       itemBuilder: (context) {
-                                        return const [
-                                          PopupMenuItem<int>(
+                                        return [
+                                          if(user.isSenTRequest == true)...[PopupMenuItem<int>(
                                             value: 0,
-                                            child: Text("Normal"),
+                                            child: const Text("Accept"),
+                                            onTap: ()=>onAcceptFriend(),
                                           ),
-                                          PopupMenuItem<int>(
+                                            PopupMenuItem<int>(
                                             value: 1,
-                                            child: Text("Anonymous"),
+                                            child: const Text("Reject"),
+                                            onTap: ()=>onRejectFriend(),
+                                          ),],
+                                          if(user.areFriends == true)PopupMenuItem<int>(
+                                            value: 0,
+                                            child: const Text("Delete Friend"),
+                                            onTap: ()=>onDeleteFriend(),
                                           ),
                                         ];
-                                      },
-                                      onSelected: (value) {
-                                        context.push(Routes.CHAT);
                                       },
                                       child: Container(
                                           alignment: Alignment.center,
@@ -296,12 +330,12 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(5),
-                                              color: AppColors.SECONDARY_COLOR),
+                                              color: AppColors.PRIMARY_COLOR),
                                           child: Text(
-                                            user.areFriends == true
-                                                ? 'Friends'
-                                                : user.isSenTRequest == false
-                                                    ? 'Accept Request'
+                                            user.isSenTRequest == true
+                                                ? 'Accept Request'
+                                                : user.areFriends == true
+                                                    ? 'Friends'
                                                     : '',
                                             style: Styles.mediumText(
                                                 color: Colors.white),
@@ -399,6 +433,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                 ],
               ),
               Label(
+                  text: '@${user.email.split('@')[0]}',
+                  style: Styles.mediumText(color: Colors.grey)),
+              Label(
                   text: user.bio,
                   style: Styles.mediumText(color: Colors.black)),
               const Sizer(),
@@ -440,7 +477,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           const Sizer(),
                           Expanded(
                             child: Label(
-                              text: '${user.country}, ${user.city}',
+                              text: '${user.country}${user.city.isNotEmpty?',':''} ${user.city}',
                               style: Styles.headerText(
                                   color: Colors.grey, fontSize: 30),
                               maxLines: 1,

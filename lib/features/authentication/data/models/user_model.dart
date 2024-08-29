@@ -17,6 +17,7 @@ class UserModel extends UserEntity {
     super.isRestaurant,
     super.isLoading,
     super.isDocument,
+    super.bio, super.phone, super.city, super.country, super.job, super.gender
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -36,6 +37,12 @@ class UserModel extends UserEntity {
       isRestaurant: json['isRestaurant'] ?? false,
       isLoading: json['isLoading'] ?? false,
       isDocument: json['isDocument'] ?? false,
+      bio: json['bio'] ?? '',
+      phone: json['phone'] ?? '',
+      city: json['city'] ?? '',
+      job: json['job'] ?? '',
+      country: json['country'] ?? '',
+      gender: json['gender'] ?? '',
     );
   }
 }

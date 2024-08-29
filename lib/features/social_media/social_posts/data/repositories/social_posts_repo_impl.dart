@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
@@ -36,6 +37,11 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   Future<Either<Failure, List<PostEntity>>> getUserPosts(
       {required UserPostsParams params}) {
     return _remoteDataSource.getUserPosts(params: params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> acceptRejectFriendRequest({required AcceptRejectFriendRequestParams params}) {
+    return _remoteDataSource.acceptRejectFriendRequest(params: params);
   }
 
   @override
@@ -156,5 +162,10 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   Future<Either<Failure, bool>> editComment(
       {required PostCommentParams params}) {
     return _remoteDataSource.editComment(params: params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteFriend({required String userId}) {
+    return _remoteDataSource.deleteFriend(userId: userId);
   }
 }

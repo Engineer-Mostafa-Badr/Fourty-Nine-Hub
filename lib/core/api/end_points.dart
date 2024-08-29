@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
@@ -286,6 +287,14 @@ class EndPoints {
 
   static String editComment(PostCommentParams params) {
     return '/facebook/comment/update-comment/${params.postId}?subCategory=66b77e77bb35968b535dc944';
+  }
+
+  static String acceptRejectFriendRequest(AcceptRejectFriendRequestParams params) {
+    return '/friends/acceptOrRejectrequest/${params.userId}?subCategory=62ef7cf658c90d4a7ed48120';
+  }
+
+  static String deleteFriend(String userId) {
+    return '/friends/deleteFriend/$userId?subCategory=62ef7cf658c90d4a7ed48120';
   }
 
   static String commentOnTwitterPost(String postId) {
