@@ -11,7 +11,7 @@ class UserProfileEntity {
   final int? totalView;
   final String? profilePicture;
   final String? profileCover;
-  final int? friendsCount;
+  int? friendsCount;
   final int? followersCount;
   final int? followingCount;
   bool? isFollowed;

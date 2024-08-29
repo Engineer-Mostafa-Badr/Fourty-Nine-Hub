@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/domain/entities/edit_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/domain/usecases/edit_profile_usecase.dart';
 
@@ -43,8 +44,14 @@ class EditProfileCubit extends Cubit<EditProfileState> {
     emit(state.copyWith(status: EditProfileStates.loading));
     final response = await _editProfileUseCase(params);
     response.fold((l) => emit(state.copyWith(failure: l,status: EditProfileStates.error)), (data) {
+      UserCubit.to.getUser();
       emit(state.copyWith(status: EditProfileStates.success));
     });
+  }
+
+
+  initGender(String gender){
+    emit(state.copyWith(isMale:gender=='male'||gender.isEmpty?true:false));
   }
 
 
