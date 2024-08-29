@@ -166,6 +166,8 @@ import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dar
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getChats_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getChats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_saved_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
@@ -187,6 +189,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../core/api/api_consumer.dart';
 import '../core/local_storage/local_storage_consumer.dart';
 import '../core/localization/localization_service.dart';
+import '../features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import '../firebase_options.dart';
 import 'account_service_locator.dart';
 import 'auction_service_locator.dart';
@@ -249,7 +252,7 @@ class DI {
             )
         ]),
     );
-
+/*
     // Register the ReelsRepository
     serviceLocator.registerLazySingleton<ReelsRepository>(
       () => ReelsRepository(),
@@ -341,11 +344,25 @@ class DI {
           serviceLocator(),
           serviceLocator(),
         ));
+    serviceLocator.registerFactory<ChatsCubit>(() => ChatsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
 
     serviceLocator
         .registerLazySingleton<GetSavedReelsUseCase>(() => GetSavedReelsUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<GetChatsUseCase>(() => GetChatsUseCase(
+          serviceLocator(),
+        ));*/
 
     // Register the TinderViewCubit and inject the TinderRepository dependency
     serviceLocator.registerFactory<TinderViewCubit>(() =>
@@ -401,7 +418,7 @@ class DI {
     // Account
     AccountServiceLocator.execute(serviceLocator: serviceLocator);
     // Social
-    SocialServiceLocator.execute(serviceLocator: serviceLocator);
+    await SocialServiceLocator.execute(serviceLocator: serviceLocator);
     // Club Voice
     ClubVoiceServiceLocator.execute(serviceLocator: serviceLocator);
     // Meeting

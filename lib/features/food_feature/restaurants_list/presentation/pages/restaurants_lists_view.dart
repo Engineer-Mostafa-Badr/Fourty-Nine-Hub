@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/presentatio
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -26,7 +27,9 @@ class RestaurantsListsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SharedScaffold(
+      body: BlocProvider(
+  create: (context) => serviceLocator<RestaurantsListCubit>(),
+  child: SharedScaffold(
         mainCategoryId: 1,
         body: RefreshIndicator(
           onRefresh: () async =>
@@ -186,6 +189,7 @@ class RestaurantsListsView extends StatelessWidget {
           ),
         ),
       ),
+),
     );
   }
 

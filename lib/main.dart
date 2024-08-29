@@ -1,57 +1,101 @@
-import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/localization/localization_service.dart';
+import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
+import 'package:fourtyninehub/common/theme/cubit/states.dart';
+import 'package:fourtyninehub/core/themes/dark_theme.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'core/service/cache_service.dart';
+import 'core/themes/light_theme.dart';
+import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+import 'routes/pages.dart';
 
-class ImageUploaderWidget extends StatefulWidget {
-  final String? tilte;
-  final double? height;
-  final double? width;
-  final Widget? image;
-  final String subCategoryId;
-  final Function(UploadFileEntity)? onUploaded;
-  const ImageUploaderWidget({
-    super.key,
-    this.tilte,
-    this.height,
-    this.width,
-    required this.subCategoryId,
-    this.onUploaded,
-    this.image,
-  });
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await CacheServiceImpl.init();
+  await DI.execute();
+  //to cache gift items
+  // ZegoGiftManager().cache.cache(giftItemList);
 
-  @override
-  State<ImageUploaderWidget> createState() => _ImageUploaderWidgetState();
+
+  //Admob.initialize();
+
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+  runApp(
+    LocalizationService.rootWidget(
+      // child: DevicePreview(
+      //   enabled: !kReleaseMode,
+      //   builder: (context) => const MyApp(),
+      // ),
+      child: const MyApp(),
+    ),
+  );
 }
 
-class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
-  late Widget? _image;
-  @override
-  void initState() {
-    _image = widget.image;
-    super.initState();
-  }
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        UploadFile().uploadImage(
-          subCategoryId: widget.subCategoryId,
-          onUploaded: (value) {
-            setState(() {
-              _image = Image.file(File(value.file.path));
-            });
-            widget.onUploaded?.call(value);
-          },
-        );
-      },
-      child: ImagePickerPlaceholder(
-        height: widget.height,
-        width: widget.width,
-        image: _image,
-        tilte: widget.tilte,
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => serviceLocator<UserCubit>(),
+        ),
+        // BlocProvider(
+        //   create: (context) => serviceLocator<RiderequestCubit>(),
+        // ),
+        // BlocProvider(
+        //   create: (context) => serviceLocator<CreateShippingRequestCubit>(),
+        // ),
+        // // CreateAdCubit
+        // BlocProvider(
+        //   create: (context) => serviceLocator<CreateAdCubit>(),
+        // ),
+        // //  tinder to be reviewed
+        BlocProvider(
+          create: (context) => serviceLocator<ChatsCubit>(),
+        ),
+        // BlocProvider(
+        //   create: (context) => TinderViewCubit(),
+        // ),
+        BlocProvider(
+          create: (context) => ThemeCubit(),
+        ),
+      ],
+      child: ZegoScreenUtilInit(
+          designSize: const Size(750, 1334),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (context, child) {
+            return BlocBuilder<ThemeCubit, ThemeStates>(
+              builder: (BuildContext context, state) {
+                return MaterialApp.router(
+                  themeMode: context.read<ThemeCubit>().isDarkTheme
+                      ? ThemeMode.dark
+                      : ThemeMode.light,
+                  theme: lightTheme(),
+                  darkTheme: darkTheme(),
+                  title: '49',
+                  debugShowCheckedModeBanner: false,
+                  routerConfig: AppPages.router,
+                  localizationsDelegates: context.localizationDelegates,
+                  supportedLocales: context.supportedLocales,
+                  locale: context.locale,
+                  // for device preview package
+                  // builder: DevicePreview.appBuilder,
+                );
+              },
+            );
+          }),
     );
   }
 }
