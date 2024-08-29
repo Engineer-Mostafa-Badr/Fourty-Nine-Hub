@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -33,11 +35,13 @@ class CreateDoctorIDPhotoPicker extends StatelessWidget {
                 builder: (context, state) {
                   if (state is CreateDoctorUploadIdFrontImage) {
                     return ImagePickerPlaceholder(
-                      image: state.file,
+                      image: Image.file(
+                        File(state.file.path),
+                      ),
                     );
                   }
                   return const ImagePickerPlaceholder(
-                    title: 'Front',
+                    tilte: 'Front',
                   );
                 },
               ),
@@ -53,10 +57,14 @@ class CreateDoctorIDPhotoPicker extends StatelessWidget {
                     current is CreateDoctorInitial,
                 builder: (context, state) {
                   if (state is CreateDoctorUploadIdBehindImage) {
-                    return ImagePickerPlaceholder(image: state.file);
+                    return ImagePickerPlaceholder(
+                      image: Image.file(
+                        File(state.file.path),
+                      ),
+                    );
                   }
                   return const ImagePickerPlaceholder(
-                    title: 'Back',
+                    tilte: 'Back',
                   );
                 },
               ),

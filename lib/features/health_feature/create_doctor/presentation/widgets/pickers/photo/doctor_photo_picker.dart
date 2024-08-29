@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -38,7 +40,9 @@ class _CreateDoctorProfilePhotoPickerState
             builder: (context, state) {
               if (state is CreateDoctorUploadProfileImage) {
                 return ImagePickerPlaceholder(
-                  image: state.file,
+                  image: Image.file(
+                    File(state.file.path),
+                  ),
                 );
               }
               return const ImagePickerPlaceholder();

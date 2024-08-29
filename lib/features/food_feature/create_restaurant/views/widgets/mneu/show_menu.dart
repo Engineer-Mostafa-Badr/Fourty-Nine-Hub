@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -11,8 +13,8 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:image_picker/image_picker.dart';
 
+// ignore: must_be_immutable
 class ShowMneu extends StatelessWidget {
   ShowMneu({super.key});
 
@@ -54,8 +56,10 @@ class ShowMneu extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               ImagePickerPlaceholder(
-                                fit: BoxFit.cover,
-                                image: XFile(e.photoPath ?? ""),
+                                image: Image.file(
+                                  File(e.photoPath ?? ""),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                               const Sizer(),
                               Column(
@@ -123,12 +127,14 @@ class ShowMneu extends StatelessWidget {
                           if (state is RestaurantMenuImagePicked) {
                             imagePath = state.imagePath;
                             return ImagePickerPlaceholder(
-                              fit: BoxFit.cover,
-                              image: XFile(state.imagePath),
+                              image: Image.file(
+                                File(imagePath),
+                                fit: BoxFit.cover,
+                              ),
                             );
                           }
                           return ImagePickerPlaceholder(
-                            title: LocaleKeys.photoForMeal.tr(),
+                            tilte: LocaleKeys.photoForMeal.tr(),
                           );
                         },
                       ),

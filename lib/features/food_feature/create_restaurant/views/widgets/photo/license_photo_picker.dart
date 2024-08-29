@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -7,7 +9,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:image_picker/image_picker.dart';
 
 class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
   const CreateRestaurantLicensePhotoPicker({super.key});
@@ -39,8 +40,10 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                   builder: (context, state) {
                     if (state is CreateRestaurantUploadLicenseFirstPageImage) {
                       return ImagePickerPlaceholder(
-                        fit: BoxFit.cover,
-                        image: XFile(state.file.path),
+                        image: Image.file(
+                          File(state.file.path),
+                          fit: BoxFit.cover,
+                        ),
                       );
                     }
                     return ImagePickerPlaceholder(
@@ -48,7 +51,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                               (state.isCommercialFirstPage ?? true)
                           ? Colors.red
                           : Colors.black,
-                      title: LocaleKeys.firstPage.tr(),
+                      tilte: LocaleKeys.firstPage.tr(),
                     );
                   },
                 ),
@@ -66,9 +69,9 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                   builder: (context, state) {
                     if (state is CreateRestaurantUploadLicenseSecondPageImage) {
                       return ImagePickerPlaceholder(
-                        fit: BoxFit.cover,
-                        image: XFile(
-                          state.file.path,
+                        image: Image.file(
+                          File(state.file.path),
+                          fit: BoxFit.cover,
                         ),
                       );
                     }
@@ -77,7 +80,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                               (state.isCommercialSecondPage ?? true)
                           ? Colors.red
                           : Colors.black,
-                      title: LocaleKeys.secondPage.tr(),
+                      tilte: LocaleKeys.secondPage.tr(),
                     );
                   },
                 ),
@@ -95,8 +98,10 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                   builder: (context, state) {
                     if (state is CreateRestaurantUploadLicenseThiredPageImage) {
                       return ImagePickerPlaceholder(
-                        fit: BoxFit.cover,
-                        image: XFile(state.file.path),
+                        image: Image.file(
+                          File(state.file.path),
+                          fit: BoxFit.cover,
+                        ),
                       );
                     }
                     return ImagePickerPlaceholder(
@@ -104,7 +109,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                               (state.isCommercialThirdPage ?? true)
                           ? Colors.red
                           : Colors.black,
-                      title: LocaleKeys.thirdPage.tr(),
+                      tilte: LocaleKeys.thirdPage.tr(),
                     );
                   },
                 ),

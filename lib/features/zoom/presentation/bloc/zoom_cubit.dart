@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -56,7 +54,7 @@ class MeetingCubit extends Cubit<MeetingState> {
   void joinRoom(String roomId) {
     emit(state.copyWith(status: MeetingStates.loading));
     joinRoomUseCase(MeetingParams(meetingId: roomId)).then((result) {
-      if (result.statusCode == 200) {
+      if (result!.statusCode == 200) {
         emit(state.copyWith(status: MeetingStates.success));
       } else {
         final String errorMessage = result.data['error']['message'] ?? '';
