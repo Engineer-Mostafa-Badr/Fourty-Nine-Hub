@@ -22,8 +22,8 @@ class UserModel extends UserEntity {
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['userId'] ?? json['_id'],
-      firstName: json['first_name'] ?? json['firstName'] ?? '',
-      lastName: json['last_name'] ?? json['lastName'] ?? '',
+      firstName:  json['firstName'][0].toUpperCase() + json['firstName'].substring(1).toLowerCase() ?? '',
+      lastName:json['lastName'][0].toUpperCase() + json['lastName'].substring(1).toLowerCase() ?? '',
       email: json['email'] ?? '',
       profilePicture: json['profilePicture'] ?? json['profilePicture'] ?? 'https://st3.depositphotos.com/9998432/13335/v/450/depositphotos_133352010-stock-illustration-default-placeholder-man-and-woman.jpg',
       profileCover: json['coverPicture'] ?? '',

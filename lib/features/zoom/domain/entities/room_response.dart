@@ -11,7 +11,6 @@ class RoomResponse extends Equatable {
     required this.success,
   });
 
-
   @override
   List<Object> get props => [message, success];
 }

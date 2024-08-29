@@ -35,14 +35,14 @@ class CommentCard extends StatefulWidget {
       required this.onAddReply,
       required this.onDeleteComment,
       required this.onDeleteReply,
-      required this.from, required this.onEditComment});
+      required this.from,
+      required this.onEditComment});
 
   @override
   State<CommentCard> createState() => _CommentCardState();
 }
 
 class _CommentCardState extends State<CommentCard> {
-
   final editTextController = TextEditingController();
 
   @override
@@ -56,8 +56,9 @@ class _CommentCardState extends State<CommentCard> {
             ProfileImage(
               accountId: 0,
               withBorder: false,
-              imageURL:
-                  widget.comment.user.image.isNotEmpty ? widget.comment.user.image : null,
+              imageURL: widget.comment.user.image.isNotEmpty
+                  ? widget.comment.user.image
+                  : null,
             ),
             const Sizer(),
             Expanded(
@@ -86,19 +87,20 @@ class _CommentCardState extends State<CommentCard> {
                   Icons.more_vert,
                   color: widget.textColor,
                 )),
-            if(user?.id==widget.comment.user.id)...[
+            if (user?.id == widget.comment.user.id) ...[
               const Sizer(),
-            GestureDetector(
-                onTap: () {
-                  widget.comment.edit=!widget.comment.edit!;
-                  editTextController.text=widget.comment.content;
-                  setState(() {});
-                },
-                child: Icon(
-                  Icons.edit,
-                  color: widget.textColor,
-                  size: 20,
-                )),],
+              GestureDetector(
+                  onTap: () {
+                    widget.comment.edit = !widget.comment.edit!;
+                    editTextController.text = widget.comment.content;
+                    setState(() {});
+                  },
+                  child: Icon(
+                    Icons.edit,
+                    color: widget.textColor,
+                    size: 20,
+                  )),
+            ],
             const Sizer(),
             GestureDetector(
                 onTap: () {
@@ -113,35 +115,36 @@ class _CommentCardState extends State<CommentCard> {
         ),
         const Sizer(),
         Text(
-
-           widget.comment.content,
-
+          widget.comment.content,
           style: Styles.mediumText(color: widget.textColor),
         ),
-        if(widget.comment.edit==true)Row(
-          children: [
-            Expanded(
-                child: FormTextField(
-                    hint: 'Type your comment ....',
-                    action: (v) {
+        if (widget.comment.edit == true)
+          Row(
+            children: [
+              Expanded(
+                  child: FormTextField(
+                      hint: 'Type your comment ....',
+                      action: (v) {
+                        setState(() {});
+                      },
+                      controller: editTextController)),
+              const Sizer(),
+              if (editTextController.text.isNotEmpty)
+                IconAppButton(
+                    icon: Icons.send,
+                    isCircle: true,
+                    onPressed: () async {
+                      var result = await widget.onEditComment(PostCommentParams(
+                          postId: widget.comment.id,
+                          content: editTextController.text));
+                      if (result == true) {
+                        widget.comment.content = editTextController.text;
+                        widget.comment.edit = false;
+                      }
                       setState(() {});
-                    },
-                    controller: editTextController)),
-            const Sizer(),
-            if (editTextController.text.isNotEmpty)
-              IconAppButton(
-                  icon: Icons.send,
-                  isCircle: true,
-                  onPressed: () async {
-                    var result = await widget.onEditComment(PostCommentParams(postId: widget.comment.id, content: editTextController.text));
-                    if(result==true){
-                      widget.comment.content=editTextController.text;
-                      widget.comment.edit=false;
-                    }
-                    setState(() {});
-                  })
-          ],
-        ),
+                    })
+            ],
+          ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -166,8 +169,11 @@ class _CommentCardState extends State<CommentCard> {
                           commentId: widget.comment.id,
                           onAddReply: (ReplyOnCommentParams params) =>
                               widget.onAddReply(params),
-                          onDeleteReply: (String id) => widget.onDeleteReply(id),
-                          from: widget.from, onEditComment: (PostCommentParams params)=>widget.onEditComment(params),
+                          onDeleteReply: (String id) =>
+                              widget.onDeleteReply(id),
+                          from: widget.from,
+                          onEditComment: (PostCommentParams params) =>
+                              widget.onEditComment(params),
                         ),
                       ));
                 })

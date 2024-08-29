@@ -11,8 +11,10 @@ abstract class CreatePostRepo {
   Future<Either<Failure, List<FeelingEntity>>> getFeelingsList();
   Future<Either<Failure, List<ActivityEntity>>> getActivitiesList();
   Future<Either<Failure, bool>> postData({required Map<String, dynamic> data});
-  Future<Either<Failure, List<PostUserEntity>>> getFriendsFollowers({required FriendsFollowersParams params});
-  Future<Either<Failure, List<PlaceEntity>>> getPlaces({required FriendsFollowersParams params});
+  Future<Either<Failure, List<PostUserEntity>>> getFriendsFollowers(
+      {required FriendsFollowersParams params});
+  Future<Either<Failure, List<PlaceEntity>>> getPlaces(
+      {required FriendsFollowersParams params});
   Future<Either<Failure, bool>> createTwitterPost(
       {required CreateTwitterPostParams params});
 }

@@ -105,11 +105,13 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<Restaurant2Model>>> getAllRestaurantsWithMenu({required PostCommentsParams params}) async {
+  Future<Either<Failure, List<Restaurant2Model>>> getAllRestaurantsWithMenu(
+      {required PostCommentsParams params}) async {
     final response = await _apiConsumer
         .get(EndPoints.getAllRestaurantWithMenu(params: params));
     return response.fold(
-            (failure) => Left(failure),
-            (data) => Right(List<Restaurant2Model>.from(data["data"].map((e)=> Restaurant2Model.fromJson(e)).toList)));
+        (failure) => Left(failure),
+        (data) => Right(List<Restaurant2Model>.from(
+            data["data"].map((e) => Restaurant2Model.fromJson(e)).toList)));
   }
 }

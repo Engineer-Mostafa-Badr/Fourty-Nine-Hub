@@ -415,7 +415,7 @@ class ShippingCubit extends Cubit<ShippingState> {
     String fileName = file.path.split('/').last;
     log(image.length.toString(), name: 'signedUrlll');
     log(signedUrl.toString(), name: 'signedUrlll');
-    
+
     Options options = Options(contentType: file.mimeType, headers: {
       'Accept': "*/*",
       'Content-Type': 'application/octet-stream',

@@ -13,12 +13,19 @@ class TripJoinView extends StatelessWidget {
     // context
     //     .read<DestinationLocationCubit>()
     //     .getDestinationLocation(address: 'المنصورة شارع الجمهورية بجوار قصر البارون');
+    // serviceLocator<FetchPriceDistanceUsecase>().call(
+    //   startLocation: const LatLng(29.962565, 31.261392),
+    //   destiantionLocation: const LatLng(30.098281, 31.329383),
+    // );
+    // context.read<FetchCarBrandsCubit>().fetchCarBrand(search: 'niss');
+    // context.read<FetchCarBrandsCubit>().fetchCarBrand(search: 'niss');
+    // serviceLocator<FetchCarYearTypeUseCase>().call(brand: 'Toyota', model: 'Corolla');
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           'Trip Join',
-          style: Styles.headerText(fontSize: 24),
+          style: Styles.headerText(),
         ),
       ),
       body: const TripJoinBody(),

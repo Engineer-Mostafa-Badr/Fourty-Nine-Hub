@@ -10,7 +10,7 @@ class ChatItemModel {
       json['chats'].forEach((v) {
         chats!.add(ChatModel.fromJson(v));
       });
-    }else if (json['groups'] != null) {
+    } else if (json['groups'] != null) {
       chats = <ChatModel>[];
       json['groups'].forEach((v) {
         chats!.add(ChatModel.fromJson(v));

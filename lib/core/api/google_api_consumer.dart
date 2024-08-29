@@ -27,7 +27,8 @@ class GoogleApiConsumer extends ApiConsumer {
       if (result.data['status'] == 'OK') {
         return Right(result.data['results'][0] as Map<String, dynamic>);
       } else {
-        return Left(ValidationFailure(result.data['error_message'] ?? "Unkown Error, Please Try Again Later"));
+        return Left(ValidationFailure(result.data['error_message'] ??
+            "Unkown Error, Please Try Again Later"));
       }
     } catch (e) {
       return Left(_getFailure(e));
@@ -39,10 +40,12 @@ class GoogleApiConsumer extends ApiConsumer {
       if (e.response?.statusCode == 401) {
         return const UnauthorizedFailure();
       } else if (e.response?.statusCode == 400) {
-        if (e.response?.data is Map && e.response?.data['error_message'] is String) {
+        if (e.response?.data is Map &&
+            e.response?.data['error_message'] is String) {
           return ServerFailure(message: e.response?.data['error_message']);
         } else {
-          return const ServerFailure(message: "Unkown Error, Please Try Again Later");
+          return const ServerFailure(
+              message: "Unkown Error, Please Try Again Later");
         }
       }
     }
@@ -67,7 +70,9 @@ class GoogleApiConsumer extends ApiConsumer {
 
   @override
   Future<Either<Failure, Map<String, dynamic>>> post(String url,
-      {Map<String, dynamic>? data, FormData? formData, Map<String, dynamic>? queryParameters}) {
+      {Map<String, dynamic>? data,
+      FormData? formData,
+      Map<String, dynamic>? queryParameters}) {
     // TODO: implement post
     throw UnimplementedError();
   }

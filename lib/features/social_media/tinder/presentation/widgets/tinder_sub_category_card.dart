@@ -1,5 +1,6 @@
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -123,16 +124,18 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Label(
-                text: subCategoryName,
+              Text(
+                subCategoryName,
                 style: Styles.headerText(
-                  fontSize: 16,
+                  fontSize: MediaQuery.of(context).size.width * 0.089,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Label(
-                text: '${9355.toShortScale} ads',
-                style: Styles.mediumText(fontSize: 14),
+              Text(
+                '${9355.toShortScale} ads',
+                style: Styles.mediumText(
+                  fontSize: MediaQuery.of(context).size.width * 0.07,
+                ),
               ),
             ],
           ),

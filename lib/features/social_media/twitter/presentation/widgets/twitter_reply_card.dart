@@ -26,7 +26,9 @@ class TwitterReplyCard extends StatefulWidget {
     this.textColor = Colors.black,
     required this.reply,
     required this.onReplyReact,
-    required this.onReport, required this.onEditReply, required this.onDeleteReply,
+    required this.onReport,
+    required this.onEditReply,
+    required this.onDeleteReply,
   });
 
   @override
@@ -34,7 +36,6 @@ class TwitterReplyCard extends StatefulWidget {
 }
 
 class _TwitterReplyCardState extends State<TwitterReplyCard> {
-
   final editTextController = TextEditingController();
 
   @override
@@ -81,19 +82,21 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                   Icons.more_vert,
                   color: widget.textColor,
                 )),
-            if(user?.id==widget.reply.user.id)...[
+            if (user?.id == widget.reply.user.id) ...[
               // const Sizer(),
               GestureDetector(
                   onTap: () {
-                    widget.reply.edit=!widget.reply.edit!;
-                    editTextController.text=widget.reply.content??'';
+                    widget.reply.edit = !widget.reply.edit!;
+                    editTextController.text = widget.reply.content ?? '';
                     setState(() {});
                   },
                   child: Icon(
                     Icons.edit,
                     color: widget.textColor,
                     size: 20,
-                  )),const Sizer()],
+                  )),
+              const Sizer()
+            ],
             GestureDetector(
                 onTap: () {
                   widget.onDeleteReply(widget.reply.id);
@@ -108,33 +111,37 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
         const Sizer(),
         Label(
           textAlign: TextAlign.start,
-          text: widget.reply.content??'',
+          text: widget.reply.content ?? '',
           style: Styles.mediumText(color: widget.textColor),
         ),
-        if(widget.reply.edit==true)Row(
-          children: [
-            Expanded(
-                child: FormTextField(
-                    hint: 'Type your reply ....',
-                    action: (v) {
+        if (widget.reply.edit == true)
+          Row(
+            children: [
+              Expanded(
+                  child: FormTextField(
+                      hint: 'Type your reply ....',
+                      action: (v) {
+                        setState(() {});
+                      },
+                      controller: editTextController)),
+              const Sizer(),
+              if (editTextController.text.isNotEmpty)
+                IconAppButton(
+                    icon: Icons.send,
+                    isCircle: true,
+                    onPressed: () async {
+                      var result = await widget.onEditReply(
+                          TwitterPostCommentParams(
+                              postId: widget.reply.id,
+                              content: editTextController.text));
+                      if (result == true) {
+                        widget.reply.content = editTextController.text;
+                        widget.reply.edit = false;
+                      }
                       setState(() {});
-                    },
-                    controller: editTextController)),
-            const Sizer(),
-            if (editTextController.text.isNotEmpty)
-              IconAppButton(
-                  icon: Icons.send,
-                  isCircle: true,
-                  onPressed: () async {
-                    var result = await widget.onEditReply(TwitterPostCommentParams(postId: widget.reply.id, content: editTextController.text));
-                    if(result==true){
-                      widget.reply.content=editTextController.text;
-                      widget.reply.edit=false;
-                    }
-                    setState(() {});
-                  })
-          ],
-        ),
+                    })
+            ],
+          ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

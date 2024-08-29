@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
@@ -12,10 +11,9 @@ import 'package:fourtyninehub/features/zoom/presentation/widgets/meeting_dialogu
 import 'package:fourtyninehub/features/zoom/presentation/widgets/schedule_meeting_bottom_sheet.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
-
-import '../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
@@ -51,8 +49,7 @@ class MeetingView extends StatelessWidget {
                         if (context.mounted) {
                           context.push(
                             Routes.MEETINGROOM,
-                            extra:
-                                ZegoArgs(genRandNo, true, shareScreen: false),
+                            extra: ZegoArgs(genRandNo, true, shareScreen: false),
                           );
                         }
                       },
@@ -99,10 +96,7 @@ class MeetingView extends StatelessWidget {
                         },
                         child: const Text(
                           'Add a calender',
-                          style: TextStyle(
-                              color: AppColors.PRIMARY_COLOR,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
+                          style: TextStyle(color: AppColors.PRIMARY_COLOR, fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
@@ -131,14 +125,12 @@ class MeetingView extends StatelessWidget {
 
   Container _scheduledMeetings(MeetingCubit cubit) {
     return Container(
-      constraints:
-          const BoxConstraints(maxHeight: double.infinity, minHeight: 400),
+      constraints: const BoxConstraints(maxHeight: double.infinity, minHeight: 400),
       child: ListView.builder(
           itemCount: cubit.scheduledMeetingList.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            ScheduledMeeting scheduledMeeting =
-                cubit.scheduledMeetingList[index];
+            ScheduledMeeting scheduledMeeting = cubit.scheduledMeetingList[index];
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -164,13 +156,11 @@ class MeetingView extends StatelessWidget {
                         children: [
                           Label(
                             text: getHour(scheduledMeeting.startDate),
-                            style: Styles.headerText(
-                                fontSize: 25, color: Colors.grey[600]),
+                            style: Styles.headerText(fontSize: 25, color: Colors.grey[600]),
                           ),
                           Label(
                             text: getPeriod(scheduledMeeting.startDate),
-                            style: Styles.headerText(
-                                fontSize: 18, color: Colors.grey[600]),
+                            style: Styles.headerText(fontSize: 18, color: Colors.grey[600]),
                           ),
                         ],
                       ),
@@ -184,22 +174,18 @@ class MeetingView extends StatelessWidget {
                           SizedBox(height: 5.zH),
                           Label(
                             text: 'Meeting ID: ${scheduledMeeting.roomId}',
-                            style: Styles.headerText(
-                                fontSize: 20, color: Colors.grey[600]),
+                            style: Styles.headerText(fontSize: 20, color: Colors.grey[600]),
                           ),
                         ],
                       ),
                       SizedBox(width: 15.zW),
                       InkWell(
-                        onTap: ()
-                        {
-                          context.go(
-                            Routes.MEETINGROOM,
-                            extra: ZegoArgs(
-                              scheduledMeeting.roomId,
-                              true,
-                            )
-                          );
+                        onTap: () {
+                          context.go(Routes.MEETINGROOM,
+                              extra: ZegoArgs(
+                                scheduledMeeting.roomId,
+                                true,
+                              ));
                         },
                         child: Container(
                           padding: const EdgeInsets.all(8),
@@ -239,11 +225,9 @@ class MeetingView extends StatelessWidget {
     DateTime tomorrow = today.add(const Duration(days: 1));
 
     // Compare the date and return the appropriate string
-    if (dateTime.isAfter(today.subtract(const Duration(seconds: 1))) &&
-        dateTime.isBefore(tomorrow)) {
+    if (dateTime.isAfter(today.subtract(const Duration(seconds: 1))) && dateTime.isBefore(tomorrow)) {
       return 'Today';
-    } else if (dateTime
-            .isAfter(tomorrow.subtract(const Duration(seconds: 1))) &&
+    } else if (dateTime.isAfter(tomorrow.subtract(const Duration(seconds: 1))) &&
         dateTime.isBefore(tomorrow.add(const Duration(days: 1)))) {
       return 'Tomorrow';
     } else {
@@ -298,8 +282,7 @@ class MeetingView extends StatelessWidget {
             // height: 80,
             // width: 80,
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10), color: color),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: color),
             child: Icon(
               icon,
               color: Colors.white,
@@ -307,12 +290,9 @@ class MeetingView extends StatelessWidget {
             ),
           ),
           Sizer(
-            height:twoLines ? 10.zH : 30.zH,
+            height: twoLines ? 10.zH : 30.zH,
           ),
-          Label(
-              text: label,
-              textAlign: TextAlign.center,
-              style: Styles.headerText(fontSize: 25))
+          Label(text: label, textAlign: TextAlign.center, style: Styles.headerText(fontSize: 25))
         ],
       ),
     );

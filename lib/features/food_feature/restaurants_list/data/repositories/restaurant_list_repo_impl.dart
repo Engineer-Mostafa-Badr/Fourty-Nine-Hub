@@ -51,8 +51,8 @@ class RestaurantListRepoImpl implements RestaurantListRepo {
   }
 
   @override
-  Future<Either<Failure, List<Restaurant>>> getAllRestaurantsWithMenu({required PostCommentsParams params}) {
-    return _remoteDataSource.getAllRestaurantsWithMenu(
-        params: params);
+  Future<Either<Failure, List<Restaurant>>> getAllRestaurantsWithMenu(
+      {required PostCommentsParams params}) {
+    return _remoteDataSource.getAllRestaurantsWithMenu(params: params);
   }
 }

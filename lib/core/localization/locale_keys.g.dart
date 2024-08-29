@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static String join = 'join'.tr();
   static String arabic = 'arabic'.tr();
   static String english = 'english'.tr();
@@ -135,5 +135,4 @@ abstract class  LocaleKeys {
   static String clearNoti = 'clearNoti'.tr();
   static String ok = 'ok'.tr();
   static String cancel = 'cancel'.tr();
-
 }

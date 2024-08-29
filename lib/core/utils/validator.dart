@@ -80,8 +80,9 @@ class Validator {
     return userAge < allowedAge;
   }
 
-  String? validateEmptyField(String? text) =>
-      text == null || text.isEmpty ?LocaleKeys.emptyFieldNotValid.localize : null;
+  String? validateEmptyField(String? text) => text == null || text.isEmpty
+      ? LocaleKeys.emptyFieldNotValid.localize
+      : null;
 
   String? validateEmptyValue(String? value) =>
       value == null ? "Empty Field Not Valid" : null;

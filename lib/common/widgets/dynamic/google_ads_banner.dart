@@ -5,7 +5,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 
 import '../../../core/localization/locale_keys.g.dart';
 import '../../../res/style/app_colors.dart';
-import '../../../res/style/styles.dart';
 
 class GoogleAddsBanner extends StatelessWidget {
   final double margin;
@@ -14,7 +13,7 @@ class GoogleAddsBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: kToolbarHeight *1.3.zH,
+        height: kToolbarHeight * 1.3.zH,
         width: double.infinity,
         margin: EdgeInsets.symmetric(
           horizontal: margin,
@@ -29,11 +28,11 @@ class GoogleAddsBanner extends StatelessWidget {
                 spreadRadius: 5,
               )
             ]),
-        child:  Center(child: Label(text: LocaleKeys.ads.tr(),
-          style: TextStyle(
-              fontSize: 34.zW,
-              fontWeight: FontWeight.bold
-          ),))
+        child: Center(
+            child: Label(
+          text: LocaleKeys.ads.tr(),
+          style: TextStyle(fontSize: 34.zW, fontWeight: FontWeight.bold),
+        ))
         // AdmobBanner(
         //         adUnitId: UIConst.adHomeUnitId,
         //         adSize: AdmobBannerSize.BANNER,

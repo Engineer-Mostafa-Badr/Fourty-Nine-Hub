@@ -11,10 +11,16 @@ class UserProfileModel extends UserProfileEntity {
     super.friendsCount,
     super.followersCount,
     super.followingCount,
+    required super.bio,
+    required super.city,
+    required super.country,
+    required super.job,
+    required super.phone,
     required super.totalView,
     super.isFollowed,
     super.areFriends,
     super.isDocument,
+    super.isSenTRequest,
     super.sentFriendRequest,
     super.isBlock,
   });
@@ -22,8 +28,13 @@ class UserProfileModel extends UserProfileEntity {
   factory UserProfileModel.fromJson(Map<String, dynamic> json) {
     return UserProfileModel(
       id: json['userId']['_id'],
-      firstName: json['userId']['firstName'] ?? '',
-      lastName: json['userId']['lastName'] ?? '',
+      firstName: json['userId']['firstName'][0].toUpperCase() + json['userId']['firstName'].substring(1).toLowerCase() ?? '',
+      lastName: json['userId']['lastName'][0].toUpperCase() + json['userId']['lastName'].substring(1).toLowerCase() ?? '',
+      bio: json['userId']['bio']??'',
+      city: json['userId']['city']??'',
+      phone: json['userId']['phone']??'',
+      country: json['userId']['country']??'',
+      job: json['userId']['job']??'',
       email: json['userId']['email'] ?? '',
       isDocument: json['userId']['twitter_documentation'] ?? false,
       totalView: json['totalView'] ?? 0,
@@ -36,6 +47,7 @@ class UserProfileModel extends UserProfileEntity {
       areFriends: json['areFriends'] ?? false,
       sentFriendRequest: json['sentFriendRequest'] ?? false,
       isBlock: json['isBlock'] ?? false,
+      isSenTRequest: json['isSenTRequest'] ?? false,
     );
   }
 }
