@@ -138,6 +138,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/models/audio_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/like_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/save_reel_model.dart';
@@ -282,15 +283,77 @@ class ReelsRepository {
     }
   }
 
+  Future<AddCommentResponse> addReplayComment({
+    required String reelId,
+    required String comment,
+    String? receiverComment,
+    String? parentCommentId,
+  }) async {
+    final String url = 'https://49dev.com/api/v1/reels/comments/$reelId';
+
+    final Map<String, dynamic> requestBody = {
+      'comment': comment,
+    };
+
+    if (receiverComment != null) {
+      requestBody['receiverComment'] = receiverComment;
+    }
+
+    if (parentCommentId != null) {
+      requestBody['parentCommentId'] = parentCommentId;
+    }
+
+    final response = await _makePostRequest(
+      url: url,
+      body: jsonEncode(requestBody),
+    );
+
+    if (response != null) {
+      return AddCommentResponse.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to add comment');
+    }
+  }
+
   Future<GetCommentsResponse> fetchComments(String reelId) async {
     final url = 'https://49dev.com/api/v1/reels/comments/$reelId';
 
     final response =
         await _makeGetRequest(url: url, fromMethod: 'fetchComments');
     if (response != null) {
+      log("${response.body} from fetchComments repo *******************************************************************");
       return GetCommentsResponse.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to load comments');
     }
   }
+
+  Future<String?> toggleLike(String commentId) async {
+    final String url =
+        'https://49dev.com/api/v1/reels/comments/like/$commentId';
+
+    final response = await _makePostRequest(url: url, body: '{}');
+    if (response != null) {
+      final parsedResponse = jsonDecode(response.body);
+
+      log("from toggleLike repo: ${parsedResponse['message']}");
+
+      return parsedResponse['message']; // "like" or "unlike"
+    } else {
+      throw Exception('Failed to like/unlike the comment');
+    }
+  }
+  Future<ReelsForAudioResponse> fetchReelsWithSameAudio(String audioId, {int page = 1, int limit = 10}) async {
+    final url = 'https://49dev.com/api/v1/reels/audio/$audioId?page=$page&limit=$limit';
+
+    final response = await _makeGetRequest(url: url, fromMethod: 'fetchReelsWithSameAudio');
+    if (response != null) {
+      log("Fetched reels with the same audio successfully.");
+      return ReelsForAudioResponse.fromJson(json.decode(response.body));
+    } else {
+      log("Failed to fetch reels with the same audio.");
+      throw Exception('Failed to fetch reels with the same audio');
+    }
+  }
+
 }

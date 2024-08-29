@@ -1,3 +1,5 @@
+import 'new_reels_model.dart';
+
 class ReelsForAudioResponse {
   final bool? status;
   final String? message;
@@ -18,13 +20,7 @@ class ReelsForAudioResponse {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'status': status,
-      'message': message,
-      'data': data?.toJson(),
-    }..removeWhere((key, value) => value == null);
-  }
+
 }
 
 class ReelsData {
@@ -48,73 +44,6 @@ class ReelsData {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'reels': reels?.map((e) => e.toJson()).toList(),
-      'pagination': pagination?.toJson(),
-    }..removeWhere((key, value) => value == null);
-  }
-}
-
-class Reel {
-  final String? id;
-  final String? videoMedia;
-  final String? audioMedia;
-  final String? name;
-  final bool? isLiked;
-  final bool? isSaved;
-  final bool? isFollowing;
-  final User? user;
-  final Audio? audio;
-  final List<dynamic>? repost;
-  final String? thumbnailSignedUrl;
-
-  Reel({
-    this.id,
-    this.videoMedia,
-    this.audioMedia,
-    this.name,
-    this.isLiked,
-    this.isSaved,
-    this.isFollowing,
-    this.user,
-    this.audio,
-    this.repost,
-    this.thumbnailSignedUrl,
-  });
-
-  factory Reel.fromJson(Map<String, dynamic>? json) {
-    if (json == null) return Reel();
-    return Reel(
-      id: json['_id'] as String?,
-      videoMedia: json['videoMedia'] as String?,
-      audioMedia: json['audioMedia'] as String?,
-      name: json['name'] as String?,
-      isLiked: json['isLiked'] as bool?,
-      isSaved: json['isSaved'] as bool?,
-      isFollowing: json['isFollowing'] as bool?,
-      user: json['user'] != null ? User.fromJson(json['user']) : null,
-      audio: json['audio'] != null ? Audio.fromJson(json['audio']) : null,
-      repost: json['repost'] as List<dynamic>?,
-      thumbnailSignedUrl: json['thumbnailSignedUrl'] as String?,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'videoMedia': videoMedia,
-      'audioMedia': audioMedia,
-      'name': name,
-      'isLiked': isLiked,
-      'isSaved': isSaved,
-      'isFollowing': isFollowing,
-      'user': user?.toJson(),
-      'audio': audio?.toJson(),
-      'repost': repost,
-      'thumbnailSignedUrl': thumbnailSignedUrl,
-    }..removeWhere((key, value) => value == null);
-  }
 }
 
 class User {
@@ -162,47 +91,6 @@ class User {
       'story': story,
       'verified': verified,
       'profilePictureSignedUrl': profilePictureSignedUrl,
-    }..removeWhere((key, value) => value == null);
-  }
-}
-
-class Audio {
-  final String? id;
-  final int? reelsCount;
-  final String? audioSignedUrl;
-  final String? audioPicture;
-  final String? audioName;
-  final String? username;
-
-  Audio({
-    this.id,
-    this.reelsCount,
-    this.audioSignedUrl,
-    this.audioPicture,
-    this.audioName,
-    this.username,
-  });
-
-  factory Audio.fromJson(Map<String, dynamic>? json) {
-    if (json == null) return Audio();
-    return Audio(
-      id: json['_id'] as String?,
-      reelsCount: json['reelsCount'] as int?,
-      audioSignedUrl: json['audioSignedUrl'] as String?,
-      audioPicture: json['audioPicture'] as String?,
-      audioName: json['audioName'] as String?,
-      username: json['username'] as String?,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'reelsCount': reelsCount,
-      'audioSignedUrl': audioSignedUrl,
-      'audioPicture': audioPicture,
-      'audioName': audioName,
-      'username': username,
     }..removeWhere((key, value) => value == null);
   }
 }

@@ -43,7 +43,7 @@ class Reel {
   int saveCount;
   final int viewCount;
   final bool isLiked;
-  final bool isSaved;
+  bool isSaved;
   final bool isFollowing;
   final User user;
   final Audio audio;

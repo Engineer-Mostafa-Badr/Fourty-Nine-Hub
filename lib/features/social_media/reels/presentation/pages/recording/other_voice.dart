@@ -16,7 +16,9 @@ import '../../shared/filter_utiles.dart';
 import 'recording_shared.dart';
 
 class OtherVoiceVideoRecordingScreen extends StatefulWidget {
-  const OtherVoiceVideoRecordingScreen({super.key});
+  final String voiceUrl;
+
+  const OtherVoiceVideoRecordingScreen({super.key, required this.voiceUrl});
 
   @override
   OtherVoiceVideoRecordingScreenState createState() =>
@@ -39,8 +41,6 @@ class OtherVoiceVideoRecordingScreenState
   int _secondsRemaining = 30;
 
   bool showGalleryBtn = false;
-  String voiceUrl =
-      'https://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/start.ogg';
 
   final List<Filter> filters = FilterLibrary.filters;
   Filter? _selectedFilter;
@@ -139,7 +139,7 @@ class OtherVoiceVideoRecordingScreenState
 
   Future _loadAndPlayAudio() async {
     try {
-      await _audioPlayer.setUrl(voiceUrl);
+      await _audioPlayer.setUrl(widget.voiceUrl);
       _audioPlayer.setLoopMode(LoopMode.one);
     } catch (e) {
       log("Audio playback error: $e");
@@ -219,7 +219,7 @@ class OtherVoiceVideoRecordingScreenState
     // Adjusted FFmpeg command with horizontal flip
     final commandArgs = [
       '-i', videoPath!,
-      '-i', voiceUrl,
+      '-i', widget.voiceUrl,
       if (filterCommand.isNotEmpty) ...['-vf', filterCommand],
       '-map', '0:v:0',
       '-map', '1:a:0',
