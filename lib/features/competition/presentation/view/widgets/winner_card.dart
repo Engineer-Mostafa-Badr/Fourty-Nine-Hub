@@ -53,7 +53,7 @@ class WinnerCard extends StatelessWidget {
             radius: isWinner ? 40 : 33,
             backgroundColor: Colors.white,
             backgroundImage:
-                NetworkImage('${model.userId!.userProfile!.profilePictureKey}'),
+                NetworkImage('${model.userId!.userProfile!.profilePictureKey!.mediaKey}'),
           ),
         ),
         const Sizer(),

@@ -153,7 +153,11 @@ class CodegenLoader extends AssetLoader{
   "winners": "الفائزون",
   "competition": "المسابقات",
   "count": "العدد: ",
-  "max": "الحد الأقصى: "
+  "max": "الحد الأقصى: ",
+  "money": "اموال",
+  "points": "نقاط",
+  "notEnoughWheel": "لا يوجد عدد كاف من العناصر لتدوير العجلة",
+  "spin": "دوران"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -295,7 +299,11 @@ static const Map<String,dynamic> en = {
   "winners": "Winners",
   "competition": "Competitions",
   "count": "Count: ",
-  "max": "Max: "
+  "max": "Max: ",
+  "money": "Money",
+  "points": "Points",
+  "notEnoughWheel": "Not enough items to spin the wheel",
+  "spin": "Spin"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

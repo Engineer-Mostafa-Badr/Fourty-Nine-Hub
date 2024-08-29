@@ -138,5 +138,9 @@
   "winners": "Winners",
   "competition": "Competitions",
   "count": "Count: ",
-  "max": "Max: "
+  "max": "Max: ",
+  "money": "Money",
+  "points": "Points",
+  "notEnoughWheel": "Not enough items to spin the wheel",
+  "spin": "Spin"
 }

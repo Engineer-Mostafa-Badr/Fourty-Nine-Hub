@@ -135,9 +135,13 @@ abstract class  LocaleKeys {
   static String clearNoti = 'clearNoti'.tr();
   static String ok = 'ok'.tr();
   static String cancel = 'cancel'.tr();
-  static String winners = 'winners';
-  static String competition = 'competition';
-  static String count = 'count';
-  static String max = 'max';
+  static String winners = 'winners'.tr();
+  static String competition = 'competition'.tr();
+  static String count = 'count'.tr();
+  static String max = 'max'.tr();
+  static String money = 'money'.tr();
+  static String points = 'points'.tr();
+  static String notEnoughWheel = 'notEnoughWheel'.tr();
+  static String spin = 'spin'.tr();
 
 }

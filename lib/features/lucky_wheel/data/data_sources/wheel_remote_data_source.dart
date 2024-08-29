@@ -26,7 +26,7 @@ class WheelRemoteDataSourceImpl implements WheelRemoteDataSource {
       (failure) => Left(failure),
       (response) => Right(
         WheelModel.fromJson(
-          response['data']['wheel'],
+          response['data'],
         ),
       ),
     );
