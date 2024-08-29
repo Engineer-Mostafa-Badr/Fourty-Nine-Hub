@@ -85,6 +85,7 @@ dependencies:
   just_audio:
   image: any
   video_thumbnail:
+  flutter_credit_card:
 
 
   #for loading

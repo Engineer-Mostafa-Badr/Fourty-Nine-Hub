@@ -59,6 +59,7 @@ import 'package:fourtyninehub/features/installment_feature/installment_list/pres
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
+import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
@@ -269,7 +270,8 @@ class AppPages {
                 ),
                 BlocProvider(
                   create: (_) => serviceLocator<GetWalletCubit>(),
-                ),BlocProvider(
+                ),
+                BlocProvider(
                   create: (_) => serviceLocator<UserCubit>(),
                 ),
                 BlocProvider(
@@ -390,7 +392,10 @@ class AppPages {
           GoRoute(
             name: Routes.PAYMENT,
             path: Paths.PAYMENT,
-            builder: (context, state) => const PaymentView(),
+            builder: (context, state) => BlocProvider(
+              create: (context) => serviceLocator<PaymentCubit>()..getAdvertisements(),
+              child: const PaymentView(),
+            ),
             routes: const [],
           ),
           GoRoute(
@@ -482,7 +487,9 @@ class AppPages {
                     builder: (context, state) =>
                         BlocProvider<FavouriteCategoryCubit>(
                           create: (_) => serviceLocator(),
-                          child: const FavouriteCategoryView(),
+                          child: const FavouriteCategoryView(
+                            favoriteCategory: [],
+                          ),
                         )),
                 GoRoute(
                   path: Paths.FAVOURITESUBCATEGORIES,
@@ -551,8 +558,7 @@ class AppPages {
                     builder: (context, state) => BlocProvider<TwitterCubit>(
                         create: (_) => serviceLocator(),
                         child: const TwitterView()),
-                    routes: [
-                    ]),
+                    routes: []),
                 GoRoute(
                   path: Paths.OTHERSACCOUNT,
                   name: Routes.OTHERSACCOUNT,
@@ -937,7 +943,8 @@ class AppPages {
               path: Paths.ZOOM,
               name: Routes.ZOOM,
               builder: (context, state) => BlocProvider<MeetingCubit>(
-                    create: (context) => serviceLocator<MeetingCubit>()..getScheduledMeetings(),
+                    create: (context) =>
+                        serviceLocator<MeetingCubit>()..getScheduledMeetings(),
                     child: const MeetingView(),
                   ),
               routes: [

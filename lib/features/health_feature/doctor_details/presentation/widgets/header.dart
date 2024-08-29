@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
@@ -41,8 +42,9 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                    text: '${doctor.firstName} ${doctor.lastName}',
-                    style: Styles.mediumText(fontWeight: FontWeight.w500)),
+                  text: '${toBeginningOfSentenceCase(doctor.firstName)} ${toBeginningOfSentenceCase(doctor.lastName)}',
+                  style: Styles.mediumText(fontWeight: FontWeight.w500),
+                ),
                 RatingStars(
                   rating: doctor.rating,
                   color: AppColors.ACCENT_COLOR,

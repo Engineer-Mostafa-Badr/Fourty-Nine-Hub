@@ -1,10 +1,28 @@
 part of 'payment_cubit.dart';
 
-abstract class PaymentState extends Equatable {
-  const PaymentState();
+class PaymentState {
+  final StateStatus? status;
+  final Failure? failure;
+  final List<PaymentProviderEntity>? data;
 
-  @override
-  List<Object> get props => [];
+  PaymentState(
+      {
+      this.status,
+      this.failure,
+      this.data,
+
+      });
+
+  PaymentState copyWith({
+    StateStatus? status,
+    Failure? failure,
+    List<PaymentProviderEntity>? data,
+  }) {
+    return PaymentState(
+      status: status ?? this.status,
+      failure: failure ?? this.failure,
+      data: data ?? this.data,
+
+    );
+  }
 }
-
-class PaymentInitial extends PaymentState {}

@@ -3,8 +3,10 @@ import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/models/appointment_booking_model.dart';
+import 'package:fourtyninehub/features/health_feature/health/data/models/category_favorite_model.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/models/health_subcategory_model.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/favorite_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 
 abstract class HealthRemoteDataSource {
@@ -13,6 +15,7 @@ abstract class HealthRemoteDataSource {
   Future<Either<Failure, List<HealthSubcategoryEntity>>>
       getHealthSubcategories();
   Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices();
+  Future<Either<Failure, List<FavoriteCategoryBannersEntity>>> getFavoriteCategory();
 
   Future<Either<Failure, bool>> isDoctor();
   Future<Either<Failure, bool>> isDoctorApproval();
@@ -78,6 +81,16 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
     final response = await _apiConsumer.get(EndPoints.isDoctorApproval);
     return response.fold(
             (l) => Left(l), (data) => Right(data["data"]["isApproved"] as bool));
+  }
+
+  @override
+  Future<Either<Failure, List<FavoriteCategoryBannersEntity>>> getFavoriteCategory() async{
+    final response = await _apiConsumer.get(EndPoints.getFavoriteCategory);
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right((data['data']['favorites'] as List)
+            .map((e) => FavoriteCategoryModel.fromJson(e))
+            .toList()));
   }
 
 }

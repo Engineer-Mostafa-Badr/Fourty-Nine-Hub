@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/add_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/anonymous_chat_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/last_seen_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/main_category_model.dart';
@@ -43,6 +44,7 @@ class TinderViewState {
   final DataState uploadImageState;
 
   final SubFavoritesResponse? getFavCategoryModel;
+  final CategoryFavoritesResponse? getFavoriteCategoryModel;
   final DataState getFavCategoryModelState;
 
   // final FavoritesResponse favoritesResponse;
@@ -120,6 +122,7 @@ class TinderViewState {
     required this.lastSeenModel,
     required this.lastSeenModelState,
     required this.getFavCategoryModel,
+    required this.getFavoriteCategoryModel,
     required this.getFavCategoryModelState,
   });
 
@@ -150,6 +153,7 @@ class TinderViewState {
       lastSeenModel: LastSeenModel(),
       lastSeenModelState: DataState.initial,
       getFavCategoryModel: null,
+      getFavoriteCategoryModel: null,
       getFavCategoryModelState: DataState.initial,
       addCategoryModel: AddCategoryModel(),
       addCategoryModelState: DataState.initial,
@@ -183,6 +187,7 @@ class TinderViewState {
     ProfileUserData? profileUserData,
     DataState? profileUserState,
     SubFavoritesResponse? getFavCategoryList,
+    CategoryFavoritesResponse? FavoriteCategoryList,
     DataState? getFavCategoryListState,
     AddCategoryModel? addCategoryModel,
     DataState? addCategoryModelState,
@@ -244,6 +249,7 @@ class TinderViewState {
       lastSeenModel: lastSeenModel ?? this.lastSeenModel,
       lastSeenModelState: lastSeenModelState ?? this.lastSeenModelState,
       getFavCategoryModel: getFavCategoryList ?? getFavCategoryModel,
+      getFavoriteCategoryModel: FavoriteCategoryList ?? getFavoriteCategoryModel,
       getFavCategoryModelState:
           getFavCategoryListState ?? getFavCategoryModelState,
       addCategoryModel: addCategoryModel ?? this.addCategoryModel,

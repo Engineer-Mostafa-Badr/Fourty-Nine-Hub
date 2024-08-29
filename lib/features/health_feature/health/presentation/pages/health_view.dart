@@ -29,6 +29,10 @@ class HealthView extends StatelessWidget {
             return ListView(
               padding: EdgeInsets.all(16.0.zW),
               children: [
+                ElevatedButton(onPressed: (){
+                  context.push(Routes.PAYMENT);
+
+                }, child: Text("Payment")),
                 BlocProvider.value(
                   value: serviceLocator<HealthCubit>(),
                   child: HealthBanner(),

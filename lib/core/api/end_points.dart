@@ -72,8 +72,10 @@ class EndPoints {
   static String getDoctorDetails(String doctorId) => '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
   static const getHealthSubcategories = '/health/subCategories-health-with-ads';
   static const getMedicalServices = '/health/subCategories-medicalServices-with-ads';
+  static const getFavoriteCategory = '/favorite-category';
   static const String getUpcomingUserAppointments = '/health/book-appointment';
   static const String getHealthRequestsHistory = '/health/history-patient-booking';
+  static const String getPaymentProvider = '/dashboard/payment-provider';
   static const remainingDaysOfDoctorPracticing = '/health/dashboard/remaining-days-of-doctor-id';
   static const remainingDaysOfDoctorID = '/health/dashboard/remaining-days-of-doctor-practicing-id';
   static const remainingDaysOfDoctorSubscription = '/health/dashboard/remaining-days-of-doctor-subscription';

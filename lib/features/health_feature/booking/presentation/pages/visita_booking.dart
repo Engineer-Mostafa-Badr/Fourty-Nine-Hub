@@ -80,6 +80,7 @@ class _VisitaBookingState extends State<VisitaBooking> {
                   const BookDoctorAppointmentLocationInfoCard(),
                   const BookDoctorAppointmentFeesCard(),
                   const Sizer(),
+
                 Row(
                   children: [
                     Expanded(child: AppButton(
@@ -89,6 +90,9 @@ class _VisitaBookingState extends State<VisitaBooking> {
                         onPressed: () {
                           serviceLocator<SubscriptionController>()
                               .checkIfUserSubscribed(
+                            title: serviceLocator<HealthSharedData>()
+                                .doctorSearchParams
+                                .subCategory.name,
                             onSubscribed: () async {
                               await controller.premiumBook();
                             },

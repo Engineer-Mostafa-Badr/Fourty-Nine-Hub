@@ -812,6 +812,17 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       emit(state.copyWith(getFavCategoryListState: DataState.failure));
     }
   }
+  Future<void> fetchFavoritesCategory() async {
+    emit(state.copyWith(getFavCategoryListState: DataState.initial));
+    final apiResponse = await tinderRepository.fetchFavoritesCategory();
+    if (apiResponse != null) {
+      emit(state.copyWith(
+          getFavCategoryListState: DataState.success,
+          FavoriteCategoryList: apiResponse));
+    } else {
+      emit(state.copyWith(getFavCategoryListState: DataState.failure));
+    }
+  }
 
   Future<void> addFavoriteCategory({String? categoryId}) async {
     emit(state.copyWith(addCategoryModelState: DataState.initial));
