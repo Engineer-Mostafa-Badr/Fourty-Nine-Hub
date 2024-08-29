@@ -13,7 +13,8 @@ class NotificationModel {
     return NotificationModel(
       status: json['status'] as bool?,
       message: json['message'] as String?,
-      data: json['data'] != null ? NotificationData.fromJson(json['data']) : null,
+      data:
+          json['data'] != null ? NotificationData.fromJson(json['data']) : null,
     );
   }
 }
@@ -46,7 +47,9 @@ class NotificationData {
   factory NotificationData.fromJson(Map<String, dynamic> json) {
     return NotificationData(
       docs: json['docs'] != null
-          ? (json['docs'] as List).map((doc) => NotificationDoc.fromJson(doc)).toList()
+          ? (json['docs'] as List)
+              .map((doc) => NotificationDoc.fromJson(doc))
+              .toList()
           : null,
       totalDocs: json['totalDocs'] as int?,
       limit: json['limit'] as int?,
@@ -106,12 +109,10 @@ class NotificationDoc {
       itemId: json['itemId'] as String?,
       titleTranslationCode: json['titleTranslationCode'] as String?,
       bodyTranslationCode: json['bodyTranslationCode'] as String?,
-      createdAt: json['createdAt'] != null
-          ? DateTime.parse(json['createdAt'])
-          : null,
-      updatedAt: json['updatedAt'] != null
-          ? DateTime.parse(json['updatedAt'])
-          : null,
+      createdAt:
+          json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
+      updatedAt:
+          json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
       v: json['__v'] as int?,
     );
   }

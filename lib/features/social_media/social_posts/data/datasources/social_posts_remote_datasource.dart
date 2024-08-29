@@ -59,7 +59,8 @@ abstract class SocialPostsRemoteDataSource {
   Future<Either<Failure, bool>> blockUser({required String userId});
   Future<Either<Failure, bool>> followRequest({required String userId});
   Future<Either<Failure, bool>> unFollow({required String userId});
-  Future<Either<Failure, bool>> sendGreetMessage({required SendGreetMessageParams params});
+  Future<Either<Failure, bool>> sendGreetMessage(
+      {required SendGreetMessageParams params});
   Future<Either<Failure, bool>> removeSuggestUser({required String userId});
   Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends(
       {required SuggestedFriendsParams params});
@@ -237,8 +238,9 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   @override
   Future<Either<Failure, bool>> sendGreetMessage(
       {required SendGreetMessageParams params}) async {
-    final response = await _apiConsumer
-        .post(EndPoints.greetMessage(params.userId), data: {"message": params.message});
+    final response = await _apiConsumer.post(
+        EndPoints.greetMessage(params.userId),
+        data: {"message": params.message});
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 

@@ -8,29 +8,39 @@ import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/publ
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/select_seat_and_repeat_v2.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/total_price_v2.dart';
 
-class TripAndCarInformationV2 extends StatelessWidget {
+class TripAndCarInformationV2 extends StatefulWidget {
   const TripAndCarInformationV2({super.key});
+
+  @override
+  State<TripAndCarInformationV2> createState() => _TripAndCarInformationV2State();
+}
+
+class _TripAndCarInformationV2State extends State<TripAndCarInformationV2> {
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     double size = 30;
-    return Column(
-      children: [
-        const Sizer(),
-        DistanceAndPricePerPersonV2(size: size),
-        const Sizer(),
-        DateAndTimePickerV2(size: size),
-        SelectSeatAndRepeatV2(size: size),
-        const Sizer(height: 3),
-        TotalPriceV2(size: size),
-        const Sizer(),
-        const DriverPhoneNumberV2(),
-        const Sizer(),
-        const CarInfoV2(),
-        const Sizer(height: 20),
-        const PublishButton(),
-        const Sizer(),
-      ],
+    return Form(
+      key: formKey,
+      child: Column(
+        children: [
+          const Sizer(),
+          DistanceAndPricePerPersonV2(size: size),
+          const Sizer(),
+          DateAndTimePickerV2(size: size),
+          SelectSeatAndRepeatV2(size: size),
+          const Sizer(height: 3),
+          TotalPriceV2(size: size),
+          const Sizer(),
+          const DriverPhoneNumberV2(),
+          const Sizer(),
+          const CarInfoV2(),
+          const Sizer(height: 20),
+          PublishButton(formKey: formKey),
+          const Sizer(),
+        ],
+      ),
     );
   }
 }

@@ -48,6 +48,5 @@ class UserProfileEntity {
     required this.country,
     required this.job,
     required this.phone,
-
   });
 }

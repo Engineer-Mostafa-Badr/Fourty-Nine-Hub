@@ -50,7 +50,8 @@ class InstagramCubit extends Cubit<InstagramState> {
       this._instagramReelsUseCase,
       this._userReelsUseCase,
       this._editCommentUseCase,
-      this._deleteCommentUseCase, this._getSavedReelsUseCase)
+      this._deleteCommentUseCase,
+      this._getSavedReelsUseCase)
       : super(InstagramState());
 
   void loadData() async {
@@ -209,26 +210,26 @@ class InstagramCubit extends Cubit<InstagramState> {
   }
 
   getSavedReels(int page, String userId) async {
-    final response = await _getSavedReelsUseCase(
-        TwitterFeedParams(limit: 10, page: page));
+    final response =
+        await _getSavedReelsUseCase(TwitterFeedParams(limit: 10, page: page));
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) async {
-          final isLastPage = data.length < 10;
-          if (page == 1) {
-            print("page == 1 $page");
-            savedReelsPagingController.itemList = [];
-          }
-          if (isLastPage) {
-            print("isLastPage = $isLastPage");
-            savedReelsPagingController.appendLastPage(data);
-          } else {
-            print("isNotLastPage = $isLastPage");
-            final nextPageKey = page + 1;
-            savedReelsPagingController.appendPage(data, nextPageKey);
-          }
-          emit(state.copyWith(posts: data, status: StateStatus.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) async {
+      final isLastPage = data.length < 10;
+      if (page == 1) {
+        print("page == 1 $page");
+        savedReelsPagingController.itemList = [];
+      }
+      if (isLastPage) {
+        print("isLastPage = $isLastPage");
+        savedReelsPagingController.appendLastPage(data);
+      } else {
+        print("isNotLastPage = $isLastPage");
+        final nextPageKey = page + 1;
+        savedReelsPagingController.appendPage(data, nextPageKey);
+      }
+      emit(state.copyWith(posts: data, status: StateStatus.success));
+    });
   }
 
   void changeIndex(int index) {
