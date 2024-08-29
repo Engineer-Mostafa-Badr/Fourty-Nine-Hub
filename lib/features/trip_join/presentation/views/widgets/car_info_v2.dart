@@ -36,25 +36,29 @@ class _CarInfoV2State extends State<CarInfoV2> {
           child: TypeAheadField<String>(
             builder: (context, controller, focusNode) {
               controller.text = fetchCarBrandsCubit.brand ?? '';
-              return SizedBox(
-                height: 50,
-                child: TextField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  // autofocus: true,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    fillColor: Colors.transparent,
-                    label: const Text('Brand'),
-                  ),
-                  onChanged: (value) {
-                    fetchCarBrandsCubit.brand = value;
-                    // print(' ============ $value');
-                    fetchCarModelsCubit.fetchCarModel(brand: value);
-                    fetchCarBrandsCubit.fetchCarBrand(search: value);
-                  },
+              return TextFormField(
+                controller: controller,
+                focusNode: focusNode,
+                // autofocus: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                  fillColor: Colors.transparent,
+                  label: const Text('Brand'),
+                  isDense: true, // Added this
+                  contentPadding: const EdgeInsets.all(14),
                 ),
+                onChanged: (value) {
+                  fetchCarBrandsCubit.brand = value;
+                  // print(' ============ $value');
+                  fetchCarModelsCubit.fetchCarModel(brand: value);
+                  fetchCarBrandsCubit.fetchCarBrand(search: value);
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Car Brand Required';
+                  }
+                  return null;
+                },
               );
             },
             itemBuilder: (context, value) {
@@ -66,55 +70,55 @@ class _CarInfoV2State extends State<CarInfoV2> {
             },
             suggestionsCallback: (search) async {
               // fetchCarBrandsCubit.brand = search;
-              return fetchCarBrandsCubit.carBrandsList
-                  .map((e) => e?.brand ?? '')
-                  .toList();
+              return fetchCarBrandsCubit.carBrandsList.map((e) => e?.brand ?? '').toList();
             },
           ),
         ),
         const Sizer(),
         Expanded(
           flex: 1,
-          child: SizedBox(
-            height: 50,
-            child: TypeAheadField<String>(
-              builder: (context, controller, focusNode) {
-                controller.text = fetchCarModelsCubit.model ?? '';
-                return TextField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  // autofocus: true,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    fillColor: Colors.transparent,
-                    label: const Text('Model'),
-                  ),
-                  onChanged: (value) {
-                    fetchCarModelsCubit.model = value;
-                    if (value.length == 1) {
-                      fetchCarModelsCubit.fetchCarModel(
-                          brand: fetchCarBrandsCubit.brand ?? '');
-                    }
-                  },
-                );
-              },
-              itemBuilder: (context, value) {
-                return ListTile(title: Text(value));
-              },
-              onSelected: (value) {
-                // print(' ============== $value');
-                fetchCarModelsCubit.model = value;
-                setState(() {});
-              },
-              suggestionsCallback: (search) async {
-                return fetchCarModelsCubit.carModels
-                    .map((e) => e?.model ?? '')
-                    .where((element) =>
-                        element.toLowerCase().contains(search.toLowerCase()))
-                    .toList();
-              },
-            ),
+          child: TypeAheadField<String>(
+            builder: (context, controller, focusNode) {
+              controller.text = fetchCarModelsCubit.model ?? '';
+              return TextFormField(
+                controller: controller,
+                focusNode: focusNode,
+                // autofocus: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                  fillColor: Colors.transparent,
+                  label: const Text('Model'),
+                  isDense: true, // Added this
+                  contentPadding: const EdgeInsets.all(14),
+                ),
+                onChanged: (value) {
+                  fetchCarModelsCubit.model = value;
+                  if (value.length == 1) {
+                    fetchCarModelsCubit.fetchCarModel(brand: fetchCarBrandsCubit.brand ?? '');
+                  }
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Car Model Required';
+                  }
+                  return null;
+                },
+              );
+            },
+            itemBuilder: (context, value) {
+              return ListTile(title: Text(value));
+            },
+            onSelected: (value) {
+              // print(' ============== $value');
+              fetchCarModelsCubit.model = value;
+              setState(() {});
+            },
+            suggestionsCallback: (search) async {
+              return fetchCarModelsCubit.carModels
+                  .map((e) => e?.model ?? '')
+                  .where((element) => element.toLowerCase().contains(search.toLowerCase()))
+                  .toList();
+            },
           ),
         ),
         // TypeAheadField<String>(

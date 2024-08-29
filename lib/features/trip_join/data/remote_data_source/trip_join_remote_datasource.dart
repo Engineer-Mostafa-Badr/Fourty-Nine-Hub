@@ -122,11 +122,11 @@ class TripJoinRemoteDataSourceImp implements TripJoinRemoteDataSource {
 
     return response.fold(
       (failure) {
-        print(' ========= $failure');
+        // print(' ========= $failure');
         return Left(failure);
       },
       (data) {
-        print(' ========= $data');
+        // print(' ========= $data');
         return const Right(true);
       },
     );
