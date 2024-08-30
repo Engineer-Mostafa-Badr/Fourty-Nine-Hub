@@ -18,7 +18,10 @@ class ListsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BackAppBar(label: Labels.lists),
+        appBar: const BackAppBar(
+          centerTitle: false,
+            label: Labels.lists,
+        ),
         body: BlocConsumer<ListsCubit, ListsState>(
             listener: (context, state) {},
             builder: (context, state) {

@@ -213,7 +213,7 @@ class DrawerWidget extends StatelessWidget {
             counterItem(
                 icon: Icons.ads_click,
                 label: LocaleKeys.specialAds.localize,
-                value: '+8',
+                value: '13',
                 onTap: () {
                   Navigator.push(
                       context,
