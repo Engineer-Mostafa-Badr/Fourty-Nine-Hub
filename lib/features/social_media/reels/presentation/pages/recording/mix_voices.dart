@@ -329,6 +329,7 @@
 
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
@@ -339,6 +340,8 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../../../../../service_locator/service_locator.dart';
+import '../../controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import '../../shared/filter_utiles.dart';
 import 'recording_shared.dart';
 
@@ -527,6 +530,8 @@ class MixVoiceVideoRecordingScreenState
         final savedSuccessfully =
             await GallerySaver.saveVideo(filteredVideoPath!);
         if (savedSuccessfully ?? false) {
+          serviceLocator<ReelsCubit>().uploadReel(File(filteredVideoPath!));
+
           setState(() {
             showGalleryBtn = true;
           });

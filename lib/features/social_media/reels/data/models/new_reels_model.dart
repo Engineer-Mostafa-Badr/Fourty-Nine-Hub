@@ -39,11 +39,11 @@ class Reel {
   final String name;
   int likeCount;
   int commentCount;
-  final int shareCount;
-  final int saveCount;
+  int shareCount;
+  int saveCount;
   final int viewCount;
   final bool isLiked;
-  final bool isSaved;
+  bool isSaved;
   final bool isFollowing;
   final User user;
   final Audio audio;

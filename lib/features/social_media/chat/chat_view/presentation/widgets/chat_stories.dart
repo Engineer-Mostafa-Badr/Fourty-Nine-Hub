@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/Stories.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -26,10 +27,10 @@ class ChatStories extends StatelessWidget {
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                return _buildStoryItem();
+                return _buildStoryItem(context);
               },
               separatorBuilder: (context, index) => const Sizer(),
-              itemCount: 5,
+              itemCount: 1,
             ),
           ),
         ],
@@ -80,23 +81,32 @@ class ChatStories extends StatelessWidget {
     );
   }
 
-  Widget _buildStoryItem() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const CircleAvatar(
-          radius: 25,
-          backgroundColor: AppColors.SECONDARY_COLOR,
-          child: CircleAvatar(
-            radius: 23,
-            backgroundColor: Colors.white,
-            backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+  Widget _buildStoryItem(context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MoreStories(),
+            ));
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const CircleAvatar(
+            radius: 25,
+            backgroundColor: AppColors.SECONDARY_COLOR,
+            child: CircleAvatar(
+              radius: 23,
+              backgroundColor: Colors.white,
+              backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+            ),
           ),
-        ),
-        Label(
-            text: 'Ghanem',
-            style: Styles.mediumText(fontWeight: FontWeight.w600))
-      ],
+          Label(
+              text: 'Romman',
+              style: Styles.mediumText(fontWeight: FontWeight.w600))
+        ],
+      ),
     );
   }
 }
