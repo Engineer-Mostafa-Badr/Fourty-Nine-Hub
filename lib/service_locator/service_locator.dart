@@ -93,7 +93,7 @@ class DI {
     );
 
 //tinder getIt register
-    serviceLocator.registerLazySingleton<TinderViewCubit>(() => TinderViewCubit());
+    serviceLocator.registerLazySingleton<TinderViewCubit>(() => TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
     serviceLocator.registerLazySingleton<CompetitionRepoImpl>(() => CompetitionRepoImpl(ApiService(Dio())),);
     // Register the ReelsRepository
     serviceLocator.registerLazySingleton<ReelsRepository>(
