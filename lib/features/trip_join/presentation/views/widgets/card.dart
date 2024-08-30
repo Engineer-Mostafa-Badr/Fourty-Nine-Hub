@@ -4,14 +4,16 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 class CustomCard extends StatelessWidget {
   const CustomCard({
     super.key,
-    required this.child,
+    required this.children,
+    this.title = '',
   });
-  final Widget child;
+  final List<Widget> children;
+  final String title;
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(5),
+      // padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.PRIMARY_COLOR),
         borderRadius: BorderRadius.circular(10),
@@ -23,7 +25,18 @@ class CustomCard extends StatelessWidget {
           ),
         ],
       ),
-      child: child,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: children,
+            ),
+          )
+        ],
+      ),
     );
   }
 }

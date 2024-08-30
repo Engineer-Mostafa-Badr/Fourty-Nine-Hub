@@ -12,13 +12,19 @@ import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
 import 'package:fourtyninehub/core/utils/api_service.dart';
 import 'package:fourtyninehub/features/competition/data/repository/competition_repo_impl.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/repositories/reels_repository_impl.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/repo/tinder_repo.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
+import 'package:fourtyninehub/service_locator/face_book_service_locator.dart';
+import 'package:fourtyninehub/service_locator/instagram_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
 import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
 import 'package:fourtyninehub/service_locator/trip_join_service_locator.dart';
+import 'package:fourtyninehub/service_locator/twitter_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -89,8 +95,38 @@ class DI {
 //tinder getIt register
     serviceLocator.registerLazySingleton<TinderViewCubit>(() => TinderViewCubit());
     serviceLocator.registerLazySingleton<CompetitionRepoImpl>(() => CompetitionRepoImpl(ApiService(Dio())),);
+    // Register the ReelsRepository
+    serviceLocator.registerLazySingleton<ReelsRepository>(
+      () => ReelsRepository(),
+    );
 
-    // api consumer
+    // Register the ReelsCubit
+    serviceLocator.registerFactory<ReelsCubit>(
+      () => ReelsCubit(repository: serviceLocator<ReelsRepository>()),
+    );
+    //
+    // // Register the TinderRepository
+    // serviceLocator.registerLazySingleton<TinderRepository>(
+    //   () => TinderRepository(),
+    // );
+    //
+    // // Register the TinderCubit
+    // serviceLocator.registerFactory<TinderViewCubit>(
+    //   () =>
+    //       TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()),
+    // );
+
+    // Register the TinderRepository as a singleton
+    serviceLocator.registerLazySingleton<TinderRepository>(() => TinderRepository());
+
+
+    // Register the TinderViewCubit and inject the TinderRepository dependency
+    serviceLocator
+        .registerFactory<TinderViewCubit>(() => TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
+
+    // Register other dependencies...
+    // serviceLocator
+    //     .registerLazySingleton<TinderViewCubit>(() => TinderViewCubit());
 
     serviceLocator.registerLazySingleton<ApiConsumer>(
       () => BaseApiConsumer(
@@ -101,6 +137,7 @@ class DI {
     serviceLocator.registerLazySingleton<ApiClientHelper>(
       () => ApiClientHelperImp(),
     );
+
     // base repo
     serviceLocator.registerLazySingleton(
       () => BaseRepository(),
@@ -109,6 +146,7 @@ class DI {
     serviceLocator.registerLazySingleton<JsonParser>(
       () => JsonParser(),
     );
+
     // auth service locator
     await AuthServiceLocator.execute(serviceLocator: serviceLocator);
     // Ride Customer
@@ -118,36 +156,37 @@ class DI {
     // Fourty-Nine
     FourtyNineServiceLocator.execute(serviceLocator);
 
-    // sokcket service
+    // Socket service
     serviceLocator.registerLazySingleton<SocketServiceContract>(
       () => SocketServiceImplementation(),
     );
 
     // Wheel
     WheelServiceLocator.execute(serviceLocator);
-    // Reels
-    // ReelsServiceLocator.execute(serviceLocator);
-    // food
+    // Food
     FoodServiceLocator.execute(serviceLocator: serviceLocator);
-    // auction
+    // Auction
     AuctionServiceLocator.execute(serviceLocator: serviceLocator);
-    // installments
+    // Installments
     InstallmentServiceLocator.execute(serviceLocator: serviceLocator);
-    // health
+    // Health
     HealthServiceLocator.execute(serviceLocator: serviceLocator);
-    // account
+    // Account
     AccountServiceLocator.execute(serviceLocator: serviceLocator);
-    // social
+    // Social
     SocialServiceLocator.execute(serviceLocator: serviceLocator);
-    //club voice
+    // Club Voice
     ClubVoiceServiceLocator.execute(serviceLocator: serviceLocator);
-    //meeting
+    // Meeting
     MeetingServiceLocator.execute(serviceLocator: serviceLocator);
-    // subscriptions
+    // Subscriptions
     SubscriptionServiceLocator.execute(serviceLocator: serviceLocator);
-    // shipping
+    // Shipping
     ShippingServiceLocatior.execute(serviceLocator: serviceLocator);
     // trip join
     TripJoinServiceLocator.execute(serviceLocator: serviceLocator);
+    InstagramServiceLocator.execute(serviceLocator: serviceLocator);
+    FaceBookServiceLocator.execute(serviceLocator: serviceLocator);
+    TwitterServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

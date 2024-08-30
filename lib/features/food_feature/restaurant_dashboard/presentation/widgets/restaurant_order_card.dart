@@ -73,7 +73,7 @@ class RestaurantOrderCard extends StatelessWidget {
           return RichText(
               text: TextSpan(children: [
             TextSpan(
-                text: meal.meal.name,
+                text: meal.meal.foodName ?? "",
                 style: Styles.mediumText(fontWeight: FontWeight.w600)),
             TextSpan(
                 text: ' x ${meal.qty} \n',

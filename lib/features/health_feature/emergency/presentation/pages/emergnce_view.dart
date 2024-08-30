@@ -37,7 +37,7 @@ class HealthEmergencyView extends StatelessWidget {
         }
       },
       child: Scaffold(
-        appBar:  BackAppBar(
+        appBar: BackAppBar(
           label: LocaleKeys.emergency.localize,
         ),
         body: Form(
@@ -69,11 +69,11 @@ class HealthEmergencyView extends StatelessWidget {
               const HealthEmergencySubCategoriesDropdown(),
               const Sizer(height: 30),
               DefaultTextFormField(
-                  hintColor: AppColors.QUANTITY_COLOR,
-                  currentFocusNode: emergencyCubit.locationFocusNode,
-                  currentController: emergencyCubit.locationController,
-                  isRequired: true,
-                  hint: LocaleKeys.address.localize,
+                hintColor: AppColors.QUANTITY_COLOR,
+                currentFocusNode: emergencyCubit.locationFocusNode,
+                currentController: emergencyCubit.locationController,
+                isRequired: true,
+                hint: LocaleKeys.address.localize,
               ),
               const Sizer(height: 30),
               ElevatedAppButton(

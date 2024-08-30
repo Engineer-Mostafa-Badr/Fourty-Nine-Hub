@@ -17,7 +17,7 @@ class DoctorGovernorateFilterView extends StatelessWidget {
     final doctorGovernorateFilter =
         context.read<DoctorGovernorateFilterCubit>();
     return Scaffold(
-      appBar:  BackAppBar(
+      appBar: BackAppBar(
         label: LocaleKeys.governorate.localize,
       ),
       body: Padding(
@@ -54,15 +54,15 @@ class DoctorGovernorateFilterView extends StatelessWidget {
             BlocBuilder<DoctorGovernorateFilterCubit,
                 DoctorGovernorateFilterState>(
               builder: (context, state) {
-                if(state is DoctorGovernorateFilterLoaded){
-                      return Expanded(
-                          child: ListView.separated(
-                            itemCount: state.governorates.length,
-                            separatorBuilder: (context, index) => const Divider(),
-                            itemBuilder: (context, index) => GovernorateListTitle(
-                                governorate: state.governorates[index]),
-                          ));
-                }else {
+                if (state is DoctorGovernorateFilterLoaded) {
+                  return Expanded(
+                      child: ListView.separated(
+                    itemCount: state.governorates.length,
+                    separatorBuilder: (context, index) => const Divider(),
+                    itemBuilder: (context, index) => GovernorateListTitle(
+                        governorate: state.governorates[index]),
+                  ));
+                } else {
                   return const SizedBox.shrink();
                 }
                 // switch (state) {

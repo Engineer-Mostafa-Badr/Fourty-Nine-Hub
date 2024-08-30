@@ -19,6 +19,8 @@ class TinderViewState {
   final DataState? userDataState0;
   final int? currentPage;
 
+  final String gender; // Add gender to the state
+
   final List<UserData> userData;
   final DataState userDataState;
 
@@ -78,6 +80,7 @@ class TinderViewState {
   final DataState lastSeenModelState;
 
   TinderViewState({
+    required this.gender,
     required this.mainCategoryResponse,
     required this.mainCategoryResponseState,
     required this.anonymousChatResponse,
@@ -122,6 +125,7 @@ class TinderViewState {
   factory TinderViewState.initial() {
     return TinderViewState(
       userData: [],
+      gender: 'female', // Default gender
       userDataState: DataState.initial,
       subCategoryData: [],
       subCategoryDataState: DataState.initial,
@@ -172,6 +176,7 @@ class TinderViewState {
     List<UserData>? userData0,
     DataState? userDataState0,
     int? currentPage,
+    String? gender,
     ProfileUserData? profileUserData,
     DataState? profileUserState,
     SubFavoritesResponse? getFavCategoryList,
@@ -206,6 +211,7 @@ class TinderViewState {
     DataState? lastSeenModelState,
   }) {
     return TinderViewState(
+      gender: gender ?? this.gender,
       userData0: userData0 ?? this.userData0,
       userDataState0: userDataState0 ?? this.userDataState0,
       currentPage: currentPage ?? this.currentPage,

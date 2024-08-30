@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class ScheduleMeetingBottomSheet extends StatefulWidget {
+  final String genRandNo;
+
+  const ScheduleMeetingBottomSheet(this.genRandNo, {super.key});
+
   @override
   _ScheduleMeetingBottomSheetState createState() =>
       _ScheduleMeetingBottomSheetState();
@@ -50,7 +58,13 @@ class _ScheduleMeetingBottomSheetState
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.only(
+        left: 16.0,
+        right: 16.0,
+        top: 16.0,
+        bottom: MediaQuery.of(context).viewInsets.bottom +
+            16.0, // Adjust for the keyboard
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         // crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,7 +99,7 @@ class _ScheduleMeetingBottomSheetState
             style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blueAccent[700]!,
                 minimumSize: Size(MediaQuery.sizeOf(context).width / 1.2, 60)),
-            onPressed: () {
+            onPressed: () async {
               final title = _titleController.text;
               if (title.isNotEmpty &&
                   _startDateTime != null &&
@@ -93,9 +107,33 @@ class _ScheduleMeetingBottomSheetState
                 // Process the meeting details
                 print('Meeting Title: $title');
                 print('Start DateTime: $_startDateTime');
+                print('id: ${widget.genRandNo}');
                 print('End DateTime: $_endDateTime');
+                if (_titleController.text.isNotEmpty &&
+                    _endDateTime != null &&
+                    _startDateTime != null) {
+                  if (_endDateTime!.isBefore(_startDateTime!)) {
+                    showErrorMessage(
+                        context, 'Start Date must be before End Date');
+                    return;
+                  }
+                  if (_startDateTime!.isBefore(DateTime.now())) {
+                    showErrorMessage(
+                        context, 'Start Date must be in the future');
+                    return;
+                  }
+                  await context.read<MeetingCubit>().addRoom(
+                        widget.genRandNo,
+                        startDate: _startDateTime,
+                        title: _titleController.text.trim(),
+                        endDate: _endDateTime,
+                      );
+                } else {
+                  showErrorMessage(context, 'Please fill the all fields');
+                }
+                context.pop();
               }
-              Navigator.pop(context);
+              // Navigator.pop(context);
             },
             child: const Text(
               'Schedule',

@@ -87,7 +87,7 @@ class ListsView extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-          const Expanded(
+          Expanded(
               child: FormTextField(
             hint: 'Search with name',
             height: kToolbarHeight * .9,

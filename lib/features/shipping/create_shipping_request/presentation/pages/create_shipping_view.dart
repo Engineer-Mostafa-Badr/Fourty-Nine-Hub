@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/shipping_banner.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card_selected.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -37,8 +38,10 @@ class _CreateShippingViewState extends State<CreateShippingView> {
   TextEditingController decoration = TextEditingController();
   TextEditingController offerPrice = TextEditingController();
   TextEditingController phone = TextEditingController();
+
   // Time time;
   SubCategoryEntity? select;
+
   @override
   Widget build(BuildContext context) {
     final shippingcubit = context.read<ShippingCubit>();
@@ -54,8 +57,11 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                 BlocBuilder<ShippingCubit, ShippingState>(
                   builder: (context, state) {
                     if (state is SuccessGetBannerState) {
-                      return ShippingBanner(
-                        model: state.model,
+                      return SizedBox(
+                        width:double.infinity,
+                        child: ShippingBanner(
+                          model: state.model,
+                        ),
                       );
                     } else {
                       return Container();
@@ -199,16 +205,14 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   minLines: 6,
                   maxLines: 6,
                   maxLength: 100,
-                  style: const TextStyle(
-                    color: AppColors.QUANTITY_COLOR
-                  ),
+                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                   decoration: InputDecoration(
                       fillColor: AppColors.AUTH_CONTAINER_COLOR,
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       disabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12)),
@@ -217,7 +221,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12)),
                       hintText: Labels.description,
-                      hintStyle: const TextStyle(fontSize: 12,color: AppColors.QUANTITY_COLOR)),
+                      hintStyle: const TextStyle(
+                          fontSize: 12, color: AppColors.QUANTITY_COLOR)),
                 ),
                 const SizedBox(
                   height: 20,

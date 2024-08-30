@@ -15,6 +15,7 @@ class BadgedLabel extends StatelessWidget {
   final bool isBordered;
   final bool isCentered;
   final bool close;
+
   final GestureTapCallback? onRemove;
 
   const BadgedLabel(
@@ -50,9 +51,7 @@ class BadgedLabel extends StatelessWidget {
             //padding: const EdgeInsetsDirectional.only(end: 8,top: 5),
             decoration: BoxDecoration(
                 color: isBordered ? color : color,
-                border: isBordered
-                    ? Border.all(color: borderColor, width: .5.zW)
-                    : null,
+                border: isBordered ? Border.all(color: borderColor, width: .5.zW) : null,
                 borderRadius: BorderRadius.circular(radius.zR)),
             // child: isCentered
             //     ? Center(
@@ -65,20 +64,19 @@ class BadgedLabel extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if(close)
-                 Align(
-                  alignment: AlignmentDirectional.topEnd,
-                  child: GestureDetector(
-                      onTap: onRemove,
-                      child: const Icon(
-                        Icons.close,
-                        color: Colors.white,
-                        size: 15,
-                      )),
-                ),
+                if (close)
+                  Align(
+                    alignment: AlignmentDirectional.topEnd,
+                    child: GestureDetector(
+                        onTap: onRemove,
+                        child: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: 15,
+                        )),
+                  ),
                 Padding(
-                  padding:
-                       EdgeInsets.symmetric(horizontal: 10.zW, vertical: 3.zW),
+                  padding: EdgeInsets.symmetric(horizontal: 10.zW, vertical: 3.zW),
                   child: isCentered
                       ? Center(
                           child: _buildLabelWidget(),

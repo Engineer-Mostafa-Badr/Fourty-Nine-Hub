@@ -19,7 +19,6 @@ class NotificationsErrorState extends NotificationsState {
   NotificationsErrorState({required this.errMessage});
 }
 
-
 class DeleteNotificationsLoadingState extends NotificationsState {}
 
 class DeleteNotificationsSuccessState extends NotificationsState {

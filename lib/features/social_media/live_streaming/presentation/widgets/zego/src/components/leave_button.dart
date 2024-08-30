@@ -1,17 +1,14 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
-// Package imports:
-import 'package:zego_uikit/zego_uikit.dart';
-
-// Project imports:
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/minimizing/defines.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/config.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/controller.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/core/host_manager.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/config.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.defines.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/defines.dart';
+// Project imports:
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/minimizing/defines.dart';
+// Package imports:
+import 'package:zego_uikit/zego_uikit.dart';
 
 import '../defines.dart';
 
@@ -52,12 +49,10 @@ class ZegoLiveStreamingLeaveButton extends StatefulWidget {
   });
 
   @override
-  State<ZegoLiveStreamingLeaveButton> createState() =>
-      _ZegoLiveStreamingLeaveButtonState();
+  State<ZegoLiveStreamingLeaveButton> createState() => _ZegoLiveStreamingLeaveButtonState();
 }
 
-class _ZegoLiveStreamingLeaveButtonState
-    extends State<ZegoLiveStreamingLeaveButton> {
+class _ZegoLiveStreamingLeaveButtonState extends State<ZegoLiveStreamingLeaveButton> {
   final hangupButtonClickableNotifier = ValueNotifier<bool>(true);
 
   @override
@@ -82,10 +77,10 @@ class _ZegoLiveStreamingLeaveButtonState
       icon: widget.icon,
       clickableNotifier: hangupButtonClickableNotifier,
       onLeaveConfirmation: (context) async {
-        return true;
+        widget.showTopBar.value = !widget.showTopBar.value;
+        return false;
       },
       onPress: () async {
-        widget.showTopBar.value = !widget.showTopBar.value;
         final endEvent = ZegoLiveStreamingEndEvent(
           reason: widget.config.role == ZegoLiveStreamingRole.host
               ? ZegoLiveStreamingEndReason.hostEnd
@@ -110,8 +105,7 @@ class _ZegoLiveStreamingLeaveButtonState
   }
 
   void oHangUpRequestingChanged() {
-    hangupButtonClickableNotifier.value =
-        !(widget.isLeaveRequestingNotifier?.value ?? true);
+    hangupButtonClickableNotifier.value = !(widget.isLeaveRequestingNotifier?.value ?? true);
   }
 
   Future<void> notifyUserLeaveByMessage() async {

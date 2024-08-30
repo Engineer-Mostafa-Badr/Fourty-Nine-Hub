@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/pages/meeting_view.dart';
 
@@ -81,19 +82,20 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
   final ValueNotifier<bool> showTopBar = ValueNotifier(true);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: widget.config.topMenuBar.margin,
-      padding: widget.config.topMenuBar.padding,
-      decoration: BoxDecoration(
-        color: widget.config.topMenuBar.backgroundColor ?? Colors.transparent,
-      ),
-      height: widget.config.topMenuBar.height ?? 160.zH,
-      child: ValueListenableBuilder<bool>(
-          valueListenable: showTopBar,
-          builder: (context, showTopBar, child) {
-            return Column(
+    return ValueListenableBuilder<bool>(
+        valueListenable: showTopBar,
+        builder: (context, showTopBarValue, child) {
+          return Container(
+            margin: widget.config.topMenuBar.margin,
+            padding: widget.config.topMenuBar.padding,
+            decoration: BoxDecoration(
+              color: widget.config.topMenuBar.backgroundColor ??
+                  Colors.transparent,
+            ),
+            // height: showTopBar ? 160.zH : 240.zH,
+            child: Column(
               children: [
-                if (showTopBar)
+                if (showTopBarValue)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -135,25 +137,103 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                     ],
                   )
                 else
-                  Row(
+                  Column(
                     children: [
-                      Container(height: 10, width: 50, color: Colors.white),
-                      Expanded(child: Container()),
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                      Row(
                         children: [
-                          SizedBox(width: 30),
-                          CloseButton(),
-                          SizedBox(width: 30),
+                          Expanded(child: Container()),
+                          InkWell(
+                            onTap: () {
+                              showTopBar.value = !showTopBar.value;
+                              print(
+                                  'show top bar state is ${showTopBar.value}');
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(15),
+                              margin: const EdgeInsets.only(right: 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.grey[800],
+                              ),
+                              child: const Text(
+                                'Cancel',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
                         ],
-                      )
+                      ),
+                      const Sizer(
+                        height: 15,
+                      ),
+                      if (widget.config.role == ZegoLiveStreamingRole.host)
+                        InkWell(
+                          onTap: () async {
+                            final users = ZegoUIKit().getAllUsers();
+                            for (var user in users) {
+                              await ZegoUIKit().removeUserFromRoom([user.id]);
+                            }
+                            if (context.mounted) {
+                              await context
+                                  .read<MeetingCubit>()
+                                  .endRoom(ZegoUIKit().getRoom().id);
+                              Navigator.of(context).pop(true);
+                            }
+                          },
+                          child: Container(
+                            width: MediaQuery.sizeOf(context).width / 1.3,
+                            height: 60,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.0),
+                              color: Colors.redAccent,
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'End meeting for all',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                      const Sizer(
+                        height: 15,
+                      ),
+                      InkWell(
+                        onTap: () async {
+                          Navigator.of(context).pop(true);
+                        },
+                        child: Container(
+                          width: MediaQuery.sizeOf(context).width / 1.3,
+                          height: 60,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.0),
+                            color: AppColors.BARRIER_COLOR,
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Leave meeting',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                const Divider()
+                showTopBarValue ? const Divider() : Container()
               ],
-            );
-          }),
-    );
+            ),
+          );
+        });
   }
 
   Widget minimizingButton() {

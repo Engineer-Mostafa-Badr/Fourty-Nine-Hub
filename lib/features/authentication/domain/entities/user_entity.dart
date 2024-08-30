@@ -5,6 +5,12 @@ class UserEntity extends Equatable {
   final String firstName;
   final String lastName;
   final String? email;
+  final String? bio;
+  final String? phone;
+  final String? city;
+  final String? country;
+  final String? job;
+  final String? gender;
   final String? profilePicture;
   final String? profileCover;
   final int? friendsCount;
@@ -39,6 +45,7 @@ class UserEntity extends Equatable {
     this.isRestaurant = false,
     this.isLoading = false,
     this.isDocument = false,
+    this.bio, this.phone, this.city, this.country, this.job, this.gender
   });
 
   @override

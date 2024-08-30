@@ -12,12 +12,12 @@ class ImageValidation extends StatelessWidget {
       {super.key,
       this.onTap,
       this.validator,
-      this.title,
+      this.tilte,
       this.hint,
       this.iconColor});
   final void Function(File image)? onTap;
   final String? Function(Object? value)? validator;
-  final String? title;
+  final String? tilte;
   final String? hint;
   final Color? iconColor;
   @override
@@ -28,11 +28,11 @@ class ImageValidation extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (title != null)
+            if (tilte != null)
               Column(
                 children: [
                   Label(
-                    text: title ?? "",
+                    text: tilte ?? "",
                     style: Styles.headerText(),
                   ),
                   const Sizer(),

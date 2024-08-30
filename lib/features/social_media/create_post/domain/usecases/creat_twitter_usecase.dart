@@ -3,13 +3,11 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/repositor
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
-class CreateTwitterPostUseCase
-    extends UseCase<bool, CreateTwitterPostParams> {
+class CreateTwitterPostUseCase extends UseCase<bool, CreateTwitterPostParams> {
   final CreatePostRepo _repo;
   CreateTwitterPostUseCase(this._repo);
   @override
-  Future<Either<Failure, bool>> call(
-      CreateTwitterPostParams params) async {
+  Future<Either<Failure, bool>> call(CreateTwitterPostParams params) async {
     return await _repo.createTwitterPost(params: params);
   }
 }

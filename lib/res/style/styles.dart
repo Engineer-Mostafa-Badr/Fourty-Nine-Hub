@@ -11,8 +11,8 @@ abstract class Styles {
       List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
-        fontSize: fontSize.zW,
-        color: color ,
+        fontSize: fontSize.zSP,
+        color: color,
         decoration: decoration,
         shadows: shadows,
         decorationColor: color ?? AppColors.PRIMARY_COLOR,
@@ -26,8 +26,8 @@ abstract class Styles {
       List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
-        fontSize: fontSize.zW,
-        color: color ,
+        fontSize: fontSize.zSP,
+        color: color,
         // overflow: TextOverflow.ellipsis,
         shadows: shadows,
         decoration: decoration,
@@ -42,7 +42,7 @@ abstract class Styles {
       Color? color,
       FontWeight fontWeight = FontWeight.w600}) {
     return TextStyle(
-        fontSize: fontSize.zW,
+        fontSize: fontSize.zSP,
         fontWeight: fontWeight,
         shadows: shadows,
         decorationColor: color,

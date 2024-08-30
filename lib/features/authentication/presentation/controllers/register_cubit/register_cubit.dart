@@ -48,7 +48,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   ) : super(RegisterInitial());
 
   Future<void> register() async {
-                              log("message");
+    log("message");
     if (state is RegisterLoading) return;
     if (formKey.currentState!.validate()) {
       emit(RegisterLoading());

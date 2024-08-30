@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 
 import '../../../subcategories/domain/entities/sub_category_entity.dart';
 
@@ -22,6 +23,17 @@ class MainCategoryEntity extends Equatable {
     required this.isFavorite,
     required this.total,
   });
+
+  factory MainCategoryEntity.fake() {
+    return const MainCategoryEntity(
+        id: "id",
+        name: "Fake Data",
+        image: UIConst.imagePlaceHolder,
+        banner: UIConst.imagePlaceHolder,
+        cover: UIConst.imagePlaceHolder,
+        isFavorite: false,
+        total: 9900000);
+  }
 
   @override
   List<Object?> get props => [

@@ -1,12 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 
 import '../../../../../core/error/failure.dart';
 
-import '../../../restaurants_list/domain/entities/restaurant_entity.dart';
-
 import '../../data/models/selected_meal_model.dart';
-import '../../domain/entities/meal_entity.dart';
 import '../../domain/usecases/add_to_cart_usecase.dart';
 import '../../domain/usecases/get_meals_usecase.dart';
 import '../../domain/usecases/get_restaurant_details_usecase.dart';
@@ -44,20 +45,18 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
             status: RestaurantDetailsStates.initState, meals: data)));
   }
 
-  void addToCart(
+  addToCart(
       {required BuildContext context,
-      required SelectedMealModel selectedMeal}) async {
-    final response = await _addToCartUseCase(selectedMeal);
+      required String restaurantId,
+      required String foodId,
+      required String quantity}) async {
+    final response = await _addToCartUseCase(
+        restaurantId: restaurantId, foodId: foodId, quantity: quantity);
     response.fold(
         (l) => emit(
             state.copyWith(failure: l, status: RestaurantDetailsStates.error)),
         (data) {
-      if (data) {
-        List<SelectedMealModel> selectedMeals = state.selectedMeals ?? [];
-        selectedMeals.add(selectedMeal);
-        emit(state.copyWith(selectedMeals: selectedMeals));
-        Navigator.pop(context);
-      }
+      if (data) {}
     });
   }
 
@@ -65,5 +64,29 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
     List<SelectedMealModel> selectedMeals = state.selectedMeals ?? [];
     selectedMeals.removeAt(index);
     emit(state.copyWith(selectedMeals: selectedMeals));
+  }
+
+  void selectMeal({required RestaurantMenu meal, required int qty}) {
+    List<SelectedMealModel> selectedMeals = state.selectedMeals ?? [];
+    selectedMeals.add(
+      SelectedMealModel(
+        qty: qty,
+        price: meal.price ?? 0.0,
+        meal: meal,
+        restaurantId: meal.restaurantId ?? "",
+        selectedAddOn: [],
+        selectedVariations: [],
+      ),
+    );
+    emit(state.copyWith(selectedMeals: selectedMeals));
+
+    log("added: ${state.selectedMeals?.length}");
+  }
+
+  void removeMeal({required RestaurantMenu meal}) {
+    List<SelectedMealModel> selectedMeals = state.selectedMeals ?? [];
+    selectedMeals.removeWhere((element) => element.meal == meal);
+    emit(state.copyWith(selectedMeals: selectedMeals));
+    log("removed: ${state.selectedMeals?.length}");
   }
 }

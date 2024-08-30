@@ -40,7 +40,7 @@ class _ChatRoomState extends State<ChatRoom> {
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
-          backgroundColor: AppColors.GREY_LIGHT_COLOR,
+          backgroundColor: Colors.amber,
           appBar: const ChatRoomAppBar(),
           // bottomNavigationBar: Padding(
           //   padding: MediaQuery.of(context).viewInsets,
@@ -106,13 +106,13 @@ class _ChatRoomState extends State<ChatRoom> {
               //         );
               // }),
               SendMessageWidget(
-                // focusNode: focusNode,
-                // replayMessage: _replayMessage,
-                // onCancelReplay: cancelReplay,
-                // anotherUserName:
-                //     chatRoomCubit.chatMessagesModel.chat?.contact?.name ??
-                //         'No name',
-              ),
+                  // focusNode: focusNode,
+                  // replayMessage: _replayMessage,
+                  // onCancelReplay: cancelReplay,
+                  // anotherUserName:
+                  //     chatRoomCubit.chatMessagesModel.chat?.contact?.name ??
+                  //         'No name',
+                  ),
             ],
           ),
         ),

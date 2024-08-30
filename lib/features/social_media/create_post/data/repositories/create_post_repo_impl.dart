@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/social_media/create_post/data/datasources/create_post_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
@@ -7,7 +8,6 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/entities/
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import '../../domain/repositories/create_post_repo.dart';
-import '../datasources/create_post_remote_datasource.dart';
 
 class CreatePostRepoImpl implements CreatePostRepo {
   final CreatePostRemoteDataSource _remoteDataSource;
@@ -34,11 +34,14 @@ class CreatePostRepoImpl implements CreatePostRepo {
   }
 
   @override
-  Future<Either<Failure, List<PostUserEntity>>> getFriendsFollowers({required FriendsFollowersParams params}) {
+  Future<Either<Failure, List<PostUserEntity>>> getFriendsFollowers(
+      {required FriendsFollowersParams params}) {
     return _remoteDataSource.getFriendsFollowers(params: params);
   }
+
   @override
-  Future<Either<Failure, List<PlaceEntity>>> getPlaces({required FriendsFollowersParams params}) {
+  Future<Either<Failure, List<PlaceEntity>>> getPlaces(
+      {required FriendsFollowersParams params}) {
     return _remoteDataSource.getPlaces(params: params);
   }
 }
