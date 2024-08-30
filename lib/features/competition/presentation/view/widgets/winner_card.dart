@@ -53,12 +53,12 @@ class WinnerCard extends StatelessWidget {
             radius: isWinner ? 40 : 33,
             backgroundColor: Colors.white,
             backgroundImage:
-                NetworkImage('${model.userId!.userProfile!.profilePictureKey!.mediaKey}'),
+                NetworkImage('${model.userId?.userProfile?.profilePictureKey?.mediaKey}' ?? ''),
           ),
         ),
         const Sizer(),
         Label(
-            text: model.userId!.fullName,
+            text: model.userId?.fullName ??'',
             style: Styles.mediumText(fontWeight: FontWeight.w500)),
         Label(
             text: context.locale == Locales.english
