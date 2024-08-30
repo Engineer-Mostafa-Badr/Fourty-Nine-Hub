@@ -66,7 +66,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
             isWithBackArrow: true,
           ),
           drawer: const DrawerWidget(),
-          bottomNavigationBar:  BottomNavigator(
+          bottomNavigationBar: BottomNavigator(
             scrollController: scrollController,
             isScrollingDown: _isScrollingDown,
             mainCategory: 2,
@@ -75,44 +75,53 @@ class _SocialHomeViewState extends State<SocialHomeView>
           floatingActionButton: _isScrollingDown
               ? null
               : const FloatingButton(
-            changeView: 2,
-          ),
+                  changeView: 2,
+                ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
               builder: (context, state) {
             return context.read<UserCubit>().isLoggedIn
-                ? NestedAppbar(appBars: [
-                    SliverAppBar(
-                      backgroundColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      automaticallyImplyLeading: false,
-                      floating: true,
-                      // pinned: true,
-                      flexibleSpace: const CreatePostBanner(),
-                    ),
-                    SliverAppBar(
-                      backgroundColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      automaticallyImplyLeading: false,
-                      // floating: true,
-                      pinned: true,
-                      flexibleSpace: _buildTabBar(),
-                    )
-                  ], body:  FacebookBody(scrollController: scrollController,))
-                : Center(
-                    child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                          onTap: () => context.push(Routes.LOGIN),
-                          child:
-                              Label(text: 'Login', style: Styles.headerText())),
-                      Label(
-                          text: ', To continue in using chat services',
-                          style: Styles.headerText()),
+                ? NestedAppbar(
+                    scrollController: ScrollController(),
+                    appBars: [
+                      SliverAppBar(
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        automaticallyImplyLeading: false,
+                        floating: true,
+                        // pinned: true,
+                        flexibleSpace: const CreatePostBanner(),
+                      ),
+                      SliverAppBar(
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        automaticallyImplyLeading: false,
+                        // floating: true,
+                        pinned: true,
+                        flexibleSpace: _buildTabBar(),
+                      )
                     ],
-                  ));
+                    body: FacebookBody(
+                      scrollController: scrollController,
+                    ))
+                : Center(
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                            onTap: () => context.push(Routes.LOGIN),
+                            child:
+                            Label(text: 'Login', style: Styles.headerText())),
+                        Label(
+                            text: ', To continue in using chat services',
+                            style: Styles.headerText()),
+                      ],
+                    ),
+                  ),
+                );
           })),
     );
   }

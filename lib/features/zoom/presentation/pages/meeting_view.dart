@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
@@ -12,10 +11,9 @@ import 'package:fourtyninehub/features/zoom/presentation/widgets/meeting_dialogu
 import 'package:fourtyninehub/features/zoom/presentation/widgets/schedule_meeting_bottom_sheet.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
-
-import '../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
@@ -191,15 +189,12 @@ class MeetingView extends StatelessWidget {
                       ),
                       SizedBox(width: 15.zW),
                       InkWell(
-                        onTap: ()
-                        {
-                          context.go(
-                            Routes.MEETINGROOM,
-                            extra: ZegoArgs(
-                              scheduledMeeting.roomId,
-                              true,
-                            )
-                          );
+                        onTap: () {
+                          context.go(Routes.MEETINGROOM,
+                              extra: ZegoArgs(
+                                scheduledMeeting.roomId,
+                                true,
+                              ));
                         },
                         child: Container(
                           padding: const EdgeInsets.all(8),
@@ -307,7 +302,7 @@ class MeetingView extends StatelessWidget {
             ),
           ),
           Sizer(
-            height:twoLines ? 10.zH : 30.zH,
+            height: twoLines ? 10.zH : 30.zH,
           ),
           Label(
               text: label,

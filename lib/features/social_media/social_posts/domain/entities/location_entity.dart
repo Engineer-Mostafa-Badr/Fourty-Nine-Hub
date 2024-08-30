@@ -1,4 +1,4 @@
-class LocationEntity{
+class LocationEntity {
   final String place;
   final String lat;
   final String log;

@@ -172,10 +172,13 @@ import 'package:fourtyninehub/features/social_media/tinder/data/repo/tinder_repo
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
+import 'package:fourtyninehub/service_locator/face_book_service_locator.dart';
+import 'package:fourtyninehub/service_locator/instagram_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
 import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
 import 'package:fourtyninehub/service_locator/trip_join_service_locator.dart';
+import 'package:fourtyninehub/service_locator/twitter_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -221,9 +224,7 @@ class DI {
     serviceLocator.registerLazySingleton<Dio>(
       () => Dio(
         BaseOptions(
-          baseUrl: kReleaseMode
-              ? EndPoints.productionBaseUrl
-              : EndPoints.developmentBaseUrl,
+          baseUrl: kReleaseMode ? EndPoints.productionBaseUrl : EndPoints.developmentBaseUrl,
           connectTimeout: const Duration(seconds: 60),
           headers: {
             'Accept': 'application/json',
@@ -267,12 +268,12 @@ class DI {
     // );
 
     // Register the TinderRepository as a singleton
-    serviceLocator
-        .registerLazySingleton<TinderRepository>(() => TinderRepository());
+    serviceLocator.registerLazySingleton<TinderRepository>(() => TinderRepository());
+
 
     // Register the TinderViewCubit and inject the TinderRepository dependency
-    serviceLocator.registerFactory<TinderViewCubit>(() =>
-        TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
+    serviceLocator
+        .registerFactory<TinderViewCubit>(() => TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
 
     // Register other dependencies...
     // serviceLocator
@@ -335,5 +336,8 @@ class DI {
     ShippingServiceLocatior.execute(serviceLocator: serviceLocator);
     // trip join
     TripJoinServiceLocator.execute(serviceLocator: serviceLocator);
+    InstagramServiceLocator.execute(serviceLocator: serviceLocator);
+    FaceBookServiceLocator.execute(serviceLocator: serviceLocator);
+    TwitterServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

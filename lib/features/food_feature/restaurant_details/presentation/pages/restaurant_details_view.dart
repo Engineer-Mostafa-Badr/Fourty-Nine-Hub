@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/widgets/build_food_list.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 
@@ -9,9 +12,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
-import '../../../restaurant_details/presentation/widgets/meal_card.dart';
 import '../../../restaurant_details/presentation/widgets/restaurant_header.dart';
-import '../../data/models/selected_meal_model.dart';
 import '../cubit/restaurant_details_cubit.dart';
 
 class RestaurantDetailsView extends StatefulWidget {
@@ -42,8 +43,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
             if (state.restaurant != null)
               RestaurantHeader(restaurant: state.restaurant!),
             const Divider(),
-            // _buildFilter(),
-            _buildFoodList(context: context),
+            const BuildFoodList(),
           ],
         );
       }),
@@ -66,33 +66,6 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                   context.push(Routes.FOODCART);
                 }
               }));
-    });
-  }
-
-  Widget _buildFoodList({required BuildContext context}) {
-    final controller = context.read<RestaurantDetailsCubit>();
-    return BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
-        builder: (context, state) {
-      return state.meals?.isNotEmpty ?? false
-          ? Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: GridView.builder(
-                  shrinkWrap: true,
-                  itemCount: state.meals?.length ?? 0,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      crossAxisCount: 2),
-                  itemBuilder: (context, index) {
-                    return MealCard(
-                      restaurantId: widget.id,
-                      addToCart: (SelectedMealModel v) => controller.addToCart(
-                          context: context, selectedMeal: v),
-                      item: state.meals![index],
-                    );
-                  }))
-          : const SizedBox();
     });
   }
 

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -40,35 +38,36 @@ class FormTextField extends StatefulWidget {
   final TextStyle? textStyle;
   FormTextField(
       {super.key,
-        this.initialValue,
-        this.hintStyle,
-        this.action,
-        this.obsecure,
-        this.borderRadius,
-        this.prefix,
-        this.noBorder = false,
-        this.constraints,
-        this.fillColor,
-        this.hint,
-        this.label,
-        this.info,
-        this.autofill,
-        this.suffix,
-        this.type,
-        this.isEmail,
-        this.enabled,
-        this.onConfirm,
-        this.textAlignVertical,
-        this.extraValidationMessage,
-        this.extraValidation,
-        this.onTap,
-        this.height,
-        this.maxLines,
-        this.maxLength,
-        this.style,
-        this.validator,
-        this.required,
-        this.controller,this.textStyle});
+      this.initialValue,
+      this.hintStyle,
+      this.action,
+      this.obsecure,
+      this.borderRadius,
+      this.prefix,
+      this.noBorder = false,
+      this.constraints,
+      this.fillColor,
+      this.hint,
+      this.label,
+      this.info,
+      this.autofill,
+      this.suffix,
+      this.type,
+      this.isEmail,
+      this.enabled,
+      this.onConfirm,
+      this.textAlignVertical,
+      this.extraValidationMessage,
+      this.extraValidation,
+      this.onTap,
+      this.height,
+      this.maxLines,
+      this.maxLength,
+      this.style,
+      this.validator,
+      this.required,
+      this.controller,
+      this.textStyle});
 
   @override
   State<FormTextField> createState() => _FormTextFieldState();
@@ -88,7 +87,7 @@ class _FormTextFieldState extends State<FormTextField> {
                   ? (widget.height ?? 100.zH) * 1.5.zH
                   : widget.height ?? 100.zH,
           child: TextFormField(
-            style:widget.textStyle?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
+            style: widget.textStyle ?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
             textAlignVertical: widget.textAlignVertical,
             maxLines: widget.maxLines ?? 1,
             maxLength: widget.maxLength,
@@ -97,25 +96,24 @@ class _FormTextFieldState extends State<FormTextField> {
                 widget.onConfirm!();
               }
             },
-            validator: widget.validator?? (value) {
-              validate = true;
-              final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+            validator: widget.validator ??
+                (value) {
+                  validate = true;
+                  final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
 
-              setState(() {});
-              if ((value == null || value.isEmpty) &&
-                  (widget.required ?? true)) {
-                return LocaleKeys.required.localize;
-              } else if (widget.extraValidation ?? false) {
-                return widget.extraValidationMessage ?? '';
-              } else if (!emailRegExp.hasMatch(value!.trim()) &&
-                  (widget.isEmail ?? false)) {
-                return LocaleKeys.emailFormat.localize;
-              } else {
-                validate = false;
-                setState(() {});
-                return null;
-              }
-            },
+                  setState(() {});
+                  if ((value == null || value.isEmpty) && (widget.required ?? true)) {
+                    return LocaleKeys.required.localize;
+                  } else if (widget.extraValidation ?? false) {
+                    return widget.extraValidationMessage ?? '';
+                  } else if (!emailRegExp.hasMatch(value!.trim()) && (widget.isEmail ?? false)) {
+                    return LocaleKeys.emailFormat.localize;
+                  } else {
+                    validate = false;
+                    setState(() {});
+                    return null;
+                  }
+                },
             onTap: () {
               if (widget.onTap != null) {
                 widget.onTap!();
@@ -134,18 +132,10 @@ class _FormTextFieldState extends State<FormTextField> {
               filled: true,
               fillColor: widget.fillColor ?? Colors.transparent,
               labelText: widget.label,
-              hintStyle: widget.style ??TextStyle(
-                  fontSize: 30.zW,
-                  color: AppColors.QUANTITY_COLOR
-              ),
-              labelStyle: widget.style ?? TextStyle(
-                  fontSize: 30.zW,
-                  color: AppColors.QUANTITY_COLOR
-              ),
+              hintStyle: widget.style ?? TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
+              labelStyle: widget.style ?? TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
               prefixIcon: Padding(
-                padding:  EdgeInsets.symmetric(
-                  horizontal: 10.zW
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 10.zW),
                 child: widget.prefix,
               ),
               suffixIcon: widget.suffix,
@@ -155,8 +145,7 @@ class _FormTextFieldState extends State<FormTextField> {
                       borderSide: const BorderSide(
                         color: AppColors.LIGHT_GRAY_COLOR,
                       ),
-                      borderRadius:
-                          widget.borderRadius ?? BorderRadius.circular(10),
+                      borderRadius: widget.borderRadius ?? BorderRadius.circular(10),
                     ),
               focusedBorder: widget.noBorder
                   ? InputBorder.none
@@ -164,8 +153,7 @@ class _FormTextFieldState extends State<FormTextField> {
                       borderSide: const BorderSide(
                         color: AppColors.PRIMARY_COLOR,
                       ),
-                      borderRadius:
-                          widget.borderRadius ?? BorderRadius.circular(10),
+                      borderRadius: widget.borderRadius ?? BorderRadius.circular(10),
                     ),
               errorBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
@@ -179,8 +167,7 @@ class _FormTextFieldState extends State<FormTextField> {
                       borderSide: const BorderSide(
                         color: Colors.red,
                       ),
-                      borderRadius:
-                          widget.borderRadius ?? BorderRadius.circular(10),
+                      borderRadius: widget.borderRadius ?? BorderRadius.circular(10),
                     ),
             ),
           ),

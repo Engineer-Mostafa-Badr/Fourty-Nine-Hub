@@ -5,11 +5,13 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
-class GetPlacesUseCase extends UseCase<List<PlaceEntity>, FriendsFollowersParams> {
+class GetPlacesUseCase
+    extends UseCase<List<PlaceEntity>, FriendsFollowersParams> {
   final CreatePostRepo _repo;
   GetPlacesUseCase(this._repo);
   @override
-  Future<Either<Failure, List<PlaceEntity>>> call(FriendsFollowersParams params) async {
+  Future<Either<Failure, List<PlaceEntity>>> call(
+      FriendsFollowersParams params) async {
     return await _repo.getPlaces(params: params);
   }
 }

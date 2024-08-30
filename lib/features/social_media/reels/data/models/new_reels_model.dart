@@ -37,8 +37,8 @@ class Reel {
   final String videoMedia;
   final String audioMedia;
   final String name;
-   int likeCount;
-   int commentCount;
+  int likeCount;
+  int commentCount;
   final int shareCount;
   final int saveCount;
   final int viewCount;

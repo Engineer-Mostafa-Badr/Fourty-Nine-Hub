@@ -12,44 +12,42 @@ class StartingPointSuggestion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ...cardTitleAndInfo(title: 'Starting Point'),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: 6,
-            // itemExtent: 50,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Container(
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                child: Row(
-                  children: [
-                    Radio(
-                        value: index,
-                        groupValue: 'startPoint',
-                        onChanged: (value) {}),
-                    const Expanded(
-                      child: Flexible(
-                        child: Text(
-                            overflow: TextOverflow.visible,
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'),
-                      ),
+      title: '',
+      children: [
+        ...cardTitleAndInfo(title: 'Starting Point'),
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: 6,
+          // itemExtent: 50,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            return Container(
+              margin: const EdgeInsets.symmetric(vertical: 5),
+              child: Row(
+                children: [
+                  Radio(
+                      value: index,
+                      groupValue: 'startPoint',
+                      onChanged: (value) {}),
+                  const Expanded(
+                    child: Flexible(
+                      child: Text(
+                          overflow: TextOverflow.visible,
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'),
                     ),
-                  ],
-                ),
-              );
-            },
-          ),
-          const Sizer(),
-          CustomButton(
-            onTap: () {},
-            title: 'Save starting point address',
-            height: 40,
-          ),
-        ],
-      ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+        const Sizer(),
+        CustomButton(
+          onTap: () {},
+          title: 'Save starting point address',
+          height: 40,
+        ),
+      ],
     );
   }
 }

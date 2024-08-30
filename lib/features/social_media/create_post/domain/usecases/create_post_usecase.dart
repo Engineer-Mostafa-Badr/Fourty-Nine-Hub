@@ -33,17 +33,18 @@ class PostParams {
     this.users,
   });
   Map<String, dynamic> toJson() => {
-        'content': content ,
-        if (feeling != null&&feeling!.isNotEmpty) 'feeling': feeling,
-        if (activity != null&&activity!.isNotEmpty) 'activity': activity,
-        if (place != null) "location" : {
-          "place" : place?.name,
-          "lat" : "${place?.lat}",
-          "long" : "${place?.lng}"
-        },
+        'content': content,
+        if (feeling != null && feeling!.isNotEmpty) 'feeling': feeling,
+        if (activity != null && activity!.isNotEmpty) 'activity': activity,
+        if (place != null)
+          "location": {
+            "place": place?.name,
+            "lat": "${place?.lat}",
+            "long": "${place?.lng}"
+          },
         if (color != null) 'background_color': color,
         'media': mediaId,
         'publicationType': privacy ?? 'public',
-    "with" :users,
+        "with": users,
       };
 }

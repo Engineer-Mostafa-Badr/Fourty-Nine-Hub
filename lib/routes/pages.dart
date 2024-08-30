@@ -556,27 +556,27 @@ class AppPages {
                         child: const TwitterView()),
                     routes: []),
                 GoRoute(
-                  path: Paths.OTHERSACCOUNT,
-                  name: Routes.OTHERSACCOUNT,
-                  builder: (context, state) {
-                    final id = state.extra as String?;
-                    return BlocProvider<SocialPostsCubit>(
-                        create: (_) =>
-                            serviceLocator()..getUserProfile(id: id ?? ''),
-                        child: OtherAccountView(
-                          userId: id ?? '',
-                        ));
-                  },
-                  routes: [
-                    GoRoute(
-                      path: Paths.EDITPROFILE,
-                      name: Routes.EDITPROFILE,
-                      builder: (context, state) => BlocProvider<EditProfileCubit>(
-                          create: (_) => serviceLocator(),
-                          child: const EditProfileView()),
-                    ),
-                  ]
-                ),
+                    path: Paths.OTHERSACCOUNT,
+                    name: Routes.OTHERSACCOUNT,
+                    builder: (context, state) {
+                      final id = state.extra as String?;
+                      return BlocProvider<SocialPostsCubit>(
+                          create: (_) =>
+                              serviceLocator()..getUserProfile(id: id ?? ''),
+                          child: OtherAccountView(
+                            userId: id ?? '',
+                          ));
+                    },
+                    routes: [
+                      GoRoute(
+                        path: Paths.EDITPROFILE,
+                        name: Routes.EDITPROFILE,
+                        builder: (context, state) =>
+                            BlocProvider<EditProfileCubit>(
+                                create: (_) => serviceLocator(),
+                                child: const EditProfileView()),
+                      ),
+                    ]),
                 GoRoute(
                     path: Paths.REELS,
                     name: Routes.REELS,
@@ -697,11 +697,11 @@ class AppPages {
                   name: Routes.CHATROOMCAMERAPICKER,
                   builder: (context, state) => const CameraPickerView(),
                 ),
-
                 GoRoute(
                   path: Paths.MEDIASLIDER,
                   name: Routes.MEDIASLIDER,
-                  builder: (context, state) =>  MediaSliderView(params: (state.extra) as MediaSliderViewParams),
+                  builder: (context, state) => MediaSliderView(
+                      params: (state.extra) as MediaSliderViewParams),
                 ),
               ]),
 
@@ -856,7 +856,7 @@ class AppPages {
               path: Paths.FOOD,
               name: Routes.FOOD,
               builder: (context, state) => BlocProvider<RestaurantsListCubit>(
-                    create: (_) => serviceLocator(),
+                    create: (context) => serviceLocator()..loadData(),
                     child: const RestaurantsListsView(),
                   ),
               routes: [

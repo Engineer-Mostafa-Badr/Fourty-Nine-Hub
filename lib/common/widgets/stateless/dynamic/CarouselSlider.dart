@@ -5,10 +5,12 @@ class CarouselSliderWidget extends StatefulWidget {
   final List<Widget> widgets;
   final double height;
   final bool autoPlay;
+  final ValueChanged<int>? onPageChanged;
   final Duration autoPlayInterval;
 
   const CarouselSliderWidget({
     super.key,
+    this.onPageChanged,
     required this.widgets,
     this.height = 400,
     this.autoPlay = false,
@@ -58,6 +60,7 @@ class _CarouselSliderWidgetState extends State<CarouselSliderWidget> {
     return SizedBox(
       height: widget.height,
       child: PageView.builder(
+        onPageChanged: widget.onPageChanged,
         controller: _pageController,
         itemCount: widget.widgets.length,
         itemBuilder: (context, index) {

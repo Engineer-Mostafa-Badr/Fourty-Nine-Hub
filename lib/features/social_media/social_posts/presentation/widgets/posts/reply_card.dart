@@ -26,7 +26,8 @@ class ReplyCard extends StatefulWidget {
     required this.reply,
     required this.onReplyReact,
     required this.onReport,
-    required this.onDeleteReply, required this.onEditComment,
+    required this.onDeleteReply,
+    required this.onEditComment,
   });
 
   @override
@@ -34,7 +35,6 @@ class ReplyCard extends StatefulWidget {
 }
 
 class _ReplyCardState extends State<ReplyCard> {
-
   final editTextController = TextEditingController();
 
   @override
@@ -81,8 +81,8 @@ class _ReplyCardState extends State<ReplyCard> {
             const Sizer(),
             GestureDetector(
                 onTap: () {
-                  widget.reply.edit=!widget.reply.edit!;
-                  editTextController.text=widget.reply.content;
+                  widget.reply.edit = !widget.reply.edit!;
+                  editTextController.text = widget.reply.content;
                   setState(() {});
                 },
                 child: Icon(
@@ -106,31 +106,33 @@ class _ReplyCardState extends State<ReplyCard> {
           widget.reply.content,
           style: Styles.mediumText(color: widget.textColor),
         ),
-        if(widget.reply.edit==true)Row(
-          children: [
-            Expanded(
-                child: FormTextField(
-                    hint: 'Type your comment ....',
-                    action: (v) {
+        if (widget.reply.edit == true)
+          Row(
+            children: [
+              Expanded(
+                  child: FormTextField(
+                      hint: 'Type your comment ....',
+                      action: (v) {
+                        setState(() {});
+                      },
+                      controller: editTextController)),
+              const Sizer(),
+              if (editTextController.text.isNotEmpty)
+                IconAppButton(
+                    icon: Icons.send,
+                    isCircle: true,
+                    onPressed: () async {
+                      var result = await widget.onEditComment(PostCommentParams(
+                          postId: widget.reply.id,
+                          content: editTextController.text));
+                      if (result == true) {
+                        widget.reply.content = editTextController.text;
+                        widget.reply.edit = false;
+                      }
                       setState(() {});
-                    },
-                    controller: editTextController)),
-            const Sizer(),
-            if (editTextController.text.isNotEmpty)
-              IconAppButton(
-                  icon: Icons.send,
-                  isCircle: true,
-                  onPressed: () async {
-                    var result = await widget.onEditComment(PostCommentParams(postId: widget.reply.id, content: editTextController.text));
-                    if(result==true){
-                      widget.reply.content=editTextController.text;
-                      widget.reply.edit=false;
-                    }
-                    setState(() {});
-                  })
-          ],
-        ),
-
+                    })
+            ],
+          ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

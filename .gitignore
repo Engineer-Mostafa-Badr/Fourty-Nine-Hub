@@ -9,7 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
-*.g.dart
+# *.g.dart
 pubspec.lock
 
 # IntelliJ related
@@ -33,7 +33,6 @@ pubspec.lock
 .pub/
 /build/
 *.lock
-*.g.dart
 
 # Symbolication related
 app.*.symbols

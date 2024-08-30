@@ -70,6 +70,7 @@ abstract class Routes {
 
   static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
   static const CusineRestaurants = '/Food/Cusine-Restaurants';
+  static const SEARCHMEALS = '/Food/SearchMeals';
   static const RestaurantDashboard = '/Food/RestaurantDashboard';
   static const CREATERESTURANT = '/Food/CreateResturant';
 
@@ -125,6 +126,7 @@ abstract class Routes {
   static const SUBSCRIPTIONPLANS = '/SubscriptionPlans';
 
   static const TRIP_JOIN = '/TripJoin';
+  static const AVAILABLE_TRIPS = '/AvailableTrips';
 }
 
 abstract class Paths {
@@ -189,6 +191,7 @@ abstract class Paths {
   static const CREATERESTURANT = 'CreateResturant';
   static const CusineRestaurants = 'Cusine-Restaurants';
   static const RestaurantDashboard = 'RestaurantDashboard';
+  static const SearchMeals = 'SearchMeals';
   static const SHIPPING = 'Shipping';
   static const SHIPPING_REGISTER = 'shippingRegister';
 
@@ -238,4 +241,5 @@ abstract class Paths {
   static const SUBSCRIPTIONPLANS = 'SubscriptionPlans';
 
   static const TRIP_JOIN = 'TripJoin';
+  static const AVAILABLE_TRIPS = 'AvailableTrips';
 }

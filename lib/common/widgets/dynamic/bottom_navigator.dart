@@ -1,31 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
-import '../../../res/assets/assets.dart';
-import '../../../res/style/styles.dart';
-import '../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../theme/cubit/cubit.dart';
+import '../../../res/assets/assets.dart';
+import '../../../routes/routes.dart';
 import 'bottom_painter.dart';
 
 class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
   final int mainCategory;
   final int index;
   final ScrollController scrollController;
- final bool isScrollingDown ;
+  final bool isScrollingDown;
 
   const BottomNavigator({
     super.key,
     required this.mainCategory,
     required this.index,
     required this.scrollController,
-     required this.isScrollingDown,
+    required this.isScrollingDown,
   });
 
   @override
@@ -93,8 +89,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
                   // Translated text
                   index: 3,
                   image: Assets.message,
-                  // route: Routes.CHAT,
-                  route: Routes.CHATROOM,
+                  route: Routes.CHAT,
                 ),
                 BottomItemModel(
                   icon: FontAwesomeIcons.car,
@@ -149,7 +144,8 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         }
       },
       items: pages,
-      scrollController: scrollController!, isScrollingDown: isScrollingDown!,
+      scrollController: scrollController,
+      isScrollingDown: isScrollingDown,
     );
   }
 
@@ -165,7 +161,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
 
   bool isScrollingDown;
 
-   CustomBottomNavigationBar({
+  CustomBottomNavigationBar({
     super.key,
     required this.currentIndex,
     required this.onTap,
@@ -175,15 +171,13 @@ class CustomBottomNavigationBar extends StatefulWidget {
   });
 
   @override
-  _CustomBottomNavigationBarState createState() =>
-      _CustomBottomNavigationBarState(
+  _CustomBottomNavigationBarState createState() => _CustomBottomNavigationBarState(
         scrollController: scrollController,
         isScrollingDown: isScrollingDown,
       );
 }
 
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
-    with SingleTickerProviderStateMixin {
+class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> with SingleTickerProviderStateMixin {
   final ScrollController scrollController;
 
   bool isScrollingDown;
@@ -197,8 +191,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   void initState() {
     scrollController;
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
         if (!isScrollingDown) {
           setState(() {
             isScrollingDown = true;
@@ -228,11 +221,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
       builder: (BuildContext context, Widget? child) {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 400),
-          height:90.zH,
-          // height: scrollController.position.userScrollDirection ==
-          //         ScrollDirection.reverse
-          //     ? 0
-          //     : 90.zH,
+          height: scrollController.position.userScrollDirection == ScrollDirection.reverse ? 0 : 90.zH,
           child: CustomPaint(
             painter: BottomBarPainter(
               color: Colors.black,
@@ -241,10 +230,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
               padding: const EdgeInsets.only(bottom: 20, top: 10),
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black12, blurRadius: 5, spreadRadius: 2)
-                ],
+                boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2)],
               ),
               child: SafeArea(
                 child: Padding(
@@ -310,6 +296,6 @@ class BottomItemModel {
   });
 
   void action(BuildContext context) {
-    context.push(route,extra: '');
+    context.push(route);
   }
 }

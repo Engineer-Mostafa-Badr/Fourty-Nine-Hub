@@ -8,7 +8,6 @@ extension ChatMessagesStateX on ChatsState {
   bool get isLoading => status == ChatsStates.loading;
 
   bool get isError => status == ChatsStates.error;
-
   bool get isTyping => status == ChatsStates.typing;
 }
 

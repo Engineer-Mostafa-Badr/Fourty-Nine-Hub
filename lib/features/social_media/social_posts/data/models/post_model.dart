@@ -54,7 +54,9 @@ class PostModel extends PostEntity {
     return PostModel(
         id: json['_id'],
         content: json['content'] ?? '',
-        location: json['location']!=null?LocationModel.fromJson(json['location']):null,
+        location: json['location'] != null
+            ? LocationModel.fromJson(json['location'])
+            : null,
         type: json['type'] ?? '',
         images: json['media'] != null
             ? List<String>.from(
@@ -116,8 +118,8 @@ class PostModel extends PostEntity {
         users: json['with'] == null
             ? null
             : (json['with'] as List)
-            .map((e) => TwitterUserModel.fromJson(e))
-            .toList(),
+                .map((e) => TwitterUserModel.fromJson(e))
+                .toList(),
         photo: json['photo'] ?? '',
         backgroundColor: json['background_color']);
   }

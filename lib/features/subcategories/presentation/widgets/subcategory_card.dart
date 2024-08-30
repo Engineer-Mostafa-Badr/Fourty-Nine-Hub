@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
-
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -22,8 +20,7 @@ class SubCategoryCard extends StatelessWidget {
   final SubCategoryEntity item;
   final MainCategoryEntity mainCategory;
 
-  const SubCategoryCard(
-      {super.key, required this.item, required this.mainCategory});
+  const SubCategoryCard({super.key, required this.item, required this.mainCategory});
 
   @override
   Widget build(BuildContext context) {
@@ -32,17 +29,11 @@ class SubCategoryCard extends StatelessWidget {
       child: Container(
         // width: kToolbarHeight * 2.5.zW,
         // height: kToolbarHeight * 3.zH,
-        margin:  EdgeInsets.all(10.zW),
+        margin: EdgeInsets.all(10.zW),
         decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(5),
-            boxShadow: const [
-              BoxShadow(
-                  color: Colors.grey,
-                  spreadRadius: 1,
-                  offset: Offset(-1, 1),
-                  blurRadius: 5)
-            ]),
+            boxShadow: const [BoxShadow(color: Colors.grey, spreadRadius: 1, offset: Offset(-1, 1), blurRadius: 5)]),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -58,7 +49,7 @@ class SubCategoryCard extends StatelessWidget {
                   ),
                   Positioned(
                       top: 10.zH,
-                      right:10.zW,
+                      right: 10.zW,
                       child: IconAppButton(
                         icon: Icons.favorite_outline,
                         onPressed: () {},
@@ -93,9 +84,7 @@ class SubCategoryCard extends StatelessWidget {
                       onPressed: () {
                         if (AuthHelper().isLoggedIn()) {
                           context.push(Routes.CREATEAD,
-                              extra: CategorizationEntity(
-                                  mainCategory: mainCategory,
-                                  subCategory: item));
+                              extra: CategorizationEntity(mainCategory: mainCategory, subCategory: item));
                         } else {
                           context.push(Routes.LOGIN);
                         }

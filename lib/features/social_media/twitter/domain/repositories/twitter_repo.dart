@@ -36,7 +36,8 @@ abstract class TwitterRepo {
       {required PostCommentsParams params});
   Future<Either<Failure, bool>> deletePost({required String postId});
   Future<Either<Failure, bool>> deleteComment({required String commentId});
-  Future<Either<Failure, bool>> editComment({required TwitterPostCommentParams params});
+  Future<Either<Failure, bool>> editComment(
+      {required TwitterPostCommentParams params});
   Future<Either<Failure, bool>> hidePost({required String postId});
   Future<Either<Failure, bool>> addReport(
       {required TwitterReportParams params});

@@ -29,7 +29,6 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
     await _getDoctorProfile();
   }
 
-
   Future<void> _getDoctorProfile() async {
     final response = await _getDoctorProfileUseCase(const NoParams());
 

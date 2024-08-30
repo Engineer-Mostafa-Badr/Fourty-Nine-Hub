@@ -24,22 +24,19 @@ class MainCategoryEntity extends Equatable {
     required this.total,
   });
 
-
-  factory MainCategoryEntity.fake(){
-    return  const MainCategoryEntity(id: "id",
+  factory MainCategoryEntity.fake() {
+    return const MainCategoryEntity(
+        id: "id",
         name: "Fake Data",
         image: UIConst.imagePlaceHolder,
         banner: UIConst.imagePlaceHolder,
         cover: UIConst.imagePlaceHolder,
         isFavorite: false,
-        total: 9900000
-    );
+        total: 9900000);
   }
 
-
   @override
-  List<Object?> get props =>
-      [
+  List<Object?> get props => [
         id,
         name,
         image,
