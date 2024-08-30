@@ -336,6 +336,12 @@ String capitalizeAndSplit(String name) {
   return parts.map(capitalize).join(' ');
 }
 
+String capitalizeAndSplit2Only(String name) {
+  if (name.isEmpty) return name;
+  List<String> parts = name.split(' ').take(2).toList();
+  return parts.map(capitalize).join(' ');
+}
+
 String getTimeAgo(String lastSeen) {
   DateTime lastSeenTime = DateTime.parse(lastSeen);
   DateTime now = DateTime.now().toUtc();
