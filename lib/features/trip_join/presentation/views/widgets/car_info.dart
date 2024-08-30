@@ -22,6 +22,7 @@ class _CarInfoState extends State<CarInfo> {
   late FetchCarBrandsCubit fetchCarBrandsCubit;
   late FetchCarModelsCubit fetchCarModelsCubit;
   late FetchCarYearTypeCubit fetchCarYearTypeCubit;
+
   @override
   void initState() {
     fetchCarBrandsCubit = context.read<FetchCarBrandsCubit>();
