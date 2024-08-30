@@ -93,7 +93,8 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
                   // Translated text
                   index: 3,
                   image: Assets.message,
-                  route: Routes.CHAT,
+                  // route: Routes.CHAT,
+                  route: Routes.CHATROOM,
                 ),
                 BottomItemModel(
                   icon: FontAwesomeIcons.car,
@@ -227,10 +228,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
       builder: (BuildContext context, Widget? child) {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 400),
-          height: scrollController.position.userScrollDirection ==
-                  ScrollDirection.reverse
-              ? 0
-              : 90.zH,
+          height:90.zH,
+          // height: scrollController.position.userScrollDirection ==
+          //         ScrollDirection.reverse
+          //     ? 0
+          //     : 90.zH,
           child: CustomPaint(
             painter: BottomBarPainter(
               color: Colors.black,
@@ -308,6 +310,6 @@ class BottomItemModel {
   });
 
   void action(BuildContext context) {
-    context.push(route);
+    context.push(route,extra: '');
   }
 }

@@ -146,7 +146,12 @@ class CodegenLoader extends AssetLoader{
   "close": "إغلاق",
   "giftApp": "لقد حصلت على هدية بقيمة 400 جنيه كهدية ترحيبية للتسجيل في تطبيق 49.",
   "clearAll": "حذف الكل",
-  "clearNotification": "هل أنت متأكد من أنك تريد مسح جميع الإشعارات؟"
+  "clearNotification": "هل أنت متأكد من أنك تريد مسح جميع الإشعارات؟",
+  "clearNoti": "هل أنت متأكد أنك تريد مسح هذا الإشعار؟",
+  "ok": "نعم",
+  "cancel": "الغاء",
+  "save": "حفظ",
+  "suscessfullySaved": "تم حفظ البيانات بنجاح"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -281,7 +286,12 @@ static const Map<String,dynamic> en = {
   "close": "CLOSE",
   "giftApp": "You got a gift of 400 pounds as a welcome gift for registering on the 49 app.",
   "clearAll": "Clear All",
-  "clearNotification": "Are you sure you want to clear all notifications?"
+  "clearNotification": "Are you sure you want to clear all notifications?",
+  "clearNoti": "Are you sure you want to clear notifications?",
+  "ok": "Ok",
+  "cancel": "Cancel",
+  "save": "Save",
+  "suscessfullySaved": "Successfully Saved"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

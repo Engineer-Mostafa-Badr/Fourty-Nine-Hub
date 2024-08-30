@@ -192,8 +192,6 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
-import '../../../reels/presentation/pages/reel_view.dart';
-
 const kToolbarHeightFactor = 0.80;
 const kDefaultPadding = 8.0;
 
@@ -242,14 +240,9 @@ class _TinderScreenState extends State<TinderScreen> {
     log('TinderScreen built');
     return SharedScaffold(
       body: BlocConsumer<TinderViewCubit, TinderViewState>(
-        listener: (context, state) {
-          final userCubit = serviceLocator<UserCubit>();
-          if (userCubit.token == null || userCubit.token!.isEmpty) {
-            showSnackBarAfterBuild(context, message: 'Check the login page.');
-          }
-        },
+        listener: (context, state) {},
         builder: (context, state) {
-          if (state.userData == null || state.subCategoryData == null) {
+          if (state.userData.isEmpty || state.subCategoryData.isEmpty) {
             return const Center(
               child: CupertinoActivityIndicator(radius: 25),
             );
@@ -263,6 +256,7 @@ class _TinderScreenState extends State<TinderScreen> {
 
   Widget _buildLoggedInContent(BuildContext context, TinderViewState state) {
     return Container(
+//000000000000
       color: Theme.of(context).scaffoldBackgroundColor,
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -272,11 +266,11 @@ class _TinderScreenState extends State<TinderScreen> {
             state.userData.isNotEmpty
                 ? const TinderCardStack()
                 : SizedBox(
-              height: MediaQuery.of(context).size.height * 2.5 / 4,
-              child: const Center(
-                child: CupertinoActivityIndicator(radius: 15),
-              ),
-            ),
+                    height: MediaQuery.of(context).size.height * 2.5 / 4,
+                    child: const Center(
+                      child: CupertinoActivityIndicator(radius: 15),
+                    ),
+                  ),
             const Padding(
               padding: EdgeInsets.only(top: 8.0, bottom: 2),
               child: Divider(color: Colors.grey, height: 1),
@@ -296,7 +290,9 @@ class _TinderScreenState extends State<TinderScreen> {
         alignment: Alignment.topLeft,
         child: Label(
           text: 'Find',
-          style: Styles.headerText(fontSize: 18),
+          style: Styles.headerText(
+            fontSize: MediaQuery.of(context).size.width * 0.1,
+          ),
         ),
       ),
     );
@@ -323,3 +319,4 @@ class _TinderScreenState extends State<TinderScreen> {
     );
   }
 }
+//00000000

@@ -10,6 +10,7 @@ class UserEntity extends Equatable {
   final int? friendsCount;
   final int? followersCount;
   final int? followingCount;
+  final int? wallet;
   final bool? isRider;
   final bool? isDoctor;
   final bool? isRestaurant;
@@ -17,6 +18,7 @@ class UserEntity extends Equatable {
   final bool? isDocument;
 
   String get fullName => '$firstName $lastName';
+
   bool isMyAccount(String anotherId) {
     return id == anotherId;
   }
@@ -31,6 +33,7 @@ class UserEntity extends Equatable {
     required this.friendsCount,
     required this.followersCount,
     required this.followingCount,
+    required this.wallet,
     this.isRider = false,
     this.isDoctor = false,
     this.isRestaurant = false,
@@ -48,6 +51,7 @@ class UserEntity extends Equatable {
         profileCover,
         friendsCount,
         followersCount,
-        followingCount
+        followingCount,
+        wallet
       ];
 }

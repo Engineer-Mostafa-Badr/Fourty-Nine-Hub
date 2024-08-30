@@ -2,11 +2,15 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
+import 'package:fourtyninehub/core/enums/club_house_layout_mode_enum.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -17,13 +21,12 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:video_player/video_player.dart';
-
-import 'video_editor/flutter_story_editor.dart';
-import 'video_editor/src/controller/controller.dart';
+import 'package:image/image.dart' as img;
+import 'package:video_trimmer/video_trimmer.dart';
 
 part 'media_slider.dart';
 
@@ -168,29 +171,12 @@ class _CamViewState extends State<_CamView> {
                           final media =
                               context.read<CameraPickerCubit>().state.mediaList;
                           if (media != null && media.isNotEmpty) {
-                            // showDialog(
-                            //     context: context,
-                            //     builder: (_) =>
-                            //         MediaSliderView(media: media)).then(
-                            //     (value) => context
-                            //         .read<CameraPickerCubit>()
-                            // //         .refreshMediaList());
-                            // context
-                            //     .push(Routes.MEDIASLIDER,
-                            //         extra: MediaSliderViewParams(media: media))
-                            //     .then((value) => context
-                            //         .read<CameraPickerCubit>()
-                            //         .refreshMediaList());
-
-                            showBottomSheet(
-                                context: context,
-                                builder: (_) => FlutterStoryEditor(
-                                    controller: FlutterStoryEditorController(),
-                                    captionController: TextEditingController(),
-                                    selectedFiles: media.map((e) => File(e.path)).toList(),
-                                    onSaveClickListener: (files) {
-                                      // Here you go with your edited files.
-                                    }));
+                            context
+                                .push(Routes.MEDIASLIDER,
+                                    extra: MediaSliderViewParams(media: media))
+                                .then((value) => context
+                                    .read<CameraPickerCubit>()
+                                    .refreshMediaList());
                           } else {
                             showErrorMessage(
                                 context, LocaleKeys.pickPhotoOrVideo);
@@ -303,23 +289,25 @@ class _CamViewState extends State<_CamView> {
 class _BaseIcon extends StatelessWidget {
   final Color? color;
   final IconData icon;
+  final double? iconSize;
   final void Function()? onTap;
 
-  const _BaseIcon({super.key, this.color, required this.icon, this.onTap});
+  const _BaseIcon({super.key, this.color, required this.icon, this.onTap, this.iconSize});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(8),
+        padding:  EdgeInsets.all(15.zH),
         decoration: BoxDecoration(
           color: (color ?? AppColors.GREY_DARK_COLOR).withOpacity(0.5),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(50.zR),
         ),
         child: Icon(
           icon,
           color: Colors.white,
+          size: iconSize,
         ),
       ),
     );
@@ -414,7 +402,10 @@ class _ImagesListState extends State<_ImagesList> {
                           ? AppColors.SECONDARY_COLOR
                           : null,
                       onPressed: () {
-                        controller.emitPhotoPickMode();
+                        if (controller.state.status !=
+                            CameraPickerStatus.startVideo) {
+                          controller.emitPhotoPickMode();
+                        }
                       },
                     );
                   },
@@ -447,23 +438,17 @@ class _ImagesListState extends State<_ImagesList> {
       {required ImageProvider image,
       required double width,
       required int index,
-      required List<XFile> media,
+      required List<File> media,
       bool isPhoto = true}) {
     return InkWell(
       onTap: () {
         if (mounted) {
-          // showDialog(
-          //     context: context,
-          //     builder: (_) =>
-          //         MediaSliderView(media: media, initialIndex: index)).then(
-          //     (value) => context.read<CameraPickerCubit>().refreshMediaList());
-          // context
-          //     .push(Routes.MEDIASLIDER,
-          //         extra:
-          //             MediaSliderViewParams(media: media, initialIndex: index))
-          //     .then((value) =>
-          //         context.read<CameraPickerCubit>().refreshMediaList());
-
+          context
+              .push(Routes.MEDIASLIDER,
+                  extra:
+                      MediaSliderViewParams(media: media, initialIndex: index))
+              .then((value) =>
+                  context.read<CameraPickerCubit>().refreshMediaList());
         }
       },
       child: Container(
@@ -584,7 +569,6 @@ class __VideoCircularIndicatorState extends State<_VideoCircularIndicator> {
       child: CircularProgressIndicator(
         value: 1 - (_time / widget.duration.inSeconds),
         valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-        // color: AppColors.SECONDARY_COLOR,
         backgroundColor: AppColors.SECONDARY_COLOR,
       ),
     );

@@ -28,6 +28,7 @@ class FormTextField extends StatefulWidget {
   final String? extraValidationMessage;
   final TextAlignVertical? textAlignVertical;
   final int? maxLines;
+  int? maxLength;
   final double? height;
   final TextStyle? style;
   final String? Function(String?)? validator;
@@ -37,7 +38,7 @@ class FormTextField extends StatefulWidget {
   final BorderRadius? borderRadius;
   final BoxConstraints? constraints;
   final TextStyle? textStyle;
-  const FormTextField(
+  FormTextField(
       {super.key,
         this.initialValue,
         this.hintStyle,
@@ -63,6 +64,7 @@ class FormTextField extends StatefulWidget {
         this.onTap,
         this.height,
         this.maxLines,
+        this.maxLength,
         this.style,
         this.validator,
         this.required,
@@ -89,6 +91,7 @@ class _FormTextFieldState extends State<FormTextField> {
             style:widget.textStyle?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
             textAlignVertical: widget.textAlignVertical,
             maxLines: widget.maxLines ?? 1,
+            maxLength: widget.maxLength,
             onFieldSubmitted: (v) {
               if (widget.onConfirm != null) {
                 widget.onConfirm!();

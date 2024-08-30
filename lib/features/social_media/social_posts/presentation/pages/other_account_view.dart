@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -12,9 +11,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_reels.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_tweets.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
-import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
-import '../../../../../common/widgets/dynamic/drawer.dart';
-import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -40,15 +36,6 @@ class _OtherAccountViewState extends State<OtherAccountView> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        // backgroundColor: Colors.,
-        // appBar: const HomeAppbar(),
-        // drawer: const DrawerWidget(),
-        // bottomNavigationBar: const BottomNavigator(
-        //   mainCategory: 0,
-        //   index: 2,
-        // ),
-        // floatingActionButton: const FloatingButton(),
-        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: BlocBuilder<SocialPostsCubit, SocialPostsState>(
             builder: (context, state) {
           final controller = context.read<SocialPostsCubit>();
@@ -119,7 +106,6 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               icon: const Icon(Icons.arrow_back)),
                           actions: [
                             // IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-                            if (loginUser?.id != state.profileData?.id)
                               PopupMenuButton(
                                 icon: const Icon(
                                   Icons.more_vert,
@@ -127,7 +113,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 ),
                                 itemBuilder: (context) {
                                   return [
-                                    PopupMenuItem<int>(
+                                    if (loginUser?.id != state.profileData?.id)PopupMenuItem<int>(
                                       value: 4,
                                       child: const Text("Report"),
                                       onTap: () {
@@ -140,7 +126,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                             ));
                                       },
                                     ),
-                                    PopupMenuItem<int>(
+                                    if (loginUser?.id != state.profileData?.id)PopupMenuItem<int>(
                                       value: 5,
                                       child: Text(
                                           state.profileData?.isBlock == true
@@ -167,6 +153,13 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                         }
                                       },
                                     ),
+                                    if (loginUser?.id == state.profileData?.id)PopupMenuItem<int>(
+                                      value: 5,
+                                      child: const Text('Edit Profile'),
+                                      onTap: () async {
+                                        context.push(Routes.EDITPROFILE);
+                                      },
+                                    )
                                   ];
                                 },
                               ),
@@ -227,7 +220,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                 child: Column(
               children: [
                 Expanded(
-                    flex: 3,
+                    flex: 4,
                     child: Image.network(
                       user.profileCover!.isNotEmpty
                           ? user.profileCover!
@@ -244,36 +237,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            PopupMenuButton(
-                                icon: Container(
-                                  height: kToolbarHeight * .5,
-                                  width: kToolbarHeight * 1.5,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: AppColors.SECONDARY_COLOR,
-                                  ),
-                                  child: Center(
-                                      child: Label(
-                                    text: 'Chat',
-                                    style:
-                                        Styles.mediumText(color: Colors.white),
-                                  )),
-                                ),
-                                itemBuilder: (context) {
-                                  return const [
-                                    PopupMenuItem<int>(
-                                      value: 0,
-                                      child: Text("Normal"),
-                                    ),
-                                    PopupMenuItem<int>(
-                                      value: 1,
-                                      child: Text("Anonymous"),
-                                    ),
-                                  ];
-                                },
-                                onSelected: (value) {
-                                  context.push(Routes.CHAT);
-                                }),
+
                             AppButton(
                                 height: kToolbarHeight * .5,
                                 width: kToolbarHeight * 1.5,
@@ -283,25 +247,31 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 label: user.isFollowed == true
                                     ? 'unFollow'
                                     : 'Follow',
+                                style:
+                                Styles.mediumText(color: Colors.white),
                                 onPressed: () {
                                   onFollow();
                                 }),
                             const Sizer(),
                             AppButton(
                                 height: kToolbarHeight * .5,
-                                width: kToolbarHeight *
-                                    (user.sentFriendRequest == true
-                                        ? 1.8
-                                        : 1.5),
+                                // width: kToolbarHeight *
+                                //     (user.sentFriendRequest == true
+                                //         ? 1.8
+                                //         : 1.5),
+                                padding: 5,
                                 backColor: user.areFriends == true ||
-                                        user.sentFriendRequest == true
+                                        user.sentFriendRequest == true||
+                                        user.isSenTRequest == true
                                     ? AppColors.DARK_GRAY_COLOR
                                     : null,
-                                label: user.areFriends == true
-                                    ? 'friends'
+                                style:
+                                Styles.mediumText(color: Colors.white),
+                                label: user.isSenTRequest == true?'Accept Request':user.areFriends == true
+                                    ? 'Friends'
                                     : user.sentFriendRequest == true
-                                        ? 'Remove request'
-                                        : 'Add friend',
+                                        ? 'Remove Request'
+                                        : 'Add Friend',
                                 onPressed: () {
                                   onAddFriend();
                                 })
@@ -311,14 +281,14 @@ class _OtherAccountViewState extends State<OtherAccountView> {
               ],
             )),
             PositionedDirectional(
-                bottom: 20,
+                bottom: 0,
                 start: 10,
 
                 child: CircleAvatar(
-                  radius: 30,
+                  radius: 60,
                   backgroundColor: AppColors.SECONDARY_COLOR,
                   child: CircleAvatar(
-                    radius: 28,
+                    radius: 58,
                     backgroundColor: Colors.white,
                     backgroundImage: NetworkImage(user.profilePicture ?? ''),
                   ),
@@ -330,19 +300,56 @@ class _OtherAccountViewState extends State<OtherAccountView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Sizer(),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Label(
-                      text: "${user.firstName} ${user.lastName}",
-                      style: Styles.headerText(fontWeight: FontWeight.w600)),
-                  const Sizer(
-                    width: 5,
+                  Row(
+                    children: [
+                      Label(
+                          text: "${user.firstName} ${user.lastName}",
+                          style: Styles.headerText(fontWeight: FontWeight.w600)),
+                      const Sizer(
+                        width: 5,
+                      ),
+                      const Icon(
+                        Icons.verified,
+                        size: 20,
+                        color: AppColors.SECONDARY_COLOR,
+                      )
+                    ],
                   ),
-                  const Icon(
-                    Icons.verified,
-                    size: 20,
-                    color: AppColors.SECONDARY_COLOR,
-                  )
+                  PopupMenuButton(
+                      icon: Container(
+                        height: kToolbarHeight * .5,
+                        width: kToolbarHeight * 1.5,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: AppColors.SECONDARY_COLOR,
+                        ),
+                        child: Center(
+                            child: Label(
+                              text: 'Chat',
+                              style:
+                              Styles.mediumText(color: Colors.white),
+                            )),
+                      ),
+                      itemBuilder: (context) {
+                        return const [
+                          PopupMenuItem<int>(
+                            value: 0,
+                            child: Text("Normal"),
+                          ),
+                          PopupMenuItem<int>(
+                            value: 1,
+                            child: Text("Anonymous"),
+                          ),
+                        ];
+                      },
+                      onSelected: (value) {
+                        context.push(Routes.CHAT);
+                      }),
+
                 ],
               ),
               Label(

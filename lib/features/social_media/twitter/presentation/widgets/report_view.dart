@@ -941,7 +941,7 @@ class _ReportViewState extends State<ReportView> {
         Label(
           text: "Report",
           style: Styles.headerText(
-            fontSize: screenWidth * 0.07,
+            fontSize: screenWidth * 0.1,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
@@ -984,7 +984,7 @@ class _ReportViewState extends State<ReportView> {
               child: Label(
                 text: capitalizeAndSplit(report.name),
                 style: Styles.headerText(
-                  fontSize: screenWidth * 0.05,
+                  fontSize: screenWidth * 0.09,
                   fontWeight: FontWeight.bold,
                   color: selectedReport == report
                       ? AppColors.SECONDARY_COLOR
