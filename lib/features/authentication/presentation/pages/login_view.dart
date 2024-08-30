@@ -20,8 +20,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
-import '../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/localization/locales.dart';
 import '../../../../res/style/app_colors.dart';
@@ -40,14 +40,12 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   // AuthType selectedAuth = AuthType.LOGIN;
   ScrollController scrollController = ScrollController();
-
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     scrollController.dispose();
-    log(widget.authType.toString(),
-        name: "lllllllllllllllllllllllllllllllllllll");
+    log(widget.authType.toString(), name: "lllllllllllllllllllllllllllllllllllll");
     // wid, required AuthType authTypeget.authType = widget.authType;
     // log(widget.authType.toString(), name: "lllllllllllllllllllllllllllllllllllll");
   }
@@ -60,8 +58,7 @@ class _LoginViewState extends State<LoginView> {
       log("lllllllllllllllllllllllllll");
       scrollController.jumpTo(409);
     }
-    log(MediaQuery.of(context).viewInsets.bottom.toString(),
-        name: "OpenKeyboard");
+    log(MediaQuery.of(context).viewInsets.bottom.toString(), name: "OpenKeyboard");
     return BlocListener<RegisterCubit, RegisterState>(
       listener: (context, state) async {
         if (state is RegisterError) {
@@ -89,10 +86,8 @@ class _LoginViewState extends State<LoginView> {
               ),
             );
           } else if (state is LoginSuccess) {
-            await TokenManager.saveAccessToken(
-                state.userTokensEntity.accessToken);
-            await TokenManager.saveRefreshToken(
-                state.userTokensEntity.refreshToken);
+            await TokenManager.saveAccessToken(state.userTokensEntity.accessToken);
+            await TokenManager.saveRefreshToken(state.userTokensEntity.refreshToken);
 
             serviceLocator<UserCubit>()
               ..setLogin(true)
@@ -101,12 +96,10 @@ class _LoginViewState extends State<LoginView> {
                 serviceLocator<GetWalletCubit>().getWallet();
                 String? accessToken = await TokenManager.getAccessToken();
                 String? refreshToken = await TokenManager.getRefreshToken();
-                debugPrint(
-                    '/////////////////////////////////////////////////////////////////////////');
+                debugPrint('/////////////////////////////////////////////////////////////////////////');
                 debugPrint('Refresh Token: $refreshToken');
                 debugPrint('Access Token: $accessToken');
-                debugPrint(
-                    '/////////////////////////////////////////////////////////////////////////');
+                debugPrint('/////////////////////////////////////////////////////////////////////////');
                 debugPrint(serviceLocator<UserCubit>().state.data.toString());
                 Navigator.pop(context);
                 Navigator.pop(context);
@@ -193,31 +186,22 @@ class _LoginViewState extends State<LoginView> {
                       ),
                       widget.authType == AuthType.REGISTER
                           ? DefaultButton(
-                              labelStyle: TextStyle(
-                                  fontSize: 35.zH,
-                                  color: AppColors.AUTH_CONTAINER_COLOR),
+                              labelStyle: TextStyle(fontSize: 35.zH, color: AppColors.AUTH_CONTAINER_COLOR),
                               label: LocaleKeys.register.localize,
                               width: double.infinity,
                               onPressed: () {
                                 if (registerCubit.accept) {
                                   registerCubit.register();
                                 } else {
-                                  showErrorMessage(
-                                      context,
-                                      getFailureMessage(
-                                          ServerFailure(
-                                              message:
-                                                  LocaleKeys.terms.localize),
-                                          context));
+                                  showErrorMessage(context,
+                                      getFailureMessage(ServerFailure(message: LocaleKeys.terms.localize), context));
                                 }
                               },
                             )
                           : DefaultButton(
                               width: double.infinity,
                               label: LocaleKeys.login.localize,
-                              labelStyle: TextStyle(
-                                  fontSize: 35.zH,
-                                  color: AppColors.AUTH_CONTAINER_COLOR),
+                              labelStyle: TextStyle(fontSize: 35.zH, color: AppColors.AUTH_CONTAINER_COLOR),
                               onPressed: loginCubit.login,
                             ),
                     ],
@@ -230,10 +214,7 @@ class _LoginViewState extends State<LoginView> {
   }
 
   chooseAuthWidget(
-      {required bool active,
-      required String text,
-      required BorderRadius borderRadius,
-      void Function()? onTap}) {
+      {required bool active, required String text, required BorderRadius borderRadius, void Function()? onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -246,8 +227,7 @@ class _LoginViewState extends State<LoginView> {
         child: Center(
           child: Text(
             text,
-            style:
-                Styles.mediumText(color: active ? Colors.white : Colors.black),
+            style: Styles.mediumText(color: active ? Colors.white : Colors.black),
           ),
         ),
       ),
@@ -259,7 +239,6 @@ enum AuthType { LOGIN, REGISTER }
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key, required this.loginCubit});
-
   final LoginCubit loginCubit;
 
   @override
@@ -268,12 +247,14 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   bool obsecure = false;
-
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        FormTextField(validator: (v){},
+        FormTextField(
+          validator: (v) {
+            return null;
+          },
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.zR),
@@ -289,7 +270,10 @@ class _LoginWidgetState extends State<LoginWidget> {
           action: (v) {},
         ),
         const Sizer(),
-        FormTextField(validator: (v){},
+        FormTextField(
+          validator: (v) {
+            return null;
+          },
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.zR),
@@ -414,7 +398,6 @@ class RegisterWidget extends StatefulWidget {
 
 class _RegisterWidgetState extends State<RegisterWidget> {
   bool obsecure = true;
-
   @override
   Widget build(BuildContext context) {
     final registerCubit = context.read<RegisterCubit>();
@@ -429,8 +412,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             child: Column(
               children: [
                 FormTextField(
-                  constraints:
-                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20.zR),
                   controller: registerCubit.firstNameController,
@@ -447,8 +429,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30.zH,
                 ),
                 FormTextField(
-                  constraints:
-                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20.zR),
                   controller: registerCubit.lastNameController,
@@ -465,8 +446,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30.zH,
                 ),
                 FormTextField(
-                  constraints:
-                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   controller: registerCubit.emailTextController,
@@ -488,9 +468,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   children: [
                     Flexible(
                         child: Text(LocaleKeys.gender.localize,
-                            style: Styles.mediumText(
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.w400))),
+                            style:
+                                Styles.mediumText(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w400))),
                     Flexible(
                       child: Row(
                         children: [
@@ -505,9 +484,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                   isCentered: true,
                                   close: false,
                                   isBordered: !registerCubit.isMale,
-                                  color: registerCubit.isMale
-                                      ? AppColors.PRIMARY_COLOR
-                                      : Colors.transparent,
+                                  color: registerCubit.isMale ? AppColors.PRIMARY_COLOR : Colors.transparent,
                                   textColor: registerCubit.isMale
                                       ? AppColors.AUTH_CONTAINER_COLOR
                                       : Theme.of(context).primaryColor,
@@ -529,9 +506,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                               textColor: registerCubit.isMale
                                   ? Theme.of(context).primaryColor
                                   : AppColors.AUTH_CONTAINER_COLOR,
-                              color: registerCubit.isMale
-                                  ? Colors.transparent
-                                  : AppColors.PRIMARY_COLOR,
+                              color: registerCubit.isMale ? Colors.transparent : AppColors.PRIMARY_COLOR,
                               label: 'female'.localize,
                             ),
                           ),
@@ -544,8 +519,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30.zH,
                 ),
                 FormTextField(
-                  constraints:
-                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   controller: registerCubit.passwordTextController,
@@ -570,14 +544,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30.zH,
                 ),
                 FormTextField(
-                  constraints:
-                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   controller: registerCubit.confirmPasswordTextController,
                   // label: 'Password',
-                  hint:
-                      '${LocaleKeys.confirm.localize} ${LocaleKeys.password.localize}',
+                  hint: '${LocaleKeys.confirm.localize} ${LocaleKeys.password.localize}',
                   obsecure: obsecure,
                   prefix: GestureDetector(
                     onTap: () {
@@ -600,8 +572,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   validator: (p0) {
                     return null;
                   },
-                  constraints:
-                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   // controller: registerCubit.firstNameController,
@@ -635,9 +606,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     ),
                     Text(
                       LocaleKeys.conditions.localize,
-                      style: Styles.mediumText(
-                          color: const Color(0xFF4898D6),
-                          fontWeight: FontWeight.w600),
+                      style: Styles.mediumText(color: const Color(0xFF4898D6), fontWeight: FontWeight.w600),
                     ),
                     Checkbox(
                       activeColor: Colors.red,

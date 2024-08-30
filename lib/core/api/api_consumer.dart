@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
+
 // import 'dart:convert';
 // import 'package:flutter/services.dart' show rootBundle;
 
@@ -78,9 +79,7 @@ class BaseApiConsumer extends ApiConsumer {
       );
       return Right(result.data as Map<String, dynamic>);
     } catch (e) {
-      if (e is DioException &&
-          e.response?.statusCode == 401 &&
-          isTokenAttached) {
+      if (e is DioException && e.response?.statusCode == 401 && isTokenAttached) {
         return refreshToken().then(
           (_) => delete(
             url,
@@ -116,8 +115,7 @@ class BaseApiConsumer extends ApiConsumer {
       if (result.data['status']) {
         return Right(result.data as Map<String, dynamic>);
       } else {
-        return Left(ValidationFailure(
-            result.data['message'] ?? result.data['error']['message']));
+        return Left(ValidationFailure(result.data['message'] ?? result.data['error']['message']));
       }
     } catch (e) {
       // if (e is DioException &&
@@ -153,13 +151,10 @@ class BaseApiConsumer extends ApiConsumer {
       if (result.data['status']) {
         return Right(result.data as Map<String, dynamic>);
       } else {
-        return Left(ValidationFailure(
-            result.data['message'] ?? result.data['error']['message']));
+        return Left(ValidationFailure(result.data['message'] ?? result.data['error']['message']));
       }
     } catch (e) {
-      if (e is DioException &&
-          e.response?.statusCode == 401 &&
-          isTokenAttached) {
+      if (e is DioException && e.response?.statusCode == 401 && isTokenAttached) {
         return refreshToken().then(
           (_) => post(
             url,
@@ -168,6 +163,9 @@ class BaseApiConsumer extends ApiConsumer {
           ),
         );
       } else {
+        // if (e is DioException) {
+        //   print(' ========= ${e.response?.data}');
+        // }
         return Left(_getFailure(e));
       }
     }
@@ -194,13 +192,10 @@ class BaseApiConsumer extends ApiConsumer {
           return Right({"data": result.data});
         }
       } else {
-        return Left(ValidationFailure(
-            result.data['message'] ?? result.data['error']['message']));
+        return Left(ValidationFailure(result.data['message'] ?? result.data['error']['message']));
       }
     } catch (e) {
-      if (e is DioException &&
-          e.response?.statusCode == 401 &&
-          isTokenAttached) {
+      if (e is DioException && e.response?.statusCode == 401 && isTokenAttached) {
         return refreshToken().then(
           (_) => put(
             url,
@@ -222,8 +217,7 @@ class BaseApiConsumer extends ApiConsumer {
         );
       } else if (e.response?.statusCode == 401) {
         return const UnauthorizedFailure();
-      } else if (e.response?.data is Map &&
-          e.response?.data['message'] is String) {
+      } else if (e.response?.data is Map && e.response?.data['message'] is String) {
         return ServerFailure(
           message: e.response?.data['message'] as String,
           statusCode: e.response?.statusCode,
@@ -233,18 +227,14 @@ class BaseApiConsumer extends ApiConsumer {
         List<String>? errors;
         if (error['data'] is List) {
           final data = e.response?.data['error']['data'] as List;
-          errors = data
-              .map((e) => e['message'] as String)
-              .whereType<String>()
-              .toList();
+          errors = data.map((e) => e['message'] as String).whereType<String>().toList();
         }
         return ServerFailure(
           message: error['message'] as String,
           statusCode: e.response?.statusCode,
           errors: errors,
         );
-      } else if (e.response?.data is Map &&
-          e.response?.data['data'] is String) {
+      } else if (e.response?.data is Map && e.response?.data['data'] is String) {
         return ServerFailure(
           message: e.response?.data['data'] as String,
           statusCode: e.response?.statusCode,

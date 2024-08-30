@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -78,7 +76,7 @@ class MeetingCubit extends Cubit<MeetingState> {
     });
   }
 
-  Future<void> endRoom(String roomId) async{
+  Future<void> endRoom(String roomId) async {
     emit(state.copyWith(status: MeetingStates.loading));
     await endRoomUseCase(MeetingParams(meetingId: roomId)).then((value) {
       print('room Ended');
@@ -86,7 +84,7 @@ class MeetingCubit extends Cubit<MeetingState> {
     }).catchError((error) {
       print('room Not Ended');
       emit(state.copyWith(status: MeetingStates.failure));
-      throw'';
+      throw '';
     });
   }
 

@@ -7,7 +7,6 @@ import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
-import '../../domain/entities/restaurant_entity.dart';
 
 class RestaurantCard extends StatelessWidget {
   final Restaurant? item;
@@ -58,11 +57,11 @@ class RestaurantCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                  text: item?.name??"",
+                  text: item?.name ?? "",
                   style: Styles.mediumText(fontWeight: FontWeight.w400),
                 ),
                 Label(
-                  text:"",// item?.description??"",
+                  text: "", // item?.description??"",
                   style: Styles.mediumText(
                     color: Colors.grey,
                   ),
@@ -109,11 +108,11 @@ class RestaurantCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Label(
-              text: item?.name??"",
+              text: item?.name ?? "",
               style: Styles.mediumText(fontWeight: FontWeight.w400),
             ),
             Label(
-                text: "",//item?.description,
+                text: "", //item?.description,
                 style: Styles.mediumText(color: Colors.grey)),
             Row(
               children: [

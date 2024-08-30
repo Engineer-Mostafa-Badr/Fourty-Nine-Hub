@@ -1,6 +1,10 @@
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/city_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/food_category_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/government_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_media_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
+import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'restaurant_2_model.g.dart';
@@ -13,6 +17,9 @@ class Restaurant2Model extends Restaurant {
     super.address,
     super.countryCode,
     super.datumId,
+    super.city,
+    super.mainCategoryId,
+    super.subcategoryId,
     super.government,
     super.isActive,
     super.deliveryTime,

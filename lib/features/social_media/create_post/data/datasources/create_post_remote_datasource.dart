@@ -18,8 +18,10 @@ abstract class CreatePostRemoteDataSource {
   Future<Either<Failure, List<FeelingEntity>>> getFeelingsList();
   Future<Either<Failure, List<ActivityEntity>>> getActivitiesList();
   Future<Either<Failure, bool>> postData({required Map<String, dynamic> data});
-  Future<Either<Failure, List<PostUserEntity>>> getFriendsFollowers({required FriendsFollowersParams params});
-  Future<Either<Failure, List<PlaceEntity>>> getPlaces({required FriendsFollowersParams params});
+  Future<Either<Failure, List<PostUserEntity>>> getFriendsFollowers(
+      {required FriendsFollowersParams params});
+  Future<Either<Failure, List<PlaceEntity>>> getPlaces(
+      {required FriendsFollowersParams params});
   Future<Either<Failure, bool>> createTwitterPost(
       {required CreateTwitterPostParams params});
 }
@@ -78,26 +80,28 @@ class CreatePostRemoteDataSourceImpl implements CreatePostRemoteDataSource {
       'content': params.content,
       'mediaIds': params.mediaIds.isEmpty ? [] : params.mediaIds
     });
-    return response.fold((l) => Left(l),
-        (data) => Right(data['status']));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, List<PostUserEntity>>> getFriendsFollowers({required FriendsFollowersParams params}) async{
-    final response = await _apiConsumer.get(EndPoints.getFriendsFollowers(params));
+  Future<Either<Failure, List<PostUserEntity>>> getFriendsFollowers(
+      {required FriendsFollowersParams params}) async {
+    final response =
+        await _apiConsumer.get(EndPoints.getFriendsFollowers(params));
     return response.fold(
-            (l) => Left(l),
-            (data) => Right((data['data']['users'] as List)
+        (l) => Left(l),
+        (data) => Right((data['data']['users'] as List)
             .map((e) => PostUserModel.fromJson(e))
             .toList()));
   }
 
   @override
-  Future<Either<Failure, List<PlaceEntity>>> getPlaces({required FriendsFollowersParams params}) async{
+  Future<Either<Failure, List<PlaceEntity>>> getPlaces(
+      {required FriendsFollowersParams params}) async {
     final response = await _apiConsumer.get(EndPoints.getPlaces(params));
     return response.fold(
-            (l) => Left(l),
-            (data) => Right((data['data']['results'] as List)
+        (l) => Left(l),
+        (data) => Right((data['data']['results'] as List)
             .map((e) => PlaceModel.fromJson(e))
             .toList()));
   }

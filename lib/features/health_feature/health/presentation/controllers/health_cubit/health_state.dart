@@ -11,16 +11,16 @@ class HealthState {
   final List<GovernorateEntity>? governorates;
   final MainCategoryEntity? mainCategory;
   final bool? isDoctor;
-  const HealthState(
-      {this.status = HealthStates.loading,
-      this.failure,
-      this.mainCategory,
-      this.myBookings,
-      this.isDoctor,
-      this.subCategories,
-      this.medicalServices,
-        this.governorates,
-      });
+  const HealthState({
+    this.status = HealthStates.loading,
+    this.failure,
+    this.mainCategory,
+    this.myBookings,
+    this.isDoctor,
+    this.subCategories,
+    this.medicalServices,
+    this.governorates,
+  });
   HealthState copyWith({
     HealthStates? status,
     Failure? failure,
@@ -32,13 +32,13 @@ class HealthState {
     List<GovernorateEntity>? governorates,
   }) {
     return HealthState(
-        status: status ?? this.status,
-        medicalServices: medicalServices ?? this.medicalServices,
-        failure: failure ?? this.failure,
-        myBookings: myBookings ?? this.myBookings,
-        mainCategory: mainCategory ?? this.mainCategory,
-        isDoctor: isDoctor ?? this.isDoctor,
-        subCategories: subCategories ?? this.subCategories,
+      status: status ?? this.status,
+      medicalServices: medicalServices ?? this.medicalServices,
+      failure: failure ?? this.failure,
+      myBookings: myBookings ?? this.myBookings,
+      mainCategory: mainCategory ?? this.mainCategory,
+      isDoctor: isDoctor ?? this.isDoctor,
+      subCategories: subCategories ?? this.subCategories,
       governorates: governorates ?? this.governorates,
     );
   }

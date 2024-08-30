@@ -335,6 +335,7 @@ class _ChatViewState extends State<ChatView> {
       child: SharedScaffold(
         mainCategoryId: 2,
         body: NestedAppbar(
+          scrollController: ScrollController(),
           appBars: [
             const SliverAppBar(
               expandedHeight: kToolbarHeight * 1.5,
@@ -379,7 +380,7 @@ class _ChatViewState extends State<ChatView> {
         labelColor: AppColors.PRIMARY_COLOR,
         indicatorColor: Colors.red,
         onTap: (index) {
-          if(context.read<UserCubit>().isLoggedIn){
+          if (context.read<UserCubit>().isLoggedIn) {
             context.read<ChatsCubit>().getChats(index: index);
 
             // if this locked chat we request password
@@ -539,7 +540,4 @@ class _ChatViewState extends State<ChatView> {
           )),
     );
   }
-
-
-
 }

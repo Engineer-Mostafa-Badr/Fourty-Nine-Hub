@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_entity.dart';
@@ -54,12 +55,13 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
   final service = MainServicesEnum.food;
 
   // final user = UserCubit.to.state.data;
-@override
+  @override
   void onChange(Change<RestaurantsListState> change) {
     print(change.currentState.status);
     print(change.nextState.status);
     super.onChange(change);
   }
+
   void loadData() async {
     Future.wait([
       _getMainCategoryDetails(),

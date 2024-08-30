@@ -25,7 +25,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-
 part 'chats_state.dart';
 
 class ChatsCubit extends Cubit<ChatsState> {
@@ -109,13 +108,12 @@ class ChatsCubit extends Cubit<ChatsState> {
       }
 
       response.fold(
-        (failure) => emit
-            .call(state.copyWith(failure: failure, status: ChatsStates.error)),
-        (data) async {
-          data.chats!
-              .map(
-                  (e) => _chats.update(e.sId!, (value) => e, ifAbsent: () => e))
-              .toList();
+          (failure) => emit.call(
+              state.copyWith(failure: failure, status: ChatsStates.error)),
+          (data) async {
+        data.chats!
+            .map((e) => _chats.update(e.sId!, (value) => e, ifAbsent: () => e))
+            .toList();
 
         // to listen typing and online emit event status
         List<UserStatusParams> userStatusParams = [];
@@ -124,10 +122,10 @@ class ChatsCubit extends Cubit<ChatsState> {
               .add(UserStatusParams(chatId: item.sId!, userId: item.userId!));
         }
 
-    await Future.delayed(const Duration(seconds: 1));
-    sendUserStatus(userStatusParams);
-    _socketService.listenToUserStatus();
-    unReadMessage = data.totalUnread ?? 0;
+        await Future.delayed(const Duration(seconds: 1));
+        sendUserStatus(userStatusParams);
+        _socketService.listenToUserStatus();
+        unReadMessage = data.totalUnread ?? 0;
 
         return emit.call(
             state.copyWith(chats: data.chats, status: ChatsStates.initState));
@@ -143,7 +141,6 @@ class ChatsCubit extends Cubit<ChatsState> {
           chats: _chats.values.toList(), status: ChatsStates.initState));
     });
   }
-
 
   //   listenToNewMessages() {
   //   _socketService.socketMessageStream.listen((event) {
@@ -297,9 +294,6 @@ class ChatsCubit extends Cubit<ChatsState> {
       }
     });
   }
-
-
-
 
   sendUserStatus(List<UserStatusParams> params) {
     Timer? timer;

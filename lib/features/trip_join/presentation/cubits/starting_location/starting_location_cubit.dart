@@ -15,10 +15,12 @@ class StartingLocationCubit extends Cubit<StartingLocationState> {
   LocationEntity? startingLocation;
   Future<void> getStartingLocation({required String address}) async {
     emit(StartingLocationLoading());
-    final response = await fetchLocationCordinatesUseCase.call(address: address);
+    final response =
+        await fetchLocationCordinatesUseCase.call(address: address);
     response.fold(
       (Failure failure) => emit(
-        StartingLocationFailed(errorMessage: _getErrorMessageFromFailure(failure)),
+        StartingLocationFailed(
+            errorMessage: _getErrorMessageFromFailure(failure)),
       ),
       (LocationEntity location) {
         startingLocation = location;

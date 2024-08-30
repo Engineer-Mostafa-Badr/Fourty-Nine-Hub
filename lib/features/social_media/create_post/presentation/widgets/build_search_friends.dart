@@ -9,8 +9,11 @@ import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class BuildSearchFriends extends StatefulWidget {
-  const BuildSearchFriends(
-      {super.key, required this.onSelectUser, required this.controller,});
+  const BuildSearchFriends({
+    super.key,
+    required this.onSelectUser,
+    required this.controller,
+  });
   final Function(PostUserEntity) onSelectUser;
   final CreatePostCubit controller;
   @override
@@ -22,7 +25,7 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
 
   @override
   void initState() {
-    widget.controller.usersPagingController.itemList=[];
+    widget.controller.usersPagingController.itemList = [];
     super.initState();
   }
 
@@ -30,15 +33,13 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsetsDirectional.only(top: 20.0, end: 8,start: 8),
+        padding: const EdgeInsetsDirectional.only(top: 20.0, end: 8, start: 8),
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
               child: Row(
                 children: [
-                  InkWell(
-                      onTap:()=>context.pop(),
-                      child: const Icon(Icons.arrow_back)),
+                  InkWell(onTap: () => context.pop(), child: const Icon(Icons.arrow_back)),
                   const SizedBox(
                     width: 10,
                   ),
@@ -54,9 +55,7 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
 
                         // widget.controller.usersPagingController.itemList = [];
                         await widget.controller.loadUsers(v);
-                        setState(() {
-
-                        });
+                        setState(() {});
                       },
                       controller: searchController,
                       suffix: const Icon(Icons.search),
@@ -65,7 +64,6 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
                 ],
               ),
             ),
-
             if (widget.controller.usersPagingController.itemList != null &&
                 widget.controller.usersPagingController.itemList!.isNotEmpty)
               PagedSliverList<int, PostUserEntity>(
@@ -84,32 +82,24 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
                             children: [
                               CircleAvatar(
                                 radius: 30,
-                                backgroundImage: NetworkImage(widget.controller
-                                    .usersPagingController
-                                    .itemList?[index]
-                                    .profilePicture ??
-                                    ''),
+                                backgroundImage: NetworkImage(
+                                    widget.controller.usersPagingController.itemList?[index].profilePicture ?? ''),
                               ),
                               const SizedBox(
                                 width: 10,
                               ),
                               Label(
-                                text: widget.controller.usersPagingController
-                                    .itemList?[index].fullName ??
-                                    '',
+                                text: widget.controller.usersPagingController.itemList?[index].fullName ?? '',
                                 style: Styles.headerText(),
                               ),
                             ],
                           ),
                           Checkbox(
-                              value: widget.controller.usersPagingController
-                                  .itemList?[index].isSelected,
+                              value: widget.controller.usersPagingController.itemList?[index].isSelected,
                               onChanged: (v) {
-                                widget.onSelectUser(widget.controller.usersPagingController
-                                    .itemList![index]);
-                                widget.controller.usersPagingController
-                                    .itemList?[index].isSelected=!widget.controller.usersPagingController
-                                    .itemList![index].isSelected!;
+                                widget.onSelectUser(widget.controller.usersPagingController.itemList![index]);
+                                widget.controller.usersPagingController.itemList?[index].isSelected =
+                                    !widget.controller.usersPagingController.itemList![index].isSelected!;
                                 setState(() {});
                               }),
                         ],
@@ -117,10 +107,8 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
                     );
                   },
                   noMoreItemsIndicatorBuilder: (context) => Container(),
-                  firstPageProgressIndicatorBuilder: (context) =>
-                  const CupertinoActivityIndicator(),
-                  newPageProgressIndicatorBuilder: (context) =>
-                  const CupertinoActivityIndicator(),
+                  firstPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator(),
+                  newPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator(),
                 ),
               ),
           ],

@@ -47,7 +47,11 @@ class PostDetailsPage extends StatefulWidget {
     required this.showPostDetails,
     required this.comments,
     required this.deletePost,
-    required this.hidePost, required this.onCommentReply, required this.onDeleteComment, required this.onDeleteReply, required this.onEditComment,
+    required this.hidePost,
+    required this.onCommentReply,
+    required this.onDeleteComment,
+    required this.onDeleteReply,
+    required this.onEditComment,
   });
 
   @override
@@ -75,21 +79,26 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
           builder: (context, state) {
             final controller = context.read<SocialPostsCubit>();
 
-            if(state.status==StateStatus.loading){
-              return const Center(child: CircularProgressIndicator(),);
-            }else if(state.status==StateStatus.error||state.postDetails==null){
-              return Center(
-                child: Label(text: getFailureMessage(
-                  state.failure!,
-                  context,
-                ),),
+            if (state.status == StateStatus.loading) {
+              return const Center(
+                child: CircularProgressIndicator(),
               );
-            }else{
+            } else if (state.status == StateStatus.error ||
+                state.postDetails == null) {
+              return Center(
+                child: Label(
+                  text: getFailureMessage(
+                    state.failure!,
+                    context,
+                  ),
+                ),
+              );
+            } else {
               return Column(
                 children: [
                   Expanded(
-                    child:RefreshIndicator(
-                      onRefresh: () async=> controller.onRefreshPostDetails(),
+                    child: RefreshIndicator(
+                      onRefresh: () async => controller.onRefreshPostDetails(),
                       child: CustomScrollView(
                         slivers: [
                           SliverToBoxAdapter(
@@ -97,7 +106,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                               children: [
                                 FacebookPostCard(
                                   post: state.postDetails!,
-                                  onReact: (params)async{
+                                  onReact: (params) async {
                                     var result = await widget.onReact(params);
                                     return result;
                                   },
@@ -108,7 +117,8 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                   onShare: (String id) {},
                                   from: 'details',
                                   isMyPost:
-                                  user?.id == state.postDetails?.user.id, index: 0,
+                                      user?.id == state.postDetails?.user.id,
+                                  index: 0,
                                 ),
                                 const Divider(),
                               ],
@@ -116,9 +126,9 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                           ),
                           PagedSliverList<int, CommentEntity>(
                             pagingController:
-                            controller.commentsPagingController,
+                                controller.commentsPagingController,
                             builderDelegate:
-                            PagedChildBuilderDelegate<CommentEntity>(
+                                PagedChildBuilderDelegate<CommentEntity>(
                               noItemsFoundIndicatorBuilder: (context) {
                                 return const Center(
                                   child: Text(
@@ -132,37 +142,53 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                               },
                               itemBuilder: (context, item, index) {
                                 return _buildCommentCard(
-                                    comment: controller
-                                        .commentsPagingController
-                                        .itemList![index], onCommentReply: (ReplyOnCommentParams params) async{
-                                      var result = await widget.onCommentReply(params);
+                                    comment: controller.commentsPagingController
+                                        .itemList![index],
+                                    onCommentReply:
+                                        (ReplyOnCommentParams params) async {
+                                      var result =
+                                          await widget.onCommentReply(params);
 
-                                        state.postDetails?.commentsCount=(state.postDetails!.commentsCount!+1);
-                                        setState(() {
-
-                                        });
+                                      state.postDetails?.commentsCount =
+                                          (state.postDetails!.commentsCount! +
+                                              1);
+                                      setState(() {});
                                       return result;
-                                }, onDeleteComment: (String id) async{
-                                  var result = await widget.onDeleteComment(id);
-                                  state.postDetails?.commentsCount=(state.postDetails!.commentsCount!-1);
-                                  controller.commentsPagingController.itemList?.removeWhere((element) => element.id==id);
+                                    },
+                                    onDeleteComment: (String id) async {
+                                      var result =
+                                          await widget.onDeleteComment(id);
+                                      state.postDetails?.commentsCount =
+                                          (state.postDetails!.commentsCount! -
+                                              1);
+                                      controller
+                                          .commentsPagingController.itemList
+                                          ?.removeWhere(
+                                              (element) => element.id == id);
 
-                                  setState(() {});
-                                  return result;
-                                }, onDeleteReply: (String id) async {
-                                  var result = await widget.onDeleteReply(id);
-                                  state.postDetails?.commentsCount=(state.postDetails!.commentsCount!-1);
-                                  controller.repliesPagingController.itemList?.removeWhere((element) => element.id==id);
-                                  setState(() {});
-                                  return result;
-                                });
+                                      setState(() {});
+                                      return result;
+                                    },
+                                    onDeleteReply: (String id) async {
+                                      var result =
+                                          await widget.onDeleteReply(id);
+                                      state.postDetails?.commentsCount =
+                                          (state.postDetails!.commentsCount! -
+                                              1);
+                                      controller
+                                          .repliesPagingController.itemList
+                                          ?.removeWhere(
+                                              (element) => element.id == id);
+                                      setState(() {});
+                                      return result;
+                                    });
                               },
                               noMoreItemsIndicatorBuilder: (context) =>
                                   Container(),
                               firstPageProgressIndicatorBuilder: (context) =>
-                              const CupertinoActivityIndicator(),
+                                  const CupertinoActivityIndicator(),
                               newPageProgressIndicatorBuilder: (context) =>
-                              const CupertinoActivityIndicator(),
+                                  const CupertinoActivityIndicator(),
                             ),
                           ),
                         ],
@@ -193,10 +219,12 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                           onPressed: () async {
                             CommentEntity data = await widget.onAddComment(
                               PostCommentParams(
-                                  postId: state.postDetails!.id, content: commentTextController.text),
+                                  postId: state.postDetails!.id,
+                                  content: commentTextController.text),
                             );
                             final user = context.read<UserCubit>().state.data;
-                            controller.commentsPagingController.itemList?.insert(
+                            controller.commentsPagingController.itemList
+                                ?.insert(
                               0,
                               CommentModel(
                                 id: data.id,
@@ -213,19 +241,21 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                 isLikes: false,
                                 isLove: false,
                                 isSad: false,
-                                isWow: false, user: TwitterUserEntity(
-                                id: user!.id,
-                                firstName: user.firstName,
-                                lastName: user.lastName,
-                                createdAt: DateTime.now(),
-                                image: user.profilePicture ?? '',
-                                email: user.email ?? '',
-                                isDocumented: false,
-                              ),
+                                isWow: false,
+                                user: TwitterUserEntity(
+                                  id: user!.id,
+                                  firstName: user.firstName,
+                                  lastName: user.lastName,
+                                  createdAt: DateTime.now(),
+                                  image: user.profilePicture ?? '',
+                                  email: user.email ?? '',
+                                  isDocumented: false,
+                                ),
                               ),
                             );
                             // widget.post.commentsCount=(widget.post.commentsCount!+1);
-                            state.postDetails?.commentsCount=(state.postDetails!.commentsCount!+1);
+                            state.postDetails?.commentsCount =
+                                (state.postDetails!.commentsCount! + 1);
                             commentTextController.clear();
                             FocusScope.of(context).unfocus();
                             setState(() {});
@@ -236,38 +266,37 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                 ],
               );
             }
-        }
-      ),
+          }),
     );
   }
 
-  Widget _buildCommentCard({
-    required CommentEntity comment,
-    required Function(ReplyOnCommentParams) onCommentReply,
-    required dynamic Function(String) onDeleteComment,
-    required dynamic Function(String) onDeleteReply
-  }) {
+  Widget _buildCommentCard(
+      {required CommentEntity comment,
+      required Function(ReplyOnCommentParams) onCommentReply,
+      required dynamic Function(String) onDeleteComment,
+      required dynamic Function(String) onDeleteReply}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CommentCard(
           comment: comment,
-          onAddReply: (ReplyOnCommentParams params) async{
+          onAddReply: (ReplyOnCommentParams params) async {
             var result = await onCommentReply(params);
             setState(() {});
             return result;
           },
-          onDeleteComment: (String id)=>onDeleteComment(id),
-          onDeleteReply: (String id)=>onDeleteReply(id),
-          from: 'feed', onEditComment: (PostCommentParams params) =>widget.onEditComment(params),
+          onDeleteComment: (String id) => onDeleteComment(id),
+          onDeleteReply: (String id) => onDeleteReply(id),
+          from: 'feed',
+          onEditComment: (PostCommentParams params) =>
+              widget.onEditComment(params),
         ),
         if (comment.repliesCount != 0)
           Container(
               margin: const EdgeInsets.only(left: 30),
               child: TextAppButton(
                   label: 'show ${comment.repliesCount} replies',
-                  onPressed: () {})
-              )
+                  onPressed: () {}))
       ],
     );
   }

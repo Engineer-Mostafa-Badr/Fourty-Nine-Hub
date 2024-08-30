@@ -36,7 +36,8 @@ class HealthCubit extends Cubit<HealthState> {
       this._getMedicalServicesUseCase,
       this._toggleFavoriteSubcategoryUseCase,
       this._isDoctorUseCase,
-      this._getMainCategoryDetailsUseCase, this._getGovernoratesUseCase)
+      this._getMainCategoryDetailsUseCase,
+      this._getGovernoratesUseCase)
       : super(const HealthState());
 
   final List<HealthBookingFilterModel> services = [
@@ -104,17 +105,16 @@ class HealthCubit extends Cubit<HealthState> {
   }
 
   Future<void> getSubCategories({bool reload = false}) async {
-   // if (_healthShare.subCategories.isEmpty || reload) {
-      final response =
-          await _getHealthSubcategoriesUseCase.call(const NoParams());
-      response.fold(
-          (failure) => emit(
-              state.copyWith(failure: failure, status: HealthStates.error)),
-          (data) {
-        _healthShare.subCategories = data;
-        emit(state.copyWith(
-            status: HealthStates.initState, subCategories: data));
-      });
+    // if (_healthShare.subCategories.isEmpty || reload) {
+    final response =
+        await _getHealthSubcategoriesUseCase.call(const NoParams());
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) {
+      _healthShare.subCategories = data;
+      emit(state.copyWith(status: HealthStates.initState, subCategories: data));
+    });
     // } else {
     //   emit(state.copyWith(subCategories: _healthShare.subCategories));
     // }
@@ -122,16 +122,14 @@ class HealthCubit extends Cubit<HealthState> {
 
   Future<void> getGovernorates() async {
     // if (_healthShare.subCategories.isEmpty || reload) {
-    final response =
-    await _getGovernoratesUseCase.call(const NoParams());
+    final response = await _getGovernoratesUseCase.call(const NoParams());
     response.fold(
-            (failure) => emit(
-            state.copyWith(failure: failure, status: HealthStates.error)),
-            (data) {
-          _healthShare.governorates = data;
-          emit(state.copyWith(
-              status: HealthStates.initState, governorates: data));
-        });
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) {
+      _healthShare.governorates = data;
+      emit(state.copyWith(status: HealthStates.initState, governorates: data));
+    });
     // } else {
     //   emit(state.copyWith(subCategories: _healthShare.subCategories));
     // }

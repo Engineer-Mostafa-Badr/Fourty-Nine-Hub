@@ -4,11 +4,13 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/repositor
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
-class FriendsFollowersUseCase extends UseCase<List<PostUserEntity>, FriendsFollowersParams> {
+class FriendsFollowersUseCase
+    extends UseCase<List<PostUserEntity>, FriendsFollowersParams> {
   final CreatePostRepo _repo;
   FriendsFollowersUseCase(this._repo);
   @override
-  Future<Either<Failure, List<PostUserEntity>>> call(FriendsFollowersParams params) async {
+  Future<Either<Failure, List<PostUserEntity>>> call(
+      FriendsFollowersParams params) async {
     return await _repo.getFriendsFollowers(params: params);
   }
 }
@@ -22,9 +24,6 @@ class FriendsFollowersParams {
     required this.limit,
     required this.page,
   });
-  Map<String, dynamic> toJson() => {
-        'search': search,
-        'limit': limit,
-  'page':'page'
-      };
+  Map<String, dynamic> toJson() =>
+      {'search': search, 'limit': limit, 'page': 'page'};
 }

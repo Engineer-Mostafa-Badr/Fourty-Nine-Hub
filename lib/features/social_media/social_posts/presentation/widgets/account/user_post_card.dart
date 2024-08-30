@@ -118,47 +118,50 @@ class _UserPostCardState extends State<UserPostCard> {
                       value: serviceLocator<SocialPostsCubit>()
                         ..loadPostDetails(context, widget.post.mainPost!.id),
                       child: PostDetailsPage(
-                          comments: const [],
-                          postId: widget.post.mainPost!.id,
-                          deletePost: (String postId) => controller.deletePost(
-                              context: context, postId: postId),
-                          hidePost: (String postId) => controller.hidePost(
-                              context: context, postId: postId),
-                          onAddComment: (PostCommentParams params) => controller
-                              .onPostComment(params: params, from: 'details'),
-                          onReact: (params) =>
-                              controller.onReact(params: params, from: 'posts'),
-                          showPostComments: (postId) {},
-                          showPostDetails: (PostEntity post) {},
-                          // post: controller.feedPagingController.itemList![index],
+                        comments: const [],
+                        postId: widget.post.mainPost!.id,
+                        deletePost: (String postId) => controller.deletePost(
+                            context: context, postId: postId),
+                        hidePost: (String postId) => controller.hidePost(
+                            context: context, postId: postId),
+                        onAddComment: (PostCommentParams params) => controller
+                            .onPostComment(params: params, from: 'details'),
+                        onReact: (params) =>
+                            controller.onReact(params: params, from: 'posts'),
+                        showPostComments: (postId) {},
+                        showPostDetails: (PostEntity post) {},
+                        // post: controller.feedPagingController.itemList![index],
 
-                          onCommentReply: (ReplyOnCommentParams params) {
-                            return controller.replyOnComment(
-                              params: ReplyOnCommentParams(
-                                  postId: params.postId,
-                                  content: params.content,
-                                  commentId: params.commentId),
-                              from: 'details',
-                            );
-                          },
-                          onDeleteComment: (String id) async {
-                            return await controller.deleteComment(
-                                context: context,
-                                commentId: id,
-                                postId: widget.post.mainPost!.id,
-                                from: 'feed');
-                            // print(result);
-                          },
-                          onDeleteReply: (String id) async {
-                            return await controller.deleteComment(
-                                context: context,
-                                commentId: id,
-                                postId: widget.post.mainPost!.id,
-                                from: 'feed');
-                          }, onEditComment: (PostCommentParams params) async{
-                            var result = await controller.editComment(params: params);
-                            return result;
-                      },),
+                        onCommentReply: (ReplyOnCommentParams params) {
+                          return controller.replyOnComment(
+                            params: ReplyOnCommentParams(
+                                postId: params.postId,
+                                content: params.content,
+                                commentId: params.commentId),
+                            from: 'details',
+                          );
+                        },
+                        onDeleteComment: (String id) async {
+                          return await controller.deleteComment(
+                              context: context,
+                              commentId: id,
+                              postId: widget.post.mainPost!.id,
+                              from: 'feed');
+                          // print(result);
+                        },
+                        onDeleteReply: (String id) async {
+                          return await controller.deleteComment(
+                              context: context,
+                              commentId: id,
+                              postId: widget.post.mainPost!.id,
+                              from: 'feed');
+                        },
+                        onEditComment: (PostCommentParams params) async {
+                          var result =
+                              await controller.editComment(params: params);
+                          return result;
+                        },
+                      ),
                     ));
               }
             },
@@ -169,31 +172,44 @@ class _UserPostCardState extends State<UserPostCard> {
                   border: myPost.isShared == true ? Border.all() : null),
               child: Column(
                 children: [
-                  if(myPost.type != 'advertisement' &&
-                      myPost.isShared == true&&myPost.mainPost!=null)...[if (myPost.type != 'advertisement' &&
-                      myPost.isShared == true)
-                    _buildMainAccountHeader(
-                        context: context, post: myPost.mainPost!),
+                  if (myPost.type != 'advertisement' &&
+                      myPost.isShared == true &&
+                      myPost.mainPost != null) ...[
+                    if (myPost.type != 'advertisement' &&
+                        myPost.isShared == true)
+                      _buildMainAccountHeader(
+                          context: context, post: myPost.mainPost!),
                     if (myPost.isShared == true)
                       _buildContentWidget(
                           content: myPost.mainPost?.content ?? '',
                           backgroundColor: null,
-                          images: myPost.mainPost?.images ?? []),],
-                  if(myPost.type != 'advertisement' &&
-                      myPost.isShared == true&&myPost.mainPost==null)SizedBox(
-                    width: double.infinity,
-                    height: 100,
-                    child: Center(
-                      child: Row(
-                        children: [
-                          const Sizer(),
-                          const Icon(Icons.lock,color: Colors.black,),
-                          const Sizer(),
-                          Label(text: "This content is not available now.",style: Styles.headerText(color: Colors.black,),),
-                        ],
+                          images: myPost.mainPost?.images ?? []),
+                  ],
+                  if (myPost.type != 'advertisement' &&
+                      myPost.isShared == true &&
+                      myPost.mainPost == null)
+                    SizedBox(
+                      width: double.infinity,
+                      height: 100,
+                      child: Center(
+                        child: Row(
+                          children: [
+                            const Sizer(),
+                            const Icon(
+                              Icons.lock,
+                              color: Colors.black,
+                            ),
+                            const Sizer(),
+                            Label(
+                              text: "This content is not available now.",
+                              style: Styles.headerText(
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  )
+                    )
                 ],
               ),
             ),
@@ -379,50 +395,45 @@ class _UserPostCardState extends State<UserPostCard> {
             ),
             const Sizer(),
             Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                InkWell(
-                  onTap: () {
-                    if (widget.fromProfile == false) {
-                      context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-                    }
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextAppButton(
-                          label: post.user.firstName,
-                          onPressed: () {
-                            if (widget.fromProfile == false) {
-                              context.push(Routes.OTHERSACCOUNT,
-                                  extra: post.user.id);
-                            }
-                          }),
-                      RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                            text: post.sinceTime,
-                            style: Styles.mediumText(color: Colors.grey)),
-                        const WidgetSpan(
-                            child: Icon(
-                          Icons.group,
-                          size: 14,
-                          color: Colors.grey,
-                        ))
-                      ])),
-                    ],
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      if (widget.fromProfile == false) {
+                        context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                      }
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextAppButton(
+                            label: post.user.firstName,
+                            onPressed: () {
+                              if (widget.fromProfile == false) {
+                                context.push(Routes.OTHERSACCOUNT,
+                                    extra: post.user.id);
+                              }
+                            }),
+                        RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: post.sinceTime,
+                              style: Styles.mediumText(color: Colors.grey)),
+                          const WidgetSpan(
+                              child: Icon(
+                            Icons.group,
+                            size: 14,
+                            color: Colors.grey,
+                          ))
+                        ])),
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(child: _buildActivityFeelingWidget(post)),
-              ],
+                  Expanded(child: _buildActivityFeelingWidget(post)),
+                ],
+              ),
             ),
-            ),
-
-
-
-
-
             if (post.user.id == user?.id)
               IconAppButton(
                 onPressed: () {
@@ -449,15 +460,23 @@ class _UserPostCardState extends State<UserPostCard> {
               ),
           ],
         ),
-        if(post.location!=null)Padding(
-          padding: const EdgeInsetsDirectional.only(start: 40.0),
-          child: Row(
-            children: [
-              const Icon(Icons.location_on,size: 20,),
-              Expanded(child: Label(text: post.location?.place??'',style: Styles.mediumText(fontSize: 14),))
-            ],
+        if (post.location != null)
+          Padding(
+            padding: const EdgeInsetsDirectional.only(start: 40.0),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.location_on,
+                  size: 20,
+                ),
+                Expanded(
+                    child: Label(
+                  text: post.location?.place ?? '',
+                  style: Styles.mediumText(fontSize: 14),
+                ))
+              ],
+            ),
           ),
-        ),
       ],
     );
   }
@@ -532,7 +551,7 @@ class _UserPostCardState extends State<UserPostCard> {
             images!.isEmpty
         ? Container(
             width: double.infinity,
-            height: 400,
+            height: 220,
             alignment: Alignment.center,
             margin: const EdgeInsets.symmetric(vertical: 10),
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
@@ -700,7 +719,8 @@ class _UserPostCardState extends State<UserPostCard> {
                   child: Label(
                     text:
                         "${post.users![0].firstName} ${post.users![0].lastName} ",
-                    style: Styles.mediumText(decoration: TextDecoration.underline),
+                    style:
+                        Styles.mediumText(decoration: TextDecoration.underline),
                   ),
                 ),
                 if (post.users!.length > 1)

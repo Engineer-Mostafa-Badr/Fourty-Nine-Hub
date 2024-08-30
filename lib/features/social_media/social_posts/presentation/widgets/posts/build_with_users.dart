@@ -12,34 +12,37 @@ class BuildWithUsers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(
-        label: 'With users',
-      ),
-      body: ListView(
-        children: List.generate(users.length, (index) => GestureDetector(
-          onTap: (){
-            context.push(Routes.OTHERSACCOUNT,extra: users[index].id);
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundImage: NetworkImage(users[index].image),
+        appBar: const BackAppBar(
+          label: 'With users',
+        ),
+        body: ListView(
+          children: List.generate(
+            users.length,
+            (index) => GestureDetector(
+              onTap: () {
+                context.push(Routes.OTHERSACCOUNT, extra: users[index].id);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundImage: NetworkImage(users[index].image),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Label(
+                      text:
+                          '${users[index].firstName} ${users[index].lastName}',
+                      style: Styles.headerText(),
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Label(
-                  text: '${users[index].firstName} ${users[index].lastName}',
-                  style: Styles.headerText(),
-                ),
-              ],
+              ),
             ),
           ),
-        ),),
-      )
-    );
+        ));
   }
 }

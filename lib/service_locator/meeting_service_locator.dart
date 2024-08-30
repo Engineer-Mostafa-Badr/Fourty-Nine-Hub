@@ -28,7 +28,8 @@ class MeetingServiceLocator {
     serviceLocator.registerFactory(() => AddRoomUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => JoinRoomUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => EndRoomUseCase(serviceLocator()));
-    serviceLocator.registerFactory(() => GetScheduledRoomsUseCase(serviceLocator()));
+    serviceLocator
+        .registerFactory(() => GetScheduledRoomsUseCase(serviceLocator()));
     //cubit
     serviceLocator.registerFactory(() => MeetingCubit(
           serviceLocator(),
