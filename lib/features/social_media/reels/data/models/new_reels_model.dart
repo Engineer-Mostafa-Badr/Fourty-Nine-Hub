@@ -3,8 +3,7 @@ class ReelsResponse {
   final String message;
   final ReelsData data;
 
-  ReelsResponse(
-      {required this.status, required this.message, required this.data});
+  ReelsResponse({required this.status, required this.message, required this.data});
 
   factory ReelsResponse.fromJson(Map<String, dynamic> json) {
     return ReelsResponse(
@@ -39,11 +38,11 @@ class Reel {
   final String name;
   int likeCount;
   int commentCount;
-  final int shareCount;
-  final int saveCount;
+  int shareCount;
+  int saveCount;
   final int viewCount;
   final bool isLiked;
-  final bool isSaved;
+  bool isSaved;
   final bool isFollowing;
   final User user;
   final Audio audio;

@@ -9,6 +9,8 @@ abstract class InstagramRepo {
       {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getReels(
       {required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getSavedReels(
+      {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getUserReels(
       {required UserReelsParams params});
 }

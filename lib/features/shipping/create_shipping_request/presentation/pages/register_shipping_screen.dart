@@ -211,7 +211,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                 ),
                 // CreateDoctorProfilePhotoPicker(),
                 ImageValidation(
-                  title: "Photo",
+                  tilte: "Photo",
                   validator: (value) {
                     return shippingcubit.validation(
                         message: "This field is required.",

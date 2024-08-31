@@ -281,7 +281,6 @@ class ZoomCameraBuilder extends StatelessWidget {
 
 class ZoomIconButtons {
   final Widget button;
-
   ZoomIconButtons({
     required this.button,
   });
@@ -289,7 +288,6 @@ class ZoomIconButtons {
 
 class ZoomParticipantsBuilder extends StatelessWidget {
   final ZegoLiveStreamingBottomBar widget;
-
   const ZoomParticipantsBuilder({
     super.key,
     required this.widget,
@@ -331,7 +329,6 @@ class ZoomParticipantsBuilder extends StatelessWidget {
 
 class ZoomChatBuilder extends StatelessWidget {
   final ZegoLiveStreamingBottomBar widget;
-
   const ZoomChatBuilder({
     super.key,
     required this.widget,
@@ -412,7 +409,6 @@ class ZoomSharescreenBuilder extends StatelessWidget {
                       // size: 35,
                     ),
                   ),
-
                   iconStopSharing: ButtonIcon(
                     icon: const Icon(
                       Icons.stop_screen_share_outlined,
@@ -442,7 +438,6 @@ class ZoomShareCodeButton extends StatelessWidget {
   const ZoomShareCodeButton({super.key, required this.liveId});
 
   final String liveId;
-
   @override
   Widget build(BuildContext context) {
     return Align(

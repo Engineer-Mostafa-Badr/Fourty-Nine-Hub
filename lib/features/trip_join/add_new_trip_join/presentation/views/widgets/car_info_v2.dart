@@ -19,6 +19,7 @@ class _CarInfoV2State extends State<CarInfoV2> {
   late FetchCarBrandsCubit fetchCarBrandsCubit;
   late FetchCarModelsCubit fetchCarModelsCubit;
   late FetchCarYearTypeCubit fetchCarYearTypeCubit;
+
   @override
   void initState() {
     fetchCarBrandsCubit = context.read<FetchCarBrandsCubit>();
@@ -45,7 +46,8 @@ class _CarInfoV2State extends State<CarInfoV2> {
                       borderRadius: BorderRadius.circular(15)),
                   fillColor: Colors.transparent,
                   label: const Text('Brand'),
-                  isDense: true, // Added this
+                  isDense: true,
+                  // Added this
                   contentPadding: const EdgeInsets.all(14),
                 ),
                 onChanged: (value) {
@@ -92,7 +94,8 @@ class _CarInfoV2State extends State<CarInfoV2> {
                       borderRadius: BorderRadius.circular(15)),
                   fillColor: Colors.transparent,
                   label: const Text('Model'),
-                  isDense: true, // Added this
+                  isDense: true,
+                  // Added this
                   contentPadding: const EdgeInsets.all(14),
                 ),
                 onChanged: (value) {

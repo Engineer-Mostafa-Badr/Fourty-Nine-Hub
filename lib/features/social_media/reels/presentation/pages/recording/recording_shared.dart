@@ -8,9 +8,9 @@ import 'my_voice.dart';
 import 'other_voice.dart';
 
 class ReelsRecordingScreen extends StatefulWidget {
-  final String voiceUrl;
+  final String? voiceUrl;
 
-  const ReelsRecordingScreen({super.key, required this.voiceUrl});
+  const ReelsRecordingScreen({super.key,  this.voiceUrl});
 
   @override
   ReelsRecordingScreenState createState() => ReelsRecordingScreenState();
@@ -38,10 +38,12 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
                   case 0:
                     return const MyVoiceVideoRecordingScreen();
                   case 1:
-                    return const OtherVoiceVideoRecordingScreen();
+                    return OtherVoiceVideoRecordingScreen(
+                      voiceUrl: widget.voiceUrl??'',
+                    );
                   case 2:
                     return MixVoiceVideoRecordingScreen(
-                      voiceUrl: widget.voiceUrl,
+                      voiceUrl: widget.voiceUrl??'',
                     );
                 }
                 return const MyVoiceVideoRecordingScreen();
@@ -170,11 +172,11 @@ class HorizontalTextWheelPicker extends StatefulWidget {
   });
 
   @override
-  _HorizontalTextWheelPickerState createState() =>
-      _HorizontalTextWheelPickerState();
+  HorizontalTextWheelPickerState createState() =>
+      HorizontalTextWheelPickerState();
 }
 
-class _HorizontalTextWheelPickerState extends State<HorizontalTextWheelPicker> {
+class HorizontalTextWheelPickerState extends State<HorizontalTextWheelPicker> {
   late int selectedItemIndex;
   late FixedExtentScrollController _scrollController;
 

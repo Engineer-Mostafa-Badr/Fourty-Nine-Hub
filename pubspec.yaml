@@ -9,8 +9,7 @@ environment:
   sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
-  audio_video_progress_bar: ^1.0.0
-  cached_network_image: 3.3.1
+  cached_network_image: ^3.3.1
   camera: ^0.11.0+2
   card_swiper: ^3.0.1
   chewie: ^1.5.0
@@ -42,7 +41,7 @@ dependencies:
   flutter_slidable: ^3.1.0
   flutter_spinkit: ^5.2.1
   flutter_svg: ^2.0.10+1
-  flutter_typeahead: ^5.2.0
+  flutter_typeahead:
   font_awesome_flutter: ^10.7.0
   gallery_saver: ^2.3.2
   get_it: ^7.7.0
@@ -75,12 +74,31 @@ dependencies:
   transparent_image: ^2.0.1
   url_launcher: 6.2.6
   video_player: ^2.9.1
-  video_thumbnail: null
+  #  video_thumbnail: ^0.5.3
   visibility_detector: ^0.3.3
   webview_flutter: ^4.8.0
   win32: ^5.4.0
   zego_uikit_prebuilt_live_audio_room: ^3.7.5
   zego_uikit_signaling_plugin: ^2.8.2
+  #  zero_story_editor: ^0.0.4
+  audio_video_progress_bar: ^1.0.0
+  #  audioplayers: ^6.0.0
+  #  flutter_ffmpeg: ^0.4.2
+  path_provider: ^2.0.11
+  gallery_saver: ^2.3.2
+  just_audio:
+  image: any
+  video_thumbnail:
+  uni_links: ^0.5.1
+
+  #for loading
+  # skeletons: ^0.0.3
+
+  lottie: ^3.1.2
+
+  json_annotation: ^4.8.1
+  ffmpeg_kit_flutter: ^6.0.3
+  story_view: ^0.16.5
 dependency_overrides:
   http: ^0.13.3
 dev_dependencies:

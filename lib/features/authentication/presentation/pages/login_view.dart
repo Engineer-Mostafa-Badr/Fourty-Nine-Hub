@@ -40,7 +40,6 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   // AuthType selectedAuth = AuthType.LOGIN;
   ScrollController scrollController = ScrollController();
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -259,7 +258,6 @@ enum AuthType { LOGIN, REGISTER }
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key, required this.loginCubit});
-
   final LoginCubit loginCubit;
 
   @override
@@ -268,7 +266,6 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   bool obsecure = false;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -420,7 +417,6 @@ class RegisterWidget extends StatefulWidget {
 
 class _RegisterWidgetState extends State<RegisterWidget> {
   bool obsecure = true;
-
   @override
   Widget build(BuildContext context) {
     final registerCubit = context.read<RegisterCubit>();

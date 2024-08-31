@@ -335,6 +335,7 @@ class _ChatViewState extends State<ChatView> {
       child: SharedScaffold(
         mainCategoryId: 2,
         body: NestedAppbar(
+          scrollController: ScrollController(),
           appBars: [
             const SliverAppBar(
               expandedHeight: kToolbarHeight * 1.5,

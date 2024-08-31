@@ -19,18 +19,18 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   }
 
   void _startPolling(String type) {
-    _pollingTimer?.cancel();
-
-    // Start polling every 10 seconds (adjust the interval as needed)
-    _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
-      var result = await notificationRepo.fetchNotifications(type);
-
-      result.fold((failure) {
-        emit(NotificationsErrorState(errMessage: 'failure'));
-      }, (notification) {
-        emit(NotificationsSuccessState(notificationModel: notification));
-      });
-    });
+    // _pollingTimer?.cancel();
+    //
+    // // Start polling every 10 seconds (adjust the interval as needed)
+    // _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
+    //   var result =await notificationRepo.fetchNotifications(type);
+    //
+    //   result.fold((failure) {
+    //     emit(NotificationsErrorState(errMessage: 'failure'));
+    //   }, (notification) {
+    //     emit(NotificationsSuccessState(notificationModel: notification));
+    //   });
+    // });
   }
 
   void deleteNotification({
@@ -43,8 +43,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       emit(DeleteNotificationsErrorState(errMessage: 'failure'));
       // print(failure.errMessage.toString());
     }, (notification) {
-      emit(DeleteNotificationsSuccessState(
-          deleteNotificationModel: notification));
+      emit(DeleteNotificationsSuccessState(deleteNotificationModel: notification));
     });
   }
 }

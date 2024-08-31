@@ -14,6 +14,8 @@ abstract class InstagramRemoteDataSource {
       {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getUserReels(
       {required UserReelsParams params});
+  Future<Either<Failure, List<PostEntity>>> getSavedReels(
+      {required TwitterFeedParams params});
 }
 
 class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
@@ -59,6 +61,21 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
       return Left(l);
     }, (data) {
       final list = (data['data']['reels']['reels'] as List)
+          .map((e) => PostModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<PostEntity>>> getSavedReels(
+      {required TwitterFeedParams params}) async {
+    final response = await _apiConsumer.get(EndPoints.getSavedReels(params));
+
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data']['reels'] as List)
           .map((e) => PostModel.fromJson(e))
           .toList();
       return Right(list);

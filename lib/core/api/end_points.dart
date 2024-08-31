@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
@@ -204,6 +205,10 @@ class EndPoints {
     return '/reels/users/${params.userId}?limit=${params.limit}&page=${params.page}';
   }
 
+  static String getSavedReels(TwitterFeedParams params) {
+    return '/reels/saved?limit=${params.limit}&page=${params.page}';
+  }
+
   static String getAdvertisement(TwitterFeedParams params) {
     return '/advertisementCompany?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
   }
@@ -282,6 +287,14 @@ class EndPoints {
 
   static String editComment(PostCommentParams params) {
     return '/facebook/comment/update-comment/${params.postId}?subCategory=66b77e77bb35968b535dc944';
+  }
+
+  static String acceptRejectFriendRequest(AcceptRejectFriendRequestParams params) {
+    return '/friends/acceptOrRejectrequest/${params.userId}?subCategory=62ef7cf658c90d4a7ed48120';
+  }
+
+  static String deleteFriend(String userId) {
+    return '/friends/deleteFriend/$userId?subCategory=62ef7cf658c90d4a7ed48120';
   }
 
   static String commentOnTwitterPost(String postId) {
@@ -371,7 +384,9 @@ class EndPoints {
   static String getMealsWithCountRestaurant({PostCommentsParams? params}) =>
       '/restaurants/subcategories-count-restaurant${params?.page != null || params?.userId != null ? "?page=${params?.page}&userId=${params?.userId}" : ""}';
   static String getAllRestaurantWithMenu({PostCommentsParams? params}) =>
-      '/restaurants/subcategories-count-restaurant${params?.page != null ? "?page=${params?.page}" : ""}';
+      '/restaurants/all-restaurants${params?.page != null ? "?page=${params?.page}" : ""}';
+  static String searchRestaurants({PostCommentsParams? params}) =>
+      '/restaurants/search-restaurants${params?.page != null ? "?page=${params?.page ?? "1"}&limit=${params?.limit ?? "20"}" : ""}';
 //?page=1&userId=
   static String restaurantDetails(String id) {
     return '/restaurants/$id';
@@ -479,7 +494,6 @@ class EndPoints {
   static String endMeeting(String id) => '/room-id/finish/$id';
   static String getScheduledMeetings(String id) => '/room-id/$id';
   static String deleteChatMessage = '/chat/message';
-
   static String changeChatMuteState(String chatId) {
     return '/chat/mute-chat/$chatId';
   }
@@ -494,10 +508,6 @@ class EndPoints {
   static String checkUserSubscription(String id) {
     return '/subscription/subcategory/$id';
   }
-
-  static String subscribe = '/subscription/subscribe';
-
-  static String getActiveSubscriptionAmounts = '/payment-amount/active';
 
   static String lockChat(String chatId) {
     return '/chat/lock-chat/$chatId';
@@ -526,4 +536,7 @@ class EndPoints {
   static String getCarModelByBrand = "/ride/riders/models";
   static String getCarYearType = "/ride/riders/car-years-and-types";
   static String publishTripJoin = "/ride/come-with-you";
+
+  static String subscribe = '/subscription/subscribe';
+  static String getActiveSubscriptionAmounts = '/payment-amount/active';
 }

@@ -1,17 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
-import 'package:fourtyninehub/common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/privacy_status_enum.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/governorate_filter_cubit/doctor_governorate_filter_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/domain/entities/edit_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/widgets/privact_icon.dart';
@@ -40,10 +33,14 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   @override
   void initState() {
-    firstNameTextController.text =
-        context.read<UserCubit>().state.data?.firstName ?? '';
-    lastNameTextController.text =
-        context.read<UserCubit>().state.data?.lastName ?? '';
+    firstNameTextController.text = context.read<UserCubit>().state.data?.firstName ?? '';
+    lastNameTextController.text = context.read<UserCubit>().state.data?.lastName ?? '';
+    phoneTextController.text = context.read<UserCubit>().state.data?.phone ?? '';
+    cityTextController.text = context.read<UserCubit>().state.data?.city ?? '';
+    countryTextController.text = context.read<UserCubit>().state.data?.country ?? '';
+    jobTextController.text = context.read<UserCubit>().state.data?.job ?? '';
+    bioTextController.text = context.read<UserCubit>().state.data?.bio ?? '';
+    context.read<EditProfileCubit>().initGender(context.read<UserCubit>().state.data?.gender ?? '');
     super.initState();
   }
 
@@ -271,19 +268,14 @@ class _EditProfileViewState extends State<EditProfileView> {
                         child: Container(
                           padding: EdgeInsets.all(10.zR),
                           decoration: BoxDecoration(
-                              color: state.isMale == true
-                                  ? AppColors.PRIMARY_COLOR
-                                  : Colors.white,
+                              color: state.isMale == true ? AppColors.PRIMARY_COLOR : Colors.white,
                               borderRadius: BorderRadius.circular(15.zR),
-                              border:
-                                  Border.all(color: AppColors.PRIMARY_COLOR)),
+                              border: Border.all(color: AppColors.PRIMARY_COLOR)),
                           alignment: AlignmentDirectional.center,
                           child: Text(
                             'Male',
                             style: Styles.mediumText(
-                                color: state.isMale == false
-                                    ? AppColors.PRIMARY_COLOR
-                                    : Colors.white),
+                                color: state.isMale == false ? AppColors.PRIMARY_COLOR : Colors.white),
                           ),
                         ),
                       )),
@@ -298,19 +290,14 @@ class _EditProfileViewState extends State<EditProfileView> {
                           child: Container(
                             padding: EdgeInsets.all(10.zR),
                             decoration: BoxDecoration(
-                                color: state.isMale == false
-                                    ? AppColors.PRIMARY_COLOR
-                                    : Colors.white,
+                                color: state.isMale == false ? AppColors.PRIMARY_COLOR : Colors.white,
                                 borderRadius: BorderRadius.circular(15.zR),
-                                border:
-                                    Border.all(color: AppColors.PRIMARY_COLOR)),
+                                border: Border.all(color: AppColors.PRIMARY_COLOR)),
                             alignment: AlignmentDirectional.center,
                             child: Text(
                               'Female',
                               style: Styles.mediumText(
-                                  color: state.isMale == true
-                                      ? AppColors.PRIMARY_COLOR
-                                      : Colors.white),
+                                  color: state.isMale == true ? AppColors.PRIMARY_COLOR : Colors.white),
                             ),
                           ),
                         ),
@@ -319,36 +306,34 @@ class _EditProfileViewState extends State<EditProfileView> {
                   ),
                   const Sizer(),
                   state.status == EditProfileStates.loading
-                      ? Center(
+                      ? const Center(
                           child: CircularProgressIndicator(),
                         )
                       : InkWell(
-                          onTap: () {
-                            controller.editProfile(
+                          onTap: () async {
+                            await controller.editProfile(
                               EditProfileEntity(
-                                state.selectedBioPrivacy ?? 'public',
-                                state.selectedPhonePrivacy ?? 'public',
-                                state.selectedJobPrivacy ?? 'public',
-                                state.selectedCountryPrivacy ?? 'public',
-                                state.selectedCityPrivacy ?? 'public',
-                                firstName: firstNameTextController.text,
-                                lastName: lastNameTextController.text,
-                                bio: bioTextController.text,
-                                phone: phoneTextController.text,
-                                job: jobTextController.text,
-                                country: countryTextController.text,
-                                city: cityTextController.text,
-                              ),
+                                  state.selectedBioPrivacy ?? 'public',
+                                  state.selectedPhonePrivacy ?? 'public',
+                                  state.selectedJobPrivacy ?? 'public',
+                                  state.selectedCountryPrivacy ?? 'public',
+                                  state.selectedCityPrivacy ?? 'public',
+                                  firstName: firstNameTextController.text,
+                                  lastName: lastNameTextController.text,
+                                  bio: bioTextController.text,
+                                  phone: phoneTextController.text,
+                                  job: jobTextController.text,
+                                  country: countryTextController.text,
+                                  city: cityTextController.text,
+                                  isMale: state.isMale),
                             );
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10.zW, vertical: 20.zH),
+                            padding: EdgeInsets.symmetric(horizontal: 10.zW, vertical: 20.zH),
                             decoration: BoxDecoration(
                                 color: AppColors.PRIMARY_COLOR,
                                 borderRadius: BorderRadius.circular(15.zR),
-                                border:
-                                    Border.all(color: AppColors.PRIMARY_COLOR)),
+                                border: Border.all(color: AppColors.PRIMARY_COLOR)),
                             alignment: AlignmentDirectional.center,
                             child: Text(
                               'Edit',

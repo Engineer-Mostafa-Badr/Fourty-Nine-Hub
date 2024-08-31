@@ -852,7 +852,8 @@ class AppPages {
               path: Paths.FOOD,
               name: Routes.FOOD,
               builder: (context, state) => BlocProvider<RestaurantsListCubit>(
-                    create: (_) => serviceLocator(),
+                    create: (context) =>
+                    serviceLocator()..loadData(),
                     child: const RestaurantsListsView(),
                   ),
               routes: [
