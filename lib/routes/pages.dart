@@ -1056,7 +1056,7 @@ class AppPages {
               ),
             ], child: const RegisterShippingScreen()),
           ),
-          // ___________________ trip join ______________
+        // ___________________ trip join ______________
           GoRoute(
             path: Paths.TRIP_JOIN,
             name: Routes.TRIP_JOIN,
@@ -1074,10 +1074,49 @@ class AppPages {
                         serviceLocator<FetchLocationCordinatesUseCase>(),
                   ),
                 ),
+                BlocProvider(
+                  create: (_) => FetchPriceDistanceCubit(
+                    fetchPriceDistanceUsecase:
+                        serviceLocator<FetchPriceDistanceUsecase>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (_) => FetchCarBrandsCubit(
+                    fetchCarBrandUseCase:
+                        serviceLocator<FetchCarBrandUseCase>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (_) => FetchCarModelsCubit(
+                    fetchCarModelUseCase:
+                        serviceLocator<FetchCarModelUseCase>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (_) => FetchCarYearTypeCubit(
+                    fetchCarYearTypeUseCase:
+                        serviceLocator<FetchCarYearTypeUseCase>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (_) => PublishTripJoinCubit(
+                    publishTripJoinUseCase:
+                        serviceLocator<PublishTripJoinUseCase>(),
+                  ),
+                ),
+                BlocProvider(create: (_) => TripJoinViewCubit()),
               ],
               child: const TripJoinView(),
             ),
           ),
+          // ___________________ Available Trips ______________
+          GoRoute(
+            path: Paths.AVAILABLE_TRIPS,
+            name: Routes.AVAILABLE_TRIPS,
+            builder: (context, state) => const AvailableTripsView(),
+          ),
+
+        
         ],
       ),
     ],
