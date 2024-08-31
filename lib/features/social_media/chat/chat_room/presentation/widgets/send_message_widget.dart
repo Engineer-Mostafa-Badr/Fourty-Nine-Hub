@@ -561,48 +561,35 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
     );
   }
 
-  Widget _cameraButton() {
-    return Offstage(
-      offstage: !_showMicButton,
-      child: IconButton(
-        icon: const Icon(
-          Icons.camera_alt_outlined,
-          color: Colors.grey,
-        ),
-        onPressed: () {},
-      ),
-    );
-  }
-
   Widget _micButton() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // return SocialMediaRecorder(
-        //   sendRequestFunction: (File soundFile, String time) {},
-        //   initRecordPackageWidth: 30,
-        //   fullRecordPackageHeight: 30,
-        //   recordIconBackGroundColor: AppColors.PRIMARY_COLOR,
-        //   counterBackGroundColor: AppColors.PRIMARY_COLOR,
-        //   cancelTextBackGroundColor: AppColors.PRIMARY_COLOR,
-        //   recordIconWhenLockBackGroundColor: AppColors.PRIMARY_COLOR,
-        //   backGroundColor: AppColors.PRIMARY_COLOR,
-        //   radius: BorderRadius.circular(50),
-        //   recordIcon:  Icon(Icons.mic, color: Colors.white, size: 50.zH),
-        // );
-        return InkWell(
-          onTap: () {},
-          child: CircleAvatar(
-            backgroundColor: AppColors.PRIMARY_COLOR,
-            radius: 25,
-            child: const Center(
-              child: Icon(
-                Icons.send,
-                color: Colors.white,
-                size: 20,
-              ),
-            ),
-          ),
+        return SocialMediaRecorder(
+          sendRequestFunction: (File soundFile, String time) {},
+          initRecordPackageWidth: constraints.maxWidth,
+          fullRecordPackageHeight: constraints.maxWidth,
+          recordIconBackGroundColor: AppColors.PRIMARY_COLOR,
+          counterBackGroundColor: AppColors.PRIMARY_COLOR,
+          cancelTextBackGroundColor: AppColors.PRIMARY_COLOR,
+          recordIconWhenLockBackGroundColor: AppColors.PRIMARY_COLOR,
+          backGroundColor: AppColors.PRIMARY_COLOR,
+          radius: BorderRadius.circular(50),
+          recordIcon:  Icon(Icons.mic, color: Colors.white, size: 50.zH),
         );
+        // return InkWell(
+        //   onTap: () {},
+        //   child: CircleAvatar(
+        //     backgroundColor: AppColors.PRIMARY_COLOR,
+        //     radius: 25,
+        //     child: const Center(
+        //       child: Icon(
+        //         Icons.send,
+        //         color: Colors.white,
+        //         size: 20,
+        //       ),
+        //     ),
+        //   ),
+        // );
       },
     );
   }

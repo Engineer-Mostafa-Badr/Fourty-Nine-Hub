@@ -105,14 +105,7 @@ class _ChatRoomState extends State<ChatRoom> {
               //           // ),
               //         );
               // }),
-              SendMessageWidget(
-                  // focusNode: focusNode,
-                  // replayMessage: _replayMessage,
-                  // onCancelReplay: cancelReplay,
-                  // anotherUserName:
-                  //     chatRoomCubit.chatMessagesModel.chat?.contact?.name ??
-                  //         'No name',
-                  ),
+              SendMessageWidget(),
             ],
           ),
         ),
