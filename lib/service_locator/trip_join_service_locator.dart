@@ -14,6 +14,10 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecas
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_location_cordinates_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_price_distance_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/publish_trip_join_usecase.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/data/datasource/remote_datasource/view_all_trip_join_remote_datasource.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/data/repos/view_all_trip_join_repo_imp.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/repos/view_all_trip_join_repo.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/view_all_trip_join_usecase.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
@@ -39,26 +43,22 @@ class TripJoinServiceLocator {
     );
 
     serviceLocator.registerLazySingleton<GoogleApiConsumer>(
-      () =>
-          GoogleApiConsumer(dio: serviceLocator(instanceName: 'dioGoogleApi')),
+      () => GoogleApiConsumer(dio: serviceLocator(instanceName: 'dioGoogleApi')),
     );
 
     serviceLocator.registerLazySingleton<FetchLocationRemoteDataSource>(
-      () =>
-          FetchLocationRemoteDataSourceImp(googleApiConsumer: serviceLocator()),
+      () => FetchLocationRemoteDataSourceImp(googleApiConsumer: serviceLocator()),
     );
 
     serviceLocator.registerLazySingleton<TripJoinGoogleApiRepo>(
-      () => TripJoinGoogleApiRepoImp(
-          fetchLocationRemoteDataSource: serviceLocator()),
+      () => TripJoinGoogleApiRepoImp(fetchLocationRemoteDataSource: serviceLocator()),
     );
 
     serviceLocator.registerLazySingleton<FetchLocationCordinatesUseCase>(
-      () => FetchLocationCordinatesUseCase(
-          tripJoinGoogleApiRepo: serviceLocator()),
+      () => FetchLocationCordinatesUseCase(tripJoinGoogleApiRepo: serviceLocator()),
     );
 
-    //! trip join db injection
+    //! add new trip join db injection
     serviceLocator.registerLazySingleton<TripJoinRemoteDataSource>(
       () => TripJoinRemoteDataSourceImp(apiConsumer: serviceLocator()),
     );
@@ -81,6 +81,17 @@ class TripJoinServiceLocator {
     );
     serviceLocator.registerLazySingleton<PublishTripJoinUseCase>(
       () => PublishTripJoinUseCase(tripJoinRepo: serviceLocator()),
+    );
+
+    //! view all trip join db injection
+    serviceLocator.registerLazySingleton<ViewAllTripJoinRemoteDataSource>(
+      () => ViewAllTripJoinRemoteDataSourceImp(apiConsumer: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<ViewAllTripJoinRepo>(
+      () => ViewAllTripJoinRepoImp(viewripJoinRemoteDataSource: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<ViewAllTripJoinUseCase>(
+      () => ViewAllTripJoinUseCase(viewAllTripJoinRepo: serviceLocator()),
     );
   }
 }

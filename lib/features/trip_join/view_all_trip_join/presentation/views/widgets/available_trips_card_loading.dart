@@ -2,14 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/custom_fading_widget.dart';
 
-class AvailableTripCardLoading extends StatelessWidget {
-  const AvailableTripCardLoading({super.key});
+class AvailableTripCardLoadingList extends StatelessWidget {
+  const AvailableTripCardLoadingList({super.key});
 
   @override
   Widget build(BuildContext context) {
     final decoration = BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(2));
     const double height = 30;
-    return CustomFadingWidget(
+    return Column(
+      children: [
+        ...List.generate(
+            10,
+            (index) => CustomFadingWidget(
+                  child: AvailableTripCardLoading(decoration: decoration, height: height),
+                )),
+      ],
+    );
+  }
+}
+
+class AvailableTripCardLoading extends StatelessWidget {
+  const AvailableTripCardLoading({
+    super.key,
+    required this.decoration,
+    required this.height,
+  });
+
+  final BoxDecoration decoration;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15),
       child: CustomCard(
         children: [
           CustomGrayContainer(decoration: decoration, height: height, flex: 4),

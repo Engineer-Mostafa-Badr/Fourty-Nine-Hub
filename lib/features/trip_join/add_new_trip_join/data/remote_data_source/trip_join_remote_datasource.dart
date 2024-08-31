@@ -20,14 +20,10 @@ abstract class TripJoinRemoteDataSource {
     required LatLng startLocation,
     required LatLng destinationLocation,
   });
-  Future<Either<Failure, List<CarBrandEntity>>> fetchCarBrand(
-      {required String search});
-  Future<Either<Failure, List<CarModelEntity>>> fetchCarModel(
-      {required String brand});
-  Future<Either<Failure, List<CarYearTypeEntity>>> fetchCarYearType(
-      {required String brand, required String model});
-  Future<Either<Failure, bool>> publishTripJoin(
-      {required TripJoinPublishParam tripJoinPublishParam});
+  Future<Either<Failure, List<CarBrandEntity>>> fetchCarBrand({required String search});
+  Future<Either<Failure, List<CarModelEntity>>> fetchCarModel({required String brand});
+  Future<Either<Failure, List<CarYearTypeEntity>>> fetchCarYearType({required String brand, required String model});
+  Future<Either<Failure, bool>> publishTripJoin({required TripJoinPublishParam tripJoinPublishParam});
 }
 
 class TripJoinRemoteDataSourceImp implements TripJoinRemoteDataSource {
@@ -44,10 +40,7 @@ class TripJoinRemoteDataSourceImp implements TripJoinRemoteDataSource {
       EndPoints.tripJoinExpectedPrice,
       data: {
         'startLocation': [startLocation.latitude, startLocation.longitude],
-        'targetLocation': [
-          destinationLocation.latitude,
-          destinationLocation.longitude
-        ],
+        'targetLocation': [destinationLocation.latitude, destinationLocation.longitude],
       },
     );
 
@@ -62,8 +55,7 @@ class TripJoinRemoteDataSourceImp implements TripJoinRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<CarBrandEntity>>> fetchCarBrand(
-      {required String search}) async {
+  Future<Either<Failure, List<CarBrandEntity>>> fetchCarBrand({required String search}) async {
     final response = await apiConsumer.post(
       EndPoints.getCarBrand,
       data: {
@@ -74,9 +66,7 @@ class TripJoinRemoteDataSourceImp implements TripJoinRemoteDataSource {
     return response.fold(
       (failure) => Left(failure),
       (data) {
-        List<CarBrandEntity> brands = data['data']
-            .map<CarBrandEntity>((json) => CarBrandModel.fromJson(json))
-            .toList();
+        List<CarBrandEntity> brands = data['data'].map<CarBrandEntity>((json) => CarBrandModel.fromJson(json)).toList();
         log(brands.toString());
         return Right(brands);
       },
@@ -84,8 +74,7 @@ class TripJoinRemoteDataSourceImp implements TripJoinRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<CarModelEntity>>> fetchCarModel(
-      {required String brand}) async {
+  Future<Either<Failure, List<CarModelEntity>>> fetchCarModel({required String brand}) async {
     final response = await apiConsumer.get(
       EndPoints.getCarModelByBrand,
       queryParameters: {
@@ -96,9 +85,7 @@ class TripJoinRemoteDataSourceImp implements TripJoinRemoteDataSource {
     return response.fold(
       (failure) => Left(failure),
       (data) {
-        List<CarModelEntity> models = data['data']
-            .map<CarModelEntity>((json) => CarTypeModel.fromJson(json))
-            .toList();
+        List<CarModelEntity> models = data['data'].map<CarModelEntity>((json) => CarTypeModel.fromJson(json)).toList();
         log(models.toString());
         return Right(models);
       },
@@ -118,9 +105,8 @@ class TripJoinRemoteDataSourceImp implements TripJoinRemoteDataSource {
     return response.fold(
       (failure) => Left(failure),
       (data) {
-        List<CarYearTypeModel> models = data['data']
-            .map<CarYearTypeModel>((json) => CarYearTypeModel.fromJson(json))
-            .toList();
+        List<CarYearTypeModel> models =
+            data['data'].map<CarYearTypeModel>((json) => CarYearTypeModel.fromJson(json)).toList();
         log(models.toString());
         return Right(models);
       },
@@ -128,8 +114,7 @@ class TripJoinRemoteDataSourceImp implements TripJoinRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> publishTripJoin(
-      {required TripJoinPublishParam tripJoinPublishParam}) async {
+  Future<Either<Failure, bool>> publishTripJoin({required TripJoinPublishParam tripJoinPublishParam}) async {
     final response = await apiConsumer.post(
       EndPoints.publishTripJoin,
       data: tripJoinPublishParam.toJson(),

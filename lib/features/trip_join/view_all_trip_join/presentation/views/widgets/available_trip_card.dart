@@ -97,11 +97,13 @@ class AvailableTripCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.trip_origin, color: AppColors.CHECK_MARK_COLOR, size: 20),
                       const Sizer(width: 13),
-                      Text(
-                        tripJoinCardEntity.destinationAddressEn ?? '',
-                        style: Styles.headerText(fontSize: 32),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
+                      Flexible(
+                        child: Text(
+                          tripJoinCardEntity.destinationAddressEn ?? '',
+                          style: Styles.headerText(fontSize: 32),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
                       ),
                     ],
                   ),
@@ -204,7 +206,6 @@ class AvailableTripCard extends StatelessWidget {
     if (tripJoinCardEntity.publishDate == null) {
       return '';
     }
-    return DateFormat('dd MMM yyyy hh:mm aaa')
-        .format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.publishDate!));
+    return DateFormat('dd MMM, hh:mm aaa').format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.publishDate!));
   }
 }
