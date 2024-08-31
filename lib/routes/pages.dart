@@ -1,3 +1,4 @@
+import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
@@ -611,33 +612,34 @@ class AppPages {
                     path: Paths.TINDER,
                     name: Routes.Tinder,
                     builder: (context, state) => const TinderView()),
-
                 GoRoute(
-                  path: Paths.LIVE,
-                  name: Routes.LIVE,
-                  builder: (context, state) => const LiveStreamHomeScreen(),
-                  routes: [
-                    GoRoute(
-                        path: Paths.LIVEVIEW,
-                        name: Routes.LIVEView,
-                        builder: (context, state) {
-                          var extras = state.extra as ZegoArgs;
-                          return LiveStreamView(
-                            isHost: extras.isHost,
-                            liveID: extras.liveId,
-                          );
-                        }),
-                  ],
-                ),
-                // ClubHouseHome
-                GoRoute(
-                    path: Paths.CLUBHOUSE,
-                    name: Routes.CLUBHOUSE,
-                    builder: (context, state) => BlocProvider<ClubVoiceCubit>(
-                          create: (context) => serviceLocator()..getAllRooms(),
-                          child: const ClubHouseHome(),
+                    path: Paths.LIVE,
+                    name: Routes.LIVE,
+                    builder: (context, state) => MultiBlocProvider(
+                          providers: [
+                            //club voice
+                            BlocProvider<ClubVoiceCubit>(
+                              create: (context) =>
+                                  serviceLocator()..getAllRooms(),
+                              child: const ClubHouseHome(),
+                            ),
+                          ],
+                          child: const LiveStreamHomeScreen(),
                         ),
                     routes: [
+                      GoRoute(
+                          path: Paths.LIVEVIEW,
+                          name: Routes.LIVEView,
+                          builder: (context, state) {
+                            var extras = state.extra as ZegoArgs;
+                            return LiveStreamView(
+                              isHost: extras.isHost,
+                              liveID: extras.liveId,
+                            );
+                          }),
+
+                      // ClubHouseHome
+
                       GoRoute(
                         path: Paths.CLUBHOUSEROOM,
                         name: Routes.AUDIOSTREAMSCREEN,
@@ -653,7 +655,6 @@ class AppPages {
                       ),
                     ]),
               ]),
-
           // MazadatView
           GoRoute(
               path: Paths.MAZADAT,
@@ -1056,7 +1057,7 @@ class AppPages {
               ),
             ], child: const RegisterShippingScreen()),
           ),
-        // ___________________ trip join ______________
+          // ___________________ trip join ______________
           GoRoute(
             path: Paths.TRIP_JOIN,
             name: Routes.TRIP_JOIN,
@@ -1115,8 +1116,6 @@ class AppPages {
             name: Routes.AVAILABLE_TRIPS,
             builder: (context, state) => const AvailableTripsView(),
           ),
-
-        
         ],
       ),
     ],

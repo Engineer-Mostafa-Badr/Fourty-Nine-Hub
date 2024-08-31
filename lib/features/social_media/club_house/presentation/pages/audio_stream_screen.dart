@@ -38,23 +38,20 @@ class AudioStreamScreen extends StatelessWidget {
                             : context.read<ClubVoiceCubit>().leaveRoom(liveId);
                         context.pop();
                       },
-                      child: const Row(
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.handPeace,
-                            color: Colors.red,
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0)
+                            .add(const EdgeInsets.symmetric(horizontal: 15)),
+                        margin: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.redAccent),
+                        child: Text(
+                          isHost ? 'End' : 'Leave',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
                           ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Leave quitely',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ],

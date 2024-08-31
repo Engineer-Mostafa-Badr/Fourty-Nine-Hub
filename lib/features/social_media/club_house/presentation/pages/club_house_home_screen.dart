@@ -14,69 +14,68 @@ class ClubHouseHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SharedScaffold(
-        mainCategoryId: 3,
+    return Scaffold(
         body: BlocBuilder<ClubVoiceCubit, ClubVoiceState>(
-          buildWhen: (previous, current) => previous != current,
-          builder: (context, state) {
-            var cubit = context.read<ClubVoiceCubit>();
-            return Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Label(
-                          text: 'Club Voice',
-                          style: Styles.headerText(),
-                        ),
-                        ConstrainedBox(
-                          constraints: BoxConstraints(
-                              minHeight: MediaQuery.sizeOf(context).height,
-                              maxHeight: double.infinity),
-                          child: ListView.separated(
-                            physics: const NeverScrollableScrollPhysics(),
-                            padding: const EdgeInsets.only(bottom: 0),
-                            shrinkWrap: true,
-                            itemCount: cubit.rooms.length,
-                            itemBuilder: (context, index) {
-                              final room = cubit.rooms[index];
-                              return AudioRoomCard(
-                                room: room,
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return const SizedBox(
-                                height: 10,
-                              );
-                            },
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+      buildWhen: (previous, current) => previous != current,
+      builder: (context, state) {
+        var cubit = context.read<ClubVoiceCubit>();
+        return Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Label(
+                    //   text: 'Club Voice',
+                    //   style: Styles.headerText(),
+                    // ),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                          minHeight: MediaQuery.sizeOf(context).height,
+                          maxHeight: double.infinity),
+                      child: ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.only(bottom: 0),
+                        shrinkWrap: true,
+                        itemCount: cubit.rooms.length,
+                        itemBuilder: (context, index) {
+                          final room = cubit.rooms[index];
+                          return AudioRoomCard(
+                            room: room,
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(
+                            height: 10,
+                          );
+                        },
+                      ),
+                    )
+                  ],
                 ),
-                Positioned(
-                  bottom: 16.0,
-                  right: 16.0,
-                  child: FloatingActionButton(
-                      heroTag: 'create voice club',
-                      backgroundColor: Colors.deepOrange[700],
-                      shape: const CircleBorder(),
-                      onPressed: () =>
-                          showVoiceLiveDialogue(context: context, cubit: cubit),
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      )),
-                ),
-              ],
-            );
-          },
-        ));
+              ),
+            ),
+            Positioned(
+              bottom: 16.0,
+              right: 16.0,
+              child: FloatingActionButton(
+                  heroTag: 'create voice club',
+                  backgroundColor: Colors.deepOrange[700],
+                  shape: const CircleBorder(),
+                  onPressed: () =>
+                      showVoiceLiveDialogue(context: context, cubit: cubit),
+                  child: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  )),
+            ),
+          ],
+        );
+      },
+    ));
   }
 }
 

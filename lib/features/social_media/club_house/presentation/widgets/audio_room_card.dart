@@ -47,7 +47,8 @@ class AudioRoomCard extends StatelessWidget {
         child: Column(
           children: [
             ReadMoreLabel(
-              style: const TextStyle(color: AppColors.QUANTITY_COLOR),
+              style: const TextStyle(
+                  color: AppColors.QUANTITY_COLOR, fontWeight: FontWeight.bold),
               text: room.subject,
               trimLines: 2,
             ),
@@ -114,7 +115,7 @@ class AudioRoomCard extends StatelessWidget {
                                   style: Styles.mediumText(color: Colors.grey))
                             ],
                           ),
-                          const Sizer(),
+                          // const Sizer(),
                         ],
                       ),
                     ],
