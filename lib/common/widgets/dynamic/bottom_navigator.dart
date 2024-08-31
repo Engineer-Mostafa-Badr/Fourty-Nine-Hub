@@ -31,11 +31,11 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
             BottomItemModel(
               icon: FontAwesomeIcons.microphone,
               height: 30,
-              label: 'voice',
+              label: 'snap',
               // Translated text
               index: 0,
-              image: Assets.voiceLive,
-              route: Routes.CLUBHOUSE,
+              image: Assets.cameraIcon,
+              route: Routes.SNAP,
             ),
             BottomItemModel(
               icon: FontAwesomeIcons.stream,
@@ -56,13 +56,13 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
               route: Routes.ZOOM,
             ),
             BottomItemModel(
-              icon: Icons.video_call,
-              label: 'cast',
+              icon: Icons.light_mode_rounded,
+              label: 'spotlight',
               // Translated text
               index: 0,
               height: 25,
-              image: Assets.radio,
-              route: Routes.CLUBHOUSE,
+              image: Assets.spotlightIcon,
+              route: Routes.SPOTLIGHT,
             ),
           ]
         : mainCategory == 2

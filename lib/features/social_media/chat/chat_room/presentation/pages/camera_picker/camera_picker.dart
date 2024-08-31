@@ -292,14 +292,15 @@ class _BaseIcon extends StatelessWidget {
   final double? iconSize;
   final void Function()? onTap;
 
-  const _BaseIcon({super.key, this.color, required this.icon, this.onTap, this.iconSize});
+  const _BaseIcon(
+      {super.key, this.color, required this.icon, this.onTap, this.iconSize});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding:  EdgeInsets.all(15.zH),
+        padding: EdgeInsets.all(15.zH),
         decoration: BoxDecoration(
           color: (color ?? AppColors.GREY_DARK_COLOR).withOpacity(0.5),
           borderRadius: BorderRadius.circular(50.zR),
@@ -442,7 +443,9 @@ class _ImagesListState extends State<_ImagesList> {
       bool isPhoto = true}) {
     return InkWell(
       onTap: () {
-        if (mounted) {
+        if (mounted &&
+            context.read<CameraPickerCubit>().state.status !=
+                CameraPickerStatus.startVideo) {
           context
               .push(Routes.MEDIASLIDER,
                   extra:

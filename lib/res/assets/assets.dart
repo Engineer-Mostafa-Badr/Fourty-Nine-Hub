@@ -88,4 +88,8 @@ abstract class Assets {
   static String azkar = 'assets/49-New-icons/Group 3.png';
   static String policy = 'assets/49-New-icons/Group 8.png';
   static String history = 'assets/49-New-icons/Group 9.png';
+  static String snapDemo = 'assets/images/snap_demo.jpg';
+  static String spotLightDemo = 'assets/images/spot_light_demo.jpg';
+  static String spotlightIcon = 'assets/icons/spotlight.svg';
+  static String cameraIcon = 'assets/icons/camera_icon.svg';
 }

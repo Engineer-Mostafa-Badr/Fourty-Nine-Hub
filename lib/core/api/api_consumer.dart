@@ -111,7 +111,7 @@ class BaseApiConsumer extends ApiConsumer {
         // )
       );
       log(url);
-      log(_dio.options.headers['Authorization'], name: "Authorization$url");
+      // log(_dio.options.headers['Authorization'], name: "Authorization$url");
       if (result.data['status']) {
         return Right(result.data as Map<String, dynamic>);
       } else {

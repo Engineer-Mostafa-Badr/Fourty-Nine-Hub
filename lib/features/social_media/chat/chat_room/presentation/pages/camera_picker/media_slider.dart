@@ -95,7 +95,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                     if (file.isImage) {
                       return Image.file(file);
                     } else {
-                      return _TrimmerView(file);
+                      return _TrimmerView(file: file, onSave: (editedVideo) {});
                     }
                   },
                 ),
@@ -225,8 +225,9 @@ class _MediaSliderViewState extends State<MediaSliderView> {
 
 class _TrimmerView extends StatefulWidget {
   final File file;
+  final void Function(File video) onSave;
 
-  const _TrimmerView(this.file);
+  const _TrimmerView({required this.file, required this.onSave});
 
   @override
   _TrimmerViewState createState() => _TrimmerViewState();
@@ -301,33 +302,43 @@ class _TrimmerViewState extends State<_TrimmerView> {
                 },
                 child: VideoViewer(trimmer: _trimmer)),
           ),
-          Center(
-            child: TrimViewer(
-              trimmer: _trimmer,
-              viewerHeight: 50.0,
-              viewerWidth: MediaQuery.of(context).size.width,
-              onChangeStart: (value) => _startValue = value,
-              onChangeEnd: (value) => _endValue = value,
-              onChangePlaybackState: (value) =>
-                  setState(() => _isPlaying = value),
-            ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: TrimViewer(
+                  trimmer: _trimmer,
+                  viewerHeight: 50.0,
+                  // viewerWidth: MediaQuery.of(context).size.width,
+                  onChangeStart: (value) => _startValue = value,
+                  onChangeEnd: (value) => _endValue = value,
+                  onChangePlaybackState: (value) =>
+                      setState(() => _isPlaying = value),
+                ),
+              ),
+              SizedBox(width: 5.zW),
+              Center(child: _BaseIcon(icon: Icons.check, onTap: _saveVideo)),
+            ],
           ),
-          const Sizer(),
-          ElevatedAppButton(
-            onPressed: () async {
-              if (_progressVisibility) {
-                _saveVideo().then((outputPath) {
-                  CliLogger.info('OUTPUT PATH: $outputPath');
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(LocaleKeys.suscessfullySaved.tr())),
-                  );
-                });
-              }
-            },
-            
-            label: LocaleKeys.save.tr(),
-          ),
+          // const Sizer(),
+          // ElevatedAppButton(
+          //   onPressed: () async {
+          //     if (_progressVisibility) {
+          //       _saveVideo().then((outputPath) {
+          //         CliLogger.info('OUTPUT PATH: $outputPath');
+          //         if (outputPath != null) {
+          //           widget.onSave(File(outputPath));
+          //           ScaffoldMessenger.of(context).showSnackBar(
+          //             SnackBar(
+          //                 content: Text(LocaleKeys.suscessfullySaved.tr())),
+          //           );
+          //         }
+          //       });
+          //     }
+          //   },
+          //   label: LocaleKeys.save.tr(),
+          // ),
           // TextButton(
           //   child: _isPlaying
           //       ? Icon(

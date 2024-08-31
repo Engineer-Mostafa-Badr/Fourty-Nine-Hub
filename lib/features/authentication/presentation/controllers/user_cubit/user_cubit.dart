@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
- import 'package:fourtyninehub/core/service/cache_service.dart';
+import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/attach_token_use_case.dart';
@@ -92,11 +92,13 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   void attachToken() async {
     String? accessToken = await TokenManager.getAccessToken();
     String? refreshToken = await TokenManager.getRefreshToken();
-    _attachTokenUseCase(UserTokensEntity(
-      accessToken: accessToken!,
-      refreshToken: refreshToken!,
-    ));
-    _isTokenAttached = true;
+    if (accessToken != null && refreshToken != null) {
+      _attachTokenUseCase(UserTokensEntity(
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      ));
+    }
+    _isTokenAttached = accessToken != null && refreshToken != null;
     getUser();
   }
 
@@ -130,6 +132,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     // TinderSharedUtils.initializeToken(token!.accessToken);
     // return token;
   }
+
 // getWallet() async {
 //   if (!_isTokenAttached) return;
 //   var response = await repository.getWallet();

@@ -121,6 +121,7 @@ flutter:
     - assets/translations/
     - assets/settings/
     - assets/images/reactions/
+    - assets/images/
     - assets/49-New-icons/
     # - assets/images/lion.png
     # - assets/images/butterfly.png

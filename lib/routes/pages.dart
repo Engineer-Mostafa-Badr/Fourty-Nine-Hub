@@ -83,6 +83,8 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
+import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
@@ -705,6 +707,16 @@ class AppPages {
                 ),
               ]),
 
+          // Snap
+          GoRoute(
+              path: Paths.SNAP,
+              name: Routes.SNAP,
+              builder: (context, state) => const SnapView()),
+          // Spotlight
+          GoRoute(
+              path: Paths.SPOTLIGHT,
+              name: Routes.SPOTLIGHT,
+              builder: (context, state) => const SpotlightView()),
           // _________________ services ____________
 
           GoRoute(
