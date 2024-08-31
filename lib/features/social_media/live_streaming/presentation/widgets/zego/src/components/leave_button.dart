@@ -49,10 +49,12 @@ class ZegoLiveStreamingLeaveButton extends StatefulWidget {
   });
 
   @override
-  State<ZegoLiveStreamingLeaveButton> createState() => _ZegoLiveStreamingLeaveButtonState();
+  State<ZegoLiveStreamingLeaveButton> createState() =>
+      _ZegoLiveStreamingLeaveButtonState();
 }
 
-class _ZegoLiveStreamingLeaveButtonState extends State<ZegoLiveStreamingLeaveButton> {
+class _ZegoLiveStreamingLeaveButtonState
+    extends State<ZegoLiveStreamingLeaveButton> {
   final hangupButtonClickableNotifier = ValueNotifier<bool>(true);
 
   @override
@@ -105,7 +107,8 @@ class _ZegoLiveStreamingLeaveButtonState extends State<ZegoLiveStreamingLeaveBut
   }
 
   void oHangUpRequestingChanged() {
-    hangupButtonClickableNotifier.value = !(widget.isLeaveRequestingNotifier?.value ?? true);
+    hangupButtonClickableNotifier.value =
+        !(widget.isLeaveRequestingNotifier?.value ?? true);
   }
 
   Future<void> notifyUserLeaveByMessage() async {

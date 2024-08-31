@@ -5,8 +5,9 @@ import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.da
 import 'package:fourtyninehub/features/zoom/domain/repositories/meeting_repository.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
 
-class GetScheduledRoomsUseCase extends UseCase<List<ScheduledMeeting>,MeetingParams>{
-final MeetingRepository repo;
+class GetScheduledRoomsUseCase
+    extends UseCase<List<ScheduledMeeting>, MeetingParams> {
+  final MeetingRepository repo;
 
   GetScheduledRoomsUseCase(this.repo);
   @override

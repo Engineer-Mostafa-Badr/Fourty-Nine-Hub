@@ -147,7 +147,6 @@ class _ZegoLiveStreamingBottomBarState
             ZoomShareCodeButton(
               liveId: ZegoUIKit().getRoom().id,
             ),
-
           ],
         ),
       ),

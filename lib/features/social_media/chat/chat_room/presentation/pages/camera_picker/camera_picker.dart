@@ -73,7 +73,11 @@ class _CamViewState extends State<_CamView> {
             builder: (context, state) {
               if (state.controller != null &&
                   state.status != CameraPickerStatus.loadingCamera) {
+              if (state.controller != null &&
+                  state.status != CameraPickerStatus.loadingCamera) {
                 return CameraPreview(state.controller!);
+              } else if (state.status ==
+                  CameraPickerStatus.needCameraPermission) {
               } else if (state.status ==
                   CameraPickerStatus.needCameraPermission) {
                 return _permissionButton(LocaleKeys.allowAccessToYourCamera);
@@ -81,7 +85,13 @@ class _CamViewState extends State<_CamView> {
                   CameraPickerStatus.needMicrophonePermission) {
                 return _permissionButton(
                     LocaleKeys.allowAccessToYourMicrophone);
+              } else if (state.status ==
+                  CameraPickerStatus.needMicrophonePermission) {
+                return _permissionButton(
+                    LocaleKeys.allowAccessToYourMicrophone);
               } else {
+                return const Icon(Icons.camera,
+                    color: AppColors.GREY_DARK_COLOR, size: 150);
                 return const Icon(Icons.camera,
                     color: AppColors.GREY_DARK_COLOR, size: 150);
               }
@@ -116,6 +126,8 @@ class _CamViewState extends State<_CamView> {
                       return _VideoTimer(duration: controller.maxVideoLength);
                     } else if (state.pickMode == PickMode.video &&
                         state.controller != null) {
+                    } else if (state.pickMode == PickMode.video &&
+                        state.controller != null) {
                       return Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
@@ -134,6 +146,8 @@ class _CamViewState extends State<_CamView> {
                 ),
                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   builder: (context, state) {
+                    if (state.controller != null &&
+                        state.status != CameraPickerStatus.startVideo) {
                     if (state.controller != null &&
                         state.status != CameraPickerStatus.startVideo) {
                       return _BaseIcon(
@@ -165,9 +179,13 @@ class _CamViewState extends State<_CamView> {
                   builder: (context, state) {
                     if (state.status != CameraPickerStatus.startVideo &&
                         state.controller != null) {
+                    if (state.status != CameraPickerStatus.startVideo &&
+                        state.controller != null) {
                       return _BaseIcon(
                         icon: Icons.check,
                         onTap: () {
+                          final media =
+                              context.read<CameraPickerCubit>().state.mediaList;
                           final media =
                               context.read<CameraPickerCubit>().state.mediaList;
                           if (media != null && media.isNotEmpty) {
@@ -178,6 +196,8 @@ class _CamViewState extends State<_CamView> {
                                     .read<CameraPickerCubit>()
                                     .refreshMediaList());
                           } else {
+                            showErrorMessage(
+                                context, LocaleKeys.pickPhotoOrVideo);
                             showErrorMessage(
                                 context, LocaleKeys.pickPhotoOrVideo);
                           }
@@ -192,6 +212,8 @@ class _CamViewState extends State<_CamView> {
                   builder: (context, state) {
                     if (state.controller != null &&
                         state.controller!.value.isInitialized) {
+                    if (state.controller != null &&
+                        state.controller!.value.isInitialized) {
                       if (state.pickMode == PickMode.photo) {
                         return IconButton(
                           onPressed: () {
@@ -201,6 +223,8 @@ class _CamViewState extends State<_CamView> {
                         );
                       } else if (state.status ==
                           CameraPickerStatus.startVideo) {
+                      } else if (state.status ==
+                          CameraPickerStatus.startVideo) {
                         return InkWell(
                           onTap: () {
                             controller.stopVideoRecording();
@@ -208,6 +232,8 @@ class _CamViewState extends State<_CamView> {
                           child: Stack(
                             alignment: Alignment.center,
                             children: [
+                              _VideoCircularIndicator(
+                                  duration: controller.maxVideoLength),
                               _VideoCircularIndicator(
                                   duration: controller.maxVideoLength),
                               const Icon(
@@ -233,6 +259,8 @@ class _CamViewState extends State<_CamView> {
                 ),
                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   builder: (context, state) {
+                    if (state.controller != null &&
+                        state.status != CameraPickerStatus.startVideo) {
                     if (state.controller != null &&
                         state.status != CameraPickerStatus.startVideo) {
                       return _BaseIcon(
@@ -268,6 +296,8 @@ class _CamViewState extends State<_CamView> {
     }
   }
 
+  Widget get _pickIcon =>
+      const Icon(Icons.circle, size: 80, color: Colors.white);
   Widget get _pickIcon =>
       const Icon(Icons.circle, size: 80, color: Colors.white);
 
@@ -336,6 +366,8 @@ class _ImagesListState extends State<_ImagesList> {
                 return BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   buildWhen: (previous, current) =>
                       current.status == CameraPickerStatus.updateMediaList,
+                  buildWhen: (previous, current) =>
+                      current.status == CameraPickerStatus.updateMediaList,
                   builder: (context, state) {
                     return ListView.separated(
                       padding: const EdgeInsets.symmetric(vertical: 5),
@@ -396,9 +428,14 @@ class _ImagesListState extends State<_ImagesList> {
                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   buildWhen: (previous, current) =>
                       current.pickMode != previous.pickMode,
+                  buildWhen: (previous, current) =>
+                      current.pickMode != previous.pickMode,
                   builder: (context, state) {
                     return ElevatedAppButton(
                       label: LocaleKeys.photo,
+                      backColor: state.pickMode == PickMode.photo
+                          ? AppColors.SECONDARY_COLOR
+                          : null,
                       backColor: state.pickMode == PickMode.photo
                           ? AppColors.SECONDARY_COLOR
                           : null,
@@ -415,9 +452,14 @@ class _ImagesListState extends State<_ImagesList> {
                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   buildWhen: (previous, current) =>
                       current.pickMode != previous.pickMode,
+                  buildWhen: (previous, current) =>
+                      current.pickMode != previous.pickMode,
                   builder: (context, state) {
                     return ElevatedAppButton(
                       label: LocaleKeys.video,
+                      backColor: state.pickMode == PickMode.video
+                          ? AppColors.SECONDARY_COLOR
+                          : null,
                       backColor: state.pickMode == PickMode.video
                           ? AppColors.SECONDARY_COLOR
                           : null,
@@ -500,6 +542,8 @@ class __VideoTimerState extends State<_VideoTimer> {
         setState(() {
           _timerText =
               '${minutes.toString().padLeft(2, '0')} : ${seconds.toString().padLeft(2, '0')}';
+          _timerText =
+              '${minutes.toString().padLeft(2, '0')} : ${seconds.toString().padLeft(2, '0')}';
         });
         CliLogger.info(_timerText);
       }
@@ -534,6 +578,8 @@ class _VideoCircularIndicator extends StatefulWidget {
   const _VideoCircularIndicator({required this.duration});
 
   @override
+  State<_VideoCircularIndicator> createState() =>
+      __VideoCircularIndicatorState();
   State<_VideoCircularIndicator> createState() =>
       __VideoCircularIndicatorState();
 }

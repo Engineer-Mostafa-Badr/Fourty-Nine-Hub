@@ -19,10 +19,12 @@ class TinderSubCategoryAdsView extends StatefulWidget {
   });
 
   @override
-  State<TinderSubCategoryAdsView> createState() => _TinderSubCategoryAdsViewState();
+  State<TinderSubCategoryAdsView> createState() =>
+      _TinderSubCategoryAdsViewState();
 }
 
-class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView> with SingleTickerProviderStateMixin {
+class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
+    with SingleTickerProviderStateMixin {
   late final MainCategoryEntity mainCategory;
 
   late TabController _tabController;
@@ -62,14 +64,17 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView> wit
                   children: [
                     const Sizer(),
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: padding, horizontal: padding),
+                      padding: EdgeInsets.symmetric(
+                          vertical: padding, horizontal: padding),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
                         color: Colors.yellow,
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: NetworkImage(
-                            tinderCubit.state.mainCategoryResponse?.data.mainCategory.banner ?? '',
+                            tinderCubit.state.mainCategoryResponse?.data
+                                    .mainCategory.banner ??
+                                '',
                           ),
                         ),
                       ),
@@ -91,7 +96,8 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView> wit
                                 const Sizer(),
                                 Text(
                                   '${tinderCubit.state.mainCategoryResponse!.data.mainCategory.numberOfAds} ${Labels.ads}',
-                                  style: Styles.mediumText(color: Colors.white, fontSize: textSize),
+                                  style: Styles.mediumText(
+                                      color: Colors.white, fontSize: textSize),
                                 )
                               ],
                             ),
@@ -100,7 +106,8 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView> wit
                           Expanded(
                             child: FittedBox(
                               child: Text(
-                                tinderCubit.state.mainCategoryResponse!.data.mainCategory.nameEn,
+                                tinderCubit.state.mainCategoryResponse!.data
+                                    .mainCategory.nameEn,
                                 style: Styles.headerText(
                                     // color: AppColors.PRIMARY_COLOR,
                                     color: Colors.white,
@@ -116,11 +123,13 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView> wit
                     const Sizer(),
                     Label(
                       text: widget.params.subCategory.name,
-                      style: Styles.headerText(fontSize: textSize, color: AppColors.SECONDARY_COLOR),
+                      style: Styles.headerText(
+                          fontSize: textSize, color: AppColors.SECONDARY_COLOR),
                     ),
                     const Sizer(),
                     Builder(builder: (context) {
-                      String provider = getServiceName(widget.params.subCategory.name);
+                      String provider =
+                          getServiceName(widget.params.subCategory.name);
                       String user = getUserName(widget.params.subCategory.name);
                       return TabBar(
                         controller: _tabController,
@@ -138,8 +147,12 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView> wit
                       child: TabBarView(
                         controller: _tabController,
                         children: [
-                          Center(child: Text('Provider: ${getServiceName(widget.params.subCategory.name)}')),
-                          Center(child: Text('User: ${getUserName(widget.params.subCategory.name)}')),
+                          Center(
+                              child: Text(
+                                  'Provider: ${getServiceName(widget.params.subCategory.name)}')),
+                          Center(
+                              child: Text(
+                                  'User: ${getUserName(widget.params.subCategory.name)}')),
                         ],
                       ),
                     ),

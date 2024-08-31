@@ -39,7 +39,9 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
             SliverToBoxAdapter(
               child: Row(
                 children: [
-                  InkWell(onTap: () => context.pop(), child: const Icon(Icons.arrow_back)),
+                  InkWell(
+                      onTap: () => context.pop(),
+                      child: const Icon(Icons.arrow_back)),
                   const SizedBox(
                     width: 10,
                   ),
@@ -82,24 +84,34 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
                             children: [
                               CircleAvatar(
                                 radius: 30,
-                                backgroundImage: NetworkImage(
-                                    widget.controller.usersPagingController.itemList?[index].profilePicture ?? ''),
+                                backgroundImage: NetworkImage(widget
+                                        .controller
+                                        .usersPagingController
+                                        .itemList?[index]
+                                        .profilePicture ??
+                                    ''),
                               ),
                               const SizedBox(
                                 width: 10,
                               ),
                               Label(
-                                text: widget.controller.usersPagingController.itemList?[index].fullName ?? '',
+                                text: widget.controller.usersPagingController
+                                        .itemList?[index].fullName ??
+                                    '',
                                 style: Styles.headerText(),
                               ),
                             ],
                           ),
                           Checkbox(
-                              value: widget.controller.usersPagingController.itemList?[index].isSelected,
+                              value: widget.controller.usersPagingController
+                                  .itemList?[index].isSelected,
                               onChanged: (v) {
-                                widget.onSelectUser(widget.controller.usersPagingController.itemList![index]);
-                                widget.controller.usersPagingController.itemList?[index].isSelected =
-                                    !widget.controller.usersPagingController.itemList![index].isSelected!;
+                                widget.onSelectUser(widget.controller
+                                    .usersPagingController.itemList![index]);
+                                widget.controller.usersPagingController
+                                        .itemList?[index].isSelected =
+                                    !widget.controller.usersPagingController
+                                        .itemList![index].isSelected!;
                                 setState(() {});
                               }),
                         ],
@@ -107,8 +119,10 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
                     );
                   },
                   noMoreItemsIndicatorBuilder: (context) => Container(),
-                  firstPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator(),
-                  newPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator(),
+                  firstPageProgressIndicatorBuilder: (context) =>
+                      const CupertinoActivityIndicator(),
+                  newPageProgressIndicatorBuilder: (context) =>
+                      const CupertinoActivityIndicator(),
                 ),
               ),
           ],

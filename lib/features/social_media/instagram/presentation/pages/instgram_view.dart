@@ -31,15 +31,13 @@ class _InstagramViewState extends State<InstagramView> {
     super.initState();
     scrollController = ScrollController();
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
         if (!_isScrollingDown) {
           setState(() {
             _isScrollingDown = true;
           });
         }
-      } else if (scrollController.position.userScrollDirection ==
-          ScrollDirection.forward) {
+      } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
         if (_isScrollingDown) {
           setState(() {
             _isScrollingDown = false;
@@ -83,8 +81,7 @@ class _InstagramViewState extends State<InstagramView> {
                     children: [
                       _buildTabBar(context),
                       Expanded(
-                        child: InstagramGlobalPosts(
-                            scrollController: scrollController),
+                        child: InstagramGlobalPosts(scrollController: scrollController),
                       ),
                     ],
                   )

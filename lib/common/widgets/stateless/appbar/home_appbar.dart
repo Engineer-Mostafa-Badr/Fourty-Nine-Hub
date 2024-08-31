@@ -139,37 +139,40 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
                 BlocProvider(
-                  create: (BuildContext context) =>
-                  NotificationsCubit(NotificationRepoImpl(ApiService(Dio())))..fetchNotification('app'),
-                  child: BlocBuilder<NotificationsCubit,NotificationsState>(
+                  create: (BuildContext context) => NotificationsCubit(
+                      NotificationRepoImpl(ApiService(Dio())))
+                    ..fetchNotification('app'),
+                  child: BlocBuilder<NotificationsCubit, NotificationsState>(
                     builder: (BuildContext context, state) {
-                      if(state is NotificationsSuccessState) {
+                      if (state is NotificationsSuccessState) {
                         return Positioned(
-                        top: 15.zH,
-                        right: 10.zW,
-                        child: Container(
-                          padding:  EdgeInsets.symmetric(
-                            vertical: 3.zH,
-                            horizontal: 5.zW,
+                          top: 15.zH,
+                          right: 10.zW,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 3.zH,
+                              horizontal: 5.zW,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(20.zR),
+                            ),
+                            child: Label(
+                                text: context.read<UserCubit>().isLoggedIn
+                                    ? '${state.notificationModel.data!.docs!.length}'
+                                    : '0',
+                                style: Styles.smallText(color: Colors.white)),
                           ),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(20.zR),
-                          ),
-                          child: Label(
-                              text:context.read<UserCubit>().isLoggedIn
-                                  ? '${state.notificationModel.data!.docs!.length}':'0',
-                              style: Styles.smallText(color: Colors.white)),
-                        ),
-                      );
-                      }return const SizedBox.shrink();
+                        );
+                      }
+                      return const SizedBox.shrink();
                     },
                   ),
                 ),
               ],
             ),
           ),
-           SizedBox(
+          SizedBox(
             width: 10.zW,
           ),
         ],
