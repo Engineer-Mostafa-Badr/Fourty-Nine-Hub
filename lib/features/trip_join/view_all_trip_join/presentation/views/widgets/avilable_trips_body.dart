@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_card.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trips_card_loading.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -37,9 +38,11 @@ class AvailableTripsBody extends StatelessWidget {
                 status: 'Premuim',
               ),
             ),
+            const AvailableTripCardLoading(),
           ],
         ),
       ),
     );
   }
 }
+
