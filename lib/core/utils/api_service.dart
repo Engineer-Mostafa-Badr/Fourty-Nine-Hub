@@ -10,14 +10,16 @@ class ApiService {
   Future<Map<String,dynamic>> get({
     required String url,
     String? token,
+    String? filter,
   }) async {
     var response = await dio.get(
       '$_baseUrl$url',
-      options: Options(
+      options: Options  (
         headers: {
           'Authorization': 'Bearer $token'
         },
       ),
+
     );
     // Check if the response is a Map or a List
     if (response.data is Map<String, dynamic>) {
@@ -30,6 +32,25 @@ class ApiService {
       // Handle unexpected response types
       throw Exception('Unexpected response type');
     }
+  }
+
+  post({
+    required String url,
+    dynamic data,
+    dynamic query,
+    String? token,
+  }) async {
+    var response = await dio.post(
+      '$_baseUrl$url',
+      data: data,
+      queryParameters: query,
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token'
+        },
+      ),
+    );
+    return response.data;
   }
 
 

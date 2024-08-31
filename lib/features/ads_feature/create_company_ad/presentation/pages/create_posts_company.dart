@@ -9,23 +9,31 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class CreatePostCompany extends StatefulWidget {
-  const CreatePostCompany({
-    super.key,  this.text=true,  this.picture=true, required this.title,
+   CreatePostCompany({
+    super.key,  this.text=true,  this.picture=true, required this.title, required this.function, this.postContentTextController,
   });
   final bool text ;
   final bool picture;
   final String title;
+  final Function function;
+   TextEditingController? postContentTextController;
 
   @override
   State<CreatePostCompany> createState() => _CreatePostViewState();
 }
 
 class _CreatePostViewState extends State<CreatePostCompany> {
-  var postContentTextController = TextEditingController();
 
   Future<bool> onBackPressed() async {
     SystemNavigator.pop();
+
     return true;
+  }
+  @override
+  void dispose() {
+    // Clear the controller when disposing the state
+    widget.postContentTextController?.clear();
+    super.dispose();
   }
 
   @override
@@ -35,7 +43,9 @@ class _CreatePostViewState extends State<CreatePostCompany> {
         centerTitle: false,
         label: widget.title,
         actions: [
-          TextButton(child: const Label(text: 'Post'), onPressed: () {}),
+          TextButton(child: const Label(text: 'Post'), onPressed: () {
+            widget.function();
+          }),
         ],
       ),
       body: Column(
@@ -74,9 +84,15 @@ class _CreatePostViewState extends State<CreatePostCompany> {
     return Container(
         padding: const EdgeInsets.all(10),
         color: Colors.white,
-        child: TextField(
+        child: TextFormField(
           maxLines: 4,
           maxLength: 150,
+          validator: (value){
+            if(value!.isEmpty){
+              return 'Field is required';
+            }
+            return null;
+          },
           style: const TextStyle(color: AppColors.QUANTITY_COLOR),
           onChanged: (c) {
             if (c.length == 150) {
@@ -84,7 +100,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                   context, "You can't type more than 150 character");
             }
           },
-          controller: postContentTextController,
+          controller: widget.postContentTextController,
           decoration: const InputDecoration(
               hintText: 'Type Here ... ',
               hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
