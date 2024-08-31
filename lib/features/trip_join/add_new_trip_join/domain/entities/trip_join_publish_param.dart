@@ -2,8 +2,12 @@ class TripJoinPublishParam {
   String? vehicleModel;
   String? vehicleBrand;
   String? categoryId;
-  String? from;
-  String? to;
+  // arabic address fetched from the backend
+  String? fromAr;
+  String? toAr;
+  // english address fetched from geocoding api
+  String? fromEn;
+  String? toEn;
   num? distance;
   num? duration;
   num? passengers;
@@ -16,8 +20,10 @@ class TripJoinPublishParam {
     this.vehicleModel,
     this.vehicleBrand,
     this.categoryId,
-    this.from,
-    this.to,
+    this.fromAr,
+    this.toAr,
+    this.fromEn,
+    this.toEn,
     this.distance,
     this.duration,
     this.passengers,
@@ -29,7 +35,7 @@ class TripJoinPublishParam {
 
   @override
   String toString() {
-    return 'TripJoinPublishParams(vehicleModel: $vehicleModel, vehicleBrand: $vehicleBrand, categoryId: $categoryId, from: $from, to: $to, distance: $distance, duration: $duration, passengers: $passengers, price: $price, phone: $phone, time: $time, isRepeat: $isRepeat)';
+    return 'TripJoinPublishParams(vehicleModel: $vehicleModel, vehicleBrand: $vehicleBrand, categoryId: $categoryId, fromAr: $fromAr, toAr: $toAr, fromEn: $fromEn, toEn: $toEn, distance: $distance, duration: $duration, passengers: $passengers, price: $price, phone: $phone, time: $time, isRepeat: $isRepeat)';
   }
 
   factory TripJoinPublishParam.fromJson(Map<String, dynamic> json) {
@@ -37,8 +43,10 @@ class TripJoinPublishParam {
       vehicleModel: json['vehicleModel'] as String?,
       vehicleBrand: json['vehicleBrand'] as String?,
       categoryId: json['categoryId'] as String?,
-      from: json['from'] as String?,
-      to: json['to'] as String?,
+      fromAr: json['fromAr'] as String?,
+      toAr: json['toAr'] as String?,
+      fromEn: json['fromEn'] as String?,
+      toEn: json['toEn'] as String?,
       distance: json['distance'] as num?,
       duration: json['duration'] as num?,
       passengers: json['passengers'] as num?,
@@ -53,8 +61,10 @@ class TripJoinPublishParam {
         'vehicleModel': vehicleModel,
         'vehicleBrand': vehicleBrand,
         'categoryId': categoryId,
-        'from': from,
-        'to': to,
+        'fromAr': fromAr,
+        'toAr': toAr,
+        'fromEn': fromEn,
+        'toEn': toEn,
         'distance': distance,
         'duration': duration,
         'passengers': passengers,
@@ -68,8 +78,10 @@ class TripJoinPublishParam {
     String? vehicleModel,
     String? vehicleBrand,
     String? categoryId,
-    String? from,
-    String? to,
+    String? fromAr,
+    String? toAr,
+    String? fromEn,
+    String? toEn,
     num? distance,
     num? duration,
     String? priceId,
@@ -83,8 +95,10 @@ class TripJoinPublishParam {
       vehicleModel: vehicleModel ?? this.vehicleModel,
       vehicleBrand: vehicleBrand ?? this.vehicleBrand,
       categoryId: categoryId ?? this.categoryId,
-      from: from ?? this.from,
-      to: to ?? this.to,
+      fromAr: fromAr ?? fromAr,
+      toAr: toAr ?? toAr,
+      fromEn: fromEn ?? fromEn,
+      toEn: toEn ?? toEn,
       distance: distance ?? this.distance,
       duration: duration ?? this.duration,
       passengers: passengers ?? this.passengers,

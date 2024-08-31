@@ -69,8 +69,6 @@ class UploadFile {
     await Dio().put(signedUrl,
         data: Stream.fromIterable(image.map((e) => [e])), options: options);
   }
-
-
 }
 
 class UploadFileEntity {

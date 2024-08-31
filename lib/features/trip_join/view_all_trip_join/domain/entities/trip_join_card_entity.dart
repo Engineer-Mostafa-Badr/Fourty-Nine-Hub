@@ -2,55 +2,63 @@
 class TripJoinCardEntity {
   String? brand;
   String? model;
-  num? price;
+  num? journeyPrice;
   String? status;
   int? seatNumber;
   bool? isRepeated;
-  String? startingAddress;
-  String? destinationAddress;
-  bool? isActive;
-  DateTime? publishDate;
+  String? startingAddressAr;
+  String? destinationAddressAr;
+  String? startingAddressEn;
+  String? destinationAddressEn;
+  bool? isApproved;
+  int? publishDate;
   TripJoinCardEntity({
     this.brand,
     this.model,
-    this.price,
+    this.journeyPrice,
     this.status,
     this.seatNumber,
     this.isRepeated,
-    this.startingAddress,
-    this.destinationAddress,
-    this.isActive,
+    this.startingAddressAr,
+    this.destinationAddressAr,
+    this.startingAddressEn,
+    this.destinationAddressEn,
+    this.isApproved,
     this.publishDate,
   });
 
   TripJoinCardEntity copyWith({
     String? brand,
     String? model,
-    num? price,
+    num? journeyPrice,
     String? status,
     int? seatNumber,
     bool? isRepeated,
-    String? startingAddress,
-    String? locationAddress,
-    bool? isActive,
-    DateTime? publishDate,
+    String? startingAddressAr,
+    String? destinationAddressAr,
+    String? startingAddressEn,
+    String? destinationAddressEn,
+    bool? isApproved,
+    int? publishDate,
   }) {
     return TripJoinCardEntity(
       brand: brand ?? this.brand,
       model: model ?? this.model,
-      price: price ?? this.price,
+      journeyPrice: journeyPrice ?? this.journeyPrice,
       status: status ?? this.status,
       seatNumber: seatNumber ?? this.seatNumber,
       isRepeated: isRepeated ?? this.isRepeated,
-      startingAddress: startingAddress ?? this.startingAddress,
-      destinationAddress: locationAddress ?? destinationAddress,
-      isActive: isActive ?? this.isActive,
+      startingAddressAr: startingAddressAr ?? this.startingAddressAr,
+      destinationAddressAr: destinationAddressAr ?? this.destinationAddressAr,
+      startingAddressEn: startingAddressEn ?? this.startingAddressEn,
+      destinationAddressEn: destinationAddressEn ?? this.destinationAddressEn,
+      isApproved: isApproved ?? this.isApproved,
       publishDate: publishDate ?? this.publishDate,
     );
   }
 
   @override
   String toString() {
-    return 'TripJoinCardEntity(brand: $brand, model: $model, price: $price, status: $status, seatNumber: $seatNumber, isRepeated: $isRepeated, startingAddress: $startingAddress, destinationAddress: $destinationAddress, isActive: $isActive, publishDate: $publishDate)';
+    return 'TripJoinCardEntity(brand: $brand, model: $model, journeyPrice: $journeyPrice, status: $status, seatNumber: $seatNumber, isRepeated: $isRepeated, startingAddressAr: $startingAddressAr, destinationAddressAr: $destinationAddressAr, startingAddressEn: $startingAddressEn, destinationAddressEn: $destinationAddressEn, isApproved: $isApproved, publishDate: $publishDate)';
   }
 }

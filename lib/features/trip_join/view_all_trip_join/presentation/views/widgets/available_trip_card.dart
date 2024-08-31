@@ -83,7 +83,7 @@ class AvailableTripCard extends StatelessWidget {
                       const Sizer(width: 13),
                       Flexible(
                         child: Text(
-                          tripJoinCardEntity.startingAddress ?? '',
+                          tripJoinCardEntity.startingAddressEn ?? '',
                           style: Styles.headerText(fontSize: 32),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
@@ -98,7 +98,7 @@ class AvailableTripCard extends StatelessWidget {
                       const Icon(Icons.trip_origin, color: AppColors.CHECK_MARK_COLOR, size: 20),
                       const Sizer(width: 13),
                       Text(
-                        tripJoinCardEntity.destinationAddress ?? '',
+                        tripJoinCardEntity.destinationAddressEn ?? '',
                         style: Styles.headerText(fontSize: 32),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
@@ -136,7 +136,7 @@ class AvailableTripCard extends StatelessWidget {
                         flex: 3,
                         child: AvaialbleTripsButton(
                           title: 'Call',
-                          color: (tripJoinCardEntity.isActive ?? false)
+                          color: (tripJoinCardEntity.isApproved ?? false)
                               ? AppColors.PRIMARY_COLOR
                               : AppColors.DARK_GRAY_COLOR,
                           icon: Icons.call,
@@ -148,7 +148,7 @@ class AvailableTripCard extends StatelessWidget {
                         flex: 3,
                         child: AvaialbleTripsButton(
                           title: 'Message',
-                          color: (tripJoinCardEntity.isActive ?? false)
+                          color: (tripJoinCardEntity.isApproved ?? false)
                               ? AppColors.PRIMARY_COLOR
                               : AppColors.DARK_GRAY_COLOR,
                           icon: Icons.email,
@@ -174,7 +174,7 @@ class AvailableTripCard extends StatelessWidget {
                 right: 20,
                 child: Column(
                   children: [
-                    Text(tripJoinCardEntity.price?.toStringAsFixed(0) ?? '',
+                    Text(tripJoinCardEntity.journeyPrice?.toStringAsFixed(0) ?? '',
                         style: Styles.headerText(fontSize: 70, color: Colors.green[600])),
                     Text(tripJoinCardEntity.status ?? '',
                         style: Styles.headerText(fontSize: 30, color: AppColors.SECONDARY_COLOR)),
@@ -204,6 +204,7 @@ class AvailableTripCard extends StatelessWidget {
     if (tripJoinCardEntity.publishDate == null) {
       return '';
     }
-    return DateFormat('dd MMM yyyy hh:mm aaa').format(tripJoinCardEntity.publishDate!);
+    return DateFormat('dd MMM yyyy hh:mm aaa')
+        .format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.publishDate!));
   }
 }

@@ -9,7 +9,9 @@ class TripJoinGoogleApiRepoImp implements TripJoinGoogleApiRepo {
 
   TripJoinGoogleApiRepoImp({required this.fetchLocationRemoteDataSource});
   @override
-  Future<Either<Failure, LocationEntity>> fetchLocationCordinations({required String address}) {
-    return fetchLocationRemoteDataSource.fetchLocationCordinations(address: address);
+  Future<Either<Failure, LocationEntity>> fetchLocationCordinations(
+      {required String address}) {
+    return fetchLocationRemoteDataSource.fetchLocationCordinations(
+        address: address);
   }
 }

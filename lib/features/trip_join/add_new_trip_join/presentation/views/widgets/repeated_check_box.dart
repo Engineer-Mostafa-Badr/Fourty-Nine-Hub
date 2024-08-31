@@ -30,7 +30,8 @@ class _RepeatedCheckBoxState extends State<RepeatedCheckBox> {
           checkColor: Colors.white,
           activeColor: AppColors.PRIMARY_COLOR,
         ),
-        Text('Repeated', style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
+        Text('Repeated',
+            style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
       ],
     );
   }

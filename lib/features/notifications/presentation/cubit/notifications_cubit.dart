@@ -5,18 +5,17 @@ import 'package:fourtyninehub/features/notifications/presentation/cubit/notifica
 
 import '../../data/repository/notification_repo.dart';
 
-
 class NotificationsCubit extends Cubit<NotificationsState> {
   NotificationsCubit(this.notificationRepo) : super(NotificationsInitial());
 
- final NotificationRepo notificationRepo;
-  static NotificationsCubit get(context)=>BlocProvider.of(context);
+  final NotificationRepo notificationRepo;
+  static NotificationsCubit get(context) => BlocProvider.of(context);
 
   Timer? _pollingTimer;
 
-  void fetchNotification(String type)async{
+  void fetchNotification(String type) async {
     emit(NotificationsLoadingState());
-   _startPolling(type);
+    _startPolling(type);
   }
 
   void _startPolling(String type) {
@@ -24,7 +23,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
 
     // Start polling every 10 seconds (adjust the interval as needed)
     _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
-      var result =await notificationRepo.fetchNotifications(type);
+      var result = await notificationRepo.fetchNotifications(type);
 
       result.fold((failure) {
         emit(NotificationsErrorState(errMessage: 'failure'));
@@ -34,18 +33,18 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     });
   }
 
-
   void deleteNotification({
     required String id,
-})async{
+  }) async {
     emit(DeleteNotificationsLoadingState());
-   var result=await notificationRepo.deleteItemNotifications(id);
+    var result = await notificationRepo.deleteItemNotifications(id);
 
     result.fold((failure) {
       emit(DeleteNotificationsErrorState(errMessage: 'failure'));
-     // print(failure.errMessage.toString());
+      // print(failure.errMessage.toString());
     }, (notification) {
-      emit(DeleteNotificationsSuccessState(deleteNotificationModel: notification));
+      emit(DeleteNotificationsSuccessState(
+          deleteNotificationModel: notification));
     });
   }
 }

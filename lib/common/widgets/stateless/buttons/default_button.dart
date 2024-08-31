@@ -88,7 +88,8 @@ class _DefaultButtonState extends State<DefaultButton>
     ];
     return Container(
       margin: widget.margin,
-      width: widget.width,height: 110.zH,
+      width: widget.width,
+      height: 110.zH,
       child: AnimatedSize(
         duration: const Duration(milliseconds: 300),
         curve: Curves.bounceInOut,

@@ -28,13 +28,13 @@ class LoginCubit extends Cubit<LoginState> {
   final passwordFocusNode = FocusNode();
 
   LoginCubit(
-      this._loginUseCase,
-      this._saveTokens,
-      this._attachToken,
-      this._googleSignInUseCase,
-      this._facebookSignInUseCase,
-      this._appleSignInUseCase,
-      ) : super(LoginInitial());
+    this._loginUseCase,
+    this._saveTokens,
+    this._attachToken,
+    this._googleSignInUseCase,
+    this._facebookSignInUseCase,
+    this._appleSignInUseCase,
+  ) : super(LoginInitial());
 
   String? token;
 
@@ -49,9 +49,9 @@ class LoginCubit extends Cubit<LoginState> {
       );
 
       result.fold(
-            (failure) => emit(LoginError(failure)),
-            (userToken)  {
-              print(userToken);
+        (failure) => emit(LoginError(failure)),
+        (userToken) {
+          print(userToken);
           _attachToken(userToken); // attach to dio
           _saveTokens(userToken); // ensure tokens are saved before proceeding
           emit(LoginSuccess(userTokensEntity: userToken));
@@ -66,10 +66,11 @@ class LoginCubit extends Cubit<LoginState> {
     final result = await _googleSignInUseCase(const NoParams());
 
     result.fold(
-          (failure) => emit(LoginError(failure)),
-          (userToken) async {
+      (failure) => emit(LoginError(failure)),
+      (userToken) async {
         _attachToken(userToken); // attach to dio
-        await _saveTokens(userToken); // ensure tokens are saved before proceeding
+        await _saveTokens(
+            userToken); // ensure tokens are saved before proceeding
         emit(LoginSuccess(userTokensEntity: userToken));
       },
     );
@@ -81,10 +82,11 @@ class LoginCubit extends Cubit<LoginState> {
     final result = await _appleSignInUseCase(const NoParams());
 
     result.fold(
-          (failure) => emit(LoginError(failure)),
-          (userToken) async {
+      (failure) => emit(LoginError(failure)),
+      (userToken) async {
         _attachToken(userToken); // attach to dio
-        await _saveTokens(userToken); // ensure tokens are saved before proceeding
+        await _saveTokens(
+            userToken); // ensure tokens are saved before proceeding
         emit(LoginSuccess(userTokensEntity: userToken));
       },
     );
@@ -96,10 +98,11 @@ class LoginCubit extends Cubit<LoginState> {
     final result = await _facebookSignInUseCase(const NoParams());
 
     result.fold(
-          (failure) => emit(LoginError(failure)),
-          (userToken) async {
+      (failure) => emit(LoginError(failure)),
+      (userToken) async {
         _attachToken(userToken); // attach to dio
-        await _saveTokens(userToken); // ensure tokens are saved before proceeding
+        await _saveTokens(
+            userToken); // ensure tokens are saved before proceeding
         emit(LoginSuccess(userTokensEntity: userToken));
       },
     );

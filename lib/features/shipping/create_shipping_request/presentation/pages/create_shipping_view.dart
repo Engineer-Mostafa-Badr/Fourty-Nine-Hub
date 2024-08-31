@@ -59,7 +59,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   builder: (context, state) {
                     if (state is SuccessGetBannerState) {
                       return SizedBox(
-                        width:double.infinity,
+                        width: double.infinity,
                         child: ShippingBanner(
                           model: state.model,
                         ),

@@ -7,7 +7,9 @@ class PublishTripJoinUseCase {
   final TripJoinRepo tripJoinRepo;
 
   PublishTripJoinUseCase({required this.tripJoinRepo});
-  Future<Either<Failure, bool>> call({required TripJoinPublishParam tripJoinPublishParam}) async {
-    return await tripJoinRepo.publishTripJoin(tripJoinPublishParam: tripJoinPublishParam);
+  Future<Either<Failure, bool>> call(
+      {required TripJoinPublishParam tripJoinPublishParam}) async {
+    return await tripJoinRepo.publishTripJoin(
+        tripJoinPublishParam: tripJoinPublishParam);
   }
 }

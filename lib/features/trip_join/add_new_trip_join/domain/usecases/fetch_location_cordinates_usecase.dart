@@ -11,7 +11,9 @@ class FetchLocationCordinatesUseCase {
     required this.tripJoinGoogleApiRepo,
   });
 
-  Future<Either<Failure, LocationEntity>> call({required String address}) async {
-    return await tripJoinGoogleApiRepo.fetchLocationCordinations(address: address);
+  Future<Either<Failure, LocationEntity>> call(
+      {required String address}) async {
+    return await tripJoinGoogleApiRepo.fetchLocationCordinations(
+        address: address);
   }
 }

@@ -3,5 +3,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/location_entity.dart';
 
 abstract class TripJoinGoogleApiRepo {
-  Future<Either<Failure, LocationEntity>> fetchLocationCordinations({required String address});
+  Future<Either<Failure, LocationEntity>> fetchLocationCordinations(
+      {required String address});
 }

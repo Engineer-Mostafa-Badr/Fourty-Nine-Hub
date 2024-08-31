@@ -916,8 +916,7 @@ class _FavSubCategoryViewContentState
         height: MediaQuery.of(context).size.height / 4,
         padding: const EdgeInsets.all(8.0),
         child: FavTinderSubCategoryCard(
-            favSubCategoryCardData: favSubCategoryData,
-            activeFav: false)
+            favSubCategoryCardData: favSubCategoryData, activeFav: false)
         // Column(
         //   children: [
         //     Text(favSubCategoryData.categoryId?.nameAr ?? 'Unknown Category'),

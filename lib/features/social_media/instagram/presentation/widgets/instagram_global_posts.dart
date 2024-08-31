@@ -25,7 +25,8 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class InstagramGlobalPosts extends StatefulWidget {
   const InstagramGlobalPosts({
-    super.key, required this.scrollController,
+    super.key,
+    required this.scrollController,
   });
   final scrollController;
   @override
@@ -51,7 +52,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
       return RefreshIndicator(
         onRefresh: () async => controller.onRefresh(),
         child: CustomScrollView(
-         controller: widget.scrollController,
+          controller: widget.scrollController,
           slivers: [
             const SliverToBoxAdapter(
               child: ChatStories(),

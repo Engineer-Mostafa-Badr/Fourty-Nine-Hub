@@ -41,6 +41,7 @@ class _YouTubeViewState extends State<YouTubeView> {
     });
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,8 +57,8 @@ class _YouTubeViewState extends State<YouTubeView> {
       floatingActionButton: _isScrollingDown
           ? null
           : const FloatingButton(
-        changeView: 0,
-      ),
+              changeView: 0,
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: _buildVideosList(scrollController),
     );
@@ -65,7 +66,7 @@ class _YouTubeViewState extends State<YouTubeView> {
 
   Widget _buildVideosList(ScrollController scrollController) {
     return ListView.separated(
-      controller: scrollController,
+        controller: scrollController,
         shrinkWrap: true,
         itemBuilder: (context, index) => const YoutubeVideoCard(),
         separatorBuilder: (context, index) => const Sizer(),

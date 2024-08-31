@@ -27,8 +27,13 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   final FriendsFollowersUseCase _friendsFollowersUseCase;
   final GetPlacesUseCase _getPlacesUseCase;
   final postContentTextController = TextEditingController();
-  CreatePostCubit(this._createPostUseCase, this._getActivitiesUseCase, this._getFeelingsUseCase,
-      this._createTwitterPostUseCase, this._friendsFollowersUseCase, this._getPlacesUseCase)
+  CreatePostCubit(
+      this._createPostUseCase,
+      this._getActivitiesUseCase,
+      this._getFeelingsUseCase,
+      this._createTwitterPostUseCase,
+      this._friendsFollowersUseCase,
+      this._getPlacesUseCase)
       : super(const CreatePostState());
 
   List<String>? selectedImages;
@@ -72,8 +77,13 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       print("test media ${selectedImages?.length}");
       if (type == 'twitter') {
         final response = await _createTwitterPostUseCase(
-            CreateTwitterPostParams(content: postContentTextController.text, mediaIds: selectedImages ?? []));
-        response.fold((l) => emit(state.copyWith(failure: l, status: CreatePostStates.error)), (r) {
+            CreateTwitterPostParams(
+                content: postContentTextController.text,
+                mediaIds: selectedImages ?? []));
+        response.fold(
+            (l) => emit(
+                state.copyWith(failure: l, status: CreatePostStates.error)),
+            (r) {
           Navigator.pop(context);
         });
       } else if (type == "facebook") {
@@ -89,7 +99,10 @@ class CreatePostCubit extends Cubit<CreatePostState> {
             users: state.selectedUsers?.map((e) => e.id).toList() ?? [],
           ),
         );
-        response.fold((l) => emit(state.copyWith(failure: l, status: CreatePostStates.error)), (r) {
+        response.fold(
+            (l) => emit(
+                state.copyWith(failure: l, status: CreatePostStates.error)),
+            (r) {
           Navigator.pop(context);
         });
       }
@@ -128,7 +141,10 @@ class CreatePostCubit extends Cubit<CreatePostState> {
           selectedImages = images.map((e) => e.mediaId).toList();
           print("selectedImages${selectedImages?.length}");
           print(images.length);
-          emit(state.copyWith(images: images, backColor: '#FFFFFFFF', status: CreatePostStates.success));
+          emit(state.copyWith(
+              images: images,
+              backColor: '#FFFFFFFF',
+              status: CreatePostStates.success));
         });
     print("length${state.images?.length}");
   }
@@ -157,7 +173,8 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   }
 
   // int pageSize = 4;
-  final PagingController<int, PostUserEntity> usersPagingController = PagingController(firstPageKey: 1);
+  final PagingController<int, PostUserEntity> usersPagingController =
+      PagingController(firstPageKey: 1);
 
   PaginationParams paginationParams = PaginationParams.basic();
   List<PostUserEntity> usersList = [];
@@ -191,8 +208,8 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     if (page == 1) {
       usersPagingController.itemList = [];
     }
-    final response =
-        await _friendsFollowersUseCase(FriendsFollowersParams(search: search, limit: pageSize, page: page));
+    final response = await _friendsFollowersUseCase(
+        FriendsFollowersParams(search: search, limit: pageSize, page: page));
     response.fold(
       (l) => emit(state.copyWith(failure: l, status: CreatePostStates.error)),
       (data) {
@@ -202,7 +219,8 @@ class CreatePostCubit extends Cubit<CreatePostState> {
           fetchUsers.clear();
           print("ssssssssssssssssssssssssssssssssssssssssssss");
           fetchUsers = data.map((item) {
-            var isSelected = state.selectedUsers!.any((selected) => item.id == selected.id);
+            var isSelected =
+                state.selectedUsers!.any((selected) => item.id == selected.id);
 
             if (isSelected) {
               item.isSelected = true;
@@ -225,12 +243,16 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     );
   }
 
-  final PagingController<int, PlaceEntity> placesPagingController = PagingController(firstPageKey: 1);
+  final PagingController<int, PlaceEntity> placesPagingController =
+      PagingController(firstPageKey: 1);
   Future<void> getPlaces(int page, String search) async {
     // emit(state.copyWith(status: St))
     // final user = context.read<UserCubit>().state.data;
-    final response = await _getPlacesUseCase(FriendsFollowersParams(search: search, limit: pageSize, page: page));
-    response.fold((l) => emit(state.copyWith(failure: l, status: CreatePostStates.error)), (data) {
+    final response = await _getPlacesUseCase(
+        FriendsFollowersParams(search: search, limit: pageSize, page: page));
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: CreatePostStates.error)),
+        (data) {
       final isLastPage = data.length < pageSize;
       if (page == 1) {
         print("page == 1 $page");
@@ -256,16 +278,20 @@ class CreatePostCubit extends Cubit<CreatePostState> {
 
   onRemovePlace() {
     emit(state.copyWith(
-        place: PlaceEntity(formattedAddress: '', name: '', lat: 0.0, lng: 0.0), status: CreatePostStates.success));
+        place: PlaceEntity(formattedAddress: '', name: '', lat: 0.0, lng: 0.0),
+        status: CreatePostStates.success));
   }
 
   onRemoveFeeling() {
-    emit(state.copyWith(selectedFeeling: FeelingEntity(name: '', image: '', id: ''), status: CreatePostStates.success));
+    emit(state.copyWith(
+        selectedFeeling: FeelingEntity(name: '', image: '', id: ''),
+        status: CreatePostStates.success));
   }
 
   onRemoveActivity() {
     emit(state.copyWith(
-        selectedActivity: ActivityEntity(name: '', image: '', id: ''), status: CreatePostStates.success));
+        selectedActivity: ActivityEntity(name: '', image: '', id: ''),
+        status: CreatePostStates.success));
   }
 
   onRemoveUser(PostUserEntity user) {
@@ -274,7 +300,8 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       newUsers.addAll(state.selectedUsers!);
       newUsers.removeWhere((e) => e.id == user.id);
     }
-    emit(state.copyWith(selectedUsers: newUsers, status: CreatePostStates.success));
+    emit(state.copyWith(
+        selectedUsers: newUsers, status: CreatePostStates.success));
   }
 
   selectUsers(PostUserEntity user) {

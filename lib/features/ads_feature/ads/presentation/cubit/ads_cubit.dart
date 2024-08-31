@@ -78,8 +78,7 @@ class AdsCubit extends Cubit<AdsState> {
                         friendsCount: null,
                         followersCount: null,
                         followingCount: null,
-                      wallet: 0
-                    ),
+                        wallet: 0),
                     active: true,
                     details: [
                       DetailEntiy(label: 'label', type: 'type', value: 'value')

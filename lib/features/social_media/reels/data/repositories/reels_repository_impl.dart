@@ -214,8 +214,7 @@ class ReelsRepository {
   Future<ReelsResponse> fetchReels({int page = 1, int limit = 3}) async {
     final url =
         'https://49dev.com/api/v1/reels/explore?page=$page&limit=$limit';
-    final response =
-    await _makeGetRequest(url: url, fromMethod: 'fetchReels');
+    final response = await _makeGetRequest(url: url, fromMethod: 'fetchReels');
     if (response != null) {
       log("from ReelsRepository");
       return ReelsResponse.fromJson(json.decode(response.body));
@@ -259,7 +258,7 @@ class ReelsRepository {
     final url = 'https://49dev.com/api/v1/reels/comments/$reelId';
 
     final response =
-    await _makeGetRequest(url: url, fromMethod: 'fetchComments');
+        await _makeGetRequest(url: url, fromMethod: 'fetchComments');
     if (response != null) {
       return GetCommentsResponse.fromJson(jsonDecode(response.body));
     } else {

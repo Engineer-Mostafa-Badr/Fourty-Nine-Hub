@@ -9,8 +9,7 @@ part 'edit_profile_state.dart';
 class EditProfileCubit extends Cubit<EditProfileState> {
   final postContentTextController = TextEditingController();
   final EditProfileUseCase _editProfileUseCase;
-  EditProfileCubit(this._editProfileUseCase)
-      : super( EditProfileState());
+  EditProfileCubit(this._editProfileUseCase) : super(EditProfileState());
 
   List<String>? selectedImages;
 
@@ -42,10 +41,11 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   Future<void> editProfile(EditProfileEntity params) async {
     emit(state.copyWith(status: EditProfileStates.loading));
     final response = await _editProfileUseCase(params);
-    response.fold((l) => emit(state.copyWith(failure: l,status: EditProfileStates.error)), (data) {
+    response.fold(
+        (l) =>
+            emit(state.copyWith(failure: l, status: EditProfileStates.error)),
+        (data) {
       emit(state.copyWith(status: EditProfileStates.success));
     });
   }
-
-
 }

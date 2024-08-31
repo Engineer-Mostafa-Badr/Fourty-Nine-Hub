@@ -108,7 +108,8 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> sendGreetMessage({required SendGreetMessageParams params}) {
+  Future<Either<Failure, bool>> sendGreetMessage(
+      {required SendGreetMessageParams params}) {
     return _remoteDataSource.sendGreetMessage(params: params);
   }
 

@@ -12,7 +12,8 @@ class TripAndCarInformationV2 extends StatefulWidget {
   const TripAndCarInformationV2({super.key});
 
   @override
-  State<TripAndCarInformationV2> createState() => _TripAndCarInformationV2State();
+  State<TripAndCarInformationV2> createState() =>
+      _TripAndCarInformationV2State();
 }
 
 class _TripAndCarInformationV2State extends State<TripAndCarInformationV2> {

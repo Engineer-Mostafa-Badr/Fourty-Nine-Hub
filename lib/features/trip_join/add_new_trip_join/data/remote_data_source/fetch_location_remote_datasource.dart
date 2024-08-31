@@ -10,10 +10,12 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entiti
 import 'package:fourtyninehub/res/style/const.dart';
 
 abstract class FetchLocationRemoteDataSource {
-  Future<Either<Failure, LocationEntity>> fetchLocationCordinations({required String address});
+  Future<Either<Failure, LocationEntity>> fetchLocationCordinations(
+      {required String address});
 }
 
-class FetchLocationRemoteDataSourceImp implements FetchLocationRemoteDataSource {
+class FetchLocationRemoteDataSourceImp
+    implements FetchLocationRemoteDataSource {
   final GoogleApiConsumer googleApiConsumer;
   FetchLocationRemoteDataSourceImp({
     required this.googleApiConsumer,
@@ -27,6 +29,7 @@ class FetchLocationRemoteDataSourceImp implements FetchLocationRemoteDataSource 
       queryParameters: {
         'address': address,
         'key': UIConst.googleGeocodingApiKey,
+        'language': 'en',
       },
     );
     return response.fold(

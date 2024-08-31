@@ -29,10 +29,16 @@ class TotalPriceV2 extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.only(left: 15),
             child: BlocBuilder<TripJoinViewCubit, TripJoinViewState>(
-              buildWhen: (previous, current) => current is TripJoinViewSeatNumberState,
+              buildWhen: (previous, current) =>
+                  current is TripJoinViewSeatNumberState,
               builder: (context, state) {
-                int seatNumber = context.read<TripJoinViewCubit>().numberOfSeats;
-                double price = context.watch<FetchPriceDistanceCubit>().tripInfoEntity?.price ?? 0;
+                int seatNumber =
+                    context.read<TripJoinViewCubit>().numberOfSeats;
+                double price = context
+                        .watch<FetchPriceDistanceCubit>()
+                        .tripInfoEntity
+                        ?.price ??
+                    0;
                 String totalPrice = (seatNumber * price).toStringAsFixed(1);
                 return Text(totalPrice, style: Styles.headerText());
               },

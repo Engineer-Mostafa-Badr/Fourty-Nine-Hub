@@ -40,8 +40,10 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   @override
   void initState() {
-    firstNameTextController.text = context.read<UserCubit>().state.data?.firstName??'';
-    lastNameTextController.text = context.read<UserCubit>().state.data?.lastName??'';
+    firstNameTextController.text =
+        context.read<UserCubit>().state.data?.firstName ?? '';
+    lastNameTextController.text =
+        context.read<UserCubit>().state.data?.lastName ?? '';
     super.initState();
   }
 
@@ -316,39 +318,44 @@ class _EditProfileViewState extends State<EditProfileView> {
                     ],
                   ),
                   const Sizer(),
-                  state.status==EditProfileStates.loading?Center(child: CircularProgressIndicator(),):InkWell(
-                    onTap: () {
-                      controller.editProfile(
-                        EditProfileEntity(
-                          state.selectedBioPrivacy ?? 'public',
-                          state.selectedPhonePrivacy ?? 'public',
-                          state.selectedJobPrivacy ?? 'public',
-                          state.selectedCountryPrivacy ?? 'public',
-                          state.selectedCityPrivacy ?? 'public',
-                          firstName: firstNameTextController.text,
-                          lastName: lastNameTextController.text,
-                          bio: bioTextController.text,
-                          phone: phoneTextController.text,
-                          job: jobTextController.text,
-                          country: countryTextController.text,
-                          city: cityTextController.text,
+                  state.status == EditProfileStates.loading
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : InkWell(
+                          onTap: () {
+                            controller.editProfile(
+                              EditProfileEntity(
+                                state.selectedBioPrivacy ?? 'public',
+                                state.selectedPhonePrivacy ?? 'public',
+                                state.selectedJobPrivacy ?? 'public',
+                                state.selectedCountryPrivacy ?? 'public',
+                                state.selectedCityPrivacy ?? 'public',
+                                firstName: firstNameTextController.text,
+                                lastName: lastNameTextController.text,
+                                bio: bioTextController.text,
+                                phone: phoneTextController.text,
+                                job: jobTextController.text,
+                                country: countryTextController.text,
+                                city: cityTextController.text,
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10.zW, vertical: 20.zH),
+                            decoration: BoxDecoration(
+                                color: AppColors.PRIMARY_COLOR,
+                                borderRadius: BorderRadius.circular(15.zR),
+                                border:
+                                    Border.all(color: AppColors.PRIMARY_COLOR)),
+                            alignment: AlignmentDirectional.center,
+                            child: Text(
+                              'Edit',
+                              style: Styles.mediumText(color: Colors.white),
+                            ),
+                          ),
                         ),
-                      );
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 10.zW, vertical: 20.zH),
-                      decoration: BoxDecoration(
-                          color: AppColors.PRIMARY_COLOR,
-                          borderRadius: BorderRadius.circular(15.zR),
-                          border: Border.all(color: AppColors.PRIMARY_COLOR)),
-                      alignment: AlignmentDirectional.center,
-                      child: Text(
-                        'Edit',
-                        style: Styles.mediumText(color: Colors.white),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),

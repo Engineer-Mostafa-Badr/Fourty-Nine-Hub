@@ -49,7 +49,8 @@ class _SelectSeatAndRepeatV2State extends State<SelectSeatAndRepeatV2> {
           },
           icon: Icon(Icons.keyboard_arrow_down, size: widget.size),
         ),
-        Text('$seatsNumber ${seatsNumber == 1 ? "Seat" : "Seats"}', style: Styles.headerText()),
+        Text('$seatsNumber ${seatsNumber == 1 ? "Seat" : "Seats"}',
+            style: Styles.headerText()),
         Checkbox(
           value: repeated,
           onChanged: (value) {
