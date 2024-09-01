@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentatio
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../../core/error/custom_error.dart';
 import '../../../../../../core/loading/custom_loading.dart';
+import '../../../../../../res/style/styles.dart';
 import '../../../../../../service_locator/service_locator.dart';
 import '../../../data/repositories/company_advertise_repo/company_advertise_repo_impl.dart';
 import 'build_item_photo_post.dart';
@@ -22,7 +23,8 @@ class PhotoPostContent extends StatelessWidget {
       child: BlocBuilder<CompanyAdvertiseCubit, CompanyAdvertiseState>(
         builder: (BuildContext context, state) {
           if (state is FetchAllCompanyAdvertiseSuccess) {
-            return Padding(
+            if(state.advertiseCompanyModel.data!.advertises!.isNotEmpty) {
+              return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: ListView.separated(
                 itemBuilder: (context, index) => BuildItemPhotoPost(
@@ -37,6 +39,14 @@ class PhotoPostContent extends StatelessWidget {
                 itemCount: state.advertiseCompanyModel.data!.advertises!.length,
               ),
             );
+            }else {
+              return Center(
+                child: Text(
+                  'There are no Photo posts at the moment.',
+                  style: Styles.mediumText(fontSize: 34),
+                ),
+              );
+            }
           } else if (state is FetchAllCompanyAdvertiseError) {
             return CustomError(
               errMessage: state.errMessage,

@@ -14,4 +14,5 @@ abstract class CompanyAdvertiseRepo{
 });
 
   Future<Either<Failure,AdvertiseCompanyModel>>fetchPostCompanyAdvertise(String filter);
+  Future<Either<Failure,void>>deletePosts(String id);
 }

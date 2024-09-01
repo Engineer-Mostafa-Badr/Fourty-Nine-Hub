@@ -44,10 +44,15 @@ class CompanyAdvertiseCubit extends Cubit<CompanyAdvertiseState> {
     });
   }
 
+
+
   Future<void> fetchAdvertiseCompany(BuildContext context, String filter) async {
     emit(FetchAllCompanyAdvertiseLoading());
     _startPollingAdvertise(context, filter);
   }
+
+
+
 
   void _startPollingAdvertise(BuildContext context, String filter) {
     _pollingTimer?.cancel();
@@ -63,5 +68,24 @@ class CompanyAdvertiseCubit extends Cubit<CompanyAdvertiseState> {
         emit(FetchAllCompanyAdvertiseSuccess(advertiseCompanyModel: company));
       });
     });
+  }
+
+
+
+
+
+
+   deletePost(BuildContext context, String id)async {
+    emit(DeletePostLoading());
+
+      var result = await companyAdvertiseRepo.deletePosts(id);
+
+      result.fold((failure) {
+        emit(DeletePostError(
+            errMessage: getFailureMessage(failure, context)));
+        print(getFailureMessage(failure, context));
+      }, (_) {
+        emit(DeletePostSuccess());
+      });
   }
 }

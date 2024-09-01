@@ -101,4 +101,21 @@ class CompanyAdvertiseRepoImpl implements CompanyAdvertiseRepo {
       return left(failure);
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deletePosts(String id) async{
+    try {
+      String? accessToken = await TokenManager.getAccessToken();
+
+       await apiService.delete(
+        url: 'api/v1/advertisementCompany/$id',
+        token: accessToken,
+      );
+
+      return right(unit);
+    } on Exception catch (e) {
+      final failure = _mapExceptionToFailure(e);
+      return left(failure);
+    }
+  }
 }

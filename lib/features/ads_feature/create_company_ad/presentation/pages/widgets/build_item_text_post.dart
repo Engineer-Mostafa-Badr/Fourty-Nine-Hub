@@ -1,9 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_state.dart';
 
+import '../../../../../../core/messages/messages.dart';
 import '../../../../../../res/style/styles.dart';
+import '../../../../../../service_locator/service_locator.dart';
 import '../../../data/models/company_advertise_model.dart';
+import '../../../data/repositories/company_advertise_repo/company_advertise_repo_impl.dart';
+import '../../cubit/company_advertise/company_advertise_cubit.dart';
 
 class BuildItemTextPost extends StatelessWidget {
   const BuildItemTextPost({super.key, required this.advertises});
@@ -13,69 +19,72 @@ class BuildItemTextPost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DateTime createdAt = DateTime.parse(advertises.createdAt!);
-
-    final DateTime egyptTime = createdAt.toUtc().add(
-        const Duration(hours: 3));
-
+    final DateTime egyptTime = createdAt.toUtc().add(const Duration(hours: 3));
     final String formattedDayTime = DateFormat('EEEE, h:mm a').format(egyptTime);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        const SizedBox(
-          height: 5,
-        ),
-        Slidable(
-          key: Key(DateTime.now().toString()),
-          endActionPane: ActionPane(
-            dragDismissible: false,
-            extentRatio: .3,
-            motion: const ScrollMotion(),
-            dismissible: DismissiblePane(onDismissed: () {}),
+
+    return BlocProvider(
+      create: (BuildContext context) => CompanyAdvertiseCubit(serviceLocator<CompanyAdvertiseRepoImpl>()),
+
+      child: BlocConsumer<CompanyAdvertiseCubit, CompanyAdvertiseState>(
+        listener: (BuildContext context, CompanyAdvertiseState state) {
+          if (state is DeletePostSuccess) {
+            showSuccessMessage(context, 'Delete Successfully');
+          }
+          },
+        builder: (BuildContext context, state) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const SizedBox(width: 5),
-              SlidableAction(
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                borderRadius: BorderRadius.circular(10),
-                onPressed: (context) async {
-                  // Implement your archive logic here
-                },
-                backgroundColor: Theme.of(context).primaryColor,
-                foregroundColor: Colors.white,
-                icon: Icons.delete_outlined,
-                label: 'Delete',
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Theme.of(context).primaryColor,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              const SizedBox(height: 5),
+              Slidable(
+                key: ValueKey(advertises.sId),
+                endActionPane: ActionPane(
+                  dragDismissible: false,
+                  extentRatio: 0.25,
+                  motion: const ScrollMotion(),
+                  dismissible: DismissiblePane(onDismissed: () {}),
                   children: [
-                    Text(
-                      advertises.post!, // Use actual data here
-                      style: Styles.mediumText(
-                        fontSize: 34,
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                      ),
+                    const SizedBox(height: 5),
+                    SlidableAction(
+                      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      borderRadius: BorderRadius.circular(10),
+                      onPressed: (context) async {
+                        CompanyAdvertiseCubit.get(context).deletePost(context, advertises.sId!);
+                      },
+                      backgroundColor: Theme.of(context).primaryColor,
+                      foregroundColor: Colors.white,
+                      icon: Icons.delete_outlined,
+                      label: 'Delete',
                     ),
                   ],
                 ),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        advertises.post!,
+                        style: Styles.mediumText(
+                          fontSize: 34,
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
+              const SizedBox(height: 2),
+              Text(formattedDayTime),
             ],
-          ),
-        ),
-        const SizedBox(
-          height: 2,
-        ),
-        Text(formattedDayTime),
-      ],
+          );
+      },
+      ),
     );
   }
 }

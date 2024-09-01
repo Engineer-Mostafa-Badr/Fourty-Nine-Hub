@@ -22,34 +22,34 @@ class BuildItemPhotoPost extends StatelessWidget {
         itemCount:length < 4 ? length: 4,
         itemBuilder: (context, index) =>
             InkWell(
-              // onTap: () {
-              //   if (index != 3 ||
-              //       (index == 3 && media.photo!.length == 4)) {
-              //     // showDialog(
-              //     //     context: context,
-              //     //     builder: (context) =>
-              //     //         ImageDetailsScreen(
-              //     //           image: media.photo!,
-              //     //           isFile: true,
-              //     //           onRemoveImage: () {
-              //     //             controller.removePhoto(state
-              //     //                 .images![index]);
-              //     //             context.pop();
-              //     //           },
-              //     //         )
-              //     // );
-              //   } else {
-              //     showDialog(
-              //         context: context,
-              //         builder: (context) =>
-              //             ShowAllImages(
-              //               images: media.photo!,
-              //               onRemoveImage: (UploadFileEntity image) {
-              //                 controller.removePhoto(image);
-              //               },
-              //             ));
-              //   }
-              // },
+              onTap: () {
+                if (index != 3 ||
+                    (index == 3 && length == 4)) {
+                  showDialog(
+                      context: context,
+                      builder: (context) =>
+                          ImageDetailsScreen(
+                            image: media.photo!,
+                            isFile: true,
+                            onRemoveImage: () {
+                              // controller.removePhoto(media.photo!);
+                              // context.pop();
+                            },
+                          )
+                  );
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (context) =>
+                          ShowAllImages(
+                            images: length, onRemoveImage: (){},
+                            // onRemoveImage: (UploadFileEntity image) {
+                            //   controller.removePhoto(image);
+                            // },
+                          )
+                  );
+                }
+              },
               child: Stack(
                 children: [
                   Stack(

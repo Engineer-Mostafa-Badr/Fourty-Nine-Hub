@@ -23,3 +23,12 @@ class FetchAllCompanyAdvertiseError extends CompanyAdvertiseState{
 
   FetchAllCompanyAdvertiseError({required this.errMessage});
 }
+
+
+class DeletePostLoading extends CompanyAdvertiseState{}
+class DeletePostSuccess extends CompanyAdvertiseState{}
+class DeletePostError extends CompanyAdvertiseState{
+  final String errMessage;
+
+  DeletePostError({required this.errMessage});
+}

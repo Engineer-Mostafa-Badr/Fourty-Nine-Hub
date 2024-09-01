@@ -164,7 +164,6 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                     children: [
                       Expanded(
                         child: Container(
-                          margin: const EdgeInsetsDirectional.only(bottom: 35),
                           padding: const EdgeInsetsDirectional.symmetric(
                               vertical: 10, horizontal: 10),
                           width: double.infinity,
@@ -194,7 +193,6 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                       const SizedBox(width: 5),
                       Expanded(
                         child: Container(
-                          margin: const EdgeInsetsDirectional.only(bottom: 35),
                           padding: const EdgeInsetsDirectional.symmetric(
                               vertical: 10, horizontal: 10),
                           width: double.infinity,
