@@ -52,7 +52,7 @@ class Data {
 class Advertises {
   String? sId;
   UserId? userId;
-  List<dynamic>? media;
+  List<Media>? media; // Updated type
   List<dynamic>? views;
   String? advertisementType;
   String? post;
@@ -65,26 +65,32 @@ class Advertises {
   int? viewCount;
   String? description;
 
-  Advertises(
-      {this.sId,
-        this.userId,
-        this.media,
-        this.views,
-        this.advertisementType,
-        this.post,
-        this.totalPrice,
-        this.isApproved,
-        this.endAt,
-        this.type,
-        this.createdAt,
-        this.updatedAt,
-        this.viewCount,
-        this.description});
+  Advertises({
+    this.sId,
+    this.userId,
+    this.media,
+    this.views,
+    this.advertisementType,
+    this.post,
+    this.totalPrice,
+    this.isApproved,
+    this.endAt,
+    this.type,
+    this.createdAt,
+    this.updatedAt,
+    this.viewCount,
+    this.description,
+  });
 
   Advertises.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     userId = json['userId'] != null ? UserId.fromJson(json['userId']) : null;
-    media = json['media'];
+    if (json['media'] != null) {
+      media = [];
+      json['media'].forEach((v) {
+        media!.add(Media.fromJson(v));
+      });
+    }
     views = json['views'];
     advertisementType = json['advertisement_type'];
     post = json['post'];
@@ -104,7 +110,9 @@ class Advertises {
     if (this.userId != null) {
       data['userId'] = this.userId!.toJson();
     }
-    data['media'] = this.media;
+    if (this.media != null) {
+      data['media'] = this.media!.map((v) => v.toJson()).toList();
+    }
     data['views'] = this.views;
     data['advertisement_type'] = this.advertisementType;
     data['post'] = this.post;
@@ -275,6 +283,60 @@ class ProfilePictureKey {
     data['successUpload'] = this.successUpload;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
+    return data;
+  }
+}
+
+class Media {
+  String? sId;
+  String? user;
+  String? subcategoryId;
+  String? mimetype;
+  int? size;
+  String? mediaKey;
+  bool? successUpload;
+  String? createdAt;
+  String? updatedAt;
+  String? photo;
+
+  Media({
+    this.sId,
+    this.user,
+    this.subcategoryId,
+    this.mimetype,
+    this.size,
+    this.mediaKey,
+    this.successUpload,
+    this.createdAt,
+    this.updatedAt,
+    this.photo,
+  });
+
+  Media.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    user = json['user'];
+    subcategoryId = json['subcategoryId'];
+    mimetype = json['mimetype'];
+    size = json['size'];
+    mediaKey = json['mediaKey'];
+    successUpload = json['successUpload'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    photo = json['photo'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['user'] = this.user;
+    data['subcategoryId'] = this.subcategoryId;
+    data['mimetype'] = this.mimetype;
+    data['size'] = this.size;
+    data['mediaKey'] = this.mediaKey;
+    data['successUpload'] = this.successUpload;
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    data['photo'] = this.photo;
     return data;
   }
 }

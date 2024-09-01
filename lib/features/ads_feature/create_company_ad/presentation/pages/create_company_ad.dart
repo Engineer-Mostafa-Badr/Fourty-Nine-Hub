@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_state.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/custom_container.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/show_post_company_advertise.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../service_locator/service_locator.dart';
-import '../../data/repositories/company_advertise_repo/company_advertise_repo_impl.dart';
 import '../cubit/company_advertise/company_advertise_cubit.dart';
 import '../cubit/company_advertise_price/advertise_price_cubit.dart';
 import '../cubit/company_advertise_price/advertise_price_state.dart';
@@ -20,28 +18,58 @@ class CreateCompanyAdView extends StatefulWidget {
 }
 
 class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
+  int _totalPrice = 0;
 
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<CompanyAdvertiseCubit>().fetchAdvertiseCompany(context, 'written');
-      context.read<CompanyAdvertiseCubit>().fetchAdvertiseCompany(context, 'photo');
-      context.read<CompanyAdvertiseCubit>().fetchAdvertiseCompany(context, 'photo_written');
-      context.read<CompanyAdvertiseCubit>().fetchAdvertiseCompany(context, 'reel');
+      context
+          .read<CompanyAdvertiseCubit>()
+          .fetchAdvertiseCompany(context, 'written');
+      context
+          .read<CompanyAdvertiseCubit>()
+          .fetchAdvertiseCompany(context, 'photo');
+      context
+          .read<CompanyAdvertiseCubit>()
+          .fetchAdvertiseCompany(context, 'photo_written');
+      context
+          .read<CompanyAdvertiseCubit>()
+          .fetchAdvertiseCompany(context, 'reel');
     });
   }
+
+  void _updateTotalPrice(int price) {
+    setState(() {
+      _totalPrice += price;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(
+      appBar: BackAppBar(
         centerTitle: false,
-        label: 'Company Advertise', //adds files
+        label: 'Company Advertise',
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ShowPostCompanyAdvertise(),
+                  ),
+                );
+              },
+              icon: Icon(
+                Icons.access_time_outlined,
+                color: Theme.of(context).primaryColor,
+              ))
+        ],
       ),
       body: BlocBuilder<AdvertisePriceCubit, AdvertisePriceState>(
         builder: (context, state) {
-          // final controller = context.read<CreateCompanyAdCubit>();
           if (state is AdvertisePriceSuccess) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
@@ -50,87 +78,84 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                   Expanded(
                     child: Column(
                       children: [
-                        _buildContainer(
+                        CustomContainerAdvertise(
                           filter: 'written',
-                          //numberOfAdvertises: numberOfAdvertises,
-                          //    advertise: advertise.advertiseCompanyModel.data!.advertises!.isNotEmpty,
                           title: 'Text only',
-                          price: '${state
-                              .advertisePriceModel
-                              .data!
-                              .advertisementPostPrice!}',
+                          price: state.advertisePriceModel.data!
+                              .advertisementPostPrice!,
                           context: context,
                           function: () {
+                            _updateTotalPrice(state.advertisePriceModel.data!
+                                .advertisementPostPrice!);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => CreatePostCompany(
-                                    picture: false,
-                                    title: 'Create Text Post',
-                                    type: 'written',
-                                    totalPrice: state
-                                        .advertisePriceModel
-                                        .data!
-                                        .advertisementPostPrice!,
-                                  )),
+                                        picture: false,
+                                        title: 'Create Text Post',
+                                        type: 'written',
+                                        totalPrice: state.advertisePriceModel
+                                            .data!.advertisementPostPrice!,
+                                      )),
                             );
                           },
                         ),
-                        _buildContainer(
+                        CustomContainerAdvertise(
                           filter: 'photo',
-                          // numberOfAdvertises: numberOfAdvertises,
-                          // advertise: advertise.advertiseCompanyModel.data!.advertises!.isNotEmpty,
                           title: 'Picture only',
-                          price: '${state.advertisePriceModel.data!.advertisementPhotoPrice}',
+                          price: state.advertisePriceModel.data!
+                              .advertisementPhotoPrice!,
                           context: context,
                           function: () {
+                            _updateTotalPrice(state.advertisePriceModel.data!
+                                .advertisementPhotoPrice!);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => CreatePostCompany(
-                                    text: false,
-                                    title: 'Create Picture Post',
-                                    type: 'photo',
-                                    totalPrice: state
-                                        .advertisePriceModel
-                                        .data!
-                                        .advertisementPostPrice!,
-                                  )),
+                                        text: false,
+                                        title: 'Create Picture Post',
+                                        type: 'photo',
+                                        totalPrice: state.advertisePriceModel
+                                            .data!.advertisementPhotoPrice!,
+                                      )),
                             );
                           },
                         ),
-                        _buildContainer(
+                        CustomContainerAdvertise(
                           filter: 'photo_written',
-                          //  numberOfAdvertises: numberOfAdvertises,
-                          //  advertise: advertise.advertiseCompanyModel.data!.advertises!.isNotEmpty,
                           title: 'Text with pictures',
-                          price:
-                          '${state.advertisePriceModel.data!.advertisementPostAndPhotoPrice}',
+                          price: state.advertisePriceModel.data!
+                              .advertisementPostAndPhotoPrice!,
                           context: context,
                           function: () {
+                            _updateTotalPrice(state.advertisePriceModel.data!
+                                .advertisementPostAndPhotoPrice!);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => CreatePostCompany(
-                                    title: 'Create Post',
-                                    type: 'photo_written',
-                                    totalPrice: state
-                                        .advertisePriceModel
-                                        .data!
-                                        .advertisementPostAndPhotoPrice!,
-                                  )),
+                                        title: 'Create Post',
+                                        type: 'photo_written',
+                                        totalPrice: state
+                                            .advertisePriceModel
+                                            .data!
+                                            .advertisementPostAndPhotoPrice!,
+                                      )),
                             );
                           },
                         ),
-                        _buildContainer(
+                        CustomContainerAdvertise(
                           filter: 'reel',
-                          //  numberOfAdvertises: numberOfAdvertises,
-                          //    advertise: advertise.advertiseCompanyModel.data!.advertises!.isNotEmpty,
                           title: 'Reel',
-                          price:
-                          '${state.advertisePriceModel.data!.advertisementReelPrice}',
+                          price: state.advertisePriceModel.data!
+                              .advertisementReelPrice!,
                           context: context,
-                          function: () {},
+                          function: () {
+                            _updateTotalPrice(state.advertisePriceModel.data!
+                                .advertisementReelPrice!);
+                            // Handle reel creation logic here
+                          },
                         ),
                       ],
                     ),
@@ -139,13 +164,13 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                     children: [
                       Expanded(
                         child: Container(
-                          margin: EdgeInsetsDirectional.only(bottom: 35.zH),
+                          margin: const EdgeInsetsDirectional.only(bottom: 35),
                           padding: const EdgeInsetsDirectional.symmetric(
                               vertical: 10, horizontal: 10),
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: Theme.of(context).primaryColor,
-                            borderRadius: BorderRadius.circular(20.zR),
+                            borderRadius: BorderRadius.circular(20),
                           ),
                           child: Row(
                             children: [
@@ -157,7 +182,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                               ),
                               const Spacer(),
                               Text(
-                                '10',
+                                '$_totalPrice',
                                 style: Styles.mediumText(
                                     color: Theme.of(context)
                                         .scaffoldBackgroundColor),
@@ -166,18 +191,16 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        width: 5,
-                      ),
+                      const SizedBox(width: 5),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsetsDirectional.only(bottom: 35.zH),
+                          margin: const EdgeInsetsDirectional.only(bottom: 35),
                           padding: const EdgeInsetsDirectional.symmetric(
                               vertical: 10, horizontal: 10),
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: AppColors.SECONDARY_COLOR,
-                            borderRadius: BorderRadius.circular(20.zR),
+                            borderRadius: BorderRadius.circular(20),
                           ),
                           child: Center(
                             child: Text(
@@ -194,17 +217,6 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                 ],
               ),
             );
-            // return BlocBuilder<CompanyAdvertiseCubit,CompanyAdvertiseState>(
-            //   builder: (BuildContext context, Object? advertise) {
-            //     if( advertise is FetchAllCompanyAdvertiseSuccess) {
-            //       final pricePerPost = state.advertisePriceModel.data!.advertisementPostPrice;
-            //       final numberOfAdvertises = advertise.advertiseCompanyModel.data!.advertises!.length;
-            //
-            //       final totalPrice = pricePerPost! * numberOfAdvertises;
-            //       return ;
-            //     }return const SizedBox.shrink();
-            //   },
-            // );
           } else if (state is AdvertisePriceError) {
             return Center(
               child: Text(
@@ -219,81 +231,4 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
       ),
     );
   }
-
-  Widget _buildContainer({
-    required String title,
-    required String price,
-    required Function function,
-    required String filter, // Add filter parameter
-    //  int? numberOfAdvertises,
-    //  advertise,
-    context,
-  }) =>
-      BlocProvider(
-        create: (context) =>
-        CompanyAdvertiseCubit(serviceLocator.get<CompanyAdvertiseRepoImpl>())
-          ..fetchAdvertiseCompany(context,filter),
-        child: BlocBuilder<CompanyAdvertiseCubit,CompanyAdvertiseState>(
-          builder: (BuildContext context, CompanyAdvertiseState state) {
-            if(state is FetchAllCompanyAdvertiseSuccess) {
-              final numberOfAdvertises = state.advertiseCompanyModel.data!.advertises!.length;
-
-              final p = int.tryParse(price) ?? 0;
-              final totalPrice = p * numberOfAdvertises;
-
-              return GestureDetector(
-                onTap: () {
-                  function();
-                },
-                child: Container(
-                  margin: EdgeInsetsDirectional.only(bottom: 35.zH),
-                  padding: const EdgeInsetsDirectional.symmetric(
-                      vertical: 7, horizontal: 10),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(20.zR),
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        title,
-                        style: Styles.headerText(
-                            color: Theme.of(context).scaffoldBackgroundColor),
-                      ),
-                      const SizedBox(
-                        width: 6,
-                      ),
-                      if (state.advertiseCompanyModel.data!.advertises!.isNotEmpty)
-                        Text(
-                          '(${state.advertiseCompanyModel.data!.advertises!.length})',
-                          style: Styles.mediumText(
-                              color: Theme.of(context).scaffoldBackgroundColor),
-                        ),
-                      const Spacer(),
-                      if (state.advertiseCompanyModel.data!.advertises!.isNotEmpty)
-                        Text(
-                          '$totalPrice', // Format the total price as needed
-                          style: Styles.mediumText(
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                          ),
-                        ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.check_circle,
-                          color: state.advertiseCompanyModel.data!.advertises!.isNotEmpty
-                              ? AppColors.SECONDARY_COLOR
-                              : Colors.transparent,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-
-            }return const SizedBox.shrink();
-          },
-        ),
-      );
 }
