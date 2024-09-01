@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/entities/club_voice_room_entity.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
@@ -54,20 +55,29 @@ class AudioRoomCard extends StatelessWidget {
             ),
             Row(
               children: [
-                const SizedBox(
+                SizedBox(
                   width: 80,
                   height: 80,
                   child: Stack(
                     children: [
                       Positioned(
                           child: ProfileImage(
+                        userId: room.users!.isNotEmpty ? room.users![0].id : '',
+                        imageURL: room.users!.isNotEmpty
+                            ? room.users![0].profilePicture
+                            : null,
                         accountId: 0,
                       )),
                       Positioned(
                           top: 20,
                           left: 20,
                           child: ProfileImage(
+                            userId:
+                                room.users!.length > 1 ? room.users![1].id : '',
                             accountId: 0,
+                            imageURL: room.users!.length > 1
+                                ? room.users![1].profilePicture
+                                : null,
                             withBorder: true,
                           )),
                     ],
@@ -77,22 +87,22 @@ class AudioRoomCard extends StatelessWidget {
                   child: Column(
                     children: [
                       ListView.separated(
-                        itemCount: room.users?.length??0,
+                        itemCount: room.users!.isNotEmpty
+                            ? (room.users!.length >= 2 ? 2 : 1)
+                            : 0,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           final user = room.users![index];
-                          if(room.users!=null||room.users!.isNotEmpty){
-                            print(user.lastName);
-                            print(user.firstName);
-                            print(user.profilePicture);
-                          }
+
                           return Row(
                             children: [
-                              Label(
-                                  color: AppColors.QUANTITY_COLOR,
-                                  text: room.hostname,
-                                  style: Styles.mediumText()),
-                              const Sizer(),
+                              Expanded(
+                                child: Label(
+                                    color: AppColors.QUANTITY_COLOR,
+                                    text: '${user.firstName} ${user.lastName}',
+                                    style: Styles.mediumText()),
+                              ),
+                              // const Sizer(),
                               const Icon(
                                 FontAwesomeIcons.comment,
                                 color: Colors.grey,
@@ -114,7 +124,7 @@ class AudioRoomCard extends StatelessWidget {
                           ),
                           const Sizer(),
                           Label(
-                              text: room.users?.length.toString()??'0',
+                              text: room.users?.length.toString() ?? '0',
                               style: Styles.mediumText(color: Colors.grey))
                         ],
                       ),
