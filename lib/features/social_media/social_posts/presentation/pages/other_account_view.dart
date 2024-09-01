@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,6 +27,7 @@ class OtherAccountView extends StatefulWidget {
   const OtherAccountView({super.key, required this.userId});
   final String userId;
 
+
   @override
   State<OtherAccountView> createState() => _OtherAccountViewState();
 }
@@ -38,7 +40,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
     return DefaultTabController(
       length: loginUser?.id == widget.userId ? 4 : 3,
       child: Scaffold(
-        body: BlocBuilder<SocialPostsCubit, SocialPostsState>(builder: (context, state) {
+        body: BlocBuilder<SocialPostsCubit, SocialPostsState>(
+            builder: (context, state) {
           final controller = context.read<SocialPostsCubit>();
           return state.status == StateStatus.loading
               ? const Center(
@@ -47,6 +50,92 @@ class _OtherAccountViewState extends State<OtherAccountView> {
               : CustomScrollView(
                   slivers: [
                     SliverToBoxAdapter(
+                        child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsetsDirectional.only(
+                                top: 25, end: 10, start: 10),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                      onPressed: () => context.pop(),
+                                      icon: const Icon(
+                                        Icons.arrow_back,
+                                        color: Colors.black,
+                                      )),
+                                  PopupMenuButton(
+                                      icon: const Icon(
+                                        Icons.more_vert,
+                                        color: Colors.black,
+                                      ),
+                                      itemBuilder: (context) {
+                                        return [
+                                          if (loginUser?.id !=
+                                              state.profileData?.id)
+                                            PopupMenuItem<int>(
+                                              value: 4,
+                                              child: const Text("Report"),
+                                              onTap: () {
+                                                bottomSheet(
+                                                    context: context,
+                                                    widget: ReportView(
+                                                      id: widget.userId,
+                                                      categoryId:
+                                                          '66b77e77bb35968b535dc944',
+                                                    ));
+                                              },
+                                            ),
+                                          if (loginUser?.id !=
+                                              state.profileData?.id)
+                                            PopupMenuItem<int>(
+                                              value: 5,
+                                              child: Text(
+                                                  state.profileData?.isBlock ==
+                                                          true
+                                                      ? 'UnBlock'
+                                                      : 'Block'),
+                                              onTap: () async {
+                                                // context.pop();
+                                                var result =
+                                                    await controller.blockUser(
+                                                        context: context,
+                                                        userId: widget.userId);
+                                                print("result:$result");
+                                                if (result == true) {
+                                                  print("object");
+                                                  if (state.profileData
+                                                          ?.isBlock ==
+                                                      false) {
+                                                    state.profileData?.isBlock =
+                                                        true;
+                                                    showSuccessMessage(context,
+                                                        'Blocked user successfully.');
+                                                  } else {
+                                                    state.profileData?.isBlock =
+                                                        false;
+                                                    showSuccessMessage(context,
+                                                        'Unblocked user successfully.');
+                                                  }
+                                                }
+                                              },
+                                            ),
+                                          if (loginUser?.id ==
+                                              state.profileData?.id)
+                                            PopupMenuItem<int>(
+                                              value: 5,
+                                              child: const Text('Edit Profile'),
+                                              onTap: () async {
+                                                await context
+                                                    .push(Routes.EDITPROFILE);
+                                                controller.getUserProfile(
+                                                    id: widget.userId);
+                                              },
+                                            )
+                                        ];
+                                      })
+                                ]))),
+                    SliverToBoxAdapter(
                       child: Stack(
                         children: [
                           _buildAccountCounter(
@@ -54,15 +143,17 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               user: state.profileData!,
                               onFollow: () async {
                                 if (state.profileData?.isFollowed == true) {
-                                  var result =
-                                      await controller.unFollowRequest(context: context, userId: state.profileData!.id);
+                                  var result = await controller.unFollowRequest(
+                                      context: context,
+                                      userId: state.profileData!.id);
                                   if (result == true) {
                                     state.profileData?.isFollowed = false;
                                     setState(() {});
                                   }
                                 } else {
-                                  var result =
-                                      await controller.followRequest(context: context, userId: state.profileData!.id);
+                                  var result = await controller.followRequest(
+                                      context: context,
+                                      userId: state.profileData!.id);
                                   if (result == true) {
                                     state.profileData?.isFollowed = true;
                                     setState(() {});
@@ -73,114 +164,63 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 // print("object");
                                 if (state.profileData?.areFriends == true) {
                                 } else {
-                                  if (state.profileData?.sentFriendRequest == true) {
-                                    var result = await controller.removeFriendRequest(
-                                        context: context, userId: state.profileData!.id);
+                                  if (state.profileData?.sentFriendRequest ==
+                                      true) {
+                                    var result =
+                                        await controller.removeFriendRequest(
+                                            context: context,
+                                            userId: state.profileData!.id);
                                     if (result == true) {
-                                      state.profileData?.sentFriendRequest = false;
+                                      state.profileData?.sentFriendRequest =
+                                          false;
                                       setState(() {});
                                     }
                                   } else {
-                                    var result =
-                                        await controller.friendRequest(context: context, userId: state.profileData!.id);
+                                    var result = await controller.friendRequest(
+                                        context: context,
+                                        userId: state.profileData!.id);
                                     if (result == true) {
-                                      state.profileData?.sentFriendRequest = true;
+                                      state.profileData?.sentFriendRequest =
+                                          true;
                                       setState(() {});
                                     }
                                   }
                                 }
                               },
                               onAcceptFriend: () async {
-                                bool result = await controller.acceptRejectFriend(
-                                    params: AcceptRejectFriendRequestParams(userId: widget.userId, status: true));
+                                bool result =
+                                    await controller.acceptRejectFriend(
+                                        params: AcceptRejectFriendRequestParams(
+                                            userId: widget.userId,
+                                            status: true));
                                 state.profileData?.isSenTRequest = false;
                                 state.profileData?.areFriends = true;
-                                state.profileData!.friendsCount = state.profileData!.friendsCount! + 1;
+                                state.profileData!.friendsCount =
+                                    state.profileData!.friendsCount! + 1;
                                 print(state.profileData?.friendsCount);
                                 setState(() {});
                                 return result;
                               },
                               onRejectFriend: () async {
-                                bool result = await controller.acceptRejectFriend(
-                                    params: AcceptRejectFriendRequestParams(userId: widget.userId, status: false));
+                                bool result =
+                                    await controller.acceptRejectFriend(
+                                        params: AcceptRejectFriendRequestParams(
+                                            userId: widget.userId,
+                                            status: false));
                                 state.profileData?.isSenTRequest = false;
                                 setState(() {});
                                 return result;
                               },
                               onDeleteFriend: () async {
-                                bool result = await controller.deleteFriend(userId: widget.userId);
+                                bool result = await controller.deleteFriend(
+                                    userId: widget.userId);
                                 state.profileData?.areFriends = false;
-                                state.profileData!.friendsCount = state.profileData!.friendsCount! - 1;
+                                state.profileData!.friendsCount =
+                                    state.profileData!.friendsCount! - 1;
                                 print(state.profileData?.friendsCount);
                                 setState(() {});
                                 return result;
                               }),
-                          PositionedDirectional(
-                            top: 30,
-                            end: 10,
-                            child: PopupMenuButton(
-                              icon: const Icon(
-                                Icons.more_vert,
-                                color: Colors.white,
-                              ),
-                              itemBuilder: (context) {
-                                return [
-                                  if (loginUser?.id != state.profileData?.id)
-                                    PopupMenuItem<int>(
-                                      value: 4,
-                                      child: const Text("Report"),
-                                      onTap: () {
-                                        bottomSheet(
-                                            context: context,
-                                            widget: ReportView(
-                                              id: widget.userId,
-                                              categoryId: '66b77e77bb35968b535dc944',
-                                            ));
-                                      },
-                                    ),
-                                  if (loginUser?.id != state.profileData?.id)
-                                    PopupMenuItem<int>(
-                                      value: 5,
-                                      child: Text(state.profileData?.isBlock == true ? 'UnBlock' : 'Block'),
-                                      onTap: () async {
-                                        // context.pop();
-                                        var result =
-                                            await controller.blockUser(context: context, userId: widget.userId);
-                                        print("result:$result");
-                                        if (result == true) {
-                                          print("object");
-                                          if (state.profileData?.isBlock == false) {
-                                            state.profileData?.isBlock = true;
-                                            showSuccessMessage(context, 'Blocked user successfully.');
-                                          } else {
-                                            state.profileData?.isBlock = false;
-                                            showSuccessMessage(context, 'Unblocked user successfully.');
-                                          }
-                                        }
-                                      },
-                                    ),
-                                  if (loginUser?.id == state.profileData?.id)
-                                    PopupMenuItem<int>(
-                                      value: 5,
-                                      child: const Text('Edit Profile'),
-                                      onTap: () async {
-                                        await context.push(Routes.EDITPROFILE);
-                                        controller.getUserProfile(id: widget.userId);
-                                      },
-                                    )
-                                ];
-                              },
-                            ),
-                          ),
-                          PositionedDirectional(
-                              top: 30,
-                              start: 10,
-                              child: IconButton(
-                                  onPressed: () => context.pop(),
-                                  icon: const Icon(
-                                    Icons.arrow_back,
-                                    color: Colors.white,
-                                  )))
                         ],
                       ),
                     ),
@@ -205,7 +245,12 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                       const Tab(
                                         text: 'Reels',
                                       ),
-                                      if (context.read<UserCubit>().state.data?.id == widget.userId)
+                                      if (context
+                                              .read<UserCubit>()
+                                              .state
+                                              .data
+                                              ?.id ==
+                                          widget.userId)
                                         const Tab(
                                           text: 'Saved Reels',
                                         ),
@@ -222,20 +267,25 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               ),
                             ),
                     ),
-                    state.profilePage == 0 && state.profileData?.isBlock == false
+                    state.profilePage == 0 &&
+                            state.profileData?.isBlock == false
                         ? UserPosts(
                             userData: state.profileData!,
                           )
-                        : state.profilePage == 1 && state.profileData?.isBlock == false
+                        : state.profilePage == 1 &&
+                                state.profileData?.isBlock == false
                             ? UserTweets(
                                 userData: state.profileData!,
                               )
-                            : state.profilePage == 2 && state.profileData?.isBlock == false
+                            : state.profilePage == 2 &&
+                                    state.profileData?.isBlock == false
                                 ? UserReels(
                                     userData: state.profileData!,
                                   )
-                                : state.profilePage == 2 && state.profileData?.isBlock == false
-                                    ? SavedReelsView(userData: state.profileData!)
+                                : state.profilePage == 2 &&
+                                        state.profileData?.isBlock == false
+                                    ? SavedReelsView(
+                                        userData: state.profileData!)
                                     : const SliverToBoxAdapter(
                                         child: SizedBox.shrink(),
                                       ),
@@ -268,13 +318,16 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   Expanded(
                       flex: 4,
                       child: Image.network(
-                        user.profileCover!.isNotEmpty ? user.profileCover! : UIConst.socialImagePlaceHolder,
+                        user.profileCover!.isNotEmpty
+                            ? user.profileCover!
+                            : UIConst.socialImagePlaceHolder,
                         fit: BoxFit.fill,
                         width: double.infinity,
                       )),
                   Expanded(
                       child: Padding(
-                    padding: const EdgeInsetsDirectional.only(top: 3.0, end: 10),
+                    padding:
+                        const EdgeInsetsDirectional.only(top: 3.0, end: 10),
                     child: loginUser?.id == user.id
                         ? Container()
                         : Row(
@@ -284,14 +337,19 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               AppButton(
                                   height: 120,
                                   width: kToolbarHeight * 1.5,
-                                  backColor: user.isFollowed == true ? AppColors.PRIMARY_COLOR : null,
-                                  label: user.isFollowed == true ? 'unFollow' : 'Follow',
+                                  backColor: user.isFollowed == true
+                                      ? AppColors.PRIMARY_COLOR
+                                      : null,
+                                  label: user.isFollowed == true
+                                      ? 'unFollow'
+                                      : 'Follow',
                                   style: Styles.mediumText(color: Colors.white),
                                   onPressed: () {
                                     onFollow();
                                   }),
                               const Sizer(),
-                              (user.areFriends == true || user.isSenTRequest == true)
+                              (user.areFriends == true ||
+                                      user.isSenTRequest == true)
                                   ? PopupMenuButton(
                                       // iconSize: 150,
                                       itemBuilder: (context) {
@@ -311,29 +369,37 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           if (user.areFriends == true)
                                             PopupMenuItem<int>(
                                               value: 0,
-                                              child: const Text("Delete Friend"),
+                                              child:
+                                                  const Text("Delete Friend"),
                                               onTap: () => onDeleteFriend(),
                                             ),
                                         ];
                                       },
                                       child: Container(
                                           alignment: Alignment.center,
-                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10),
                                           decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(5), color: AppColors.PRIMARY_COLOR),
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              color: AppColors.PRIMARY_COLOR),
                                           child: Text(
                                             user.isSenTRequest == true
                                                 ? 'Accept Request'
                                                 : user.areFriends == true
                                                     ? 'Friends'
                                                     : '',
-                                            style: Styles.mediumText(color: Colors.white),
+                                            style: Styles.mediumText(
+                                                color: Colors.white),
                                           )))
                                   : AppButton(
                                       height: 110,
                                       padding: 5,
-                                      backColor: user.sentFriendRequest == true ? AppColors.PRIMARY_COLOR : null,
-                                      style: Styles.mediumText(color: Colors.white),
+                                      backColor: user.sentFriendRequest == true
+                                          ? AppColors.PRIMARY_COLOR
+                                          : null,
+                                      style: Styles.mediumText(
+                                          color: Colors.white),
                                       label: user.isSenTRequest == true
                                           ? 'Accept Request'
                                           : user.areFriends == true
@@ -354,11 +420,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   start: 10,
                   child: CircleAvatar(
                     radius: 60,
-                    backgroundColor: AppColors.SECONDARY_COLOR,
                     child: CircleAvatar(
-                      radius: 58,
+                      radius: 60,
                       backgroundColor: Colors.white,
-                      backgroundImage: NetworkImage(user.profilePicture ?? ''),
+                      backgroundImage: CachedNetworkImageProvider(
+                          user.profilePicture ?? UIConst.profilePlaceHolder),
                     ),
                   ))
             ],
@@ -377,7 +443,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     children: [
                       Label(
                           text: "${user.firstName} ${user.lastName}",
-                          style: Styles.headerText(fontWeight: FontWeight.w600)),
+                          style:
+                              Styles.headerText(fontWeight: FontWeight.w600)),
                       const Sizer(
                         width: 5,
                       ),
@@ -393,8 +460,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         child: Container(
                             alignment: Alignment.center,
                             padding: const EdgeInsets.all(10),
-                            decoration:
-                                BoxDecoration(borderRadius: BorderRadius.circular(5), color: AppColors.SECONDARY_COLOR),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: AppColors.SECONDARY_COLOR),
                             child: Text(
                               'Message',
                               style: Styles.mediumText(color: Colors.white),
@@ -416,9 +484,15 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         }),
                 ],
               ),
-              Label(text: '@${user.email.split('@')[0]}', style: Styles.mediumText(color: Colors.grey)),
-              Label(text: user.bio, style: Styles.mediumText(color: Colors.black)),
-              const Sizer(),
+              const Sizer(
+                height: 4,
+              ),
+              Label(
+                  text: '@${user.email.split('@')[0]}',
+                  style: Styles.mediumText(color: Colors.grey)),
+              const Sizer(
+                height: 4,
+              ),
               Row(
                 children: [
                   _buildCounter(
@@ -437,63 +511,88 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   ),
                 ],
               ),
-              const Sizer(),
-              if (user.city.isNotEmpty || user.job.isNotEmpty || user.country.isNotEmpty || user.phone.isNotEmpty)
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(15)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (user.city.isNotEmpty || user.country.isNotEmpty) ...[
-                        Row(
-                          children: [
-                            Label(text: 'Address:', style: Styles.headerText(color: Colors.black, fontSize: 30)),
-                            const Sizer(),
-                            Expanded(
-                              child: Label(
-                                text: '${user.country}${user.city.isNotEmpty ? ',' : ''} ${user.city}',
-                                style: Styles.headerText(color: Colors.grey, fontSize: 30),
-                                maxLines: 1,
-                              ),
+              const Sizer(
+                height: 5,
+              ),
+              Label(
+                  text: user.bio,
+                  style: Styles.mediumText(color: Colors.black)),
+              const Sizer(
+                height: 5,
+              ),
+              if (user.city.isNotEmpty ||
+                  user.job.isNotEmpty ||
+                  user.country.isNotEmpty ||
+                  user.phone.isNotEmpty)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (user.city.isNotEmpty || user.country.isNotEmpty) ...[
+                      Row(
+                        children: [
+                          Label(
+                              text: 'From',
+                              style: Styles.headerText(
+                                  color: Colors.grey, fontSize: 30)),
+                          const Sizer(
+                            height: 5,
+                          ),
+                          Expanded(
+                            child: Label(
+                              text:
+                                  '${user.country}${user.city.isNotEmpty ? ',' : ''} ${user.city}',
+                              style: Styles.headerText(
+                                  color: Colors.black, fontSize: 30),
+                              maxLines: 1,
                             ),
-                          ],
-                        ),
-                        const Sizer(),
-                      ],
-                      if (user.phone.isNotEmpty) ...[
-                        Row(
-                          children: [
-                            Label(text: 'Phone:', style: Styles.headerText(color: Colors.black, fontSize: 30)),
-                            const Sizer(),
-                            Expanded(
-                              child: Label(
-                                text: user.phone,
-                                style: Styles.headerText(color: Colors.grey, fontSize: 30),
-                                maxLines: 1,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Sizer(),
-                      ],
-                      if (user.job.isNotEmpty)
-                        Row(
-                          children: [
-                            Label(text: 'Job:', style: Styles.headerText(color: Colors.black, fontSize: 30)),
-                            const Sizer(),
-                            Expanded(
-                              child: Label(
-                                text: user.job,
-                                style: Styles.headerText(color: Colors.grey, fontSize: 30),
-                                maxLines: 1,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
+                      ),
+                      const Sizer(
+                        height: 5,
+                      ),
                     ],
-                  ),
+                    if (user.phone.isNotEmpty) ...[
+                      Row(
+                        children: [
+                          Label(
+                              text: 'Phone',
+                              style: Styles.headerText(
+                                  color: Colors.grey, fontSize: 30)),
+                          const Sizer(),
+                          Expanded(
+                            child: Label(
+                              text: user.phone,
+                              style: Styles.headerText(
+                                  color: Colors.black, fontSize: 30),
+                              maxLines: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Sizer(
+                        height: 5,
+                      ),
+                    ],
+                    if (user.job.isNotEmpty)
+                      Row(
+                        children: [
+                          Label(
+                              text: 'Work',
+                              style: Styles.headerText(
+                                  color: Colors.grey, fontSize: 30)),
+                          const Sizer(),
+                          Expanded(
+                            child: Label(
+                              text: user.job,
+                              style: Styles.headerText(
+                                  color: Colors.black, fontSize: 30),
+                              maxLines: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
                 ),
             ],
           ),
@@ -505,7 +604,10 @@ class _OtherAccountViewState extends State<OtherAccountView> {
   Widget _buildCounter({required String value, required String label}) {
     return RichText(
         text: TextSpan(children: [
-      TextSpan(text: value, style: Styles.mediumText(color: Colors.black, fontWeight: FontWeight.w500)),
+      TextSpan(
+          text: value,
+          style: Styles.mediumText(
+              color: Colors.black, fontWeight: FontWeight.w500)),
       TextSpan(
           text: label,
           style: Styles.mediumText(

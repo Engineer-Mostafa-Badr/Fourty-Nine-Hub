@@ -1,13 +1,12 @@
 import 'package:equatable/equatable.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 
 class ClubVoiceRoomEntity extends Equatable {
   final String id;
   final String hostname;
   final String subject;
   //will be List<Users>
-  final List<UserProfileEntity> users;
-  const ClubVoiceRoomEntity({
+  final List<ClubUserEntity>? users;
+  const ClubVoiceRoomEntity( {
     required this.id,
     required this.hostname,
     required this.subject,
@@ -19,6 +18,18 @@ class ClubVoiceRoomEntity extends Equatable {
         id,
         hostname,
         subject,
-        users,
+        users??[],
       ];
+}
+
+
+
+
+class ClubUserEntity{
+  final String firstName;
+  final String lastName;
+  final String? profilePicture;
+
+  ClubUserEntity({required this.firstName, required this.lastName, required this.profilePicture});
+
 }

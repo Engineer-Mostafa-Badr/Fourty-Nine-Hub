@@ -2,10 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/entities/club_voice_room_entity.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
-import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_state.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
@@ -79,11 +77,15 @@ class AudioRoomCard extends StatelessWidget {
                   child: Column(
                     children: [
                       ListView.separated(
-                        itemCount: room.users.length,
+                        itemCount: room.users?.length??0,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          final user = room.users[index];
-
+                          final user = room.users![index];
+                          if(room.users!=null||room.users!.isNotEmpty){
+                            print(user.lastName);
+                            print(user.firstName);
+                            print(user.profilePicture);
+                          }
                           return Row(
                             children: [
                               Label(
@@ -112,7 +114,7 @@ class AudioRoomCard extends StatelessWidget {
                           ),
                           const Sizer(),
                           Label(
-                              text: room.users.length.toString(),
+                              text: room.users?.length.toString()??'0',
                               style: Styles.mediumText(color: Colors.grey))
                         ],
                       ),

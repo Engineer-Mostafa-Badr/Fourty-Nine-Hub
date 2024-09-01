@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -90,7 +89,7 @@ class _UserPostCardState extends State<UserPostCard> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ?? const UnknownFailure(''),
+            state.failure ??  UnknownFailure(''),
             context,
           ),
         );
@@ -434,7 +433,7 @@ class _UserPostCardState extends State<UserPostCard> {
                 ],
               ),
             ),
-            if (post.user.id == user?.id)
+            if (post.user.id != user?.id)
               IconAppButton(
                 onPressed: () {
                   bottomSheet(
@@ -551,7 +550,7 @@ class _UserPostCardState extends State<UserPostCard> {
             images!.isEmpty
         ? Container(
             width: double.infinity,
-            height: 220,
+            height: 160,
             alignment: Alignment.center,
             margin: const EdgeInsets.symmetric(vertical: 10),
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),

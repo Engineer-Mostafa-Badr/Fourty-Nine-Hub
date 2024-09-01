@@ -86,7 +86,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ?? const UnknownFailure(''),
+            state.failure ??  UnknownFailure(''),
             context,
           ),
         );
@@ -500,7 +500,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 ],
               ),
             ),
-            if (post.user.id == user?.id)
+            if (post.user.id != user?.id)
               IconAppButton(
                 onPressed: () {
                   bottomSheet(

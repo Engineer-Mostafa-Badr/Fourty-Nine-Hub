@@ -1078,7 +1078,7 @@ class _ReportViewState extends State<ReportView> {
                         showErrorMessage(
                           context,
                           getFailureMessage(
-                              state.failure ?? const UnknownFailure(''),
+                              state.failure ??  UnknownFailure(''),
                               context),
                         );
                         context.pop();

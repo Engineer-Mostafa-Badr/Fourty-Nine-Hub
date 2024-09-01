@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
@@ -34,7 +32,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ?? const UnknownFailure(''),
+            state.failure ??  UnknownFailure(''),
             context,
           ),
         );
@@ -55,26 +53,11 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Label(
-                            text: "Peaple you may know",
-                            style: Styles.headerText(),
-                          ),
-                          Row(
-                            children: [
-                              IconAppButton(
-                                  icon: Icons.more_horiz, onPressed: () {}),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              IconAppButton(
-                                  icon: Icons.clear, onPressed: () {}),
-                            ],
-                          ),
-                        ],
+                      Label(
+                        text: "People you may know",
+                        style: Styles.headerText(),
                       ),
                       Container(
                         alignment: AlignmentDirectional.topStart,

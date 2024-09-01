@@ -123,20 +123,20 @@ class _InstagramViewState extends State<InstagramView> {
           (i) => GestureDetector(
             onTap: () {
               if (i == 1) {
-                context.push(Routes.OTHERSACCOUNT, extra: user?.id);
+                context.push(Routes.INSTAGRAMPROFILE, extra: user?.id);
               }
             },
             child: Container(
               decoration: i == 0
                   ? const BoxDecoration(
                       border: Border(
-                        bottom: BorderSide(color: Colors.blue, width: 2),
+                        bottom: BorderSide(color: AppColors.PRIMARY_COLOR, width: 2),
                       ),
                     )
                   : null,
               child: Icon(
                 i == 0 ? Icons.grid_4x4_outlined : Icons.person,
-                color: i == 0 ? Colors.blue : AppColors.DARK_GRAY_COLOR,
+                color: i == 0 ? AppColors.PRIMARY_COLOR : Colors.grey,
               ),
             ),
           ),
