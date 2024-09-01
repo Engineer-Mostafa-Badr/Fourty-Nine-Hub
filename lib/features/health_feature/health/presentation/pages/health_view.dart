@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/widget
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/medical_services/medical_services.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/booking_types/booking_types.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/sub_categories/sub_categories.dart';
+import 'package:fourtyninehub/features/payment/presentation/pages/payment_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -29,10 +30,7 @@ class HealthView extends StatelessWidget {
             return ListView(
               padding: EdgeInsets.all(16.0.zW),
               children: [
-                ElevatedButton(onPressed: (){
-                  context.push(Routes.PAYMENT);
 
-                }, child: Text("Payment")),
                 BlocProvider.value(
                   value: serviceLocator<HealthCubit>(),
                   child: HealthBanner(),

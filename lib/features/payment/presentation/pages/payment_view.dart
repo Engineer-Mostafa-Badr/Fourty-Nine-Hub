@@ -1,19 +1,35 @@
 
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_credit_card/flutter_credit_card.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
+import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
+import 'package:fourtyninehub/features/payment/presentation/pages/widgets/payment_fawry_widget.dart';
 
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+class PaymobLink {
+  final String amountId;
+  final num amount;
+
+  PaymobLink(
+      {required this.amountId,
+        required this.amount});
+}
 class PaymentView extends StatefulWidget {
-  const PaymentView({super.key});
+  const PaymentView({
+    Key? key,
+    required this.amountId,
+    required this.amount,
+  }) : super(key: key);
+
+  final String amountId;
+  final num amount;
 
   @override
   _PaymentViewState createState() => _PaymentViewState();
@@ -21,93 +37,11 @@ class PaymentView extends StatefulWidget {
 
 class _PaymentViewState extends State<PaymentView> {
   String _selectedPaymentMethod = '';
-  List<Map<String, String>> _savedCards = [];
-  String? _selectedCard;
-  final TextEditingController _cardNumberController = TextEditingController();
-  final TextEditingController _expiryDateController = TextEditingController();
-  final TextEditingController _cvvController = TextEditingController();
-  final FocusNode _cvvFocusNode = FocusNode();
-  bool _isAddingNewCard = false;
+  String? _selectedProviderId;
 
   @override
   void initState() {
     super.initState();
-    _loadSavedCards();
-    _cvvFocusNode.addListener(() {
-      setState(() {});
-    });
-  }
-
-  Future<void> _loadSavedCards() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? cards = prefs.getStringList('savedCards');
-    if (cards != null) {
-      setState(() {
-        _savedCards = cards.map((card) {
-          List<String> cardDetails = card.split(',');
-          return {
-            'last4': cardDetails[0],
-            'expiry': cardDetails[1],
-          };
-        }).toList();
-      });
-    }
-  }
-
-  Future<void> _saveCardDetails(String last4, String expiry) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _savedCards.add({'last4': last4, 'expiry': expiry});
-    List<String> cards = _savedCards
-        .map((card) => '${card['last4']},${card['expiry']}')
-        .toList();
-    await prefs.setStringList('savedCards', cards);
-
-    setState(() {});
-  }
-
-  Future<void> _deleteCard(String last4) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _savedCards.removeWhere((card) => card['last4'] == last4);
-    List<String> cards = _savedCards
-        .map((card) => '${card['last4']},${card['expiry']}')
-        .toList();
-    await prefs.setStringList('savedCards', cards);
-    setState(() {});
-  }
-
-  void _handleSaveCard() {
-    String cardNumber = _cardNumberController.text;
-    String expiryDate = _expiryDateController.text;
-    String last4 = cardNumber.isNotEmpty ? cardNumber.substring(cardNumber.length - 4) : '';
-
-    if (cardNumber.isNotEmpty && expiryDate.isNotEmpty) {
-      _saveCardDetails(last4, expiryDate);
-
-      _cardNumberController.clear();
-      _expiryDateController.clear();
-      _cvvController.clear();
-
-      setState(() {
-        _isAddingNewCard = false;
-      });
-    }
-  }
-
-  void _onCardSelected(String last4) {
-    setState(() {
-      _selectedCard = last4;
-    });
-  }
-
-  void _onNextPressed() {
-    if (_selectedCard != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PaymentConfirmationView(selectedCard: _selectedCard!),
-        ),
-      );
-    }
   }
 
   @override
@@ -117,96 +51,155 @@ class _PaymentViewState extends State<PaymentView> {
         title: const Text('Payment Options'),
       ),
       body: BlocBuilder<PaymentCubit, PaymentState>(
-  builder: (context, state) {
-    return SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
+        builder: (context, state) {
+          return SingleChildScrollView(
+            child: Column(
               children: [
-                _buildCustomCard('Credit Card', Icon(Icons.credit_card), Colors.blue, 'Enter your credit card details'),
-                _buildCustomCard('Fawry', Image.asset(Assets.fawry,fit: BoxFit.cover,), Colors.orange, 'Enter your Paymob link'),
-                _buildCustomCard('Bank Transfer', Icon(Icons.account_balance), Colors.green, 'Enter your bank account details'),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildCustomCard(
+                        onTap: () async {
+                          final cubit = context.read<PaymentCubit>();
+                          final url = cubit.state.paymobData?.data;
+                          if (url != null) {
+                            await launchUrl(Uri.parse(url));
+                          }
+                        },
+                        title: 'Paymob',
+                        titleId: 'Paymob',
+                        icon: Image.asset(
+                          Assets.paymob,
+                          fit: BoxFit.cover,
+                        ),
+                        color: Colors.blue,
+                        details: 'Enter your credit card details',
+                        context: context,
+                      ),
+                    ),
+                    Expanded(
+                      child: _buildCustomCard(
+                        title: 'Fawry',
+                        titleId: 'Fawry',
+                        icon: Image.asset(
+                          Assets.fawry,
+                          fit: BoxFit.cover,
+                        ),
+                        color: Colors.orange,
+                        details: 'Enter your Paymob link',
+                        context: context,
+                      ),
+                    ),
+                    Expanded(
+                      child: _buildCustomCard(
+                        title: 'InstaPay',
+                        titleId: 'manual',
+                        icon: Image.asset(
+                          Assets.instaPay,
+                          fit: BoxFit.cover,
+                        ),
+                        color: Colors.deepPurple,
+                        details: 'Enter your bank account details',
+                        context: context,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20.0),
+                _buildPaymentBody(context),
+                if (_selectedPaymentMethod == 'Credit Card') ...[
+                  const SizedBox(height: 20.0),
+                ],
               ],
             ),
-            const SizedBox(height: 20.0),
-            _buildPaymentBody(),
-            if (_selectedPaymentMethod == 'Credit Card') ...[
-              const SizedBox(height: 20.0),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.PRIMARY_COLOR
-                ),
-                onPressed: _onNextPressed,
-                child: const Text('Next',style: TextStyle(
-                  color:  AppColors.LIGHT_COLOR,
-                ),),
-              ),
-            ],
-          ],
-        ),
-      );
-  },
-),
+          );
+        },
+      ),
     );
   }
 
-  Widget _buildCustomCard(String title, Widget icon, Color color, String details) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _selectedPaymentMethod = title;
-          });
-        },
-        child: Container(
-          height: 130,
-          margin: const EdgeInsets.symmetric(horizontal: 8.0),
-          padding: const EdgeInsets.all(16.0),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15.0),
-            border: Border.all(
-              color: _selectedPaymentMethod == title ? color : Colors.grey,
-              width: 2.0,
+  Widget _buildCustomCard({
+    required String title,
+    required Widget icon,
+    required Color color,
+    required String details,
+    VoidCallback? onTap,
+    String? titleId,
+    required BuildContext context,
+  }) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedPaymentMethod = title;
+        });
+
+        final cubit = context.read<PaymentCubit>();
+        _selectedProviderId = cubit.paymentProviderMap[titleId];
+
+        if (_selectedProviderId != null) {
+          print('Provider ID for $title: $_selectedProviderId');
+
+          cubit.getPaymobData(amountId: widget.amountId, providerId: _selectedProviderId!);
+        } else {
+          print('Provider ID not found for $title');
+        }
+
+        if (onTap != null) {
+          onTap();
+        }
+      },
+      child: Container(
+        height: 130,
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15.0),
+          border: Border.all(
+            color: _selectedPaymentMethod == title ? color : Colors.grey,
+            width: 2.0,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: color.withOpacity(0.3),
+              spreadRadius: 2,
+              blurRadius: 8,
+              offset: const Offset(0, 4),
             ),
-            boxShadow: [
-              BoxShadow(
-                color: color.withOpacity(0.3),
-                spreadRadius: 2,
-                blurRadius: 8,
-                offset: const Offset(0, 4),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            icon,
+            const Spacer(),
+            Text(
+              title,
+              style: TextStyle(
+                color: color,
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0,
               ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              icon,
-             Spacer(),
-              Text(
-                title,
-                style: TextStyle(
-                  color: color,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
-                ),
-                maxLines: 2,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+              maxLines: 2,
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildPaymentBody() {
+  Widget _buildPaymentBody(BuildContext context) {
     switch (_selectedPaymentMethod) {
       case 'Credit Card':
-        return _creditCardPayment();
+        return _openLinkPayment(context);
       case 'Fawry':
-        return _fawryPayment();
-      case 'Bank Transfer':
+        return FawryPayment(
+          amountId: widget.amountId,
+          providerId: _selectedProviderId ?? '',
+          amount: widget.amount,
+        );
+      case 'InstaPay':
         return _bankTransferPayment();
       default:
         return const Center(
@@ -215,180 +208,19 @@ class _PaymentViewState extends State<PaymentView> {
     }
   }
 
-  Widget _creditCardPayment() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          if (_savedCards.isNotEmpty) _buildSavedCardsList(),
-          const SizedBox(height: 16.0),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: _isAddingNewCard ?  AppColors.PRIMARY_COLOR_DARK  :AppColors.PRIMARY_COLOR
-            ),
-            onPressed: () {
-              setState(() {
-                _isAddingNewCard = !_isAddingNewCard;
-              });
-            },
-            child: Text(_isAddingNewCard ? 'Hide Card Form' : 'Add New Card',style: const TextStyle(
-              color: AppColors.LIGHT_COLOR
-
-            ),),
-          ),
-          if (_isAddingNewCard) ...[
-            CreditCardWidget(
-              cardBgColor: Colors.black,
-              cardNumber: _cardNumberController.text,
-              expiryDate: _expiryDateController.text,
-              cardHolderName: '',
-              cvvCode: _cvvController.text,
-              showBackView: _cvvFocusNode.hasFocus,
-              obscureCardNumber: true,
-              obscureCardCvv: true,
-              isHolderNameVisible: false,
-              isChipVisible: true,
-              onCreditCardWidgetChange: (CreditCardBrand) {},
-            ),
-            const SizedBox(height: 16.0),
-            TextFormField(
-              controller: _cardNumberController,
-              decoration: const InputDecoration(
-                labelText: 'Credit Card Number',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(16),
-              ],
-              onChanged: (value) {
-                setState(() {});
-              },
-            ),
-            const SizedBox(height: 16.0),
-            TextFormField(
-              controller: _expiryDateController,
-              decoration: const InputDecoration(
-                labelText: 'Expiry Date',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.datetime,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(5),
-              ],
-              onChanged: (value) {
-                setState(() {});
-              },
-            ),
-            const SizedBox(height: 16.0),
-            TextFormField(
-              controller: _cvvController,
-              focusNode: _cvvFocusNode,
-              decoration: const InputDecoration(
-                labelText: 'CVV',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(4),
-              ],
-              obscureText: true,
-              onChanged: (value) {
-                setState(() {});
-              },
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor:AppColors.PRIMARY_COLOR
-              ),
-              onPressed: _handleSaveCard,
-              child: const Text("Save Card",style: TextStyle(
-                  color: AppColors.LIGHT_COLOR
-
-              ),),
-            ),
-            ElevatedButton(
-              onPressed: (){
-                setState(() {
-                  _isAddingNewCard = false;
-                });
-              },
-              child:  const Text('Cancel',style: TextStyle(
-                color: AppColors.LIGHT_COLOR
-              ),),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSavedCardsList() {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: _savedCards.length,
-      itemBuilder: (context, index) {
-        final card = _savedCards[index];
-        final last4 = card['last4']!;
-        final expiry = card['expiry']!;
-
-        return ListTile(
-          leading: const Icon(
-            Icons.credit_card,
-            color: Colors.blue,
-          ),
-          title: Text('Card ending in $last4'),
-          subtitle: Text('Expires $expiry'),
-          trailing: _selectedCard == last4
-              ? const Icon(Icons.check, color: Colors.green)
-              : IconButton(
-            icon: const Icon(Icons.delete, color: Colors.red),
-            onPressed: () => _deleteCard(last4),
-          ),
-          onTap: () => _onCardSelected(last4),
-        );
-      },
-    );
-  }
-
-  Widget _fawryPayment() {
-    final TextEditingController _fawryLinkController = TextEditingController();
-
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          FormTextField(
-            controller: _fawryLinkController,
-            label: "Fawry Link",
-          ),
-          const SizedBox(height: 16.0),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.PRIMARY_COLOR
-            ),
-            onPressed: () {
-              final fawryLink = _fawryLinkController.text;
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PaymentConfirmationView(selectedCard: fawryLink),
-                ),
-              );
-            },
-            child: const Text('Next',style: TextStyle(color: AppColors.LIGHT_COLOR),),
-          ),
-        ],
-      ),
-    );
+  Widget _openLinkPayment(BuildContext context) {
+    final cubit = context.read<PaymentCubit>();
+    final url = cubit.state.paymobData?.data;
+    if (url != null) {
+      launchUrl(Uri.parse(url));
+    } else {
+      print("Null $url");
+    }
+    return const SizedBox.shrink();
   }
 
   Widget _bankTransferPayment() {
     final TextEditingController _bankNameController = TextEditingController();
-    final TextEditingController _accountNumberController = TextEditingController();
 
     final cubit = context.read<PaymentCubit>();
     final banks = cubit.state.data ?? [];
@@ -410,7 +242,6 @@ class _PaymentViewState extends State<PaymentView> {
               fillColor: Colors.white,
               labelText: 'Select Phone Number',
             ),
-
             dropdownColor: Colors.blue.withOpacity(0.5),
             items: phoneNumbers.map((phone) {
               return DropdownMenuItem<String>(
@@ -424,44 +255,79 @@ class _PaymentViewState extends State<PaymentView> {
               }
             },
           ),
-          const SizedBox(height: 16.0),
-          FormTextField(
-            controller: _accountNumberController,
-            label:  'Account Number',
-          ),
-          const SizedBox(height: 16.0),
+          const SizedBox(height: 15),
           ElevatedButton(
-            onPressed: () {
-              // Handle bank transfer details submission
-              final phoneNumber = _bankNameController.text;
-              final accountNumber = _accountNumberController.text;
-              print(phoneNumber);
-              print(accountNumber);
-            },
-            child: const Text('Submit'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.PRIMARY_COLOR,
+            ),
+            onPressed: () {},
+            child: Text(
+              "${widget.amount}",
+              style: const TextStyle(color: AppColors.LIGHT_COLOR, fontSize: 20),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20),
+              Label(
+                text: "Snap copy of bill payment",
+                style: Styles.headerText(),
+              ),
+              const SizedBox(),
+              InkWell(
+                onTap: () async {
+                  await cubit.uploadProfileImage();
+                },
+                child: BlocBuilder<PaymentCubit, PaymentState>(
+                  buildWhen: (previous, current) =>
+                  previous.uploadedImage != current.uploadedImage ||
+                      previous.uploadStatus != current.uploadStatus,
+                  builder: (context, state) {
+                    if (state.uploadStatus == StateStatus.loading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state.uploadStatus == StateStatus.success &&
+                        state.uploadedImage != null) {
+                      return Image.file(state.uploadedImage!);
+                    }
+                    return const ImagePickerPlaceholder();
+                  },
+                ),
+              ),
+              BlocBuilder<PaymentCubit, PaymentState>(
+                builder: (context, state) {
+                  return ElevatedButton(
+                    onPressed: () {
+                      // Snackbar: "Your bill has been sent successfully, waiting for administration approval."
+                      print("${state.imageMediaId}");
+                      print(" the provider ${_selectedProviderId}");
+                      if(state.imageMediaId != null){
+                        cubit.postInstaPay(receiptId:state.imageMediaId!, amountId: widget.amountId, paymentProviderId: _selectedProviderId!);
+                      }
+                      if(state.status == StateStatus.success){
+                        print("99111");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(state.instaPayResponseData?.message ?? 'Payment successful'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                      }
+                    },
+                    child: Text(
+                      "Send for review and approval",
+                      style: const TextStyle(
+                          color: AppColors.LIGHT_COLOR, fontSize: 20),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
         ],
       ),
     );
   }
-
-
 }
 
-class PaymentConfirmationView extends StatelessWidget {
-  final String selectedCard;
-
-  const PaymentConfirmationView({required this.selectedCard, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Confirm Payment'),
-      ),
-      body: Center(
-        child: Text('You have selected card ending in $selectedCard'),
-      ),
-    );
-  }
-}

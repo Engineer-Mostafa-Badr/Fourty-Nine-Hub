@@ -1,4 +1,3 @@
-// PaymentProviderEntity.dart
 
 class PaymentProviderEntity {
   final String id;

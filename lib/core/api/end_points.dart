@@ -71,7 +71,16 @@ class EndPoints {
   static const getFavoriteCategory = '/favorite-category';
   static const String getUpcomingUserAppointments = '/health/book-appointment';
   static const String getHealthRequestsHistory = '/health/history-patient-booking';
-  static const String getPaymentProvider = '/dashboard/payment-provider';
+  static const String getPaymentProvider = '/payment-provider/active';
+  // static const String getPaymentProvider = '/dashboard/payment-provider';
+  static const String getPaymob = '/paymob/paynow';
+  static const String postInstaPay = '/manual-payment/create';
+  static const String saveCardToken = '/fawry/tokenize-card';
+  static const String payWithCardToken = '/fawry/pay-with-card-token';
+  static const String getSavedCards = '/payment/cards';
+  static const String makeMultiPayment = '/fawry/multi-charge';
+  static const String deleteSavedCard = '/payment/cards';
+  static const String chargeWithCard = '/fawry/charge-with-card';
   static const remainingDaysOfDoctorPracticing = '/health/dashboard/remaining-days-of-doctor-id';
   static const remainingDaysOfDoctorID = '/health/dashboard/remaining-days-of-doctor-practicing-id';
   static const remainingDaysOfDoctorSubscription = '/health/dashboard/remaining-days-of-doctor-subscription';

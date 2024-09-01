@@ -11,7 +11,7 @@ class CategoryFavoritesResponse {
 
   factory CategoryFavoritesResponse.fromJson(Map<String, dynamic> json) {
     return CategoryFavoritesResponse(
-      status: json['success'],
+      status: json['status'],
       data: List<CategoryFavoriteItem>.from(
         json['data']['favorites'].map((x) => CategoryFavoriteItem.fromJson(x)),
       ),
@@ -20,7 +20,7 @@ class CategoryFavoritesResponse {
 
   Map<String, dynamic> toJson() {
     return {
-      'success': status,
+      'status': status,
       'data': {
         'favorites': List<dynamic>.from(data.map((x) => x.toJson())),
       },
