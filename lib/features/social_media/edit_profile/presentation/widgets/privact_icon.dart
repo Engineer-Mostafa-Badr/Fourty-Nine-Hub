@@ -10,8 +10,8 @@ class PrivacyIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
         onPressed: () async {
-          final res = await CustomVerticalSheetItem.normal<PrivacyStatus>(
-              context, [
+          final res =
+              await CustomVerticalSheetItem.normal<PrivacyStatus>(context, [
             CustomSheetModel(
               text: "Public",
               value: PrivacyStatus.public,
@@ -40,7 +40,7 @@ class PrivacyIcon extends StatelessWidget {
           ]);
           print(res?.name);
           print("============>");
-          selectPrivacy(res?.name??'public');
+          selectPrivacy(res?.name ?? 'public');
         },
         icon: const Icon(
           Icons.privacy_tip,

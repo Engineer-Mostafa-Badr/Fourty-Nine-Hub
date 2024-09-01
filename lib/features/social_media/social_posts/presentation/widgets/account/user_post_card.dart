@@ -89,7 +89,7 @@ class _UserPostCardState extends State<UserPostCard> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ?? const UnknownFailure(),
+            state.failure ?? const UnknownFailure(''),
             context,
           ),
         );

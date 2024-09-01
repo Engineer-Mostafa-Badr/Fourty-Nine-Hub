@@ -7,35 +7,36 @@ import '../../../../core/utils/shared_pref.dart';
 import '../models/delete_notification_model.dart';
 import 'notification_repo.dart';
 
-class NotificationRepoImpl implements NotificationRepo{
- final ApiService apiService;
+class NotificationRepoImpl implements NotificationRepo {
+  final ApiService apiService;
 
   NotificationRepoImpl(this.apiService);
   @override
-
-  Future<Either<Failure, NotificationModel>> fetchNotifications(String type) async{
+  Future<Either<Failure, NotificationModel>> fetchNotifications(
+      String type) async {
     String? accessToken = await TokenManager.getAccessToken();
     String? refreshToken = await TokenManager.getRefreshToken();
-   // try{
-     var data =await apiService.get(url: 'api/v1/notifications?type=$type',token: accessToken);
-     var notification=NotificationModel.fromJson(data);
-     return right(notification);
-    // }catch(e){
-    //   return left(CacheFailure());
-    // }
+    try {
+      var data = await apiService.get(
+          url: 'api/v1/notifications?type=$type', token: accessToken);
+      var notification = NotificationModel.fromJson(data);
+      return right(notification);
+    } catch (e) {
+      return left(CacheFailure());
+    }
   }
 
   @override
-  Future<Either<Failure, DeleteNotificationModel>> deleteItemNotifications(String id)async {
+  Future<Either<Failure, DeleteNotificationModel>> deleteItemNotifications(
+      String id) async {
     String? accessToken = await TokenManager.getAccessToken();
     String? refreshToken = await TokenManager.getRefreshToken();
-    var data =await apiService.delete(url: 'api/v1/notifications/$id',token: accessToken);
-    var notification=DeleteNotificationModel.fromJson(data);
+    var data = await apiService.delete(
+        url: 'api/v1/notifications/$id', token: accessToken);
+    var notification = DeleteNotificationModel.fromJson(data);
     return right(notification);
   }
-
 }
-
 
 // Failure handleApiError(dynamic error) {
 //   if (error is DioError) {
@@ -59,13 +60,13 @@ class NotificationRepoImpl implements NotificationRepo{
 //       return UnauthorizedFailure();
 //     } else {
 //       // Other Dio errors
-//       return UnknownFailure();
+//       return UnknownFailure('');
 //     }
 //   } else if (error is CacheException) {
 //     // Handle cache-related errors
 //     return CacheFailure();
 //   } else {
 //     // Fallback to an unknown failure for any other errors
-//     return UnknownFailure();
+//     return UnknownFailure('');
 //   }
 // }

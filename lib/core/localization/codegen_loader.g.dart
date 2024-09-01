@@ -6,7 +6,7 @@ import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart' show AssetLoader;
 
-class CodegenLoader extends AssetLoader{
+class CodegenLoader extends AssetLoader {
   const CodegenLoader();
 
   @override
@@ -61,7 +61,7 @@ class CodegenLoader extends AssetLoader{
   "creatingRestaurant": "جاري انشاء المطعم...",
   "youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove": "يمكنك الاستمتاع بخدمة عملائك باستخدام مطعمك بالضغط على زر التسجيل بالأعلى.",
   "photoForMeal": "صور للوجبة",
-  "mneu": "القائمة",
+  "menu": "القائمة",
   "submit": "ارسال",
   "needToLogin": "يجب عليك تسجيل الدخول",
   "completeAllFields": "يرجى تحديد جميع الحقول",
@@ -76,8 +76,7 @@ class CodegenLoader extends AssetLoader{
   "lang": "E",
   "search": "بحث",
   "ad": "اعلان",
-  "Ads": "اعلانات",
-  "ads": "اعلان",
+  "ads": "اعلانات",
   "wallet": "محفظه",
   "gift": "هدايا",
   "balance": "رصيد",
@@ -85,10 +84,10 @@ class CodegenLoader extends AssetLoader{
   "tripJoin": "جاي معاك",
   "auction": "مزاد",
   "installments": "تقسيط",
-  "Craft": "حرفه",
+  "craft": "حرفه",
   "homeService": "خدمه منزليه",
   "homeEssentials": "مستلزمات منزل",
-  "Scenery": " ديكور",
+  "scenery": " ديكور",
   "specialities": "التخصصات",
   "medicalService": "الخدمات الطبية",
   "doctor": "دكتور",
@@ -140,8 +139,6 @@ class CodegenLoader extends AssetLoader{
   "feelLucky": "هل تشعر بالحظ؟",
   "restaurants": "مطعم",
   "meals": "وجبات الطعام",
-  "craft": "حرفه",
-  "scenery": " ديكور",
   "message": "رسالة",
   "photo": "صورة",
   "video": "فيديو",
@@ -193,7 +190,9 @@ class CodegenLoader extends AssetLoader{
   "clearNotification": "هل أنت متأكد من أنك تريد مسح جميع الإشعارات؟",
   "clearNoti": "هل أنت متأكد أنك تريد مسح هذا الإشعار؟",
   "ok": "نعم",
-  "cancel": "الغاء"
+  "cancel": "الغاء",
+  "save": "حفظ",
+  "suscessfullySaved": "تم حفظ البيانات بنجاح"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -240,7 +239,7 @@ static const Map<String,dynamic> en = {
   "price": "Price",
   "youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval": "You have submitted your registration successfully, waiting for administration approval",
   "photoForMeal": "Photo For Meal",
-  "mneu": "Menu",
+  "menu": "Menu",
   "submit": "Submit",
   "needToLogin": "Need To Login",
   "completeAllFields": "Complete All Fields",
@@ -372,7 +371,9 @@ static const Map<String,dynamic> en = {
   "clearNotification": "Are you sure you want to clear all notifications?",
   "clearNoti": "Are you sure you want to clear notifications?",
   "ok": "Ok",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "save": "Save",
+  "suscessfullySaved": "Successfully Saved"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

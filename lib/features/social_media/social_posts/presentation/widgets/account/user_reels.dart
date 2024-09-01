@@ -30,7 +30,7 @@ class _UserReelsState extends State<UserReels> {
           showErrorMessage(
             context,
             getFailureMessage(
-              state.failure ?? const UnknownFailure(),
+              state.failure ?? const UnknownFailure(''),
               context,
             ),
           );
@@ -74,7 +74,7 @@ class _UserReelsState extends State<UserReels> {
                     : Center(
                         child: Label(
                             text: getFailureMessage(
-                          state.failure ?? const UnknownFailure(),
+                          state.failure ?? const UnknownFailure(''),
                           context,
                         )),
                       );

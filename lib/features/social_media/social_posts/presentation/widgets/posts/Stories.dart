@@ -45,7 +45,7 @@ class Stories extends StatelessWidget {
         onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => MoreStories(),
+              builder: (context) => const MoreStories(),
             )),
         child: Container(
           height: kToolbarHeight * 2.5,
@@ -77,18 +77,14 @@ class Stories extends StatelessWidget {
                       child: CircleAvatar(
                         radius: 14,
                         backgroundColor: Colors.white,
-                        backgroundImage:
-                            NetworkImage(UIConst.profilePlaceHolder),
+                        backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
                       ),
                     ),
                     FittedBox(
                       child: Label(
-                          text: capitalizeAndSplit2Only(
-                              'mohamed ayman ayman ayman'),
+                          text: capitalizeAndSplit2Only('mohamed ayman ayman ayman'),
                           textAlign: TextAlign.end,
-                          style: Styles.smallText(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
+                          style: Styles.smallText(color: Colors.black, fontWeight: FontWeight.bold)),
                     )
                   ],
                 ),
@@ -120,9 +116,7 @@ class Stories extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Label(text: 'Create Story', style: Styles.smallText())
-                    ],
+                    children: [Label(text: 'Create Story', style: Styles.smallText())],
                   ),
                 ))
               ],
@@ -221,8 +215,7 @@ final List<StoryData> stories = [
   ),
   StoryData(
     type: StoryType.image,
-    content:
-        "https://image.ibb.co/cU4WGx/Omotuo-Groundnut-Soup-braperucci-com-1.jpg",
+    content: "https://image.ibb.co/cU4WGx/Omotuo-Groundnut-Soup-braperucci-com-1.jpg",
     caption: "Still sampling",
   ),
   StoryData(
@@ -242,14 +235,15 @@ final List<StoryData> stories = [
   ),
   StoryData(
     type: StoryType.video,
-    content:
-        "https://videos.pexels.com/video-files/27961886/12274254_1440_2560_50fps.mp4",
+    content: "https://videos.pexels.com/video-files/27961886/12274254_1440_2560_50fps.mp4",
     caption: "Hello, from the other side2",
   ),
 ];
 
 //------------------------------------------------------------------------------------------------
 class MoreStories extends StatefulWidget {
+  const MoreStories({super.key});
+
   @override
   _MoreStoriesState createState() => _MoreStoriesState();
 }
@@ -265,9 +259,7 @@ class _MoreStoriesState extends State<MoreStories> {
 
   @override
   Widget build(BuildContext context) {
-    final List<StoryItem> storyItems = stories
-        .map((storyData) => createStoryItem(storyData, storyController))
-        .toList();
+    final List<StoryItem> storyItems = stories.map((storyData) => createStoryItem(storyData, storyController)).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -299,7 +291,7 @@ class _MoreStoriesState extends State<MoreStories> {
           print("Completed a cycle");
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => MoreStories()),
+            MaterialPageRoute(builder: (context) => const MoreStories()),
           );
         },
         progressPosition: ProgressPosition.top,

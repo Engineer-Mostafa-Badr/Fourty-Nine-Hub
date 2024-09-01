@@ -40,7 +40,7 @@ class _ChatRoomState extends State<ChatRoom> {
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
-          backgroundColor: Colors.amber,
+          backgroundColor: AppColors.BACKGROUND_COLOR,
           appBar: const ChatRoomAppBar(),
           // bottomNavigationBar: Padding(
           //   padding: MediaQuery.of(context).viewInsets,

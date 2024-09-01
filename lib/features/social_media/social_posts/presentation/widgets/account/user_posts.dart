@@ -36,7 +36,7 @@ class _UserPostsState extends State<UserPosts> {
           showErrorMessage(
             context,
             getFailureMessage(
-              state.failure ?? const UnknownFailure(),
+              state.failure ?? const UnknownFailure(''),
               context,
             ),
           );
@@ -67,8 +67,8 @@ class _UserPostsState extends State<UserPosts> {
                 showReacts = false;
                 return state.status == StateStatus.success
                     ? Padding(
-                      padding: const EdgeInsets.only(top:15.0),
-                      child: UserPostCard(
+                        padding: const EdgeInsets.only(top: 15.0),
+                        child: UserPostCard(
                           // showReacts: showReacts,
                           post: post,
                           onReact: (params) async {},
@@ -186,11 +186,11 @@ class _UserPostsState extends State<UserPosts> {
                           index: 0,
                           onSelectReact: (int i) {},
                         ),
-                    )
+                      )
                     : Center(
                         child: Label(
                             text: getFailureMessage(
-                          state.failure ?? const UnknownFailure(),
+                          state.failure ?? const UnknownFailure(''),
                           context,
                         )),
                       );

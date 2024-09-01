@@ -39,7 +39,7 @@ class _LogoutWidgetState extends State<LogoutWidget> {
           children: [
             Expanded(
                 child: AppButton(
-                  height: 50.zH,
+              height: 50.zH,
               label: LocaleKeys.no.localize,
               color: AppColors.AUTH_CONTAINER_COLOR,
               onPressed: () => context.pop(),

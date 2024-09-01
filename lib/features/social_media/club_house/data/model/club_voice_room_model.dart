@@ -1,3 +1,6 @@
+
+import 'package:fourtyninehub/features/social_media/social_posts/data/models/user_profile_model.dart';
+
 import '../../domain/entities/club_voice_room_entity.dart';
 
 class ClubVoiceRoomModel extends ClubVoiceRoomEntity {
@@ -12,7 +15,11 @@ class ClubVoiceRoomModel extends ClubVoiceRoomEntity {
       id: json['_id'],
       hostname: json['userId'], // Assuming hostname is the userId
       subject: json['subject'],
-      users: List<String>.from(json['members']),
+      users: json['members'] == null
+          ? null
+          : (json['members'])
+              .map((e) => UserProfileModel.fromJson(e))
+              .toList(),
     );
   }
 }

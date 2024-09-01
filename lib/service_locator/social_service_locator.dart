@@ -17,7 +17,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:get_it/get_it.dart';
 
-
 class SocialServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     // chats

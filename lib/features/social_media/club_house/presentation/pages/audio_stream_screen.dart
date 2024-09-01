@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/zego_audio_room_widget.dart';
 import 'package:go_router/go_router.dart';
@@ -38,23 +37,20 @@ class AudioStreamScreen extends StatelessWidget {
                             : context.read<ClubVoiceCubit>().leaveRoom(liveId);
                         context.pop();
                       },
-                      child: const Row(
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.handPeace,
-                            color: Colors.red,
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0)
+                            .add(const EdgeInsets.symmetric(horizontal: 15)),
+                        margin: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.redAccent),
+                        child: Text(
+                          isHost ? 'End' : 'Leave',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
                           ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Leave quitely',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ],
