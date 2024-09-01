@@ -33,7 +33,11 @@ class AudioRoomCard extends StatelessWidget {
             builder: (ctx) => BlocProvider.value(
               value: serviceLocator<ClubVoiceCubit>(),
               child: AudioStreamScreen(
-                  liveId: room.id, roomSubject: room.subject, isHost: false),
+                liveId: room.id,
+                roomSubject: room.subject,
+                isHost: false,
+                userCount: room.users!.length,
+              ),
             ),
           ),
         );

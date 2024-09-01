@@ -17,7 +17,7 @@ class ClubHouseHome extends StatelessWidget {
         body: BlocConsumer<ClubVoiceCubit, ClubVoiceState>(
       listener: (context, state) {
         if (state.isFailure) {
-          showErrorMessage(context, 'message');
+          showErrorMessage(context, 'Please try again');
         }
       },
       buildWhen: (previous, current) => previous != current,
@@ -72,10 +72,12 @@ class ClubHouseHome extends StatelessWidget {
                 right: 16.0,
                 child: FloatingActionButton(
                     heroTag: 'create voice club',
-                    backgroundColor: Colors.deepOrange[700],
-                    shape: const CircleBorder(),
+                    backgroundColor: AppColors.SECONDARY_COLOR,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     onPressed: () =>
-                        showVoiceLiveDialogue(context: context, cubit: cubit),
+                        showVoiceLiveBottomSheet(context: context, cubit: cubit),
                     child: const Icon(
                       Icons.add,
                       color: Colors.white,
