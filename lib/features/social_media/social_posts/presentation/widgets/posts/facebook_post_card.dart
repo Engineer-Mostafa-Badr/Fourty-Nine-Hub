@@ -86,7 +86,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ?? const UnknownFailure(),
+            state.failure ?? const UnknownFailure(''),
             context,
           ),
         );

@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_state.dart';
+import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_state.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import 'package:zego_uikit/zego_uikit.dart';

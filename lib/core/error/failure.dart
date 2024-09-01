@@ -26,7 +26,8 @@ class CacheFailure extends Failure {
 }
 
 class UnknownFailure extends Failure {
-  const UnknownFailure();
+  final String error;
+  const UnknownFailure(this.error);
 }
 
 class InvalidOtpFailure extends Failure {

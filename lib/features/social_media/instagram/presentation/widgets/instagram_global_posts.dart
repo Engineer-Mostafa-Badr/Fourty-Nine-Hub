@@ -42,7 +42,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ?? const UnknownFailure(),
+            state.failure ?? const UnknownFailure(''),
             context,
           ),
         );

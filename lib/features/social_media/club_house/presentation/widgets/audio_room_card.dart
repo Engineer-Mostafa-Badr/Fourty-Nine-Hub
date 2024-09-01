@@ -2,8 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/entities/club_voice_room_entity.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
+import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_state.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
@@ -81,6 +83,7 @@ class AudioRoomCard extends StatelessWidget {
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           final user = room.users[index];
+
                           return Row(
                             children: [
                               Label(
@@ -102,20 +105,15 @@ class AudioRoomCard extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.person,
-                                color: Colors.grey,
-                                size: 14,
-                              ),
-                              const Sizer(),
-                              Label(
-                                  text: '144',
-                                  style: Styles.mediumText(color: Colors.grey))
-                            ],
+                          const Icon(
+                            Icons.person,
+                            color: Colors.grey,
+                            size: 14,
                           ),
-                          // const Sizer(),
+                          const Sizer(),
+                          Label(
+                              text: room.users.length.toString(),
+                              style: Styles.mediumText(color: Colors.grey))
                         ],
                       ),
                     ],

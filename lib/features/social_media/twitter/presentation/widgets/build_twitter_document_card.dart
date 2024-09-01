@@ -27,7 +27,7 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ?? const UnknownFailure(),
+            state.failure ?? const UnknownFailure(''),
             context,
           ),
         );

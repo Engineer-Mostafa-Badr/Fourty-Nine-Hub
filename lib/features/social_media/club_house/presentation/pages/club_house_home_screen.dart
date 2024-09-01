@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_state.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_dialogue.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
-import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../widgets/audio_room_card.dart';
 
 class ClubHouseHome extends StatelessWidget {
@@ -15,64 +14,75 @@ class ClubHouseHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: BlocBuilder<ClubVoiceCubit, ClubVoiceState>(
+        body: BlocConsumer<ClubVoiceCubit, ClubVoiceState>(
+      listener: (context, state) {
+        if (state.isFailure) {
+          showErrorMessage(context, 'message');
+        }
+      },
       buildWhen: (previous, current) => previous != current,
       builder: (context, state) {
         var cubit = context.read<ClubVoiceCubit>();
-        return Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Label(
-                    //   text: 'Club Voice',
-                    //   style: Styles.headerText(),
-                    // ),
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                          minHeight: MediaQuery.sizeOf(context).height,
-                          maxHeight: double.infinity),
-                      child: ListView.separated(
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: const EdgeInsets.only(bottom: 0),
-                        shrinkWrap: true,
-                        itemCount: cubit.rooms.length,
-                        itemBuilder: (context, index) {
-                          final room = cubit.rooms[index];
-                          return AudioRoomCard(
-                            room: room,
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(
-                            height: 10,
-                          );
-                        },
-                      ),
-                    )
-                  ],
+        return RefreshIndicator(
+          onRefresh: () async => await cubit.getAllRooms(),
+          backgroundColor: Colors.white,
+          color: AppColors.PRIMARY_COLOR,
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Label(
+                      //   text: 'Club Voice',
+                      //   style: Styles.headerText(),
+                      // ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                            minHeight: MediaQuery.sizeOf(context).height,
+                            maxHeight: double.infinity),
+                        child: ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: const EdgeInsets.only(bottom: 0),
+                          shrinkWrap: true,
+                          itemCount: cubit.rooms.length,
+                          itemBuilder: (context, index) {
+                            print('room length $cubit.rooms.length');
+                            final room = cubit.rooms[index];
+                            return AudioRoomCard(
+                              room: room,
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(
+                              height: 10,
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 16.0,
-              right: 16.0,
-              child: FloatingActionButton(
-                  heroTag: 'create voice club',
-                  backgroundColor: Colors.deepOrange[700],
-                  shape: const CircleBorder(),
-                  onPressed: () =>
-                      showVoiceLiveDialogue(context: context, cubit: cubit),
-                  child: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  )),
-            ),
-          ],
+              Positioned(
+                bottom: 16.0,
+                right: 16.0,
+                child: FloatingActionButton(
+                    heroTag: 'create voice club',
+                    backgroundColor: Colors.deepOrange[700],
+                    shape: const CircleBorder(),
+                    onPressed: () =>
+                        showVoiceLiveDialogue(context: context, cubit: cubit),
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    )),
+              ),
+            ],
+          ),
         );
       },
     ));

@@ -11,7 +11,7 @@ import 'package:fourtyninehub/features/zoom/domain/usecases/join_room_use_case.d
 
 import '../../../../routes/pages.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'zoom_state.dart';
+import 'meeting_state.dart';
 
 class MeetingCubit extends Cubit<MeetingState> {
   MeetingCubit(

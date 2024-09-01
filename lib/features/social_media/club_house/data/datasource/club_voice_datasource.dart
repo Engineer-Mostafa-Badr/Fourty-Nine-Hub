@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/social_media/club_house/domain/entities/c
 import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/add_club_voice_use_case.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/join_club_voice_use_case.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/search_club_voice_use_case.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../../core/api/api_consumer.dart';
 
@@ -51,7 +52,9 @@ class ClubVoiceDataSourceImpl extends ClubVoiceDataSource {
       // print('list is  ${rooms.toString()}');
       return result.fold((l) => Left(l), (r) => Right(_returnListOfRooms(r)));
     } catch (e) {
-      return const Left(UnknownFailure());
+      CliLogger.error('failure  $e');
+
+      return Left(UnknownFailure(e.toString()));
     }
   }
 

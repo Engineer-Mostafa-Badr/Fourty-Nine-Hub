@@ -64,7 +64,7 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
               showErrorMessage(
                 context,
                 getFailureMessage(
-                  state.failure ?? const UnknownFailure(),
+                  state.failure ?? const UnknownFailure(''),
                   context,
                 ),
               );

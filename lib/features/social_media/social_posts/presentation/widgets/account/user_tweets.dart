@@ -32,12 +32,13 @@ class _UserTweetsState extends State<UserTweets> {
   Widget build(BuildContext context) {
     return BlocProvider<TwitterCubit>(
       create: (_) => serviceLocator()..loadUserTweets(widget.userData.id),
-      child: BlocConsumer<TwitterCubit, TwitterState>(listener: (context, state) {
+      child:
+          BlocConsumer<TwitterCubit, TwitterState>(listener: (context, state) {
         if (state.status == StateStatus.error) {
           showErrorMessage(
             context,
             getFailureMessage(
-              state.failure ?? const UnknownFailure(),
+              state.failure ?? const UnknownFailure(''),
               context,
             ),
           );
@@ -68,73 +69,108 @@ class _UserTweetsState extends State<UserTweets> {
                 return state.status == StateStatus.success
                     ? TwitterPostCard(
                         fromProfile: user?.id == widget.userData.id,
-                        post: controller.userTweetsPagingController.itemList![index],
+                        post: controller
+                            .userTweetsPagingController.itemList![index],
                         onReact: () async {
                           var result = await controller.onReact(
                               params: TwitterPostReactParams(
-                                  postId: controller.userTweetsPagingController.itemList![index].id, react: 'love'));
+                                  postId: controller.userTweetsPagingController
+                                      .itemList![index].id,
+                                  react: 'love'));
                           if (result == true) {
-                            if (controller.userTweetsPagingController.itemList?[index].isReact == false) {
-                              controller.userTweetsPagingController.itemList?[index].isReact = true;
-                              controller.userTweetsPagingController.itemList?[index].loveCount =
-                                  (controller.userTweetsPagingController.itemList![index].loveCount! + 1);
+                            if (controller.userTweetsPagingController
+                                    .itemList?[index].isReact ==
+                                false) {
+                              controller.userTweetsPagingController
+                                  .itemList?[index].isReact = true;
+                              controller.userTweetsPagingController
+                                  .itemList?[index].loveCount = (controller
+                                      .userTweetsPagingController
+                                      .itemList![index]
+                                      .loveCount! +
+                                  1);
                               setState(() {});
                             } else {
-                              controller.userTweetsPagingController.itemList?[index].isReact = false;
-                              controller.userTweetsPagingController.itemList?[index].loveCount =
-                                  (controller.userTweetsPagingController.itemList![index].loveCount! - 1);
+                              controller.userTweetsPagingController
+                                  .itemList?[index].isReact = false;
+                              controller.userTweetsPagingController
+                                  .itemList?[index].loveCount = (controller
+                                      .userTweetsPagingController
+                                      .itemList![index]
+                                      .loveCount! -
+                                  1);
                               setState(() {});
                             }
                           }
                         },
                         shareSuccess: state.shareSuccess,
                         onShare: () {
-                          var tweet = controller.userTweetsPagingController.itemList![index];
+                          var tweet = controller
+                              .userTweetsPagingController.itemList![index];
                           controller.onShare(
-                            postId: tweet.isShared == true ? tweet.mainPost.id : tweet.id,
+                            postId: tweet.isShared == true
+                                ? tweet.mainPost.id
+                                : tweet.id,
                           );
                           setState(() {});
                         },
                         showPostComments: (String v) {
                           final user = context.read<UserCubit>().state.data;
 
-                          print("mainId ${controller.userTweetsPagingController.itemList![index].id}");
+                          print(
+                              "mainId ${controller.userTweetsPagingController.itemList![index].id}");
                           bottomSheet(
                             context: context,
                             isScrollControlled: true,
                             widget: BlocProvider.value(
                               value: serviceLocator<TwitterCubit>()
-                                ..loadComments(context, controller.userTweetsPagingController.itemList![index].id),
+                                ..loadComments(
+                                    context,
+                                    controller.userTweetsPagingController
+                                        .itemList![index].id),
                               child: TwitterPostComments(
                                 comments: const [],
-                                postId: controller.userTweetsPagingController.itemList![index].id,
+                                postId: controller.userTweetsPagingController
+                                    .itemList![index].id,
                                 user: user,
-                                onAddComment: (TwitterPostCommentParams params) async {
-                                  var result = await controller.onPostComment(params: params);
+                                onAddComment:
+                                    (TwitterPostCommentParams params) async {
+                                  var result = await controller.onPostComment(
+                                      params: params);
                                   controller.userTweetsPagingController.itemList
-                                      ?.firstWhere((element) => element.id == params.postId)
-                                      .commentsCount = (controller.userTweetsPagingController.itemList!
-                                          .firstWhere((element) => element.id == params.postId)
+                                      ?.firstWhere((element) =>
+                                          element.id == params.postId)
+                                      .commentsCount = (controller
+                                          .userTweetsPagingController.itemList!
+                                          .firstWhere((element) =>
+                                              element.id == params.postId)
                                           .commentsCount! +
                                       1);
                                   setState(() {});
                                   return result;
                                 },
-                                onAddReply: (TwitterCommentReplyParams params) async {
-                                  final result = await controller.onCommentReply(params: params);
+                                onAddReply:
+                                    (TwitterCommentReplyParams params) async {
+                                  final result = await controller
+                                      .onCommentReply(params: params);
                                   controller.userTweetsPagingController.itemList
-                                      ?.firstWhere((element) => element.id == params.postId)
-                                      .commentsCount = (controller.userTweetsPagingController.itemList!
-                                          .firstWhere((element) => element.id == params.postId)
+                                      ?.firstWhere((element) =>
+                                          element.id == params.postId)
+                                      .commentsCount = (controller
+                                          .userTweetsPagingController.itemList!
+                                          .firstWhere((element) =>
+                                              element.id == params.postId)
                                           .commentsCount! +
                                       1);
                                   setState(() {});
                                   return result;
                                 },
-                                onCommentReact: (TwitterCommentReactParams params) {
+                                onCommentReact:
+                                    (TwitterCommentReactParams params) {
                                   controller.onCommentReact(params: params);
                                 },
-                                onGetReplies: (String id, TwitterPostCommentEntity comment) async {
+                                onGetReplies: (String id,
+                                    TwitterPostCommentEntity comment) async {
                                   // getCommentReplies(
                                   //   context: context,
                                   //   commentId: id,
@@ -147,16 +183,28 @@ class _UserTweetsState extends State<UserTweets> {
                                 onReport: (TwitterReportParams params) {
                                   controller.onReport(params);
                                 },
-                                onEditComment: (TwitterPostCommentParams params) async =>
-                                    await controller.editComment(params: params),
+                                onEditComment:
+                                    (TwitterPostCommentParams params) async =>
+                                        await controller.editComment(
+                                            params: params),
                                 onDeleteComment: (String id) async {
                                   var result = await controller.deleteComment(
                                       context: context,
                                       commentId: id,
-                                      postId: controller.userTweetsPagingController.itemList![index].mainPost.id,
+                                      postId: controller
+                                          .userTweetsPagingController
+                                          .itemList![index]
+                                          .mainPost
+                                          .id,
                                       from: 'details');
-                                  controller.userTweetsPagingController.itemList![index].commentsCount =
-                                      ((controller.userTweetsPagingController.itemList![index].commentsCount)! - 1);
+                                  controller
+                                      .userTweetsPagingController
+                                      .itemList![index]
+                                      .commentsCount = ((controller
+                                          .userTweetsPagingController
+                                          .itemList![index]
+                                          .commentsCount)! -
+                                      1);
                                   setState(() {});
                                   return result;
                                 },
@@ -167,7 +215,8 @@ class _UserTweetsState extends State<UserTweets> {
                         getPost: () {
                           controller.getTwitterPost(
                               context,
-                              controller.userTweetsPagingController.itemList![index].mainPost.id,
+                              controller.userTweetsPagingController
+                                  .itemList![index].mainPost.id,
                               state.newCommentId ?? '');
                         },
                         onReport: (TwitterReportParams params) {
@@ -183,28 +232,36 @@ class _UserTweetsState extends State<UserTweets> {
                           var result = await controller.deleteComment(
                               context: context,
                               commentId: id,
-                              postId: controller.userTweetsPagingController.itemList![index].mainPost.id,
+                              postId: controller.userTweetsPagingController
+                                  .itemList![index].mainPost.id,
                               from: 'details');
-                          controller.userTweetsPagingController.itemList?[index].commentsCount =
-                              (controller.userTweetsPagingController.itemList![index].commentsCount! - 1);
+                          controller.userTweetsPagingController.itemList?[index]
+                              .commentsCount = (controller
+                                  .userTweetsPagingController
+                                  .itemList![index]
+                                  .commentsCount! -
+                              1);
                           setState(() {});
                           return result;
                         },
-                        onEditComment: (TwitterPostCommentParams params) async =>
-                            controller.editComment(params: params),
+                        onEditComment:
+                            (TwitterPostCommentParams params) async =>
+                                controller.editComment(params: params),
                       )
                     : Center(
                         child: Label(
                             text: getFailureMessage(
-                          state.failure ?? const UnknownFailure(),
+                          state.failure ?? const UnknownFailure(''),
                           context,
                         )),
                       );
               },
               noMoreItemsIndicatorBuilder: (context) => Container(),
-              firstPageProgressIndicatorBuilder: (context) =>
-                  Container(margin: const EdgeInsets.only(top: 150), child: const CupertinoActivityIndicator()),
-              newPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator()),
+              firstPageProgressIndicatorBuilder: (context) => Container(
+                  margin: const EdgeInsets.only(top: 150),
+                  child: const CupertinoActivityIndicator()),
+              newPageProgressIndicatorBuilder: (context) =>
+                  const CupertinoActivityIndicator()),
         );
       }),
     );

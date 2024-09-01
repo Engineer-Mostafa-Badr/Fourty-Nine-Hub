@@ -255,7 +255,7 @@ class BaseApiConsumer extends ApiConsumer {
         );
       }
     }
-    return const UnknownFailure();
+    return  UnknownFailure(e);
   }
 
   Future<void> refreshToken() async {

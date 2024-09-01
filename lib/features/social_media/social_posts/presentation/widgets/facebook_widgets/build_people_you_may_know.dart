@@ -34,7 +34,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ?? const UnknownFailure(),
+            state.failure ?? const UnknownFailure(''),
             context,
           ),
         );

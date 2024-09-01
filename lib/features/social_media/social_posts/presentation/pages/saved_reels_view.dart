@@ -26,7 +26,7 @@ class SavedReelsView extends StatelessWidget {
               showErrorMessage(
                 context,
                 getFailureMessage(
-                  state.failure ?? const UnknownFailure(),
+                  state.failure ?? const UnknownFailure(''),
                   context,
                 ),
               );
@@ -70,7 +70,7 @@ class SavedReelsView extends StatelessWidget {
                     : Center(
                   child: Label(
                       text: getFailureMessage(
-                        state.failure ?? const UnknownFailure(),
+                        state.failure ?? const UnknownFailure(''),
                         context,
                       )),
                 );
