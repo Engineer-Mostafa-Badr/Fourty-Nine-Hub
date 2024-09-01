@@ -72,8 +72,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   }
 
   void createPost({required BuildContext context, required String type}) async {
-    if (postContentTextController.text.isNotEmpty) {
-      // selectedImages=state.images?.map((e)=>e.mediaId).toList();
+    if (postContentTextController.text.isNotEmpty||selectedImages!=null||selectedImages!.isNotEmpty) {
       print("test media ${selectedImages?.length}");
       if (type == 'twitter') {
         final response = await _createTwitterPostUseCase(

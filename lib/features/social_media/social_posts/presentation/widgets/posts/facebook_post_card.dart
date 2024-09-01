@@ -500,7 +500,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 ],
               ),
             ),
-            if (post.user.id == user?.id)
+            if (post.user.id != user?.id)
               IconAppButton(
                 onPressed: () {
                   bottomSheet(

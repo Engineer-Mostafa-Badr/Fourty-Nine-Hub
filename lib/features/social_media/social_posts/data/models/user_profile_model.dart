@@ -22,7 +22,7 @@ class UserProfileModel extends UserProfileEntity {
     super.isDocument,
     super.isSenTRequest,
     super.sentFriendRequest,
-    super.isBlock,
+    super.isBlock, required super.posts,
   });
 
   factory UserProfileModel.fromJson(Map<String, dynamic> json) {
@@ -38,6 +38,7 @@ class UserProfileModel extends UserProfileEntity {
       email: json['userId']['email'] ?? '',
       isDocument: json['userId']['twitter_documentation'] ?? false,
       totalView: json['totalView'] ?? 0,
+      posts: json['posts'] ?? 0,
       profilePicture: json['profilePictureKey'] ?? '',
       profileCover: json['coverPictureKey'] ?? '',
       friendsCount: json['friendsCount'] ?? 0,

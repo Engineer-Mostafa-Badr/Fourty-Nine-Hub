@@ -56,6 +56,25 @@ class _CreatePostViewState extends State<CreatePostView> {
               body: ListView(
                 shrinkWrap: true,
                 children: [
+                  Row(
+                    children: [
+                      Container(
+                        margin: const EdgeInsetsDirectional.only(start: 10),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withOpacity(0.3),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(state.selectedPrivacy=='onlyMe'?Icons.lock:state.selectedPrivacy=='friends'?Icons.family_restroom:state.selectedPrivacy=='followers'?Icons.accessibility_sharp:state.selectedPrivacy=='friendsAndFollowers'?Icons.supervised_user_circle_outlined:Icons.language),
+                            const Sizer(),
+                            Text(state.selectedPrivacy=='onlyMe'? 'Only Me':state.selectedPrivacy=='friends'?'Friends':state.selectedPrivacy=='followers'?'Followers':state.selectedPrivacy=='friendsAndFollowers'?'Friends / Followers':'Public',style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                   if (state.place != null && state.place!.name.isNotEmpty)
                     GestureDetector(
                       onTap: () {},
@@ -139,9 +158,9 @@ class _CreatePostViewState extends State<CreatePostView> {
                   if (widget.social != 'twitter' && (state.images == null || state.images!.isEmpty))
                     _buildColorsBallet(context: context),
                   const Sizer(),
-                  _buildOptions(controller),
-                  const Sizer(),
                   if (state.images != null && state.images!.isNotEmpty) Expanded(child: _buildMediaCard()),
+                  const Sizer(),
+                  _buildOptions(controller),
                 ],
               ),
             ),
@@ -303,19 +322,35 @@ class _CreatePostViewState extends State<CreatePostView> {
 
   Widget _buildOptions(CreatePostCubit controller) {
     return BlocBuilder<CreatePostCubit, CreatePostState>(builder: (context, state) {
-      return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        IconButton(
-            onPressed: () async {
-              await controller.uploadPhoto();
-            },
-            icon: const Icon(
-              Icons.image,
-              color: Colors.green,
-              size: 30,
-            )),
-        if (widget.social != 'twitter')
-          IconButton(
-              onPressed: () {
+      return Padding(
+        padding: const EdgeInsetsDirectional.only(start: 8.0),
+        child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround,crossAxisAlignment: CrossAxisAlignment.start , children: [
+          const Divider(),
+          InkWell(
+            splashColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: ()async=>await controller.uploadPhoto(),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.image,
+                  color: Colors.green,
+                  size: 30,
+                ),
+                const Sizer(),
+                Text('Photo',style: Styles.mediumText(fontSize: 34,fontWeight: FontWeight.w500),),
+              ],
+            ),
+          ),
+          if (widget.social != 'twitter')
+            ...[
+              const Divider(),
+              InkWell(
+              splashColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: (){
                 bottomSheet(
                     isScrollControlled: true,
                     context: context,
@@ -324,14 +359,26 @@ class _CreatePostViewState extends State<CreatePostView> {
                       onSelected: (ActivityEntity item) => context.read<CreatePostCubit>().selectActivity(item: item),
                     ));
               },
-              icon: const Icon(
-                Icons.local_activity,
-                color: Colors.blue,
-                size: 30,
-              )),
-        if (widget.social != 'twitter')
-          IconButton(
-              onPressed: () {
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.local_activity,
+                    color: Colors.blue,
+                    size: 30,
+                  ),
+                  const Sizer(),
+                  Text('Activity',style: Styles.mediumText(fontSize: 34,fontWeight: FontWeight.w500),),
+                ],
+              ),
+            )],
+          if (widget.social != 'twitter')
+            ...[
+              const Divider(),
+              InkWell(
+              splashColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: (){
                 bottomSheet(
                     isScrollControlled: true,
                     context: context,
@@ -340,32 +387,56 @@ class _CreatePostViewState extends State<CreatePostView> {
                       onSelected: (FeelingEntity item) => context.read<CreatePostCubit>().selectedFeeling(item: item),
                     ));
               },
-              icon: const Icon(
-                Icons.emoji_emotions_outlined,
-                color: Colors.orangeAccent,
-                size: 30,
-              )),
-        if (widget.social != 'twitter')
-          IconButton(
-              onPressed: () {
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.emoji_emotions_outlined,
+                    color: Colors.orangeAccent,
+                    size: 30,
+                  ),
+                  const Sizer(),
+                  Text('Feeling',style: Styles.mediumText(fontSize: 34,fontWeight: FontWeight.w500),),
+                ],
+              ),
+            )],
+          if (widget.social != 'twitter')
+            ...[
+              const Divider(),
+              InkWell(
+              splashColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: (){
                 showDialog(
                     context: context,
                     builder: (context) => BuildSearchFriends(
-                          onSelectUser: (PostUserEntity user) {
-                            controller.selectUsers(user);
-                            // context.pop(true);
-                          },
-                          controller: controller,
-                        ));
+                      onSelectUser: (PostUserEntity user) {
+                        controller.selectUsers(user);
+                        // context.pop(true);
+                      },
+                      controller: controller,
+                    ));
               },
-              icon: const Icon(
-                Icons.people,
-                color: Colors.grey,
-                size: 30,
-              )),
-        if (widget.social != 'twitter')
-          IconButton(
-              onPressed: () {
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.people,
+                    color: Colors.grey,
+                    size: 30,
+                  ),
+                  const Sizer(),
+                  Text('Tag People',style: Styles.mediumText(fontSize: 34,fontWeight: FontWeight.w500),),
+                ],
+              ),
+            )],
+          if (widget.social != 'twitter')
+            ...[
+              const Divider(),
+              InkWell(
+              splashColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: (){
                 showDialog(
                     context: context,
                     builder: (context) => BuildSearchPlaces(
@@ -375,14 +446,26 @@ class _CreatePostViewState extends State<CreatePostView> {
                         },
                         controller: controller));
               },
-              icon: const Icon(
-                Icons.location_on,
-                color: Colors.grey,
-                size: 30,
-              )),
-        if (widget.social != 'twitter')
-          IconButton(
-              onPressed: () async {
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.location_on,
+                    color: Colors.red,
+                    size: 30,
+                  ),
+                  const Sizer(),
+                  Text('Check in',style: Styles.mediumText(fontSize: 34,fontWeight: FontWeight.w500),),
+                ],
+              ),
+            )],
+          if (widget.social != 'twitter')
+            ...[
+              const Divider(),
+              InkWell(
+              splashColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: ()async{
                 final res = await CustomVerticalSheetItem.normal<PrivacyStatus>(context, [
                   CustomSheetModel(
                     text: "Public",
@@ -414,12 +497,22 @@ class _CreatePostViewState extends State<CreatePostView> {
                 print("============>");
                 controller.selectPrivacy(privacy: res?.name ?? 'public');
               },
-              icon: const Icon(
-                Icons.privacy_tip,
-                color: Colors.grey,
-                size: 30,
-              )),
-      ]);
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.privacy_tip,
+                    color: Colors.grey,
+                    size: 30,
+                  ),
+                  const Sizer(),
+                  Text('Privacy',style: Styles.mediumText(fontSize: 34,fontWeight: FontWeight.w500),),
+                ],
+              ),
+            ),
+              const Sizer(),
+            ],
+        ]),
+      );
     });
   }
 }

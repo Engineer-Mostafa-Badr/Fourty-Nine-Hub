@@ -72,8 +72,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_dialogue.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_friends.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_places.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/pages/edit_profile_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
@@ -83,7 +81,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/instagram_profile.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
@@ -522,6 +520,24 @@ class AppPages {
           GoRoute(
             path: Paths.INSTAGRAM,
             name: Routes.INSTAGRAM,
+            routes: [
+              GoRoute(
+                path: Paths.INSTAGRAMPROFILE,
+                name: Routes.INSTAGRAMPROFILE,
+                routes: [
+
+                ],
+                builder: (context, state) {
+                  final id = state.extra as String?;
+
+                  return BlocProvider<SocialPostsCubit>(
+                  create: (_) =>
+                  serviceLocator()..getUserProfile(id: id ?? ''),
+                  child: InstagramProfile(userId: id??''),
+                );
+                },
+              ),
+            ],
             builder: (context, state) => BlocProvider<InstagramCubit>(
               create: (_) => serviceLocator()..loadData(),
               child: const InstagramView(),
@@ -588,6 +604,7 @@ class AppPages {
                                 child: const EditProfileView()),
                       ),
                     ]),
+
                 GoRoute(
                     path: Paths.REELS,
                     name: Routes.REELS,

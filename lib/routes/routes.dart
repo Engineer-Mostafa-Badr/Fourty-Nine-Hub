@@ -21,6 +21,7 @@ abstract class Routes {
   static const TRANSFERMONEY = '/Wallet/TransferMoney';
   static const SOCIAL = '/Social';
   static const OTHERSACCOUNT = '/Social/OthersAccount';
+  static const INSTAGRAMPROFILE = '/Instagram/InstagramProfile';
   static const EDITPROFILE = '/Social/OthersAccount/EditProfile';
   static const REELS = '/Social/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
@@ -147,6 +148,7 @@ abstract class Paths {
   static const INSTAGRAM = 'Instagram';
   static const SOCIAL = 'Social';
   static const OTHERSACCOUNT = 'OthersAccount';
+  static const INSTAGRAMPROFILE = 'InstagramProfile';
   static const MAZADAT = 'Mazadat';
   static const MAZADDETAILS = 'MazadDetails';
   static const CREATEAUCTION = 'CreateAuction';

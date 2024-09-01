@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,20 +7,22 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class SavedReelsView extends StatelessWidget {
-  const SavedReelsView({super.key, required this.userData});
-  final UserProfileEntity userData;
+class MediaView extends StatefulWidget {
+  const MediaView({super.key});
 
+  @override
+  State<MediaView> createState() => _MediaViewState();
+}
+
+class _MediaViewState extends State<MediaView> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<InstagramCubit>(
-      create: (_) => serviceLocator()..loadSaverReels(userData.id),
+      create: (_) => serviceLocator()..loadMedia(),
       child: BlocConsumer<InstagramCubit, InstagramState>(
           listener: (context, state) {
             if (state.status == StateStatus.error) {
@@ -34,15 +37,15 @@ class SavedReelsView extends StatelessWidget {
           }, builder: (context, state) {
         final controller = context.read<InstagramCubit>();
         return PagedSliverList<int, PostEntity>(
-          pagingController: controller.savedReelsPagingController,
+          pagingController: controller.mediaPagingController,
           builderDelegate: PagedChildBuilderDelegate<PostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
-                print(controller.savedReelsPagingController.itemList?.length);
+                print(controller.mediaPagingController.itemList?.length);
                 return const Padding(
                     padding: EdgeInsets.only(top: 200),
                     child: Center(
                       child: Text(
-                        "No Reels",
+                        "No Media",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 18,
@@ -51,18 +54,23 @@ class SavedReelsView extends StatelessWidget {
                     ));
               },
               itemBuilder: (context, item, index) {
-                final post =
-                controller.savedReelsPagingController.itemList![index];
-                print(post.videoMedia);
                 return state.status == StateStatus.success
                     ? Container(
-                    color: Colors.black,
-                    width: double.infinity,
-                    height: 400,
-                    child: InstagramReelCard(
-                      item: post,
-                      playVideo: false,
-                    ))
+                  padding: const EdgeInsets.all(8),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: CachedNetworkImage(
+                                          height: 300,
+                                          imageUrl: controller.mediaPagingController.itemList?[index].images?[0]??'',
+                                          fit: BoxFit.fill,
+                                          placeholder: (context, url) => const Center(
+                        child: CupertinoActivityIndicator(radius: 25),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                          const Center(child: Icon(Icons.error)),
+                                        ),
+                      ),
+                    )
                     : Center(
                   child: Label(
                       text: getFailureMessage(
