@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/data/models/use
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
@@ -25,6 +26,8 @@ abstract class SocialPostsRemoteDataSource {
   Future<Either<Failure, List<PostEntity>>> getTweet(
       {required TwitterFeedParams params});
   Future<Either<Failure, PostEntity>> getPost({required String postId});
+  Future<Either<Failure, bool>> deleteFriend({required String userId});
+  Future<Either<Failure, bool>> acceptRejectFriendRequest({required AcceptRejectFriendRequestParams params});
   Future<Either<Failure, UserProfileEntity>> getUserProfile(
       {required String userId});
   Future<Either<Failure, List<PostEntity>>> getAdvertisement(
@@ -56,7 +59,8 @@ abstract class SocialPostsRemoteDataSource {
   Future<Either<Failure, bool>> blockUser({required String userId});
   Future<Either<Failure, bool>> followRequest({required String userId});
   Future<Either<Failure, bool>> unFollow({required String userId});
-  Future<Either<Failure, bool>> sendGreetMessage({required SendGreetMessageParams params});
+  Future<Either<Failure, bool>> sendGreetMessage(
+      {required SendGreetMessageParams params});
   Future<Either<Failure, bool>> removeSuggestUser({required String userId});
   Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends(
       {required SuggestedFriendsParams params});
@@ -234,8 +238,9 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   @override
   Future<Either<Failure, bool>> sendGreetMessage(
       {required SendGreetMessageParams params}) async {
-    final response = await _apiConsumer
-        .post(EndPoints.greetMessage(params.userId), data: {"message": params.message});
+    final response = await _apiConsumer.post(
+        EndPoints.greetMessage(params.userId),
+        data: {"message": params.message});
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
@@ -294,6 +299,20 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
       {required PostCommentParams params}) async {
     final response = await _apiConsumer
         .put(EndPoints.editComment(params), data: {'content': params.content});
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> acceptRejectFriendRequest({required AcceptRejectFriendRequestParams params}) async{
+    final response = await _apiConsumer
+        .put(EndPoints.acceptRejectFriendRequest(params), data: {'status': params.status});
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteFriend({required String userId}) async{
+    final response = await _apiConsumer
+        .delete(EndPoints.deleteFriend(userId),);
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 }

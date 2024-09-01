@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
@@ -7,28 +9,93 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
-import '../../../restaurants_list/domain/entities/restaurant_entity.dart';
-
 class RestaurantHeader extends StatelessWidget {
-  final RestaurantEntity restaurant;
+  final Restaurant restaurant;
   const RestaurantHeader({super.key, required this.restaurant});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: kToolbarHeight * 4,
+      height: kToolbarHeight * 5.5,
       width: double.infinity,
       child: Stack(
         children: [
-          Positioned.fill(
-              child: Column(
+          Column(
             children: [
-              Expanded(
-                  child: SquareImage(
-                      width: double.infinity, url: restaurant.image.first)),
-              const Spacer(),
+              ImagesProfileForRestaurant(
+                autoPlay: true,
+                restaurantMedia: restaurant.restaurantMedia,
+                heightCarousel: MediaQuery.of(context).size.width * 0.5,
+                widthForImages: MediaQuery.of(context).size.width,
+              ),
+
+              /// card data
+              SizedBox(
+                height: kToolbarHeight * 1.9,
+                child: Card(
+                  margin: const EdgeInsets.all(15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+                  elevation: 5,
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  child: Container(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SquareImage(
+                                width: kToolbarHeight * 2,
+                                height: kToolbarHeight,
+                                fit: BoxFit.cover,
+                                url:
+                                    restaurant.restaurantMedia?.first.mediaKey),
+                            const Sizer(),
+                            Expanded(
+                                child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Label(
+                                  text: restaurant.name ?? "",
+                                  style: Styles.headerText(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.PRIMARY_COLOR_DARK),
+                                ),
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.star_rounded,
+                                      color: AppColors.ACCENT_COLOR,
+                                    ),
+                                    const Sizer(),
+                                    Label(
+                                        text:
+                                            '${restaurant.totalRating ?? ""} ',
+                                        style: Styles.mediumText(
+                                            fontWeight: FontWeight.w500)),
+                                    Label(
+                                        text:
+                                            '(${restaurant.numberOfReviews}+)',
+                                        style: Styles.mediumText()),
+                                  ],
+                                ),
+                              ],
+                            ))
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ],
-          )),
+          ),
+
+          /// back botton
           Positioned(
             top: 10,
             left: 10,
@@ -38,69 +105,6 @@ class RestaurantHeader extends StatelessWidget {
               isCircle: true,
             ),
           ),
-          Positioned(
-              bottom: 0,
-              left: 10,
-              right: 10,
-              height: kToolbarHeight * 2,
-              child: Container(
-                margin: const EdgeInsets.all(15),
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.grey, spreadRadius: 6, blurRadius: 10)
-                  ],
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: kToolbarHeight,
-                          width: kToolbarHeight,
-                          child: SquareImage(
-                              radius: 5, url: restaurant.image.first),
-                        ),
-                        const Sizer(),
-                        Expanded(
-                            child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Label(
-                              text: restaurant.name,
-                              style: Styles.mediumText(
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            Label(
-                                text: restaurant.description,
-                                style: Styles.mediumText(color: Colors.grey)),
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.star_rounded,
-                                  color: AppColors.ACCENT_COLOR,
-                                ),
-                                const Sizer(),
-                                Label(
-                                    text: '${restaurant.rate} ',
-                                    style: Styles.mediumText(
-                                        fontWeight: FontWeight.w500)),
-                                Label(
-                                    text: '(${restaurant.numberOfReviews}+)',
-                                    style: Styles.mediumText()),
-                              ],
-                            ),
-                          ],
-                        ))
-                      ],
-                    ),
-                  ],
-                ),
-              ))
         ],
       ),
     );

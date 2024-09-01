@@ -27,7 +27,6 @@ import '../../../../ride/RideRequest/domain/entity/address_search_params_entity.
 
 class CreateShippingView extends StatefulWidget {
   const CreateShippingView({super.key});
-
   @override
   State<CreateShippingView> createState() => _CreateShippingViewState();
 }
@@ -59,7 +58,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   builder: (context, state) {
                     if (state is SuccessGetBannerState) {
                       return SizedBox(
-                        width:double.infinity,
+                        width: double.infinity,
                         child: ShippingBanner(
                           model: state.model,
                         ),
@@ -438,13 +437,11 @@ class CustomTextField extends StatelessWidget {
       this.minLines,
       this.maxLines,
       this.maxLength});
-
   final String hint;
   final Icon? prefixIcon;
   final int? minLines;
   final int? maxLines;
   final int? maxLength;
-
   @override
   Widget build(BuildContext context) {
     return TextField(

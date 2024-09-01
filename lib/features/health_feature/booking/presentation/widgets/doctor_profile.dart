@@ -26,6 +26,7 @@ class BookingDoctorProfileWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           ProfileImage(
+            userId: '',
             accountId: 0,
             size: 50,
             imageURL: doctor.image,

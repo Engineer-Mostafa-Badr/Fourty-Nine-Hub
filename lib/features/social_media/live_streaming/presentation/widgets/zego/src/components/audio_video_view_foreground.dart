@@ -93,19 +93,19 @@ class ZegoLiveStreamingAudioVideoForeground extends StatelessWidget {
   Widget userName(BuildContext context, double maxWidth) {
     return showUserNameOnView
         ? ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: maxWidth,
-            ),
-            child: Text(
-              user?.name ?? '',
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 22.0.zR,
-                color: const Color(0xffffffff),
-                decoration: TextDecoration.none,
-              ),
-            ),
-          )
+      constraints: BoxConstraints(
+        maxWidth: maxWidth,
+      ),
+      child: Text(
+        user?.name ?? '',
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          fontSize: 22.0.zR,
+          color: const Color(0xffffffff),
+          decoration: TextDecoration.none,
+        ),
+      ),
+    )
         : const SizedBox();
   }
 
@@ -134,11 +134,11 @@ class ZegoLiveStreamingAudioVideoForeground extends StatelessWidget {
   }
 
   Widget audioVideoViewForegroundControlButton(
-    BuildContext context,
-    ZegoUIKitUser? user,
-    double maxWidth,
-    double maxHeight,
-  ) {
+      BuildContext context,
+      ZegoUIKitUser? user,
+      double maxWidth,
+      double maxHeight,
+      ) {
     if (!hostManager.isLocalHost ||
         user == null ||
         user.id == hostManager.notifier.value?.id) {

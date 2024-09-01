@@ -13,7 +13,6 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twit
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -50,6 +49,7 @@ class _CommentRepliesState extends State<CommentReplies> {
     return BlocBuilder<SocialPostsCubit, SocialPostsState>(
         builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
+      final user = context.read<UserCubit>().state.data;
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -116,16 +116,23 @@ class _CommentRepliesState extends State<CommentReplies> {
                 ),
                 child: Row(
                   children: [
-                    const ProfileImage(accountId: 0),
+                    ProfileImage(accountId: 0,fromProfile: true,imageURL: user?.profilePicture, userId: '',),
                     const Sizer(),
                     Expanded(
-                        child: FormTextField(
-                            hint: 'Type your reply ....',
-                            // height: kToolbarHeight * .7,
-                            action: (v) {
-                              setState(() {});
-                            },
-                            controller: replyTextController)),
+                        child: TextFormField(
+                          controller: replyTextController,
+                          onChanged: (v){
+                            setState(() {});
+                          },
+                          style: Styles.headerText(fontSize: 26),
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            contentPadding: const EdgeInsets.all(5),
+                            hintText: 'Type your reply ....',
+                            hintStyle: Styles.mediumText(),
+
+                          ),
+                        )),
                     const Sizer(),
                     if (replyTextController.text.isNotEmpty)
                       IconAppButton(

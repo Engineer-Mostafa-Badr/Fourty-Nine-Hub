@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_facebook_body.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -18,7 +19,6 @@ import '../widgets/posts/create_post_banner.dart';
 
 class SocialHomeView extends StatefulWidget {
   final String userId;
-
   const SocialHomeView({super.key, required this.userId});
 
   @override
@@ -145,12 +145,12 @@ class _SocialHomeViewState extends State<SocialHomeView>
                   decoration: i == 0
                       ? const BoxDecoration(
                           border: Border(
-                              bottom: BorderSide(color: Colors.blue, width: 2)))
+                              bottom: BorderSide(color: AppColors.PRIMARY_COLOR, width: 2)))
                       : null,
                   child: Icon(
                     i == 0 ? Icons.home : Icons.person,
                     color:
-                        i == 0 ? Colors.blue : Theme.of(context).primaryColor,
+                        i == 0 ? AppColors.PRIMARY_COLOR : Colors.grey,
                   )),
             ),
           ),

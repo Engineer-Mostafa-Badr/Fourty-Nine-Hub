@@ -382,7 +382,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               style: Styles.mediumText(color: Colors.grey)),
         ),
         Label(text: ' . $date', style: Styles.mediumText(color: Colors.grey)),
-        IconButton(
+        if(post.user.id!=user?.id)IconButton(
           onPressed: () {
             bottomSheet(
                 context: context,
@@ -520,7 +520,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             ],
           ),
         ),
-        if (post.isShared == false) ...[
+        if (post.isShared == false&&(post.user.id!=user?.id)) ...[
           IconButton(
             onPressed: () {
               bottomSheet(

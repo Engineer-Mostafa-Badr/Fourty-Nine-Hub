@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_state.dart';
+import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_state.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import 'package:zego_uikit/zego_uikit.dart';
@@ -147,7 +147,6 @@ class _ZegoLiveStreamingBottomBarState
             ZoomShareCodeButton(
               liveId: ZegoUIKit().getRoom().id,
             ),
-
           ],
         ),
       ),
@@ -282,7 +281,6 @@ class ZoomCameraBuilder extends StatelessWidget {
 
 class ZoomIconButtons {
   final Widget button;
-
   ZoomIconButtons({
     required this.button,
   });
@@ -290,7 +288,6 @@ class ZoomIconButtons {
 
 class ZoomParticipantsBuilder extends StatelessWidget {
   final ZegoLiveStreamingBottomBar widget;
-
   const ZoomParticipantsBuilder({
     super.key,
     required this.widget,
@@ -332,7 +329,6 @@ class ZoomParticipantsBuilder extends StatelessWidget {
 
 class ZoomChatBuilder extends StatelessWidget {
   final ZegoLiveStreamingBottomBar widget;
-
   const ZoomChatBuilder({
     super.key,
     required this.widget,
@@ -413,7 +409,6 @@ class ZoomSharescreenBuilder extends StatelessWidget {
                       // size: 35,
                     ),
                   ),
-
                   iconStopSharing: ButtonIcon(
                     icon: const Icon(
                       Icons.stop_screen_share_outlined,
@@ -443,7 +438,6 @@ class ZoomShareCodeButton extends StatelessWidget {
   const ZoomShareCodeButton({super.key, required this.liveId});
 
   final String liveId;
-
   @override
   Widget build(BuildContext context) {
     return Align(

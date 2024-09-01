@@ -11,11 +11,12 @@ class GetCommentsResponse {
 
   factory GetCommentsResponse.fromJson(Map<String, dynamic> json) {
     return GetCommentsResponse(
-      status: json['status'],
-      message: json['message'],
-      data: (json['data'] as List<dynamic>)
-          .map((item) => CommentData.fromJson(item))
-          .toList(),
+      status: json['status'] as bool? ?? false,
+      message: json['message'] as String? ?? '',
+      data: (json['data'] as List<dynamic>?)
+          ?.map((item) => CommentData.fromJson(item as Map<String, dynamic>))
+          .toList() ??
+          [],
     );
   }
 
@@ -27,17 +28,16 @@ class GetCommentsResponse {
     };
   }
 }
-
 class CommentData {
   final String id;
   final String reelId;
   final String comment;
-  final String? parentId; // Nullable
-  final ReceiverComment? receiverComment; // Nullable
+  final String? parentId;
+  final ReceiverComment? receiverComment;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final int likeCount;
-  final bool isLiked;
+  int likeCount;
+  bool isLiked;
   final User user;
   final List<CommentData> replies;
 
@@ -45,8 +45,8 @@ class CommentData {
     required this.id,
     required this.reelId,
     required this.comment,
-    this.parentId, // Nullable
-    this.receiverComment, // Nullable
+    this.parentId,
+    this.receiverComment,
     required this.createdAt,
     required this.updatedAt,
     required this.likeCount,
@@ -57,21 +57,22 @@ class CommentData {
 
   factory CommentData.fromJson(Map<String, dynamic> json) {
     return CommentData(
-      id: json['_id'],
-      reelId: json['reelId'],
-      comment: json['comment'],
-      parentId: json['parentId'], // Nullable
+      id: json['_id'] as String? ?? '',
+      reelId: json['reelId'] as String? ?? '',
+      comment: json['comment'] as String? ?? '',
+      parentId: json['parentId'] as String?,
       receiverComment: json['receiverComment'] != null
-          ? ReceiverComment.fromJson(json['receiverComment'])
-          : null, // Nullable
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
-      likeCount: json['likeCount'],
-      isLiked: json['isLiked'],
-      user: User.fromJson(json['user']),
-      replies: (json['replies'] as List<dynamic>)
-          .map((item) => CommentData.fromJson(item))
-          .toList(),
+          ? ReceiverComment.fromJson(json['receiverComment'] as Map<String, dynamic>)
+          : null,
+      createdAt: DateTime.tryParse(json['createdAt'] as String? ?? '') ?? DateTime.now(),
+      updatedAt: DateTime.tryParse(json['updatedAt'] as String? ?? '') ?? DateTime.now(),
+      likeCount: json['likeCount'] as int? ?? 0,
+      isLiked: json['isLiked'] as bool? ?? false,
+      user: User.fromJson(json['user'] as Map<String, dynamic>? ?? {}),
+      replies: (json['replies'] as List<dynamic>?)
+          ?.map((item) => CommentData.fromJson(item as Map<String, dynamic>))
+          .toList() ??
+          [],
     );
   }
 
@@ -80,8 +81,8 @@ class CommentData {
       '_id': id,
       'reelId': reelId,
       'comment': comment,
-      'parentId': parentId, // Nullable
-      'receiverComment': receiverComment?.toJson(), // Nullable
+      'parentId': parentId,
+      'receiverComment': receiverComment?.toJson(),
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
       'likeCount': likeCount,
@@ -91,23 +92,22 @@ class CommentData {
     };
   }
 }
-
 class ReceiverComment {
   final String firstName;
   final String lastName;
-  final String? id; // Nullable
+  final String? id;
 
   ReceiverComment({
     required this.firstName,
     required this.lastName,
-    this.id, // Nullable
+    this.id,
   });
 
   factory ReceiverComment.fromJson(Map<String, dynamic> json) {
     return ReceiverComment(
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      id: json['id'], // Nullable
+      firstName: json['firstName'] as String? ?? '',
+      lastName: json['lastName'] as String? ?? '',
+      id: json['id'] as String?,
     );
   }
 
@@ -115,11 +115,10 @@ class ReceiverComment {
     return {
       'firstName': firstName,
       'lastName': lastName,
-      'id': id, // Nullable
+      'id': id,
     };
   }
 }
-
 class User {
   final String id;
   final String firstName;
@@ -135,10 +134,10 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['_id'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      profilePictureSignedUrl: json['profilePictureSignedUrl'],
+      id: json['_id'] as String? ?? '',
+      firstName: json['firstName'] as String? ?? '',
+      lastName: json['lastName'] as String? ?? '',
+      profilePictureSignedUrl: json['profilePictureSignedUrl'] as String? ?? '',
     );
   }
 

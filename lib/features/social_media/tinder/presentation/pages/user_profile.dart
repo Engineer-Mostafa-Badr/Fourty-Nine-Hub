@@ -332,6 +332,12 @@ String capitalize(String name) {
 
 String capitalizeAndSplit(String name) {
   if (name.isEmpty) return name;
+  List<String> parts = name.split(' ').toList();
+  return parts.map(capitalize).join(' ');
+}
+
+String capitalizeAndSplit2Only(String name) {
+  if (name.isEmpty) return name;
   List<String> parts = name.split(' ').take(2).toList();
   return parts.map(capitalize).join(' ');
 }

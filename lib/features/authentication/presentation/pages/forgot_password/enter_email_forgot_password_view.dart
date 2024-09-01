@@ -24,7 +24,7 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<ForgotPasswordCubit>();
     return Scaffold(
-      appBar:  BackAppBar(
+      appBar: BackAppBar(
         label: LocaleKeys.forget.localize,
       ),
       body: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
@@ -48,7 +48,7 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
         },
         builder: (context, state) {
           return Padding(
-            padding:  EdgeInsets.all(20.zW),
+            padding: EdgeInsets.all(20.zW),
             child: ListView(
               children: [
                 const Sizer(),
@@ -58,15 +58,22 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
                     controller: cubit.emailController,
                     label: LocaleKeys.email.localize,
                     hint: LocaleKeys.typeHere.localize,
-                    style: TextStyle(fontSize: 30.zW,),
-                    prefix:  Icon(Icons.person,color: AppColors.GREY_DARK_COLOR,size: 40.zW,),
+                    style: TextStyle(
+                      fontSize: 30.zW,
+                    ),
+                    prefix: Icon(
+                      Icons.person,
+                      color: AppColors.GREY_DARK_COLOR,
+                      size: 40.zW,
+                    ),
                   ),
                 ),
                 const Sizer(),
                 DefaultButton(
                   label: LocaleKeys.sendOTP.localize,
                   onPressed: cubit.sendForgetPasswordOTP,
-                  labelStyle: TextStyle(fontSize: 35.zW,color: AppColors.AUTH_CONTAINER_COLOR),
+                  labelStyle: TextStyle(
+                      fontSize: 35.zW, color: AppColors.AUTH_CONTAINER_COLOR),
                 ),
               ],
             ),

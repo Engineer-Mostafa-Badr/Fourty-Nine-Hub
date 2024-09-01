@@ -21,7 +21,6 @@ void main() async {
   //to cache gift items
   // ZegoGiftManager().cache.cache(giftItemList);
 
-
   //Admob.initialize();
 
   SystemChrome.setPreferredOrientations([

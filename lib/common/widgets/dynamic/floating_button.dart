@@ -22,29 +22,31 @@ class FloatingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 90.zH,  // Set the desired height
+      height: 90.zH, // Set the desired height
       width: 90.zW,
-      child: FloatingActionButton(shape: CircleBorder(),
+      child: FloatingActionButton(
+        shape: CircleBorder(),
         onPressed: onTap != null
             ? () => onTap!()
             : () {
-          if (changeView == 1) {
-            context.push(Routes.SOCIAL);
-          } else if (changeView == 2) {
-            context.push(Routes.INSTAGRAM);
-          }
-        },
-        backgroundColor: changeView == 2 ? AppColors.PRIMARY_COLOR : Colors.white,
+                if (changeView == 1) {
+                  context.push(Routes.SOCIAL);
+                } else if (changeView == 2) {
+                  context.push(Routes.INSTAGRAM);
+                }
+              },
+        backgroundColor:
+            changeView == 2 ? AppColors.PRIMARY_COLOR : Colors.white,
         child: icon != null
             ? Icon(
-          icon,
-          color: AppColors.SECONDARY_COLOR,
-        )
+                icon,
+                color: AppColors.SECONDARY_COLOR,
+              )
             : Image.asset(
-          Assets.logo,
-          height: 50.zH, // Adjust size as needed
-          width: 50.zH,  // Adjust size as needed
-        ),
+                Assets.logo,
+                height: 50.zH, // Adjust size as needed
+                width: 50.zH, // Adjust size as needed
+              ),
       ),
     );
   }

@@ -20,7 +20,8 @@ class SubCategoryCard extends StatelessWidget {
   final SubCategoryEntity item;
   final MainCategoryEntity mainCategory;
 
-  const SubCategoryCard({super.key, required this.item, required this.mainCategory});
+  const SubCategoryCard(
+      {super.key, required this.item, required this.mainCategory});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,13 @@ class SubCategoryCard extends StatelessWidget {
         decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(5),
-            boxShadow: const [BoxShadow(color: Colors.grey, spreadRadius: 1, offset: Offset(-1, 1), blurRadius: 5)]),
+            boxShadow: const [
+              BoxShadow(
+                  color: Colors.grey,
+                  spreadRadius: 1,
+                  offset: Offset(-1, 1),
+                  blurRadius: 5)
+            ]),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -84,7 +91,9 @@ class SubCategoryCard extends StatelessWidget {
                       onPressed: () {
                         if (AuthHelper().isLoggedIn()) {
                           context.push(Routes.CREATEAD,
-                              extra: CategorizationEntity(mainCategory: mainCategory, subCategory: item));
+                              extra: CategorizationEntity(
+                                  mainCategory: mainCategory,
+                                  subCategory: item));
                         } else {
                           context.push(Routes.LOGIN);
                         }

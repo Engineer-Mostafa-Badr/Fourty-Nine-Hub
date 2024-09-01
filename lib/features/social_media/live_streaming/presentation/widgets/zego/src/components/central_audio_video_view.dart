@@ -30,8 +30,8 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/pk_combine_notifier.dart';
 
 import '../../../../../../../../service_locator/service_locator.dart';
-import '../../../../../../../zoom/presentation/bloc/zoom_cubit.dart';
-import '../../../../../../../zoom/presentation/bloc/zoom_state.dart';
+import '../../../../../../../zoom/presentation/bloc/meeting_cubit.dart';
+import '../../../../../../../zoom/presentation/bloc/meeting_state.dart';
 
 /// @nodoc
 class ZegoLiveStreamingCentralAudioVideoView extends StatefulWidget {

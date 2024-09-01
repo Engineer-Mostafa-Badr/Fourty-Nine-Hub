@@ -49,7 +49,7 @@ class GoogleApiConsumer extends ApiConsumer {
         }
       }
     }
-    return const UnknownFailure();
+    return  UnknownFailure(e);
   }
 
   @override

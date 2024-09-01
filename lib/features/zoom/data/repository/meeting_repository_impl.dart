@@ -23,8 +23,10 @@ class MeetingRepositoryImpl extends MeetingRepository {
   Future<Either<Failure, void>> end(MeetingParams params) {
     return meetingDataSource.endRoom(params);
   }
+
   @override
-  Future<Either<Failure, List<ScheduledMeeting>>> getScheduledMeetings(MeetingParams params) {
+  Future<Either<Failure, List<ScheduledMeeting>>> getScheduledMeetings(
+      MeetingParams params) {
     return meetingDataSource.getScheduledMeetings(params);
   }
 

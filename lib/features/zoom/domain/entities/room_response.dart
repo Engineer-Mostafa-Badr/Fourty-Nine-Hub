@@ -1,9 +1,6 @@
-
-
 import 'package:equatable/equatable.dart';
 
 class RoomResponse extends Equatable {
-  
   final String message;
   final bool success;
   const RoomResponse({

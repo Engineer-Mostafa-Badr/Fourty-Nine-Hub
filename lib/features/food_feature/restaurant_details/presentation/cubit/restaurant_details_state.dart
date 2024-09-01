@@ -11,8 +11,8 @@ extension RestaurantDetailsStateX on RestaurantDetailsState {
 class RestaurantDetailsState {
   final RestaurantDetailsStates? status;
   final Failure? failure;
-  final List<MealEntity>? meals;
-  final RestaurantEntity? restaurant;
+  final List<RestaurantMenu>? meals;
+  final Restaurant? restaurant;
   final List<SelectedMealModel>? selectedMeals;
   const RestaurantDetailsState(
       {this.status,
@@ -24,8 +24,8 @@ class RestaurantDetailsState {
   RestaurantDetailsState copyWith({
     RestaurantDetailsStates? status,
     Failure? failure,
-    List<MealEntity>? meals,
-    RestaurantEntity? restaurant,
+    List<RestaurantMenu>? meals,
+    Restaurant? restaurant,
     List<SelectedMealModel>? selectedMeals,
   }) {
     return RestaurantDetailsState(

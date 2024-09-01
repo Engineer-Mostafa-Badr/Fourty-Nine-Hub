@@ -21,6 +21,7 @@ abstract class Routes {
   static const TRANSFERMONEY = '/Wallet/TransferMoney';
   static const SOCIAL = '/Social';
   static const OTHERSACCOUNT = '/Social/OthersAccount';
+  static const INSTAGRAMPROFILE = '/Instagram/InstagramProfile';
   static const EDITPROFILE = '/Social/OthersAccount/EditProfile';
   static const REELS = '/Social/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
@@ -38,6 +39,8 @@ abstract class Routes {
   static const AUDIOSTREAMSCREEN = '/Social/ClubHouse/ClubHouseRoom';
   static const CHAT = '/Chat';
   static const CHATROOM = '/ChatRoom';
+  static const CHATROOMCAMERAPICKER = '/ChatRoom/CameraPicker';
+  static const MEDIASLIDER = '/ChatRoom/MediaSlider';
   static const MAZADAT = '/Mazadat';
   static const VISITA = '/Visita';
   static const VISITAEMERGENCY = '/Visita/VisitaEmergency';
@@ -68,6 +71,7 @@ abstract class Routes {
 
   static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
   static const CusineRestaurants = '/Food/Cusine-Restaurants';
+  static const SEARCHMEALS = '/Food/SearchMeals';
   static const RestaurantDashboard = '/Food/RestaurantDashboard';
   static const CREATERESTURANT = '/Food/CreateResturant';
 
@@ -124,6 +128,9 @@ abstract class Routes {
 
   static const TRIP_JOIN = '/TripJoin';
   static const AVAILABLE_TRIPS = '/AvailableTrips';
+
+  static const SPOTLIGHT = '/Spotlight';
+  static const SNAP = '/Snap';
 }
 
 abstract class Paths {
@@ -146,11 +153,14 @@ abstract class Paths {
   static const INSTAGRAM = 'Instagram';
   static const SOCIAL = 'Social';
   static const OTHERSACCOUNT = 'OthersAccount';
+  static const INSTAGRAMPROFILE = 'InstagramProfile';
   static const MAZADAT = 'Mazadat';
   static const MAZADDETAILS = 'MazadDetails';
   static const CREATEAUCTION = 'CreateAuction';
   static const CHAT = 'Chat';
   static const CHATROOM = 'ChatRoom';
+  static const CHATROOMCAMERAPICKER = 'CameraPicker';
+  static const MEDIASLIDER = 'MediaSlider';
   static const REELS = 'Reels';
   static const MUSICREELS = 'MUSICREELS';
   static const TWITTER = 'Twitter';
@@ -186,6 +196,7 @@ abstract class Paths {
   static const CREATERESTURANT = 'CreateResturant';
   static const CusineRestaurants = 'Cusine-Restaurants';
   static const RestaurantDashboard = 'RestaurantDashboard';
+  static const SearchMeals = 'SearchMeals';
   static const SHIPPING = 'Shipping';
   static const SHIPPING_REGISTER = 'shippingRegister';
 
@@ -236,4 +247,9 @@ abstract class Paths {
 
   static const TRIP_JOIN = 'TripJoin';
   static const AVAILABLE_TRIPS = 'AvailableTrips';
+
+  static const SPOTLIGHT = 'Spotlight';
+  static const SNAP = 'Snap';
+
+
 }

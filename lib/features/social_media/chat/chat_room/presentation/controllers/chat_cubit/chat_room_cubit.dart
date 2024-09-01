@@ -4,10 +4,9 @@ import 'dart:developer';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/file_picker_helper.dart';
-import 'package:fourtyninehub/common/widgets/stateful/picker/image_picker.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
@@ -19,7 +18,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/getChatMessages_usecase.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 part 'chat_view_state.dart';
@@ -37,7 +35,6 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   String? userToken;
   String? userId;
   String? chatId;
-  final ImagePicker _imagePicker = ImagePicker();
   final FilePicker _filePicker = FilePicker.platform;
 
   ChatRoomCubit(
@@ -174,19 +171,10 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     try {
       // Pick document files only
       if (await Permission.storage.request().isGranted) {
-        FilePickerResult? result = await _filePicker.pickFiles(
+         FilePickerResult? result = await _filePicker.pickFiles(
           type: FileType.custom,
           allowMultiple: true,
-          allowedExtensions: [
-            'doc',
-            'docx',
-            'pdf',
-            'txt',
-            'xls',
-            'xlsx',
-            'ppt',
-            'pptx'
-          ],
+          allowedExtensions: docsExtensions,
         );
 
         if (result != null) {
@@ -212,15 +200,11 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     try {
       // Pick document files only
       if (await Permission.storage.request().isGranted) {
+        final allowedExtensions = [...imagesExtensions, ...videosExtensions];
         FilePickerResult? result = await _filePicker.pickFiles(
           type: FileType.custom,
           allowMultiple: true,
-          allowedExtensions: [
-            // Image Extensions
-            'jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp', 'heic', 'svg',
-            // Video Extensions
-            'mp4', 'mov', 'avi', 'mkv', 'flv', 'wmv', 'webm', 'm4v', '3gp'
-          ],
+          allowedExtensions: allowedExtensions,
         );
 
         if (result != null) {
@@ -249,18 +233,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         FilePickerResult? result = await _filePicker.pickFiles(
           type: FileType.custom,
           allowMultiple: true,
-          allowedExtensions: [
-            'mp3', // MPEG Layer 3 Audio
-            'wav', // Waveform Audio File Format
-            'flac', // Free Lossless Audio Codec
-            'aac', // Advanced Audio Codec
-            'ogg', // Ogg Vorbis Audio
-            'm4a', // MPEG-4 Audio
-            'wma', // Windows Media Audio
-            'alac', // Apple Lossless Audio Codec
-            'opus', // Opus Audio
-            'aiff', // Audio Interchange File Format
-          ],
+          allowedExtensions: audioExtensions,
         );
 
         if (result != null) {
@@ -282,17 +255,9 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     }
   }
 
-  Future<void> pickFromCamera() async {
-    try {
-      _imagePicker.pickImage(source: ImageSource.gallery);
-    } catch (e) {
-      debugPrint('Error picking file: $e');
-    }
-  }
-
   @override
   Future<void> close() {
-    // _socketService.disposeSocket();
+    _socketService.disposeSocket();
     return super.close();
   }
 }

@@ -26,7 +26,8 @@ class NotificationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) =>
-          NotificationsCubit(NotificationRepoImpl(ApiService(Dio())))..fetchNotification('app'),
+          NotificationsCubit(NotificationRepoImpl(ApiService(Dio())))
+            ..fetchNotification('app'),
       child: BlocBuilder<NotificationsCubit, NotificationsState>(
         builder: (BuildContext context, state) {
           return DefaultTabController(
@@ -50,12 +51,14 @@ class NotificationView extends StatelessWidget {
                                   style: Styles.headerText(),
                                 ),
                                 TextAppButton(
-                                    style: const TextStyle(color: AppColors.SECONDARY_COLOR),
+                                    style: const TextStyle(
+                                        color: AppColors.SECONDARY_COLOR),
                                     label: LocaleKeys.clearAll.localize,
                                     onPressed: () {
                                       showAreYouSure(
                                           title: LocaleKeys.alert.localize,
-                                          subTitle: LocaleKeys.clearNotification.localize,
+                                          subTitle: LocaleKeys
+                                              .clearNotification.localize,
                                           action: () {},
                                           context: context);
                                     }),
@@ -64,7 +67,8 @@ class NotificationView extends StatelessWidget {
                             const Sizer(),
                             TabBar(tabs: [
                               Tab(
-                                icon: SvgPicture.asset(Assets.social, height: 20, semanticsLabel: 'social'),
+                                icon: SvgPicture.asset(Assets.social,
+                                    height: 20, semanticsLabel: 'social'),
                               ),
                               Tab(
                                 icon: Image.asset(

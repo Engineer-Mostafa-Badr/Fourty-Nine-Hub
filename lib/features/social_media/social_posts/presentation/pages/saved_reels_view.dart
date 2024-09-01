@@ -26,7 +26,7 @@ class SavedReelsView extends StatelessWidget {
               showErrorMessage(
                 context,
                 getFailureMessage(
-                  state.failure ?? const UnknownFailure(),
+                  state.failure ??  UnknownFailure(''),
                   context,
                 ),
               );
@@ -34,11 +34,7 @@ class SavedReelsView extends StatelessWidget {
           }, builder: (context, state) {
         final controller = context.read<InstagramCubit>();
         return PagedSliverList<int, PostEntity>(
-          // padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
           pagingController: controller.savedReelsPagingController,
-          // shrinkWrap: true,
-          // physics: const BouncingScrollPhysics(
-          //     parent: AlwaysScrollableScrollPhysics()),
           builderDelegate: PagedChildBuilderDelegate<PostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.savedReelsPagingController.itemList?.length);
@@ -70,7 +66,7 @@ class SavedReelsView extends StatelessWidget {
                     : Center(
                   child: Label(
                       text: getFailureMessage(
-                        state.failure ?? const UnknownFailure(),
+                        state.failure ??  UnknownFailure(''),
                         context,
                       )),
                 );

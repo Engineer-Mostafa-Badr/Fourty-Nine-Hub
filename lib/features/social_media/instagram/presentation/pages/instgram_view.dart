@@ -65,8 +65,8 @@ class _InstagramViewState extends State<InstagramView> {
         floatingActionButton: _isScrollingDown
             ? null
             : const FloatingButton(
-          changeView: 3,
-        ),
+                changeView: 3,
+              ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomNavigator(
           scrollController: scrollController,
@@ -78,34 +78,34 @@ class _InstagramViewState extends State<InstagramView> {
           builder: (context, state) {
             return context.read<UserCubit>().isLoggedIn
                 ? Column(
-              children: [
-                _buildTabBar(context),
-                Expanded(
-                  child: InstagramGlobalPosts(scrollController: scrollController),
-                ),
-              ],
-            )
+                    children: [
+                      _buildTabBar(context),
+                      Expanded(
+                        child: InstagramGlobalPosts(scrollController: scrollController),
+                      ),
+                    ],
+                  )
                 : Center(
-              child: SingleChildScrollView(
-                controller: scrollController,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () => context.push(Routes.LOGIN),
-                      child: Label(
-                        text: 'Login',
-                        style: Styles.headerText(color: Colors.blue),
+                    child: SingleChildScrollView(
+                      controller: scrollController,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () => context.push(Routes.LOGIN),
+                            child: Label(
+                              text: 'Login',
+                              style: Styles.headerText(color: Colors.blue),
+                            ),
+                          ),
+                          Label(
+                            text: ', To continue using chat services',
+                            style: Styles.headerText(),
+                          ),
+                        ],
                       ),
                     ),
-                    Label(
-                      text: ', To continue using chat services',
-                      style: Styles.headerText(),
-                    ),
-                  ],
-                ),
-              ),
-            );
+                  );
           },
         ),
       ),
@@ -120,23 +120,23 @@ class _InstagramViewState extends State<InstagramView> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: List.generate(
           2,
-              (i) => GestureDetector(
+          (i) => GestureDetector(
             onTap: () {
               if (i == 1) {
-                context.push(Routes.OTHERSACCOUNT, extra: user?.id);
+                context.push(Routes.INSTAGRAMPROFILE, extra: user?.id);
               }
             },
             child: Container(
               decoration: i == 0
                   ? const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: Colors.blue, width: 2),
-                ),
-              )
+                      border: Border(
+                        bottom: BorderSide(color: AppColors.PRIMARY_COLOR, width: 2),
+                      ),
+                    )
                   : null,
               child: Icon(
                 i == 0 ? Icons.grid_4x4_outlined : Icons.person,
-                color: i == 0 ? Colors.blue : AppColors.DARK_GRAY_COLOR,
+                color: i == 0 ? AppColors.PRIMARY_COLOR : Colors.grey,
               ),
             ),
           ),
@@ -145,5 +145,3 @@ class _InstagramViewState extends State<InstagramView> {
     );
   }
 }
-
-

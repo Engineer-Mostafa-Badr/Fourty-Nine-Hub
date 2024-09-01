@@ -7,10 +7,12 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/react_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/block_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_comment_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_friend_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/edit_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_advertisement_use_case.dart';
@@ -67,6 +69,8 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final RemoveFriedRequestUseCase _removeFriedRequestUseCase;
   final BlocUserUseCase _blocUserUseCase;
   final EditCommentUseCase _editCommentUseCase;
+  final AcceptRejectFriendRequestUseCase _acceptRejectFriendRequestUseCase;
+  final DeleteFriendUseCase _deleteFriendUseCase;
 
   SocialPostsCubit(
     this._getFeedUseCase,
@@ -93,7 +97,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._unFollowUserUseCase,
     this._removeFriedRequestUseCase,
     this._blocUserUseCase,
-    this._editCommentUseCase,
+    this._editCommentUseCase, this._acceptRejectFriendRequestUseCase, this._deleteFriendUseCase,
   ) : super(const SocialPostsState());
 
   void loadData() async {
@@ -179,7 +183,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       totalPosts.addAll(data);
       totalPosts.addAll(tweets);
       totalPosts.addAll(advertisements);
-      final isLastPage = totalPosts.length < (4);
+      final isLastPage = totalPosts.length < (3);
       if (page == 1) {
         print("page == 1 $page");
         feedPagingController.itemList = [];
@@ -255,7 +259,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       response.fold(
           (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
           (data) {
-        final isLastPage = data.length < pageSize;
+        final isLastPage = data.length < pageSize||page==3;
         if (page == 1) {
           print("page == 1 $page");
           suggestUserPagingController.itemList = [];
@@ -310,9 +314,10 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
             state.copyWith(profileData: data, status: StateStatus.success)));
   }
 
-  void changeUserPage(int page){
-    emit(state.copyWith(profilePage: page,status: StateStatus.success));
+  void changeUserPage(int page) {
+    emit(state.copyWith(profilePage: page, status: StateStatus.success));
   }
+
 // react on a post
   Future<bool> onReact(
       {required PostReactParams params, required String from}) async {
@@ -371,6 +376,32 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         (r) {
       value = r;
     });
+    return value;
+  }
+
+  // acceptRejectFriend
+  Future<bool> acceptRejectFriend({required AcceptRejectFriendRequestParams params}) async {
+    var response = await _acceptRejectFriendRequestUseCase(params);
+    bool value = false;
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: StateStatus.error)),
+            (r) {
+          value = r;
+        });
+    return value;
+  }
+
+  // Delete Friend
+  Future<bool> deleteFriend({required String userId}) async {
+    var response = await _deleteFriendUseCase(userId);
+    bool value = false;
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: StateStatus.error)),
+            (r) {
+          value = r;
+        });
     return value;
   }
 
@@ -622,8 +653,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   }
 
   Future<bool> sendGreetMessage(
-      {required BuildContext context, required String userId,required String message}) async {
-    final response = await _sendGreetMessageUseCase(SendGreetMessageParams(userId: userId,message: message,));
+      {required BuildContext context,
+      required String userId,
+      required String message}) async {
+    final response = await _sendGreetMessageUseCase(SendGreetMessageParams(
+      userId: userId,
+      message: message,
+    ));
     bool isAdd = false;
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),

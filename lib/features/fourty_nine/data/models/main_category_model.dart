@@ -30,14 +30,4 @@ class MainCategoryModel extends MainCategoryEntity {
               : (json['subCategories'] as List)
                   .map((e) => SubCategoryModel.fromJson(e))
                   .toList());
-
-  Map<String, dynamic> toJson() => {
-        '_id': id,
-        'name': name,
-        'image': image,
-        'banner': banner,
-        'cover': cover,
-        'isFavorite': isFavorite,
-        'totalAds': total,
-      };
 }

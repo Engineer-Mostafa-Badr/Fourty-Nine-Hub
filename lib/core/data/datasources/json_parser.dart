@@ -88,6 +88,6 @@ class JsonParser implements ApiConsumer {
         );
       }
     }
-    return const UnknownFailure();
+    return  UnknownFailure(e);
   }
 }

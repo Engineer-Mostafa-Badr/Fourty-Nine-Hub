@@ -40,6 +40,7 @@ class DoctorCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ProfileImage(
+                  userId: '',
                   accountId: 0,
                   size: 25,
                   imageURL: doctor.image,

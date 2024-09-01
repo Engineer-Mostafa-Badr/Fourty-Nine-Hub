@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
+
 // import 'dart:convert';
 // import 'package:flutter/services.dart' show rootBundle;
 
@@ -112,7 +113,7 @@ class BaseApiConsumer extends ApiConsumer {
         // )
       );
       log(url);
-      log(_dio.options.headers['Authorization'], name: "Authorization$url");
+      // log(_dio.options.headers['Authorization'], name: "Authorization$url");
       if (result.data['status']) {
         return Right(result.data as Map<String, dynamic>);
       } else {
@@ -168,6 +169,9 @@ class BaseApiConsumer extends ApiConsumer {
           ),
         );
       } else {
+        // if (e is DioException) {
+        //   print(' ========= ${e.response?.data}');
+        // }
         return Left(_getFailure(e));
       }
     }
@@ -251,7 +255,7 @@ class BaseApiConsumer extends ApiConsumer {
         );
       }
     }
-    return const UnknownFailure();
+    return  UnknownFailure(e);
   }
 
   Future<void> refreshToken() async {
