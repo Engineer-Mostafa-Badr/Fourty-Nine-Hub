@@ -81,7 +81,7 @@ class ClubVoiceDataSourceImpl extends ClubVoiceDataSource {
   }
 
   List<ClubVoiceRoomModel> _returnListOfRooms(Map<String, dynamic> r) {
-    var list = List.from(r['data']['docs'] as List)
+    var list = List.from(r['data'] as List)
         .map((e) => ClubVoiceRoomModel.fromJson(e))
         .toList();
     return list;

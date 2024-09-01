@@ -29,7 +29,7 @@ class _MediaViewState extends State<MediaView> {
               showErrorMessage(
                 context,
                 getFailureMessage(
-                  state.failure ?? const UnknownFailure(),
+                  state.failure ??  UnknownFailure(''),
                   context,
                 ),
               );
@@ -74,7 +74,7 @@ class _MediaViewState extends State<MediaView> {
                     : Center(
                   child: Label(
                       text: getFailureMessage(
-                        state.failure ?? const UnknownFailure(),
+                        state.failure ??  UnknownFailure(''),
                         context,
                       )),
                 );

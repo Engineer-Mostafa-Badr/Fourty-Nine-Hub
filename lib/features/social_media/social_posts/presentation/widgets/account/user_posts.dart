@@ -36,7 +36,7 @@ class _UserPostsState extends State<UserPosts> {
           showErrorMessage(
             context,
             getFailureMessage(
-              state.failure ?? const UnknownFailure(''),
+              state.failure ??  UnknownFailure(''),
               context,
             ),
           );
@@ -190,7 +190,7 @@ class _UserPostsState extends State<UserPosts> {
                     : Center(
                         child: Label(
                             text: getFailureMessage(
-                          state.failure ?? const UnknownFailure(''),
+                          state.failure ??  UnknownFailure(''),
                           context,
                         )),
                       );
