@@ -1,81 +1,181 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_state.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../res/style/styles.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../social_media/create_post/presentation/cubit/create_post_cubit.dart';
+import '../../../../social_media/create_post/presentation/widgets/image_details.dart';
+import '../../../../social_media/create_post/presentation/widgets/show_all_images.dart';
+import '../cubit/company_advertise/company_advertise_cubit.dart';
 
 class CreatePostCompany extends StatefulWidget {
-   CreatePostCompany({
-    super.key,  this.text=true,  this.picture=true, required this.title, required this.function, this.postContentTextController,
-  });
-  final bool text ;
+  CreatePostCompany({super.key,
+    this.text = true,
+    this.picture = true,
+    required this.title,
+    required this.totalPrice,
+    required this.type});
+
+  final bool text;
   final bool picture;
   final String title;
-  final Function function;
-   TextEditingController? postContentTextController;
+  final String type;
+  final int totalPrice;
 
   @override
   State<CreatePostCompany> createState() => _CreatePostViewState();
 }
 
 class _CreatePostViewState extends State<CreatePostCompany> {
+  var postContentTextController = TextEditingController();
+  var formKey = GlobalKey<FormState>();
 
   Future<bool> onBackPressed() async {
     SystemNavigator.pop();
-
     return true;
   }
+
   @override
   void dispose() {
-    // Clear the controller when disposing the state
-    widget.postContentTextController?.clear();
+    postContentTextController.clear();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: BackAppBar(
-        centerTitle: false,
-        label: widget.title,
-        actions: [
-          TextButton(child: const Label(text: 'Post'), onPressed: () {
-            widget.function();
-          }),
-        ],
-      ),
-      body: Column(
-        children: [
-          if(widget.text)
-          _buildCreatePost(),
-          if(widget.picture)
-            Column(
-              children: [
-                _buildMediaCard(),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  margin: const EdgeInsets.all(10),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(20.zR),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Upload Image',
-                      style: Styles.headerText(
-                          color: Theme.of(context)
-                              .scaffoldBackgroundColor),
+    return BlocProvider(
+      create: (BuildContext context) => serviceLocator<CreatePostCubit>(),
+      child: BlocConsumer<CreatePostCubit, CreatePostState>(
+        listener: (BuildContext context, photo) {},
+        builder: (BuildContext context, photo) {
+          final controller = context.read<CreatePostCubit>();
+          return BlocConsumer<CompanyAdvertiseCubit, CompanyAdvertiseState>(
+            listener: (BuildContext context, state) {
+              if (state is AddCompanyAdvertiseSuccess) {
+                showSuccessMessage(context, 'Post Successfully');
+                Navigator.of(context).pop();
+              }
+            },
+            builder: (BuildContext context, Object? state) {
+              return Scaffold(
+                appBar: BackAppBar(
+                  centerTitle: false,
+                  label: widget.title,
+                  actions: [
+                    TextButton(
+                        child: const Label(text: 'Post'),
+                        onPressed: () {
+                          print('**************************************');
+                          print(controller.selectedImages);
+                          print('**************************************');
+                          if (formKey.currentState!.validate()) {
+                            CompanyAdvertiseCubit.get(context)
+                                .addPostCompanyAdvertise(
+                              context: context,
+                              mediaIds: widget.picture ? controller
+                                  .selectedImages!.isNotEmpty ?
+                              controller.selectedImages : showSuccessMessage(
+                                context, 'Image not selected',
+                                color: AppColors.SECONDARY_COLOR,
+                                icon: Icons.error,)
+                                  :null,
+                            type: widget.type,
+                            post: widget.text
+                            ? postContentTextController.text
+                                : null,
+                              totalPrice: widget.totalPrice,
+                            );
+                          }
+                        }),
+                  ],
+                ),
+                body: Form(
+                  key: formKey,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        if (widget.text) _buildCreatePost(),
+                        if (widget.picture)
+                          Column(
+                            children: [
+                              if (photo.images != null &&
+                                  photo.images!.isNotEmpty) _buildMediaCard(),
+                              GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Wrap(
+                                        children: <Widget>[
+                                          ListTile(
+                                            leading: const Icon(
+                                                Icons.photo_library),
+                                            title: const Text('Gallery'),
+                                            onTap: () async {
+                                              Navigator.pop(context);
+                                              controller.uploadPhoto();
+                                              // await CompanyAdvertiseCubit.get(context)
+                                              //     .uploadPhoto();
+                                              // Reload user data if needed
+                                            },
+                                          ),
+                                          ListTile(
+                                            leading: const Icon(Icons.camera_alt),
+                                            title: const Text('Camera'),
+                                            onTap: () async {
+                                              Navigator.pop(context);
+                                              controller.uploadPhoto();
+                                              // await CompanyAdvertiseCubit.get(context)
+                                              //     .uploadPhoto(isGallery: false);
+                                              // Reload user data if needed
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  margin: const EdgeInsets.all(10),
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Theme
+                                        .of(context)
+                                        .primaryColor,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Upload Image',
+                                      style: Styles.headerText(
+                                          color: Theme
+                                              .of(context)
+                                              .scaffoldBackgroundColor),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
                     ),
                   ),
                 ),
-              ],
-            ),
-        ],
+              );
+            },
+          );
+        },
       ),
     );
   }
@@ -87,8 +187,8 @@ class _CreatePostViewState extends State<CreatePostCompany> {
         child: TextFormField(
           maxLines: 4,
           maxLength: 150,
-          validator: (value){
-            if(value!.isEmpty){
+          validator: (value) {
+            if (value!.isEmpty) {
               return 'Field is required';
             }
             return null;
@@ -97,10 +197,10 @@ class _CreatePostViewState extends State<CreatePostCompany> {
           onChanged: (c) {
             if (c.length == 150) {
               showErrorMessage(
-                  context, "You can't type more than 150 character");
+                  context, "You can't type more than 150 characters");
             }
           },
-          controller: widget.postContentTextController,
+          controller: postContentTextController,
           decoration: const InputDecoration(
               hintText: 'Type Here ... ',
               hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
@@ -109,96 +209,385 @@ class _CreatePostViewState extends State<CreatePostCompany> {
   }
 
   Widget _buildMediaCard() {
-    return GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(10),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2 == 1 ? 1 : 2),
-        itemCount: 2 < 4 ? 2 : 4,
-        itemBuilder: (context, index) => InkWell(
-          onTap: () {
-            // if (index != 3 || (index == 3 && 4 == 4)) {
-            //   showDialog(
-            //       context: context,
-            //       builder: (context) => ImageDetailsScreen(
-            //       //  image: state.images![index].file.path,
-            //         image: 'https://th.bing.com/th/id/OIP.HxV79tFMPfBAIo0BBF-sOgHaEy?rs=1&pid=ImgDetMain',
-            //         isFile: true,
-            //         onRemoveImage: () {
-            //           // controller.removePhoto(state.images![index]);
-            //           // context.pop();
-            //         },
-            //       ));
-            // } else {
-            //   showDialog(
-            //       context: context,
-            //       builder: (context) => ShowAllImages(
-            //         images: [],
-            //         onRemoveImage: () {},
-            //         // onRemoveImage: (UploadFileEntity image) {
-            //         //   controller.removePhoto(image);
-            //         // },
-            //       ));
-            // }
-          },
-          child: Stack(
-            children: [
-              Stack(
-                children: [
-                  Container(
-                    margin: const EdgeInsetsDirectional.only(
-                        end: 10, bottom: 10),
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: NetworkImage('https://th.bing.com/th/id/OIP.HxV79tFMPfBAIo0BBF-sOgHaEy?rs=1&pid=ImgDetMain'),
-                      ),
-                      // image: FileImage(
-                      //   File(state.images?[index].file.path ?? ''),
-                      // ),
-                    ),
-                  ),
-                  if (index == 3 && 3 > 4)
-                    Container(
-                      margin: const EdgeInsetsDirectional.only(
-                          end: 10, bottom: 10),
-                      // padding: const EdgeInsets.all(10),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.black.withOpacity(0.5),
-                      ),
-                      child: Center(
-                        child: Label(
-                          text: "+",
-                          // text: "+${state.images!.length - 4}",
-                          style: Styles.headerText(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              if (index == 0 && 2== 1)
-                PositionedDirectional(
-                  end: 15,
-                  top: 5,
-                  child: InkWell(
+    return BlocBuilder<CreatePostCubit, CreatePostState>(
+        builder: (context, state) {
+          final controller = context.read<CreatePostCubit>();
+          return GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(10),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: state.images!.length == 1 ? 1 : 2),
+              itemCount: state.images!.length < 4 ? state.images!.length : 4,
+              itemBuilder: (context, index) =>
+                  InkWell(
                     onTap: () {
-                      //controller.removePhoto(state.images?[index]);
+                      if (index != 3 ||
+                          (index == 3 && state.images!.length == 4)) {
+                        showDialog(
+                            context: context,
+                            builder: (context) =>
+                                ImageDetailsScreen(
+                                  image: state.images![index].file.path,
+                                  isFile: true,
+                                  onRemoveImage: () {
+                                    controller.removePhoto(state
+                                        .images![index]);
+                                    context.pop();
+                                  },
+                                ));
+                      } else {
+                        showDialog(
+                            context: context,
+                            builder: (context) =>
+                                ShowAllImages(
+                                  images: state.images!,
+                                  onRemoveImage: (UploadFileEntity image) {
+                                    controller.removePhoto(image);
+                                  },
+                                ));
+                      }
                     },
-                    child: const Icon(
-                      Icons.close,
-                      color: Colors.red,
+                    child: Stack(
+                      children: [
+                        Stack(
+                          children: [
+                            Container(
+                              margin: const EdgeInsetsDirectional.only(
+                                  end: 10, bottom: 10),
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: FileImage(
+                                    File(state.images?[index].file.path ?? ''),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            if (index == 3 && state.images!.length > 4)
+                              Container(
+                                margin: const EdgeInsetsDirectional.only(
+                                    end: 10, bottom: 10),
+                                // padding: const EdgeInsets.all(10),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: Colors.black.withOpacity(0.5),
+                                ),
+                                child: Center(
+                                  child: Label(
+                                    text: "+${state.images!.length - 4}",
+                                    style: Styles.headerText(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                        if (index == 0 && state.images!.length == 1)
+                          PositionedDirectional(
+                            end: 15,
+                            top: 5,
+                            child: InkWell(
+                              onTap: () {
+                                controller.removePhoto(state.images?[index]);
+                              },
+                              child: const Icon(
+                                Icons.close,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
-                  ),
-                ),
-            ],
-          ),
-        ));
+                  ));
+        });
   }
+
 }
+
+
+// import 'dart:io';
+//
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_state.dart';
+// import 'package:go_router/go_router.dart';
+// import '../../../../../common/functions/global/upload_file.dart';
+// import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+// import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+// import 'package:fourtyninehub/core/messages/messages.dart';
+// import 'package:fourtyninehub/res/style/app_colors.dart';
+//
+// import '../../../../../res/style/styles.dart';
+// import '../../../../../service_locator/service_locator.dart';
+// import '../../../../social_media/create_post/presentation/cubit/create_post_cubit.dart';
+// import '../../../../social_media/create_post/presentation/widgets/image_details.dart';
+// import '../../../../social_media/create_post/presentation/widgets/show_all_images.dart';
+// import '../../data/repositories/company_advertise_repo/company_advertise_repo_impl.dart';
+// import '../cubit/company_advertise/company_advertise_cubit.dart';
+//
+// class CreatePostCompany extends StatefulWidget {
+//   CreatePostCompany(
+//       {super.key,
+//       this.text = true,
+//       this.picture = true,
+//       required this.title,
+//       required this.totalPrice,
+//       required this.type});
+//
+//   final bool text;
+//   final bool picture;
+//   final String title;
+//   final String type;
+//   final int totalPrice;
+//
+//   @override
+//   State<CreatePostCompany> createState() => _CreatePostViewState();
+// }
+//
+// class _CreatePostViewState extends State<CreatePostCompany> {
+//   var postContentTextController = TextEditingController();
+//   var formKey = GlobalKey<FormState>();
+//
+//   Future<bool> onBackPressed() async {
+//     SystemNavigator.pop();
+//     return true;
+//   }
+//
+//   @override
+//   void dispose() {
+//     postContentTextController.clear();
+//     super.dispose();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocProvider(
+//       create: (BuildContext context) =>serviceLocator<CreatePostCubit>(),
+//       child: BlocConsumer<CreatePostCubit, CreatePostState>(
+//         listener: (BuildContext context, photo) {  },
+//         builder: (BuildContext context, photo) {
+//           final controller = context.read<CreatePostCubit>();
+//           return Scaffold(
+//             appBar: BackAppBar(
+//               centerTitle: false,
+//               label: widget.title,
+//               actions: [
+//                 TextButton(
+//                     child: const Label(text: 'Post'),
+//                     onPressed: () {
+//                       if (formKey.currentState!.validate()) {
+//                         CompanyAdvertiseCubit.get(context)
+//                             .addPostCompanyAdvertise(
+//                           context: context,
+//                           mediaIds: widget.picture? controller.selectedImages
+//                               :null,
+//                           type: widget.type,
+//                           post: widget.text
+//                               ? postContentTextController.text
+//                               : null,
+//                           totalPrice: widget.totalPrice,
+//                         );
+//                       }
+//                       print('**************************************');
+//                       print(controller.selectedImages);
+//                       print('**************************************');
+//                     }),
+//               ],
+//             ),
+//             body: Form(
+//               key: formKey,
+//               child: Column(
+//                 children: [
+//                   if (widget.text) _buildCreatePost(),
+//                   if (widget.picture)
+//                     Column(
+//                       children: [
+//                         if (photo.images != null && photo.images!.isNotEmpty)  _buildMediaCard(),
+//                         GestureDetector(
+//                           onTap: () {
+//                             showModalBottomSheet(
+//                               context: context,
+//                               builder: (BuildContext context) {
+//                                 return Wrap(
+//                                   children: <Widget>[
+//                                     ListTile(
+//                                       leading: const Icon(Icons.photo_library),
+//                                       title: const Text('Gallery'),
+//                                       onTap: () async {
+//                                          Navigator.pop(context);
+//                                          controller.uploadPhoto();
+//                                         // await CompanyAdvertiseCubit.get(context)
+//                                         //     .uploadPhoto();
+//                                         // Reload user data if needed
+//                                       },
+//                                     ),
+//                                     ListTile(
+//                                       leading: const Icon(Icons.camera_alt),
+//                                       title: const Text('Camera'),
+//                                       onTap: () async {
+//                                         Navigator.pop(context);
+//                                         controller.uploadPhoto();
+//                                         // await CompanyAdvertiseCubit.get(context)
+//                                         //     .uploadPhoto(isGallery: false);
+//                                         // Reload user data if needed
+//                                       },
+//                                     ),
+//                                   ],
+//                                 );
+//                               },
+//                             );
+//                           },
+//                           child: Container(
+//                             padding: const EdgeInsets.all(10),
+//                             margin: const EdgeInsets.all(10),
+//                             width: double.infinity,
+//                             decoration: BoxDecoration(
+//                               color: Theme.of(context).primaryColor,
+//                               borderRadius: BorderRadius.circular(20),
+//                             ),
+//                             child: Center(
+//                               child: Text(
+//                                 'Upload Image',
+//                                 style: Styles.headerText(
+//                                     color: Theme.of(context)
+//                                         .scaffoldBackgroundColor),
+//                               ),
+//                             ),
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                 ],
+//               ),
+//             ),
+//           );
+//         },
+//       ),
+//     );
+//   }
+//
+//   Widget _buildCreatePost() {
+//     return Container(
+//         padding: const EdgeInsets.all(10),
+//         color: Colors.white,
+//         child: TextFormField(
+//           maxLines: 4,
+//           maxLength: 150,
+//           validator: (value) {
+//             if (value!.isEmpty) {
+//               return 'Field is required';
+//             }
+//             return null;
+//           },
+//           style: const TextStyle(color: AppColors.QUANTITY_COLOR),
+//           onChanged: (c) {
+//             if (c.length == 150) {
+//               showErrorMessage(
+//                   context, "You can't type more than 150 characters");
+//             }
+//           },
+//           controller: postContentTextController,
+//           decoration: const InputDecoration(
+//               hintText: 'Type Here ... ',
+//               hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
+//               fillColor: Colors.white),
+//         ));
+//   }
+//
+//   Widget _buildMediaCard() {
+//     return BlocBuilder<CreatePostCubit, CreatePostState>(builder: (context, state) {
+//       final controller = context.read<CreatePostCubit>();
+//       return GridView.builder(
+//           shrinkWrap: true,
+//           physics: const NeverScrollableScrollPhysics(),
+//           padding: const EdgeInsets.all(10),
+//           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: state.images!.length == 1 ? 1 : 2),
+//           itemCount: state.images!.length < 4 ? state.images!.length : 4,
+//           itemBuilder: (context, index) => InkWell(
+//             onTap: () {
+//               if (index != 3 || (index == 3 && state.images!.length == 4)) {
+//                 showDialog(
+//                     context: context,
+//                     builder: (context) => ImageDetailsScreen(
+//                       image: state.images![index].file.path,
+//                       isFile: true,
+//                       onRemoveImage: () {
+//                         controller.removePhoto(state.images![index]);
+//                         context.pop();
+//                       },
+//                     ));
+//               } else {
+//                 showDialog(
+//                     context: context,
+//                     builder: (context) => ShowAllImages(
+//                       images: state.images!,
+//                       onRemoveImage: (UploadFileEntity image) {
+//                         controller.removePhoto(image);
+//                       },
+//                     ));
+//               }
+//             },
+//             child: Stack(
+//               children: [
+//                 Stack(
+//                   children: [
+//                     Container(
+//                       margin: const EdgeInsetsDirectional.only(end: 10, bottom: 10),
+//                       padding: const EdgeInsets.all(10),
+//                       decoration: BoxDecoration(
+//                         borderRadius: BorderRadius.circular(15),
+//                         image: DecorationImage(
+//                           fit: BoxFit.fill,
+//                           image: FileImage(
+//                             File(state.images?[index].file.path ?? ''),
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                     if (index == 3 && state.images!.length > 4)
+//                       Container(
+//                         margin: const EdgeInsetsDirectional.only(end: 10, bottom: 10),
+//                         // padding: const EdgeInsets.all(10),
+//                         alignment: Alignment.center,
+//                         decoration: BoxDecoration(
+//                           borderRadius: BorderRadius.circular(15),
+//                           color: Colors.black.withOpacity(0.5),
+//                         ),
+//                         child: Center(
+//                           child: Label(
+//                             text: "+${state.images!.length - 4}",
+//                             style: Styles.headerText(
+//                               color: Colors.white,
+//                             ),
+//                           ),
+//                         ),
+//                       ),
+//                   ],
+//                 ),
+//                 if (index == 0 && state.images!.length == 1)
+//                   PositionedDirectional(
+//                     end: 15,
+//                     top: 5,
+//                     child: InkWell(
+//                       onTap: () {
+//                         controller.removePhoto(state.images?[index]);
+//                       },
+//                       child: const Icon(
+//                         Icons.close,
+//                         color: Colors.red,
+//                       ),
+//                     ),
+//                   ),
+//               ],
+//             ),
+//           ));
+//     });
+//   }
+//
+// }

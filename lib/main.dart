@@ -70,11 +70,7 @@ class MyApp extends StatelessWidget {
             AdvertisePriceCubit(serviceLocator.get<CompanyAdvertiseRepoImpl>())
               ..fetchPrice(context)
         ),
-        // BlocProvider(
-        //     create: (context) =>
-        //     CompanyAdvertiseCubit(serviceLocator.get<CompanyAdvertiseRepoImpl>())
-        //       ..fetchAdvertiseCompany(context)
-        // ),
+        BlocProvider(create: (_) => CompanyAdvertiseCubit(serviceLocator<CompanyAdvertiseRepoImpl>())),
         // BlocProvider(
         //   create: (context) => serviceLocator<RiderequestCubit>(),
         // ),

@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_facebook_body.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -26,6 +27,12 @@ class SocialHomeView extends StatefulWidget {
 
 class _SocialHomeViewState extends State<SocialHomeView>
     with SingleTickerProviderStateMixin {
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
@@ -49,12 +56,6 @@ class _SocialHomeViewState extends State<SocialHomeView>
       }
     });
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    scrollController.dispose();
-    super.dispose();
   }
 
   @override
@@ -108,18 +109,32 @@ class _SocialHomeViewState extends State<SocialHomeView>
                 : Center(
                   child: SingleChildScrollView(
                     controller: scrollController,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                            onTap: () => context.push(Routes.LOGIN),
-                            child:
-                            Label(text: 'Login', style: Styles.headerText())),
-                        Label(
-                            text: ', To continue in using chat services',
-                            style: Styles.headerText()),
-                      ],
-                    ),
+                    child: GestureDetector(
+                      onTap: () => context.push(Routes.LOGIN),
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        width: 300,
+                        height: 300,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Theme.of(context).primaryColor,
+                            width: 4, // Width of the border
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Please Login, Register to enjoy the app',
+                            style: Styles.headerText(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    )
+                    ,
                   ),
                 );
           })),

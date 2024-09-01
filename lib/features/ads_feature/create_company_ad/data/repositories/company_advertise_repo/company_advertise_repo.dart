@@ -6,7 +6,7 @@ import '../../models/company_price_model.dart';
 abstract class CompanyAdvertiseRepo{
   Future<Either<Failure,AdvertisePriceModel>>fetchPrice();
   Future<Either<Failure,void>>addPostCompanyAdvertise({
-    List<dynamic>? media,
+    List<String>? mediaIds,
     String? post,
     required String type,
     String? description,

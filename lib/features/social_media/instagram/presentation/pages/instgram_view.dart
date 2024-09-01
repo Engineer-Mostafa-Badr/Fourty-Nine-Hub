@@ -91,21 +91,30 @@ class _InstagramViewState extends State<InstagramView> {
                 : Center(
                     child: SingleChildScrollView(
                       controller: scrollController,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () => context.push(Routes.LOGIN),
-                            child: Label(
-                              text: 'Login',
-                              style: Styles.headerText(color: Colors.blue),
+                      child: GestureDetector(
+                        onTap: () => context.push(Routes.LOGIN),
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          width: 300,
+                          height: 300,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Theme.of(context).primaryColor,
+                              width: 4, // Width of the border
                             ),
                           ),
-                          Label(
-                            text: ', To continue using chat services',
-                            style: Styles.headerText(),
+                          child: Center(
+                            child: Text(
+                              'Please Login, Register to enjoy the app',
+                              style: Styles.headerText(
+                                color: Theme.of(context).scaffoldBackgroundColor,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   );

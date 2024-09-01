@@ -10,7 +10,6 @@ class ApiService {
   Future<Map<String,dynamic>> get({
     required String url,
     String? token,
-    String? filter,
   }) async {
     var response = await dio.get(
       '$_baseUrl$url',

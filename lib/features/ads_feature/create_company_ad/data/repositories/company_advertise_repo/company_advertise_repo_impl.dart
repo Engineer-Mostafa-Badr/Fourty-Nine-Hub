@@ -35,8 +35,7 @@ class CompanyAdvertiseRepoImpl implements CompanyAdvertiseRepo {
 
   @override
   Future<Either<Failure, void>> addPostCompanyAdvertise(
-      {
-        List<dynamic>? media,
+      {List<String>? mediaIds,
       String? post,
       required String type,
       String? description,
@@ -47,7 +46,7 @@ class CompanyAdvertiseRepoImpl implements CompanyAdvertiseRepo {
       final Map<String, dynamic> jsonData = {
         "advertisements": [
           {
-            "media": media,
+            "media": mediaIds,
             "post": post,
             "advertisement_type": type,
             "description": description,
@@ -55,12 +54,12 @@ class CompanyAdvertiseRepoImpl implements CompanyAdvertiseRepo {
           }
         ]
       };
-       await apiService
-          .post(url: 'api/v1/advertisementCompany',
-          token: accessToken, data: jsonData
-      );
+      await apiService.post(
+          url: 'api/v1/advertisementCompany',
+          token: accessToken,
+          data: jsonData);
 
-     // var advertiseCompany = AdvertiseCompanyModel.fromJson(data);
+      // var advertiseCompany = AdvertiseCompanyModel.fromJson(data);
 
       return right(unit);
     } on Exception catch (e) {
@@ -83,12 +82,15 @@ class CompanyAdvertiseRepoImpl implements CompanyAdvertiseRepo {
   }
 
   @override
-  Future<Either<Failure, AdvertiseCompanyModel>> fetchPostCompanyAdvertise(String filter) async {
+  Future<Either<Failure, AdvertiseCompanyModel>> fetchPostCompanyAdvertise(
+      String filter) async {
     try {
       String? accessToken = await TokenManager.getAccessToken();
 
       var data = await apiService.get(
-          url: 'api/v1/advertisementCompany/my-advertisement?filter=$filter', token: accessToken,filter: 'photo');
+          url: 'api/v1/advertisementCompany/my-advertisement?filter=$filter',
+          token: accessToken,
+          );
 
       var advertiseCompany = AdvertiseCompanyModel.fromJson(data);
 

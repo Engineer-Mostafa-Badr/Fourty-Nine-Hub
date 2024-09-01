@@ -281,7 +281,7 @@ class ProfilePictureKey {
 
 class Pagination {
   int? page;
-  int? limit;
+  dynamic limit;
 
   Pagination({this.page, this.limit});
 
