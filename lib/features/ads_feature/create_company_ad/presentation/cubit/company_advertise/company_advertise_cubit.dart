@@ -47,8 +47,7 @@ class CompanyAdvertiseCubit extends Cubit<CompanyAdvertiseState> {
 
 
 
-
-  Future<void> fetchAdvertiseCompany(BuildContext context, String filter) async {
+  Future<void> fetchAdvertiseCompanyImage(BuildContext context, String filter) async {
     emit(FetchAllCompanyAdvertiseLoading());
 
     var result = await companyAdvertiseRepo.fetchPostCompanyAdvertise(filter);
@@ -61,38 +60,44 @@ class CompanyAdvertiseCubit extends Cubit<CompanyAdvertiseState> {
     });
   }
 
+  Future<void> fetchAdvertiseCompany(BuildContext context, String filter) async {
+    emit(FetchAllCompanyAdvertiseLoading());
+
+    _startPollingAdvertise(context, filter);
+  }
 
 
 
-  // AdvertiseCompanyModel? _cachedCompanyAdvertise;
-  //
-  // void _startPollingAdvertise(BuildContext context, String filter) {
-  //   _pollingTimer?.cancel();
-  //
-  //   _pollingTimer = Timer.periodic(const Duration(seconds: 5), (timer) async {
-  //     var result = await companyAdvertiseRepo.fetchPostCompanyAdvertise(filter);
-  //
-  //     result.fold((failure) {
-  //       emit(FetchAllCompanyAdvertiseError(
-  //           errMessage: getFailureMessage(failure, context)));
-  //     }, (newData) {
-  //       if (state is FetchAllCompanyAdvertiseSuccess) {
-  //         var currentState = state as FetchAllCompanyAdvertiseSuccess;
-  //         if (newData != currentState.advertiseCompanyModel) {
-  //           emit(FetchAllCompanyAdvertiseSuccess(advertiseCompanyModel: newData));
-  //         }
-  //       } else {
-  //         emit(FetchAllCompanyAdvertiseSuccess(advertiseCompanyModel: newData));
-  //       }
-  //     });
-  //   });
-  // }
-  //
-  // @override
-  // Future<void> close() {
-  //   _pollingTimer?.cancel();
-  //   return super.close();
-  // }
+
+  AdvertiseCompanyModel? _cachedCompanyAdvertise;
+
+  void _startPollingAdvertise(BuildContext context, String filter) {
+    _pollingTimer?.cancel();
+
+    _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
+      var result = await companyAdvertiseRepo.fetchPostCompanyAdvertise(filter);
+
+      result.fold((failure) {
+        emit(FetchAllCompanyAdvertiseError(
+            errMessage: getFailureMessage(failure, context)));
+      }, (newData) {
+        if (state is FetchAllCompanyAdvertiseSuccess) {
+          var currentState = state as FetchAllCompanyAdvertiseSuccess;
+          if (newData != currentState.advertiseCompanyModel) {
+            emit(FetchAllCompanyAdvertiseSuccess(advertiseCompanyModel: newData));
+          }
+        } else {
+          emit(FetchAllCompanyAdvertiseSuccess(advertiseCompanyModel: newData));
+        }
+      });
+    });
+  }
+
+  @override
+  Future<void> close() {
+    _pollingTimer?.cancel();
+    return super.close();
+  }
 
 
 

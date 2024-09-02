@@ -12,9 +12,10 @@ import '../../../data/repositories/company_advertise_repo/company_advertise_repo
 import '../../cubit/company_advertise/company_advertise_cubit.dart';
 
 class BuildItemTextPost extends StatelessWidget {
-  const BuildItemTextPost({super.key, required this.advertises});
+   BuildItemTextPost({super.key, required this.advertises,this.isScalable=true});
 
   final Advertises advertises;
+  bool? isScalable;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class BuildItemTextPost extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         const SizedBox(height: 5),
-        Slidable(
+       isScalable!? Slidable(
           key: ValueKey(advertises.sId),
           endActionPane: ActionPane(
             dragDismissible: false,
@@ -48,30 +49,34 @@ class BuildItemTextPost extends StatelessWidget {
               ),
             ],
           ),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Theme.of(context).primaryColor,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  advertises.post!,
-                  style: Styles.mediumText(
-                    fontSize: 34,
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+          child: buildItem(context),
+        ):buildItem(context),
         const SizedBox(height: 2),
         Text(formattedDayTime),
       ],
     );
+  }
+
+  Widget buildItem(context) {
+    return Container(
+    width: double.infinity,
+    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(10),
+      color: Theme.of(context).primaryColor,
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          advertises.post!,
+          style: Styles.mediumText(
+            fontSize: 34,
+            color: Theme.of(context).scaffoldBackgroundColor,
+          ),
+        ),
+      ],
+    ),
+  );
   }
 }

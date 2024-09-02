@@ -12,11 +12,13 @@ import 'image_details.dart';
 class BuildItemPhotoPost extends StatelessWidget {
   final int length;
   final Advertises advertises;
+  bool? isPhoto;
 
-  const BuildItemPhotoPost(
+   BuildItemPhotoPost(
       {super.key,
       required this.length,
       required this.advertises,
+        this.isPhoto=true,
       });
 
   @override
@@ -94,6 +96,7 @@ class BuildItemPhotoPost extends StatelessWidget {
                 ),
               ),
             ),
+            if(isPhoto!)
             IconButton(
               onPressed: () {
                 context
@@ -108,7 +111,8 @@ class BuildItemPhotoPost extends StatelessWidget {
             ),
           ],
         ),
-        Text(formattedDayTime)
+        if(isPhoto!)
+        Text(formattedDayTime),
       ],
     );
   }

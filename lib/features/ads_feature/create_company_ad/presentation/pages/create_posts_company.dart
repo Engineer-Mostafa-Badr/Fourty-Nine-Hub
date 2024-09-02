@@ -123,7 +123,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                             title: const Text('Gallery'),
                                             onTap: () async {
                                               Navigator.pop(context);
-                                              controller.uploadPhoto();
+                                              controller.uploadPhoto(isGallery: true);
                                               // await CompanyAdvertiseCubit.get(context)
                                               //     .uploadPhoto();
                                               // Reload user data if needed
@@ -134,7 +134,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                             title: const Text('Camera'),
                                             onTap: () async {
                                               Navigator.pop(context);
-                                              controller.uploadPhoto();
+                                              controller.uploadPhoto(isGallery: false);
                                               // await CompanyAdvertiseCubit.get(context)
                                               //     .uploadPhoto(isGallery: false);
                                               // Reload user data if needed
