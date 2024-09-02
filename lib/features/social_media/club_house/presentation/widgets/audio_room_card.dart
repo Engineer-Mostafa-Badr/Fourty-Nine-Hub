@@ -36,7 +36,7 @@ class AudioRoomCard extends StatelessWidget {
                 liveId: room.id,
                 roomSubject: room.subject,
                 isHost: false,
-                userCount: room.users!.length,
+                
               ),
             ),
           ),
