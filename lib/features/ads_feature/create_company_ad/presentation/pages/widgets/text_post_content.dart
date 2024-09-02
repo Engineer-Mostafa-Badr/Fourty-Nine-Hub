@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_state.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/build_item_text_post.dart';
@@ -23,7 +26,7 @@ class TextPostContent extends StatelessWidget {
       child: BlocConsumer<CompanyAdvertiseCubit, CompanyAdvertiseState>(
         listener: (BuildContext context, CompanyAdvertiseState state) {
           if (state is DeletePostSuccess) {
-            showSuccessMessage(context, 'Delete Successfully');
+            showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
           }
         },
         builder: (BuildContext context, state) {
@@ -52,7 +55,7 @@ class TextPostContent extends StatelessWidget {
                 child: Center(
                   child: Text(
                     textAlign: TextAlign.center,
-                    'There are no text posts at the moment.',
+                    LocaleKeys.noTextPosts.localize,
                     style: Styles.mediumText(fontSize: 34),
                   ),
                 ),

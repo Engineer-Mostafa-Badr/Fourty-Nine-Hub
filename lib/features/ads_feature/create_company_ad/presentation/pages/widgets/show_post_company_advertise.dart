@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
+import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import 'photo_post_content.dart';
@@ -22,9 +24,9 @@ class _ShowPostCompanyAdvertiseState extends State<ShowPostCompanyAdvertise> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(
+      appBar:  BackAppBar(
         centerTitle: false,
-        label: 'My Posts',
+        label: LocaleKeys.myPosts.localize,
       ),
       body: Column(
         children: [
@@ -35,19 +37,19 @@ class _ShowPostCompanyAdvertiseState extends State<ShowPostCompanyAdvertise> {
               scrollDirection: Axis.horizontal,
               children: [
                 listItem(
-                  label: 'Text Post',
+                  label: LocaleKeys.textPost.localize,
                   type: 'Text Post',
                 ),
                 listItem(
-                  label: 'Photo Post',
+                  label: LocaleKeys.photoPost.localize,
                   type: 'Photo Post',
                 ),
                 listItem(
-                  label: 'Photo And Text Post',
+                  label:LocaleKeys.photoAndTextPost.localize,
                   type: 'Photo And Text Post',
                 ),
                 listItem(
-                  label: 'Reels Post',
+                  label: LocaleKeys.reelsPost.localize,
                   type: 'Reels Post',
                 ),
               ],

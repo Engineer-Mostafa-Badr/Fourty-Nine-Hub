@@ -72,10 +72,10 @@ abstract class  LocaleKeys {
   static String tripJoin = 'tripJoin'.tr();
   static String auction = 'auction'.tr();
   static String installments = 'installments'.tr();
-  static String Craft = 'Craft'.tr();
+  static String craft = 'craft'.tr();
   static String homeService = 'homeService'.tr();
   static String homeEssentials = 'homeEssentials'.tr();
-  static String Scenery = 'Scenery'.tr();
+  static String scenery = 'scenery'.tr();
   static String specialities = 'specialities'.tr();
   static String medicalService = 'medicalService'.tr();
   static String doctor = 'doctor'.tr();
@@ -125,8 +125,6 @@ abstract class  LocaleKeys {
   static String feelLucky = 'feelLucky'.tr();
   static String restaurants = 'restaurants'.tr();
   static String meals = 'meals'.tr();
-  static String craft = 'craft'.tr();
-  static String scenery = 'scenery'.tr();
   static String message = 'message'.tr();
   static String photo = 'photo'.tr();
   static String video = 'video'.tr();
@@ -187,5 +185,28 @@ abstract class  LocaleKeys {
   static String points = 'points'.tr();
   static String notEnoughWheel = 'notEnoughWheel'.tr();
   static String spin = 'spin'.tr();
+  static String companyAdvertise = 'companyAdvertise'.tr();
+  static String textOnly = 'textOnly'.tr();
+  static String createTextPost = 'createTextPost'.tr();
+  static String pictureOnly = 'pictureOnly'.tr();
+  static String createPicturePost = 'createPicturePost'.tr();
+  static String textWithPictures = 'textWithPictures'.tr();
+  static String createPost = 'createPost'.tr();
+  static String reel = 'reel'.tr();
+  static String total = 'total'.tr();
+  static String pay = 'pay'.tr();
+  static String postSuccessfully = 'postSuccessfully'.tr();
+  static String post = 'post'.tr();
+  static String uploadImage = 'uploadImage'.tr();
+  static String fieldIsRequired = 'fieldIsRequired'.tr();
+  static String character = 'character'.tr();
+  static String typeHer = 'typeHer'.tr();
+  static String myPosts = 'myPosts'.tr();
+  static String textPost = 'textPost'.tr();
+  static String photoPost = 'photoPost'.tr();
+  static String photoAndTextPost = 'photoAndTextPost'.tr();
+  static String reelsPost = 'reelsPost'.tr();
+  static String deleteSuccessfully = 'deleteSuccessfully'.tr();
+  static String noTextPosts = 'noTextPosts'.tr();
 
 }

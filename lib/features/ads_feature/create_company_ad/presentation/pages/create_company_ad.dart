@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/custom_container.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/show_post_company_advertise.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/pages/citiy_filter_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -52,7 +55,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
     return Scaffold(
       appBar: BackAppBar(
         centerTitle: false,
-        label: 'Company Advertise',
+        label: LocaleKeys.companyAdvertise.localize,
         actions: [
           IconButton(
               onPressed: () {
@@ -83,7 +86,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                       children: [
                         CustomContainerAdvertise(
                           filter: 'written',
-                          title: 'Text only',
+                          title: LocaleKeys.textOnly.localize,
                           price: state.advertisePriceModel.data!
                               .advertisementPostPrice!,
                           context: context,
@@ -96,7 +99,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                                   builder: (context) =>
                                       CreatePostCompany(
                                         picture: false,
-                                        title: 'Create Text Post',
+                                        title: LocaleKeys.createTextPost.localize,
                                         type: 'written',
                                         totalPrice: state.advertisePriceModel
                                             .data!.advertisementPostPrice!,
@@ -106,7 +109,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                         ),
                         CustomContainerAdvertise(
                           filter: 'photo',
-                          title: 'Picture only',
+                          title: LocaleKeys.pictureOnly.localize,
                           price: state.advertisePriceModel.data!
                               .advertisementPhotoPrice!,
                           context: context,
@@ -119,7 +122,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                                   builder: (context) =>
                                       CreatePostCompany(
                                         text: false,
-                                        title: 'Create Picture Post',
+                                        title: LocaleKeys.createPicturePost.localize,
                                         type: 'photo',
                                         totalPrice: state.advertisePriceModel
                                             .data!.advertisementPhotoPrice!,
@@ -129,7 +132,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                         ),
                         CustomContainerAdvertise(
                           filter: 'photo_written',
-                          title: 'Text with pictures',
+                          title: LocaleKeys.textWithPictures.localize,
                           price: state.advertisePriceModel.data!
                               .advertisementPostAndPhotoPrice!,
                           context: context,
@@ -141,7 +144,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                               MaterialPageRoute(
                                   builder: (context) =>
                                       CreatePostCompany(
-                                        title: 'Create Post',
+                                        title: LocaleKeys.createPost.localize,
                                         type: 'photo_written',
                                         totalPrice: state
                                             .advertisePriceModel
@@ -153,7 +156,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                         ),
                         CustomContainerAdvertise(
                           filter: 'reel',
-                          title: 'Reel',
+                          title: LocaleKeys.reel.localize,
                           price: state.advertisePriceModel.data!
                               .advertisementReelPrice!,
                           context: context,
@@ -185,7 +188,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                           child: Row(
                             children: [
                               Text(
-                                'Total',
+                                LocaleKeys.total.localize,
                                 style: Styles.headerText(
                                     color: Theme
                                         .of(context)
@@ -215,7 +218,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                           ),
                           child: Center(
                             child: Text(
-                              'Pay',
+                              LocaleKeys.pay.localize,
                               style: Styles.headerText(
                                   color: AppColors.AUTH_CONTAINER_COLOR,
                               ),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_state.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/functions/global/upload_file.dart';
@@ -11,6 +12,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/create_post/presentation/cubit/create_post_cubit.dart';
@@ -62,7 +64,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
           return BlocConsumer<CompanyAdvertiseCubit, CompanyAdvertiseState>(
             listener: (BuildContext context, state) {
               if (state is AddCompanyAdvertiseSuccess) {
-                showSuccessMessage(context, 'Post Successfully');
+                showSuccessMessage(context, LocaleKeys.postSuccessfully.localize);
                 Navigator.of(context).pop();
               }
             },
@@ -73,7 +75,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                   label: widget.title,
                   actions: [
                     TextButton(
-                        child:  const Label(text: 'Post'),
+                        child:  Label(text: LocaleKeys.post.localize),
                         onPressed: () {
                           print('**************************************');
                           print(controller.selectedImages);
@@ -120,7 +122,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                           ListTile(
                                             leading: const Icon(
                                                 Icons.photo_library),
-                                            title: const Text('Gallery'),
+                                            title:  Text(LocaleKeys.gallery.localize),
                                             onTap: () async {
                                               Navigator.pop(context);
                                               controller.uploadPhoto(isGallery: true);
@@ -131,7 +133,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                           ),
                                           ListTile(
                                             leading: const Icon(Icons.camera_alt),
-                                            title: const Text('Camera'),
+                                            title:  Text(LocaleKeys.camera.localize),
                                             onTap: () async {
                                               Navigator.pop(context);
                                               controller.uploadPhoto(isGallery: false);
@@ -157,7 +159,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      'Upload Image',
+                                      LocaleKeys.uploadImage.localize,
                                       style: Styles.headerText(
                                           color: Theme
                                               .of(context)
@@ -189,7 +191,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
           maxLength: 150,
           validator: (value) {
             if (value!.isEmpty) {
-              return 'Field is required';
+              return LocaleKeys.fieldIsRequired.localize;
             }
             return null;
           },
@@ -197,13 +199,13 @@ class _CreatePostViewState extends State<CreatePostCompany> {
           onChanged: (c) {
             if (c.length == 150) {
               showErrorMessage(
-                  context, "You can't type more than 150 characters");
+                  context, LocaleKeys.character.localize);
             }
           },
           controller: postContentTextController,
-          decoration: const InputDecoration(
-              hintText: 'Type Here ... ',
-              hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
+          decoration:  InputDecoration(
+              hintText: LocaleKeys.typeHer.localize,
+              hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
               fillColor: Colors.white
           ),
         ));
