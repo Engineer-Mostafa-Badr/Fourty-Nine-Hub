@@ -42,7 +42,7 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
         hoverColor: Colors.transparent,
         highlightColor: Colors.transparent,
         onTap: () {
-          if(context.read<UserCubit>().state.data!=null){
+          if(context.read<UserCubit>().isLoggedIn){
             bottomSheet(
               context: context,
               isScrollControlled: true,

@@ -234,7 +234,7 @@ class _UserPostCardState extends State<UserPostCard> {
               const Spacer(),
               InkWell(
                 onTap: () {
-                  if(context.read<UserCubit>().state.data!=null){
+                  if(context.read<UserCubit>().isLoggedIn){
                   widget.showPostComments(myPost.id);}else{
                     context.push(Routes.LOGIN);
                   }
@@ -265,12 +265,12 @@ class _UserPostCardState extends State<UserPostCard> {
             child: Row(
               children: [
                 Expanded(
-                  child: context.read<UserCubit>().state.data!=null?BuildReactionsButtons(
+                  child: context.read<UserCubit>().isLoggedIn?BuildReactionsButtons(
                       post: widget.post, from: 'userPosts'):_buildReactionPlaceHolder(
                       icon: Icons.thumb_up_alt_outlined,
                       label: 'Like',
                       onTap: () {
-                        if(context.read<UserCubit>().state.data!=null) {
+                        if(context.read<UserCubit>().isLoggedIn) {
                           return widget.showPostComments(myPost.id);
                         }else{
                           context.push(Routes.LOGIN);
@@ -283,7 +283,7 @@ class _UserPostCardState extends State<UserPostCard> {
                         icon: FontAwesomeIcons.message,
                         label: 'Comment',
                         onTap: () {
-                          if(context.read<UserCubit>().state.data!=null) {
+                          if(context.read<UserCubit>().isLoggedIn) {
                             return widget.showPostComments(myPost.id);
                           }else{
                             context.push(Routes.LOGIN);
@@ -295,7 +295,7 @@ class _UserPostCardState extends State<UserPostCard> {
                       icon: FontAwesomeIcons.share,
                       label: 'Share',
                       onTap: () async {
-                        if(context.read<UserCubit>().state.data!=null){
+                        if(context.read<UserCubit>().isLoggedIn){
                         var result = await controller.onShare(
                             postId: myPost.isShared == true
                                 ? myPost.mainPost!.id
@@ -457,7 +457,7 @@ class _UserPostCardState extends State<UserPostCard> {
                 ],
               ),
             ),
-            if (post.user.id != user?.id&&context.read<UserCubit>().state.data!=null)
+            if (post.user.id != user?.id&&context.read<UserCubit>().isLoggedIn)
               IconAppButton(
                 onPressed: () {
                   bottomSheet(

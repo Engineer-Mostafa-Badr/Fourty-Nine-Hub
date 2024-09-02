@@ -36,59 +36,55 @@ class _MediaViewState extends State<MediaView> {
         }
       }, builder: (context, state) {
         final controller = context.read<InstagramCubit>();
-        return MediaQuery.removePadding(
-          context: context,
-          removeBottom: true,
-          child: PagedSliverGrid<int, PostEntity>(
-            pagingController: controller.mediaPagingController,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3, crossAxisSpacing: 1, mainAxisSpacing: 1),
-            builderDelegate: PagedChildBuilderDelegate<PostEntity>(
-                noItemsFoundIndicatorBuilder: (context) {
-                  print(controller.mediaPagingController.itemList?.length);
-                  return const Center(
-                    child: Text(
-                      "No Media",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                      ),
+        return PagedSliverGrid<int, PostEntity>(
+          pagingController: controller.mediaPagingController,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3, crossAxisSpacing: 1, mainAxisSpacing: 1),
+          builderDelegate: PagedChildBuilderDelegate<PostEntity>(
+              noItemsFoundIndicatorBuilder: (context) {
+                print(controller.mediaPagingController.itemList?.length);
+                return const Center(
+                  child: Text(
+                    "No Media",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
                     ),
-                  );
-                },
-                itemBuilder: (context, item, index) {
-                  return state.status == StateStatus.success
-                      ? Container(
-                          padding: const EdgeInsets.only(top: 2),
-                          child: ClipRRect(
-                            // borderRadius: BorderRadius.circular(15),
-                            child: CachedNetworkImage(
-                              height: 300,
-                              imageUrl: item.images?[0] ?? '',
-                              fit: BoxFit.fill,
-                              placeholder: (context, url) => const Center(
-                                child: CupertinoActivityIndicator(radius: 25),
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  const Center(child: Icon(Icons.error)),
+                  ),
+                );
+              },
+              itemBuilder: (context, item, index) {
+                return state.status == StateStatus.success
+                    ? Container(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: ClipRRect(
+                          // borderRadius: BorderRadius.circular(15),
+                          child: CachedNetworkImage(
+                            height: 300,
+                            imageUrl: item.images?[0] ?? '',
+                            fit: BoxFit.fill,
+                            placeholder: (context, url) => const Center(
+                              child: CupertinoActivityIndicator(radius: 25),
                             ),
+                            errorWidget: (context, url, error) =>
+                                const Center(child: Icon(Icons.error)),
                           ),
-                        )
-                      : Center(
-                          child: Label(
-                              text: getFailureMessage(
-                            state.failure ?? UnknownFailure(''),
-                            context,
-                          )),
-                        );
-                },
-                noMoreItemsIndicatorBuilder: (context) => Container(),
-                firstPageProgressIndicatorBuilder: (context) => Container(
-                    margin: const EdgeInsets.only(top: 150),
-                    child: const CupertinoActivityIndicator()),
-                newPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator()),
-          ),
+                        ),
+                      )
+                    : Center(
+                        child: Label(
+                            text: getFailureMessage(
+                          state.failure ?? UnknownFailure(''),
+                          context,
+                        )),
+                      );
+              },
+              noMoreItemsIndicatorBuilder: (context) => Container(),
+              firstPageProgressIndicatorBuilder: (context) => Container(
+                  margin: const EdgeInsets.only(top: 150),
+                  child: const CupertinoActivityIndicator()),
+              newPageProgressIndicatorBuilder: (context) =>
+                  const CupertinoActivityIndicator()),
         );
       }),
     );

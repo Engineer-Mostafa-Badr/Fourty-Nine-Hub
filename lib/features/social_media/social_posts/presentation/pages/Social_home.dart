@@ -138,7 +138,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
             (i) => GestureDetector(
               onTap: () {
                 if (i == 1) {
-                  context.read<UserCubit>().state.data!=null?context.push(Routes.OTHERSACCOUNT, extra: user?.id):context.push(Routes.LOGIN);
+                  context.read<UserCubit>().isLoggedIn?context.push(Routes.OTHERSACCOUNT, extra: user?.id):context.push(Routes.LOGIN);
                 }
               },
               child: Container(

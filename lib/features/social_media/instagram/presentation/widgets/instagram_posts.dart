@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/social_image_viewer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
@@ -17,10 +19,15 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_people_you_may_know.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class InstagramPosts extends StatefulWidget {
@@ -57,6 +64,11 @@ class _InstagramPostsState extends State<InstagramPosts> {
             const SliverToBoxAdapter(
               child: ChatStories(),
             ),
+            SliverToBoxAdapter(
+              child: BlocProvider<SocialPostsCubit>(
+                  create: (_)=>serviceLocator(),
+                  child: BuildPeopleYouMayKnow()),
+            ),
             PagedSliverList<int, PostEntity>(
               pagingController: controller.feedPagingController,
               builderDelegate: PagedChildBuilderDelegate<PostEntity>(
@@ -90,6 +102,9 @@ class _InstagramPostsState extends State<InstagramPosts> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          const Sizer(),
+                          _buildMainAccountHeader(post:controller.feedPagingController
+                              .itemList![index], context: context),
                           const Sizer(),
                           SizedBox(
                             height: kToolbarHeight * 5,
@@ -398,5 +413,63 @@ class _InstagramPostsState extends State<InstagramPosts> {
         ),
       );
     });
+  }
+
+
+  Widget _buildMainAccountHeader({
+    required BuildContext context,
+    required PostEntity post,
+  }) {
+    return Row(
+      children: [
+        InkWell(
+          onTap: () {
+                context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
+          },
+          child: CircleAvatar(
+            backgroundColor: Colors.white,
+            backgroundImage: NetworkImage((post.user.image.isNotEmpty)
+                ? post.user.image
+                : UIConst.profilePlaceHolder),
+          ),
+        ),
+        const Sizer(),
+        Expanded(
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                          context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
+                                           },
+                      child: TextAppButton(
+                          style: TextStyle(color: Theme.of(context).primaryColor),
+                          label: post.user.firstName,
+                          onPressed: () {
+                              context.push(Routes.OTHERSACCOUNT,
+                                  extra: post.user.id);
+                          }),
+                    ),
+                    RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: post.sinceTime,
+                              style: Styles.mediumText(color: Colors.grey)),
+                          const WidgetSpan(
+                              child: Icon(
+                                Icons.group,
+                                size: 14,
+                                color: Colors.grey,
+                              ))
+                        ]))
+                  ],
+                ),
+                // _buildActivityFeelingWidget(post),
+              ],
+            )),
+      ],
+    );
   }
 }

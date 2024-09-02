@@ -77,7 +77,7 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
                 ? TwitterPostCard(
                     post: state.postDetails!,
                     onReact: () async {
-                      if(context.read<UserCubit>().state.data!=null){
+                      if(context.read<UserCubit>().isLoggedIn){
                         var result = await controller.onReact(
                           params: TwitterPostReactParams(
                               react: 'love', postId: state.postDetails!.id),
@@ -98,7 +98,7 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
                       }
                     },
                     showPostComments: (i) {
-                      if(context.read<UserCubit>().state.data!=null){
+                      if(context.read<UserCubit>().isLoggedIn){
                         final user = context.read<UserCubit>().state.data;
 
                         bottomSheet(
@@ -171,7 +171,7 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
                       }
                     },
                     onShare: () {
-                      if(context.read<UserCubit>().state.data!=null){
+                      if(context.read<UserCubit>().isLoggedIn){
                         controller.onShare(postId: state.postDetails!.id);
                       }else{
                         context.push(Routes.LOGIN);

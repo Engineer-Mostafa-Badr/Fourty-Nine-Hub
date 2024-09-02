@@ -31,7 +31,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   final CacheService cacheService;
 
   // final UserRepository repository;
-  bool _isTokenAttached = false;
+  bool isTokenAttached = false;
 
   UserCubit(
       this._getUserUseCase,
@@ -52,7 +52,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   }
 
   Future<Either<Failure, UserEntity>?> getUser() async {
-    if (!_isTokenAttached) return null;
+    if (!isTokenAttached) return null;
     final result = await _getUserUseCase(const NoParams());
     emit(
       result.fold(
@@ -83,7 +83,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   //         token = tokens.accessToken.toString();
   //       }
   //       _attachTokenUseCase(tokens);
-  //       _isTokenAttached = true;
+  //       isTokenAttached = true;
   //       getUser();
   //     },
   //   );
@@ -98,7 +98,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
         refreshToken: refreshToken,
       ));
     }
-    _isTokenAttached = accessToken != null && refreshToken != null;
+    isTokenAttached = accessToken != null && refreshToken != null;
     getUser();
   }
 
@@ -106,7 +106,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     cacheService.setLogin(false);
     _attachTokenUseCase(null);
     _saveTokensUseCase(null);
-    _isTokenAttached = false;
+    isTokenAttached = false;
+    state.copyWith(status: StateStatus.success, data: const UserEntity(id: '', firstName: '', lastName: '', email: '', profilePicture: '', profileCover: '', friendsCount: 0, followersCount: 0, followingCount: 0, wallet: 0));
     await _signOutUseCase(const NoParams());
 
     emit(const BasicState());
@@ -124,7 +125,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
       (_) {},
       (tokens) {
         _attachTokenUseCase(tokens);
-        _isTokenAttached = true;
+        isTokenAttached = true;
         // token = tokens!;
         emit(state.copyWith(status: StateStatus.success, token: tokens));
       },
@@ -134,7 +135,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   }
 
 // getWallet() async {
-//   if (!_isTokenAttached) return;
+//   if (!isTokenAttached) return;
 //   var response = await repository.getWallet();
 //   response.fold(
 //     (error) {

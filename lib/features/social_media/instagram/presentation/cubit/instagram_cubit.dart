@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_feed_usecase.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_global_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_saved_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
@@ -25,6 +26,7 @@ part 'instagram_state.dart';
 
 class InstagramCubit extends Cubit<InstagramState> {
   final GetInstagramFeedUseCase _getFeedUseCase;
+  final GetInstagramGlobalFeedUseCase _getGlobalFeedUseCase;
   final FaceAdvertisementUseCase _advertisementUseCase;
   final PostReactUseCase _postReactUseCase;
   final GetPostCommentsUseCase _getPostCommentsUseCase;
@@ -51,7 +53,7 @@ class InstagramCubit extends Cubit<InstagramState> {
       this._userReelsUseCase,
       this._editCommentUseCase,
       this._deleteCommentUseCase,
-      this._getSavedReelsUseCase)
+      this._getSavedReelsUseCase, this._getGlobalFeedUseCase)
       : super(InstagramState());
 
   void loadData() async {
@@ -59,6 +61,14 @@ class InstagramCubit extends Cubit<InstagramState> {
     feedPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
       getFeed(pageKey);
+    });
+  }
+
+  void loadGlobalData() async {
+    await getGlobalMedia(1);
+    globalFeedPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getGlobalMedia(pageKey);
     });
   }
 
@@ -87,6 +97,10 @@ class InstagramCubit extends Cubit<InstagramState> {
 
   refreshUserReels() async {
     userReelsPagingController.refresh();
+  }
+
+  refreshGlobalPosts() async {
+    globalFeedPagingController.refresh();
   }
 
   refreshMedia() async {
@@ -119,6 +133,9 @@ class InstagramCubit extends Cubit<InstagramState> {
   }
 
   final PagingController<int, PostEntity> feedPagingController =
+      PagingController(firstPageKey: 1);
+
+  final PagingController<int, PostEntity> globalFeedPagingController =
       PagingController(firstPageKey: 1);
 
   final PagingController<int, PostEntity> userReelsPagingController =
@@ -162,6 +179,30 @@ class InstagramCubit extends Cubit<InstagramState> {
       }
       emit(state.copyWith(posts: totalPosts, status: StateStatus.initial));
     });
+  }
+
+  //get media
+  getGlobalMedia(int page) async {
+    final response =
+    await _getGlobalFeedUseCase(TwitterFeedParams(limit: 10, page: page));
+    response.fold(
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (data) async {
+          final isLastPage = data.length < 10;
+          if (page == 1) {
+            print("page == 1 $page");
+            globalFeedPagingController.itemList = [];
+          }
+          if (isLastPage) {
+            print("isLastPage = $isLastPage");
+            globalFeedPagingController.appendLastPage(data);
+          } else {
+            print("isNotLastPage = $isLastPage");
+            final nextPageKey = page + 1;
+            globalFeedPagingController.appendPage(data, nextPageKey);
+          }
+          emit(state.copyWith(posts:data, status: StateStatus.success));
+        });
   }
 
 

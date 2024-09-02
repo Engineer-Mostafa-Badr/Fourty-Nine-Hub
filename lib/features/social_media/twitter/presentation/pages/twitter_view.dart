@@ -60,7 +60,7 @@ class _TwitterViewState extends State<TwitterView> {
           child: FloatingActionButton(
             backgroundColor: Colors.red,
             onPressed: () {
-              if(context.read<UserCubit>().state.data!=null){
+              if(context.read<UserCubit>().isLoggedIn){
                 context.push(Routes.CREATEPOST, extra: 'twitter');
               }else{
                 context.push(Routes.LOGIN);

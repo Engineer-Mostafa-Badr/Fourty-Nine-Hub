@@ -4,16 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/api_error_page.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/saved_reels_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_posts.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_reels.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_tweets.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:lottie/lottie.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -40,6 +44,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
     return DefaultTabController(
       length: loginUser?.id == widget.userId ? 4 : 3,
       child: Scaffold(
+        appBar: AppBar(
+
+        ),
         body: BlocBuilder<SocialPostsCubit, SocialPostsState>(
             builder: (context, state) {
           final controller = context.read<SocialPostsCubit>();
@@ -47,7 +54,10 @@ class _OtherAccountViewState extends State<OtherAccountView> {
               ? const Center(
                   child: CupertinoActivityIndicator(),
                 )
-              : CustomScrollView(
+              :state.status== StateStatus.error? ApiErrorPage(message:  getFailureMessage(
+            state.failure ??  UnknownFailure(''),
+            context,
+          ),):CustomScrollView(
                   slivers: [
                     SliverToBoxAdapter(
                         child: Container(
@@ -64,7 +74,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                         Icons.arrow_back,
                                         color: Colors.black,
                                       )),
-                                  if(context.read<UserCubit>().state.data!=null)PopupMenuButton(
+                                  if(context.read<UserCubit>().isLoggedIn)PopupMenuButton(
                                       icon: const Icon(
                                         Icons.more_vert,
                                         color: Colors.black,
@@ -142,7 +152,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               context: context,
                               user: state.profileData!,
                               onFollow: () async {
-                                if(context.read<UserCubit>().state.data!=null){
+                                if(context.read<UserCubit>().isLoggedIn){
                                   if (state.profileData?.isFollowed == true) {
                                     var result =
                                         await controller.unFollowRequest(
@@ -167,7 +177,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               },
                               onAddFriend: () async {
                                 // print("object");
-                                if(context.read<UserCubit>().state.data!=null){
+                                if(context.read<UserCubit>().isLoggedIn){
                                   if (state.profileData?.areFriends == true) {
                                   } else {
                                     if (state.profileData?.sentFriendRequest ==
@@ -490,7 +500,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           ];
                         },
                         onSelected: (value) {
-                          context.read<UserCubit>().state.data==null?context.push(Routes.LOGIN):context.push(Routes.CHAT);
+                          !context.read<UserCubit>().isLoggedIn?context.push(Routes.LOGIN):context.push(Routes.CHAT);
                         }),
                 ],
               ),

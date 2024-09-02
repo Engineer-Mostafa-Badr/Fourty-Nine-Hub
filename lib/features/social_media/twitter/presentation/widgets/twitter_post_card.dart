@@ -173,7 +173,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               icon: Icons.comment,
               label: '${post.commentsCount}',
               onTap: () {
-                if(context.read<UserCubit>().state.data!=null){
+                if(context.read<UserCubit>().isLoggedIn){
                 return widget.showPostComments(widget.post.id);}else{
                   context.push(Routes.LOGIN);
                 }
@@ -185,7 +185,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               icon: FontAwesomeIcons.retweet,
               label: "${widget.post.sharesCount}",
               onTap: () {
-                if(context.read<UserCubit>().state.data!=null){
+                if(context.read<UserCubit>().isLoggedIn){
                   widget.onShare();
                   if (widget.shareSuccess == true &&
                       widget.post.shares?.length == widget.post.sharesCount) {
@@ -205,7 +205,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                     : Icons.favorite,
                 label: "${post.loveCount}",
                 onTap: () {
-                  if(context.read<UserCubit>().state.data!=null){
+                  if(context.read<UserCubit>().isLoggedIn){
                   widget.onReact();}else{
                     context.push(Routes.LOGIN);
                   }
@@ -367,7 +367,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               style: Styles.mediumText(color: Colors.grey)),
         ),
         Label(text: ' . $date', style: Styles.mediumText(color: Colors.grey)),
-        if(post.user.id!=user?.id&&context.read<UserCubit>().state.data!=null)IconButton(
+        if(post.user.id!=user?.id&&context.read<UserCubit>().isLoggedIn)IconButton(
           onPressed: () {
             bottomSheet(
                 context: context,
@@ -381,7 +381,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             color: AppColors.SECONDARY_COLOR,
           ),
         ),
-        if(context.read<UserCubit>().state.data!=null)IconAppButton(
+        if(context.read<UserCubit>().isLoggedIn)IconAppButton(
           icon: Icons.clear,
           onPressed: () {
             bottomSheet(
@@ -505,7 +505,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             ],
           ),
         ),
-        if (post.isShared == false&&(post.user.id!=user?.id)&&context.read<UserCubit>().state.data!=null) ...[
+        if (post.isShared == false&&(post.user.id!=user?.id)&&context.read<UserCubit>().isLoggedIn) ...[
           IconButton(
             onPressed: () {
               bottomSheet(
@@ -521,7 +521,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               color: AppColors.SECONDARY_COLOR,
             ),
           ),
-          if(context.read<UserCubit>().state.data!=null)IconAppButton(
+          if(context.read<UserCubit>().isLoggedIn)IconAppButton(
             icon: Icons.clear,
             onPressed: () {
               bottomSheet(
