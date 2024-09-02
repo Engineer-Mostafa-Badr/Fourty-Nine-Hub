@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/error/failure.dart';
-import '../../../data/models/company_advertise_model.dart';
 import '../../../data/repositories/company_advertise_repo/company_advertise_repo.dart';
 import 'company_advertise_state.dart';
 
@@ -69,7 +68,6 @@ class CompanyAdvertiseCubit extends Cubit<CompanyAdvertiseState> {
 
 
 
-  AdvertiseCompanyModel? _cachedCompanyAdvertise;
 
   void _startPollingAdvertise(BuildContext context, String filter) {
     _pollingTimer?.cancel();

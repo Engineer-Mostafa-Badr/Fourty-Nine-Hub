@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/build_item_photo_post.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/build_item_text_post.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../../res/style/app_colors.dart';
 import '../../../data/models/company_advertise_model.dart';
-import '../../../data/repositories/company_advertise_repo/company_advertise_repo_impl.dart';
 import '../../cubit/company_advertise/company_advertise_cubit.dart';
 import '../../cubit/company_advertise/company_advertise_state.dart';
 

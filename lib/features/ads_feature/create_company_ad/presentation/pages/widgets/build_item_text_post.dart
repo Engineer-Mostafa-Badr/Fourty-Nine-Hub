@@ -2,13 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_state.dart';
-
-import '../../../../../../core/messages/messages.dart';
 import '../../../../../../res/style/styles.dart';
-import '../../../../../../service_locator/service_locator.dart';
 import '../../../data/models/company_advertise_model.dart';
-import '../../../data/repositories/company_advertise_repo/company_advertise_repo_impl.dart';
 import '../../cubit/company_advertise/company_advertise_cubit.dart';
 
 class BuildItemTextPost extends StatelessWidget {
