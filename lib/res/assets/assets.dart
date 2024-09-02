@@ -15,6 +15,9 @@ abstract class Assets {
   static String tinder = 'assets/images/tinder.svg';
   static String social = 'assets/images/social.svg';
   static String hand = 'assets/images/hand.png';
+  static String fawry = 'assets/images/fawry.png';
+  static String instaPay = 'assets/images/instapay.png';
+  static String paymob = 'assets/images/paymob.png';
   static String share = 'assets/images/share.png';
   static String message = 'assets/images/message.svg';
   static String ride = 'assets/images/ride_icon.svg';

@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -13,14 +15,15 @@ class MainCategoryBanner extends StatefulWidget {
   final MainCategoryEntity category;
   final bool canRegister;
   final Function()? onRegister;
-  final bool? Function()? onFavorite;
-
-  const MainCategoryBanner({
+  final Function() onFavorite;
+  bool? isFavorite;
+   MainCategoryBanner({
     super.key,
     this.canRegister = false,
     this.onRegister,
     required this.category,
-    this.onFavorite,
+     required this.onFavorite,
+    this.isFavorite,
   });
 
   @override
@@ -28,11 +31,11 @@ class MainCategoryBanner extends StatefulWidget {
 }
 
 class _MainCategoryBannerState extends State<MainCategoryBanner> {
-  late bool _isFavorite;
+  // late bool _isFavorite;
 
   @override
   void initState() {
-    _isFavorite = widget.category.isFavorite;
+    widget.isFavorite = widget.category.isFavorite ?? false;
     super.initState();
   }
 
@@ -58,35 +61,34 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          PositionedDirectional(end: 0, child: _buildRegisterButton()),
+          PositionedDirectional(
+            end: 0,
+              child: _buildRegisterButton()),
           Label(
             text: widget.category.name,
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 45.zSP),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 45.zSP),
           ),
           PositionedDirectional(
             start: 0,
             child: Column(
               children: [
-                InkWell(
+                context.read<UserCubit>().isLoggedIn ?  InkWell(
                   onTap: () async {
-                    final result = widget.onFavorite?.call();
-                    if (result != null && result != _isFavorite) {
+                    final result = await widget.onFavorite();
+                    if (result != null && result != widget.isFavorite) {
                       setState(() {
-                        _isFavorite = result;
+                        widget.isFavorite = result;
+                        print("===================$result");
+
                       });
                     }
                   },
                   child: Icon(
-                    _isFavorite ? Icons.favorite : Icons.favorite_border,
+                    widget.isFavorite == true ? Icons.favorite : Icons.favorite_border,
                     color: AppColors.SECONDARY_COLOR,
                   ),
-                ),
-                Sizer(
-                  height: 15.zH,
-                ),
+                ) : SizedBox.shrink(),
+                Sizer(height: 15.zH,),
                 Label(
                   text: '${widget.category.total.toShortScale} ${Labels.ads}',
                   style: Styles.mediumText(
@@ -107,8 +109,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       return InkWell(
         onTap: () => widget.onRegister?.call(),
         child: Text(Labels.register,
-            style: Styles.mediumText(
-                color: Colors.white, fontWeight: FontWeight.bold)),
+            style: Styles.mediumText(color: Colors.white,fontWeight: FontWeight.bold)),
       );
     } else {
       return const SizedBox.shrink();

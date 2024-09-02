@@ -78,9 +78,11 @@ class EndPoints {
       '/health/doctor/rate/$doctorId';
   static String getDoctorDetails(String doctorId) =>
       '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
+  static String toggleFavoriteCategory(String subCategoryId) => '/favorite-category/$subCategoryId';
   static const getHealthSubcategories = '/health/subCategories-health-with-ads';
   static const getMedicalServices =
       '/health/subCategories-medicalServices-with-ads';
+  static const getFavoriteCategory = '/favorite-category';
   static const String getUpcomingUserAppointments = '/health/book-appointment';
   static const String getHealthRequestsHistory =
       '/health/history-patient-booking';
@@ -90,6 +92,16 @@ class EndPoints {
       '/health/dashboard/remaining-days-of-doctor-practicing-id';
   static const remainingDaysOfDoctorSubscription =
       '/health/dashboard/remaining-days-of-doctor-subscription';
+  static const String getPaymentProvider = '/payment-provider/active';
+  // static const String getPaymentProvider = '/dashboard/payment-provider';
+  static const String getPaymob = '/paymob/paynow';
+  static const String postInstaPay = '/manual-payment/create';
+  static const String saveCardToken = '/fawry/tokenize-card';
+  static const String payWithCardToken = '/fawry/pay-with-card-token';
+  static const String getSavedCards = '/payment/cards';
+  static const String makeMultiPayment = '/fawry/multi-charge';
+  static const String deleteSavedCard = '/payment/cards';
+  static const String chargeWithCard = '/fawry/charge-with-card';
   static const getDoctorAppointmentsByDay = '/health/doctor/booking-day';
   static const getDoctorUnhandledAppointments = '/health/book-requests';
   static const isDoctor = '/health/check-doctor-or-not';
@@ -101,6 +113,7 @@ class EndPoints {
       '/health/book-appointment/reject/$appointmentId';
   static const getAllDoctorReservations =
       '/health/dashboard/number-of-reservations';
+  static const isDoctorApproval = '/health/check-doctor-approval';
   static const getDoctorProfile = '/health/doctor-profile';
   static const updateDoctorProfilePhoto = '/health/doctor/picture';
   static const updateDoctorPractcing =
@@ -503,11 +516,14 @@ class EndPoints {
   }
 
   static String buttonAvailable = '/global/click';
-  static String getSubscriptionPlans(String subcategoryId) =>
-      '/subscription/plans/$subcategoryId';
+  static String getSubscriptionPlans(String subcategoryId) => '/subscription/plans/$subcategoryId';
   static String checkUserSubscription(String id) {
     return '/subscription/subcategory/$id';
   }
+
+  static String subscribe = '/subscription/subscribe';
+
+  static String getActiveSubscriptionAmounts = '/payment-amount/active';
 
   static String lockChat(String chatId) {
     return '/chat/lock-chat/$chatId';
@@ -537,6 +553,4 @@ class EndPoints {
   static String getCarYearType = "/ride/riders/car-years-and-types";
   static String publishTripJoin = "/ride/come-with-you";
 
-  static String subscribe = '/subscription/subscribe';
-  static String getActiveSubscriptionAmounts = '/payment-amount/active';
 }

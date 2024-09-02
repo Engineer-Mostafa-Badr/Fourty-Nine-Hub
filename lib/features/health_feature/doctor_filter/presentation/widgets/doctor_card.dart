@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
@@ -33,7 +34,9 @@ class DoctorCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(10)),
         child: Column(
           children: [
-            Row(
+          Row(
+            children: [
+            Expanded(child:   Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ProfileImage(
@@ -45,21 +48,54 @@ class DoctorCard extends StatelessWidget {
                 const Sizer(),
                 Expanded(
                     child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(doctor.fullName, style: Styles.mediumText()),
-                        RatingStars(
-                          rating: doctor.rating.toDouble(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(toBeginningOfSentenceCase(doctor.fullName), style: Styles.mediumText()),
+
+                            RatingStars(
+                              rating: doctor.rating.toDouble(),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                  ],
-                )),
+                    )),
               ],
-            ),
+            ),),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                decoration: BoxDecoration(
+                  color: doctor.isPremium ? Colors.black : Colors.white,
+                  borderRadius: BorderRadius.circular(20.0),
+                  border: Border.all(
+                    color: doctor.isPremium ? Colors.amber : Colors.grey,
+                    width: 2.0,
+                  ),
+                  boxShadow: doctor.isPremium
+                      ? [
+                    BoxShadow(
+                      color: Colors.amber.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 8,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ]
+                      : null,
+                ),
+                child: Text(
+                  doctor.isPremium ? "Premium" : "Regular",
+                  style: TextStyle(
+                    color: doctor.isPremium ? Colors.amber : Colors.grey,
+                    fontWeight: doctor.isPremium ? FontWeight.bold : FontWeight.normal,
+                    fontSize: 16.0,
+                  ),
+                ),
+              ),
+
+            ],
+          ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

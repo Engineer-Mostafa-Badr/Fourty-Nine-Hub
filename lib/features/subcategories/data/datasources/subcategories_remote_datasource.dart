@@ -11,6 +11,8 @@ abstract class SubcategoriesRemoteDataSource {
       GetSubCategoriesParams params);
 
   Future<Either<Failure, bool>> toggleFavoriteSubcategory(String sucategoryId);
+  Future<Either<Failure, bool>> toggleFavoriteCategory(String sucategoryId);
+  Future<Either<Failure, bool>> deleteFavoriteCategory(String sucategoryId);
 }
 
 class SubcategoriesRemoteDataSourceImpl
@@ -41,5 +43,21 @@ class SubcategoriesRemoteDataSourceImpl
         .post(EndPoints.toggleFavoriteSubcategory(sucategoryId));
     return response.fold(
         (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> toggleFavoriteCategory(String sucategoryId) async {
+    final response = await _apiConsumer
+        .post(EndPoints.toggleFavoriteCategory(sucategoryId));
+    return response.fold(
+            (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteFavoriteCategory(String sucategoryId)async {
+    final response = await _apiConsumer
+        .delete(EndPoints.toggleFavoriteCategory(sucategoryId));
+    return response.fold(
+            (failure) => Left(failure), (data) => Right(data['status']));
   }
 }
