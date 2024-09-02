@@ -16,3 +16,5 @@ class AdvertisePriceError extends AdvertisePriceState{
 
   AdvertisePriceError({required this.errMessage});
 }
+
+class AdvertiseSuccess extends AdvertisePriceState{}

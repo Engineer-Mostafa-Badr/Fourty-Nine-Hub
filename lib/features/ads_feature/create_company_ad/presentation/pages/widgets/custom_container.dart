@@ -26,7 +26,7 @@ class CustomContainerAdvertise extends StatelessWidget {
         builder: (BuildContext context, CompanyAdvertiseState state) {
           if (state is FetchAllCompanyAdvertiseSuccess) {
             final numberOfAdvertises =
-                state.advertiseCompanyModel.data!.advertises!.length;
+                state.dataLength;
 
             final totalPrice = price * numberOfAdvertises;
 

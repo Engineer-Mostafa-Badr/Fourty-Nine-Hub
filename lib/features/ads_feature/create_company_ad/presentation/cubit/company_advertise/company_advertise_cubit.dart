@@ -46,19 +46,6 @@ class CompanyAdvertiseCubit extends Cubit<CompanyAdvertiseState> {
 
 
 
-  Future<void> fetchAdvertiseCompanyImage(BuildContext context, String filter) async {
-    emit(FetchAllCompanyAdvertiseLoading());
-
-    var result = await companyAdvertiseRepo.fetchPostCompanyAdvertise(filter);
-
-    result.fold((failure) {
-      emit(FetchAllCompanyAdvertiseError(
-          errMessage: getFailureMessage(failure, context)));
-    }, (company) {
-      emit(FetchAllCompanyAdvertiseSuccess(advertiseCompanyModel: company));
-    });
-  }
-
   Future<void> fetchAdvertiseCompany(BuildContext context, String filter) async {
     emit(FetchAllCompanyAdvertiseLoading());
 
@@ -68,7 +55,11 @@ class CompanyAdvertiseCubit extends Cubit<CompanyAdvertiseState> {
       emit(FetchAllCompanyAdvertiseError(
           errMessage: getFailureMessage(failure, context)));
     }, (newData) {
-      emit(FetchAllCompanyAdvertiseSuccess(advertiseCompanyModel: newData));
+     // int dataLength = newData.data!.advertises!.length;
+      emit(FetchAllCompanyAdvertiseSuccess(
+          newData.data!.advertises!.length,
+          advertiseCompanyModel: newData
+      ));
     });
   }
 

@@ -1,12 +1,12 @@
 class AdvertiseCompanyModel {
   bool? status;
-  Data? data;
+  DataAdvertise? data;
 
   AdvertiseCompanyModel({this.status, this.data});
 
   AdvertiseCompanyModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? DataAdvertise.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -19,13 +19,13 @@ class AdvertiseCompanyModel {
   }
 }
 
-class Data {
+class DataAdvertise {
   List<Advertises>? advertises;
   Pagination? pagination;
 
-  Data({this.advertises, this.pagination});
+  DataAdvertise({this.advertises, this.pagination});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DataAdvertise.fromJson(Map<String, dynamic> json) {
     if (json['advertises'] != null) {
       advertises = [];
       json['advertises'].forEach((v) {
@@ -91,7 +91,12 @@ class Advertises {
         media!.add(Media.fromJson(v));
       });
     }
-    views = json['views'];
+    if (json['views'] != null) {
+      views = [];
+      json['views'].forEach((v) {
+        views!.add(Advertises.fromJson(v));
+      });
+    }
     advertisementType = json['advertisement_type'];
     post = json['post'];
     totalPrice = json['totalPrice'];
@@ -342,7 +347,7 @@ class Media {
 }
 
 class Pagination {
-  int? page;
+ dynamic page;
   dynamic limit;
 
   Pagination({this.page, this.limit});

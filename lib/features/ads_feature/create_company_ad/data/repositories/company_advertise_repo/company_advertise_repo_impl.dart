@@ -5,9 +5,8 @@ import 'package:fourtyninehub/core/utils/api_service.dart';
 
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/models/company_advertise_model.dart';
 
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/models/company_price_model.dart';
-
 import '../../../../../../core/utils/shared_pref.dart';
+import '../../models/company_price_model.dart';
 import 'company_advertise_repo.dart';
 
 class CompanyAdvertiseRepoImpl implements CompanyAdvertiseRepo {
@@ -36,10 +35,10 @@ class CompanyAdvertiseRepoImpl implements CompanyAdvertiseRepo {
   @override
   Future<Either<Failure, void>> addPostCompanyAdvertise(
       {List<String>? mediaIds,
-      String? post,
-      required String type,
-      String? description,
-      required int totalPrice}) async {
+        String? post,
+        required String type,
+        String? description,
+        required int totalPrice}) async {
     try {
       String? accessToken = await TokenManager.getAccessToken();
 
@@ -86,28 +85,45 @@ class CompanyAdvertiseRepoImpl implements CompanyAdvertiseRepo {
       String filter) async {
     try {
       String? accessToken = await TokenManager.getAccessToken();
+      int page = 1;
+      bool hasMoreData = true;
+      List<Advertises> allItems = [];
 
-      var data = await apiService.get(
-          url: 'api/v1/advertisementCompany/my-advertisement?filter=$filter',
+      while (hasMoreData) {
+        var data = await apiService.get(
+          url: 'api/v1/advertisementCompany/my-advertisement?filter=$filter&page=$page',
           token: accessToken,
-          );
+        );
 
-      var advertiseCompany = AdvertiseCompanyModel.fromJson(data);
+        var advertiseCompany = AdvertiseCompanyModel.fromJson(data);
 
-      return right(advertiseCompany);
+        allItems.addAll(advertiseCompany.data!.advertises!);
+
+        if (advertiseCompany.data!.advertises!.length < 10) {
+          hasMoreData = false;
+        } else {
+          page++;
+        }
+      }
+
+      var finalData = DataAdvertise(advertises: allItems);
+
+      var finalModel = AdvertiseCompanyModel(data: finalData);
+      return right(finalModel);
     } on Exception catch (e) {
-      // Handle general exceptions
       final failure = _mapExceptionToFailure(e);
       return left(failure);
     }
   }
+
+
 
   @override
   Future<Either<Failure, void>> deletePosts(String id) async{
     try {
       String? accessToken = await TokenManager.getAccessToken();
 
-       await apiService.delete(
+      await apiService.delete(
         url: 'api/v1/advertisementCompany/$id',
         token: accessToken,
       );

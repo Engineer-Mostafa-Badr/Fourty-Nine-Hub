@@ -6,9 +6,12 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentatio
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/show_post_company_advertise.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/pages/citiy_filter_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../cubit/company_advertise/company_advertise_cubit.dart';
 import '../cubit/company_advertise_price/advertise_price_cubit.dart';
 import '../cubit/company_advertise_price/advertise_price_state.dart';
@@ -74,7 +77,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
               ))
         ],
       ),
-      body: BlocBuilder<AdvertisePriceCubit, AdvertisePriceState>(
+      body:context.read<UserCubit>().isLoggedIn? BlocBuilder<AdvertisePriceCubit, AdvertisePriceState>(
         builder: (context, state) {
           if (state is AdvertisePriceSuccess) {
             return Padding(
@@ -242,6 +245,35 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
           }
           return const Center(child: CircularProgressIndicator());
         },
+      ):Center(
+        child: SingleChildScrollView(
+          child: GestureDetector(
+            onTap: () => context.push(Routes.LOGIN),
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Theme.of(context).primaryColor,
+                  width: 4, // Width of the border
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  'Please Login, Register to enjoy the app',
+                  style: Styles.headerText(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          )
+          ,
+        ),
       ),
     );
   }

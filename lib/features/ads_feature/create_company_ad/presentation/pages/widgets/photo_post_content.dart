@@ -20,7 +20,7 @@ class PhotoPostContent extends StatelessWidget {
     return BlocProvider(
       create: (BuildContext context) =>
       CompanyAdvertiseCubit(serviceLocator.get<CompanyAdvertiseRepoImpl>())
-        ..fetchAdvertiseCompanyImage(context, 'photo'),
+        ..fetchAdvertiseCompany(context, 'photo'),
       child: BlocConsumer<CompanyAdvertiseCubit, CompanyAdvertiseState>(
         listener: (BuildContext context, CompanyAdvertiseState state) {
           if (state is DeletePostSuccess) {

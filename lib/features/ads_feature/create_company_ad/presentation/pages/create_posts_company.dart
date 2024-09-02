@@ -65,7 +65,8 @@ class _CreatePostViewState extends State<CreatePostCompany> {
             listener: (BuildContext context, state) {
               if (state is AddCompanyAdvertiseSuccess) {
                 showSuccessMessage(context, LocaleKeys.postSuccessfully.localize);
-                Navigator.of(context).pop();
+
+                  Navigator.of(context).pop();
               }
             },
             builder: (BuildContext context, Object? state) {

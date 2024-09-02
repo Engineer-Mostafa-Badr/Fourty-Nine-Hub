@@ -12,27 +12,28 @@ class AdvertisePriceCubit extends Cubit<AdvertisePriceState> {
 
   static AdvertisePriceCubit get(context) => BlocProvider.of(context);
 
- Timer? _pollingTimer;
+// Timer? _pollingTimer;
 
   void fetchPrice(context) async {
     emit(AdvertisePriceLoading());
-    _startPolling(context);
+    var result = await companyAdvertiseRepo.fetchPrice();
+
+    result.fold((failure) {
+      emit(AdvertisePriceError(
+          errMessage: getFailureMessage(failure, context)));
+      print(getFailureMessage(failure, context));
+    }, (company) {
+      //emit(AdvertiseSuccess());
+      emit(AdvertisePriceSuccess(advertisePriceModel: company));
+    });
   }
 
-  void _startPolling(context) async{
-   _pollingTimer?.cancel();
-
-  //  Start polling every 10 seconds (adjust the interval as needed)
-   _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
-     var result = await companyAdvertiseRepo.fetchPrice();
-
-     result.fold((failure) {
-       emit(AdvertisePriceError(
-           errMessage: getFailureMessage(failure, context)));
-       print(getFailureMessage(failure, context));
-     }, (company) {
-       emit(AdvertisePriceSuccess(advertisePriceModel: company));
-     });
-   });
-  }
+  // void _startPolling(context) async{
+  //  _pollingTimer?.cancel();
+  //
+  // //  Start polling every 10 seconds (adjust the interval as needed)
+  //  _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
+  //
+  //  });
+  // }
 }

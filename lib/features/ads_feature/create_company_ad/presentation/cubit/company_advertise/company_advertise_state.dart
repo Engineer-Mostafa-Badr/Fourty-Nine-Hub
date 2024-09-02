@@ -15,8 +15,8 @@ class AddCompanyAdvertiseError extends CompanyAdvertiseState{
 class FetchAllCompanyAdvertiseLoading extends CompanyAdvertiseState{}
 class FetchAllCompanyAdvertiseSuccess extends CompanyAdvertiseState{
   final AdvertiseCompanyModel advertiseCompanyModel;
-
-  FetchAllCompanyAdvertiseSuccess({required this.advertiseCompanyModel});
+  final int dataLength;
+  FetchAllCompanyAdvertiseSuccess(this.dataLength, {required this.advertiseCompanyModel});
 }
 class FetchAllCompanyAdvertiseError extends CompanyAdvertiseState{
   final String errMessage;

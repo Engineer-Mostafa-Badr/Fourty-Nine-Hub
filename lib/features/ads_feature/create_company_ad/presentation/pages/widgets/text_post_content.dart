@@ -22,7 +22,7 @@ class TextPostContent extends StatelessWidget {
     return BlocProvider(
       create: (BuildContext context) =>
           CompanyAdvertiseCubit(serviceLocator.get<CompanyAdvertiseRepoImpl>())
-            ..fetchAdvertiseCompanyImage(context, 'written'),
+            ..fetchAdvertiseCompany(context, 'written'),
       child: BlocConsumer<CompanyAdvertiseCubit, CompanyAdvertiseState>(
         listener: (BuildContext context, CompanyAdvertiseState state) {
           if (state is DeletePostSuccess) {
