@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/custom_container.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/show_post_company_advertise.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -64,7 +65,9 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
               },
               icon: Icon(
                 Icons.access_time_outlined,
-                color: Theme.of(context).primaryColor,
+                color: Theme
+                    .of(context)
+                    .primaryColor,
               ))
         ],
       ),
@@ -90,7 +93,8 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CreatePostCompany(
+                                  builder: (context) =>
+                                      CreatePostCompany(
                                         picture: false,
                                         title: 'Create Text Post',
                                         type: 'written',
@@ -112,7 +116,8 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CreatePostCompany(
+                                  builder: (context) =>
+                                      CreatePostCompany(
                                         text: false,
                                         title: 'Create Picture Post',
                                         type: 'photo',
@@ -134,7 +139,8 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CreatePostCompany(
+                                  builder: (context) =>
+                                      CreatePostCompany(
                                         title: 'Create Post',
                                         type: 'photo_written',
                                         totalPrice: state
@@ -154,6 +160,9 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                           function: () {
                             _updateTotalPrice(state.advertisePriceModel.data!
                                 .advertisementReelPrice!);
+
+                            Navigator.push(context,
+                              MaterialPageRoute(builder: (context) =>const ReelsRecordingScreen(voiceUrl: '',)),);
                             // Handle reel creation logic here
                           },
                         ),
@@ -165,10 +174,12 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                       Expanded(
                         child: Container(
                           padding: const EdgeInsetsDirectional.symmetric(
-                              vertical: 10, horizontal: 10),
+                              vertical: 10, horizontal: 14),
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
+                            color: Theme
+                                .of(context)
+                                .primaryColor,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Row(
@@ -176,14 +187,16 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                               Text(
                                 'Total',
                                 style: Styles.headerText(
-                                    color: Theme.of(context)
+                                    color: Theme
+                                        .of(context)
                                         .scaffoldBackgroundColor),
                               ),
                               const Spacer(),
                               Text(
                                 '$_totalPrice',
                                 style: Styles.mediumText(
-                                    color: Theme.of(context)
+                                    color: Theme
+                                        .of(context)
                                         .scaffoldBackgroundColor),
                               ),
                             ],
@@ -204,8 +217,8 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                             child: Text(
                               'Pay',
                               style: Styles.headerText(
-                                  color: Theme.of(context)
-                                      .scaffoldBackgroundColor),
+                                  color: AppColors.AUTH_CONTAINER_COLOR,
+                              ),
                             ),
                           ),
                         ),

@@ -13,7 +13,7 @@ class CompanyAdvertiseCubit extends Cubit<CompanyAdvertiseState> {
 
   static CompanyAdvertiseCubit get(context) => BlocProvider.of(context);
 
-  Timer? _pollingTimer;
+  //Timer? _pollingTimer;
 
 
   Future<void> addPostCompanyAdvertise({
@@ -62,40 +62,40 @@ class CompanyAdvertiseCubit extends Cubit<CompanyAdvertiseState> {
   Future<void> fetchAdvertiseCompany(BuildContext context, String filter) async {
     emit(FetchAllCompanyAdvertiseLoading());
 
-    _startPollingAdvertise(context, filter);
-  }
+    var result = await companyAdvertiseRepo.fetchPostCompanyAdvertise(filter);
 
-
-
-
-
-  void _startPollingAdvertise(BuildContext context, String filter) {
-    _pollingTimer?.cancel();
-
-    _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
-      var result = await companyAdvertiseRepo.fetchPostCompanyAdvertise(filter);
-
-      result.fold((failure) {
-        emit(FetchAllCompanyAdvertiseError(
-            errMessage: getFailureMessage(failure, context)));
-      }, (newData) {
-        if (state is FetchAllCompanyAdvertiseSuccess) {
-          var currentState = state as FetchAllCompanyAdvertiseSuccess;
-          if (newData != currentState.advertiseCompanyModel) {
-            emit(FetchAllCompanyAdvertiseSuccess(advertiseCompanyModel: newData));
-          }
-        } else {
-          emit(FetchAllCompanyAdvertiseSuccess(advertiseCompanyModel: newData));
-        }
-      });
+    result.fold((failure) {
+      emit(FetchAllCompanyAdvertiseError(
+          errMessage: getFailureMessage(failure, context)));
+    }, (newData) {
+      emit(FetchAllCompanyAdvertiseSuccess(advertiseCompanyModel: newData));
     });
   }
 
-  @override
-  Future<void> close() {
-    _pollingTimer?.cancel();
-    return super.close();
-  }
+
+
+
+
+  // void _startPollingAdvertise(BuildContext context, String filter) {
+  //   _pollingTimer?.cancel();
+  //
+  //   _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
+  //     var result = await companyAdvertiseRepo.fetchPostCompanyAdvertise(filter);
+  //
+  //     result.fold((failure) {
+  //       emit(FetchAllCompanyAdvertiseError(
+  //           errMessage: getFailureMessage(failure, context)));
+  //     }, (newData) {
+  //       emit(FetchAllCompanyAdvertiseSuccess(advertiseCompanyModel: newData));
+  //     });
+  //   });
+  // }
+  //
+  // @override
+  // Future<void> close() {
+  //   _pollingTimer?.cancel();
+  //   return super.close();
+  // }
 
 
 

@@ -7,7 +7,8 @@ import '../../../data/models/company_advertise_model.dart';
 import '../../cubit/company_advertise/company_advertise_cubit.dart';
 
 class BuildItemTextPost extends StatelessWidget {
-   BuildItemTextPost({super.key, required this.advertises,this.isScalable=true});
+  BuildItemTextPost(
+      {super.key, required this.advertises, this.isScalable = true});
 
   final Advertises advertises;
   bool? isScalable;
@@ -16,36 +17,55 @@ class BuildItemTextPost extends StatelessWidget {
   Widget build(BuildContext context) {
     final DateTime createdAt = DateTime.parse(advertises.createdAt!);
     final DateTime egyptTime = createdAt.toUtc().add(const Duration(hours: 3));
-    final String formattedDayTime = DateFormat('EEEE, h:mm a').format(egyptTime);
+    final String formattedDayTime =
+        DateFormat('EEEE, h:mm a').format(egyptTime);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         const SizedBox(height: 5),
-       isScalable!? Slidable(
-          key: ValueKey(advertises.sId),
-          endActionPane: ActionPane(
-            dragDismissible: false,
-            extentRatio: 0.25,
-            motion: const ScrollMotion(),
-            dismissible: DismissiblePane(onDismissed: () {}),
-            children: [
-              const SizedBox(height: 5),
-              SlidableAction(
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                borderRadius: BorderRadius.circular(10),
-                onPressed: (context) async {
-                  context.read<CompanyAdvertiseCubit>().deletePost(context, advertises.sId!, 'written');
-                },
-                backgroundColor: Theme.of(context).primaryColor,
-                foregroundColor: Colors.white,
-                icon: Icons.delete_outlined,
-                label: 'Delete',
-              ),
-            ],
-          ),
-          child: buildItem(context),
-        ):buildItem(context),
+        isScalable!
+            ? Slidable(
+                key: ValueKey(advertises.sId),
+                endActionPane: ActionPane(
+                  dragDismissible: false,
+                  extentRatio: 0.2,
+                  motion: const ScrollMotion(),
+                  dismissible: DismissiblePane(onDismissed: () {}),
+                  children: [
+                    const SizedBox(width: 5),
+                    GestureDetector(
+                      onTap: (){
+                        context.read<CompanyAdvertiseCubit>().deletePost(context, advertises.sId!, 'written');
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 20),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Theme.of(context).primaryColor),
+                        child: Icon(
+                          Icons.delete_outlined,
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                        ),
+                        // child: SlidableAction(
+                        //   padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        //   borderRadius: BorderRadius.circular(10),
+                        //   onPressed: (context) async {
+                        //     context.read<CompanyAdvertiseCubit>().deletePost(context, advertises.sId!, 'written');
+                        //   },
+                        //   backgroundColor: Theme.of(context).primaryColor,
+                        //   foregroundColor: Theme.of(context).primaryColor,
+                        //   icon: Icons.delete_outlined,
+                        //   label: 'Delete',
+                        // ),
+                      ),
+                    ),
+                  ],
+                ),
+                child: buildItem(context),
+              )
+            : buildItem(context),
         const SizedBox(height: 2),
         Text(formattedDayTime),
       ],
@@ -54,24 +74,24 @@ class BuildItemTextPost extends StatelessWidget {
 
   Widget buildItem(context) {
     return Container(
-    width: double.infinity,
-    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(10),
-      color: Theme.of(context).primaryColor,
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          advertises.post!,
-          style: Styles.mediumText(
-            fontSize: 34,
-            color: Theme.of(context).scaffoldBackgroundColor,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Theme.of(context).primaryColor,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            advertises.post!,
+            style: Styles.mediumText(
+              fontSize: 34,
+              color: Theme.of(context).scaffoldBackgroundColor,
+            ),
           ),
-        ),
-      ],
-    ),
-  );
+        ],
+      ),
+    );
   }
 }

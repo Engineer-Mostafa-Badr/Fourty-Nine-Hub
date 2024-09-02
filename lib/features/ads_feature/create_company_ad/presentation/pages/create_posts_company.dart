@@ -73,7 +73,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                   label: widget.title,
                   actions: [
                     TextButton(
-                        child: const Label(text: 'Post'),
+                        child:  const Label(text: 'Post'),
                         onPressed: () {
                           print('**************************************');
                           print(controller.selectedImages);
@@ -183,7 +183,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
   Widget _buildCreatePost() {
     return Container(
         padding: const EdgeInsets.all(10),
-        color: Colors.white,
+       // color: Colors.white,
         child: TextFormField(
           maxLines: 4,
           maxLength: 150,
@@ -204,7 +204,8 @@ class _CreatePostViewState extends State<CreatePostCompany> {
           decoration: const InputDecoration(
               hintText: 'Type Here ... ',
               hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
-              fillColor: Colors.white),
+              fillColor: Colors.white
+          ),
         ));
   }
 
