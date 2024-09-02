@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/subscripe/domain/usecases/subscribe_useca
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -18,16 +19,17 @@ class SubscriptionPlansWidget extends StatefulWidget {
   final SubscriptionPlansEntity subscribePlans;
   final List<WalletTypes>? paymentMenthods;
   final String subCategoryId;
+  final String? title;
   const SubscriptionPlansWidget({
     super.key,
     this.paymentMenthods,
     required this.subscribePlans,
     required this.subCategoryId,
+    this.title,
   });
 
   @override
-  State<SubscriptionPlansWidget> createState() =>
-      _SubscriptionPlansWidgetState();
+  State<SubscriptionPlansWidget> createState() => _SubscriptionPlansWidgetState();
 }
 
 class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
@@ -41,6 +43,12 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
       child: ListView(
         children: [
           const SizedBox(height: 20),
+          Text(
+            widget.title ?? '',
+            style: Styles.headerText(),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
           Row(
             children: [
               Expanded(
@@ -49,18 +57,14 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
-                      color: !_isPremium
-                          ? AppColors.PRIMARY_COLOR
-                          : Colors.transparent,
+                      color: !_isPremium ? AppColors.PRIMARY_COLOR : Colors.transparent,
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: Text(
                       Labels.regular,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: !_isPremium
-                            ? Colors.white
-                            : Theme.of(context).primaryColor,
+                        color: !_isPremium ? Colors.white : Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -73,9 +77,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
-                      color: _isPremium
-                          ? Theme.of(context).primaryColor
-                          : Colors.red,
+                      color: _isPremium ? Theme.of(context).primaryColor : Colors.red,
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: Text(
@@ -95,13 +97,11 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
           _buildList(),
           const SizedBox(height: 20),
           const AppInfoText(
-              text:
-                  'The Premium Package gives you the opportunity to be seen more and get more cashback.'),
+              text: 'The Premium Package gives you the opportunity to be seen more and get more cashback.'),
           ElevatedAppButton(
             label: Labels.confirm,
             onPressed: () async {
-              if (widget.paymentMenthods == null ||
-                  widget.paymentMenthods!.isEmpty) {
+              if (widget.paymentMenthods == null || widget.paymentMenthods!.isEmpty) {
                 showLoadingDialog(context);
                 await serviceLocator<SubscriptionController>().subscribe(
                   subscribeParams: SubscribeParams(

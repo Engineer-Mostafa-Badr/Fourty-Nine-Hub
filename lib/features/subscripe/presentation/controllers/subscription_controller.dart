@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/subscripe/domain/usecases/get_active_subs
 import 'package:fourtyninehub/features/subscripe/presentation/widgets/amounts.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+
 import '../../domain/usecases/check_if_user_subscribed_usecase.dart';
 import '../../domain/usecases/get_subscription_plans_usecase.dart';
 import '../../domain/usecases/subscribe_usecase.dart';
@@ -15,18 +16,13 @@ import '../widgets/subscription_plans.dart';
 
 class SubscriptionController {
   //to pass current context
-  final BuildContext context =
-      AppPages.router.configuration.navigatorKey.currentContext!;
+  final BuildContext context = AppPages.router.configuration.navigatorKey.currentContext!;
   final CheckIfUserSubscribedUseCase _checkIfUserSubscribedUseCase;
   final GetSubscriptionPlansUseCase _getSubscriptionPlansUseCase;
   final SubscribeUseCase _subscribeUseCase;
-  final GetActiveSubscriptionAmountsUseCase
-      _getActiveSubscriptionAmountsUseCase;
+  final GetActiveSubscriptionAmountsUseCase _getActiveSubscriptionAmountsUseCase;
 
-  SubscriptionController(
-      this._checkIfUserSubscribedUseCase,
-      this._getSubscriptionPlansUseCase,
-      this._subscribeUseCase,
+  SubscriptionController(this._checkIfUserSubscribedUseCase, this._getSubscriptionPlansUseCase, this._subscribeUseCase,
       this._getActiveSubscriptionAmountsUseCase);
 
   void checkIfUserSubscribed({
@@ -49,8 +45,7 @@ class SubscriptionController {
     });
   }
 
-  Future<void> showSubscriptionPlans(
-      {List<WalletTypes>? wallets, required String subCategoryId}) async {
+  Future<void> showSubscriptionPlans({List<WalletTypes>? wallets, required String subCategoryId, String? title}) async {
     showLoadingDialog(context);
     final plansResponse = await _getSubscriptionPlansUseCase(subCategoryId);
     AppPages.router.pop();
@@ -66,14 +61,13 @@ class SubscriptionController {
             subscribePlans: plans,
             subCategoryId: subCategoryId,
             paymentMenthods: wallets,
+            title: title,
           ));
     });
   }
 
-  Future<void> showActiveSubscriptionAmounts(
-      {required WalletTypes walletType}) async {
-    final response =
-        await _getActiveSubscriptionAmountsUseCase(const NoParams());
+  Future<void> showActiveSubscriptionAmounts({required WalletTypes walletType}) async {
+    final response = await _getActiveSubscriptionAmountsUseCase(const NoParams());
     response.fold(
       (l) => showErrorMessage(
         context,

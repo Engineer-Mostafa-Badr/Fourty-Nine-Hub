@@ -3,8 +3,11 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entit
 import 'vehicle_id.dart';
 
 class TripJoinCardModel extends TripJoinCardEntity {
+  @override
   String? id;
+  @override
   String? userId;
+  @override
   String? categoryId;
   VehicleId? vehicleId;
   String? fromAr;
@@ -48,6 +51,9 @@ class TripJoinCardModel extends TripJoinCardEntity {
     this.updatedAt,
     this.status,
   }) : super(
+          id: id,
+          userId: userId,
+          categoryId: categoryId,
           brand: vehicleId?.brand,
           model: vehicleId?.model,
           journeyPrice: price,

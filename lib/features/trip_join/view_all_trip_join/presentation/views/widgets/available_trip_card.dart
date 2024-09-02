@@ -16,6 +16,7 @@ class AvailableTripCard extends StatelessWidget {
     this.callOnTap,
     this.messageOnTap,
     this.reportOnTap,
+    this.subscribeMessageOnTap,
   });
   final TripJoinCardEntity tripJoinCardEntity;
   final void Function()? premuimRequestOnTap;
@@ -23,6 +24,7 @@ class AvailableTripCard extends StatelessWidget {
   final void Function()? callOnTap;
   final void Function()? messageOnTap;
   final void Function()? reportOnTap;
+  final void Function()? subscribeMessageOnTap;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -164,7 +166,7 @@ class AvailableTripCard extends StatelessWidget {
                           title: 'Report',
                           color: AppColors.SECONDARY_COLOR,
                           icon: Icons.report,
-                          onTap: messageOnTap,
+                          onTap: reportOnTap,
                         ),
                       ),
                     ],
@@ -188,13 +190,16 @@ class AvailableTripCard extends StatelessWidget {
           const Sizer(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              'Subscribe to contact the client!',
-              style: Styles.headerText(
-                color: Colors.red[300],
-                fontSize: 30,
+            child: InkWell(
+              onTap: subscribeMessageOnTap,
+              child: Text(
+                'Subscribe to contact the client!',
+                style: Styles.headerText(
+                  color: Colors.red[300],
+                  fontSize: 30,
+                ),
+                textAlign: TextAlign.start,
               ),
-              textAlign: TextAlign.start,
             ),
           )
         ],
