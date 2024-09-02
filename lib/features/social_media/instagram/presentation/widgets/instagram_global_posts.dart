@@ -442,8 +442,11 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
       children: [
         InkWell(
           onTap: () {
+            if(context.read<UserCubit>().isLoggedIn){
               context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-            
+            }else{
+              context.push(Routes.LOGIN);
+            }
           },
           child: CircleAvatar(
             backgroundColor: Colors.white,
@@ -461,14 +464,20 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                   children: [
                     InkWell(
                       onTap: () {
+                        if(context.read<UserCubit>().isLoggedIn){
                           context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
-                                             },
+                        }else{
+                          context.push(Routes.LOGIN);
+                        }                      },
                       child: TextAppButton(
                           style: TextStyle(color: Theme.of(context).primaryColor),
                           label: post.user.firstName,
                           onPressed: () {
-                            context.push(Routes.INSTAGRAMPROFILE,
-                                extra: post.user.id);
+                            if(context.read<UserCubit>().isLoggedIn){
+                              context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
+                            }else{
+                              context.push(Routes.LOGIN);
+                            }
                           }),
                     ),
                     RichText(

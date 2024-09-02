@@ -232,7 +232,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                           title:
                                                                               Label(
                                                                             text:
-                                                                                'Enter greet message',
+                                                                                'Enter Greet Message',
                                                                             style:
                                                                                 Styles.headerText(),
                                                                           ),
@@ -245,7 +245,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                               setState(() {});
                                                                             },
                                                                             decoration: InputDecoration(
-                                                                                hintText: "Greet message",
+                                                                                hintText: "Greet Message",
                                                                                 fillColor: Colors.white,
                                                                                 hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
                                                                           ),

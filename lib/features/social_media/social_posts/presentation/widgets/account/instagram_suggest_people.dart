@@ -14,14 +14,14 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class InstagramSuggestPeople extends StatefulWidget {
-  const InstagramSuggestPeople({super.key});
+class InstagramProfileSuggestPeople extends StatefulWidget {
+  const InstagramProfileSuggestPeople({super.key});
 
   @override
-  State<InstagramSuggestPeople> createState() => _InstagramSuggestPeopleState();
+  State<InstagramProfileSuggestPeople> createState() => _InstagramProfileSuggestPeopleState();
 }
 
-class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
+class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestPeople> {
   final messageController = TextEditingController();
 
   @override
@@ -196,7 +196,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                           title:
                                                                               Label(
                                                                             text:
-                                                                                'Enter greet message',
+                                                                                'Enter Greet Message',
                                                                             style:
                                                                                 Styles.headerText(),
                                                                           ),
@@ -209,7 +209,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                               setState(() {});
                                                                             },
                                                                             decoration: InputDecoration(
-                                                                                hintText: "Greet message",
+                                                                                hintText: "Greet Message",
                                                                                 fillColor: Colors.white,
                                                                                 hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
                                                                           ),

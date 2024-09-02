@@ -47,6 +47,11 @@ class InstagramServiceLocator {
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
     ));
 
 

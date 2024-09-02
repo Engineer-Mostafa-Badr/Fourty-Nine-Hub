@@ -16,8 +16,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_reels.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_tweets.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:lottie/lottie.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -44,9 +42,6 @@ class _OtherAccountViewState extends State<OtherAccountView> {
     return DefaultTabController(
       length: loginUser?.id == widget.userId ? 4 : 3,
       child: Scaffold(
-        appBar: AppBar(
-
-        ),
         body: BlocBuilder<SocialPostsCubit, SocialPostsState>(
             builder: (context, state) {
           final controller = context.read<SocialPostsCubit>();

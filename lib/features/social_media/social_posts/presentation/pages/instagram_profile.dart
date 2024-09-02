@@ -320,33 +320,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                       ),
                     ],
                   ),
-                  if (loginUser?.id != widget.userId)
-                    PopupMenuButton(
-                        child: Container(
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: AppColors.SECONDARY_COLOR),
-                            child: Text(
-                              'Message',
-                              style: Styles.mediumText(color: Colors.white),
-                            )),
-                        itemBuilder: (context) {
-                          return const [
-                            PopupMenuItem<int>(
-                              value: 0,
-                              child: Text("Normal"),
-                            ),
-                            PopupMenuItem<int>(
-                              value: 1,
-                              child: Text("Anonymous"),
-                            ),
-                          ];
-                        },
-                        onSelected: (value) {
-                          context.push(Routes.CHAT);
-                        }),
+
                 ],
               ),
               const Sizer(
@@ -439,7 +413,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                           ),
                         ],
                       ),
-                    if(user.id!=widget.userId)...[
+    if (loginUser?.id != widget.userId)...[
                       const Sizer(),
                     Row(
                       children: [
@@ -486,7 +460,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                             }),)
                       ],
                     ),],
-                    if(user.id==widget.userId)...[
+                    if (loginUser?.id == widget.userId)...[
                       const Sizer(),
                       Row(
                         children: [
@@ -539,7 +513,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                           ),
                         ],
                       ),],
-                    if(showSuggestPeople==true)InstagramSuggestPeople()
+                    if(showSuggestPeople==true)const InstagramProfileSuggestPeople()
                   ],
                 ),
             ],

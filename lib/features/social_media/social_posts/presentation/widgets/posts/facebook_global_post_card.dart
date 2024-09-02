@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_reaction_button/flutter_reaction_button.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -19,11 +18,8 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_tweet_card.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/assets/assets.dart';
@@ -459,8 +455,10 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
           children: [
             InkWell(
               onTap: () {
-                if (widget.fromProfile == false) {
+                if (widget.fromProfile == false&&context.read<UserCubit>().isLoggedIn) {
                   context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                }else{
+                  context.push(Routes.LOGIN);
                 }
               },
               child: CircleAvatar(
@@ -477,8 +475,10 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                 children: [
                   InkWell(
                     onTap: () {
-                      if (widget.fromProfile == false) {
+                      if (widget.fromProfile == false&&context.read<UserCubit>().isLoggedIn) {
                         context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                      }else{
+                        context.push(Routes.LOGIN);
                       }
                     },
                     child: Column(
@@ -487,9 +487,11 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                         TextAppButton(
                             label: post.user.firstName,
                             onPressed: () {
-                              if (widget.fromProfile == false) {
+                              if (widget.fromProfile == false&&context.read<UserCubit>().isLoggedIn) {
                                 context.push(Routes.OTHERSACCOUNT,
                                     extra: post.user.id);
+                              }else{
+                                context.push(Routes.LOGIN);
                               }
                             }),
                         RichText(

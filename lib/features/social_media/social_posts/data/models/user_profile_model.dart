@@ -32,7 +32,7 @@ class UserProfileModel extends UserProfileEntity {
       lastName: json['userId']['lastName'][0].toUpperCase() + json['userId']['lastName'].substring(1).toLowerCase() ?? '',
       bio: json['userId']['bio']??'',
       city: json['userId']['city']??'',
-      phone: json['userId']['phone']??'',
+      phone: json['userId']['phone'].toString(),
       country: json['userId']['country']??'',
       job: json['userId']['job']??'',
       email: json['userId']['email'] ?? '',
