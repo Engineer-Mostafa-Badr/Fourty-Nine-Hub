@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,6 +15,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -171,7 +173,10 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               icon: Icons.comment,
               label: '${post.commentsCount}',
               onTap: () {
-                return widget.showPostComments(widget.post.id);
+                if(context.read<UserCubit>().state.data!=null){
+                return widget.showPostComments(widget.post.id);}else{
+                  context.push(Routes.LOGIN);
+                }
               },
             ),
           ),
@@ -180,12 +185,16 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               icon: FontAwesomeIcons.retweet,
               label: "${widget.post.sharesCount}",
               onTap: () {
-                widget.onShare();
-                if (widget.shareSuccess == true &&
-                    widget.post.shares?.length == widget.post.sharesCount) {
-                  widget.post.sharesCount = widget.post.sharesCount! + 1;
+                if(context.read<UserCubit>().state.data!=null){
+                  widget.onShare();
+                  if (widget.shareSuccess == true &&
+                      widget.post.shares?.length == widget.post.sharesCount) {
+                    widget.post.sharesCount = widget.post.sharesCount! + 1;
+                  }
+                  setState(() {});
+                }else{
+                  context.push(Routes.LOGIN);
                 }
-                setState(() {});
               },
             ),
           ),
@@ -196,37 +205,13 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                     : Icons.favorite,
                 label: "${post.loveCount}",
                 onTap: () {
-                  widget.onReact();
-                  // print(result);
-                  // if(result == true){
-                  //   if(post.isReact == true){
-                  //     post.isReact = false;
-                  //     post.loveCount = (post.loveCount! - 1);
-                  //     setState(() {});
-                  //   }else{
-                  //     post.isReact = true;
-                  //     post.loveCount = (post.loveCount! + 1);
-                  //     setState(() {});
-                  //   }
-                  // }
-                  // if (post.isReact == true) {
-                  //   var result = widget.onReact();
-                  //   print(result);
-                  //   post.loveCount = (post.loveCount! - 1);
-                  //   setState(() {});
-                  // } else {
-                  //   widget.onReact();
-                  //
-                  //   post.loveCount = post.loveCount! + 1;
-                  //   setState(() {});
-                  // }
+                  if(context.read<UserCubit>().state.data!=null){
+                  widget.onReact();}else{
+                    context.push(Routes.LOGIN);
+                  }
                 },
                 iconColor: post.isReact == false ? Colors.grey : Colors.red),
           ),
-          // Expanded(
-          //   child: _buildTwitterItem(
-          //       icon: Icons.analytics, label: '14,350', onTap: () {}),
-          // ),
         ],
       ),
     );
@@ -382,7 +367,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               style: Styles.mediumText(color: Colors.grey)),
         ),
         Label(text: ' . $date', style: Styles.mediumText(color: Colors.grey)),
-        if(post.user.id!=user?.id)IconButton(
+        if(post.user.id!=user?.id&&context.read<UserCubit>().state.data!=null)IconButton(
           onPressed: () {
             bottomSheet(
                 context: context,
@@ -396,7 +381,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             color: AppColors.SECONDARY_COLOR,
           ),
         ),
-        IconAppButton(
+        if(context.read<UserCubit>().state.data!=null)IconAppButton(
           icon: Icons.clear,
           onPressed: () {
             bottomSheet(
@@ -520,7 +505,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             ],
           ),
         ),
-        if (post.isShared == false&&(post.user.id!=user?.id)) ...[
+        if (post.isShared == false&&(post.user.id!=user?.id)&&context.read<UserCubit>().state.data!=null) ...[
           IconButton(
             onPressed: () {
               bottomSheet(
@@ -536,7 +521,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               color: AppColors.SECONDARY_COLOR,
             ),
           ),
-          IconAppButton(
+          if(context.read<UserCubit>().state.data!=null)IconAppButton(
             icon: Icons.clear,
             onPressed: () {
               bottomSheet(

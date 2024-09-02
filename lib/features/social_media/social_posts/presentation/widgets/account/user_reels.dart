@@ -46,17 +46,15 @@ class _UserReelsState extends State<UserReels> {
           builderDelegate: PagedChildBuilderDelegate<PostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.userReelsPagingController.itemList?.length);
-                return const Padding(
-                    padding: EdgeInsets.only(top: 200),
-                    child: Center(
-                      child: Text(
-                        "No Reels",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ));
+                return Center(
+                  child: Text(
+                    "No Reels",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                    ),
+                  ),
+                );
               },
               itemBuilder: (context, item, index) {
                 final post =

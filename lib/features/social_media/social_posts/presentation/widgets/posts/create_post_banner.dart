@@ -37,7 +37,9 @@ class CreatePostBanner extends StatelessWidget {
           ),
           Expanded(
               child: InkWell(
-            onTap: () => context.push(Routes.CREATEPOST, extra: 'facebook'),
+            onTap: () {
+              context.read<UserCubit>().state.data==null?context.push(Routes.LOGIN):context.push(Routes.CREATEPOST, extra: 'facebook');
+            },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
               decoration: BoxDecoration(

@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../res/style/app_colors.dart';
@@ -29,7 +31,7 @@ class ProfileImage extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (fromProfile == false) {
-          context.push(Routes.OTHERSACCOUNT);
+          context.read<UserCubit>().state.data==null?context.push(Routes.LOGIN):context.push(Routes.OTHERSACCOUNT);
         }
       },
       child: CircleAvatar(

@@ -5,7 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_global_posts.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_posts.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -81,7 +81,7 @@ class _InstagramViewState extends State<InstagramView> {
                     children: [
                       _buildTabBar(context),
                       Expanded(
-                        child: InstagramGlobalPosts(scrollController: scrollController),
+                        child: InstagramPosts(scrollController: scrollController),
                       ),
                     ],
                   )

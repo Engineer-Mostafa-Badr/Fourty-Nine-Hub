@@ -17,6 +17,8 @@ import '../usecases/post_react_usecase.dart';
 abstract class SocialPostsRepo {
   Future<Either<Failure, List<PostEntity>>> getFeed(
       {required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getGlobalFeed(
+      {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getAdvertisement(
       {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getTweet(
@@ -29,6 +31,8 @@ abstract class SocialPostsRepo {
   Future<Either<Failure, CommentEntity>> commentOnPost(
       {required PostCommentParams params});
   Future<Either<Failure, UserProfileEntity>> getUserProfile(
+      {required String params});
+  Future<Either<Failure, bool>> viewProfile(
       {required String params});
   Future<Either<Failure, CommentEntity>> replyOnComment(
       {required ReplyOnCommentParams params});

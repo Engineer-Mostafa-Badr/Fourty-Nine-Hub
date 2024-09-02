@@ -193,9 +193,18 @@ class EndPoints {
     return '/facebook/feed?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
   }
 
+  static String getGlobalFeed(TwitterFeedParams params) {
+    return '/facebook/feed/general?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
+  }
+
   static String getInstagramPosts(TwitterFeedParams params) {
     return '/instagram/feed?limit=${params.limit}&page=${params.page}';
   }
+
+  static String getInstagramGlobalPosts(TwitterFeedParams params) {
+    return '/instagram/feed/general?limit=${params.limit}&page=${params.page}';
+  }
+
 
   static String getReels(TwitterFeedParams params) {
     return '/reels/explore?limit=${params.limit}&page=${params.page}';
@@ -283,6 +292,10 @@ class EndPoints {
 
   static String getUserProfile(String userId) {
     return '/users/profile/$userId?subCategory=66b77e77bb35968b535dc944';
+  }
+
+  static String viewProfile(String userId) {
+    return '/users/profile-view/$userId?subCategory=66b77e77bb35968b535dc944';
   }
 
   static String editComment(PostCommentParams params) {

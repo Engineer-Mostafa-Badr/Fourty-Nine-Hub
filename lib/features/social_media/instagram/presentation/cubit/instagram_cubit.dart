@@ -168,7 +168,7 @@ class InstagramCubit extends Cubit<InstagramState> {
   //get media
   getMedia(int page) async {
     final response =
-    await _getFeedUseCase(TwitterFeedParams(limit: 10, page: 1));
+    await _getFeedUseCase(TwitterFeedParams(limit: 10, page: page));
     response.fold(
             (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
             (data) async {

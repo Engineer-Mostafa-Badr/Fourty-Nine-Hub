@@ -37,7 +37,7 @@ class UserProfileModel extends UserProfileEntity {
       job: json['userId']['job']??'',
       email: json['userId']['email'] ?? '',
       isDocument: json['userId']['twitter_documentation'] ?? false,
-      totalView: json['totalView'] ?? 0,
+      totalView: json['usersView'] ?? 0,
       posts: json['posts'] ?? 0,
       profilePicture: json['profilePictureKey'] ?? '',
       profileCover: json['coverPictureKey'] ?? '',

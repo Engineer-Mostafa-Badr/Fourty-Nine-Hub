@@ -583,9 +583,7 @@ class AppPages {
                 GoRoute(
                     path: Paths.TWITTER,
                     name: Routes.TWITTER,
-                    builder: (context, state) => BlocProvider<TwitterCubit>(
-                        create: (_) => serviceLocator(),
-                        child: const TwitterView()),
+                    builder: (context, state) => const TwitterView(),
                     routes: []),
                 GoRoute(
                     path: Paths.OTHERSACCOUNT,

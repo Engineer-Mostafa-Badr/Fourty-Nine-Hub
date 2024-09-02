@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
@@ -16,6 +15,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/media_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/saved_reels_view.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/instagram_suggest_people.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_reels.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -33,6 +33,16 @@ class InstagramProfile extends StatefulWidget {
 }
 
 class _InstagramProfileState extends State<InstagramProfile> {
+
+  bool showSuggestPeople=false;
+
+  void showHideSuggestPeople(){
+    setState(() {
+      showSuggestPeople=!showSuggestPeople;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final loginUser = context.read<UserCubit>().state.data;
@@ -77,7 +87,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                     )
                                   ],
                                 ),
-                                PopupMenuButton(
+                                if(loginUser?.id!=widget.userId)PopupMenuButton(
                                     icon: const Icon(
                                       Icons.more_vert,
                                       color: Colors.black,
@@ -133,63 +143,51 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                               }
                                             },
                                           ),
-                                        if (loginUser?.id ==
-                                            state.profileData?.id)
-                                          PopupMenuItem<int>(
-                                            value: 5,
-                                            child: const Text('Edit Profile'),
-                                            onTap: () async {
-                                              await context
-                                                  .push(Routes.EDITPROFILE);
-                                              controller.getUserProfile(
-                                                  id: widget.userId);
-                                            },
-                                          )
                                       ];
                                     })
                               ]))),
                   SliverToBoxAdapter(
-                    child: Stack(
-                      children: [
-                        _buildAccountCounter(
-                            context: context,
-                            user: state.profileData!,
-                            onFollow: () async {
-                              if (state.profileData?.isFollowed == true) {
-                                var result = await controller.unFollowRequest(
-                                    context: context,
-                                    userId: state.profileData!.id);
-                                if (result == true) {
-                                  state.profileData?.isFollowed = false;
-                                  setState(() {});
-                                }
-                              } else {
-                                var result = await controller.followRequest(
-                                    context: context,
-                                    userId: state.profileData!.id);
-                                if (result == true) {
-                                  state.profileData?.isFollowed = true;
-                                  setState(() {});
-                                }
-                              }
-                            }, getUserProfile: ()async{
-                          await context
-                              .push(Routes.EDITPROFILE);
-                              controller.getUserProfile(id: widget.userId);
-                        },),
-                      ],
-                    ),
+                    child: _buildAccountCounter(
+                        context: context,
+                        user: state.profileData!,
+                        onFollow: () async {
+                          if (state.profileData?.isFollowed == true) {
+                            var result = await controller.unFollowRequest(
+                                context: context,
+                                userId: state.profileData!.id);
+                            if (result == true) {
+                              state.profileData?.isFollowed = false;
+                              setState(() {});
+                            }
+                          } else {
+                            var result = await controller.followRequest(
+                                context: context,
+                                userId: state.profileData!.id);
+                            if (result == true) {
+                              state.profileData?.isFollowed = true;
+                              setState(() {});
+                            }
+                          }
+                        }, getUserProfile: ()async{
+                      await context
+                          .push(Routes.EDITPROFILE);
+                          controller.getUserProfile(id: widget.userId);
+                    }, showHideSuggestPeople: () {
+                          showHideSuggestPeople();
+                          print(showSuggestPeople);
+                    },showSuggestPeople:showSuggestPeople),
                   ),
                   SliverToBoxAdapter(
                     child: state.profileData?.isBlock == false
                         ? Column(
                       children: [
+                        Sizer(),
                         TabBar(
                             labelStyle: Styles.mediumText(),
                             isScrollable: true,
                             tabAlignment: TabAlignment.center,
                             // labelPadding: EdgeInsetsDirectional.only(end: 100),
-                            // indicatorSize: TabBarIndicatorSize.tab,
+                            indicatorSize: TabBarIndicatorSize.tab,
                             labelPadding: const EdgeInsetsDirectional.symmetric(horizontal: 50),
                             onTap: (i) {
                               controller.changeUserPage(i);
@@ -250,6 +248,8 @@ class _InstagramProfileState extends State<InstagramProfile> {
         required UserProfileEntity user,
         required Function onFollow,
         required GestureTapCallback? getUserProfile,
+        required GestureTapCallback? showHideSuggestPeople,
+        required bool showSuggestPeople
 
         }) {
     final loginUser = context.read<UserCubit>().state.data;
@@ -276,18 +276,23 @@ class _InstagramProfileState extends State<InstagramProfile> {
                   children: [
                     _buildCounter(
                       value: '${user.posts??0} ',
-                      label: 'Posts',
+                      label: 'Post',
+                    ),
+                    const Sizer(),
+                    _buildCounter(
+                      value: '${user.friendsCount} ',
+                      label: 'Friend',
                     ),
                     const Sizer(),
                     _buildCounter(
                       value: '${user.followersCount} ',
                       label: 'Follower',
                     ),
-                    const Sizer(),
+                    if(loginUser?.id==user.id)...[const Sizer(width: 5,),
                     _buildCounter(
-                      value: '${user.followingCount} ',
-                      label: 'Following',
-                    ),
+                      value: '${user.totalView} ',
+                      label: 'View',
+                    ),],
                     const Sizer(width: 5,),
                   ],
                 ),
@@ -517,7 +522,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                           ),
                           const Sizer(),
                           InkWell(
-                            // onTap: getUserProfile,
+                            onTap: showHideSuggestPeople,
                             child:Container(
                               height: 42,
                               width: 42,
@@ -527,14 +532,14 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                 borderRadius: BorderRadius.circular( 10.zR),
                                 color:AppColors.PRIMARY_COLOR,
                               ),
-                              child: const Center(
-                                child: Icon(Icons.person,color: Colors.white,),
+                              child: Center(
+                                child: Icon(showSuggestPeople==false?Icons.person_add:Icons.person,color: Colors.white,),
                               ),
                             ),
                           ),
                         ],
                       ),],
-                    
+                    if(showSuggestPeople==true)InstagramSuggestPeople()
                   ],
                 ),
             ],

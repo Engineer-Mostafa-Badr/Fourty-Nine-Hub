@@ -514,7 +514,6 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 color: AppColors.SECONDARY_COLOR,
               ),
             const Sizer(),
-            if (post.user.id == user?.id)
               IconAppButton(
                 icon: Icons.clear,
                 onPressed: () {
@@ -774,7 +773,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         children: [
           if (post.feeling != null || post.activity != null) ...[
             Text(
-              'feeling ${post.feeling?.name}, ${post.activity?.name}',
+              'feeling ${post.feeling!=null?post.feeling?.name??'':''}${post.activity!=null?', ${post.activity?.name}':''}',
               style: Styles.mediumText(),
             ),
             const SizedBox(
