@@ -183,7 +183,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       totalPosts.addAll(data);
       totalPosts.addAll(tweets);
       totalPosts.addAll(advertisements);
-      final isLastPage = totalPosts.length < (4);
+      final isLastPage = totalPosts.length < (3);
       if (page == 1) {
         print("page == 1 $page");
         feedPagingController.itemList = [];

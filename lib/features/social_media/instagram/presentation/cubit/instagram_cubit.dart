@@ -78,8 +78,19 @@ class InstagramCubit extends Cubit<InstagramState> {
     });
   }
 
+  void loadMedia() async {
+    await getMedia(1);
+    mediaPagingController.addPageRequestListener((pageKey) {
+      getMedia(pageKey);
+    });
+  }
+
   refreshUserReels() async {
     userReelsPagingController.refresh();
+  }
+
+  refreshMedia() async {
+    mediaPagingController.refresh();
   }
 
   refreshSavedReels() async {
@@ -116,6 +127,9 @@ class InstagramCubit extends Cubit<InstagramState> {
   final PagingController<int, PostEntity> savedReelsPagingController =
       PagingController(firstPageKey: 1);
 
+  final PagingController<int, PostEntity> mediaPagingController =
+      PagingController(firstPageKey: 1);
+
 // get feed posts
   Future<void> getFeed(int page) async {
     final response =
@@ -148,6 +162,31 @@ class InstagramCubit extends Cubit<InstagramState> {
       }
       emit(state.copyWith(posts: totalPosts, status: StateStatus.initial));
     });
+  }
+
+
+  //get media
+  getMedia(int page) async {
+    final response =
+    await _getFeedUseCase(TwitterFeedParams(limit: 10, page: 1));
+    response.fold(
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (data) async {
+          final isLastPage = data.length < 10;
+          if (page == 1) {
+            print("page == 1 $page");
+            mediaPagingController.itemList = [];
+          }
+          if (isLastPage) {
+            print("isLastPage = $isLastPage");
+            mediaPagingController.appendLastPage(data);
+          } else {
+            print("isNotLastPage = $isLastPage");
+            final nextPageKey = page + 1;
+            mediaPagingController.appendPage(data, nextPageKey);
+          }
+          emit(state.copyWith(media:data, status: StateStatus.success));
+        });
   }
 
   // get advertisements

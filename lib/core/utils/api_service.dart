@@ -7,16 +7,14 @@ class ApiService {
 
   ApiService(this.dio);
 
-  Future<Map<String,dynamic>> get({
+  Future<Map<String, dynamic>> get({
     required String url,
     String? token,
   }) async {
     var response = await dio.get(
       '$_baseUrl$url',
       options: Options(
-        headers: {
-          'Authorization': 'Bearer $token'
-        },
+        headers: {'Authorization': 'Bearer $token'},
       ),
     );
     // Check if the response is a Map or a List
@@ -32,17 +30,14 @@ class ApiService {
     }
   }
 
-
-  Future<Map<String,dynamic>> delete({
+  Future<Map<String, dynamic>> delete({
     required String url,
     String? token,
   }) async {
     var response = await dio.delete(
       '$_baseUrl$url',
       options: Options(
-        headers: {
-          'Authorization': 'Bearer $token'
-        },
+        headers: {'Authorization': 'Bearer $token'},
       ),
     );
     // Check if the response is a Map or a List

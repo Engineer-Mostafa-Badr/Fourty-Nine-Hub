@@ -41,15 +41,18 @@ class CreateCompanyAdView extends StatelessWidget {
                   Expanded(
                       child: ListView.separated(
                           itemBuilder: (context, index) {
-                            return _buildOptionWidget(adOption: state.adOptions![index]);
+                            return _buildOptionWidget(
+                                adOption: state.adOptions![index]);
                           },
                           separatorBuilder: (context, index) {
                             return const Sizer();
                           },
                           itemCount: state.adOptions?.length ?? 0)),
                   AppButton(
-                      style: const TextStyle(color: AppColors.AUTH_CONTAINER_COLOR),
-                      label: 'Proceed to Payment (${controller.totalPrice()} ${Labels.currency})',
+                      style: const TextStyle(
+                          color: AppColors.AUTH_CONTAINER_COLOR),
+                      label:
+                          'Proceed to Payment (${controller.totalPrice()} ${Labels.currency})',
                       backColor: (state.selectedOptions?.isEmpty ?? true)
                           ? AppColors.SECONDARY_COLOR.withAlpha(150)
                           : AppColors.SECONDARY_COLOR,
@@ -62,7 +65,8 @@ class CreateCompanyAdView extends StatelessWidget {
   }
 
   Widget _buildOptionWidget({required CompanyAdEntity adOption}) {
-    return BlocBuilder<CreateCompanyAdCubit, CreateCompanyAdState>(builder: (context, state) {
+    return BlocBuilder<CreateCompanyAdCubit, CreateCompanyAdState>(
+        builder: (context, state) {
       final controller = context.read<CreateCompanyAdCubit>();
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +79,10 @@ class CreateCompanyAdView extends StatelessWidget {
                   style: Styles.headerText(),
                 ),
               ),
-              IconAppButton(icon: Icons.upload, isCircle: true, onPressed: () async => FilePickerHelper().pickMedia()),
+              IconAppButton(
+                  icon: Icons.upload,
+                  isCircle: true,
+                  onPressed: () async => FilePickerHelper().pickMedia()),
             ],
           ),
           ListView.builder(
@@ -87,7 +94,8 @@ class CreateCompanyAdView extends StatelessWidget {
                 return Row(
                   children: [
                     Checkbox(
-                        value: controller.optionSelected(option), onChanged: (v) => controller.onSelection(option)),
+                        value: controller.optionSelected(option),
+                        onChanged: (v) => controller.onSelection(option)),
                     Expanded(
                         child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

@@ -158,7 +158,7 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
 
       return Right(list);
     } catch (e) {
-      return const Left(UnknownFailure());
+      return Left(UnknownFailure(e.toString()));
     }
   }
 

@@ -142,7 +142,7 @@
 // // // //                               showErrorMessage(
 // // // //                                 context,
 // // // //                                 getFailureMessage(
-// // // //                                   state.failure ?? const UnknownFailure(),
+// // // //                                   state.failure ?? const UnknownFailure(''),
 // // // //                                   context,
 // // // //                                 ),
 // // // //                               );
@@ -351,7 +351,7 @@
 // // //                                 showErrorMessage(
 // // //                                   context,
 // // //                                   getFailureMessage(
-// // //                                     state.failure ?? const UnknownFailure(),
+// // //                                     state.failure ?? const UnknownFailure(''),
 // // //                                     context,
 // // //                                   ),
 // // //                                 );
@@ -558,7 +558,7 @@
 // //                               } else {
 // //                                 showErrorMessage(
 // //                                   context,
-// //                                   getFailureMessage(state.failure ?? const UnknownFailure(), context),
+// //                                   getFailureMessage(state.failure ?? const UnknownFailure(''), context),
 // //                                 );
 // //                               }
 // //                             }
@@ -818,7 +818,7 @@
 //                         showErrorMessage(
 //                           context,
 //                           getFailureMessage(
-//                               state.failure ?? const UnknownFailure(), context),
+//                               state.failure ?? const UnknownFailure(''), context),
 //                         );
 //                       }
 //                     }
@@ -1078,7 +1078,8 @@ class _ReportViewState extends State<ReportView> {
                         showErrorMessage(
                           context,
                           getFailureMessage(
-                              state.failure ?? const UnknownFailure(), context),
+                              state.failure ??  UnknownFailure(''),
+                              context),
                         );
                         context.pop();
                       }

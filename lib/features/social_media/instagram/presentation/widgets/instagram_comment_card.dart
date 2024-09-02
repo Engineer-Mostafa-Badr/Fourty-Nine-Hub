@@ -52,6 +52,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
           children: [
             ProfileImage(
               accountId: 0,
+              userId: '',
               withBorder: false,
               imageURL: widget.comment.user.image.isNotEmpty
                   ? widget.comment.user.image

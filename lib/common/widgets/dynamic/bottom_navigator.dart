@@ -171,13 +171,15 @@ class CustomBottomNavigationBar extends StatefulWidget {
   });
 
   @override
-  _CustomBottomNavigationBarState createState() => _CustomBottomNavigationBarState(
+  _CustomBottomNavigationBarState createState() =>
+      _CustomBottomNavigationBarState(
         scrollController: scrollController,
         isScrollingDown: isScrollingDown,
       );
 }
 
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> with SingleTickerProviderStateMixin {
+class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
+    with SingleTickerProviderStateMixin {
   final ScrollController scrollController;
 
   bool isScrollingDown;
@@ -191,7 +193,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
   void initState() {
     scrollController;
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
         if (!isScrollingDown) {
           setState(() {
             isScrollingDown = true;
@@ -221,7 +224,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
       builder: (BuildContext context, Widget? child) {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 400),
-          height: scrollController.position.userScrollDirection == ScrollDirection.reverse ? 0 : 90.zH,
+          height: scrollController.position.userScrollDirection ==
+                  ScrollDirection.reverse
+              ? 0
+              : 90.zH,
           child: CustomPaint(
             painter: BottomBarPainter(
               color: Colors.black,
@@ -230,7 +236,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
               padding: const EdgeInsets.only(bottom: 20, top: 10),
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
-                boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2)],
+                boxShadow: const [
+                  BoxShadow(
+                      color: Colors.black12, blurRadius: 5, spreadRadius: 2)
+                ],
               ),
               child: SafeArea(
                 child: Padding(

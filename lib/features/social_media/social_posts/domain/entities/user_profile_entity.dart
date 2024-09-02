@@ -9,6 +9,7 @@ class UserProfileEntity {
   final String job;
   final String phone;
   final int? totalView;
+  final int? posts;
   final String? profilePicture;
   final String? profileCover;
   int? friendsCount;
@@ -37,6 +38,7 @@ class UserProfileEntity {
     required this.friendsCount,
     required this.followersCount,
     required this.followingCount,
+    required this.posts,
     this.isFollowed = false,
     this.areFriends = false,
     this.isDocument = false,

@@ -7,10 +7,9 @@ import 'package:fourtyninehub/features/authentication/data/models/user_model.dar
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/domain/entities/edit_profile_entity.dart';
 
-
 abstract class EditProfileRemoteDataSource {
-  Future<Either<Failure, UserEntity>> editProfile({required EditProfileEntity params});
-
+  Future<Either<Failure, UserEntity>> editProfile(
+      {required EditProfileEntity params});
 }
 
 class EditProfileRemoteDataSourceImpl implements EditProfileRemoteDataSource {
@@ -19,10 +18,11 @@ class EditProfileRemoteDataSourceImpl implements EditProfileRemoteDataSource {
   EditProfileRemoteDataSourceImpl(this._jsonParser, this._apiConsumer);
 
   @override
-  Future<Either<Failure, UserEntity>> editProfile({required EditProfileEntity params}) async{
-    final response = await _apiConsumer
-        .put(EndPoints.editProfile, data: params.toJson());
+  Future<Either<Failure, UserEntity>> editProfile(
+      {required EditProfileEntity params}) async {
+    final response =
+        await _apiConsumer.put(EndPoints.editProfile, data: params.toJson());
     return response.fold(
-            (l) => Left(l), (data) => Right(UserModel.fromJson(data['data'])));
+        (l) => Left(l), (data) => Right(UserModel.fromJson(data['data'])));
   }
 }

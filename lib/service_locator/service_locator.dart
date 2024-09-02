@@ -174,6 +174,7 @@ import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
 import 'package:fourtyninehub/service_locator/face_book_service_locator.dart';
 import 'package:fourtyninehub/service_locator/instagram_service_locator.dart';
+import 'package:fourtyninehub/service_locator/payment_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
 import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
@@ -224,7 +225,9 @@ class DI {
     serviceLocator.registerLazySingleton<Dio>(
       () => Dio(
         BaseOptions(
-          baseUrl: kReleaseMode ? EndPoints.productionBaseUrl : EndPoints.developmentBaseUrl,
+          baseUrl: kReleaseMode
+              ? EndPoints.productionBaseUrl
+              : EndPoints.developmentBaseUrl,
           connectTimeout: const Duration(seconds: 60),
           headers: {
             'Accept': 'application/json',
@@ -268,12 +271,13 @@ class DI {
     // );
 
     // Register the TinderRepository as a singleton
-    serviceLocator.registerLazySingleton<TinderRepository>(() => TinderRepository());
+    serviceLocator
+        .registerLazySingleton<TinderRepository>(() => TinderRepository());
 
 
     // Register the TinderViewCubit and inject the TinderRepository dependency
-    serviceLocator
-        .registerFactory<TinderViewCubit>(() => TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
+    serviceLocator.registerFactory<TinderViewCubit>(() =>
+        TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
 
     // Register other dependencies...
     // serviceLocator
@@ -339,5 +343,6 @@ class DI {
     InstagramServiceLocator.execute(serviceLocator: serviceLocator);
     FaceBookServiceLocator.execute(serviceLocator: serviceLocator);
     TwitterServiceLocator.execute(serviceLocator: serviceLocator);
+    PaymentProviderServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

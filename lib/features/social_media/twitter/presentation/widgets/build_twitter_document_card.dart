@@ -27,13 +27,13 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ?? const UnknownFailure(),
+            state.failure ??  UnknownFailure(''),
             context,
           ),
         );
       }
     }, builder: (context, state) {
-      final controller = context.read<TwitterCubit>();
+      context.read<TwitterCubit>();
       return InkWell(
         splashColor: Colors.transparent,
         hoverColor: Colors.transparent,

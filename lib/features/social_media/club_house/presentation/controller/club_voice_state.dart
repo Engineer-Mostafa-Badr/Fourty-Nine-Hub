@@ -5,53 +5,29 @@ import 'package:fourtyninehub/core/enums/zego_request_state.dart';
 
 import '../../domain/entities/club_voice_room_entity.dart';
 
+extension MeetingStateX on ClubVoiceState {
+  bool get isInitial => status == ZegoRequestState.initial;
+  bool get isLoading => status == ZegoRequestState.loading;
+  bool get isSuccess => status == ZegoRequestState.success;
+  bool get isFailure => status == ZegoRequestState.failure;
+}
+
 @immutable
-sealed class ClubVoiceState {
-  const ClubVoiceState();
-}
-
-//inital
-class InitialClubVoiceState extends ClubVoiceState {
-  const InitialClubVoiceState() : super();
-}
-
-//for adding room
-class AddRoomState extends ClubVoiceState {
-  final ZegoRequestState requestState;
-
-  const AddRoomState({
-    this.requestState = ZegoRequestState.initial,
-  }) : super();
-}
-
-//for end leave search join
-class RehashRoomState extends ClubVoiceState {
-  final ZegoRequestState requestState;
-
-  const RehashRoomState({this.requestState = ZegoRequestState.initial})
-      : super();
-
-  ClubVoiceState copyWith(ZegoRequestState? requestState) {
-    return RehashRoomState(
-      requestState: requestState ?? this.requestState,
-    );
-  }
-}
-
-//for get
-class GetRoomState extends ClubVoiceState {
-  final ZegoRequestState requestState;
+class ClubVoiceState {
+  final ZegoRequestState status;
   final List<ClubVoiceRoomEntity> roomsList;
-  const GetRoomState({
-    this.requestState = ZegoRequestState.initial,
-    this.roomsList = const [],
-  }) : super();
-
-  ClubVoiceState copyWith(
-      {ZegoRequestState? requestState, List<ClubVoiceRoomEntity>? roomsList}) {
-    return GetRoomState(
-      requestState: requestState ?? this.requestState,
+  ClubVoiceState copyWith({
+    ZegoRequestState? requestState,
+    List<ClubVoiceRoomEntity>? roomsList,
+  }) {
+    return ClubVoiceState(
       roomsList: roomsList ?? this.roomsList,
+      status: requestState ?? status,
     );
   }
+
+  const ClubVoiceState({
+    this.status = ZegoRequestState.initial,
+    this.roomsList = const [],
+  });
 }
