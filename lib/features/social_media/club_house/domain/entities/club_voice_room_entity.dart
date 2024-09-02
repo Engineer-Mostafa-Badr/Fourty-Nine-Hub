@@ -6,7 +6,7 @@ class ClubVoiceRoomEntity extends Equatable {
   final String subject;
   //will be List<Users>
   final List<ClubUserEntity>? users;
-  const ClubVoiceRoomEntity( {
+  const ClubVoiceRoomEntity({
     required this.id,
     required this.hostname,
     required this.subject,
@@ -18,18 +18,20 @@ class ClubVoiceRoomEntity extends Equatable {
         id,
         hostname,
         subject,
-        users??[],
+        users ?? [],
       ];
 }
 
-
-
-
-class ClubUserEntity{
+class ClubUserEntity {
   final String firstName;
   final String lastName;
+  final String id;
   final String? profilePicture;
 
-  ClubUserEntity({required this.firstName, required this.lastName, required this.profilePicture});
-
+  ClubUserEntity({
+    required this.firstName,
+    required this.lastName,
+    required this.profilePicture,
+    required this.id,
+  });
 }

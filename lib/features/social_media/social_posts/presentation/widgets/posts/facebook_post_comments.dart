@@ -119,7 +119,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                 ),
                 child: Row(
                   children: [
-                    ProfileImage(accountId: 0,fromProfile: true,imageURL: user?.profilePicture,),
+                    ProfileImage(accountId: 0,fromProfile: true,imageURL: user?.profilePicture, userId: '',),
                     const Sizer(),
                     Expanded(
                       child:TextFormField(

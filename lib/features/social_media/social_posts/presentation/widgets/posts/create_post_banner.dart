@@ -30,7 +30,7 @@ class CreatePostBanner extends StatelessWidget {
                   accountId: 0,
                 )
               : const ProfileImage(
-                  accountId: 0,
+                  accountId: 0, userId: '',
                 ),
           const Sizer(
             width: 10,

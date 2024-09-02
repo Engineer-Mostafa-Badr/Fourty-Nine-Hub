@@ -58,6 +58,7 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                 ProfileImage(
                   accountId: 0,
                   withBorder: false,
+                  userId: '',
                   imageURL: widget.reply.user.image.isNotEmpty
                       ? widget.reply.user.image
                       : null,

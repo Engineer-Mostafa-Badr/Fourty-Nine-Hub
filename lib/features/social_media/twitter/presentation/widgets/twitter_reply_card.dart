@@ -49,11 +49,11 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
             widget.reply.user.image == ''
                 ? const ProfileImage(
                     accountId: 0,
-                    withBorder: false,
+                    withBorder: false, userId: '',
                   )
                 : ProfileImage(
                     accountId: 0,
-                    imageURL: widget.reply.user.image,
+                    imageURL: widget.reply.user.image, userId: '',
                   ),
             const Sizer(),
             Expanded(

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -25,13 +26,14 @@ class BookingDoctorProfileWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           ProfileImage(
+            userId: '',
             accountId: 0,
             size: 50,
             imageURL: doctor.image,
           ),
           const Sizer(height: 16),
           Text(
-            '${Labels.doctor} ${doctor.fullName}',
+            '${Labels.doctor} ${toBeginningOfSentenceCase(doctor.fullName)}',
             style: Styles.headerText(),
           ),
           const Sizer(height: 8),

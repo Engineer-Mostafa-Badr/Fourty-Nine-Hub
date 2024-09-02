@@ -18,11 +18,12 @@ class SubscriptionPlansWidget extends StatefulWidget {
   final SubscriptionPlansEntity subscribePlans;
   final List<WalletTypes>? paymentMenthods;
   final String subCategoryId;
+  final String? title;
   const SubscriptionPlansWidget({
     super.key,
     this.paymentMenthods,
     required this.subscribePlans,
-    required this.subCategoryId,
+    required this.subCategoryId, this.title,
   });
 
   @override
@@ -41,6 +42,12 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
       child: ListView(
         children: [
           const SizedBox(height: 20),
+          Text(widget.title ?? "",textAlign: TextAlign.center,style: const TextStyle(
+            color: AppColors.PRIMARY_COLOR_LIGHT,
+            fontWeight: FontWeight.bold
+          ),),
+          const SizedBox(height: 20),
+          // const SizedBox(height: 20),
           Row(
             children: [
               Expanded(
@@ -74,8 +81,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
                       color: _isPremium
-                          ? Theme.of(context).primaryColor
-                          : Colors.red,
+                          ? Colors.red
+                          : Theme.of(context).primaryColor,
+                          // : Colors.red,
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: Text(
@@ -157,9 +165,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               setState(() => _groupValue = v!);
             },
           ),
-          Expanded(child: ElevatedAppButton(label: period, onPressed: () {})),
+          Expanded(child: ElevatedAppButton(label: period, onPressed: () {},backColor: _isPremium ? Colors.red : AppColors.PRIMARY_COLOR,)),
           const SizedBox(width: 10),
-          Expanded(child: ElevatedAppButton(label: '$price', onPressed: () {})),
+          Expanded(child: ElevatedAppButton(label: '$price', onPressed: () {},backColor: _isPremium ? Colors.red : AppColors.PRIMARY_COLOR,)),
         ],
       ),
     );

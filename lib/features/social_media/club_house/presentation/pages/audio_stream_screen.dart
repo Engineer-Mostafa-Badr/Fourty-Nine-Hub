@@ -8,11 +8,14 @@ class AudioStreamScreen extends StatelessWidget {
   final String liveId;
   final String roomSubject;
   final bool isHost;
-  const AudioStreamScreen(
-      {super.key,
-      required this.liveId,
-      required this.roomSubject,
-      required this.isHost});
+  final int userCount;
+  const AudioStreamScreen({
+    super.key,
+    required this.liveId,
+    required this.roomSubject,
+    required this.isHost,
+    required this.userCount,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -78,47 +81,33 @@ class AudioStreamScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(right: 20.0),
+                Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
-                      CircleAvatar(
+                      const CircleAvatar(
                         radius: 1,
                         backgroundColor: Colors.grey,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Text(
-                        '132 here now',
-                        style: TextStyle(color: Colors.grey),
+                        '$userCount here now',
+                        style: const TextStyle(color: Colors.grey),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
-                      CircleAvatar(
-                        radius: 1,
-                        backgroundColor: Colors.grey,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        '140',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Icon(
+                      const Icon(
                         Icons.person_outline_outlined,
                         color: Colors.grey,
                       ),
-                      Spacer(),
+                      const Spacer(),
                     ],
                   ),
                 ),

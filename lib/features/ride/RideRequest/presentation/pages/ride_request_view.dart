@@ -34,7 +34,7 @@ class RideRequestView extends StatelessWidget {
                   } else {
                     context.push(Routes.REGISTER);
                   }
-                }),
+                }, onFavorite: () {  },),
           ),
           Expanded(
               child: Stack(

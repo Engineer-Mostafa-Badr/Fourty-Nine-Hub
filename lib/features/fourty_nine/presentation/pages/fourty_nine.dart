@@ -155,7 +155,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         context.push(Routes.SUBCATEGORIES,
                             extra: state.data![index]);
                       },
-                      child: MainCategoryBanner(category: state.data![index]),
+                      child: MainCategoryBanner(category: state.data![index], onFavorite: () {  },),
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) =>

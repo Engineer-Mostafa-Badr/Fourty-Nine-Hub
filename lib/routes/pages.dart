@@ -60,6 +60,7 @@ import 'package:fourtyninehub/features/installment_feature/installment_list/pres
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
+import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
@@ -408,7 +409,34 @@ class AppPages {
           GoRoute(
             name: Routes.PAYMENT,
             path: Paths.PAYMENT,
-            builder: (context, state) => const PaymentView(),
+            builder: (context, state) {
+              final args = state.extra as PaymobLink;
+
+              return BlocProvider(
+                create: (context) {
+                  return serviceLocator<PaymentCubit>()
+                    ..getPaymentProvider()..getSavedCards();
+                    // ..getPaymobData(
+                    //     amountId: args.amountId,
+                    //     providerId: args.providerId
+                    // );
+                    // ..chargeWithCard(
+                    //   cardNumber: params.cardNumber,
+                    //   cardExpiryYear: params.cardExpiryYear,
+                    //   cardExpiryMonth: params.cardExpiryMonth,
+                    //   cvv: params.cvv,
+                    //   amountId: params.amountId,
+                    //   providerId: params.providerId,
+                    //   paymentMethod: params.paymentMethod,
+                    // );
+                },
+                child: PaymentView(
+                  amountId: args.amountId,
+                  // providerId: args.providerId,
+                  amount: args.amount,
+                ),
+              );
+            },
             routes: const [],
           ),
           GoRoute(
@@ -500,7 +528,9 @@ class AppPages {
                     builder: (context, state) =>
                         BlocProvider<FavouriteCategoryCubit>(
                           create: (_) => serviceLocator(),
-                          child: const FavouriteCategoryView(),
+                          child: const FavouriteCategoryView(
+                            favoriteCategory: [],
+                          ),
                         )),
                 GoRoute(
                   path: Paths.FAVOURITESUBCATEGORIES,
@@ -580,6 +610,7 @@ class AppPages {
                     );
                   },
                 ),
+
                 GoRoute(
                     path: Paths.TWITTER,
                     name: Routes.TWITTER,
@@ -667,6 +698,7 @@ class AppPages {
                             liveId: extras.liveId,
                             roomSubject: extras.subject,
                             isHost: extras.isHost,
+                            userCount: extras.usersCount,
                           );
                         },
                         routes: const [],

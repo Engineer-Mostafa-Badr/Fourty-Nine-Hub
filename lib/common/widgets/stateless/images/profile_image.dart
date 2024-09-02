@@ -1,7 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../res/style/app_colors.dart';
@@ -15,11 +13,13 @@ class ProfileImage extends StatelessWidget {
   final bool withBorder;
   final bool? fromProfile;
   final int accountId;
+  final String userId;
 
 
   const ProfileImage(
       {super.key,
       required this.accountId,
+      required this.userId,
       this.size = 15,
       this.withBorder = false,
       this.imageURL,
@@ -30,9 +30,10 @@ class ProfileImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if (fromProfile == false) {
-          context.read<UserCubit>().state.data==null?context.push(Routes.LOGIN):context.push(Routes.OTHERSACCOUNT);
+        if (fromProfile == false && userId.isNotEmpty) {
+          context.push(Routes.OTHERSACCOUNT,extra:userId);
         }
+
       },
       child: CircleAvatar(
         radius: withBorder ? size + 2 : size,

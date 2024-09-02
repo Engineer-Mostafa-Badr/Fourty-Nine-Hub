@@ -23,13 +23,14 @@ class ClubVoiceRoomModel extends ClubVoiceRoomEntity {
 
 
 class ClubUserModel extends ClubUserEntity{
-  ClubUserModel({required super.firstName, required super.lastName, required super.profilePicture});
+  ClubUserModel({required super.firstName, required super.lastName, required super.profilePicture, required super.id});
 
   factory ClubUserModel.fromJson(Map<String, dynamic> json) {
     return ClubUserModel(
       firstName: json['firstName'][0].toUpperCase() + json['firstName'].substring(1).toLowerCase() ?? '',
       lastName: json['lastName'][0].toUpperCase() + json['lastName'].substring(1).toLowerCase() ?? '',
       profilePicture: json['image'] ?? '',
+      id: json['_id'] ?? '',
     );
   }
 }

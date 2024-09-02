@@ -38,7 +38,7 @@ class ShippingBanner extends StatelessWidget {
         image: UIConst.imagePlaceHolder,
         total: model.mainCategory?.driverLength ?? 0,
         isFavorite: false,
-      ),
+      ), onFavorite: () {  },
     );
     // return Container(
     //   padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
