@@ -96,17 +96,16 @@ void showVoiceLiveBottomSheet({
                             debugPrint('room id is ${cubit.roomId}');
                             if (context.mounted) {
                               Navigator.pop(context);
-
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (ctx) => BlocProvider.value(
                                     value: serviceLocator<ClubVoiceCubit>(),
                                     child: AudioStreamScreen(
-                                        liveId: cubit.roomId,
-                                        roomSubject: roomSub,
-                                        userCount: 1,
-                                        isHost: true,),
+                                      liveId: cubit.roomId,
+                                      roomSubject: roomSub,
+                                      isHost: true,
+                                    ),
                                   ),
                                 ),
                               );
@@ -148,5 +147,5 @@ class RoomArgs {
   final String subject;
   final bool isHost;
   final int usersCount;
-  RoomArgs(this.liveId, this.subject, this.isHost,this.usersCount);
+  RoomArgs(this.liveId, this.subject, this.isHost, this.usersCount);
 }

@@ -698,7 +698,6 @@ class AppPages {
                             liveId: extras.liveId,
                             roomSubject: extras.subject,
                             isHost: extras.isHost,
-                            userCount: extras.usersCount,
                           );
                         },
                         routes: const [],

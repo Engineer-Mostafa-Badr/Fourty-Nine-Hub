@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/meeting_dialogue.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../routes/routes.dart';
@@ -18,6 +19,8 @@ class LiveStreamHomeScreen extends StatelessWidget {
           toolbarHeight: 0,
           // leading: BackButton(),
           bottom: const TabBar(
+            indicatorColor: AppColors.PRIMARY_COLOR,
+            labelColor:  AppColors.PRIMARY_COLOR,
             tabs: [
               Tab(text: 'Live'),
               Tab(text: 'Club Voice'),
