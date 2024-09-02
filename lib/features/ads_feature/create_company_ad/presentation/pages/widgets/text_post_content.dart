@@ -7,6 +7,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../../core/error/custom_error.dart';
 import '../../../../../../core/loading/custom_loading.dart';
+import '../../../../../../core/messages/messages.dart';
 import '../../../../../../service_locator/service_locator.dart';
 import '../../../data/repositories/company_advertise_repo/company_advertise_repo_impl.dart';
 
@@ -19,7 +20,12 @@ class TextPostContent extends StatelessWidget {
       create: (BuildContext context) =>
           CompanyAdvertiseCubit(serviceLocator.get<CompanyAdvertiseRepoImpl>())
             ..fetchAdvertiseCompany(context, 'written'),
-      child: BlocBuilder<CompanyAdvertiseCubit, CompanyAdvertiseState>(
+      child: BlocConsumer<CompanyAdvertiseCubit, CompanyAdvertiseState>(
+        listener: (BuildContext context, CompanyAdvertiseState state) {
+          if (state is DeletePostSuccess) {
+            showSuccessMessage(context, 'Delete Successfully');
+          }
+        },
         builder: (BuildContext context, state) {
           if (state is FetchAllCompanyAdvertiseSuccess) {
             if (state.advertiseCompanyModel.data!.advertises!.isNotEmpty) {

@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentatio
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../../core/error/custom_error.dart';
 import '../../../../../../core/loading/custom_loading.dart';
+import '../../../../../../core/messages/messages.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../service_locator/service_locator.dart';
 import '../../../data/repositories/company_advertise_repo/company_advertise_repo_impl.dart';
@@ -20,7 +21,12 @@ class PhotoPostContent extends StatelessWidget {
       create: (BuildContext context) =>
       CompanyAdvertiseCubit(serviceLocator.get<CompanyAdvertiseRepoImpl>())
         ..fetchAdvertiseCompany(context, 'photo'),
-      child: BlocBuilder<CompanyAdvertiseCubit, CompanyAdvertiseState>(
+      child: BlocConsumer<CompanyAdvertiseCubit, CompanyAdvertiseState>(
+        listener: (BuildContext context, CompanyAdvertiseState state) {
+          if (state is DeletePostSuccess) {
+            showSuccessMessage(context, 'Delete Successfully');
+          }
+        },
         builder: (BuildContext context, state) {
           if (state is FetchAllCompanyAdvertiseSuccess) {
             if(state.advertiseCompanyModel.data!.advertises!.isNotEmpty) {
@@ -28,8 +34,9 @@ class PhotoPostContent extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: ListView.separated(
                 itemBuilder: (context, index) => BuildItemPhotoPost(
-                  media: state.advertiseCompanyModel.data!.advertises![index].media![0],
+                 // media: state.advertiseCompanyModel.data!.advertises![index].media![index],
                   length: state.advertiseCompanyModel.data!.advertises![index].media!.length,
+                  advertises: state.advertiseCompanyModel.data!.advertises![index],
                 ),
                 separatorBuilder: (context, index) => const Divider(
                   color: AppColors.GREY_LIGHT_COLOR,

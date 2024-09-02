@@ -7,7 +7,7 @@ class ApiService {
 
   ApiService(this.dio);
 
-  Future<Map<String,dynamic>> get({
+  Future<dynamic> get({
     required String url,
     String? token,
   }) async {
