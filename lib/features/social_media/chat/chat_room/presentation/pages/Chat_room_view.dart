@@ -2,27 +2,27 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/global/loading_custom.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/delete_message_body.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/masseges_list_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import '../widgets/chat_room_app_bar.dart';
 import '../widgets/send_message_widget.dart';
 
-class ChatRoom extends StatefulWidget {
+class ChatRoomView extends StatefulWidget {
   final String? chatId;
 
-  const ChatRoom({super.key, this.chatId});
+  const ChatRoomView({super.key, this.chatId});
 
   @override
-  State<ChatRoom> createState() => _ChatRoomState();
+  State<ChatRoomView> createState() => _ChatRoomViewState();
 }
 
-class _ChatRoomState extends State<ChatRoom> {
+class _ChatRoomViewState extends State<ChatRoomView> {
   late ChatRoomCubit chatRoomCubit;
   final focusNode = FocusNode();
   MessageEntity? _replayMessage;
@@ -36,79 +36,14 @@ class _ChatRoomState extends State<ChatRoom> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: Scaffold(
-          backgroundColor: AppColors.BACKGROUND_COLOR,
-          appBar: const ChatRoomAppBar(),
-          // bottomNavigationBar: Padding(
-          //   padding: MediaQuery.of(context).viewInsets,
-          //   child: SendMessageWidget(
-          //     focusNode: focusNode,
-          //     replayMessage: _replayMessage,
-          //     onCancelReplay: cancelReplay,
-          //     anotherUserName:
-          //         chatRoomCubit.chatMessagesModel.chat?.contact?.name ??
-          //             'No name',
-          //   ),
-          // ),
-          body: Column(
-            children: [
-              Spacer(),
-              // BlocBuilder<ChatRoomCubit, ChatRoomState>(
-              //     builder: (context, state) {
-              //   return state.isLoading
-              //       ? LoadingCustom.customThreeBounce(context)
-              //       : const Expanded(
-              //           child: SizedBox(),
-              //           // child: ListView.separated(
-              //           //   addAutomaticKeepAlives: true,
-              //           //   controller: chatRoomCubit.scrollController,
-              //           //   // reverse: true,
-              //           //   // physics: const NeverScrollableScrollPhysics(),
-              //           //   itemBuilder: (context, index) => SwipeTo(
-              //           //     onRightSwipe: (message) {
-              //           //       replayMessage(state.chatMessages![index]);
-              //           //     },
-              //           //     child: GestureDetector(
-              //           //       onLongPress: () {
-              //           //         _showReplyDialog(
-              //           //           context,
-              //           //           messageEntity: state.chatMessages![index],
-              //           //           replyFunction: () {
-              //           //             Navigator.of(context).pop();
-              //           //             replayMessage(state.chatMessages![index]);
-              //           //           },
-              //           //           deleteFunction: () {
-              //           //             Navigator.of(context).pop();
-              //           //             deleteMessage(
-              //           //                 chatId:
-              //           //                     state.chatMessages![index].chatId!,
-              //           //                 messageId:
-              //           //                     state.chatMessages![index].sId!);
-              //           //           },
-              //           //         );
-              //           //       },
-              //           //       child: MessageCard(
-              //           //         messageEntity: state.chatMessages![index],
-              //           //         anotherUserName:
-              //           //             state.chatData?.chat?.contact?.name ??
-              //           //                 'No name',
-              //           //       ),
-              //           //     ),
-              //           //   ),
-              //           //   separatorBuilder: (context, index) => const Sizer(
-              //           //     height: 3,
-              //           //   ),
-              //           //   itemCount: state.chatMessages?.length ?? 0,
-              //           // ),
-              //         );
-              // }),
-              SendMessageWidget(),
-            ],
-          ),
-        ),
+    return const Scaffold(
+      backgroundColor: AppColors.BACKGROUND_COLOR,
+      appBar: ChatRoomAppBar(),
+      body: Column(
+        children: [
+          MessagesListView(),
+          SendMessageWidget(),
+        ],
       ),
     );
   }

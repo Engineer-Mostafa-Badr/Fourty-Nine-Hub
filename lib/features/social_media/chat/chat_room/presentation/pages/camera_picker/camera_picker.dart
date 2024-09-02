@@ -76,11 +76,12 @@ class _CamViewState extends State<_CamView> {
                 return CameraPreview(state.controller!);
               } else if (state.status ==
                   CameraPickerStatus.needCameraPermission) {
-                return _permissionButton(LocaleKeys.allowAccessToYourCamera);
+                return _permissionButton(
+                    LocaleKeys.allowAccessToYourCamera.tr());
               } else if (state.status ==
                   CameraPickerStatus.needMicrophonePermission) {
                 return _permissionButton(
-                    LocaleKeys.allowAccessToYourMicrophone);
+                    LocaleKeys.allowAccessToYourMicrophone.tr());
               } else {
                 return const Icon(Icons.camera,
                     color: AppColors.GREY_DARK_COLOR, size: 150);

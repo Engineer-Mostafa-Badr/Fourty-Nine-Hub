@@ -308,8 +308,8 @@ class DI {
     FourtyNineServiceLocator.execute(serviceLocator);
 
     // Socket service
-    serviceLocator.registerLazySingleton<SocketServiceContract>(
-      () => SocketServiceImplementation(),
+    serviceLocator.registerLazySingleton<ChatSocketServiceContract>(
+      () => ChatSocketServiceImplementation(),
     );
 
     // Wheel

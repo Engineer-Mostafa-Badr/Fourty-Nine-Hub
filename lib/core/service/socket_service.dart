@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/typing_and_online_model.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
-abstract class SocketServiceContract {
+abstract class ChatSocketServiceContract {
   Socket get socket;
 
   initSocketConnection(String userToken);
@@ -35,7 +36,7 @@ abstract class SocketServiceContract {
   disposeSocket();
 }
 
-class SocketServiceImplementation extends SocketServiceContract {
+class ChatSocketServiceImplementation extends ChatSocketServiceContract {
   @override
   late Socket socket;
 
@@ -59,7 +60,7 @@ class SocketServiceImplementation extends SocketServiceContract {
       socket.connect();
 
       socket.onConnect((_) {
-        debugPrint('\nConnect To Socket successfully ');
+        CliLogger.success('\nConnect To Socket successfully ');
 
         // getRoomUsersJoined();
 
@@ -71,28 +72,27 @@ class SocketServiceImplementation extends SocketServiceContract {
           MessageModel messageModel = MessageModel.fromJson(data);
 
           _socketMessageStream.add(messageModel);
-          debugPrint("socketMessageModel ${messageModel.text}");
+          CliLogger.info("socketMessageModel ${messageModel.text}");
         });
 
         // listen to messages that sent from current user
         socket.on('messageSent', (data) {
-          debugPrint("messageSent $data");
+          CliLogger.info("messageSent $data");
 
           MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
 
           _socketMessageStream.add(messageModel);
 
-          debugPrint("socketMessageModel ${messageModel.text}");
+          CliLogger.info("socketMessageModel ${messageModel.text}");
         });
       });
 
       socket.on('error', (data) {
-        debugPrint("error $data");
-        debugPrint(data);
+        CliLogger.error("error $data");
       });
 
-      socket.onDisconnect((_) => debugPrint('disconnect'));
-      socket.onerror((e) => debugPrint('onError $e'));
+      socket.onDisconnect((_) => CliLogger.info('socket disconnect'));
+      socket.onerror((e) => CliLogger.error('onError $e'));
     } catch (e) {
       debugPrint('Connection established$e');
     }
@@ -163,6 +163,8 @@ class SocketServiceImplementation extends SocketServiceContract {
   @override
   disposeSocket() {
     socket.disconnect();
+    _socketChatTyping.close();
+    _socketMessageStream.close();
     socket.dispose();
   }
 

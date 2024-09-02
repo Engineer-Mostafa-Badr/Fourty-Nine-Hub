@@ -207,7 +207,8 @@
 //     );
 //   }
 
-//   Widget buildReplay() => Container(
+//   Widget buildReplay() =>
+//   Container(
 //         padding: const EdgeInsets.all(8),
 //         decoration: BoxDecoration(
 //             color: Colors.grey.withOpacity(.2),
@@ -427,6 +428,8 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:social_media_recorder/screen/social_media_recorder.dart';
 
+import 'replay_message_widget.dart';
+
 class SendMessageWidget extends StatefulWidget {
   const SendMessageWidget({super.key});
 
@@ -439,6 +442,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   late final FocusNode _messageFocusNode;
   late bool _showMicButton;
   late bool _showEmojiKeyboard;
+  final Radius radius = const Radius.circular(25);
 
   @override
   void initState() {
@@ -469,7 +473,12 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
             children: [
               Expanded(
                 flex: 6,
-                child: _textField(),
+                child: Column(
+                  children: [
+                    _replayedMessageCard(),
+                    _textField(),
+                  ],
+                ),
               ),
               const Sizer(),
               Expanded(
@@ -485,30 +494,61 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   }
 
   Widget _textField() {
-    return TextFormField(
-      controller: _messageTextController,
-      focusNode: _messageFocusNode,
-      onTap: () {
-        _closeEmojiKeyboard();
-        _openTextKeyboard();
+    return BlocBuilder<ChatRoomCubit, ChatRoomState>(
+      builder: (context, state) {
+        Radius topRadius = state.replayedMessage == null ? radius : Radius.zero;
+        return TextFormField(
+          controller: _messageTextController,
+          focusNode: _messageFocusNode,
+          onTap: () {
+            _closeEmojiKeyboard();
+            _openTextKeyboard();
+          },
+          decoration: InputDecoration(
+            fillColor: Colors.white,
+            filled: true,
+            hintText: LocaleKeys.message.tr(),
+            hintStyle: const TextStyle(color: Colors.grey),
+            contentPadding: const EdgeInsets.symmetric(vertical: 10),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.vertical(
+                top: topRadius,
+                bottom: radius,
+              ),
+              borderSide: BorderSide.none,
+            ),
+            prefixIcon: _showEmojiKeyboard ? _keyboardButton() : _emojiButton(),
+            suffixIcon: _attachmentButton(),
+          ),
+          style: const TextStyle(color: Colors.black),
+          keyboardType: TextInputType.multiline,
+          maxLines: 3,
+          minLines: 1,
+        );
       },
-      decoration: InputDecoration(
-        fillColor: Colors.white,
-        filled: true,
-        hintText: LocaleKeys.message.tr(),
-        hintStyle: const TextStyle(color: Colors.grey),
-        contentPadding: const EdgeInsets.symmetric(vertical: 10),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(25),
-          borderSide: BorderSide.none,
-        ),
-        prefixIcon: _showEmojiKeyboard ? _keyboardButton() : _emojiButton(),
-        suffixIcon: _attachmentButton(),
-      ),
-      style: const TextStyle(color: Colors.black),
-      keyboardType: TextInputType.multiline,
-      maxLines: 3,
-      minLines: 1,
+    );
+  }
+
+  Widget _replayedMessageCard() {
+    return BlocBuilder<ChatRoomCubit, ChatRoomState>(
+      builder: (context, state) {
+        if (state.replayedMessage != null) {
+          return Container(
+            padding: const EdgeInsets.all(8),
+            decoration:
+                BoxDecoration(borderRadius: BorderRadius.vertical(top: radius)),
+            child: ReplayMessageWidget(
+              messageEntity: state.replayedMessage!,
+              onCancelReplay: () =>
+                  context.read<ChatRoomCubit>().cancelReplay(),
+              anotherUserName: state.chatData?.chat?.contact?.name ??
+                  LocaleKeys.anonymous.tr(),
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
     );
   }
 
@@ -574,7 +614,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
           recordIconWhenLockBackGroundColor: AppColors.PRIMARY_COLOR,
           backGroundColor: AppColors.PRIMARY_COLOR,
           radius: BorderRadius.circular(50),
-          recordIcon:  Icon(Icons.mic, color: Colors.white, size: 50.zH),
+          recordIcon: Icon(Icons.mic, color: Colors.white, size: 50.zH),
         );
         // return InkWell(
         //   onTap: () {},
@@ -597,11 +637,14 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   Widget _sendButton() {
     return LayoutBuilder(builder: (context, constraints) {
       return InkWell(
-        onTap: () {},
+        onTap: () {
+          context
+              .read<ChatRoomCubit>()
+              .sendMessage(message: _messageTextController.text);
+        },
         child: CircleAvatar(
           backgroundColor: AppColors.PRIMARY_COLOR,
           radius: 25,
-
           child: const Center(
             child: Icon(
               Icons.send,

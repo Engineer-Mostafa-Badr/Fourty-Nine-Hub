@@ -192,7 +192,8 @@ class CodegenLoader extends AssetLoader{
   "ok": "نعم",
   "cancel": "الغاء",
   "save": "حفظ",
-  "suscessfullySaved": "تم حفظ البيانات بنجاح"
+  "suscessfullySaved": "تم حفظ البيانات بنجاح",
+  "anonymous": "مجهول"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -373,7 +374,8 @@ static const Map<String,dynamic> en = {
   "ok": "Ok",
   "cancel": "Cancel",
   "save": "Save",
-  "suscessfullySaved": "Successfully Saved"
+  "suscessfullySaved": "Successfully Saved",
+  "anonymous": "Anonymous"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

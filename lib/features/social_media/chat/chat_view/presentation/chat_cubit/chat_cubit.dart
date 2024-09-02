@@ -28,7 +28,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 part 'chats_state.dart';
 
 class ChatsCubit extends Cubit<ChatsState> {
-  final SocketServiceContract _socketService;
+  final ChatSocketServiceContract _socketService;
   final GetTokensUseCase _getTokensUseCase;
   final GetChatsUseCase _getChatsUseCase;
   final ChangeChatMuteStateUseCase _changeChatMuteStateUseCase;

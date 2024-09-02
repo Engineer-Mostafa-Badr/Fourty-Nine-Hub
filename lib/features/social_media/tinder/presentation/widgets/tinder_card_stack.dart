@@ -7,7 +7,7 @@
 // import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 // import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room.dart';
+// import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room_view.dart';
 // import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
@@ -622,7 +622,7 @@ import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
@@ -1110,7 +1110,7 @@ class ChatAlertDialogue extends StatelessWidget {
             BlocProvider.value(value: chatRoomCubit),
             BlocProvider.value(value: chatsCubit),
           ],
-          child: ChatRoom(chatId: chatId),
+          child: ChatRoomView(chatId: chatId),
         ),
       ),
     );

@@ -177,5 +177,6 @@ abstract class  LocaleKeys {
   static const cancel = 'cancel';
   static const save = 'save';
   static const suscessfullySaved = 'suscessfullySaved';
+  static const anonymous = 'anonymous';
 
 }

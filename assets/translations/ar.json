@@ -176,5 +176,6 @@
   "ok": "نعم",
   "cancel":"الغاء",
   "save": "حفظ",
-  "suscessfullySaved": "تم حفظ البيانات بنجاح"
+  "suscessfullySaved": "تم حفظ البيانات بنجاح",
+  "anonymous": "مجهول"
 }

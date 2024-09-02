@@ -274,7 +274,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:fourtyninehub/common/functions/global/loading_custom.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/nested_appbar.dart';
@@ -396,14 +395,13 @@ class _ChatViewState extends State<ChatView> {
         isScrollable: true,
         tabs: groups.map((e) {
           return Tab(
-            // text: 'there was error here look at code and solve it',
-            // text: chatCubit.selectedTabIndex == groups.indexOf(e)
-            //     ? unReadMessages == 0
-            //         ? e
-            //         : "$e($unReadMessages)"
-            //     : error,
-            text:e
-          );
+              // text: 'there was error here look at code and solve it',
+              // text: chatCubit.selectedTabIndex == groups.indexOf(e)
+              //     ? unReadMessages == 0
+              //         ? e
+              //         : "$e($unReadMessages)"
+              //     : error,
+              text: e);
         }).toList());
   }
 
@@ -426,7 +424,9 @@ class _ChatViewState extends State<ChatView> {
   Widget _buildCategoryChats({bool isSecret = false}) {
     return BlocBuilder<ChatsCubit, ChatsState>(builder: (context, state) {
       return state.chats == null || state.isLoading
-          ? LoadingCustom.customThreeBounce(context)
+          ? const Center(
+              child: CircularProgressIndicator.adaptive(),
+            )
           : state.chats?.length == 0
               ? Center(
                   child: Label(
