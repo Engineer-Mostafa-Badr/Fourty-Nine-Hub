@@ -36,13 +36,28 @@ class _ChatRoomViewState extends State<ChatRoomView> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: AppColors.BACKGROUND_COLOR,
       appBar: ChatRoomAppBar(),
-      body: Column(
+      body: Stack(
         children: [
-          MessagesListView(),
-          SendMessageWidget(),
+          // Background image
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/background.png',
+              scale: 7,
+              // fit: BoxFit.cover,
+              repeat: ImageRepeat.repeat,
+              opacity: const AlwaysStoppedAnimation(0.7),
+            ),
+          ),
+          // Main content
+          Column(
+            children: [
+              Expanded(child: MessagesListView()),
+              SendMessageWidget(),
+            ],
+          ),
         ],
       ),
     );
