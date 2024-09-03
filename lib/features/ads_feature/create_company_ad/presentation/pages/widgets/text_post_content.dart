@@ -1,74 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/dynamic/list_view_pagination.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/models/company_advertise_model.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_state.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/build_item_text_post.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import '../../../../../../core/error/custom_error.dart';
-import '../../../../../../core/loading/custom_loading.dart';
 import '../../../../../../core/messages/messages.dart';
-import '../../../../../../service_locator/service_locator.dart';
-import '../../../data/repositories/company_advertise_repo/company_advertise_repo_impl.dart';
+import '../../../../../../res/style/styles.dart';
 
 class TextPostContent extends StatelessWidget {
   const TextPostContent({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) =>
-          CompanyAdvertiseCubit(serviceLocator.get<CompanyAdvertiseRepoImpl>())
-            ..fetchAdvertiseCompany(context, 'written'),
-      child: BlocConsumer<CompanyAdvertiseCubit, CompanyAdvertiseState>(
-        listener: (BuildContext context, CompanyAdvertiseState state) {
-          if (state is DeletePostSuccess) {
-            showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
-          }
-        },
-        builder: (BuildContext context, state) {
-          if (state is FetchAllCompanyAdvertiseSuccess) {
-            if (state.advertiseCompanyModel.data!.advertises!.isNotEmpty) {
-              return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: ListView.separated(
-                  itemBuilder: (context, index) => BuildItemTextPost(
-                    advertises:
-                        state.advertiseCompanyModel.data!.advertises![index],
-                  ),
-                  separatorBuilder: (context, index) => const Divider(
-                    color: AppColors.GREY_LIGHT_COLOR,
-                    height: 30,
-                    endIndent: 30,
-                  ),
-                  itemCount:
-                      state.advertiseCompanyModel.data!.advertises!.length,
+    return BlocConsumer<CompanyAdvertiseCubit, CompanyAdvertiseState>(
+      listener: (BuildContext context, CompanyAdvertiseState state) {
+        if (state is DeletePostSuccess) {
+          showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
+        }
+      },
+      builder: (BuildContext context, CompanyAdvertiseState state) {
+        var data=CompanyAdvertiseCubit.get(context).data;
+        if(data.isNotEmpty) {
+          return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: PaginationView<Advertises>(
+            build: (scrollController, data) {
+              return ListView.separated(
+                controller: scrollController,
+                itemBuilder: (context, index) => BuildItemTextPost(
+                  advertises: data[index],
                 ),
-              );
-            } else {
-              return Padding(
-                padding:const EdgeInsets.symmetric(horizontal: 15),
-                child: Center(
-                  child: Text(
-                    textAlign: TextAlign.center,
-                    LocaleKeys.noTextPosts.localize,
-                    style: Styles.mediumText(fontSize: 34),
-                  ),
+                separatorBuilder: (context, index) => const Divider(
+                  color: AppColors.GREY_LIGHT_COLOR,
+                  height: 30,
+                  endIndent: 30,
                 ),
+                itemCount: data.length,
               );
-            }
-          } else if (state is FetchAllCompanyAdvertiseError) {
-            return CustomError(
-              errMessage: state.errMessage,
-            );
-          }
-          return const CustomLoading();
-        },
-      ),
+            },
+            fetchData: (paginationParams) {
+              return context
+                  .read<CompanyAdvertiseCubit>()
+                  .fetchAdvertiseCompany(context,'written', params: paginationParams);
+            },
+          ),
+        );
+        }
+        return Center(
+          child: Text(
+            LocaleKeys.noTextPosts.localize,
+            style: Styles.mediumText(fontSize: 34),
+          ),
+        );
+      },
     );
   }
 }

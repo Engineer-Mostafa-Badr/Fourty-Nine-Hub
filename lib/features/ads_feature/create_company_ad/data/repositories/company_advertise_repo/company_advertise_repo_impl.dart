@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/models
 
 import '../../../../../../core/utils/shared_pref.dart';
 import '../../models/company_price_model.dart';
+import '../../models/fetch_post_company_advertise_params.dart';
 import 'company_advertise_repo.dart';
 
 class CompanyAdvertiseRepoImpl implements CompanyAdvertiseRepo {
@@ -82,34 +83,21 @@ class CompanyAdvertiseRepoImpl implements CompanyAdvertiseRepo {
 
   @override
   Future<Either<Failure, AdvertiseCompanyModel>> fetchPostCompanyAdvertise(
-      String filter) async {
+      FetchPostCompanyAdvertiseParams params) async {
     try {
       String? accessToken = await TokenManager.getAccessToken();
-      int page = 1;
-      bool hasMoreData = true;
-      List<Advertises> allItems = [];
 
-      while (hasMoreData) {
         var data = await apiService.get(
-          url: 'api/v1/advertisementCompany/my-advertisement?filter=$filter&page=$page',
+          url: 'api/v1/advertisementCompany/my-advertisement',
+          params: params.toMap(),
           token: accessToken,
         );
 
         var advertiseCompany = AdvertiseCompanyModel.fromJson(data);
 
-        allItems.addAll(advertiseCompany.data!.advertises!);
+       return right(advertiseCompany);
 
-        if (advertiseCompany.data!.advertises!.length < 10) {
-          hasMoreData = false;
-        } else {
-          page++;
-        }
-      }
 
-      var finalData = DataAdvertise(advertises: allItems);
-
-      var finalModel = AdvertiseCompanyModel(data: finalData);
-      return right(finalModel);
     } on Exception catch (e) {
       final failure = _mapExceptionToFailure(e);
       return left(failure);

@@ -10,6 +10,7 @@ class ApiService {
   Future<dynamic> get({
     required String url,
     String? token,
+    Map<String,dynamic>? params,
   }) async {
     var response = await dio.get(
       '$_baseUrl$url',
@@ -18,6 +19,7 @@ class ApiService {
           'Authorization': 'Bearer $token'
         },
       ),
+      queryParameters: params,
 
     );
     // Check if the response is a Map or a List

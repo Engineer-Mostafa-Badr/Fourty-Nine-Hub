@@ -77,7 +77,8 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
               ))
         ],
       ),
-      body:context.read<UserCubit>().isLoggedIn? BlocBuilder<AdvertisePriceCubit, AdvertisePriceState>(
+      body:context.read<UserCubit>().isLoggedIn?
+      BlocBuilder<AdvertisePriceCubit, AdvertisePriceState>(
         builder: (context, state) {
           if (state is AdvertisePriceSuccess) {
             return Padding(

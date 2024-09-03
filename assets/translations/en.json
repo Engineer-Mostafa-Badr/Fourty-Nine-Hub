@@ -206,5 +206,7 @@
   "photoAndTextPost": "Photo And Text Post",
   "reelsPost": "Reels Post",
   "deleteSuccessfully": "Delete Successfully",
-  "noTextPosts": "There are no text posts at the moment."
+  "noTextPosts": "There are no text posts at the moment.",
+  "noPhotoPosts": "There are no photo posts at the moment.",
+  "noPosts": "There are no posts at the moment."
 }

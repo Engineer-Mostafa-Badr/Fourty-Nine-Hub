@@ -222,7 +222,9 @@ class CodegenLoader extends AssetLoader{
   "photoAndTextPost": "منشور صورة ونص",
   "reelsPost": "منشور بكرات",
   "deleteSuccessfully": "تم الحذف بنجاح",
-  "noTextPosts": "لا توجد منشورات نصية في الوقت الحالي."
+  "noTextPosts": "لا توجد منشورات نصية في الوقت الحالي.",
+  "noPhotoPosts": "لا توجد منشورات صور في الوقت الحالي.",
+  "noPosts": "لا توجد منشورات في الوقت الحالي."
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -432,7 +434,9 @@ static const Map<String,dynamic> en = {
   "photoAndTextPost": "Photo And Text Post",
   "reelsPost": "Reels Post",
   "deleteSuccessfully": "Delete Successfully",
-  "noTextPosts": "There are no text posts at the moment."
+  "noTextPosts": "There are no text posts at the moment.",
+  "noPhotoPosts": "There are no photo posts at the moment.",
+  "noPosts": "There are no posts at the moment."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

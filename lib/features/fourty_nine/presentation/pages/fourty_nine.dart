@@ -97,13 +97,13 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         children: [
           //carousel slider
           const AnnounceWidget(),
-          const Sizer(),
+         // const Sizer(),
           //wallet
           const WalletWidget(),
-          const Sizer(),
+      //    const Sizer(),
           //admob
-          const GoogleAddsBanner(),
-          const Sizer(),
+       //   const GoogleAddsBanner(),
+        //  const Sizer(),
           //pick me and come with U
           _pickMeAndComeWithUWidget(),
           const Sizer(),

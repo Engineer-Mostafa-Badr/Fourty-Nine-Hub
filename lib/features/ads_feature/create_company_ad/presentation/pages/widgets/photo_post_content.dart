@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateful/dynamic/list_view_pagination.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_state.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/build_item_text_post.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import '../../../../../../core/error/custom_error.dart';
-import '../../../../../../core/loading/custom_loading.dart';
 import '../../../../../../core/messages/messages.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../service_locator/service_locator.dart';
+import '../../../data/models/company_advertise_model.dart';
 import '../../../data/repositories/company_advertise_repo/company_advertise_repo_impl.dart';
 import 'build_item_photo_post.dart';
 
@@ -17,51 +18,49 @@ class PhotoPostContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) =>
-      CompanyAdvertiseCubit(serviceLocator.get<CompanyAdvertiseRepoImpl>())
-        ..fetchAdvertiseCompany(context, 'photo'),
-      child: BlocConsumer<CompanyAdvertiseCubit, CompanyAdvertiseState>(
-        listener: (BuildContext context, CompanyAdvertiseState state) {
-          if (state is DeletePostSuccess) {
-            showSuccessMessage(context, 'Delete Successfully');
-          }
-        },
-        builder: (BuildContext context, state) {
-          if (state is FetchAllCompanyAdvertiseSuccess) {
-            if(state.advertiseCompanyModel.data!.advertises!.isNotEmpty) {
-              return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: ListView.separated(
+    return BlocConsumer<CompanyAdvertiseCubit, CompanyAdvertiseState>(
+      listener: (BuildContext context, CompanyAdvertiseState state) {
+        if (state is DeletePostSuccess) {
+          showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
+        }
+      },
+      builder: (BuildContext context, state) {
+        var data=CompanyAdvertiseCubit.get(context).data;
+        if(data.isNotEmpty) {
+          return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: PaginationView<Advertises>(
+            build: (scrollController, data) {
+              return ListView.separated(
+                controller: scrollController,
                 itemBuilder: (context, index) => BuildItemPhotoPost(
-                 // media: state.advertiseCompanyModel.data!.advertises![index].media![index],
-                  length: state.advertiseCompanyModel.data!.advertises![index].media!.length,
-                  advertises: state.advertiseCompanyModel.data!.advertises![index],
+                  // media: state.advertiseCompanyModel.data!.advertises![index].media![index],
+                  length:data[index].media!.length,
+                  advertises:data[index],
                 ),
                 separatorBuilder: (context, index) => const Divider(
                   color: AppColors.GREY_LIGHT_COLOR,
                   height: 30,
                   endIndent: 30,
                 ),
-                itemCount: state.advertiseCompanyModel.data!.advertises!.length,
-              ),
-            );
-            }else {
-              return Center(
-                child: Text(
-                  'There are no Photo posts at the moment.',
-                  style: Styles.mediumText(fontSize: 34),
-                ),
+                itemCount:data.length,
               );
-            }
-          } else if (state is FetchAllCompanyAdvertiseError) {
-            return CustomError(
-              errMessage: state.errMessage,
-            );
-          }
-          return const CustomLoading();
-        },
-      ),
+            },
+            fetchData: (paginationParams) {
+              return context
+                  .read<CompanyAdvertiseCubit>()
+                  .fetchAdvertiseCompany(context,'photo', params: paginationParams);
+            },
+          ),
+        );
+        }
+          return Center(
+            child: Text(
+              LocaleKeys.noPhotoPosts.localize,
+              style: Styles.mediumText(fontSize: 34),
+            ),
+          );
+      },
     );
   }
 }

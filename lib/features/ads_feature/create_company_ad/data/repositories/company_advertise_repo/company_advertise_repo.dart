@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import '../../models/company_advertise_model.dart';
 import '../../models/company_price_model.dart';
+import '../../models/fetch_post_company_advertise_params.dart';
 
 abstract class CompanyAdvertiseRepo{
   Future<Either<Failure,AdvertisePriceModel>>fetchPrice();
@@ -13,6 +14,6 @@ abstract class CompanyAdvertiseRepo{
     required int totalPrice,
 });
 
-  Future<Either<Failure,AdvertiseCompanyModel>>fetchPostCompanyAdvertise(String filter);
+  Future<Either<Failure,AdvertiseCompanyModel>>fetchPostCompanyAdvertise(FetchPostCompanyAdvertiseParams params);
   Future<Either<Failure,void>>deletePosts(String id);
 }

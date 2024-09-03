@@ -1,7 +1,11 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../../common/models/public/pagination_params.dart';
 import '../../../../../../core/error/failure.dart';
+import '../../../data/models/company_advertise_model.dart';
+import '../../../data/models/fetch_post_company_advertise_params.dart';
 import '../../../data/repositories/company_advertise_repo/company_advertise_repo.dart';
 import 'company_advertise_state.dart';
 
@@ -15,7 +19,6 @@ class CompanyAdvertiseCubit extends Cubit<CompanyAdvertiseState> {
 
   //Timer? _pollingTimer;
 
-
   Future<void> addPostCompanyAdvertise({
     required BuildContext context,
     String? post,
@@ -24,13 +27,12 @@ class CompanyAdvertiseCubit extends Cubit<CompanyAdvertiseState> {
     required int totalPrice,
     List<String>? mediaIds, // Make sure this is used correctly
   }) async {
-
     var result = await companyAdvertiseRepo.addPostCompanyAdvertise(
       type: type,
       totalPrice: totalPrice,
       post: post,
       description: description,
-      mediaIds: mediaIds,  // Pass mediaIds here
+      mediaIds: mediaIds, // Pass mediaIds here
     );
 
     result.fold((failure) {
@@ -44,28 +46,32 @@ class CompanyAdvertiseCubit extends Cubit<CompanyAdvertiseState> {
     });
   }
 
+  List<Advertises> data = [];
+  Future<List<Advertises>> fetchAdvertiseCompany(
+      BuildContext context, String filter,
+      {PaginationParams? params}) async {
+    // emit(FetchAllCompanyAdvertiseLoading());
 
 
-  Future<void> fetchAdvertiseCompany(BuildContext context, String filter) async {
-    emit(FetchAllCompanyAdvertiseLoading());
-
-    var result = await companyAdvertiseRepo.fetchPostCompanyAdvertise(filter);
+    var result = await companyAdvertiseRepo.fetchPostCompanyAdvertise(
+        FetchPostCompanyAdvertiseParams(
+            filter: filter,
+            paginationParams: params ?? PaginationParams.basic()));
 
     result.fold((failure) {
-      emit(FetchAllCompanyAdvertiseError(
-          errMessage: getFailureMessage(failure, context)));
+      // emit(FetchAllCompanyAdvertiseError(
+      //     errMessage: getFailureMessage(failure, context)));
     }, (newData) {
-     // int dataLength = newData.data!.advertises!.length;
-      emit(FetchAllCompanyAdvertiseSuccess(
-          newData.data!.advertises!.length,
-          advertiseCompanyModel: newData
-      ));
+      data = newData.data?.advertises ?? [];
+
+      // int dataLength = newData.data!.advertises!.length;
+       emit(FetchAllCompanyAdvertiseSuccess(
+           newData.data!.advertises!.length,
+           advertiseCompanyModel: newData
+       ));
     });
+    return data;
   }
-
-
-
-
 
   // void _startPollingAdvertise(BuildContext context, String filter) {
   //   _pollingTimer?.cancel();
@@ -88,30 +94,20 @@ class CompanyAdvertiseCubit extends Cubit<CompanyAdvertiseState> {
   //   return super.close();
   // }
 
-
-
-
-
-
-   deletePost(BuildContext context, String id,String filter)async {
+  deletePost(BuildContext context, String id, String filter) async {
     emit(DeletePostLoading());
 
-      var result = await companyAdvertiseRepo.deletePosts(id);
+    var result = await companyAdvertiseRepo.deletePosts(id);
 
-      result.fold((failure) {
-        emit(DeletePostError(
-            errMessage: getFailureMessage(failure, context)));
-        print(getFailureMessage(failure, context));
-      }, (_) {
-        emit(DeletePostSuccess());
-        fetchAdvertiseCompany(context, filter);
-      });
+    result.fold((failure) {
+      emit(DeletePostError(errMessage: getFailureMessage(failure, context)));
+      print(getFailureMessage(failure, context));
+    }, (_) {
+      emit(DeletePostSuccess());
+      // fetchAdvertiseCompany(context, filter);
+    });
   }
 }
-
-
-
-
 
 // import 'dart:async';
 // import 'package:flutter/material.dart';

@@ -208,5 +208,7 @@ abstract class  LocaleKeys {
   static String reelsPost = 'reelsPost'.tr();
   static String deleteSuccessfully = 'deleteSuccessfully'.tr();
   static String noTextPosts = 'noTextPosts'.tr();
+  static String noPhotoPosts = 'noPhotoPosts'.tr();
+  static String noPosts = 'noPosts'.tr();
 
 }
