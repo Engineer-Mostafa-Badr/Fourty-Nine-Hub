@@ -93,6 +93,7 @@ dependencies:
   video_trimmer: ^3.0.1
   uuid:
 
+
 dependency_overrides:
   http: ^0.13.3
 dev_dependencies:
