@@ -12,16 +12,16 @@ class EditProfileState {
   String? selectedJobPrivacy;
   String? selectedCountryPrivacy;
 
-  EditProfileState(
-      {this.status = EditProfileStates.error,
-      this.failure,
-      this.isMale=true,
-  this.selectedCityPrivacy,
-  this.selectedBioPrivacy,
-  this.selectedPhonePrivacy,
-  this.selectedJobPrivacy,
-  this.selectedCountryPrivacy,
-      });
+  EditProfileState({
+    this.status = EditProfileStates.error,
+    this.failure,
+    this.isMale = true,
+    this.selectedCityPrivacy,
+    this.selectedBioPrivacy,
+    this.selectedPhonePrivacy,
+    this.selectedJobPrivacy,
+    this.selectedCountryPrivacy,
+  });
   EditProfileState copyWith({
     EditProfileStates? status,
     Failure? failure,
@@ -40,7 +40,8 @@ class EditProfileState {
       selectedBioPrivacy: selectedBioPrivacy ?? this.selectedBioPrivacy,
       selectedPhonePrivacy: selectedPhonePrivacy ?? this.selectedPhonePrivacy,
       selectedJobPrivacy: selectedJobPrivacy ?? this.selectedJobPrivacy,
-      selectedCountryPrivacy: selectedCountryPrivacy ?? this.selectedCountryPrivacy,
+      selectedCountryPrivacy:
+          selectedCountryPrivacy ?? this.selectedCountryPrivacy,
     );
   }
 }

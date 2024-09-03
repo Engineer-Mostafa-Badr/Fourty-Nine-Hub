@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/components/utils/pop_up_manager.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/core/host_manager.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/defines.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 // Package imports:
 import 'package:permission_handler/permission_handler.dart';
 
@@ -666,7 +667,7 @@ class _ZegoLiveStreamingPreviewPageState
             height: 94.zR,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30.zR),
-              color: Colors.blueAccent[700],
+              color: AppColors.PRIMARY_COLOR,
             ),
             child: Align(
               alignment: Alignment.center,

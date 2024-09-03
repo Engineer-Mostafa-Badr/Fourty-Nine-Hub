@@ -51,7 +51,9 @@ class BadgedLabel extends StatelessWidget {
             //padding: const EdgeInsetsDirectional.only(end: 8,top: 5),
             decoration: BoxDecoration(
                 color: isBordered ? color : color,
-                border: isBordered ? Border.all(color: borderColor, width: .5.zW) : null,
+                border: isBordered
+                    ? Border.all(color: borderColor, width: .5.zW)
+                    : null,
                 borderRadius: BorderRadius.circular(radius.zR)),
             // child: isCentered
             //     ? Center(
@@ -76,7 +78,8 @@ class BadgedLabel extends StatelessWidget {
                         )),
                   ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.zW, vertical: 3.zW),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 10.zW, vertical: 3.zW),
                   child: isCentered
                       ? Center(
                           child: _buildLabelWidget(),

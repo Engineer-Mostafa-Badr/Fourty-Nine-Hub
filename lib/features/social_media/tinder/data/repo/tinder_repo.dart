@@ -246,6 +246,7 @@
 
 import 'dart:convert';
 import 'dart:developer';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_category_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:fourtyninehub/features/social_media/tinder/data/models/anonymous_chat_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
@@ -381,6 +382,15 @@ class TinderRepository {
     if (response != null) {
       final data = json.decode(response.body);
       return SubFavoritesResponse.fromJson(data);
+    }
+    return null;
+  }
+  Future<CategoryFavoritesResponse?> fetchFavoritesCategory() async {
+    const url = 'https://49dev.com/api/v1/favorite-category';
+    final response = await _makeGetRequest(url: url, fromMethod: 'fetchFavorites');
+    if (response != null) {
+      final data = json.decode(response.body);
+      return CategoryFavoritesResponse.fromJson(data);
     }
     return null;
   }

@@ -269,6 +269,8 @@
 //   }
 // }
 //after add index to navigate
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -327,6 +329,7 @@ class _ChatViewState extends State<ChatView> {
     'Archive',
     'Lock Chat',
     'Unread',
+    'Broadcast',
   ];
 
   @override
@@ -397,13 +400,14 @@ class _ChatViewState extends State<ChatView> {
         tabAlignment: TabAlignment.start,
         isScrollable: true,
         tabs: groups.map((e) {
-          return const Tab(
-            text: 'there was error here look at code and solve it',
+          return Tab(
+            // text: 'there was error here look at code and solve it',
             // text: chatCubit.selectedTabIndex == groups.indexOf(e)
             //     ? unReadMessages == 0
             //         ? e
             //         : "$e($unReadMessages)"
-            //     : e,
+            //     : error,
+            text:e
           );
         }).toList());
   }
@@ -417,6 +421,7 @@ class _ChatViewState extends State<ChatView> {
       _buildCallingHistory(isVideo: false),
       _buildCallingHistory(isVideo: true),
       _buildCategoryChats(isSecret: true),
+      _buildCategoryChats(),
       _buildCategoryChats(),
       _buildCategoryChats(),
       _buildCategoryChats(),

@@ -23,7 +23,7 @@ class OfferRideCard extends StatelessWidget {
           ProfileImage(
             accountId: 0,
             size: 20,
-            imageURL: offer.profileImage,
+            imageURL: offer.profileImage, userId: '',
           ),
           const Sizer(),
           Expanded(

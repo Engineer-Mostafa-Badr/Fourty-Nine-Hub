@@ -43,8 +43,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       emit(DeleteNotificationsErrorState(errMessage: 'failure'));
       // print(failure.errMessage.toString());
     }, (notification) {
-      emit(DeleteNotificationsSuccessState(
-          deleteNotificationModel: notification));
+      emit(DeleteNotificationsSuccessState(deleteNotificationModel: notification));
     });
   }
 }

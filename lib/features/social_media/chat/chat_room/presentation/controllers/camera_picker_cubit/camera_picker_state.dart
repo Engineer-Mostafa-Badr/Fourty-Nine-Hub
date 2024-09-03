@@ -19,7 +19,7 @@ class CameraPickerState {
   final CameraPickerStatus status;
   final CameraController? controller;
   final PickMode pickMode;
-  final List<XFile>? mediaList;
+  final List<File>? mediaList;
 
   CameraPickerState({
     this.status = CameraPickerStatus.notInitialized,
@@ -32,7 +32,7 @@ class CameraPickerState {
     CameraPickerStatus? status,
     CameraController? controller,
     PickMode? pickMode,
-    List<XFile>? mediaList,
+    List<File>? mediaList,
   }) {
     return CameraPickerState(
       status: status ?? this.status,

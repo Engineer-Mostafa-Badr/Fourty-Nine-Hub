@@ -614,7 +614,6 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
         child: CircleAvatar(
           backgroundColor: AppColors.PRIMARY_COLOR,
           radius: 25,
-
           child: const Center(
             child: Icon(
               Icons.send,
