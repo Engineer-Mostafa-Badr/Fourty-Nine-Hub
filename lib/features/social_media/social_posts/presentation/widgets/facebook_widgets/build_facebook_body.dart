@@ -46,8 +46,17 @@ class FacebookBody extends StatelessWidget {
           child: CustomScrollView(
             controller: scrollController,
             slivers: [
-              const SliverToBoxAdapter(
-                child: Stories(),
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: 5,
+                      color: AppColors.LIGHT_GRAY_COLOR,
+                    ),
+                    Stories(),
+                  ],
+                ),
               ),
               const SliverToBoxAdapter(
                 child: BuildPeopleYouMayKnow(),

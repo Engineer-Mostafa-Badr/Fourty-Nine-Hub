@@ -52,12 +52,12 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                  text: "Discover People",
+                  text: "Suggested For You",
                   style: Styles.headerText(),
                 ),
                 Container(
                   alignment: AlignmentDirectional.topStart,
-                  height: 200,
+                  height: 250,
                   child: PagedListView<int, SuggestUserEntity>(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(

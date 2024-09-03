@@ -34,7 +34,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       this._createTwitterPostUseCase,
       this._friendsFollowersUseCase,
       this._getPlacesUseCase)
-      : super(const CreatePostState());
+      : super( CreatePostState());
 
   List<String>? selectedImages;
 
@@ -49,6 +49,26 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   //     }
   //   });
   // }
+
+  removeBackground(){
+    // emit(state.copyWith(backColor:'#FFFFFFFF',));
+  }
+
+  onBigger80(){
+    emit(state.copyWith(isBiggerThan80: true,isBiggerThen120: false,isBiggerThen150: false));
+  }
+
+  onBigger120(){
+    emit(state.copyWith(isBiggerThan80: false,isBiggerThen120: true,isBiggerThen150: false));
+  }
+
+  onBigger150(){
+    emit(state.copyWith(isBiggerThan80: false,isBiggerThen120: false,isBiggerThen150: true));
+  }
+
+  onSmallerText(){
+    emit(state.copyWith(isBiggerThan80: false,isBiggerThen120: false,isBiggerThen150: false));
+  }
 
   void loadData() async {
     await getActivities();
