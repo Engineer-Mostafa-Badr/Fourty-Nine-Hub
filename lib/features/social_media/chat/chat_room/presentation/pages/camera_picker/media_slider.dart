@@ -77,7 +77,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                         ).then((value) async {
                           if (editedImage != null) {
                             _media[_selectedIndex] =
-                                await _convertUint8ListToFile(editedImage!);
+                            await _convertUint8ListToFile(editedImage!);
                             setState(() {});
                           }
                         });
@@ -203,21 +203,21 @@ class _MediaSliderViewState extends State<MediaSliderView> {
         ),
         child: isPhoto
             ? index == _selectedIndex
-                ? const Center(
-                    child: Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
-                  )
-                : null
+            ? const Center(
+          child: Icon(
+            Icons.delete,
+            color: Colors.white,
+          ),
+        )
+            : null
             : Center(
-                child: Icon(
-                  _selectedIndex == index
-                      ? Icons.delete
-                      : Icons.play_arrow_rounded,
-                  color: Colors.white,
-                ),
-              ),
+          child: Icon(
+            _selectedIndex == index
+                ? Icons.delete
+                : Icons.play_arrow_rounded,
+            color: Colors.white,
+          ),
+        ),
       ),
     );
   }

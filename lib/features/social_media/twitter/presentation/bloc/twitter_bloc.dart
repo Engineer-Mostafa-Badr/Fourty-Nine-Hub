@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/dele
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/delete_twitter_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/edit_twitter_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_global_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_post_comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_twitter_post_usecase.dart';
@@ -30,6 +31,7 @@ part 'twitter_state.dart';
 
 class TwitterCubit extends Cubit<TwitterState> {
   final GetTwitterFeedUseCase _getFeedUseCase;
+  final GetTwitterGlobalFeedUseCase _getTwitterGlobalFeedUseCase;
   final TwitterPostReactUseCase _twitterPostReactUseCase;
   final GetTwitterPostCommentsUseCase _getTwitterPostCommentsUseCase;
   final TwitterCommentReactUseCase _twitterCommentReactUseCase;
@@ -62,7 +64,7 @@ class TwitterCubit extends Cubit<TwitterState> {
     this._deleteTwitterPostUseCase,
     this._hideTwitterPostUseCase,
     this._deleteTwitterCommentUseCase,
-    this._editTwitterCommentUseCase,
+    this._editTwitterCommentUseCase, this._getTwitterGlobalFeedUseCase,
   ) : super(const TwitterState());
 
   void loadData() async {
@@ -71,6 +73,15 @@ class TwitterCubit extends Cubit<TwitterState> {
     postsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
       getFeed(pageKey);
+    });
+  }
+
+  void loadGlobalData() async {
+    //   await getFeed(1);
+    getGlobalFeed(1);
+    globalPostsPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getGlobalFeed(pageKey);
     });
   }
 
@@ -94,6 +105,10 @@ class TwitterCubit extends Cubit<TwitterState> {
     postsPagingController.refresh();
   }
 
+  void onGlobalRefresh() async {
+    globalPostsPagingController.refresh();
+  }
+
   void onRefreshUserTweets() async {
     userTweetsPagingController.refresh();
   }
@@ -111,6 +126,9 @@ class TwitterCubit extends Cubit<TwitterState> {
 
   final int pageSize = 10;
   final PagingController<int, TwitterPostEntity> postsPagingController =
+      PagingController(firstPageKey: 1);
+
+  final PagingController<int, TwitterPostEntity> globalPostsPagingController =
       PagingController(firstPageKey: 1);
 
   final PagingController<int, TwitterPostEntity> userTweetsPagingController =
@@ -138,6 +156,55 @@ class TwitterCubit extends Cubit<TwitterState> {
       emit(state.copyWith(posts: data, status: StateStatus.success));
     });
   }
+
+  // get global feed posts
+  Future<void> getGlobalFeed(int page) async {
+    final response =
+        await _getTwitterGlobalFeedUseCase(TwitterFeedParams(limit: pageSize, page: page));
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) {
+      final isLastPage = data.length < pageSize;
+      if (page == 1) {
+        print("page == 1 $page");
+        globalPostsPagingController.itemList = [];
+      }
+      if (isLastPage) {
+        print("isLastPage = $isLastPage");
+        globalPostsPagingController.appendLastPage(data);
+      } else {
+        print("isNotLastPage = $isLastPage");
+        final nextPageKey = page + 1;
+        globalPostsPagingController.appendPage(data, nextPageKey);
+      }
+      emit(state.copyWith(posts: data, status: StateStatus.success));
+    });
+  }
+  //
+  // // get global feed posts
+  // getGlobalFeed(int page) async {
+  //   final response =
+  //   await _getGlobalFeedUseCase(TwitterFeedParams(limit: 10, page: page));
+  //   response.fold(
+  //           (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+  //           (data) async {
+  //         final isLastPage = data.length < 10;
+  //         if (page == 1) {
+  //           print("page == 1 $page");
+  //           globalFeedPagingController.itemList = [];
+  //         }
+  //         if (isLastPage) {
+  //           print("isLastPage = $isLastPage");
+  //           globalFeedPagingController.appendLastPage(data);
+  //         } else {
+  //           print("isNotLastPage = $isLastPage");
+  //           final nextPageKey = page + 1;
+  //           globalFeedPagingController.appendPage(data, nextPageKey);
+  //         }
+  //         emit(state.copyWith( status: StateStatus.success));
+  //       });
+  // }
+
 
   Future<void> getUserTweets(int page, String userId) async {
     final response = await _getUserTweetsUseCase(

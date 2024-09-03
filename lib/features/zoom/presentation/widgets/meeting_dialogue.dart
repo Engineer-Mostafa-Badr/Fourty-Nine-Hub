@@ -128,8 +128,8 @@ void showMeetingDialogue(BuildContext context, {bool shareScreen = false}) {
   );
 }
 
-Future<void> joinRoom(MeetingCubit cubit, String liveId) async {
-  return cubit.joinRoom(liveId);
+Future<bool> joinRoom(MeetingCubit cubit, String liveId) async {
+  return cubit.joinNewMeeting(liveId);
 }
 
 //for passing args

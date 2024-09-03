@@ -12,8 +12,8 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import '../../../../core/error/failure.dart';
 
 abstract class MeetingDataSource {
-  Future<void> addRoom(MeetingParams params);
-  Future<Response?> joinRoom(MeetingParams params);
+  Future<Either<Failure, bool>> addRoom(MeetingParams params);
+  Future<Either<Failure, bool>> joinRoom(MeetingParams params);
   Future<Either<Failure, void>> endRoom(MeetingParams params);
   Future<Either<Failure, List<ScheduledMeeting>>> getScheduledMeetings(
       MeetingParams params);
@@ -25,17 +25,14 @@ class MeetingDataSourceImpl extends MeetingDataSource {
 
   MeetingDataSourceImpl(this.apiConsumer, this._dio);
   @override
-  Future<void> addRoom(MeetingParams params) async {
+  Future<Either<Failure, bool>> addRoom(MeetingParams params) async {
     final result =
-        await _dio.post(EndPoints.createMeeting, data: params.toJson());
-    if (result.statusCode == 201) {
-      CliLogger.success('create successfully ${result.statusMessage}');
-      return;
-    } else {
-      CliLogger.error(
-          'failed ${result.statusMessage} cause of ${result.statusCode}');
-      throw 'Meeting Unable to launch';
-    }
+        await apiConsumer.post(EndPoints.createMeeting, data: params.toJson());
+    return result.fold((l) {
+      return Left(l);
+    }, (r) {
+      return Right(r['status']);
+    });
   }
 
   @override
@@ -48,33 +45,32 @@ class MeetingDataSourceImpl extends MeetingDataSource {
   }
 
   @override
-  Future<Response?> joinRoom(MeetingParams params) async {
-    final url = EndPoints.joinMeeting(params.meetingId);
-
-    try {
-      final response = await _dio.put(url);
-
-      if (response.statusCode == 200) {
-        print('stata is ok');
-        return response;
-        // Handle success
-      } else {
-        // Handle other status codes
-        return response;
-      }
-    } on DioException catch (e) {
-      // Handle network error
-      if (e.response != null && e.response?.statusCode == 404) {
-        return e.response;
-      } else if (e.response != null) {
-        return e.response;
-      } else {
-        // Handle cases where no response was returned (e.g., network error)
-
-        return null;
-      }
-    }
-  }
+  // Future<Response?> joinRoom(MeetingParams params) async {
+  //   final url = EndPoints.joinMeeting(params.meetingId);
+  //   try {
+  //     final response = await _dio.put(url);
+  //
+  //     if (response.statusCode == 200) {
+  //       print('stata is ok');
+  //       return response;
+  //       // Handle success
+  //     } else {
+  //       // Handle other status codes
+  //       return response;
+  //     }
+  //   } on DioException catch (e) {
+  //     // Handle network error
+  //     if (e.response != null && e.response?.statusCode == 404) {
+  //       return e.response;
+  //     } else if (e.response != null) {
+  //       return e.response;
+  //     } else {
+  //       // Handle cases where no response was returned (e.g., network error)
+  //
+  //       return null;
+  //     }
+  //   }
+  // }
 
   @override
   Future<Either<Failure, List<ScheduledMeeting>>> getScheduledMeetings(
@@ -89,6 +85,17 @@ class MeetingDataSourceImpl extends MeetingDataSource {
           .map((e) => ScheduledMeetingModel.fromJson(e))
           .toList();
       return Right(rooms);
+    });
+  }
+
+  @override
+  Future<Either<Failure, bool>> joinRoom(MeetingParams params) async{
+    final result =
+        await apiConsumer.put(EndPoints.joinMeeting(params.meetingId));
+    return result.fold((l) {
+      return Left(l);
+    }, (r) {
+      return Right(r['status']);
     });
   }
 }

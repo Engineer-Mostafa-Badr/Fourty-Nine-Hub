@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/api_error_page.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/saved_reels_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_posts.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_reels.dart';
@@ -47,7 +49,10 @@ class _OtherAccountViewState extends State<OtherAccountView> {
               ? const Center(
                   child: CupertinoActivityIndicator(),
                 )
-              : CustomScrollView(
+              :state.status== StateStatus.error? ApiErrorPage(message:  getFailureMessage(
+            state.failure ??  UnknownFailure(''),
+            context,
+          ),):CustomScrollView(
                   slivers: [
                     SliverToBoxAdapter(
                         child: Container(
@@ -64,7 +69,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                         Icons.arrow_back,
                                         color: Colors.black,
                                       )),
-                                  PopupMenuButton(
+                                  if(context.read<UserCubit>().isLoggedIn)PopupMenuButton(
                                       icon: const Icon(
                                         Icons.more_vert,
                                         color: Colors.black,
@@ -142,49 +147,59 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               context: context,
                               user: state.profileData!,
                               onFollow: () async {
-                                if (state.profileData?.isFollowed == true) {
-                                  var result = await controller.unFollowRequest(
-                                      context: context,
-                                      userId: state.profileData!.id);
-                                  if (result == true) {
-                                    state.profileData?.isFollowed = false;
-                                    setState(() {});
+                                if(context.read<UserCubit>().isLoggedIn){
+                                  if (state.profileData?.isFollowed == true) {
+                                    var result =
+                                        await controller.unFollowRequest(
+                                            context: context,
+                                            userId: state.profileData!.id);
+                                    if (result == true) {
+                                      state.profileData?.isFollowed = false;
+                                      setState(() {});
+                                    }
+                                  } else {
+                                    var result = await controller.followRequest(
+                                        context: context,
+                                        userId: state.profileData!.id);
+                                    if (result == true) {
+                                      state.profileData?.isFollowed = true;
+                                      setState(() {});
+                                    }
                                   }
-                                } else {
-                                  var result = await controller.followRequest(
-                                      context: context,
-                                      userId: state.profileData!.id);
-                                  if (result == true) {
-                                    state.profileData?.isFollowed = true;
-                                    setState(() {});
-                                  }
+                                }else{
+                                  context.push(Routes.LOGIN);
                                 }
                               },
                               onAddFriend: () async {
                                 // print("object");
-                                if (state.profileData?.areFriends == true) {
-                                } else {
-                                  if (state.profileData?.sentFriendRequest ==
-                                      true) {
-                                    var result =
-                                        await controller.removeFriendRequest(
-                                            context: context,
-                                            userId: state.profileData!.id);
-                                    if (result == true) {
-                                      state.profileData?.sentFriendRequest =
-                                          false;
-                                      setState(() {});
-                                    }
+                                if(context.read<UserCubit>().isLoggedIn){
+                                  if (state.profileData?.areFriends == true) {
                                   } else {
-                                    var result = await controller.friendRequest(
-                                        context: context,
-                                        userId: state.profileData!.id);
-                                    if (result == true) {
-                                      state.profileData?.sentFriendRequest =
-                                          true;
-                                      setState(() {});
+                                    if (state.profileData?.sentFriendRequest ==
+                                        true) {
+                                      var result =
+                                          await controller.removeFriendRequest(
+                                              context: context,
+                                              userId: state.profileData!.id);
+                                      if (result == true) {
+                                        state.profileData?.sentFriendRequest =
+                                            false;
+                                        setState(() {});
+                                      }
+                                    } else {
+                                      var result =
+                                          await controller.friendRequest(
+                                              context: context,
+                                              userId: state.profileData!.id);
+                                      if (result == true) {
+                                        state.profileData?.sentFriendRequest =
+                                            true;
+                                        setState(() {});
+                                      }
                                     }
                                   }
+                                }else{
+                                  context.push(Routes.LOGIN);
                                 }
                               },
                               onAcceptFriend: () async {
@@ -480,7 +495,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           ];
                         },
                         onSelected: (value) {
-                          context.push(Routes.CHAT);
+                          !context.read<UserCubit>().isLoggedIn?context.push(Routes.LOGIN):context.push(Routes.CHAT);
                         }),
                 ],
               ),

@@ -2,15 +2,12 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
-import 'package:fourtyninehub/core/enums/club_house_layout_mode_enum.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -173,10 +170,10 @@ class _CamViewState extends State<_CamView> {
                           if (media != null && media.isNotEmpty) {
                             context
                                 .push(Routes.MEDIASLIDER,
-                                    extra: MediaSliderViewParams(media: media))
+                                extra: MediaSliderViewParams(media: media))
                                 .then((value) => context
-                                    .read<CameraPickerCubit>()
-                                    .refreshMediaList());
+                                .read<CameraPickerCubit>()
+                                .refreshMediaList());
                           } else {
                             showErrorMessage(
                                 context, LocaleKeys.pickPhotoOrVideo);
@@ -335,7 +332,7 @@ class _ImagesListState extends State<_ImagesList> {
               builder: (context, constraints) {
                 return BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   buildWhen: (previous, current) =>
-                      current.status == CameraPickerStatus.updateMediaList,
+                  current.status == CameraPickerStatus.updateMediaList,
                   builder: (context, state) {
                     return ListView.separated(
                       padding: const EdgeInsets.symmetric(vertical: 5),
@@ -395,7 +392,7 @@ class _ImagesListState extends State<_ImagesList> {
               children: [
                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   buildWhen: (previous, current) =>
-                      current.pickMode != previous.pickMode,
+                  current.pickMode != previous.pickMode,
                   builder: (context, state) {
                     return ElevatedAppButton(
                       label: LocaleKeys.photo,
@@ -414,7 +411,7 @@ class _ImagesListState extends State<_ImagesList> {
                 const Sizer(),
                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   buildWhen: (previous, current) =>
-                      current.pickMode != previous.pickMode,
+                  current.pickMode != previous.pickMode,
                   builder: (context, state) {
                     return ElevatedAppButton(
                       label: LocaleKeys.video,
@@ -437,10 +434,10 @@ class _ImagesListState extends State<_ImagesList> {
 
   Widget _mediaContainer(
       {required ImageProvider image,
-      required double width,
-      required int index,
-      required List<File> media,
-      bool isPhoto = true}) {
+        required double width,
+        required int index,
+        required List<File> media,
+        bool isPhoto = true}) {
     return InkWell(
       onTap: () {
         if (mounted &&
@@ -448,10 +445,10 @@ class _ImagesListState extends State<_ImagesList> {
                 CameraPickerStatus.startVideo) {
           context
               .push(Routes.MEDIASLIDER,
-                  extra:
-                      MediaSliderViewParams(media: media, initialIndex: index))
+              extra:
+              MediaSliderViewParams(media: media, initialIndex: index))
               .then((value) =>
-                  context.read<CameraPickerCubit>().refreshMediaList());
+              context.read<CameraPickerCubit>().refreshMediaList());
         }
       },
       child: Container(
@@ -462,11 +459,11 @@ class _ImagesListState extends State<_ImagesList> {
         ),
         child: !isPhoto
             ? const Center(
-                child: Icon(
-                  Icons.play_arrow_rounded,
-                  color: Colors.white,
-                ),
-              )
+          child: Icon(
+            Icons.play_arrow_rounded,
+            color: Colors.white,
+          ),
+        )
             : null,
       ),
     );
@@ -499,7 +496,7 @@ class __VideoTimerState extends State<_VideoTimer> {
         int seconds = (timer.tick % 60);
         setState(() {
           _timerText =
-              '${minutes.toString().padLeft(2, '0')} : ${seconds.toString().padLeft(2, '0')}';
+          '${minutes.toString().padLeft(2, '0')} : ${seconds.toString().padLeft(2, '0')}';
         });
         CliLogger.info(_timerText);
       }

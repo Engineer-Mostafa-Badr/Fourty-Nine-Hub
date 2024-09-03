@@ -50,7 +50,7 @@ class MeetingView extends StatelessWidget {
                           context.push(
                             Routes.MEETINGROOM,
                             extra:
-                                ZegoArgs(rand, true, shareScreen: false),
+                                ZegoArgs(cubit.meetingId, true, shareScreen: false),
                           );
                         }
                       },
@@ -260,7 +260,9 @@ class MeetingView extends StatelessWidget {
     return period;
   }
 
-  
+  Future<void> newMeeting(MeetingCubit cubit) async {
+    cubit.createNewMeeting();
+  }
 
   void _showScheduleMeetingBottomSheet(BuildContext context) {
     showModalBottomSheet(

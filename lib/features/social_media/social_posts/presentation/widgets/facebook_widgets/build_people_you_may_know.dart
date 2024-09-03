@@ -61,7 +61,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                       ),
                       Container(
                         alignment: AlignmentDirectional.topStart,
-                        height: 350,
+                        height: 250,
                         child: PagedListView<int, SuggestUserEntity>(
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.symmetric(
@@ -101,7 +101,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                 .id);
                                       },
                                       child: Container(
-                                        width: 260,
+                                        width: 200,
                                         padding:
                                             const EdgeInsets.only(bottom: 10),
                                         margin:
@@ -109,9 +109,9 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                 end: 10),
                                         decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(20),
+                                              BorderRadius.circular(5),
                                           border: Border.all(
-                                              color: AppColors.DARK_GRAY_COLOR),
+                                              color: AppColors.DIVIDER_GRAY_COLOR),
                                         ),
                                         child: Column(
                                           crossAxisAlignment:
@@ -124,8 +124,8 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                 width: 300,
                                                 borderRadius:
                                                     const BorderRadius.only(
-                                                  topLeft: Radius.circular(20),
-                                                  topRight: Radius.circular(20),
+                                                  topLeft: Radius.circular(5),
+                                                  topRight: Radius.circular(5),
                                                 ),
                                               ),
                                             ),
@@ -232,7 +232,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                           title:
                                                                               Label(
                                                                             text:
-                                                                                'Enter greet message',
+                                                                                'Enter Greet Message',
                                                                             style:
                                                                                 Styles.headerText(),
                                                                           ),
@@ -245,7 +245,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                               setState(() {});
                                                                             },
                                                                             decoration: InputDecoration(
-                                                                                hintText: "Greet message",
+                                                                                hintText: "Greet Message",
                                                                                 fillColor: Colors.white,
                                                                                 hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
                                                                           ),

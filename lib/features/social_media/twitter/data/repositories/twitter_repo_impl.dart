@@ -110,4 +110,9 @@ class TwitterRepoImpl implements TwitterRepo {
       {required TwitterPostCommentParams params}) {
     return _remoteDataSource.editComment(params: params);
   }
+
+  @override
+  Future<Either<Failure, List<TwitterPostEntity>>> getGlobalFeed({required TwitterFeedParams params}) {
+    return _remoteDataSource.getGlobalFeed(params: params);
+  }
 }

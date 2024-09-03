@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.da
 import 'package:fourtyninehub/features/zoom/domain/usecases/end_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/get_scheuled_rooms_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/join_room_use_case.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../routes/pages.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -24,6 +25,40 @@ class MeetingCubit extends Cubit<MeetingState> {
   final JoinRoomUseCase joinRoomUseCase;
   final EndRoomUseCase endRoomUseCase;
   final GetScheduledRoomsUseCase getScheduledRoomsUseCase;
+
+
+  String meetingId = '';
+
+  Future<bool> createNewMeeting() async {
+    meetingId=const Uuid().v4();
+    final response = await addRoomUseCase( MeetingParams(meetingId: meetingId));
+    bool isAdd = false;
+    response.fold(
+            (l) => emit(state.copyWith( status: MeetingStates.failure)),
+            (r) {
+          print("object $r}");
+          isAdd = r;
+          emit(state.copyWith(status: MeetingStates.success));
+        });
+    print(isAdd);
+    return isAdd;
+  }
+
+  Future<bool> joinNewMeeting(
+      String roomId
+      ) async {
+    final response = await joinRoomUseCase( MeetingParams(meetingId: 'd1472203-7f1f-4c17-bb5c-cdba9ae4e163'));
+    bool isAdd = false;
+    response.fold(
+            (l) => emit(state.copyWith( status: MeetingStates.failure)),
+            (r) {
+          print("object $r}");
+          isAdd = r;
+          emit(state.copyWith(status: MeetingStates.success));
+        });
+    print(isAdd);
+    return isAdd;
+  }
 
   // @override
   // void onChange(Change<MeetingState> change) {
@@ -57,25 +92,25 @@ class MeetingCubit extends Cubit<MeetingState> {
   void joinRoom(String roomId) {
     emit(state.copyWith(status: MeetingStates.loading));
     joinRoomUseCase(MeetingParams(meetingId: roomId)).then((result) {
-      if (result!.statusCode == 200) {
-        emit(state.copyWith(status: MeetingStates.success));
-      } else {
-        final String errorMessage = result.data['error']['message'] ?? '';
-        final Map<String, dynamic> localizedMessage = json.decode(errorMessage);
-        print('state is ${localizedMessage['en']}');
-        emit(state.copyWith(
-          status: MeetingStates.failure,
-          errorMessage: (localizedMessage[AppPages.router.configuration
-                      .navigatorKey.currentContext!.isArabic
-                  ? 'ar'
-                  : 'en'] ??
-              'Room not registered'),
-        ));
-        showErrorMessage(
-          AppPages.router.configuration.navigatorKey.currentContext!,
-          state.errorMessage!,
-        );
-      }
+      // if (result!.statusCode == 200) {
+      //   emit(state.copyWith(status: MeetingStates.success));
+      // } else {
+      //   final String errorMessage = result.data['error']['message'] ?? '';
+      //   final Map<String, dynamic> localizedMessage = json.decode(errorMessage);
+      //   print('state is ${localizedMessage['en']}');
+      //   emit(state.copyWith(
+      //     status: MeetingStates.failure,
+      //     errorMessage: (localizedMessage[AppPages.router.configuration
+      //                 .navigatorKey.currentContext!.isArabic
+      //             ? 'ar'
+      //             : 'en'] ??
+      //         'Room not registered'),
+      //   ));
+      //   showErrorMessage(
+      //     AppPages.router.configuration.navigatorKey.currentContext!,
+      //     state.errorMessage!,
+      //   );
+      // }
     });
   }
 

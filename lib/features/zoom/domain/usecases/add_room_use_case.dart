@@ -6,12 +6,12 @@ import 'package:fourtyninehub/core/error/failure.dart';
 
 import '../repositories/meeting_repository.dart';
 
-class AddRoomUseCase extends NormalUseCase<void, MeetingParams> {
+class AddRoomUseCase extends UseCase<bool, MeetingParams> {
   final MeetingRepository repository;
 
   AddRoomUseCase(this.repository);
   @override
-  Future<void> call(MeetingParams params) {
+  Future<Either<Failure, bool>> call(MeetingParams params) {
     return repository.addRoom(params);
   }
 }
@@ -29,10 +29,7 @@ class MeetingParams extends Equatable {
   });
   //post method data
   Map<String, dynamic> toJson() => {
-        'roomId': meetingId,
-        'title': title,
-        'startDate': startedAt?.toUtc().toIso8601String(),
-        'endDate': endsAt?.toUtc().toIso8601String(),
+        'roomId': meetingId
       };
 
   @override

@@ -28,6 +28,12 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   }
 
   @override
+  Future<Either<Failure, List<PostEntity>>> getGlobalFeed(
+      {required TwitterFeedParams params}) {
+    return _remoteDataSource.getGlobalFeed(params: params);
+  }
+
+  @override
   Future<Either<Failure, List<PostEntity>>> getAdvertisement(
       {required TwitterFeedParams params}) {
     return _remoteDataSource.getAdvertisement(params: params);
@@ -156,6 +162,12 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   Future<Either<Failure, UserProfileEntity>> getUserProfile(
       {required String params}) {
     return _remoteDataSource.getUserProfile(userId: params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> viewProfile(
+      {required String params}) {
+    return _remoteDataSource.viewProfile(userId: params);
   }
 
   @override
