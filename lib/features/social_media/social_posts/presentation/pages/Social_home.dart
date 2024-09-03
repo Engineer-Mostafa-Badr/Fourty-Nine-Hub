@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_facebook_body.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_global_facebook_body.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
@@ -52,11 +51,6 @@ class _SocialHomeViewState extends State<SocialHomeView>
     super.initState();
   }
 
-  @override
-  void dispose() {
-    scrollController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,23 +100,29 @@ class _SocialHomeViewState extends State<SocialHomeView>
                     body: FacebookBody(
                       scrollController: scrollController,
                     ))
-                : Center(
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                            onTap: () => context.push(Routes.LOGIN),
-                            child:
-                            Label(text: 'Login', style: Styles.headerText())),
-                        Label(
-                            text: ', To continue in using chat services',
-                            style: Styles.headerText()),
-                      ],
-                    ),
+                : NestedAppbar(
+                scrollController: ScrollController(),
+                appBars: [
+                  SliverAppBar(
+                    backgroundColor:
+                    Theme.of(context).scaffoldBackgroundColor,
+                    automaticallyImplyLeading: false,
+                    floating: true,
+                    // pinned: true,
+                    flexibleSpace: const CreatePostBanner(),
                   ),
-                );
+                  SliverAppBar(
+                    backgroundColor:
+                    Theme.of(context).scaffoldBackgroundColor,
+                    automaticallyImplyLeading: false,
+                    // floating: true,
+                    pinned: true,
+                    flexibleSpace: _buildTabBar(),
+                  )
+                ],
+                body: FacebookGlobalBody(
+                  scrollController: scrollController,
+                ));
           })),
     );
   }
@@ -138,7 +138,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
             (i) => GestureDetector(
               onTap: () {
                 if (i == 1) {
-                  context.push(Routes.OTHERSACCOUNT, extra: user?.id);
+                  context.read<UserCubit>().isLoggedIn?context.push(Routes.OTHERSACCOUNT, extra: user?.id):context.push(Routes.LOGIN);
                 }
               },
               child: Container(

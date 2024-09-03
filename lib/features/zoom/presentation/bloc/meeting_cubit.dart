@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'dart:math';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
@@ -8,6 +11,7 @@ import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.da
 import 'package:fourtyninehub/features/zoom/domain/usecases/end_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/get_scheuled_rooms_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/join_room_use_case.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../routes/pages.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -25,56 +29,59 @@ class MeetingCubit extends Cubit<MeetingState> {
   final EndRoomUseCase endRoomUseCase;
   final GetScheduledRoomsUseCase getScheduledRoomsUseCase;
 
+  String meetingId = '';
+  String get genRandNo {
+    int min = 10000000;
+    int max = 99999999;
+    final String liveId = '${min + Random().nextInt(max - min)}';
+    return liveId;
+  }
+
+  Future<bool> createNewMeeting() async {
+    meetingId = genRandNo;
+    final response = await addRoomUseCase(MeetingParams(meetingId: meetingId));
+    bool isAdd = false;
+    response.fold(
+        (l) => emit(state.copyWith(status: MeetingStates.failure, failure: l)),
+        (r) {
+      print("object $r}");
+      isAdd = r;
+      emit(state.copyWith(status: MeetingStates.success));
+    });
+    print(isAdd);
+    return isAdd;
+  }
+
+  Future<bool> joinNewMeeting(String roomId) async {
+    final response = await joinRoomUseCase(MeetingParams(meetingId: roomId));
+    bool isAdd = false;
+    response.fold((l) {
+      emit(state.copyWith(status: MeetingStates.failure, failure: l));
+      showErrorMessage(
+        _context(),
+        getFailureMessage(
+          state.failure ?? UnknownFailure(''),
+          _context(),
+        ),
+      );
+    }, (r) {
+      print("object $r}");
+      isAdd = r;
+      emit(state.copyWith(status: MeetingStates.success));
+    });
+    print(isAdd);
+    return isAdd;
+  }
+
+  BuildContext _context() =>
+      AppPages.router.configuration.navigatorKey.currentContext!;
+
   // @override
   // void onChange(Change<MeetingState> change) {
   //   debugPrint('change is ${change.currentState}');
   //   debugPrint('change next ${change.nextState}');
   //   super.onChange(change);
   // }
-
-  Future<void> addRoom(String roomId,
-      {DateTime? startDate, DateTime? endDate, String? title}) async {
-    emit(state.copyWith(status: MeetingStates.loading));
-    addRoomUseCase(MeetingParams(
-      meetingId: roomId,
-
-      /// to [Schedule] meeting
-      startedAt: startDate,
-      endsAt: endDate,
-      title: title,
-    ))
-        .then((value) => emit(state.copyWith(status: MeetingStates.success)))
-        .catchError(
-          (error) => emit(
-            state.copyWith(status: MeetingStates.failure),
-          ),
-        );
-  }
-
-  void joinRoom(String roomId) {
-    emit(state.copyWith(status: MeetingStates.loading));
-    joinRoomUseCase(MeetingParams(meetingId: roomId)).then((result) {
-      if (result!.statusCode == 200) {
-        emit(state.copyWith(status: MeetingStates.success));
-      } else {
-        final String errorMessage = result.data['error']['message'] ?? '';
-        final Map<String, dynamic> localizedMessage = json.decode(errorMessage);
-        print('state is ${localizedMessage['en']}');
-        emit(state.copyWith(
-          status: MeetingStates.failure,
-          errorMessage: (localizedMessage[AppPages.router.configuration
-                      .navigatorKey.currentContext!.isArabic
-                  ? 'ar'
-                  : 'en'] ??
-              'Room not registered'),
-        ));
-        showErrorMessage(
-          AppPages.router.configuration.navigatorKey.currentContext!,
-          state.errorMessage!,
-        );
-      }
-    });
-  }
 
   Future<void> endRoom(String roomId) async {
     emit(state.copyWith(status: MeetingStates.loading));
@@ -91,8 +98,13 @@ class MeetingCubit extends Cubit<MeetingState> {
   List<ScheduledMeeting> scheduledMeetingList = [];
   void getScheduledMeetings() {
     emit(state.copyWith(status: MeetingStates.loading));
-    getScheduledRoomsUseCase(
-            MeetingParams(meetingId: UserCubit.to.state.data!.id))
+    getScheduledRoomsUseCase(MeetingParams(
+            meetingId: AppPages
+                .router.configuration.navigatorKey.currentContext!
+                .read<UserCubit>()
+                .state
+                .data!
+                .id))
         .then((value) {
       value.fold((l) => emit(state.copyWith(status: MeetingStates.failure)),
           (r) {

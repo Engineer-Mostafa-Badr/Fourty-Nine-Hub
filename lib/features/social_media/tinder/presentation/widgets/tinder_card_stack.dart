@@ -619,6 +619,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
@@ -628,6 +629,7 @@ import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_pe
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/show_user_in_map.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -635,6 +637,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../data/shared/shared.dart';
@@ -698,9 +701,8 @@ class TinderCardStack extends StatelessWidget {
 
   void _fetchUserDataOnSwipe(BuildContext context, String? userId) {
     if (userId != null && userId.isNotEmpty) {
-      context.read<TinderViewCubit>()
-        ..fetchLastSeen(userId: userId)
-        ..checkUserNearby(cardUserId: userId);
+      context.read<TinderViewCubit>().fetchLastSeen(userId: userId);
+      // ..checkUserNearby(cardUserId: userId);
     }
   }
 
@@ -714,6 +716,7 @@ class TinderCardStack extends StatelessWidget {
           children: [
             SwipeCardDemo2(cardUser: cardUser),
             _buildGenderSwitch(context, cardUser),
+            // _buildMapSwitch(context, cardUser),
             _buildStoryBar(context, cardUser),
             _buildPersonInfo(context, cardUser),
             _buildActions(context, cardUser),
@@ -745,6 +748,41 @@ class TinderCardStack extends StatelessWidget {
                 size: 35,
                 color: Colors.black),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMapSwitch(BuildContext context, UserData user) {
+    return Positioned(
+      left: 8,
+      top: 25,
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.5),
+          shape: BoxShape.circle,
+        ),
+        child: IconButton(
+          onPressed: () {
+            // Define the location you want to pass
+            // LatLng location = LatLng(37.7749, -122.4194); // Example coordinates (San Francisco)
+
+            LatLng location = LatLng(
+                user.location!.coordinates[0],
+                user.location!
+                    .coordinates[1]); // Example coordinates (San Francisco)
+            log("${user.location!.coordinates[0]} ${user.location!.coordinates[1]} /////////////////////////////////////////////////////////");
+            // Navigate to the MapScreen and pass the location
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MapScreen(location: location),
+              ),
+            );
+          },
+          icon: const Icon(FontAwesomeIcons.locationDot, color: Colors.black),
         ),
       ),
     );
@@ -941,7 +979,7 @@ class TinderCardStack extends StatelessWidget {
             BlocProvider.value(
               value: serviceLocator<TinderViewCubit>()
                 ..fetchUserProfile(
-                    userId: context.read<UserCubit>().state.data!.id),
+                    userId: serviceLocator<UserCubit>().state.data!.id),
             ),
           ],
           child: const UserProfilePage(),

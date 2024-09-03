@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
@@ -11,6 +13,7 @@ import 'package:fourtyninehub/features/zoom/presentation/widgets/meeting_dialogu
 import 'package:fourtyninehub/features/zoom/presentation/widgets/schedule_meeting_bottom_sheet.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
@@ -28,7 +31,15 @@ class MeetingView extends StatelessWidget {
       appBar: AppBar(),
       // drawer: const DrawerWidget(),
       body: SingleChildScrollView(
-        child: BlocBuilder<MeetingCubit, MeetingState>(
+        child: BlocConsumer<MeetingCubit, MeetingState>(
+          listener: (_, state) {
+            if (state.isFailure) {
+              showErrorMessage(
+                  context,
+                  getFailureMessage(
+                      state.failure ?? UnknownFailure(''), context));
+            }
+          },
           builder: (_, state) {
             var cubit = context.read<MeetingCubit>();
             return Column(
@@ -47,10 +58,11 @@ class MeetingView extends StatelessWidget {
                       onTap: () async {
                         await newMeeting(cubit);
                         if (context.mounted) {
+                          CliLogger.info('meeting id is ${cubit.meetingId}');
                           context.push(
                             Routes.MEETINGROOM,
-                            extra:
-                                ZegoArgs(genRandNo, true, shareScreen: false),
+                            extra: ZegoArgs(cubit.meetingId, true,
+                                shareScreen: false),
                           );
                         }
                       },
@@ -217,13 +229,6 @@ class MeetingView extends StatelessWidget {
     );
   }
 
-  String get genRandNo {
-    int min = 10000000;
-    int max = 99999999;
-    final String liveId = '${min + Random().nextInt(max - min)}';
-    return liveId;
-  }
-
   String formatDateString(String dateString) {
     // Parse the input date string
     DateTime dateTime = DateTime.parse(dateString).toLocal();
@@ -261,7 +266,7 @@ class MeetingView extends StatelessWidget {
   }
 
   Future<void> newMeeting(MeetingCubit cubit) async {
-    cubit.addRoom(genRandNo);
+    cubit.createNewMeeting();
   }
 
   void _showScheduleMeetingBottomSheet(BuildContext context) {
@@ -271,7 +276,7 @@ class MeetingView extends StatelessWidget {
       builder: (context) => BlocProvider.value(
         value: serviceLocator<MeetingCubit>(),
         child: ScheduleMeetingBottomSheet(
-          genRandNo,
+          '',
         ),
       ),
     );

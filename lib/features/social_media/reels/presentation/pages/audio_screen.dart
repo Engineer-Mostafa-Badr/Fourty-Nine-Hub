@@ -455,6 +455,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
           Icons.arrow_back,
           color: Colors.white,
         ),
+
         title: const Text('Audio',
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
         actions: [
@@ -564,7 +565,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                 child: ElevatedButton(
                   style: const ButtonStyle(
                       backgroundColor:
-                          MaterialStatePropertyAll(Colors.lightBlueAccent)),
+                          MaterialStatePropertyAll(AppColors.PRIMARY_COLOR)),
                   onPressed: () {
                     _player.dispose();
                     Navigator.push(
@@ -577,7 +578,9 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                   },
                   child: const Text(
                     'Use audio',
-                    style: TextStyle(color: Colors.white),
+                    textScaler: TextScaler.linear(1.2),
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
