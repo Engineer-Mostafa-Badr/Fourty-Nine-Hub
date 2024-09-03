@@ -177,5 +177,6 @@
   "cancel":"الغاء",
   "save": "حفظ",
   "suscessfullySaved": "تم حفظ البيانات بنجاح",
-  "anonymous": "مجهول"
+  "anonymous": "مجهول",
+  "noData" : "لا يوجد بيانات"
 }

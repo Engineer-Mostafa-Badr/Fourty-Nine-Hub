@@ -6,7 +6,7 @@ import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart' show AssetLoader;
 
-class CodegenLoader extends AssetLoader {
+class CodegenLoader extends AssetLoader{
   const CodegenLoader();
 
   @override
@@ -193,7 +193,8 @@ class CodegenLoader extends AssetLoader {
   "cancel": "الغاء",
   "save": "حفظ",
   "suscessfullySaved": "تم حفظ البيانات بنجاح",
-  "anonymous": "مجهول"
+  "anonymous": "مجهول",
+  "noData": "لا يوجد بيانات"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -375,7 +376,8 @@ static const Map<String,dynamic> en = {
   "cancel": "Cancel",
   "save": "Save",
   "suscessfullySaved": "Successfully Saved",
-  "anonymous": "Anonymous"
+  "anonymous": "Anonymous",
+  "noData": "No Data"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

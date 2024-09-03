@@ -178,5 +178,6 @@
   "cancel": "Cancel",
   "save": "Save",
   "suscessfullySaved": "Successfully Saved",
-  "anonymous": "Anonymous"
+  "anonymous": "Anonymous",
+  "noData": "No Data"
 }
