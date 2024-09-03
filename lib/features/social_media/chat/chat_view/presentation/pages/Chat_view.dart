@@ -290,6 +290,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../../service_locator/service_locator.dart';
+import '../../../../stories/presentation/cubit/stories_cubit.dart';
 import '../widgets/calling_card.dart';
 import '../widgets/chat_card.dart';
 
@@ -340,11 +342,14 @@ class _ChatViewState extends State<ChatView> {
         body: NestedAppbar(
           scrollController: ScrollController(),
           appBars: [
-            const SliverAppBar(
+            SliverAppBar(
               expandedHeight: kToolbarHeight * 1.5,
               automaticallyImplyLeading: false,
               floating: true,
-              flexibleSpace: ChatStories(),
+              flexibleSpace: BlocProvider.value(
+                value: serviceLocator<StoryCubit>()..fetchStories(),
+                child: const ChatStories(),
+              ),
             ),
             SliverAppBar(
               automaticallyImplyLeading: false,
