@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -25,9 +26,12 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class InstagramGlobalPosts extends StatefulWidget {
   const InstagramGlobalPosts({
-    super.key, required this.scrollController,
+    super.key,
+    required this.scrollController,
   });
+
   final ScrollController scrollController;
+
   @override
   State<InstagramGlobalPosts> createState() => _InstagramGlobalPostsState();
 }
@@ -51,10 +55,13 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
       return RefreshIndicator(
         onRefresh: () async => controller.onRefresh(),
         child: CustomScrollView(
-         controller: widget.scrollController,
+          controller: widget.scrollController,
           slivers: [
-            const SliverToBoxAdapter(
-              child: ChatStories(),
+            SliverToBoxAdapter(
+              child: BlocProvider.value(
+                value: serviceLocator<StoryCubit>()..fetchStories(),
+                child: const ChatStories(),
+              ),
             ),
             PagedSliverList<int, PostEntity>(
               pagingController: controller.feedPagingController,

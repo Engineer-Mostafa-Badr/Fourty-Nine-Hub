@@ -3477,7 +3477,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
         if (widget.reel.user.verified)
           const Icon(
             Icons.verified,
-            color: Colors.blue,
+            color: AppColors.PRIMARY_COLOR_DARK,
             size: 25,
           ),
       ],

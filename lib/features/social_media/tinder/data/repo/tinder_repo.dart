@@ -416,7 +416,7 @@ class TinderRepository {
   }
 
   Future<List<GiftData>?> fetchGifts() async {
-    final url = 'https://49dev.com/api/v1/dashboard-gifts?limit=10';
+    const url = 'https://49dev.com/api/v1/dashboard-gifts?limit=10';
     final response = await _makeGetRequest(url: url, fromMethod: 'fetchGifts');
     if (response != null) {
       final data = json.decode(response.body);
