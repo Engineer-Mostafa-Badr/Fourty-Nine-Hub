@@ -652,7 +652,7 @@ class _ZegoLiveStreamingPreviewPageState
             );
             return;
           }
-          await newMeeting(widget.liveID);
+          // await newMeeting(widget.liveID);
 
           widget.startedNotifier.value = true;
         },
@@ -687,10 +687,7 @@ class _ZegoLiveStreamingPreviewPageState
         );
   }
 
-  Future<void> newMeeting(String genNo) async {
-    await context.read<MeetingCubit>().addRoom(genNo);
-  }
-
+ 
   void _toggleCamera(bool v) {
     final valueNotifier = v;
 

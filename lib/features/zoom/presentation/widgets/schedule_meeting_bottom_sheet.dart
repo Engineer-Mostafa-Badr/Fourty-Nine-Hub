@@ -122,12 +122,12 @@ class _ScheduleMeetingBottomSheetState
                         context, 'Start Date must be in the future');
                     return;
                   }
-                  await context.read<MeetingCubit>().addRoom(
-                        widget.genRandNo,
-                        startDate: _startDateTime,
-                        title: _titleController.text.trim(),
-                        endDate: _endDateTime,
-                      );
+                  // await context.read<MeetingCubit>().createNewMeeting(
+                  //       widget.genRandNo,
+                  //       startDate: _startDateTime,
+                  //       title: _titleController.text.trim(),
+                  //       endDate: _endDateTime,
+                  //     );
                 } else {
                   showErrorMessage(context, 'Please fill the all fields');
                 }
