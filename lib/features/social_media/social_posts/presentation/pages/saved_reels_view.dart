@@ -38,17 +38,15 @@ class SavedReelsView extends StatelessWidget {
           builderDelegate: PagedChildBuilderDelegate<PostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.savedReelsPagingController.itemList?.length);
-                return const Padding(
-                    padding: EdgeInsets.only(top: 200),
-                    child: Center(
-                      child: Text(
-                        "No Reels",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ));
+                return const Center(
+                  child: Text(
+                    "No Reels",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                    ),
+                  ),
+                );
               },
               itemBuilder: (context, item, index) {
                 final post =

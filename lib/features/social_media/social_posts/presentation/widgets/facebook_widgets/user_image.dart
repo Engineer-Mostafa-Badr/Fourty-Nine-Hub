@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -28,7 +30,7 @@ class UserProfileImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if (fromProfile == false) {
+        if (fromProfile == false&&context.read<UserCubit>().isLoggedIn) {
           context.push(Routes.OTHERSACCOUNT, extra: userId);
         }
       },

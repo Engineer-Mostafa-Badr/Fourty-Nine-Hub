@@ -14,14 +14,14 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class BuildPeopleYouMayKnow extends StatefulWidget {
-  const BuildPeopleYouMayKnow({super.key});
+class InstagramProfileSuggestPeople extends StatefulWidget {
+  const InstagramProfileSuggestPeople({super.key});
 
   @override
-  State<BuildPeopleYouMayKnow> createState() => _BuildPeopleYouMayKnowState();
+  State<InstagramProfileSuggestPeople> createState() => _InstagramProfileSuggestPeopleState();
 }
 
-class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
+class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestPeople> {
   final messageController = TextEditingController();
 
   @override
@@ -45,23 +45,19 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: double.infinity,
-                  height: 5,
-                  color: AppColors.LIGHT_GRAY_COLOR,
-                ),
+
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Label(
-                        text: "People you may know",
+                        text: "Discover People",
                         style: Styles.headerText(),
                       ),
                       Container(
                         alignment: AlignmentDirectional.topStart,
-                        height: 250,
+                        height: 200,
                         child: PagedListView<int, SuggestUserEntity>(
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.symmetric(
@@ -109,9 +105,9 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                 end: 10),
                                         decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(5),
+                                              BorderRadius.circular(20),
                                           border: Border.all(
-                                              color: AppColors.DIVIDER_GRAY_COLOR),
+                                              color: AppColors.DARK_GRAY_COLOR),
                                         ),
                                         child: Column(
                                           crossAxisAlignment:
@@ -124,8 +120,8 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                 width: 300,
                                                 borderRadius:
                                                     const BorderRadius.only(
-                                                  topLeft: Radius.circular(5),
-                                                  topRight: Radius.circular(5),
+                                                  topLeft: Radius.circular(20),
+                                                  topRight: Radius.circular(20),
                                                 ),
                                               ),
                                             ),
@@ -146,16 +142,8 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                     maxLines: 1,
                                                     style: Styles.mediumText(),
                                                   ),
-                                                  SizedBox(
-                                                    height: item.sendWelcomeSuccessfully ==
-                                                            true
-                                                        ? 30
-                                                        : item.followSuccessfully ==
-                                                                    true &&
-                                                                item.addedSuccessfully ==
-                                                                    true
-                                                            ? 20
-                                                            : 30,
+                                                  const SizedBox(
+                                                    height: 10,
                                                   ),
                                                   item.sendWelcomeSuccessfully ==
                                                           true
@@ -177,29 +165,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                               child: InkWell(
                                                                 onTap:
                                                                     () async {
-                                                                  if (item.addedSuccessfully ==
-                                                                      false) {
-                                                                    var response = await controller.friendRequest(
-                                                                        context:
-                                                                            context,
-                                                                        userId:
-                                                                            item.id);
-                                                                    print(item
-                                                                        .addedSuccessfully);
-
-                                                                    if (response ==
-                                                                        true) {
-                                                                      item.addedSuccessfully =
-                                                                          true;
-                                                                      setState(
-                                                                          () {});
-                                                                      print(item
-                                                                          .addedSuccessfully);
-                                                                    }
-                                                                  } else if (item
-                                                                              .addedSuccessfully ==
-                                                                          true &&
-                                                                      item.followSuccessfully ==
+                                                                   if (item.followSuccessfully ==
                                                                           false) {
                                                                     var response = await controller.followRequest(
                                                                         context:
@@ -213,9 +179,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                       setState(
                                                                           () {});
                                                                     }
-                                                                  } else if (item
-                                                                              .addedSuccessfully ==
-                                                                          true &&
+                                                                  } else if (
                                                                       item.followSuccessfully ==
                                                                           true) {
                                                                     showDialog(
@@ -314,9 +278,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                         ),
                                                                         child:
                                                                             Label(
-                                                                          text: item.addedSuccessfully == false
-                                                                              ? 'Add Friend'
-                                                                              : item.addedSuccessfully == true && item.followSuccessfully == false
+                                                                          text:item.followSuccessfully == false
                                                                                   ? 'Follow'
                                                                                   : "Send Greet Message",
                                                                           style: Styles.mediumText(
@@ -407,11 +369,6 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                       ),
                     ],
                   ),
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 5,
-                  color: AppColors.LIGHT_GRAY_COLOR,
                 ),
               ],
             );

@@ -23,12 +23,16 @@ import '../models/comment_model.dart';
 abstract class SocialPostsRemoteDataSource {
   Future<Either<Failure, List<PostEntity>>> getFeed(
       {required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getGlobalFeed(
+      {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getTweet(
       {required TwitterFeedParams params});
   Future<Either<Failure, PostEntity>> getPost({required String postId});
   Future<Either<Failure, bool>> deleteFriend({required String userId});
   Future<Either<Failure, bool>> acceptRejectFriendRequest({required AcceptRejectFriendRequestParams params});
   Future<Either<Failure, UserProfileEntity>> getUserProfile(
+      {required String userId});
+  Future<Either<Failure, bool>> viewProfile(
       {required String userId});
   Future<Either<Failure, List<PostEntity>>> getAdvertisement(
       {required TwitterFeedParams params});
@@ -75,6 +79,22 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
       {required TwitterFeedParams params}) async {
     final response = await _apiConsumer.get(EndPoints.getFeedPosts(params),
         data: {'subCategory': '66b77e77bb35968b535dc944'});
+
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data']['posts'] as List)
+          .map((e) => PostModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<PostEntity>>> getGlobalFeed(
+      {required TwitterFeedParams params}) async {
+    final response = await _apiConsumer.get(EndPoints.getGlobalFeed(params),
+        );
 
     return response.fold((l) {
       return Left(l);
@@ -292,6 +312,16 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
     );
     return response.fold((l) => Left(l),
         (data) => Right(UserProfileModel.fromJson(data['data'])));
+  }
+
+  @override
+  Future<Either<Failure, bool>> viewProfile(
+      {required String userId}) async {
+    final response = await _apiConsumer.put(
+      EndPoints.viewProfile(userId),
+    );
+    return response.fold((l) => Left(l),
+        (data) => Right(data['status']));
   }
 
   @override

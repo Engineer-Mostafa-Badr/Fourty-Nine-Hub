@@ -15,7 +15,7 @@ class MeetingRepositoryImpl extends MeetingRepository {
 
   MeetingRepositoryImpl(this.meetingDataSource);
   @override
-  Future<Either<Failure, void>> addRoom(MeetingParams params) {
+  Future<Either<Failure, bool>> addRoom(MeetingParams params) {
     return meetingDataSource.addRoom(params);
   }
 
@@ -31,7 +31,7 @@ class MeetingRepositoryImpl extends MeetingRepository {
   }
 
   @override
-  Future<Response?> join(MeetingParams params) {
+  Future<Either<Failure, bool>> join(MeetingParams params) {
     return meetingDataSource.joinRoom(params);
   }
 }

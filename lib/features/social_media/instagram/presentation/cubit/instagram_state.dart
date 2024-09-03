@@ -9,6 +9,7 @@ class InstagramState {
   final List<PostEntity>? media;
   final int? pageIndex;
   final int? count;
+  final List<SuggestUserEntity>? suggestedFriends;
   CommentEntity? newComment;
   final List<CommentEntity>? postComments;
 
@@ -21,6 +22,7 @@ class InstagramState {
       this.failure,
       this.newComment,
       this.postComments,
+      this.suggestedFriends,
       this.media,
       this.count = 0});
   InstagramState copyWith({
@@ -32,6 +34,7 @@ class InstagramState {
     int? newPage,
     int? pageIndex,
     int? count,
+    List<SuggestUserEntity>? suggestedFriends,
     CommentEntity? newComment,
     List<CommentEntity>? postComments,
   }) {
@@ -46,6 +49,7 @@ class InstagramState {
       newComment: newComment ?? this.newComment,
       postComments: postComments ?? this.postComments,
       media: media ?? this.media,
+      suggestedFriends: suggestedFriends ?? this.suggestedFriends,
     );
   }
 }

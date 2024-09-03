@@ -14,9 +14,12 @@ class CreatePostState {
   final List<PostUserEntity>? users;
   final List<PostUserEntity>? selectedUsers;
   final String? selectedPrivacy;
-  final String backColor;
+  String? backColor;
   final bool isLast;
-  const CreatePostState(
+  final bool isBiggerThan80;
+  final bool isBiggerThen150;
+  final bool isBiggerThen120;
+  CreatePostState(
       {this.status = CreatePostStates.error,
       this.failure,
       this.images,
@@ -24,6 +27,9 @@ class CreatePostState {
       this.feelings,
       this.backColor = "#FFFFFFFF",
       this.isLast = false,
+      this.isBiggerThan80 = false,
+      this.isBiggerThen150 = false,
+      this.isBiggerThen120 = false,
       this.selectedActivity,
       this.selectedFeeling,
       this.users,
@@ -44,6 +50,9 @@ class CreatePostState {
     List<PostUserEntity>? selectedUsers,
     String? backColor,
     bool? isLast,
+    bool? isBiggerThan80,
+    bool? isBiggerThen150,
+    bool? isBiggerThen120,
   }) {
     return CreatePostState(
       status: status ?? this.status,
@@ -59,6 +68,9 @@ class CreatePostState {
       selectedUsers: selectedUsers ?? this.selectedUsers,
       place: place ?? this.place,
       isLast: isLast ?? this.isLast,
+      isBiggerThan80: isBiggerThan80 ?? this.isBiggerThan80,
+      isBiggerThen150: isBiggerThen150 ?? this.isBiggerThen150,
+      isBiggerThen120: isBiggerThen120 ?? this.isBiggerThen120,
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/dele
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/delete_twitter_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/edit_twitter_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_global_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_post_comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_twitter_post_usecase.dart';
@@ -98,7 +99,12 @@ class TwitterServiceLocator {
       serviceLocator(),
     ));
 
+    serviceLocator.registerLazySingleton<GetTwitterGlobalFeedUseCase>(() => GetTwitterGlobalFeedUseCase(
+      serviceLocator(),
+    ));
+
     serviceLocator.registerFactory<TwitterCubit>(() => TwitterCubit(
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
