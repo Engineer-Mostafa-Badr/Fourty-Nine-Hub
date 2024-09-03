@@ -32,12 +32,15 @@ class MeetingCubit extends Cubit<MeetingState> {
   //   super.onChange(change);
   // }
 
-  Future<void> addRoom(String roomId,
-      {DateTime? startDate, DateTime? endDate, String? title}) async {
+  Future<void> addRoom(
+    String roomId, {
+    DateTime? startDate,
+    DateTime? endDate,
+    String? title,
+  }) async {
     emit(state.copyWith(status: MeetingStates.loading));
     addRoomUseCase(MeetingParams(
       meetingId: roomId,
-
       /// to [Schedule] meeting
       startedAt: startDate,
       endsAt: endDate,
@@ -90,19 +93,24 @@ class MeetingCubit extends Cubit<MeetingState> {
 
   List<ScheduledMeeting> scheduledMeetingList = [];
   void getScheduledMeetings() {
-    emit(state.copyWith(status: MeetingStates.loading));
-    getScheduledRoomsUseCase(
-            MeetingParams(meetingId: UserCubit.to.state.data!.id))
-        .then((value) {
-      value.fold((l) => emit(state.copyWith(status: MeetingStates.failure)),
-          (r) {
-        scheduledMeetingList = r;
-        getScheduledMeetings();
-        emit(state.copyWith(status: MeetingStates.success));
-      });
-    }).catchError((error) {
-      emit(state.copyWith(status: MeetingStates.failure));
-    });
+    // emit(state.copyWith(status: MeetingStates.loading));
+    // getScheduledRoomsUseCase(MeetingParams(
+    //         meetingId: AppPages
+    //             .router.configuration.navigatorKey.currentContext!
+    //             .read<UserCubit>()
+    //             .state
+    //             .data!
+    //             .id))
+    //     .then((value) {
+    //   value.fold((l) => emit(state.copyWith(status: MeetingStates.failure)),
+    //       (r) {
+    //     scheduledMeetingList = r;
+    //     getScheduledMeetings();
+    //     emit(state.copyWith(status: MeetingStates.success));
+    //   });
+    // }).catchError((error) {
+    //   emit(state.copyWith(status: MeetingStates.failure));
+    // });
   }
 
   Future<void> openWhiteBoard() async {

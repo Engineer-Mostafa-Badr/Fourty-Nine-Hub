@@ -1,22 +1,18 @@
-import 'dart:convert';
-
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 // ignore: unused_import
 import 'package:fourtyninehub/core/data/models/meeting_error_message_model.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/zoom/data/model/room_response_error_model.dart';
 import 'package:fourtyninehub/features/zoom/data/model/schedule_meeting_model.dart';
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
-import 'package:fourtyninehub/routes/pages.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../core/error/failure.dart';
 
 abstract class MeetingDataSource {
-  Future<Either<Failure, void>> addRoom(MeetingParams params);
+  Future<void> addRoom(MeetingParams params);
   Future<Response?> joinRoom(MeetingParams params);
   Future<Either<Failure, void>> endRoom(MeetingParams params);
   Future<Either<Failure, List<ScheduledMeeting>>> getScheduledMeetings(
@@ -29,22 +25,26 @@ class MeetingDataSourceImpl extends MeetingDataSource {
 
   MeetingDataSourceImpl(this.apiConsumer, this._dio);
   @override
-  Future<Either<Failure, void>> addRoom(MeetingParams params) async {
+  Future<void> addRoom(MeetingParams params) async {
     final result =
-        await apiConsumer.post(EndPoints.createMeeting, data: params.toJson());
-    return result.fold((l) {
-      // throw MeetingErrorMessageModel.fromJson(l);
-      return Left(l);
-    }, (r) {
-      return Right(r);
-    });
+        await _dio.post(EndPoints.createMeeting, data: params.toJson());
+    if (result.statusCode == 201) {
+      CliLogger.success('create successfully ${result.statusMessage}');
+      return;
+    } else {
+      CliLogger.error(
+          'failed ${result.statusMessage} cause of ${result.statusCode}');
+      throw 'Meeting Unable to launch';
+    }
   }
 
   @override
   Future<Either<Failure, void>> endRoom(MeetingParams params) async {
-    final result =
-        await apiConsumer.put(EndPoints.endMeeting(params.meetingId));
-    return result.fold((l) => Left(l), (r) => Right(r));
+    // print('deleted');
+    // final result =
+    //     await apiConsumer.put(EndPoints.endMeeting(params.meetingId));
+    // return result.fold((l) => Left(l), (r) => Right(r));
+    throw Exception('UnImplemented Finish Func');
   }
 
   @override

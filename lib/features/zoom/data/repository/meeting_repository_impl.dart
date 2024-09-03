@@ -15,7 +15,7 @@ class MeetingRepositoryImpl extends MeetingRepository {
 
   MeetingRepositoryImpl(this.meetingDataSource);
   @override
-  Future<Either<Failure, void>> addRoom(MeetingParams params) {
+  Future< void> addRoom(MeetingParams params) {
     return meetingDataSource.addRoom(params);
   }
 

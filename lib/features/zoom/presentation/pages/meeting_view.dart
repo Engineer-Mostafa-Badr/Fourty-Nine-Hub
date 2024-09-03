@@ -44,13 +44,13 @@ class MeetingView extends StatelessWidget {
                       label: 'New \n Meeting'.tr(),
                       icon: Icons.video_call,
                       twoLines: true,
-                      onTap: () async {
-                        await newMeeting(cubit);
+                      onTap: ()  {
+                        String rand = genRandNo;
                         if (context.mounted) {
                           context.push(
                             Routes.MEETINGROOM,
                             extra:
-                                ZegoArgs(genRandNo, true, shareScreen: false),
+                                ZegoArgs(rand, true, shareScreen: false),
                           );
                         }
                       },
@@ -260,9 +260,7 @@ class MeetingView extends StatelessWidget {
     return period;
   }
 
-  Future<void> newMeeting(MeetingCubit cubit) async {
-    cubit.addRoom(genRandNo);
-  }
+  
 
   void _showScheduleMeetingBottomSheet(BuildContext context) {
     showModalBottomSheet(
