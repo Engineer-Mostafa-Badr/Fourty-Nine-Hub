@@ -53,7 +53,7 @@ class DoctorCard extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(toBeginningOfSentenceCase(doctor.fullName), style: Styles.mediumText()),
+                            Text(toBeginningOfSentenceCase(doctor.fullName)??'', style: Styles.mediumText()),
 
                             RatingStars(
                               rating: doctor.rating.toDouble(),
