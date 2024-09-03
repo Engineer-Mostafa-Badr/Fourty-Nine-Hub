@@ -3,26 +3,49 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/zego_audio_room_widget.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
 
 class AudioStreamScreen extends StatelessWidget {
   final String liveId;
   final String roomSubject;
   final bool isHost;
-  final int userCount;
   const AudioStreamScreen({
     super.key,
     required this.liveId,
     required this.roomSubject,
     required this.isHost,
-    required this.userCount,
   });
 
   @override
   Widget build(BuildContext context) {
     print('live id is $liveId');
-    return Directionality(
-      textDirection: TextDirection.ltr,
-      child: SafeArea(
+    return SafeArea(
+      child: PopScope(
+        onPopInvoked: (pop) async {
+          // Show the confirmation dialog
+          await showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Are you sure?'),
+              content: const Text('Do you want to leave this screen?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text('No'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    isHost
+                        ? _endRoom(context)
+                        : context.read<ClubVoiceCubit>().leaveRoom(liveId);
+                    Navigator.of(context).pop(true);
+                  },
+                  child: const Text('Yes'),
+                ),
+              ],
+            ),
+          );
+        },
         child: Scaffold(
           body: SingleChildScrollView(
             child: Column(
@@ -36,7 +59,7 @@ class AudioStreamScreen extends StatelessWidget {
                     InkWell(
                       onTap: () {
                         isHost
-                            ? context.read<ClubVoiceCubit>().endRoom(liveId)
+                            ? _endRoom(context)
                             : context.read<ClubVoiceCubit>().leaveRoom(liveId);
                         context.pop();
                       },
@@ -81,33 +104,21 @@ class AudioStreamScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 20.0),
+                const Padding(
+                  padding: EdgeInsets.only(right: 20.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      const SizedBox(
+                      SizedBox(
                         width: 10,
                       ),
-                      const CircleAvatar(
+                      CircleAvatar(
                         radius: 1,
                         backgroundColor: Colors.grey,
                       ),
-                      const SizedBox(
+                      SizedBox(
                         width: 10,
                       ),
-                      Text(
-                        '$userCount here now',
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Icon(
-                        Icons.person_outline_outlined,
-                        color: Colors.grey,
-                      ),
-                      const Spacer(),
                     ],
                   ),
                 ),
@@ -122,5 +133,13 @@ class AudioStreamScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _endRoom(BuildContext context) async {
+    final users = ZegoUIKit().getAllUsers();
+    for (var user in users) {
+      await ZegoUIKit().removeUserFromRoom([user.id]);
+    }
+    context.read<ClubVoiceCubit>().endRoom(liveId);
   }
 }

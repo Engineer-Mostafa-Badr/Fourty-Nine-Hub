@@ -4,13 +4,13 @@ import '../../res/style/app_colors.dart';
 
 ThemeData lightTheme() {
   return ThemeData(
-    primaryColor: AppColors.QUANTITY_COLOR,
+    primaryColor: AppColors.PRIMARY_COLOR,
     scaffoldBackgroundColor: AppColors.AUTH_CONTAINER_COLOR,
     //scaffoldBackgroundColor: Colors.grey[200],
-    colorScheme: ColorScheme.fromSeed(
-      background: Colors.white,
-      seedColor: const Color(0xff0b1035),
-    ),
+    // colorScheme: ColorScheme.fromSeed(
+    //   background: Colors.white,
+    //   seedColor: const Color(0xff0b1035),
+    // ),
     useMaterial3: true,
     appBarTheme: const AppBarTheme(
       color: AppColors.AUTH_CONTAINER_COLOR,
