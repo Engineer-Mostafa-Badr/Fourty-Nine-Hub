@@ -164,6 +164,7 @@ import 'package:fourtyninehub/core/api/api_client_helper_imp.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
+import 'package:fourtyninehub/core/local_storage/local_database_consumer.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/repositories/reels_repository_impl.dart';
@@ -183,6 +184,7 @@ import 'package:fourtyninehub/service_locator/twitter_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../core/api/api_consumer.dart';
 import '../core/local_storage/local_storage_consumer.dart';
@@ -218,6 +220,8 @@ class DI {
         storage: FlutterSecureStorage(),
       ),
     );
+
+    serviceLocator.registerLazySingletonAsync<Database>(() => SQFLiteHelper.instance.database);
 
     await LocalizationService.init();
 
@@ -273,7 +277,6 @@ class DI {
     // Register the TinderRepository as a singleton
     serviceLocator
         .registerLazySingleton<TinderRepository>(() => TinderRepository());
-
 
     // Register the TinderViewCubit and inject the TinderRepository dependency
     serviceLocator.registerFactory<TinderViewCubit>(() =>

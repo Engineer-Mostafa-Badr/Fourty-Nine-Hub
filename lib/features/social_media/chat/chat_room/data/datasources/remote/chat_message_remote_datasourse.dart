@@ -4,7 +4,7 @@ import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/chat_messgaes_model.dart';
 
-abstract class ChatRemoteDataSource {
+abstract class MessagesRemoteDataSource {
   Future<Either<Failure, ChatMessagesModel>> getChatMessages({
     required String chatId,
   });
@@ -15,10 +15,10 @@ abstract class ChatRemoteDataSource {
   });
 }
 
-class ChatRemoteDataSourceImplementation implements ChatRemoteDataSource {
+class MessagesRemoteDataSourceImplementation implements MessagesRemoteDataSource {
   final ApiConsumer _apiConsumer;
 
-  ChatRemoteDataSourceImplementation(this._apiConsumer);
+  MessagesRemoteDataSourceImplementation(this._apiConsumer);
 
   @override
   Future<Either<Failure, ChatMessagesModel>> getChatMessages(

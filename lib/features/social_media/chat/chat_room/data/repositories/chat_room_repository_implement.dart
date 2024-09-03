@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasources/local/chat_message_local_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasources/remote/chat_message_remote_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_request.dart';
@@ -7,8 +8,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import '../models/chat_messgaes_model.dart';
 
 class ChatRoomRepositoryImplementation extends ChatRoomRepository {
-  final ChatRemoteDataSource _chatRemoteDataSource;
-  // final ChatLo
+  final MessagesRemoteDataSource _chatRemoteDataSource;
+  // final MessagesLocalDataSource _chatLocalDataSource;
   ChatRoomRepositoryImplementation(this._chatRemoteDataSource);
 
   @override

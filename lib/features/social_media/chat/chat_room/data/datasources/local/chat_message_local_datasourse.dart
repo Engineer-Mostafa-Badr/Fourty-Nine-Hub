@@ -4,12 +4,19 @@ import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/local_storage/local_database_consumer.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/chat_messgaes_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/chat_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/chat_messgaes_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class MessagesLocalDataSource {
-  Future<Either<Failure, ChatMessagesModel>> getChatMessages({
+  Future<Either<Failure, ChatMessageEntity>> getChatMessages({
     required String chatId,
   });
+
+  Future<Either<Failure, bool>> addMessage(MessageEntity message);
 
   Future<Either<Failure, bool>> deleteMessage({
     required String chatId,
@@ -19,31 +26,43 @@ abstract class MessagesLocalDataSource {
 
 class SQFLiteMessagesLocalDataSourceImplementation
     implements MessagesLocalDataSource {
-  final LocalDatabaseConsumer _database;
+  final Database _database;
 
   SQFLiteMessagesLocalDataSourceImplementation(this._database);
 
   @override
-  Future<Either<Failure, ChatMessagesModel>> getChatMessages(
+  Future<Either<Failure, ChatMessageEntity>> getChatMessages(
       {required String chatId}) async {
-    final response = await _database.getMessages(chatId);
-    // return response.fold((failure) => Left(failure),
-    //     (data) => Right(ChatMessagesModel.fromJson(data['data'])));
-    throw UnimplementedError();
+    try {
+      ChatMessageEntity chatMessageEntity;
+      final messages = await _database.query(DatabaseTables.messages,
+          where: 'chatId = ?', whereArgs: [chatId]);
+      final chat = await _database
+          .query(DatabaseTables.chats, where: 'id = ?', whereArgs: [chatId]);
+      chatMessageEntity = ChatMessageEntity(
+          chat: ChatModel.fromDatabase(chat.first),
+          messages: messages.map((e) => MessageModel.fromDatabase(e)).toList());
+      return Right(chatMessageEntity);
+    } catch (e) {
+      CliLogger.error(e.toString());
+      return const Left(CacheFailure());
+    }
   }
 
   @override
   Future<Either<Failure, bool>> deleteMessage(
       {required String chatId, required String messageId}) async {
-    var data = {
-      "chatId": chatId,
-      "messageId": messageId,
-    };
-    // final response =
-    //     await _apiConsumer.delete(EndPoints.deleteChatMessage, data: data);
-    // return response.fold(
-    //     (failure) => Left(failure), (data) => Right(data['status']));
-
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> addMessage(MessageEntity message) async {
+    try{
+      final result = await _database.insert(DatabaseTables.messages, MessageModel.fromEntity(message).toDatabase());
+      return Right(result > 0);
+    }catch(e){
+      CliLogger.error(e.toString());
+      return const Left(CacheFailure());
+    }
   }
 }

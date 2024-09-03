@@ -24,6 +24,7 @@ class SocialServiceLocator {
     serviceLocator
         .registerLazySingleton<ChatsRemoteDataSource>(() => ChatsRemoteDataSourceImplementation(serviceLocator()));
 
+
     serviceLocator.registerLazySingleton<ChatsRepository>(() => ChatsRepositoryImplementation(serviceLocator()));
 
     serviceLocator.registerFactory<ChatsCubit>(() => ChatsCubit(
@@ -77,7 +78,9 @@ class SocialServiceLocator {
     serviceLocator.registerLazySingleton<ChatRoomRepository>(() => ChatRoomRepositoryImplementation(serviceLocator()));
 
     serviceLocator
-        .registerLazySingleton<ChatRemoteDataSource>(() => ChatRemoteDataSourceImplementation(serviceLocator()));
+        .registerLazySingleton<MessagesRemoteDataSource>(() => MessagesRemoteDataSourceImplementation(serviceLocator()));
+
+
     serviceLocator.registerLazySingleton<GetChatMessagesUseCase>(() => GetChatMessagesUseCase(
           serviceLocator(),
         ));

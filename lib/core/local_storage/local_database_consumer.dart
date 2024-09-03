@@ -1,22 +1,26 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/chat_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-abstract class LocalDatabaseConsumer {
-  Future<Either<Failure, bool>> addMessage(MessageEntity message);
 
-  Future<Either<Failure, bool>> deleteMessage(String messageId);
+class SQFLiteHelper {
+  SQFLiteHelper._privateConstructor();
 
-  Future<Either<Failure, bool>> updateMessage(MessageEntity message);
+  static final SQFLiteHelper instance = SQFLiteHelper._privateConstructor();
 
-  Future<Either<Failure, List<MessageEntity>>> getMessages(String chatId);
-}
-
-class SQFLiteDatabaseConsumer implements LocalDatabaseConsumer {
   static Database? _database;
+
+  // Singleton pattern: ensures a single instance of the database.
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+    _database = await _initDatabase();
+    return _database!;
+  }
 
   Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), 'fourtyninehub.db');
@@ -25,15 +29,9 @@ class SQFLiteDatabaseConsumer implements LocalDatabaseConsumer {
       version: 1,
       onCreate: (db, version) async {
         await _createMessagesTable(db, version);
+        await _createChatsTable(db, version);
       },
     );
-  }
-
-  // Singleton pattern: ensures a single instance of the database.
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _initDatabase();
-    return _database!;
   }
 
   Future<void> _createMessagesTable(Database db, int version) async {
@@ -64,72 +62,25 @@ class SQFLiteDatabaseConsumer implements LocalDatabaseConsumer {
     ''');
   }
 
-  @override
-  Future<Either<Failure, bool>> addMessage(MessageEntity message) async {
-    try {
-      Database db = await database;
-      final result =
-          await db.insert(DatabaseTables.messages, MessageModel.fromEntity(message).toDatabase());
-      if (result == 0) {
-        return const Right(false);
-      } else {
-        return const Right(true);
-      }
-    } catch (e) {
-      CliLogger.error(e.toString());
-      return const Left(CacheFailure());
-    }
-  }
-
-  @override
-  Future<Either<Failure, bool>> deleteMessage(String messageId) async {
-    try {
-      Database db = await database;
-      final result = await db.delete(DatabaseTables.messages,
-          where: 'id = ?', whereArgs: [messageId]);
-      if (result == 0) {
-        return const Right(false);
-      } else {
-        return const Right(true);
-      }
-    } catch (e) {
-      CliLogger.error(e.toString());
-      return const Left(CacheFailure());
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<MessageEntity>>> getMessages(
-      String chatId) async {
-    try {
-      Database db = await database;
-      final result = await db.query(DatabaseTables.messages,
-          where: 'chatId = ?', whereArgs: [chatId]);
-      return Right(result.map((e) => MessageModel.fromDatabase(e)).toList());
-    } catch (e) {
-      CliLogger.error(e.toString());
-      return const Left(CacheFailure());
-    }
-  }
-
-  @override
-  Future<Either<Failure, bool>> updateMessage(MessageEntity message) async {
-    try {
-      Database db = await database;
-      final result = await db.update(DatabaseTables.messages, MessageModel.fromEntity(message).toDatabase(),
-          where: 'id = ?', whereArgs: [message.id]);
-      if (result == 0) {
-        return const Right(false);
-      } else {
-        return const Right(true);
-      }
-    }catch(e){
-      CliLogger.error(e.toString());
-      return const Left(CacheFailure());
-    }
+  Future<void> _createChatsTable(Database db, int version) async {
+    await db.execute('''
+      CREATE TABLE ${DatabaseTables.chats}(
+        id TEXT,
+        contactId TEXT,
+        contactAvatar TEXT,
+        contactName TEXT,
+        privacy TEXT,
+        type TEXT,
+        categoryId TEXT,
+        createdAt TEXT,
+        updatedAt TEXT,
+        lastMessage TEXT
+      )
+    ''');
   }
 }
 
 abstract class DatabaseTables {
   static const messages = 'messages';
+  static const chats = 'chats';
 }
