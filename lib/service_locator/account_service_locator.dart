@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/w
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_competitions_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_history_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:get_it/get_it.dart';
 import '../features/account_taps/account/data/repositories/account_repo_impl.dart';
@@ -81,5 +82,9 @@ class AccountServiceLocator {
     serviceLocator.registerFactory<WalletCubit>(() =>
         WalletCubit(serviceLocator(), serviceLocator(), serviceLocator())
           ..loadData());
+
+    serviceLocator.registerFactory<GiftCubit>(() =>
+    GiftCubit(serviceLocator(), serviceLocator())
+      ..loadData());
   }
 }

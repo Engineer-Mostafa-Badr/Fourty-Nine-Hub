@@ -13,11 +13,17 @@ class WinnerCubit extends Cubit<WinnerState> {
  final CompetitionRepo competitionRepo;
   static WinnerCubit get(context)=>BlocProvider.of(context);
 
-  Timer? _pollingTimer;
+  //Timer? _pollingTimer;
 
   void fetchWinners(context)async{
     emit(WinnersLoadingState());
-    _startPolling(context);
+    var result =await competitionRepo.fetchWinners();
+
+    result.fold((failure) {
+      emit(WinnersErrorState(errMessage: getFailureMessage(failure, context)));
+    }, (winner) {
+      emit(WinnersSuccessState(winnersModel: winner));
+    });
 
   }
 
@@ -30,18 +36,18 @@ class WinnerCubit extends Cubit<WinnerState> {
   //   });
   // }
 
-  void _startPolling(context) {
-    _pollingTimer?.cancel();
-
-    _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
-      var result =await competitionRepo.fetchWinners();
-
-      result.fold((failure) {
-        emit(WinnersErrorState(errMessage: getFailureMessage(failure, context)));
-      }, (winner) {
-        emit(WinnersSuccessState(winnersModel: winner));
-      });
-    });
-  }
+  // void _startPolling(context) {
+  //   _pollingTimer?.cancel();
+  //
+  //   _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
+  //     var result =await competitionRepo.fetchWinners();
+  //
+  //     result.fold((failure) {
+  //       emit(WinnersErrorState(errMessage: getFailureMessage(failure, context)));
+  //     }, (winner) {
+  //       emit(WinnersSuccessState(winnersModel: winner));
+  //     });
+  //   });
+  // }
 
 }

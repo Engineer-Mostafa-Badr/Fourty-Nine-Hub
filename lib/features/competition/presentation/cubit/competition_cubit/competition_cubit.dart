@@ -13,26 +13,32 @@ class CompetitionCubit extends Cubit<CompetitionState> {
  final CompetitionRepo competitionRepo;
   static CompetitionCubit get(context)=>BlocProvider.of(context);
 
-  Timer? _pollingTimer;
+  //Timer? _pollingTimer;
 
   void fetchCompetition(context)async{
     emit(CompetitionLoadingState());
-    _startPolling(context);
-  }
-
-  void _startPolling(context) {
-    _pollingTimer?.cancel();
-
-    // Start polling every 10 seconds (adjust the interval as needed)
-    _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
-      var result =await competitionRepo.fetchCompetition();
-
-      result.fold((failure) {
-        emit(CompetitionErrorState(errMessage: getFailureMessage(failure, context)));
-        print(getFailureMessage(failure, context));
-      }, (competition) {
-        emit(CompetitionSuccessState(competitionModel: competition));
-      });
+    var result =await competitionRepo.fetchCompetition();
+    result.fold((failure) {
+      emit(CompetitionErrorState(errMessage: getFailureMessage(failure, context)));
+      print(getFailureMessage(failure, context));
+    }, (competition) {
+      emit(CompetitionSuccessState(competitionModel: competition));
     });
   }
+
+  // void _startPolling(context) {
+  //   _pollingTimer?.cancel();
+  //
+  //   // Start polling every 10 seconds (adjust the interval as needed)
+  //   _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
+  //     var result =await competitionRepo.fetchCompetition();
+  //
+  //     result.fold((failure) {
+  //       emit(CompetitionErrorState(errMessage: getFailureMessage(failure, context)));
+  //       print(getFailureMessage(failure, context));
+  //     }, (competition) {
+  //       emit(CompetitionSuccessState(competitionModel: competition));
+  //     });
+  //   });
+  // }
 }

@@ -25,11 +25,12 @@ class PhotoPostContent extends StatelessWidget {
         }
       },
       builder: (BuildContext context, state) {
-        var data=CompanyAdvertiseCubit.get(context).data;
-        if(data.isNotEmpty) {
-          return Padding(
+       return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: PaginationView<Advertises>(
+            emptyWidget: Text(LocaleKeys.noPhotoPosts.localize,
+            style: Styles.mediumText(),
+            ),
             build: (scrollController, data) {
               return ListView.separated(
                 controller: scrollController,
@@ -53,13 +54,6 @@ class PhotoPostContent extends StatelessWidget {
             },
           ),
         );
-        }
-          return Center(
-            child: Text(
-              LocaleKeys.noPhotoPosts.localize,
-              style: Styles.mediumText(fontSize: 34),
-            ),
-          );
       },
     );
   }

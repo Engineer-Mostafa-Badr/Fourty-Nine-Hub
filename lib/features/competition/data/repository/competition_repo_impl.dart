@@ -16,7 +16,7 @@ class CompetitionRepoImpl implements CompetitionRepo{
     try{
       String? accessToken = await TokenManager.getAccessToken();
       String? refreshToken = await TokenManager.getRefreshToken();
-      var data=await apiService.get(url: 'api/v1/subscriber/competitions',token: accessToken);
+      var data=await apiService.get(url: 'api/v1/subscriber/competitionsSubscriber',token: accessToken);
 
       var competition=CompetitionModel.fromJson(data);
 

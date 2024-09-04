@@ -31,6 +31,10 @@ class EndPoints {
   static String deleteMainCategoryFromFavorite(String id) =>
       '/favorite-category/$id';
 
+
+  static const getGift= '';
+
+  
   static const getWheel = '/wheels/random';
   static const spinWheel = '/wheels/spin/';
   static const wheelWallet = '/wheel/wallets/my/wallet';
