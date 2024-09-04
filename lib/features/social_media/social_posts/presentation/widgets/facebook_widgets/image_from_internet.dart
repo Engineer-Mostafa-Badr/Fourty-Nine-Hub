@@ -12,12 +12,15 @@ class ImageFromInternet extends StatelessWidget {
       this.width,
       this.height,
       this.borderRadius,
-      this.fromFile = false});
+      this.fromFile = false,
+      this.isCircle = false,
+      });
   final String image;
   final double? width;
   final double? height;
   final BorderRadius? borderRadius;
   final bool? fromFile;
+  final bool? isCircle;
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
@@ -27,10 +30,12 @@ class ImageFromInternet extends StatelessWidget {
         width: width,
         decoration: BoxDecoration(
           borderRadius: borderRadius,
+          shape: isCircle==true?BoxShape.circle:BoxShape.rectangle,
           image: DecorationImage(
             image: imageProvider,
             fit: BoxFit.fill,
           ),
+
         ),
       ),
       errorWidget: (context, url, error) => Container(
@@ -39,6 +44,7 @@ class ImageFromInternet extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           borderRadius: borderRadius,
+          shape: isCircle==true?BoxShape.circle:BoxShape.rectangle,
           color: AppColors.PRIMARY_COLOR,
           image: fromFile == true
               ? DecorationImage(
@@ -58,6 +64,7 @@ class ImageFromInternet extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: borderRadius,
           color: AppColors.PRIMARY_COLOR,
+          shape: isCircle==true?BoxShape.circle:BoxShape.rectangle,
           image: DecorationImage(
             image: AssetImage(Assets.logo),
             fit: BoxFit.contain,
