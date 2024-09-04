@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/data/datasources/wall
 import 'package:fourtyninehub/features/account_taps/wallet/data/repositories/wallet_repo_impl.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/wallet_repo.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_competitions_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_gifts_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_history_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
@@ -30,6 +31,7 @@ class AccountServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     serviceLocator.registerLazySingleton<AccountRemoteDataSource>(
         () => AccountRemoteDataSourceImpl(serviceLocator()));
+
 
     serviceLocator.registerLazySingleton<WalletRemoteDataSouce>(
         () => WalletRemoteDataSouceImpl(serviceLocator()));
@@ -63,6 +65,8 @@ class AccountServiceLocator {
         () => GetCompetitionsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetWalletUseCase>(
         () => GetWalletUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetWalletGiftsUseCase>(
+        () => GetWalletGiftsUseCase(serviceLocator()));
 
     serviceLocator.registerFactory<FavouriteAdsCubit>(
         () => FavouriteAdsCubit(serviceLocator())..loadData());
@@ -84,7 +88,7 @@ class AccountServiceLocator {
           ..loadData());
 
     serviceLocator.registerFactory<GiftCubit>(() =>
-    GiftCubit(serviceLocator(), serviceLocator())
+    GiftCubit(serviceLocator(),)
       ..loadData());
   }
 }

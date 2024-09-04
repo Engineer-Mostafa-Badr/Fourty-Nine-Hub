@@ -7,15 +7,12 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/g
 class GiftRepositoryImpl implements GiftRepository{
   final GiftRemoteDataSource remoteDataSource;
 
-  GiftRepositoryImpl(this.remoteDataSource);
-  @override
-  Future<Either<Failure, List<CompetitionWallet>>> fetchCompetitionsWallet() {
-    return remoteDataSource.fetchCompetitionsWallet();
-  }
+  GiftRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, GiftWallet>> fetchGiftWallet() {
+  Future<Either<Failure, GiftEntity>> fetchGiftWallet() {
     return remoteDataSource.fetchGiftWallet();
   }
+
 
 }

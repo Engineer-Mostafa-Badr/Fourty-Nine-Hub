@@ -32,7 +32,7 @@ class EndPoints {
       '/favorite-category/$id';
 
 
-  static const getGift= '';
+  static const getGift= '/subscriber/competitions';
 
   
   static const getWheel = '/wheels/random';

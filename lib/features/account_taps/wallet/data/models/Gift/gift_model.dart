@@ -1,27 +1,19 @@
+import 'package:fourtyninehub/features/account_taps/wallet/data/models/competitons_wallet_model.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/data/models/gift_wallet_model.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/gift_entities.dart';
 
-class GiftModelModel<T> extends GiftEntities<T> {
-  const GiftModelModel({
-    required super.status,
-    required super.message,
-    required super.data,
+class GiftModelModel extends GiftEntity {
+  GiftModelModel({
+    required super.giftWallet,
+    required super.competitionsWallet,
   });
 
-  // Factory method to create a BaseResponseModel from JSON
-  factory GiftModelModel.fromJson(Map<String, dynamic> json, T Function(Map<String, dynamic>) fromJsonT) {
+  factory GiftModelModel.fromJson(Map<String, dynamic> json) {
     return GiftModelModel(
-      status: json['status'],
-      message: json['message'],
-      data: fromJsonT(json['data']),
+      giftWallet: GiftWalletModel.fromJson(json['giftWallet']),
+      competitionsWallet: (json['competitionsWallet'] as List)
+          .map((e) => CompetitionsWalletModel.fromJson(e))
+          .toList()
     );
-  }
-
-  // Method to convert BaseResponseModel to JSON
-  Map<String, dynamic> toJson(Map<String, dynamic> Function(T) toJsonT) {
-    return {
-      'status': status,
-      'message': message,
-      'data': toJsonT(data),
-    };
   }
 }
