@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/enums/wallet_types_enums.dart';
 import '../../../core/localization/locale_keys.g.dart';
+import '../../../features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/styles.dart';
 import '../stateless/labels/label.dart';
@@ -70,7 +71,11 @@ class WalletWidget extends StatelessWidget {
           const Sizer(),
           buildItem(
             () {
-              context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
+              //context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const GiftWalletView()));
             },
             LocaleKeys.gift.tr(),
             '300',

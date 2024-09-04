@@ -66,8 +66,8 @@ class _NormalWalletViewState extends State<NormalWalletView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const WalletCardWidget(
-                    balance: 400,
+                   const WalletCardWidget(
+                    balance: '400',
                     type: WalletTypes.mainWallet,
 
                     // target: 1002,

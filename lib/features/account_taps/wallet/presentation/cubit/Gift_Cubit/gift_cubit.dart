@@ -19,7 +19,12 @@ class GiftCubit extends Cubit<GiftState>{
    response.fold((l) {
      emit(state.copyWith(failure: l, status: GiftStates.error));
    }, (data) {
+     print('///////////////////////////////////////');
+     print(data.giftWallet.userId);
+     print('///////////////////////////////////////');
      emit(state.copyWith(gift: data));
+
+
    });
  }
 

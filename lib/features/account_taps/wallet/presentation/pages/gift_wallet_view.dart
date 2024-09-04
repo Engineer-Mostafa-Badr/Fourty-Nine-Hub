@@ -31,8 +31,8 @@ class GiftWalletView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const WalletCardWidget(
-                      balance: 300,
+                     WalletCardWidget(
+                      balance: '${state.gift?.giftWallet.amount ??''}',
                       type: WalletTypes.giftWallet,
                     ),
                     const Sizer(),

@@ -10,8 +10,12 @@ import 'package:fourtyninehub/features/account_taps/lists/domain/usecases/get_bl
 import 'package:fourtyninehub/features/account_taps/lists/domain/usecases/get_followers_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/lists/domain/usecases/get_friend_requests_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/lists/domain/usecases/get_friends_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/data/datasources/Gift/gift_remote_data_source.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/datasources/wallet_remote_datasource.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/data/models/gift_wallet_model.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/data/repositories/Gift/gift_repository_impl.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/repositories/wallet_repo_impl.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/gift_repository.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/wallet_repo.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_competitions_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_gifts_use_case.dart';
@@ -32,6 +36,9 @@ class AccountServiceLocator {
     serviceLocator.registerLazySingleton<AccountRemoteDataSource>(
         () => AccountRemoteDataSourceImpl(serviceLocator()));
 
+    serviceLocator.registerLazySingleton<GiftRemoteDataSource>(
+            () => GiftRemoteDataSourceImpl(serviceLocator()));
+
 
     serviceLocator.registerLazySingleton<WalletRemoteDataSouce>(
         () => WalletRemoteDataSouceImpl(serviceLocator()));
@@ -42,6 +49,9 @@ class AccountServiceLocator {
         () => ListsRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<WalletRepo>(
         () => WalletRepoImpl(serviceLocator()));
+
+    serviceLocator.registerLazySingleton<GiftRepository>(
+            () => GiftRepositoryImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<AccountRepo>(
         () => AccountRepoImpl(serviceLocator()));

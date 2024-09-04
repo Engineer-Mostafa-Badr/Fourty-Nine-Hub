@@ -71,211 +71,216 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
               },
               icon: Icon(
                 Icons.access_time_outlined,
-                color: Theme
-                    .of(context)
-                    .primaryColor,
+                color: Theme.of(context).primaryColor,
               ))
         ],
       ),
-      body:context.read<UserCubit>().isLoggedIn?
-      BlocBuilder<AdvertisePriceCubit, AdvertisePriceState>(
-        builder: (context, state) {
-          if (state is AdvertisePriceSuccess) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Expanded(
+      body: context.read<UserCubit>().isLoggedIn
+          ? BlocBuilder<AdvertisePriceCubit, AdvertisePriceState>(
+              builder: (context, state) {
+                if (state is AdvertisePriceSuccess) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        CustomContainerAdvertise(
-                          filter: 'written',
-                          title: LocaleKeys.textOnly.localize,
-                          price: state.advertisePriceModel.data!
-                              .advertisementPostPrice!,
-                          context: context,
-                          function: () {
-                            _updateTotalPrice(state.advertisePriceModel.data!
-                                .advertisementPostPrice!);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      CreatePostCompany(
-                                        picture: false,
-                                        title: LocaleKeys.createTextPost.localize,
-                                        type: 'written',
-                                        totalPrice: state.advertisePriceModel
-                                            .data!.advertisementPostPrice!,
-                                      )),
-                            );
-                          },
-                        ),
-                        CustomContainerAdvertise(
-                          filter: 'photo',
-                          title: LocaleKeys.pictureOnly.localize,
-                          price: state.advertisePriceModel.data!
-                              .advertisementPhotoPrice!,
-                          context: context,
-                          function: () {
-                            _updateTotalPrice(state.advertisePriceModel.data!
-                                .advertisementPhotoPrice!);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      CreatePostCompany(
-                                        text: false,
-                                        title: LocaleKeys.createPicturePost.localize,
-                                        type: 'photo',
-                                        totalPrice: state.advertisePriceModel
-                                            .data!.advertisementPhotoPrice!,
-                                      )),
-                            );
-                          },
-                        ),
-                        CustomContainerAdvertise(
-                          filter: 'photo_written',
-                          title: LocaleKeys.textWithPictures.localize,
-                          price: state.advertisePriceModel.data!
-                              .advertisementPostAndPhotoPrice!,
-                          context: context,
-                          function: () {
-                            _updateTotalPrice(state.advertisePriceModel.data!
-                                .advertisementPostAndPhotoPrice!);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      CreatePostCompany(
-                                        title: LocaleKeys.createPost.localize,
-                                        type: 'photo_written',
-                                        totalPrice: state
-                                            .advertisePriceModel
-                                            .data!
-                                            .advertisementPostAndPhotoPrice!,
-                                      )),
-                            );
-                          },
-                        ),
-                        CustomContainerAdvertise(
-                          filter: 'reel',
-                          title: LocaleKeys.reel.localize,
-                          price: state.advertisePriceModel.data!
-                              .advertisementReelPrice!,
-                          context: context,
-                          function: () {
-                            _updateTotalPrice(state.advertisePriceModel.data!
-                                .advertisementReelPrice!);
-
-                            Navigator.push(context,
-                              MaterialPageRoute(builder: (context) =>const ReelsRecordingScreen(voiceUrl: '',)),);
-                            // Handle reel creation logic here
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsetsDirectional.symmetric(
-                              vertical: 10, horizontal: 14),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Theme
-                                .of(context)
-                                .primaryColor,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
+                        Expanded(
+                          child: Column(
                             children: [
-                              Text(
-                                LocaleKeys.total.localize,
-                                style: Styles.headerText(
-                                    color: Theme
-                                        .of(context)
-                                        .scaffoldBackgroundColor),
+                              CustomContainerAdvertise(
+                                filter: 'written',
+                                title: LocaleKeys.textOnly.localize,
+                                price: state.advertisePriceModel.data!
+                                    .advertisementPostPrice!,
+                                context: context,
+                                function: () {
+                                  _updateTotalPrice(state.advertisePriceModel
+                                      .data!.advertisementPostPrice!);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CreatePostCompany(
+                                              picture: false,
+                                              title: LocaleKeys
+                                                  .createTextPost.localize,
+                                              type: 'written',
+                                              totalPrice: state
+                                                  .advertisePriceModel
+                                                  .data!
+                                                  .advertisementPostPrice!,
+                                            )),
+                                  );
+                                },
                               ),
-                              const Spacer(),
-                              Text(
-                                '$_totalPrice',
-                                style: Styles.mediumText(
-                                    color: Theme
-                                        .of(context)
-                                        .scaffoldBackgroundColor),
+                              CustomContainerAdvertise(
+                                filter: 'photo',
+                                title: LocaleKeys.pictureOnly.localize,
+                                price: state.advertisePriceModel.data!
+                                    .advertisementPhotoPrice!,
+                                context: context,
+                                function: () {
+                                  _updateTotalPrice(state.advertisePriceModel
+                                      .data!.advertisementPhotoPrice!);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CreatePostCompany(
+                                              text: false,
+                                              title: LocaleKeys
+                                                  .createPicturePost.localize,
+                                              type: 'photo',
+                                              totalPrice: state
+                                                  .advertisePriceModel
+                                                  .data!
+                                                  .advertisementPhotoPrice!,
+                                            )),
+                                  );
+                                },
+                              ),
+                              CustomContainerAdvertise(
+                                filter: 'photo_written',
+                                title: LocaleKeys.textWithPictures.localize,
+                                price: state.advertisePriceModel.data!
+                                    .advertisementPostAndPhotoPrice!,
+                                context: context,
+                                function: () {
+                                  _updateTotalPrice(state.advertisePriceModel
+                                      .data!.advertisementPostAndPhotoPrice!);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CreatePostCompany(
+                                              title: LocaleKeys
+                                                  .createPost.localize,
+                                              type: 'photo_written',
+                                              totalPrice: state
+                                                  .advertisePriceModel
+                                                  .data!
+                                                  .advertisementPostAndPhotoPrice!,
+                                            )),
+                                  );
+                                },
+                              ),
+                              CustomContainerAdvertise(
+                                filter: 'reel',
+                                title: LocaleKeys.reel.localize,
+                                price: state.advertisePriceModel.data!
+                                    .advertisementReelPrice!,
+                                context: context,
+                                function: () {
+                                  _updateTotalPrice(state.advertisePriceModel
+                                      .data!.advertisementReelPrice!);
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ReelsRecordingScreen(
+
+                                              voiceUrl: '',
+                                            )),
+                                  );
+                                  // Handle reel creation logic here
+                                },
                               ),
                             ],
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsetsDirectional.symmetric(
-                              vertical: 10, horizontal: 10),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: AppColors.SECONDARY_COLOR,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Center(
-                            child: Text(
-                              LocaleKeys.pay.localize,
-                              style: Styles.headerText(
-                                  color: AppColors.AUTH_CONTAINER_COLOR,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsetsDirectional.symmetric(
+                                    vertical: 10, horizontal: 14),
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      LocaleKeys.total.localize,
+                                      style: Styles.headerText(
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      '$_totalPrice',
+                                      style: Styles.mediumText(
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
+                            const SizedBox(width: 5),
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsetsDirectional.symmetric(
+                                    vertical: 10, horizontal: 10),
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: AppColors.SECONDARY_COLOR,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    LocaleKeys.pay.localize,
+                                    style: Styles.headerText(
+                                      color: AppColors.AUTH_CONTAINER_COLOR,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
+                      ],
+                    ),
+                  );
+                } else if (state is AdvertisePriceError) {
+                  return Center(
+                    child: Text(
+                      state.errMessage,
+                      textAlign: TextAlign.center,
+                      style: Styles.mediumText(),
+                    ),
+                  );
+                }
+                return const Center(child: CircularProgressIndicator());
+              },
+            )
+          : Center(
+              child: SingleChildScrollView(
+                child: GestureDetector(
+                  onTap: () => context.push(Routes.LOGIN),
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    width: 300,
+                    height: 300,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Theme.of(context).primaryColor,
+                        width: 4, // Width of the border
                       ),
-                    ],
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Please Login, Register to enjoy the app',
+                        style: Styles.headerText(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ),
-                ],
-              ),
-            );
-          } else if (state is AdvertisePriceError) {
-            return Center(
-              child: Text(
-                state.errMessage,
-                textAlign: TextAlign.center,
-                style: Styles.mediumText(),
-              ),
-            );
-          }
-          return const Center(child: CircularProgressIndicator());
-        },
-      ):Center(
-        child: SingleChildScrollView(
-          child: GestureDetector(
-            onTap: () => context.push(Routes.LOGIN),
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              width: 300,
-              height: 300,
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Theme.of(context).primaryColor,
-                  width: 4, // Width of the border
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  'Please Login, Register to enjoy the app',
-                  style: Styles.headerText(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ),
-                  textAlign: TextAlign.center,
                 ),
               ),
             ),
-          )
-          ,
-        ),
-      ),
     );
   }
 }

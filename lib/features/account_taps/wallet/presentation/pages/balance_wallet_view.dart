@@ -32,7 +32,7 @@ class BalanceWalletView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const WalletCardWidget(
-                    balance: 900,
+                    balance: '900',
                     target: 1002,
                     type: WalletTypes.balance,
                   ),
