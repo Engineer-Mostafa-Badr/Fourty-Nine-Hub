@@ -29,7 +29,10 @@ class MeetingParams extends Equatable {
   });
   //post method data
   Map<String, dynamic> toJson() => {
-        'roomId': meetingId
+        'roomId': meetingId,
+        'title': title,
+        'startDate': startedAt?.toUtc().toString(),
+        'endDate': startedAt?.toUtc().toString(),
       };
 
   @override

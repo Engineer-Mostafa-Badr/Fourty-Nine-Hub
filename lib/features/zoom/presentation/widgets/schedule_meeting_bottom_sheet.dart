@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class ScheduleMeetingBottomSheet extends StatefulWidget {
-  final String genRandNo;
-
-  const ScheduleMeetingBottomSheet(this.genRandNo, {super.key});
+  const ScheduleMeetingBottomSheet({super.key});
 
   @override
   _ScheduleMeetingBottomSheetState createState() =>
@@ -23,7 +24,7 @@ class _ScheduleMeetingBottomSheetState
   final _titleController = TextEditingController();
   final _dateFormat = DateFormat('yyyy-MM-dd');
   final _timeFormat = DateFormat('HH:mm');
-
+  final FocusNode focusNode = FocusNode();
   Future<void> _selectDateTime(BuildContext context, DateTime? initialDateTime,
       ValueChanged<DateTime?> onDateTimeSelected) async {
     final selectedDate = await showDatePicker(
@@ -52,95 +53,111 @@ class _ScheduleMeetingBottomSheetState
   @override
   void dispose() {
     _titleController.dispose();
+    focusNode.dispose();
     super.dispose();
   }
 
   @override
+  initState() {
+    focusNode.requestFocus();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(
-        left: 16.0,
-        right: 16.0,
-        top: 16.0,
-        bottom: MediaQuery.of(context).viewInsets.bottom +
-            16.0, // Adjust for the keyboard
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        // crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Schedule Meeting',
-              style: Theme.of(context).textTheme.bodyLarge),
-          const SizedBox(height: 16.0),
-          TextField(
-            controller: _titleController,
-            decoration: const InputDecoration(
-              labelText: 'Meeting Title',
-              border: OutlineInputBorder(),
-              fillColor: Colors.white,
+    return SingleChildScrollView(
+      child: Container(
+        // height: context.screenHeight,
+        padding: EdgeInsets.only(
+          left: 16.0,
+          right: 16.0,
+          top: 50.0,
+          bottom: MediaQuery.of(context).viewInsets.bottom +
+              16.0, // Adjust for the keyboard
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Schedule Meeting',
+                style: Theme.of(context).textTheme.bodyLarge),
+            const SizedBox(height: 16.0),
+            TextField(
+              focusNode: focusNode,
+              controller: _titleController,
+              decoration: const InputDecoration(
+                labelText: 'Meeting Title',
+                border: OutlineInputBorder(),
+                fillColor: Colors.white,
+              ),
             ),
-          ),
-          const SizedBox(height: 16.0),
-          _buildDateTimeSelection(
-            title: 'Start Date & Time',
-            dateTime: _startDateTime,
-            onTap: () => _selectDateTime(context, _startDateTime,
-                (dateTime) => setState(() => _startDateTime = dateTime)),
-          ),
-          SizedBox(height: 16.0.zH),
-          _buildDateTimeSelection(
-            title: 'End Date & Time',
-            dateTime: _endDateTime,
-            onTap: () => _selectDateTime(context, _endDateTime,
-                (dateTime) => setState(() => _endDateTime = dateTime)),
-          ),
-          const SizedBox(height: 16.0),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent[700]!,
-                minimumSize: Size(MediaQuery.sizeOf(context).width / 1.2, 60)),
-            onPressed: () async {
-              final title = _titleController.text;
-              if (title.isNotEmpty &&
-                  _startDateTime != null &&
-                  _endDateTime != null) {
-                // Process the meeting details
-                print('Meeting Title: $title');
-                print('Start DateTime: $_startDateTime');
-                print('id: ${widget.genRandNo}');
-                print('End DateTime: $_endDateTime');
-                if (_titleController.text.isNotEmpty &&
-                    _endDateTime != null &&
-                    _startDateTime != null) {
-                  if (_endDateTime!.isBefore(_startDateTime!)) {
-                    showErrorMessage(
-                        context, 'Start Date must be before End Date');
-                    return;
+            const SizedBox(height: 16.0),
+            _buildDateTimeSelection(
+              title: 'Start Date & Time',
+              dateTime: _startDateTime,
+              onTap: () => _selectDateTime(context, _startDateTime,
+                  (dateTime) => setState(() => _startDateTime = dateTime)),
+            ),
+            SizedBox(height: 16.0.zH),
+            _buildDateTimeSelection(
+              title: 'End Date & Time',
+              dateTime: _endDateTime,
+              onTap: () => _selectDateTime(context, _endDateTime,
+                  (dateTime) => setState(() => _endDateTime = dateTime)),
+            ),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.PRIMARY_COLOR,
+                  minimumSize:
+                      Size(MediaQuery.sizeOf(context).width / 1.2, 60)),
+              onPressed: () async {
+                final title = _titleController.text;
+                if (title.isNotEmpty &&
+                    _startDateTime != null &&
+                    _endDateTime != null) {
+                  // Process the meeting details
+                  // print('Meeting Title: $title');
+                  // print('Start DateTime: $_startDateTime');
+                  // print('id: ${widget.genRandNo}');
+                  // print('End DateTime: $_endDateTime');
+                  if (_titleController.text.isNotEmpty &&
+                      _endDateTime != null &&
+                      _startDateTime != null) {
+                    if (_endDateTime!.isBefore(_startDateTime!)) {
+                      showErrorMessage(
+                          context, 'Start Date must be before End Date');
+                      context.pop();
+                      return;
+                    }
+                    if (_startDateTime!.isBefore(DateTime.now())) {
+                      showErrorMessage(
+                          context, 'Start Date must be in the future');
+                      context.pop();
+                      return;
+                    }
+                    await context.read<MeetingCubit>().createNewMeeting(
+                          startTime: _startDateTime,
+                          title: _titleController.text.trim(),
+                          endTime: _endDateTime,
+                        );
+
+                    if (context.mounted)
+                      context.pushReplacementNamed(Routes.ZOOM);
+                  } else {
+                    context.pop();
+                    showErrorMessage(context, 'Please fill all fields');
                   }
-                  if (_startDateTime!.isBefore(DateTime.now())) {
-                    showErrorMessage(
-                        context, 'Start Date must be in the future');
-                    return;
-                  }
-                  // await context.read<MeetingCubit>().createNewMeeting(
-                  //       widget.genRandNo,
-                  //       startDate: _startDateTime,
-                  //       title: _titleController.text.trim(),
-                  //       endDate: _endDateTime,
-                  //     );
-                } else {
-                  showErrorMessage(context, 'Please fill the all fields');
                 }
-                context.pop();
-              }
-              // Navigator.pop(context);
-            },
-            child: const Text(
-              'Schedule',
-              style: TextStyle(color: Colors.white),
+                // Navigator.pop(context);
+              },
+              child: const Text(
+                'Schedule',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

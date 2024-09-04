@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.da
 import 'package:fourtyninehub/features/zoom/domain/usecases/end_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/get_scheuled_rooms_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/join_room_use_case.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../routes/pages.dart';
@@ -37,18 +38,32 @@ class MeetingCubit extends Cubit<MeetingState> {
     return liveId;
   }
 
-  Future<bool> createNewMeeting() async {
+  Future<bool> createNewMeeting({
+    DateTime? startTime,
+    DateTime? endTime,
+    String? title,
+  }) async {
     meetingId = genRandNo;
-    final response = await addRoomUseCase(MeetingParams(meetingId: meetingId));
+    final response = await addRoomUseCase(MeetingParams(
+      meetingId: meetingId,
+      endsAt: endTime,
+      startedAt: startTime,
+      title: title,
+    ));
+    emit(state.copyWith(status: MeetingStates.loading));
     bool isAdd = false;
     response.fold(
         (l) => emit(state.copyWith(status: MeetingStates.failure, failure: l)),
-        (r) {
-      print("object $r}");
-      isAdd = r;
+        (r) async {
+      print("object $r");
       emit(state.copyWith(status: MeetingStates.success));
+      if (startTime != null) {
+        await getScheduledMeetings();
+        isAdd = true;
+      }
     });
-    print(isAdd);
+
+    // print(isAdd);
     return isAdd;
   }
 
@@ -67,6 +82,7 @@ class MeetingCubit extends Cubit<MeetingState> {
     }, (r) {
       print("object $r}");
       isAdd = r;
+
       emit(state.copyWith(status: MeetingStates.success));
     });
     print(isAdd);
@@ -76,44 +92,42 @@ class MeetingCubit extends Cubit<MeetingState> {
   BuildContext _context() =>
       AppPages.router.configuration.navigatorKey.currentContext!;
 
-  // @override
-  // void onChange(Change<MeetingState> change) {
-  //   debugPrint('change is ${change.currentState}');
-  //   debugPrint('change next ${change.nextState}');
-  //   super.onChange(change);
-  // }
+  @override
+  void onChange(Change<MeetingState> change) {
+    debugPrint('change is ${change.currentState.status}');
+    debugPrint('change next ${change.nextState.status}');
+    super.onChange(change);
+  }
 
   Future<void> endRoom(String roomId) async {
     emit(state.copyWith(status: MeetingStates.loading));
     await endRoomUseCase(MeetingParams(meetingId: roomId)).then((value) {
-      print('room Ended');
+      // print('room Ended');
       emit(state.copyWith(status: MeetingStates.success));
     }).catchError((error) {
-      print('room Not Ended');
+      // print('room Not Ended');
       emit(state.copyWith(status: MeetingStates.failure));
       throw '';
     });
   }
 
-  List<ScheduledMeeting> scheduledMeetingList = [];
-  void getScheduledMeetings() {
+  Future<void> getScheduledMeetings() async {
     emit(state.copyWith(status: MeetingStates.loading));
-    getScheduledRoomsUseCase(MeetingParams(
-            meetingId: AppPages
-                .router.configuration.navigatorKey.currentContext!
-                .read<UserCubit>()
-                .state
-                .data!
-                .id))
-        .then((value) {
-      value.fold((l) => emit(state.copyWith(status: MeetingStates.failure)),
-          (r) {
-        scheduledMeetingList = r;
-        getScheduledMeetings();
-        emit(state.copyWith(status: MeetingStates.success));
-      });
-    }).catchError((error) {
-      emit(state.copyWith(status: MeetingStates.failure));
+    var result = await getScheduledRoomsUseCase(MeetingParams(
+      meetingId: UserCubit.to.state.data!.id,
+    ));
+    result.fold((l) {
+      emit(state.copyWith(status: MeetingStates.failure, failure: l));
+    }, (r) {
+      CliLogger.info('first title is  ${r.first.title}');
+      emit(state.copyWith(
+        status: MeetingStates.gotscheduledMeeting,
+        scheduledMeetings: r,
+      ));
+      // emit(state.copyWith(
+      //   status: MeetingStates.initial,
+      //   scheduledMeetings: r,
+      // ));
     });
   }
 

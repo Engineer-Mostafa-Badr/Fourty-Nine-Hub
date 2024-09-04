@@ -107,7 +107,19 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     _attachTokenUseCase(null);
     _saveTokensUseCase(null);
     isTokenAttached = false;
-    state.copyWith(status: StateStatus.success, data: const UserEntity(id: '', firstName: '', lastName: '', email: '', profilePicture: '', profileCover: '', friendsCount: 0, followersCount: 0, followingCount: 0, wallet: 0));
+    state.copyWith(
+        status: StateStatus.success,
+        data: const UserEntity(
+            id: '',
+            firstName: '',
+            lastName: '',
+            email: '',
+            profilePicture: '',
+            profileCover: '',
+            friendsCount: 0,
+            followersCount: 0,
+            followingCount: 0,
+            wallet: 0));
     await _signOutUseCase(const NoParams());
 
     emit(const BasicState());

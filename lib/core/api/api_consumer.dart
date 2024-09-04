@@ -112,7 +112,7 @@ class BaseApiConsumer extends ApiConsumer {
         // }
         // )
       );
-      log(url);
+      // log(url);
       // log(_dio.options.headers['Authorization'], name: "Authorization$url");
       if (result.data['status']) {
         return Right(result.data as Map<String, dynamic>);
@@ -182,12 +182,14 @@ class BaseApiConsumer extends ApiConsumer {
     String url, {
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers
   }) async {
     try {
       final result = await _dio.put(
         url,
         data: data,
         queryParameters: queryParameters,
+         options: Options(headers: headers)
       );
       log(result.data.toString(), name: "url");
       if (result.data['status']) {
@@ -197,7 +199,7 @@ class BaseApiConsumer extends ApiConsumer {
         } else {
           return Right({"data": result.data});
         }
-      } else {
+      } else {  
         return Left(ValidationFailure(
             result.data['message'] ?? result.data['error']['message']));
       }

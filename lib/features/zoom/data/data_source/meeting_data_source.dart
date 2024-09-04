@@ -21,13 +21,15 @@ abstract class MeetingDataSource {
 
 class MeetingDataSourceImpl extends MeetingDataSource {
   final ApiConsumer apiConsumer;
-  final Dio _dio;
 
-  MeetingDataSourceImpl(this.apiConsumer, this._dio);
+  MeetingDataSourceImpl(this.apiConsumer);
   @override
   Future<Either<Failure, bool>> addRoom(MeetingParams params) async {
     final result =
         await apiConsumer.post(EndPoints.createMeeting, data: params.toJson());
+    // if(params.title!=null){
+    //   getScheduledMeetings();
+    // }
     return result.fold((l) {
       return Left(l);
     }, (r) {
@@ -44,6 +46,7 @@ class MeetingDataSourceImpl extends MeetingDataSource {
     // throw Exception('UnImplemented Finish Func');
   }
 
+  @override
   Future<Either<Failure, List<ScheduledMeeting>>> getScheduledMeetings(
       MeetingParams params) async {
     final result =
