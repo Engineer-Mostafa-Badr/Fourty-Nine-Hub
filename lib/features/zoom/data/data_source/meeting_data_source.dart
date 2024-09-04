@@ -1,13 +1,13 @@
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 // ignore: unused_import
 import 'package:fourtyninehub/core/data/models/meeting_error_message_model.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/zoom/data/model/schedule_meeting_model.dart';
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
-import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../../core/error/failure.dart';
 
@@ -64,8 +64,13 @@ class MeetingDataSourceImpl extends MeetingDataSource {
 
   @override
   Future<Either<Failure, bool>> joinRoom(MeetingParams params) async {
-    final result =
-        await apiConsumer.put(EndPoints.joinMeeting(params.meetingId));
+    final result = await apiConsumer
+        .put(EndPoints.joinMeeting(params.meetingId), headers: {
+      'lang':
+          AppPages.router.configuration.navigatorKey.currentContext!.isArabic
+              ? 'ar'
+              : 'en',
+    });
     return result.fold((l) {
       return Left(l);
     }, (r) {

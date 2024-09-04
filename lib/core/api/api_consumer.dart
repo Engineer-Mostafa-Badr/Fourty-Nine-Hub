@@ -31,6 +31,8 @@ abstract class ApiConsumer {
     String url, {
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+
   });
 
   Future<Either<Failure, Map<String, dynamic>>> delete(
@@ -212,6 +214,7 @@ class BaseApiConsumer extends ApiConsumer {
             url,
             queryParameters: queryParameters,
             data: data,
+            headers: headers,
           ),
         );
       } else {

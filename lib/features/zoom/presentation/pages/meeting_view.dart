@@ -93,34 +93,20 @@ class MeetingView extends StatelessWidget {
             SizedBox(
               height: 40.zH,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: GestureDetector(
-                    onTap: () {
-                      _showScheduleMeetingBottomSheet(context);
-                    },
-                    child: const Text(
-                      'Add a calender',
-                      style: TextStyle(
-                          color: AppColors.PRIMARY_COLOR,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
+            Align(
+              alignment: Alignment.center,
+              child: GestureDetector(
+                onTap: () {
+                  _showScheduleMeetingBottomSheet(context);
+                },
+                child: const Text(
+                  'Add a calender',
+                  style: TextStyle(
+                      color: AppColors.PRIMARY_COLOR,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
                 ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    onPressed: () {
-                      context.read<MeetingCubit>().getScheduledMeetings();
-                    },
-                    icon: const Icon(Icons.refresh),
-                  ),
-                ),
-              ],
+              ),
             ),
             SizedBox(
               height: 10.zH,
@@ -296,18 +282,11 @@ class MeetingView extends StatelessWidget {
   }
 
   void _showScheduleMeetingBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      constraints: BoxConstraints(
-        minHeight: context.screenHeight / 3,
-        maxHeight: context.screenHeight / 1.1,
-      ),
-      builder: (context) => BlocProvider.value(
-        value: serviceLocator<MeetingCubit>(),
-        child: const ScheduleMeetingBottomSheet(),
-      ),
-    );
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+              value: serviceLocator<MeetingCubit>(),
+              child: const ScheduleMeetingScreen(),
+            )));
   }
 
   Widget _buildMeetingItem({
