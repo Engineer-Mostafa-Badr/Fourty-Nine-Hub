@@ -1,17 +1,21 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/competition_entity.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/localization/locales.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../domain/entities/competitions_wallet_entity.dart';
 
 class CompetitionCard extends StatelessWidget {
-  final CompetitionEntity item;
+  final CompetitionsWalletEntity competitionsWalletEntity;
   final Function(BuildContext context) onTap;
-  const CompetitionCard({super.key, required this.item, required this.onTap});
+
+  const CompetitionCard(
+      {super.key, required this.onTap, required this.competitionsWalletEntity});
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +37,13 @@ class CompetitionCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Label(
-                      text: item.name,
+                      text: context.locale == Locales.english
+                          ? competitionsWalletEntity.nameEn
+                          : competitionsWalletEntity.nameAr,
                       style: Styles.mediumText(fontWeight: FontWeight.bold),
                     ),
                     Label(
-                      text: item.value.toString(),
+                      text: '${competitionsWalletEntity.countOfRequest}',
                     ),
                   ],
                 )),
@@ -48,15 +54,20 @@ class CompetitionCard extends StatelessWidget {
                     children: [
                       Positioned.fill(
                         child: CircularProgressIndicator(
-                          value: item.value / item.target,
+                          value: competitionsWalletEntity.countOfRequest /
+                              competitionsWalletEntity.maxRequests,
                           strokeWidth: 10,
                           color: AppColors.SECONDARY_COLOR,
                         ),
                       ),
                       Positioned.fill(
-                          child: Center(
-                        child: Label(text: item.value.toString()),
-                      ))
+                        child: Center(
+                          child: Label(
+                            text:
+                                '${((competitionsWalletEntity.countOfRequest / competitionsWalletEntity.maxRequests) * 100).toStringAsFixed(1)}%',
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 )
@@ -73,16 +84,22 @@ class CompetitionCard extends StatelessWidget {
                 const Sizer(),
                 Expanded(
                     child: Label(
-                  text: 'Minimum 1500 EGP for personal transaction',
+                  text:
+                      'Minimum ${competitionsWalletEntity.maxRequests} request for personal transaction',
                   style: Styles.mediumText(color: Colors.grey),
                 )),
               ],
             ),
             const Sizer(),
             AppButton(
-                label: 'Request Withdrawel',
-                backColor: Colors.red.withOpacity(.5),
-                onPressed: () {}),
+              label: 'Request Withdrawel',
+              color: AppColors.AUTH_CONTAINER_COLOR,
+              backColor: competitionsWalletEntity.countOfRequest >= 5000 &&
+                      competitionsWalletEntity.isWinner == true
+                  ? Colors.red
+                  : Colors.red.withOpacity(.5),
+              onPressed: () {},
+            ),
           ],
         ),
       ),

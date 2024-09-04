@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/repositories/company_advertise_repo/company_advertise_repo_impl.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_cubit.dart';
 import 'package:fourtyninehub/features/competition/data/repository/competition_repo_impl.dart';

@@ -18,7 +18,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.label,
       this.backColor,
       this.iconColor,
-      this.actions, this.centerTitle=true});
+      this.actions, this.centerTitle=false});
 
   @override
   Widget build(BuildContext context) {

@@ -11,6 +11,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/styles.dart';
+import '../widgets/competition_card.dart';
 import '../widgets/wallet_card_widget.dart';
 
 class GiftWalletView extends StatelessWidget {
@@ -40,18 +41,18 @@ class GiftWalletView extends StatelessWidget {
                       text: 'Competitions',
                       style: Styles.headerText(),
                     ),
-                    // ListView.builder(
-                    //     shrinkWrap: true,
-                    //     physics: const NeverScrollableScrollPhysics(),
-                    //     itemCount: state.competitions?.length ?? 0,
-                    //     itemBuilder: (context, index) {
-                    //       final item = state.competitions![index];
-                    //       return CompetitionCard(
-                    //         item: item,
-                    //         onTap: (context) =>
-                    //             controller.showGiftsHistory(context: context),
-                    //       );
-                    //     })
+                    ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: state.gift?.competitionsWallet.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return CompetitionCard(
+                            competitionsWalletEntity: state.gift!.competitionsWallet[index],
+                            onTap: (context){},
+                            // onTap: (context) =>
+                            //     controller.showGiftsHistory(context: context),
+                          );
+                        })
                   ],
                 ),
               ),
