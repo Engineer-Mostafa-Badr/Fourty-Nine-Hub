@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/local_storage/local_database_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/local/database/local_database_data_source.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/chat_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/chat_messgaes_entity.dart';

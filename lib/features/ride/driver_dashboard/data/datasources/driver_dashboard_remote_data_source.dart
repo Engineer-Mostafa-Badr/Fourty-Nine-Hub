@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/data/models/driver_statistics_model.dart';
-import '../../../../../core/api/api_consumer.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../res/assets/jsons.dart';
 import '../../../../requests_history/data/models/trip_model.dart';
