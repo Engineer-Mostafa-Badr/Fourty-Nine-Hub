@@ -142,8 +142,9 @@ class _ScheduleMeetingBottomSheetState
                           endTime: _endDateTime,
                         );
 
-                    if (context.mounted)
+                    if (context.mounted) {
                       context.pushReplacementNamed(Routes.ZOOM);
+                    }
                   } else {
                     context.pop();
                     showErrorMessage(context, 'Please fill all fields');
