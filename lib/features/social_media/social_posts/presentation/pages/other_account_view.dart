@@ -69,7 +69,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                         Icons.arrow_back,
                                         color: Colors.black,
                                       )),
-                                  if(context.read<UserCubit>().isLoggedIn)PopupMenuButton(
+                                  if(context.read<UserCubit>().isLoggedIn&&loginUser?.id!=widget.userId)PopupMenuButton(
                                       icon: const Icon(
                                         Icons.more_vert,
                                         color: Colors.black,
@@ -138,10 +138,17 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                               },
                                             )
                                         ];
-                                      })
+                                      }),
+
+                                  if(context.read<UserCubit>().isLoggedIn&&loginUser?.id==widget.userId)IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.search,
+                                        color: Colors.black,
+                                      )),
                                 ]))),
                     SliverToBoxAdapter(
-                      child: Stack(
+                      child: Column(
                         children: [
                           _buildAccountCounter(
                               context: context,
@@ -235,7 +242,21 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 print(state.profileData?.friendsCount);
                                 setState(() {});
                                 return result;
-                              }),
+                              }, editProfile: ()async{
+                            await context
+                                .push(Routes.EDITPROFILE);
+                            controller.getUserProfile(
+                                id: widget.userId);
+                          }),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 6),
+                            child: AppButton(label: 'Edit Profile', onPressed: ()async{
+                              await context
+                                  .push(Routes.EDITPROFILE);
+                              controller.getUserProfile(
+                                  id: widget.userId);
+                            },color: Colors.white,backColor: AppColors.PRIMARY_COLOR,),
+                          )
                         ],
                       ),
                     ),
@@ -318,6 +339,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
       required Function onAcceptFriend,
       required Function onRejectFriend,
       required Function onDeleteFriend,
+      required Function editProfile,
       required Function onAddFriend}) {
     final loginUser = context.read<UserCubit>().state.data;
     return Column(
@@ -611,7 +633,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                 ),
             ],
           ),
-        )
+        ),
+
       ],
     );
   }
