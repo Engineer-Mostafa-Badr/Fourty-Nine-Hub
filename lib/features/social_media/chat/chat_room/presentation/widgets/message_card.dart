@@ -134,7 +134,7 @@
 //                                 : messageEntity.delivered!
 //                                     ? const Icon(
 //                                         FontAwesomeIcons.checkDouble,
-//                                         color: AppColors.PRIMARY_COLOR,
+//                                         color: AppColors.MESSAGE_COLOR,
 //                                         size: 10,
 //                                       )
 //                                     : const Icon(
@@ -241,7 +241,7 @@ class MessageCard extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               margin: const EdgeInsets.all(10),
               decoration: const BoxDecoration(
-                color: AppColors.PRIMARY_COLOR,
+                color: AppColors.MESSAGE_COLOR,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
                   topRight: Radius.circular(12),
@@ -279,7 +279,7 @@ class MessageCard extends StatelessWidget {
                         : ReadMoreLabel(
                             trimLines: 5,
                             text: messageEntity.text!,
-                            style: Styles.mediumText(color: Colors.white),
+                            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
                             textAlign: TextAlign.left,
                           ),
                   ),
@@ -288,7 +288,7 @@ class MessageCard extends StatelessWidget {
                     children: [
                       Label(
                         text: '${messageEntity.formattedCreatedAt}',
-                        style: Styles.smallText(color: Colors.white),
+                        style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
                       ),
                       const SizedBox(width: 4),
                       Icon(
@@ -352,7 +352,7 @@ class MessageCard extends StatelessWidget {
                   child: ReadMoreLabel(
                     trimLines: 5,
                     text: messageEntity.text!,
-                    style: Styles.mediumText(color: Colors.white),
+                    style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
                     textAlign: TextAlign.left,
                   ),
                 ),
@@ -361,7 +361,7 @@ class MessageCard extends StatelessWidget {
                   children: [
                     Label(
                       text: '${messageEntity.formattedCreatedAt}',
-                      style: Styles.smallText(color: Colors.white),
+                      style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
                     ),
                     const SizedBox(width: 4),
                     Icon(
