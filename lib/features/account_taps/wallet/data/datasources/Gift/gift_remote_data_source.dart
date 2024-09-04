@@ -20,6 +20,6 @@ class GiftRemoteDataSourceImpl implements GiftRemoteDataSource{
     final response = await _apiConsumer.get(EndPoints.getGift);
     return response.fold(
             (failure) => Left(failure),
-            (response) => Right(GiftModelModel.fromJson(response)));
+            (response) => Right(GiftModelModel.fromJson(response['data'])));
   }
 }
