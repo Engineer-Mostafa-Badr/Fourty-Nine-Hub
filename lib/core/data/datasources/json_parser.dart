@@ -48,8 +48,12 @@ class JsonParser implements ApiConsumer {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> put(String url,
-      {Map<String, dynamic>? data, Map<String, dynamic>? queryParameters}) {
+  Future<Either<Failure, Map<String, dynamic>>> put(
+    String url, {
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+  }) {
     // TODO: implement put
     throw UnimplementedError();
   }
@@ -88,6 +92,6 @@ class JsonParser implements ApiConsumer {
         );
       }
     }
-    return  UnknownFailure(e);
+    return UnknownFailure(e);
   }
 }

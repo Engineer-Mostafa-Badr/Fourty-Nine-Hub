@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
@@ -27,26 +28,18 @@ class MeetingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(),
-      // drawer: const DrawerWidget(),
-      body: SingleChildScrollView(
-        child: BlocConsumer<MeetingCubit, MeetingState>(
-          listener: (_, state) {
-            if (state.isFailure) {
-              showErrorMessage(
-                  context,
-                  getFailureMessage(
-                      state.failure ?? UnknownFailure(''), context));
-            }
-          },
-          builder: (_, state) {
-            var cubit = context.read<MeetingCubit>();
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 16.zH),
-                Row(
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(),
+        // drawer: const DrawerWidget(),
+        body: SingleChildScrollView(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 16.zH),
+            BlocBuilder<MeetingCubit, MeetingState>(
+              builder: (context, state) {
+                var cubit = context.read<MeetingCubit>();
+                return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -93,139 +86,158 @@ class MeetingView extends StatelessWidget {
                       },
                     ),
                   ],
+                );
+              },
+            ),
+            const Divider(),
+            SizedBox(
+              height: 40.zH,
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: GestureDetector(
+                onTap: () {
+                  _showScheduleMeetingBottomSheet(context);
+                },
+                child: const Text(
+                  'Add a calender',
+                  style: TextStyle(
+                      color: AppColors.PRIMARY_COLOR,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
                 ),
-                const Divider(),
-                SizedBox(
-                  height: 40.zH,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: GestureDetector(
-                        onTap: () {
-                          _showScheduleMeetingBottomSheet(context);
-                        },
-                        child: const Text(
-                          'Add a calender',
-                          style: TextStyle(
-                              color: AppColors.PRIMARY_COLOR,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        onPressed: () {
-                          cubit.getScheduledMeetings();
-                        },
-                        icon: const Icon(Icons.refresh),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10.zH,
-                ),
-                _scheduledMeetings(cubit)
-              ],
-            );
-          },
-        ),
-      ),
-    );
+              ),
+            ),
+            SizedBox(
+              height: 10.zH,
+            ),
+            _scheduledMeetings()
+          ],
+        )));
   }
 
-  Container _scheduledMeetings(MeetingCubit cubit) {
+  Container _scheduledMeetings() {
     return Container(
       constraints:
           const BoxConstraints(maxHeight: double.infinity, minHeight: 400),
-      child: ListView.builder(
-          itemCount: cubit.scheduledMeetingList.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            ScheduledMeeting scheduledMeeting =
-                cubit.scheduledMeetingList[index];
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  color: Colors.grey[400],
-                  width: double.maxFinite,
-                  padding: EdgeInsets.only(
-                    left: 30.zW,
-                    top: 5.zH,
-                    bottom: 5.zH,
-                  ),
-                  child: Label(
-                    text: formatDateString(scheduledMeeting.startDate),
-                    style: Styles.headerText(fontSize: 25),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          Label(
-                            text: getHour(scheduledMeeting.startDate),
-                            style: Styles.headerText(
-                                fontSize: 25, color: Colors.grey[600]),
+      child: BlocListener<MeetingCubit, MeetingState>(
+        listener: (context, state) {
+          if (state.isFailure) {
+            showErrorMessage(
+                context,
+                getFailureMessage(
+                  state.failure!,
+                  context,
+                ));
+          }
+          if (state.isGotScheduledMeeting) {}
+        },
+        child: BlocBuilder<MeetingCubit, MeetingState>(
+          builder: (context, state) {
+            CliLogger.warning('WARNING state is updated${state.status}');
+            if (state.isLoading) {
+              // print('data is loading');
+              return const Center(
+                child: CircularProgressIndicator.adaptive(),
+              );
+            }
+            if (state.scheduledMeeting == null) {
+              // print('data is null');
+              return Container();
+            } else if (state.isGotScheduledMeeting) {
+              return ListView.builder(
+                  itemCount: state.scheduledMeeting!.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    ScheduledMeeting scheduledMeeting =
+                        state.scheduledMeeting![index];
+                    print(
+                        'scheduled meeting success ${state.scheduledMeeting!.first.toString()}');
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          color: Colors.grey[400],
+                          width: double.maxFinite,
+                          padding: EdgeInsets.only(
+                            left: 30.zW,
+                            top: 5.zH,
+                            bottom: 5.zH,
                           ),
-                          Label(
-                            text: getPeriod(scheduledMeeting.startDate),
-                            style: Styles.headerText(
-                                fontSize: 18, color: Colors.grey[600]),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(height: 5.zH),
-                          Label(
-                            text: scheduledMeeting.title,
+                          child: Label(
+                            text: formatDateString(scheduledMeeting.startDate),
                             style: Styles.headerText(fontSize: 25),
                           ),
-                          SizedBox(height: 5.zH),
-                          Label(
-                            text: 'Meeting ID: ${scheduledMeeting.roomId}',
-                            style: Styles.headerText(
-                                fontSize: 20, color: Colors.grey[600]),
-                          ),
-                        ],
-                      ),
-                      SizedBox(width: 15.zW),
-                      InkWell(
-                        onTap: () {
-                          context.go(Routes.MEETINGROOM,
-                              extra: ZegoArgs(
-                                scheduledMeeting.roomId,
-                                true,
-                              ));
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.PRIMARY_COLOR,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            'Start Now',
-                            style: Styles.smallText(color: Colors.white),
-                          ),
                         ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            );
-          }),
+                        Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                children: [
+                                  Label(
+                                    text: getHour(scheduledMeeting.startDate),
+                                    style: Styles.headerText(
+                                        fontSize: 25, color: Colors.grey[600]),
+                                  ),
+                                  Label(
+                                    text: getPeriod(scheduledMeeting.startDate),
+                                    style: Styles.headerText(
+                                        fontSize: 18, color: Colors.grey[600]),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  SizedBox(height: 5.zH),
+                                  Label(
+                                    text: scheduledMeeting.title,
+                                    style: Styles.headerText(fontSize: 25),
+                                  ),
+                                  SizedBox(height: 5.zH),
+                                  Label(
+                                    text:
+                                        'Meeting ID: ${scheduledMeeting.roomId}',
+                                    style: Styles.headerText(
+                                        fontSize: 20, color: Colors.grey[600]),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(width: 15.zW),
+                              InkWell(
+                                onTap: () {
+                                  context.go(Routes.MEETINGROOM,
+                                      extra: ZegoArgs(
+                                        scheduledMeeting.roomId,
+                                        true,
+                                      ));
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.PRIMARY_COLOR,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    'Start Now',
+                                    style:
+                                        Styles.smallText(color: Colors.white),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    );
+                  });
+            }
+            return Container();
+          },
+        ),
+      ),
     );
   }
 
@@ -270,16 +282,11 @@ class MeetingView extends StatelessWidget {
   }
 
   void _showScheduleMeetingBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) => BlocProvider.value(
-        value: serviceLocator<MeetingCubit>(),
-        child: ScheduleMeetingBottomSheet(
-          '',
-        ),
-      ),
-    );
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+              value: serviceLocator<MeetingCubit>(),
+              child: const ScheduleMeetingScreen(),
+            )));
   }
 
   Widget _buildMeetingItem({

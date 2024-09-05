@@ -1029,7 +1029,8 @@ class AppPages {
               path: Paths.ZOOM,
               name: Routes.ZOOM,
               builder: (context, state) => BlocProvider<MeetingCubit>(
-                    create: (context) => serviceLocator<MeetingCubit>(),
+                    create: (context) =>
+                        serviceLocator<MeetingCubit>()..getScheduledMeetings(),
                     child: const MeetingView(),
                   ),
               routes: [
