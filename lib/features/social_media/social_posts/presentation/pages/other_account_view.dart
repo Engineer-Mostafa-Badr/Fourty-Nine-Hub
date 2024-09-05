@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -247,6 +248,36 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 .push(Routes.EDITPROFILE);
                             controller.getUserProfile(
                                 id: widget.userId);
+                          }, selectImageGallary: (){
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Wrap(
+                                  children: <Widget>[
+                                    ListTile(
+                                      leading: const Icon(Icons.photo_library),
+                                      title: const Text('Gallery'),
+                                      onTap: () async {
+                                        Navigator.pop(context);
+                                        await controller.uploadPhoto(isGallery: true);
+                                        // Reload user data if needed
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: const Icon(Icons.camera_alt),
+                                      title: const Text('Camera'),
+                                      onTap: () async {
+                                        Navigator.pop(context);
+                                        await controller.uploadPhoto(isGallery: false);
+                                        // Reload user data if needed
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }, selectCoverImage: (){
+                            controller.uploadCoverPhoto();
                           }),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 6),
@@ -338,6 +369,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
       required Function onFollow,
       required Function onAcceptFriend,
       required Function onRejectFriend,
+      required Function selectImageGallary,
+      required Function selectCoverImage,
       required Function onDeleteFriend,
       required Function editProfile,
       required Function onAddFriend}) {
@@ -353,14 +386,33 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   child: Column(
                 children: [
                   Expanded(
-                      flex: 4,
-                      child: Image.network(
-                        user.profileCover!.isNotEmpty
-                            ? user.profileCover!
-                            : UIConst.socialImagePlaceHolder,
-                        fit: BoxFit.fill,
-                        width: double.infinity,
-                      )),
+                    flex: 4,
+                    child: Stack(
+                      alignment: AlignmentDirectional.bottomEnd,
+                      children: [
+                        Image.network(
+                          user.profileCover!.isNotEmpty
+                              ? user.profileCover!
+                              : UIConst.socialImagePlaceHolder,
+                          fit: BoxFit.fill,
+                          width: double.infinity,
+                        ),
+                        if(loginUser?.id==user.id)InkWell(
+                          onTap: (){
+                            selectCoverImage();
+
+                          },
+                          child: Container(
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.PRIMARY_COLOR
+                              ),
+                              child: Icon(Icons.camera_alt_outlined,color: Colors.white,)),
+                        )
+                      ],
+                    ),
+                  ),
                   Expanded(
                       child: Padding(
                     padding:
@@ -455,14 +507,32 @@ class _OtherAccountViewState extends State<OtherAccountView> {
               PositionedDirectional(
                   bottom: 0,
                   start: 10,
-                  child: CircleAvatar(
-                    radius: 60,
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundColor: Colors.white,
-                      backgroundImage: CachedNetworkImageProvider(
-                          user.profilePicture ?? UIConst.profilePlaceHolder),
-                    ),
+                  child: Stack(
+                    alignment: AlignmentDirectional.bottomEnd,
+                    children: [
+                      CircleAvatar(
+                        radius: 60,
+                        child: CircleAvatar(
+                          radius: 60,
+                          backgroundColor: Colors.white,
+                          backgroundImage: CachedNetworkImageProvider(
+                              user.profilePicture ?? UIConst.profilePlaceHolder),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: (){
+                          selectImageGallary();
+
+                        },
+                        child: Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.PRIMARY_COLOR
+                            ),
+                            child: Icon(Icons.camera_alt_outlined,color: Colors.white,)),
+                      )
+                    ],
                   ))
             ],
           ),

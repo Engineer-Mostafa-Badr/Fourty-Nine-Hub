@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_global_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_reels_usecase.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_saved_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
@@ -26,8 +27,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/un_follow_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
-import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
-import 'package:fourtyninehub/features/zoom/domain/usecases/join_room_use_case.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 part 'instagram_state.dart';
@@ -52,6 +51,7 @@ class InstagramCubit extends Cubit<InstagramState> {
   final UnFollowUserUseCase _unFollowUserUseCase;
   final SendGreetMessageUseCase _sendGreetMessageUseCase;
   final RemoveSuggestUserUseCase _removeSuggestUserUseCase;
+  final GetInstagramUserMediaUseCase _userMediaUseCase;
 
   InstagramCubit(
       this._getFeedUseCase,
@@ -70,7 +70,7 @@ class InstagramCubit extends Cubit<InstagramState> {
       this._userReelsUseCase,
       this._editCommentUseCase,
       this._deleteCommentUseCase,
-      this._getSavedReelsUseCase, this._getGlobalFeedUseCase, this._suggestedFriendsUseCase)
+      this._getSavedReelsUseCase, this._getGlobalFeedUseCase, this._suggestedFriendsUseCase, this._userMediaUseCase)
       : super(InstagramState());
 
   void loadData() async {
@@ -206,10 +206,10 @@ class InstagramCubit extends Cubit<InstagramState> {
     });
   }
 
-  void loadMedia() async {
-    await getMedia(1);
+  void loadMedia(String userId) async {
+    await getMedia(1,userId);
     mediaPagingController.addPageRequestListener((pageKey) {
-      getMedia(pageKey);
+      getMedia(pageKey,userId);
     });
   }
 
@@ -325,9 +325,9 @@ class InstagramCubit extends Cubit<InstagramState> {
 
 
   //get media
-  getMedia(int page) async {
+  getMedia(int page,String userId) async {
     final response =
-    await _getFeedUseCase(TwitterFeedParams(limit: 10, page: page));
+    await _userMediaUseCase(InstagramUserMediaParams(limit: 10, page: page,userId:userId));
     response.fold(
             (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
             (data) async {

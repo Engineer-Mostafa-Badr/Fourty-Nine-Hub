@@ -47,9 +47,6 @@ class FacebookGlobalBody extends StatelessWidget {
           child: CustomScrollView(
             controller: scrollController,
             slivers: [
-              const SliverToBoxAdapter(
-                child: Stories(),
-              ),
               BlocBuilder<SocialPostsCubit, SocialPostsState>(
                 builder: (context, state) {
                   final controller = context.read<SocialPostsCubit>();

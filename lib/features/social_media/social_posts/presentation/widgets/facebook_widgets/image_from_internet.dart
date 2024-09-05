@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../../res/style/const.dart';
+
 class ImageFromInternet extends StatelessWidget {
   const ImageFromInternet(
       {super.key,
@@ -24,7 +26,7 @@ class ImageFromInternet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      imageUrl: image,
+      imageUrl: image??UIConst.profilePlaceHolder,
       imageBuilder: (context, imageProvider) => Container(
         height: height,
         width: width,
@@ -51,8 +53,8 @@ class ImageFromInternet extends StatelessWidget {
                   image: FileImage(File(image)),
                   fit: BoxFit.contain,
                 )
-              : DecorationImage(
-                  image: AssetImage(Assets.logo),
+              : const DecorationImage(
+                  image: NetworkImage(UIConst.profilePlaceHolder),
                   fit: BoxFit.contain,
                 ),
         ),

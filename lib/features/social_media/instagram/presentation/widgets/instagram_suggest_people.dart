@@ -89,11 +89,10 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                               .itemList![index];
                           return InkWell(
                             onTap: () {
-                              context.push(Routes.OTHERSACCOUNT,
-                                  extra: controller
-                                      .suggestUserPagingController
-                                      .itemList?[index]
-                                      .id);
+                              context.push(Routes.INSTAGRAMPROFILE, extra: controller
+                                  .suggestUserPagingController
+                                  .itemList?[index]
+                                  .id);
                             },
                             child: Container(
                               width: 200,
