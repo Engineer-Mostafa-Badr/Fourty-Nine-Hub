@@ -19,14 +19,14 @@ class ChatRoomState {
   final ChatRoomStates status;
   final Failure? failure;
   final List<MessageEntity>? messages;
-  final ChatMessagesModel? chatData;
+  // final ChatMessagesModel? chatData;
   final MessageEntity? replayedMessage;
 
   const ChatRoomState({
     this.status = ChatRoomStates.initState,
     this.failure,
     this.messages,
-    this.chatData,
+    // this.chatData,
     this.replayedMessage,
   });
 
@@ -34,14 +34,14 @@ class ChatRoomState {
     ChatRoomStates? status,
     Failure? failure,
     List<MessageEntity>? messages,
-    ChatMessagesModel? chatData,
+    // ChatMessagesModel? chatData,
     MessageEntity? replayedMessage,
   }) {
     return ChatRoomState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
       messages: messages,
-      chatData: chatData,
+      // chatData: chatData,
       replayedMessage: replayedMessage,
     );
   }

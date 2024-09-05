@@ -4,6 +4,9 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/data/reposito
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/deleteMessage_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/getChatMessages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/datasources/chats_remote_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/repositories/chats_repository_implement.dart';
@@ -23,13 +26,14 @@ class SocialServiceLocator {
     // ---------------------------------- data sources ----------------------------------
     serviceLocator.registerLazySingleton<ChatsRemoteDataSource>(
         () => ChatsRemoteDataSourceImplementation(serviceLocator()));
-    serviceLocator.registerLazySingleton<MessagesRemoteDataSource>(
-        () => MessagesRemoteDataSourceImplementation(serviceLocator()));
+    serviceLocator.registerLazySingleton<MessagesRemoteDataSource>(() =>
+        MessagesRemoteDataSourceImplementation(
+            serviceLocator(), serviceLocator()));
     serviceLocator.registerLazySingleton<MessagesLocalDataSource>(
         () => SQFLiteMessagesLocalDataSourceImplementation(serviceLocator()));
     // ---------------------------------- repositories ----------------------------------
-    serviceLocator.registerLazySingleton<ChatRoomRepository>(
-        () => ChatRoomRepositoryImplementation(serviceLocator(),serviceLocator()));
+    serviceLocator.registerLazySingleton<ChatRoomRepository>(() =>
+        ChatRoomRepositoryImplementation(serviceLocator(), serviceLocator()));
     serviceLocator.registerLazySingleton<ChatsRepository>(
         () => ChatsRepositoryImplementation(serviceLocator()));
     // ---------------------------------- use cases ----------------------------------
@@ -75,6 +79,19 @@ class SocialServiceLocator {
         () => DeleteChatMessageUseCase(
               serviceLocator(),
             ));
+
+    serviceLocator.registerLazySingleton<ListenToNewMessageUseCase>(
+        () => ListenToNewMessageUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<SendMessageUseCase>(
+            () => SendMessageUseCase(
+          serviceLocator(),
+        ));
+    serviceLocator.registerLazySingleton<GetMessagesUseCase>(
+            () => GetMessagesUseCase(
+          serviceLocator(),
+        ));
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerFactory<ChatsCubit>(() => ChatsCubit(
@@ -90,6 +107,8 @@ class SocialServiceLocator {
         ));
 
     serviceLocator.registerFactory<ChatRoomCubit>(() => ChatRoomCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

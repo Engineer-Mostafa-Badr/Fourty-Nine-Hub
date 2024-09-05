@@ -70,9 +70,9 @@ class MessageModel extends MessageEntity {
       updatedAt: json['updatedAt'],
       formattedCreatedAt: json['formattedCreatedAt'],
       byMe: json['byMe'],
-      replyMessageId: json['replyMessageId'] != null
-          ? ReplyMessageModel.fromJson(json['replyMessageId'])
-          : null,
+      // replyMessageId: json['replyMessageId'] != null
+      //     ? ReplyMessageModel.fromJson(json['replyMessageId'])
+      //     : null,
     );
   }
 

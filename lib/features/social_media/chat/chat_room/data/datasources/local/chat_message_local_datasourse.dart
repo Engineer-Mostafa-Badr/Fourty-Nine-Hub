@@ -17,7 +17,7 @@ abstract class MessagesLocalDataSource {
   Future<Either<Failure, List<MessageEntity>>> getMessages(
       GetMessagesParams params);
 
-  Future<Either<Failure, bool>> addMessage(MessageEntity message);
+  Future<Either<Failure, bool>> saveMessage(MessageEntity message);
 
   Future<Either<Failure, bool>> deleteMessage({
     required String chatId,
@@ -70,7 +70,7 @@ class SQFLiteMessagesLocalDataSourceImplementation
 
       return Right(messages);
     } catch (e) {
-      CliLogger.error(e.toString());
+      CliLogger.error("error while get messages from database ${e.toString()}");
       return const Left(CacheFailure());
     }
   }
@@ -82,13 +82,13 @@ class SQFLiteMessagesLocalDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, bool>> addMessage(MessageEntity message) async {
+  Future<Either<Failure, bool>> saveMessage(MessageEntity message) async {
     try {
       final result = await _database.insert(DatabaseTables.messages,
           MessageModel.fromEntity(message).toDatabase());
       return Right(result > 0);
     } catch (e) {
-      CliLogger.error(e.toString());
+      CliLogger.error("error while saving message to database ${e.toString()}");
       return const Left(CacheFailure());
     }
   }

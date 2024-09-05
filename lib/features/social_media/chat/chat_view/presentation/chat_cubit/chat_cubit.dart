@@ -62,7 +62,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   initSocketConnection() async {
     String? userToken = await getUserToken();
     _socketService.initSocketConnection(userToken!);
-
+    SocketIODataSource.instance.connect();
     // listen to new messages
     listenToNewMessages();
     listenToMessageTyping();
@@ -304,8 +304,9 @@ class ChatsCubit extends Cubit<ChatsState> {
 
   @override
   Future<void> close() {
-    print("Close Socket");
+    // print("Close Socket");
     _socketService.disposeSocket();
+    SocketIODataSource.instance.close();
     return super.close();
   }
 

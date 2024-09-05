@@ -13,52 +13,50 @@ class MessagesListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chatRoomCubit = context.read<ChatRoomCubit>();
-    return Expanded(
-      child: BlocBuilder<ChatRoomCubit, ChatRoomState>(
-        buildWhen: (previous, current) => previous.status != current.status,
-        builder: (context, state) {
-          if (state.messages != null) {
-            return ListView.separated(
-                addAutomaticKeepAlives: true,
-                itemCount: state.messages?.length ?? 0,
-                controller: chatRoomCubit.scrollController,
-                itemBuilder: (context, index) => GestureDetector(
-                      onLongPress: () {
-                        // _showReplyDialog(
-                        //   context,
-                        //   messageEntity: state.chatMessages![index],
-                        //   replyFunction: () {
-                        //     Navigator.of(context).pop();
-                        //     replayMessage(state.chatMessages![index]);
-                        //   },
-                        //   deleteFunction: () {
-                        //     Navigator.of(context).pop();
-                        //     deleteMessage(
-                        //         chatId: state.chatMessages![index].chatId!,
-                        //         messageId: state.chatMessages![index].sId!);
-                        //   },
-                        // );
-                      },
-                      onHorizontalDragEnd: (details) {
-                        chatRoomCubit
-                            .selectMessageForReplaying(state.messages![index]);
-                      },
-                      child: MessageCard(
-                        messageEntity: state.messages![index],
-                        anotherUserName:
-                            state.chatData?.chat?.contact?.name ?? LocaleKeys.anonymous.tr(),
-                      ),
+    return BlocBuilder<ChatRoomCubit, ChatRoomState>(
+      // buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        if (state.messages != null) {
+          return ListView.separated(
+              addAutomaticKeepAlives: true,
+              itemCount: state.messages?.length ?? 0,
+              controller: chatRoomCubit.scrollController,
+              itemBuilder: (context, index) => GestureDetector(
+                    onLongPress: () {
+                      // _showReplyDialog(
+                      //   context,
+                      //   messageEntity: state.chatMessages![index],
+                      //   replyFunction: () {
+                      //     Navigator.of(context).pop();
+                      //     replayMessage(state.chatMessages![index]);
+                      //   },
+                      //   deleteFunction: () {
+                      //     Navigator.of(context).pop();
+                      //     deleteMessage(
+                      //         chatId: state.chatMessages![index].chatId!,
+                      //         messageId: state.chatMessages![index].sId!);
+                      //   },
+                      // );
+                    },
+                    onHorizontalDragEnd: (details) {
+                      chatRoomCubit
+                          .selectMessageForReplaying(state.messages![index]);
+                    },
+                    child: MessageCard(
+                      messageEntity: state.messages![index],
+                      anotherUserName: 'Anonymous',
+                          // state.chatData?.chat?.contact?.name ?? LocaleKeys.anonymous.tr(),
                     ),
-                separatorBuilder: (context, index) => const Sizer(
-                      height: 3,
-                    ));
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
+                  ),
+              separatorBuilder: (context, index) => const Sizer(
+                    height: 3,
+                  ));
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -16,15 +17,23 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entiti
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/deleteMessage_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/getChatMessages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
+
 part 'chat_room_state.dart';
 
 class ChatRoomCubit extends Cubit<ChatRoomState> {
   final GetTokensUseCase _getTokensUseCase;
-  final GetChatMessagesUseCase _getChatMessagesUseCase;
+
+  // final GetChatMessagesUseCase _getChatMessagesUseCase;
+  final GetMessagesUseCase _getMessagesUseCase;
   final GetUserUseCase _getUserUseCase;
   final DeleteChatMessageUseCase _deleteChatMessageUseCase;
   final ChatSocketServiceContract _socketService;
+  final ListenToNewMessageUseCase _listenToNewMessageUseCase;
+  final SendMessageUseCase _sendMessageUseCase;
   List<MessageEntity> chatMessages = [];
   ChatMessagesModel chatMessagesModel = ChatMessagesModel();
   final ScrollController scrollController = ScrollController();
@@ -36,10 +45,12 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   ChatRoomCubit(
     this._getTokensUseCase,
-    this._getChatMessagesUseCase,
+    this._listenToNewMessageUseCase,
+    this._getMessagesUseCase,
     this._deleteChatMessageUseCase,
     this._getUserUseCase,
     this._socketService,
+    this._sendMessageUseCase,
   ) : super(const ChatRoomState());
 
   Future<String?> getUserToken() async {
@@ -48,34 +59,45 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     });
   }
 
-  Future<void> getChatMessages(String chatID) async {
-    emit(state.copyWith(status: ChatRoomStates.loading));
-    chatId = chatID;
-    final response = await _getChatMessagesUseCase(chatID);
-    response.fold(
-        (failure) => emit(
-            state.copyWith(failure: failure, status: ChatRoomStates.error)),
-        (data) {
-      chatMessages = data.messages ?? [];
-      chatMessagesModel = data;
+  // final messagesStreamController = StreamController<MessageEntity>();
 
-      emit(state.copyWith(
-          chatData: data,
-          messages: data.messages!,
-          status: ChatRoomStates.success));
-      _scrollDown();
-      listenToNewMessages();
-    });
+
+  Future<void> getChatMessages(String chatID) async {
+    // emit(state.copyWith(status: ChatRoomStates.loading));
+    // chatId = chatID;
+    // final response = await _getChatMessagesUseCase(chatID);
+    // response.fold(
+    //     (failure) => emit(
+    //         state.copyWith(failure: failure, status: ChatRoomStates.error)),
+    //     (data) {
+    //   chatMessages = data.messages ?? [];
+    //   chatMessagesModel = data;
+    //
+    //   emit(state.copyWith(
+    //       chatData: data,
+    //       messages: data.messages!,
+    //       status: ChatRoomStates.success));
+    //   _scrollDown();
+    //   listenToNewMessages();
+    // });
+    emit(
+        state.copyWith(status: ChatRoomStates.success, messages: chatMessages));
+    listenToNewMessages();
   }
 
   Future<void> sendMessage(
       {required String message, String? replyMessageId}) async {
-    if (chatId != null) {
-      _socketService.sendMessage(
-          message: message, chatId: chatId!, replyMessageId: replyMessageId);
-    } else {
-      CliLogger.error("Error chat id not found");
-    }
+    // if (chatId != null) {
+    // _socketService.sendMessage(
+    //     message: message, chatId: chatId!, replyMessageId: replyMessageId);
+    _sendMessageUseCase(SendMessageParams(
+        message: message,
+        chatId: '66d874ec3b4cc1d6bdb4626e',
+        mediaIds: [],
+        oneTimeView: false));
+    // } else {
+    //   CliLogger.error("Error chat id not found");
+    // }
   }
 
   void selectMessageForReplaying(MessageEntity message) {
@@ -116,30 +138,48 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     );
   }
 
+
+
   listenToNewMessages() {
-    _socketService.socketMessageStream.listen((event) {
-      chatMessages.add(event);
+    // _socketService.socketMessageStream.listen((event) {
+    //   chatMessages.add(event);
+    //   emit.call(state.copyWith(
+    //       chatData: chatMessagesModel,
+    //       messages: chatMessages,
+    //       status: ChatRoomStates.success));
+    //
+    //   _scrollDown();
+    // });
+
+    // messagesStreamController.stream.listen((message) {
+    //
+    // });
+    CliLogger.success("listen to new messages called");
+
+    _listenToNewMessageUseCase((message) {
+      CliLogger.warning("listen to new messages called from Cubit lelelelel");
+      // messagesStreamController.add(message);
+
+      chatMessages.add(message);
       emit.call(state.copyWith(
-          chatData: chatMessagesModel,
+        // chatData: chatMessagesModel,
           messages: chatMessages,
           status: ChatRoomStates.success));
-
-      _scrollDown();
     });
   }
 
   listenToMessageTyping() {
-    _socketService.socketChatTypingStream.listen((event) {
-      debugPrint("chatListen $event");
-
-      List<TypingAndOnlineModel> chatsIds = event ?? [];
-      chatsIds.map((e) {}).toList();
-
-      emit.call(state.copyWith(
-          chatData: chatMessagesModel,
-          messages: chatMessages,
-          status: ChatRoomStates.typing));
-    });
+    // _socketService.socketChatTypingStream.listen((event) {
+    //   debugPrint("chatListen $event");
+    //
+    //   List<TypingAndOnlineModel> chatsIds = event ?? [];
+    //   chatsIds.map((e) {}).toList();
+    //
+    //   emit.call(state.copyWith(
+    //       chatData: chatMessagesModel,
+    //       messages: chatMessages,
+    //       status: ChatRoomStates.typing));
+    // });
   }
 
   deleteMessage({required String chatId, required String messageId}) async {
@@ -221,7 +261,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   @override
   Future<void> close() {
-    _socketService.disposeSocket();
+    // _socketService.disposeSocket();
     return super.close();
   }
 }

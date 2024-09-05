@@ -541,8 +541,9 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
               messageEntity: state.replayedMessage!,
               onCancelReplay: () =>
                   context.read<ChatRoomCubit>().cancelReplay(),
-              anotherUserName: state.chatData?.chat?.contact?.name ??
-                  LocaleKeys.anonymous.tr(),
+              anotherUserName: 'Anonymous',
+              // state.chatData?.chat?.contact?.name ??
+              //     LocaleKeys.anonymous.tr(),
             ),
           );
         } else {

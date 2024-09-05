@@ -8,15 +8,11 @@ class SQFLiteDataSource {
 
   static Database? _database;
 
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _initDatabase();
-    return _database!;
-  }
+  Database get database => _database!;
 
-  Future<Database> _initDatabase() async {
+  Future<void> initDatabase() async {
     String path = join(await getDatabasesPath(), 'fourtyninehub.db');
-    return await openDatabase(
+    _database = await openDatabase(
       path,
       version: 1,
       onCreate: (db, version) async {
