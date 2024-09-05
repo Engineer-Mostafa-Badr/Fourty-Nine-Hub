@@ -35,11 +35,9 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
   void initState() {
     super.initState();
 
-    context.read<UserCubit>().giveMeTokenForTinder().then((value) {
       context.read<TinderViewCubit>().fetchMainCategoryById(
-          '62c8b5b09332225799fe335e',
-          context.read<UserCubit>().state.token!.accessToken);
-    });
+            '62c8b5b09332225799fe335e',
+          );
 
     _tabController = TabController(length: 2, vsync: this);
   }
@@ -55,7 +53,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
     final tinderCubit = context.watch<TinderViewCubit>();
 
     return Scaffold(
-      appBar: HomeAppbar(),
+      appBar:  const HomeAppbar(),
       body: LayoutBuilder(
         builder: (context, constraints) {
           final isSmallScreen = constraints.maxWidth < 600;

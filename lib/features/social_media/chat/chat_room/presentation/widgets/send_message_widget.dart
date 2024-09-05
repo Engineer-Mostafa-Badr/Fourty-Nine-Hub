@@ -423,6 +423,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/Attachment_types.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/emoji_keyboard.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:social_media_recorder/screen/social_media_recorder.dart';
 
@@ -438,6 +439,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   late final FocusNode _messageFocusNode;
   late bool _showMicButton;
   late bool _showEmojiKeyboard;
+
   @override
   void initState() {
     _messageTextController = TextEditingController();
@@ -575,17 +577,31 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   Widget _micButton() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return SocialMediaRecorder(
-          sendRequestFunction: (File soundFile, String time) {},
-          initRecordPackageWidth: constraints.maxWidth,
-          fullRecordPackageHeight: constraints.maxWidth,
-          recordIconBackGroundColor: AppColors.PRIMARY_COLOR,
-          counterBackGroundColor: AppColors.PRIMARY_COLOR,
-          cancelTextBackGroundColor: AppColors.PRIMARY_COLOR,
-          recordIconWhenLockBackGroundColor: AppColors.PRIMARY_COLOR,
-          backGroundColor: AppColors.PRIMARY_COLOR,
-          radius: BorderRadius.circular(50),
-          recordIcon: const Icon(Icons.mic, color: Colors.white),
+        // return SocialMediaRecorder(
+        //   sendRequestFunction: (File soundFile, String time) {},
+        //   initRecordPackageWidth: 30,
+        //   fullRecordPackageHeight: 30,
+        //   recordIconBackGroundColor: AppColors.PRIMARY_COLOR,
+        //   counterBackGroundColor: AppColors.PRIMARY_COLOR,
+        //   cancelTextBackGroundColor: AppColors.PRIMARY_COLOR,
+        //   recordIconWhenLockBackGroundColor: AppColors.PRIMARY_COLOR,
+        //   backGroundColor: AppColors.PRIMARY_COLOR,
+        //   radius: BorderRadius.circular(50),
+        //   recordIcon:  Icon(Icons.mic, color: Colors.white, size: 50.zH),
+        // );
+        return InkWell(
+          onTap: () {},
+          child: CircleAvatar(
+            backgroundColor: AppColors.PRIMARY_COLOR,
+            radius: 25,
+            child: const Center(
+              child: Icon(
+                Icons.send,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
+          ),
         );
       },
     );
@@ -593,20 +609,18 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
 
   Widget _sendButton() {
     return LayoutBuilder(builder: (context, constraints) {
-      return ClipOval(
-        child: Material(
-          color: AppColors.PRIMARY_COLOR,
-          child: InkWell(
-            onTap: () {},
-            child: SizedBox(
-                width: constraints.maxWidth,
-                height: constraints.maxWidth,
-                child: const Center(
-                  child: Icon(
-                    Icons.send,
-                    color: Colors.white,
-                  ),
-                )),
+      return InkWell(
+        onTap: () {},
+        child: CircleAvatar(
+          backgroundColor: AppColors.PRIMARY_COLOR,
+          radius: 25,
+
+          child: const Center(
+            child: Icon(
+              Icons.send,
+              color: Colors.white,
+              size: 20,
+            ),
           ),
         ),
       );

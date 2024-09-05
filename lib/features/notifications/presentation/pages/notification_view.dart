@@ -21,6 +21,8 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/utils/api_service.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/styles.dart';
+import '../../../../routes/routes.dart';
+import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../data/repository/notification_repo_impl.dart';
 import '../cubit/notifications_cubit.dart';
 
@@ -31,7 +33,7 @@ class NotificationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) =>
-      NotificationsCubit(NotificationRepoImpl(ApiService(Dio())))..fetchNotification(),
+      NotificationsCubit(NotificationRepoImpl(ApiService(Dio())))..fetchNotification('app'),
       child: BlocBuilder<NotificationsCubit,NotificationsState>(
         builder: (BuildContext context, state) {
             return DefaultTabController(
@@ -90,10 +92,14 @@ class NotificationView extends StatelessWidget {
                           child: TabBarView(children: [
                             const SizedBox.shrink(),
                             const SizedBox.shrink(),
-                            _buildNotificationWidget(state: state),
+                           state.notificationModel.data!.docs!.isNotEmpty? _buildNotificationWidget(state: state):Center(
+                              child: Text('There are no notifications.',
+                                style: Styles.mediumText(fontSize: 35),
+                              ),
+                            ),
                           ]))
                     ],
-                  ),
+                  )
                 ):const Center(child: CircularProgressIndicator()),
               ));
         },
@@ -109,7 +115,7 @@ class NotificationView extends StatelessWidget {
       onRefresh: () async {},
       child: ListView.separated(
           itemBuilder: (context, index) {
-            return  NotificationCard(
+              return  NotificationCard(
               notificationDoc: state.notificationModel.data!.docs[index],
             );
           },

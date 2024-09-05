@@ -17,7 +17,7 @@ class UploadFile {
         required String subCategoryId,
         required Function(UploadFileEntity) onUploaded}) async {
     final file = await FilePickerHelper()
-        .pickMedia(isGallery: isGallery)
+        .pickImage(isGallery: isGallery)
         .then((file) async {
       if (file != null) {
         final bytes = await file.readAsBytes();
@@ -69,6 +69,8 @@ class UploadFile {
     await Dio().put(signedUrl,
         data: Stream.fromIterable(image.map((e) => [e])), options: options);
   }
+
+
 }
 
 class UploadFileEntity {

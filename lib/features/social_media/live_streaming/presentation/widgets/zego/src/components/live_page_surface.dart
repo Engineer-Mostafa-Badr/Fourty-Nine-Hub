@@ -108,7 +108,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
               durationTimeBoard(),
               if (!state.isOpenWhiteBoard) topBar(),
               bottomBar(),
-              messageList(),
+              if (!state.isOpenWhiteBoard) messageList(),
               foreground(
                 constraints.maxWidth,
                 constraints.maxHeight,

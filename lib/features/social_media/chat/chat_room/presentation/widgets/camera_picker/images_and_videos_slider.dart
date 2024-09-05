@@ -1,16 +1,4 @@
-import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:camera/camera.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:fourtyninehub/core/extensions/file_extension.dart';
-import 'package:go_router/go_router.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:video_player/video_player.dart';
-
-import '../../../../../../../common/widgets/dynamic/sizer.dart';
+part of 'camera_picker.dart';
 
 class ImagesAndVideosSlider extends StatefulWidget {
   final List<XFile> media;
@@ -45,10 +33,14 @@ class _ImagesAndVideosSliderState extends State<ImagesAndVideosSlider> {
     super.dispose();
   }
 
+  // FlutterStoryEditorController controller = FlutterStoryEditorController();
+  final TextEditingController _captionController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.black,
         body: Stack(
           children: [
             Positioned.fill(
@@ -68,15 +60,71 @@ class _ImagesAndVideosSliderState extends State<ImagesAndVideosSlider> {
               ),
             ),
             Positioned(
-              bottom: 20,
+              top: 20.zH,
+              right: 0,
+              left: 0,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.zW),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _BaseIcon(
+                      icon: Icons.close,
+                      onTap: () {
+                        context.pop();
+                      },
+                    ),
+                    _BaseIcon(
+                      icon: Icons.edit,
+                      onTap: () {
+                        final file = File(widget.media[_selectedIndex].path);
+                        late Widget child;
+                        if (file.isPhoto) {
+                  //         child = ProImageEditor.file(
+                  //           file,
+                  //           // configs: ProImageEditorConfigs(
+                  //           //
+                  //           // ),
+                  //           onImageEditingComplete: (Uint8List bytes) async {
+                  //             /*
+                  //  Your code to handle the edited image. Upload it to your server as an example.
+                  //  You can choose to use await, so that the loading-dialog remains visible until your code is ready, or no async, so that the loading-dialog closes immediately.
+                  //  By default, the bytes are in `jpg` format.
+                  // */
+                  //             CliLogger.info(bytes.toString());
+                  //             // Navigator.pop(context);
+                  //           },
+                  //         );
+                        } else {
+                          // child = FlutterStoryEditor(
+                          //     controller: controller,
+                          //     captionController: _captionController,
+                          //     selectedFiles: [file],
+                          //     onSaveClickListener: (files) {
+                          //       // Here you go with your edited files.
+                          //     });
+                        }
+                        showBottomSheet(
+                          context: context,
+                          builder: (context) => Container(),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 50.zH,
               left: 0,
               right: 0,
               child: SizedBox(
-                height: 100,
+                height: 150.zW,
                 child: ListView.separated(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   scrollDirection: Axis.horizontal,
-                  itemCount: widget.media.length ?? 0,
+                  itemCount: widget.media.length,
                   separatorBuilder: (context, index) => const Sizer(),
                   itemBuilder: (context, index) {
                     final file = File(widget.media[index].path);
@@ -99,8 +147,7 @@ class _ImagesAndVideosSliderState extends State<ImagesAndVideosSlider> {
                               baseColor: Colors.grey[300]!,
                               highlightColor: Colors.grey[100]!,
                               child: Container(
-                                width: 100,
-                                height: 100,
+                                width: 150.zW,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
@@ -141,8 +188,7 @@ class _ImagesAndVideosSliderState extends State<ImagesAndVideosSlider> {
         }
       },
       child: Container(
-        width: 100,
-        height: 100,
+        width: 150.zW,
         decoration: BoxDecoration(
           border: _selectedIndex == index
               ? Border.all(color: Colors.white, width: 3)
@@ -161,7 +207,9 @@ class _ImagesAndVideosSliderState extends State<ImagesAndVideosSlider> {
                 : null
             : Center(
                 child: Icon(
-                  _selectedIndex == index ? Icons.delete : Icons.play_arrow,
+                  _selectedIndex == index
+                      ? Icons.delete
+                      : Icons.play_arrow_rounded,
                   color: Colors.white,
                 ),
               ),
@@ -188,6 +236,11 @@ class _VideoPlayerScreenState extends State<_VideoPlayerScreen> {
 
     _controller = VideoPlayerController.file(widget.videoFile)
       ..initialize().then((value) => setState(() {}));
+    _controller.addListener(() {
+      if (_controller.value.isInitialized && _controller.value.isCompleted) {
+        setState(() {});
+      }
+    });
 
     // Use the controller to loop the video.
     // _controller.setLooping(false);
@@ -223,15 +276,11 @@ class _VideoPlayerScreenState extends State<_VideoPlayerScreen> {
             alignment: Alignment.center,
             children: [
               VideoPlayer(_controller),
-              if (_controller.value.isPlaying)
-                const Icon(
-                  Icons.pause,
-                  color: Colors.white,
-                ),
               if (!_controller.value.isPlaying)
-                const Icon(
-                  Icons.play_arrow,
-                  color: Colors.white,
+                Icon(
+                  Icons.play_arrow_rounded,
+                  color: Colors.white.withOpacity(0.5),
+                  size: 300.zW,
                 ),
             ],
           ),
@@ -242,53 +291,5 @@ class _VideoPlayerScreenState extends State<_VideoPlayerScreen> {
         child: CircularProgressIndicator(),
       );
     }
-    // return FutureBuilder(
-    //   future: _initializeVideoPlayerFuture,
-    //   builder: (context, snapshot) {
-    //     if (snapshot.connectionState == ConnectionState.done) {
-    //       // If the VideoPlayerController has finished initialization, use
-    // //       // the data it provides to limit the aspect ratio of the video.
-    //       return InkWell(
-    //         onTap: () {
-    //           setState(() {
-    //             // If the video is playing, pause it.
-    //             if (_controller.value.isPlaying) {
-    //               _controller.pause();
-    //             } else {
-    //               // If the video is paused, play it.
-    //               _controller.play();
-    //             }
-    //           });
-    //         },
-    //         child: AspectRatio(
-    //           aspectRatio: _controller.value.aspectRatio,
-    //           // Use the VideoPlayer widget to display the video.
-    //           child: Stack(
-    //             alignment: Alignment.center,
-    //             children: [
-    //               VideoPlayer(_controller),
-    //               if (_controller.value.isPlaying)
-    //                 const Icon(
-    //                   Icons.pause,
-    //                   color: Colors.white,
-    //                 ),
-    //               if (!_controller.value.isPlaying)
-    //                 const Icon(
-    //                   Icons.play_arrow,
-    //                   color: Colors.white,
-    //                 ),
-    //             ],
-    //           ),
-    //         ),
-    //       );
-    //     } else {
-    //       // If the VideoPlayerController is still initializing, show a
-    //       // loading spinner.
-    //       return const Center(
-    //         child: CircularProgressIndicator(),
-    //       );
-    //     }
-    //   },
-    // );
   }
 }

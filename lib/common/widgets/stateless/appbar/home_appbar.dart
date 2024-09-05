@@ -15,6 +15,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/utils/api_service.dart';
+import '../../../../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../features/notifications/data/repository/notification_repo_impl.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
@@ -139,7 +140,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 BlocProvider(
                   create: (BuildContext context) =>
-                  NotificationsCubit(NotificationRepoImpl(ApiService(Dio())))..fetchNotification(),
+                  NotificationsCubit(NotificationRepoImpl(ApiService(Dio())))..fetchNotification('app'),
                   child: BlocBuilder<NotificationsCubit,NotificationsState>(
                     builder: (BuildContext context, state) {
                       if(state is NotificationsSuccessState) {
@@ -156,7 +157,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                             borderRadius: BorderRadius.circular(20.zR),
                           ),
                           child: Label(
-                              text: '${state.notificationModel.data!.docs!.length}',
+                              text:context.read<UserCubit>().isLoggedIn
+                                  ? '${state.notificationModel.data!.docs!.length}':'0',
                               style: Styles.smallText(color: Colors.white)),
                         ),
                       );

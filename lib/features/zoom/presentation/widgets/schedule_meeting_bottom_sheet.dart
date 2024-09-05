@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 
 class ScheduleMeetingBottomSheet extends StatefulWidget {
   final String genRandNo;
+
   const ScheduleMeetingBottomSheet(this.genRandNo, {super.key});
 
   @override
@@ -111,6 +112,16 @@ class _ScheduleMeetingBottomSheetState
                 if (_titleController.text.isNotEmpty &&
                     _endDateTime != null &&
                     _startDateTime != null) {
+                  if (_endDateTime!.isBefore(_startDateTime!)) {
+                    showErrorMessage(
+                        context, 'Start Date must be before End Date');
+                    return;
+                  }
+                  if (_startDateTime!.isBefore(DateTime.now())) {
+                    showErrorMessage(
+                        context, 'Start Date must be in the future');
+                    return;
+                  }
                   await context.read<MeetingCubit>().addRoom(
                         widget.genRandNo,
                         startDate: _startDateTime,

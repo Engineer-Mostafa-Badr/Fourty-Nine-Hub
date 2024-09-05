@@ -273,7 +273,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        FormTextField(
+        FormTextField(validator: (v){},
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.zR),
@@ -289,7 +289,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           action: (v) {},
         ),
         const Sizer(),
-        FormTextField(
+        FormTextField(validator: (v){},
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.zR),
@@ -501,8 +501,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
                                     setState(() {});
                                   },
-                                  height: kToolbarHeight,
+                                  height: kToolbarHeight.zH,
                                   isCentered: true,
+                                  close: false,
                                   isBordered: !registerCubit.isMale,
                                   color: registerCubit.isMale
                                       ? AppColors.PRIMARY_COLOR
@@ -521,9 +522,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
                                 setState(() {});
                               },
-                              height: kToolbarHeight,
+                              height: kToolbarHeight.zH,
                               isCentered: true,
                               isBordered: true,
+                              close: false,
                               textColor: registerCubit.isMale
                                   ? Theme.of(context).primaryColor
                                   : AppColors.AUTH_CONTAINER_COLOR,

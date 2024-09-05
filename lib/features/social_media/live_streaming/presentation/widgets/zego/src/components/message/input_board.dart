@@ -61,7 +61,8 @@ class ZegoLiveStreamingInRoomMessageInputBoard extends ModalRoute<String> {
             placeHolder: translationText.messageEmptyToast,
             payloadAttributes: payloadAttributes,
             // to change text field text color
-            textColor: Colors.black,
+            textColor: Colors.white,
+            textHintColor: Colors.white,
             onSubmit: () {
               Navigator.of(
                 context,
