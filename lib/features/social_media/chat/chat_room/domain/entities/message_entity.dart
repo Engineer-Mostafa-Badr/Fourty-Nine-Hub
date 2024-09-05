@@ -1,8 +1,8 @@
 class MessageEntity {
-  String? sId;
+  String? id;
   String? text;
   String? chatId;
-  dynamic groupId;
+  String? groupId;
   bool? seen;
   bool? delivered;
   bool? isDeleted;
@@ -21,7 +21,7 @@ class MessageEntity {
   String? formattedCreatedAt;
 
   MessageEntity({
-    this.sId,
+    this.id,
     this.text,
     this.chatId,
     this.groupId,

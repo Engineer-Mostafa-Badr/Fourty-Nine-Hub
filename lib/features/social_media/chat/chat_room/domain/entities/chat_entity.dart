@@ -5,7 +5,7 @@ class ChatEntity {
   String? privacy;
   String? type;
   String? categoryId;
-  Contact? contact;
+  ContactModel? contact;
   String? createdAt;
   String? updatedAt;
   String? lastMessage;

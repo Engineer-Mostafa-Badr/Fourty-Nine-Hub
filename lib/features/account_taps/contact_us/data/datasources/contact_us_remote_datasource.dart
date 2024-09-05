@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/data/models/contact_us_model.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/domain/entities/contact_us_entity.dart';
-
-import '../../../../../core/api/api_consumer.dart';
 import '../../../../../core/error/failure.dart';
 
 abstract class ContactUsRemoteDataSource {

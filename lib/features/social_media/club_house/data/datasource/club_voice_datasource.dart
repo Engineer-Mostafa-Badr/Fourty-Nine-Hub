@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/club_house/data/model/club_voice_room_model.dart';
 import 'package:fourtyninehub/features/social_media/club_house/data/model/create_voice_room_model.dart';
@@ -9,7 +10,6 @@ import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/j
 import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/search_club_voice_use_case.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
-import '../../../../../core/api/api_consumer.dart';
 
 abstract class ClubVoiceDataSource {
   Future<Either<Failure, ZegoResponseModel>> addRoom(AddRoomParams params);

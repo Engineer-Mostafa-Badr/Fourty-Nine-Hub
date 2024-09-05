@@ -177,5 +177,7 @@
   "ok": "Ok",
   "cancel": "Cancel",
   "save": "Save",
-  "suscessfullySaved": "Successfully Saved"
+  "suscessfullySaved": "Successfully Saved",
+  "anonymous": "Anonymous",
+  "noData": "No Data"
 }

@@ -8,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/service/socket_service.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/typing_and_online_model.dart';
@@ -28,7 +28,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 part 'chats_state.dart';
 
 class ChatsCubit extends Cubit<ChatsState> {
-  final SocketServiceContract _socketService;
+  final ChatSocketServiceContract _socketService;
   final GetTokensUseCase _getTokensUseCase;
   final GetChatsUseCase _getChatsUseCase;
   final ChangeChatMuteStateUseCase _changeChatMuteStateUseCase;
@@ -62,7 +62,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   initSocketConnection() async {
     String? userToken = await getUserToken();
     _socketService.initSocketConnection(userToken!);
-
+    SocketIODataSource.instance.connect();
     // listen to new messages
     listenToNewMessages();
     listenToMessageTyping();
@@ -304,8 +304,9 @@ class ChatsCubit extends Cubit<ChatsState> {
 
   @override
   Future<void> close() {
-    print("Close Socket");
+    // print("Close Socket");
     _socketService.disposeSocket();
+    SocketIODataSource.instance.close();
     return super.close();
   }
 

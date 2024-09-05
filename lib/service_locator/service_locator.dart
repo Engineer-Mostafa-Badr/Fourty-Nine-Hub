@@ -5,11 +5,11 @@
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // import 'package:fourtyninehub/core/api/api_client_helper.dart';
 // import 'package:fourtyninehub/core/api/api_client_helper_imp.dart';
-// import 'package:fourtyninehub/core/api/end_points.dart';
+//
 // import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dart';
 // import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 // import 'package:fourtyninehub/core/service/base_repository.dart';
-// import 'package:fourtyninehub/core/service/socket_service.dart';
+// import 'package:fourtyninehub/core/service/socket_data_source.dart';
 // import 'package:fourtyninehub/features/social_media/reels/data/repositories/reels_repository_impl.dart';
 // import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
@@ -159,13 +159,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fourtyninehub/core/api/api_client_helper.dart';
-import 'package:fourtyninehub/core/api/api_client_helper_imp.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
-import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_client_helper.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_client_helper_imp.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/subscription_interceptor.dart';
+import 'package:fourtyninehub/core/data/datasources/local/database/local_database_data_source.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';
-import 'package:fourtyninehub/core/service/socket_service.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/repositories/reels_repository_impl.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/repositories/StoriesRpo.dart';
@@ -185,9 +188,10 @@ import 'package:fourtyninehub/service_locator/twitter_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:socket_io_client/socket_io_client.dart';
+import 'package:sqflite/sqflite.dart';
 
-import '../core/api/api_consumer.dart';
-import '../core/local_storage/local_storage_consumer.dart';
+import '../core/data/datasources/local/shared_preferences/local_storage_consumer.dart';
 import '../core/localization/localization_service.dart';
 import '../firebase_options.dart';
 import 'account_service_locator.dart';
@@ -222,6 +226,19 @@ class DI {
     );
 
     await LocalizationService.init();
+    await SQFLiteDataSource.instance.initDatabase();
+    final token = await TokenManager.getAccessToken();
+    // socket
+    serviceLocator.registerLazySingleton<Socket>(() => io(
+        'https://49dev.com',
+        OptionBuilder()
+            .setTransports(['websocket'])
+            .disableAutoConnect()
+            .setExtraHeaders({'authorization': token}) // optional
+            .build()));
+    // database
+    serviceLocator.registerLazySingleton<Database>(
+        () => SQFLiteDataSource.instance.database);
 
     // dio
     serviceLocator.registerLazySingleton<Dio>(
@@ -283,12 +300,12 @@ class DI {
     // );
 
     // Register the TinderRepository as a singleton
-    serviceLocator.registerLazySingleton<TinderRepository>(() => TinderRepository());
-
+    serviceLocator
+        .registerLazySingleton<TinderRepository>(() => TinderRepository());
 
     // Register the TinderViewCubit and inject the TinderRepository dependency
-    serviceLocator
-        .registerFactory<TinderViewCubit>(() => TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
+    serviceLocator.registerFactory<TinderViewCubit>(() =>
+        TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
 
     // Register other dependencies...
     // serviceLocator
@@ -323,8 +340,8 @@ class DI {
     FourtyNineServiceLocator.execute(serviceLocator);
 
     // Socket service
-    serviceLocator.registerLazySingleton<SocketServiceContract>(
-      () => SocketServiceImplementation(),
+    serviceLocator.registerLazySingleton<ChatSocketServiceContract>(
+      () => ChatSocketServiceImplementation(),
     );
 
     // Wheel
