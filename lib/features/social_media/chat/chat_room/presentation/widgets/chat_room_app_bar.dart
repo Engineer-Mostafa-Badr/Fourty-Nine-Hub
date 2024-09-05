@@ -50,8 +50,8 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 children: [
                                   Expanded(
                                     child: Label(
-                                      text:
-                                          'state.chatData?.chat?.contact?.name',
+                                      text: "Ahmed Nasr",
+                                      // 'state.chatData?.chat?.contact?.name',
                                       style: Styles.headerText(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w400,
