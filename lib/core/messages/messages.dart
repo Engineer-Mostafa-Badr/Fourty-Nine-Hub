@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
@@ -138,7 +139,7 @@ Future<void> showPermissionDialog({required String message}) async =>
         ),
         actions: [
           TextAppButton(
-            label: LocaleKeys.openAppSettings,
+            label: LocaleKeys.openAppSettings.tr(),
             onPressed: () async {
               await openAppSettings();
               AppPages.router.configuration.navigatorKey.currentContext!.pop();

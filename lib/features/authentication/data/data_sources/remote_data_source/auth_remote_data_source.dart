@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_tokens_model.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_new_forget_password_use_case.dart';

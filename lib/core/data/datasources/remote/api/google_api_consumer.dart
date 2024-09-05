@@ -1,9 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
+
+import 'api_consumer.dart';
 
 class GoogleApiConsumer extends ApiConsumer {
   final Dio dio;

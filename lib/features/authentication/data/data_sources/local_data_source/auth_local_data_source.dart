@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_tokens_model.dart';
 
 import '../../../../../core/error/failure.dart';
-import '../../../../../core/local_storage/local_storage_consumer.dart';
+import '../../../../../core/data/datasources/local/shared_preferences/local_storage_consumer.dart';
 
 abstract class AuthLocalDataSource {
   Future<Either<Failure, bool>> saveUserTokens(UserTokensModel? userTokens);

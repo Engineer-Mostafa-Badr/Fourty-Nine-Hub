@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -73,11 +74,12 @@ class _CamViewState extends State<_CamView> {
                 return CameraPreview(state.controller!);
               } else if (state.status ==
                   CameraPickerStatus.needCameraPermission) {
-                return _permissionButton(LocaleKeys.allowAccessToYourCamera);
+                return _permissionButton(
+                    LocaleKeys.allowAccessToYourCamera.tr());
               } else if (state.status ==
                   CameraPickerStatus.needMicrophonePermission) {
                 return _permissionButton(
-                    LocaleKeys.allowAccessToYourMicrophone);
+                    LocaleKeys.allowAccessToYourMicrophone.tr());
               } else {
                 return const Icon(Icons.camera,
                     color: AppColors.GREY_DARK_COLOR, size: 150);

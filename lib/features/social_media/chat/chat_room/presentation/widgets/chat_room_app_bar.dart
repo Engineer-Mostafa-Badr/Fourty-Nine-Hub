@@ -37,20 +37,20 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Expanded(
             child: BlocBuilder<ChatRoomCubit, ChatRoomState>(
                 builder: (context, state) {
-              return state.chatData?.chat?.contact?.name == null
+              return 'state.chatData?.chat?.contact?.name' == null
                   ? const SizedBox()
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        state.chatData?.chat?.contact?.name == null
+                        'state.chatData?.chat?.contact?.name' == null
                             ? const SizedBox()
                             : Row(
                                 children: [
                                   Expanded(
                                     child: Label(
                                       text:
-                                          '${state.chatData?.chat?.contact?.name}',
+                                          'state.chatData?.chat?.contact?.name',
                                       style: Styles.headerText(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w400,

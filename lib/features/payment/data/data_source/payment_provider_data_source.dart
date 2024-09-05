@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/payment/data/models/fawry_delete_card_model.dart';
 import 'package:fourtyninehub/features/payment/data/models/fawry_pay_with_card_model.dart';
 import 'package:fourtyninehub/features/payment/data/models/fawry_save_card_token_model.dart';

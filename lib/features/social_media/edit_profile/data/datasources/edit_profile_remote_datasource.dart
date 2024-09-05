@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_model.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';

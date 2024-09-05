@@ -74,7 +74,6 @@ dependencies:
   transparent_image: ^2.0.1
   url_launcher: 6.2.6
   video_player: ^2.9.1
-#  video_thumbnail: ^0.5.3
   visibility_detector: ^0.3.3
   webview_flutter: ^4.8.0
   win32: ^5.4.0
@@ -94,6 +93,7 @@ dependencies:
   # uuid:
 
 
+  sqflite: ^2.3.3+1
 dependency_overrides:
   http: ^0.13.3
 dev_dependencies:

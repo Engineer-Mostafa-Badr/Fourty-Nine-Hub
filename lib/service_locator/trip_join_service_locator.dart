@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:fourtyninehub/core/api/google_api_consumer.dart';
-import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/google_api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/subscription_interceptor.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/data/remote_data_source/fetch_location_remote_datasource.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/data/remote_data_source/trip_join_remote_datasource.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/data/repo/trip_join_google_api_repo_imp.dart';

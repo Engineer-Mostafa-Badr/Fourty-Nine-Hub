@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../error/failure.dart';
+import '../../../../error/failure.dart';
 
 abstract class LocalStorageConsumer {
   const LocalStorageConsumer();

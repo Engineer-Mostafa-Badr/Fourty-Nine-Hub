@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
-import '../../api/api_consumer.dart';
+import 'remote/api/api_consumer.dart';
 
 class JsonParser implements ApiConsumer {
   @override

@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 // ignore: unused_import
 import 'package:fourtyninehub/core/data/models/meeting_error_message_model.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';

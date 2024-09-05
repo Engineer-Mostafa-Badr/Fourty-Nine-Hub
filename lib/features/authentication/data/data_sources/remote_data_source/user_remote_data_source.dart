@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_model.dart';
 import 'package:fourtyninehub/features/authentication/data/models/wallet_model.dart';
