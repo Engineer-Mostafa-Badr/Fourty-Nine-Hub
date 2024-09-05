@@ -9,62 +9,61 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_w
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
+import '../../domain/entities/wallet_entity.dart';
 import '../../domain/entities/wallet_history_entity.dart';
 
 part 'wallet_state.dart';
 
 class WalletCubit extends Cubit<WalletState> {
-  final GetCompetitionsUsecase _getCompetitionsUsecase;
-  final GetWalletHistoryUseCase _getWalletHistoryUseCase;
+  // final GetCompetitionsUsecase _getCompetitionsUsecase;
+  // final GetWalletHistoryUseCase _getWalletHistoryUseCase;
   final GetWalletUseCase _getWalletUseCase;
 
-  WalletCubit(this._getCompetitionsUsecase, this._getWalletHistoryUseCase,
-      this._getWalletUseCase)
-      : super(const WalletState());
+  WalletCubit(this._getWalletUseCase) : super(const WalletState());
 
   void loadData() async {
-    await getBalanceWalletHistory();
-    await getNormalWalletHistory();
-    await getCompetitions();
+   // await getBalanceWalletHistory();
+    await getWallet();
+   // await getCompetitions();
   }
 
-  Future<void> getBalanceWalletHistory() async {
-    final response = await _getWalletHistoryUseCase.call(WalletTypes.balance);
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: WalletStates.error));
-    }, (data) {
-      emit(state.copyWith(balanceHistory: data));
-    });
-  }
+  // Future<void> getBalanceWalletHistory() async {
+  //   final response = await _getWalletHistoryUseCase.call(WalletTypes.balance);
+  //   response.fold((l) {
+  //     emit(state.copyWith(failure: l, status: WalletStates.error));
+  //   }, (data) {
+  //     emit(state.copyWith(balanceHistory: data));
+  //   });
+  // }
 
-  Future<void> getNormalWalletHistory() async {
+  Future<void> getWallet() async {
     final response =
-        await _getWalletHistoryUseCase.call(WalletTypes.mainWallet);
+        await _getWalletUseCase.call(const NoParams());
     response.fold((l) {
       emit(state.copyWith(failure: l, status: WalletStates.error));
     }, (data) {
-      emit(state.copyWith(walletHistory: data));
+      emit(state.copyWith(wallet: data));
     });
   }
 
-  Future<void> getCompetitions() async {
-    final response = await _getCompetitionsUsecase.call(const NoParams());
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: WalletStates.error));
-    }, (data) {
-      emit(state.copyWith(competitions: data));
-    });
-  }
-
-  void showGiftsHistory({
-    required BuildContext context,
-  }) async {
-    final response =
-        await _getWalletHistoryUseCase.call(WalletTypes.giftWallet);
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: WalletStates.error));
-    }, (data) {
-      context.push(Routes.WALLETHISTORY, extra: data);
-    });
-  }
+  // Future<void> getCompetitions() async {
+  //   final response = await _getCompetitionsUsecase.call(const NoParams());
+  //   response.fold((l) {
+  //     emit(state.copyWith(failure: l, status: WalletStates.error));
+  //   }, (data) {
+  //     emit(state.copyWith(competitions: data));
+  //   });
+  // }
+  //
+  // void showGiftsHistory({
+  //   required BuildContext context,
+  // }) async {
+  //   final response =
+  //       await _getWalletHistoryUseCase.call(WalletTypes.giftWallet);
+  //   response.fold((l) {
+  //     emit(state.copyWith(failure: l, status: WalletStates.error));
+  //   }, (data) {
+  //     context.push(Routes.WALLETHISTORY, extra: data);
+  //   });
+  // }
 }

@@ -12,14 +12,11 @@ import 'package:fourtyninehub/features/account_taps/lists/domain/usecases/get_fr
 import 'package:fourtyninehub/features/account_taps/lists/domain/usecases/get_friends_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/datasources/Gift/gift_remote_data_source.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/datasources/wallet_remote_datasource.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/data/models/gift_wallet_model.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/repositories/Gift/gift_repository_impl.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/repositories/wallet_repo_impl.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/gift_repository.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/wallet_repo.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_competitions_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_gifts_use_case.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_history_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
@@ -40,8 +37,8 @@ class AccountServiceLocator {
             () => GiftRemoteDataSourceImpl(serviceLocator()));
 
 
-    serviceLocator.registerLazySingleton<WalletRemoteDataSouce>(
-        () => WalletRemoteDataSouceImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<WalletRemoteDataSource>(
+        () => WalletRemoteDataSourceImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<ListsRemoteDataSource>(
         () => ListsRemoteDataSourceImpl(serviceLocator()));
     // AccountRepo
@@ -69,10 +66,10 @@ class AccountServiceLocator {
         () => GetFriendRequestsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetBlockedUseCase>(
         () => GetBlockedUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<GetWalletHistoryUseCase>(
-        () => GetWalletHistoryUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<GetCompetitionsUsecase>(
-        () => GetCompetitionsUsecase(serviceLocator()));
+    // serviceLocator.registerLazySingleton<GetWalletHistoryUseCase>(
+    //     () => GetWalletHistoryUseCase(serviceLocator()));
+    // serviceLocator.registerLazySingleton<GetCompetitionsUsecase>(
+    //     () => GetCompetitionsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetWalletUseCase>(
         () => GetWalletUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetWalletGiftsUseCase>(
@@ -94,7 +91,7 @@ class AccountServiceLocator {
           serviceLocator(),
         )..loadData());
     serviceLocator.registerFactory<WalletCubit>(() =>
-        WalletCubit(serviceLocator(), serviceLocator(), serviceLocator())
+        WalletCubit(serviceLocator())
           ..loadData());
 
     serviceLocator.registerFactory<GiftCubit>(() =>
