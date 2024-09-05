@@ -1,14 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
-import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/account_taps/lists/data/models/user_friend_model.dart';
 import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
-import 'package:fourtyninehub/res/assets/jsons.dart';
-
 import '../../../../../core/error/failure.dart';
-import '../../domain/entities/users_list_entity.dart';
-import '../models/users_list_model.dart';
 
 abstract class ListsRemoteDataSource {
   Future<Either<Failure, List<UserFriendEntity>>> getFriendsList();
