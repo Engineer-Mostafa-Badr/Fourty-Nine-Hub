@@ -28,7 +28,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 part 'chats_state.dart';
 
 class ChatsCubit extends Cubit<ChatsState> {
-  final ChatSocketServiceContract _socketService;
+  final SocketServiceContract _socketService;
   final GetTokensUseCase _getTokensUseCase;
   final GetChatsUseCase _getChatsUseCase;
   final ChangeChatMuteStateUseCase _changeChatMuteStateUseCase;
@@ -62,7 +62,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   initSocketConnection() async {
     String? userToken = await getUserToken();
     _socketService.initSocketConnection(userToken!);
-    SocketIODataSource.instance.connect();
+    // SocketIODataSource.instance.connect();
     // listen to new messages
     listenToNewMessages();
     listenToMessageTyping();
@@ -306,7 +306,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   Future<void> close() {
     // print("Close Socket");
     _socketService.disposeSocket();
-    SocketIODataSource.instance.close();
+    // SocketIODataSource.instance.close();
     return super.close();
   }
 

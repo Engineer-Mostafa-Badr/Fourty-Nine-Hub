@@ -227,15 +227,7 @@ class DI {
 
     await LocalizationService.init();
     await SQFLiteDataSource.instance.initDatabase();
-    final token = await TokenManager.getAccessToken();
-    // socket
-    serviceLocator.registerLazySingleton<Socket>(() => io(
-        'https://49dev.com',
-        OptionBuilder()
-            .setTransports(['websocket'])
-            .disableAutoConnect()
-            .setExtraHeaders({'authorization': token}) // optional
-            .build()));
+
     // database
     serviceLocator.registerLazySingleton<Database>(
         () => SQFLiteDataSource.instance.database);
@@ -340,8 +332,8 @@ class DI {
     FourtyNineServiceLocator.execute(serviceLocator);
 
     // Socket service
-    serviceLocator.registerLazySingleton<ChatSocketServiceContract>(
-      () => ChatSocketServiceImplementation(),
+    serviceLocator.registerLazySingleton<SocketServiceContract>(
+      () => SocketServiceImplementation(),
     );
 
     // Wheel
