@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/res/assets/jsons.dart';
-import '../../../../../core/api/end_points.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../ads/data/models/Ad_model.dart';
 import '../../domain/usecases/make_ad_request_usecase.dart';

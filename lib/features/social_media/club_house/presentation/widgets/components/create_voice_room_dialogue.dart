@@ -4,7 +4,6 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../../service_locator/service_locator.dart';
 
@@ -15,24 +14,23 @@ void showVoiceLiveBottomSheet({
   TextEditingController roomSubjectController = TextEditingController();
 
   showModalBottomSheet(
-    context: context,
-    isDismissible: true,
-    isScrollControlled: true,
-    useSafeArea: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
-    builder: (BuildContext context) {
-      return BlocProvider(
-        create: (context) => serviceLocator<ClubVoiceCubit>(),
-        child: Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + 32,
-            left: 16,
-            right: 16,
-            top: 24,
-          ),
-          child: SingleChildScrollView(
+      context: context,
+      isDismissible: true,
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return BlocProvider(
+          create: (context) => serviceLocator<ClubVoiceCubit>(),
+          child: Padding(
+            padding: const EdgeInsets.only(
+              // bottom: MediaQuery.of(context).viewInsets.bottom + 32,
+              left: 16,
+              right: 16,
+              top: 24,
+            ),
             child: Column(
               // mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -61,7 +59,7 @@ void showVoiceLiveBottomSheet({
                     controller: roomSubjectController,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
-                      labelText: 'Room Subject',
+                      // labelText: 'Room Subject',
                       hintText: 'Enter room subject',
                       prefixIcon: const Icon(Icons.headset_mic_rounded),
                       border: const OutlineInputBorder(
@@ -132,10 +130,8 @@ void showVoiceLiveBottomSheet({
               ],
             ),
           ),
-        ),
-      );
-    },
-  );
+        );
+      });
 }
 
 Future<void> addRoom(ClubVoiceCubit cubit, String roomSub) async =>

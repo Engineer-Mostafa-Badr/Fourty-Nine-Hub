@@ -11,7 +11,7 @@ class ScheduledMeetingModel extends ScheduledMeeting {
   factory ScheduledMeetingModel.fromJson(Map<String, dynamic> json) {
     return ScheduledMeetingModel(
       title: json['title'],
-      startDate: json['startDate'],
+      startDate: json['startDate'] ?? '2024-09-04T12:21:53.199Z',
       endDate: json['endDate'],
       roomId: json['roomId'],
     );

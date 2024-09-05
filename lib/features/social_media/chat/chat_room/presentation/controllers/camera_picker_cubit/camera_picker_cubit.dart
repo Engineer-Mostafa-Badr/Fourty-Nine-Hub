@@ -16,7 +16,7 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
   final List<File> _mediaList = [];
   final Duration _maxVideoLength = const Duration(minutes: 2);
   late List<CameraDescription> _cameras;
-  Completer<void>? _recordingCompleter;
+  Completer<void>? _recordingManualCompleter;
 
   Future<void> init() async {
     try {
@@ -81,22 +81,22 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
 
   Future<void> startVideoRecording() async {
     try {
-      _recordingCompleter = Completer<void>();
+      _recordingManualCompleter = Completer<void>();
       await _controller?.startVideoRecording();
       emit(state.copyWith(status: CameraPickerStatus.startVideo));
       CliLogger.info('Video recording started');
 
       await Future.any([
         Future.delayed(_maxVideoLength),
-        _recordingCompleter!.future,
+        _recordingManualCompleter!.future,
       ]);
 
-      if (!_recordingCompleter!.isCompleted) {
+      if (!(_recordingManualCompleter!.isCompleted)) {
         CliLogger.info('Video recording stopped automatically');
         stopVideoRecording();
       }
 
-      _recordingCompleter = null;
+      _recordingManualCompleter = null;
     } catch (e) {
       CliLogger.error("Error while starting video recording: $e");
     }
@@ -104,8 +104,8 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
 
   Future<void> stopVideoRecording() async {
     try {
-      if (_recordingCompleter != null && !_recordingCompleter!.isCompleted) {
-        _recordingCompleter!
+      if (_recordingManualCompleter != null && !_recordingManualCompleter!.isCompleted) {
+        _recordingManualCompleter!
             .complete(); // Signal that the recording has been stopped
       }
 

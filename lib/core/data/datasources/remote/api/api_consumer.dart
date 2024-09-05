@@ -2,13 +2,13 @@ import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 
 // import 'dart:convert';
 // import 'package:flutter/services.dart' show rootBundle;
 
-import '../error/failure.dart';
 import 'end_points.dart';
 
 abstract class ApiConsumer {
@@ -31,6 +31,8 @@ abstract class ApiConsumer {
     String url, {
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+
   });
 
   Future<Either<Failure, Map<String, dynamic>>> delete(
@@ -112,7 +114,7 @@ class BaseApiConsumer extends ApiConsumer {
         // }
         // )
       );
-      log(url);
+      // log(url);
       // log(_dio.options.headers['Authorization'], name: "Authorization$url");
       if (result.data['status']) {
         return Right(result.data as Map<String, dynamic>);
@@ -182,12 +184,14 @@ class BaseApiConsumer extends ApiConsumer {
     String url, {
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers
   }) async {
     try {
       final result = await _dio.put(
         url,
         data: data,
         queryParameters: queryParameters,
+         options: Options(headers: headers)
       );
       log(result.data.toString(), name: "url");
       if (result.data['status']) {
@@ -197,7 +201,7 @@ class BaseApiConsumer extends ApiConsumer {
         } else {
           return Right({"data": result.data});
         }
-      } else {
+      } else {  
         return Left(ValidationFailure(
             result.data['message'] ?? result.data['error']['message']));
       }
@@ -210,6 +214,7 @@ class BaseApiConsumer extends ApiConsumer {
             url,
             queryParameters: queryParameters,
             data: data,
+            headers: headers,
           ),
         );
       } else {

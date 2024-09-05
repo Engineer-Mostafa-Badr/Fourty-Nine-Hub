@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/post_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/suggest_user_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/user_profile_model.dart';

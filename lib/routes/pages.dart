@@ -1,4 +1,4 @@
-import 'package:flutter/src/widgets/basic.dart';
+// import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
@@ -67,10 +67,10 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/Chat_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_dialogue.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
@@ -85,10 +85,10 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/pages/mus
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
+// import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/instagram_profile.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
+// import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_brand_usecase.dart';
@@ -108,7 +108,7 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/trip_join_view.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/avaiable_trips_view.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/widgets/meeting_dialogue.dart';
+import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/enums/wallet_types_enums.dart';
@@ -415,20 +415,21 @@ class AppPages {
               return BlocProvider(
                 create: (context) {
                   return serviceLocator<PaymentCubit>()
-                    ..getPaymentProvider()..getSavedCards();
-                    // ..getPaymobData(
-                    //     amountId: args.amountId,
-                    //     providerId: args.providerId
-                    // );
-                    // ..chargeWithCard(
-                    //   cardNumber: params.cardNumber,
-                    //   cardExpiryYear: params.cardExpiryYear,
-                    //   cardExpiryMonth: params.cardExpiryMonth,
-                    //   cvv: params.cvv,
-                    //   amountId: params.amountId,
-                    //   providerId: params.providerId,
-                    //   paymentMethod: params.paymentMethod,
-                    // );
+                    ..getPaymentProvider()
+                    ..getSavedCards();
+                  // ..getPaymobData(
+                  //     amountId: args.amountId,
+                  //     providerId: args.providerId
+                  // );
+                  // ..chargeWithCard(
+                  //   cardNumber: params.cardNumber,
+                  //   cardExpiryYear: params.cardExpiryYear,
+                  //   cardExpiryMonth: params.cardExpiryMonth,
+                  //   cvv: params.cvv,
+                  //   amountId: params.amountId,
+                  //   providerId: params.providerId,
+                  //   paymentMethod: params.paymentMethod,
+                  // );
                 },
                 child: PaymentView(
                   amountId: args.amountId,
@@ -559,17 +560,15 @@ class AppPages {
               GoRoute(
                 path: Paths.INSTAGRAMPROFILE,
                 name: Routes.INSTAGRAMPROFILE,
-                routes: [
-
-                ],
+                routes: [],
                 builder: (context, state) {
                   final id = state.extra as String?;
 
                   return BlocProvider<SocialPostsCubit>(
-                  create: (_) =>
-                  serviceLocator()..getUserProfile(id: id ?? ''),
-                  child: InstagramProfile(userId: id??''),
-                );
+                    create: (_) =>
+                        serviceLocator()..getUserProfile(id: id ?? ''),
+                    child: InstagramProfile(userId: id ?? ''),
+                  );
                 },
               ),
             ],
@@ -610,7 +609,6 @@ class AppPages {
                     );
                   },
                 ),
-
                 GoRoute(
                     path: Paths.TWITTER,
                     name: Routes.TWITTER,
@@ -638,7 +636,6 @@ class AppPages {
                                 child: const EditProfileView()),
                       ),
                     ]),
-
                 GoRoute(
                     path: Paths.REELS,
                     name: Routes.REELS,
@@ -749,7 +746,7 @@ class AppPages {
               name: Routes.CHATROOM,
               builder: (context, state) => BlocProvider<ChatRoomCubit>(
                     create: (_) => serviceLocator(),
-                    child: ChatRoom(
+                    child: ChatRoomView(
                       chatId: state.extra as String,
                     ),
                   ),
@@ -1048,6 +1045,7 @@ class AppPages {
                       liveID: extras.liveId,
                       isHost: extras.isHost,
                       shareScreen: extras.shareScreen,
+                      userName: extras.userName,
                     );
                   },
                 ),

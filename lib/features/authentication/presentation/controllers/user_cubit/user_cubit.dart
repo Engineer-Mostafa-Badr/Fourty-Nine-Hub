@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
@@ -12,7 +13,6 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/save_toke
 import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../../../common/functions/global/upload_file.dart';
-import '../../../../../core/api/api_consumer.dart';
 import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../domain/entities/user_tokens_entity.dart';
@@ -107,7 +107,19 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     _attachTokenUseCase(null);
     _saveTokensUseCase(null);
     isTokenAttached = false;
-    state.copyWith(status: StateStatus.success, data: const UserEntity(id: '', firstName: '', lastName: '', email: '', profilePicture: '', profileCover: '', friendsCount: 0, followersCount: 0, followingCount: 0, wallet: 0));
+    state.copyWith(
+        status: StateStatus.success,
+        data: const UserEntity(
+            id: '',
+            firstName: '',
+            lastName: '',
+            email: '',
+            profilePicture: '',
+            profileCover: '',
+            friendsCount: 0,
+            followersCount: 0,
+            followingCount: 0,
+            wallet: 0));
     await _signOutUseCase(const NoParams());
 
     emit(const BasicState());

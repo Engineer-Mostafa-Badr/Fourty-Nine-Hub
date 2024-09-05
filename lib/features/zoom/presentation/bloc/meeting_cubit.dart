@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'dart:math';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
@@ -8,6 +11,7 @@ import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.da
 import 'package:fourtyninehub/features/zoom/domain/usecases/end_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/get_scheuled_rooms_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/join_room_use_case.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../routes/pages.dart';
@@ -26,117 +30,105 @@ class MeetingCubit extends Cubit<MeetingState> {
   final EndRoomUseCase endRoomUseCase;
   final GetScheduledRoomsUseCase getScheduledRoomsUseCase;
 
-
   String meetingId = '';
-
-  Future<bool> createNewMeeting() async {
-    meetingId=const Uuid().v4();
-    final response = await addRoomUseCase( MeetingParams(meetingId: meetingId));
-    bool isAdd = false;
-    response.fold(
-            (l) => emit(state.copyWith( status: MeetingStates.failure)),
-            (r) {
-          print("object $r}");
-          isAdd = r;
-          emit(state.copyWith(status: MeetingStates.success));
-        });
-    print(isAdd);
-    return isAdd;
+  String get genRandNo {
+    int min = 10000000;
+    int max = 99999999;
+    final String liveId = '${min + Random().nextInt(max - min)}';
+    return liveId;
   }
 
-  Future<bool> joinNewMeeting(
-      String roomId
-      ) async {
-    final response = await joinRoomUseCase( MeetingParams(meetingId: 'd1472203-7f1f-4c17-bb5c-cdba9ae4e163'));
-    bool isAdd = false;
-    response.fold(
-            (l) => emit(state.copyWith( status: MeetingStates.failure)),
-            (r) {
-          print("object $r}");
-          isAdd = r;
-          emit(state.copyWith(status: MeetingStates.success));
-        });
-    print(isAdd);
-    return isAdd;
-  }
-
-  // @override
-  // void onChange(Change<MeetingState> change) {
-  //   debugPrint('change is ${change.currentState}');
-  //   debugPrint('change next ${change.nextState}');
-  //   super.onChange(change);
-  // }
-
-  Future<void> addRoom(String roomId,
-      {DateTime? startDate, DateTime? endDate, String? title}) async {
-    emit(state.copyWith(status: MeetingStates.loading));
-    addRoomUseCase(MeetingParams(
-      meetingId: roomId,
-
-      /// to [Schedule] meeting
-      startedAt: startDate,
-      endsAt: endDate,
+  Future<bool> createNewMeeting({
+    DateTime? startTime,
+    DateTime? endTime,
+    String? title,
+  }) async {
+    meetingId = genRandNo;
+    final response = await addRoomUseCase(MeetingParams(
+      meetingId: meetingId,
+      endsAt: endTime,
+      startedAt: startTime,
       title: title,
-    ))
-        .then((value) => emit(state.copyWith(status: MeetingStates.success)))
-        .catchError(
-          (error) => emit(
-            state.copyWith(status: MeetingStates.failure),
-          ),
-        );
+    ));
+    emit(state.copyWith(status: MeetingStates.loading));
+    bool isAdd = false;
+    response.fold(
+        (l) => emit(state.copyWith(status: MeetingStates.failure, failure: l)),
+        (r) async {
+      print("object $r");
+      emit(state.copyWith(status: MeetingStates.success));
+      if (startTime != null) {
+        await getScheduledMeetings();
+        isAdd = true;
+      }
+    });
+
+    // print(isAdd);
+    return isAdd;
   }
 
-  void joinRoom(String roomId) {
+  Future<bool> joinNewMeeting(String roomId) async {
     emit(state.copyWith(status: MeetingStates.loading));
-    joinRoomUseCase(MeetingParams(meetingId: roomId)).then((result) {
-      // if (result!.statusCode == 200) {
-      //   emit(state.copyWith(status: MeetingStates.success));
-      // } else {
-      //   final String errorMessage = result.data['error']['message'] ?? '';
-      //   final Map<String, dynamic> localizedMessage = json.decode(errorMessage);
-      //   print('state is ${localizedMessage['en']}');
-      //   emit(state.copyWith(
-      //     status: MeetingStates.failure,
-      //     errorMessage: (localizedMessage[AppPages.router.configuration
-      //                 .navigatorKey.currentContext!.isArabic
-      //             ? 'ar'
-      //             : 'en'] ??
-      //         'Room not registered'),
-      //   ));
-      //   showErrorMessage(
-      //     AppPages.router.configuration.navigatorKey.currentContext!,
-      //     state.errorMessage!,
-      //   );
-      // }
+    final response = await joinRoomUseCase(MeetingParams(meetingId: roomId));
+    bool isAdd = false;
+    response.fold((l) {
+      emit(state.copyWith(status: MeetingStates.failure, failure: l));
+      showErrorMessage(
+        _context(),
+        getFailureMessage(
+          state.failure ?? UnknownFailure(''),
+          _context(),
+        ),
+      );
+    }, (r) {
+      print("object $r}");
+      isAdd = r;
+
+      emit(state.copyWith(status: MeetingStates.success));
     });
+    print(isAdd);
+    return isAdd;
+  }
+
+  BuildContext _context() =>
+      AppPages.router.configuration.navigatorKey.currentContext!;
+
+  @override
+  void onChange(Change<MeetingState> change) {
+    debugPrint('change is ${change.currentState.status}');
+    debugPrint('change next ${change.nextState.status}');
+    super.onChange(change);
   }
 
   Future<void> endRoom(String roomId) async {
     emit(state.copyWith(status: MeetingStates.loading));
     await endRoomUseCase(MeetingParams(meetingId: roomId)).then((value) {
-      print('room Ended');
+      // print('room Ended');
       emit(state.copyWith(status: MeetingStates.success));
     }).catchError((error) {
-      print('room Not Ended');
+      // print('room Not Ended');
       emit(state.copyWith(status: MeetingStates.failure));
       throw '';
     });
   }
 
-  List<ScheduledMeeting> scheduledMeetingList = [];
-  void getScheduledMeetings() {
+  Future<void> getScheduledMeetings() async {
     emit(state.copyWith(status: MeetingStates.loading));
-    getScheduledRoomsUseCase(
-            MeetingParams(meetingId: UserCubit.to.state.data!.id))
-        .then((value) {
-      value.fold((l) => emit(state.copyWith(status: MeetingStates.failure)),
-          (r) {
-        scheduledMeetingList = r;
-        getScheduledMeetings();
-        emit(state.copyWith(status: MeetingStates.success));
-      });
-    }).catchError((error) {
-      emit(state.copyWith(status: MeetingStates.failure));
+    var result = await getScheduledRoomsUseCase(MeetingParams(
+      meetingId: UserCubit.to.state.data!.id,
+    ));
+    result.fold((l) {
+      emit(state.copyWith(status: MeetingStates.failure, failure: l));
+    }, (r) {
+      CliLogger.info('first title is  ${r.first.title}');
+      emit(state.copyWith(
+        status: MeetingStates.gotscheduledMeeting,
+        scheduledMeetings: r,
+      ));
+      // emit(state.copyWith(
+      //   status: MeetingStates.initial,
+      //   scheduledMeetings: r,
+      // ));
     });
   }
 

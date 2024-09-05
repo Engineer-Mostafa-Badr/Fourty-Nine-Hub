@@ -1,9 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
+
+import 'api_consumer.dart';
 
 class GoogleApiConsumer extends ApiConsumer {
   final Dio dio;
@@ -49,7 +50,7 @@ class GoogleApiConsumer extends ApiConsumer {
         }
       }
     }
-    return  UnknownFailure(e);
+    return UnknownFailure(e);
   }
 
   @override
@@ -79,7 +80,9 @@ class GoogleApiConsumer extends ApiConsumer {
 
   @override
   Future<Either<Failure, Map<String, dynamic>>> put(String url,
-      {Map<String, dynamic>? data, Map<String, dynamic>? queryParameters}) {
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers}) {
     // TODO: implement put
     throw UnimplementedError();
   }

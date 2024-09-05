@@ -15,7 +15,6 @@ class MeetingServiceLocator {
     serviceLocator.registerLazySingleton<MeetingDataSource>(
       () => MeetingDataSourceImpl(
         serviceLocator(),
-        serviceLocator(),
       ),
     );
 
