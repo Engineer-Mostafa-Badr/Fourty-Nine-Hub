@@ -8,9 +8,6 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentatio
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_state.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../../core/messages/messages.dart';
-import '../../../../../../res/style/styles.dart';
-import '../../../../../../service_locator/service_locator.dart';
-import '../../../data/repositories/company_advertise_repo/company_advertise_repo_impl.dart';
 import 'build_item_photo_text_post.dart';
 
 class PhotoAndTextPostContent extends StatelessWidget {
