@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/localization/locales.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -85,14 +87,14 @@ class CompetitionCard extends StatelessWidget {
                 Expanded(
                     child: Label(
                   text:
-                      'Minimum ${competitionsWalletEntity.maxRequests} request for personal transaction',
+                      '${LocaleKeys.minimum.localize} ${competitionsWalletEntity.maxRequests} ${LocaleKeys.requestTransaction.localize}',
                   style: Styles.mediumText(color: Colors.grey),
                 )),
               ],
             ),
             const Sizer(),
             AppButton(
-              label: 'Request Withdrawel',
+              label: LocaleKeys.requestWithdraw.localize,
               color: AppColors.AUTH_CONTAINER_COLOR,
               backColor: competitionsWalletEntity.countOfRequest >= 5000 &&
                       competitionsWalletEntity.isWinner == true

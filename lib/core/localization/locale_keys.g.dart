@@ -210,5 +210,21 @@ abstract class  LocaleKeys {
   static String noTextPosts = 'noTextPosts'.tr();
   static String noPhotoPosts = 'noPhotoPosts'.tr();
   static String noPosts = 'noPosts'.tr();
+  static String transferMoney = 'transferMoney'.tr();
+  static String yourBalance = 'yourBalance'.tr();
+  static String yourGift = 'yourGift'.tr();
+  static String yourWallet = 'yourWallet'.tr();
+  static String hUB = '49HUB'.tr();
+  static String transaction = 'transaction'.tr();
+  static String minimum = 'minimum'.tr();
+  static String withdraw = 'withdraw'.tr();
+  static String subscriptions = 'subscriptions'.tr();
+  static String showMore = 'showMore'.tr();
+  static String history = 'history'.tr();
+  static String competitions = 'competitions'.tr();
+  static String requestWithdraw = 'requestWithdraw'.tr();
+  static String requestTransaction = 'requestTransaction'.tr();
+  static String years = 'years'.tr();
+  static String transfer = 'transfer'.tr();
 
 }

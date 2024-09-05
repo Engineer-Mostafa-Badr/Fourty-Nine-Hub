@@ -4,14 +4,15 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_states.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/wallet_card_widget.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/enums/wallet_types_enums.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 
@@ -21,8 +22,8 @@ class BalanceWalletView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BackAppBar(
-          label: Labels.balanceWallet,
+        appBar:  BackAppBar(
+          label: LocaleKeys.balance.localize,
         ),
         body: BlocProvider<BalanceCubit>(
           create: (_) =>serviceLocator()..loadData(),
@@ -47,29 +48,42 @@ class BalanceWalletView extends StatelessWidget {
                         ),
                         const Sizer(),
                         Expanded(
-                            child: Label(
-                          text: 'Minimum 1002 EGP for personal transaction',
-                          style: Styles.mediumText(color: Colors.grey),
-                        )),
+                          child: Row(
+                            children: [
+                              Label(
+                                text: LocaleKeys.minimum.localize,
+                                style: Styles.mediumText(color: Colors.grey),
+                              ),
+                              Label(
+                                text: '500 ',
+                                style: Styles.mediumText(color: Colors.grey),
+                              ),
+                              Label(
+                                text: LocaleKeys.transaction.localize,
+                                style: Styles.mediumText(color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                     AppButton(
                       backColor: Colors.red.withOpacity(.5),
-                      label: 'Request Withdrawel',
+                      label: LocaleKeys.requestWithdraw.localize,
                       onPressed: () => context.push(Routes.PAYMENT),
                       margin: 10,
                     ),
                     _buildWalletActionItem(
-                        label: 'Gift / 5 years',
+                        label: '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',
                         subTitle: '${state.balance?.fiveYears ??''} . 3 years last',
                         ontap: () {}),
                     _buildWalletActionItem(
-                        label: 'Gift / 10 years',
+                        label: '${LocaleKeys.gift.localize} / 10 ${LocaleKeys.years.localize}',
                         subTitle: '${state.balance?.tenYears ??''} . 8 years last',
                         ontap: () {}),
                     const Sizer(),
                     Label(
-                      text: 'History',
+                      text:LocaleKeys.history.localize,
                       style: Styles.headerText(),
                     ),
                     // ListView.separated(

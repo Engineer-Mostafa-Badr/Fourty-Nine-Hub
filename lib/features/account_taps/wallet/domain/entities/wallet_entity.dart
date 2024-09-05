@@ -1,5 +1,5 @@
 class WalletEntity {
-  final num realAmount;
+  final num? realAmount;
 
   WalletEntity({required this.realAmount});
 }

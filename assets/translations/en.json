@@ -208,5 +208,21 @@
   "deleteSuccessfully": "Delete Successfully",
   "noTextPosts": "There are no text posts at the moment.",
   "noPhotoPosts": "There are no photo posts at the moment.",
-  "noPosts": "There are no posts at the moment."
+  "noPosts": "There are no posts at the moment.",
+  "transferMoney": "Transfer Money",
+  "yourBalance": "Your Balance is",
+  "yourGift": "Your Gift is",
+  "yourWallet": "Your Wallet is",
+  "hUB": "49 HUB WALLET",
+  "transaction": "for personal transaction",
+  "minimum": "Minimum ",
+  "withdraw": "Withdraw",
+  "subscriptions": "Subscriptions",
+  "showMore": "Show More",
+  "history": "History",
+  "competitions": "Competitions",
+  "requestWithdraw": "Request Withdraw",
+  "requestTransaction": "request for personal transaction",
+  "years": "Years",
+  "transfer": "Transfer"
 }

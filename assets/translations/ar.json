@@ -208,5 +208,21 @@
   "deleteSuccessfully": "تم الحذف بنجاح",
   "noTextPosts": "لا توجد منشورات نصية في الوقت الحالي.",
   "noPhotoPosts": "لا توجد منشورات صور في الوقت الحالي.",
-  "noPosts": "لا توجد منشورات في الوقت الحالي."
+  "noPosts": "لا توجد منشورات في الوقت الحالي.",
+  "transferMoney": "تحويل اموال",
+  "yourBalance": "رصيدك",
+  "yourGift": "هديتك",
+  "yourWallet": "محفظتك",
+  "hUB": "محفظة 49 HUB",
+  "transaction": "للمعاملات الشخصية ",
+  "minimum": "الحد الأدنى ",
+  "withdraw": "سحب",
+  "subscriptions": "الاشتراكات",
+  "showMore": "إظهار المزيد",
+  "history": "التاريخ",
+  "competitions": "المسابقات",
+  "requestWithdraw": "طلب سحب",
+  "requestTransaction": "طلب للمعاملات الشخصية",
+  "years": "سنوات",
+  "transfer": "تحويل"
 }

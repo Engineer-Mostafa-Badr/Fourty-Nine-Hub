@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 import '../../../../../core/enums/wallet_types_enums.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import 'semi_circle_indicator.dart';
 
 class WalletCardWidget extends StatelessWidget {
   final String balance;
@@ -31,17 +32,17 @@ class WalletCardWidget extends StatelessWidget {
               children: [
                 if (type == WalletTypes.balance)
                   Label(
-                    text: 'Your Balance is',
+                    text: LocaleKeys.yourBalance.localize,
                     style: Styles.mediumText(color: Colors.white),
                   ),
                 if (type == WalletTypes.giftWallet)
                   Label(
-                    text: 'Your Gift is',
+                    text: LocaleKeys.yourGift.localize,
                     style: Styles.mediumText(color: Colors.white),
                   ),
                 if (type == WalletTypes.mainWallet)
                   Label(
-                    text: 'Your Wallet is',
+                    text: LocaleKeys.yourWallet.localize,
                     style: Styles.mediumText(color: Colors.white),
                   ),
                 Label(
@@ -49,7 +50,7 @@ class WalletCardWidget extends StatelessWidget {
                   style: Styles.headerText(color: Colors.white, fontSize: 25),
                 ),
                 Label(
-                  text: '49 HUB WALLET',
+                  text: LocaleKeys.hUB.localize,
                   style: Styles.mediumText(
                       fontWeight: FontWeight.w300, color: Colors.white),
                 )

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_states.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -9,6 +10,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/styles.dart';
 import '../widgets/competition_card.dart';
@@ -20,8 +22,8 @@ class GiftWalletView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BackAppBar(
-          label: Labels.giftWallet,
+        appBar:  BackAppBar(
+          label: LocaleKeys.gift.localize,
         ),
         body: BlocProvider<GiftCubit>(
           create:(_)=>serviceLocator()..loadData(),
@@ -38,7 +40,7 @@ class GiftWalletView extends StatelessWidget {
                     ),
                     const Sizer(),
                     Label(
-                      text: 'Competitions',
+                      text: LocaleKeys.competition.localize,
                       style: Styles.headerText(),
                     ),
                     ListView.builder(

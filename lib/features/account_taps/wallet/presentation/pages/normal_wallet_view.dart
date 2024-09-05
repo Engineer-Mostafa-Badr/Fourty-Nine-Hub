@@ -26,6 +26,7 @@ class NormalWalletView extends StatefulWidget {
 
 class _NormalWalletViewState extends State<NormalWalletView> {
   bool showMore = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,8 +41,8 @@ class _NormalWalletViewState extends State<NormalWalletView> {
               //   context.push(Routes.TRANSFERMONEY);
               // }
             },
-            color: Colors.red,
-            textColor: Colors.white,
+            color: AppColors.SECONDARY_COLOR,
+            textColor: AppColors.AUTH_CONTAINER_COLOR,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -59,23 +60,51 @@ class _NormalWalletViewState extends State<NormalWalletView> {
           ),
         ),
         body: BlocProvider<WalletCubit>(
-          create: (BuildContext context)=>serviceLocator()..loadData(),
-          child: BlocBuilder<WalletCubit, WalletState>(builder: (context, state) {
+          create: (BuildContext context) => serviceLocator()..loadData(),
+          child:
+              BlocBuilder<WalletCubit, WalletState>(builder: (context, state) {
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                      WalletCardWidget(
-                      balance: '${state.wallet?.realAmount ??''}',
+                    WalletCardWidget(
+                      balance: '${state.wallet?.realAmount ?? ''}',
                       type: WalletTypes.mainWallet,
-
                       // target: 1002,
                     ),
                     const Sizer(),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.info_outline,
+                          color: Colors.grey,
+                        ),
+                        const Sizer(),
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Label(
+                                text: 'Minimum ',
+                                style: Styles.mediumText(color: Colors.grey),
+                              ),
+                              Label(
+                                text: '500 ',
+                                style: Styles.mediumText(color: Colors.grey),
+                              ),
+                              Label(
+                                text: 'for personal transaction',
+                                style: Styles.mediumText(color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Sizer(),
                     AppButton(
-                      label: 'Withdrawel',
+                      label: 'Withdraw',
                       backColor: AppColors.SECONDARY_COLOR.withOpacity(.5),
                       onPressed: () => context.push(Routes.PAYMENT),
                     ),

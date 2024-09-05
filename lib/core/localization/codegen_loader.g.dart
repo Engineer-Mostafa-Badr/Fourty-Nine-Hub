@@ -224,7 +224,23 @@ class CodegenLoader extends AssetLoader{
   "deleteSuccessfully": "تم الحذف بنجاح",
   "noTextPosts": "لا توجد منشورات نصية في الوقت الحالي.",
   "noPhotoPosts": "لا توجد منشورات صور في الوقت الحالي.",
-  "noPosts": "لا توجد منشورات في الوقت الحالي."
+  "noPosts": "لا توجد منشورات في الوقت الحالي.",
+  "transferMoney": "تحويل اموال",
+  "yourBalance": "رصيدك",
+  "yourGift": "هديتك",
+  "yourWallet": "محفظتك",
+  "49HUB": "محفظة 49 HUB",
+  "transaction": "للمعاملات الشخصية ",
+  "minimum": "الحد الأدنى ",
+  "withdraw": "سحب",
+  "subscriptions": "الاشتراكات",
+  "showMore": "إظهار المزيد",
+  "history": "التاريخ",
+  "competitions": "المسابقات",
+  "requestWithdraw": "طلب سحب",
+  "requestTransaction": "طلب للمعاملات الشخصية",
+  "years": "سنوات",
+  "transfer": "تحويل"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -436,7 +452,23 @@ static const Map<String,dynamic> en = {
   "deleteSuccessfully": "Delete Successfully",
   "noTextPosts": "There are no text posts at the moment.",
   "noPhotoPosts": "There are no photo posts at the moment.",
-  "noPosts": "There are no posts at the moment."
+  "noPosts": "There are no posts at the moment.",
+  "transferMoney": "Transfer Money",
+  "yourBalance": "Your Balance is",
+  "yourGift": "Your Gift is",
+  "yourWallet": "Your Wallet is",
+  "49HUB": "49 HUB WALLET",
+  "transaction": "for personal transaction",
+  "minimum": "Minimum ",
+  "withdraw": "Withdraw",
+  "subscriptions": "Subscriptions",
+  "showMore": "Show More",
+  "history": "History",
+  "competitions": "Competitions",
+  "requestWithdraw": "Request Withdraw",
+  "requestTransaction": "request for personal transaction",
+  "years": "Years",
+  "transfer": "Transfer"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
