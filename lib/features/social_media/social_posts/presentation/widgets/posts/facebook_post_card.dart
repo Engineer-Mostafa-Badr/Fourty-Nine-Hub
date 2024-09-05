@@ -5,7 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
@@ -389,9 +388,24 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   Widget _buildPostOptions(
       {required bool fromDetails, required PostEntity post}) {
     return SizedBox(
-      height: widget.isMyPost ? 150 : 80,
+      height: widget.isMyPost ? 150 : 150,
       child: Column(
         children: [
+          if (!widget.isMyPost)listTile(
+              icon: Icons.report,
+              iconColor: Colors.red,
+              title: 'Report post',
+              subTitle: 'Your well reports this post.',
+              onTap: () async{
+                Future.delayed(const Duration(milliseconds: 200), () {
+                  bottomSheet(
+                    context: context,
+                    widget: ReportView(id: widget.post.id,
+                      categoryId: '66a3583454e6e337915514db',)
+                  );
+                });
+
+              }),
           if (widget.isMyPost)
             listTile(
                 icon: Icons.delete,
@@ -420,7 +434,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   }
 
   Widget listTile(
-      {required IconData icon,
+      {required IconData icon, Color? iconColor,
       required String title,
       required String subTitle,
       required Function onTap}) {
@@ -432,7 +446,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       },
       leading: Icon(
         icon,
-        color: Colors.black,
+        color: iconColor??Colors.black,
       ),
       subtitle: Label(
         text: subTitle,
@@ -445,7 +459,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
     required BuildContext context,
     required PostEntity post,
   }) {
-    final user = context.read<UserCubit>().state.data;
+
     return Padding(
       padding: const EdgeInsets.only(left: 8,right: 8,top: 8),
       child: Column(
@@ -508,27 +522,17 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   ],
                 ),
               ),
-              if (post.user.id != user?.id)
-                IconAppButton(
-                  onPressed: () {
-                    bottomSheet(
-                        context: context,
-                        widget: ReportView(
-                          id: widget.post.id,
-                          categoryId: '66a3583454e6e337915514db',
-                        ));
-                  },
-                  icon: Icons.report,
-                  color: AppColors.SECONDARY_COLOR,
-                ),
               const Sizer(),
                 IconAppButton(
-                  icon: Icons.clear,
+                  icon: Icons.more_horiz_outlined,
                   onPressed: () {
                     bottomSheet(
                         context: context,
                         widget: _buildPostOptions(
-                            fromDetails: widget.from == 'details', post: post));
+                            fromDetails: widget.from == 'details',
+                            post: post,
+                        ),
+                    );
                   },
                 ),
             ],

@@ -1,60 +1,77 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
-import 'package:fourtyninehub/res/assets/jsons.dart';
-
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/features/account_taps/lists/data/models/user_friend_model.dart';
+import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
 import '../../../../../core/error/failure.dart';
-import '../../domain/entities/users_list_entity.dart';
-import '../models/users_list_model.dart';
 
 abstract class ListsRemoteDataSource {
-  Future<Either<Failure, List<UsersListEntity>>> getFriendsList();
-  Future<Either<Failure, List<UsersListEntity>>> getFollowers();
-  Future<Either<Failure, List<UsersListEntity>>> getFreindRequests();
-  Future<Either<Failure, List<UsersListEntity>>> getBlockedUsers();
+  Future<Either<Failure, List<UserFriendEntity>>> getFriendsList();
+  Future<Either<Failure, List<UserFriendEntity>>> getFollowers();
+  Future<Either<Failure, List<UserFriendEntity>>> getFreindRequests();
+  Future<Either<Failure, List<UserFriendEntity>>> getBlockedUsers();
 }
 
 class ListsRemoteDataSourceImpl implements ListsRemoteDataSource {
-  final JsonParser _apiConsumer;
+  final ApiConsumer _apiConsumer;
   ListsRemoteDataSourceImpl(this._apiConsumer);
   @override
-  Future<Either<Failure, List<UsersListEntity>>> getBlockedUsers() async {
-    final response = await _apiConsumer.get(Jsons.usersList);
-    return response.fold(
-        (failure) => Left(failure),
-        (data) => Right((data['data']['items'] as List)
-            .map((e) => UsersListModel.fromJson(e))
-            .toList()));
+  Future<Either<Failure, List<UserFriendEntity >>> getBlockedUsers() async {
+    final response = await _apiConsumer.get(
+        EndPoints.blockedUsersList);
+
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data'] as List)
+          .map((e) => UserFriendModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
   }
 
   @override
-  Future<Either<Failure, List<UsersListEntity>>> getFollowers() async {
-    final response = await _apiConsumer.get(Jsons.usersList);
-    return response.fold(
-        (failure) => Left(failure),
-        (data) => Right((data['data']['items'] as List)
-            .map((e) => UsersListModel.fromJson(e))
-            .toList()));
+  Future<Either<Failure, List<UserFriendEntity>>> getFollowers() async {
+    final response = await _apiConsumer.get(
+        EndPoints.followersList);
+
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data']['followers'] as List)
+          .map((e) => UserFriendModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
   }
 
   @override
-  Future<Either<Failure, List<UsersListEntity>>> getFreindRequests() async {
-    final response = await _apiConsumer.get(Jsons.usersList);
-    return response.fold(
-        (failure) => Left(failure),
-        (data) => Right((data['data']['items'] as List)
-            .map((e) => UsersListModel.fromJson(e))
-            .toList()));
+  Future<Either<Failure, List<UserFriendEntity>>> getFreindRequests() async {
+    final response = await _apiConsumer.get(
+        EndPoints.friendRequestsList);
+
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data'] as List)
+          .map((e) => UserFriendModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
   }
 
   @override
-  Future<Either<Failure, List<UsersListEntity>>> getFriendsList() async {
-    final response = await _apiConsumer.get(Jsons.usersList);
+  Future<Either<Failure, List<UserFriendEntity>>> getFriendsList() async {
+    final response = await _apiConsumer.get(
+        EndPoints.friendsList);
 
-    return response.fold((failure) {
-      return Left(failure);
-    },
-        (data) => Right((data['data']['items'] as List)
-            .map((e) => UsersListModel.fromJson(e))
-            .toList()));
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data'] as List)
+          .map((e) => UserFriendModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
   }
 }

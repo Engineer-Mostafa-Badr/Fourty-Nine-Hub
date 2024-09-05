@@ -12,7 +12,8 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class MediaView extends StatefulWidget {
-  const MediaView({super.key});
+  const MediaView({super.key, required this.userId});
+  final String userId;
 
   @override
   State<MediaView> createState() => _MediaViewState();
@@ -22,7 +23,7 @@ class _MediaViewState extends State<MediaView> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<InstagramCubit>(
-      create: (_) => serviceLocator()..loadMedia(),
+      create: (_) => serviceLocator()..loadMedia(widget.userId),
       child: BlocConsumer<InstagramCubit, InstagramState>(
           listener: (context, state) {
         if (state.status == StateStatus.error) {

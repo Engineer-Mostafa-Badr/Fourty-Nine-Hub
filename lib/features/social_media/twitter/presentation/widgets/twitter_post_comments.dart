@@ -166,18 +166,28 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                     const ProfileImage(accountId: 0,userId: '',),
                     const Sizer(),
                     Expanded(
-                        child: FormTextField(
-                            hint: 'Type your comment ....',
-                            height: kToolbarHeight * .7,
-                            action: (v) {
-                              setState(() {});
-                            },
-                            controller: commentTextController)),
+                        child:
+                      TextFormField(
+                      maxLines: null,
+                      controller: commentTextController,
+                      onChanged: (v) {
+                        setState(() {});
+                      },
+                      style: Styles.headerText(fontSize: 26),
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        contentPadding: const EdgeInsets.all(5),
+                        hintText: 'Type your comment ....',
+                        hintStyle: Styles.mediumText(),
+                      ),
+                    )
+                    ),
                     const Sizer(),
                     if (commentTextController.text.isNotEmpty)
                       IconAppButton(
                           icon: Icons.send,
                           isCircle: true,
+                          size: 20,
                           onPressed: () async {
                             TwitterPostCommentModel data =
                                 await widget.onAddComment(

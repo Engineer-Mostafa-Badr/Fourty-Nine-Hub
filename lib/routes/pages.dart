@@ -506,7 +506,7 @@ class AppPages {
                     path: Paths.Lists,
                     name: Routes.Lists,
                     builder: (context, state) => BlocProvider<ListsCubit>(
-                          create: (_) => serviceLocator(),
+                          create: (_) => serviceLocator()..getFriends(),
                           child: const ListsView(),
                         )),
                 GoRoute(

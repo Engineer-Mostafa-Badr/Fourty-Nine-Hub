@@ -11,7 +11,6 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_comments.dart';
@@ -60,9 +59,9 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
           child: CustomScrollView(
             controller: widget.scrollController,
             slivers: [
-              const SliverToBoxAdapter(
-                child: ChatStories(),
-              ),
+              // const SliverToBoxAdapter(
+              //   child: ChatStories(),
+              // ),
               PagedSliverList<int, PostEntity>(
                 pagingController: controller.globalFeedPagingController,
                 builderDelegate: PagedChildBuilderDelegate<PostEntity>(

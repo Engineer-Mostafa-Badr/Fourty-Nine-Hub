@@ -13,6 +13,7 @@ class UserProfileEntity {
   final String? profilePicture;
   final String? profileCover;
   int? friendsCount;
+  int? instagramPosts;
   final int? followersCount;
   final int? followingCount;
   bool? isFollowed;
@@ -21,6 +22,7 @@ class UserProfileEntity {
   bool? sentFriendRequest;
   bool? isDocument;
   bool? isBlock;
+  List<String>? followers;
 
   String get fullName => '$firstName $lastName';
   bool isMyAccount(String anotherId) {
@@ -39,6 +41,7 @@ class UserProfileEntity {
     required this.followersCount,
     required this.followingCount,
     required this.posts,
+    required this.instagramPosts,
     this.isFollowed = false,
     this.areFriends = false,
     this.isDocument = false,
@@ -50,5 +53,6 @@ class UserProfileEntity {
     required this.country,
     required this.job,
     required this.phone,
+    this.followers,
   });
 }
