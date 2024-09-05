@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_gifts_use_case.dart';
@@ -19,9 +21,9 @@ class GiftCubit extends Cubit<GiftState>{
    response.fold((l) {
      emit(state.copyWith(failure: l, status: GiftStates.error));
    }, (data) {
-     print('///////////////////////////////////////');
-     print(data.giftWallet.userId);
-     print('///////////////////////////////////////');
+     log('///////////////////////////////////////');
+     log(data.giftWallet.userId);
+     log('///////////////////////////////////////');
      emit(state.copyWith(gift: data));
 
 
