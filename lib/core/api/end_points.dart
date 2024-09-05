@@ -35,6 +35,7 @@ class EndPoints {
   static const getGift= '/subscriber/competitions';
   static const getBalance= '/main-wallet/user-balance';
   static const getWallet= '/main-wallet/user-wallet';
+  static const getPrice= '/advertisementCompany/price';
 
   
   static const getWheel = '/wheels/random';

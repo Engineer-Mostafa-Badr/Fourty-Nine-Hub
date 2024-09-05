@@ -4,8 +4,8 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/custom_container.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/show_post_company_advertise.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/pages/citiy_filter_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -13,8 +13,7 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../cubit/company_advertise/company_advertise_cubit.dart';
-import '../cubit/company_advertise_price/advertise_price_cubit.dart';
-import '../cubit/company_advertise_price/advertise_price_state.dart';
+import '../cubit/create_company_ad_cubit.dart';
 import 'create_posts_company.dart';
 
 class CreateCompanyAdView extends StatefulWidget {
@@ -76,10 +75,11 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
         ],
       ),
       body: context.read<UserCubit>().isLoggedIn
-          ? BlocBuilder<AdvertisePriceCubit, AdvertisePriceState>(
-              builder: (context, state) {
-                if (state is AdvertisePriceSuccess) {
-                  return Padding(
+          ? BlocProvider<CreateCompanyAdCubit>(
+            create: (_)=>serviceLocator()..loadData(),
+            child: BlocBuilder<CreateCompanyAdCubit, CreateCompanyAdState>(
+                builder: (context, state) {
+                return  Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
@@ -89,95 +89,78 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                               CustomContainerAdvertise(
                                 filter: 'written',
                                 title: LocaleKeys.textOnly.localize,
-                                price: state.advertisePriceModel.data!
-                                    .advertisementPostPrice!,
+                                price: state.price?.postPrice as int? ?? 0 ,
                                 context: context,
                                 function: () {
-                                  _updateTotalPrice(state.advertisePriceModel
-                                      .data!.advertisementPostPrice!);
+                                  _updateTotalPrice(state.price?.postPrice as int? ?? 0 );
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => CreatePostCompany(
-                                              picture: false,
-                                              title: LocaleKeys
-                                                  .createTextPost.localize,
-                                              type: 'written',
-                                              totalPrice: state
-                                                  .advertisePriceModel
-                                                  .data!
-                                                  .advertisementPostPrice!,
-                                            )),
+                                          picture: false,
+                                          title: LocaleKeys
+                                              .createTextPost.localize,
+                                          type: 'written',
+                                          totalPrice: state.price?.postPrice as int? ?? 0 ,
+                                        )),
                                   );
                                 },
                               ),
                               CustomContainerAdvertise(
                                 filter: 'photo',
                                 title: LocaleKeys.pictureOnly.localize,
-                                price: state.advertisePriceModel.data!
-                                    .advertisementPhotoPrice!,
+                                price: state.price?.photoPrice as int? ?? 0 ,
                                 context: context,
                                 function: () {
-                                  _updateTotalPrice(state.advertisePriceModel
-                                      .data!.advertisementPhotoPrice!);
+                                  _updateTotalPrice(state.price?.photoPrice as int? ?? 0 );
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => CreatePostCompany(
-                                              text: false,
-                                              title: LocaleKeys
-                                                  .createPicturePost.localize,
-                                              type: 'photo',
-                                              totalPrice: state
-                                                  .advertisePriceModel
-                                                  .data!
-                                                  .advertisementPhotoPrice!,
-                                            )),
+                                          text: false,
+                                          title: LocaleKeys
+                                              .createPicturePost.localize,
+                                          type: 'photo',
+                                          totalPrice: state.price?.photoPrice as int? ?? 0
+                                        )),
                                   );
                                 },
                               ),
                               CustomContainerAdvertise(
                                 filter: 'photo_written',
                                 title: LocaleKeys.textWithPictures.localize,
-                                price: state.advertisePriceModel.data!
-                                    .advertisementPostAndPhotoPrice!,
+                                price: state.price?.postAndPhotoPrice as int? ?? 0 ,
                                 context: context,
                                 function: () {
-                                  _updateTotalPrice(state.advertisePriceModel
-                                      .data!.advertisementPostAndPhotoPrice!);
+                                  _updateTotalPrice(state.price?.postAndPhotoPrice as int? ?? 0);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => CreatePostCompany(
-                                              title: LocaleKeys
-                                                  .createPost.localize,
-                                              type: 'photo_written',
-                                              totalPrice: state
-                                                  .advertisePriceModel
-                                                  .data!
-                                                  .advertisementPostAndPhotoPrice!,
-                                            )),
+                                          title: LocaleKeys
+                                              .createPost.localize,
+                                          type: 'photo_written',
+                                          totalPrice: state.price?.postAndPhotoPrice as int? ?? 0
+                                        )),
                                   );
                                 },
                               ),
                               CustomContainerAdvertise(
                                 filter: 'reel',
                                 title: LocaleKeys.reel.localize,
-                                price: state.advertisePriceModel.data!
-                                    .advertisementReelPrice!,
+                                price: state.price?.reelPrice as int? ?? 0,
                                 context: context,
                                 function: () {
-                                  _updateTotalPrice(state.advertisePriceModel
-                                      .data!.advertisementReelPrice!);
+                                  _updateTotalPrice(state.price?.reelPrice as int? ?? 0);
 
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const ReelsRecordingScreen(
+                                        const ReelsRecordingScreen(
 
-                                              voiceUrl: '',
-                                            )),
+                                          voiceUrl: '',
+                                        )),
                                   );
                                   // Handle reel creation logic here
                                 },
@@ -240,18 +223,9 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                       ],
                     ),
                   );
-                } else if (state is AdvertisePriceError) {
-                  return Center(
-                    child: Text(
-                      state.errMessage,
-                      textAlign: TextAlign.center,
-                      style: Styles.mediumText(),
-                    ),
-                  );
-                }
-                return const Center(child: CircularProgressIndicator());
-              },
-            )
+                },
+              ),
+          )
           : Center(
               child: SingleChildScrollView(
                 child: GestureDetector(

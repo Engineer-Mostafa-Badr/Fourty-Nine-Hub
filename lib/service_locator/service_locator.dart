@@ -37,6 +37,7 @@ import '../firebase_options.dart';
 import 'account_service_locator.dart';
 import 'auction_service_locator.dart';
 import 'balance_service_locator.dart';
+import 'company_add_service_locator.dart';
 import 'food_service_locator.dart';
 import 'fourty_nine_service_locator.dart';
 import 'health_service_locator.dart';
@@ -191,5 +192,6 @@ class DI {
     FaceBookServiceLocator.execute(serviceLocator: serviceLocator);
     TwitterServiceLocator.execute(serviceLocator: serviceLocator);
     BalanceServiceLocator.execute(serviceLocator: serviceLocator);
+    CompanyAddServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

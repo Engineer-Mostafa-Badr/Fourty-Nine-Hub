@@ -66,11 +66,11 @@ class MyApp extends StatelessWidget {
             WinnerCubit(serviceLocator.get<CompetitionRepoImpl>())
               ..fetchWinners(context)
         ),
-        BlocProvider(
-            create: (context) =>
-            AdvertisePriceCubit(serviceLocator.get<CompanyAdvertiseRepoImpl>())
-              ..fetchPrice(context)
-        ),
+        // BlocProvider(
+        //     create: (context) =>
+        //     AdvertisePriceCubit(serviceLocator.get<CompanyAdvertiseRepoImpl>())
+        //       ..fetchPrice(context)
+        // ),
         BlocProvider(create: (_) => CompanyAdvertiseCubit(serviceLocator<CompanyAdvertiseRepoImpl>())),
         // BlocProvider(
         //   create: (context) => serviceLocator<RiderequestCubit>(),

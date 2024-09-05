@@ -25,9 +25,7 @@ class PhotoAndTextPostContent extends StatelessWidget {
         }
       },
       builder: (BuildContext context, state) {
-        var data=CompanyAdvertiseCubit.get(context).data;
-        if(data.isNotEmpty) {
-          return Padding(
+        return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: PaginationView<Advertises>(
             build: (scrollController, data) {
@@ -49,13 +47,6 @@ class PhotoAndTextPostContent extends StatelessWidget {
                   .read<CompanyAdvertiseCubit>()
                   .fetchAdvertiseCompany(context,'photo_written', params: paginationParams);
             },
-          ),
-        );
-        }
-        return Center(
-          child: Text(
-            LocaleKeys.noPosts.localize,
-            style: Styles.mediumText(fontSize: 34),
           ),
         );
       },

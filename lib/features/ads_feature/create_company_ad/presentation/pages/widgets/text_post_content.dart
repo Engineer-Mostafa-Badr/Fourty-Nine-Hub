@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentatio
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/build_item_text_post.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../../core/messages/messages.dart';
-import '../../../../../../res/style/styles.dart';
 
 class TextPostContent extends StatelessWidget {
   const TextPostContent({super.key});
@@ -23,9 +22,7 @@ class TextPostContent extends StatelessWidget {
         }
       },
       builder: (BuildContext context, CompanyAdvertiseState state) {
-        var data=CompanyAdvertiseCubit.get(context).data;
-        if(data.isNotEmpty) {
-          return Padding(
+        return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: PaginationView<Advertises>(
             build: (scrollController, data) {
@@ -47,13 +44,6 @@ class TextPostContent extends StatelessWidget {
                   .read<CompanyAdvertiseCubit>()
                   .fetchAdvertiseCompany(context,'written', params: paginationParams);
             },
-          ),
-        );
-        }
-        return Center(
-          child: Text(
-            LocaleKeys.noTextPosts.localize,
-            style: Styles.mediumText(fontSize: 34),
           ),
         );
       },
