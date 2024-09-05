@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/models/wallet_model.dart';
 
 import '../../../../../core/error/failure.dart';
-import '../../domain/entities/wallet_entity.dart';
 import '../../domain/repositories/wallet_repo.dart';
 import '../datasources/wallet_remote_datasource.dart';
 
