@@ -60,12 +60,16 @@ class SubscriptionController {
               Labels.errorHappened,
             ), (plans) {
       bottomSheet(
+          isScrollControlled: true,
           context: context,
           backColor: Theme.of(context).scaffoldBackgroundColor,
-          widget: SubscriptionPlansWidget(
-            subscribePlans: plans,
-            subCategoryId: subCategoryId,
-            paymentMenthods: wallets,
+          widget: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.57,
+            child: SubscriptionPlansWidget(
+              subscribePlans: plans,
+              subCategoryId: subCategoryId,
+              paymentMenthods: wallets,
+            ),
           ));
     });
   }

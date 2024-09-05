@@ -87,13 +87,18 @@ class ShippingRepository {
     return dataSource.favorite(id: id);
   }
 
+  Future<Either<Failure, Map<String, dynamic>>> favoriteMain(
+      {required String id}) {
+    return dataSource.favoriteMain(id: id);
+  }
+
   Future<Either<Failure, Map<String, dynamic>>> confirm({required String id}) {
     return dataSource.confirm(id: id);
   }
 
   Future<Either<Failure, Map<String, dynamic>>> createTrip(
       {required RequestModel model}) async {
-    List<S3UploadModel> imagesS3 = [];
+    // List<S3UploadModel> imagesS3 = [];
     // ignore: unused_local_variable
     // if (model.tripImages != null) {
     //   for (var image in model.tripImages!) {
@@ -132,10 +137,10 @@ class ShippingRepository {
     return dataSource.getAllTripBySubCategory();
   }
 
-  Future<Either<Failure, Map<String, dynamic>>> acceptLoadingTripOffer(
-      {required String id}) {
-    return dataSource.acceptLoadingTripOffer(id: id);
-  }
+  // Future<Either<Failure, Map<String, dynamic>>> acceptLoadingTripOffer(
+  //     {required String id}) {
+  //   return dataSource.acceptLoadingTripOffer(id: id);
+  // }
 
   Future<Either<Failure, Map<String, dynamic>>> sendOfferPremium(
       {required String id, required double price}) {
@@ -156,6 +161,9 @@ class ShippingRepository {
 
   Future<Either<Failure, Map<String, dynamic>>> getMyTrip() {
     return dataSource.getMyTrip();
+  }
+  Future<Either<Failure, Map<String, dynamic>>> driverStatistics() {
+    return dataSource.driverStatistics();
   }
   // Future<Either<Failure, Map<String, dynamic>>> uploadImages(
   //     {required XFile image, required String subcategoryId}) async {
@@ -193,18 +201,51 @@ class ShippingRepository {
   Future<Either<Failure, Map<String, dynamic>>> loadingTripRequests() {
     return dataSource.loadingTripRequests();
   }
+
   Future<Either<Failure, Map<String, dynamic>>> getShippingRequests() {
     return dataSource.getShippingRequests();
   }
+
+  Future<Either<Failure, Map<String, dynamic>>> acceptTrip(
+      {required String loadingRequestId}) {
+    return dataSource.acceptTrip(loadingRequestId: loadingRequestId);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> declineTrip(
+      {required String loadingRequestId}) {
+    return dataSource.declineTrip(loadingRequestId: loadingRequestId);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> cancelTrip(
+      {required String tripId}) {
+    return dataSource.cancelTrip(tripId: tripId);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getDriverData() {
+    return dataSource.getDrive();
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> updateDriver(
+      DriverRegisterRequestModel model) {
+    return dataSource.updateDriver(model);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> completeTrip(
+      {required String loadingTrip}) {
+    return dataSource.completeTrip(loadingTrip: loadingTrip);
+  }
+  Future<Either<Failure, Map<String, dynamic>>> deleteDriver() {
+    return dataSource.deleteDriver();
+  }
 }
 
-class S3UploadModel {
-  final String sigendUrl;
-  final String mediaId;
-  final XFile image;
+// class S3UploadModel {
+//   final String sigendUrl;
+//   final String mediaId;
+//   final XFile image;
 
-  S3UploadModel(this.image, {required this.sigendUrl, required this.mediaId});
-}
+//   S3UploadModel(this.image, {required this.sigendUrl, required this.mediaId});
+// }
 
 // class CreateTripReturnModel {
 //   final Map<String, dynamic> data;

@@ -228,12 +228,8 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TwitterCommentCard(
-          onDeleteComment: (p0) {
-
-          },
-          onEditComment: (p0) {
-
-          },
+          onDeleteComment: (p0) {},
+          onEditComment: (p0) {},
           comment: comment,
           onCommentReact: () {
             widget.onCommentReact(TwitterCommentReactParams(
@@ -246,13 +242,9 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
               context: context,
               isScrollControlled: true,
               widget: TwitterCommentReplies(
-                onEditReply: (p0) {
-
-                },
+                onEditReply: (p0) {},
                 replies: const [],
-                onDeleteReply: (p0) {
-
-                },
+                onDeleteReply: (p0) {},
                 onAddReply: (TwitterCommentReplyParams params) {},
                 commentId: comment.id,
                 postId: comment.post,

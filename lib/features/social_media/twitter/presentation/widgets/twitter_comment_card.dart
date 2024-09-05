@@ -30,14 +30,15 @@ class TwitterCommentCard extends StatefulWidget {
       required this.onCommentReact,
       required this.onCommentReply,
       required this.onReport,
-      this.fromProfile = false, required this.onEditComment, required this.onDeleteComment});
+      this.fromProfile = false,
+      required this.onEditComment,
+      required this.onDeleteComment});
 
   @override
   State<TwitterCommentCard> createState() => _TwitterCommentCardState();
 }
 
 class _TwitterCommentCardState extends State<TwitterCommentCard> {
-
   final editTextController = TextEditingController();
 
   @override
@@ -85,19 +86,21 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                 icon: const Icon(
                   Icons.more_vert,
                 )),
-            if(user?.id==widget.comment.user.id)...[
+            if (user?.id == widget.comment.user.id) ...[
               // const Sizer(),
               GestureDetector(
                   onTap: () {
-                    widget.comment.edit=!widget.comment.edit!;
-                    editTextController.text=widget.comment.content??'';
+                    widget.comment.edit = !widget.comment.edit!;
+                    editTextController.text = widget.comment.content ?? '';
                     setState(() {});
                   },
                   child: Icon(
                     Icons.edit,
                     color: widget.textColor,
                     size: 20,
-                  )),const Sizer()],
+                  )),
+              const Sizer()
+            ],
             GestureDetector(
                 onTap: () {
                   widget.onDeleteComment(widget.comment.id);
@@ -112,33 +115,37 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
         const Sizer(),
         Label(
           textAlign: TextAlign.start,
-          text: widget.comment.content??'',
+          text: widget.comment.content ?? '',
           style: Styles.mediumText(),
         ),
-        if(widget.comment.edit==true)Row(
-          children: [
-            Expanded(
-                child: FormTextField(
-                    hint: 'Type your comment ....',
-                    action: (v) {
+        if (widget.comment.edit == true)
+          Row(
+            children: [
+              Expanded(
+                  child: FormTextField(
+                      hint: 'Type your comment ....',
+                      action: (v) {
+                        setState(() {});
+                      },
+                      controller: editTextController)),
+              const Sizer(),
+              if (editTextController.text.isNotEmpty)
+                IconAppButton(
+                    icon: Icons.send,
+                    isCircle: true,
+                    onPressed: () async {
+                      var result = await widget.onEditComment(
+                          TwitterPostCommentParams(
+                              postId: widget.comment.id,
+                              content: editTextController.text));
+                      if (result == true) {
+                        widget.comment.content = editTextController.text;
+                        widget.comment.edit = false;
+                      }
                       setState(() {});
-                    },
-                    controller: editTextController)),
-            const Sizer(),
-            if (editTextController.text.isNotEmpty)
-              IconAppButton(
-                  icon: Icons.send,
-                  isCircle: true,
-                  onPressed: () async {
-                    var result = await widget.onEditComment(TwitterPostCommentParams(postId: widget.comment.id, content: editTextController.text));
-                    if(result==true){
-                      widget.comment.content=editTextController.text;
-                      widget.comment.edit=false;
-                    }
-                    setState(() {});
-                  })
-          ],
-        ),
+                    })
+            ],
+          ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

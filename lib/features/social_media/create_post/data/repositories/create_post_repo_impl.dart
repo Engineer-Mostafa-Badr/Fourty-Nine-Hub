@@ -34,11 +34,14 @@ class CreatePostRepoImpl implements CreatePostRepo {
   }
 
   @override
-  Future<Either<Failure, List<PostUserEntity>>> getFriendsFollowers({required FriendsFollowersParams params}) {
+  Future<Either<Failure, List<PostUserEntity>>> getFriendsFollowers(
+      {required FriendsFollowersParams params}) {
     return _remoteDataSource.getFriendsFollowers(params: params);
   }
+
   @override
-  Future<Either<Failure, List<PlaceEntity>>> getPlaces({required FriendsFollowersParams params}) {
+  Future<Either<Failure, List<PlaceEntity>>> getPlaces(
+      {required FriendsFollowersParams params}) {
     return _remoteDataSource.getPlaces(params: params);
   }
 }

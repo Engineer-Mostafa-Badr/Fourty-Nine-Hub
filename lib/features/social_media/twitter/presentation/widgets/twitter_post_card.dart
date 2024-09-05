@@ -49,7 +49,9 @@ class TwitterPostCard extends StatefulWidget {
     required this.getPost,
     required this.onReport,
     required this.deletePost,
-    required this.hidePost, required this.onDeleteComment, required this.onEditComment,
+    required this.hidePost,
+    required this.onDeleteComment,
+    required this.onEditComment,
   });
 
   @override
@@ -264,7 +266,9 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
     String? label,
     String? image,
   }) {
-    var myImages=widget.post.isShared==true?widget.post.mainPost.images:widget.post.images;
+    var myImages = widget.post.isShared == true
+        ? widget.post.mainPost.images
+        : widget.post.images;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -277,13 +281,10 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: myImages.length == 1 ? 1 : 2),
-            itemCount: myImages.length < 4
-                ? myImages.length
-                : 4,
+            itemCount: myImages.length < 4 ? myImages.length : 4,
             itemBuilder: (context, index) => InkWell(
               onTap: () {
-                if (index != 3 ||
-                    (index == 3 && myImages!.length == 4)) {
+                if (index != 3 || (index == 3 && myImages!.length == 4)) {
                   showDialog(
                       context: context,
                       builder: (context) => ImageDetailsScreen(
@@ -337,8 +338,6 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               ),
             ),
           ),
-
-
       ],
     );
   }
@@ -521,30 +520,32 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             ],
           ),
         ),
-        if(post.isShared==false)...[IconButton(
-          onPressed: () {
-            bottomSheet(
-              context: context,
-              widget: ReportView(
-                id: widget.post.id,
-                categoryId: '66a3583454e6e337915514db',
-              ),
-            );
-          },
-          icon: const Icon(
-            Icons.report,
-            color: AppColors.SECONDARY_COLOR,
-          ),
-        ),
-        IconAppButton(
-          icon: Icons.clear,
-          onPressed: () {
-            bottomSheet(
+        if (post.isShared == false) ...[
+          IconButton(
+            onPressed: () {
+              bottomSheet(
                 context: context,
-                widget:
-                    _buildPostOptions(isMyPost: (post.user.id == user!.id)));
-          },
-        ),]
+                widget: ReportView(
+                  id: widget.post.id,
+                  categoryId: '66a3583454e6e337915514db',
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.report,
+              color: AppColors.SECONDARY_COLOR,
+            ),
+          ),
+          IconAppButton(
+            icon: Icons.clear,
+            onPressed: () {
+              bottomSheet(
+                  context: context,
+                  widget:
+                      _buildPostOptions(isMyPost: (post.user.id == user!.id)));
+            },
+          ),
+        ]
       ],
     );
   }

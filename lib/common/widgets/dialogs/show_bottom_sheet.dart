@@ -13,14 +13,15 @@ void bottomSheet(
       builder: (context) {
         return Container(
           width: double.infinity,
-          padding:  EdgeInsets.all(30.zW),
+          padding: EdgeInsets.all(30.zW),
+          // height: 800,
           // margin: const EdgeInsets.all(kToolbarHeight),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20.zR),
               topRight: Radius.circular(20.zR),
             ),
-            color: backColor??Theme.of(context).dialogBackgroundColor,
+            color: backColor ?? Theme.of(context).dialogBackgroundColor,
           ),
           child: widget,
         );

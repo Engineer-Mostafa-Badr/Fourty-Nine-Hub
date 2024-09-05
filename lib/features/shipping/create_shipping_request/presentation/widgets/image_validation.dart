@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -14,6 +15,7 @@ class ImageValidation extends StatefulWidget {
       this.validator,
       this.title,
       this.hint,
+      this.networkImage,
       this.iconColor,
       this.height,
       this.noTextError = false,
@@ -28,6 +30,7 @@ class ImageValidation extends StatefulWidget {
   final TextStyle? textStyle;
   final double? width;
   final bool noTextError;
+  final String? networkImage;
   @override
   State<ImageValidation> createState() => _ImageValidationState();
 }
@@ -69,7 +72,33 @@ class _ImageValidationState extends State<ImageValidation> {
                 height: widget.height,
                 borderColor: field.hasError ? Colors.red : null,
                 tilte: widget.hint,
-                image: Image.file(File(image?.path??"")),
+                image: image != null
+                    ? Container(
+                        width: widget.width ?? 100,
+                        height: widget.height ?? 100,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(UIConst.radius),
+                            image: DecorationImage(
+                              image: FileImage(
+                                File(image?.path ?? ""),
+                              ),
+                              fit: BoxFit.cover,
+                            )),
+                      )
+                    : widget.networkImage != null
+                        ? Container(
+                            width: widget.width ?? 100,
+                            height: widget.height ?? 100,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.circular(UIConst.radius),
+                                image: DecorationImage(
+                                  image:
+                                      NetworkImage(widget.networkImage ?? ""),
+                                  fit: BoxFit.cover,
+                                )),
+                          )
+                        : null,
                 iconColor: widget.iconColor,
               ),
             ),

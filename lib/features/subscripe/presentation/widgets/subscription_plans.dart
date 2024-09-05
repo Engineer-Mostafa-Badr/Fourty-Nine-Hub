@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/subscripe/domain/usecases/subscribe_useca
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,10 +38,16 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
       child: ListView(
         children: [
-          const SizedBox(height: 20),
+          // const SizedBox(height: 20),
+          Align(
+              child: Text(
+            "Pckup Subscription",
+            style: Styles.headerText(color: Colors.red, fontSize: 40),
+          )),
+          const SizedBox(height: 10),
           Row(
             children: [
               Expanded(

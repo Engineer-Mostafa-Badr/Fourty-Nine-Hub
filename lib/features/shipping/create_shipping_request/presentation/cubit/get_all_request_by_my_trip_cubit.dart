@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/repositories/shipping_repository.dart';
@@ -14,6 +16,7 @@ class GetAllRequestByMyTripCubit extends Cubit<ShippingState> {
         emit(FailureShippingState(failure: l));
       },
       (r) {
+        log(r.toString(), name: "laksjdlskjdlskjffff");
         List<GetRequestsForLoadingModel> list = (r['data'] as List)
             .map(
               (e) => GetRequestsForLoadingModel.fromJson(e),

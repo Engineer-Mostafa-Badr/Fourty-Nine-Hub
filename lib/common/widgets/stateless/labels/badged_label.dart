@@ -66,20 +66,20 @@ class BadgedLabel extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if(close)
-                 Align(
-                  alignment: AlignmentDirectional.topEnd,
-                  child: GestureDetector(
-                      onTap: onRemove,
-                      child: const Icon(
-                        Icons.close,
-                        color: Colors.white,
-                        size: 15,
-                      )),
-                ),
+                if (close)
+                  Align(
+                    alignment: AlignmentDirectional.topEnd,
+                    child: GestureDetector(
+                        onTap: onRemove,
+                        child: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: 15,
+                        )),
+                  ),
                 Padding(
                   padding:
-                       EdgeInsets.symmetric(horizontal: 10.zW, vertical: 3.zW),
+                      EdgeInsets.symmetric(horizontal: 10.zW, vertical: 3.zW),
                   child: isCentered
                       ? Center(
                           child: _buildLabelWidget(),

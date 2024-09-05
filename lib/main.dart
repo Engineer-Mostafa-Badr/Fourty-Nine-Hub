@@ -6,6 +6,8 @@ import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/accept_decline_trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'core/service/cache_service.dart';
@@ -20,7 +22,6 @@ void main() async {
   await DI.execute();
   //to cache gift items
   // ZegoGiftManager().cache.cache(giftItemList);
-
 
   //Admob.initialize();
 
@@ -49,6 +50,12 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => serviceLocator<UserCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<AcceptDeclineTripCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<CallMessageCubit>(),
         ),
         // BlocProvider(
         //   create: (context) => serviceLocator<RiderequestCubit>(),

@@ -1,21 +1,33 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/api/api_consumer.dart';
+import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/food_order_model.dart';
+import 'package:fourtyninehub/features/requests_history/data/models/shipping_request_model/shipping_request_model.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/trip_model.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../../../res/assets/jsons.dart';
-import '../models/shipping_request_model.dart';
 
 abstract class RequestHistoryRemoteDataSource {
   Future<Either<Failure, List<TripModel>>> getRideHistory();
   Future<Either<Failure, List<ShippingRequestModel>>> getShippingRequests();
   Future<Either<Failure, List<FoodOrderModel>>> getFoodHistory();
+  Future<Either<Failure, Map<String, dynamic>>> rating(
+      {required int trip,
+      required int driver,
+      required int service,
+      required String comment,
+      required String driverId,
+      required String loadingTripId,
+      required String categoryId});
 }
 
 class RequestHistoryRemoteDataSourceImpl
     extends RequestHistoryRemoteDataSource {
-  final JsonParser _apiConsumer;
+  final ApiConsumer _apiConsumer;
   RequestHistoryRemoteDataSourceImpl(this._apiConsumer);
 
   @override
@@ -47,5 +59,41 @@ class RequestHistoryRemoteDataSourceImpl
         (data) => Right((data['data'] as List)
             .map((e) => ShippingRequestModel.fromJson(e))
             .toList()));
+  }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> rating(
+      {required int trip,
+      required int driver,
+      required int service,
+      required String comment,
+      required String driverId,
+      required String loadingTripId,
+      required String categoryId}) async {
+    // var re = {
+    //   "driverId": driverId,
+    //   "categoryId": categoryId,
+    //   "loadingTripId": loadingTripId,
+    //   "rate": [trip, driver, service],
+    //   "comment": comment
+    // };
+    // log(re.toString());
+    // final response = await _apiConsumer.get(EndPoints.makeRatingDriver, data: {
+    //   "driverId": "66d097916165474c5431e765",
+    //   "categoryId": "62c8baad8e28a58a3edf5805",
+    //   "loadingTripId": "66d09b436165474c5432edc7",
+    //   "rate": [5, 3, 2],
+    //   // [trip,driver,service]
+    //   "comment": "That's Great"
+    // });
+    // log("$response", name: "lksjdflskjdflskdjflskdjf");
+    return _apiConsumer.post(EndPoints.makeRatingDriver, data: {
+      "driverId": driverId,
+      "categoryId": categoryId,
+      "loadingTripId": loadingTripId,
+      "rate": [trip, driver, service],
+      // [trip,driver,service]
+      "comment": comment
+    });
   }
 }

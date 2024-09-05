@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -14,10 +16,11 @@ class MainCategoryBanner extends StatefulWidget {
   final bool canRegister;
   final Function()? onRegister;
   final bool? Function()? onFavorite;
-
+  // final String? favoriteName;
   const MainCategoryBanner({
     super.key,
     this.canRegister = false,
+    // this.favoriteName,
     this.onRegister,
     required this.category,
     this.onFavorite,
@@ -40,6 +43,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.sizeOf(context).height * 0.08,
+      width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
@@ -58,34 +62,39 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          PositionedDirectional(
-            end: 0,
-              child: _buildRegisterButton()),
+          PositionedDirectional(end: 0, child: _buildRegisterButton()),
           Label(
             text: widget.category.name,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 45.zSP),
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 45.zSP),
           ),
           PositionedDirectional(
             start: 0,
             child: Column(
               children: [
-                InkWell(
-                  onTap: () async {
-                    final result = widget.onFavorite?.call();
-                    if (result != null && result != _isFavorite) {
-                      setState(() {
-                        _isFavorite = result;
-                      });
-                    }
-                  },
-                  child: Icon(
-                    _isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: AppColors.SECONDARY_COLOR,
+                if (context.read<UserCubit>().isLoggedIn)
+                  InkWell(
+                    onTap: () async {
+                      final result = widget.onFavorite?.call();
+                      if (result != null && result != _isFavorite) {
+                        setState(() {
+                          _isFavorite = result;
+                        });
+                      }
+                    },
+                    child: Icon(
+                      _isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: AppColors.SECONDARY_COLOR,
+                    ),
                   ),
+                Sizer(
+                  height: 15.zH,
                 ),
-                Sizer(height: 15.zH,),
                 Label(
-                  text: '${widget.category.total.toShortScale} ${Labels.ads}',
+                  text:
+                      '${widget.category.total.toShortScale} ${widget.category.favoriteName ?? Labels.ads}',
                   style: Styles.mediumText(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -104,7 +113,8 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       return InkWell(
         onTap: () => widget.onRegister?.call(),
         child: Text(Labels.register,
-            style: Styles.mediumText(color: Colors.white,fontWeight: FontWeight.bold)),
+            style: Styles.mediumText(
+                color: Colors.white, fontWeight: FontWeight.bold)),
       );
     } else {
       return const SizedBox.shrink();

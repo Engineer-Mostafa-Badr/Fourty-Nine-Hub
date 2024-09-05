@@ -9,7 +9,9 @@ class TripJoinRepoImp implements TripJoinRepo {
 
   TripJoinRepoImp({required this.fetchLocationRemoteDataSource});
   @override
-  Future<Either<Failure, LocationEntity>> fetchLocationCordinations({required String address}) {
-    return fetchLocationRemoteDataSource.fetchLocationCordinations(address: address);
+  Future<Either<Failure, LocationEntity>> fetchLocationCordinations(
+      {required String address}) {
+    return fetchLocationRemoteDataSource.fetchLocationCordinations(
+        address: address);
   }
 }

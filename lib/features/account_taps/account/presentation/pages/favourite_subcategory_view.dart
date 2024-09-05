@@ -849,7 +849,7 @@ class _FavSubCategoryViewContentState
             return const Center(child: Text('No data available'));
           }
 
-          return _buildFavoritesGrid(
+          return _buildGridRow(
               context, tinderCubit.state.getFavCategoryModel!.data);
         },
       ),
@@ -904,19 +904,18 @@ class _FavSubCategoryViewContentState
       BuildContext context, List<FavoriteItem> subCategoryChunk) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: subCategoryChunk
-              .map((subCategoryData) => _buildCard(
-                      context, subCategoryData, selectedItem == subCategoryData,
-                      (value) {
-                    setState(() {
-                      selectedItem = subCategoryData;
-                    });
-                  }))
-              .toList(),
-        ),
+      child: GridView.count(
+        shrinkWrap: true,
+        crossAxisCount: 2,
+        children: subCategoryChunk
+            .map((subCategoryData) => _buildCard(
+                    context, subCategoryData, selectedItem == subCategoryData,
+                    (value) {
+                  setState(() {
+                    selectedItem = subCategoryData;
+                  });
+                }))
+            .toList(),
       ),
     );
   }
@@ -925,7 +924,7 @@ class _FavSubCategoryViewContentState
       bool selectedItem, void Function(bool?)? onChanged) {
     return Container(
         width: 200,
-        height: MediaQuery.of(context).size.height / 4,
+        height: 300,
         padding: const EdgeInsets.all(8.0),
         child: FavTinderSubCategoryCard(
             selectedItem: selectedItem,
@@ -945,7 +944,7 @@ class FavTinderSubCategoryCard extends StatefulWidget {
   final FavoriteItem favSubCategoryCardData;
   final bool activeFav;
   final bool selectedItem;
-  final TinderViewCubit tinderViewCubit;
+  // final TinderViewCubit tinderViewCubit;
   final void Function(bool?)? onChanged;
   const FavTinderSubCategoryCard({
     super.key,
@@ -972,10 +971,9 @@ class _FavTinderSubCategoryCardState extends State<FavTinderSubCategoryCard> {
         width: 200,
         padding: const EdgeInsets.all(0),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Theme.of(context).scaffoldBackgroundColor),
-            borderRadius: BorderRadius.circular(10),
-            color: Theme.of(context).scaffoldBackgroundColor),
+          borderRadius: BorderRadius.circular(10),
+          color: Theme.of(context).scaffoldBackgroundColor,
+        ),
         child: Card(
           clipBehavior: Clip.hardEdge,
           color: Theme.of(context).scaffoldBackgroundColor,

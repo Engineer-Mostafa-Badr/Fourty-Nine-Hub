@@ -21,6 +21,7 @@ abstract class Routes {
   static const TRANSFERMONEY = '/Wallet/TransferMoney';
   static const SOCIAL = '/Social';
   static const OTHERSACCOUNT = '/Social/OthersAccount';
+  static const EDITPROFILE = '/Social/OthersAccount/EditProfile';
   static const REELS = '/Social/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
   static const TWITTER = '/Social/Twitter';
@@ -120,9 +121,11 @@ abstract class Routes {
   static const SETTINGS = '/Account/Settings';
   static const PAYMENT = '/Payment';
   static const SUBSCRIPTIONPLANS = '/SubscriptionPlans';
-  static const DRIVERREQUESTS = '/DriverRequests';
-  static const DRIVERREQUESTSDETIALS = '/DriverRequestsDetials';
-  static const DASHBOARDDRIVERSCREEN = '/DashboardDriverScreen';
+  static const DASHBOARDDRIVERSCREEN = '/DASHBOARDDRIVERSCREEN';
+  static const DRIVERREQUESTSDETIALS = '/DRIVERREQUESTSDETIALS';
+  static const MyRating = '/MyRating';
+  static const TripRating = '/TripRating';
+  static const EDITDRIVERSCREEN = '/EditDriver';
 
   static const TRIP_JOIN = '/TripJoin';
 }
@@ -157,6 +160,7 @@ abstract class Paths {
   static const TWITTER = 'Twitter';
   static const TWITTERPOSTDETAILS = 'TwitterPostDetails';
   static const CREATEPOST = 'CreatePost';
+  static const EDITPROFILE = 'EditProfile';
   static const SEARCHFRIENDS = 'SearchFriend';
   static const SEARCHPLACES = 'SearchPlaces';
   static const TINDER = 'Tinder';
@@ -233,9 +237,11 @@ abstract class Paths {
   static const AZKAAR = 'Azkaar';
   static const PAYMENT = 'Payment';
   static const SUBSCRIPTIONPLANS = 'SubscriptionPlans';
-  static const DRIVERREQUESTS = 'DriverRequests';
-  static const DRIVERREQUESTSDETIALS = 'DriverRequestsDetials';
-  static const DASHBOARDDRIVERSCREEN = 'DashboardDriverScreen';
 
   static const TRIP_JOIN = 'TripJoin';
+  static const DASHBOARDDRIVERSCREEN = 'DASHBOARDDRIVERSCREEN';
+  static const DRIVERREQUESTSDETIALS = 'DRIVERREQUESTSDETIALS';
+  static const MyRating = 'MyRating';
+  static const TripRating = 'TripRating';
+  static const EDITDRIVERSCREEN = 'EditDriver';
 }

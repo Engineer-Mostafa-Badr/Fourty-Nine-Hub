@@ -21,12 +21,15 @@ class EndPoints {
   static const resendOTP = '/auth/resend-reset-code';
   static const refreshToken = '/auth/refresh/token';
   static const getParentMainCategories = '/category/parent';
+  static const favouriteCategoriesList = '/favorite-category';
   static const getMainCategories = '/category/parent/get-all-main';
   static String getBannerByID({required String id}) => '/categories/main/$id';
   static const getMainCategoriesWithoutSubcategories = '/categories/main';
   static String getMainCategoryDetails(String id) => '/categories/main/$id';
-  static String addMainCategoryToFavorite(String id) => '/favorite-category/$id';
-  static String deleteMainCategoryFromFavorite(String id) => '/favorite-category/$id';
+  static String addMainCategoryToFavorite(String id) =>
+      '/favorite-category/$id';
+  static String deleteMainCategoryFromFavorite(String id) =>
+      '/favorite-category/$id';
 
   static const getWheel = '/wheels/random';
   static const spinWheel = '/wheels/spin/';
@@ -44,7 +47,7 @@ class EndPoints {
   // ride
   //shipping
   static String bannerData = "$developmentBaseUrl/loading/driver/subcategory";
-  static String registerDriver = "$developmentBaseUrl//loading/driver/register";
+  static String registerDriver = "$developmentBaseUrl/loading/driver/register";
   static String favoriteSubCategory =
       "$developmentBaseUrl/favorite-sub-category";
   static String createLoadingTrip =
@@ -65,53 +68,81 @@ class EndPoints {
   static const carLicense =
       '$developmentBaseUrl/loading/driver/info/car-license';
   static const successUpload = '/loading/driver/info/success-upload';
-  // static const successDocuments = '$developmentBaseUrl/loading/driver/info/documents';
+  static const makeRatingDriver = '/loading/rating-driver/makeRating';
+  static const getDriverData = '$developmentBaseUrl/loading/driver/info';
+  static const updateDriver = '$developmentBaseUrl/loading/driver';
+  static const completeTrip = '$developmentBaseUrl/loading/trip/complete';
+  static const deleteDriver = '$developmentBaseUrl/loading/driver/deleteDriver';
+  static const driverStatistics =
+      '$developmentBaseUrl/loading/driver/driverStatistics';
   static const successCarImages =
       '$developmentBaseUrl/driver/info/success-car-images';
   //trip
   static const sendOffer = '$developmentBaseUrl/loading/trip/sendOffer';
   static const reportUrl = '$developmentBaseUrl/report';
+  static const favoriteCategory = '$developmentBaseUrl/favorite-category';
   static const sendOfferPremium =
       '$developmentBaseUrl/loading/trip/sendOffer-premium';
-  static const acceptLoadingTripOffer =
-      '$developmentBaseUrl/loading/trip/acceptLoadingTripOffer';
+  // static const acceptLoadingTripOffer =
+  //     '$developmentBaseUrl/loading/trip/acceptLoadingTripOffer';
   static const mediasignedUrl =
       '$developmentBaseUrl/dashboard/media/signed-url';
   static const mediaconfirm = '$developmentBaseUrl/dashboard/media/confirm';
   static const click = '$developmentBaseUrl/global/click';
   static const allUserTrips = '$developmentBaseUrl/loading/trip/allUserTrips';
+  static const cancelOffer = '$developmentBaseUrl/loading/trip/cancelOffer';
+  static const acceptLoadingTripOffer =
+      '$developmentBaseUrl/loading/trip/acceptOffer';
+  static const deleteLoadingTrip =
+      '$developmentBaseUrl/loading/trip/deleteLoadingTrip';
   static const loadingTripRequests =
       '$developmentBaseUrl/loading/trip/loadingTripRequests';
   // static const allUserTrips =
   //     '$developmentBaseUrl/loading/trip/allUserTrips';
   // health
-  static String getCities({required String governorateId}) => '/health/cities/$governorateId';
+  static String getCities({required String governorateId}) =>
+      '/health/cities/$governorateId';
   static const getGovernorates = '/health/governorate';
   static const createDoctor = '/health/doctor';
   static const doctorSearch = '/health/doctor-search';
   static const bookEmergency = '/health/book-emergency';
-  static String bookRegularAppointment(String appointmentId) => '/health/book-appointment/$appointmentId';
-  static String toggleFavoriteSubcategory(String subCategoryId) => '/favorite-sub-category/$subCategoryId';
-  static String bookPremiumAppointment(String appointmentId) => '/health/book-appointment-premium/$appointmentId';
-  static String getDoctorReviewsForUsers(String doctorId) => '/health/doctor/rate/$doctorId';
-  static String getDoctorDetails(String doctorId) => '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
+  static String bookRegularAppointment(String appointmentId) =>
+      '/health/book-appointment/$appointmentId';
+  static String toggleFavoriteSubcategory(String subCategoryId) =>
+      '/favorite-sub-category/$subCategoryId';
+  static String bookPremiumAppointment(String appointmentId) =>
+      '/health/book-appointment-premium/$appointmentId';
+  static String getDoctorReviewsForUsers(String doctorId) =>
+      '/health/doctor/rate/$doctorId';
+  static String getDoctorDetails(String doctorId) =>
+      '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
   static const getHealthSubcategories = '/health/subCategories-health-with-ads';
-  static const getMedicalServices = '/health/subCategories-medicalServices-with-ads';
+  static const getMedicalServices =
+      '/health/subCategories-medicalServices-with-ads';
   static const String getUpcomingUserAppointments = '/health/book-appointment';
-  static const String getHealthRequestsHistory = '/health/history-patient-booking';
-  static const remainingDaysOfDoctorPracticing = '/health/dashboard/remaining-days-of-doctor-id';
-  static const remainingDaysOfDoctorID = '/health/dashboard/remaining-days-of-doctor-practicing-id';
-  static const remainingDaysOfDoctorSubscription = '/health/dashboard/remaining-days-of-doctor-subscription';
+  static const String getHealthRequestsHistory =
+      '/health/history-patient-booking';
+  static const remainingDaysOfDoctorPracticing =
+      '/health/dashboard/remaining-days-of-doctor-id';
+  static const remainingDaysOfDoctorID =
+      '/health/dashboard/remaining-days-of-doctor-practicing-id';
+  static const remainingDaysOfDoctorSubscription =
+      '/health/dashboard/remaining-days-of-doctor-subscription';
   static const getDoctorAppointmentsByDay = '/health/doctor/booking-day';
   static const getDoctorUnhandledAppointments = '/health/book-requests';
   static const isDoctor = '/health/check-doctor-or-not';
-  static const getDoctorTotalEarnedMoney = '/health/dashboard/total-earned-money';
-  static String doctorAcceptAppointment(String appointmentId) => '/health/book-appointment/approve/$appointmentId';
-  static String doctorRejectAppointment(String appointmentId) => '/health/book-appointment/reject/$appointmentId';
-  static const getAllDoctorReservations = '/health/dashboard/number-of-reservations';
+  static const getDoctorTotalEarnedMoney =
+      '/health/dashboard/total-earned-money';
+  static String doctorAcceptAppointment(String appointmentId) =>
+      '/health/book-appointment/approve/$appointmentId';
+  static String doctorRejectAppointment(String appointmentId) =>
+      '/health/book-appointment/reject/$appointmentId';
+  static const getAllDoctorReservations =
+      '/health/dashboard/number-of-reservations';
   static const getDoctorProfile = '/health/doctor-profile';
   static const updateDoctorProfilePhoto = '/health/doctor/picture';
-  static const updateDoctorPractcing = '/health/doctor-upload-license-practicing';
+  static const updateDoctorPractcing =
+      '/health/doctor-upload-license-practicing';
   static const updateDoctorID = '/health/doctor-upload-license-id';
   static String deleteDoctor(String doctorId) => '/health/doctor/$doctorId';
 
@@ -477,7 +508,8 @@ class EndPoints {
   static String joinVoiceRoom(String id) => '/clubvoice/join/$id';
   static String endVoiceRoom(String id) => '/clubvoice/$id';
   static String leaveVoiceRoom(String id) => '/clubvoice/leave/$id';
-  static String searchVoiceRooms(String subject) => '/clubvoice?search=$subject';
+  static String searchVoiceRooms(String subject) =>
+      '/clubvoice?search=$subject';
 
   //meeting
   static String createMeeting = '/room-id';
@@ -495,7 +527,8 @@ class EndPoints {
   }
 
   static String buttonAvailable = '/global/click';
-  static String getSubscriptionPlans(String subcategoryId) => '/subscription/plans/$subcategoryId';
+  static String getSubscriptionPlans(String subcategoryId) =>
+      '/subscription/plans/$subcategoryId';
   static String checkUserSubscription(String id) {
     return '/subscription/subcategory/$id';
   }
@@ -523,5 +556,4 @@ class EndPoints {
 
   static String geocodingUrl =
       'https://maps.googleapis.com/maps/api/geocode/json';
-
 }

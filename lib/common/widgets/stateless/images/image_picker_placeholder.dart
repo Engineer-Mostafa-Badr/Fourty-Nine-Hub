@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -25,12 +24,12 @@ class ImagePickerPlaceholder extends StatelessWidget {
       width: width ?? 100,
       height: height ?? 100,
       decoration: BoxDecoration(
-          border: Border.all(color: borderColor ?? Colors.black),
-          borderRadius: BorderRadius.circular(UIConst.radius),
-          // image: image != null
-          //     ? DecorationImage(
-          //         image: FileImage(File(image!.path)), fit: BoxFit.cover)
-          //     : null
+        border: Border.all(color: borderColor ?? Colors.black),
+        borderRadius: BorderRadius.circular(UIConst.radius),
+        // image: image != null
+        //     ? DecorationImage(
+        //         image: FileImage(File(image!.path)), fit: BoxFit.cover)
+        //     : null
       ),
       child: _buildImage(),
     );

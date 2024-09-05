@@ -154,7 +154,9 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>  ReelsRecordingScreen(voiceUrl: widget.audio.audioSignedUrl,),
+                          builder: (context) => ReelsRecordingScreen(
+                            voiceUrl: widget.audio.audioSignedUrl,
+                          ),
                         ));
                   },
                   child: const Text(

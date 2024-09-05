@@ -25,7 +25,9 @@ class UserModel extends UserEntity {
       firstName: json['first_name'] ?? json['firstName'] ?? '',
       lastName: json['last_name'] ?? json['lastName'] ?? '',
       email: json['email'] ?? '',
-      profilePicture: json['profilePicture'] ?? json['profilePicture'] ?? 'https://st3.depositphotos.com/9998432/13335/v/450/depositphotos_133352010-stock-illustration-default-placeholder-man-and-woman.jpg',
+      profilePicture: json['profilePicture'] ??
+          json['profilePicture'] ??
+          'https://st3.depositphotos.com/9998432/13335/v/450/depositphotos_133352010-stock-illustration-default-placeholder-man-and-woman.jpg',
       profileCover: json['coverPicture'] ?? '',
       friendsCount: json['friends_count'] ?? 0,
       followersCount: json['followers_count'] ?? 0,

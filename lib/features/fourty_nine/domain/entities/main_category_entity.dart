@@ -12,6 +12,7 @@ class MainCategoryEntity extends Equatable {
   final String cover;
   final bool isFavorite;
   final int total;
+  final String? favoriteName;
 
   MainCategoryEntity({
     required this.id,
@@ -22,24 +23,22 @@ class MainCategoryEntity extends Equatable {
     required this.cover,
     required this.isFavorite,
     required this.total,
+    this.favoriteName,
   });
 
-
-  factory MainCategoryEntity.fake(){
-    return  MainCategoryEntity(id: "id",
+  factory MainCategoryEntity.fake() {
+    return MainCategoryEntity(
+        id: "id",
         name: "Fake Data",
         image: UIConst.imagePlaceHolder,
         banner: UIConst.imagePlaceHolder,
         cover: UIConst.imagePlaceHolder,
         isFavorite: false,
-        total: 9900000
-    );
+        total: 9900000);
   }
 
-
   @override
-  List<Object?> get props =>
-      [
+  List<Object?> get props => [
         id,
         name,
         image,

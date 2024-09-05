@@ -116,7 +116,8 @@ class BaseApiConsumer extends ApiConsumer {
         options: Options(
           headers: {
             "Authorization":
-                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjNjZTEyYjY0LTBiMGUtNDVjNi1iZTBkLTk5MWYwNDBiMDI0MCIsImlhdCI6MTcyNDcyMzM3NCwiZXhwIjo1NTcyNDcyMzM3NCwic3ViIjoiNjZjMzQ5ZDdhNjg0YWI0NzNmMWMxZWQ3In0.8N3NfdXD3m5Ll-P-geBZlb5GwEWL6kIFiYiokE71ryI"
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjJlNmQyNjIyLTVjNjItNDIxOS1hMzM3LTQ2MWI5OGJkODEzZiIsImlhdCI6MTcyNTMyNjY0OCwiZXhwIjo1NTcyNTMyNjY0OCwic3ViIjoiNjZjMzQ5ZDdhNjg0YWI0NzNmMWMxZWQ3In0.N-dzSJOiTglVNoQ9xn9J6SUtv-Us-nvg4Ed2aeSGl-Y"
+            // "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6Ijc3NTc3MGJlLTI1YjUtNGZlMS04OThmLTk1NmNiZDZmNmMzMyIsImlhdCI6MTcyNTMyNzYxOSwiZXhwIjo1NTcyNTMyNzYxOSwic3ViIjoiNjZiNzYwNjVhYjNiNmY1YTNkMjI3M2VkIn0.yhVguyP7hGGW5Hr_9p1TJsgpD5NeHi5Z50dr0Wml3Fg" //Rider
           },
         ),
         // options: Options(headers: {
@@ -130,6 +131,10 @@ class BaseApiConsumer extends ApiConsumer {
       if (result.data['status']) {
         return Right(result.data as Map<String, dynamic>);
       } else {
+        if (result.data['endPointSubscription'] == true &&
+            result.data['userSubscription'] == false) {
+          log("kdddddddddddddddddddddddddddddddddddddd");
+        }
         return Left(ValidationFailure(
             result.data['message'] ?? result.data['error']['message']));
       }
@@ -146,6 +151,7 @@ class BaseApiConsumer extends ApiConsumer {
       // } else {
       //   return Left(_getFailure(e));
       // }
+
       return Left(_getFailure(e));
     }
   }
@@ -165,11 +171,11 @@ class BaseApiConsumer extends ApiConsumer {
         options: Options(
           headers: {
             "Authorization":
-                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjNjZTEyYjY0LTBiMGUtNDVjNi1iZTBkLTk5MWYwNDBiMDI0MCIsImlhdCI6MTcyNDcyMzM3NCwiZXhwIjo1NTcyNDcyMzM3NCwic3ViIjoiNjZjMzQ5ZDdhNjg0YWI0NzNmMWMxZWQ3In0.8N3NfdXD3m5Ll-P-geBZlb5GwEWL6kIFiYiokE71ryI"
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjJlNmQyNjIyLTVjNjItNDIxOS1hMzM3LTQ2MWI5OGJkODEzZiIsImlhdCI6MTcyNTMyNjY0OCwiZXhwIjo1NTcyNTMyNjY0OCwic3ViIjoiNjZjMzQ5ZDdhNjg0YWI0NzNmMWMxZWQ3In0.N-dzSJOiTglVNoQ9xn9J6SUtv-Us-nvg4Ed2aeSGl-Y"
+            // "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6Ijc3NTc3MGJlLTI1YjUtNGZlMS04OThmLTk1NmNiZDZmNmMzMyIsImlhdCI6MTcyNTMyNzYxOSwiZXhwIjo1NTcyNTMyNzYxOSwic3ViIjoiNjZiNzYwNjVhYjNiNmY1YTNkMjI3M2VkIn0.yhVguyP7hGGW5Hr_9p1TJsgpD5NeHi5Z50dr0Wml3Fg"
           },
         ),
       );
-// [''] = ';
       if (result.data['status']) {
         return Right(result.data as Map<String, dynamic>);
       } else {
@@ -204,6 +210,13 @@ class BaseApiConsumer extends ApiConsumer {
         url,
         data: data,
         queryParameters: queryParameters,
+        options: Options(
+          headers: {
+            "Authorization":
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6IjJlNmQyNjIyLTVjNjItNDIxOS1hMzM3LTQ2MWI5OGJkODEzZiIsImlhdCI6MTcyNTMyNjY0OCwiZXhwIjo1NTcyNTMyNjY0OCwic3ViIjoiNjZjMzQ5ZDdhNjg0YWI0NzNmMWMxZWQ3In0.N-dzSJOiTglVNoQ9xn9J6SUtv-Us-nvg4Ed2aeSGl-Y"
+            // "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6Ijc3NTc3MGJlLTI1YjUtNGZlMS04OThmLTk1NmNiZDZmNmMzMyIsImlhdCI6MTcyNTMyNzYxOSwiZXhwIjo1NTcyNTMyNzYxOSwic3ViIjoiNjZiNzYwNjVhYjNiNmY1YTNkMjI3M2VkIn0.yhVguyP7hGGW5Hr_9p1TJsgpD5NeHi5Z50dr0Wml3Fg"
+          },
+        ),
       );
       log(result.data.toString(), name: "url");
       if (result.data['status']) {
@@ -214,6 +227,10 @@ class BaseApiConsumer extends ApiConsumer {
           return Right({"data": result.data});
         }
       } else {
+        if (result.data['endPointSubscription'] == true &&
+            result.data['userSubscription'] == false) {
+          log("kdddddddddddddddddddddddddddddddddddddd");
+        }
         return Left(ValidationFailure(
             result.data['message'] ?? result.data['error']['message']));
       }

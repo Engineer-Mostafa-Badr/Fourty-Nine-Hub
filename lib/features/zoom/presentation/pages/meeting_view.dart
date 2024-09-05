@@ -191,15 +191,12 @@ class MeetingView extends StatelessWidget {
                       ),
                       SizedBox(width: 15.zW),
                       InkWell(
-                        onTap: ()
-                        {
-                          context.go(
-                            Routes.MEETINGROOM,
-                            extra: ZegoArgs(
-                              scheduledMeeting.roomId,
-                              true,
-                            )
-                          );
+                        onTap: () {
+                          context.go(Routes.MEETINGROOM,
+                              extra: ZegoArgs(
+                                scheduledMeeting.roomId,
+                                true,
+                              ));
                         },
                         child: Container(
                           padding: const EdgeInsets.all(8),
@@ -307,7 +304,7 @@ class MeetingView extends StatelessWidget {
             ),
           ),
           Sizer(
-            height:twoLines ? 10.zH : 30.zH,
+            height: twoLines ? 10.zH : 30.zH,
           ),
           Label(
               text: label,

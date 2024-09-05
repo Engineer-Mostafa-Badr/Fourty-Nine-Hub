@@ -9,7 +9,7 @@ class WalletRepository {
   final WalletDataSource dataSource;
   WalletRepository(this.dataSource);
   Future<Either<Failure, WalletModel>> getWallet() {
-    log("4444444444444444444444444444");
+    // log("4444444444444444444444444444");
     return dataSource.getWallet();
   }
 }

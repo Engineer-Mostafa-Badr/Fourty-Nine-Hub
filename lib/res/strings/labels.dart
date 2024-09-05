@@ -17,7 +17,7 @@ abstract class Labels {
   static const months = 'Months';
   static const month = 'Month';
   static const details = 'Details';
-  static const description = 'Description of the carpo';
+  static const description = 'Cargo Description';
   static const buyWithInstallment = 'Buy with installment';
   // doctors
   static const languages = 'Languages';

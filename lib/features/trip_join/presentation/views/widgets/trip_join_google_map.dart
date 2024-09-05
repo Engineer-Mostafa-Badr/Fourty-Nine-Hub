@@ -14,7 +14,8 @@ class TripJoinGoogleMap extends StatefulWidget {
 }
 
 class _TripJoinGoogleMapState extends State<TripJoinGoogleMap> {
-  final Completer<GoogleMapController> _googleMapController = Completer<GoogleMapController>();
+  final Completer<GoogleMapController> _googleMapController =
+      Completer<GoogleMapController>();
 
   static const CameraPosition _egyptLocation = CameraPosition(
     target: LatLng(30.033333, 31.233334),
@@ -32,7 +33,9 @@ class _TripJoinGoogleMapState extends State<TripJoinGoogleMap> {
       height: 400,
       child: GoogleMap(
         mapType: MapType.normal,
-        initialCameraPosition: markers.isEmpty ? _egyptLocation : CameraPosition(target: markers[0].position),
+        initialCameraPosition: markers.isEmpty
+            ? _egyptLocation
+            : CameraPosition(target: markers[0].position),
         onMapCreated: (GoogleMapController controller) {
           _googleMapController.complete(controller);
         },
@@ -81,8 +84,10 @@ class _TripJoinGoogleMapState extends State<TripJoinGoogleMap> {
         Marker(
           markerId: const MarkerId('destinatonMarker'),
           position: LatLng(
-            destinationCubit.destinationLocation!.coordinates?[0]?.toDouble() ?? 0,
-            destinationCubit.destinationLocation!.coordinates?[1]?.toDouble() ?? 0,
+            destinationCubit.destinationLocation!.coordinates?[0]?.toDouble() ??
+                0,
+            destinationCubit.destinationLocation!.coordinates?[1]?.toDouble() ??
+                0,
           ),
         ),
       );

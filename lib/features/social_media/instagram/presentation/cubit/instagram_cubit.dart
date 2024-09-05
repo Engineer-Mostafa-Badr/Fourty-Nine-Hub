@@ -36,8 +36,20 @@ class InstagramCubit extends Cubit<InstagramState> {
   final EditCommentUseCase _editCommentUseCase;
   final DeleteCommentUseCase _deleteCommentUseCase;
 
-  InstagramCubit(this._getFeedUseCase, this._advertisementUseCase, this._postReactUseCase, this._getPostCommentsUseCase, this._getPostCommentRepliesUseCase, this._postCommentUseCase, this._replyOnCommentUseCase, this._commentReactUseCase, this._instagramReelsUseCase, this._userReelsUseCase, this._editCommentUseCase, this._deleteCommentUseCase) : super(InstagramState());
-
+  InstagramCubit(
+      this._getFeedUseCase,
+      this._advertisementUseCase,
+      this._postReactUseCase,
+      this._getPostCommentsUseCase,
+      this._getPostCommentRepliesUseCase,
+      this._postCommentUseCase,
+      this._replyOnCommentUseCase,
+      this._commentReactUseCase,
+      this._instagramReelsUseCase,
+      this._userReelsUseCase,
+      this._editCommentUseCase,
+      this._deleteCommentUseCase)
+      : super(InstagramState());
 
   void loadData() async {
     await getFeed(1);
@@ -362,42 +374,39 @@ class InstagramCubit extends Cubit<InstagramState> {
     return value;
   }
 
-
   Future<bool> deleteComment(
       {required BuildContext context,
-        required String commentId,
-        required String postId,
-        required String from}) async {
+      required String commentId,
+      required String postId,
+      required String from}) async {
     final response = await _deleteCommentUseCase(commentId);
     bool result = false;
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (r) {
-          result = r;
-          if (from == 'feed') {
-            var currentPost = feedPagingController.itemList
-                ?.firstWhere((element) => element.id == postId);
-            print("comment count${currentPost?.commentsCount}");
-            currentPost?.commentsCount = (currentPost.commentsCount! - 1);
-          }
-          emit(state.copyWith(status: StateStatus.success));
-          showSuccessMessage(context, "Comment delete successfully");
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+      result = r;
+      if (from == 'feed') {
+        var currentPost = feedPagingController.itemList
+            ?.firstWhere((element) => element.id == postId);
+        print("comment count${currentPost?.commentsCount}");
+        currentPost?.commentsCount = (currentPost.commentsCount! - 1);
+      }
+      emit(state.copyWith(status: StateStatus.success));
+      showSuccessMessage(context, "Comment delete successfully");
+    });
     return result;
   }
-
 
   // edit on a comment
   Future<bool> editComment({required PostCommentParams params}) async {
     var response = await _editCommentUseCase(params);
     bool value = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (r) {
-          value = r;
-        });
+        (r) {
+      value = r;
+    });
     return value;
   }
-
 }

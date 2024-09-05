@@ -3,15 +3,22 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/data/dat
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/datasources/shipping_data_source.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/repositories/images_repository.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/repositories/shipping_repository.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/accept_decline_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/driverStatistics_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/favorite_main_cateogry_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/favorite_shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_request_by_my_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_driver_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_driver_dashboard_data.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_my_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/images_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/update_driver_cubit.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 class ShippingServiceLocatior {
@@ -36,7 +43,34 @@ class ShippingServiceLocatior {
       () => FavoriteShippingCubit(repository: serviceLocator()),
     );
     serviceLocator.registerFactory(
-      () => GetShippingRequestCubit(repository: serviceLocator())..getAllRequest(),
+      () => TwitterCubit(
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerFactory(
+      () => AcceptDeclineTripCubit(repository: serviceLocator()),
+    );
+    serviceLocator.registerFactory(
+      () => FavoriteMainCateogryCubit(repository: serviceLocator()),
+    );
+    serviceLocator.registerFactory(
+      () => GetShippingRequestCubit(repository: serviceLocator())
+        ..getAllRequest(),
     );
     serviceLocator.registerFactory(
       () => GetMyTripCubit(repository: serviceLocator())..getMyTrip(),
@@ -47,6 +81,19 @@ class ShippingServiceLocatior {
     );
     serviceLocator.registerFactory(
       () => CreateTripCubit(repository: serviceLocator()),
+    );
+    serviceLocator.registerFactory(
+      () => GetDriverCubit(repository: serviceLocator())..getDriverData(),
+    );
+    serviceLocator.registerFactory(
+      () => DriverStatisticsCubit(repository: serviceLocator()),
+    );
+    
+    serviceLocator.registerFactory(
+      () => GetDriverDashboardData(repository: serviceLocator()),
+    );
+    serviceLocator.registerFactory(
+      () => UpdateDriverCubit(repository: serviceLocator()),
     );
     serviceLocator.registerFactory(
       () => ImagesCubit(repository: serviceLocator()),

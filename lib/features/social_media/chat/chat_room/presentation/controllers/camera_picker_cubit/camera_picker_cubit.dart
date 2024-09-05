@@ -131,8 +131,9 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
     emit(state.copyWith(pickMode: PickMode.video));
   }
 
-  void refreshMediaList(){
-    emit(state.copyWith(status: CameraPickerStatus.updateMediaList, mediaList: _mediaList));
+  void refreshMediaList() {
+    emit(state.copyWith(
+        status: CameraPickerStatus.updateMediaList, mediaList: _mediaList));
   }
 
   Duration get maxVideoLength => _maxVideoLength;

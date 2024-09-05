@@ -18,6 +18,7 @@ class AllTripModel {
   String? time;
   String? desc;
   bool? isPremium;
+  bool? acceptedReq;
   int? phone;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -36,6 +37,7 @@ class AllTripModel {
     this.time,
     this.desc,
     this.isPremium,
+    this.acceptedReq,
     this.phone,
     this.createdAt,
     this.updatedAt,
@@ -45,6 +47,7 @@ class AllTripModel {
     log(json['startLocation'].toString(),
         name: "lksdjlskjdflskjdflskdjflskdjflsj");
     return AllTripModel(
+      acceptedReq: json['acceptedReq'] as bool?,
       adminIgnore: json['adminIgnore'] as bool?,
       driverId: json['driverId'] as dynamic,
       userId: json['userId'] as String?,

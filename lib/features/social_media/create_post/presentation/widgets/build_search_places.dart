@@ -12,7 +12,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class BuildSearchPlaces extends StatefulWidget {
   const BuildSearchPlaces(
-      {super.key, required this.onSelectPlace,required this.controller});
+      {super.key, required this.onSelectPlace, required this.controller});
   final Function(PlaceEntity) onSelectPlace;
   final CreatePostCubit controller;
 
@@ -21,20 +21,19 @@ class BuildSearchPlaces extends StatefulWidget {
 }
 
 class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
-
   @override
   Widget build(BuildContext context) {
     final searchController = TextEditingController();
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsetsDirectional.only(top: 20.0, end: 8,start: 8),
+        padding: const EdgeInsetsDirectional.only(top: 20.0, end: 8, start: 8),
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
               child: Row(
                 children: [
                   InkWell(
-                      onTap:()=>context.pop(),
+                      onTap: () => context.pop(),
                       child: const Icon(Icons.arrow_back)),
                   const SizedBox(
                     width: 10,
@@ -65,21 +64,25 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
                   },
                   itemBuilder: (context, item, index) {
                     return GestureDetector(
-                      onTap: (){
-                        widget.onSelectPlace(widget.controller.placesPagingController.itemList![index]);
+                      onTap: () {
+                        widget.onSelectPlace(widget.controller
+                            .placesPagingController.itemList![index]);
                       },
                       child: Container(
                         padding: const EdgeInsets.all(15),
                         child: Row(
                           children: [
-                            const Icon(Icons.location_on,size: 25,),
+                            const Icon(
+                              Icons.location_on,
+                              size: 25,
+                            ),
                             SizedBox(
                               width: 10.zW,
                             ),
                             Expanded(
                               child: Label(
                                 text: widget.controller.placesPagingController
-                                    .itemList?[index].name ??
+                                        .itemList?[index].name ??
                                     '',
                                 style: Styles.headerText(),
                                 maxLines: 1,
@@ -92,9 +95,9 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
                   },
                   noMoreItemsIndicatorBuilder: (context) => Container(),
                   firstPageProgressIndicatorBuilder: (context) =>
-                  const CupertinoActivityIndicator(),
+                      const CupertinoActivityIndicator(),
                   newPageProgressIndicatorBuilder: (context) =>
-                  const CupertinoActivityIndicator(),
+                      const CupertinoActivityIndicator(),
                 ),
               ),
           ],

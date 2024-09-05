@@ -81,21 +81,21 @@ class _ImagesAndVideosSliderState extends State<ImagesAndVideosSlider> {
                         final file = File(widget.media[_selectedIndex].path);
                         late Widget child;
                         if (file.isPhoto) {
-                  //         child = ProImageEditor.file(
-                  //           file,
-                  //           // configs: ProImageEditorConfigs(
-                  //           //
-                  //           // ),
-                  //           onImageEditingComplete: (Uint8List bytes) async {
-                  //             /*
-                  //  Your code to handle the edited image. Upload it to your server as an example.
-                  //  You can choose to use await, so that the loading-dialog remains visible until your code is ready, or no async, so that the loading-dialog closes immediately.
-                  //  By default, the bytes are in `jpg` format.
-                  // */
-                  //             CliLogger.info(bytes.toString());
-                  //             // Navigator.pop(context);
-                  //           },
-                  //         );
+                          //         child = ProImageEditor.file(
+                          //           file,
+                          //           // configs: ProImageEditorConfigs(
+                          //           //
+                          //           // ),
+                          //           onImageEditingComplete: (Uint8List bytes) async {
+                          //             /*
+                          //  Your code to handle the edited image. Upload it to your server as an example.
+                          //  You can choose to use await, so that the loading-dialog remains visible until your code is ready, or no async, so that the loading-dialog closes immediately.
+                          //  By default, the bytes are in `jpg` format.
+                          // */
+                          //             CliLogger.info(bytes.toString());
+                          //             // Navigator.pop(context);
+                          //           },
+                          //         );
                         } else {
                           // child = FlutterStoryEditor(
                           //     controller: controller,

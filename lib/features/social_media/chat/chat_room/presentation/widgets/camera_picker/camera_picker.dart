@@ -22,6 +22,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
 
 part 'images_and_videos_slider.dart';
+
 class CameraPicker extends StatelessWidget {
   final void Function(List<XFile> media)? onDone;
 

@@ -379,7 +379,7 @@ class _ChatViewState extends State<ChatView> {
         labelColor: AppColors.PRIMARY_COLOR,
         indicatorColor: Colors.red,
         onTap: (index) {
-          if(context.read<UserCubit>().isLoggedIn){
+          if (context.read<UserCubit>().isLoggedIn) {
             context.read<ChatsCubit>().getChats(index: index);
 
             // if this locked chat we request password
@@ -539,7 +539,4 @@ class _ChatViewState extends State<ChatView> {
           )),
     );
   }
-
-
-
 }

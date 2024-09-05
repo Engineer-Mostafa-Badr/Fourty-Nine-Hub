@@ -264,29 +264,25 @@ class SocialServiceLocator {
         () => GetInstagramFeedUseCase(
               serviceLocator(),
             ));
-    serviceLocator
-        .registerLazySingleton<FriendsFollowersUseCase>(() => FriendsFollowersUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<FriendsFollowersUseCase>(
+        () => FriendsFollowersUseCase(
+              serviceLocator(),
+            ));
 
+    serviceLocator.registerLazySingleton<GetInstagramFeedUseCase>(
+        () => GetInstagramFeedUseCase(
+              serviceLocator(),
+            ));
 
+    serviceLocator.registerLazySingleton<HideTwitterPostUseCase>(
+        () => HideTwitterPostUseCase(
+              serviceLocator(),
+            ));
 
-    serviceLocator
-        .registerLazySingleton<GetInstagramFeedUseCase>(() => GetInstagramFeedUseCase(
-      serviceLocator(),
-    ));
-
-
-    serviceLocator
-        .registerLazySingleton<HideTwitterPostUseCase>(() => HideTwitterPostUseCase(
-      serviceLocator(),
-    ));
-
-
-    serviceLocator
-        .registerLazySingleton<DeleteTwitterPostUseCase>(() => DeleteTwitterPostUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<DeleteTwitterPostUseCase>(
+        () => DeleteTwitterPostUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<GetInstagramReelsUseCase>(
         () => GetInstagramReelsUseCase(
@@ -312,66 +308,63 @@ class SocialServiceLocator {
               serviceLocator(),
             ));
 
-    serviceLocator
-        .registerLazySingleton<RemoveFriedRequestUseCase>(() => RemoveFriedRequestUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<RemoveFriedRequestUseCase>(
+        () => RemoveFriedRequestUseCase(
+              serviceLocator(),
+            ));
 
-    serviceLocator
-        .registerLazySingleton<BlocUserUseCase>(() => BlocUserUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<BlocUserUseCase>(() => BlocUserUseCase(
+          serviceLocator(),
+        ));
 
-    serviceLocator
-        .registerLazySingleton<GetInstagramUserReelsUseCase>(() => GetInstagramUserReelsUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<GetInstagramUserReelsUseCase>(
+        () => GetInstagramUserReelsUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator
         .registerLazySingleton<EditCommentUseCase>(() => EditCommentUseCase(
-      serviceLocator(),
-    ));
-
+              serviceLocator(),
+            ));
 
     serviceLocator
         .registerLazySingleton<GetPlacesUseCase>(() => GetPlacesUseCase(
-      serviceLocator(),
-    ));
+              serviceLocator(),
+            ));
 
-    serviceLocator
-        .registerLazySingleton<EditTwitterCommentUseCase>(() => EditTwitterCommentUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<EditTwitterCommentUseCase>(
+        () => EditTwitterCommentUseCase(
+              serviceLocator(),
+            ));
 
-    serviceLocator
-        .registerLazySingleton<DeleteTwitterCommentUseCase>(() => DeleteTwitterCommentUseCase(
-      serviceLocator(),
-    ));
-
+    serviceLocator.registerLazySingleton<DeleteTwitterCommentUseCase>(
+        () => DeleteTwitterCommentUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerFactory<CreatePostCubit>(() => CreatePostCubit(
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-    ));
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
 
     serviceLocator.registerFactory<InstagramCubit>(() => InstagramCubit(
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-    ));
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
     serviceLocator.registerFactory<SocialPostsCubit>(() => SocialPostsCubit(
           serviceLocator(),
           serviceLocator(),
@@ -400,23 +393,23 @@ class SocialServiceLocator {
           serviceLocator(),
         ));
     serviceLocator.registerFactory<TwitterCubit>(() => TwitterCubit(
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-    ));
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
 
     // chats
 
@@ -459,8 +452,6 @@ class SocialServiceLocator {
         () => GetSeenHistoryUseCase(
               serviceLocator(),
             ));
-
-
 
     serviceLocator.registerLazySingleton<ChangeChatMuteStateUseCase>(
         () => ChangeChatMuteStateUseCase(

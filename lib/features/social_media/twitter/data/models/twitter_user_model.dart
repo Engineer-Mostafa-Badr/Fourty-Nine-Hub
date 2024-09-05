@@ -15,7 +15,11 @@ class TwitterUserModel extends TwitterUserEntity {
       id: json['_id'] ?? '',
       firstName: json['firstName'] ?? '',
       lastName: json['lastName'] ?? '',
-      image: json['image']!=null?json['image']:json['profilePictureSignedUrl']!=null?json['profilePictureSignedUrl']: json['USER_PROFILE']['image']??'',
+      image: json['image'] != null
+          ? json['image']
+          : json['profilePictureSignedUrl'] != null
+              ? json['profilePictureSignedUrl']
+              : json['USER_PROFILE']['image'] ?? '',
       email: json['email'] ?? '',
       isDocumented: json['twitter_documentation'] ?? false,
       createdAt: json['createdAt'] is String

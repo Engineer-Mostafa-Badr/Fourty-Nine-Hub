@@ -34,7 +34,8 @@ class CommentReplies extends StatefulWidget {
     required this.postId,
     required this.onAddReply,
     required this.onDeleteReply,
-    required this.from, required this.onEditComment,
+    required this.from,
+    required this.onEditComment,
   });
 
   @override
@@ -196,7 +197,9 @@ class _CommentRepliesState extends State<CommentReplies> {
           onReport: (TwitterReportParams params) {
             // widget.onReport(params);
           },
-          onDeleteReply: (String id) => onDeleteReply(id), onEditComment: (PostCommentParams params ) =>widget.onEditComment(params),
+          onDeleteReply: (String id) => onDeleteReply(id),
+          onEditComment: (PostCommentParams params) =>
+              widget.onEditComment(params),
         ),
       ],
     );

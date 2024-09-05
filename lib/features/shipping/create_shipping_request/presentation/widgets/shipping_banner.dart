@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +10,7 @@ import 'package:fourtyninehub/core/enums/main_services_enum.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/favorite_main_cateogry_cubit.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -17,27 +20,74 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../common/functions/helper/lang_helper.dart';
 
-class ShippingBanner extends StatelessWidget {
+class ShippingBanner extends StatefulWidget {
   const ShippingBanner({
     super.key,
     required this.model,
+    this.favoriteName,
   });
 
   final BannerModel model;
+  final String? favoriteName;
+
+  @override
+  State<ShippingBanner> createState() => _ShippingBannerState();
+}
+
+class _ShippingBannerState extends State<ShippingBanner> {
+  bool isFavrote = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isFavrote = widget.model.mainCategory?.isFavorite ?? false;
+  }
 
   @override
   Widget build(BuildContext context) {
     return MainCategoryBanner(
+      onFavorite: () {
+        if (isFavrote) {
+          context
+              .read<FavoriteMainCateogryCubit>()
+              .favorite(widget.model.mainCategory?.mainCategoryId ?? "");
+          isFavrote = false;
+          return isFavrote;
+        } else {
+          context
+              .read<FavoriteMainCateogryCubit>()
+              .favorite(widget.model.mainCategory?.mainCategoryId ?? "");
+          isFavrote = true;
+          return isFavrote;
+        }
+        // setState(() {
+        //   isFavrote = !isFavrote!;
+        // });
+        // log("Slkdfjld");
+        // return true;
+      },
+      onRegister: () {
+        if (context.read<UserCubit>().isLoggedIn) {
+          context.push(Routes.SHIPPING_REGISTER);
+        } else {
+          // context.push(Routes.SHIPPING_REGISTER);
+          context.push(Routes.LOGIN);
+        }
+      },
+      // canRegister: true,
+      canRegister: !(widget.model.mainCategory?.isDriver ?? false) &&
+          !(widget.model.mainCategory?.isDriverApproved ?? false),
       category: MainCategoryEntity(
-        id: model.mainCategory?.mainCategoryId ?? '',
+        id: widget.model.mainCategory?.mainCategoryId ?? '',
         name: getLang() == 'ar'
-            ? model.mainCategory?.nameAr ?? ''
-            : model.mainCategory?.nameEn ?? '',
-        banner: model.mainCategory?.banner ?? UIConst.imagePlaceHolder,
-        cover: model.mainCategory?.cover ?? UIConst.imagePlaceHolder,
+            ? widget.model.mainCategory?.nameAr ?? ''
+            : widget.model.mainCategory?.nameEn ?? '',
+        banner: widget.model.mainCategory?.banner ?? UIConst.imagePlaceHolder,
+        cover: widget.model.mainCategory?.cover ?? UIConst.imagePlaceHolder,
         image: UIConst.imagePlaceHolder,
-        total: model.mainCategory?.driverLength ?? 0,
-        isFavorite: false,
+        total: widget.model.mainCategory?.driverLength ?? 0,
+        favoriteName: widget.favoriteName,
+        isFavorite: widget.model.mainCategory!.isFavorite ?? false,
       ),
     );
     // return Container(
@@ -76,12 +126,12 @@ class ShippingBanner extends StatelessWidget {
     //       ),
     //       InkWell(
     //         onTap: () {
-    //           if (context.read<UserCubit>().isLoggedIn) {
-    //             context.push(Routes.SHIPPING_REGISTER);
-    //           } else {
-    //             context.push(Routes.SHIPPING_REGISTER);
-    //             // context.push(Routes.LOGIN);
-    //           }
+    // if (context.read<UserCubit>().isLoggedIn) {
+    //   context.push(Routes.SHIPPING_REGISTER);
+    // } else {
+    //   context.push(Routes.SHIPPING_REGISTER);
+    //   // context.push(Routes.LOGIN);
+    // }
     //         },
     //         child: Text(
     //           Labels.register,

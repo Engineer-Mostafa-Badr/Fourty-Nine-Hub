@@ -44,7 +44,7 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
     return Container(
       width: kToolbarHeight * 2.5,
       height: kToolbarHeight * 3,
-      margin: const EdgeInsets.all(5),
+      margin: const EdgeInsets.only(bottom: 5, top: 5, right: 5, left: 5),
       decoration: BoxDecoration(
           border: Border.all(
               color: widget.selected ? Colors.red : Colors.transparent,

@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_card.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/cubit/get_shipping_request_cubit.dart';
+import 'package:fourtyninehub/features/requests_history/presentation/cubit/rating_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
@@ -34,6 +35,7 @@ class HistoryRequestsView extends StatelessWidget {
         initialIndex: 0,
         child: Scaffold(
           appBar: const BackAppBar(
+            centerTitle: false,
             label: Labels.requestsHistory,
           ),
           body: Padding(
@@ -115,6 +117,9 @@ class HistoryRequestsView extends StatelessWidget {
         BlocProvider(
           create: (context) => serviceLocator<GetShippingRequestCubit>(),
         ),
+        BlocProvider(
+          create: (context) => serviceLocator<RatingCubit>(),
+        ),
       ],
       child: BlocBuilder<GetShippingRequestCubit, ShippingState>(
         builder: (context, state) {
@@ -122,18 +127,10 @@ class HistoryRequestsView extends StatelessWidget {
             return ListView.builder(
               itemCount: state.list.length,
               itemBuilder: (context, index) {
-                return NotificationDriverCard(
-                  isHistory: true,
-                  priceFontSize: 20,
-                  model: AllTripModel(
-                    desc: state.list[index].desc,
-                    status: state.list[index].status,
-                    price: state.list[index].price,
-                    targetLocation: state.list[index].targetLocation,
-                    startLocation: state.list[index].startLocation,
-                    time: state.list[index].time,
-                  ),
-                );
+                return ShppingHistoryCard(
+                    isHistory: true,
+                    priceFontSize: 20,
+                    model: state.list[index]);
               },
             );
           } else {

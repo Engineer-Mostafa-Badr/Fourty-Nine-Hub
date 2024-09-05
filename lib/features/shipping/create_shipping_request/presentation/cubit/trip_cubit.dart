@@ -5,19 +5,19 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 class TripCubit extends Cubit<ShippingState> {
   final ShippingRepository repository;
   TripCubit({required this.repository}) : super(ShippingInitial());
-  acceptOffer({required String id}) async {
-    emit(LoadingShippingState());
-    var response = await repository.acceptLoadingTripOffer(id: id);
-    response.fold(
-      (l) {
-        emit(FailureShippingState(failure: l));
-      },
-      (r) {
-        emit(SuccessAcceptOfferState(
-            message: "The request has been successfully approved."));
-      },
-    );
-  }
+  // acceptOffer({required String id}) async {
+  //   emit(LoadingShippingState());
+  //   var response = await repository.acceptLoadingTripOffer(id: id);
+  //   response.fold(
+  //     (l) {
+  //       emit(FailureShippingState(failure: l));
+  //     },
+  //     (r) {
+  //       emit(SuccessAcceptOfferState(
+  //           message: "The request has been successfully approved."));
+  //     },
+  //   );
+  // }
 
   newOffer(
       {required String id,

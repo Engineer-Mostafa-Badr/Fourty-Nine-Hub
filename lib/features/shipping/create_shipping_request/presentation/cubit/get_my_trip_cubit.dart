@@ -16,9 +16,12 @@ class GetMyTripCubit extends Cubit<ShippingState> {
         emit(FailureShippingState(failure: l));
       },
       (r) {
-        TripByUserModel model =
-            TripByUserModel.fromJson((r['data'] as List).first);
-        emit(SuccessGetMyTripState(model: model));
+        log(r['data'][1]['id'].toString(), name: "lskdfjlskdjfkdddd");
+        if ((r['data'] as List).isNotEmpty) {
+          TripByUserModel model =
+              TripByUserModel.fromJson((r['data'] as List).first);
+          emit(SuccessGetMyTripState(model: model));
+        }
       },
     );
   }

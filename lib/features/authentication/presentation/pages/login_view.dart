@@ -273,7 +273,8 @@ class _LoginWidgetState extends State<LoginWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        FormTextField(validator: (v){},
+        FormTextField(
+          validator: (v) {},
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.zR),
@@ -289,7 +290,8 @@ class _LoginWidgetState extends State<LoginWidget> {
           action: (v) {},
         ),
         const Sizer(),
-        FormTextField(validator: (v){},
+        FormTextField(
+          validator: (v) {},
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.zR),

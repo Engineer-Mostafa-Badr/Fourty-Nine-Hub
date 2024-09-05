@@ -56,7 +56,7 @@ class TripByUserModel {
           ? null
           : DateTime.parse(json['updatedAt'] as String),
       driverRatingsVirtual: json['driverRatingsVirtual'] as List<dynamic>?,
-      id: json['id'] as String?,
+      id: json['_id'] as String?,
     );
   }
 

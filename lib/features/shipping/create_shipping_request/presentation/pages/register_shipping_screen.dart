@@ -98,20 +98,20 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(
-                      height: 30,
-                    ),
+                    // const SizedBox(
+                    //   height: 30,
+                    // ),
                     // const Gap(30),
                     Text(
                       "Welcome to Ship Register",
                       style: Styles.headerText(
-                        fontSize: 20,
+                        fontSize: 40,
                         color: AppColors.PRIMARY_COLOR_DARK,
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
                     // const Gap(40),
                     Center(
                       child: BlocBuilder<ShippingCubit, ShippingState>(
@@ -242,9 +242,9 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       ),
                     ),
                     // Gap(35),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -528,7 +528,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //   ],
                     // ),
                     // const Gap(30),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -776,7 +776,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //   ),
                     // ),
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     Row(
                       children: [
@@ -811,7 +811,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     ),
                     // const Gap(20),
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     CreateDoctorIDExpiryDatePicker(
                       textStyle: TextStyle(
@@ -1009,7 +1009,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     ),
                     // const Gap(40),
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     // DefaultTextFormField(
                     //   contentPadding: EdgeInsets.z,
@@ -1114,7 +1114,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
 
                     // const Gap(50),
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     // Center(
                     //   child: BlocListener<CreateDoctorCubit, CreateDoctorState>(
@@ -1170,7 +1170,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     ),
                     // const Gap(30),
                     const SizedBox(
-                      height: 30,
+                      height: 10,
                     ),
                     AppInfoText(
                       text: Labels.youWillGetPounds,
@@ -1200,7 +1200,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //   ],
                     // ),
                     const SizedBox(
-                      height: 30,
+                      height: 10,
                     ),
                     // const Gap(30),
                     Align(

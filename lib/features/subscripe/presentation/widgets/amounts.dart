@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/features/subscripe/domain/entities/subscription_amount_entity.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:go_router/go_router.dart';
 
 class SubscriptoinAmountsWidget extends StatefulWidget {
   final WalletTypes walletType;
@@ -24,13 +27,16 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
     return Column(
       children: [
         Text(
-          "You don't have in money in ${widget.walletType.translatedName}",
-          style: Styles.headerText(),
+          "Insufficient Amount",
+          style: Styles.headerText(color: Colors.red, fontSize: 40),
         ),
         const Sizer(),
-        Text(
-          "select amount to charge",
-          style: Styles.mediumText(),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Select amount to charge",
+            style: Styles.mediumText(),
+          ),
         ),
         const Sizer(),
         Expanded(
@@ -58,10 +64,33 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
           ),
         ),
         const Sizer(),
-        ElevatedAppButton(
-          label: 'Charge Now',
-          onPressed: () {},
-        ),
+        Row(
+          children: [
+            Flexible(
+              child: AppButton(
+                textColor: Colors.white,
+                backColor: AppColors.PRIMARY_COLOR,
+                color: Colors.white,
+                label: 'Charge',
+                onPressed: () {},
+              ),
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            Flexible(
+              child: AppButton(
+                textColor: Colors.white,
+                // backColor: AppColors.PRIMARY_COLOR,
+                color: Colors.white,
+                label: 'Cancel',
+                onPressed: () {
+                  context.pop();
+                },
+              ),
+            )
+          ],
+        )
       ],
     );
   }

@@ -48,18 +48,18 @@ class FacebookPostCard extends StatefulWidget {
 
   const FacebookPostCard(
       {super.key,
-        required this.post,
-        required this.onReact,
-        this.showOptions = true,
-        this.isMyPost = false,
-        this.fromProfile = false,
-        required this.deletePost,
-        required this.hidePost,
-        required this.showPostDetails,
-        required this.showPostComments,
-        required this.onShare,
-        required this.from,
-        required this.index});
+      required this.post,
+      required this.onReact,
+      this.showOptions = true,
+      this.isMyPost = false,
+      this.fromProfile = false,
+      required this.deletePost,
+      required this.hidePost,
+      required this.showPostDetails,
+      required this.showPostComments,
+      required this.onShare,
+      required this.from,
+      required this.index});
 
   @override
   State<FacebookPostCard> createState() => _FacebookPostCardState();
@@ -82,16 +82,16 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   Widget build(BuildContext context) {
     return BlocConsumer<SocialPostsCubit, SocialPostsState>(
         listener: (context, state) {
-          if (state.status == StateStatus.error) {
-            showErrorMessage(
-              context,
-              getFailureMessage(
-                state.failure ?? const UnknownFailure(),
-                context,
-              ),
-            );
-          }
-        }, builder: (context, state) {
+      if (state.status == StateStatus.error) {
+        showErrorMessage(
+          context,
+          getFailureMessage(
+            state.failure ?? const UnknownFailure(),
+            context,
+          ),
+        );
+      }
+    }, builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
       if (widget.from == 'posts') {
         if (controller.feedPagingController.itemList?[widget.index].type ==
@@ -100,7 +100,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             post: controller.feedPagingController.itemList![widget.index],
           );
         } else if (controller
-            .feedPagingController.itemList![widget.index].type ==
+                .feedPagingController.itemList![widget.index].type ==
             'twitter_post') {
           return FacebookTweetCard(
             post: controller.feedPagingController.itemList![widget.index],
@@ -112,7 +112,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           return InkWell(
             onTap: (widget.from == 'posts' && widget.post.isShared == true)
                 ? () => widget.showPostDetails(
-                controller.feedPagingController.itemList![widget.index])
+                    controller.feedPagingController.itemList![widget.index])
                 : null,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,36 +125,52 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                       images: myPost.images ?? []),
                 Container(
                   margin: EdgeInsets.all(myPost.isShared == true ? 10 : 0),
-                  padding: EdgeInsets.all((myPost.isShared == true&&myPost.mainPost!=null) ? 10 : 0),
+                  padding: EdgeInsets.all(
+                      (myPost.isShared == true && myPost.mainPost != null)
+                          ? 10
+                          : 0),
                   decoration: BoxDecoration(
                       border: myPost.isShared == true ? Border.all() : null),
                   child: Column(
                     children: [
-                      if(myPost.type != 'advertisement' &&
-                          myPost.isShared == true&&myPost.mainPost!=null)...[if (myPost.type != 'advertisement' &&
-                          myPost.isShared == true)
-                        _buildMainAccountHeader(
-                            context: context, post: myPost.mainPost!),
+                      if (myPost.type != 'advertisement' &&
+                          myPost.isShared == true &&
+                          myPost.mainPost != null) ...[
+                        if (myPost.type != 'advertisement' &&
+                            myPost.isShared == true)
+                          _buildMainAccountHeader(
+                              context: context, post: myPost.mainPost!),
                         if (myPost.isShared == true)
                           _buildContentWidget(
                               content: myPost.mainPost?.content ?? '',
                               backgroundColor: null,
-                              images: myPost.mainPost?.images ?? []),],
-                      if(myPost.type != 'advertisement' &&
-                          myPost.isShared == true&&myPost.mainPost==null)SizedBox(
-                        width: double.infinity,
-                        height: 100,
-                        child: Center(
-                          child: Row(
-                            children: [
-                              const Sizer(),
-                              const Icon(Icons.lock,color: Colors.black,),
-                              const Sizer(),
-                              Label(text: "This content is not available now.",style: Styles.headerText(color: Colors.black,),),
-                            ],
+                              images: myPost.mainPost?.images ?? []),
+                      ],
+                      if (myPost.type != 'advertisement' &&
+                          myPost.isShared == true &&
+                          myPost.mainPost == null)
+                        SizedBox(
+                          width: double.infinity,
+                          height: 100,
+                          child: Center(
+                            child: Row(
+                              children: [
+                                const Sizer(),
+                                const Icon(
+                                  Icons.lock,
+                                  color: Colors.black,
+                                ),
+                                const Sizer(),
+                                Label(
+                                  text: "This content is not available now.",
+                                  style: Styles.headerText(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      )
+                        )
                     ],
                   ),
                 ),
@@ -208,9 +224,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     children: [
                       Expanded(
                           child: BuildReactionsButtons(
-                            post: myPost,
-                            from: widget.from,
-                          )),
+                        post: myPost,
+                        from: widget.from,
+                      )),
                       if (widget.from == 'posts')
                         Expanded(
                           child: _buildReactionPlaceHolder(
@@ -247,7 +263,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         return InkWell(
           onTap: (widget.from == 'posts' && widget.post.isShared == true)
               ? () => widget.showPostDetails(
-              controller.feedPagingController.itemList![widget.index])
+                  controller.feedPagingController.itemList![widget.index])
               : null,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,9 +324,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   children: [
                     Expanded(
                         child: BuildReactionsButtons(
-                          post: myPost,
-                          from: 'posts',
-                        )),
+                      post: myPost,
+                      from: 'posts',
+                    )),
                     if (widget.from == 'posts')
                       Expanded(
                         child: _buildReactionPlaceHolder(
@@ -375,7 +391,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 icon: Icons.delete,
                 title: 'Delete Post',
                 subTitle:
-                'Your post will be deleted, and you cannot get it again',
+                    'Your post will be deleted, and you cannot get it again',
                 onTap: () {
                   widget.deletePost(post.id);
                   if (fromDetails == true) {
@@ -399,9 +415,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
 
   Widget listTile(
       {required IconData icon,
-        required String title,
-        required String subTitle,
-        required Function onTap}) {
+      required String title,
+      required String subTitle,
+      required Function onTap}) {
     return ListTile(
       title: Label(text: title),
       onTap: () {
@@ -467,16 +483,16 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                             }),
                         RichText(
                             text: TextSpan(children: [
-                              TextSpan(
-                                  text: post.sinceTime,
-                                  style: Styles.mediumText(color: Colors.grey)),
-                              const WidgetSpan(
-                                  child: Icon(
-                                    Icons.group,
-                                    size: 14,
-                                    color: Colors.grey,
-                                  ))
-                            ])),
+                          TextSpan(
+                              text: post.sinceTime,
+                              style: Styles.mediumText(color: Colors.grey)),
+                          const WidgetSpan(
+                              child: Icon(
+                            Icons.group,
+                            size: 14,
+                            color: Colors.grey,
+                          ))
+                        ])),
                       ],
                     ),
                   ),
@@ -484,11 +500,6 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 ],
               ),
             ),
-
-
-
-
-
             if (post.user.id == user?.id)
               IconAppButton(
                 onPressed: () {
@@ -515,22 +526,34 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               ),
           ],
         ),
-        if(post.location!=null)Padding(
-          padding: const EdgeInsetsDirectional.only(start: 40.0),
-          child: InkWell(
-            onTap: (){
-              showDialog(context: context, builder: (_)=> Scaffold(
-                body: FacebookUserOnMap(location: post.location!,),
-              ));
-            },
-            child: Row(
-              children: [
-                const Icon(Icons.location_on,size: 20,),
-                Expanded(child: Label(text: post.location?.place??'',style: Styles.mediumText(fontSize: 14),))
-              ],
+        if (post.location != null)
+          Padding(
+            padding: const EdgeInsetsDirectional.only(start: 40.0),
+            child: InkWell(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (_) => Scaffold(
+                          body: FacebookUserOnMap(
+                            location: post.location!,
+                          ),
+                        ));
+              },
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.location_on,
+                    size: 20,
+                  ),
+                  Expanded(
+                      child: Label(
+                    text: post.location?.place ?? '',
+                    style: Styles.mediumText(fontSize: 14),
+                  ))
+                ],
+              ),
             ),
           ),
-        ),
       ],
     );
   }
@@ -557,154 +580,154 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         const Sizer(),
         Expanded(
             child: Row(
-              children: [
-                InkWell(
-                  onTap: () {
-                    if (widget.fromProfile == false) {
-                      context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-                    }
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextAppButton(
-                          style: TextStyle(color: Theme.of(context).primaryColor),
-                          label: post.user.firstName,
-                          onPressed: () {
-                            if (widget.fromProfile == false) {
-                              context.push(Routes.OTHERSACCOUNT,
-                                  extra: post.user.id);
-                            }
-                          }),
-                      RichText(
-                          text: TextSpan(children: [
-                            TextSpan(
-                                text: post.sinceTime,
-                                style: Styles.mediumText(color: Colors.grey)),
-                            const WidgetSpan(
-                                child: Icon(
-                                  Icons.group,
-                                  size: 14,
-                                  color: Colors.grey,
-                                ))
-                          ]))
-                    ],
-                  ),
-                ),
-                // _buildActivityFeelingWidget(post),
-              ],
-            )),
+          children: [
+            InkWell(
+              onTap: () {
+                if (widget.fromProfile == false) {
+                  context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                }
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextAppButton(
+                      style: TextStyle(color: Theme.of(context).primaryColor),
+                      label: post.user.firstName,
+                      onPressed: () {
+                        if (widget.fromProfile == false) {
+                          context.push(Routes.OTHERSACCOUNT,
+                              extra: post.user.id);
+                        }
+                      }),
+                  RichText(
+                      text: TextSpan(children: [
+                    TextSpan(
+                        text: post.sinceTime,
+                        style: Styles.mediumText(color: Colors.grey)),
+                    const WidgetSpan(
+                        child: Icon(
+                      Icons.group,
+                      size: 14,
+                      color: Colors.grey,
+                    ))
+                  ]))
+                ],
+              ),
+            ),
+            // _buildActivityFeelingWidget(post),
+          ],
+        )),
       ],
     );
   }
 
   Widget _buildContentWidget(
       {String? backgroundColor,
-        required String content,
-        List<String>? images}) {
+      required String content,
+      List<String>? images}) {
     return (backgroundColor != null && backgroundColor != '#FFFFFFFF') &&
-        images!.isEmpty
+            images!.isEmpty
         ? Container(
-      width: double.infinity,
-      height: 220,
-      alignment: Alignment.center,
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-      color: images.isEmpty
-          ? Color(int.parse(backgroundColor.substring(1), radix: 16))
-          : Colors.white,
-      child: ReadMoreLabel(
-        text: content,
-        style: Styles.headerText(
-            color: Colors.black,
-            fontSize: 24,
-            fontWeight: FontWeight.bold),
-      ),
-    )
-        : Container(
-      width: double.infinity,
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ReadMoreLabel(text: content),
-          const SizedBox(
-            height: 10,
-          ),
-          if ((images?.isNotEmpty ?? false))
-            SizedBox(
-              child: GridView.builder(
-                  padding: const EdgeInsets.all(10),
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: images!.length == 1 ? 1 : 2),
-                  itemCount: images.length < 4 ? images.length : 4,
-                  itemBuilder: (context, index) => InkWell(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    onTap: () {
-                      if (index != 3 ||
-                          (index == 3 && images.length == 4)) {
-                        showDialog(
-                            context: context,
-                            builder: (context) => ImageDetailsScreen(
-                              image: images[index],
-                              fromPost: true,
-                              onRemoveImage: () {
-                                // controller
-                                //     .removePhoto(images![index]);
-                                context.pop();
-                              },
-                            ));
-                      } else {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return ShowPostsImages(
-                                images: images,
-                                onRemoveImage:
-                                    (UploadFileEntity image) {
-                                  // controller.removePhoto(image);
-                                },
-                              );
-                            });
-                      }
-                    },
-                    child: Stack(
-                      children: [
-                        Stack(
-                          children: [
-                            ImageFromInternet(
-                              image: images[index],
-                            ),
-                            if (index == 3 && images.length > 4)
-                              Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color:
-                                  Colors.black.withOpacity(0.5),
-                                ),
-                                child: Center(
-                                  child: Label(
-                                    text: "+${images.length - 4}",
-                                    style: Styles.headerText(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )),
+            width: double.infinity,
+            height: 220,
+            alignment: Alignment.center,
+            margin: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+            color: images.isEmpty
+                ? Color(int.parse(backgroundColor.substring(1), radix: 16))
+                : Colors.white,
+            child: ReadMoreLabel(
+              text: content,
+              style: Styles.headerText(
+                  color: Colors.black,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold),
             ),
-        ],
-      ),
-    );
+          )
+        : Container(
+            width: double.infinity,
+            margin: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ReadMoreLabel(text: content),
+                const SizedBox(
+                  height: 10,
+                ),
+                if ((images?.isNotEmpty ?? false))
+                  SizedBox(
+                    child: GridView.builder(
+                        padding: const EdgeInsets.all(10),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: images!.length == 1 ? 1 : 2),
+                        itemCount: images.length < 4 ? images.length : 4,
+                        itemBuilder: (context, index) => InkWell(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              onTap: () {
+                                if (index != 3 ||
+                                    (index == 3 && images.length == 4)) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => ImageDetailsScreen(
+                                            image: images[index],
+                                            fromPost: true,
+                                            onRemoveImage: () {
+                                              // controller
+                                              //     .removePhoto(images![index]);
+                                              context.pop();
+                                            },
+                                          ));
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return ShowPostsImages(
+                                          images: images,
+                                          onRemoveImage:
+                                              (UploadFileEntity image) {
+                                            // controller.removePhoto(image);
+                                          },
+                                        );
+                                      });
+                                }
+                              },
+                              child: Stack(
+                                children: [
+                                  Stack(
+                                    children: [
+                                      ImageFromInternet(
+                                        image: images[index],
+                                      ),
+                                      if (index == 3 && images.length > 4)
+                                        Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.5),
+                                          ),
+                                          child: Center(
+                                            child: Label(
+                                              text: "+${images.length - 4}",
+                                              style: Styles.headerText(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )),
+                  ),
+              ],
+            ),
+          );
   }
 
   Widget _buildReactionPlaceHolder({
@@ -716,7 +739,11 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          FaIcon(icon,color: AppColors.GREY_DARK_COLOR,size: 20,),
+          FaIcon(
+            icon,
+            color: AppColors.GREY_DARK_COLOR,
+            size: 20,
+          ),
           Label(text: label, style: Styles.mediumText(color: Colors.grey))
         ],
       );
@@ -768,8 +795,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   },
                   child: Label(
                     text:
-                    "${post.users![0].firstName} ${post.users![0].lastName} ",
-                    style: Styles.mediumText(decoration: TextDecoration.underline),
+                        "${post.users![0].firstName} ${post.users![0].lastName} ",
+                    style:
+                        Styles.mediumText(decoration: TextDecoration.underline),
                   ),
                 ),
                 if (post.users!.length > 1)
@@ -778,8 +806,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                         showDialog(
                             context: context,
                             builder: (_) => BuildWithUsers(
-                              users: post.users!,
-                            ));
+                                  users: post.users!,
+                                ));
                       },
                       child: Label(
                         text: '+${post.users!.length - 1}',

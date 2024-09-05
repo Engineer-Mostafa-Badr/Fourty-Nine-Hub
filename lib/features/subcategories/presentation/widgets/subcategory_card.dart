@@ -39,7 +39,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
       child: Container(
         // width: kToolbarHeight * 2.5.zW,
         // height: kToolbarHeight * 3.zH,
-        margin:  EdgeInsets.all(10.zW),
+        margin: EdgeInsets.all(10.zW),
         decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(5),
@@ -65,7 +65,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                   ),
                   Positioned(
                       top: 10.zH,
-                      right:10.zW,
+                      right: 10.zW,
                       child: IconAppButton(
                         icon: Icons.favorite_outline,
                         onPressed: () {},

@@ -352,9 +352,9 @@ class DrawerWidget extends StatelessWidget {
 
   Widget competitionSubscription({required BuildContext context}) {
     return InkWell(
-      onTap: () => context.go(
-        context.read<UserCubit>().isLoggedIn ? Routes.LUCKYWHEEL : Routes.LOGIN,
-      ),
+      // onTap: () => context.go(
+      // context.read<UserCubit>().isLoggedIn ? Routes.LUCKYWHEEL : Routes.LOGIN,
+      // ),
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.all(20.zW),
@@ -447,7 +447,7 @@ class DrawerWidget extends StatelessWidget {
               children: [
                 Positioned.fill(
                   child: BlocConsumer<UserCubit, BasicState>(
-                    listener: (context,state){
+                    listener: (context, state) {
                       // if(state.isSuccess){
                       //   context.pop();
                       //   showSuccessMessage(context, 'Picture Uploaded Successfully');
@@ -463,7 +463,7 @@ class DrawerWidget extends StatelessWidget {
                         Shimmer.fromColors(
                           baseColor: Colors.amber,
                           highlightColor: Colors.black,
-                          child:  CircleAvatar(
+                          child: CircleAvatar(
                             child: Container(
                               color: Colors.red,
                             ),
@@ -491,7 +491,9 @@ class DrawerWidget extends StatelessWidget {
                               title: const Text('Gallery'),
                               onTap: () async {
                                 Navigator.pop(context);
-                                await context.read<UserCubit>().uploadPhoto(isGallery: true);
+                                await context
+                                    .read<UserCubit>()
+                                    .uploadPhoto(isGallery: true);
                                 // Reload user data if needed
                               },
                             ),
@@ -500,7 +502,9 @@ class DrawerWidget extends StatelessWidget {
                               title: const Text('Camera'),
                               onTap: () async {
                                 Navigator.pop(context);
-                                await context.read<UserCubit>().uploadPhoto(isGallery: false);
+                                await context
+                                    .read<UserCubit>()
+                                    .uploadPhoto(isGallery: false);
                                 // Reload user data if needed
                               },
                             ),
@@ -586,14 +590,13 @@ class DrawerWidget extends StatelessWidget {
 
   String _getFirstTwoWords(String fullName) {
     List<String> words = fullName.split(" ");
-    if(words.length>1) {
+    if (words.length > 1) {
       // Capitalize the first letter of each word
-    words = words.map((word) {
-      return word[0].toUpperCase() + word.substring(1).toLowerCase();
-    }).toList();
+      words = words.map((word) {
+        return word[0].toUpperCase() + word.substring(1).toLowerCase();
+      }).toList();
     }
     return words.length > 1 ? '${words[0]} ${words[1]}' : words[0];
-
   }
 
   getUserType(

@@ -34,7 +34,6 @@ class OtherAccountView extends StatefulWidget {
 }
 
 class _OtherAccountViewState extends State<OtherAccountView> {
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -58,154 +57,150 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   child: CupertinoActivityIndicator(),
                 )
               : NestedAppbar(
-                      appBars: [
-                        SliverAppBar(
-                          floating: true,
-                          expandedHeight: kToolbarHeight * 5,
-                          automaticallyImplyLeading: false,
-                          backgroundColor: Colors.white,
-                          flexibleSpace: _buildAccountCounter(
-                              context: context,
-                              user: state.profileData!,
-                              onFollow: () async {
-                                if (state.profileData?.isFollowed == true) {
-                                  var result = await controller.unFollowRequest(
-                                      context: context,
-                                      userId: state.profileData!.id);
-                                  if (result == true) {
-                                    state.profileData?.isFollowed = false;
-                                    setState(() {});
-                                  }
-                                } else {
-                                  var result = await controller.followRequest(
-                                      context: context,
-                                      userId: state.profileData!.id);
-                                  if (result == true) {
-                                    state.profileData?.isFollowed = true;
-                                    setState(() {});
-                                  }
-                                }
-                              },
-                              onAddFriend: () async {
-                                // print("object");
-                                if (state.profileData?.areFriends == true) {
-                                } else {
-                                  if (state.profileData?.sentFriendRequest ==
-                                      true) {
-                                    var result =
-                                        await controller.removeFriendRequest(
-                                            context: context,
-                                            userId: state.profileData!.id);
-                                    if (result == true) {
-                                      state.profileData?.sentFriendRequest =
-                                          false;
-                                      setState(() {});
-                                    }
-                                  } else {
-                                    var result = await controller.friendRequest(
+                  appBars: [
+                    SliverAppBar(
+                      floating: true,
+                      expandedHeight: kToolbarHeight * 5,
+                      automaticallyImplyLeading: false,
+                      backgroundColor: Colors.white,
+                      flexibleSpace: _buildAccountCounter(
+                          context: context,
+                          user: state.profileData!,
+                          onFollow: () async {
+                            if (state.profileData?.isFollowed == true) {
+                              var result = await controller.unFollowRequest(
+                                  context: context,
+                                  userId: state.profileData!.id);
+                              if (result == true) {
+                                state.profileData?.isFollowed = false;
+                                setState(() {});
+                              }
+                            } else {
+                              var result = await controller.followRequest(
+                                  context: context,
+                                  userId: state.profileData!.id);
+                              if (result == true) {
+                                state.profileData?.isFollowed = true;
+                                setState(() {});
+                              }
+                            }
+                          },
+                          onAddFriend: () async {
+                            // print("object");
+                            if (state.profileData?.areFriends == true) {
+                            } else {
+                              if (state.profileData?.sentFriendRequest ==
+                                  true) {
+                                var result =
+                                    await controller.removeFriendRequest(
                                         context: context,
                                         userId: state.profileData!.id);
-                                    if (result == true) {
-                                      state.profileData?.sentFriendRequest =
-                                          true;
-                                      setState(() {});
-                                    }
-                                  }
+                                if (result == true) {
+                                  state.profileData?.sentFriendRequest = false;
+                                  setState(() {});
                                 }
-                              }),
-                          iconTheme: const IconThemeData(color: Colors.white),
-                          leading: IconButton(
-                              onPressed: () => context.pop(),
-                              icon: const Icon(Icons.arrow_back)),
-                          actions: [
-                            // IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-                            if (loginUser?.id != state.profileData?.id)
-                              PopupMenuButton(
-                                icon: const Icon(
-                                  Icons.more_vert,
-                                  color: Colors.white,
+                              } else {
+                                var result = await controller.friendRequest(
+                                    context: context,
+                                    userId: state.profileData!.id);
+                                if (result == true) {
+                                  state.profileData?.sentFriendRequest = true;
+                                  setState(() {});
+                                }
+                              }
+                            }
+                          }),
+                      iconTheme: const IconThemeData(color: Colors.white),
+                      leading: IconButton(
+                          onPressed: () => context.pop(),
+                          icon: const Icon(Icons.arrow_back)),
+                      actions: [
+                        // IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+                        if (loginUser?.id != state.profileData?.id)
+                          PopupMenuButton(
+                            icon: const Icon(
+                              Icons.more_vert,
+                              color: Colors.white,
+                            ),
+                            itemBuilder: (context) {
+                              return [
+                                PopupMenuItem<int>(
+                                  value: 4,
+                                  child: const Text("Report"),
+                                  onTap: () {
+                                    bottomSheet(
+                                        context: context,
+                                        widget: ReportView(
+                                          id: widget.userId,
+                                          categoryId:
+                                              '66b77e77bb35968b535dc944',
+                                        ));
+                                  },
                                 ),
-                                itemBuilder: (context) {
-                                  return [
-                                    PopupMenuItem<int>(
-                                      value: 4,
-                                      child: const Text("Report"),
-                                      onTap: () {
-                                        bottomSheet(
-                                            context: context,
-                                            widget: ReportView(
-                                              id: widget.userId,
-                                              categoryId:
-                                                  '66b77e77bb35968b535dc944',
-                                            ));
-                                      },
-                                    ),
-                                    PopupMenuItem<int>(
-                                      value: 5,
-                                      child: Text(
-                                          state.profileData?.isBlock == true
-                                              ? 'UnBlock'
-                                              : 'Block'),
-                                      onTap: () async {
-                                        // context.pop();
-                                        var result = await controller.blockUser(
-                                            context: context,
-                                            userId: widget.userId);
-                                        print("result:${result}");
-                                        if (result == true) {
-                                          print("object");
-                                          if (state.profileData?.isBlock ==
-                                              false) {
-                                            state.profileData?.isBlock = true;
-                                            showSuccessMessage(context,
-                                                'Blocked user successfully.');
-                                          } else {
-                                            state.profileData?.isBlock = false;
-                                            showSuccessMessage(context,
-                                                'Unblocked user successfully.');
-                                          }
-                                        }
-                                      },
-                                    ),
-                                  ];
-                                },
-                              ),
-                          ],
-                        ),
-                        if (state.profileData?.isBlock == false)
-                          SliverAppBar(
-                            automaticallyImplyLeading: false,
-                            floating: false,
-                            backgroundColor: Colors.white,
-                            pinned: true,
-                            title: TabBar(
-                                labelStyle: Styles.mediumText(),
-                                isScrollable: true,
-                                tabAlignment: TabAlignment.center,
-                                tabs: const [
-                                  Tab(
-                                    text: 'Posts',
-                                  ),
-                                  Tab(
-                                    text: 'Tweets',
-                                  ),
-                                  Tab(
-                                    text: 'Reels',
-                                  ),
-                                  // Tab(
-                                  //   text: 'Media',
-                                  // ),
-                                ]),
+                                PopupMenuItem<int>(
+                                  value: 5,
+                                  child: Text(state.profileData?.isBlock == true
+                                      ? 'UnBlock'
+                                      : 'Block'),
+                                  onTap: () async {
+                                    // context.pop();
+                                    var result = await controller.blockUser(
+                                        context: context,
+                                        userId: widget.userId);
+                                    print("result:${result}");
+                                    if (result == true) {
+                                      print("object");
+                                      if (state.profileData?.isBlock == false) {
+                                        state.profileData?.isBlock = true;
+                                        showSuccessMessage(context,
+                                            'Blocked user successfully.');
+                                      } else {
+                                        state.profileData?.isBlock = false;
+                                        showSuccessMessage(context,
+                                            'Unblocked user successfully.');
+                                      }
+                                    }
+                                  },
+                                ),
+                              ];
+                            },
                           ),
                       ],
-                      body: state.profileData?.isBlock == false
-                          ? _buildAccountPages(state.profileData!)
-                          : const Center(
-                              child: Label(
-                                text: 'You have blocked this user.',
+                    ),
+                    if (state.profileData?.isBlock == false)
+                      SliverAppBar(
+                        automaticallyImplyLeading: false,
+                        floating: false,
+                        backgroundColor: Colors.white,
+                        pinned: true,
+                        title: TabBar(
+                            labelStyle: Styles.mediumText(),
+                            isScrollable: true,
+                            tabAlignment: TabAlignment.center,
+                            tabs: const [
+                              Tab(
+                                text: 'Posts',
                               ),
-                            ),
-                    );
+                              Tab(
+                                text: 'Tweets',
+                              ),
+                              Tab(
+                                text: 'Reels',
+                              ),
+                              // Tab(
+                              //   text: 'Media',
+                              // ),
+                            ]),
+                      ),
+                  ],
+                  body: state.profileData?.isBlock == false
+                      ? _buildAccountPages(state.profileData!)
+                      : const Center(
+                          child: Label(
+                            text: 'You have blocked this user.',
+                          ),
+                        ),
+                );
         }),
       ),
     );
@@ -313,7 +308,6 @@ class _OtherAccountViewState extends State<OtherAccountView> {
             PositionedDirectional(
                 bottom: 20,
                 start: 10,
-
                 child: CircleAvatar(
                   radius: 30,
                   backgroundColor: AppColors.SECONDARY_COLOR,

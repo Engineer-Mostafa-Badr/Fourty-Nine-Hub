@@ -2,7 +2,7 @@ part of 'request_history_cubit.dart';
 
 enum RequestHistoryStates { loading, initState, error }
 
-extension RequestHistoryStateX on RequestHistoryState {
+extension c on RequestHistoryState {
   bool get isLoading => status == RequestHistoryStates.loading;
   bool get isInitState => status == RequestHistoryStates.initState;
   bool get isError => status == RequestHistoryStates.error;

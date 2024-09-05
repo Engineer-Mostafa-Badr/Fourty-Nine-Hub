@@ -18,14 +18,14 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
   final int mainCategory;
   final int index;
   final ScrollController scrollController;
- final bool isScrollingDown ;
+  final bool isScrollingDown;
 
   const BottomNavigator({
     super.key,
     required this.mainCategory,
     required this.index,
     required this.scrollController,
-     required this.isScrollingDown,
+    required this.isScrollingDown,
   });
 
   @override
@@ -136,7 +136,8 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         }
       },
       items: pages,
-      scrollController: scrollController!, isScrollingDown: isScrollingDown!,
+      scrollController: scrollController!,
+      isScrollingDown: isScrollingDown!,
     );
   }
 
@@ -152,7 +153,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
 
   bool isScrollingDown;
 
-   CustomBottomNavigationBar({
+  CustomBottomNavigationBar({
     super.key,
     required this.currentIndex,
     required this.onTap,

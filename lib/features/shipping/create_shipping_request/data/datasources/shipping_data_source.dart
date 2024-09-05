@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/driver_register_request_model.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/register_request_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/request_model.dart';
 
 class ShippingDataSource {
@@ -14,9 +15,11 @@ class ShippingDataSource {
   ShippingDataSource({required this.api, required this.cacheService});
   Future<Either<Failure, Map<String, dynamic>>> getBannerData() {
     log(cacheService.getDriverId().toString(), name: "DriverId");
-    return api.get("${EndPoints.bannerData}?userId=66b4659d1c9c4b1cb35bfee4");
+    return api.get("${EndPoints.bannerData}?userId=66c349d7a684ab473f1c1ed7");
   }
 
+// 66b76065ab3b6f5a3d2273ed
+//66c349d7a684ab473f1c1ed7
   Future<Either<Failure, Map<String, dynamic>>> getS3(
       {required String endpoint, Map<String, dynamic>? data}) {
     return api.put(endpoint, data: data);
@@ -31,6 +34,11 @@ class ShippingDataSource {
     return api.post(
       "${EndPoints.favoriteSubCategory}/$id",
     );
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> favoriteMain(
+      {required String id}) {
+    return api.post("${EndPoints.favoriteCategory}/$id");
   }
 
   Future<Either<Failure, Map<String, dynamic>>> createTrip(
@@ -80,11 +88,11 @@ class ShippingDataSource {
     });
   }
 
-  Future<Either<Failure, Map<String, dynamic>>> acceptLoadingTripOffer(
-      {required String id}) {
-    return api
-        .post(EndPoints.acceptLoadingTripOffer, data: {"loadingRequestId": id});
-  }
+  // Future<Either<Failure, Map<String, dynamic>>> acceptLoadingTripOffer(
+  //     {required String id}) {
+  //   return api
+  //       .post(EndPoints.acceptLoadingTripOffer, data: {"loadingRequestId": id});
+  // }
 
   Future<Either<Failure, Map<String, dynamic>>> signedUrl(
       {required Map<String, dynamic> json}) {
@@ -113,7 +121,47 @@ class ShippingDataSource {
   Future<Either<Failure, Map<String, dynamic>>> loadingTripRequests() async {
     return api.get(EndPoints.loadingTripRequests);
   }
+
   Future<Either<Failure, Map<String, dynamic>>> getShippingRequests() async {
     return api.get(EndPoints.allUserTrips);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> acceptTrip(
+      {required String loadingRequestId}) async {
+    return api.post(EndPoints.acceptLoadingTripOffer,
+        data: {"loadingRequestId": loadingRequestId});
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> declineTrip(
+      {required String loadingRequestId}) async {
+    return api.post(EndPoints.cancelOffer,
+        data: {"loadingRequestId": loadingRequestId});
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> cancelTrip(
+      {required String tripId}) async {
+    return api.delete("${EndPoints.deleteLoadingTrip}/$tripId");
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getDrive() async {
+    return api.get(EndPoints.getDriverData,
+        queryParameters: {"subCategory": "62c8baad8e28a58a3edf5805"});
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> updateDriver(
+      DriverRegisterRequestModel model) async {
+    return api.put(EndPoints.updateDriver, data: model.register());
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> completeTrip(
+      {required String loadingTrip}) async {
+    return api.put("${EndPoints.completeTrip}/$loadingTrip");
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> driverStatistics() async {
+    return api.get(EndPoints.driverStatistics);
+  }
+  Future<Either<Failure, Map<String, dynamic>>> deleteDriver() async {
+    return api.get(EndPoints.deleteDriver);
   }
 }

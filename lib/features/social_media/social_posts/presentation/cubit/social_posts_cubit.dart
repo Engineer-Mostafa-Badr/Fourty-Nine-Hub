@@ -92,7 +92,8 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._userProfileUseCase,
     this._unFollowUserUseCase,
     this._removeFriedRequestUseCase,
-    this._blocUserUseCase, this._editCommentUseCase,
+    this._blocUserUseCase,
+    this._editCommentUseCase,
   ) : super(const SocialPostsState());
 
   void loadData() async {
@@ -345,7 +346,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
         (r) {
-          print(params.postId);
+      print(params.postId);
       var currentComment = commentsPagingController.itemList
           ?.firstWhere((element) => element.id == params.postId);
       var currentReply = repliesPagingController.itemList
@@ -356,8 +357,6 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     });
     return value;
   }
-
-
 
   // edit on a comment
   Future<bool> editComment({required PostCommentParams params}) async {
@@ -374,7 +373,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 
 // add comment
   Future<CommentEntity> onPostComment(
-      {required PostCommentParams params,required String from}) async {
+      {required PostCommentParams params, required String from}) async {
     var response = await _postCommentUseCase(params);
     CommentEntity? model;
     response.fold(
@@ -382,7 +381,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
               state.copyWith(failure: failure, status: StateStatus.error),
             ), (data) {
       model = data;
-      if(from=='feed'){
+      if (from == 'feed') {
         print(feedPagingController.itemList!.length);
         var currentPost = feedPagingController.itemList
             ?.firstWhere((element) => element.id == params.postId);
@@ -390,14 +389,14 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 
         currentPost?.commentsCount = (currentPost.commentsCount! + 1);
       }
-      emit(state.copyWith( status: StateStatus.success));
+      emit(state.copyWith(status: StateStatus.success));
     });
     return model!;
   }
 
   // add reply
   Future<CommentEntity> replyOnComment(
-      {required ReplyOnCommentParams params,required String from}) async {
+      {required ReplyOnCommentParams params, required String from}) async {
     var response = await _replyOnCommentUseCase(params);
     CommentEntity? model;
     response.fold(
@@ -405,13 +404,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
               state.copyWith(failure: failure, status: StateStatus.error),
             ), (data) {
       model = data;
-     if(from == 'feed'){
-       var currentPost = feedPagingController.itemList
-           ?.firstWhere((element) => element.id == params.postId);
-       print("commmmmment count${currentPost?.commentsCount}");
+      if (from == 'feed') {
+        var currentPost = feedPagingController.itemList
+            ?.firstWhere((element) => element.id == params.postId);
+        print("commmmmment count${currentPost?.commentsCount}");
 
-       currentPost?.commentsCount = (currentPost.commentsCount! + 1);
-     }
+        currentPost?.commentsCount = (currentPost.commentsCount! + 1);
+      }
 
       emit(state.copyWith(newComment: data, status: StateStatus.success));
     });
@@ -527,9 +526,10 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         print("commmmmment count${currentPost?.commentsCount}");
 
         currentPost?.commentsCount = (currentPost.commentsCount! - 1);
-      }else{
-        if(state.postDetails!=null){
-          state.postDetails?.commentsCount = (state.postDetails!.commentsCount!-1);
+      } else {
+        if (state.postDetails != null) {
+          state.postDetails?.commentsCount =
+              (state.postDetails!.commentsCount! - 1);
         }
       }
       emit(state.copyWith(status: StateStatus.success));
@@ -580,13 +580,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       {required BuildContext context, required String userId}) async {
     final response = await _blocUserUseCase(userId);
     bool isBlocked = false;
-    response.fold(
-        (l) {
-          print("isBlocked$isBlocked");
-          emit(state.copyWith(failure: l, status: StateStatus.error));
-        },
-        (r) {
-          print("objectRight");
+    response.fold((l) {
+      print("isBlocked$isBlocked");
+      emit(state.copyWith(failure: l, status: StateStatus.error));
+    }, (r) {
+      print("objectRight");
       isBlocked = r;
       print("isBlocked$isBlocked");
       emit(state.copyWith(status: StateStatus.success));
@@ -621,8 +619,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   }
 
   Future<bool> sendGreetMessage(
-      {required BuildContext context, required String userId,required String message}) async {
-    final response = await _sendGreetMessageUseCase(SendGreetMessageParams(userId: userId,message: message,));
+      {required BuildContext context,
+      required String userId,
+      required String message}) async {
+    final response = await _sendGreetMessageUseCase(SendGreetMessageParams(
+      userId: userId,
+      message: message,
+    ));
     bool isAdd = false;
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
@@ -691,8 +694,5 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     ),
   ];
 
-  void triggerBlock(){
-
-  }
-
+  void triggerBlock() {}
 }

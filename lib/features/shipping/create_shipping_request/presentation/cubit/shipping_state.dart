@@ -1,7 +1,10 @@
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/requests_history/data/models/shipping_request_model.dart';
+import 'package:fourtyninehub/features/requests_history/data/models/shipping_request_model/shipping_request_model.dart';
+import 'package:fourtyninehub/features/ride/driver_dashboard/data/models/driver_statistics_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/driver_statistice_model.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_driver_data_model/get_driver_data_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/trip_by_user_model.dart';
 
@@ -98,3 +101,33 @@ class SuccessGetShippingHistoryState extends ShippingState {
 
   SuccessGetShippingHistoryState({required this.list});
 }
+
+class SuccessAcceptState extends ShippingState {}
+
+class SuccessCancelState extends ShippingState {}
+
+class SuccessDeclineState extends ShippingState {}
+
+class SuccessGetDriverDataState extends ShippingState {
+  final GetDriverDataModel model;
+
+  SuccessGetDriverDataState({required this.model});
+}
+
+class SuccessUpdateDriverState extends ShippingState {}
+
+class SuccessCompleteTripState extends ShippingState {}
+
+class SuccessGetDriverStatisticsState extends ShippingState {
+  final DriverStatisticeModel model;
+
+  SuccessGetDriverStatisticsState({required this.model});
+}
+
+class SuccessDeleteDriver extends ShippingState {
+  final String message;
+
+  SuccessDeleteDriver({required this.message});
+}
+
+// class Delete

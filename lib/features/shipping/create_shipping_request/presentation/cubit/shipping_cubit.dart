@@ -434,4 +434,16 @@ class ShippingCubit extends Cubit<ShippingState> {
       },
     );
   }
+
+  deleteDriver() async {
+    var response = await repository.deleteDriver();
+    response.fold(
+      (l) {
+        emit(FailureShippingState(failure: l));
+      },
+      (r) {
+        emit(SuccessDeleteDriver(message: "Success Delete Driver"));
+      },
+    );
+  }
 }

@@ -26,7 +26,7 @@ class MainPostModel extends MainPostEntity {
             : null,
         isShared: json['isShared'] ?? false,
         isDocumentation: json['twitter_documentation'] ?? false,
-        user: json['user']==null
+        user: json['user'] == null
             ? null
             : json['user'] is String
                 ? json['user']

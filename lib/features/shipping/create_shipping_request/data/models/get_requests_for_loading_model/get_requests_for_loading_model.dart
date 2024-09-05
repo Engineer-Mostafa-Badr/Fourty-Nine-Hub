@@ -4,7 +4,7 @@ class GetRequestsForLoadingModel {
   String? id;
   DriverId? driverId;
   String? loadingTripId;
-  int? price;
+  double? price;
   bool? isAccepted;
   bool? isRejected;
   bool? isPremium;
@@ -30,7 +30,7 @@ class GetRequestsForLoadingModel {
           ? null
           : DriverId.fromJson(json['driverId'] as Map<String, dynamic>),
       loadingTripId: json['loadingTripId'] as String?,
-      price: json['price'] as int?,
+      price: double.parse(json['price'].toString()),
       isAccepted: json['isAccepted'] as bool?,
       isRejected: json['isRejected'] as bool?,
       isPremium: json['isPremium'] as bool?,

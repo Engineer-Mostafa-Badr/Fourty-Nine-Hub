@@ -1,6 +1,10 @@
+import 'driver_id.dart';
+import 'driver_ratings_virtual.dart';
+import 'is_user_rate.dart';
+
 class ShippingRequestModel {
   String? id;
-  dynamic driverId;
+  DriverId? driverId;
   String? userId;
   String? categoryId;
   String? startLocation;
@@ -14,7 +18,8 @@ class ShippingRequestModel {
   int? phone;
   DateTime? createdAt;
   DateTime? updatedAt;
-  List<dynamic>? driverRatingsVirtual;
+  List<DriverRatingsVirtual>? driverRatingsVirtual;
+  IsUserRate? isUserRate;
 
   ShippingRequestModel({
     this.id,
@@ -33,11 +38,15 @@ class ShippingRequestModel {
     this.createdAt,
     this.updatedAt,
     this.driverRatingsVirtual,
+    this.isUserRate,
   });
 
   factory ShippingRequestModel.fromJson(Map<String, dynamic> json) {
     return ShippingRequestModel(
-      driverId: json['driverId'] as dynamic,
+      id: json['_id'] as String?,
+      driverId: json['driverId'] == null
+          ? null
+          : DriverId.fromJson(json['driverId'] as Map<String, dynamic>),
       userId: json['userId'] as String?,
       categoryId: json['categoryId'] as String?,
       startLocation: json['startLocation'] as String?,
@@ -55,13 +64,18 @@ class ShippingRequestModel {
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.parse(json['updatedAt'] as String),
-      driverRatingsVirtual: json['driverRatingsVirtual'] as List<dynamic>?,
-      id: json['id'] as String?,
+      driverRatingsVirtual: (json['driverRatingsVirtual'] as List<dynamic>?)
+          ?.map((e) => DriverRatingsVirtual.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      isUserRate: json['isUserRate'] == null
+          ? null
+          : IsUserRate.fromJson(json['isUserRate'] as Map<String, dynamic>),
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'driverId': driverId,
+        '_id': id,
+        'driverId': driverId?.toJson(),
         'userId': userId,
         'categoryId': categoryId,
         'startLocation': startLocation,
@@ -75,7 +89,8 @@ class ShippingRequestModel {
         'phone': phone,
         'createdAt': createdAt?.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
-        'driverRatingsVirtual': driverRatingsVirtual,
-        'id': id,
+        'driverRatingsVirtual':
+            driverRatingsVirtual?.map((e) => e.toJson()).toList(),
+        'isUserRate': isUserRate?.toJson(),
       };
 }

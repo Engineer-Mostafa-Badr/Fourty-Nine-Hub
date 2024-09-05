@@ -9,5 +9,6 @@ abstract class MeetingRepository {
   Future<Either<Failure, void>> addRoom(MeetingParams params);
   Future<Response?> join(MeetingParams params);
   Future<Either<Failure, void>> end(MeetingParams params);
-  Future<Either<Failure,  List<ScheduledMeeting>>> getScheduledMeetings(MeetingParams params);
+  Future<Either<Failure, List<ScheduledMeeting>>> getScheduledMeetings(
+      MeetingParams params);
 }

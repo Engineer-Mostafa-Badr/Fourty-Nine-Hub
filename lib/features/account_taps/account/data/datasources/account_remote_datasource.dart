@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -8,7 +10,7 @@ import '../../../../../core/api/api_consumer.dart';
 import '../../../../../core/api/end_points.dart';
 import '../../domain/entities/favourite_category_entity.dart';
 import '../models/favourite_ad_model.dart';
-import '../models/favourite_category_model.dart';
+import '../models/favourite_category_model1.dart';
 import '../models/favourite_subcategory_model.dart';
 
 abstract class AccountRemoteDataSource {
@@ -28,12 +30,14 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
   @override
   Future<Either<Failure, List<FavouriteCategoryEntity>>>
       getFavouriteCategories() async {
-    final response = await _apiConsumer.get(Jsons.favouriteCategoriesList);
-    return response.fold(
-        (failure) => Left(failure),
-        (data) => Right((data['data']['categories_list'] as List)
-            .map((e) => FavouriteCategoryModel.fromJson(e))
-            .toList()));
+    final response = await _apiConsumer.get(EndPoints.favouriteCategoriesList);
+    log(response.toString(), name: "lskdjfslkdfjslkdfjslkdfjsdf");
+    return response.fold((failure) => Left(failure), (data) {
+      log(data.toString(), name: "kljjjjjjjjjjjjjjjjjjjjjjjjj");
+      return Right((data['data']['favorites'] as List)
+          .map((e) => FavouriteCategoryModel.fromJson(e))
+          .toList());
+    });
   }
 
   @override

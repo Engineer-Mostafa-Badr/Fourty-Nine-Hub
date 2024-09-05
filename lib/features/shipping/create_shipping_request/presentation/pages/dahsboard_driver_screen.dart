@@ -2,13 +2,28 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_renew_day_count.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_today_appointments.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_unhandled_appointments.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/popup_menu.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/driverStatistics_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/my_rating_screen.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/trip_card.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
+import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -84,7 +99,7 @@ class DahsboardDriverScreen extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     child: const Text(
-                      "Edit",
+                      "Information",
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
@@ -96,7 +111,7 @@ class DahsboardDriverScreen extends StatelessWidget {
           body: TabBarView(
             children: [
               const NewTripWidget(),
-              Container(),
+              EditTabShipping(),
             ],
           )),
     );
@@ -265,3 +280,303 @@ class NewTripWidget extends StatelessWidget {
 //           ],
 //         ),
 //       ),
+
+class EditTabShipping extends StatefulWidget {
+  const EditTabShipping({super.key});
+
+  @override
+  State<EditTabShipping> createState() => _EditTabShippingState();
+}
+
+class _EditTabShippingState extends State<EditTabShipping> {
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              DriverStatisticsCubit(repository: serviceLocator())..get(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<ShippingCubit>(),
+          // create: (context) => ShippingCubit(repository: serviceLocator(), imageRepository: serviceLocator(), cacheService: serviceLocator()),
+        ),
+      ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: BlocListener<ShippingCubit, ShippingState>(
+          listener: (context, state) {
+            if (state is SuccessDeleteDriver) {
+              showSuccessMessage(context, state.message);
+              context.push(Routes.HOME);
+            }
+          },
+          child: BlocBuilder<DriverStatisticsCubit, ShippingState>(
+            builder: (context, state) {
+              log(state.toString(), name: "lksdjflskdjfldkfj");
+
+              if (state is SuccessGetDriverStatisticsState) {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      AppButton(
+                        padding: 20,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        label: "Registertion Form",
+                        onPressed: () {
+                          context.push(Routes.EDITDRIVERSCREEN);
+                        },
+                        backColor: Colors.white,
+                        color: AppColors.PRIMARY_COLOR,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      AppButton(
+                        widget: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Label(
+                                text: "Deadline Subscription",
+                                style: Styles.mediumText(
+                                    color: AppColors.PRIMARY_COLOR)),
+                            Label(
+                                text: "//${state.model.deadlineSubscription}",
+                                style: Styles.mediumText(
+                                    color: AppColors.PRIMARY_COLOR)),
+                          ],
+                        ),
+                        padding: 20,
+                        width: double.infinity,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        label: "Deadline Subscription",
+                        onPressed: () {
+                          // serviceLocator<SubscriptionController>()
+                          //     .showSubscriptionPlans(subCategoryId: "62c8bab18e28a58a3edf580d");
+                          // context.push(Routes.)
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                                width: double.infinity,
+                                decoration: BoxDecoration(color: Colors.white),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      width: 100,
+                                      height: 100,
+                                      color: Colors.red,
+                                    ),
+                                    Text(
+                                      "Subcateogry name",
+                                      style: Styles.headerText(),
+                                    ),
+                                    Text(
+                                      "Premium",
+                                      style: Styles.headerText(),
+                                    ),
+                                    Text(
+                                      "${state.model.deadlineSubscription} Day",
+                                      style: Styles.headerText(),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    AppButton(
+                                        color: Colors.white,
+                                        backColor: AppColors.PRIMARY_COLOR,
+                                        label: "Add Subscription",
+                                        onPressed: () {
+                                          serviceLocator<
+                                                  SubscriptionController>()
+                                              .showSubscriptionPlans(
+                                                  subCategoryId:
+                                                      "62c8bab18e28a58a3edf580d");
+                                        })
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        backColor: Colors.white,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      AppButton(
+                        widget: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Label(
+                                text: "Deadline Id",
+                                style: Styles.mediumText(
+                                    color: AppColors.PRIMARY_COLOR)),
+                            Label(
+                                text: "${state.model.deadlineId}",
+                                style: Styles.mediumText(
+                                    color: AppColors.PRIMARY_COLOR)),
+                          ],
+                        ),
+                        padding: 20,
+                        width: double.infinity,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        label: "Deadline Subscription",
+                        onPressed: () {
+                          log('message');
+                          serviceLocator<SubscriptionController>()
+                              .showSubscriptionPlans(subCategoryId: "");
+                        },
+                        backColor: Colors.white,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      AppButton(
+                        widget: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Label(
+                                text: "Deadline License",
+                                style: Styles.mediumText(
+                                    color: AppColors.PRIMARY_COLOR)),
+                            Label(
+                                text: "${state.model.deadlineLicense}",
+                                style: Styles.mediumText(
+                                    color: AppColors.PRIMARY_COLOR)),
+                          ],
+                        ),
+                        padding: 20,
+                        width: double.infinity,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        label: "Deadline Id",
+                        onPressed: () {},
+                        backColor: Colors.white,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      AppButton(
+                        widget: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Label(
+                                text: "Deadline Driver License",
+                                style: Styles.mediumText(
+                                    color: AppColors.PRIMARY_COLOR)),
+                            Label(
+                                text: "${state.model.deadlineId}",
+                                style: Styles.mediumText(
+                                    color: AppColors.PRIMARY_COLOR)),
+                          ],
+                        ),
+                        padding: 20,
+                        width: double.infinity,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        label: "Deadline Driver License",
+                        onPressed: () {},
+                        backColor: Colors.white,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      AppButton(
+                        widget: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Label(
+                                text: "Your Trips",
+                                style: Styles.mediumText(
+                                    color: AppColors.PRIMARY_COLOR)),
+                            Label(
+                                text: "${state.model.tripCount}",
+                                style: Styles.mediumText(
+                                    color: AppColors.PRIMARY_COLOR)),
+                          ],
+                        ),
+                        padding: 20,
+                        width: double.infinity,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        label: "",
+                        onPressed: () {},
+                        backColor: Colors.white,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      AppButton(
+                        widget: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Label(
+                                text: "Profit",
+                                style: Styles.mediumText(
+                                    color: AppColors.PRIMARY_COLOR)),
+                            Label(
+                                text: "${state.model.profit}",
+                                style: Styles.mediumText(
+                                    color: AppColors.PRIMARY_COLOR)),
+                          ],
+                        ),
+                        padding: 20,
+                        width: double.infinity,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        label: "",
+                        onPressed: () {},
+                        backColor: Colors.white,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      AppButton(
+                        widget: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Label(
+                                text: "Clients Rating",
+                                style: Styles.mediumText(
+                                    color: AppColors.PRIMARY_COLOR)),
+                            Label(
+                                text: "${state.model.totalRating}",
+                                style: Styles.mediumText(
+                                    color: AppColors.PRIMARY_COLOR)),
+                          ],
+                        ),
+                        padding: 20,
+                        width: double.infinity,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        label: "",
+                        onPressed: () {
+                          context.push(Routes.MyRating);
+                        },
+                        backColor: Colors.white,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      AppButton(
+                        label: "Delete Registration",
+                        onPressed: () {
+                          context.read<ShippingCubit>().deleteDriver();
+                        },
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}

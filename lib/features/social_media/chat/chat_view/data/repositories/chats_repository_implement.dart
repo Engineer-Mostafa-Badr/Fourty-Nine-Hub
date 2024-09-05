@@ -49,15 +49,16 @@ class ChatsRepositoryImplementation extends ChatsRepository {
         chatId: lockChatParams.chatId!,
         password: lockChatParams.lockChatPassword!);
   }
-  
+
   @override
   Future<Either<Failure, ChatItemModel>> getGroups() {
     // TODO: implement getGroups
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<Either<Failure, List<SeenHistoryModel>>> getSeenHistory({required String chatId}) {
+  Future<Either<Failure, List<SeenHistoryModel>>> getSeenHistory(
+      {required String chatId}) {
     // TODO: implement getSeenHistory
     throw UnimplementedError();
   }

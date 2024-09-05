@@ -48,7 +48,8 @@ abstract class SocialPostsRepo {
   Future<Either<Failure, bool>> blockUser({required String userId});
   Future<Either<Failure, bool>> followRequest({required String userId});
   Future<Either<Failure, bool>> unFollow({required String userId});
-  Future<Either<Failure, bool>> sendGreetMessage({required SendGreetMessageParams params});
+  Future<Either<Failure, bool>> sendGreetMessage(
+      {required SendGreetMessageParams params});
   Future<Either<Failure, bool>> removeSuggestUser({required String userId});
   Future<Either<Failure, bool>> hidePost({required String postId});
   Future<Either<Failure, bool>> sharePost({required String postId});
