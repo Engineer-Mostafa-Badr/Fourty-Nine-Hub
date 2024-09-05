@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -67,22 +68,6 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                   )
                                 ],
                               ),
-                        // Row(
-                        //   children: [
-                        //     const CircleAvatar(
-                        //       radius: 3,
-                        //       backgroundColor: Colors.red,
-                        //     ),
-                        //     const Sizer(),
-                        //     state.chatData?.chat?.contact?.name == null
-                        //         ? const SizedBox()
-                        //         : Label(
-                        //             text: 'Online',
-                        //             style:
-                        //                 Styles.mediumText(color: Colors.white),
-                        //           ),
-                        //   ],
-                        // )
                       ],
                     );
             }),
@@ -110,33 +95,152 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
               Icons.more_vert,
               color: Colors.white,
             ),
-            itemBuilder: (context) {
-              return [
-                const PopupMenuItem<int>(
-                  value: 0,
-                  child: Text("Mute notifications"),
-                ),
-                const PopupMenuItem<int>(
-                  value: 1,
-                  child: Text("Delete Chat"),
-                ),
-                const PopupMenuItem<int>(
-                  value: 2,
-                  child: Text("Report"),
-                ),
-                const PopupMenuItem<int>(
-                  value: 3,
-                  child: Text("Block"),
-                ),
-                const PopupMenuItem<int>(
-                  value: 4,
-                  child: Text("Edit name"),
-                ),
-              ];
+            color: AppColors.PRIMARY_COLOR,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+            ),
+            offset: const Offset(0, 50),
+            onSelected: (int value) async {
+              if (value == 0) {
+                context.push(Routes.VIEWCONTACT);
+              }
+              if (value == 6) {
+                _showMoreMenu(context);
+              }
             },
-          ),
+            itemBuilder: (context) {
+              return _mainMenuBuilder();
+            },
+          )
         ],
       ),
+    );
+  }
+
+  List<PopupMenuEntry<int>> _mainMenuBuilder() {
+    return [
+      PopupMenuItem<int>(
+        value: 0,
+        child: Text(
+          "View Contact",
+          style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+        ),
+      ),
+      PopupMenuItem<int>(
+        value: 1,
+        child: Text(
+          "Media, Links and docs",
+          style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+        ),
+      ),
+      PopupMenuItem<int>(
+        value: 2,
+        child: Text(
+          "Search",
+          style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+        ),
+      ),
+      PopupMenuItem<int>(
+        value: 3,
+        child: Text(
+          "Mute notifications",
+          style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+        ),
+      ),
+      PopupMenuItem<int>(
+        value: 4,
+        child: Text(
+          "Wallpaper",
+          style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+        ),
+      ),
+      PopupMenuItem<int>(
+        value: 5,
+        child: Text(
+          "Disappearing messages",
+          style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+        ),
+      ),
+      PopupMenuItem<int>(
+        value: 6,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "More",
+              style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+            ),
+            const Spacer(),
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 22,
+              color: AppColors.BACKGROUND_COLOR,
+            )
+          ],
+        ),
+      ),
+    ];
+  }
+
+  void _showMoreMenu(BuildContext context) {
+    showMenu<int>(
+      context: context,
+      position: const RelativeRect.fromLTRB(250, 50, 0, 0),
+      items: [
+        PopupMenuItem<int>(
+          value: 1,
+          child: Text(
+            "Edit",
+            style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: 2,
+          child: Text(
+            "Share",
+            style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: 3,
+          child: Text(
+            "Report",
+            style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: 4,
+          child: Text(
+            "Block",
+            style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: 5,
+          child: Text(
+            "Clear chat",
+            style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: 6,
+          child: Text(
+            "Export chat",
+            style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: 7,
+          child: Text(
+            "Add shortcut      ",
+            style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+          ),
+        ),
+      ],
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+      ),
+      color: AppColors.PRIMARY_COLOR,
     );
   }
 

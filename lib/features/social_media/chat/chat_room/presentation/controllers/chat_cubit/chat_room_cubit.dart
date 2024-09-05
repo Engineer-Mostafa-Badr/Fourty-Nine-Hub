@@ -61,7 +61,6 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   // final messagesStreamController = StreamController<MessageEntity>();
 
-
   Future<void> getChatMessages(String chatID) async {
     // emit(state.copyWith(status: ChatRoomStates.loading));
     // chatId = chatID;
@@ -138,8 +137,6 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     );
   }
 
-
-
   listenToNewMessages() {
     // _socketService.socketMessageStream.listen((event) {
     //   chatMessages.add(event);
@@ -162,7 +159,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       chatMessages.add(message);
       emit.call(state.copyWith(
-        // chatData: chatMessagesModel,
+          // chatData: chatMessagesModel,
           messages: chatMessages,
           status: ChatRoomStates.success));
     });

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
@@ -27,7 +28,7 @@ abstract class MessagesRemoteDataSource {
     required String messageId,
   });
 
-  void stopListenToNewMessages() ;
+  void stopListenToNewMessages();
 }
 
 class MessagesRemoteDataSourceImplementation
@@ -62,13 +63,14 @@ class MessagesRemoteDataSourceImplementation
   void listenToNewMessages(Function(MessageEntity) params) {
     try {
       _socket.on(SocketIOEvents.newMessageFromMe, (data) {
-        
         CliLogger.info("newMessageFromMe :  $data");
+        log("newMessageFromMe");
         MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
         params(messageModel);
       });
       _socket.on(SocketIOEvents.newMessageFromOther, (data) {
         CliLogger.info("newMessageFromOther :  $data");
+        log("newMessageFromOther");
         MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
         params(messageModel);
       });
@@ -78,12 +80,12 @@ class MessagesRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, bool>> sendMessage(SendMessageParams params) async{
-    try{
-      _socket.emit(SocketIOMessages.sendMessage,params.toSocketParams());
+  Future<Either<Failure, bool>> sendMessage(SendMessageParams params) async {
+    try {
+      _socket.emit(SocketIOMessages.sendMessage, params.toSocketParams());
       CliLogger.info('message sent successfully');
       return const Right(true);
-    }catch(e){
+    } catch (e) {
       CliLogger.error('can\'t send error $e');
       return const Left(ServerFailure(message: "can't send message "));
     }
