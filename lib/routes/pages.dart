@@ -71,6 +71,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/viewcontact_view/pages/viewcontact_view.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_dialogue.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
@@ -761,6 +762,11 @@ class AppPages {
                   name: Routes.MEDIASLIDER,
                   builder: (context, state) => MediaSliderView(
                       params: (state.extra) as MediaSliderViewParams),
+                ),
+                GoRoute(
+                  path: Paths.VIEWCONTACT,
+                  name: Routes.VIEWCONTACT,
+                  builder: (context, state) => const ViewContactView(),
                 ),
               ]),
 
