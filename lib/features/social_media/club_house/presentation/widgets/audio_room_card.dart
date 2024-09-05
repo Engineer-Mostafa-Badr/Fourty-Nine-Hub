@@ -36,7 +36,6 @@ class AudioRoomCard extends StatelessWidget {
                 liveId: room.id,
                 roomSubject: room.subject,
                 isHost: false,
-                
               ),
             ),
           ),
@@ -55,6 +54,7 @@ class AudioRoomCard extends StatelessWidget {
               style: const TextStyle(
                   color: AppColors.QUANTITY_COLOR, fontWeight: FontWeight.bold),
               text: room.subject,
+              textAlign: TextAlign.center,
               trimLines: 2,
             ),
             Row(
