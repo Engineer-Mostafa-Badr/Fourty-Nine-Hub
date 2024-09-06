@@ -85,6 +85,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/pages/mus
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/instagram_profile.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
@@ -415,20 +416,21 @@ class AppPages {
               return BlocProvider(
                 create: (context) {
                   return serviceLocator<PaymentCubit>()
-                    ..getPaymentProvider()..getSavedCards();
-                    // ..getPaymobData(
-                    //     amountId: args.amountId,
-                    //     providerId: args.providerId
-                    // );
-                    // ..chargeWithCard(
-                    //   cardNumber: params.cardNumber,
-                    //   cardExpiryYear: params.cardExpiryYear,
-                    //   cardExpiryMonth: params.cardExpiryMonth,
-                    //   cvv: params.cvv,
-                    //   amountId: params.amountId,
-                    //   providerId: params.providerId,
-                    //   paymentMethod: params.paymentMethod,
-                    // );
+                    ..getPaymentProvider()
+                    ..getSavedCards();
+                  // ..getPaymobData(
+                  //     amountId: args.amountId,
+                  //     providerId: args.providerId
+                  // );
+                  // ..chargeWithCard(
+                  //   cardNumber: params.cardNumber,
+                  //   cardExpiryYear: params.cardExpiryYear,
+                  //   cardExpiryMonth: params.cardExpiryMonth,
+                  //   cvv: params.cvv,
+                  //   amountId: params.amountId,
+                  //   providerId: params.providerId,
+                  //   paymentMethod: params.paymentMethod,
+                  // );
                 },
                 child: PaymentView(
                   amountId: args.amountId,
@@ -559,22 +561,27 @@ class AppPages {
               GoRoute(
                 path: Paths.INSTAGRAMPROFILE,
                 name: Routes.INSTAGRAMPROFILE,
-                routes: [
-
-                ],
+                routes: [],
                 builder: (context, state) {
                   final id = state.extra as String?;
 
                   return BlocProvider<SocialPostsCubit>(
-                  create: (_) =>
-                  serviceLocator()..getUserProfile(id: id ?? ''),
-                  child: InstagramProfile(userId: id??''),
-                );
+                    create: (_) =>
+                        serviceLocator()..getUserProfile(id: id ?? ''),
+                    child: InstagramProfile(userId: id ?? ''),
+                  );
                 },
               ),
             ],
-            builder: (context, state) => BlocProvider<InstagramCubit>(
-              create: (_) => serviceLocator()..loadData(),
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) =>  serviceLocator<InstagramCubit>()..loadData(),
+                ),
+                BlocProvider(
+                  create: (context) => serviceLocator<StoryCubit>(),
+                ),
+              ],
               child: const InstagramView(),
             ),
           ),
@@ -610,7 +617,6 @@ class AppPages {
                     );
                   },
                 ),
-
                 GoRoute(
                     path: Paths.TWITTER,
                     name: Routes.TWITTER,
@@ -640,7 +646,6 @@ class AppPages {
                                 child: const EditProfileView()),
                       ),
                     ]),
-
                 GoRoute(
                     path: Paths.REELS,
                     name: Routes.REELS,
@@ -778,7 +783,17 @@ class AppPages {
           GoRoute(
               path: Paths.SPOTLIGHT,
               name: Routes.SPOTLIGHT,
-              builder: (context, state) => const SpotlightView()),
+              builder: (context, state) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                          create: (context) => serviceLocator<ReelsCubit>()),
+                      BlocProvider<StoryCubit>(
+                        create: (_) =>
+                            serviceLocator<StoryCubit>(),
+                      ),
+                    ],
+                    child: const SpotlightView(),
+                  )),
           // _________________ services ____________
 
           GoRoute(

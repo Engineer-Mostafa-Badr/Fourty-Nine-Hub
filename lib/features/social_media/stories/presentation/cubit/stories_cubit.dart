@@ -13,7 +13,7 @@ import 'package:path/path.dart' as path;
 import '../../../../../core/utils/shared_pref.dart';
 
 class StoryState {
-  List<UserStories> stories;
+  List<UserStories> users;
   final bool isLoading;
   final bool hasReachedMax;
   final int currentPage;
@@ -21,7 +21,7 @@ class StoryState {
   final DateTime? currentStoryCreatedAt; // New field
 
   StoryState({
-    required this.stories,
+    required this.users,
     this.isLoading = false,
     this.hasReachedMax = false,
     this.currentPage = 1,
@@ -42,7 +42,7 @@ class StoryState {
           currentStoryCreatedAt ?? this.currentStoryCreatedAt,
       // New copyWith field
 
-      stories: stories ?? this.stories,
+      users: stories ?? this.users,
       isLoading: isLoading ?? this.isLoading,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
       currentPage: currentPage ?? this.currentPage,
@@ -52,13 +52,13 @@ class StoryState {
 }
 
 class StoryInitial extends StoryState {
-  StoryInitial() : super(stories: []);
+  StoryInitial() : super(users: []);
 }
 
 class StoryError extends StoryState {
   final String error;
 
-  StoryError(this.error) : super(stories: []);
+  StoryError(this.error) : super(users: []);
 }
 
 class StoryCubit extends Cubit<StoryState> {
@@ -66,6 +66,33 @@ class StoryCubit extends Cubit<StoryState> {
   DateTime? _currentStoryCreatedAt; // Store the current story's createdAt
 
   StoryCubit(this.storyRepository) : super(StoryInitial());
+
+  Future<void> deleteStory(String storyId) async {
+    try {
+      emit(state.copyWith(isLoading: true));
+      await storyRepository.deleteStory(storyId);
+      // Remove the deleted story from the list
+      // // final updatedStories = state.stories.where((story) => story.id != storyId).toList();
+      // final updatedStories = state.stories.map((userStory) {
+      //   // Filter the nested stories within each userStory
+      //   final filteredStories = userStory.stories!
+      //       .where((element) => element.id != storyId)
+      //       .toList();
+      //
+      //   // Return the updated userStory with the filtered stories
+      // }).where((userStory) {
+      //   // Ensure we only keep userStories that still have stories after filtering
+      //   return userStory!.stories!.isNotEmpty;
+      // }).toList();
+      //
+      // emit(state.copyWith(stories: updatedStories));
+      await fetchStories();
+    } catch (e) {
+      emit(StoryError('Failed to delete story: $e'));
+    } finally {
+      emit(state.copyWith(isLoading: false));
+    }
+  }
 
   Future<void> fetchStories({bool loadMore = false}) async {
     if ((loadMore && state.isFetchingMore) || (!loadMore && state.isLoading)) {
@@ -78,7 +105,8 @@ class StoryCubit extends Cubit<StoryState> {
         isFetchingMore: loadMore,
       ));
 
-      final listOfUserStories = await storyRepository.fetchStories(state.currentPage);
+      final listOfUserStories =
+          await storyRepository.fetchStories(state.currentPage);
 
       if (listOfUserStories.isEmpty && loadMore) {
         // No more stories to load
@@ -91,11 +119,13 @@ class StoryCubit extends Cubit<StoryState> {
       }
 
       final newStories = loadMore
-          ? [...state.stories, ...listOfUserStories]
+          ? [...state.users, ...listOfUserStories]
           : listOfUserStories;
 
       // Remove duplicates using a Map where keys are story IDs
-      final uniqueStoriesMap = {for (var story in newStories) story.user!.id: story};
+      final uniqueStoriesMap = {
+        for (var story in newStories) story.user!.id: story
+      };
       final uniqueStories = uniqueStoriesMap.values.toList();
 
       emit(state.copyWith(

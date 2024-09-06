@@ -343,11 +343,12 @@ class _ChatViewState extends State<ChatView> {
           scrollController: ScrollController(),
           appBars: [
             SliverAppBar(
-              expandedHeight: kToolbarHeight * 1.5,
+              expandedHeight: MediaQuery.of(context).size.height * 0.15, // Responsive height
               automaticallyImplyLeading: false,
               floating: true,
-              flexibleSpace: BlocProvider.value(
-                value: serviceLocator<StoryCubit>()..fetchStories(),
+              flexibleSpace: BlocProvider(
+                create: (context) =>
+                    serviceLocator<StoryCubit>()..fetchStories(),
                 child: const ChatStories(),
               ),
             ),
@@ -401,14 +402,13 @@ class _ChatViewState extends State<ChatView> {
         isScrollable: true,
         tabs: groups.map((e) {
           return Tab(
-            // text: 'there was error here look at code and solve it',
-            // text: chatCubit.selectedTabIndex == groups.indexOf(e)
-            //     ? unReadMessages == 0
-            //         ? e
-            //         : "$e($unReadMessages)"
-            //     : error,
-            text:e
-          );
+              // text: 'there was error here look at code and solve it',
+              // text: chatCubit.selectedTabIndex == groups.indexOf(e)
+              //     ? unReadMessages == 0
+              //         ? e
+              //         : "$e($unReadMessages)"
+              //     : error,
+              text: e);
         }).toList());
   }
 

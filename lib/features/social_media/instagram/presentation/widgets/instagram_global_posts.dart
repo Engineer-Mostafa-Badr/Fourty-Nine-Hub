@@ -45,7 +45,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ??  UnknownFailure(''),
+            state.failure ?? UnknownFailure(''),
             context,
           ),
         );
@@ -53,13 +53,21 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
     }, builder: (context, state) {
       final controller = context.read<InstagramCubit>();
       return RefreshIndicator(
-        onRefresh: () async => controller.onRefresh(),
+        onRefresh: () async {
+          BlocProvider.of<StoryCubit>(context).fetchStories(loadMore: true);
+
+          controller.onRefresh();
+        },
         child: CustomScrollView(
           controller: widget.scrollController,
           slivers: [
-            SliverToBoxAdapter(
-              child: BlocProvider.value(
-                value: serviceLocator<StoryCubit>()..fetchStories(),
+            SliverAppBar(
+              expandedHeight: MediaQuery.of(context).size.height * 0.15, // Responsive height
+              automaticallyImplyLeading: false,
+              floating: true,
+              flexibleSpace: BlocProvider(
+                create: (context) =>
+                serviceLocator<StoryCubit>()..fetchStories(),
                 child: const ChatStories(),
               ),
             ),

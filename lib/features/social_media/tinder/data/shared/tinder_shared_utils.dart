@@ -38,6 +38,7 @@ class TinderSharedUtils {
         'You do not have enough money in your wallet.';
     const successMessage = 'has been sent successfully!';
 
+    log(response.toString()+"111111111111111111111111111111111111");
     switch (response) {
       case '{"success":false,"error":{"name":"Bad Request","httpCode":400,"message":"You does not have enough money in the wallet","data":{},"isOperational":true,"stack":"","domain":"49dev.com"}}':
         _showDialog(

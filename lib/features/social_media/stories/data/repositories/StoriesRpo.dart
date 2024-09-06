@@ -37,7 +37,22 @@ class StoryRepository {
   Future<void> _ensureTokenInitialized() async {
     _token ??= await TokenManager.getAccessToken();
   }
+  Future<void> deleteStory(String storyId) async {
+    await _ensureTokenInitialized();
+    final response = await http.delete(
+      Uri.parse("https://49dev.com/api/v1/stories/$storyId"),
+      headers: {
+        "Authorization": "Bearer $_token",
+      },
+    );
+    log('Story deleted successfully!${response.body} ***********************************************************************************');
 
+    if (response.statusCode == 200) {
+      log('Story deleted successfully! ***********************************************************************************');
+    } else {
+      throw Exception("Failed to delete story");
+    }
+  }
   Future<List<UserStories>> fetchStories(int page) async {
     await _ensureTokenInitialized();
     log("Fetching stories with token: $_token");

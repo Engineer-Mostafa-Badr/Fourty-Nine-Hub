@@ -1,8 +1,10 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 import 'package:path/path.dart' as path;
@@ -70,6 +72,42 @@ class _CameraScreenState extends State<CameraScreen> {
     setState(() {});
   }
 
+  // Define the color map
+  final Map<String, Color> colorMap = {
+    'Colors.red': Colors.red,
+    'Colors.white': Colors.blueGrey,
+    'Colors.black': Colors.black,
+    'Colors.blue': Colors.blue,
+    'Colors.green': Colors.green,
+    'Colors.yellow': Colors.yellow,
+    'Colors.orange': Colors.orange,
+    'Colors.purple': Colors.purple,
+  };
+
+  // Variable to store the selected color
+  Color currentColor = Colors.blueGrey;
+
+  // Function to get a random color
+  void getRandomColor() {
+    final random = Random();
+    setState(() {
+      currentColor = colorMap.values.elementAt(random.nextInt(colorMap.length));
+    });
+  }
+
+  String getColorStringFromColor(Color color) {
+    // Find the color in the map and return the corresponding string
+    String? colorString;
+    colorMap.forEach((key, value) {
+      if (value == color) {
+        colorString = key;
+      }
+    });
+
+    return colorString ??
+        'Unknown Color'; // Return a default if color not found
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,17 +143,22 @@ class _CameraScreenState extends State<CameraScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-          icon: const Icon(Icons.cached, color: Colors.black, size: 30),
-          onPressed: () {
-            // Switch camera action
-          },
-        ),
-        IconButton(
           icon: const Icon(Icons.close, color: Colors.black, size: 30),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
+        if (_selectedPageIndex == 0)
+          IconButton(
+            icon: Icon(Icons.color_lens_outlined,
+                color:
+                    currentColor == Colors.white ? Colors.black : Colors.white,
+                size: 30),
+            onPressed: getRandomColor,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: currentColor,
+            ),
+          ),
       ],
     );
   }
@@ -124,7 +167,6 @@ class _CameraScreenState extends State<CameraScreen> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (_selectedPageIndex != 0) _buildDescriptionField(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -147,28 +189,33 @@ class _CameraScreenState extends State<CameraScreen> {
               color: Colors.black,
               onPressed: () async {
                 // Handle send action
-                log("${_storyText}555555555555555555$_descriptionText");
+                print("${_storyText}555555555555555555$_descriptionText");
 
                 if (_selectedPageIndex == 0) {
-                  await serviceLocator<StoryCubit>()
-                      .createTextStory(_storyText!);
-                  Navigator.pop(context);
+                  if (_storyText != null && _storyText!.isNotEmpty) {
+                    await serviceLocator<StoryCubit>()
+                        .createTextStory(
+                            "${getColorStringFromColor(currentColor)}~${_storyText!}")
+                        .then((value) => Navigator.pop(context));
+                  }
                 }
                 if (_selectedPageIndex == 1 || _selectedPageIndex == 2) {
-                  // Convert the picked file to a File object
-                  final file = _selectedFile;
+                  if (_selectedFile != null) {
+                    // Convert the picked file to a File object
+                    final file = _selectedFile;
 
-                  // Determine the file type based on the file extension
-                  final fileType = _determineFileType(file!.path);
+                    // Determine the file type based on the file extension
+                    final fileType = _determineFileType(file!.path);
 
-                  // Get the file size
-                  final fileSize = await file.length();
+                    // Get the file size
+                    final fileSize = await file.length();
 
-                  // Call your upload method
-                  await serviceLocator<StoryCubit>().uploadStoryVideoOrImage(
-                      file, fileType, fileSize,
-                      description: _descriptionText);
-                  Navigator.pop(context);
+                    // Call your upload method
+                    await serviceLocator<StoryCubit>()
+                        .uploadStoryVideoOrImage(file, fileType, fileSize,
+                            description: _descriptionText)
+                        .then((value) => Navigator.pop(context));
+                  }
                 }
               },
             ),
@@ -178,6 +225,7 @@ class _CameraScreenState extends State<CameraScreen> {
               ),
           ],
         ),
+        if (_selectedPageIndex != 0) _buildDescriptionField(),
         _buildModeSelector(),
       ],
     );
@@ -196,16 +244,26 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Widget _buildTextStoryInput() {
     return Container(
-      color: Colors.white,
+      color: currentColor,
       padding: const EdgeInsets.all(16.0),
       child: Center(
         child: TextField(
-          cursorColor: Colors.black,
+          cursorColor: Colors.white,
           maxLines: null,
-          style: const TextStyle(fontSize: 28, color: Colors.black),
+          style: const TextStyle(
+            fontSize: 28,
+            color: Colors.white,
+            shadows: [
+              Shadow(
+                offset: Offset(1.0, 1.0),
+                blurRadius: 4.0,
+                color: Colors.black,
+              ),
+            ],
+          ),
           decoration: const InputDecoration(
             hintText: 'Write your story...',
-            hintStyle: TextStyle(color: Colors.grey),
+            hintStyle: TextStyle(color: Colors.white),
             border: InputBorder.none,
             fillColor: Colors.transparent,
           ),
@@ -258,26 +316,72 @@ class _CameraScreenState extends State<CameraScreen> {
     );
   }
 
+  // Widget _buildDescriptionField() {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(8.0),
+  //     child: TextField(
+  //       maxLines: 2,
+  //       style: const TextStyle(fontSize: 16, color: Colors.black),
+  //       decoration: InputDecoration(
+  //         hintText: 'Add a description...',
+  //         border: OutlineInputBorder(
+  //           borderRadius: BorderRadius.circular(8.0),
+  //           borderSide: const BorderSide(color: Colors.grey),
+  //         ),
+  //         filled: true,
+  //         fillColor: Colors.white,
+  //       ),
+  //       onChanged: (text) {
+  //         setState(() {
+  //           _descriptionText = text;
+  //         });
+  //       },
+  //     ),
+  //   );
+  // }
   Widget _buildDescriptionField() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        maxLines: 2,
-        style: const TextStyle(fontSize: 16, color: Colors.black),
-        decoration: InputDecoration(
-          hintText: 'Add a description...',
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            borderSide: const BorderSide(color: Colors.grey),
+      padding: const EdgeInsets.all(4.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1C1C1E),
+                  // Dark color similar to the image
+                  borderRadius: BorderRadius.circular(30.0), // Rounded corners
+                ),
+                clipBehavior: Clip.hardEdge,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    cursorColor: Colors.white,
+                    cursorErrorColor: Colors.red,
+                    maxLines: 1,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.white, // White text color
+                    ),
+                    decoration: InputDecoration(
+                        hintText: 'Add a description...',
+                        hintStyle:
+                            TextStyle(color: Colors.white.withOpacity(0.7)),
+                        // Hint text color
+                        border: InputBorder.none,
+                        fillColor: Colors.transparent),
+                    onChanged: (text) {
+                      setState(() {
+                        _descriptionText = text;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ),
           ),
-          filled: true,
-          fillColor: Colors.white,
-        ),
-        onChanged: (text) {
-          setState(() {
-            _descriptionText = text;
-          });
-        },
+        ],
       ),
     );
   }
@@ -293,7 +397,7 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   Widget _buildCaptureButton() {
-    return FloatingActionButton(
+    return IconButton(
       onPressed: () async {
         if (_selectedPageIndex == 1) {
           // Image mode
@@ -303,8 +407,7 @@ class _CameraScreenState extends State<CameraScreen> {
           await _recordVideo();
         }
       },
-      backgroundColor: Colors.redAccent,
-      child: const Icon(Icons.camera_alt, color: Colors.white, size: 36),
+      icon: const Icon(Icons.camera_alt, color: Colors.black, size: 36),
     );
   }
 
@@ -326,15 +429,20 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Widget _buildModeSelector() {
     return Container(
-      height: kToolbarHeight,
-      color: Colors.white70,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildModeSelectorButton(0, 'Text'),
-          _buildModeSelectorButton(1, 'Photo'),
-          _buildModeSelectorButton(2, 'Video'),
-        ],
+      height: kToolbarHeight * 1.2,
+      color: Colors.black, // Background color for the selector
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            const Spacer(),
+            _buildModeSelectorButton(0, 'Text'),
+            _buildModeSelectorButton(1, 'Picture'),
+            _buildModeSelectorButton(2, 'Video'),
+            const Spacer(),
+          ],
+        ),
       ),
     );
   }
@@ -351,19 +459,18 @@ class _CameraScreenState extends State<CameraScreen> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           decoration: BoxDecoration(
-            border: isSelected
-                ? const Border(
-                    bottom: BorderSide(width: 3, color: Colors.redAccent),
-                  )
-                : null,
+            color: isSelected ? Colors.white12 : Colors.transparent,
+            // Background color for selected item
+            borderRadius:
+                BorderRadius.circular(50), // Rounded corners for selected item
           ),
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          // Padding for buttons
           child: Center(
             child: Text(
               mode,
               style: TextStyle(
-                color: isSelected ? Colors.redAccent : Colors.black54,
-                fontSize: 18,
+                color: isSelected ? Colors.white : Colors.white60,
+                // Text color based on selection
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
             ),

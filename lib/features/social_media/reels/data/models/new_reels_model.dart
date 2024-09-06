@@ -104,7 +104,23 @@ class User {
   final String privacy;
   final bool story;
   final bool verified;
-  final String profilePictureSignedUrl;
+  final String? profilePictureSignedUrl;
+  final String? coverPictureSignedUrl;
+  final String? bio;
+  final String? birthday;
+  final String? country;
+  final String? countryPrivacy;
+  final String? job;
+  final String? jobPrivacy;
+  final String? city;
+  final String? cityPrivacy;
+  final String? gender;
+  final String? phone;
+  final String? phonePrivacy;
+  final bool isLoading;
+  final bool isRider;
+  final bool isDoctor;
+  final bool isRestaurant;
 
   User({
     required this.id,
@@ -114,23 +130,54 @@ class User {
     required this.privacy,
     required this.story,
     required this.verified,
-    required this.profilePictureSignedUrl,
+    this.profilePictureSignedUrl,
+    this.coverPictureSignedUrl,
+    this.bio,
+    this.birthday,
+    this.country,
+    this.countryPrivacy,
+    this.job,
+    this.jobPrivacy,
+    this.city,
+    this.cityPrivacy,
+    this.gender,
+    this.phone,
+    this.phonePrivacy,
+    this.isLoading = false,
+    this.isRider = false,
+    this.isDoctor = false,
+    this.isRestaurant = false,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['_id'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      isFriend: json['isFriend'],
-      privacy: json['privacy'],
-      story: json['story'],
-      verified: json['verified'],
+      id: json['_id'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      isFriend: json['isFriend'] ?? false,
+      privacy: json['privacy'] ?? 'public',
+      story: json['story'] ?? false,
+      verified: json['verified'] ?? false,
       profilePictureSignedUrl: json['profilePictureSignedUrl'],
+      coverPictureSignedUrl: json['coverPictureSignedUrl'],
+      bio: json['bio'],
+      birthday: json['birthday'],
+      country: json['country'],
+      countryPrivacy: json['countryPrivacy'],
+      job: json['job'],
+      jobPrivacy: json['jobPrivacy'],
+      city: json['city'],
+      cityPrivacy: json['cityPrivacy'],
+      gender: json['gender'],
+      phone: json['phone'],
+      phonePrivacy: json['phonePrivacy'],
+      isLoading: json['isLoading'] ?? false,
+      isRider: json['isRider'] ?? false,
+      isDoctor: json['isDoctor'] ?? false,
+      isRestaurant: json['isRestaurant'] ?? false,
     );
   }
 }
-
 class Audio {
   final String id;
   final int reelsCount;
