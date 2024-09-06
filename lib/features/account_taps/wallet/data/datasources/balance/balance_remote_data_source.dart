@@ -3,10 +3,16 @@ import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 
 import '../../../../../../core/error/failure.dart';
+import '../../../domain/entities/balance/balance_history_entity.dart';
+import '../../../domain/usecases/get_balance_history_use_case.dart';
 import '../../models/balance/balance_data_model.dart';
+import '../../models/balance/balance_history_model.dart';
 
 abstract class BalanceRemoteDataSource {
   Future<Either<Failure, BalanceDataModel>> fetchBalance();
+
+  Future<Either<Failure, List<BalanceHistoryEntity>>> fetchHistoryBalance(
+      BalanceHistoryParams params);
 }
 
 class BalanceRemoteDataSourceImpl extends BalanceRemoteDataSource {
@@ -18,9 +24,24 @@ class BalanceRemoteDataSourceImpl extends BalanceRemoteDataSource {
   Future<Either<Failure, BalanceDataModel>> fetchBalance() async {
     final response = await _apiConsumer.get(EndPoints.getBalance);
 
-   return response.fold(
-      (failure)=>Left(failure),
-      (response)=> Right(BalanceDataModel.fromJson(response['data'])),
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(BalanceDataModel.fromJson(response['data'])),
     );
+  }
+
+  @override
+  Future<Either<Failure, List<BalanceHistoryModel>>> fetchHistoryBalance(
+      BalanceHistoryParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.getHistoryBalance(params));
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data'] as List)
+          .map((e) => BalanceHistoryModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
   }
 }

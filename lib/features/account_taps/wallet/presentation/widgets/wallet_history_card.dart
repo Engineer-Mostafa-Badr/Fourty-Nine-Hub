@@ -20,10 +20,10 @@ class WalletHistoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Label(text: title, style: Styles.mediumText(fontSize: 12)),
+      title: Label(text: title, style: Styles.mediumText()),
       subtitle: Label(
         text: subTitle,
-        style: Styles.mediumText(fontSize: 10),
+        style: Styles.mediumText(fontSize: 24),
       ),
       trailing: Icon(
         Icons.line_axis,

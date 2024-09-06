@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/balance_data_entity.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/balance/balance_data_entity.dart';
 
 class BalanceDataModel extends BalanceDataEntity {
   BalanceDataModel(

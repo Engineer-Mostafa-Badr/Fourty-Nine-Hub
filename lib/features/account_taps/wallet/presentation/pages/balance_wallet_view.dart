@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
@@ -16,12 +18,15 @@ import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
+import '../widgets/wallet_history_card.dart';
 
 class BalanceWalletView extends StatelessWidget {
   const BalanceWalletView({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
         appBar: BackAppBar(
           label: LocaleKeys.balance.localize,
@@ -100,22 +105,27 @@ class BalanceWalletView extends StatelessWidget {
                       text: LocaleKeys.history.localize,
                       style: Styles.headerText(),
                     ),
-                    // ListView.separated(
-                    //     shrinkWrap: true,
-                    //     physics: const NeverScrollableScrollPhysics(),
-                    //     itemBuilder: (context, index) {
-                    //       final item = state.balanceHistory![index];
-                    //       return WalletHistoryCard(
-                    //           title: '${item.amount} ${Labels.currency}',
-                    //           subTitle: item.description,
-                    //           onTap: () {},
-                    //           amount: item.amount,
-                    //           icon: FontAwesomeIcons.check);
-                    //     },
-                    //     separatorBuilder: (context, index) {
-                    //       return const SizedBox();
-                    //     },
-                    //     itemCount: state.balanceHistory?.length ?? 0)
+                    ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          final item = state.history![index];
+                          final DateTime createdAt = DateTime.parse(item.createdAt);
+                          final DateTime egyptTime = createdAt.toUtc().add(const Duration(hours: 3));
+                          final String formattedDateTime = DateFormat('dd/MM/yyyy, h:mm a').format(egyptTime);
+
+
+                          return WalletHistoryCard(
+                              title: '${item.transactionAmount}',
+                              subTitle:formattedDateTime,
+                              onTap: () {},
+                              //amount: item.amount,
+                              icon: FontAwesomeIcons.check);
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox();
+                        },
+                        itemCount: state.history?.length ?? 0)
                   ],
                 ),
               ),

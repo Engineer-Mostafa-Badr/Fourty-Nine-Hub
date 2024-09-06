@@ -5,22 +5,33 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_b
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_cubit.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/account_taps/wallet/domain/usecases/get_balance_history_use_case.dart';
+
 class BalanceServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
+    serviceLocator.registerLazySingleton<BalanceRemoteDataSource>(
+        () => BalanceRemoteDataSourceImpl(
+              serviceLocator(),
+            ));
 
-    serviceLocator.registerLazySingleton<BalanceRemoteDataSource>(() => BalanceRemoteDataSourceImpl(
-      serviceLocator(),
-    ));
+    serviceLocator
+        .registerLazySingleton<BalanceRepository>(() => BalanceRepositoryImpl(
+              serviceLocator(),
+            ));
 
-    serviceLocator.registerLazySingleton<BalanceRepository>(() => BalanceRepositoryImpl(serviceLocator()));
+    serviceLocator
+        .registerLazySingleton<GetBalanceUseCases>(() => GetBalanceUseCases(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<GetBalanceHistoryUseCase>(
+        () => GetBalanceHistoryUseCase(
+              serviceLocator(),
+            ));
 
-    serviceLocator.registerLazySingleton<GetBalanceUseCases>(() => GetBalanceUseCases(
-      serviceLocator(),
-    ));
-
-    serviceLocator.registerFactory<BalanceCubit>(() => BalanceCubit(
-      serviceLocator()
-    )..loadData());
-
+    serviceLocator.registerFactory<BalanceCubit>(
+        () => BalanceCubit(
+            serviceLocator(),
+            serviceLocator(),
+        )..loadData());
   }
 }

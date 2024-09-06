@@ -3,7 +3,7 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/balance_repository.dart';
 
-import '../entities/balance_data_entity.dart';
+import '../entities/balance/balance_data_entity.dart';
 
 class GetBalanceUseCases extends UseCase<BalanceDataEntity,NoParams>{
  final BalanceRepository _balanceRepository;
