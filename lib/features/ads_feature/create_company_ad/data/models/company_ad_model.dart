@@ -3,14 +3,10 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/enti
 
 class CompanyAdModel extends CompanyAdEntity {
   CompanyAdModel(
-      {required super.title,
-      required super.allowVideo,
-      required super.options});
+      {required super.data});
   factory CompanyAdModel.fromJson(Map<String, dynamic> json) {
     return CompanyAdModel(
-        title: json['title'],
-        allowVideo: json['allow_video'],
-        options: (json['options'] as List)
+        data: (json['data'] as List)
             .map((e) => CompanyAdOptionModel.fromJson(e))
             .toList());
   }

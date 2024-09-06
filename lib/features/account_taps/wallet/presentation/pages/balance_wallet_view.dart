@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_states.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/wallet_card_widget.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,20 +23,21 @@ class BalanceWalletView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar:  BackAppBar(
+        appBar: BackAppBar(
           label: LocaleKeys.balance.localize,
         ),
         body: BlocProvider<BalanceCubit>(
-          create: (_) =>serviceLocator()..loadData(),
-          child: BlocBuilder<BalanceCubit, BalanceState>(builder: (context, state) {
+          create: (_) => serviceLocator()..loadData(),
+          child: BlocBuilder<BalanceCubit, BalanceState>(
+              builder: (context, state) {
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     WalletCardWidget(
-                      balance: '${state.balance?.balance ??''}',
+                    WalletCardWidget(
+                      balance: '${state.balance?.balance ?? ''}',
                       target: 1002,
                       type: WalletTypes.balance,
                     ),
@@ -67,23 +69,35 @@ class BalanceWalletView extends StatelessWidget {
                         ),
                       ],
                     ),
-                    AppButton(
-                      backColor: Colors.red.withOpacity(.5),
-                      label: LocaleKeys.requestWithdraw.localize,
-                      onPressed: () => context.push(Routes.PAYMENT),
-                      margin: 10,
-                    ),
+                    state.balance?.openBalance == true
+                        ? AppButton(
+                            backColor: AppColors.SECONDARY_COLOR,
+                            color: AppColors.AUTH_CONTAINER_COLOR,
+                            label: LocaleKeys.requestWithdraw.localize,
+                            onPressed: () => context.push(Routes.PAYMENT),
+                            margin: 10,
+                          )
+                        : AppButton(
+                            backColor: Colors.red.withOpacity(.5),
+                            label: LocaleKeys.requestWithdraw.localize,
+                            onPressed: () {},
+                            margin: 10,
+                          ),
                     _buildWalletActionItem(
-                        label: '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',
-                        subTitle: '${state.balance?.fiveYears ??''} . 3 years last',
+                        label:
+                            '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',
+                        subTitle:
+                            '${state.balance?.fiveYears ?? ''} . 3 years last',
                         ontap: () {}),
                     _buildWalletActionItem(
-                        label: '${LocaleKeys.gift.localize} / 10 ${LocaleKeys.years.localize}',
-                        subTitle: '${state.balance?.tenYears ??''} . 8 years last',
+                        label:
+                            '${LocaleKeys.gift.localize} / 10 ${LocaleKeys.years.localize}',
+                        subTitle:
+                            '${state.balance?.tenYears ?? ''} . 8 years last',
                         ontap: () {}),
                     const Sizer(),
                     Label(
-                      text:LocaleKeys.history.localize,
+                      text: LocaleKeys.history.localize,
                       style: Styles.headerText(),
                     ),
                     // ListView.separated(
