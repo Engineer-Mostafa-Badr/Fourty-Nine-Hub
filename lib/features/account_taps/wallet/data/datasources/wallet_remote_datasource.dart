@@ -3,14 +3,15 @@ import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 
-import '../models/wallet_model.dart';
+import '../../domain/entities/wallet/wallet_history_entity.dart';
+import '../../domain/usecases/get_wallet_history_use_case.dart';
+import '../models/wallet/wallet_history_model.dart';
+import '../models/wallet/wallet_model.dart';
 
 
 abstract class WalletRemoteDataSource {
   Future<Either<Failure, WalletModel>> getWallet();
-// Future<Either<Failure, List<WalletHistoryEntity>>> getWalletHistory(
-//     {required WalletTypes type});
-// Future<Either<Failure, List<CompetitionEntity>>> getCompetitions();
+  Future<Either<Failure,List<WalletHistoryEntity>>>fetchHistoryWallet(WalletHistoryParams params);
 }
 
 class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
@@ -36,6 +37,20 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
       (failure)=>Left(failure),
       (response)=>Right(WalletModel.fromJson(response['data'])),
     );
+  }
+
+  @override
+  Future<Either<Failure, List<WalletHistoryEntity>>> fetchHistoryWallet(WalletHistoryParams params) async{
+    final response =
+    await _apiConsumer.get(EndPoints.getHistoryWallet(params));
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data'] as List)
+          .map((e) => WalletHistoryModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
   }
 
 // @override

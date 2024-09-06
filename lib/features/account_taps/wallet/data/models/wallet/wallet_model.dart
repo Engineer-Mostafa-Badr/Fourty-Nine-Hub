@@ -1,4 +1,4 @@
-import '../../domain/entities/wallet_entity.dart';
+import '../../../domain/entities/wallet/wallet_entity.dart';
 
 class WalletModel extends WalletEntity {
   WalletModel({required super.realAmount});

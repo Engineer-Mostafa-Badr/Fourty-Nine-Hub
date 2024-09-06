@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/subscription_widget.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -16,6 +17,7 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../cubit/wallet_cubit.dart';
 import '../widgets/wallet_card_widget.dart';
+import '../widgets/wallet_history_card.dart';
 
 class NormalWalletView extends StatefulWidget {
   const NormalWalletView({super.key});
@@ -160,9 +162,9 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                     //     shrinkWrap: true,
                     //     physics: const NeverScrollableScrollPhysics(),
                     //     itemBuilder: (context, index) {
-                    //       final item = state.walletHistory![index];
+                    //       final item = state.history![index];
                     //       return WalletHistoryCard(
-                    //           title: '${item.amount} ${Labels.currency}',
+                    //           title: '${item.amount}',
                     //           subTitle: item.description,
                     //           onTap: () {},
                     //           amount: item.amount,
@@ -171,7 +173,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                     //     separatorBuilder: (context, index) {
                     //       return const SizedBox();
                     //     },
-                    //     itemCount: state.balanceHistory?.length ?? 0)
+                    //     itemCount: state.history?.length ?? 0)
                   ],
                 ),
               ),

@@ -27,6 +27,7 @@ import '../features/account_taps/account/presentation/cubit/managers/favourite_a
 import '../features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import '../features/account_taps/lists/presentation/cubit/lists_cubit.dart';
 import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
+import '../features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 
 class AccountServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
@@ -34,8 +35,7 @@ class AccountServiceLocator {
         () => AccountRemoteDataSourceImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<GiftRemoteDataSource>(
-            () => GiftRemoteDataSourceImpl(serviceLocator()));
-
+        () => GiftRemoteDataSourceImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<WalletRemoteDataSource>(
         () => WalletRemoteDataSourceImpl(serviceLocator()));
@@ -48,7 +48,7 @@ class AccountServiceLocator {
         () => WalletRepoImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<GiftRepository>(
-            () => GiftRepositoryImpl(serviceLocator()));
+        () => GiftRepositoryImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<AccountRepo>(
         () => AccountRepoImpl(serviceLocator()));
@@ -66,8 +66,8 @@ class AccountServiceLocator {
         () => GetFriendRequestsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetBlockedUseCase>(
         () => GetBlockedUseCase(serviceLocator()));
-    // serviceLocator.registerLazySingleton<GetWalletHistoryUseCase>(
-    //     () => GetWalletHistoryUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetWalletHistoryUseCase>(
+        () => GetWalletHistoryUseCase(serviceLocator()));
     // serviceLocator.registerLazySingleton<GetCompetitionsUsecase>(
     //     () => GetCompetitionsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetWalletUseCase>(
@@ -90,12 +90,13 @@ class AccountServiceLocator {
           serviceLocator(),
           serviceLocator(),
         )..loadData());
-    serviceLocator.registerFactory<WalletCubit>(() =>
-        WalletCubit(serviceLocator())
-          ..loadData());
+    serviceLocator.registerFactory<WalletCubit>(() => WalletCubit(
+          serviceLocator(),
+          serviceLocator(),
+        )..loadData());
 
-    serviceLocator.registerFactory<GiftCubit>(() =>
-    GiftCubit(serviceLocator(),)
-      ..loadData());
+    serviceLocator.registerFactory<GiftCubit>(() => GiftCubit(
+          serviceLocator(),
+        )..loadData());
   }
 }
