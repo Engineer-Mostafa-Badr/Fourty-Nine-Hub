@@ -174,6 +174,7 @@ import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
 import 'package:fourtyninehub/service_locator/face_book_service_locator.dart';
 import 'package:fourtyninehub/service_locator/instagram_service_locator.dart';
+import 'package:fourtyninehub/service_locator/notification_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
 import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
@@ -273,7 +274,6 @@ class DI {
     serviceLocator
         .registerLazySingleton<TinderRepository>(() => TinderRepository());
 
-
     // Register the TinderViewCubit and inject the TinderRepository dependency
     serviceLocator.registerFactory<TinderViewCubit>(() =>
         TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
@@ -339,6 +339,8 @@ class DI {
     ShippingServiceLocatior.execute(serviceLocator: serviceLocator);
     // trip join
     TripJoinServiceLocator.execute(serviceLocator: serviceLocator);
+    // notifications
+    NotificationsServiceLocator.execute(serviceLocator: serviceLocator);
     InstagramServiceLocator.execute(serviceLocator: serviceLocator);
     FaceBookServiceLocator.execute(serviceLocator: serviceLocator);
     TwitterServiceLocator.execute(serviceLocator: serviceLocator);

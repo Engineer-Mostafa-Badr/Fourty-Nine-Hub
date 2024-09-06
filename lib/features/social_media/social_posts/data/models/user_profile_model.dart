@@ -28,13 +28,17 @@ class UserProfileModel extends UserProfileEntity {
   factory UserProfileModel.fromJson(Map<String, dynamic> json) {
     return UserProfileModel(
       id: json['userId']['_id'],
-      firstName: json['userId']['firstName'][0].toUpperCase() + json['userId']['firstName'].substring(1).toLowerCase() ?? '',
-      lastName: json['userId']['lastName'][0].toUpperCase() + json['userId']['lastName'].substring(1).toLowerCase() ?? '',
-      bio: json['userId']['bio']??'',
-      city: json['userId']['city']??'',
-      phone: json['userId']['phone']??'',
-      country: json['userId']['country']??'',
-      job: json['userId']['job']??'',
+      firstName: json['userId']['firstName'][0].toUpperCase() +
+              json['userId']['firstName'].substring(1).toLowerCase() ??
+          '',
+      lastName: json['userId']['lastName'][0].toUpperCase() +
+              json['userId']['lastName'].substring(1).toLowerCase() ??
+          '',
+      bio: json['userId']['bio'] ?? '',
+      city: json['userId']['city'] ?? '',
+      phone: json['userId']['phone'] ?? '',
+      country: json['userId']['country'] ?? '',
+      job: json['userId']['job'] ?? '',
       email: json['userId']['email'] ?? '',
       isDocument: json['userId']['twitter_documentation'] ?? false,
       totalView: json['totalView'] ?? 0,

@@ -27,7 +27,8 @@ abstract class SocialPostsRemoteDataSource {
       {required TwitterFeedParams params});
   Future<Either<Failure, PostEntity>> getPost({required String postId});
   Future<Either<Failure, bool>> deleteFriend({required String userId});
-  Future<Either<Failure, bool>> acceptRejectFriendRequest({required AcceptRejectFriendRequestParams params});
+  Future<Either<Failure, bool>> acceptRejectFriendRequest(
+      {required AcceptRejectFriendRequestParams params});
   Future<Either<Failure, UserProfileEntity>> getUserProfile(
       {required String userId});
   Future<Either<Failure, List<PostEntity>>> getAdvertisement(
@@ -303,16 +304,19 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> acceptRejectFriendRequest({required AcceptRejectFriendRequestParams params}) async{
-    final response = await _apiConsumer
-        .put(EndPoints.acceptRejectFriendRequest(params), data: {'status': params.status});
+  Future<Either<Failure, bool>> acceptRejectFriendRequest(
+      {required AcceptRejectFriendRequestParams params}) async {
+    final response = await _apiConsumer.put(
+        EndPoints.acceptRejectFriendRequest(params),
+        data: {'status': params.status});
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, bool>> deleteFriend({required String userId}) async{
-    final response = await _apiConsumer
-        .delete(EndPoints.deleteFriend(userId),);
+  Future<Either<Failure, bool>> deleteFriend({required String userId}) async {
+    final response = await _apiConsumer.delete(
+      EndPoints.deleteFriend(userId),
+    );
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 }

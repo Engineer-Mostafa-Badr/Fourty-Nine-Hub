@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,16 +6,11 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart'
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubit/notifications_cubit.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubit/notifications_state.dart';
-import 'package:fourtyninehub/features/notifications/presentation/pages/notification_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/utils/api_service.dart';
 import '../../../../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../../features/notifications/data/repository/notification_repo_impl.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -138,36 +132,32 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-                BlocProvider(
-                  create: (BuildContext context) => NotificationsCubit(
-                      NotificationRepoImpl(ApiService(Dio())))
-                    ..fetchNotification('app'),
-                  child: BlocBuilder<NotificationsCubit, NotificationsState>(
-                    builder: (BuildContext context, state) {
-                      if (state is NotificationsSuccessState) {
-                        return Positioned(
-                          top: 15.zH,
-                          right: 10.zW,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 3.zH,
-                              horizontal: 5.zW,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(20.zR),
-                            ),
-                            child: Label(
-                                text: context.read<UserCubit>().isLoggedIn
-                                    ? '${state.notificationModel.data!.docs!.length}'
-                                    : '0',
-                                style: Styles.smallText(color: Colors.white)),
-                          ),
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
+                Builder(
+                  builder: (BuildContext context) {
+                    // if (state is NotificationsSuccessState) {
+                    return Positioned(
+                      top: 15.zH,
+                      right: 10.zW,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 3.zH,
+                          horizontal: 5.zW,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(20.zR),
+                        ),
+                        child: Label(
+                            text: context.read<UserCubit>().isLoggedIn
+                                // ? '${state.notificationModel.data!.docs!.length}'
+                                ? ''
+                                : '0',
+                            style: Styles.smallText(color: Colors.white)),
+                      ),
+                    );
+                    // ;}
+                    // return const SizedBox.shrink();
+                  },
                 ),
               ],
             ),

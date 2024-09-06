@@ -9,40 +9,41 @@ import 'package:get_it/get_it.dart';
 
 class InstagramServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
-    serviceLocator.registerLazySingleton<InstagramRemoteDataSource>(() => InstagramRemoteDataSourceImpl(
-      serviceLocator(),
-    ));
-    serviceLocator.registerLazySingleton<InstagramRepo>(() => InstagramRepoImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<InstagramRemoteDataSource>(
+        () => InstagramRemoteDataSourceImpl(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<InstagramRepo>(
+        () => InstagramRepoImpl(serviceLocator()));
 
+    serviceLocator.registerLazySingleton<GetInstagramReelsUseCase>(
+        () => GetInstagramReelsUseCase(
+              serviceLocator(),
+            ));
 
-    serviceLocator.registerLazySingleton<GetInstagramReelsUseCase>(() => GetInstagramReelsUseCase(
-      serviceLocator(),
-    ));
-
-
-    serviceLocator.registerLazySingleton<GetInstagramUserReelsUseCase>(() => GetInstagramUserReelsUseCase(
-      serviceLocator(),
-    ));
-    serviceLocator.registerLazySingleton<GetInstagramFeedUseCase>(() => GetInstagramFeedUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<GetInstagramUserReelsUseCase>(
+        () => GetInstagramUserReelsUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<GetInstagramFeedUseCase>(
+        () => GetInstagramFeedUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerFactory<InstagramCubit>(() => InstagramCubit(
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-    ));
-
-
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
   }
 }

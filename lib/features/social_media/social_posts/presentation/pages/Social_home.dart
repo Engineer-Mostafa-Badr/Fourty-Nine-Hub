@@ -24,7 +24,8 @@ class SocialHomeView extends StatefulWidget {
   State<SocialHomeView> createState() => _SocialHomeViewState();
 }
 
-class _SocialHomeViewState extends State<SocialHomeView> with SingleTickerProviderStateMixin {
+class _SocialHomeViewState extends State<SocialHomeView>
+    with SingleTickerProviderStateMixin {
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
@@ -32,7 +33,8 @@ class _SocialHomeViewState extends State<SocialHomeView> with SingleTickerProvid
   void initState() {
     scrollController;
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
         if (!_isScrollingDown) {
           setState(() {
             _isScrollingDown = true;
@@ -75,21 +77,25 @@ class _SocialHomeViewState extends State<SocialHomeView> with SingleTickerProvid
               : const FloatingButton(
                   changeView: 2,
                 ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          body: BlocBuilder<UserCubit, BasicState<UserEntity>>(builder: (context, state) {
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
+              builder: (context, state) {
             return context.read<UserCubit>().isLoggedIn
                 ? NestedAppbar(
                     scrollController: ScrollController(),
                     appBars: [
                       SliverAppBar(
-                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
                         automaticallyImplyLeading: false,
                         floating: true,
                         // pinned: true,
                         flexibleSpace: const CreatePostBanner(),
                       ),
                       SliverAppBar(
-                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
                         automaticallyImplyLeading: false,
                         // floating: true,
                         pinned: true,
@@ -107,8 +113,11 @@ class _SocialHomeViewState extends State<SocialHomeView> with SingleTickerProvid
                         children: [
                           GestureDetector(
                               onTap: () => context.push(Routes.LOGIN),
-                              child: Label(text: 'Login', style: Styles.headerText())),
-                          Label(text: ', To continue in using chat services', style: Styles.headerText()),
+                              child: Label(
+                                  text: 'Login', style: Styles.headerText())),
+                          Label(
+                              text: ', To continue in using chat services',
+                              style: Styles.headerText()),
                         ],
                       ),
                     ),
@@ -133,11 +142,14 @@ class _SocialHomeViewState extends State<SocialHomeView> with SingleTickerProvid
               },
               child: Container(
                   decoration: i == 0
-                      ? const BoxDecoration(border: Border(bottom: BorderSide(color: Colors.blue, width: 2)))
+                      ? const BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(color: Colors.blue, width: 2)))
                       : null,
                   child: Icon(
                     i == 0 ? Icons.home : Icons.person,
-                    color: i == 0 ? Colors.blue : Theme.of(context).primaryColor,
+                    color:
+                        i == 0 ? Colors.blue : Theme.of(context).primaryColor,
                   )),
             ),
           ),

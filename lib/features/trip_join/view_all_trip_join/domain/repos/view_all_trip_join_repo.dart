@@ -8,4 +8,8 @@ abstract class ViewAllTripJoinRepo {
     required String subCategory,
     required PaginationParams paginationParams,
   });
+  Future<Either<Failure, bool>> requestTripJoin({
+    required String addId,
+    required String mobile,
+  });
 }

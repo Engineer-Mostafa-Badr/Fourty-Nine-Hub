@@ -7,8 +7,10 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trips_card_loading.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/report_view_trip_join.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/request_trip_Join_bottom_sheet.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class ViewAllTripJoinCardBuilder extends StatefulWidget {
   const ViewAllTripJoinCardBuilder({
@@ -16,10 +18,12 @@ class ViewAllTripJoinCardBuilder extends StatefulWidget {
   });
 
   @override
-  State<ViewAllTripJoinCardBuilder> createState() => _ViewAllTripJoinCardBuilderState();
+  State<ViewAllTripJoinCardBuilder> createState() =>
+      _ViewAllTripJoinCardBuilderState();
 }
 
-class _ViewAllTripJoinCardBuilderState extends State<ViewAllTripJoinCardBuilder> {
+class _ViewAllTripJoinCardBuilderState
+    extends State<ViewAllTripJoinCardBuilder> {
   late final ViewAllTripJoinCubit viewAllTripJoinCubit;
 
   @override
@@ -33,13 +37,24 @@ class _ViewAllTripJoinCardBuilderState extends State<ViewAllTripJoinCardBuilder>
     return BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
       // buildWhen: (previous, current) => !viewAllTripJoinCubit.noMoreDataInDatabase,
       builder: (context, state) {
+        if (viewAllTripJoinCubit.tripJoinCards.isEmpty &&
+            (state is ViewAllTripJoinSuccess ||
+                state is ViewAllTripJoinFailed)) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.8,
+            width: double.infinity,
+            alignment: Alignment.center,
+            child: const Text('There are no trips available till now'),
+          );
+        }
         return ListView.builder(
           itemCount: viewAllTripJoinCubit.tripJoinCards.length + 1,
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) {
             if (index < viewAllTripJoinCubit.tripJoinCards.length) {
-              TripJoinCardEntity tripJoinCardEntity = viewAllTripJoinCubit.tripJoinCards[index];
+              TripJoinCardEntity tripJoinCardEntity =
+                  viewAllTripJoinCubit.tripJoinCards[index];
               return AvailableTripCard(
                 tripJoinCardEntity: tripJoinCardEntity,
                 reportOnTap: () {
@@ -52,13 +67,25 @@ class _ViewAllTripJoinCardBuilderState extends State<ViewAllTripJoinCardBuilder>
                     'Trip Join Subscription',
                   )) {}
                 },
-                requestOnTap: () {},
+                requestOnTap: () {
+                  showBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return RequstTripJoinBottomSheet(
+                          tripJoinCardEntity: tripJoinCardEntity);
+                    },
+                  );
+                },
                 callOnTap: () async {
+                  // launchUrlString("tel://${tripJoinCardEntity.phone}");
+                  // return;
                   if (await _userApproved(
                     tripJoinCardEntity,
                     UIConst.chatNormalId,
                     'Chat Subscription',
-                  )) {}
+                  )) {
+                    launchUrlString("tel://${tripJoinCardEntity.phone}");
+                  }
                 },
                 messageOnTap: () async {
                   if (await _userApproved(
@@ -76,7 +103,8 @@ class _ViewAllTripJoinCardBuilderState extends State<ViewAllTripJoinCardBuilder>
                 },
               );
             }
-            return state is ViewAllTripJoinLoading && !viewAllTripJoinCubit.noMoreDataInDatabase
+            return state is ViewAllTripJoinLoading &&
+                    !viewAllTripJoinCubit.noMoreDataInDatabase
                 ? const AvailableTripCardLoadingList()
                 : const SizedBox();
           },
@@ -85,8 +113,10 @@ class _ViewAllTripJoinCardBuilderState extends State<ViewAllTripJoinCardBuilder>
     );
   }
 
-  Future<bool> _userApproved(TripJoinCardEntity tripJoinCardEntity, String subCategoryId, String title) async {
-    if (tripJoinCardEntity.isApproved == null || tripJoinCardEntity.isApproved == false) {
+  Future<bool> _userApproved(TripJoinCardEntity tripJoinCardEntity,
+      String subCategoryId, String title) async {
+    if (tripJoinCardEntity.isApproved == null ||
+        tripJoinCardEntity.isApproved == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
         subCategoryId: subCategoryId,
         title: title,
@@ -102,7 +132,8 @@ class _ViewAllTripJoinCardBuilderState extends State<ViewAllTripJoinCardBuilder>
         widget: ReportViewTripJoin(
           id: viewAllTripJoinCubit.tripJoinCards[index].userId ?? '',
           cardId: viewAllTripJoinCubit.tripJoinCards[index].id ?? '',
-          categoryId: viewAllTripJoinCubit.tripJoinCards[index].categoryId ?? '',
+          categoryId:
+              viewAllTripJoinCubit.tripJoinCards[index].categoryId ?? '',
         ));
   }
 }

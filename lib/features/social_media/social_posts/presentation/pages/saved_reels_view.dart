@@ -22,16 +22,16 @@ class SavedReelsView extends StatelessWidget {
       create: (_) => serviceLocator()..loadSaverReels(userData.id),
       child: BlocConsumer<InstagramCubit, InstagramState>(
           listener: (context, state) {
-            if (state.status == StateStatus.error) {
-              showErrorMessage(
-                context,
-                getFailureMessage(
-                  state.failure ?? const UnknownFailure(),
-                  context,
-                ),
-              );
-            }
-          }, builder: (context, state) {
+        if (state.status == StateStatus.error) {
+          showErrorMessage(
+            context,
+            getFailureMessage(
+              state.failure ?? const UnknownFailure(),
+              context,
+            ),
+          );
+        }
+      }, builder: (context, state) {
         final controller = context.read<InstagramCubit>();
         return PagedSliverList<int, PostEntity>(
           // padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
@@ -56,31 +56,31 @@ class SavedReelsView extends StatelessWidget {
               },
               itemBuilder: (context, item, index) {
                 final post =
-                controller.savedReelsPagingController.itemList![index];
+                    controller.savedReelsPagingController.itemList![index];
                 print(post.videoMedia);
                 return state.status == StateStatus.success
                     ? Container(
-                    color: Colors.black,
-                    width: double.infinity,
-                    height: 400,
-                    child: InstagramReelCard(
-                      item: post,
-                      playVideo: false,
-                    ))
+                        color: Colors.black,
+                        width: double.infinity,
+                        height: 400,
+                        child: InstagramReelCard(
+                          item: post,
+                          playVideo: false,
+                        ))
                     : Center(
-                  child: Label(
-                      text: getFailureMessage(
-                        state.failure ?? const UnknownFailure(),
-                        context,
-                      )),
-                );
+                        child: Label(
+                            text: getFailureMessage(
+                          state.failure ?? const UnknownFailure(),
+                          context,
+                        )),
+                      );
               },
               noMoreItemsIndicatorBuilder: (context) => Container(),
               firstPageProgressIndicatorBuilder: (context) => Container(
                   margin: const EdgeInsets.only(top: 150),
                   child: const CupertinoActivityIndicator()),
               newPageProgressIndicatorBuilder: (context) =>
-              const CupertinoActivityIndicator()),
+                  const CupertinoActivityIndicator()),
         );
       }),
     );

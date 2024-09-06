@@ -35,7 +35,7 @@ class EndPoints {
   static const sendForgetPasswordOTP = '/auth/forgot-password';
   static const verifyForgetPasswordOTP = '/auth/verify/otp';
   static const createNewForgetPassword = '/auth/reset-password';
-  static const notifications = '/api/v1/notifications';
+  static const notifications = '/notifications';
   // static const report = '/report?subCategory=66a3583454e6e337915514db';
   static String report({required String subCategoryId}) => '/report?subCategory=$subCategoryId';
   static const documentRequest = '/twitter/document-request?subCategory=66a3583454e6e337915514db';
@@ -514,4 +514,7 @@ class EndPoints {
   static String subscribe = '/subscription/subscribe';
   static String getActiveSubscriptionAmounts = '/payment-amount/active';
   static String getAllTripJoin = '/ride/come-with-you/get-all';
+  static String makeTripJoinRequest(String addId) {
+    return '/ride/come-with-you/request/$addId?subCategory=62ea00e269ea29c91dfc390c';
+  }
 }

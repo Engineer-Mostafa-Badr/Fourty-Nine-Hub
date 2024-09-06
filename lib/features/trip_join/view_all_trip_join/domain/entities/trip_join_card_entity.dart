@@ -15,6 +15,7 @@ class TripJoinCardEntity {
   String? destinationAddressEn;
   bool? isApproved;
   int? publishDate;
+  String? phone;
   TripJoinCardEntity({
     this.id,
     this.userId,
@@ -31,6 +32,7 @@ class TripJoinCardEntity {
     this.destinationAddressEn,
     this.isApproved,
     this.publishDate,
+    this.phone,
   });
 
   TripJoinCardEntity copyWith({
@@ -49,6 +51,7 @@ class TripJoinCardEntity {
     String? destinationAddressEn,
     bool? isApproved,
     int? publishDate,
+    String? phone,
   }) {
     return TripJoinCardEntity(
       id: id ?? this.id,
@@ -66,11 +69,12 @@ class TripJoinCardEntity {
       destinationAddressEn: destinationAddressEn ?? this.destinationAddressEn,
       isApproved: isApproved ?? this.isApproved,
       publishDate: publishDate ?? this.publishDate,
+      phone: phone ?? this.phone,
     );
   }
 
   @override
   String toString() {
-    return 'TripJoinCardEntity(id: $id, userId: $userId, categoryId: $categoryId, brand: $brand, model: $model, journeyPrice: $journeyPrice, status: $status, seatNumber: $seatNumber, isRepeated: $isRepeated, startingAddressAr: $startingAddressAr, destinationAddressAr: $destinationAddressAr, startingAddressEn: $startingAddressEn, destinationAddressEn: $destinationAddressEn, isApproved: $isApproved, publishDate: $publishDate)';
+    return 'TripJoinCardEntity(id: $id, userId: $userId, categoryId: $categoryId, brand: $brand, model: $model, journeyPrice: $journeyPrice, status: $status, seatNumber: $seatNumber, isRepeated: $isRepeated, startingAddressAr: $startingAddressAr, destinationAddressAr: $destinationAddressAr, startingAddressEn: $startingAddressEn, destinationAddressEn: $destinationAddressEn, isApproved: $isApproved, publishDate: $publishDate, phone: $phone)';
   }
 }

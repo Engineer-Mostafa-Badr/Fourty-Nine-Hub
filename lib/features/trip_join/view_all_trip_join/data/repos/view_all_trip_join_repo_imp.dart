@@ -11,10 +11,18 @@ class ViewAllTripJoinRepoImp implements ViewAllTripJoinRepo {
   ViewAllTripJoinRepoImp({required this.viewripJoinRemoteDataSource});
   @override
   Future<Either<Failure, List<TripJoinCardEntity>>> getAllTripJion(
-      {required String subCategory, required PaginationParams paginationParams}) {
+      {required String subCategory,
+      required PaginationParams paginationParams}) {
     return viewripJoinRemoteDataSource.fetchAllTripJoin(
       subCategory: subCategory,
       paginationParams: paginationParams,
     );
+  }
+
+  @override
+  Future<Either<Failure, bool>> requestTripJoin(
+      {required String addId, required String mobile}) {
+    return viewripJoinRemoteDataSource.requestTripJoin(
+        addId: addId, mobile: mobile);
   }
 }

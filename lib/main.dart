@@ -2,12 +2,18 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
+import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/get_services_notifications/get_services_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -69,6 +75,24 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => ThemeCubit(),
         ),
+        BlocProvider<FirebaseNotficationsCubit>(
+          create: (context) => FirebaseNotficationsCubit(serviceLocator()),
+        ),
+        BlocProvider<GetAppNotificationsCubit>(
+          create: (context) => GetAppNotificationsCubit(getNotficationsUseCase: serviceLocator()),
+        ),
+        BlocProvider<GetSocialNotificationsCubit>(
+          create: (context) => GetSocialNotificationsCubit(getNotficationsUseCase: serviceLocator()),
+        ),
+        BlocProvider<GetServicesNotificationsCubit>(
+          create: (context) => GetServicesNotificationsCubit(getNotficationsUseCase: serviceLocator()),
+        ),
+        BlocProvider<NotificationSocketIoCubit>(
+          create: (context) => NotificationSocketIoCubit(
+            context: context,
+            webSocketHelper: serviceLocator(),
+          )..notificationListener(),
+        ),
       ],
       child: ZegoScreenUtilInit(
           designSize: const Size(750, 1334),
@@ -78,9 +102,7 @@ class MyApp extends StatelessWidget {
             return BlocBuilder<ThemeCubit, ThemeStates>(
               builder: (BuildContext context, state) {
                 return MaterialApp.router(
-                  themeMode: context.read<ThemeCubit>().isDarkTheme
-                      ? ThemeMode.dark
-                      : ThemeMode.light,
+                  themeMode: context.read<ThemeCubit>().isDarkTheme ? ThemeMode.dark : ThemeMode.light,
                   theme: lightTheme(),
                   darkTheme: darkTheme(),
                   title: '49',

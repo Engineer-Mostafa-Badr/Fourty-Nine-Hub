@@ -14,8 +14,9 @@ class GetCommentsResponse {
       status: json['status'] as bool? ?? false,
       message: json['message'] as String? ?? '',
       data: (json['data'] as List<dynamic>?)
-          ?.map((item) => CommentData.fromJson(item as Map<String, dynamic>))
-          .toList() ??
+              ?.map(
+                  (item) => CommentData.fromJson(item as Map<String, dynamic>))
+              .toList() ??
           [],
     );
   }
@@ -28,6 +29,7 @@ class GetCommentsResponse {
     };
   }
 }
+
 class CommentData {
   final String id;
   final String reelId;
@@ -62,16 +64,20 @@ class CommentData {
       comment: json['comment'] as String? ?? '',
       parentId: json['parentId'] as String?,
       receiverComment: json['receiverComment'] != null
-          ? ReceiverComment.fromJson(json['receiverComment'] as Map<String, dynamic>)
+          ? ReceiverComment.fromJson(
+              json['receiverComment'] as Map<String, dynamic>)
           : null,
-      createdAt: DateTime.tryParse(json['createdAt'] as String? ?? '') ?? DateTime.now(),
-      updatedAt: DateTime.tryParse(json['updatedAt'] as String? ?? '') ?? DateTime.now(),
+      createdAt: DateTime.tryParse(json['createdAt'] as String? ?? '') ??
+          DateTime.now(),
+      updatedAt: DateTime.tryParse(json['updatedAt'] as String? ?? '') ??
+          DateTime.now(),
       likeCount: json['likeCount'] as int? ?? 0,
       isLiked: json['isLiked'] as bool? ?? false,
       user: User.fromJson(json['user'] as Map<String, dynamic>? ?? {}),
       replies: (json['replies'] as List<dynamic>?)
-          ?.map((item) => CommentData.fromJson(item as Map<String, dynamic>))
-          .toList() ??
+              ?.map(
+                  (item) => CommentData.fromJson(item as Map<String, dynamic>))
+              .toList() ??
           [],
     );
   }
@@ -92,6 +98,7 @@ class CommentData {
     };
   }
 }
+
 class ReceiverComment {
   final String firstName;
   final String lastName;
@@ -119,6 +126,7 @@ class ReceiverComment {
     };
   }
 }
+
 class User {
   final String id;
   final String firstName;

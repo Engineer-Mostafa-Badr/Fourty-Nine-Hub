@@ -8,6 +8,8 @@ class AvailableTripsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // FirebaseHelper.getToken();
+    // FirebaseHelper.setupInteractedMessage();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -21,6 +23,7 @@ class AvailableTripsView extends StatelessWidget {
         ),
         body: const Stack(
           children: [
+            SizedBox(width: double.infinity, height: double.infinity),
             AvailableTripsBody(),
             AvailableTripsFloatingActionButton(),
           ],

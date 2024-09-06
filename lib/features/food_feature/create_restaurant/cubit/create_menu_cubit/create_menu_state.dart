@@ -6,7 +6,7 @@ final class RestaurantMenuInitial extends RestaurantMenuState {}
 
 final class RestaurantMenuLoading extends RestaurantMenuState {}
 
- final class RestaurantUpLoadPhototLoading extends RestaurantMenuState {
+final class RestaurantUpLoadPhototLoading extends RestaurantMenuState {
   final String message;
   RestaurantUpLoadPhototLoading(this.message);
 }

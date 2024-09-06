@@ -12,6 +12,9 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -48,8 +51,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   void initState() {
     scrollController;
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
         if (!_isScrollingDown) {
           setState(() {
             _isScrollingDown = true;
@@ -63,6 +65,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         }
       }
     });
+    context.read<FirebaseNotficationsCubit>().setupInterceptedMessage(context: context);
     super.initState();
   }
 
@@ -74,99 +77,110 @@ class _FourtyNineViewState extends State<FourtyNineView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const HomeAppbar(
-        isWithBackArrow: false,
-        language: true,
-      ),
-      bottomNavigationBar: BottomNavigator(
-        scrollController: scrollController,
-        isScrollingDown: _isScrollingDown,
-        mainCategory: 1,
-        index: 2,
-      ),
-      floatingActionButton: _isScrollingDown
-          ? null
-          : const FloatingButton(
-              changeView: 1,
-            ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      drawer: const DrawerWidget(),
-      body: ListView(
-        controller: scrollController,
-        padding: EdgeInsets.symmetric(horizontal: 20.zW),
-        children: [
-          //carousel slider
-          const AnnounceWidget(),
-          const Sizer(),
-          //wallet
-          const WalletWidget(),
-          const Sizer(),
-          //admob
-          const GoogleAddsBanner(),
-          const Sizer(),
-          //pick me and come with U
-          _pickMeAndComeWithUWidget(),
-          const Sizer(),
-          //auction
-          _auctionAndInstallmentWidget(),
-          const Sizer(),
-          //cats layout
-          _buildMainCategoriesViews(),
-          const Sizer(),
-          //main cats
-          BlocBuilder<MainCategoriesCubit,
-              BasicState<List<MainCategoryEntity>>>(
-            builder: (context, state) {
-              if (state.isLoading) {
-                return Shimmer.fromColors(
-                  baseColor: Colors.grey[100]!,
-                  highlightColor: Colors.white24,
-                  child: Column(
-                    children: List.generate(
-                        6,
-                        (index) => Padding(
-                              padding: EdgeInsets.only(bottom: 15.zH),
-                              child: Container(
-                                height:
-                                    MediaQuery.of(context).size.height * .15.zH,
-                                width: double.infinity,
-                                margin: EdgeInsets.symmetric(horizontal: 10.zW),
-                                padding:
-                                    EdgeInsets.symmetric(horizontal: 10.zW),
-                                decoration: BoxDecoration(
-                                  color: AppColors.AUTH_CONTAINER_COLOR,
-                                  borderRadius: BorderRadius.circular(20.zR),
-                                  border: Border.all(color: Colors.grey),
+    return BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
+      listener: (context, state) {
+        if (state is NotificationSocketIoNewNotification) {
+          // pr('new notfication is recieved by the bloc listner');
+          // pr(state.notificationEntity);
+          notificationSnackBar(
+            context: context,
+            title: state.notificationEntity.title ?? '',
+            body: state.notificationEntity.body ?? '',
+          );
+        } else if (state is NotificationSocketIoFailed) {
+          // pr('Failed to recieve the new notfication ');
+          // pr(state.message);
+        }
+      },
+      child: Scaffold(
+        appBar: const HomeAppbar(
+          isWithBackArrow: false,
+          language: true,
+        ),
+        bottomNavigationBar: BottomNavigator(
+          scrollController: scrollController,
+          isScrollingDown: _isScrollingDown,
+          mainCategory: 1,
+          index: 2,
+        ),
+        floatingActionButton: _isScrollingDown
+            ? null
+            : const FloatingButton(
+                changeView: 1,
+              ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        drawer: const DrawerWidget(),
+        body: ListView(
+          controller: scrollController,
+          padding: EdgeInsets.symmetric(horizontal: 20.zW),
+          children: [
+            //carousel slider
+            const AnnounceWidget(),
+            const Sizer(),
+            //wallet
+            const WalletWidget(),
+            const Sizer(),
+            //admob
+            const GoogleAddsBanner(),
+            const Sizer(),
+            //pick me and come with U
+            _pickMeAndComeWithUWidget(),
+            const Sizer(),
+            //auction
+            _auctionAndInstallmentWidget(),
+            const Sizer(),
+            //cats layout
+            _buildMainCategoriesViews(),
+            const Sizer(),
+            //main cats
+            BlocBuilder<MainCategoriesCubit, BasicState<List<MainCategoryEntity>>>(
+              builder: (context, state) {
+                if (state.isLoading) {
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey[100]!,
+                    highlightColor: Colors.white24,
+                    child: Column(
+                      children: List.generate(
+                          6,
+                          (index) => Padding(
+                                padding: EdgeInsets.only(bottom: 15.zH),
+                                child: Container(
+                                  height: MediaQuery.of(context).size.height * .15.zH,
+                                  width: double.infinity,
+                                  margin: EdgeInsets.symmetric(horizontal: 10.zW),
+                                  padding: EdgeInsets.symmetric(horizontal: 10.zW),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.AUTH_CONTAINER_COLOR,
+                                    borderRadius: BorderRadius.circular(20.zR),
+                                    border: Border.all(color: Colors.grey),
+                                  ),
                                 ),
-                              ),
-                            )),
-                  ),
-                );
-              }
-              if (state.isSuccess && state.data != null) {
-                return ListView.separated(
-                  itemCount: state.data?.length ?? 0,
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        context.push(Routes.SUBCATEGORIES,
-                            extra: state.data![index]);
-                      },
-                      child: MainCategoryBanner(category: state.data![index]),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Sizer(),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
-          ),
-        ],
+                              )),
+                    ),
+                  );
+                }
+                if (state.isSuccess && state.data != null) {
+                  return ListView.separated(
+                    itemCount: state.data?.length ?? 0,
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          context.push(Routes.SUBCATEGORIES, extra: state.data![index]);
+                        },
+                        child: MainCategoryBanner(category: state.data![index]),
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) => const Sizer(),
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -224,8 +238,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     );
   }
 
-  BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-      _pickMeAndComeWithUWidget() {
+  BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>> _pickMeAndComeWithUWidget() {
     return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
       builder: (context, state) {
         if (state.status == StateStatus.loading) {
@@ -287,17 +300,15 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   Row _auctionAndInstallmentWidget() {
     return Row(
       children: [
-        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
-            () => context.push(Routes.MAZADAT), Icons.group),
+        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize, () => context.push(Routes.MAZADAT), Icons.group),
         const Sizer(),
-        itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize,
-            () => context.push(Routes.INSTALLMENT), Icons.list),
+        itemAuctionAndInstallmentWidget(
+            LocaleKeys.installments.localize, () => context.push(Routes.INSTALLMENT), Icons.list),
       ],
     );
   }
 
-  Widget itemAuctionAndInstallmentWidget(
-      String label, Function function, IconData icon) {
+  Widget itemAuctionAndInstallmentWidget(String label, Function function, IconData icon) {
     return Expanded(
       child: InkWell(
         onTap: () => context.go(Routes.MAZADAT),
@@ -385,8 +396,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                       url: image,
                     ),
                     Container(
-                      color: Colors.black
-                          .withOpacity(0.3), // Darken the background
+                      color: Colors.black.withOpacity(0.3), // Darken the background
                     ),
                   ],
                 ),

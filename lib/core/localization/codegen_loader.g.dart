@@ -27,8 +27,10 @@ class CodegenLoader extends AssetLoader {
     "cast": "سرعة",
     "restaurantName": "إسم المطعم",
     "theCommercialRegister": "السجل التجاري",
-    "theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider": "التطبيق لا يخصم اي نسبه من مزود الخدمة",
-    "youWillGetEGP3650PerYearIfYouSubscribeDaily": "سوف تحصل على 3650 جنيها في السنه عندما تشترك يوميا",
+    "theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider":
+        "التطبيق لا يخصم اي نسبه من مزود الخدمة",
+    "youWillGetEGP3650PerYearIfYouSubscribeDaily":
+        "سوف تحصل على 3650 جنيها في السنه عندما تشترك يوميا",
     "welcomeToResturantRegisteration": "مرحبا بك في تسجيل المطعم",
     "selecteSubcategory": "اختر الفئه الفرعيه:",
     "photoForRestaurant": "صور للمطعم",
@@ -191,7 +193,8 @@ class CodegenLoader extends AssetLoader {
     "checkVerification": "يرجى التحقق من بريدك الإلكتروني لمعرفة رمز التحقق",
     "congratulations": "تهانينا",
     "close": "إغلاق",
-    "giftApp": "لقد حصلت على هدية بقيمة 400 جنيه كهدية ترحيبية للتسجيل في تطبيق 49.",
+    "giftApp":
+        "لقد حصلت على هدية بقيمة 400 جنيه كهدية ترحيبية للتسجيل في تطبيق 49.",
     "clearAll": "حذف الكل",
     "clearNotification": "هل أنت متأكد من أنك تريد مسح جميع الإشعارات؟",
     "clearNoti": "هل أنت متأكد أنك تريد مسح هذا الإشعار؟",
@@ -211,7 +214,8 @@ class CodegenLoader extends AssetLoader {
     "theCommercialRegister": "The Commercial Register",
     "theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider":
         "The application does not deduct any percentage from the service provider.",
-    "youWillGetEGP3650PerYearIfYouSubscribeDaily": "You will get 3650 EGP per year if you subscribe daily.",
+    "youWillGetEGP3650PerYearIfYouSubscribeDaily":
+        "You will get 3650 EGP per year if you subscribe daily.",
     "welcomeToResturantRegisteration": "Welcome to Resturant Registeration",
     "selecteSubcategory": "Selecte Subcategory:",
     "photoForRestaurant": "Photos For Restaurant",
@@ -371,15 +375,20 @@ class CodegenLoader extends AssetLoader {
     "emailOtp": "Email OTP",
     "verification": "Verification",
     "notifications": "Notifications",
-    "checkVerification": "Please check your email to see the verification code ",
+    "checkVerification":
+        "Please check your email to see the verification code ",
     "congratulations": "Congratulations",
     "close": "CLOSE",
-    "giftApp": "You got a gift of 400 pounds as a welcome gift for registering on the 49 app.",
+    "giftApp":
+        "You got a gift of 400 pounds as a welcome gift for registering on the 49 app.",
     "clearAll": "Clear All",
     "clearNotification": "Are you sure you want to clear all notifications?",
     "clearNoti": "Are you sure you want to clear notifications?",
     "ok": "Ok",
     "cancel": "Cancel"
   };
-  static const Map<String, Map<String, dynamic>> mapLocales = {"ar": ar, "en": en};
+  static const Map<String, Map<String, dynamic>> mapLocales = {
+    "ar": ar,
+    "en": en
+  };
 }

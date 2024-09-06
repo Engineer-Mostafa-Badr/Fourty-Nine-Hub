@@ -7,14 +7,16 @@ class AvailableTripCardLoadingList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final decoration = BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(2));
+    final decoration = BoxDecoration(
+        color: Colors.grey, borderRadius: BorderRadius.circular(2));
     const double height = 30;
     return Column(
       children: [
         ...List.generate(
             10,
             (index) => CustomFadingWidget(
-                  child: AvailableTripCardLoading(decoration: decoration, height: height),
+                  child: AvailableTripCardLoading(
+                      decoration: decoration, height: height),
                 )),
       ],
     );
@@ -39,11 +41,14 @@ class AvailableTripCardLoading extends StatelessWidget {
         children: [
           CustomGrayContainer(decoration: decoration, height: height, flex: 4),
           CustomGrayContainer(decoration: decoration, height: height, flex: 6),
-          CustomGrayContainerEqualSizes(decoration: decoration, height: height, numberOfBoxes: 2),
+          CustomGrayContainerEqualSizes(
+              decoration: decoration, height: height, numberOfBoxes: 2),
           CustomGrayContainer(decoration: decoration, height: height, flex: 4),
           CustomGrayContainer(decoration: decoration, height: height, flex: 4),
-          CustomGrayContainerEqualSizes(decoration: decoration, height: height, numberOfBoxes: 2),
-          CustomGrayContainerEqualSizes(decoration: decoration, height: height, numberOfBoxes: 3),
+          CustomGrayContainerEqualSizes(
+              decoration: decoration, height: height, numberOfBoxes: 2),
+          CustomGrayContainerEqualSizes(
+              decoration: decoration, height: height, numberOfBoxes: 3),
         ],
       ),
     );
@@ -66,7 +71,9 @@ class CustomGrayContainer extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       child: Row(children: [
-        Expanded(flex: flex, child: Container(height: height, decoration: decoration)),
+        Expanded(
+            flex: flex,
+            child: Container(height: height, decoration: decoration)),
         Expanded(flex: 1, child: Container(height: height))
       ]),
     );

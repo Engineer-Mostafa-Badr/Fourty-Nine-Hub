@@ -97,7 +97,9 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._unFollowUserUseCase,
     this._removeFriedRequestUseCase,
     this._blocUserUseCase,
-    this._editCommentUseCase, this._acceptRejectFriendRequestUseCase, this._deleteFriendUseCase,
+    this._editCommentUseCase,
+    this._acceptRejectFriendRequestUseCase,
+    this._deleteFriendUseCase,
   ) : super(const SocialPostsState());
 
   void loadData() async {
@@ -259,7 +261,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       response.fold(
           (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
           (data) {
-        final isLastPage = data.length < pageSize||page==3;
+        final isLastPage = data.length < pageSize || page == 3;
         if (page == 1) {
           print("page == 1 $page");
           suggestUserPagingController.itemList = [];
@@ -380,15 +382,16 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   }
 
   // acceptRejectFriend
-  Future<bool> acceptRejectFriend({required AcceptRejectFriendRequestParams params}) async {
+  Future<bool> acceptRejectFriend(
+      {required AcceptRejectFriendRequestParams params}) async {
     var response = await _acceptRejectFriendRequestUseCase(params);
     bool value = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (r) {
-          value = r;
-        });
+        (r) {
+      value = r;
+    });
     return value;
   }
 
@@ -397,11 +400,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     var response = await _deleteFriendUseCase(userId);
     bool value = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (r) {
-          value = r;
-        });
+        (r) {
+      value = r;
+    });
     return value;
   }
 

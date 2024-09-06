@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static String join = 'join'.tr();
   static String arabic = 'arabic'.tr();
   static String english = 'english'.tr();
@@ -14,9 +14,12 @@ abstract class  LocaleKeys {
   static String cast = 'cast'.tr();
   static String restaurantName = 'restaurantName'.tr();
   static String theCommercialRegister = 'theCommercialRegister'.tr();
-  static String theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider = 'theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider'.tr();
-  static String youWillGetEGP3650PerYearIfYouSubscribeDaily = 'youWillGetEGP3650PerYearIfYouSubscribeDaily'.tr();
-  static String welcomeToResturantRegisteration = 'welcomeToResturantRegisteration'.tr();
+  static String theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider =
+      'theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider'.tr();
+  static String youWillGetEGP3650PerYearIfYouSubscribeDaily =
+      'youWillGetEGP3650PerYearIfYouSubscribeDaily'.tr();
+  static String welcomeToResturantRegisteration =
+      'welcomeToResturantRegisteration'.tr();
   static String selecteSubcategory = 'selecteSubcategory'.tr();
   static String photoForRestaurant = 'photoForRestaurant'.tr();
   static String searchForFavouriteMeals = 'searchForFavouriteMeals'.tr();
@@ -25,7 +28,8 @@ abstract class  LocaleKeys {
   static String thirdPage = 'thirdPage'.tr();
   static String selectGovernorate = 'selectGovernorate'.tr();
   static String selectCity = 'selectCity'.tr();
-  static String newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore = 'newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore'.tr();
+  static String newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore =
+      'newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore'.tr();
   static String premium = 'premium'.tr();
   static String comma = 'comma'.tr();
   static String noResultFound = 'noResultFound'.tr();
@@ -34,7 +38,10 @@ abstract class  LocaleKeys {
   static String restaurantsForSelectedMeal = 'restaurantsForSelectedMeal'.tr();
   static String itemName = 'itemName'.tr();
   static String price = 'price'.tr();
-  static String youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval = 'youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval'.tr();
+  static String
+      youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval =
+      'youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval'
+          .tr();
   static String selectSubcategoryFirst = 'selectSubcategoryFirst'.tr();
   static String uploadingImage = 'uploadingImage'.tr();
   static String cantLoadCities = 'cantLoadCities'.tr();
@@ -46,7 +53,10 @@ abstract class  LocaleKeys {
   static String cantLoadSpecialities = 'cantLoadSpecialities'.tr();
   static String cantLoadSubSubCategories = 'cantLoadSubSubCategories'.tr();
   static String creatingRestaurant = 'creatingRestaurant'.tr();
-  static String youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove = 'youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove'.tr();
+  static String
+      youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove =
+      'youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove'
+          .tr();
   static String photoForMeal = 'photoForMeal'.tr();
   static String mneu = 'mneu'.tr();
   static String submit = 'submit'.tr();
@@ -180,5 +190,4 @@ abstract class  LocaleKeys {
   static String clearNoti = 'clearNoti'.tr();
   static String ok = 'ok'.tr();
   static String cancel = 'cancel'.tr();
-
 }

@@ -902,13 +902,16 @@ class _ReportViewState extends State<ReportView> {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: reports.length,
-                        separatorBuilder: (context, i) => const SizedBox(height: 10),
+                        separatorBuilder: (context, i) =>
+                            const SizedBox(height: 10),
                         itemBuilder: (context, i) {
-                          return _buildReportOption(context, reports[i], screenWidth);
+                          return _buildReportOption(
+                              context, reports[i], screenWidth);
                         },
                       ),
                     const SizedBox(height: 20),
-                    _buildTextFieldWithSendButton(context, screenWidth, controller, state),
+                    _buildTextFieldWithSendButton(
+                        context, screenWidth, controller, state),
                     const SizedBox(height: 20),
                   ],
                 ),
@@ -953,7 +956,8 @@ class _ReportViewState extends State<ReportView> {
     );
   }
 
-  Widget _buildReportOption(BuildContext context, ReportsEnum report, double screenWidth) {
+  Widget _buildReportOption(
+      BuildContext context, ReportsEnum report, double screenWidth) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -963,10 +967,14 @@ class _ReportViewState extends State<ReportView> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         decoration: BoxDecoration(
-          color: selectedReport == report ? AppColors.SECONDARY_COLOR.withOpacity(0.1) : Colors.white,
+          color: selectedReport == report
+              ? AppColors.SECONDARY_COLOR.withOpacity(0.1)
+              : Colors.white,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: selectedReport == report ? AppColors.SECONDARY_COLOR : Colors.grey[300]!,
+            color: selectedReport == report
+                ? AppColors.SECONDARY_COLOR
+                : Colors.grey[300]!,
             width: 1.5,
           ),
         ),
@@ -978,7 +986,9 @@ class _ReportViewState extends State<ReportView> {
                 style: Styles.headerText(
                   fontSize: screenWidth * 0.09,
                   fontWeight: FontWeight.bold,
-                  color: selectedReport == report ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
+                  color: selectedReport == report
+                      ? AppColors.SECONDARY_COLOR
+                      : AppColors.DARK_GRAY_COLOR,
                 ),
                 maxLines: 3,
               ),
@@ -999,8 +1009,8 @@ class _ReportViewState extends State<ReportView> {
     );
   }
 
-  Widget _buildTextFieldWithSendButton(
-      BuildContext context, double screenWidth, TwitterCubit controller, TwitterState state) {
+  Widget _buildTextFieldWithSendButton(BuildContext context, double screenWidth,
+      TwitterCubit controller, TwitterState state) {
     return Row(
       children: [
         Expanded(
@@ -1067,7 +1077,8 @@ class _ReportViewState extends State<ReportView> {
                       } else {
                         showErrorMessage(
                           context,
-                          getFailureMessage(state.failure ?? const UnknownFailure(), context),
+                          getFailureMessage(
+                              state.failure ?? const UnknownFailure(), context),
                         );
                         context.pop();
                       }
