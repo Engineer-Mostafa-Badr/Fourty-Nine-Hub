@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 
 class EndPoints {
   static const pageSize = 20;
+  static const developmentWebSocketBaseUrl = 'https://49dev.com';
   static const developmentBaseUrl = 'https://49dev.com/api/v1';
   static const productionBaseUrl = 'https://49dev.com/api/v1';
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';

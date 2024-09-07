@@ -32,4 +32,9 @@ class NotificationRepoImpl implements NotificationRepo {
   }) async {
     notificationRemoteDataSource.setupInteractedMessage(context: context);
   }
+
+  @override
+  Future<void> notificationListener({required Function(Map<String, dynamic> data) notificationCallback}) {
+    return notificationRemoteDataSource.notificationListener(notificationCallback: notificationCallback);
+  }
 }

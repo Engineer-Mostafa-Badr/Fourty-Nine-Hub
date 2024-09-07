@@ -159,6 +159,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/api/api_client_helper.dart';
 import 'package:fourtyninehub/core/api/api_client_helper_imp.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
@@ -166,6 +167,7 @@ import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dar
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/core/service/socket_service.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/repositories/reels_repository_impl.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/repo/tinder_repo.dart';
@@ -183,6 +185,7 @@ import 'package:fourtyninehub/service_locator/twitter_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 import '../core/api/api_consumer.dart';
 import '../core/local_storage/local_storage_consumer.dart';
@@ -225,9 +228,7 @@ class DI {
     serviceLocator.registerLazySingleton<Dio>(
       () => Dio(
         BaseOptions(
-          baseUrl: kReleaseMode
-              ? EndPoints.productionBaseUrl
-              : EndPoints.developmentBaseUrl,
+          baseUrl: kReleaseMode ? EndPoints.productionBaseUrl : EndPoints.developmentBaseUrl,
           connectTimeout: const Duration(seconds: 60),
           headers: {
             'Accept': 'application/json',
@@ -271,12 +272,11 @@ class DI {
     // );
 
     // Register the TinderRepository as a singleton
-    serviceLocator
-        .registerLazySingleton<TinderRepository>(() => TinderRepository());
+    serviceLocator.registerLazySingleton<TinderRepository>(() => TinderRepository());
 
     // Register the TinderViewCubit and inject the TinderRepository dependency
-    serviceLocator.registerFactory<TinderViewCubit>(() =>
-        TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
+    serviceLocator
+        .registerFactory<TinderViewCubit>(() => TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
 
     // Register other dependencies...
     // serviceLocator
@@ -303,6 +303,23 @@ class DI {
 
     // auth service locator
     await AuthServiceLocator.execute(serviceLocator: serviceLocator);
+
+    // web socket instance
+    final String? token = (await serviceLocator<GetTokensUseCase>().call(const NoParams())).fold(
+      (l) => null,
+      (r) => r?.accessToken,
+    );
+    serviceLocator.registerSingleton<Socket>(io(
+      EndPoints.developmentWebSocketBaseUrl,
+      OptionBuilder()
+          .setTransports(['websocket'])
+          .disableAutoConnect()
+          .setExtraHeaders({
+            'authorization': token,
+          })
+          .build(),
+    ));
+
     // Ride Customer
     await RideServiceLocator.execute(serviceLocator: serviceLocator);
     // Subcategories
@@ -340,7 +357,7 @@ class DI {
     // trip join
     TripJoinServiceLocator.execute(serviceLocator: serviceLocator);
     // notifications
-    NotificationsServiceLocator.execute(serviceLocator: serviceLocator);
+    await NotificationsServiceLocator.execute(serviceLocator: serviceLocator);
     InstagramServiceLocator.execute(serviceLocator: serviceLocator);
     FaceBookServiceLocator.execute(serviceLocator: serviceLocator);
     TwitterServiceLocator.execute(serviceLocator: serviceLocator);

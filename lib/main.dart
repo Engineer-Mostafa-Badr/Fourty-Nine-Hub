@@ -90,7 +90,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<NotificationSocketIoCubit>(
           create: (context) => NotificationSocketIoCubit(
             context: context,
-            webSocketHelper: serviceLocator(),
+            notificationListenerUseCase: serviceLocator(),
           )..notificationListener(),
         ),
       ],

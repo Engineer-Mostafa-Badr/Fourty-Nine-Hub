@@ -11,9 +11,9 @@ abstract class NotificationRepo {
     required int page,
     int limit = 10,
   });
-  Future<Either<Failure, DeleteNotificationModel>> deleteItemNotifications(
-      String id);
+  Future<Either<Failure, DeleteNotificationModel>> deleteItemNotifications(String id);
   Future<void> setupInteractedMessage({
     required BuildContext context,
   });
+  Future<void> notificationListener({required Function(Map<String, dynamic> data) notificationCallback});
 }

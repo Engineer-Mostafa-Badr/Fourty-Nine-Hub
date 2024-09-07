@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/notifications/data/models/notification_model/notification_model.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/notification_entity.dart';
 import 'package:fourtyninehub/features/notifications/helpers/firebase_notification_helper.dart';
+import 'package:fourtyninehub/features/notifications/helpers/web_socket_helper.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 
 abstract class NotificationsRemoteDataSource {
@@ -15,15 +16,18 @@ abstract class NotificationsRemoteDataSource {
     required int page,
     int limit = 10,
   });
+  Future<void> notificationListener({required Function(Map<String, dynamic> data) notificationCallback});
 }
 
 class NotificationsRemoteDataSourceImp implements NotificationsRemoteDataSource {
   final FirebaseHelper firebaseHelper;
   final ApiConsumer apiConsumer;
+  final WebSocketHelper webSocketHelper;
 
   NotificationsRemoteDataSourceImp({
     required this.firebaseHelper,
     required this.apiConsumer,
+    required this.webSocketHelper,
   });
 
   @override
@@ -69,5 +73,10 @@ class NotificationsRemoteDataSourceImp implements NotificationsRemoteDataSource 
 
   int? nextPageNumber(json) {
     return json['data']['nextPage'] as int?;
+  }
+
+  @override
+  Future<void> notificationListener({required Function(Map<String, dynamic> data) notificationCallback}) async {
+    webSocketHelper.notificationListener(notificationCallback);
   }
 }
