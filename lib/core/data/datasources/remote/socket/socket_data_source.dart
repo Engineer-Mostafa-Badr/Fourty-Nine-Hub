@@ -138,7 +138,7 @@ class SocketServiceImplementation extends SocketServiceContract {
       socket.onDisconnect((_) => CliLogger.info('socket disconnect'));
       socket.onerror((e) => CliLogger.error('onError $e'));
     } catch (e) {
-      debugPrint('Connection established$e');
+      CliLogger.error('Connection established $e');
     }
   }
 
@@ -170,7 +170,7 @@ class SocketServiceImplementation extends SocketServiceContract {
     socket.emit("Chat:joinRoom", jsonString);
 
     socket.on('getRooms', (data) {
-      debugPrint("data ${data}");
+      CliLogger.info("data ${data}");
     });
   }
 
@@ -183,7 +183,6 @@ class SocketServiceImplementation extends SocketServiceContract {
     });
     socket.emit('Message:Typing', messageMap);
 
-    debugPrint("Emit");
   }
 
   @override
@@ -230,7 +229,7 @@ class SocketServiceImplementation extends SocketServiceContract {
   listenToUserStatus() {
     socket.on('usersStatus', (data) {
       List<TypingAndOnlineModel> chatIdsTyping = [];
-      debugPrint("usersStatus $data");
+      CliLogger.info("usersStatus $data");
 
       chatIdsTyping.addAll(List<TypingAndOnlineModel>.from(
           json.decode(data).map((x) => TypingAndOnlineModel.fromJson(x))));
