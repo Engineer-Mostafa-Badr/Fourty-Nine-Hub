@@ -16,8 +16,8 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: kToolbarHeight,
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      height: kToolbarHeight + 20,
+      padding: const EdgeInsets.only(bottom: 5, top: 24),
       decoration: const BoxDecoration(
         color: AppColors.PRIMARY_COLOR,
       ),
@@ -40,35 +40,38 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 builder: (context, state) {
               return 'state.chatData?.chat?.contact?.name' == null
                   ? const SizedBox()
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        'state.chatData?.chat?.contact?.name' == null
-                            ? const SizedBox()
-                            : Row(
-                                children: [
-                                  Expanded(
-                                    child: Label(
-                                      text: "Ahmed Nasr",
-                                      // 'state.chatData?.chat?.contact?.name',
-                                      style: Styles.headerText(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w400,
+                  : GestureDetector(
+                      onTap: () => context.push(Routes.VIEWCONTACT),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          'state.chatData?.chat?.contact?.name' == null
+                              ? const SizedBox()
+                              : Row(
+                                  children: [
+                                    Expanded(
+                                      child: Label(
+                                        text: "Ahmed Nasr",
+                                        // 'state.chatData?.chat?.contact?.name',
+                                        style: Styles.headerText(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    child: SizedBox(
-                                      width: 5,
-                                      height: 5,
-                                    ),
-                                  )
-                                ],
-                              ),
-                      ],
+                                    const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      child: SizedBox(
+                                        width: 5,
+                                        height: 5,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                        ],
+                      ),
                     );
             }),
           ),
@@ -188,7 +191,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
   void _showMoreMenu(BuildContext context) {
     showMenu<int>(
       context: context,
-      position: const RelativeRect.fromLTRB(250, 50, 0, 0),
+      position: const RelativeRect.fromLTRB(250, 74, 0, 0),
       items: [
         PopupMenuItem<int>(
           value: 1,
