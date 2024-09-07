@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
@@ -21,6 +22,10 @@ class EndPoints {
   static const socialLogin = '/auth/social/login';
   static const resendOTP = '/auth/resend-reset-code';
   static const refreshToken = '/auth/refresh/token';
+  static String friendsList = '/friends/allFriends';
+  static String friendRequestsList = '/friends/FriendRequests';
+  static String blockedUsersList = '/users/blocked';
+  static String followersList = '/follow/followers';
   static const getParentMainCategories = '/category/parent';
   static const getMainCategories = '/category/parent/get-all-main';
   static String getBannerByID({required String id}) => '/categories/main/$id';
@@ -212,6 +217,10 @@ class EndPoints {
 
   static String getInstagramPosts(TwitterFeedParams params) {
     return '/instagram/feed?limit=${params.limit}&page=${params.page}';
+  }
+
+  static String getUserMedia(InstagramUserMediaParams params) {
+    return '/instagram/posts/${params.userId}?limit=${params.limit}&page=${params.page}';
   }
 
   static String getInstagramGlobalPosts(TwitterFeedParams params) {

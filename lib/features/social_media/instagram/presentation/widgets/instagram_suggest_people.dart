@@ -45,7 +45,6 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
           : Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
@@ -90,11 +89,10 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                               .itemList![index];
                           return InkWell(
                             onTap: () {
-                              context.push(Routes.OTHERSACCOUNT,
-                                  extra: controller
-                                      .suggestUserPagingController
-                                      .itemList?[index]
-                                      .id);
+                              context.push(Routes.INSTAGRAMPROFILE, extra: controller
+                                  .suggestUserPagingController
+                                  .itemList?[index]
+                                  .id);
                             },
                             child: Container(
                               width: 200,
@@ -105,7 +103,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                   end: 10),
                               decoration: BoxDecoration(
                                 borderRadius:
-                                BorderRadius.circular(20),
+                                BorderRadius.circular(4),
                                 border: Border.all(
                                     color: AppColors.DARK_GRAY_COLOR),
                               ),
@@ -113,16 +111,38 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                 crossAxisAlignment:
                                 CrossAxisAlignment.start,
                                 children: [
+                                  Align(
+                                    alignment: AlignmentDirectional.topEnd,
+                                    child: InkWell(
+                                      onTap:
+                                          () async {
+                                        bool data = await controller.removeSuggestUser(
+                                            context:
+                                            context,
+                                            userId:
+                                            item.id);
+                                        if (data ==
+                                            true) {
+                                          controller
+                                              .suggestUserPagingController
+                                              .itemList
+                                              ?.removeWhere((e) =>
+                                          e.id ==
+                                              controller.suggestUserPagingController.itemList?[index].id);
+                                          setState(
+                                                  () {});
+                                        }
+                                      },
+                                      child: Icon(Icons.close
+                                      ),
+                                    ),
+                                  ),
                                   Expanded(
                                     child: ImageFromInternet(
                                       image: item.profilePicture,
                                       // height: 220,
-                                      width: 300,
-                                      borderRadius:
-                                      const BorderRadius.only(
-                                        topLeft: Radius.circular(20),
-                                        topRight: Radius.circular(20),
-                                      ),
+                                      // width: 300,
+                                      isCircle: true,
                                     ),
                                   ),
                                   Padding(
@@ -201,17 +221,13 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                             Styles.headerText(),
                                                           ),
                                                           content:
-                                                          TextFormField(
-                                                            controller:
-                                                            messageController,
-                                                            onChanged:
-                                                                (c) {
-                                                              setState(() {});
-                                                            },
-                                                            decoration: InputDecoration(
-                                                                hintText: "Greet Message",
-                                                                fillColor: Colors.white,
-                                                                hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
+                                                          TextField(
+                                                            // focusNode: focusNode,
+                                                            maxLines: null,
+                                                            maxLength: 150,
+                                                            onChanged: (c) {},
+                                                            controller: messageController,
+                                                            decoration: InputDecoration(hintText: "Greet Message", fillColor: Colors.white, hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
                                                           ),
                                                           actions: <Widget>[
                                                             TextButton(
@@ -260,7 +276,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                 )
                                                     : Container(
                                                   height:
-                                                  30,
+                                                  25,
                                                   alignment:
                                                   Alignment.center,
                                                   decoration:
@@ -269,7 +285,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                         ? Border.all()
                                                         : null,
                                                     borderRadius:
-                                                    BorderRadius.circular(5),
+                                                    BorderRadius.circular(4),
                                                     color: item.followSuccessfully == false
                                                         ? AppColors.PRIMARY_COLOR
                                                         :  Colors.white,
@@ -281,70 +297,12 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                         : "Send Greet Message",
                                                     style: Styles.mediumText(
                                                         color: item.followSuccessfully == true ? AppColors.PRIMARY_COLOR_DARK : Colors.white,
-                                                        fontSize: 14,
+                                                        fontSize: 22,
                                                         fontWeight: FontWeight.bold),
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            if (item.addedSuccessfully ==
-                                                false)
-                                              Expanded(
-                                                child: InkWell(
-                                                  onTap:
-                                                      () async {
-                                                    bool data = await controller.removeSuggestUser(
-                                                        context:
-                                                        context,
-                                                        userId:
-                                                        item.id);
-                                                    if (data ==
-                                                        true) {
-                                                      controller
-                                                          .suggestUserPagingController
-                                                          .itemList
-                                                          ?.removeWhere((e) =>
-                                                      e.id ==
-                                                          controller.suggestUserPagingController.itemList?[index].id);
-                                                      setState(
-                                                              () {});
-                                                    }
-                                                  },
-                                                  child:
-                                                  Container(
-                                                    height: 30,
-                                                    alignment:
-                                                    Alignment
-                                                        .center,
-                                                    decoration:
-                                                    BoxDecoration(
-                                                      borderRadius:
-                                                      BorderRadius.circular(
-                                                          5),
-                                                      color: Colors
-                                                          .grey,
-                                                    ),
-                                                    child:
-                                                    Label(
-                                                      text:
-                                                      'Remove',
-                                                      style: Styles.mediumText(
-                                                          color: Colors
-                                                              .black,
-                                                          fontSize:
-                                                          14,
-                                                          fontWeight:
-                                                          FontWeight.bold),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            // Expanded(
-                                            //     child: DefaultButton(
-                                            //         onPressed: () {}))
                                           ],
                                         ),
                                       ],

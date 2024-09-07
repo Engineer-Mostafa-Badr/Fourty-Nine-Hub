@@ -7,12 +7,13 @@ import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 
 class ScheduleMeetingScreen extends StatefulWidget {
   const ScheduleMeetingScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ScheduleMeetingScreenState createState() => _ScheduleMeetingScreenState();
 }
 
@@ -23,7 +24,7 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
   final _titleController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   final _dateFormat = DateFormat('MM/dd/yyyy');
-  final _timeFormat = DateFormat('h:mm a');
+  // final _timeFormat = DateFormat('h:mm a');
 
   @override
   void dispose() {
@@ -85,10 +86,8 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
       setState(() {
         if (isStartTime) {
           _startTime = picked;
-          print(_startTime);
         } else {
           _endTime = picked;
-          print(_endTime);
         }
       });
     }
@@ -100,7 +99,7 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
     _selectedDate = DateTime.now();
     _startTime = TimeOfDay.now();
     _endTime = TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 1);
-    _focusNode.requestFocus();
+    // _focusNode.requestFocus();
     super.initState();
   }
 

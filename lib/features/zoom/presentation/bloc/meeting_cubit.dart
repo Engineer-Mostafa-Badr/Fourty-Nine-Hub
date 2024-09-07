@@ -68,6 +68,7 @@ class MeetingCubit extends Cubit<MeetingState> {
   }
 
   Future<bool> joinNewMeeting(String roomId) async {
+    emit(state.copyWith(status: MeetingStates.loading));
     final response = await joinRoomUseCase(MeetingParams(meetingId: roomId));
     bool isAdd = false;
     response.fold((l) {

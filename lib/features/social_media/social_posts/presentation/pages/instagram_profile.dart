@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +16,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/pa
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/saved_reels_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/instagram_suggest_people.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_reels.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -77,13 +77,13 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                           color: Colors.black,
                                         )),
                                     Label(
-                                        text: '@${state.profileData?.email.split('@')[0]}',
+                                        text: '${state.profileData?.email.split('@')[0]}',
                                         style: Styles.mediumText(color: Colors.grey)),
                                    const Sizer(width: 4,),
                                     const Icon(
                                       Icons.verified,
                                       size: 20,
-                                      color: Colors.blue,
+                                      color: AppColors.PRIMARY_COLOR_DARK,
                                     )
                                   ],
                                 ),
@@ -94,8 +94,6 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                     ),
                                     itemBuilder: (context) {
                                       return [
-                                        if (loginUser?.id !=
-                                            state.profileData?.id)
                                           PopupMenuItem<int>(
                                             value: 4,
                                             child: const Text("Report"),
@@ -181,7 +179,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                     child: state.profileData?.isBlock == false
                         ? Column(
                       children: [
-                        Sizer(),
+                        const Sizer(),
                         TabBar(
                             labelStyle: Styles.mediumText(),
                             isScrollable: true,
@@ -223,7 +221,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                   ),
                   state.profilePage == 0 &&
                       state.profileData?.isBlock == false
-                      ? const MediaView()
+                      ? MediaView(userId: widget.userId,)
                       : state.profilePage == 1 &&
                       state.profileData?.isBlock == false
                       ? UserReels(
@@ -260,22 +258,19 @@ class _InstagramProfileState extends State<InstagramProfile> {
           padding: const EdgeInsets.symmetric(horizontal:8.0),
           child: Row(
             children: [
-              CircleAvatar(
-                radius: 50,
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.white,
-                  backgroundImage: CachedNetworkImageProvider(
-                      user.profilePicture ?? UIConst.profilePlaceHolder),
-                ),
-              ),
+          ImageFromInternet(
+          image: user.profilePicture ?? UIConst.profilePlaceHolder,
+          height: 80,
+          width: 80,
+          isCircle: true,
+          ),
               const Sizer(width: 20,),
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buildCounter(
-                      value: '${user.posts??0} ',
+                      value: '${user.instagramPosts??0} ',
                       label: 'Post',
                     ),
                     const Sizer(),
@@ -288,11 +283,11 @@ class _InstagramProfileState extends State<InstagramProfile> {
                       value: '${user.followersCount} ',
                       label: 'Follower',
                     ),
-                    if(loginUser?.id==user.id)...[const Sizer(width: 5,),
+                    const Sizer(width: 5,),
                     _buildCounter(
                       value: '${user.totalView} ',
                       label: 'View',
-                    ),],
+                    ),
                     const Sizer(width: 5,),
                   ],
                 ),
@@ -332,10 +327,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
               const Sizer(
                 height: 4,
               ),
-              const Sizer(
-                height: 5,
-              ),
-              Label(
+              if(user.bio.isNotEmpty)Label(
                   text: user.bio,
                   style: Styles.mediumText(color: Colors.black)),
               const Sizer(
@@ -413,109 +405,133 @@ class _InstagramProfileState extends State<InstagramProfile> {
                           ),
                         ],
                       ),
-    if (loginUser?.id != widget.userId)...[
-                      const Sizer(),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: AppButton(
-                              height: 42,
-                              backColor: user.isFollowed == true
-                                  ? AppColors.PRIMARY_COLOR
-                                  : null,
-                              label: user.isFollowed == true
-                                  ? 'unFollow'
-                                  : 'Follow',
-                              style: Styles.mediumText(color: Colors.white),
-                              onPressed: () {
-                                onFollow();
-                              }),
-                        ),
-                        const Sizer(),
-                        Expanded(child: PopupMenuButton(
-                            child: Container(
-                                alignment: Alignment.center,
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: AppColors.SECONDARY_COLOR),
-                                child: Text(
-                                  'Message',
-                                  style: Styles.mediumText(color: Colors.white),
-                                )),
-                            itemBuilder: (context) {
-                              return const [
-                                PopupMenuItem<int>(
-                                  value: 0,
-                                  child: Text("Normal"),
-                                ),
-                                PopupMenuItem<int>(
-                                  value: 1,
-                                  child: Text("Anonymous"),
-                                ),
-                              ];
-                            },
-                            onSelected: (value) {
-                              context.push(Routes.CHAT);
-                            }),)
-                      ],
-                    ),],
-                    if (loginUser?.id == widget.userId)...[
-                      const Sizer(),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: getUserProfile,
-                              child:Container(
-                                height: 42,
-                                margin: const EdgeInsets.all( 0),
-                                padding: const EdgeInsets.symmetric(horizontal:  0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular( 10.zR),
-                                  color:AppColors.PRIMARY_COLOR,
-                                ),
-                                child: Center(
-                                  child: Label(
-                                      text:'Edit Profile',
-                                      style: Styles.mediumText(color: Colors.white),),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const Sizer(),
-                          Expanded(
-                            child: AppButton(
-                                height: 42,
-                                backColor:  AppColors.PRIMARY_COLOR,
-                                label:'Share Profile',
-                                style: Styles.mediumText(color: Colors.white),
-                                onPressed: () {
-                                  onFollow();
-                                }),
-                          ),
-                          const Sizer(),
-                          InkWell(
-                            onTap: showHideSuggestPeople,
-                            child:Container(
-                              height: 42,
-                              width: 42,
-                              margin: const EdgeInsets.all( 0),
-                              padding: const EdgeInsets.symmetric(horizontal:  0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular( 10.zR),
-                                color:AppColors.PRIMARY_COLOR,
-                              ),
-                              child: Center(
-                                child: Icon(showSuggestPeople==false?Icons.person_add:Icons.person,color: Colors.white,),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),],
-                    if(showSuggestPeople==true)const InstagramProfileSuggestPeople()
+
                   ],
                 ),
+            ],
+          ),
+        ),
+        Padding(padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Column(
+            children: [
+              if (loginUser?.id != widget.userId)...[
+                const Sizer(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AppButton(
+                          height: 42,
+                          backColor: user.isFollowed == true
+                              ? AppColors.PRIMARY_COLOR
+                              : null,
+                          label: user.isFollowed == true
+                              ? 'unFollow'
+                              : 'Follow',
+                          style: Styles.mediumText(color: Colors.white),
+                          onPressed: () {
+                            onFollow();
+                          }),
+                    ),
+                    const Sizer(),
+                    Expanded(child: PopupMenuButton(
+                        child: Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: AppColors.SECONDARY_COLOR),
+                            child: Text(
+                              'Message',
+                              style: Styles.mediumText(color: Colors.white),
+                            )),
+                        itemBuilder: (context) {
+                          return const [
+                            PopupMenuItem<int>(
+                              value: 0,
+                              child: Text("Normal"),
+                            ),
+                            PopupMenuItem<int>(
+                              value: 1,
+                              child: Text("Anonymous"),
+                            ),
+                          ];
+                        },
+                        onSelected: (value) {
+                          context.push(Routes.CHAT);
+                        }),),
+                    Sizer(),
+                    InkWell(
+                      onTap: showHideSuggestPeople,
+                      child:Container(
+                        height: 42,
+                        width: 42,
+                        margin: const EdgeInsets.all( 0),
+                        padding: const EdgeInsets.symmetric(horizontal:  0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular( 10.zR),
+                          color:AppColors.PRIMARY_COLOR,
+                        ),
+                        child: Center(
+                          child: Icon(showSuggestPeople==false?Icons.person_add:Icons.person,color: Colors.white,),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),],
+              if (loginUser?.id == widget.userId)...[
+                const Sizer(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: getUserProfile,
+                        child:Container(
+                          height: 42,
+                          margin: const EdgeInsets.all( 0),
+                          padding: const EdgeInsets.symmetric(horizontal:  0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular( 10.zR),
+                            color:AppColors.PRIMARY_COLOR,
+                          ),
+                          child: Center(
+                            child: Label(
+                              text:'Edit Profile',
+                              style: Styles.mediumText(color: Colors.white),),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Sizer(),
+                    Expanded(
+                      child: AppButton(
+                          height: 42,
+                          backColor:  AppColors.PRIMARY_COLOR,
+                          label:'Share Profile',
+                          style: Styles.mediumText(color: Colors.white),
+                          onPressed: () {
+                            onFollow();
+                          }),
+                    ),
+                    const Sizer(),
+                    InkWell(
+                      onTap: showHideSuggestPeople,
+                      child:Container(
+                        height: 42,
+                        width: 42,
+                        margin: const EdgeInsets.all( 0),
+                        padding: const EdgeInsets.symmetric(horizontal:  0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular( 10.zR),
+                          color:AppColors.PRIMARY_COLOR,
+                        ),
+                        child: Center(
+                          child: Icon(showSuggestPeople==false?Icons.person_add:Icons.person,color: Colors.white,),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),],
+              if(showSuggestPeople==true)const InstagramProfileSuggestPeople()
             ],
           ),
         )

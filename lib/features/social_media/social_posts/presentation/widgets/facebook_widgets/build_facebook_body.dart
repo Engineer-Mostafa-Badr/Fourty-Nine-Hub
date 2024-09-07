@@ -34,10 +34,10 @@ class FacebookBody extends StatelessWidget {
         BlocProvider<SocialPostsCubit>(
           create: (_) => serviceLocator()..loadData(),
         ),
-        BlocProvider(
-          create: (context) => serviceLocator<StoryCubit>()..fetchStories(),
-          // create: (context) => serviceLocator<StoryCubit>(),
-        ),
+        // BlocProvider(
+        //   create: (context) => serviceLocator<StoryCubit>()..fetchStories(),
+        //   // create: (context) => serviceLocator<StoryCubit>(),
+        // ),
       ],
       child: BlocConsumer<SocialPostsCubit, SocialPostsState>(
           listener: (context, state) {
@@ -54,25 +54,25 @@ class FacebookBody extends StatelessWidget {
         final controller = context.read<SocialPostsCubit>();
         return RefreshIndicator(
           onRefresh: () async {
-            context.read<StoryCubit>().fetchStories(loadMore: true);
+            // context.read<StoryCubit>().fetchStories(loadMore: true);
 
             controller.onRefresh();
           },
           child: CustomScrollView(
             controller: scrollController,
             slivers: [
-              SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 5,
-                      color: AppColors.LIGHT_GRAY_COLOR,
-                    ),
-                    Stories(),
-                  ],
-                ),
-              ),
+              // SliverToBoxAdapter(
+              //   child: Column(
+              //     children: [
+              //       Container(
+              //         width: double.infinity,
+              //         height: 5,
+              //         color: AppColors.LIGHT_GRAY_COLOR,
+              //       ),
+              //       Stories(),
+              //     ],
+              //   ),
+              // ),
               const SliverToBoxAdapter(
                 child: BuildPeopleYouMayKnow(),
               ),

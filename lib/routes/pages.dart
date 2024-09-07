@@ -1,4 +1,4 @@
-import 'package:flutter/src/widgets/basic.dart';
+// import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
@@ -86,10 +86,10 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/pages/mus
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
+// import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/instagram_profile.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
+// import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_brand_usecase.dart';
@@ -109,7 +109,7 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/trip_join_view.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/avaiable_trips_view.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/widgets/meeting_dialogue.dart';
+import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/enums/wallet_types_enums.dart';
@@ -507,7 +507,7 @@ class AppPages {
                     path: Paths.Lists,
                     name: Routes.Lists,
                     builder: (context, state) => BlocProvider<ListsCubit>(
-                          create: (_) => serviceLocator(),
+                          create: (_) => serviceLocator()..getFriends(),
                           child: const ListsView(),
                         )),
                 GoRoute(
@@ -1051,6 +1051,7 @@ class AppPages {
                       liveID: extras.liveId,
                       isHost: extras.isHost,
                       shareScreen: extras.shareScreen,
+                      userName: extras.userName,
                     );
                   },
                 ),

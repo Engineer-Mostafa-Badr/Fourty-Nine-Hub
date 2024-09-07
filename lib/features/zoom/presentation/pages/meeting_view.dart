@@ -1,17 +1,20 @@
-import 'dart:math';
+// import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/animations/create_custom_transition.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
+// import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_state.dart';
-import 'package:fourtyninehub/features/zoom/presentation/widgets/meeting_dialogue.dart';
-import 'package:fourtyninehub/features/zoom/presentation/widgets/schedule_meeting_bottom_sheet.dart';
+import 'package:fourtyninehub/features/zoom/presentation/pages/meeting_room.dart';
+import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
+import 'package:fourtyninehub/features/zoom/presentation/widgets/schedule_meeting_screen.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -52,11 +55,20 @@ class MeetingView extends StatelessWidget {
                         await newMeeting(cubit);
                         if (context.mounted) {
                           CliLogger.info('meeting id is ${cubit.meetingId}');
-                          context.push(
-                            Routes.MEETINGROOM,
-                            extra: ZegoArgs(cubit.meetingId, true,
-                                shareScreen: false),
-                          );
+                          Navigator.of(context)
+                              .push(createCustomTransitionRoute(
+                            MeetingRoom(
+                              shareScreen: false,
+                              isHost: true,
+                              liveID: cubit.meetingId,
+                              userName: context
+                                  .read<UserCubit>()
+                                  .state
+                                  .data!
+                                  .fullName,
+                            ),
+                            TransitionType.rightToLeft,
+                          ));
                         }
                       },
                     ),
@@ -66,25 +78,31 @@ class MeetingView extends StatelessWidget {
                         icon: Icons.add_box_rounded,
                         onTap: () {
                           // join meeting
-                          showMeetingDialogue(context);
+                          Navigator.of(context).push(
+                              createCustomTransitionRoute(
+                                  const JoinMeetingScreen(shareScreen: false),
+                                  TransitionType.bottomToTop));
                         }),
                     _buildMeetingItem(
                       color: AppColors.PRIMARY_COLOR,
                       label: 'Schedule'.tr(),
                       icon: Icons.calendar_today_outlined,
                       onTap: () async {
-                        _showScheduleMeetingBottomSheet(context);
+                        _scheduleAMeeting(context);
                       },
                     ),
                     _buildMeetingItem(
-                      color: AppColors.PRIMARY_COLOR,
-                      label: 'Share\nScreen'.tr(),
-                      icon: Icons.screen_share,
-                      twoLines: true,
-                      onTap: () {
-                        showMeetingDialogue(context, shareScreen: true);
-                      },
-                    ),
+                        color: AppColors.PRIMARY_COLOR,
+                        label: 'Share\nScreen'.tr(),
+                        icon: Icons.screen_share,
+                        twoLines: true,
+                        onTap: () {
+                          //share screen
+                          Navigator.of(context).push(
+                              createCustomTransitionRoute(
+                                  const JoinMeetingScreen(shareScreen: true),
+                                  TransitionType.bottomToTop));
+                        }),
                   ],
                 );
               },
@@ -97,7 +115,7 @@ class MeetingView extends StatelessWidget {
               alignment: Alignment.center,
               child: GestureDetector(
                 onTap: () {
-                  _showScheduleMeetingBottomSheet(context);
+                  _scheduleAMeeting(context);
                 },
                 child: const Text(
                   'Add a calender',
@@ -210,9 +228,13 @@ class MeetingView extends StatelessWidget {
                                 onTap: () {
                                   context.go(Routes.MEETINGROOM,
                                       extra: ZegoArgs(
-                                        scheduledMeeting.roomId,
-                                        true,
-                                      ));
+                                          scheduledMeeting.roomId,
+                                          true,
+                                          context
+                                              .read<UserCubit>()
+                                              .state
+                                              .data!
+                                              .fullName));
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.all(8),
@@ -281,12 +303,13 @@ class MeetingView extends StatelessWidget {
     cubit.createNewMeeting();
   }
 
-  void _showScheduleMeetingBottomSheet(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => BlocProvider.value(
-              value: serviceLocator<MeetingCubit>(),
-              child: const ScheduleMeetingScreen(),
-            )));
+  void _scheduleAMeeting(BuildContext context) {
+    Navigator.of(context).push(createCustomTransitionRoute(
+        BlocProvider.value(
+          value: serviceLocator<MeetingCubit>(),
+          child: const ScheduleMeetingScreen(),
+        ),
+        TransitionType.bottomToTop));
   }
 
   Widget _buildMeetingItem({

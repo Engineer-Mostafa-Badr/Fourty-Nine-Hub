@@ -123,6 +123,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                     const Sizer(),
                     Expanded(
                       child:TextFormField(
+                        maxLines: null,
                           controller: commentTextController,
                         onChanged: (v){
                             setState(() {
@@ -142,6 +143,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                     if (commentTextController.text.isNotEmpty)
                       IconAppButton(
                           icon: Icons.send,
+                          size: 20,
                           isCircle: true,
                           onPressed: () async {
                             CommentEntity data = await widget.onAddComment(
