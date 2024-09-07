@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
@@ -19,7 +18,7 @@ abstract class MessagesRemoteDataSource {
     required String chatId,
   });
 
-  void listenToNewMessages(Function(MessageEntity) params);
+  Stream<MessageEntity> listenToNewMessages();
 
   Future<Either<Failure, bool>> sendMessage(SendMessageParams params);
 
@@ -28,13 +27,13 @@ abstract class MessagesRemoteDataSource {
     required String messageId,
   });
 
-  void stopListenToNewMessages();
+
 }
 
 class MessagesRemoteDataSourceImplementation
     implements MessagesRemoteDataSource {
   final ApiConsumer _apiConsumer;
-  final Socket _socket;
+  final SocketServiceContract _socket;
 
   MessagesRemoteDataSourceImplementation(this._apiConsumer, this._socket);
 
@@ -60,39 +59,38 @@ class MessagesRemoteDataSourceImplementation
   }
 
   @override
-  void listenToNewMessages(Function(MessageEntity) params) {
-    try {
-      _socket.on(SocketIOEvents.newMessageFromMe, (data) {
-        CliLogger.info("newMessageFromMe :  $data");
-        log("newMessageFromMe");
-        MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
-        params(messageModel);
-      });
-      _socket.on(SocketIOEvents.newMessageFromOther, (data) {
-        CliLogger.info("newMessageFromOther :  $data");
-        log("newMessageFromOther");
-        MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
-        params(messageModel);
-      });
-    } catch (e) {
-      CliLogger.info("can't read last message error $e");
-    }
+  Stream<MessageEntity> listenToNewMessages() {
+    return _socket.socketMessageStream;
+    // try {
+    //   _socket.on(SocketIOEvents.newMessageFromMe, (data) {
+    //
+    //     CliLogger.info("newMessageFromMe :  $data");
+    //     MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
+    //     params(messageModel);
+    //   });
+    //   _socket.on(SocketIOEvents.newMessageFromOther, (data) {
+    //     CliLogger.info("newMessageFromOther :  $data");
+    //     MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
+    //     params(messageModel);
+    //   });
+    // } catch (e) {
+    //   CliLogger.info("can't read last message error $e");
+    // }
   }
 
   @override
-  Future<Either<Failure, bool>> sendMessage(SendMessageParams params) async {
-    try {
-      _socket.emit(SocketIOMessages.sendMessage, params.toSocketParams());
-      CliLogger.info('message sent successfully');
-      return const Right(true);
-    } catch (e) {
-      CliLogger.error('can\'t send error $e');
-      return const Left(ServerFailure(message: "can't send message "));
-    }
+  Future<Either<Failure, bool>> sendMessage(SendMessageParams params) async{
+    _socket.sendMessage(message: params.message, chatId: params.chatId);
+    // try{
+    //   _socket.emit(SocketIOMessages.sendMessage,params.toSocketParams());
+    //   CliLogger.info('message sent successfully');
+    //   return const Right(true);
+    // }catch(e){
+    //   CliLogger.error('can\'t send error $e');
+    //   return const Left(ServerFailure(message: "can't send message "));
+    // }
+
+    return const Right(true);
   }
 
-  @override
-  void stopListenToNewMessages() {
-    // _socket.off(SocketIOEvents.newMessage);
-  }
 }

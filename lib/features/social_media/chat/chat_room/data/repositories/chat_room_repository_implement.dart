@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasources/local/chat_message_local_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasources/remote/chat_message_remote_datasourse.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_request.dart';
@@ -45,8 +46,12 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   }
 
   @override
-  void listenToNewMessages(Function(MessageEntity) params) {
-    _chatRemoteDataSource.listenToNewMessages(params);
+  Stream<MessageEntity> listenToNewMessages() {
+    _chatRemoteDataSource.listenToNewMessages().listen((message) {
+      _chatLocalDataSource.saveMessage(message);
+    });
+    return _chatRemoteDataSource.listenToNewMessages();
+    _chatRemoteDataSource.listenToNewMessages();
     // params.stream.listen((event) {
     //   event.fold((failure) {}, (message) async {
     //     _chatLocalDataSource.saveMessage(message);
@@ -54,8 +59,5 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
     // });
   }
 
-  @override
-  void stopListenToNewMessages() {
-    _chatRemoteDataSource.stopListenToNewMessages();
-  }
+
 }

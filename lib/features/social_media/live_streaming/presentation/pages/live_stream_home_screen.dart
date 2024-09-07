@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
-import 'package:fourtyninehub/features/zoom/presentation/widgets/meeting_dialogue.dart';
+import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
@@ -46,6 +48,7 @@ class LiveStreamHomeScreen extends StatelessWidget {
               extra: ZegoArgs(
                 '123',
                 true,
+                context.read<UserCubit>().state.data!.fullName
               ));
         },
         backgroundColor: Colors.red,

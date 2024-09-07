@@ -31,7 +31,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   final GetMessagesUseCase _getMessagesUseCase;
   final GetUserUseCase _getUserUseCase;
   final DeleteChatMessageUseCase _deleteChatMessageUseCase;
-  final ChatSocketServiceContract _socketService;
+  final SocketServiceContract _socketService;
   final ListenToNewMessageUseCase _listenToNewMessageUseCase;
   final SendMessageUseCase _sendMessageUseCase;
   List<MessageEntity> chatMessages = [];
@@ -87,13 +87,24 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   Future<void> sendMessage(
       {required String message, String? replyMessageId}) async {
     // if (chatId != null) {
+
+
+
     // _socketService.sendMessage(
-    //     message: message, chatId: chatId!, replyMessageId: replyMessageId);
+    //     message: message,
+    //     chatId: '66d874ec3b4cc1d6bdb4626e',
+    //     replyMessageId: replyMessageId);
+
+
+
     _sendMessageUseCase(SendMessageParams(
         message: message,
         chatId: '66d874ec3b4cc1d6bdb4626e',
         mediaIds: [],
         oneTimeView: false));
+
+
+
     // } else {
     //   CliLogger.error("Error chat id not found");
     // }
@@ -138,10 +149,18 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   }
 
   listenToNewMessages() {
+    _listenToNewMessageUseCase(const NoParams()).listen((message) {
+      chatMessages.add(message);
+      emit.call(state.copyWith(
+        messages: chatMessages,
+        status: ChatRoomStates.success,
+      ));
+    });
+
     // _socketService.socketMessageStream.listen((event) {
     //   chatMessages.add(event);
     //   emit.call(state.copyWith(
-    //       chatData: chatMessagesModel,
+    //       // chatData: chatMessagesModel,
     //       messages: chatMessages,
     //       status: ChatRoomStates.success));
     //
@@ -151,18 +170,19 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     // messagesStreamController.stream.listen((message) {
     //
     // });
-    CliLogger.success("listen to new messages called");
 
-    _listenToNewMessageUseCase((message) {
-      CliLogger.warning("listen to new messages called from Cubit lelelelel");
-      // messagesStreamController.add(message);
-
-      chatMessages.add(message);
-      emit.call(state.copyWith(
-          // chatData: chatMessagesModel,
-          messages: chatMessages,
-          status: ChatRoomStates.success));
-    });
+    // CliLogger.success("listen to new messages called");
+    //
+    // _listenToNewMessageUseCase((message) {
+    //   CliLogger.warning("listen to new messages called from Cubit lelelelel");
+    //   // messagesStreamController.add(message);
+    //
+    //   chatMessages.add(message);
+    //   emit.call(state.copyWith(
+    //     // chatData: chatMessagesModel,
+    //       messages: chatMessages,
+    //       status: ChatRoomStates.success));
+    // });
   }
 
   listenToMessageTyping() {

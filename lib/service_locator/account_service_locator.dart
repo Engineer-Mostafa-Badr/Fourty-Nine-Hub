@@ -77,6 +77,10 @@ class AccountServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
         )..loadData());
     serviceLocator.registerFactory<WalletCubit>(() =>
         WalletCubit(serviceLocator(), serviceLocator(), serviceLocator())

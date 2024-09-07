@@ -108,8 +108,8 @@ class PostModel extends PostEntity {
             : null,
         shares: json['shares'] != null ? List<String>.from(json['shares']) : [],
         commentsCount: json['commentsCount'] ?? 0,
-        comments:
-            json['comments'] != null ? List<String>.from(json['comments']) : [],
+        // comments:
+        //     json['comments'] != null ? List<String>.from(json['comments']) : [],
         love: json['love'] == null
             ? null
             : (json['love'] as List)

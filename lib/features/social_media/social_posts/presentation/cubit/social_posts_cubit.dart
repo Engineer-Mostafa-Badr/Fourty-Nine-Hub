@@ -1,5 +1,8 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/change_react.dart';
@@ -35,6 +38,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../domain/entities/post_entity.dart';
@@ -329,6 +333,62 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         print("suggestLength${state.suggestedFriends?.length}");
       });
     }
+  }
+
+
+  uploadPhoto({bool isGallery = true}) async {
+    final UploadFile upload = UploadFile();
+    print('=======>data Hiii');
+
+    await upload.uploadImage(
+        isGallery: isGallery,
+        subCategoryId: '66a3583454e6e337915514db',
+        onUploaded: (UploadFileEntity data) async {
+
+          final response = await serviceLocator<ApiConsumer>().put(
+            '/users/profile-picture',
+            data: {'profilePictureId': data.mediaId},
+          );
+          return response.fold(
+                (failure) {
+              print('=======>data Fal}');
+
+              return Left(failure);
+
+            },
+                (data) {
+
+
+              return const Right(true);
+            },
+          );
+        });
+  }
+  uploadCoverPhoto({bool isGallery = true}) async {
+    final UploadFile upload = UploadFile();
+    print('=======>data Hiii');
+
+    await upload.uploadImage(
+        isGallery: isGallery,
+        subCategoryId: '66a3583454e6e337915514db',
+        onUploaded: (UploadFileEntity data) async {
+          final response = await serviceLocator<ApiConsumer>().put(
+            '/users/profile-picture',
+            data: {'profilePictureId': data.mediaId},
+          );
+          return response.fold(
+                (failure) {
+              print('=======>data Fal}');
+
+              return Left(failure);
+
+            },
+                (data) {
+
+              return const Right(true);
+            },
+          );
+        });
   }
 
   // get feed posts

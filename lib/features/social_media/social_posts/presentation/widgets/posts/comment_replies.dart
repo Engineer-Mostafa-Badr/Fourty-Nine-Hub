@@ -120,6 +120,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                     const Sizer(),
                     Expanded(
                         child: TextFormField(
+                          maxLines: null,
                           controller: replyTextController,
                           onChanged: (v){
                             setState(() {});
@@ -137,6 +138,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                     if (replyTextController.text.isNotEmpty)
                       IconAppButton(
                         icon: Icons.send,
+                        size: 20,
                         isCircle: true,
                         onPressed: () async {
                           CommentEntity data = await widget.onAddReply(

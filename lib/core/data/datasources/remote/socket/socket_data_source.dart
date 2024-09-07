@@ -3,44 +3,45 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/typing_and_online_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
-class SocketIODataSource {
-  final Socket _socket = serviceLocator<Socket>();
-
-  SocketIODataSource._();
-
-  static final SocketIODataSource _instance = SocketIODataSource._();
-
-  static SocketIODataSource get instance => _instance;
-
-  connect() {
-    try {
-      _socket.connect();
-
-      _socket.onConnect((_) {
-        CliLogger.success('Connect To Socket successfully');
-      });
-
-      _socket.on('error', (data) {
-        CliLogger.error("error from socket : $data");
-      });
-
-      _socket.onDisconnect((_) => CliLogger.success('socket disconnect'));
-      _socket.onerror((e) => CliLogger.error('onError $e'));
-    } catch (e) {
-      CliLogger.error('Connection established $e');
-    }
-  }
-
-  close() {
-    CliLogger.info('socket should be closed');
-    _socket.dispose();
-  }
-}
+// class SocketIODataSource {
+//   final Socket _socket = serviceLocator<Socket>();
+//
+//   SocketIODataSource._();
+//
+//   static final SocketIODataSource _instance = SocketIODataSource._();
+//
+//   static SocketIODataSource get instance => _instance;
+//
+//   connect() {
+//     // try {
+//     //   _socket.connect();
+//     //
+//     //   _socket.onConnect((_) {
+//     //     CliLogger.success('Connect To Socket successfully');
+//     //   });
+//     //
+//     //   _socket.on('error', (data) {
+//     //     CliLogger.error("error from socket : $data");
+//     //   });
+//     //
+//     //   _socket.onDisconnect((_) => CliLogger.success('socket disconnect'));
+//     //   _socket.onerror((e) => CliLogger.error('onError $e'));
+//     // } catch (e) {
+//     //   CliLogger.error('Connection established $e');
+//     // }
+//   }
+//
+//   close() {
+//     // CliLogger.info('socket should be closed');
+//     // _socket.dispose();
+//   }
+// }
 
 abstract class SocketIOEvents {
   static const String error = 'error';
@@ -53,7 +54,7 @@ abstract class SocketIOMessages {
   static const String sendMessage = 'Message:Send';
 }
 
-abstract class ChatSocketServiceContract {
+abstract class SocketServiceContract {
   Socket get socket;
 
   initSocketConnection(String userToken);
@@ -75,14 +76,14 @@ abstract class ChatSocketServiceContract {
   typingMessage({required String chatId});
 
   // listen to new message
-  Stream<MessageModel> get socketMessageStream;
+  Stream<MessageEntity> get socketMessageStream;
 
   Stream<List<TypingAndOnlineModel>?> get socketChatTypingStream;
 
   disposeSocket();
 }
 
-class ChatSocketServiceImplementation extends ChatSocketServiceContract {
+class SocketServiceImplementation extends SocketServiceContract {
   @override
   late Socket socket;
 
@@ -94,54 +95,51 @@ class ChatSocketServiceImplementation extends ChatSocketServiceContract {
 
   @override
   initSocketConnection(userToken) async {
-    // try {
-    //   socket = io(
-    //       'https://49dev.com',
-    //       OptionBuilder()
-    //           .setTransports(['websocket'])
-    //           .disableAutoConnect()
-    //           .setExtraHeaders({'authorization': userToken}) // optional
-    //           .build());
-    //
-    //   socket.connect();
-    //
-    //   socket.onConnect((_) {
-    //     CliLogger.success('\nConnect To Socket successfully ');
-    //
-    //     // getRoomUsersJoined();
-    //
-    //     // joinRoom('yy');
-    //     // to receive new messages
-    //     socket.on('user:message', (data) {
-    //       debugPrint("user:message $data");
-    //
-    //       MessageModel messageModel = MessageModel.fromJson(data);
-    //
-    //       _socketMessageStream.add(messageModel);
-    //       CliLogger.info("socketMessageModel ${messageModel.text}");
-    //     });
-    //
-    //     // listen to messages that sent from current user
-    //     socket.on('messageSent', (data) {
-    //       CliLogger.info("messageSent $data");
-    //
-    //       MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
-    //
-    //       _socketMessageStream.add(messageModel);
-    //
-    //       CliLogger.info("socketMessageModel ${messageModel.text}");
-    //     });
-    //   });
-    //
-    //   socket.on('error', (data) {
-    //     CliLogger.error("error $data");
-    //   });
-    //
-    //   socket.onDisconnect((_) => CliLogger.info('socket disconnect'));
-    //   socket.onerror((e) => CliLogger.error('onError $e'));
-    // } catch (e) {
-    //   debugPrint('Connection established$e');
-    // }
+    try {
+      socket = io(
+          'https://49dev.com',
+          OptionBuilder()
+              .setTransports(['websocket'])
+              .disableAutoConnect()
+              .setExtraHeaders({'authorization': userToken}) // optional
+              .build());
+
+      socket.connect();
+
+      socket.onConnect((_) {
+        CliLogger.success('\nConnect To Socket successfully ');
+
+        // to receive new messages from other
+        socket.on('user:message', (data) {
+          CliLogger.info("user:message $data");
+
+          MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
+
+          _socketMessageStream.add(messageModel);
+          CliLogger.info("socketMessageModel ${messageModel.text}");
+        });
+
+        // listen to messages that sent from current user
+        socket.on('messageSent', (data) {
+          CliLogger.info("messageSent $data");
+
+          MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
+
+          _socketMessageStream.add(messageModel);
+
+          CliLogger.info("socketMessageModel ${messageModel.text}");
+        });
+      });
+
+      socket.on('error', (data) {
+        CliLogger.error("error $data");
+      });
+
+      socket.onDisconnect((_) => CliLogger.info('socket disconnect'));
+      socket.onerror((e) => CliLogger.error('onError $e'));
+    } catch (e) {
+      CliLogger.error('Connection established $e');
+    }
   }
 
   @override
@@ -150,17 +148,17 @@ class ChatSocketServiceImplementation extends ChatSocketServiceContract {
     required String chatId,
     String? replyMessageId,
   }) {
-    // if (message.isEmpty) return;
-    //
-    // var messageMap = json.encode({
-    //   "chatId": chatId,
-    //   "type": 1,
-    //   "mediaIds": [],
-    //   "text": message,
-    //   "groupId": null,
-    //   if (replyMessageId != null) "replyMessageId": replyMessageId
-    // });
-    // socket.emit('Message:Send', messageMap);
+    if (message.isEmpty) return;
+
+    var messageMap = json.encode({
+      "chatId": chatId,
+      "type": 1,
+      "mediaIds": [],
+      "text": message,
+      "groupId": null,
+      if (replyMessageId != null) "replyMessageId": replyMessageId
+    });
+    socket.emit('Message:Send', messageMap);
   }
 
   @override
@@ -168,24 +166,23 @@ class ChatSocketServiceImplementation extends ChatSocketServiceContract {
 
   @override
   joinRoom(String chatId) {
-    // var jsonString = json.encode({"chatId": chatId});
-    // socket.emit("Chat:joinRoom", jsonString);
+    var jsonString = json.encode({"chatId": chatId});
+    socket.emit("Chat:joinRoom", jsonString);
 
-    // socket.on('getRooms', (data) {
-    //   debugPrint("data ${data}");
-    // });
+    socket.on('getRooms', (data) {
+      CliLogger.info("data ${data}");
+    });
   }
 
   @override
   typingMessage({required String chatId}) {
-    // if (chatId.isEmpty) return;
-    //
-    // var messageMap = json.encode({
-    //   "chatId": chatId,
-    // });
-    // socket.emit('Message:Typing', messageMap);
-    //
-    // debugPrint("Emit");
+    if (chatId.isEmpty) return;
+
+    var messageMap = json.encode({
+      "chatId": chatId,
+    });
+    socket.emit('Message:Typing', messageMap);
+
   }
 
   @override
@@ -194,53 +191,51 @@ class ChatSocketServiceImplementation extends ChatSocketServiceContract {
 
   @override
   getRoomUsersJoined() {
-    // var messageMap = json.encode({
-    //   "privacy": "normal",
-    //   "categoryId": "668e7dc4e8cfec5bcc752afc",
-    //   "archived": false,
-    //   "isLocked": false,
-    //   "password": 123,
-    //   "isUnread": false
-    // });
-    //
-    // socket.emit('Chat:getRooms', messageMap);
+    var messageMap = json.encode({
+      "privacy": "normal",
+      "categoryId": "668e7dc4e8cfec5bcc752afc",
+      "archived": false,
+      "isLocked": false,
+      "password": 123,
+      "isUnread": false
+    });
+
+    socket.emit('Chat:getRooms', messageMap);
   }
 
   @override
   disposeSocket() {
-    // socket.disconnect();
-    // _socketChatTyping.close();
-    // _socketMessageStream.close();
-    // socket.dispose();
+    socket.disconnect();
+    socket.dispose();
   }
 
   @override
   sendUserStatus(List<UserStatusParams> params) {
-    // Map<String, dynamic> paramaters = {};
-    // List<Map<String, dynamic>> ids = [];
-    //
-    // for (int i = 0; i < params.length; i++) {
-    //   paramaters['_id'] = params[i].chatId;
-    //   paramaters['userId'] = params[i].userId;
-    //   ids.add(paramaters);
-    // }
-    //
-    // var messageMap = json.encode(ids);
-    //
-    // socket.emit('Chat:usersStatus', messageMap);
+    Map<String, dynamic> paramaters = {};
+    List<Map<String, dynamic>> ids = [];
+
+    for (int i = 0; i < params.length; i++) {
+      paramaters['_id'] = params[i].chatId;
+      paramaters['userId'] = params[i].userId;
+      ids.add(paramaters);
+    }
+
+    var messageMap = json.encode(ids);
+
+    socket.emit('Chat:usersStatus', messageMap);
   }
 
   @override
   listenToUserStatus() {
-    // socket.on('usersStatus', (data) {
-    //   List<TypingAndOnlineModel> chatIdsTyping = [];
-    //   debugPrint("usersStatus $data");
+    socket.on('usersStatus', (data) {
+      List<TypingAndOnlineModel> chatIdsTyping = [];
+      CliLogger.info("usersStatus $data");
 
-    //   chatIdsTyping.addAll(List<TypingAndOnlineModel>.from(
-    //       json.decode(data).map((x) => TypingAndOnlineModel.fromJson(x))));
+      chatIdsTyping.addAll(List<TypingAndOnlineModel>.from(
+          json.decode(data).map((x) => TypingAndOnlineModel.fromJson(x))));
 
-    //   _socketChatTyping.add(chatIdsTyping);
-    // });
+      _socketChatTyping.add(chatIdsTyping);
+    });
   }
 }
 
