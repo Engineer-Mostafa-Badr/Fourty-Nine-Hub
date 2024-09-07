@@ -12,7 +12,7 @@ class WalletHistoryModel extends WalletHistoryEntity {
       required super.currency,
       required super.isPaid,
       required super.status,
-      required super.createdAt});
+      required super.createdAt, required super.received});
 
   factory WalletHistoryModel.fromJson(Map<String, dynamic> json) {
     return WalletHistoryModel(
@@ -25,6 +25,7 @@ class WalletHistoryModel extends WalletHistoryEntity {
       internalPayment: json['internalPayment'] ??'',
       currency: json['currency'] ??'',
       isPaid: json['isPaid'] ??false,
+      received: json['received'] ??false,
       status: json['status'] ??'',
       createdAt: json['createdAt'] ??'',
     );

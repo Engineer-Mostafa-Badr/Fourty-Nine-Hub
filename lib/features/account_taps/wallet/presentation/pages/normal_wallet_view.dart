@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/subscription_widget.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -16,6 +18,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../cubit/wallet_cubit.dart';
+import '../widgets/drop_down_subscription.dart';
 import '../widgets/wallet_card_widget.dart';
 import '../widgets/wallet_history_card.dart';
 
@@ -65,6 +68,11 @@ class _NormalWalletViewState extends State<NormalWalletView> {
           create: (BuildContext context) => serviceLocator()..loadData(),
           child:
               BlocBuilder<WalletCubit, WalletState>(builder: (context, state) {
+            final visibleSubscriptions = state.subscription?.isNotEmpty == true
+                ? (showMore
+                    ? state.subscription
+                    : state.subscription!.take(2).toList())
+                : []; // Return an empty list if null
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -105,35 +113,28 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                       ],
                     ),
                     const Sizer(),
-                    AppButton(
-                      label: 'Withdraw',
-                      backColor: AppColors.SECONDARY_COLOR.withOpacity(.5),
-                      onPressed: () => context.push(Routes.PAYMENT),
-                    ),
+                  state.wallet?.realAmount != null && state.wallet!.realAmount! >= 500
+                      ? AppButton(
+                    label: 'Withdraw',
+                    color: AppColors.AUTH_CONTAINER_COLOR,
+                    backColor: AppColors.SECONDARY_COLOR,
+                    onPressed: () => context.push(Routes.PAYMENT),
+                  )
+                      : AppButton(
+                    label: 'Withdraw',
+                    backColor: AppColors.SECONDARY_COLOR.withOpacity(.5),
+                    onPressed: (){}, // Disable button if less than 500
+                  ),
                     const Sizer(),
                     Label(
                       text: 'Subscriptions',
                       style: Styles.headerText(),
                     ),
-                    const SubscriptionWidget(
-                        icon:
-                            'https://img.freepik.com/premium-vector/live-streaming-icon-video-broadcasting-live-streaming-icon_564974-1250.jpg',
-                        expireDate: '2024-08-01',
-                        isExpired: false,
-                        label: 'Live Streaming'),
-                    const SubscriptionWidget(
-                        icon:
-                            'https://img.freepik.com/premium-vector/verified-vector-icon-account-verification-verification-icon_564974-1246.jpg',
-                        expireDate: '2024-07-01',
-                        isExpired: true,
-                        label: 'Verified Account'),
-                    if (showMore)
-                      const SubscriptionWidget(
-                          icon:
-                              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTU2ztXB3ZqG2jcI5p2FRxDiCJ-n6P9latg3g&s',
-                          expireDate: '2025-07-01',
-                          isExpired: false,
-                          label: 'Broadcast'),
+                    Column(
+                      children: visibleSubscriptions!.map((subscription) {
+                        return SubscriptionWidget(subscription: subscription);
+                      }).toList(),
+                    ),
                     InkWell(
                       onTap: () {
                         showMore = !showMore;
@@ -146,7 +147,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                               ? Icons.arrow_drop_down_rounded
                               : Icons.arrow_drop_up_rounded),
                           Label(
-                            text: 'Show More',
+                            text: showMore ? 'Show More' : 'Show Less',
                             style: Styles.smallText(
                                 color: Theme.of(context).primaryColor),
                           ),
@@ -154,26 +155,35 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                       ),
                     ),
                     const Sizer(),
+                    DropDownSubscription(),
+                    const Sizer(),
                     Label(
                       text: 'History',
                       style: Styles.headerText(),
                     ),
-                    // ListView.separated(
-                    //     shrinkWrap: true,
-                    //     physics: const NeverScrollableScrollPhysics(),
-                    //     itemBuilder: (context, index) {
-                    //       final item = state.history![index];
-                    //       return WalletHistoryCard(
-                    //           title: '${item.amount}',
-                    //           subTitle: item.description,
-                    //           onTap: () {},
-                    //           amount: item.amount,
-                    //           icon: FontAwesomeIcons.check);
-                    //     },
-                    //     separatorBuilder: (context, index) {
-                    //       return const SizedBox();
-                    //     },
-                    //     itemCount: state.history?.length ?? 0)
+                    ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          final item = state.history![index];
+                          final DateTime createdAt =
+                              DateTime.parse(item.createdAt);
+                          final DateTime egyptTime =
+                              createdAt.toUtc().add(const Duration(hours: 3));
+                          final String formattedDateTime =
+                              DateFormat('dd/MM/yyyy, h:mm a')
+                                  .format(egyptTime);
+                          return WalletHistoryCard(
+                              title: '${item.transactionAmount ?? ''}',
+                              subTitle: formattedDateTime,
+                              onTap: () {},
+                              amount: item.received == true,
+                              icon: FontAwesomeIcons.check);
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox();
+                        },
+                        itemCount: state.history?.length ?? 0)
                   ],
                 ),
               ),

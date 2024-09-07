@@ -28,6 +28,9 @@ class CompanyAddParams {
   CompanyAddParams({
     required this.advertisementType,
     required this.totalPrice,
+    this.media,
+    this.description,
+    this.post,
   });
 
 

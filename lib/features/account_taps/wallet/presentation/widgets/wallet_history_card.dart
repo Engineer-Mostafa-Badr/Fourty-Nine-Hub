@@ -6,14 +6,14 @@ import '../../../../../res/style/styles.dart';
 
 class WalletHistoryCard extends StatelessWidget {
   final String title, subTitle;
-  final num amount;
+  final bool? amount;
   final Function onTap;
   final IconData icon;
   const WalletHistoryCard(
       {super.key,
       required this.title,
       required this.subTitle,
-      this.amount = 0,
+      this.amount = false,
       required this.icon,
       required this.onTap});
 
@@ -27,7 +27,7 @@ class WalletHistoryCard extends StatelessWidget {
       ),
       trailing: Icon(
         Icons.line_axis,
-        color: amount < 0 ? Colors.red : Colors.green,
+        color: amount! ? Colors.red : Colors.green,
       ),
       leading: Container(
           height: kToolbarHeight * .7,

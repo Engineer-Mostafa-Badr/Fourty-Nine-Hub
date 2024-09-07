@@ -10,6 +10,7 @@ class WalletHistoryEntity {
   final bool isPaid;
   final String status;
   final String createdAt;
+  final bool received;
 
   WalletHistoryEntity(
       {required this.id,
@@ -22,5 +23,7 @@ class WalletHistoryEntity {
       required this.currency,
       required this.isPaid,
       required this.status,
-      required this.createdAt});
+      required this.createdAt,
+        required this.received
+      });
 }

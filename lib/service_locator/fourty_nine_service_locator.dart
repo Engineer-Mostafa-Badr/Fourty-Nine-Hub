@@ -319,6 +319,7 @@ class FourtyNineServiceLocator {
     serviceLocator.registerFactory<CreateCompanyAdCubit>(
       () => CreateCompanyAdCubit(
         serviceLocator(),
+        serviceLocator(),
       )..loadData(),
     );
 

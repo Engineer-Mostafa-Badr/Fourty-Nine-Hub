@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_state.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
@@ -18,15 +18,16 @@ import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import '../../../../social_media/create_post/presentation/widgets/image_details.dart';
 import '../../../../social_media/create_post/presentation/widgets/show_all_images.dart';
-import '../cubit/company_advertise/company_advertise_cubit.dart';
+import '../cubit/create_company_ad_cubit.dart';
 
 class CreatePostCompany extends StatefulWidget {
-  CreatePostCompany({super.key,
-    this.text = true,
-    this.picture = true,
-    required this.title,
-    required this.totalPrice,
-    required this.type});
+  CreatePostCompany(
+      {super.key,
+      this.text = true,
+      this.picture = true,
+      required this.title,
+      required this.totalPrice,
+      required this.type});
 
   final bool text;
   final bool picture;
@@ -61,122 +62,145 @@ class _CreatePostViewState extends State<CreatePostCompany> {
         listener: (BuildContext context, photo) {},
         builder: (BuildContext context, photo) {
           final controller = context.read<CreatePostCubit>();
-          return BlocConsumer<CompanyAdvertiseCubit, CompanyAdvertiseState>(
-            listener: (BuildContext context, state) {
-              if (state is AddCompanyAdvertiseSuccess) {
-                showSuccessMessage(context, LocaleKeys.postSuccessfully.localize);
+          return BlocProvider<CreateCompanyAdCubit>(
+            create: (_) => serviceLocator(),
+            child: BlocConsumer<CreateCompanyAdCubit, CreateCompanyAdState>(
+              listener: (BuildContext context, state) {
+                if (state.status == StateStatus.success) {
+                  showSuccessMessage(
+                      context, LocaleKeys.postSuccessfully.localize);
 
                   Navigator.of(context).pop();
-              }
-            },
-            builder: (BuildContext context, Object? state) {
-              return Scaffold(
-                appBar: BackAppBar(
-                  centerTitle: false,
-                  label: widget.title,
-                  actions: [
-                    TextButton(
-                        child:  Label(text: LocaleKeys.post.localize),
-                        onPressed: () {
-                          print('**************************************');
-                          print(controller.selectedImages);
-                          print('**************************************');
-                          if (formKey.currentState!.validate()) {
-                            CompanyAdvertiseCubit.get(context)
-                                .addPostCompanyAdvertise(
-                              context: context,
-                              mediaIds: widget.picture ? controller
-                                  .selectedImages!.isNotEmpty ?
-                              controller.selectedImages : showSuccessMessage(
-                                context, 'Image not selected',
-                                color: AppColors.SECONDARY_COLOR,
-                                icon: Icons.error,)
-                                  :null,
-                            type: widget.type,
-                            post: widget.text
-                            ? postContentTextController.text
-                                : null,
-                              totalPrice: widget.totalPrice,
-                            );
-                          }
-                        }),
-                  ],
-                ),
-                body: Form(
-                  key: formKey,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        if (widget.text) _buildCreatePost(),
-                        if (widget.picture)
-                          Column(
-                            children: [
-                              if (photo.images != null &&
-                                  photo.images!.isNotEmpty) _buildMediaCard(),
-                              GestureDetector(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return Wrap(
-                                        children: <Widget>[
-                                          ListTile(
-                                            leading: const Icon(
-                                                Icons.photo_library),
-                                            title:  Text(LocaleKeys.gallery.localize),
-                                            onTap: () async {
-                                              Navigator.pop(context);
-                                              controller.uploadPhoto(isGallery: true);
-                                              // await CompanyAdvertiseCubit.get(context)
-                                              //     .uploadPhoto();
-                                              // Reload user data if needed
-                                            },
-                                          ),
-                                          ListTile(
-                                            leading: const Icon(Icons.camera_alt),
-                                            title:  Text(LocaleKeys.camera.localize),
-                                            onTap: () async {
-                                              Navigator.pop(context);
-                                              controller.uploadPhoto(isGallery: false);
-                                              // await CompanyAdvertiseCubit.get(context)
-                                              //     .uploadPhoto(isGallery: false);
-                                              // Reload user data if needed
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
+                }
+              },
+              builder: (BuildContext context, Object? state) {
+                return Scaffold(
+                  appBar: BackAppBar(
+                    centerTitle: false,
+                    label: widget.title,
+                    actions: [
+                      TextButton(
+                          child: Label(text: LocaleKeys.post.localize),
+                          onPressed: () {
+                            print('**************************************');
+                            print(controller.selectedImages);
+                            print('**************************************');
+                            if (formKey.currentState!.validate()) {
+                              context
+                                  .read<CreateCompanyAdCubit>()
+                                  .addPostCompanyAdvertise(
+                                  mediaIds: widget.picture ? controller
+                                      .selectedImages!.isNotEmpty ?
+                                  controller.selectedImages : showSuccessMessage(
+                                    context, 'Image not selected',
+                                    color: AppColors.SECONDARY_COLOR,
+                                    icon: Icons.error,)
+                                      :null,
+                                type: widget.type,
+                                post: widget.text
+                                ? postContentTextController.text
+                                    : null,
+                                  totalPrice: 10,
                                   );
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  margin: const EdgeInsets.all(10),
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: Theme
-                                        .of(context)
-                                        .primaryColor,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      LocaleKeys.uploadImage.localize,
-                                      style: Styles.headerText(
-                                          color: Theme
-                                              .of(context)
-                                              .scaffoldBackgroundColor),
+                              // CompanyAdvertiseCubit.get(context)
+                              //     .addPostCompanyAdvertise(
+                              //   context: context,
+                              //   mediaIds: widget.picture ? controller
+                              //       .selectedImages!.isNotEmpty ?
+                              //   controller.selectedImages : showSuccessMessage(
+                              //     context, 'Image not selected',
+                              //     color: AppColors.SECONDARY_COLOR,
+                              //     icon: Icons.error,)
+                              //       :null,
+                              // type: widget.type,
+                              // post: widget.text
+                              // ? postContentTextController.text
+                              //     : null,
+                              //   totalPrice: widget.totalPrice,
+                              // );
+                            }
+                          }),
+                    ],
+                  ),
+                  body: Form(
+                    key: formKey,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          if (widget.text) _buildCreatePost(),
+                          if (widget.picture)
+                            Column(
+                              children: [
+                                if (photo.images != null &&
+                                    photo.images!.isNotEmpty)
+                                  _buildMediaCard(),
+                                GestureDetector(
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Wrap(
+                                          children: <Widget>[
+                                            ListTile(
+                                              leading: const Icon(
+                                                  Icons.photo_library),
+                                              title: Text(
+                                                  LocaleKeys.gallery.localize),
+                                              onTap: () async {
+                                                Navigator.pop(context);
+                                                controller.uploadPhoto(
+                                                    isGallery: true);
+                                                // await CompanyAdvertiseCubit.get(context)
+                                                //     .uploadPhoto();
+                                                // Reload user data if needed
+                                              },
+                                            ),
+                                            ListTile(
+                                              leading:
+                                                  const Icon(Icons.camera_alt),
+                                              title: Text(
+                                                  LocaleKeys.camera.localize),
+                                              onTap: () async {
+                                                Navigator.pop(context);
+                                                controller.uploadPhoto(
+                                                    isGallery: false);
+                                                // await CompanyAdvertiseCubit.get(context)
+                                                //     .uploadPhoto(isGallery: false);
+                                                // Reload user data if needed
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(10),
+                                    margin: const EdgeInsets.all(10),
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).primaryColor,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        LocaleKeys.uploadImage.localize,
+                                        style: Styles.headerText(
+                                            color: Theme.of(context)
+                                                .scaffoldBackgroundColor),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                      ],
+                              ],
+                            ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           );
         },
       ),
@@ -186,7 +210,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
   Widget _buildCreatePost() {
     return Container(
         padding: const EdgeInsets.all(10),
-       // color: Colors.white,
+        // color: Colors.white,
         child: TextFormField(
           maxLines: 4,
           maxLength: 150,
@@ -199,116 +223,108 @@ class _CreatePostViewState extends State<CreatePostCompany> {
           style: const TextStyle(color: AppColors.QUANTITY_COLOR),
           onChanged: (c) {
             if (c.length == 150) {
-              showErrorMessage(
-                  context, LocaleKeys.character.localize);
+              showErrorMessage(context, LocaleKeys.character.localize);
             }
           },
           controller: postContentTextController,
-          decoration:  InputDecoration(
+          decoration: InputDecoration(
               hintText: LocaleKeys.typeHer.localize,
               hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
-              fillColor: Colors.white
-          ),
+              fillColor: Colors.white),
         ));
   }
 
   Widget _buildMediaCard() {
     return BlocBuilder<CreatePostCubit, CreatePostState>(
         builder: (context, state) {
-          final controller = context.read<CreatePostCubit>();
-          return GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(10),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: state.images!.length == 1 ? 1 : 2),
-              itemCount: state.images!.length < 4 ? state.images!.length : 4,
-              itemBuilder: (context, index) =>
-                  InkWell(
-                    onTap: () {
-                      if (index != 3 ||
-                          (index == 3 && state.images!.length == 4)) {
-                        showDialog(
-                            context: context,
-                            builder: (context) =>
-                                ImageDetailsScreen(
-                                  image: state.images![index].file.path,
-                                  isFile: true,
-                                  onRemoveImage: () {
-                                    controller.removePhoto(state
-                                        .images![index]);
-                                    context.pop();
-                                  },
-                                ));
-                      } else {
-                        showDialog(
-                            context: context,
-                            builder: (context) =>
-                                ShowAllImages(
-                                  images: state.images!,
-                                  onRemoveImage: (UploadFileEntity image) {
-                                    controller.removePhoto(image);
-                                  },
-                                ));
-                      }
-                    },
-                    child: Stack(
+      final controller = context.read<CreatePostCubit>();
+      return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(10),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: state.images!.length == 1 ? 1 : 2),
+          itemCount: state.images!.length < 4 ? state.images!.length : 4,
+          itemBuilder: (context, index) => InkWell(
+                onTap: () {
+                  if (index != 3 || (index == 3 && state.images!.length == 4)) {
+                    showDialog(
+                        context: context,
+                        builder: (context) => ImageDetailsScreen(
+                              image: state.images![index].file.path,
+                              isFile: true,
+                              onRemoveImage: () {
+                                controller.removePhoto(state.images![index]);
+                                context.pop();
+                              },
+                            ));
+                  } else {
+                    showDialog(
+                        context: context,
+                        builder: (context) => ShowAllImages(
+                              images: state.images!,
+                              onRemoveImage: (UploadFileEntity image) {
+                                controller.removePhoto(image);
+                              },
+                            ));
+                  }
+                },
+                child: Stack(
+                  children: [
+                    Stack(
                       children: [
-                        Stack(
-                          children: [
-                            Container(
-                              margin: const EdgeInsetsDirectional.only(
-                                  end: 10, bottom: 10),
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: FileImage(
-                                    File(state.images?[index].file.path ?? ''),
-                                  ),
-                                ),
+                        Container(
+                          margin: const EdgeInsetsDirectional.only(
+                              end: 10, bottom: 10),
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: FileImage(
+                                File(state.images?[index].file.path ?? ''),
                               ),
                             ),
-                            if (index == 3 && state.images!.length > 4)
-                              Container(
-                                margin: const EdgeInsetsDirectional.only(
-                                    end: 10, bottom: 10),
-                                // padding: const EdgeInsets.all(10),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Colors.black.withOpacity(0.5),
-                                ),
-                                child: Center(
-                                  child: Label(
-                                    text: "+${state.images!.length - 4}",
-                                    style: Styles.headerText(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
+                          ),
                         ),
-                        if (index == 0 && state.images!.length == 1)
-                          PositionedDirectional(
-                            end: 15,
-                            top: 5,
-                            child: InkWell(
-                              onTap: () {
-                                controller.removePhoto(state.images?[index]);
-                              },
-                              child: const Icon(
-                                Icons.close,
-                                color: Colors.red,
+                        if (index == 3 && state.images!.length > 4)
+                          Container(
+                            margin: const EdgeInsetsDirectional.only(
+                                end: 10, bottom: 10),
+                            // padding: const EdgeInsets.all(10),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.black.withOpacity(0.5),
+                            ),
+                            child: Center(
+                              child: Label(
+                                text: "+${state.images!.length - 4}",
+                                style: Styles.headerText(
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
                       ],
                     ),
-                  ));
-        });
+                    if (index == 0 && state.images!.length == 1)
+                      PositionedDirectional(
+                        end: 15,
+                        top: 5,
+                        child: InkWell(
+                          onTap: () {
+                            controller.removePhoto(state.images?[index]);
+                          },
+                          child: const Icon(
+                            Icons.close,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ));
+    });
   }
-
 }

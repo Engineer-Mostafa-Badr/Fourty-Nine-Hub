@@ -44,7 +44,8 @@ class EndPoints {
   }
   static const getWallet= '/main-wallet/user-wallet';
   static const getPrice= '/advertisementCompany/price';
-  static const postCompanyAd= '/api/v1/advertisementCompany';
+  static const postCompanyAd= '/advertisementCompany';
+  static const getSubscription= '/subscription';
 
   
   static const getWheel = '/wheels/random';

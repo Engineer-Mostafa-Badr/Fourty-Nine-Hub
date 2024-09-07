@@ -27,6 +27,7 @@ import '../features/account_taps/account/presentation/cubit/managers/favourite_a
 import '../features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import '../features/account_taps/lists/presentation/cubit/lists_cubit.dart';
 import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
+import '../features/account_taps/wallet/domain/usecases/get_subscription_use_case.dart';
 import '../features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 
 class AccountServiceLocator {
@@ -68,8 +69,8 @@ class AccountServiceLocator {
         () => GetBlockedUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetWalletHistoryUseCase>(
         () => GetWalletHistoryUseCase(serviceLocator()));
-    // serviceLocator.registerLazySingleton<GetCompetitionsUsecase>(
-    //     () => GetCompetitionsUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetSubscriptionWalletUseCase>(
+        () => GetSubscriptionWalletUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetWalletUseCase>(
         () => GetWalletUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetWalletGiftsUseCase>(
@@ -91,6 +92,7 @@ class AccountServiceLocator {
           serviceLocator(),
         )..loadData());
     serviceLocator.registerFactory<WalletCubit>(() => WalletCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
         )..loadData());
