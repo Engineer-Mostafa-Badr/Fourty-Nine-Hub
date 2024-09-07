@@ -61,13 +61,25 @@ class MessagesRemoteDataSourceImplementation
     try {
       _socket.connect();
       _socket.on(SocketIOListeners.newMessageFromMe, (data) {
+        final decodedData = jsonDecode(data);
+        if (decodedData is List) {
+          data = decodedData[0];
+        } else {
+          data = decodedData;
+        }
         CliLogger.info("newMessageFromMe :  $data");
-        MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
+        MessageModel messageModel = MessageModel.fromJson(data);
         params(messageModel);
       });
       _socket.on(SocketIOListeners.newMessageFromOther, (data) {
+        final decodedData = jsonDecode(data);
+        if (decodedData is List) {
+          data = decodedData[0];
+        } else {
+          data = decodedData;
+        }
         CliLogger.info("newMessageFromOther :  $data");
-        MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
+        MessageModel messageModel = MessageModel.fromJson(data);
         params(messageModel);
       });
     } catch (e) {
