@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/chat/viewcontact_view/widgets/toggle_icon_button.dart';
+import 'package:fourtyninehub/features/social_media/chat/viewcontact_view/presentation/widgets/toggle_icon_button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 

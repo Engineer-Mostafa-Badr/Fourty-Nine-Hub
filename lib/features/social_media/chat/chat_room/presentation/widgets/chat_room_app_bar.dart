@@ -95,7 +95,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
               Icons.more_vert,
               color: Colors.white,
             ),
-            color: AppColors.PRIMARY_COLOR,
+            color: AppColors.BACKGROUND_COLOR,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(16.0)),
             ),
@@ -123,42 +123,42 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
         value: 0,
         child: Text(
           "View Contact",
-          style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 1,
         child: Text(
           "Media, Links and docs",
-          style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 2,
         child: Text(
           "Search",
-          style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 3,
         child: Text(
           "Mute notifications",
-          style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 4,
         child: Text(
           "Wallpaper",
-          style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 5,
         child: Text(
           "Disappearing messages",
-          style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
@@ -168,13 +168,13 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
           children: [
             Text(
               "More",
-              style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+              style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
             ),
             const Spacer(),
             const Icon(
               Icons.arrow_forward_ios,
               size: 22,
-              color: AppColors.BACKGROUND_COLOR,
+              color: AppColors.PRIMARY_COLOR,
             )
           ],
         ),
@@ -191,56 +191,56 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
           value: 1,
           child: Text(
             "Edit",
-            style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 2,
           child: Text(
             "Share",
-            style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 3,
           child: Text(
             "Report",
-            style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 4,
           child: Text(
             "Block",
-            style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 5,
           child: Text(
             "Clear chat",
-            style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 6,
           child: Text(
             "Export chat",
-            style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 7,
           child: Text(
             "Add shortcut      ",
-            style: Styles.mediumText(color: AppColors.BACKGROUND_COLOR),
+            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
           ),
         ),
       ],
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(16.0)),
       ),
-      color: AppColors.PRIMARY_COLOR,
+      color: AppColors.BACKGROUND_COLOR,
     );
   }
 
