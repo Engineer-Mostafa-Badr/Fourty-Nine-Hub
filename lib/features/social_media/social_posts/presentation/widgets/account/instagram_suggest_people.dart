@@ -18,10 +18,12 @@ class InstagramProfileSuggestPeople extends StatefulWidget {
   const InstagramProfileSuggestPeople({super.key});
 
   @override
-  State<InstagramProfileSuggestPeople> createState() => _InstagramProfileSuggestPeopleState();
+  State<InstagramProfileSuggestPeople> createState() =>
+      _InstagramProfileSuggestPeopleState();
 }
 
-class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestPeople> {
+class _InstagramProfileSuggestPeopleState
+    extends State<InstagramProfileSuggestPeople> {
   final messageController = TextEditingController();
 
   @override
@@ -32,7 +34,7 @@ class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestP
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ??  UnknownFailure(''),
+            state.failure ?? UnknownFailure(''),
             context,
           ),
         );
@@ -45,7 +47,6 @@ class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestP
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
@@ -105,7 +106,7 @@ class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestP
                                                 end: 10),
                                         decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(20),
+                                              BorderRadius.circular(4),
                                           border: Border.all(
                                               color: AppColors.DARK_GRAY_COLOR),
                                         ),
@@ -113,16 +114,37 @@ class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestP
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
+                                            Align(
+                                              alignment:
+                                                  AlignmentDirectional.topEnd,
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  bool data = await controller
+                                                      .removeSuggestUser(
+                                                          context: context,
+                                                          userId: item.id);
+                                                  if (data == true) {
+                                                    controller
+                                                        .suggestUserPagingController
+                                                        .itemList
+                                                        ?.removeWhere((e) =>
+                                                            e.id ==
+                                                            controller
+                                                                .suggestUserPagingController
+                                                                .itemList?[
+                                                                    index]
+                                                                .id);
+                                                    setState(() {});
+                                                  }
+                                                },
+                                                child: Icon(Icons.close),
+                                              ),
+                                            ),
                                             Expanded(
                                               child: ImageFromInternet(
                                                 image: item.profilePicture,
                                                 // height: 220,
-                                                width: 300,
-                                                borderRadius:
-                                                    const BorderRadius.only(
-                                                  topLeft: Radius.circular(20),
-                                                  topRight: Radius.circular(20),
-                                                ),
+                                                isCircle: true,
                                               ),
                                             ),
                                             Padding(
@@ -165,8 +187,8 @@ class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestP
                                                               child: InkWell(
                                                                 onTap:
                                                                     () async {
-                                                                   if (item.followSuccessfully ==
-                                                                          false) {
+                                                                  if (item.followSuccessfully ==
+                                                                      false) {
                                                                     var response = await controller.followRequest(
                                                                         context:
                                                                             context,
@@ -179,9 +201,9 @@ class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestP
                                                                       setState(
                                                                           () {});
                                                                     }
-                                                                  } else if (
-                                                                      item.followSuccessfully ==
-                                                                          true) {
+                                                                  } else if (item
+                                                                          .followSuccessfully ==
+                                                                      true) {
                                                                     showDialog(
                                                                       context:
                                                                           context,
@@ -193,6 +215,8 @@ class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestP
                                                                               AppColors.BACKGROUND_COLOR,
                                                                           surfaceTintColor:
                                                                               AppColors.BACKGROUND_COLOR,
+                                                                          shape:
+                                                                              OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
                                                                           title:
                                                                               Label(
                                                                             text:
@@ -201,16 +225,20 @@ class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestP
                                                                                 Styles.headerText(),
                                                                           ),
                                                                           content:
-                                                                              TextFormField(
+                                                                              TextField(
+                                                                            // focusNode: focusNode,
+                                                                            maxLines:
+                                                                                null,
+                                                                            maxLength:
+                                                                                150,
+                                                                            onChanged:
+                                                                                (c) {},
                                                                             controller:
                                                                                 messageController,
-                                                                            onChanged:
-                                                                                (c) {
-                                                                              setState(() {});
-                                                                            },
                                                                             decoration: InputDecoration(
                                                                                 hintText: "Greet Message",
                                                                                 fillColor: Colors.white,
+                                                                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
                                                                                 hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
                                                                           ),
                                                                           actions: <Widget>[
@@ -260,7 +288,7 @@ class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestP
                                                                       )
                                                                     : Container(
                                                                         height:
-                                                                            30,
+                                                                            25,
                                                                         alignment:
                                                                             Alignment.center,
                                                                         decoration:
@@ -269,84 +297,24 @@ class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestP
                                                                               ? Border.all()
                                                                               : null,
                                                                           borderRadius:
-                                                                              BorderRadius.circular(5),
-                                                                          color: item.addedSuccessfully == false
+                                                                              BorderRadius.circular(4),
+                                                                          color: item.followSuccessfully == false
                                                                               ? AppColors.PRIMARY_COLOR
-                                                                              : item.addedSuccessfully == true && item.followSuccessfully == false
-                                                                                  ? AppColors.PRIMARY_COLOR_DARK
-                                                                                  : Colors.white,
+                                                                              : Colors.white,
                                                                         ),
                                                                         child:
                                                                             Label(
-                                                                          text:item.followSuccessfully == false
-                                                                                  ? 'Follow'
-                                                                                  : "Send Greet Message",
+                                                                          text: item.followSuccessfully == false
+                                                                              ? 'Follow'
+                                                                              : "Send Greet Message",
                                                                           style: Styles.mediumText(
                                                                               color: item.followSuccessfully == true ? AppColors.PRIMARY_COLOR_DARK : Colors.white,
-                                                                              fontSize: 14,
+                                                                              fontSize: 22,
                                                                               fontWeight: FontWeight.bold),
                                                                         ),
                                                                       ),
                                                               ),
                                                             ),
-                                                            const SizedBox(
-                                                              width: 10,
-                                                            ),
-                                                            if (item.addedSuccessfully ==
-                                                                false)
-                                                              Expanded(
-                                                                child: InkWell(
-                                                                  onTap:
-                                                                      () async {
-                                                                    bool data = await controller.removeSuggestUser(
-                                                                        context:
-                                                                            context,
-                                                                        userId:
-                                                                            item.id);
-                                                                    if (data ==
-                                                                        true) {
-                                                                      controller
-                                                                          .suggestUserPagingController
-                                                                          .itemList
-                                                                          ?.removeWhere((e) =>
-                                                                              e.id ==
-                                                                              controller.suggestUserPagingController.itemList?[index].id);
-                                                                      setState(
-                                                                          () {});
-                                                                    }
-                                                                  },
-                                                                  child:
-                                                                      Container(
-                                                                    height: 30,
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              5),
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                    child:
-                                                                        Label(
-                                                                      text:
-                                                                          'Remove',
-                                                                      style: Styles.mediumText(
-                                                                          color: Colors
-                                                                              .black,
-                                                                          fontSize:
-                                                                              14,
-                                                                          fontWeight:
-                                                                              FontWeight.bold),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            // Expanded(
-                                                            //     child: DefaultButton(
-                                                            //         onPressed: () {}))
                                                           ],
                                                         ),
                                                 ],

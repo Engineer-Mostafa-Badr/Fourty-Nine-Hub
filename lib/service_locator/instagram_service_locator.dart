@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/repositorie
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_global_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_reels_usecase.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:get_it/get_it.dart';
@@ -32,7 +33,12 @@ class InstagramServiceLocator {
       serviceLocator(),
     ));
 
+    serviceLocator.registerLazySingleton<GetInstagramUserMediaUseCase>(() => GetInstagramUserMediaUseCase(
+      serviceLocator(),
+    ));
+
     serviceLocator.registerFactory<InstagramCubit>(() => InstagramCubit(
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),

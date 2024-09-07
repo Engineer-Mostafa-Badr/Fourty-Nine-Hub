@@ -37,55 +37,57 @@ class _ReportViewState extends State<ReportView> {
     List<ReportsEnum> reports = ReportsEnum.values;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return BlocProvider<TwitterCubit>(
-      create: (_) => serviceLocator<TwitterCubit>(),
-      child: BlocBuilder<TwitterCubit, TwitterState>(
-        builder: (context, state) {
-          final controller = context.read<TwitterCubit>();
-          final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    return Scaffold(
+      body: BlocProvider<TwitterCubit>(
+        create: (_) => serviceLocator<TwitterCubit>(),
+        child: BlocBuilder<TwitterCubit, TwitterState>(
+          builder: (context, state) {
+            final controller = context.read<TwitterCubit>();
+            final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
-          return Container(
-            color: Colors.transparent,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: bottomInset),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 12),
-                    _buildHandleIndicator(),
-                    const SizedBox(height: 12),
-                    _buildHeader(context, screenWidth),
-                    const SizedBox(height: 10),
-                    if (reports.isEmpty)
-                      const Center(
-                        child: Text(
-                          'No report categories available',
-                          style: TextStyle(color: Colors.grey),
+            return Container(
+              color: Colors.transparent,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: bottomInset),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 12),
+                      _buildHandleIndicator(),
+                      const SizedBox(height: 12),
+                      _buildHeader(context, screenWidth),
+                      const SizedBox(height: 10),
+                      if (reports.isEmpty)
+                        const Center(
+                          child: Text(
+                            'No report categories available',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        )
+                      else
+                        ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: reports.length,
+                          separatorBuilder: (context, i) =>
+                          const SizedBox(height: 10),
+                          itemBuilder: (context, i) {
+                            return _buildReportOption(
+                                context, reports[i], screenWidth);
+                          },
                         ),
-                      )
-                    else
-                      ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: reports.length,
-                        separatorBuilder: (context, i) =>
-                            const SizedBox(height: 10),
-                        itemBuilder: (context, i) {
-                          return _buildReportOption(
-                              context, reports[i], screenWidth);
-                        },
-                      ),
-                    const SizedBox(height: 20),
-                    _buildTextFieldWithSendButton(
-                        context, screenWidth, controller, state),
-                    const SizedBox(height: 20),
-                  ],
+                      const SizedBox(height: 20),
+                      _buildTextFieldWithSendButton(
+                          context, screenWidth, controller, state),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

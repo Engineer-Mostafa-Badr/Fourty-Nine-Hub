@@ -6,7 +6,7 @@ void bottomSheet(
     required Widget widget,
     Color? backColor,
     bool isFloating = false,
-    bool isScrollControlled = false}) {
+    bool isScrollControlled = false}) async {
   showModalBottomSheet(
       context: context,
       isScrollControlled: isScrollControlled,

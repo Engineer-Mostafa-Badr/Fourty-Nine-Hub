@@ -1922,6 +1922,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.12"
+  snapping_bottom_sheet:
+    dependency: "direct main"
+    description:
+      name: snapping_bottom_sheet
+      sha256: "32da031444fb97c3c2c7fc1ccad1fe50fc09a57bb9dea12070e8baf27f075553"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   social_media_recorder:
     dependency: "direct main"
     description:

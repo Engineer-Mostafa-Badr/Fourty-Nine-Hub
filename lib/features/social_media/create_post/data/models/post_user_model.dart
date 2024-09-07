@@ -13,8 +13,7 @@ class PostUserModel extends PostUserEntity {
       id: json['_id'] ?? '',
       firstName: json['firstName'] ?? '',
       lastName: json['lastName'] ?? '',
-      profilePicture:
-          json['USER_PROFILE']['profilePictureKey']['mediaKey'] ?? '',
+      profilePicture: json['USER_PROFILE']['profilePictureKey']!=null?json['USER_PROFILE']['profilePictureKey']['mediaKey'] ?? '':'',
     );
   }
 }
