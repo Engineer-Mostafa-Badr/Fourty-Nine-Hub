@@ -66,6 +66,7 @@ import 'package:fourtyninehub/features/settings/presentation/pages/settings_view
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
+import 'package:fourtyninehub/features/social_media/chat/attachments/presentation/pages/attachments_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
@@ -768,9 +769,15 @@ class AppPages {
                   name: Routes.VIEWCONTACT,
                   builder: (context, state) => const ViewContactView(),
                 ),
+                GoRoute(
+                  path: Paths.ATTACHMENTSVIEW,
+                  name: Routes.ATTACHMENTSVIEW,
+                  builder: (context, state) => const AttachementsView(),
+                ),
               ]),
 
           // Snap
+          
           GoRoute(
               path: Paths.SNAP,
               name: Routes.SNAP,

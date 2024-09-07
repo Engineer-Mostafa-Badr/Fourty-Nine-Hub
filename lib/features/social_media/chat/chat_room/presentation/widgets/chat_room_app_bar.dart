@@ -104,6 +104,9 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
               if (value == 0) {
                 context.push(Routes.VIEWCONTACT);
               }
+              if (value == 1) {
+                context.push(Routes.ATTACHMENTSVIEW);
+              }
               if (value == 6) {
                 _showMoreMenu(context);
               }
