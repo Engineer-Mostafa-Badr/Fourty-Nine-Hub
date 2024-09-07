@@ -11,6 +11,7 @@ class NotificationModel extends NotificationEntity {
   String? filterType;
   String? subcategoryId;
   String? mainCategoryId;
+  @override
   bool? read;
   String? titleTranslationCode;
   String? bodyTranslationCode;
@@ -58,6 +59,7 @@ class NotificationModel extends NotificationEntity {
           createdAt: DateTime.fromMicrosecondsSinceEpoch(time ?? 0),
           hasNextPage: hasNextPage,
           nextPageNumber: nextPageNumber,
+          read: read,
         );
 
   @override

@@ -168,7 +168,7 @@ class BaseApiConsumer extends ApiConsumer {
         );
       } else {
         // if (e is DioException) {
-        //   print(' ========= ${e.response?.data}');
+        //   pr('${e.response?.data}');
         // }
         return Left(_getFailure(e));
       }

@@ -49,8 +49,7 @@ class _PublishButtonState extends State<PublishButton> {
         listener: (context, state) {
           if (state is PublishTripJoinSuccess) {
             Future.delayed(const Duration(seconds: 1)).then((value) {
-              context.pushAndRemoveUntil(
-                  Routes.AVAILABLE_TRIPS, (route) => true);
+              context.pushAndRemoveUntil(Routes.AVAILABLE_TRIPS, (route) => true);
             });
           }
           if (state is PublishTripJoinFailed) {
@@ -64,7 +63,7 @@ class _PublishButtonState extends State<PublishButton> {
               onTap: () async {
                 if (widget.formKey.currentState!.validate()) {
                   await fetchData();
-                  // print(' ========= ${publishTripJoinCubit.tripJoinPublishParam}');
+                  // pr('${publishTripJoinCubit.tripJoinPublishParam}');
                   // return;
                   await publishTripJoinCubit.publishTripJoin();
                 }
@@ -85,8 +84,7 @@ class _PublishButtonState extends State<PublishButton> {
                     }
                     if (state is PublishTripJoinSuccess) {
                       return Center(
-                        child: Icon(Icons.check,
-                            color: Colors.green[400], size: 30),
+                        child: Icon(Icons.check, color: Colors.green[400], size: 30),
                       );
                     }
                     return const SizedBox();
@@ -99,10 +97,9 @@ class _PublishButtonState extends State<PublishButton> {
   }
 
   Future<void> fetchData() async {
-    publishTripJoinCubit.tripJoinPublishParam =
-        publishTripJoinCubit.tripJoinPublishParam.copyWith(
-      fromAr: fetchPriceDistanceCubit.tripInfoEntity?.originAddress,
-      toAr: fetchPriceDistanceCubit.tripInfoEntity?.destinationAddress,
+    publishTripJoinCubit.tripJoinPublishParam = publishTripJoinCubit.tripJoinPublishParam.copyWith(
+      fromAr: fetchPriceDistanceCubit.tripInfoEntity?.originAddress ?? '',
+      toAr: fetchPriceDistanceCubit.tripInfoEntity?.destinationAddress ?? '',
       fromEn: startingCubit.startingLocation?.address,
       toEn: destinationCubit.destinationLocation?.address,
       distance: fetchPriceDistanceCubit.tripInfoEntity?.distance,

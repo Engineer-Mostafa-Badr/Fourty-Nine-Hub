@@ -13,6 +13,7 @@ class NotificationEntity {
   DateTime? createdAt;
   bool? hasNextPage;
   int? nextPageNumber;
+  bool? read;
   NotificationEntity({
     this.id,
     this.firstName,
@@ -26,10 +27,11 @@ class NotificationEntity {
     this.createdAt,
     this.hasNextPage,
     this.nextPageNumber,
+    this.read,
   });
 
   @override
   String toString() {
-    return 'NotificationEntity(id: $id, firstName: $firstName, lastName: $lastName, filterType: $filterType, title: $title, body: $body, payload: $payload, path: $path, createdAt: $createdAt , hasNextPage: $hasNextPage, nextPageNumber: $nextPageNumber )';
+    return 'NotificationEntity(id: $id, firstName: $firstName, lastName: $lastName, filterType: $filterType, title: $title, body: $body, payload: $payload, path: $path, createdAt: $createdAt , hasNextPage: $hasNextPage, nextPageNumber: $nextPageNumber , read: $read )';
   }
 }
