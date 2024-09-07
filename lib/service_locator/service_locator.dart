@@ -230,22 +230,6 @@ class DI {
     await LocalizationService.init();
     await SQFLiteDataSource.instance.initDatabase();
 
-    final String? token =
-        (await serviceLocator<GetTokensUseCase>().call(const NoParams())).fold(
-      (l) => null,
-      (r) => r?.accessToken,
-    );
-    serviceLocator.registerSingleton<Socket>(io(
-      EndPoints.developmentWebSocketBaseUrl,
-      OptionBuilder()
-          .setTransports(['websocket'])
-          .disableAutoConnect()
-          .setExtraHeaders({
-            'authorization': token,
-          })
-          .build(),
-    ));
-
     // database
     serviceLocator.registerLazySingleton<Database>(
         () => SQFLiteDataSource.instance.database);
@@ -342,6 +326,22 @@ class DI {
 
     // auth service locator
     await AuthServiceLocator.execute(serviceLocator: serviceLocator);
+
+    final String? token = (await serviceLocator<GetTokensUseCase>().call(const NoParams())).fold(
+          (l) => null,
+          (r) => r?.accessToken,
+    );
+    serviceLocator.registerSingleton<Socket>(io(
+      EndPoints.developmentWebSocketBaseUrl,
+      OptionBuilder()
+          .setTransports(['websocket'])
+          .disableAutoConnect()
+          .setExtraHeaders({
+        'authorization': token,
+      })
+          .build(),
+    ));
+
     // Ride Customer
     await RideServiceLocator.execute(serviceLocator: serviceLocator);
     // Subcategories
