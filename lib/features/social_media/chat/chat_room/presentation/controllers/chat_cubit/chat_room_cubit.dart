@@ -135,6 +135,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     );
   }
 
+  StreamController messagesStreamController = StreamController<MessageEntity>();
+
   listenToNewMessages() {
     // _listenToNewMessageUseCase(const NoParams()).listen((message) {
     //   chatMessages.add(message);
@@ -171,13 +173,19 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     //       status: ChatRoomStates.success));
     // });
 
-    _listenToNewMessageUseCase((message) {
+    messagesStreamController.stream.listen((message) {
       chatMessages.add(message);
-      emit.call(state.copyWith(
+      emit(state.copyWith(
           // chatData: chatMessagesModel,
           messages: chatMessages,
           status: ChatRoomStates.success));
     });
+
+    _listenToNewMessageUseCase(
+      (message) {
+        messagesStreamController.add(message);
+      },
+    );
   }
 
   listenToMessageTyping() {
