@@ -7,8 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_state.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import 'package:zego_uikit/zego_uikit.dart';
 
@@ -26,7 +24,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import '../../../../../../../../core/messages/messages.dart';
 import '../inner_text.dart';
 import '../internal/pk_combine_notifier.dart';
-import '../minimizing/mini_button.dart';
 import 'member/button.dart';
 import 'message/input_board_button.dart';
 
@@ -180,23 +177,15 @@ class ZoomMicrophoneBuilder extends StatelessWidget {
                   buttonSize: Size(40.zW, 40.zH),
                   iconSize: const Size(100, 100),
                   normalIcon: ButtonIcon(
-                    icon: const Icon(
-                      Icons.mic,
-                      color: Colors.white,
-                      // size: 18.0,
-                    ),
+                    icon: Image.asset('assets/49-New-icons/mic.png'),
                     backgroundColor: Colors.transparent,
                   ),
                   offIcon: ButtonIcon(
-                    icon: const Column(
+                    icon: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.mic_off,
-                          color: Colors.white,
-                          // size: 18.0,
-                        ),
+                        Image.asset('assets/49-New-icons/mic_off.png')
                       ],
                     ),
                     backgroundColor: Colors.transparent,
@@ -309,7 +298,7 @@ class ZoomParticipantsBuilder extends StatelessWidget {
             popUpManager: widget.popUpManager,
             translationText: widget.translationText,
             builder: widget.config.memberButton.builder,
-            icon: widget.config.memberButton.icon,
+            icon: Image.asset('assets/49-New-icons/persons.png'),
             backgroundColor: Colors.transparent,
             avatarBuilder: widget.config.avatarBuilder,
             itemBuilder: widget.config.memberList.itemBuilder,
@@ -353,12 +342,10 @@ class ZoomChatBuilder extends StatelessWidget {
               buttonSize: const Size(40, 40),
               iconSize: const Size(40, 40),
               enabledIcon: ButtonIcon(
-                icon: Icon(
-                  Icons.message_rounded,
-                  color: Colors.white,
-                  size: 30.zH,
-                ),
-              ),
+                  icon: Image.asset(
+                'assets/49-New-icons/chat.png',
+                // width: 20,
+              )),
             ),
             Positioned(
               bottom: 8.zH,
@@ -403,11 +390,7 @@ class ZoomSharescreenBuilder extends StatelessWidget {
                   buttonSize: Size(35.zW, 35.zH),
                   // iconSize: const Size(120, 120),
                   iconStartSharing: ButtonIcon(
-                    icon: const Icon(
-                      Icons.screen_share_outlined,
-                      color: Colors.green,
-                      // size: 35,
-                    ),
+                    icon: Image.asset('assets/49-New-icons/sharescreen.png'),
                   ),
                   iconStopSharing: ButtonIcon(
                     icon: const Icon(

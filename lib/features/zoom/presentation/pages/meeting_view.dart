@@ -152,6 +152,7 @@ class MeetingView extends StatelessWidget {
         },
         child: BlocBuilder<MeetingCubit, MeetingState>(
           builder: (context, state) {
+            print('schedule state is  ${state.toString()}');
             CliLogger.warning('WARNING state is updated${state.status}');
             if (state.isLoading) {
               // print('data is loading');
@@ -162,7 +163,7 @@ class MeetingView extends StatelessWidget {
             if (state.scheduledMeeting == null) {
               // print('data is null');
               return Container();
-            } else if (state.isGotScheduledMeeting) {
+            } else if (state.isGotScheduledMeeting || state.isSuccess) {
               return ListView.builder(
                   itemCount: state.scheduledMeeting!.length,
                   shrinkWrap: true,
@@ -225,16 +226,21 @@ class MeetingView extends StatelessWidget {
                               ),
                               SizedBox(width: 15.zW),
                               InkWell(
-                                onTap: () {
-                                  context.go(Routes.MEETINGROOM,
-                                      extra: ZegoArgs(
-                                          scheduledMeeting.roomId,
-                                          true,
-                                          context
-                                              .read<UserCubit>()
-                                              .state
-                                              .data!
-                                              .fullName));
+                                onTap: ()  {
+                                  //to unschedule
+                                   joinRoom(context.read<MeetingCubit>(),
+                                      scheduledMeeting.roomId);
+                                  if (context.mounted) {
+                                    context.go(Routes.MEETINGROOM,
+                                        extra: ZegoArgs(
+                                            scheduledMeeting.roomId,
+                                            true,
+                                            context
+                                                .read<UserCubit>()
+                                                .state
+                                                .data!
+                                                .fullName));
+                                  }
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.all(8),
@@ -261,6 +267,10 @@ class MeetingView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<bool> joinRoom(MeetingCubit cubit, String liveId) async {
+    return cubit.joinNewMeeting(liveId);
   }
 
   String formatDateString(String dateString) {

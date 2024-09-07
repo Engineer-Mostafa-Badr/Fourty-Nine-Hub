@@ -168,7 +168,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                       Routes.MEETINGROOM,
                       extra: ZegoArgs(
                         meetingId,
-                        false,
+                        context.read<MeetingCubit>().isHost,
                         _userNameController.text.trim().isNotEmpty
                             ? _userNameController.text.trim()
                             : context.read<UserCubit>().state.data!.fullName,
