@@ -35,11 +35,11 @@ class CompanyAdvertiseDataSourceImpl implements CompanyAdvertiseDataSource {
     final Map<String, dynamic> jsonData = {
       "advertisements": [
         {
-          'post':params.post,
+          'post':params.post ,
           'advertisement_type':params.advertisementType,
           'description':params.description,
           'totalPrice':params.totalPrice,
-          'media':params.media,
+          'media':params.media?.isEmpty ??false ? [] : params.media,
         }
       ]
     };

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../common/models/public/pagination_params.dart';
@@ -19,32 +18,32 @@ class CompanyAdvertiseCubit extends Cubit<CompanyAdvertiseState> {
 
   //Timer? _pollingTimer;
 
-  Future<void> addPostCompanyAdvertise({
-    required BuildContext context,
-    String? post,
-    required String type,
-    String? description,
-    required int totalPrice,
-    List<String>? mediaIds, // Make sure this is used correctly
-  }) async {
-    var result = await companyAdvertiseRepo.addPostCompanyAdvertise(
-      type: type,
-      totalPrice: totalPrice,
-      post: post,
-      description: description,
-      mediaIds: mediaIds, // Pass mediaIds here
-    );
-
-    result.fold((failure) {
-      emit(AddCompanyAdvertiseError(
-          errMessage: getFailureMessage(failure, context)));
-      print('Error: ${getFailureMessage(failure, context)}');
-    }, (_) {
-      emit(AddCompanyAdvertiseSuccess());
-      mediaIds?.clear(); // Clear the mediaIds if needed after successful post
-      print('Media IDs cleared after successful post.');
-    });
-  }
+  // Future<void> addPostCompanyAdvertise({
+  //   required BuildContext context,
+  //   String? post,
+  //   required String type,
+  //   String? description,
+  //   required int totalPrice,
+  //   List<String>? mediaIds, // Make sure this is used correctly
+  // }) async {
+  //   var result = await companyAdvertiseRepo.addPostCompanyAdvertise(
+  //     type: type,
+  //     totalPrice: totalPrice,
+  //     post: post,
+  //     description: description,
+  //     mediaIds: mediaIds, // Pass mediaIds here
+  //   );
+  //
+  //   result.fold((failure) {
+  //     emit(AddCompanyAdvertiseError(
+  //         errMessage: getFailureMessage(failure, context)));
+  //     print('Error: ${getFailureMessage(failure, context)}');
+  //   }, (_) {
+  //     emit(AddCompanyAdvertiseSuccess());
+  //     mediaIds?.clear(); // Clear the mediaIds if needed after successful post
+  //     print('Media IDs cleared after successful post.');
+  //   });
+  // }
 
   List<Advertises> data = [];
   Future<List<Advertises>> fetchAdvertiseCompany(

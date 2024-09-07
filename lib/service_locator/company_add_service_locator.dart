@@ -4,24 +4,32 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/repo
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/usecases/get_price_use_case.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/ads_feature/create_company_ad/domain/usecases/get_company_add_use_case.dart';
 import '../features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 
 class CompanyAddServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
+    serviceLocator.registerLazySingleton<CompanyAdvertiseDataSource>(
+        () => CompanyAdvertiseDataSourceImpl(
+              serviceLocator(),
+            ));
 
-    serviceLocator.registerLazySingleton<CompanyAdvertiseDataSource>(() => CompanyAdvertiseDataSourceImpl(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<CompanyAdvertiseRepository>(
+        () => CompanyAdvertiseRepositoryImpl(serviceLocator()));
 
-    serviceLocator.registerLazySingleton<CompanyAdvertiseRepository>(() => CompanyAdvertiseRepositoryImpl(serviceLocator()));
+    serviceLocator
+        .registerLazySingleton<GetPriceUseCases>(() => GetPriceUseCases(
+              serviceLocator(),
+            ));
+    serviceLocator
+        .registerLazySingleton<GetCompanyAddUseCases>(() => GetCompanyAddUseCases(
+              serviceLocator(),
+            ));
 
-    serviceLocator.registerLazySingleton<GetPriceUseCases>(() => GetPriceUseCases(
-      serviceLocator(),
-    ));
-
-    serviceLocator.registerFactory<CreateCompanyAdCubit>(() => CreateCompanyAdCubit(
-        serviceLocator()
-    )..loadData());
-
+    serviceLocator.registerFactory<CreateCompanyAdCubit>(
+        () => CreateCompanyAdCubit(
+            serviceLocator(),
+            serviceLocator(),
+        )..loadData());
   }
 }
