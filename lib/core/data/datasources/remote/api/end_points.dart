@@ -22,10 +22,10 @@ class EndPoints {
   static const socialLogin = '/auth/social/login';
   static const resendOTP = '/auth/resend-reset-code';
   static const refreshToken = '/auth/refresh/token';
-  static String friendsList = '/friends/allFriends';
-  static String friendRequestsList = '/friends/FriendRequests';
-  static String blockedUsersList = '/users/blocked';
-  static String followersList = '/follow/followers';
+  static String friendsList (String search) => '/friends/allFriends?search=$search';
+  static String friendRequestsList (String search) => '/friends/FriendRequests?search=$search';
+  static String blockedUsersList (String search) => '/users/blocked?search=$search';
+  static String followersList (String search) => '/follow/followers?search=$search';
   static const getParentMainCategories = '/category/parent';
   static const getMainCategories = '/category/parent/get-all-main';
   static String getBannerByID({required String id}) => '/categories/main/$id';

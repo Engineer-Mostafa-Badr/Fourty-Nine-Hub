@@ -36,6 +36,7 @@ class PostModel extends PostEntity {
       super.feeling,
       super.backgroundColor,
       super.comments,
+      super.firstComment,
       super.love,
       super.isReact,
       super.shares,
@@ -116,6 +117,7 @@ class PostModel extends PostEntity {
             : (json['comments'] as List).map((e) => e is String
             ? e
             : InstagramPostModel.fromJson(e)).toList(),
+        firstComment:json['firstComment']!=null?InstagramPostModel.fromJson(json['firstComment']):null,
         love: json['love'] == null
             ? null
             : (json['love'] as List)

@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/location_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
@@ -46,6 +47,7 @@ class PostEntity {
   List<TwitterUserModel>? love;
   MainPostEntity? mainPost;
   List<dynamic>? comments;
+  InstagramPostEntity? firstComment;
   bool? isReact;
 
   //==>Advertisement
@@ -68,6 +70,7 @@ class PostEntity {
     required this.type,
     this.images,
     this.users,
+    this.firstComment,
     required this.user,
     this.commentPrivacy = 1,
     this.privacy = 1,

@@ -22,6 +22,9 @@ class ListsView extends StatefulWidget {
 }
 
 class _ListsViewState extends State<ListsView> {
+
+  TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +64,17 @@ class _ListsViewState extends State<ListsView> {
                       ],
                     ),
                   ),
-                  _buildSortingWidget(context: context),
+                  _buildSortingWidget(context: context,controller: searchController,search: (v){
+                    if(state.selectedList == ListTypes.friends) {
+                          controller.loadFriends(v);
+                        }else if(state.selectedList == ListTypes.followers) {
+                      controller.loadFollowers(v);
+                    }else if(state.selectedList == ListTypes.blocked) {
+                      controller.loadBlocked(v);
+                    }else if(state.selectedList == ListTypes.requests) {
+                      controller.loadRequests(v);
+                    }
+                      }),
                   Expanded(
                       child: state.isLoading
                           ? const Center(
@@ -191,55 +204,24 @@ class _ListsViewState extends State<ListsView> {
             }));
   }
 
-  Widget _buildSortingWidget({required BuildContext context}) {
+  Widget _buildSortingWidget({required BuildContext context, required TextEditingController controller,required Function(String) search}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-          // Expanded(
-          //     child: FormTextField(
-          //   hint: 'Search with name',
-          //   height: kToolbarHeight * .9,
-          //   textAlignVertical: TextAlignVertical.bottom,
-          // )),
           Expanded(
             child: TextFormField(
+              controller: searchController,
+              onChanged: (v){
+                search(v);
+              },
               decoration: InputDecoration(
                   fillColor: Colors.white,
-                  contentPadding: EdgeInsets.all(5),
+                  contentPadding: const EdgeInsets.all(5),
                   hintStyle: Styles.mediumText(),
                   hintText: 'Search with name'),
             ),
           )
-          // const Sizer(),
-          // Container(
-          //     decoration: BoxDecoration(
-          //         color: AppColors.PRIMARY_COLOR,
-          //         borderRadius: BorderRadius.circular(5)),
-          //     child: IconButton(
-          //         onPressed: () {
-          //           bottomSheet(
-          //               context: context,
-          //               widget: ListView(
-          //                 shrinkWrap: true,
-          //                 children: const [
-          //                   ListTile(
-          //                     leading: Icon(Icons.sort_by_alpha_rounded),
-          //                     title: Label(text: 'Sort alphabetically'),
-          //                   ),
-          //                   ListTile(
-          //                     leading: Icon(Icons.sort),
-          //                     title: Label(text: 'Lately added '),
-          //                   ),
-          //                   ListTile(
-          //                     leading: Icon(Icons.short_text_rounded),
-          //                     title: Label(text: 'Old first'),
-          //                   ),
-          //                 ],
-          //               ));
-          //         },
-          //         color: Colors.white,
-          //         icon: const Icon(Icons.sort)))
         ],
       ),
     );
@@ -255,22 +237,6 @@ class _ListsViewState extends State<ListsView> {
     required Function(String) deleteFriend,
     required Function(String) unfollowUser,
   }) {
-    // return ListView.builder(
-    //     itemCount: list.length,
-    //     itemBuilder: (context, index) {
-    //       // return Container();
-    //       return ListItemCard(
-    //         user: list[index],
-    //         type: type,
-    //         removeRequest: (AcceptRejectFriendRequestParams params) =>
-    //             removeRequest(params),
-    //         acceptRequest: (AcceptRejectFriendRequestParams params) =>
-    //             acceptRequest(params),
-    //         deleteFriend: (id) => deleteFriend(id),
-    //         unblockUser: (id) => unblockUser(id),
-    //         unfollowUser: (id) => unfollowUser(id),
-    //       );
-    //     });
     return PagedListView(
       pagingController: controller,
       physics:

@@ -412,7 +412,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                   .itemList?[index].content ??
                                   ''),
                           if(controller.feedPagingController
-                              .itemList![index].content!.isNotEmpty)...[
+                              .itemList![index].content!.isEmpty)...[
                                 InkWell(
                                     onTap:()=>showAsBottomSheet(
                                       child:BlocProvider.value(
@@ -597,19 +597,20 @@ class _InstagramPostsState extends State<InstagramPosts> {
                           ],
                           if(controller.feedPagingController
                               .itemList![index].content!.isEmpty&&(controller.feedPagingController
-                              .itemList![index].comments!=null))RichText(
+                              .itemList![index].firstComment!=null))RichText(
                               text: TextSpan(
                                   children: [
                                 TextSpan(
                                     text: '${controller.feedPagingController
-                                    .itemList?[index].comments?[0].firstName}\t\t',
+                                    .itemList?[index].firstComment?.firstName} ${controller.feedPagingController
+                                        .itemList?[index].firstComment?.lastName}\t\t',
                                     recognizer: TapGestureRecognizer()..onTap = () => context.push(Routes.INSTAGRAMPROFILE,extra: controller.feedPagingController
                                         .itemList?[index].user.id),
                                     style: Styles.mediumText(color: Colors.black)),
                                 TextSpan(
                                     text:controller.feedPagingController
-                                        .itemList![index].comments!=null?'':controller.feedPagingController
-                                        .itemList?[index].comments?[0].content,
+                                        .itemList![index].firstComment==null?'':controller.feedPagingController
+                                        .itemList?[index].firstComment?.content,
                                     style: Styles.mediumText(color: Colors.grey)),
                               ])),
                           RichText(

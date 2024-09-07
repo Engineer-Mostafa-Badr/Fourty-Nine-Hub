@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/features/social_media/social_posts/data/models/user_profile_followers_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 
 class UserProfileModel extends UserProfileEntity {
@@ -52,7 +53,11 @@ class UserProfileModel extends UserProfileEntity {
       sentFriendRequest: json['sentFriendRequest'] ?? false,
       isBlock: json['isBlock'] ?? false,
       isSenTRequest: json['isSenTRequest'] ?? false,
-      // followers: json['isSenTRequest'] ?? false,
+      followers: json['followedByUser'] == null
+          ? null
+          : (json['followedByUser'] as List)
+          .map((e) => UserProfileFollowersModel.fromJson(e))
+          .toList(),
     );
   }
 }

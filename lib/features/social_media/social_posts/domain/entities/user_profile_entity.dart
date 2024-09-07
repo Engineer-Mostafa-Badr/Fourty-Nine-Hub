@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_followers_entity.dart';
+
 class UserProfileEntity {
   final String id;
   final String firstName;
@@ -22,7 +24,7 @@ class UserProfileEntity {
   bool? sentFriendRequest;
   bool? isDocument;
   bool? isBlock;
-  List<String>? followers;
+  List<UserProfileFollowersEntity>? followers;
 
   String get fullName => '$firstName $lastName';
   bool isMyAccount(String anotherId) {

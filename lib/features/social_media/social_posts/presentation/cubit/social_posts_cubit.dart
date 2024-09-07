@@ -339,12 +339,12 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   uploadPhoto({bool isGallery = true}) async {
     final UploadFile upload = UploadFile();
     print('=======>data Hiii');
-
+    UploadFileEntity? image;
     await upload.uploadImage(
         isGallery: isGallery,
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) async {
-
+          image=data;
           final response = await serviceLocator<ApiConsumer>().put(
             '/users/profile-picture',
             data: {'profilePictureId': data.mediaId},
@@ -357,8 +357,9 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 
             },
                 (data) {
-
-
+                  emit(state.copyWith(newImage: image));
+                  UserCubit.to.getUser();
+                  print("newImage====>${state.newImage?.mediaId}");
               return const Right(true);
             },
           );
@@ -367,23 +368,24 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   uploadCoverPhoto({bool isGallery = true}) async {
     final UploadFile upload = UploadFile();
     print('=======>data Hiii');
+    UploadFileEntity? cover;
 
     await upload.uploadImage(
         isGallery: isGallery,
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) async {
           final response = await serviceLocator<ApiConsumer>().put(
-            '/users/profile-picture',
-            data: {'profilePictureId': data.mediaId},
+            '/users/request-update-cover',
+            data: {'coverPicture': data.mediaId},
           );
           return response.fold(
                 (failure) {
               print('=======>data Fal}');
-
               return Left(failure);
-
             },
                 (data) {
+                  emit(state.copyWith(newCover: cover));
+                  print("newCover====>${state.newCover?.mediaId}");
 
               return const Right(true);
             },

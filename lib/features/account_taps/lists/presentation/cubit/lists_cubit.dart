@@ -36,35 +36,35 @@ class ListsCubit extends Cubit<ListsState> {
       )
       : super(const ListsState());
 
-  void loadFriends() async {
-    getFriends(1);
+  void loadFriends(String search) async {
+    getFriends(1,search);
     friendsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getFriends(pageKey);
+      getFriends(pageKey,search);
     });
   }
 
-  void loadFollowers() async {
-    getFollowers(1);
+  void loadFollowers(String search) async {
+    getFollowers(1,search);
     followersPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getFollowers(pageKey);
+      getFollowers(pageKey,search);
     });
   }
 
-  void loadRequests() async {
-    getRequests(1);
+  void loadRequests(String search) async {
+    getRequests(1,search);
     requestsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getRequests(pageKey);
+      getRequests(pageKey,search);
     });
   }
 
-  void loadBlocked() async {
-    getBlocked(1);
+  void loadBlocked(String search) async {
+    getBlocked(1,search);
     blockedPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getBlocked(pageKey);
+      getBlocked(pageKey,search);
     });
   }
 
@@ -81,8 +81,8 @@ class ListsCubit extends Cubit<ListsState> {
   final PagingController<int, UserFriendEntity> blockedPagingController =
   PagingController(firstPageKey: 1);
 
-  Future<void> getFriends(int page) async {
-    final response = await _getFriendsUsecase.call(TwitterFeedParams(page: page, limit: pageSize));
+  Future<void> getFriends(int page,String search) async {
+    final response = await _getFriendsUsecase.call(TwitterFeedParams(page: page, limit: pageSize,search: search));
     response.fold(
         (l) => emit(state.copWith(failure: l, status: ListsStates.error)),
         (data) {
@@ -103,8 +103,8 @@ class ListsCubit extends Cubit<ListsState> {
         });
   }
 
-  Future<void> getFollowers(int page) async {
-    final response = await _getFollowersUseCase.call(TwitterFeedParams(page: page, limit: pageSize));
+  Future<void> getFollowers(int page,String search) async {
+    final response = await _getFollowersUseCase.call(TwitterFeedParams(page: page, limit: pageSize,search: search));
     response.fold(
         (l) => emit(state.copWith(failure: l, status: ListsStates.error)),
         (data) {
@@ -125,8 +125,8 @@ class ListsCubit extends Cubit<ListsState> {
         });
   }
 
-  Future<void> getRequests(int page) async {
-    final response = await _getFriendRequestsUsecase.call(TwitterFeedParams(page: page, limit: pageSize));
+  Future<void> getRequests(int page,String search) async {
+    final response = await _getFriendRequestsUsecase.call(TwitterFeedParams(page: page, limit: pageSize,search: search));
     response.fold(
         (l) => emit(state.copWith(failure: l, status: ListsStates.error)),
         (data) {
@@ -147,8 +147,8 @@ class ListsCubit extends Cubit<ListsState> {
         });
   }
 
-  Future<void> getBlocked(int page) async {
-    final response = await _getBlockedUseCase.call(TwitterFeedParams(page: page, limit: pageSize));
+  Future<void> getBlocked(int page,String search) async {
+    final response = await _getBlockedUseCase.call(TwitterFeedParams(page: page, limit: pageSize,search: search));
     response.fold(
         (l) => emit(state.copWith(failure: l, status: ListsStates.error)),
         (data) {
@@ -172,13 +172,13 @@ class ListsCubit extends Cubit<ListsState> {
   void changeListType({required ListTypes type}) async {
     emit(state.copWith(selectedList: type, status: ListsStates.loading));
     if (type == ListTypes.friends) {
-      loadFriends();
+      loadFriends('');
     } else if (type == ListTypes.followers) {
-      loadFollowers();
+      loadFollowers('');
     } else if (type == ListTypes.requests) {
-      loadRequests();
+      loadRequests('');
     } else if (type == ListTypes.blocked) {
-      loadBlocked();
+      loadBlocked('');
     }
     print(state.friends?.length);
   }
