@@ -28,7 +28,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 part 'chats_state.dart';
 
 class ChatsCubit extends Cubit<ChatsState> {
-  final SocketServiceContract _socketService;
   final GetTokensUseCase _getTokensUseCase;
   final GetChatsUseCase _getChatsUseCase;
   final ChangeChatMuteStateUseCase _changeChatMuteStateUseCase;
@@ -50,7 +49,6 @@ class ChatsCubit extends Cubit<ChatsState> {
   ChatsCubit(
     this._getTokensUseCase,
     this._getChatsUseCase,
-    this._socketService,
     this._changeChatMuteStateUseCase,
     this._changeChatToArchiveOrNormalUseCase,
     this._lockChatUseCase,
@@ -61,7 +59,6 @@ class ChatsCubit extends Cubit<ChatsState> {
 
   initSocketConnection() async {
     String? userToken = await getUserToken();
-    _socketService.initSocketConnection(userToken!);
     // SocketIODataSource.instance.connect();
     // listen to new messages
     listenToNewMessages();
@@ -69,7 +66,6 @@ class ChatsCubit extends Cubit<ChatsState> {
   }
 
   _joinRoom(String chatId) async {
-    _socketService.joinRoom(chatId);
   }
 
   Future<String?> getUserToken() async {
@@ -124,7 +120,6 @@ class ChatsCubit extends Cubit<ChatsState> {
 
         await Future.delayed(const Duration(seconds: 1));
         sendUserStatus(userStatusParams);
-        _socketService.listenToUserStatus();
         unReadMessage = data.totalUnread ?? 0;
 
         return emit.call(
@@ -134,12 +129,6 @@ class ChatsCubit extends Cubit<ChatsState> {
   }
 
   listenToNewMessages() {
-    _socketService.socketMessageStream.listen((event) {
-      debugPrint("Last message chat cubit ${event.text}");
-      _chats[event.chatId]?.lastMessageText = event.text;
-      emit.call(state.copyWith(
-          chats: _chats.values.toList(), status: ChatsStates.initState));
-    });
   }
 
   //   listenToNewMessages() {
@@ -280,49 +269,34 @@ class ChatsCubit extends Cubit<ChatsState> {
   }
 
   listenToMessageTyping() {
-    _socketService.socketChatTypingStream.listen((event) {
-      List<TypingAndOnlineModel> chatsIds = event ?? [];
-
-      if (_chats.values.length > 0) {
-        for (var key in chatsIds) {
-          _chats[key.chatId]?.typing = key.typing;
-          _chats[key.chatId]?.online = key.online;
-        }
-
-        emit.call(state.copyWith(
-            chats: _chats.values.toList(), status: ChatsStates.typing));
-      }
-    });
   }
 
   sendUserStatus(List<UserStatusParams> params) {
     Timer? timer;
     timer = Timer.periodic(const Duration(seconds: 5), (Timer t) {
-      _socketService.sendUserStatus(params);
     });
   }
 
   @override
   Future<void> close() {
     // print("Close Socket");
-    _socketService.disposeSocket();
     // SocketIODataSource.instance.close();
     return super.close();
   }
 
   getSeenHistory(String chatId, BuildContext context) async {
-    var response;
-    response = await _getSeenHistoryUseCase.call(chatId);
-    response.fold(
-      (failure) => emit
-          .call(state.copyWith(failure: failure, status: ChatsStates.error)),
-      (data) async {
-        seenHistoryList = data;
-
-        // emit(data);
-        showDialogToSeenHistory(context);
-      },
-    );
+    // var response;
+    // response = await _getSeenHistoryUseCase.call(chatId);
+    // response.fold(
+    //   (failure) => emit
+    //       .call(state.copyWith(failure: failure, status: ChatsStates.error)),
+    //   (data) async {
+    //     seenHistoryList = data;
+    //
+    //     // emit(data);
+    //     showDialogToSeenHistory(context);
+    //   },
+    // );
   }
 
   Future<bool?> showDialogToSeenHistory(BuildContext context) async {

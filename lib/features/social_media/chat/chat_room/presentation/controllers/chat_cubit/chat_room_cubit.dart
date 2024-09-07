@@ -31,11 +31,11 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   final GetMessagesUseCase _getMessagesUseCase;
   final GetUserUseCase _getUserUseCase;
   final DeleteChatMessageUseCase _deleteChatMessageUseCase;
-  final SocketServiceContract _socketService;
   final ListenToNewMessageUseCase _listenToNewMessageUseCase;
   final SendMessageUseCase _sendMessageUseCase;
   List<MessageEntity> chatMessages = [];
-  ChatMessagesModel chatMessagesModel = ChatMessagesModel();
+
+  // ChatMessagesModel chatMessagesModel = ChatMessagesModel();
   final ScrollController scrollController = ScrollController();
 
   String? userToken;
@@ -49,7 +49,6 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     this._getMessagesUseCase,
     this._deleteChatMessageUseCase,
     this._getUserUseCase,
-    this._socketService,
     this._sendMessageUseCase,
   ) : super(const ChatRoomState());
 
@@ -61,7 +60,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   // final messagesStreamController = StreamController<MessageEntity>();
 
-  Future<void> getChatMessages(String chatID) async {
+  Future<void> getMessages(String chatID) async {
+    chatId = chatID;
     // emit(state.copyWith(status: ChatRoomStates.loading));
     // chatId = chatID;
     // final response = await _getChatMessagesUseCase(chatID);
@@ -86,28 +86,17 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   Future<void> sendMessage(
       {required String message, String? replyMessageId}) async {
-    // if (chatId != null) {
+    if (chatId != null) {
+      // _socketService.sendMessage(
+      //     message: message,
+      //     chatId: '66d874ec3b4cc1d6bdb4626e',
+      //     replyMessageId: replyMessageId);
 
-
-
-    // _socketService.sendMessage(
-    //     message: message,
-    //     chatId: '66d874ec3b4cc1d6bdb4626e',
-    //     replyMessageId: replyMessageId);
-
-
-
-    _sendMessageUseCase(SendMessageParams(
-        message: message,
-        chatId: '66d874ec3b4cc1d6bdb4626e',
-        mediaIds: [],
-        oneTimeView: false));
-
-
-
-    // } else {
-    //   CliLogger.error("Error chat id not found");
-    // }
+      _sendMessageUseCase(SendMessageParams(
+          message: message, chatId: chatId!, mediaIds: [], oneTimeView: false));
+    } else {
+      CliLogger.error("Error chat id not found");
+    }
   }
 
   void selectMessageForReplaying(MessageEntity message) {
@@ -132,9 +121,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   //   }
   // }
 
-  typingMessage() {
-    _socketService.typingMessage(chatId: chatId!);
-  }
+  typingMessage() {}
 
   Future<void> getUser() async {
     final result = await _getUserUseCase(const NoParams());
@@ -149,13 +136,13 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   }
 
   listenToNewMessages() {
-    _listenToNewMessageUseCase(const NoParams()).listen((message) {
-      chatMessages.add(message);
-      emit.call(state.copyWith(
-        messages: chatMessages,
-        status: ChatRoomStates.success,
-      ));
-    });
+    // _listenToNewMessageUseCase(const NoParams()).listen((message) {
+    //   chatMessages.add(message);
+    //   emit.call(state.copyWith(
+    //     messages: chatMessages,
+    //     status: ChatRoomStates.success,
+    //   ));
+    // });
 
     // _socketService.socketMessageStream.listen((event) {
     //   chatMessages.add(event);
@@ -183,6 +170,14 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     //       messages: chatMessages,
     //       status: ChatRoomStates.success));
     // });
+
+    _listenToNewMessageUseCase((message) {
+      chatMessages.add(message);
+      emit.call(state.copyWith(
+          // chatData: chatMessagesModel,
+          messages: chatMessages,
+          status: ChatRoomStates.success));
+    });
   }
 
   listenToMessageTyping() {
@@ -203,7 +198,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     DeleteMessageParams deleteMessageParams =
         DeleteMessageParams(chatId: chatId, messageId: messageId);
     await _deleteChatMessageUseCase.call(deleteMessageParams);
-    getChatMessages(chatId);
+    getMessages(chatId);
   }
 
   Future<void> pickDocuments() async {

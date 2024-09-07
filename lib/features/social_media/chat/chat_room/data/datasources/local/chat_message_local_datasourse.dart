@@ -10,10 +10,6 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class MessagesLocalDataSource {
-  Future<Either<Failure, ChatMessageEntity>> getChatMessages({
-    required String chatId,
-  });
-
   Future<Either<Failure, List<MessageEntity>>> getMessages(
       GetMessagesParams params);
 
@@ -32,27 +28,8 @@ class SQFLiteMessagesLocalDataSourceImplementation
   SQFLiteMessagesLocalDataSourceImplementation(this._database);
 
   @override
-  Future<Either<Failure, ChatMessageEntity>> getChatMessages(
-      {required String chatId}) async {
-    try {
-      ChatMessageEntity chatMessageEntity;
-      final messages = await _database.query(DatabaseTables.messages,
-          where: 'chatId = ?', whereArgs: [chatId]);
-      final chat = await _database
-          .query(DatabaseTables.chats, where: 'id = ?', whereArgs: [chatId]);
-      chatMessageEntity = ChatMessageEntity(
-          chat: ChatModel.fromDatabase(chat.first),
-          messages: messages.map((e) => MessageModel.fromDatabase(e)).toList());
-      return Right(chatMessageEntity);
-    } catch (e) {
-      CliLogger.error(e.toString());
-      return const Left(CacheFailure());
-    }
-  }
-
-  @override
   Future<Either<Failure, List<MessageEntity>>> getMessages(
-        GetMessagesParams params) async {
+      GetMessagesParams params) async {
     try {
       List<MessageEntity> messages = [];
       final result = await _database.query(

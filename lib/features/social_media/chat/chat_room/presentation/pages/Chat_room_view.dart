@@ -31,7 +31,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
   void initState() {
     super.initState();
     chatRoomCubit = context.read<ChatRoomCubit>()
-      ..getChatMessages(widget.chatId!);
+      ..getMessages(widget.chatId!);
   }
 
   @override

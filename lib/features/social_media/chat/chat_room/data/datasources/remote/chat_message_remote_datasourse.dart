@@ -14,11 +14,11 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 abstract class MessagesRemoteDataSource {
-  Future<Either<Failure, ChatMessagesModel>> getChatMessages({
-    required String chatId,
-  });
+  // Future<Either<Failure, ChatMessagesModel>> getChatMessages({
+  //   required String chatId,
+  // });
 
-  Stream<MessageEntity> listenToNewMessages();
+  void listenToNewMessages(Function(MessageEntity message) params);
 
   Future<Either<Failure, bool>> sendMessage(SendMessageParams params);
 
@@ -26,24 +26,22 @@ abstract class MessagesRemoteDataSource {
     required String chatId,
     required String messageId,
   });
-
-
 }
 
 class MessagesRemoteDataSourceImplementation
     implements MessagesRemoteDataSource {
   final ApiConsumer _apiConsumer;
-  final SocketServiceContract _socket;
+  final Socket _socket;
 
   MessagesRemoteDataSourceImplementation(this._apiConsumer, this._socket);
 
-  @override
-  Future<Either<Failure, ChatMessagesModel>> getChatMessages(
-      {required String chatId}) async {
-    final response = await _apiConsumer.get(EndPoints.getChatMessages(chatId));
-    return response.fold((failure) => Left(failure),
-        (data) => Right(ChatMessagesModel.fromJson(data['data'])));
-  }
+  // @override
+  // Future<Either<Failure, ChatMessagesModel>> getChatMessages(
+  //     {required String chatId}) async {
+  //   final response = await _apiConsumer.get(EndPoints.getChatMessages(chatId));
+  //   return response.fold((failure) => Left(failure),
+  //       (data) => Right(ChatMessagesModel.fromJson(data['data'])));
+  // }
 
   @override
   Future<Either<Failure, bool>> deleteMessage(
@@ -59,38 +57,33 @@ class MessagesRemoteDataSourceImplementation
   }
 
   @override
-  Stream<MessageEntity> listenToNewMessages() {
-    return _socket.socketMessageStream;
-    // try {
-    //   _socket.on(SocketIOEvents.newMessageFromMe, (data) {
-    //
-    //     CliLogger.info("newMessageFromMe :  $data");
-    //     MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
-    //     params(messageModel);
-    //   });
-    //   _socket.on(SocketIOEvents.newMessageFromOther, (data) {
-    //     CliLogger.info("newMessageFromOther :  $data");
-    //     MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
-    //     params(messageModel);
-    //   });
-    // } catch (e) {
-    //   CliLogger.info("can't read last message error $e");
-    // }
+  void listenToNewMessages(Function(MessageEntity message) params) {
+    try {
+      _socket.connect();
+      _socket.on(SocketIOListeners.newMessageFromMe, (data) {
+        CliLogger.info("newMessageFromMe :  $data");
+        MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
+        params(messageModel);
+      });
+      _socket.on(SocketIOListeners.newMessageFromOther, (data) {
+        CliLogger.info("newMessageFromOther :  $data");
+        MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
+        params(messageModel);
+      });
+    } catch (e) {
+      CliLogger.info("can't read last message error $e");
+    }
   }
 
   @override
-  Future<Either<Failure, bool>> sendMessage(SendMessageParams params) async{
-    _socket.sendMessage(message: params.message, chatId: params.chatId);
-    // try{
-    //   _socket.emit(SocketIOMessages.sendMessage,params.toSocketParams());
-    //   CliLogger.info('message sent successfully');
-    //   return const Right(true);
-    // }catch(e){
-    //   CliLogger.error('can\'t send error $e');
-    //   return const Left(ServerFailure(message: "can't send message "));
-    // }
-
-    return const Right(true);
+  Future<Either<Failure, bool>> sendMessage(SendMessageParams params) async {
+    try {
+      _socket.connect();
+      _socket.emit(SocketIOEvents.sendMessage, params.toSocketParams());
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error('can\'t send error $e');
+      return const Left(ServerFailure(message: "can't send message "));
+    }
   }
-
 }

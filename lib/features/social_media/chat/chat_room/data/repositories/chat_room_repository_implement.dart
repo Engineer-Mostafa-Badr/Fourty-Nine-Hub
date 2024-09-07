@@ -20,10 +20,10 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   ChatRoomRepositoryImplementation(
       this._chatRemoteDataSource, this._chatLocalDataSource);
 
-  @override
-  Future<Either<Failure, ChatMessagesModel>> getChatMessages(String chatId) {
-    return _chatRemoteDataSource.getChatMessages(chatId: chatId);
-  }
+  // @override
+  // Future<Either<Failure, ChatMessagesModel>> getChatMessages(String chatId) {
+  //   return _chatRemoteDataSource.getChatMessages(chatId: chatId);
+  // }
 
   @override
   Future<Either<Failure, bool>> deleteChatMessage(
@@ -46,12 +46,12 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   }
 
   @override
-  Stream<MessageEntity> listenToNewMessages() {
-    _chatRemoteDataSource.listenToNewMessages().listen((message) {
-      _chatLocalDataSource.saveMessage(message);
-    });
-    return _chatRemoteDataSource.listenToNewMessages();
-    _chatRemoteDataSource.listenToNewMessages();
+  void listenToNewMessages(Function(MessageEntity message) params){
+    // _chatRemoteDataSource.listenToNewMessages().listen((message) {
+    //   _chatLocalDataSource.saveMessage(message);
+    // });
+    return _chatRemoteDataSource.listenToNewMessages(params);
+    // _chatRemoteDataSource.listenToNewMessages();
     // params.stream.listen((event) {
     //   event.fold((failure) {}, (message) async {
     //     _chatLocalDataSource.saveMessage(message);

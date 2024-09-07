@@ -159,6 +159,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_client_helper.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_client_helper_imp.dart';
@@ -169,6 +170,7 @@ import 'package:fourtyninehub/core/data/datasources/local/database/local_databas
 import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/repositories/reels_repository_impl.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/repositories/StoriesRpo.dart';
@@ -227,6 +229,22 @@ class DI {
 
     await LocalizationService.init();
     await SQFLiteDataSource.instance.initDatabase();
+
+    final String? token =
+        (await serviceLocator<GetTokensUseCase>().call(const NoParams())).fold(
+      (l) => null,
+      (r) => r?.accessToken,
+    );
+    serviceLocator.registerSingleton<Socket>(io(
+      EndPoints.developmentWebSocketBaseUrl,
+      OptionBuilder()
+          .setTransports(['websocket'])
+          .disableAutoConnect()
+          .setExtraHeaders({
+            'authorization': token,
+          })
+          .build(),
+    ));
 
     // database
     serviceLocator.registerLazySingleton<Database>(
@@ -330,11 +348,6 @@ class DI {
     SubcategoriesServiceLocator.execute(serviceLocator: serviceLocator);
     // Fourty-Nine
     FourtyNineServiceLocator.execute(serviceLocator);
-
-    // Socket service
-    serviceLocator.registerLazySingleton<SocketServiceContract>(
-      () => SocketServiceImplementation(),
-    );
 
     // Wheel
     WheelServiceLocator.execute(serviceLocator);
