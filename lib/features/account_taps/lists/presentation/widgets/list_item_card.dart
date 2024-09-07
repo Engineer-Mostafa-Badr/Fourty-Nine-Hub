@@ -35,7 +35,7 @@ class ListItemCard extends StatelessWidget {
                 fromProfile: true,
               ),
               const Sizer(),
-              Expanded(child: Label(text: user.firstName)),
+              Expanded(child: Label(text: "${user.firstName}\t${user.lastName}")),
               const Sizer(),
               if (type == ListTypes.requests)
                 IconButton(

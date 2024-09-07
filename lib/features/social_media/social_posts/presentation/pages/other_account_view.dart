@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +61,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         child: Container(
                             width: double.infinity,
                             padding: const EdgeInsetsDirectional.only(
-                                top: 25, end: 10, start: 10),
+                                top: 35, end: 10, start: 10),
                             child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -277,7 +279,33 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               },
                             );
                           }, selectCoverImage: (){
-                            controller.uploadCoverPhoto();
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Wrap(
+                                  children: <Widget>[
+                                    ListTile(
+                                      leading: const Icon(Icons.photo_library),
+                                      title: const Text('Gallery'),
+                                      onTap: () async {
+                                        Navigator.pop(context);
+                                        await controller.uploadCoverPhoto(isGallery: true);
+                                        // Reload user data if needed
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: const Icon(Icons.camera_alt),
+                                      title: const Text('Camera'),
+                                      onTap: () async {
+                                        Navigator.pop(context);
+                                        await controller.uploadCoverPhoto(isGallery: false);
+                                        // Reload user data if needed
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           }),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 6),
@@ -375,337 +403,349 @@ class _OtherAccountViewState extends State<OtherAccountView> {
       required Function editProfile,
       required Function onAddFriend}) {
     final loginUser = context.read<UserCubit>().state.data;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 250,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                  child: Column(
+    return BlocBuilder<SocialPostsCubit,SocialPostsState>(
+      builder: (context,state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 250,
+              child: Stack(
                 children: [
-                  Expanded(
-                    flex: 4,
-                    child: Stack(
-                      alignment: AlignmentDirectional.bottomEnd,
-                      children: [
-                        Image.network(
-                          user.profileCover!.isNotEmpty
-                              ? user.profileCover!
-                              : UIConst.socialImagePlaceHolder,
-                          fit: BoxFit.fill,
-                          width: double.infinity,
+                  Positioned.fill(
+                      child: Column(
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: Stack(
+                          alignment: AlignmentDirectional.bottomEnd,
+                          children: [
+                            state.newCover!=null?Image.file(
+                              File(state.newCover!.file.path),
+                              fit: BoxFit.fill,
+                              width: double.infinity,
+                            ):Image.network(
+                              user.profileCover!.isNotEmpty
+                                  ? user.profileCover!
+                                  : UIConst.socialImagePlaceHolder,
+                              fit: BoxFit.fill,
+                              width: double.infinity,
+                            ),
+                            if(loginUser?.id==user.id)InkWell(
+                              onTap: (){
+                                selectCoverImage();
+                              },
+                              child: Container(
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: AppColors.PRIMARY_COLOR
+                                  ),
+                                  child: const Icon(Icons.camera_alt_outlined,color: Colors.white,)),
+                            )
+                          ],
                         ),
-                        if(loginUser?.id==user.id)InkWell(
-                          onTap: (){
-                            selectCoverImage();
-
-                          },
-                          child: Container(
-                              padding: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.PRIMARY_COLOR
-                              ),
-                              child: Icon(Icons.camera_alt_outlined,color: Colors.white,)),
-                        )
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                      child: Padding(
-                    padding:
-                        const EdgeInsetsDirectional.only(top: 3.0, end: 10),
-                    child: loginUser?.id == user.id
-                        ? Container()
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              AppButton(
-                                  height: 120,
-                                  width: kToolbarHeight * 1.5,
-                                  backColor: user.isFollowed == true
-                                      ? AppColors.PRIMARY_COLOR
-                                      : null,
-                                  label: user.isFollowed == true
-                                      ? 'unFollow'
-                                      : 'Follow',
-                                  style: Styles.mediumText(color: Colors.white),
-                                  onPressed: () {
-                                    onFollow();
-                                  }),
-                              const Sizer(),
-                              (user.areFriends == true ||
-                                      user.isSenTRequest == true)
-                                  ? PopupMenuButton(
-                                      // iconSize: 150,
-                                      itemBuilder: (context) {
-                                        return [
-                                          if (user.isSenTRequest == true) ...[
-                                            PopupMenuItem<int>(
-                                              value: 0,
-                                              child: const Text("Accept"),
-                                              onTap: () => onAcceptFriend(),
-                                            ),
-                                            PopupMenuItem<int>(
-                                              value: 1,
-                                              child: const Text("Reject"),
-                                              onTap: () => onRejectFriend(),
-                                            ),
-                                          ],
-                                          if (user.areFriends == true)
-                                            PopupMenuItem<int>(
-                                              value: 0,
-                                              child:
-                                                  const Text("Delete Friend"),
-                                              onTap: () => onDeleteFriend(),
-                                            ),
-                                        ];
-                                      },
-                                      child: Container(
-                                          alignment: Alignment.center,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              color: AppColors.PRIMARY_COLOR),
-                                          child: Text(
-                                            user.isSenTRequest == true
-                                                ? 'Accept Request'
-                                                : user.areFriends == true
-                                                    ? 'Friends'
-                                                    : '',
-                                            style: Styles.mediumText(
-                                                color: Colors.white),
-                                          )))
-                                  : AppButton(
-                                      height: 110,
-                                      padding: 5,
-                                      backColor: user.sentFriendRequest == true
+                      ),
+                      Expanded(
+                          child: Padding(
+                        padding:
+                            const EdgeInsetsDirectional.only(top: 3.0, end: 10),
+                        child: loginUser?.id == user.id
+                            ? Container()
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  AppButton(
+                                      height: 120,
+                                      width: kToolbarHeight * 1.5,
+                                      backColor: user.isFollowed == true
                                           ? AppColors.PRIMARY_COLOR
                                           : null,
-                                      style: Styles.mediumText(
-                                          color: Colors.white),
-                                      label: user.isSenTRequest == true
-                                          ? 'Accept Request'
-                                          : user.areFriends == true
-                                              ? 'Friends'
-                                              : user.sentFriendRequest == true
-                                                  ? 'Remove Request'
-                                                  : 'Add Friend',
+                                      label: user.isFollowed == true
+                                          ? 'unFollow'
+                                          : 'Follow',
+                                      style: Styles.mediumText(color: Colors.white),
                                       onPressed: () {
-                                        onAddFriend();
-                                      })
-                            ],
-                          ),
+                                        onFollow();
+                                      }),
+                                  const Sizer(),
+                                  (user.areFriends == true ||
+                                          user.isSenTRequest == true)
+                                      ? PopupMenuButton(
+                                          // iconSize: 150,
+                                          itemBuilder: (context) {
+                                            return [
+                                              if (user.isSenTRequest == true) ...[
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: const Text("Accept"),
+                                                  onTap: () => onAcceptFriend(),
+                                                ),
+                                                PopupMenuItem<int>(
+                                                  value: 1,
+                                                  child: const Text("Reject"),
+                                                  onTap: () => onRejectFriend(),
+                                                ),
+                                              ],
+                                              if (user.areFriends == true)
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child:
+                                                      const Text("Delete Friend"),
+                                                  onTap: () => onDeleteFriend(),
+                                                ),
+                                            ];
+                                          },
+                                          child: Container(
+                                              alignment: Alignment.center,
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal: 10),
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  color: AppColors.PRIMARY_COLOR),
+                                              child: Text(
+                                                user.isSenTRequest == true
+                                                    ? 'Accept Request'
+                                                    : user.areFriends == true
+                                                        ? 'Friends'
+                                                        : '',
+                                                style: Styles.mediumText(
+                                                    color: Colors.white),
+                                              )))
+                                      : AppButton(
+                                          height: 110,
+                                          padding: 5,
+                                          backColor: user.sentFriendRequest == true
+                                              ? AppColors.PRIMARY_COLOR
+                                              : null,
+                                          style: Styles.mediumText(
+                                              color: Colors.white),
+                                          label: user.isSenTRequest == true
+                                              ? 'Accept Request'
+                                              : user.areFriends == true
+                                                  ? 'Friends'
+                                                  : user.sentFriendRequest == true
+                                                      ? 'Remove Request'
+                                                      : 'Add Friend',
+                                          onPressed: () {
+                                            onAddFriend();
+                                          })
+                                ],
+                              ),
+                      )),
+                    ],
                   )),
-                ],
-              )),
-              PositionedDirectional(
-                  bottom: 0,
-                  start: 10,
-                  child: Stack(
-                    alignment: AlignmentDirectional.bottomEnd,
-                    children: [
-                      CircleAvatar(
-                        radius: 60,
-                        child: CircleAvatar(
-                          radius: 60,
-                          backgroundColor: Colors.white,
-                          backgroundImage: CachedNetworkImageProvider(
-                              user.profilePicture ?? UIConst.profilePlaceHolder),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: (){
-                          selectImageGallary();
-
-                        },
-                        child: Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.PRIMARY_COLOR
+                  PositionedDirectional(
+                      bottom: 0,
+                      start: 10,
+                      child: Stack(
+                        alignment: AlignmentDirectional.bottomEnd,
+                        children: [
+                          state.newImage !=null ? CircleAvatar(
+                            radius: 60,
+                            child: CircleAvatar(
+                              radius: 60,
+                              backgroundColor: Colors.white,
+                              backgroundImage: FileImage(File(state.newImage!.file.path)),
                             ),
-                            child: Icon(Icons.camera_alt_outlined,color: Colors.white,)),
-                      )
-                    ],
-                  ))
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Sizer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          ):CircleAvatar(
+                            radius: 60,
+                            child: CircleAvatar(
+                              radius: 60,
+                              backgroundColor: Colors.white,
+                              backgroundImage: CachedNetworkImageProvider(
+                                  user.profilePicture ?? UIConst.profilePlaceHolder),
+                            ),
+                          ),
+                          if(loginUser?.id==user.id)InkWell(
+                            onTap: (){
+                              selectImageGallary();
+                            },
+                            child: Container(
+                                padding: const EdgeInsets.all(5),
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.PRIMARY_COLOR
+                                ),
+                                child: const Icon(Icons.camera_alt_outlined,color: Colors.white,)),
+                          )
+                        ],
+                      ))
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const Sizer(),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Label(
-                          text: "${user.firstName} ${user.lastName}",
-                          style:
-                              Styles.headerText(fontWeight: FontWeight.w600)),
-                      const Sizer(
-                        width: 5,
-                      ),
-                      const Icon(
-                        Icons.verified,
-                        size: 20,
-                        color: AppColors.SECONDARY_COLOR,
-                      )
-                    ],
-                  ),
-                  if (loginUser?.id != widget.userId)
-                    PopupMenuButton(
-                        child: Container(
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: AppColors.SECONDARY_COLOR),
-                            child: Text(
-                              'Message',
-                              style: Styles.mediumText(color: Colors.white),
-                            )),
-                        itemBuilder: (context) {
-                          return const [
-                            PopupMenuItem<int>(
-                              value: 0,
-                              child: Text("Normal"),
-                            ),
-                            PopupMenuItem<int>(
-                              value: 1,
-                              child: Text("Anonymous"),
-                            ),
-                          ];
-                        },
-                        onSelected: (value) {
-                          !context.read<UserCubit>().isLoggedIn?context.push(Routes.LOGIN):context.push(Routes.CHAT);
-                        }),
-                ],
-              ),
-              const Sizer(
-                height: 4,
-              ),
-              Label(
-                  text: '@${user.email.split('@')[0]}',
-                  style: Styles.mediumText(color: Colors.grey)),
-              const Sizer(
-                height: 4,
-              ),
-              Row(
-                children: [
-                  _buildCounter(
-                    value: '${user.friendsCount} ',
-                    label: 'Friends',
-                  ),
-                  const Sizer(),
-                  _buildCounter(
-                    value: '${user.followersCount} ',
-                    label: 'Follower',
-                  ),
-                  const Sizer(),
-                  _buildCounter(
-                    value: '${user.followingCount} ',
-                    label: 'Following',
-                  ),
-                ],
-              ),
-              const Sizer(
-                height: 5,
-              ),
-              Label(
-                  text: user.bio,
-                  style: Styles.mediumText(color: Colors.black)),
-              const Sizer(
-                height: 5,
-              ),
-              if (user.city.isNotEmpty ||
-                  user.job.isNotEmpty ||
-                  user.country.isNotEmpty ||
-                  user.phone.isNotEmpty)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (user.city.isNotEmpty || user.country.isNotEmpty) ...[
                       Row(
                         children: [
                           Label(
-                              text: 'From',
-                              style: Styles.headerText(
-                                  color: Colors.grey, fontSize: 30)),
+                              text: "${user.firstName} ${user.lastName}",
+                              style:
+                                  Styles.headerText(fontWeight: FontWeight.w600)),
+                          const Sizer(
+                            width: 5,
+                          ),
+                          const Icon(
+                            Icons.verified,
+                            size: 20,
+                            color: AppColors.SECONDARY_COLOR,
+                          )
+                        ],
+                      ),
+                      if (loginUser?.id != widget.userId)
+                        PopupMenuButton(
+                            child: Container(
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: AppColors.SECONDARY_COLOR),
+                                child: Text(
+                                  'Message',
+                                  style: Styles.mediumText(color: Colors.white),
+                                )),
+                            itemBuilder: (context) {
+                              return const [
+                                PopupMenuItem<int>(
+                                  value: 0,
+                                  child: Text("Normal"),
+                                ),
+                                PopupMenuItem<int>(
+                                  value: 1,
+                                  child: Text("Anonymous"),
+                                ),
+                              ];
+                            },
+                            onSelected: (value) {
+                              !context.read<UserCubit>().isLoggedIn?context.push(Routes.LOGIN):context.push(Routes.CHAT);
+                            }),
+                    ],
+                  ),
+                  const Sizer(
+                    height: 4,
+                  ),
+                  Label(
+                      text: '@${user.email.split('@')[0]}',
+                      style: Styles.mediumText(color: Colors.grey)),
+                  const Sizer(
+                    height: 4,
+                  ),
+                  Row(
+                    children: [
+                      _buildCounter(
+                        value: '${user.friendsCount} ',
+                        label: 'Friends',
+                      ),
+                      const Sizer(),
+                      _buildCounter(
+                        value: '${user.followersCount} ',
+                        label: 'Follower',
+                      ),
+                      const Sizer(),
+                      _buildCounter(
+                        value: '${user.followingCount} ',
+                        label: 'Following',
+                      ),
+                    ],
+                  ),
+                  const Sizer(
+                    height: 5,
+                  ),
+                  Label(
+                      text: user.bio,
+                      style: Styles.mediumText(color: Colors.black)),
+                  const Sizer(
+                    height: 5,
+                  ),
+                  if (user.city.isNotEmpty ||
+                      user.job.isNotEmpty ||
+                      user.country.isNotEmpty ||
+                      user.phone.isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (user.city.isNotEmpty || user.country.isNotEmpty) ...[
+                          Row(
+                            children: [
+                              Label(
+                                  text: 'From',
+                                  style: Styles.headerText(
+                                      color: Colors.grey, fontSize: 30)),
+                              const Sizer(
+                                height: 5,
+                              ),
+                              Expanded(
+                                child: Label(
+                                  text:
+                                      '${user.country}${user.city.isNotEmpty ? ',' : ''} ${user.city}',
+                                  style: Styles.headerText(
+                                      color: Colors.black, fontSize: 30),
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
+                          ),
                           const Sizer(
                             height: 5,
                           ),
-                          Expanded(
-                            child: Label(
-                              text:
-                                  '${user.country}${user.city.isNotEmpty ? ',' : ''} ${user.city}',
-                              style: Styles.headerText(
-                                  color: Colors.black, fontSize: 30),
-                              maxLines: 1,
-                            ),
+                        ],
+                        if (user.phone.isNotEmpty) ...[
+                          Row(
+                            children: [
+                              Label(
+                                  text: 'Phone',
+                                  style: Styles.headerText(
+                                      color: Colors.grey, fontSize: 30)),
+                              const Sizer(),
+                              Expanded(
+                                child: Label(
+                                  text: user.phone,
+                                  style: Styles.headerText(
+                                      color: Colors.black, fontSize: 30),
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Sizer(
+                            height: 5,
                           ),
                         ],
-                      ),
-                      const Sizer(
-                        height: 5,
-                      ),
-                    ],
-                    if (user.phone.isNotEmpty) ...[
-                      Row(
-                        children: [
-                          Label(
-                              text: 'Phone',
-                              style: Styles.headerText(
-                                  color: Colors.grey, fontSize: 30)),
-                          const Sizer(),
-                          Expanded(
-                            child: Label(
-                              text: user.phone,
-                              style: Styles.headerText(
-                                  color: Colors.black, fontSize: 30),
-                              maxLines: 1,
-                            ),
+                        if (user.job.isNotEmpty)
+                          Row(
+                            children: [
+                              Label(
+                                  text: 'Work',
+                                  style: Styles.headerText(
+                                      color: Colors.grey, fontSize: 30)),
+                              const Sizer(),
+                              Expanded(
+                                child: Label(
+                                  text: user.job,
+                                  style: Styles.headerText(
+                                      color: Colors.black, fontSize: 30),
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      const Sizer(
-                        height: 5,
-                      ),
-                    ],
-                    if (user.job.isNotEmpty)
-                      Row(
-                        children: [
-                          Label(
-                              text: 'Work',
-                              style: Styles.headerText(
-                                  color: Colors.grey, fontSize: 30)),
-                          const Sizer(),
-                          Expanded(
-                            child: Label(
-                              text: user.job,
-                              style: Styles.headerText(
-                                  color: Colors.black, fontSize: 30),
-                              maxLines: 1,
-                            ),
-                          ),
-                        ],
-                      ),
-                  ],
-                ),
-            ],
-          ),
-        ),
-
-      ],
+                      ],
+                    ),
+                ],
+              ),
+            ),
+          ],
+        );
+      }
     );
   }
 
