@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
@@ -90,14 +91,13 @@ class _InstagramPostsState extends State<InstagramPosts> {
           }
         }, builder: (context, state) {
       final controller = context.read<InstagramCubit>();
+      print(controller.feedPagingController
+              .itemList![5].comments);
       return RefreshIndicator(
         onRefresh: () async => controller.onRefresh(),
         child: CustomScrollView(
           controller: widget.scrollController,
           slivers: [
-            // const SliverToBoxAdapter(
-            //   child: ChatStories(),
-            // ),
             SliverToBoxAdapter(
               child: BlocProvider<InstagramCubit>(
                   create: (_)=>serviceLocator()..loadInstaSuggestedPeople(),
@@ -595,7 +595,23 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                     ),
                                     child: const Label(text: 'Show Comments'))
                           ],
-
+                          if(controller.feedPagingController
+                              .itemList![index].content!.isEmpty&&(controller.feedPagingController
+                              .itemList![index].comments!=null))RichText(
+                              text: TextSpan(
+                                  children: [
+                                TextSpan(
+                                    text: '${controller.feedPagingController
+                                    .itemList?[index].comments?[0].firstName}\t\t',
+                                    recognizer: TapGestureRecognizer()..onTap = () => context.push(Routes.INSTAGRAMPROFILE,extra: controller.feedPagingController
+                                        .itemList?[index].user.id),
+                                    style: Styles.mediumText(color: Colors.black)),
+                                TextSpan(
+                                    text:controller.feedPagingController
+                                        .itemList![index].comments!=null?'':controller.feedPagingController
+                                        .itemList?[index].comments?[0].content,
+                                    style: Styles.mediumText(color: Colors.grey)),
+                              ])),
                           RichText(
                               text: TextSpan(children: [
                                 TextSpan(

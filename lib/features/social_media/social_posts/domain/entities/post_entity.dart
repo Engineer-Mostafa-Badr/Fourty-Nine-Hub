@@ -45,7 +45,7 @@ class PostEntity {
   List<String>? shares;
   List<TwitterUserModel>? love;
   MainPostEntity? mainPost;
-  List<String>? comments;
+  List<dynamic>? comments;
   bool? isReact;
 
   //==>Advertisement

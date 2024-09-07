@@ -1,12 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
 import 'package:fourtyninehub/features/account_taps/lists/presentation/cubit/lists_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/lists/presentation/widgets/list_item_card.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -66,6 +69,8 @@ class _ListsViewState extends State<ListsView> {
                             )
                           : state.selectedList == ListTypes.friends
                               ? _buildListUsersWidget(
+                                  controller:
+                                      controller.friendsPagingController,
                                   list: state.friends ?? [],
                                   type: ListTypes.friends,
                                   removeRequest:
@@ -75,17 +80,22 @@ class _ListsViewState extends State<ListsView> {
                                       (AcceptRejectFriendRequestParams
                                           params) {},
                                   unblockUser: (String id) {},
-                                  deleteFriend: (String id) async{
-                                    var result = await controller.deleteFriend(userId: id);
-                                    if(result==true){
-                                      state.friends?.removeWhere((element) => element.id==id);
-                                      showSuccessMessage(context, 'Remove User Block Successfully');
+                                  deleteFriend: (String id) async {
+                                    var result = await controller.deleteFriend(
+                                        userId: id);
+                                    if (result == true) {
+                                      state.friends?.removeWhere(
+                                          (element) => element.id == id);
+                                      showSuccessMessage(context,
+                                          'Remove User Block Successfully');
                                       setState(() {});
                                     }
                                   },
                                   unfollowUser: (String id) {})
                               : state.selectedList == ListTypes.followers
                                   ? _buildListUsersWidget(
+                                      controller:
+                                          controller.followersPagingController,
                                       list: state.followers ?? [],
                                       type: ListTypes.followers,
                                       removeRequest:
@@ -94,50 +104,64 @@ class _ListsViewState extends State<ListsView> {
                                       acceptRequest:
                                           (AcceptRejectFriendRequestParams
                                               params) {},
-                                      unblockUser: (String id) {
-
-                                      },
-                                      deleteFriend: (String id) async{
-
-                                      },
-                                      unfollowUser: (String id) async{
-                                        var result = await controller.unFollowRequest(userId: id, context: context);
-                                        if(result==true){
-                                          state.friends?.removeWhere((element) => element.id==id);
-                                          showSuccessMessage(context, 'Unfollow User Successfully');
+                                      unblockUser: (String id) {},
+                                      deleteFriend: (String id) async {},
+                                      unfollowUser: (String id) async {
+                                        var result =
+                                            await controller.unFollowRequest(
+                                                userId: id, context: context);
+                                        if (result == true) {
+                                          state.friends?.removeWhere(
+                                              (element) => element.id == id);
+                                          showSuccessMessage(context,
+                                              'Unfollow User Successfully');
                                           setState(() {});
                                         }
                                       })
                                   : state.selectedList == ListTypes.requests
                                       ? _buildListUsersWidget(
+                                          controller: controller
+                                              .requestsPagingController,
                                           list: state.requests ?? [],
                                           type: ListTypes.requests,
                                           removeRequest:
                                               (AcceptRejectFriendRequestParams
-                                                  params) async{
-                                                var result = await controller.acceptRejectFriend(params: params);
-                                                if(result==true){
-                                                  state.requests?.removeWhere((element) => element.id==params.userId);
-                                                  showSuccessMessage(context, 'Remove User Request Successfully');
-                                                  setState(() {});
-                                                }
-                                              },
+                                                  params) async {
+                                            var result = await controller
+                                                .acceptRejectFriend(
+                                                    params: params);
+                                            if (result == true) {
+                                              state.requests?.removeWhere(
+                                                  (element) =>
+                                                      element.id ==
+                                                      params.userId);
+                                              showSuccessMessage(context,
+                                                  'Remove User Request Successfully');
+                                              setState(() {});
+                                            }
+                                          },
                                           acceptRequest:
                                               (AcceptRejectFriendRequestParams
-                                                  params) async{
-                                                var result = await controller.acceptRejectFriend(params: params);
-                                                if(result==true){
-                                                  state.requests?.removeWhere((element) => element.id==params.userId);
-                                                  showSuccessMessage(context, 'Accept User Request Successfully');
-                                                  setState(() {});
-                                                }
-                                              },
+                                                  params) async {
+                                            var result = await controller
+                                                .acceptRejectFriend(
+                                                    params: params);
+                                            if (result == true) {
+                                              state.requests?.removeWhere(
+                                                  (element) =>
+                                                      element.id ==
+                                                      params.userId);
+                                              showSuccessMessage(context,
+                                                  'Accept User Request Successfully');
+                                              setState(() {});
+                                            }
+                                          },
                                           unblockUser: (String id) {},
                                           deleteFriend: (String id) {},
-                                          unfollowUser: (String id) async{
-
-                                          })
+                                          unfollowUser: (String id) async {})
                                       : _buildListUsersWidget(
+                                          controller: controller
+                                              .blockedPagingController,
                                           list: state.blocked ?? [],
                                           type: ListTypes.blocked,
                                           removeRequest:
@@ -146,11 +170,17 @@ class _ListsViewState extends State<ListsView> {
                                           acceptRequest:
                                               (AcceptRejectFriendRequestParams
                                                   params) {},
-                                          unblockUser: (String id) async{
-                                            var result = await controller.blockUser(userId: id, context: context);
-                                            if(result==true){
-                                              state.blocked?.removeWhere((element) => element.id==id);
-                                              showSuccessMessage(context, 'Unblocked User Successfully');
+                                          unblockUser: (String id) async {
+                                            var result =
+                                                await controller.blockUser(
+                                                    userId: id,
+                                                    context: context);
+                                            if (result == true) {
+                                              state.blocked?.removeWhere(
+                                                  (element) =>
+                                                      element.id == id);
+                                              showSuccessMessage(context,
+                                                  'Unblocked User Successfully');
                                               setState(() {});
                                             }
                                           },
@@ -218,28 +248,68 @@ class _ListsViewState extends State<ListsView> {
   Widget _buildListUsersWidget({
     required List<dynamic> list,
     required ListTypes type,
+    required PagingController<int, UserFriendEntity> controller,
     required Function(AcceptRejectFriendRequestParams) removeRequest,
     required Function(AcceptRejectFriendRequestParams) acceptRequest,
     required Function(String) unblockUser,
     required Function(String) deleteFriend,
     required Function(String) unfollowUser,
   }) {
-    return ListView.builder(
-        itemCount: list.length,
-        itemBuilder: (context, index) {
-          // return Container();
-          return ListItemCard(
-            user: list[index],
-            type: type,
-            removeRequest: (AcceptRejectFriendRequestParams params) =>
-                removeRequest(params),
-            acceptRequest: (AcceptRejectFriendRequestParams params) =>
-                acceptRequest(params),
-            deleteFriend: (id) => deleteFriend(id),
-            unblockUser: (id) => unblockUser(id),
-            unfollowUser: (id) => unfollowUser(id),
-          );
-        });
+    // return ListView.builder(
+    //     itemCount: list.length,
+    //     itemBuilder: (context, index) {
+    //       // return Container();
+    //       return ListItemCard(
+    //         user: list[index],
+    //         type: type,
+    //         removeRequest: (AcceptRejectFriendRequestParams params) =>
+    //             removeRequest(params),
+    //         acceptRequest: (AcceptRejectFriendRequestParams params) =>
+    //             acceptRequest(params),
+    //         deleteFriend: (id) => deleteFriend(id),
+    //         unblockUser: (id) => unblockUser(id),
+    //         unfollowUser: (id) => unfollowUser(id),
+    //       );
+    //     });
+    return PagedListView(
+      pagingController: controller,
+      physics:
+          const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+      builderDelegate: PagedChildBuilderDelegate<UserFriendEntity>(
+          noItemsFoundIndicatorBuilder: (context) {
+            print(controller.itemList?.length);
+            return const Padding(
+                padding: EdgeInsets.only(top: 200),
+                child: Center(
+                  child: Text(
+                    "No Users",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                    ),
+                  ),
+                ));
+          },
+          itemBuilder: (context, item, index) {
+            return ListItemCard(
+              user: item,
+              type: type,
+              removeRequest: (AcceptRejectFriendRequestParams params) =>
+                  removeRequest(params),
+              acceptRequest: (AcceptRejectFriendRequestParams params) =>
+                  acceptRequest(params),
+              deleteFriend: (id) => deleteFriend(id),
+              unblockUser: (id) => unblockUser(id),
+              unfollowUser: (id) => unfollowUser(id),
+            );
+          },
+          noMoreItemsIndicatorBuilder: (context) => Container(),
+          firstPageProgressIndicatorBuilder: (context) => Container(
+              margin: const EdgeInsets.only(top: 150),
+              child: const CupertinoActivityIndicator()),
+          newPageProgressIndicatorBuilder: (context) =>
+              const CupertinoActivityIndicator()),
+    );
   }
 
   Widget listItem({
