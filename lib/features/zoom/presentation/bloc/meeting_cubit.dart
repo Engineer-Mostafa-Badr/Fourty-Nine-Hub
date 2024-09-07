@@ -1,18 +1,14 @@
-import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
-import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/end_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/get_scheuled_rooms_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/join_room_use_case.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../../routes/pages.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -66,11 +62,10 @@ class MeetingCubit extends Cubit<MeetingState> {
     // print(isAdd);
     return isAdd;
   }
-
+bool isHost = false;
   Future<bool> joinNewMeeting(String roomId) async {
     emit(state.copyWith(status: MeetingStates.loading));
     final response = await joinRoomUseCase(MeetingParams(meetingId: roomId));
-    bool isAdd = false;
     response.fold((l) {
       emit(state.copyWith(status: MeetingStates.failure, failure: l));
       showErrorMessage(
@@ -82,12 +77,12 @@ class MeetingCubit extends Cubit<MeetingState> {
       );
     }, (r) {
       print("object $r}");
-      isAdd = r;
+      isHost = r;
 
       emit(state.copyWith(status: MeetingStates.success));
     });
-    print(isAdd);
-    return isAdd;
+    print(isHost);
+    return isHost;
   }
 
   BuildContext _context() =>
