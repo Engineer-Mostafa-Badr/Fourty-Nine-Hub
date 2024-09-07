@@ -3,7 +3,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasour
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/repositories/chat_room_repository_implement.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/deleteMessage_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/getChatMessages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
@@ -70,11 +69,6 @@ class SocialServiceLocator {
           serviceLocator(),
         ));
 
-    // serviceLocator.registerLazySingleton<GetChatMessagesUseCase>(
-    //     () => GetChatMessagesUseCase(
-    //           serviceLocator(),
-    //         ));
-
     serviceLocator.registerLazySingleton<DeleteChatMessageUseCase>(
         () => DeleteChatMessageUseCase(
               serviceLocator(),
@@ -106,8 +100,6 @@ class SocialServiceLocator {
         ));
 
     serviceLocator.registerFactory<ChatRoomCubit>(() => ChatRoomCubit(
-          serviceLocator(),
-          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

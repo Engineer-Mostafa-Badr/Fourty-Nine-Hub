@@ -1,22 +1,18 @@
 import 'dart:async';
-import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_user_use_case.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/chat_messgaes_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/typing_and_online_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/deleteMessage_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_request.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/getChatMessages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
@@ -25,73 +21,46 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 part 'chat_room_state.dart';
 
 class ChatRoomCubit extends Cubit<ChatRoomState> {
-  final GetTokensUseCase _getTokensUseCase;
-
-  // final GetChatMessagesUseCase _getChatMessagesUseCase;
   final GetMessagesUseCase _getMessagesUseCase;
-  final GetUserUseCase _getUserUseCase;
   final DeleteChatMessageUseCase _deleteChatMessageUseCase;
   final ListenToNewMessageUseCase _listenToNewMessageUseCase;
   final SendMessageUseCase _sendMessageUseCase;
   List<MessageEntity> chatMessages = [];
 
-  // ChatMessagesModel chatMessagesModel = ChatMessagesModel();
-  final ScrollController scrollController = ScrollController();
+   final ScrollController scrollController = ScrollController();
+   final StreamController<MessageEntity> messagesStreamController  = StreamController<MessageEntity>();
 
-  String? userToken;
-  String? userId;
   String? chatId;
   final FilePicker _filePicker = FilePicker.platform;
 
   ChatRoomCubit(
-    this._getTokensUseCase,
     this._listenToNewMessageUseCase,
     this._getMessagesUseCase,
     this._deleteChatMessageUseCase,
-    this._getUserUseCase,
     this._sendMessageUseCase,
   ) : super(const ChatRoomState());
 
-  Future<String?> getUserToken() async {
-    return _getTokensUseCase(const NoParams()).then((value) {
-      return value.fold((l) => null, (r) => r?.accessToken);
-    });
-  }
-
-  // final messagesStreamController = StreamController<MessageEntity>();
-
   Future<void> getMessages(String chatID) async {
+    emit(state.copyWith(status: ChatRoomStates.loading));
     chatId = chatID;
-    // emit(state.copyWith(status: ChatRoomStates.loading));
-    // chatId = chatID;
-    // final response = await _getChatMessagesUseCase(chatID);
-    // response.fold(
-    //     (failure) => emit(
-    //         state.copyWith(failure: failure, status: ChatRoomStates.error)),
-    //     (data) {
-    //   chatMessages = data.messages ?? [];
-    //   chatMessagesModel = data;
-    //
-    //   emit(state.copyWith(
-    //       chatData: data,
-    //       messages: data.messages!,
-    //       status: ChatRoomStates.success));
-    //   _scrollDown();
-    //   listenToNewMessages();
-    // });
-    emit(
-        state.copyWith(status: ChatRoomStates.success, messages: chatMessages));
-    listenToNewMessages();
+    final response = await _getMessagesUseCase(GetMessagesParams(
+        chatId: chatID, pagination: PaginationParams(limit:50, page: 1)));
+    response.fold(
+        (failure) => emit(
+            state.copyWith(failure: failure, status: ChatRoomStates.error)),
+        (data) {
+      chatMessages = data;
+
+      emit(state.copyWith(
+          messages: chatMessages, status: ChatRoomStates.success));
+      _scrollDown();
+      listenToNewMessages();
+    });
   }
 
   Future<void> sendMessage(
       {required String message, String? replyMessageId}) async {
     if (chatId != null) {
-      // _socketService.sendMessage(
-      //     message: message,
-      //     chatId: '66d874ec3b4cc1d6bdb4626e',
-      //     replyMessageId: replyMessageId);
-
       _sendMessageUseCase(SendMessageParams(
           message: message, chatId: chatId!, mediaIds: [], oneTimeView: false));
     } else {
@@ -99,80 +68,9 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     }
   }
 
-  void selectMessageForReplaying(MessageEntity message) {
-    emit(state.copyWith(replayedMessage: message));
-  }
-
-  void cancelReplay() {
-    emit(state.copyWith(replayedMessage: null));
-  }
-
-  // Future<void> sendMessageFromTinder(
-  //     {required String message,
-  //     String? replyMessageId,
-  //     required chatID}) async {
-  //   if (chatID != null) {
-  //     _socketService.sendMessage(
-  //         message: message, chatId: chatID!, replyMessageId: replyMessageId);
-
-  //     log("anonymous message sent =================");
-  //   } else {
-  //     debugPrint("Error chat id not found");
-  //   }
-  // }
-
   typingMessage() {}
 
-  Future<void> getUser() async {
-    final result = await _getUserUseCase(const NoParams());
-    result.fold(
-      (failure) {
-        userId = '';
-      },
-      (user) {
-        userId = user.id;
-      },
-    );
-  }
-
-  StreamController messagesStreamController = StreamController<MessageEntity>();
-
   listenToNewMessages() {
-    // _listenToNewMessageUseCase(const NoParams()).listen((message) {
-    //   chatMessages.add(message);
-    //   emit.call(state.copyWith(
-    //     messages: chatMessages,
-    //     status: ChatRoomStates.success,
-    //   ));
-    // });
-
-    // _socketService.socketMessageStream.listen((event) {
-    //   chatMessages.add(event);
-    //   emit.call(state.copyWith(
-    //       // chatData: chatMessagesModel,
-    //       messages: chatMessages,
-    //       status: ChatRoomStates.success));
-    //
-    //   _scrollDown();
-    // });
-
-    // messagesStreamController.stream.listen((message) {
-    //
-    // });
-
-    // CliLogger.success("listen to new messages called");
-    //
-    // _listenToNewMessageUseCase((message) {
-    //   CliLogger.warning("listen to new messages called from Cubit lelelelel");
-    //   // messagesStreamController.add(message);
-    //
-    //   chatMessages.add(message);
-    //   emit.call(state.copyWith(
-    //     // chatData: chatMessagesModel,
-    //       messages: chatMessages,
-    //       status: ChatRoomStates.success));
-    // });
-
     messagesStreamController.stream.listen((message) {
       chatMessages.add(message);
       emit(state.copyWith(
@@ -207,6 +105,14 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         DeleteMessageParams(chatId: chatId, messageId: messageId);
     await _deleteChatMessageUseCase.call(deleteMessageParams);
     getMessages(chatId);
+  }
+
+  void selectMessageForReplaying(MessageEntity message) {
+    emit(state.copyWith(replayedMessage: message));
+  }
+
+  void cancelReplay() {
+    emit(state.copyWith(replayedMessage: null));
   }
 
   Future<void> pickDocuments() async {
@@ -279,9 +185,4 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   void _scrollDown() => Timer(const Duration(milliseconds: 200),
       () => scrollController.jumpTo(scrollController.position.maxScrollExtent));
 
-  @override
-  Future<void> close() {
-    // _socketService.disposeSocket();
-    return super.close();
-  }
 }

@@ -6,7 +6,6 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/chat_messgaes_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
@@ -14,10 +13,6 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 abstract class MessagesRemoteDataSource {
-  // Future<Either<Failure, ChatMessagesModel>> getChatMessages({
-  //   required String chatId,
-  // });
-
   void listenToNewMessages(Function(MessageEntity message) params);
 
   Future<Either<Failure, bool>> sendMessage(SendMessageParams params);
@@ -34,14 +29,6 @@ class MessagesRemoteDataSourceImplementation
   final Socket _socket;
 
   MessagesRemoteDataSourceImplementation(this._apiConsumer, this._socket);
-
-  // @override
-  // Future<Either<Failure, ChatMessagesModel>> getChatMessages(
-  //     {required String chatId}) async {
-  //   final response = await _apiConsumer.get(EndPoints.getChatMessages(chatId));
-  //   return response.fold((failure) => Left(failure),
-  //       (data) => Right(ChatMessagesModel.fromJson(data['data'])));
-  // }
 
   @override
   Future<Either<Failure, bool>> deleteMessage(

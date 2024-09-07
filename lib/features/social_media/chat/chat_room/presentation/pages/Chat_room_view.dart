@@ -30,15 +30,14 @@ class _ChatRoomViewState extends State<ChatRoomView> {
   @override
   void initState() {
     super.initState();
-    chatRoomCubit = context.read<ChatRoomCubit>()
-      ..getMessages(widget.chatId!);
+    chatRoomCubit = context.read<ChatRoomCubit>()..getMessages(widget.chatId!);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.BACKGROUND_COLOR,
-      appBar: ChatRoomAppBar(),
+      appBar: const ChatRoomAppBar(),
       body: Stack(
         children: [
           // Background image
@@ -52,150 +51,152 @@ class _ChatRoomViewState extends State<ChatRoomView> {
             ),
           ),
           // Main content
-          Column(
-            children: [
-              Expanded(child: MessagesListView()),
-              SendMessageWidget(),
-            ],
+          const SafeArea(
+            child: Column(
+              children: [
+                Expanded(child: MessagesListView()),
+                SendMessageWidget(),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  replayMessage(MessageEntity messageEntity) {
-    setState(() {
-      _replayMessage = messageEntity;
-    });
-    // make cursor focus to write replay
-    focusNode.requestFocus();
-  }
-
-  deleteMessage({required String chatId, required String messageId}) {
-    bottomSheet(
-        context: context,
-        widget: DeleteMessageBody(
-          deleteMessageFunction: () {
-            chatRoomCubit.deleteMessage(chatId: chatId, messageId: messageId);
-            Navigator.of(context).pop();
-          },
-        ));
-  }
-
-  cancelReplay() {
-    setState(() {
-      _replayMessage = null;
-    });
-  }
-
-  void _showReplyDialog(
-    BuildContext context, {
-    required MessageEntity messageEntity,
-    required VoidCallback replyFunction,
-    required VoidCallback deleteFunction,
-  }) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: Dialog(
-            insetPadding: const EdgeInsets.all(10),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-            backgroundColor: Colors.transparent,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(5),
-                    ),
-                    color: AppColors.PRIMARY_COLOR.withOpacity(.8),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Label(
-                      text: "${messageEntity.text}",
-                      style: Styles.headerText(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Container(
-                    margin: const EdgeInsets.only(right: 50),
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(5),
-                      ),
-                      color: AppColors.PRIMARY_COLOR.withOpacity(.8),
-                    ),
-                    child: Column(
-                      children: [
-                        // reply message
-                        InkWell(
-                          onTap: replyFunction,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Label(
-                                  text: "Replay",
-                                  style: Styles.headerText(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                                const Icon(
-                                  Icons.replay,
-                                  size: 30,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const Divider(),
-
-                        //  delete message
-                        InkWell(
-                          onTap: deleteFunction,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Label(
-                                  text: "Delete",
-                                  style: Styles.headerText(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                                const Icon(
-                                  Icons.delete,
-                                  size: 30,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+// replayMessage(MessageEntity messageEntity) {
+//   setState(() {
+//     _replayMessage = messageEntity;
+//   });
+//   // make cursor focus to write replay
+//   focusNode.requestFocus();
+// }
+//
+// deleteMessage({required String chatId, required String messageId}) {
+//   bottomSheet(
+//       context: context,
+//       widget: DeleteMessageBody(
+//         deleteMessageFunction: () {
+//           chatRoomCubit.deleteMessage(chatId: chatId, messageId: messageId);
+//           Navigator.of(context).pop();
+//         },
+//       ));
+// }
+//
+// cancelReplay() {
+//   setState(() {
+//     _replayMessage = null;
+//   });
+// }
+//
+// void _showReplyDialog(
+//   BuildContext context, {
+//   required MessageEntity messageEntity,
+//   required VoidCallback replyFunction,
+//   required VoidCallback deleteFunction,
+// }) {
+//   showDialog(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return BackdropFilter(
+//         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+//         child: Dialog(
+//           insetPadding: const EdgeInsets.all(10),
+//           shape: RoundedRectangleBorder(
+//             borderRadius: BorderRadius.circular(5.0),
+//           ),
+//           backgroundColor: Colors.transparent,
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//               Container(
+//                 decoration: BoxDecoration(
+//                   borderRadius: const BorderRadius.all(
+//                     Radius.circular(5),
+//                   ),
+//                   color: AppColors.PRIMARY_COLOR.withOpacity(.8),
+//                 ),
+//                 child: Padding(
+//                   padding: const EdgeInsets.all(8.0),
+//                   child: Label(
+//                     text: "${messageEntity.text}",
+//                     style: Styles.headerText(
+//                       fontWeight: FontWeight.bold,
+//                       color: Colors.white,
+//                       fontSize: 16,
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//               const SizedBox(
+//                 height: 12,
+//               ),
+//               Container(
+//                   margin: const EdgeInsets.only(right: 50),
+//                   decoration: BoxDecoration(
+//                     borderRadius: const BorderRadius.all(
+//                       Radius.circular(5),
+//                     ),
+//                     color: AppColors.PRIMARY_COLOR.withOpacity(.8),
+//                   ),
+//                   child: Column(
+//                     children: [
+//                       // reply message
+//                       InkWell(
+//                         onTap: replyFunction,
+//                         child: Padding(
+//                           padding: const EdgeInsets.all(8.0),
+//                           child: Row(
+//                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                             children: [
+//                               Label(
+//                                 text: "Replay",
+//                                 style: Styles.headerText(
+//                                     fontWeight: FontWeight.bold,
+//                                     color: Colors.white),
+//                               ),
+//                               const Icon(
+//                                 Icons.replay,
+//                                 size: 30,
+//                                 color: Colors.white,
+//                               ),
+//                             ],
+//                           ),
+//                         ),
+//                       ),
+//                       const Divider(),
+//
+//                       //  delete message
+//                       InkWell(
+//                         onTap: deleteFunction,
+//                         child: Padding(
+//                           padding: const EdgeInsets.all(8.0),
+//                           child: Row(
+//                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                             children: [
+//                               Label(
+//                                 text: "Delete",
+//                                 style: Styles.headerText(
+//                                     fontWeight: FontWeight.bold,
+//                                     color: Colors.white),
+//                               ),
+//                               const Icon(
+//                                 Icons.delete,
+//                                 size: 30,
+//                                 color: Colors.white,
+//                               ),
+//                             ],
+//                           ),
+//                         ),
+//                       ),
+//                     ],
+//                   )),
+//             ],
+//           ),
+//         ),
+//       );
+//     },
+//   );
+// }
 }

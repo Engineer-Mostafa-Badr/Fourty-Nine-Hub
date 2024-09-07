@@ -1,17 +1,13 @@
 import 'dart:async';
-
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasources/local/chat_message_local_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasources/remote/chat_message_remote_datasourse.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
-
-import '../models/chat_messgaes_model.dart';
 
 class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   final MessagesRemoteDataSource _chatRemoteDataSource;
@@ -19,11 +15,6 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
 
   ChatRoomRepositoryImplementation(
       this._chatRemoteDataSource, this._chatLocalDataSource);
-
-  // @override
-  // Future<Either<Failure, ChatMessagesModel>> getChatMessages(String chatId) {
-  //   return _chatRemoteDataSource.getChatMessages(chatId: chatId);
-  // }
 
   @override
   Future<Either<Failure, bool>> deleteChatMessage(
@@ -46,18 +37,10 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   }
 
   @override
-  void listenToNewMessages(Function(MessageEntity message) params){
-    // _chatRemoteDataSource.listenToNewMessages().listen((message) {
-    //   _chatLocalDataSource.saveMessage(message);
-    // });
-    return _chatRemoteDataSource.listenToNewMessages(params);
-    // _chatRemoteDataSource.listenToNewMessages();
-    // params.stream.listen((event) {
-    //   event.fold((failure) {}, (message) async {
-    //     _chatLocalDataSource.saveMessage(message);
-    //   });
-    // });
+  void listenToNewMessages(Function(MessageEntity message) params) {
+    return _chatRemoteDataSource.listenToNewMessages((message) {
+      _chatLocalDataSource.saveMessage(message);
+      params(message);
+    });
   }
-
-
 }
