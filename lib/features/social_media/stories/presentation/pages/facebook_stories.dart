@@ -86,7 +86,10 @@ class Stories extends StatelessWidget {
               ? Stack(
                   children: [
                     Positioned.fill(
-                      child: StoryView(storyItems: [
+                      child: StoryView(
+                          indicatorColor: Colors.transparent,
+                          indicatorForegroundColor: Colors.transparent,
+                          storyItems: [
                         state.users[index].userStories!.first.type != 'video'
                             ? createStoryItem(
                                 context,

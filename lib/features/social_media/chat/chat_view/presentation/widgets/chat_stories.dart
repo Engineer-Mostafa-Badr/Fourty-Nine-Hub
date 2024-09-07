@@ -313,6 +313,8 @@ class ChatStories extends StatelessWidget {
                 child: IgnorePointer(
                   ignoring: true,
                   child: StoryView(
+                    indicatorColor: Colors.transparent,
+                    indicatorForegroundColor: Colors.transparent,
                     storyItems: [
                       state.users[index].userStories!.first.type != 'video'
                           ? createStoryItem(

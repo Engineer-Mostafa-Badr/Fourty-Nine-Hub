@@ -1438,7 +1438,7 @@ class ProfileContent extends StatelessWidget {
             reel.user.coverPictureSignedUrl!.isEmpty ||
                     reel.user.coverPictureSignedUrl == null
                 ? reel.user.profilePictureSignedUrl!
-                : UIConst.profilePlaceHolder,
+                : reel.user.coverPictureSignedUrl! ,
             errorBuilder: (context, error, stackTrace) => Image.network(
               UIConst.profilePlaceHolder,
             ),

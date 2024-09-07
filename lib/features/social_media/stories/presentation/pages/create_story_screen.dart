@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/pages/privacy_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 import 'package:path/path.dart' as path;
@@ -142,12 +143,12 @@ class _CameraScreenState extends State<CameraScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        IconButton(
-          icon: const Icon(Icons.close, color: Colors.black, size: 30),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        // IconButton(
+        //   icon: const Icon(Icons.close, color: Colors.black, size: 30),
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        // ),
         if (_selectedPageIndex == 0)
           IconButton(
             icon: Icon(Icons.color_lens_outlined,
@@ -158,6 +159,19 @@ class _CameraScreenState extends State<CameraScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: currentColor,
             ),
+          ),
+        if ((_storyText != null && _storyText!.isNotEmpty) ||
+            (_selectedFile != null))
+          IconButton(
+            icon: const Icon(Icons.privacy_tip_outlined,
+                color: Colors.black, size: 30),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => StatusPrivacyScreen(),
+                  ));
+            },
           ),
       ],
     );
