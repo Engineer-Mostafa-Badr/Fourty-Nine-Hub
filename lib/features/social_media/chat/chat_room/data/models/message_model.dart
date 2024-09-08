@@ -88,7 +88,7 @@ class MessageModel extends MessageEntity {
       isDeleted:
           (map['isDeleted'] != null && map['isDeleted'] == 1) ? true : false,
       isReply: (map['isReply'] != null && map['isReply'] == 1) ? true : false,
-      type: map['type'],
+      type: 1,
       sharesCount: map['sharesCount'],
       likesCount: map['likesCount'],
       loveCount: map['loveCount'],

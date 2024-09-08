@@ -1,9 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/data/datasources/local/database/local_database_data_source.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/chat_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/chat_messgaes_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -36,9 +34,9 @@ class SQFLiteMessagesLocalDataSourceImplementation
         DatabaseTables.messages,
         where: 'chatId = ?',
         whereArgs: [params.chatId],
-        orderBy: 'createdAt ASC',
-        limit: params.pagination.limit,
-        offset: params.pagination.page - 1,
+        // orderBy: 'createdAt DESC',
+        // limit: params.pagination.limit,
+        // offset: (params.pagination.page - 1) * params.pagination.limit,
       );
 
       for (var element in result) {
