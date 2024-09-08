@@ -1,7 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
+import 'package:fourtyninehub/common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_subscription_entity.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/localization/locales.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -75,7 +80,17 @@ class SubscriptionWidget extends StatelessWidget {
                 text: 'Cancel',
                 color: AppColors.SECONDARY_COLOR,
                 textColor: AppColors.AUTH_CONTAINER_COLOR,
-                function: () {},
+                function: () {
+                  showAreYouSure(
+                    title: 'Are you sure?',
+                    subTitle: 'Are you sure you want to unsubscribe?',
+                    action: () {},
+                    context: context,
+                  );
+                  // context.read<WalletCubit>().deleteSubscription(
+                  //       subscriptionId: subscription.subCategoryId!,
+                  //     );
+                },
               ),
             ),
             const Sizer(
@@ -87,8 +102,11 @@ class SubscriptionWidget extends StatelessWidget {
                 color: Theme.of(context).primaryColor,
                 textColor: Theme.of(context).scaffoldBackgroundColor,
                 function: () {
-                  serviceLocator<SubscriptionController>().showSubscriptionPlans(
-                    subCategoryId: '66adecd7aa2ff24015872e9f', wallets: [],);
+                  serviceLocator<SubscriptionController>()
+                      .showSubscriptionPlans(
+                    subCategoryId: '66adecd7aa2ff24015872e9f',
+                    wallets: [],
+                  );
                 },
               ),
             ),

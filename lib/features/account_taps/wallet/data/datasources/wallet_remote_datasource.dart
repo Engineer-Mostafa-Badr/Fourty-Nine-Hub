@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import '../../domain/entities/wallet/main_category_entity.dart';
 import '../../domain/entities/wallet/wallet_history_entity.dart';
 import '../../domain/entities/wallet/wallet_subscription_entity.dart';
+import '../../domain/usecases/delete_subscription_use_case.dart';
 import '../../domain/usecases/get_wallet_history_use_case.dart';
 import '../../domain/usecases/main_category_use_case.dart';
 import '../models/wallet/main_category_model.dart';
@@ -26,6 +27,9 @@ abstract class WalletRemoteDataSource {
 
   Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchSubCategory(
       MainCategoryParams params);
+
+  Future<Either<Failure, bool>> deleteSubscription(
+      DeleteSubscriptionParams params);
 }
 
 class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
@@ -103,20 +107,33 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchSubCategory(MainCategoryParams params)async {
+  Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchSubCategory(
+      MainCategoryParams params) async {
     final response = await _apiConsumer.get(
       EndPoints.geSubCategoryWallet(params.id!),
       queryParameters: params.paginationParams.toJson(),
     );
 
     return response.fold(
-          (failure) => Left(failure),
-          (response) {
+      (failure) => Left(failure),
+      (response) {
         final list = (response['data']['subcategories'] as List)
             .map((e) => MainCategoryWalletModel.fromJson(e))
             .toList();
         return Right(list);
       },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteSubscription(
+      DeleteSubscriptionParams params) async {
+    final response = await _apiConsumer.delete(
+      EndPoints.deleteSubscription(params.subscriptionId!),
+    );
+    return response.fold(
+      (failure)=>Left(failure),
+      (response)=>Right(response['status']),
     );
   }
 }

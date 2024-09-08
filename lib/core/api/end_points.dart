@@ -47,6 +47,9 @@ class EndPoints {
   static String geSubCategoryWallet(String id) {
     return '/categories/subcategories/$id';
   }
+  static String deleteSubscription(String id) {
+    return '/subscription/cancel-subscription/$id';
+  }
   static const getWallet= '/main-wallet/user-wallet';
   static const getPrice= '/advertisementCompany/price';
   static const postCompanyAd= '/advertisementCompany';

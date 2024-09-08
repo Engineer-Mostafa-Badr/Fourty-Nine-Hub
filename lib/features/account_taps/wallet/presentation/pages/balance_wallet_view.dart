@@ -25,8 +25,6 @@ class BalanceWalletView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
         appBar: BackAppBar(
           label: LocaleKeys.balance.localize,
@@ -92,14 +90,18 @@ class BalanceWalletView extends StatelessWidget {
                         label:
                             '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',
                         subTitle:
-                            '${state.balance?.fiveYears ?? ''} . 3 years last',
-                        ontap: () {}),
+                            '${state.balance?.fiveYears ?? ''} . ${state.balance?.fiveYearsLeft ?? ''} years last',
+                        ontap: () {
+                         // state.balance?.fiveYearsTransfer ==true ? : const SizedBox.shrink();
+                        }),
                     _buildWalletActionItem(
                         label:
                             '${LocaleKeys.gift.localize} / 10 ${LocaleKeys.years.localize}',
                         subTitle:
-                            '${state.balance?.tenYears ?? ''} . 8 years last',
-                        ontap: () {}),
+                            '${state.balance?.tenYears ?? ''} . ${state.balance?.tenYearsLeft ?? ''} years last',
+                        ontap: () {
+
+                        }),
                     const Sizer(),
                     Label(
                       text: LocaleKeys.history.localize,
@@ -110,14 +112,17 @@ class BalanceWalletView extends StatelessWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           final item = state.history![index];
-                          final DateTime createdAt = DateTime.parse(item.createdAt);
-                          final DateTime egyptTime = createdAt.toUtc().add(const Duration(hours: 3));
-                          final String formattedDateTime = DateFormat('dd/MM/yyyy, h:mm a').format(egyptTime);
-
+                          final DateTime createdAt =
+                              DateTime.parse(item.createdAt);
+                          final DateTime egyptTime =
+                              createdAt.toUtc().add(const Duration(hours: 3));
+                          final String formattedDateTime =
+                              DateFormat('dd/MM/yyyy, h:mm a')
+                                  .format(egyptTime);
 
                           return WalletHistoryCard(
                               title: '${item.transactionAmount}',
-                              subTitle:formattedDateTime,
+                              subTitle: formattedDateTime,
                               onTap: () {},
                               //amount: item.amount,
                               icon: FontAwesomeIcons.check);
@@ -143,9 +148,11 @@ class BalanceWalletView extends StatelessWidget {
       title: Label(text: label),
       subtitle: Label(text: subTitle),
       trailing: MaterialButton(
-        onPressed: null,
+        onPressed: (){
+          ontap();
+        },
         color: Colors.red,
-        disabledColor: const Color.fromARGB(159, 255, 82, 82),
+        //disabledColor: const Color.fromARGB(159, 255, 82, 82),
         textColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),

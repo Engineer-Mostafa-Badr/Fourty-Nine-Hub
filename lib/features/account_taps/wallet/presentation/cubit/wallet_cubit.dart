@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/main_category_entity.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/delete_subscription_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_usecase.dart';
 import '../../../../../common/models/public/pagination_params.dart';
@@ -20,10 +21,11 @@ class WalletCubit extends Cubit<WalletState> {
   final GetSubscriptionWalletUseCase _subscriptionWalletUseCase;
   final MainCategoryUseCase _mainCategoryUseCase;
   final SubCategoryUseCase _subCategoryUseCase;
+  final DeleteSubscriptionUseCase _deleteSubscriptionUseCase;
 
 
   WalletCubit(this._getWalletUseCase, this._walletHistoryUseCase,
-      this._subscriptionWalletUseCase, this._mainCategoryUseCase, this._subCategoryUseCase)
+      this._subscriptionWalletUseCase, this._mainCategoryUseCase, this._subCategoryUseCase, this._deleteSubscriptionUseCase)
       : super(const WalletState());
 
   void loadData() async {
@@ -100,4 +102,14 @@ class WalletCubit extends Cubit<WalletState> {
     });
     return category;
   }
+
+
+  deleteSubscription({
+    required String subscriptionId
+})async{
+     await _deleteSubscriptionUseCase(
+      DeleteSubscriptionParams(subscriptionId: subscriptionId)
+    );
+     fetchWalletSubscription();
+}
 }
