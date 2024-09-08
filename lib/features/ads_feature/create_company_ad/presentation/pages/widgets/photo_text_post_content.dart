@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/list_view_pagination.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/models/company_advertise_model.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_state.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import '../../../../../../core/messages/messages.dart';
+import '../../../domain/entities/company_ad_entity.dart';
 import 'build_item_photo_text_post.dart';
 
 class PhotoAndTextPostContent extends StatelessWidget {
@@ -15,16 +11,16 @@ class PhotoAndTextPostContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CompanyAdvertiseCubit, CompanyAdvertiseState>(
-      listener: (BuildContext context, CompanyAdvertiseState state) {
-        if (state is DeletePostSuccess) {
-          showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
-        }
+    return BlocConsumer<CreateCompanyAdCubit, CreateCompanyAdState>(
+      listener: (BuildContext context, CreateCompanyAdState state) {
+        // if (state is DeletePostSuccess) {
+        //   showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
+        // }
       },
       builder: (BuildContext context, state) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: PaginationView<Advertises>(
+          child: PaginationView<CompanyAdEntity>(
             build: (scrollController, data) {
               return ListView.separated(
                 itemBuilder: (context, index) => BuildItemPhotoTextPost(
@@ -41,8 +37,8 @@ class PhotoAndTextPostContent extends StatelessWidget {
             },
             fetchData: (paginationParams) {
               return context
-                  .read<CompanyAdvertiseCubit>()
-                  .fetchAdvertiseCompany(context,'photo_written', params: paginationParams);
+                  .read<CreateCompanyAdCubit>()
+                  .getCompanyAdPosts('photo_written',);
             },
           ),
         );

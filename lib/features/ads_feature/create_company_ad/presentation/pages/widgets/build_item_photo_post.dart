@@ -1,18 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/company_advertise/company_advertise_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
-import '../../../data/models/company_advertise_model.dart';
+import '../../../domain/entities/company_ad_entity.dart';
 import '../../cubit/create_company_ad_cubit.dart';
 import 'image_details.dart';
 
 class BuildItemPhotoPost extends StatelessWidget {
   final int length;
-  final Advertises advertises;
+  final CompanyAdEntity advertises;
   bool? isPhoto;
 
    BuildItemPhotoPost(
@@ -49,7 +48,7 @@ class BuildItemPhotoPost extends StatelessWidget {
                         builder: (context) => ImageDetails(
                               image: advertises.media![index].photo!,
                               function: () {
-                                context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!);
+                                context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!, filter: 'photo');
                                 // context
                                 //     .read<CompanyAdvertiseCubit>()
                                 //     .deletePost(context, advertises.media![index].sId!, 'photo');
@@ -101,7 +100,7 @@ class BuildItemPhotoPost extends StatelessWidget {
             if(isPhoto!)
             IconButton(
               onPressed: () {
-                context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!);
+                context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!, filter: 'photo');
                 // context
                 //     .read<CompanyAdvertiseCubit>()
                 //     .deletePost(context, advertises.sId!, 'photo');

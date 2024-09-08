@@ -32,7 +32,6 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../core/api/api_consumer.dart';
 import '../core/local_storage/local_storage_consumer.dart';
 import '../core/localization/localization_service.dart';
-import '../features/ads_feature/create_company_ad/data/repositories/company_advertise_repo/company_advertise_repo_impl.dart';
 import '../firebase_options.dart';
 import 'account_service_locator.dart';
 import 'auction_service_locator.dart';
@@ -97,7 +96,7 @@ class DI {
 
 //tinder getIt register
     serviceLocator.registerLazySingleton<CompetitionRepoImpl>(() => CompetitionRepoImpl(ApiService(Dio())),);
-    serviceLocator.registerLazySingleton<CompanyAdvertiseRepoImpl>(() => CompanyAdvertiseRepoImpl(ApiService(Dio())),);
+   // serviceLocator.registerLazySingleton<CompanyAdvertiseRepoImpl>(() => CompanyAdvertiseRepoImpl(ApiService(Dio())),);
     // Register the ReelsRepository
     serviceLocator.registerLazySingleton<ReelsRepository>(
       () => ReelsRepository(),

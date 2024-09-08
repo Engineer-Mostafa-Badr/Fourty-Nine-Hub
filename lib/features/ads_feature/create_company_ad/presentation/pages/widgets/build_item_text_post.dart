@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import '../../../../../../res/style/styles.dart';
-import '../../../data/models/company_advertise_model.dart';
+import '../../../domain/entities/company_ad_entity.dart';
 import '../../cubit/create_company_ad_cubit.dart';
 
 class BuildItemTextPost extends StatelessWidget {
   BuildItemTextPost(
       {super.key, required this.advertises, this.isScalable = true});
 
-  final Advertises advertises;
+  final CompanyAdEntity advertises;
   bool? isScalable;
 
   @override
@@ -37,7 +37,7 @@ class BuildItemTextPost extends StatelessWidget {
                     GestureDetector(
                       onTap: (){
                        // context.read<CompanyAdvertiseCubit>().deletePost(context, advertises.sId!, 'written');
-                        context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!);
+                        context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!, filter: 'written');
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(

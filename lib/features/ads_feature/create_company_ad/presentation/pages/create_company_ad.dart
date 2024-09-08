@@ -12,7 +12,6 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../cubit/company_advertise/company_advertise_cubit.dart';
 import '../cubit/create_company_ad_cubit.dart';
 import 'create_posts_company.dart';
 
@@ -32,17 +31,17 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context
-          .read<CompanyAdvertiseCubit>()
-          .fetchAdvertiseCompany(context, 'written');
+          .read<CreateCompanyAdCubit>()
+          .getCompanyAdPosts('written');
       context
-          .read<CompanyAdvertiseCubit>()
-          .fetchAdvertiseCompany(context, 'photo');
+          .read<CreateCompanyAdCubit>()
+          .getCompanyAdPosts('photo');
       context
-          .read<CompanyAdvertiseCubit>()
-          .fetchAdvertiseCompany(context, 'photo_written');
+          .read<CreateCompanyAdCubit>()
+          .getCompanyAdPosts('photo_written');
       context
-          .read<CompanyAdvertiseCubit>()
-          .fetchAdvertiseCompany(context, 'reel');
+          .read<CreateCompanyAdCubit>()
+          .getCompanyAdPosts('reel');
     });
   }
 
@@ -104,12 +103,13 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                                           totalPrice: state.price?.postPrice as int? ?? 0 ,
                                         )),
                                   );
-                                },
+                                }, numberOfAdvertises: state.posts?.length ??0,
                               ),
                               CustomContainerAdvertise(
                                 filter: 'photo',
                                 title: LocaleKeys.pictureOnly.localize,
                                 price: state.price?.photoPrice as int? ?? 0 ,
+                                numberOfAdvertises: state.posts?.length ??0,
                                 context: context,
                                 function: () {
                                   _updateTotalPrice(state.price?.photoPrice as int? ?? 0 );
@@ -129,6 +129,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                               CustomContainerAdvertise(
                                 filter: 'photo_written',
                                 title: LocaleKeys.textWithPictures.localize,
+                                numberOfAdvertises: state.posts?.length ??0,
                                 price: state.price?.postAndPhotoPrice as int? ?? 0 ,
                                 context: context,
                                 function: () {
@@ -147,6 +148,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                               ),
                               CustomContainerAdvertise(
                                 filter: 'reel',
+                                numberOfAdvertises: state.posts?.length ??0,
                                 title: LocaleKeys.reel.localize,
                                 price: state.price?.reelPrice as int? ?? 0,
                                 context: context,

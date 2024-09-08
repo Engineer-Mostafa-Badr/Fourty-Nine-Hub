@@ -4,19 +4,17 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentatio
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/build_item_text_post.dart';
 
 import '../../../../../../res/style/app_colors.dart';
-import '../../../data/models/company_advertise_model.dart';
-import '../../cubit/company_advertise/company_advertise_cubit.dart';
-import '../../cubit/company_advertise/company_advertise_state.dart';
+import '../../../domain/entities/company_ad_entity.dart';
 import '../../cubit/create_company_ad_cubit.dart';
 
 class BuildItemPhotoTextPost extends StatelessWidget {
   const BuildItemPhotoTextPost({super.key, required this.length, required this.advertises});
   final int length;
-  final Advertises advertises;
+  final CompanyAdEntity advertises;
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CompanyAdvertiseCubit,CompanyAdvertiseState>(
+    return BlocConsumer<CreateCompanyAdCubit,CreateCompanyAdState>(
       listener: (BuildContext context, state) {  },
       builder: (BuildContext context, Object? state) {
         return Stack(
@@ -30,7 +28,7 @@ class BuildItemPhotoTextPost extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!);
+                context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!, filter: 'photo_written');
                // context
                     // .read<CompanyAdvertiseCubit>()
                     // .deletePost(context, advertises.sId!, 'photo_witten');

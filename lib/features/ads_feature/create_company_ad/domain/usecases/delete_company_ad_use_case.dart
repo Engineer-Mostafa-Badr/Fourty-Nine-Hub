@@ -3,7 +3,6 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/repositories/company_advertise_repository.dart';
 
-import '../entities/company_ad_option_entity.dart';
 
 class DeleteCompanyAddUseCases extends UseCase<bool,DeleteCompanyAdParams>{
   final CompanyAdvertiseRepository _advertiseRepository;
