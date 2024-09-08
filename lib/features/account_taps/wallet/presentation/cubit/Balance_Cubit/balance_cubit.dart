@@ -3,15 +3,21 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_balance_use_case.dart';
 
 import '../../../domain/usecases/get_balance_history_use_case.dart';
+import '../../../domain/usecases/transfer_balance_use_cse.dart';
+import '../../../domain/usecases/transfer_ten_balance_use_cse.dart';
+import '../../../domain/usecases/withdraw_balance_use_cse.dart';
 import 'balance_states.dart';
 
 class BalanceCubit extends Cubit<BalanceState> {
   final GetBalanceUseCases _balanceUseCases;
   final GetBalanceHistoryUseCase _balanceHistoryUseCase;
+  final TransferFiveBalanceUseCase _transferFiveBalanceUseCase;
+  final TransferTenBalanceUseCase _transferTenBalanceUseCase;
+  final RequestWithdrawBalanceUseCase _withdrawBalanceUseCase;
 
   BalanceCubit(
     this._balanceUseCases,
-    this._balanceHistoryUseCase,
+    this._balanceHistoryUseCase, this._transferFiveBalanceUseCase, this._transferTenBalanceUseCase, this._withdrawBalanceUseCase,
   ) : super(const BalanceState());
 
   void loadData() async {
@@ -47,4 +53,33 @@ class BalanceCubit extends Cubit<BalanceState> {
       emit(state.copyWith(history: data));
     });
   }
+   transferFiveBalance() async {
+     final response=   await _transferFiveBalanceUseCase(const NoParams());
+      response.fold((l) {
+       emit(state.copyWith(failure: l, status: BalanceStates.error));
+     }, (data) {
+       fetchBalanceWallet();
+       emit(state.copyWith(status: BalanceStates.successFive));
+     });
+
+  }
+  transferTenBalance() async {
+    final response=  await _transferTenBalanceUseCase(const NoParams());
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: BalanceStates.error));
+    }, (data) {
+      fetchBalanceWallet();
+      emit(state.copyWith(status: BalanceStates.successTen));
+    });
+  }
+  requestWithdrawBalance() async {
+    final response= await _withdrawBalanceUseCase(const NoParams());
+     response.fold((l) {
+       emit(state.copyWith(failure: l, status: BalanceStates.error));
+     }, (data) {
+       emit(state.copyWith(status: BalanceStates.initial));
+     });
+  }
+
+
 }

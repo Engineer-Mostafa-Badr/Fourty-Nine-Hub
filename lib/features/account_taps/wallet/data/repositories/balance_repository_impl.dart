@@ -21,4 +21,19 @@ class BalanceRepositoryImpl extends BalanceRepository{
     return _balanceRemoteDataSource.fetchHistoryBalance(params);
   }
 
+  @override
+  Future<Either<Failure, bool>> transferBalanceFiveYears() {
+    return _balanceRemoteDataSource.transferBalanceFiveYears();
+  }
+
+  @override
+  Future<Either<Failure, bool>> transferBalanceTenYears() {
+    return _balanceRemoteDataSource.transferBalanceTenYears();
+  }
+
+  @override
+  Future<Either<Failure, bool>> requestWithdrawBalance() {
+    return _balanceRemoteDataSource.requestWithdrawBalance();
+  }
+
 }

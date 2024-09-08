@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_subscription_entity.dart';
@@ -9,6 +10,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
+import '../cubit/wallet_cubit.dart';
 
 class SubscriptionWidget extends StatelessWidget {
   final WalletSubscriptionEntity subscription;
@@ -80,12 +82,14 @@ class SubscriptionWidget extends StatelessWidget {
                   showAreYouSure(
                     title: 'Are you sure?',
                     subTitle: 'Are you sure you want to unsubscribe?',
-                    action: () {},
+                    action: () {
+                      context.read<WalletCubit>().deleteSubscription(
+                            subscriptionId: subscription.subCategoryId!,
+                          );
+                    },
                     context: context,
                   );
-                  // context.read<WalletCubit>().deleteSubscription(
-                  //       subscriptionId: subscription.subCategoryId!,
-                  //     );
+
                 },
               ),
             ),

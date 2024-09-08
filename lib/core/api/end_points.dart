@@ -57,6 +57,9 @@ class EndPoints {
   static const getPrice= '/advertisementCompany/price';
   static const postCompanyAd= '/advertisementCompany';
   static const getSubscription= '/subscription';
+  static const transferFiveBalance= '/main-wallet/transfer-five-years';
+  static const transferTenBalance= '/main-wallet/transfer-ten-years';
+  static const requestWithdrawBalance= '/main-wallet/request-withdrawal-balance';
 
   
   static const getWheel = '/wheels/random';

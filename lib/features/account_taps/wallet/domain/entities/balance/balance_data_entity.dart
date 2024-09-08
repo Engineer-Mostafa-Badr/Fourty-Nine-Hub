@@ -3,6 +3,8 @@ class BalanceDataEntity {
   final int? tenYears;
   final int? fiveYears;
   final String? createdAt;
+  final bool? fiveYearsComplete;
+  final bool? tenYearsComplete;
   final bool? openBalance;
   final bool? fiveYearsTransfer;
   final bool? tenYearsTransfer;
@@ -17,5 +19,7 @@ class BalanceDataEntity {
       required this.tenYearsTransfer,
       required this.fiveYearsLeft,
       required this.tenYearsLeft,
+      required this.fiveYearsComplete,
+      required this.tenYearsComplete,
   });
 }

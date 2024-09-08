@@ -10,7 +10,9 @@ class BalanceDataModel extends BalanceDataEntity {
       required super.fiveYearsTransfer,
       required super.tenYearsTransfer,
       required super.fiveYearsLeft,
-      required super.tenYearsLeft});
+      required super.tenYearsLeft,
+      required super.fiveYearsComplete,
+      required super.tenYearsComplete});
 
   factory BalanceDataModel.fromJson(Map<String, dynamic> json) {
     return BalanceDataModel(
@@ -19,6 +21,8 @@ class BalanceDataModel extends BalanceDataEntity {
       fiveYears: json['five_years'] ?? 0,
       createdAt: json['createdAt'] ?? '',
       openBalance: json['openBalance'] ?? false,
+      fiveYearsComplete: json['fiveYearsComplete'] ?? false,
+      tenYearsComplete: json['tenYearsComplete'] ?? false,
       fiveYearsTransfer: json['fiveYearsTransfer'] ?? false,
       tenYearsTransfer: json['tenYearsTransfer'] ?? false,
       fiveYearsLeft: json['fiveYearsLeft'] ?? 0,

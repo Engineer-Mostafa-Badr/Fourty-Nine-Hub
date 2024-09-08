@@ -4,7 +4,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/balan
 
 import '../../../../../../core/error/failure.dart';
 
-enum BalanceStates { loading, initial, error }
+enum BalanceStates { loading, initial, error ,successFive,successTen }
 
 class BalanceState {
   final BalanceStates status;
