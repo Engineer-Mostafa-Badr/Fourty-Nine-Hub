@@ -6,6 +6,8 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/localization/locales.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 
 class SubscriptionWidget extends StatelessWidget {
   final WalletSubscriptionEntity subscription;
@@ -17,52 +19,83 @@ class SubscriptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime createdAt = subscription.isActive == true
-        ? DateTime.parse(subscription.expireSubscription ??'')
-        : DateTime.parse(subscription.expirePremium ??'');
+    final DateTime createdAt = subscription.isActive == true ||
+            subscription.isActive == false && subscription.isPremium == false
+        ? DateTime.parse(subscription.expireSubscription ?? '')
+        : DateTime.parse(subscription.expirePremium ?? '');
     final DateTime egyptTime = createdAt.toUtc().add(const Duration(hours: 3));
     final String formattedDateTime = DateFormat('dd/MM/yyyy').format(egyptTime);
     return Column(
       children: [
         Row(
           children: [
-            SizedBox(height: 30, width: 30, child: Image.network(subscription.picture ??'')),
+            SizedBox(
+                height: 30,
+                width: 30,
+                child: Image.network(subscription.picture ?? '')),
             const Sizer(),
             Expanded(
-                child: Label(
+                child: Row(
+              children: [
+                Label(
                     text: context.locale == Locales.english
-                        ? subscription.nameEn ??''
-                        : subscription.nameAr ??'')),
+                        ? subscription.nameEn ?? ''
+                        : subscription.nameAr ?? ''),
+                const Sizer(
+                  width: 5,
+                ),
+                Label(
+                  text: subscription.isActive == false &&
+                          subscription.isPremium == false
+                      ? '(Not Subscription)'
+                      : subscription.isActive == true
+                          ? '(Regular)'
+                          : '(Premium)',
+                  color: AppColors.GREY_NORMAL_COLOR,
+                )
+              ],
+            )),
             Label(
               text: formattedDateTime,
-              style:
-                  Styles.mediumText(color: subscription.isActive ==true ? Colors.red : Colors.green),
+              style: Styles.mediumText(
+                  color: subscription.isActive == false &&
+                          subscription.isPremium == false
+                      ? AppColors.SECONDARY_COLOR
+                      : AppColors.WHATS_APP_COLOR),
             )
           ],
         ),
-         const Sizer(height: 10,),
+        const Sizer(
+          height: 10,
+        ),
         Row(
           children: [
             Expanded(
               child: buildContainer(
                 text: 'Cancel',
                 color: AppColors.SECONDARY_COLOR,
-                textColor:
-                AppColors.AUTH_CONTAINER_COLOR,
+                textColor: AppColors.AUTH_CONTAINER_COLOR,
                 function: () {},
               ),
             ),
-            const Sizer(width: 5,),
+            const Sizer(
+              width: 5,
+            ),
             Expanded(
               child: buildContainer(
                 text: 'renewal',
                 color: Theme.of(context).primaryColor,
-                textColor:
-                Theme.of(context).scaffoldBackgroundColor,
-                function: () {},
+                textColor: Theme.of(context).scaffoldBackgroundColor,
+                function: () {
+                  serviceLocator<SubscriptionController>().showSubscriptionPlans(
+                    subCategoryId: '66adecd7aa2ff24015872e9f', wallets: [],);
+                },
               ),
             ),
           ],
+        ),
+        const Sizer(
+          height: 15,
         ),
       ],
     );

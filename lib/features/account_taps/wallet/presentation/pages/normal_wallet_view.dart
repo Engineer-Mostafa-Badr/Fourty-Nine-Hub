@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/subscription_widget.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -147,7 +146,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                               ? Icons.arrow_drop_down_rounded
                               : Icons.arrow_drop_up_rounded),
                           Label(
-                            text: showMore ? 'Show More' : 'Show Less',
+                            text: showMore ? 'Show Less' : 'Show More',
                             style: Styles.smallText(
                                 color: Theme.of(context).primaryColor),
                           ),
@@ -176,7 +175,6 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                           return WalletHistoryCard(
                               title: '${item.transactionAmount ?? ''}',
                               subTitle: formattedDateTime,
-                              onTap: () {},
                               amount: item.received == true,
                               icon: FontAwesomeIcons.check);
                         },

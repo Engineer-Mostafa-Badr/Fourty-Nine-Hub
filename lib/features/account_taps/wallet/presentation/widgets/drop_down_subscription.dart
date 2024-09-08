@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
+
 class DropDownSubscription extends StatefulWidget {
   @override
   _DropDownSubscriptionState createState() => _DropDownSubscriptionState();
@@ -93,7 +96,12 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
                       selectedSubCategory = subCategory;
                     });
                     Navigator.pop(context);
-                    _showBottomSheet(subCategory);
+
+                    // List<WalletTypes> wallets = (err.response?.data['paymentMethod'] as List)
+                    //     .map((e) => (e as String).toWalletType)
+                    //     .toList();
+                    serviceLocator<SubscriptionController>().showSubscriptionPlans(
+                        subCategoryId: '66adecd7aa2ff24015872e9f', wallets: [],);
                   },
                 );
               }).toList(),
