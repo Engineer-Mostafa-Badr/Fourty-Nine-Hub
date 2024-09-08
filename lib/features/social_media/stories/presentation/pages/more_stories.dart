@@ -1559,12 +1559,15 @@
 //   }
 // }
 
+// import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
-import 'package:story_view/story_view.dart';
+import 'package:story_view/utils.dart';
+import 'package:story_view/widgets/story_view.dart';
+// import 'package:story_view/story_view.dart';
 
 import '../../../../../res/style/const.dart';
 import '../../../tinder/presentation/pages/user_profile.dart';
@@ -1683,20 +1686,20 @@ class UserStoryView extends StatefulWidget {
 }
 
 class UserStoryViewState extends State<UserStoryView> {
-  late final StoryController _storyController;
+  // late final StoryController _storyController;
   late final ValueNotifier<DateTime> _currentStoryCreatedAtNotifier;
 
   @override
   void initState() {
     super.initState();
-    _storyController = StoryController();
+    // _storyController = StoryController();
     _currentStoryCreatedAtNotifier =
         ValueNotifier<DateTime>(widget.userStory.stories!.first.createdAt!);
   }
 
   @override
   void dispose() {
-    _storyController.dispose();
+    // _storyController.dispose();
     _currentStoryCreatedAtNotifier.dispose();
     super.dispose();
   }
@@ -1705,33 +1708,33 @@ class UserStoryViewState extends State<UserStoryView> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        _buildStoryView(),
+        // _buildStoryView(),
         _buildUserInfoBar(),
         _buildNavigationOverlay(),
       ],
     );
   }
 
-  Widget _buildStoryView() {
-    return StoryView(
-      storyItems: widget.userStory.stories
-              ?.map((story) => createStoryItem(story, _storyController))
-              .toList() ??
-          [],
-      onStoryShow: (storyItem, index) {
-        _currentStoryCreatedAtNotifier.value =
-            widget.userStory.stories![index].createdAt!;
-      },
-      controller: _storyController,
-      onComplete: widget.onComplete,
-      onVerticalSwipeComplete: (direction) {
-        if (direction == Direction.down) {
-          Navigator.of(context).pop();
-        }
-      },
-      progressPosition: ProgressPosition.top,
-    );
-  }
+  // Widget _buildStoryView() {
+  //   return StoryView(
+  //     storyItems: widget.userStory.stories
+  //             ?.map((story) => createStoryItem(story, _storyController))
+  //             .toList() ??
+  //         [],
+  //     onStoryShow: (storyItem, index) {
+  //       _currentStoryCreatedAtNotifier.value =
+  //           widget.userStory.stories![index].createdAt!;
+  //     },
+  //     controller: _storyController,
+  //     onComplete: widget.onComplete,
+  //     onVerticalSwipeComplete: (direction) {
+  //       if (direction == Direction.down) {
+  //         Navigator.of(context).pop();
+  //       }
+  //     },
+  //     progressPosition: ProgressPosition.top,
+  //   );
+  // }
 
   Widget _buildUserInfoBar() {
     return Positioned(
@@ -1783,13 +1786,13 @@ class UserStoryViewState extends State<UserStoryView> {
           children: [
             Expanded(
               child: GestureDetector(
-                onTap: _storyController.previous,
+                // onTap: _storyController.previous,
                 child: Container(color: Colors.transparent),
               ),
             ),
             Expanded(
               child: GestureDetector(
-                onTap: _storyController.next,
+                // onTap: _storyController.next,
                 child: Container(color: Colors.transparent),
               ),
             ),
@@ -1879,41 +1882,41 @@ class UserInfoBar extends StatelessWidget {
   }
 }
 
-StoryItem createStoryItem(Story storyData, StoryController controller) {
-  switch (storyData.type) {
-    case 'text':
-      return StoryItem.text(
-        title: storyData.content!,
-        backgroundColor: Colors.deepOrange,
-      );
-    case 'image':
-      return StoryItem.pageImage(
-        url: storyData.content!,
-        caption: storyData.caption != null && storyData.caption != 'null'
-            ? Text(
-                storyData.caption!,
-                style: const TextStyle(color: Colors.white),
-                textAlign: TextAlign.center,
-              )
-            : null,
-        controller: controller,
-      );
-    case 'video':
-      return StoryItem.pageVideo(
-        storyData.content!,
-        caption: storyData.caption != null && storyData.caption != 'null'
-            ? Text(
-                storyData.caption!,
-                style: const TextStyle(color: Colors.white),
-                textAlign: TextAlign.center,
-              )
-            : null,
-        controller: controller,
-      );
-    default:
-      return StoryItem.text(
-        title: "Unknown story type",
-        backgroundColor: Colors.red,
-      );
-  }
-}
+// StoryItem createStoryItem(Story storyData, StoryController controller) {
+//   switch (storyData.type) {
+//     case 'text':
+//       return StoryItem.text(
+//         title: storyData.content!,
+//         backgroundColor: Colors.deepOrange,
+//       );
+//     case 'image':
+//       return StoryItem.pageImage(
+//         url: storyData.content!,
+//         caption: storyData.caption != null && storyData.caption != 'null'
+//             ? Text(
+//                 storyData.caption!,
+//                 style: const TextStyle(color: Colors.white),
+//                 textAlign: TextAlign.center,
+//               )
+//             : null,
+//         controller: controller,
+//       );
+//     case 'video':
+//       return StoryItem.pageVideo(
+//         storyData.content!,
+//         caption: storyData.caption != null && storyData.caption != 'null'
+//             ? Text(
+//                 storyData.caption!,
+//                 style: const TextStyle(color: Colors.white),
+//                 textAlign: TextAlign.center,
+//               )
+//             : null,
+//         controller: controller,
+//       );
+//     default:
+//       return StoryItem.text(
+//         title: "Unknown story type",
+//         backgroundColor: Colors.red,
+//       );
+//   }
+// }

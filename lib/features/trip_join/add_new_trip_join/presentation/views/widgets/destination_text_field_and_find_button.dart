@@ -51,7 +51,7 @@ class _DestinationTextFieldAndFindButonState
                     suffixIcon: _getIcon(state),
                     currentController: destinationController,
                     // hint: 'Find your destination point..!',
-                    label: 'Destination Point',
+                    // label: 'Destination Point',
                     hint: '',
                     validator: _validator,
                   );

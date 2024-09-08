@@ -4,8 +4,8 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
@@ -61,7 +61,7 @@ class ShippingCubit extends Cubit<ShippingState> {
   }
 
   selectSubCategory({required SubCategoryEntity subCategory}) {
-    model.subCategoryEntity = subCategory;
+    model.subCategoryId = subCategory.id;
   }
 
   // getUserImage({required File image}) {
@@ -69,8 +69,8 @@ class ShippingCubit extends Cubit<ShippingState> {
   // }
 
   String? validation({required String message, required bool condition}) {
-    log((model.subCategoryEntity == null).toString(),
-        name: "subCategoryEntity");
+    // log((model.subCategoryEntity == null).toString(),
+    // name: "subCategoryEntity");
     log((condition).toString(), name: "condition");
     if (condition) {
       return message;
@@ -237,6 +237,7 @@ class ShippingCubit extends Cubit<ShippingState> {
   }
 
   getCarImagesS3() async {
+    log("123123123123123");
     List<File> listFile = [
       model.carImageInFront!,
     ];
@@ -403,7 +404,7 @@ class ShippingCubit extends Cubit<ShippingState> {
     var response = await repository.register(
       model: DriverRegisterRequestModel(
         carModel: model.model ?? "",
-        categoryId: model.subCategoryEntity?.id ?? "",
+        categoryId: model.subCategoryId ?? "",
         firstName: model.firstName ?? "",
         lastName: model.lastName ?? "",
         location: "",
@@ -419,8 +420,7 @@ class ShippingCubit extends Cubit<ShippingState> {
       },
       (r) async {
         log("successDriverResiget");
-        cacheService.setSubCategoryDriver(
-            id: model.subCategoryEntity?.id ?? "");
+        cacheService.setSubCategoryDriver(id: model.subCategoryId ?? "");
         cacheService.setDriverId(id: r['data']['_id'] ?? "");
         emit(SuccessRegisterState(
             message:

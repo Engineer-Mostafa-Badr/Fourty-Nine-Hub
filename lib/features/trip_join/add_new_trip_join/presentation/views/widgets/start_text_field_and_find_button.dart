@@ -49,7 +49,7 @@ class _StartTextFieldAndFindButonState
                   return DefaultTextFormField(
                     suffixIcon: _getIcon(state),
                     currentController: startingController,
-                    label: 'Starting Point',
+                    // label: 'Starting Point',
                     // hint: 'Find your starting Point..!',
                     hint: '',
                     validator: _validator,

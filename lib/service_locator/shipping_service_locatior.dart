@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/data/rep
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/accept_decline_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/delete_driver_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/driverStatistics_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/favorite_main_cateogry_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/favorite_shipping_cubit.dart';
@@ -60,6 +61,7 @@ class ShippingServiceLocatior {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
       ),
     );
     serviceLocator.registerFactory(
@@ -74,6 +76,9 @@ class ShippingServiceLocatior {
     );
     serviceLocator.registerFactory(
       () => GetMyTripCubit(repository: serviceLocator())..getMyTrip(),
+    );
+    serviceLocator.registerFactory(
+      () => DeleteDriverCubit(repository: serviceLocator()),
     );
     serviceLocator.registerFactory(
       () => GetAllRequestByMyTripCubit(repository: serviceLocator())

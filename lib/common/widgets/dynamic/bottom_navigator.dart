@@ -3,12 +3,12 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../res/assets/assets.dart';
 import '../../../routes/routes.dart';
 import 'bottom_painter.dart';
+import '../../../../../../common/theme/cubit/cubit.dart';
 
 class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
   final int mainCategory;
@@ -246,12 +246,12 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                           widget.items[index].image,
                           height: widget.items[index].height,
                           semanticsLabel: widget.items[index].label,
-                          color: context.read<ThemeCubit>().isDarkTheme
+                          color: ThemeCubit.get(context).isDarkTheme
                               ? Colors.white
                               : null,
                         ),
                         Text(
-                          widget.items[index].label.localize,
+                          widget.items[index].label,
                         ),
                       ],
                     ),

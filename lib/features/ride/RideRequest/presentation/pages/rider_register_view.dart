@@ -36,14 +36,14 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
-class RegisterShippingScreen extends StatefulWidget {
-  const RegisterShippingScreen({super.key});
+class RiderRegisterView extends StatefulWidget {
+  const RiderRegisterView({super.key});
 
   @override
-  State<RegisterShippingScreen> createState() => _RegisterShippingScreenState();
+  State<RiderRegisterView> createState() => _RiderRegisterViewState();
 }
 
-class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
+class _RiderRegisterViewState extends State<RiderRegisterView> {
   FocusNode firstNameFocusNode = FocusNode();
   FocusNode lastNameFocusNode = FocusNode();
   FocusNode phoneFocusNode = FocusNode();
@@ -1252,77 +1252,6 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
             );
           },
         ),
-      ),
-    );
-  }
-}
-
-class PickImageShippingCard extends StatefulWidget {
-  const PickImageShippingCard(
-      {super.key,
-      required this.text,
-      this.borderRadius,
-      this.width = 68,
-      this.height = 88,
-      this.onTap});
-  final String text;
-  final BorderRadius? borderRadius;
-  final double? width;
-  final double? height;
-  final void Function(File image)? onTap;
-  @override
-  State<PickImageShippingCard> createState() => _PickImageShippingCardState();
-}
-
-class _PickImageShippingCardState extends State<PickImageShippingCard> {
-  XFile? image;
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        var pickedImage =
-            await ImagePicker().pickImage(source: ImageSource.gallery);
-        if (pickedImage != null) {
-          setState(() {
-            image = pickedImage;
-            if (widget.onTap != null) {
-              widget.onTap!(File(pickedImage.path));
-            }
-          });
-        }
-      },
-      child: Container(
-        height: widget.height,
-        width: widget.width,
-        decoration: BoxDecoration(
-            border: Border.all(),
-            borderRadius: widget.borderRadius,
-            image: image != null
-                ? DecorationImage(
-                    image: FileImage(
-                      File(image!.path),
-                    ),
-                    fit: BoxFit.cover)
-                : null),
-        child: image != null
-            ? const SizedBox()
-            : Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.camera_alt,
-                      color: Colors.grey,
-                      size: 30,
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      widget.text,
-                      style: Styles.headerText(),
-                    ),
-                  ],
-                ),
-              ),
       ),
     );
   }

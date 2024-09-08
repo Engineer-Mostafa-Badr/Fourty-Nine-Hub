@@ -2,9 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
-import 'package:story_view/controller/story_controller.dart';
-import 'package:story_view/widgets/story_view.dart';
-
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -50,7 +47,7 @@ class Stories extends StatelessWidget {
   }
 
   Widget _buildOthersStories(context, StoryState state, index) {
-    final userController = StoryController();
+    // final userController = StoryController();
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
@@ -72,12 +69,12 @@ class Stories extends StatelessWidget {
           ),
           child: Stack(
             children: [
-              Positioned.fill(
-                child: StoryView(storyItems: [
-                  createStoryItem(
-                      state.stories[index].stories!.first, userController)
-                ], controller: userController),
-              ),
+              // Positioned.fill(
+              //   child: StoryView(storyItems: [
+              //     createStoryItem(
+              //         state.stories[index].stories!.first, userController)
+              //   ], controller: userController),
+              // ),
               Positioned.fill(
                   child: Container(
                 color: Colors.black.withOpacity(.1),

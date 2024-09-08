@@ -16,6 +16,7 @@ class ImageValidation extends StatefulWidget {
       this.tilte,
       this.hint,
       this.networkImage,
+      this.title,
       this.iconColor,
       this.height,
       this.noTextError = false,
@@ -31,6 +32,7 @@ class ImageValidation extends StatefulWidget {
   final double? width;
   final bool noTextError;
   final String? networkImage;
+  final String? title;
   @override
   State<ImageValidation> createState() => _ImageValidationState();
 }

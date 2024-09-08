@@ -31,25 +31,25 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Expanded(
-            child: Builder(
-              builder: (context) {
-                switch (selectedIndex) {
-                  case 0:
-                    return const MyVoiceVideoRecordingScreen();
-                  case 1:
-                    return OtherVoiceVideoRecordingScreen(
-                      voiceUrl: widget.voiceUrl??'',
-                    );
-                  case 2:
-                    return MixVoiceVideoRecordingScreen(
-                      voiceUrl: widget.voiceUrl??'',
-                    );
-                }
-                return const MyVoiceVideoRecordingScreen();
-              },
-            ),
-          ),
+          // Expanded(
+          //   child: Builder(
+          //     builder: (context) {
+          //       switch (selectedIndex) {
+          //         case 0:
+          //           return const MyVoiceVideoRecordingScreen();
+          //         case 1:
+          //           return OtherVoiceVideoRecordingScreen(
+          //             voiceUrl: widget.voiceUrl??'',
+          //           );
+          //         case 2:
+          //           return MixVoiceVideoRecordingScreen(
+          //             voiceUrl: widget.voiceUrl??'',
+          //           );
+          //       }
+          //       return const MyVoiceVideoRecordingScreen();
+          //     },
+          //   ),
+          // ),
           const SizedBox(
             height: 20,
           ),

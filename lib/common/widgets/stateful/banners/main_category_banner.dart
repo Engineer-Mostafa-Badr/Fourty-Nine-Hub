@@ -18,15 +18,13 @@ class MainCategoryBanner extends StatefulWidget {
   final bool canRegister;
   final Function()? onRegister;
   final bool? Function()? onFavorite;
-  // final String? favoriteName;
   const MainCategoryBanner({
     super.key,
     this.canRegister = false,
     // this.favoriteName,
     this.onRegister,
     required this.category,
-     required this.onFavorite,
-    this.isFavorite,
+    required this.onFavorite,
   });
 
   @override
@@ -34,11 +32,11 @@ class MainCategoryBanner extends StatefulWidget {
 }
 
 class _MainCategoryBannerState extends State<MainCategoryBanner> {
-  // late bool _isFavorite;
+  bool isFavorite = false;
 
   @override
   void initState() {
-    widget.isFavorite = widget.category.isFavorite ?? false;
+    isFavorite = widget.category.isFavorite ?? false;
     super.initState();
   }
 
@@ -81,14 +79,14 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                   InkWell(
                     onTap: () async {
                       final result = widget.onFavorite?.call();
-                      if (result != null && result != _isFavorite) {
+                      if (result != null && result != isFavorite) {
                         setState(() {
-                          _isFavorite = result;
+                          isFavorite = result;
                         });
                       }
                     },
                     child: Icon(
-                      _isFavorite ? Icons.favorite : Icons.favorite_border,
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
                       color: AppColors.SECONDARY_COLOR,
                     ),
                   ),

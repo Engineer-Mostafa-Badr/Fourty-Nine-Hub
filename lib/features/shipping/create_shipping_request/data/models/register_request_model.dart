@@ -4,7 +4,8 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 class RegisterRequestModel {
-  SubCategoryEntity? subCategoryEntity;
+  // SubCategoryEntity? subCategoryEntity;
+  String? subCategoryId;
   String? firstName;
   String? lastName;
   // File? image;
@@ -28,7 +29,7 @@ class RegisterRequestModel {
   String? plateInfromation;
   // GovernorateEntity? governorate;
   RegisterRequestModel({
-    this.subCategoryEntity,
+    this.subCategoryId,
     this.firstName,
     this.lastName,
     this.idNumber,

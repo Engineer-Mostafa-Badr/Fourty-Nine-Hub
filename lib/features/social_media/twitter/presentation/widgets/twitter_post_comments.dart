@@ -242,8 +242,6 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TwitterCommentCard(
-          onDeleteComment: (p0) {},
-          onEditComment: (p0) {},
           comment: comment,
           onCommentReact: () {
             widget.onCommentReact(TwitterCommentReactParams(

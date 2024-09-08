@@ -5,6 +5,8 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/driver_register_request_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/register_request_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/request_model.dart';
@@ -15,7 +17,7 @@ class ShippingDataSource {
   ShippingDataSource({required this.api, required this.cacheService});
   Future<Either<Failure, Map<String, dynamic>>> getBannerData() {
     log(cacheService.getDriverId().toString(), name: "DriverId");
-    return api.get("${EndPoints.bannerData}?userId=66c349d7a684ab473f1c1ed7");
+    return api.get("${EndPoints.bannerData}?userId=66b4659d1c9c4b1cb35bfee4");
   }
 
 // 66b76065ab3b6f5a3d2273ed
@@ -150,6 +152,7 @@ class ShippingDataSource {
 
   Future<Either<Failure, Map<String, dynamic>>> updateDriver(
       DriverRegisterRequestModel model) async {
+    log(model.register().toString(), name: "3333333333333333333333333");
     return api.put(EndPoints.updateDriver, data: model.register());
   }
 
@@ -161,6 +164,7 @@ class ShippingDataSource {
   Future<Either<Failure, Map<String, dynamic>>> driverStatistics() async {
     return api.get(EndPoints.driverStatistics);
   }
+
   Future<Either<Failure, Map<String, dynamic>>> deleteDriver() async {
     return api.get(EndPoints.deleteDriver);
   }

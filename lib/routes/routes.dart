@@ -23,7 +23,6 @@ abstract class Routes {
   static const OTHERSACCOUNT = '/Social/OthersAccount';
   static const INSTAGRAMPROFILE = '/Instagram/InstagramProfile';
   static const EDITPROFILE = '/Social/OthersAccount/EditProfile';
-  static const EDITPROFILE = '/Social/OthersAccount/EditProfile';
   static const REELS = '/Social/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
   static const TWITTER = '/Social/Twitter';
@@ -83,6 +82,7 @@ abstract class Routes {
   static const CONTACTUS = '/ContactUs';
 
   static const RIDERDASHBOARD = '/Ride/RiderDashboard';
+  static const RIDERREGISTER = '/Ride/RiderRegister';
 
   static const TRIPDETAILS = '/Ride/TripDetails';
   static const REQUESTSHISTORY = '/Ride/RequestsHistory';
@@ -173,7 +173,6 @@ abstract class Paths {
   static const TWITTERPOSTDETAILS = 'TwitterPostDetails';
   static const CREATEPOST = 'CreatePost';
   static const EDITPROFILE = 'EditProfile';
-  static const EDITPROFILE = 'EditProfile';
   static const SEARCHFRIENDS = 'SearchFriend';
   static const SEARCHPLACES = 'SearchPlaces';
   static const TINDER = 'Tinder';
@@ -210,6 +209,7 @@ abstract class Paths {
   static const RIDE = 'Ride';
   static const CONTACTUS = 'ContactUs';
   static const RIDERDASHBOARD = 'RiderDashboard';
+  static const RIDERREGISTER = 'RiderRegister';
   static const REQUESTSHISTORY = 'RequestsHistory';
   static const TRIPDETAILS = 'TripDetails';
 

@@ -344,7 +344,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                                 style: Styles.mediumText(
                                     color: AppColors.PRIMARY_COLOR)),
                             Label(
-                                text: "//${state.model.deadlineSubscription}",
+                                text: "${state.model.deadlineSubscription}",
                                 style: Styles.mediumText(
                                     color: AppColors.PRIMARY_COLOR)),
                           ],

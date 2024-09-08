@@ -111,7 +111,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                         child: FormTextField(
                             hint: 'Bio ....',
                             height: 80,
-                            maxLength: 100,
+                            // maxLength: 100,
                             action: (v) {
                               setState(() {});
                             },

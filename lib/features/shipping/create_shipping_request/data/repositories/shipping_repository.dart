@@ -4,8 +4,7 @@ import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/datasources/shipping_data_source.dart';
@@ -70,8 +69,8 @@ class ShippingRepository {
 
   Future<Either<Failure, Map<String, dynamic>>> getS3CarImages(
       {required CarImagesS3Model model}) {
-  Future<Either<Failure, Map<String, dynamic>>> getS3CarImages(
-      {required CarImagesS3Model model}) {
+  // Future<Either<Failure, Map<String, dynamic>>> getS3CarImages(
+  //     {required CarImagesS3Model model}) {
     // try {
     log(model.toJson().toString(), name: "lllllllllllllllllllllllllll");
     return dataSource.getS3(
@@ -239,6 +238,7 @@ class ShippingRepository {
   Future<Either<Failure, Map<String, dynamic>>> deleteDriver() {
     return dataSource.deleteDriver();
   }
+  
 }
 
 // class S3UploadModel {

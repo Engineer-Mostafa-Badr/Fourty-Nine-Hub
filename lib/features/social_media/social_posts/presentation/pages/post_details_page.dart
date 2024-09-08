@@ -279,7 +279,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CommentCard(
-          onEditComment: (p0) {},
+          // onEditComment: (p0) {},
           comment: comment,
           onAddReply: (ReplyOnCommentParams params) async {
             var result = await onCommentReply(params);

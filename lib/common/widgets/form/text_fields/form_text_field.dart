@@ -88,8 +88,8 @@ class _FormTextFieldState extends State<FormTextField> {
           child: TextFormField(
             style: widget.textStyle ??
                 Styles.mediumText(color: AppColors.QUANTITY_COLOR),
-            style: widget.textStyle ??
-                Styles.mediumText(color: AppColors.QUANTITY_COLOR),
+            // style: widget.textStyle ??
+            //     Styles.mediumText(color: AppColors.QUANTITY_COLOR),
             textAlignVertical: widget.textAlignVertical,
             maxLines: widget.maxLines ?? 1,
             maxLength: widget.maxLength,
@@ -102,26 +102,26 @@ class _FormTextFieldState extends State<FormTextField> {
                 (value) {
                   validate = true;
                   final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
-            validator: widget.validator ??
-                (value) {
-                  validate = true;
-                  final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+            // validator: widget.validator ?? 
+            //     (value) {
+            //       validate = true;
+            //       final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
 
-                  setState(() {});
-                  if ((value == null || value.isEmpty) &&
-                      (widget.required ?? true)) {
-                    return LocaleKeys.required.localize;
-                  } else if (widget.extraValidation ?? false) {
-                    return widget.extraValidationMessage ?? '';
-                  } else if (!emailRegExp.hasMatch(value!.trim()) &&
-                      (widget.isEmail ?? false)) {
-                    return LocaleKeys.emailFormat.localize;
-                  } else {
-                    validate = false;
-                    setState(() {});
-                    return null;
-                  }
-                },
+            //       //   setState(() {});
+            //       if ((value == null || value.isEmpty) &&
+            //           (widget.required ?? true)) {
+            //         return LocaleKeys.required.localize;
+            //       } else if (widget.extraValidation ?? false) {
+            //         return widget.extraValidationMessage ?? '';
+            //       } else if (!emailRegExp.hasMatch(value!.trim()) &&
+            //           (widget.isEmail ?? false)) {
+            //         return LocaleKeys.emailFormat.localize;
+            //       } else {
+            //         validate = false;
+            //         setState(() {});
+            //         return null;
+            //       }
+            //     },
                   setState(() {});
                   if ((value == null || value.isEmpty) &&
                       (widget.required ?? true)) {
@@ -159,13 +159,13 @@ class _FormTextFieldState extends State<FormTextField> {
                   TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
               labelStyle: widget.style ??
                   TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
-              hintStyle: widget.style ??
-                  TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
-              labelStyle: widget.style ??
-                  TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
+              // hintStyle: widget.style ??
+              //     TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
+              // labelStyle: widget.style ??
+              //     TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
               prefixIcon: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.zW),
-                padding: EdgeInsets.symmetric(horizontal: 10.zW),
+                // padding: EdgeInsets.symmetric(horizontal: 10.zW),
                 child: widget.prefix,
               ),
               suffixIcon: widget.suffix,

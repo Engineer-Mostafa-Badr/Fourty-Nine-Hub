@@ -63,6 +63,7 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/rider_register_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
@@ -78,12 +79,16 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_driver_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_my_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/update_driver_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/dahsboard_driver_screen.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/driver_requests.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/edit_driver_screen.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/my_rating_screen.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/request_detials_screen.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/trip_rating_screen.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
@@ -106,6 +111,7 @@ import 'package:fourtyninehub/features/social_media/spot_light/presentation/page
 // import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/instagram_profile.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 // import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
@@ -963,17 +969,17 @@ class AppPages {
                     ),
                   ),
               routes: [
-                GoRoute(
-                  path: Paths.CHATROOMCAMERAPICKER,
-                  name: Routes.CHATROOMCAMERAPICKER,
-                  builder: (context, state) => const CameraPickerView(),
-                ),
-                GoRoute(
-                  path: Paths.MEDIASLIDER,
-                  name: Routes.MEDIASLIDER,
-                  builder: (context, state) => MediaSliderView(
-                      params: (state.extra) as MediaSliderViewParams),
-                ),
+                // GoRoute(
+                //   path: Paths.CHATROOMCAMERAPICKER,
+                //   name: Routes.CHATROOMCAMERAPICKER,
+                //   builder: (context, state) => const CameraPickerView(),
+                // ),
+                // GoRoute(
+                //   path: Paths.MEDIASLIDER,
+                //   name: Routes.MEDIASLIDER,
+                //   builder: (context, state) => MediaSliderView(
+                //       params: (state.extra) as MediaSliderViewParams),
+                // ),
               ]),
 
           // Snap
@@ -1364,6 +1370,23 @@ class AppPages {
                             ),
                           ],
                           child: const DriverDashboardView(),
+                        )),
+                GoRoute(
+                    path: Paths.RIDERREGISTER,
+                    name: Routes.RIDERREGISTER,
+                    builder: (context, state) => MultiBlocProvider(
+                          providers: [
+                            BlocProvider<DriverDashboardCubit>(
+                              create: (_) => serviceLocator(),
+                            ),
+                            BlocProvider(
+                              create: (context) => DriverStatisticsCubit(repository: serviceLocator()),
+                            ),
+                            BlocProvider(
+                              create: (context) => serviceLocator<ShippingCubit>(),
+                            ),
+                          ],
+                          child: RiderRegisterView(),
                         ))
               ]),
           GoRoute(

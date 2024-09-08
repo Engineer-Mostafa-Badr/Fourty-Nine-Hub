@@ -26,15 +26,17 @@ class RideRequestView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: MainCategoryBanner(
-                category: MainCategoryEntity.fake(),
-                canRegister: true,
-                onRegister: () {
-                  if (context.read<UserCubit>().isLoggedIn) {
-                    context.push(Routes.CREATERESTURANT);
-                  } else {
-                    context.push(Routes.REGISTER);
-                  }
-                }, onFavorite: () {  },),
+              category: MainCategoryEntity.fake(),
+              canRegister: true,
+              onRegister: () {
+                if (context.read<UserCubit>().isLoggedIn) {
+                  context.push(Routes.RIDERREGISTER);
+                } else {
+                  context.push(Routes.REGISTER);
+                }
+              },
+              onFavorite: () {},
+            ),
           ),
           Expanded(
               child: Stack(
@@ -78,8 +80,9 @@ class RideRequestView extends StatelessWidget {
             ],
           )),
           BlocProvider.value(
-              value: serviceLocator<RiderequestCubit>(),
-              child: const RideOptionsBottomSheet()),
+            value: serviceLocator<RiderequestCubit>(),
+            child: const RideOptionsBottomSheet(),
+          ),
         ],
       ),
     );
