@@ -236,22 +236,22 @@ class MessageCard extends StatelessWidget {
       children: [
         IntrinsicWidth(
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: width * 0.9),
+            constraints: BoxConstraints(maxWidth: width * 0.85),
             child: Container(
               padding: const EdgeInsets.all(12),
               margin: const EdgeInsets.all(10),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppColors.MESSAGE_COLOR,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(12),
                   topRight: Radius.circular(12),
                   bottomLeft: Radius.circular(12),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 8,
-                    offset: Offset(0, 4),
+                    color: Colors.black26.withOpacity(0.2),
+                    blurRadius: 4,
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
@@ -279,7 +279,8 @@ class MessageCard extends StatelessWidget {
                         : ReadMoreLabel(
                             trimLines: 5,
                             text: messageEntity.text!,
-                            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+                            style: Styles.mediumText(
+                                color: AppColors.PRIMARY_COLOR),
                             textAlign: TextAlign.left,
                           ),
                   ),
@@ -292,12 +293,8 @@ class MessageCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Icon(
-                        messageEntity.seen!
-                            ? FontAwesomeIcons.checkDouble
-                            : messageEntity.delivered!
-                                ? FontAwesomeIcons.checkDouble
-                                : FontAwesomeIcons.check,
-                        color: Colors.red,
+                        _getMessageIcon(messageEntity),
+                        color: _getMessageIconColor(messageEntity),
                         size: 12,
                       ),
                     ],
@@ -309,6 +306,26 @@ class MessageCard extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  IconData _getMessageIcon(MessageEntity messageEntity) {
+    if (messageEntity.seen!) {
+      return FontAwesomeIcons.checkDouble;
+    } else if (messageEntity.delivered!) {
+      return FontAwesomeIcons.checkDouble;
+    } else {
+      return FontAwesomeIcons.check;
+    }
+  }
+
+  Color _getMessageIconColor(MessageEntity messageEntity) {
+    if (messageEntity.seen!) {
+      return Colors.red;
+    } else if (messageEntity.delivered!) {
+      return Colors.grey;
+    } else {
+      return Colors.grey;
+    }
   }
 
   Widget _buildOtherMessage({
@@ -344,38 +361,29 @@ class MessageCard extends StatelessWidget {
                 ),
               ],
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: ReadMoreLabel(
-                    trimLines: 5,
-                    text: messageEntity.text!,
-                    style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
-                    textAlign: TextAlign.left,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: width * 0.65,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: ReadMoreLabel(
+                      trimLines: 5,
+                      text: messageEntity.text!,
+                      style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+                      textAlign: TextAlign.left,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Row(
-                  children: [
-                    Label(
-                      text: '${messageEntity.formattedCreatedAt}',
-                      style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
-                    ),
-                    const SizedBox(width: 4),
-                    Icon(
-                      messageEntity.seen!
-                          ? FontAwesomeIcons.checkDouble
-                          : messageEntity.delivered!
-                              ? FontAwesomeIcons.checkDouble
-                              : FontAwesomeIcons.check,
-                      color: Colors.red,
-                      size: 10,
-                    ),
-                  ],
-                ),
-              ],
+                  const SizedBox(width: 8),
+                  Label(
+                    text: '${messageEntity.formattedCreatedAt}',
+                    style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

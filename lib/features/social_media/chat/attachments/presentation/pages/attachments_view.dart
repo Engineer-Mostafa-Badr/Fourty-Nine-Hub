@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -39,7 +41,7 @@ class AttachementsViewState extends State<AttachementsView> {
           elevation: 0,
           backgroundColor: AppColors.PRIMARY_COLOR,
           title: Text(
-            'Attachments',
+            LocaleKeys.attachments.tr(),
             style: Styles.headerText(
               fontWeight: FontWeight.bold,
               color: AppColors.BACKGROUND_COLOR,
@@ -55,7 +57,7 @@ class AttachementsViewState extends State<AttachementsView> {
               color: AppColors.BACKGROUND_COLOR,
             ),
           ),
-          bottom: const TabBar(
+          bottom: TabBar(
             indicatorColor: AppColors.BACKGROUND_COLOR,
             indicatorWeight: 3,
             // indicatorPadding: const EdgeInsets.symmetric(horizontal: 2),
@@ -63,13 +65,13 @@ class AttachementsViewState extends State<AttachementsView> {
             labelColor: AppColors.BACKGROUND_COLOR,
             tabs: [
               Tab(
-                text: 'Media',
+                text: LocaleKeys.media.tr(),
               ),
               Tab(
-                text: 'Links',
+                text: LocaleKeys.links.tr(),
               ),
               Tab(
-                text: 'Docs',
+                text: LocaleKeys.docs.tr(),
               ),
             ],
           ),
@@ -88,7 +90,7 @@ class AttachementsViewState extends State<AttachementsView> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "June 2023",
+                          "${LocaleKeys.june.tr()} 2023",
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w500,
                             // fontSize: 16,
@@ -123,11 +125,11 @@ class AttachementsViewState extends State<AttachementsView> {
                 itemBuilder: (context, index) {
                   if (index == 0) {
                     // Last week header
-                    return const Padding(
-                      padding: EdgeInsets.all(8.0),
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "Last week",
-                        style: TextStyle(
+                        "${LocaleKeys.june.tr()} 2023",
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
@@ -197,7 +199,7 @@ class AttachementsViewState extends State<AttachementsView> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "June 2023",
+                          "${LocaleKeys.june.tr()} 2023",
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w500,
                             // fontSize: 16,

@@ -30,10 +30,6 @@ void main() async {
 
   runApp(
     LocalizationService.rootWidget(
-      // child: DevicePreview(
-      //   enabled: !kReleaseMode,
-      //   builder: (context) => const MyApp(),
-      // ),
       child: const MyApp(),
     ),
   );

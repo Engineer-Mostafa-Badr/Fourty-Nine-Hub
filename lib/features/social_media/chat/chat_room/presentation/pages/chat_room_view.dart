@@ -1,13 +1,13 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/masseges_list_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/masseges_list_view.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import '../widgets/chat_room_app_bar.dart';
-import '../widgets/send_message_widget.dart';
+import '../widgets/chat_room_widgets/chat_room_app_bar.dart';
+import '../widgets/chat_room_widgets/send_message_widget.dart';
 
 class ChatRoomView extends StatefulWidget {
   final String? chatId;
@@ -26,7 +26,8 @@ class _ChatRoomViewState extends State<ChatRoomView> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => serviceLocator<ChatRoomCubit>()..getMessages(widget.chatId!),
+      create: (context) =>
+          serviceLocator<ChatRoomCubit>()..getMessages(widget.chatId!),
       child: Scaffold(
         backgroundColor: AppColors.BACKGROUND_COLOR,
         appBar: const ChatRoomAppBar(),
@@ -35,7 +36,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
             // Background image
             Positioned.fill(
               child: Image.asset(
-                'assets/images/background.png',
+                Assets.chatRoomBackground,
                 scale: 7,
                 // fit: BoxFit.cover,
                 repeat: ImageRepeat.repeat,

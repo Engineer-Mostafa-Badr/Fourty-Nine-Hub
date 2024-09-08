@@ -1,5 +1,6 @@
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -27,7 +28,7 @@ class ViewContactEncriptionCart extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Encryption',
+                LocaleKeys.encryption.tr(),
                 style: Styles.mediumText(
                   fontWeight: FontWeight.w600,
                   color: AppColors.PRIMARY_COLOR,
@@ -38,7 +39,7 @@ class ViewContactEncriptionCart extends StatelessWidget {
                   maxWidth: MediaQuery.of(context).size.width * 0.75,
                 ),
                 child: Text(
-                  'Messages and calls are end-to-end encrypted. Tap to verify.',
+                  LocaleKeys.chatEncryptionMessage.tr(),
                   style: Styles.mediumText(
                     fontWeight: FontWeight.w400,
                     color: AppColors.DARK_GRAY_COLOR,

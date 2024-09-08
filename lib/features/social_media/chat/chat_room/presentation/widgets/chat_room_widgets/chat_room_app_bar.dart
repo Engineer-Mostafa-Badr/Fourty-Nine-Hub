@@ -1,8 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -15,111 +16,97 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: kToolbarHeight + 20,
-      padding: const EdgeInsets.only(bottom: 5, top: 24),
-      decoration: const BoxDecoration(
-        color: AppColors.PRIMARY_COLOR,
+    return AppBar(
+      backgroundColor: AppColors.PRIMARY_COLOR, // Background color
+      elevation: 0,
+      leadingWidth: 26,
+
+      leading: IconButton(
+        onPressed: () => context.pop(),
+        icon: const Icon(
+          Icons.arrow_back,
+          color: Colors.white,
+        ),
       ),
-      child: Row(
-        children: [
-          IconButton(
-            onPressed: () => context.pop(),
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            ),
-          ),
-          const CircleAvatar(
-            backgroundColor: Colors.white,
-            backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
-          ),
-          const Sizer(),
-          Expanded(
-            child: BlocBuilder<ChatRoomCubit, ChatRoomState>(
-                builder: (context, state) {
-              return 'state.chatData?.chat?.contact?.name' == null
-                  ? const SizedBox()
-                  : GestureDetector(
-                      onTap: () => context.push(Routes.VIEWCONTACT),
-                      child: Column(
+      title: BlocBuilder<ChatRoomCubit, ChatRoomState>(
+        builder: (context, state) {
+          return 'state.chatData?.chat?.contact?.name' == null
+              ? const SizedBox()
+              : GestureDetector(
+                  onTap: () => context.push(Routes.VIEWCONTACT),
+                  child: Row(
+                    children: [
+                      const CircleAvatar(
+                        backgroundColor: Colors.white,
+                        backgroundImage:
+                            NetworkImage(UIConst.profilePlaceHolder),
+                      ),
+                      const SizedBox(
+                          width: 12), // Spacing between avatar and text
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          'state.chatData?.chat?.contact?.name' == null
-                              ? const SizedBox()
-                              : Row(
-                                  children: [
-                                    Expanded(
-                                      child: Label(
-                                        text: "Ahmed Nasr",
-                                        // 'state.chatData?.chat?.contact?.name',
-                                        style: Styles.headerText(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ),
-                                    const Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      child: SizedBox(
-                                        width: 5,
-                                        height: 5,
-                                      ),
-                                    )
-                                  ],
-                                ),
+                          Text(
+                            "Ahmed Nasr",
+                            // 'state.chatData?.chat?.contact?.name',
+                            overflow: TextOverflow.ellipsis,
+                            style: Styles.headerText(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
                         ],
                       ),
-                    );
-            }),
-          ),
-          // video call
-          IconAppButton(
-            icon: Icons.videocam,
-            size: 24,
-            onPressed: () {},
-            color: Colors.white,
-          ),
-          const Sizer(
-            width: 15,
-          ),
-          // call
-          IconAppButton(
-            icon: Icons.call,
-            size: 20,
-            onPressed: () {},
-            color: Colors.white,
-          ),
-          // menu icon
-          PopupMenuButton(
-            icon: const Icon(
-              Icons.more_vert,
-              color: Colors.white,
-            ),
-            color: AppColors.BACKGROUND_COLOR,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(16.0)),
-            ),
-            offset: const Offset(0, 50),
-            onSelected: (int value) async {
-              if (value == 0) {
-                context.push(Routes.VIEWCONTACT);
-              }
-              if (value == 1) {
-                context.push(Routes.ATTACHMENTSVIEW);
-              }
-              if (value == 6) {
-                _showMoreMenu(context);
-              }
-            },
-            itemBuilder: (context) {
-              return _mainMenuBuilder();
-            },
-          )
-        ],
+                    ],
+                  ),
+                );
+        },
       ),
+      actions: [
+        // video call
+        IconAppButton(
+          icon: Icons.videocam,
+          size: 24,
+          onPressed: () {},
+          color: Colors.white,
+        ),
+        const Sizer(
+          width: 15,
+        ),
+        // call
+        IconAppButton(
+          icon: Icons.call,
+          size: 20,
+          onPressed: () {},
+          color: Colors.white,
+        ),
+        PopupMenuButton(
+          icon: const Icon(
+            Icons.more_vert,
+            color: Colors.white,
+          ),
+          color: AppColors.BACKGROUND_COLOR,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.0)),
+          ),
+          offset: const Offset(0, 50),
+          onSelected: (int value) async {
+            if (value == 0) {
+              context.push(Routes.VIEWCONTACT);
+            }
+            if (value == 1) {
+              context.push(Routes.ATTACHMENTSVIEW);
+            }
+            if (value == 6) {
+              _showMoreMenu(context);
+            }
+          },
+          itemBuilder: (context) {
+            return _mainMenuBuilder();
+          },
+        )
+      ],
     );
   }
 
@@ -128,42 +115,42 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
       PopupMenuItem<int>(
         value: 0,
         child: Text(
-          "View Contact",
+          LocaleKeys.viewContact.tr(),
           style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 1,
         child: Text(
-          "Media, Links and docs",
+          LocaleKeys.mediaLinksAndDocs.tr(),
           style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 2,
         child: Text(
-          "Search",
+          LocaleKeys.search.tr(),
           style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 3,
         child: Text(
-          "Mute notifications",
+          LocaleKeys.muteNotifications.tr(),
           style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 4,
         child: Text(
-          "Wallpaper",
+          LocaleKeys.wallpaper.tr(),
           style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 5,
         child: Text(
-          "Disappearing messages",
+          LocaleKeys.disappearingMessages.tr(),
           style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
         ),
       ),
@@ -173,7 +160,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "More",
+              LocaleKeys.more.tr(),
               style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
             ),
             const Spacer(),
@@ -191,54 +178,55 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
   void _showMoreMenu(BuildContext context) {
     showMenu<int>(
       context: context,
-      position: const RelativeRect.fromLTRB(250, 74, 0, 0),
+      position: RelativeRect.fromLTRB(LocaleKeys.more.tr() != "More" ? 0 : 250,
+          78, LocaleKeys.more.tr() == "More" ? 0 : 250, 0),
       items: [
         PopupMenuItem<int>(
           value: 1,
           child: Text(
-            "Edit",
+            LocaleKeys.edit.tr(),
             style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 2,
           child: Text(
-            "Share",
+            LocaleKeys.share.tr(),
             style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 3,
           child: Text(
-            "Report",
+            LocaleKeys.report.tr(),
             style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 4,
           child: Text(
-            "Block",
+            LocaleKeys.block.tr(),
             style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 5,
           child: Text(
-            "Clear chat",
+            LocaleKeys.clearChat.tr(),
             style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 6,
           child: Text(
-            "Export chat",
+            LocaleKeys.exportChat.tr(),
             style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 7,
           child: Text(
-            "Add shortcut      ",
+            "${LocaleKeys.addShortcut.tr()}      ",
             style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
           ),
         ),
