@@ -112,83 +112,83 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
     );
   }
 
-  void _showBottomSheet(String subCategory) {
-    showModalBottomSheet(
-      backgroundColor: Theme.of(context).primaryColor,
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder( // Use StatefulBuilder for dynamic UI updates in bottom sheet
-          builder: (BuildContext context, StateSetter setModalState) {
-            return Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50),
-                  topRight: Radius.circular(50),
-                ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Label(
-                    text: 'Subscription List',
-                    style: TextStyle(
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        fontSize: 28),
-                  ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          childAspectRatio: 1 / 0.22),
-                      itemCount: 10,
-                      itemBuilder: (context, index) => GestureDetector(
-                        onTap: () {
-                          // Use setModalState to update the color in bottom sheet
-                          setModalState(() {
-                            selectedIndex = index;
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                            color: selectedIndex == index
-                                ? Colors.red // Change to red if selected
-                                : Theme.of(context).scaffoldBackgroundColor, // Default color
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Center(
-                            child: Label(
-                              text: '1000',
-                              color:selectedIndex == index? AppColors.AUTH_CONTAINER_COLOR:Theme.of(context).primaryColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context); // Close the bottom sheet
-                    },
-                    child: const Label(
-                      text: 'Subscribe',
-                      color: AppColors.AUTH_CONTAINER_COLOR,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
+  // void _showBottomSheet(String subCategory) {
+  //   showModalBottomSheet(
+  //     backgroundColor: Theme.of(context).primaryColor,
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return StatefulBuilder( // Use StatefulBuilder for dynamic UI updates in bottom sheet
+  //         builder: (BuildContext context, StateSetter setModalState) {
+  //           return Container(
+  //             width: double.infinity,
+  //             padding: const EdgeInsets.all(16),
+  //             decoration: const BoxDecoration(
+  //               borderRadius: BorderRadius.only(
+  //                 topLeft: Radius.circular(50),
+  //                 topRight: Radius.circular(50),
+  //               ),
+  //             ),
+  //             child: Column(
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: [
+  //                 Label(
+  //                   text: 'Subscription List',
+  //                   style: TextStyle(
+  //                       color: Theme.of(context).scaffoldBackgroundColor,
+  //                       fontSize: 28),
+  //                 ),
+  //                 const SizedBox(height: 10),
+  //                 Expanded(
+  //                   child: GridView.builder(
+  //                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+  //                         crossAxisCount: 2,
+  //                         crossAxisSpacing: 10,
+  //                         mainAxisSpacing: 10,
+  //                         childAspectRatio: 1 / 0.22),
+  //                     itemCount: 10,
+  //                     itemBuilder: (context, index) => GestureDetector(
+  //                       onTap: () {
+  //                         // Use setModalState to update the color in bottom sheet
+  //                         setModalState(() {
+  //                           selectedIndex = index;
+  //                         });
+  //                       },
+  //                       child: Container(
+  //                         padding: const EdgeInsets.symmetric(vertical: 6),
+  //                         decoration: BoxDecoration(
+  //                           color: selectedIndex == index
+  //                               ? Colors.red // Change to red if selected
+  //                               : Theme.of(context).scaffoldBackgroundColor, // Default color
+  //                           borderRadius: BorderRadius.circular(8),
+  //                         ),
+  //                         child: Center(
+  //                           child: Label(
+  //                             text: '1000',
+  //                             color:selectedIndex == index? AppColors.AUTH_CONTAINER_COLOR:Theme.of(context).primaryColor,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 const SizedBox(height: 10),
+  //                 ElevatedButton(
+  //                   onPressed: () {
+  //                     Navigator.pop(context); // Close the bottom sheet
+  //                   },
+  //                   child: const Label(
+  //                     text: 'Subscribe',
+  //                     color: AppColors.AUTH_CONTAINER_COLOR,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           );
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
 }
 
 
