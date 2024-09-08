@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/pages/privacy_screen.dart';
 import 'package:image_picker/image_picker.dart';
@@ -153,7 +154,7 @@ class _CameraScreenState extends State<CameraScreen> {
           IconButton(
             icon: Icon(Icons.color_lens_outlined,
                 color:
-                    currentColor == Colors.white ? Colors.black : Colors.white,
+                currentColor == Colors.white ? Colors.black : Colors.white,
                 size: 30),
             onPressed: getRandomColor,
             style: ElevatedButton.styleFrom(
@@ -169,7 +170,11 @@ class _CameraScreenState extends State<CameraScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => StatusPrivacyScreen(),
+                    builder: (context) =>
+                        BlocProvider(
+                          create: (context) => serviceLocator<StoryCubit>(),
+                          child: StatusPrivacyScreen(),
+                        ),
                   ));
             },
           ),
@@ -209,7 +214,8 @@ class _CameraScreenState extends State<CameraScreen> {
                   if (_storyText != null && _storyText!.isNotEmpty) {
                     await serviceLocator<StoryCubit>()
                         .createTextStory(
-                            "${getColorStringFromColor(currentColor)}~${_storyText!}")
+                        "${getColorStringFromColor(
+                            currentColor)}~${_storyText!}")
                         .then((value) => Navigator.pop(context));
                   }
                 }
@@ -227,7 +233,7 @@ class _CameraScreenState extends State<CameraScreen> {
                     // Call your upload method
                     await serviceLocator<StoryCubit>()
                         .uploadStoryVideoOrImage(file, fileType, fileSize,
-                            description: _descriptionText)
+                        description: _descriptionText)
                         .then((value) => Navigator.pop(context));
                   }
                 }
@@ -299,17 +305,18 @@ class _CameraScreenState extends State<CameraScreen> {
     }
     return _selectedFile != null
         ? Image.file(
-            _selectedFile!,
-            fit: BoxFit.fitHeight,
-            errorBuilder: (context, error, stackTrace) => Image.network(
-              UIConst.imagePlaceHolder,
-              fit: BoxFit.fitHeight,
-            ),
-          )
-        : Image.network(
+      _selectedFile!,
+      fit: BoxFit.fitHeight,
+      errorBuilder: (context, error, stackTrace) =>
+          Image.network(
             UIConst.imagePlaceHolder,
             fit: BoxFit.fitHeight,
-          );
+          ),
+    )
+        : Image.network(
+      UIConst.imagePlaceHolder,
+      fit: BoxFit.fitHeight,
+    );
   }
 
   Widget _buildVideoPreview() {
@@ -381,7 +388,7 @@ class _CameraScreenState extends State<CameraScreen> {
                     decoration: InputDecoration(
                         hintText: 'Add a description...',
                         hintStyle:
-                            TextStyle(color: Colors.white.withOpacity(0.7)),
+                        TextStyle(color: Colors.white.withOpacity(0.7)),
                         // Hint text color
                         border: InputBorder.none,
                         fillColor: Colors.transparent),
@@ -400,10 +407,9 @@ class _CameraScreenState extends State<CameraScreen> {
     );
   }
 
-  Widget _buildIconButton(
-      {required IconData icon,
-      required Color color,
-      required VoidCallback onPressed}) {
+  Widget _buildIconButton({required IconData icon,
+    required Color color,
+    required VoidCallback onPressed}) {
     return IconButton(
       icon: Icon(icon, color: color, size: 30),
       onPressed: onPressed,
@@ -476,7 +482,7 @@ class _CameraScreenState extends State<CameraScreen> {
             color: isSelected ? Colors.white12 : Colors.transparent,
             // Background color for selected item
             borderRadius:
-                BorderRadius.circular(50), // Rounded corners for selected item
+            BorderRadius.circular(50), // Rounded corners for selected item
           ),
           // Padding for buttons
           child: Center(

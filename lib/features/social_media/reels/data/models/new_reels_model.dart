@@ -43,7 +43,6 @@ class Reel {
   final int viewCount;
   final bool isLiked;
   bool isSaved;
-  final bool isFollowing;
   final User user;
   final Audio audio;
   final List<String> repost;
@@ -62,7 +61,6 @@ class Reel {
     required this.viewCount,
     required this.isLiked,
     required this.isSaved,
-    required this.isFollowing,
     required this.user,
     required this.audio,
     required this.repost,
@@ -86,7 +84,6 @@ class Reel {
       viewCount: json['viewCount'],
       isLiked: json['isLiked'],
       isSaved: json['isSaved'],
-      isFollowing: json['isFollowing'],
       user: User.fromJson(json['user']),
       audio: Audio.fromJson(json['audio']),
       repost: repostList,
@@ -121,6 +118,9 @@ class User {
   final bool isRider;
   final bool isDoctor;
   final bool isRestaurant;
+  final bool isFollowed;
+  final bool areFriends;
+  final bool isSentRequest;
 
   User({
     required this.id,
@@ -147,6 +147,9 @@ class User {
     this.isRider = false,
     this.isDoctor = false,
     this.isRestaurant = false,
+    required this.isFollowed,
+    required this.areFriends,
+    required this.isSentRequest,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -175,9 +178,13 @@ class User {
       isRider: json['isRider'] ?? false,
       isDoctor: json['isDoctor'] ?? false,
       isRestaurant: json['isRestaurant'] ?? false,
+      isFollowed: json['isFollowed'] ?? false,
+      areFriends: json['areFriends'] ?? false,
+      isSentRequest: json['isSenTRequest'] ?? false,
     );
   }
 }
+
 class Audio {
   final String id;
   final int reelsCount;

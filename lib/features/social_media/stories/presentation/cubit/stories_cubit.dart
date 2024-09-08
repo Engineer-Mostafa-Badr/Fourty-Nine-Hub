@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:path/path.dart' as path;
 import '../../../../../core/utils/shared_pref.dart';
+import '../../data/models/followers_model.dart';
 
 class StoryState {
   List<UserStories> users;
@@ -20,7 +21,14 @@ class StoryState {
   final bool isFetchingMore;
   final DateTime? currentStoryCreatedAt; // New field
 
+  final List<Follower> followers;
+  final bool isLoadingFollower;
+  final String? errorMessage;
+
   StoryState({
+    required this.followers,
+    this.isLoadingFollower = false,
+    this.errorMessage,
     required this.users,
     this.isLoading = false,
     this.hasReachedMax = false,
@@ -30,6 +38,9 @@ class StoryState {
   });
 
   StoryState copyWith({
+    List<Follower>? followers,
+    bool? isLoadingFollower,
+    String? errorMessage,
     List<UserStories>? stories,
     bool? isLoading,
     bool? hasReachedMax,
@@ -41,7 +52,9 @@ class StoryState {
       currentStoryCreatedAt:
           currentStoryCreatedAt ?? this.currentStoryCreatedAt,
       // New copyWith field
-
+      followers: followers ?? this.followers,
+      isLoadingFollower: isLoadingFollower ?? this.isLoadingFollower,
+      errorMessage: errorMessage,
       users: stories ?? this.users,
       isLoading: isLoading ?? this.isLoading,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
@@ -52,13 +65,13 @@ class StoryState {
 }
 
 class StoryInitial extends StoryState {
-  StoryInitial() : super(users: []);
+  StoryInitial() : super(users: [], followers: []);
 }
 
 class StoryError extends StoryState {
   final String error;
 
-  StoryError(this.error) : super(users: []);
+  StoryError(this.error) : super(users: [], followers: []);
 }
 
 class StoryCubit extends Cubit<StoryState> {
@@ -66,6 +79,37 @@ class StoryCubit extends Cubit<StoryState> {
   DateTime? _currentStoryCreatedAt; // Store the current story's createdAt
 
   StoryCubit(this.storyRepository) : super(StoryInitial());
+
+  /// Fetch all followers based on subCategory ID
+  Future<void> fetchFollowers() async {
+    try {
+      emit(state.copyWith(isLoading: true)); // Set loading state
+
+      final followers = await storyRepository.getAllFollowers('62ef7cf658c90d4a7ed48120');
+
+      emit(state.copyWith(followers: followers, isLoading: false));
+    } catch (e) {
+      emit(state.copyWith(
+          isLoading: false, errorMessage: 'Failed to load followers'));
+    }
+  }
+
+  // New method to update story privacy
+  Future<void> updateStoryPrivacy(String privacyType,
+      {List<String>? users}) async {
+    try {
+      emit(state.copyWith(isLoading: true)); // Show loading state
+
+      await storyRepository.updatePrivacy(privacyType, users: users);
+
+      // Optional: fetch stories again if you want to refresh the state after updating privacy
+      await fetchStories();
+
+      emit(state.copyWith(isLoading: false)); // Reset loading state
+    } catch (e) {
+      emit(StoryError('Failed to update privacy: $e'));
+    }
+  }
 
   Future<void> deleteStory(String storyId) async {
     try {
@@ -118,9 +162,8 @@ class StoryCubit extends Cubit<StoryState> {
         return;
       }
 
-      final newStories = loadMore
-          ? [...state.users, ...listOfUserStories]
-          : listOfUserStories;
+      final newStories =
+          loadMore ? [...state.users, ...listOfUserStories] : listOfUserStories;
 
       // Remove duplicates using a Map where keys are story IDs
       final uniqueStoriesMap = {
