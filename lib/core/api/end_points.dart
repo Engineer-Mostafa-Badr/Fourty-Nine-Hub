@@ -10,7 +10,6 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 
 import '../../features/account_taps/wallet/domain/usecases/get_balance_history_use_case.dart';
 import '../../features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
-import '../../features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
 
 class EndPoints {
   static const pageSize = 20;

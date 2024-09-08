@@ -173,7 +173,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                               DateFormat('dd/MM/yyyy, h:mm a')
                                   .format(egyptTime);
                           return WalletHistoryCard(
-                              title: '${item.transactionAmount ?? ''}',
+                              title: '${item.transactionAmount}',
                               subTitle: formattedDateTime,
                               amount: item.received == true,
                               icon: FontAwesomeIcons.check);

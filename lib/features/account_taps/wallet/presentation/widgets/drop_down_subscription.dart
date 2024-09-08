@@ -45,8 +45,8 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
                                 ? data.map((category) {
                                     String categoryName =
                                         context.locale == Locales.english
-                                            ? category.nameEn ?? ''
-                                            : category.nameAr ?? '';
+                                            ? category.nameEn
+                                            : category.nameAr;
                                     return ListTile(
                                       title: Text(categoryName),
                                       onTap: () {
