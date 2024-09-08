@@ -8,6 +8,7 @@ class WalletState {
   final WalletEntity? wallet;
   final List<WalletHistoryEntity>? history;
   final List<WalletSubscriptionEntity>? subscription;
+  final List<MainCategoryWalletEntity>? mainCategory;
 
   const WalletState({
     this.status = WalletStates.loading,
@@ -15,13 +16,15 @@ class WalletState {
     this.history,
     this.wallet,
     this.subscription,
+    this.mainCategory,
   });
   WalletState copyWith({
     WalletStates? status,
     Failure? failure,
     List<WalletHistoryEntity>? history,
     WalletEntity? wallet,
-    List<WalletSubscriptionEntity>? subscription
+    List<WalletSubscriptionEntity>? subscription,
+    List<MainCategoryWalletEntity>? mainCategory
   }) {
     return WalletState(
       status: status ?? this.status,
@@ -29,6 +32,7 @@ class WalletState {
       history: history ?? this.history,
       wallet: wallet ?? this.wallet,
       subscription: subscription ?? this.subscription,
+      mainCategory: mainCategory ?? this.mainCategory,
     );
   }
 }

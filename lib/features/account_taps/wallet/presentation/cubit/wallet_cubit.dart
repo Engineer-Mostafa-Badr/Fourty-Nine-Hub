@@ -1,12 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/main_category_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_usecase.dart';
+import '../../../../../common/models/public/pagination_params.dart';
 import '../../domain/entities/wallet/wallet_entity.dart';
 import '../../domain/entities/wallet/wallet_history_entity.dart';
 import '../../domain/entities/wallet/wallet_subscription_entity.dart';
 import '../../domain/usecases/get_subscription_use_case.dart';
+import '../../domain/usecases/main_category_use_case.dart';
 
 part 'wallet_state.dart';
 
@@ -14,8 +17,9 @@ class WalletCubit extends Cubit<WalletState> {
   final GetWalletUseCase _getWalletUseCase;
   final GetWalletHistoryUseCase _walletHistoryUseCase;
   final GetSubscriptionWalletUseCase _subscriptionWalletUseCase;
+  final MainCategoryUseCase _mainCategoryUseCase;
 
-  WalletCubit(this._getWalletUseCase, this._walletHistoryUseCase, this._subscriptionWalletUseCase) : super(const WalletState());
+  WalletCubit(this._getWalletUseCase, this._walletHistoryUseCase, this._subscriptionWalletUseCase, this._mainCategoryUseCase) : super(const WalletState());
 
   void loadData() async {
     await getWallet();
@@ -60,5 +64,22 @@ class WalletCubit extends Cubit<WalletState> {
       // print('///////////////////////////////////////');
       emit(state.copyWith(subscription: data));
     });
+  }
+
+
+ Future<List<MainCategoryWalletEntity>> fetchMainCategoryWallet({required PaginationParams paginationParams}) async {
+    List<MainCategoryWalletEntity> category=[];
+    final response = await _mainCategoryUseCase(
+      MainCategoryParams(
+       paginationParams: paginationParams,
+      ),
+    );
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: WalletStates.error));
+    }, (data) {
+      category=data;
+     // emit(state.copyWith(mainCategory: data,status: WalletStates.initial));
+    });
+    return category;
   }
 }

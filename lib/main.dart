@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
+import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'features/competition/presentation/cubit/competition_cubit/competition_cubit.dart';
 import 'features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
@@ -58,6 +59,9 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               CompetitionCubit(serviceLocator.get<CompetitionRepoImpl>())
                 ..fetchCompetition(context)
+        ),BlocProvider(
+          create: (BuildContext context) =>serviceLocator<WalletCubit>(),
+
         ),
         BlocProvider(
             create: (context) =>

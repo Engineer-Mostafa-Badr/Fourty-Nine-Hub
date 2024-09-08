@@ -3,8 +3,10 @@ import 'package:fourtyninehub/features/account_taps/wallet/data/models/wallet/wa
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_history_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_subscription_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
 
 import '../../../../../core/error/failure.dart';
+import '../../domain/entities/wallet/main_category_entity.dart';
 import '../../domain/repositories/wallet_repo.dart';
 import '../datasources/wallet_remote_datasource.dart';
 
@@ -26,16 +28,9 @@ class WalletRepoImpl implements WalletRepo {
   Future<Either<Failure, List<WalletSubscriptionEntity>>> fetchSubscriptionWallet() {
     return _remoteDataSource.fetchSubscriptionWallet();
   }
-  // @override
-  // Future<Either<Failure, List<CompetitionEntity>>> getCompetitions() {
-  //   return _remoteDataSouce.getCompetitions();
-  // }
 
-
-  //
-  // @override
-  // Future<Either<Failure, List<WalletHistoryEntity>>> getWalletHistory(
-  //     {required WalletTypes type}) {
-  //   return _remoteDataSouce.getWalletHistory(type: type);
-  // }
+  @override
+  Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchMainCategory(MainCategoryParams params) {
+    return _remoteDataSource.fetchMainCategory(params);
+  }
 }
