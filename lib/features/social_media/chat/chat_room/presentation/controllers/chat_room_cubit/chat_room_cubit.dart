@@ -91,8 +91,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       (message) {
         chatMessages.add(message);
         emit(state.copyWith(
-            messages: chatMessages,
-            status: ChatRoomStates.success));
+            messages: chatMessages, status: ChatRoomStates.success));
         _scrollDown();
       },
     );

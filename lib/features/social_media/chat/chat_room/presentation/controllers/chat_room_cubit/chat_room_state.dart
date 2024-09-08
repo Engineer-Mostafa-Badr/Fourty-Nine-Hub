@@ -1,6 +1,6 @@
 part of 'chat_room_cubit.dart';
 
-enum ChatRoomStates { initState, loading, error, typing, success}
+enum ChatRoomStates { initState, loading, error, typing, success }
 
 extension ChatRoomStateX on ChatRoomState {
   bool get isInitial => status == ChatRoomStates.initState;
@@ -19,14 +19,12 @@ class ChatRoomState {
   final ChatRoomStates status;
   final Failure? failure;
   final List<MessageEntity>? messages;
-  // final ChatMessagesModel? chatData;
   final MessageEntity? replayedMessage;
 
   const ChatRoomState({
     this.status = ChatRoomStates.initState,
     this.failure,
     this.messages,
-    // this.chatData,
     this.replayedMessage,
   });
 
@@ -34,14 +32,12 @@ class ChatRoomState {
     ChatRoomStates? status,
     Failure? failure,
     List<MessageEntity>? messages,
-    // ChatMessagesModel? chatData,
     MessageEntity? replayedMessage,
   }) {
     return ChatRoomState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
-      messages: messages,
-      // chatData: chatData,
+      messages: messages ?? this.messages,
       replayedMessage: replayedMessage,
     );
   }
