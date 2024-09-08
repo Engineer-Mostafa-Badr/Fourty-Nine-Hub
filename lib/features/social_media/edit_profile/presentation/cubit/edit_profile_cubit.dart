@@ -29,6 +29,16 @@ class EditProfileCubit extends Cubit<EditProfileState> {
     print(state.selectedPhonePrivacy);
   }
 
+  void selectStatusPrivacy({required String privacy}) {
+    emit(state.copyWith(selectedStatusPrivacy: privacy));
+    print(state.selectedStatusPrivacy);
+  }
+
+  void selectMaritalStatus({required String status}) {
+    emit(state.copyWith(selectedStatus: status));
+    print(state.selectedStatus);
+  }
+
   void selectCountryPrivacy({required String privacy}) {
     emit(state.copyWith(selectedCountryPrivacy: privacy));
     print(state.selectedCountryPrivacy);

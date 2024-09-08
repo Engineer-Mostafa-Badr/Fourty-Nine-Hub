@@ -111,8 +111,8 @@ class FacebookTweetCard extends StatelessWidget {
           onTap: () => context.push(Routes.OTHERSACCOUNT),
           child: CircleAvatar(
             backgroundColor: Colors.white,
-            backgroundImage: NetworkImage((user.image.isNotEmpty)
-                ? user.image
+            backgroundImage: NetworkImage((user.image!=null)
+                ? user.image??''
                 : UIConst.profilePlaceHolder),
           ),
         ),

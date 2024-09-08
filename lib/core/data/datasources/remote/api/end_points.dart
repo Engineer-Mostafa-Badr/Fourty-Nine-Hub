@@ -22,10 +22,11 @@ class EndPoints {
   static const socialLogin = '/auth/social/login';
   static const resendOTP = '/auth/resend-reset-code';
   static const refreshToken = '/auth/refresh/token';
-  static String friendsList (String search) => '/friends/allFriends?search=$search';
-  static String friendRequestsList (String search) => '/friends/FriendRequests?search=$search';
-  static String blockedUsersList (String search) => '/users/blocked?search=$search';
-  static String followersList (String search) => '/follow/followers?search=$search';
+  static String friendsList (TwitterFeedParams params) => '/friends/allFriends?search=${params.search}&page=${params.page}&limit=${params.limit}';
+  static String searchUsers (TwitterFeedParams params) => '/search/users/${params.search}?page=${params.page}&limit=${params.limit}';
+  static String friendRequestsList (TwitterFeedParams params) => '/friends/FriendRequests?search=${params.search}&page=${params.page}&limit=${params.limit}';
+  static String blockedUsersList (TwitterFeedParams params) => '/users/blocked?search=${params.search}&page=${params.page}&limit=${params.limit}';
+  static String followersList (TwitterFeedParams params) => '/follow/followers?search=${params.search}&page=${params.page}&limit=${params.limit}';
   static const getParentMainCategories = '/category/parent';
   static const getMainCategories = '/category/parent/get-all-main';
   static String getBannerByID({required String id}) => '/categories/main/$id';
