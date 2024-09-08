@@ -107,7 +107,7 @@ class BalanceWalletView extends StatelessWidget {
                               onPressed: () {},
                               margin: 10,
                             ),
-                      if(state.withdraw?.data ==false)
+                      if(state.balance?.openBalance == true && state.withdraw?.data ==false)
                         const Label(text: 'Please wait to check request'),
                       state.withdraw?.data == true
                           ? AppButton(
@@ -118,7 +118,6 @@ class BalanceWalletView extends StatelessWidget {
                           context
                               .read<BalanceCubit>()
                               .requestWithdrawBalance();
-                          //Your request withdrawal sent successfully waiting for administration approval
                         },
                         margin: 10,
                       )
