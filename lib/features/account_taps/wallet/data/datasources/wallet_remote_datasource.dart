@@ -23,6 +23,9 @@ abstract class WalletRemoteDataSource {
 
   Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchMainCategory(
       MainCategoryParams params);
+
+  Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchSubCategory(
+      MainCategoryParams params);
 }
 
 class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
@@ -92,6 +95,24 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
       (failure) => Left(failure),
       (response) {
         final list = (response['data']['mainCategories'] as List)
+            .map((e) => MainCategoryWalletModel.fromJson(e))
+            .toList();
+        return Right(list);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchSubCategory(MainCategoryParams params)async {
+    final response = await _apiConsumer.get(
+      EndPoints.geSubCategoryWallet(params.id!),
+      queryParameters: params.paginationParams.toJson(),
+    );
+
+    return response.fold(
+          (failure) => Left(failure),
+          (response) {
+        final list = (response['data']['subcategories'] as List)
             .map((e) => MainCategoryWalletModel.fromJson(e))
             .toList();
         return Right(list);

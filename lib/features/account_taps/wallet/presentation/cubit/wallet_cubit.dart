@@ -10,6 +10,7 @@ import '../../domain/entities/wallet/wallet_history_entity.dart';
 import '../../domain/entities/wallet/wallet_subscription_entity.dart';
 import '../../domain/usecases/get_subscription_use_case.dart';
 import '../../domain/usecases/main_category_use_case.dart';
+import '../../domain/usecases/sub_category_use_case.dart';
 
 part 'wallet_state.dart';
 
@@ -18,8 +19,12 @@ class WalletCubit extends Cubit<WalletState> {
   final GetWalletHistoryUseCase _walletHistoryUseCase;
   final GetSubscriptionWalletUseCase _subscriptionWalletUseCase;
   final MainCategoryUseCase _mainCategoryUseCase;
+  final SubCategoryUseCase _subCategoryUseCase;
 
-  WalletCubit(this._getWalletUseCase, this._walletHistoryUseCase, this._subscriptionWalletUseCase, this._mainCategoryUseCase) : super(const WalletState());
+
+  WalletCubit(this._getWalletUseCase, this._walletHistoryUseCase,
+      this._subscriptionWalletUseCase, this._mainCategoryUseCase, this._subCategoryUseCase)
+      : super(const WalletState());
 
   void loadData() async {
     await getWallet();
@@ -28,8 +33,7 @@ class WalletCubit extends Cubit<WalletState> {
   }
 
   Future<void> getWallet() async {
-    final response =
-        await _getWalletUseCase.call(const NoParams());
+    final response = await _getWalletUseCase.call(const NoParams());
     response.fold((l) {
       emit(state.copyWith(failure: l, status: WalletStates.error));
     }, (data) {
@@ -59,26 +63,40 @@ class WalletCubit extends Cubit<WalletState> {
     response.fold((l) {
       emit(state.copyWith(failure: l, status: WalletStates.error));
     }, (data) {
-      // print('///////////////////////////////////////');
-      // print(data.giftWallet.userId);
-      // print('///////////////////////////////////////');
       emit(state.copyWith(subscription: data));
     });
   }
 
-
- Future<List<MainCategoryWalletEntity>> fetchMainCategoryWallet({required PaginationParams paginationParams}) async {
-    List<MainCategoryWalletEntity> category=[];
+  Future<List<MainCategoryWalletEntity>> fetchMainCategoryWallet(
+      {required PaginationParams paginationParams}) async {
+    List<MainCategoryWalletEntity> category = [];
     final response = await _mainCategoryUseCase(
       MainCategoryParams(
-       paginationParams: paginationParams,
+        paginationParams: paginationParams,
       ),
     );
     response.fold((l) {
       emit(state.copyWith(failure: l, status: WalletStates.error));
     }, (data) {
-      category=data;
-     // emit(state.copyWith(mainCategory: data,status: WalletStates.initial));
+      category = data;
+    });
+    return category;
+  }
+
+  Future<List<MainCategoryWalletEntity>> fetchSubCategoryWallet(
+      {required PaginationParams paginationParams,required String id}) async {
+    List<MainCategoryWalletEntity> category = [];
+    final response = await _subCategoryUseCase(
+      MainCategoryParams(
+        id: id,
+        paginationParams: paginationParams,
+      ),
+    );
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: WalletStates.error));
+    }, (data) {
+      category = data;
+      // emit(state.copyWith(mainCategory: data,status: WalletStates.initial));
     });
     return category;
   }

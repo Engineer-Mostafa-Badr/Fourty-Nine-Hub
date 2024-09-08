@@ -6,6 +6,8 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/walle
 
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/localization/locales.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../cubit/wallet_cubit.dart';
 
 class DropDownSubscription extends StatefulWidget {
@@ -23,52 +25,7 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
     return Center(
       child: GestureDetector(
         onTap: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text("Select Category"),
-                content: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxHeight: 300.0, // Limits height to show only 4 items
-                  ),
-                  child: SizedBox(
-                    height: 200,
-                    child: PaginationView<MainCategoryWalletEntity>(
-                      build: (ScrollController scrollController,
-                          List<MainCategoryWalletEntity> data) {
-                        return SingleChildScrollView(
-                          controller: scrollController,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: data.isNotEmpty
-                                ? data.map((category) {
-                                    String categoryName =
-                                        context.locale == Locales.english
-                                            ? category.nameEn
-                                            : category.nameAr;
-                                    return ListTile(
-                                      title: Text(categoryName),
-                                      onTap: () {
-                                        Navigator.pop(
-                                            context); // Close category dialog
-                                      },
-                                    );
-                                  }).toList()
-                                : [const Text("No categories available")],
-                          ),
-                        );
-                      },
-                      fetchData: (PaginationParams paginationParams) {
-                      return  context.read<WalletCubit>().fetchMainCategoryWallet(
-                            paginationParams: paginationParams);
-                      },
-                    ),
-                  ),
-                ),
-              );
-            },
-          );
+          _showCategoryDialog();
         },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
@@ -89,73 +46,119 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
     );
   }
 
-// void _showCategoryDialog(MainCategoryWalletEntity category,state) {
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return AlertDialog(
-//         title: const Text("Select Category"),
-//         content: ConstrainedBox(
-//           constraints: const BoxConstraints(
-//             maxHeight: 300.0, // Limits height to show only 4 items
-//           ),
-//           child: SingleChildScrollView(
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               children: state.map((category) {
-//                 String categoryName = context.locale == Locales.english
-//                     ? category.nameEn
-//                     : category.nameAr;
-//                 return ListTile(
-//                   title: Text(categoryName),
-//                   onTap: () {
-//                     Navigator.pop(context); // Close category dialog
-//                    // _showSubCategoryDialog(category); // Show subcategory dialog
-//                   },
-//                 );
-//               }).toList(),
-//             ),
-//           ),
-//         ),
-//       );
-//     },
-//   );
-// }
+void _showCategoryDialog() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Select Category"),
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxHeight: 300.0, // Limits height to show only 4 items
+          ),
+          child: SizedBox(
+            height: 200,
+            child: PaginationView<MainCategoryWalletEntity>(
+              build: (ScrollController scrollController,
+                  List<MainCategoryWalletEntity> data) {
+                return SingleChildScrollView(
+                  controller: scrollController,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: data.isNotEmpty
+                        ? data.map((category) {
+                      String categoryName =
+                      context.locale == Locales.english
+                          ? category.nameEn
+                          : category.nameAr;
+                      return ListTile(
+                        title: Text(categoryName),
+                        onTap: () {
 
-// void _showSubCategoryDialog(String category) {
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return AlertDialog(
-//         title: const Text("Select SubCategory"),
-//         content: SingleChildScrollView(
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: categoryData[category]!.map((subCategory) {
-//               return ListTile(
-//                 title: Text(subCategory),
-//                 onTap: () {
-//                   setState(() {
-//                     selectedCategory = category;
-//                     selectedSubCategory = subCategory;
-//                   });
-//                   Navigator.pop(context);
-//
-//                   // List<WalletTypes> wallets = (err.response?.data['paymentMethod'] as List)
-//                   //     .map((e) => (e as String).toWalletType)
-//                   //     .toList();
-//                   serviceLocator<SubscriptionController>().showSubscriptionPlans(
-//                       subCategoryId: '62c8ba9f8e28a58a3edf57eb', wallets: [],);
-//                 },
-//               );
-//             }).toList(),
-//           ),
-//         ),
-//       );
-//     },
-//   );
-// }
+                          Navigator.pop(
+                            context,
+                          ); // Close category dialog
+                          _showSubCategoryDialog(category.id);
+                        },
+                      );
+                    }).toList()
+                        : [const Text("No categories available")],
+                  ),
+                );
+              },
+              fetchData: (PaginationParams paginationParams) {
+                return context
+                    .read<WalletCubit>()
+                    .fetchMainCategoryWallet(
+                    paginationParams: paginationParams);
+              },
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
 
+void _showSubCategoryDialog(String id) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Select Category"),
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxHeight: 300.0, // Limits height to show only 4 items
+          ),
+          child: SizedBox(
+            height: 200,
+            child: PaginationView<MainCategoryWalletEntity>(
+              build: (ScrollController scrollController,
+                  List<MainCategoryWalletEntity> data) {
+                return SingleChildScrollView(
+                  controller: scrollController,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: data.isNotEmpty
+                        ? data.map((category) {
+                      String categoryName =
+                      context.locale == Locales.english
+                          ? category.nameEn
+                          : category.nameAr;
+                      return ListTile(
+                        title: Text(categoryName),
+                        onTap: () {
+
+                          Navigator.pop(
+                            context,
+                          ); // Close category dialog
+                          serviceLocator<SubscriptionController>().showSubscriptionPlans(
+                          subCategoryId: category.id, wallets: [],);
+                        },
+                      );
+                    }).toList()
+                        : [const Text("No categories available")],
+                  ),
+                );
+              },
+              fetchData: (PaginationParams paginationParams) {
+                return context
+                    .read<WalletCubit>()
+                    .fetchSubCategoryWallet(
+                  id: id,
+                    paginationParams: paginationParams);
+              },
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
+
+
+  // serviceLocator<SubscriptionController>().showSubscriptionPlans(
+  // subCategoryId: '62c8ba9f8e28a58a3edf57eb', wallets: [],);
 // void _showBottomSheet(String subCategory) {
 //   showModalBottomSheet(
 //     backgroundColor: Theme.of(context).primaryColor,

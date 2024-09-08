@@ -12,4 +12,5 @@ abstract class WalletRepo {
   Future<Either<Failure,List<WalletHistoryEntity>>>fetchHistoryWallet(WalletHistoryParams params);
   Future<Either<Failure,List<WalletSubscriptionEntity>>>fetchSubscriptionWallet();
   Future<Either<Failure,List<MainCategoryWalletEntity>>>fetchMainCategory(MainCategoryParams params);
+  Future<Either<Failure,List<MainCategoryWalletEntity>>>fetchSubCategory(MainCategoryParams params);
 }

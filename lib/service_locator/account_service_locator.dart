@@ -30,6 +30,7 @@ import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.da
 import '../features/account_taps/wallet/domain/usecases/get_subscription_use_case.dart';
 import '../features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 import '../features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
+import '../features/account_taps/wallet/domain/usecases/sub_category_use_case.dart';
 
 class AccountServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
@@ -78,6 +79,8 @@ class AccountServiceLocator {
         () => GetWalletGiftsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<MainCategoryUseCase>(
         () => MainCategoryUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<SubCategoryUseCase>(
+            () => SubCategoryUseCase(serviceLocator()));
 
     serviceLocator.registerFactory<FavouriteAdsCubit>(
         () => FavouriteAdsCubit(serviceLocator())..loadData());
@@ -95,6 +98,7 @@ class AccountServiceLocator {
           serviceLocator(),
         )..loadData());
     serviceLocator.registerFactory<WalletCubit>(() => WalletCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

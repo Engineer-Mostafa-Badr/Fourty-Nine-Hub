@@ -33,4 +33,9 @@ class WalletRepoImpl implements WalletRepo {
   Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchMainCategory(MainCategoryParams params) {
     return _remoteDataSource.fetchMainCategory(params);
   }
+
+  @override
+  Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchSubCategory(MainCategoryParams params) {
+   return _remoteDataSource.fetchSubCategory(params);
+  }
 }
