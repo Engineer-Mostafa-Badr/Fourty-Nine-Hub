@@ -16,4 +16,6 @@ abstract class ChatRoomRepository {
   Future<Either<Failure, List<MessageEntity>>> getMessages(GetMessagesParams params);
 
   void listenToNewMessages(Function(MessageEntity message) params);
+
+  void stopListenToMessages();
 }

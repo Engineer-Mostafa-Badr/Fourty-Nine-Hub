@@ -39,8 +39,15 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   @override
   void listenToNewMessages(Function(MessageEntity message) params) {
     return _chatRemoteDataSource.listenToNewMessages((message) {
-      _chatLocalDataSource.saveMessage(message);
+        _chatLocalDataSource.saveMessage(message);
       params(message);
     });
   }
+
+  @override
+  void stopListenToMessages() {
+    _chatRemoteDataSource.stopListenToMessages();
+  }
+
+
 }

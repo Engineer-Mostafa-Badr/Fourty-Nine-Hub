@@ -1,15 +1,11 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/delete_message_body.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/masseges_list_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../widgets/chat_room_app_bar.dart';
 import '../widgets/send_message_widget.dart';
 
@@ -23,43 +19,40 @@ class ChatRoomView extends StatefulWidget {
 }
 
 class _ChatRoomViewState extends State<ChatRoomView> {
-  late ChatRoomCubit chatRoomCubit;
+  // late ChatRoomCubit chatRoomCubit;
   final focusNode = FocusNode();
   MessageEntity? _replayMessage;
 
   @override
-  void initState() {
-    super.initState();
-    chatRoomCubit = context.read<ChatRoomCubit>()..getMessages(widget.chatId!);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.BACKGROUND_COLOR,
-      appBar: const ChatRoomAppBar(),
-      body: Stack(
-        children: [
-          // Background image
-          Positioned.fill(
-            child: Image.asset(
-              'assets/images/background.png',
-              scale: 7,
-              // fit: BoxFit.cover,
-              repeat: ImageRepeat.repeat,
-              opacity: const AlwaysStoppedAnimation(0.7),
+    return BlocProvider(
+      create: (context) => serviceLocator<ChatRoomCubit>()..getMessages(widget.chatId!),
+      child: Scaffold(
+        backgroundColor: AppColors.BACKGROUND_COLOR,
+        appBar: const ChatRoomAppBar(),
+        body: Stack(
+          children: [
+            // Background image
+            Positioned.fill(
+              child: Image.asset(
+                'assets/images/background.png',
+                scale: 7,
+                // fit: BoxFit.cover,
+                repeat: ImageRepeat.repeat,
+                opacity: const AlwaysStoppedAnimation(0.7),
+              ),
             ),
-          ),
-          // Main content
-          const SafeArea(
-            child: Column(
-              children: [
-                Expanded(child: MessagesListView()),
-                SendMessageWidget(),
-              ],
+            // Main content
+            const SafeArea(
+              child: Column(
+                children: [
+                  Expanded(child: MessagesListView()),
+                  SendMessageWidget(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

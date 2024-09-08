@@ -34,9 +34,9 @@ class SQFLiteMessagesLocalDataSourceImplementation
         DatabaseTables.messages,
         where: 'chatId = ?',
         whereArgs: [params.chatId],
-        orderBy: 'createdAt ASC',
-        limit: params.pagination.limit,
-        offset: params.pagination.page - 1,
+        // orderBy: 'createdAt DESC',
+        // limit: params.pagination.limit,
+        // offset: (params.pagination.page - 1) * params.pagination.limit,
       );
 
       for (var element in result) {

@@ -21,6 +21,8 @@ abstract class MessagesRemoteDataSource {
     required String chatId,
     required String messageId,
   });
+
+  void stopListenToMessages();
 }
 
 class MessagesRemoteDataSourceImplementation
@@ -78,11 +80,18 @@ class MessagesRemoteDataSourceImplementation
   Future<Either<Failure, bool>> sendMessage(SendMessageParams params) async {
     try {
       _socket.connect();
+      CliLogger.info('you send message : ${params.toSocketParams()}');
       _socket.emit(SocketIOEvents.sendMessage, params.toSocketParams());
       return const Right(true);
     } catch (e) {
       CliLogger.error('can\'t send error $e');
       return const Left(ServerFailure(message: "can't send message "));
     }
+  }
+
+  @override
+  void stopListenToMessages() {
+    _socket.off(SocketIOListeners.newMessageFromOther);
+    _socket.off(SocketIOListeners.newMessageFromMe);
   }
 }
