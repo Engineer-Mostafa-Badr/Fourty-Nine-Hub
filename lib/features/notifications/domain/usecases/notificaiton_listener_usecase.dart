@@ -5,7 +5,9 @@ class NotificationListenerUseCase {
 
   NotificationListenerUseCase({required this.notificationRepo});
 
-  Future<void> call({required Function(Map<String, dynamic> data) notificationCallback}) {
-    return notificationRepo.notificationListener(notificationCallback: notificationCallback);
+  Future<void> call(
+      {required Function(Map<String, dynamic> data) notificationCallback}) {
+    return notificationRepo.notificationListener(
+        notificationCallback: notificationCallback);
   }
 }

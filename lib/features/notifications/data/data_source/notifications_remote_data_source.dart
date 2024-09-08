@@ -4,19 +4,24 @@ import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/notifications/data/models/notification_model/notification_model.dart';
+import 'package:fourtyninehub/features/notifications/data/models/unread_notifications_count_model.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/notification_entity.dart';
+import 'package:fourtyninehub/features/notifications/domain/entities/unread_notifications_count_entity.dart';
 import 'package:fourtyninehub/features/notifications/helpers/firebase_notification_helper.dart';
 import 'package:fourtyninehub/features/notifications/helpers/web_socket_helper.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 
 abstract class NotificationsRemoteDataSource {
   Future<void> setupInteractedMessage({required BuildContext context});
+
   Future<Either<Failure, List<NotificationEntity>>> fetchNotifications({
     required String type,
     required int page,
     int limit = 10,
   });
   Future<void> notificationListener({required Function(Map<String, dynamic> data) notificationCallback});
+
+  Future<Either<Failure, UnreadNotificationsCountEntity>> getUnreadNotificationsCount();
 }
 
 class NotificationsRemoteDataSourceImp implements NotificationsRemoteDataSource {
@@ -78,5 +83,21 @@ class NotificationsRemoteDataSourceImp implements NotificationsRemoteDataSource 
   @override
   Future<void> notificationListener({required Function(Map<String, dynamic> data) notificationCallback}) async {
     webSocketHelper.notificationListener(notificationCallback);
+  }
+
+  @override
+  Future<Either<Failure, UnreadNotificationsCountEntity>> getUnreadNotificationsCount() async {
+    final response = await apiConsumer.get(EndPoints.unreadNotificationsCount);
+
+    return response.fold(
+      (failure) => Left(pr(failure)),
+      (data) {
+        // pr(data);
+        UnreadNotificationsCountModel unreadNotificationsCountModel =
+            UnreadNotificationsCountModel.fromJson(data['data']);
+        pr(unreadNotificationsCountModel);
+        return Right(unreadNotificationsCountModel);
+      },
+    );
   }
 }

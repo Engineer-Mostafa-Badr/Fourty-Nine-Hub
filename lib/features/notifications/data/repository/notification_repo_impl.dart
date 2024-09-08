@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/notifications/data/data_source/notifications_remote_data_source.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/notification_entity.dart';
+import 'package:fourtyninehub/features/notifications/domain/entities/unread_notifications_count_entity.dart';
 
 import '../../domain/repos/notification_repo.dart';
 import '../models/delete_notification_model.dart';
@@ -36,5 +37,10 @@ class NotificationRepoImpl implements NotificationRepo {
   @override
   Future<void> notificationListener({required Function(Map<String, dynamic> data) notificationCallback}) {
     return notificationRemoteDataSource.notificationListener(notificationCallback: notificationCallback);
+  }
+
+  @override
+  Future<Either<Failure, UnreadNotificationsCountEntity>> getUnreadNotificationsCount() {
+    return notificationRemoteDataSource.getUnreadNotificationsCount();
   }
 }

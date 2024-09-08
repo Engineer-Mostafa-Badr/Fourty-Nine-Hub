@@ -37,6 +37,7 @@ class EndPoints {
   static const verifyForgetPasswordOTP = '/auth/verify/otp';
   static const createNewForgetPassword = '/auth/reset-password';
   static const notifications = '/notifications';
+  static const unreadNotificationsCount = '/notifications/unread/count';
   // static const report = '/report?subCategory=66a3583454e6e337915514db';
   static String report({required String subCategoryId}) => '/report?subCategory=$subCategoryId';
   static const documentRequest = '/twitter/document-request?subCategory=66a3583454e6e337915514db';

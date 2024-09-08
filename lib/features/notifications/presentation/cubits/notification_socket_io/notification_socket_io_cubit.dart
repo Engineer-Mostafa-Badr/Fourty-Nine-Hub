@@ -28,6 +28,17 @@ class NotificationSocketIoCubit extends Cubit<NotificationSocketIoState> {
           emit(NotificationSocketIoFailed('Notfication Type is not Provided From the Server'));
           return;
         }
+        //! dev will be deleted after testing
+        if (type == 'services') {
+          getAppNotificationsCubit.notifications = [];
+          getAppNotificationsCubit.page = 1;
+          await getAppNotificationsCubit.getAppNotifications();
+          if (getAppNotificationsCubit.notifications.isNotEmpty) {
+            emit(NotificationSocketIoNewNotification(getAppNotificationsCubit.notifications.first));
+          }
+          return;
+        }
+        //! dev
         if (type == 'app') {
           getAppNotificationsCubit.notifications = [];
           getAppNotificationsCubit.page = 1;

@@ -37,9 +37,13 @@ class _NotificationViewState extends State<NotificationView> {
                 ),
                 const Sizer(),
                 TabBar(
+                  isScrollable: false,
+                  // physics: const RangeMaintainingScrollPhysics(),
+                  // dragStartBehavior: DragStartBehavior.down,
                   tabs: [
                     Tab(
-                      icon: SvgPicture.asset(Assets.social, height: 20, semanticsLabel: 'social'),
+                      icon: SvgPicture.asset(Assets.social,
+                          height: 20, semanticsLabel: 'social'),
                     ),
                     Tab(
                       icon: Image.asset(
@@ -55,12 +59,24 @@ class _NotificationViewState extends State<NotificationView> {
                     ),
                   ],
                 ),
-                const Expanded(
+                Expanded(
                   child: TabBarView(
                     children: [
-                      SizedBox.shrink(),
-                      SizedBox.shrink(),
-                      AppNotificationBuilder(),
+                      GestureDetector(
+                        onHorizontalDragStart: (_) {},
+                        onHorizontalDragEnd: (_) {},
+                        child: const AppNotificationBuilder(),
+                      ),
+                      GestureDetector(
+                        onHorizontalDragStart: (_) {},
+                        onHorizontalDragEnd: (_) {},
+                        child: const AppNotificationBuilder(),
+                      ),
+                      GestureDetector(
+                        onHorizontalDragStart: (_) {},
+                        onHorizontalDragEnd: (_) {},
+                        child: const AppNotificationBuilder(),
+                      ),
                     ],
                   ),
                 )

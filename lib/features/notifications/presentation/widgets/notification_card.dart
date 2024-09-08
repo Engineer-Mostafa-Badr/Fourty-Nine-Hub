@@ -23,13 +23,15 @@ class NotificationCard extends StatelessWidget {
       child: Dismissible(
         key: UniqueKey(),
         direction: DismissDirection.startToEnd,
+        behavior: HitTestBehavior.translucent,
         confirmDismiss: (direction) async {
           bool result = false;
           await showModalBottomSheet(
             context: context,
             builder: (context) {
               return Container(
-                padding: const EdgeInsets.only(top: 20, right: 10, left: 10, bottom: 20),
+                padding: const EdgeInsets.only(
+                    top: 20, right: 10, left: 10, bottom: 20),
                 child: AreYouSure(
                   title: LocaleKeys.alert.localize,
                   subTitle: LocaleKeys.clearNoti.localize,
@@ -52,7 +54,9 @@ class NotificationCard extends StatelessWidget {
           ),
         ),
         child: NotificationCustomContainer(
-          color: notificationEntity.read! ? Colors.transparent : AppColors.PRIMARY_COLOR.withOpacity(0.1),
+          color: notificationEntity.read!
+              ? Colors.transparent
+              : AppColors.PRIMARY_COLOR.withOpacity(0.1),
           child: Row(
             children: [
               SizedBox(
@@ -95,12 +99,14 @@ class NotificationCard extends StatelessWidget {
     if (notificationEntity.createdAt == null) {
       return '';
     }
-    return DateFormat('dd MMM, hh:mm aaa').format(notificationEntity.createdAt!);
+    return DateFormat('dd MMM, hh:mm aaa')
+        .format(notificationEntity.createdAt!);
   }
 }
 
 class NotificationCustomContainer extends StatelessWidget {
-  const NotificationCustomContainer({super.key, required this.color, required this.child});
+  const NotificationCustomContainer(
+      {super.key, required this.color, required this.child});
   final Color color;
   final Widget child;
   @override

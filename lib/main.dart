@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/firebas
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_services_notifications/get_services_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -78,14 +79,28 @@ class MyApp extends StatelessWidget {
         BlocProvider<FirebaseNotficationsCubit>(
           create: (context) => FirebaseNotficationsCubit(serviceLocator()),
         ),
+        BlocProvider<GetUnreadNotificationsCountCubit>(
+          create: (context) => GetUnreadNotificationsCountCubit(
+            getUnreadNotificationsCountUseCase: serviceLocator(),
+          ),
+        ),
         BlocProvider<GetAppNotificationsCubit>(
-          create: (context) => GetAppNotificationsCubit(getNotficationsUseCase: serviceLocator()),
+          create: (context) => GetAppNotificationsCubit(
+            getNotficationsUseCase: serviceLocator(),
+            context: context,
+          ),
         ),
         BlocProvider<GetSocialNotificationsCubit>(
-          create: (context) => GetSocialNotificationsCubit(getNotficationsUseCase: serviceLocator()),
+          create: (context) => GetSocialNotificationsCubit(
+            getNotficationsUseCase: serviceLocator(),
+            context: context,
+          ),
         ),
         BlocProvider<GetServicesNotificationsCubit>(
-          create: (context) => GetServicesNotificationsCubit(getNotficationsUseCase: serviceLocator()),
+          create: (context) => GetServicesNotificationsCubit(
+            getNotficationsUseCase: serviceLocator(),
+            context: context,
+          ),
         ),
         BlocProvider<NotificationSocketIoCubit>(
           create: (context) => NotificationSocketIoCubit(

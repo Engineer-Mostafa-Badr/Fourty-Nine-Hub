@@ -10,7 +10,8 @@ final class NotificationSocketIoFailed extends NotificationSocketIoState {
   NotificationSocketIoFailed(this.message);
 }
 
-final class NotificationSocketIoNewNotification extends NotificationSocketIoState {
+final class NotificationSocketIoNewNotification
+    extends NotificationSocketIoState {
   final NotificationEntity notificationEntity;
 
   NotificationSocketIoNewNotification(this.notificationEntity);

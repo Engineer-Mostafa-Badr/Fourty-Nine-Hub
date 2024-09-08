@@ -2,6 +2,7 @@ import 'package:fourtyninehub/features/notifications/data/data_source/notificati
 import 'package:fourtyninehub/features/notifications/data/repository/notification_repo_impl.dart';
 import 'package:fourtyninehub/features/notifications/domain/repos/notification_repo.dart';
 import 'package:fourtyninehub/features/notifications/domain/usecases/get_notifications_usecase.dart';
+import 'package:fourtyninehub/features/notifications/domain/usecases/get_unread_notifications_usecase.dart';
 import 'package:fourtyninehub/features/notifications/domain/usecases/notificaiton_listener_usecase.dart';
 import 'package:fourtyninehub/features/notifications/domain/usecases/set_intercepted_notification_message_usecase.dart';
 import 'package:fourtyninehub/features/notifications/helpers/firebase_notification_helper.dart';
@@ -41,6 +42,9 @@ class NotificationsServiceLocator {
     );
     serviceLocator.registerLazySingleton<NotificationListenerUseCase>(
       () => NotificationListenerUseCase(notificationRepo: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<GetUnreadNotificationsCountUseCase>(
+      () => GetUnreadNotificationsCountUseCase(notificationRepo: serviceLocator()),
     );
   }
 }
