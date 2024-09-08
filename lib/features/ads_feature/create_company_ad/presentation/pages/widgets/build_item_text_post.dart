@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../data/models/company_advertise_model.dart';
-import '../../cubit/company_advertise/company_advertise_cubit.dart';
+import '../../cubit/create_company_ad_cubit.dart';
 
 class BuildItemTextPost extends StatelessWidget {
   BuildItemTextPost(
@@ -36,7 +36,8 @@ class BuildItemTextPost extends StatelessWidget {
                     const SizedBox(width: 5),
                     GestureDetector(
                       onTap: (){
-                        context.read<CompanyAdvertiseCubit>().deletePost(context, advertises.sId!, 'written');
+                       // context.read<CompanyAdvertiseCubit>().deletePost(context, advertises.sId!, 'written');
+                        context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!);
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(

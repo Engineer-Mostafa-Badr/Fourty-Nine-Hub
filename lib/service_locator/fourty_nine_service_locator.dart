@@ -320,6 +320,7 @@ class FourtyNineServiceLocator {
       () => CreateCompanyAdCubit(
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
       )..loadData(),
     );
 

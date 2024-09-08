@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/repo
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/usecases/get_price_use_case.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/ads_feature/create_company_ad/domain/usecases/delete_company_ad_use_case.dart';
 import '../features/ads_feature/create_company_ad/domain/usecases/get_company_add_use_case.dart';
 import '../features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 
@@ -25,9 +26,14 @@ class CompanyAddServiceLocator {
         .registerLazySingleton<GetCompanyAddUseCases>(() => GetCompanyAddUseCases(
               serviceLocator(),
             ));
+    serviceLocator
+        .registerLazySingleton<DeleteCompanyAddUseCases>(() => DeleteCompanyAddUseCases(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerFactory<CreateCompanyAdCubit>(
         () => CreateCompanyAdCubit(
+            serviceLocator(),
             serviceLocator(),
             serviceLocator(),
         )..loadData());

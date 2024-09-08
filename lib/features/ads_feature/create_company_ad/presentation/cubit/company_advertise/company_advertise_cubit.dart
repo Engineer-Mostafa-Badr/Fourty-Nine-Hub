@@ -93,19 +93,19 @@ class CompanyAdvertiseCubit extends Cubit<CompanyAdvertiseState> {
   //   return super.close();
   // }
 
-  deletePost(BuildContext context, String id, String filter) async {
-    emit(DeletePostLoading());
-
-    var result = await companyAdvertiseRepo.deletePosts(id);
-
-    result.fold((failure) {
-      emit(DeletePostError(errMessage: getFailureMessage(failure, context)));
-      print(getFailureMessage(failure, context));
-    }, (_) {
-      emit(DeletePostSuccess());
-      // fetchAdvertiseCompany(context, filter);
-    });
-  }
+  // deletePost(BuildContext context, String id, String filter) async {
+  //   emit(DeletePostLoading());
+  //
+  //   var result = await companyAdvertiseRepo.deletePosts(id);
+  //
+  //   result.fold((failure) {
+  //     emit(DeletePostError(errMessage: getFailureMessage(failure, context)));
+  //     print(getFailureMessage(failure, context));
+  //   }, (_) {
+  //     emit(DeletePostSuccess());
+  //     // fetchAdvertiseCompany(context, filter);
+  //   });
+  // }
 }
 
 // import 'dart:async';

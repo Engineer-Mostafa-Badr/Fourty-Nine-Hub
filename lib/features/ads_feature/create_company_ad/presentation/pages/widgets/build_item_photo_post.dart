@@ -7,6 +7,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../data/models/company_advertise_model.dart';
+import '../../cubit/create_company_ad_cubit.dart';
 import 'image_details.dart';
 
 class BuildItemPhotoPost extends StatelessWidget {
@@ -48,9 +49,10 @@ class BuildItemPhotoPost extends StatelessWidget {
                         builder: (context) => ImageDetails(
                               image: advertises.media![index].photo!,
                               function: () {
-                                context
-                                    .read<CompanyAdvertiseCubit>()
-                                    .deletePost(context, advertises.media![index].sId!, 'photo');
+                                context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!);
+                                // context
+                                //     .read<CompanyAdvertiseCubit>()
+                                //     .deletePost(context, advertises.media![index].sId!, 'photo');
                                 Navigator.pop(context);
                               },
                             ));
@@ -99,9 +101,10 @@ class BuildItemPhotoPost extends StatelessWidget {
             if(isPhoto!)
             IconButton(
               onPressed: () {
-                context
-                    .read<CompanyAdvertiseCubit>()
-                    .deletePost(context, advertises.sId!, 'photo');
+                context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!);
+                // context
+                //     .read<CompanyAdvertiseCubit>()
+                //     .deletePost(context, advertises.sId!, 'photo');
               },
               icon: const Icon(
                 Icons.close,
