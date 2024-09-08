@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +10,15 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../../../../../service_locator/service_locator.dart';
+import '../../controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import '../../shared/filter_utiles.dart';
 import 'recording_shared.dart';
 
 class OtherVoiceVideoRecordingScreen extends StatefulWidget {
-  const OtherVoiceVideoRecordingScreen({super.key});
+  final String voiceUrl;
+
+  const OtherVoiceVideoRecordingScreen({super.key, required this.voiceUrl});
 
   @override
   OtherVoiceVideoRecordingScreenState createState() =>
@@ -36,8 +41,6 @@ class OtherVoiceVideoRecordingScreenState
   int _secondsRemaining = 30;
 
   bool showGalleryBtn = false;
-  String voiceUrl =
-      'https://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/start.ogg';
 
   final List<Filter> filters = FilterLibrary.filters;
   Filter? _selectedFilter;
@@ -136,7 +139,7 @@ class OtherVoiceVideoRecordingScreenState
 
   Future _loadAndPlayAudio() async {
     try {
-      await _audioPlayer.setUrl(voiceUrl);
+      await _audioPlayer.setUrl(widget.voiceUrl);
       _audioPlayer.setLoopMode(LoopMode.one);
     } catch (e) {
       log("Audio playback error: $e");
@@ -216,7 +219,7 @@ class OtherVoiceVideoRecordingScreenState
     // Adjusted FFmpeg command with horizontal flip
     final commandArgs = [
       '-i', videoPath!,
-      '-i', voiceUrl,
+      '-i', widget.voiceUrl,
       if (filterCommand.isNotEmpty) ...['-vf', filterCommand],
       '-map', '0:v:0',
       '-map', '1:a:0',
@@ -241,6 +244,8 @@ class OtherVoiceVideoRecordingScreenState
         final savedSuccessfully =
             await GallerySaver.saveVideo(mergedVideoPath!);
         if (savedSuccessfully ?? false) {
+          serviceLocator<ReelsCubit>().uploadReel(File(mergedVideoPath!));
+
           setState(() {
             showGalleryBtn = true;
           });

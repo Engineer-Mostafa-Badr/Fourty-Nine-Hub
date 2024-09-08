@@ -20,8 +20,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
-import '../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/localization/locales.dart';
 import '../../../../res/style/app_colors.dart';
@@ -40,7 +40,6 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   // AuthType selectedAuth = AuthType.LOGIN;
   ScrollController scrollController = ScrollController();
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -259,7 +258,6 @@ enum AuthType { LOGIN, REGISTER }
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key, required this.loginCubit});
-
   final LoginCubit loginCubit;
 
   @override
@@ -268,13 +266,14 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   bool obsecure = false;
-
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         FormTextField(
-          validator: (v) {},
+          validator: (v) {
+            return null;
+          },
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.zR),
@@ -291,7 +290,9 @@ class _LoginWidgetState extends State<LoginWidget> {
         ),
         const Sizer(),
         FormTextField(
-          validator: (v) {},
+          validator: (v) {
+            return null;
+          },
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.zR),
@@ -416,7 +417,6 @@ class RegisterWidget extends StatefulWidget {
 
 class _RegisterWidgetState extends State<RegisterWidget> {
   bool obsecure = true;
-
   @override
   Widget build(BuildContext context) {
     final registerCubit = context.read<RegisterCubit>();

@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -23,7 +25,8 @@ class MainCategoryBanner extends StatefulWidget {
     // this.favoriteName,
     this.onRegister,
     required this.category,
-    this.onFavorite,
+     required this.onFavorite,
+    this.isFavorite,
   });
 
   @override
@@ -31,11 +34,11 @@ class MainCategoryBanner extends StatefulWidget {
 }
 
 class _MainCategoryBannerState extends State<MainCategoryBanner> {
-  late bool _isFavorite;
+  // late bool _isFavorite;
 
   @override
   void initState() {
-    _isFavorite = widget.category.isFavorite;
+    widget.isFavorite = widget.category.isFavorite ?? false;
     super.initState();
   }
 

@@ -28,19 +28,15 @@ class CartItemCard extends StatelessWidget {
             height: kToolbarHeight,
             width: kToolbarHeight,
             radius: 10,
-            source: NetworkImage(meal.meal.image)),
+            source: NetworkImage(meal.meal.picture?.mediaKey ?? "")),
         const Sizer(),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Label(
-                text: meal.meal.name,
+                text: meal.meal.foodName ?? "",
                 style: Styles.mediumText(fontWeight: FontWeight.w400),
-              ),
-              Label(
-                text: meal.meal.description,
-                style: Styles.mediumText(color: Colors.grey),
               ),
               Label(
                   text: '${meal.meal.price} EGP',

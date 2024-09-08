@@ -14,7 +14,6 @@ void bottomSheet(
         return Container(
           width: double.infinity,
           padding: EdgeInsets.all(30.zW),
-          // height: 800,
           // margin: const EdgeInsets.all(kToolbarHeight),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(

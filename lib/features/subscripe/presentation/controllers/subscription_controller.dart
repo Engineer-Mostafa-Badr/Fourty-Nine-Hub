@@ -32,6 +32,7 @@ class SubscriptionController {
   void checkIfUserSubscribed({
     required Function onSubscribed,
     required String subCategoryId,
+     String? title,
   }) async {
     showLoadingDialog(context);
     final response = await _checkIfUserSubscribedUseCase(subCategoryId);
@@ -44,13 +45,13 @@ class SubscriptionController {
       if (data) {
         onSubscribed();
       } else {
-        showSubscriptionPlans(subCategoryId: subCategoryId);
+        showSubscriptionPlans(subCategoryId: subCategoryId,title: title);
       }
     });
   }
 
   Future<void> showSubscriptionPlans(
-      {List<WalletTypes>? wallets, required String subCategoryId}) async {
+      {List<WalletTypes>? wallets, required String subCategoryId,String? title}) async {
     showLoadingDialog(context);
     final plansResponse = await _getSubscriptionPlansUseCase(subCategoryId);
     AppPages.router.pop();
@@ -63,13 +64,11 @@ class SubscriptionController {
           isScrollControlled: true,
           context: context,
           backColor: Theme.of(context).scaffoldBackgroundColor,
-          widget: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.57,
-            child: SubscriptionPlansWidget(
-              subscribePlans: plans,
-              subCategoryId: subCategoryId,
-              paymentMenthods: wallets,
-            ),
+          widget: SubscriptionPlansWidget(
+            title: title,
+            subscribePlans: plans,
+            subCategoryId: subCategoryId,
+            paymentMenthods: wallets,
           ));
     });
   }

@@ -1,7 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/report_widget.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
@@ -18,7 +21,7 @@ class ZegoAudioRoomWidget extends StatefulWidget {
     super.key,
     required this.isHost,
     required this.roomId,
-    this.layoutMode = LayoutMode.defaultLayout,
+    this.layoutMode = LayoutMode.full,
     required String roomSubject,
   });
 
@@ -27,10 +30,13 @@ class ZegoAudioRoomWidget extends StatefulWidget {
 }
 
 class _ZegoAudioRoomWidgetState extends State<ZegoAudioRoomWidget> {
-  final userId = Random().nextInt(1000).toString();
-
   @override
   Widget build(BuildContext context) {
+    final String userId = context.read<UserCubit>().state.data!.id;
+    final String userName = context.read<UserCubit>().state.data!.fullName;
+    final String imageUrl =
+        context.read<UserCubit>().state.data!.profilePicture ??
+            UIConst.profilePlaceHolder;
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
       width: MediaQuery.of(context).size.width,
@@ -43,10 +49,10 @@ class _ZegoAudioRoomWidgetState extends State<ZegoAudioRoomWidget> {
         appID: UIConst.appId,
         appSign: UIConst.appSign,
         userID: userId,
-        userName: 'user $userId',
+        userName: userName,
         roomID: widget.roomId,
         events: events,
-        config: config,
+        config: config(imageUrl),
       ),
     );
   }
@@ -110,7 +116,7 @@ class _ZegoAudioRoomWidgetState extends State<ZegoAudioRoomWidget> {
     );
   }
 
-  ZegoUIKitPrebuiltLiveAudioRoomConfig get config {
+  ZegoUIKitPrebuiltLiveAudioRoomConfig config(String imageUrl) {
     var zegoLiveAudioRoomSeatConfig = getSeatConfig()
       ..takeIndexWhenJoining = widget.isHost ? getHostSeatIndex() : -1
       ..hostIndexes = getLockSeatIndex()
@@ -120,6 +126,10 @@ class _ZegoAudioRoomWidgetState extends State<ZegoAudioRoomWidget> {
         ? (ZegoUIKitPrebuiltLiveAudioRoomConfig.host())
         : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience())
       ..seat = zegoLiveAudioRoomSeatConfig
+      ..background = Container(
+        color: context.theme.scaffoldBackgroundColor,
+      )
+      ..topMenuBar.showLeaveButton = false
       // ..background = background()
       // ..topMenuBar.showLeaveButton = false
       // ..emptyAreaBuilder = mediaPlayer
@@ -147,8 +157,7 @@ class _ZegoAudioRoomWidgetState extends State<ZegoAudioRoomWidget> {
         applyToTakeButton(),
       ]
       //must be within 64 bytes
-      ..userAvatarUrl =
-          'https://www.allprodad.com/wp-content/uploads/2021/03/05-12-21-happy-people.jpg';
+      ..userAvatarUrl = imageUrl;
   }
 
   CustomExtendedButton reportButton() {

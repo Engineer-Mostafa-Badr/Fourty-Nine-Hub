@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/models/ad_property_model.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
 
-import '../../../../../core/api/end_points.dart';
 
 abstract class CreateAdRemoteDatasource {
   Future<Either<Failure, List<AdPropertiesEntity>>> getAdProperties({

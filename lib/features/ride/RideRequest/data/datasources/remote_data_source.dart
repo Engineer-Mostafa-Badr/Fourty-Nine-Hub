@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
-
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/address_search_params_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/car_models_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/expected_price_model.dart';
@@ -16,7 +16,6 @@ import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumb
 import 'package:fourtyninehub/res/assets/jsons.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../../../../core/api/api_consumer.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../subcategories/data/models/sub_category_model.dart';
 import '../models/car_type_model.dart';
@@ -158,7 +157,7 @@ class RideRemoteDataSourceImpl implements RideRemoteDataSource {
 
       return Right(list);
     } catch (e) {
-      return const Left(UnknownFailure());
+      return Left(UnknownFailure(e.toString()));
     }
   }
 

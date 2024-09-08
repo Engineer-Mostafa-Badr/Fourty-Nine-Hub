@@ -1,9 +1,13 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+
+
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
@@ -31,20 +35,21 @@ class UploadFile {
         });
         // send to w3 storage
         signedURLResponse.fold((l) {}, (data) async {
+          log("response: ${jsonEncode(data)}");
           await sendBinaryFileData(
                   file: file, signedUrl: data['data']['signedUrl'])
               .then((value) async {
             final mediaId = data['data']['mediaId'];
             final confirmUploadResponse = await serviceLocator<ApiConsumer>()
                 .put(EndPoints.confirmUpload(mediaId));
-            confirmUploadResponse.fold((l) {
+            /* confirmUploadResponse.fold((l) {
               print("object22222");
               return Left(l);
-            }, (data) {
-              print("object111");
-              onUploaded(UploadFileEntity(mediaId: mediaId, file: file));
-              return const Right(true);
-            });
+            }, (data) { */
+            print("object111");
+            onUploaded(UploadFileEntity(mediaId: mediaId, file: file));
+            return const Right(true);
+            // });
           });
         });
       }

@@ -1,23 +1,14 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_friends.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_places.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/select_activity_view.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_friends.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/show_all_images.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -25,6 +16,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
 import '../../../../../common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
 import '../../../../account_taps/privacy/domain/entities/privacy_status_enum.dart';
@@ -40,6 +32,23 @@ class CreatePostView extends StatefulWidget {
 }
 
 class _CreatePostViewState extends State<CreatePostView> {
+
+  FocusNode focusNode = FocusNode();
+  
+  
+  @override
+  void initState() {
+    focusNode.requestFocus();
+    super.initState();
+  }
+  
+  
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
+  }
+  
   @override
   Widget build(BuildContext context) {
     final controller = context.read<CreatePostCubit>();
@@ -54,66 +63,141 @@ class _CreatePostViewState extends State<CreatePostView> {
               appBar: BackAppBar(label: 'Create Post', actions: [
                 TextButton(
                     child: const Label(text: 'Post'),
-                    onPressed: () => controller.createPost(
-                        context: context, type: widget.social)),
+                    onPressed: () => controller.createPost(context: context, type: widget.social)),
               ]),
               body: ListView(
                 shrinkWrap: true,
                 children: [
-                  if (state.place != null && state.place!.name.isNotEmpty)
-                    GestureDetector(
-                      onTap: () {},
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 10),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.location_on,
-                              size: 30,
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: ()async{
+                          final res = await CustomVerticalSheetItem.normal<PrivacyStatus>(context, [
+                            CustomSheetModel(
+                              text: "Public",
+                              value: PrivacyStatus.public,
+                              iconData: Icons.language,
                             ),
-                            Expanded(
-                              child: BadgedLabel(
-                                label: state.place!.name,
-                                style: Styles.headerText(),
-                                onRemove: () {
-                                  controller.onRemovePlace();
-                                },
-                              ),
+                            CustomSheetModel(
+                              text: "Friends",
+                              value: PrivacyStatus.friends,
+                              iconData: Icons.family_restroom,
                             ),
-                            if (state.place!.name.length < 30)
-                              const Flexible(child: SizedBox.shrink()),
-                          ],
+                            CustomSheetModel(
+                              text: "Followers",
+                              value: PrivacyStatus.followers,
+                              iconData: Icons.accessibility_sharp,
+                            ),
+                            CustomSheetModel(
+                              text: "Friends / Followers",
+                              value: PrivacyStatus.friendsAndFollowers,
+                              iconData: Icons.supervised_user_circle_outlined,
+                            ),
+                            CustomSheetModel(
+                              text: "Only Me",
+                              value: PrivacyStatus.onlyMe,
+                              iconData: Icons.lock,
+                            ),
+                          ]);
+                          print(res?.name);
+                          print("============>");
+                          controller.selectPrivacy(privacy: res?.name ?? 'public');
+                        },
+
+                        child: Container(
+                          margin: const EdgeInsetsDirectional.only(start: 10),
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: Colors.blue.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(state.selectedPrivacy=='onlyMe'?Icons.lock:state.selectedPrivacy=='friends'?Icons.family_restroom:state.selectedPrivacy=='followers'?Icons.accessibility_sharp:state.selectedPrivacy=='friendsAndFollowers'?Icons.supervised_user_circle_outlined:Icons.language,size: 16,),
+                              const Sizer(),
+                              Text(state.selectedPrivacy=='onlyMe'? 'Only Me':state.selectedPrivacy=='friends'?'Friends':state.selectedPrivacy=='followers'?'Followers':state.selectedPrivacy=='friendsAndFollowers'?'Friends / Followers':'Public',style: Styles.mediumText(color: AppColors.PRIMARY_COLOR,fontSize: 24),),
+                              const Sizer(),
+                              const Icon(Icons.keyboard_arrow_down_outlined,size: 16,),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
+                    ],
+                  ),
                   if (widget.social != 'twitter')
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Row(
                         children: [
-                          if (state.selectedFeeling != null &&
-                              state.selectedFeeling!.name.isNotEmpty)
-                            BadgedLabel(
-                              label: state.selectedFeeling!.name,
-                              onRemove: () {
-                                controller.onRemoveFeeling();
-                              },
+                          if (state.selectedFeeling != null && state.selectedFeeling!.name.isNotEmpty)
+                            Container(
+                              margin: const EdgeInsetsDirectional.only(start: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
+                              decoration: BoxDecoration(
+                                color: Colors.blue.withOpacity(0.3),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  InkWell(
+                                    onTap: (){
+                                      controller.onRemoveFeeling();
+                                    },
+                                    child: const Align(
+                                      alignment: AlignmentDirectional.topEnd,
+                                      child: Icon(Icons.close,size: 16,color: Colors.red,),
+                                    ),
+                                  ),
+                                  Align(
+                                      alignment: AlignmentDirectional.bottomStart,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                                        child: Row(
+                                          children: [
+                                            Text('Feeling ',style: Styles.headerText(fontSize: 24),),
+                                            Text(state.selectedFeeling!.name,style: Styles.mediumText(color: AppColors.PRIMARY_COLOR,fontSize: 24),),
+                                          ],
+                                        ),
+                                      )),
+                                ],
+                              ),
                             ),
                           const Sizer(),
-                          if (state.selectedActivity != null &&
-                              state.selectedActivity!.name.isNotEmpty)
-                            BadgedLabel(
-                              label: state.selectedActivity!.name,
-                              onRemove: () {
-                                controller.onRemoveActivity();
-                              },
+                          if (state.selectedActivity != null && state.selectedActivity!.name.isNotEmpty)
+                            Container(
+                              margin: const EdgeInsetsDirectional.only(start: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
+                              decoration: BoxDecoration(
+                                color: Colors.blue.withOpacity(0.3),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  InkWell(
+                                    onTap: (){
+                                      controller.onRemoveActivity();
+                                    },
+                                    child: const Align(
+                                      alignment: AlignmentDirectional.topEnd,
+                                      child: Icon(Icons.close,size: 16,color: Colors.red,),
+                                    ),
+                                  ),
+                                  Align(
+                                      alignment: AlignmentDirectional.bottomStart,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        child: Text(state.selectedActivity!.name,style: Styles.mediumText(color: AppColors.PRIMARY_COLOR,fontSize: 24),),
+                                      )),
+                                ],
+                              ),
                             ),
+
                         ],
                       ),
                     ),
-                  if (state.selectedUsers != null &&
-                      state.selectedUsers!.isNotEmpty) ...[
+                  if (state.selectedUsers != null && state.selectedUsers!.isNotEmpty) ...[
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Label(
@@ -131,13 +215,13 @@ class _CreatePostViewState extends State<CreatePostView> {
                           state.selectedUsers!.length,
                           (index) => GestureDetector(
                               onTap: () {},
-                              child: BadgedLabel(
-                                label:
-                                    state.selectedUsers?[index].fullName ?? '',
+                              child:
+
+                              BadgedLabel(
+                                label: state.selectedUsers?[index].fullName ?? '',
                                 width: 100,
                                 onRemove: () {
-                                  controller.onRemoveUser(
-                                      state.selectedUsers![index]);
+                                  controller.onRemoveUser(state.selectedUsers![index]);
                                 },
                               )),
                         ),
@@ -145,16 +229,25 @@ class _CreatePostViewState extends State<CreatePostView> {
                     ),
                   ],
                   const Sizer(),
-                  _buildCreatePost(),
+                  _buildCreatePost(onChange: (c) {
+                    if (c.length > 80&&c.length<120&&state.backColor!='#FFFFFFFF') {
+                      controller.onBigger80();
+                    }else if(c.length > 120&&c.length<150&&state.backColor!='#FFFFFFFF'){
+                      controller.onBigger120();
+                    }else if(c.length>150){
+                      controller.onBigger150();
+                    }else{
+                      controller.onSmallerText();
+                    }
+                    return controller.removeBackground();
+                  }),
                   const Sizer(),
-                  if (widget.social != 'twitter' &&
-                      (state.images == null || state.images!.isEmpty))
+                  if (widget.social != 'twitter' && (state.images == null || state.images!.isEmpty)&&state.isBiggerThen150==false)
                     _buildColorsBallet(context: context),
                   const Sizer(),
-                  _buildOptions(controller),
+                  if (state.images != null && state.images!.isNotEmpty) Expanded(child: _buildMediaCard()),
                   const Sizer(),
-                  if (state.images != null && state.images!.isNotEmpty)
-                    Expanded(child: _buildMediaCard()),
+                  _buildOptions(controller),
                 ],
               ),
             ),
@@ -164,44 +257,48 @@ class _CreatePostViewState extends State<CreatePostView> {
     );
   }
 
-  Widget _buildCreatePost() {
-    return BlocBuilder<CreatePostCubit, CreatePostState>(
-        builder: (context, state) {
+  Widget _buildCreatePost({required Function(String) onChange}) {
+    return BlocBuilder<CreatePostCubit, CreatePostState>(builder: (context, state) {
       return Container(
-          padding: const EdgeInsets.all(10),
-          color: state.backColor.isNotEmpty
-              ? Color(int.parse(state.backColor.substring(1), radix: 16))
-              : Colors.white,
-          child: TextField(
-            maxLines: 4,
-            maxLength: 150,
-            style: const TextStyle(color: AppColors.QUANTITY_COLOR),
-            onChanged: (c) {
-              if (c.length == 150) {
-                showErrorMessage(
-                    context, "You can't type more than 150 character");
-              }
-            },
-            controller:
-                context.read<CreatePostCubit>().postContentTextController,
-            decoration: const InputDecoration(
-                hintText: 'Type Here ... ',
-                hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
-                fillColor: Colors.white),
+        height: (state.backColor=='#FFFFFFFF'&&state.isBiggerThen150==false)?null:(state.isBiggerThen150==true)?300:250,
+          alignment: state.isBiggerThen150==false?AlignmentDirectional.topStart:Alignment.center,
+          color:((state.isBiggerThen150==true&&state.isBiggerThan80==false&&state.isBiggerThen120==false)) ?Colors.white: Color(int.parse(state.backColor!.substring(1), radix: 16)) ,
+          child:
+          Align(
+            child: TextField(
+              // focusNode: focusNode,
+              maxLines: null,
+              expands: (state.backColor=='#FFFFFFFF')?false:true,
+              textAlign: (state.backColor=='#FFFFFFFF'||state.isBiggerThen150==true)?TextAlign.start:TextAlign.center,
+              style: TextStyle(color: (state.backColor!='#FFFFFFFF'&&state.isBiggerThen150==false) ?Colors.white: AppColors.QUANTITY_COLOR,fontSize:(state.isBiggerThen120==true&&state.isBiggerThan80==false)?16:(state.isBiggerThen120==false&&state.isBiggerThan80==true)?18:22,fontWeight: (state.backColor=='#FFFFFFFF'||state.isBiggerThen150==true)?FontWeight.w400:FontWeight.bold),
+              onChanged: (c) =>onChange(c),
+              controller: context.read<CreatePostCubit>().postContentTextController,
+              decoration:  InputDecoration(
+                  hintText: 'Type Here ... ',
+                  hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
+                  floatingLabelAlignment: FloatingLabelAlignment.center,
+                fillColor:((state.isBiggerThen150==true&&state.isBiggerThan80==false&&state.isBiggerThen120==false)) ?Colors.white: Color(int.parse(state.backColor!.substring(1), radix: 16)) ,
+
+                border: (state.backColor=='#FFFFFFFF'||state.isBiggerThen150==true)?InputBorder.none:OutlineInputBorder(
+                  borderSide:
+                  const BorderSide(color: Colors.orange, width:100),
+                  borderRadius: BorderRadius.circular(0),
+                ),
+
+              ),
+            ),
           ));
     });
   }
 
   Widget _buildMediaCard() {
-    return BlocBuilder<CreatePostCubit, CreatePostState>(
-        builder: (context, state) {
+    return BlocBuilder<CreatePostCubit, CreatePostState>(builder: (context, state) {
       final controller = context.read<CreatePostCubit>();
       return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.all(10),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: state.images!.length == 1 ? 1 : 2),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: state.images!.length == 1 ? 1 : 2,childAspectRatio: 1/2),
           itemCount: state.images!.length < 4 ? state.images!.length : 4,
           itemBuilder: (context, index) => InkWell(
                 onTap: () {
@@ -232,8 +329,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                     Stack(
                       children: [
                         Container(
-                          margin: const EdgeInsetsDirectional.only(
-                              end: 10, bottom: 10),
+                          margin: const EdgeInsetsDirectional.only(end: 10, bottom: 10),
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
@@ -247,8 +343,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                         ),
                         if (index == 3 && state.images!.length > 4)
                           Container(
-                            margin: const EdgeInsetsDirectional.only(
-                                end: 10, bottom: 10),
+                            margin: const EdgeInsetsDirectional.only(end: 10, bottom: 10),
                             // padding: const EdgeInsets.all(10),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -312,8 +407,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                 height: 30,
                 width: 30,
                 decoration: BoxDecoration(
-                    color:
-                        Color(int.parse(colors[index].substring(1), radix: 16)),
+                    color: Color(int.parse(colors[index].substring(1), radix: 16)),
                     border: Border.all(color: Colors.grey, width: .5),
                     borderRadius: BorderRadius.circular(10)),
               ),
@@ -325,130 +419,117 @@ class _CreatePostViewState extends State<CreatePostView> {
   }
 
   Widget _buildOptions(CreatePostCubit controller) {
-    return BlocBuilder<CreatePostCubit, CreatePostState>(
-        builder: (context, state) {
-      return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        IconButton(
-            onPressed: () async {
-              await controller.uploadPhoto();
-            },
-            icon: const Icon(
-              Icons.image,
-              color: Colors.green,
-              size: 30,
-            )),
-        if (widget.social != 'twitter')
-          IconButton(
-              onPressed: () {
+    return BlocBuilder<CreatePostCubit, CreatePostState>(builder: (context, state) {
+      return Padding(
+        padding: const EdgeInsetsDirectional.only(start: 8.0),
+        child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround,crossAxisAlignment: CrossAxisAlignment.start , children: [
+          const Divider(),
+          InkWell(
+            splashColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: ()async=>await controller.uploadPhoto(),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.image,
+                  color: Colors.green,
+                  size: 30,
+                ),
+                const Sizer(),
+                Text('Photo',style: Styles.mediumText(fontSize: 34,fontWeight: FontWeight.w500),),
+              ],
+            ),
+          ),
+          if (widget.social != 'twitter')
+            ...[
+              const Divider(),
+              InkWell(
+              splashColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: (){
                 bottomSheet(
                     isScrollControlled: true,
                     context: context,
                     widget: SelectActivity(
                       activities: state.activities ?? [],
-                      onSelected: (ActivityEntity item) => context
-                          .read<CreatePostCubit>()
-                          .selectActivity(item: item),
+                      onSelected: (ActivityEntity item) => context.read<CreatePostCubit>().selectActivity(item: item),
                     ));
               },
-              icon: const Icon(
-                Icons.local_activity,
-                color: Colors.blue,
-                size: 30,
-              )),
-        if (widget.social != 'twitter')
-          IconButton(
-              onPressed: () {
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.local_activity,
+                    color: Colors.blue,
+                    size: 30,
+                  ),
+                  const Sizer(),
+                  Text('Activity',style: Styles.mediumText(fontSize: 34,fontWeight: FontWeight.w500),),
+                ],
+              ),
+            )],
+          if (widget.social != 'twitter')
+            ...[
+              const Divider(),
+              InkWell(
+              splashColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: (){
                 bottomSheet(
                     isScrollControlled: true,
                     context: context,
                     widget: SelectFeelingView(
                       feelings: state.feelings ?? [],
-                      onSelected: (FeelingEntity item) => context
-                          .read<CreatePostCubit>()
-                          .selectedFeeling(item: item),
+                      onSelected: (FeelingEntity item) => context.read<CreatePostCubit>().selectedFeeling(item: item),
                     ));
               },
-              icon: const Icon(
-                Icons.emoji_emotions_outlined,
-                color: Colors.orangeAccent,
-                size: 30,
-              )),
-        if (widget.social != 'twitter')
-          IconButton(
-              onPressed: () {
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.emoji_emotions_outlined,
+                    color: Colors.orangeAccent,
+                    size: 30,
+                  ),
+                  const Sizer(),
+                  Text('Feeling',style: Styles.mediumText(fontSize: 34,fontWeight: FontWeight.w500),),
+                ],
+              ),
+            )],
+          if (widget.social != 'twitter')
+            ...[
+              const Divider(),
+              InkWell(
+              splashColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: (){
                 showDialog(
                     context: context,
                     builder: (context) => BuildSearchFriends(
-                          onSelectUser: (PostUserEntity user) {
-                            controller.selectUsers(user);
-                            // context.pop(true);
-                          },
-                          controller: controller,
-                        ));
+                      onSelectUser: (PostUserEntity user) {
+                        controller.selectUsers(user);
+                        // context.pop(true);
+                      },
+                      controller: controller,
+                    ));
               },
-              icon: const Icon(
-                Icons.people,
-                color: Colors.grey,
-                size: 30,
-              )),
-        if (widget.social != 'twitter')
-          IconButton(
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) => BuildSearchPlaces(
-                        onSelectPlace: (PlaceEntity place) {
-                          controller.onSelectPlace(place);
-                          context.pop();
-                        },
-                        controller: controller));
-              },
-              icon: const Icon(
-                Icons.location_on,
-                color: Colors.grey,
-                size: 30,
-              )),
-        if (widget.social != 'twitter')
-          IconButton(
-              onPressed: () async {
-                final res = await CustomVerticalSheetItem.normal<PrivacyStatus>(
-                    context, [
-                  CustomSheetModel(
-                    text: "Public",
-                    value: PrivacyStatus.public,
-                    iconData: Icons.language,
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.people,
+                    color: Colors.grey,
+                    size: 30,
                   ),
-                  CustomSheetModel(
-                    text: "Friends",
-                    value: PrivacyStatus.friends,
-                    iconData: Icons.family_restroom,
-                  ),
-                  CustomSheetModel(
-                    text: "Followers",
-                    value: PrivacyStatus.followers,
-                    iconData: Icons.accessibility_sharp,
-                  ),
-                  CustomSheetModel(
-                    text: "Friends / Followers",
-                    value: PrivacyStatus.friendsAndFollowers,
-                    iconData: Icons.supervised_user_circle_outlined,
-                  ),
-                  CustomSheetModel(
-                    text: "Only Me",
-                    value: PrivacyStatus.onlyMe,
-                    iconData: Icons.lock,
-                  ),
-                ]);
-                print(res?.name);
-                print("============>");
-                controller.selectPrivacy(privacy: res?.name ?? 'public');
-              },
-              icon: const Icon(
-                Icons.privacy_tip,
-                color: Colors.grey,
-                size: 30,
-              )),
-      ]);
+                  const Sizer(),
+                  Text('Tag People',style: Styles.mediumText(fontSize: 34,fontWeight: FontWeight.w500),),
+                ],
+              ),
+            )],
+
+        ]),
+      );
     });
   }
 }

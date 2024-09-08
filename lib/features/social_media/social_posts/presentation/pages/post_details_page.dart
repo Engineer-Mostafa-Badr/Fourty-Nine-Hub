@@ -154,6 +154,33 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                               1);
                                       setState(() {});
                                       return result;
+                                    },
+                                    onDeleteComment: (String id) async {
+                                      var result =
+                                          await widget.onDeleteComment(id);
+                                      state.postDetails?.commentsCount =
+                                          (state.postDetails!.commentsCount! -
+                                              1);
+                                      controller
+                                          .commentsPagingController.itemList
+                                          ?.removeWhere(
+                                              (element) => element.id == id);
+
+                                      setState(() {});
+                                      return result;
+                                    },
+                                    onDeleteReply: (String id) async {
+                                      var result =
+                                          await widget.onDeleteReply(id);
+                                      state.postDetails?.commentsCount =
+                                          (state.postDetails!.commentsCount! -
+                                              1);
+                                      controller
+                                          .repliesPagingController.itemList
+                                          ?.removeWhere(
+                                              (element) => element.id == id);
+                                      setState(() {});
+                                      return result;
                                     });
                               },
                               noMoreItemsIndicatorBuilder: (context) =>
@@ -174,7 +201,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                       color: Colors.white,
                     ),
                     child: Row(children: [
-                      const ProfileImage(accountId: 0),
+                      const ProfileImage(accountId: 0, userId: '',),
                       const Sizer(),
                       Expanded(
                           child: FormTextField(
@@ -192,7 +219,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                           onPressed: () async {
                             CommentEntity data = await widget.onAddComment(
                               PostCommentParams(
-                                  postId: widget.postId,
+                                  postId: state.postDetails!.id,
                                   content: commentTextController.text),
                             );
                             final user = context.read<UserCubit>().state.data;
@@ -245,7 +272,9 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
   Widget _buildCommentCard(
       {required CommentEntity comment,
-      required Function(ReplyOnCommentParams) onCommentReply}) {
+      required Function(ReplyOnCommentParams) onCommentReply,
+      required dynamic Function(String) onDeleteComment,
+      required dynamic Function(String) onDeleteReply}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -257,17 +286,11 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
             setState(() {});
             return result;
           },
-          onDeleteComment: (String id) async {
-            var result = await widget.onDeleteComment(id);
-            setState(() {});
-            return result;
-          },
-          onDeleteReply: (String id) async {
-            var result = await widget.onDeleteReply(id);
-            setState(() {});
-            return result;
-          },
+          onDeleteComment: (String id) => onDeleteComment(id),
+          onDeleteReply: (String id) => onDeleteReply(id),
           from: 'feed',
+          onEditComment: (PostCommentParams params) =>
+              widget.onEditComment(params),
         ),
         if (comment.repliesCount != 0)
           Container(

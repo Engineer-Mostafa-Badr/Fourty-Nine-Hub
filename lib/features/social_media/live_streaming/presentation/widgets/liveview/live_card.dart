@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
-import '../../../../../zoom/presentation/widgets/meeting_dialogue.dart';
+import '../../../../../zoom/presentation/widgets/join_meeting_screen.dart';
 import 'recharge_coins.dart';
 
 class LiveCard extends StatefulWidget {
@@ -50,7 +52,7 @@ class _LiveCardState extends State<LiveCard> {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const ProfileImage(accountId: 0),
+          const ProfileImage(accountId: 0,userId: '',),
           const Sizer(),
           Expanded(
             child: Column(
@@ -79,6 +81,7 @@ class _LiveCardState extends State<LiveCard> {
                     extra: ZegoArgs(
                       '123',
                       false,
+                      context.read<UserCubit>().state.data!.fullName
                     ));
               }),
           const Sizer(),

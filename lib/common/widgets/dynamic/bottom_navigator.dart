@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
-import '../../../res/assets/assets.dart';
-import '../../../res/style/styles.dart';
-import '../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../theme/cubit/cubit.dart';
+import '../../../res/assets/assets.dart';
+import '../../../routes/routes.dart';
 import 'bottom_painter.dart';
 
 class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
@@ -35,10 +31,11 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
             BottomItemModel(
               icon: FontAwesomeIcons.microphone,
               height: 30,
-              label: 'voice', // Translated text
+              label: 'snap',
+              // Translated text
               index: 0,
-              image: Assets.voiceLive,
-              route: Routes.CLUBHOUSE,
+              image: Assets.cameraIcon,
+              route: Routes.SNAP,
             ),
             BottomItemModel(
               icon: FontAwesomeIcons.stream,
@@ -57,12 +54,13 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
               route: Routes.ZOOM,
             ),
             BottomItemModel(
-              icon: Icons.video_call,
-              label: 'cast', // Translated text
+              icon: Icons.light_mode_rounded,
+              label: 'spotlight',
+              // Translated text
               index: 0,
               height: 25,
-              image: Assets.radio,
-              route: Routes.CLUBHOUSE,
+              image: Assets.spotlightIcon,
+              route: Routes.SPOTLIGHT,
             ),
           ]
         : mainCategory == 2
@@ -136,8 +134,8 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         }
       },
       items: pages,
-      scrollController: scrollController!,
-      isScrollingDown: isScrollingDown!,
+      scrollController: scrollController,
+      isScrollingDown: isScrollingDown,
     );
   }
 

@@ -14,23 +14,23 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   Timer? _pollingTimer;
 
   void fetchNotification(String type) async {
-    // emit(NotificationsLoadingState());
-    // _startPolling(type);
+    emit(NotificationsLoadingState());
+    _startPolling(type);
   }
 
   void _startPolling(String type) {
-    _pollingTimer?.cancel();
-
-    // Start polling every 10 seconds (adjust the interval as needed)
-    _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
-      // var result = await notificationRepo.fetchNotifications(type);
-
-      // result.fold((failure) {
-      //   emit(NotificationsErrorState(errMessage: 'failure'));
-      // }, (notification) {
-      //   emit(NotificationsSuccessState(notificationModel: notification));
-      // });
-    });
+    // _pollingTimer?.cancel();
+    //
+    // // Start polling every 10 seconds (adjust the interval as needed)
+    // _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
+    //   var result =await notificationRepo.fetchNotifications(type);
+    //
+    //   result.fold((failure) {
+    //     emit(NotificationsErrorState(errMessage: 'failure'));
+    //   }, (notification) {
+    //     emit(NotificationsSuccessState(notificationModel: notification));
+    //   });
+    // });
   }
 
   void deleteNotification({

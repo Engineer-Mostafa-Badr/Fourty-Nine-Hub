@@ -8,6 +8,8 @@ abstract class AppColors {
   static const UNSELECTED_DARK_GRAY_COLOR = Color(0xFF2D2D2D);
   static const SPLASH_BLACK_COLOR = Color(0xFF222222);
 
+  static const MESSAGE_COLOR = Color(0xffcfd1e3);
+
   static const DARK_GRAY_COLOR = Color(0xFF909090);
   static const LIGHT_GRAY_COLOR = Color(0xFFE0E0E0);
   static const LIGHT_GRAY_COLOR2 = Color(0xFFA5A3A3);
@@ -37,6 +39,7 @@ abstract class AppColors {
   static const Arrow_Icon_color = Color(0xff374957);
   static const AUTH_CONTAINER_COLOR = Colors.white;
   static const CHECK_MARK_COLOR = Color(0xFF55CD6C);
+  static const LIGHT_BLUE = Color.fromRGBO(60, 153, 225, 1);
 
   static const BLACK_GRAY_GRADIENT = LinearGradient(
     begin: Alignment.topCenter,

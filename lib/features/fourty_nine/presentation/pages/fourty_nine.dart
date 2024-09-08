@@ -26,13 +26,11 @@ import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/dynamic/wallet_widget.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
-
 import '../../../../core/enums/ride_services_enum.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
-
 import '../widgets/announce_widget.dart';
 
 class FourtyNineView extends StatefulWidget {
@@ -157,7 +155,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         context.push(Routes.SUBCATEGORIES,
                             extra: state.data![index]);
                       },
-                      child: MainCategoryBanner(category: state.data![index]),
+                      child: MainCategoryBanner(category: state.data![index], onFavorite: () {  },),
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) =>
@@ -266,7 +264,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 child: _buildRideSubCategoryItem(
                   service: state.data![1].service,
                   image: state.data![1].image,
-                  route: Routes.TRIP_JOIN,
+                  route: Routes.AVAILABLE_TRIPS,
                 ),
               )
             ],

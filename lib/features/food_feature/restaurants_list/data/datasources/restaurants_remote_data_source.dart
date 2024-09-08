@@ -1,21 +1,31 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
-import '../../../../../core/api/end_points.dart';
 import '../../../../../res/assets/jsons.dart';
 import '../../domain/entities/restaurant_entity.dart';
 import '../models/food_category_model.dart';
 import '../models/restaurant_model.dart';
 
 abstract class RestaurantsRemoteDataSource {
+  Future<Either<Failure, bool>> createRestaurant(CreateRestaurantParams params);
   Future<Either<Failure, List<FoodCategoryModel>>> getFoodCategories();
   Future<Either<Failure, List<FoodCategoryModel>>>
       getMealCategoriesWithCountRestaurants(
           {required PostCommentsParams params});
   Future<Either<Failure, List<Restaurant2Model>>> getAllRestaurantsWithMenu(
       {required PostCommentsParams params});
+  Future<Either<Failure, List<Restaurant2Model>>> searchRestaurants(
+      {required String city,
+      required String subCategory,
+      required String government,
+      PostCommentsParams? params});
   Future<Either<Failure, List<RestaurantModel>>> getNearByReasturants({
     required double lat,
     required double lng,
@@ -27,7 +37,7 @@ abstract class RestaurantsRemoteDataSource {
   Future<Either<Failure, int>> numOfRestaurants();
   Future<Either<Failure, List<RestaurantEntity>>> getSubCategoryRestaurants(
       {required String id});
-  Future<Either<Failure, bool>> isRestaurant();
+  Future<Either<Failure, IsRestaurantModel>> isRestaurant();
 }
 
 class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
@@ -85,10 +95,10 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> isRestaurant() async {
+  Future<Either<Failure, IsRestaurantModel>> isRestaurant() async {
     final response = await _apiConsumer.get(EndPoints.isResturant);
-    return response.fold(
-        (l) => Left(l), (data) => Right(data['data']['isRestaurant'] as bool));
+    return response.fold((l) => Left(l),
+        (data) => Right(IsRestaurantModel.fromMap(data['data'])));
   }
 
   @override
@@ -110,8 +120,71 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
     final response = await _apiConsumer
         .get(EndPoints.getAllRestaurantWithMenu(params: params));
     return response.fold(
-        (failure) => Left(failure),
-        (data) => Right(List<Restaurant2Model>.from(
-            data["data"].map((e) => Restaurant2Model.fromJson(e)).toList)));
+      (failure) => Left(failure),
+      (data) => Right(
+        List.from(
+          data["data"].map((e) => Restaurant2Model.fromJson(e)).toList(),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<Restaurant2Model>>> searchRestaurants(
+      {required String city,
+      required String subCategory,
+      required String government,
+      PostCommentsParams? params}) async {
+    final data = {
+      "city": city,
+      "subcategoryId": subCategory,
+      "government": government
+    };
+    log("data: ${jsonEncode(data)}");
+    final response = await _apiConsumer
+        .get(EndPoints.searchRestaurants(params: params), data: data);
+    return response.fold(
+      (failure) => Left(failure),
+      (data) => Right(
+        List.from(
+          data["data"].map((e) => Restaurant2Model.fromJson(e)).toList(),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> createRestaurant(
+      CreateRestaurantParams params) async {
+    List<Map<String, dynamic>> mneu = [];
+    params.mneu?.forEach((element) {
+      final toMap = {
+        "foodName": element.foodName,
+        "picture": element.photo,
+        "price": element.price,
+      };
+      mneu.add(toMap);
+    });
+    Map<String, dynamic> data = {
+      "name": params.name,
+      "subcategoryId": params.subcategoryId,
+      "restaurantMedia": params.restaurantMedia,
+      "licenseMedia": params.licenseMedia,
+      "government": params.government,
+      "city": params.city,
+      "menu": mneu,
+    };
+
+    final response =
+        await _apiConsumer.post(EndPoints.createRestaurant, data: data);
+
+    return response.fold(
+      (Failure failure) {
+        return Left(failure);
+      },
+      (data) {
+        return Right(data['status']);
+      },
+    );
   }
 }

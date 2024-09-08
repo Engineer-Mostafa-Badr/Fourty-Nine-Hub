@@ -1,6 +1,6 @@
 import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,10 +8,7 @@ import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-
 import 'package:fourtyninehub/core/states/basic_state.dart';
-import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -19,14 +16,13 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../../core/api/api_consumer.dart';
+
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/const.dart';
 import '../../../res/style/styles.dart';
 import '../../../routes/routes.dart';
-import '../../functions/global/upload_file.dart';
 import '../stateless/buttons/iconAppButton.dart';
 import '../stateless/labels/label.dart';
 import 'sizer.dart';

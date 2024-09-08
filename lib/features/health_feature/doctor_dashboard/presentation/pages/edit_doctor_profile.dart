@@ -33,7 +33,7 @@ class EditDoctorProfileView extends StatelessWidget {
             showErrorMessage(
               context,
               getFailureMessage(
-                state.failure ?? const UnknownFailure(),
+                state.failure ??  UnknownFailure(''),
                 context,
               ),
             );

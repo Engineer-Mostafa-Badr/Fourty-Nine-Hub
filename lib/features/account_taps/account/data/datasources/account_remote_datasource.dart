@@ -1,13 +1,13 @@
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_ad_entity.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_subcategory_entity.dart';
 import 'package:fourtyninehub/res/assets/jsons.dart';
-import '../../../../../core/api/api_consumer.dart';
-import '../../../../../core/api/end_points.dart';
 import '../../domain/entities/favourite_category_entity.dart';
 import '../models/favourite_ad_model.dart';
 import '../models/favourite_category_model1.dart';

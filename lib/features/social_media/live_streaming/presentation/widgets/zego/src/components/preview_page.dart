@@ -1,21 +1,21 @@
 // Dart imports:
 import 'dart:core';
+import 'dart:math' as math;
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-
-// Package imports:
-import 'package:permission_handler/permission_handler.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/components/components.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/components/effects/beauty_effect_button.dart';
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/components/utils/permissions.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/components/components.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/core/host_manager.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/components/utils/pop_up_manager.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/components/effects/beauty_effect_button.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/core/host_manager.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/defines.dart';
-
-import 'dart:math' as math;
+import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+// Package imports:
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../zego_uikit_prebuilt_live_streaming.dart'; // import this
 
@@ -643,7 +643,7 @@ class _ZegoLiveStreamingPreviewPageState
         popUpManager: widget.popUpManager,
         kickOutNotifier: widget.kickOutNotifier,
       ).then(
-        (value) {
+        (value) async {
           if (!widget.liveStreamingPageReady.value) {
             ZegoLoggerService.logInfo(
               'live streaming page is waiting room login',
@@ -652,6 +652,7 @@ class _ZegoLiveStreamingPreviewPageState
             );
             return;
           }
+          // await newMeeting(widget.liveID);
 
           widget.startedNotifier.value = true;
         },
@@ -669,7 +670,7 @@ class _ZegoLiveStreamingPreviewPageState
             height: 94.zR,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30.zR),
-              color: Colors.blueAccent[700],
+              color: AppColors.PRIMARY_COLOR,
             ),
             child: Align(
               alignment: Alignment.center,
@@ -686,6 +687,7 @@ class _ZegoLiveStreamingPreviewPageState
         );
   }
 
+ 
   void _toggleCamera(bool v) {
     final valueNotifier = v;
 

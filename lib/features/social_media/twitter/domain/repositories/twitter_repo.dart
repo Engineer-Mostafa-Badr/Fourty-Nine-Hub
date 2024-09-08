@@ -17,6 +17,8 @@ import '../usecases/post_react_usecase.dart';
 abstract class TwitterRepo {
   Future<Either<Failure, List<TwitterPostEntity>>> getFeed(
       {required TwitterFeedParams params});
+  Future<Either<Failure, List<TwitterPostEntity>>> getGlobalFeed(
+      {required TwitterFeedParams params});
   Future<Either<Failure, TwitterPostEntity>> getTwitterPost(
       {required String postId});
   Future<Either<Failure, List<TwitterPostEntity>>> getUserPosts(

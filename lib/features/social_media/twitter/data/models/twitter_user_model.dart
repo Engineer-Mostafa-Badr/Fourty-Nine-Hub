@@ -13,13 +13,9 @@ class TwitterUserModel extends TwitterUserEntity {
   factory TwitterUserModel.fromJson(Map<String, dynamic> json) {
     return TwitterUserModel(
       id: json['_id'] ?? '',
-      firstName: json['firstName'] ?? '',
-      lastName: json['lastName'] ?? '',
-      image: json['image'] != null
-          ? json['image']
-          : json['profilePictureSignedUrl'] != null
-              ? json['profilePictureSignedUrl']
-              : json['USER_PROFILE']['image'] ?? '',
+      firstName: json['firstName'][0].toUpperCase() + json['firstName'].substring(1).toLowerCase() ?? '',
+      lastName: json['lastName'][0].toUpperCase() + json['lastName'].substring(1).toLowerCase() ?? '',
+      image: json['image'] ?? (json['profilePictureSignedUrl'] ?? json['USER_PROFILE']['image'] ?? ''),
       email: json['email'] ?? '',
       isDocumented: json['twitter_documentation'] ?? false,
       createdAt: json['createdAt'] is String

@@ -1,17 +1,14 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
-// Package imports:
-import 'package:zego_uikit/zego_uikit.dart';
-
-// Project imports:
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/minimizing/defines.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/config.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/controller.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/core/host_manager.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/config.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.defines.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/defines.dart';
+// Project imports:
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/minimizing/defines.dart';
+// Package imports:
+import 'package:zego_uikit/zego_uikit.dart';
 
 import '../defines.dart';
 

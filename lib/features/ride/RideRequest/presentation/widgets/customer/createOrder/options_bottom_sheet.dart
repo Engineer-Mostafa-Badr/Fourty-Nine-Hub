@@ -33,7 +33,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
           showErrorMessage(
             context,
             getFailureMessage(
-              state.failure ?? const UnknownFailure(),
+              state.failure ??  UnknownFailure(''),
               context,
             ),
           );

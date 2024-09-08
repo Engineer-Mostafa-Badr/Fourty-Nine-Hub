@@ -5,7 +5,7 @@ import '../../../../res/style/const.dart';
 import '../../domain/entities/main_category_entity.dart';
 
 class MainCategoryModel extends MainCategoryEntity {
-  MainCategoryModel({
+   MainCategoryModel({
     required super.id,
     required super.name,
     required super.image,
@@ -30,14 +30,4 @@ class MainCategoryModel extends MainCategoryEntity {
               : (json['subCategories'] as List)
                   .map((e) => SubCategoryModel.fromJson(e))
                   .toList());
-
-  Map<String, dynamic> toJson() => {
-        '_id': id,
-        'name': name,
-        'image': image,
-        'banner': banner,
-        'cover': cover,
-        'isFavorite': isFavorite,
-        'totalAds': total,
-      };
 }

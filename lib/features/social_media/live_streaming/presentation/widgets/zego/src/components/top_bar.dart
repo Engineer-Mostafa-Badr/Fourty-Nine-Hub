@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/pages/meeting_view.dart';
 
 // Package imports:
@@ -205,7 +205,8 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                       ),
                       InkWell(
                         onTap: () async {
-                          Navigator.of(context).pop(true);
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
                         },
                         child: Container(
                           width: MediaQuery.sizeOf(context).width / 1.3,

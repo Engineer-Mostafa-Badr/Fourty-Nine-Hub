@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twit
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_post_card.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_post_comments.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -64,7 +65,7 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
               showErrorMessage(
                 context,
                 getFailureMessage(
-                  state.failure ?? const UnknownFailure(),
+                  state.failure ??  UnknownFailure(''),
                   context,
                 ),
               );
@@ -76,86 +77,105 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
                 ? TwitterPostCard(
                     post: state.postDetails!,
                     onReact: () async {
-                      var result = await controller.onReact(
-                        params: TwitterPostReactParams(
-                            react: 'love', postId: state.postDetails!.id),
-                      );
-                      if (result == true) {
-                        if (state.postDetails?.isReact == true) {
-                          state.postDetails?.isReact = false;
-                          state.postDetails?.loveCount =
-                              (state.postDetails!.loveCount! - 1);
-                        } else {
-                          state.postDetails?.isReact = true;
-                          state.postDetails?.loveCount =
-                              (state.postDetails!.loveCount! + 1);
+                      if(context.read<UserCubit>().isLoggedIn){
+                        var result = await controller.onReact(
+                          params: TwitterPostReactParams(
+                              react: 'love', postId: state.postDetails!.id),
+                        );
+                        if (result == true) {
+                          if (state.postDetails?.isReact == true) {
+                            state.postDetails?.isReact = false;
+                            state.postDetails?.loveCount =
+                                (state.postDetails!.loveCount! - 1);
+                          } else {
+                            state.postDetails?.isReact = true;
+                            state.postDetails?.loveCount =
+                                (state.postDetails!.loveCount! + 1);
+                          }
                         }
+                      }else{
+                        context.push(Routes.LOGIN);
                       }
                     },
                     showPostComments: (i) {
-                      final user = context.read<UserCubit>().state.data;
+                      if(context.read<UserCubit>().isLoggedIn){
+                        final user = context.read<UserCubit>().state.data;
 
-                      bottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        widget: BlocProvider.value(
-                          value: serviceLocator<TwitterCubit>()
-                            ..loadComments(context, state.postDetails!.id),
-                          child: TwitterPostComments(
-                            comments: const [],
-                            postId: state.postDetails!.id,
-                            user: user,
-                            onAddComment:
-                                (TwitterPostCommentParams params) async {
-                              var result = await controller.onPostComment(
-                                  params: params);
-                              state.postDetails?.commentsCount =
-                                  (state.postDetails!.commentsCount! + 1);
-                              setState(() {});
-                              return result;
-                            },
-                            onAddReply:
-                                (TwitterCommentReplyParams params) async {
-                              var result = await controller.onCommentReply(
-                                  params: params);
-                              state.postDetails?.commentsCount =
-                                  (state.postDetails!.commentsCount! + 1);
-                              setState(() {});
-                              return result;
-                            },
-                            onCommentReact: (TwitterCommentReactParams params) {
-                              controller.onCommentReact(params: params);
-                            },
-                            onGetReplies: (String id,
-                                TwitterPostCommentEntity comment) async {
-                              // getCommentReplies(
-                              //   context: context,
-                              //   commentId: id,
-                              //   comment: comment,
-                              //   postId: postId, userData: userData,
-                              // );
-                            },
-                            newCommentId: '',
-                            state: state,
-                            onReport: (TwitterReportParams params) {
-                              controller.onReport(params);
-                            },
-                            // onEditComment: (TwitterPostCommentParams params) async=>await controller.editComment(params: params),
-                            // onDeleteComment: (id) async {
-                            //   var result =  await controller.deleteComment(context: context,commentId: id,postId: state.postDetails!.id,from: 'details');
-                            //   state.postDetails?.commentsCount=(state.postDetails!.commentsCount!-1);
-                            //   setState(() {
-                            //
-                            //   });
-                            //   return result;
-                            // },
-                            // userData: user,
+                        bottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          widget: BlocProvider.value(
+                            value: serviceLocator<TwitterCubit>()
+                              ..loadComments(context, state.postDetails!.id),
+                            child: TwitterPostComments(
+                              comments: const [],
+                              postId: state.postDetails!.id,
+                              user: user,
+                              onAddComment:
+                                  (TwitterPostCommentParams params) async {
+                                var result = await controller.onPostComment(
+                                    params: params);
+                                state.postDetails?.commentsCount =
+                                    (state.postDetails!.commentsCount! + 1);
+                                setState(() {});
+                                return result;
+                              },
+                              onAddReply:
+                                  (TwitterCommentReplyParams params) async {
+                                var result = await controller.onCommentReply(
+                                    params: params);
+                                state.postDetails?.commentsCount =
+                                    (state.postDetails!.commentsCount! + 1);
+                                setState(() {});
+                                return result;
+                              },
+                              onCommentReact:
+                                  (TwitterCommentReactParams params) {
+                                controller.onCommentReact(params: params);
+                              },
+                              onGetReplies: (String id,
+                                  TwitterPostCommentEntity comment) async {
+                                // getCommentReplies(
+                                //   context: context,
+                                //   commentId: id,
+                                //   comment: comment,
+                                //   postId: postId, userData: userData,
+                                // );
+                              },
+                              newCommentId: '',
+                              state: state,
+                              onReport: (TwitterReportParams params) {
+                                controller.onReport(params);
+                              },
+                              onEditComment:
+                                  (TwitterPostCommentParams params) async =>
+                                      await controller.editComment(
+                                          params: params),
+                              onDeleteComment: (id) async {
+                                var result = await controller.deleteComment(
+                                    context: context,
+                                    commentId: id,
+                                    postId: state.postDetails!.id,
+                                    from: 'details');
+                                state.postDetails?.commentsCount =
+                                    (state.postDetails!.commentsCount! - 1);
+                                setState(() {});
+                                return result;
+                              },
+                              // userData: user,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }else{
+                        context.push(Routes.LOGIN);
+                      }
                     },
                     onShare: () {
-                      controller.onShare(postId: state.postDetails!.id);
+                      if(context.read<UserCubit>().isLoggedIn){
+                        controller.onShare(postId: state.postDetails!.id);
+                      }else{
+                        context.push(Routes.LOGIN);
+                      }
                     },
                     getPost: () {},
                     onReport: (TwitterReportParams params) async {

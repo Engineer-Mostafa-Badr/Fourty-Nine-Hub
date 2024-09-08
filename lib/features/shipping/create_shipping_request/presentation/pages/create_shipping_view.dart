@@ -387,13 +387,11 @@ class CustomTextField extends StatelessWidget {
       this.minLines,
       this.maxLines,
       this.maxLength});
-
   final String hint;
   final Icon? prefixIcon;
   final int? minLines;
   final int? maxLines;
   final int? maxLength;
-
   @override
   Widget build(BuildContext context) {
     return TextField(

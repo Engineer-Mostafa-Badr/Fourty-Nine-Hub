@@ -16,14 +16,14 @@ class NotificationRepoImpl implements NotificationRepo {
       String type) async {
     String? accessToken = await TokenManager.getAccessToken();
     String? refreshToken = await TokenManager.getRefreshToken();
-    // try{
-    var data = await apiService.get(
-        url: 'api/v1/notifications?type=$type', token: accessToken);
-    var notification = NotificationModel.fromJson(data);
-    return right(notification);
-    // }catch(e){
-    //   return left(CacheFailure());
-    // }
+    try {
+      var data = await apiService.get(
+          url: 'api/v1/notifications?type=$type', token: accessToken);
+      var notification = NotificationModel.fromJson(data);
+      return right(notification);
+    } catch (e) {
+      return left(CacheFailure());
+    }
   }
 
   @override
@@ -60,13 +60,13 @@ class NotificationRepoImpl implements NotificationRepo {
 //       return UnauthorizedFailure();
 //     } else {
 //       // Other Dio errors
-//       return UnknownFailure();
+//       return UnknownFailure('');
 //     }
 //   } else if (error is CacheException) {
 //     // Handle cache-related errors
 //     return CacheFailure();
 //   } else {
 //     // Fallback to an unknown failure for any other errors
-//     return UnknownFailure();
+//     return UnknownFailure('');
 //   }
 // }

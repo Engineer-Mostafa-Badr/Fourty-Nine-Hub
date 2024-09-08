@@ -14,15 +14,11 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/data/mod
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/trip_card.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/utils/api_service.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/styles.dart';
-import '../../../../routes/routes.dart';
-import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../data/repository/notification_repo_impl.dart';
 import '../cubit/notifications_cubit.dart';
 

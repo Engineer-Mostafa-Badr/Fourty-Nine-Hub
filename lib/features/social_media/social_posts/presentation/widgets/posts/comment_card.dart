@@ -7,13 +7,13 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/comment_replies.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
-import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/comment_entity.dart';
@@ -53,12 +53,13 @@ class _CommentCardState extends State<CommentCard> {
       children: [
         Row(
           children: [
-            ProfileImage(
+            UserProfileImage(
               accountId: 0,
               withBorder: false,
               imageURL: widget.comment.user.image.isNotEmpty
                   ? widget.comment.user.image
                   : null,
+              userId: widget.comment.user.id,
             ),
             const Sizer(),
             Expanded(
@@ -74,7 +75,7 @@ class _CommentCardState extends State<CommentCard> {
                     style: Styles.mediumText(color: widget.textColor)),
               ],
             )),
-            GestureDetector(
+            if(widget.comment.user.id!=user?.id)GestureDetector(
                 onTap: () {
                   bottomSheet(
                       context: context,

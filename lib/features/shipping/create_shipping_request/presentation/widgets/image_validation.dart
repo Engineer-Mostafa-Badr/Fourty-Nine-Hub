@@ -13,7 +13,7 @@ class ImageValidation extends StatefulWidget {
       {super.key,
       this.onTap,
       this.validator,
-      this.title,
+      this.tilte,
       this.hint,
       this.networkImage,
       this.iconColor,
@@ -23,7 +23,7 @@ class ImageValidation extends StatefulWidget {
       this.width});
   final void Function(File image)? onTap;
   final String? Function(Object? value)? validator;
-  final String? title;
+  final String? tilte;
   final String? hint;
   final Color? iconColor;
   final double? height;

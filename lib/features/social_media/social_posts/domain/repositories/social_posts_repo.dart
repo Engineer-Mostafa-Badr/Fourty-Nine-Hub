@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
@@ -16,6 +17,8 @@ import '../usecases/post_react_usecase.dart';
 abstract class SocialPostsRepo {
   Future<Either<Failure, List<PostEntity>>> getFeed(
       {required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getGlobalFeed(
+      {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getAdvertisement(
       {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getTweet(
@@ -28,6 +31,8 @@ abstract class SocialPostsRepo {
   Future<Either<Failure, CommentEntity>> commentOnPost(
       {required PostCommentParams params});
   Future<Either<Failure, UserProfileEntity>> getUserProfile(
+      {required String params});
+  Future<Either<Failure, bool>> viewProfile(
       {required String params});
   Future<Either<Failure, CommentEntity>> replyOnComment(
       {required ReplyOnCommentParams params});
@@ -42,6 +47,8 @@ abstract class SocialPostsRepo {
 
   Future<Either<Failure, PostEntity>> getPost({required String postId});
   Future<Either<Failure, bool>> deletePost({required String postId});
+  Future<Either<Failure, bool>> deleteFriend({required String userId});
+  Future<Either<Failure, bool>> acceptRejectFriendRequest({required AcceptRejectFriendRequestParams params});
   Future<Either<Failure, bool>> deleteComment({required String commentId});
   Future<Either<Failure, bool>> friendRequest({required String userId});
   Future<Either<Failure, bool>> removeFriendRequest({required String userId});

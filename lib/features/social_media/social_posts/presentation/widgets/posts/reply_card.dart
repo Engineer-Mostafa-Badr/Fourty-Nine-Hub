@@ -4,11 +4,11 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dar
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 
@@ -44,12 +44,13 @@ class _ReplyCardState extends State<ReplyCard> {
       children: [
         Row(
           children: [
-            ProfileImage(
+            UserProfileImage(
               accountId: 0,
               withBorder: false,
               imageURL: widget.reply.user.image.isNotEmpty
                   ? widget.reply.user.image
                   : null,
+              userId: widget.reply.user.id,
             ),
             const Sizer(),
             Expanded(

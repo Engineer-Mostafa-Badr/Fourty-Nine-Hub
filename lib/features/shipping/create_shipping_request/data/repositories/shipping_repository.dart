@@ -70,6 +70,8 @@ class ShippingRepository {
 
   Future<Either<Failure, Map<String, dynamic>>> getS3CarImages(
       {required CarImagesS3Model model}) {
+  Future<Either<Failure, Map<String, dynamic>>> getS3CarImages(
+      {required CarImagesS3Model model}) {
     // try {
     log(model.toJson().toString(), name: "lllllllllllllllllllllllllll");
     return dataSource.getS3(

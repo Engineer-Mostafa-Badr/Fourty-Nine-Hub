@@ -14,6 +14,7 @@ class SocialPostsState {
   final List<CommentEntity>? postComments;
   final int? tweetPage;
   final int? advertisementsPage;
+  final int? profilePage;
   const SocialPostsState({
     this.status = StateStatus.loading,
     this.friendRequest,
@@ -26,6 +27,7 @@ class SocialPostsState {
     this.postComments,
     this.postDetails,
     this.tweetPage = 0,
+    this.profilePage = 0,
     this.advertisementsPage = 0,
     this.profileData,
   });
@@ -39,6 +41,7 @@ class SocialPostsState {
     List<TwitterPostEntity>? myTweets,
     bool? friendRequest,
     int? tweetPage,
+    int? profilePage,
     int? advertisementsPage,
     CommentEntity? newComment,
     PostEntity? postDetails,
@@ -58,6 +61,7 @@ class SocialPostsState {
       postComments: postComments ?? this.postComments,
       postDetails: postDetails ?? this.postDetails,
       profileData: profileData ?? this.profileData,
+      profilePage: profilePage ?? this.profilePage,
     );
   }
 }

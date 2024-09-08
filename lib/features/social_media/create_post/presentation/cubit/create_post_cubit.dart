@@ -34,7 +34,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       this._createTwitterPostUseCase,
       this._friendsFollowersUseCase,
       this._getPlacesUseCase)
-      : super(const CreatePostState());
+      : super( CreatePostState());
 
   List<String>? selectedImages;
 
@@ -49,6 +49,26 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   //     }
   //   });
   // }
+
+  removeBackground(){
+    // emit(state.copyWith(backColor:'#FFFFFFFF',));
+  }
+
+  onBigger80(){
+    emit(state.copyWith(isBiggerThan80: true,isBiggerThen120: false,isBiggerThen150: false));
+  }
+
+  onBigger120(){
+    emit(state.copyWith(isBiggerThan80: false,isBiggerThen120: true,isBiggerThen150: false));
+  }
+
+  onBigger150(){
+    emit(state.copyWith(isBiggerThan80: false,isBiggerThen120: false,isBiggerThen150: true));
+  }
+
+  onSmallerText(){
+    emit(state.copyWith(isBiggerThan80: false,isBiggerThen120: false,isBiggerThen150: false));
+  }
 
   void loadData() async {
     await getActivities();
@@ -72,8 +92,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   }
 
   void createPost({required BuildContext context, required String type}) async {
-    if (postContentTextController.text.isNotEmpty) {
-      // selectedImages=state.images?.map((e)=>e.mediaId).toList();
+    if (postContentTextController.text.isNotEmpty||selectedImages!=null||selectedImages!.isNotEmpty) {
       print("test media ${selectedImages?.length}");
       if (type == 'twitter') {
         final response = await _createTwitterPostUseCase(

@@ -1,12 +1,13 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/post_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/suggest_user_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/user_profile_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
@@ -22,10 +23,16 @@ import '../models/comment_model.dart';
 abstract class SocialPostsRemoteDataSource {
   Future<Either<Failure, List<PostEntity>>> getFeed(
       {required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getGlobalFeed(
+      {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getTweet(
       {required TwitterFeedParams params});
   Future<Either<Failure, PostEntity>> getPost({required String postId});
+  Future<Either<Failure, bool>> deleteFriend({required String userId});
+  Future<Either<Failure, bool>> acceptRejectFriendRequest({required AcceptRejectFriendRequestParams params});
   Future<Either<Failure, UserProfileEntity>> getUserProfile(
+      {required String userId});
+  Future<Either<Failure, bool>> viewProfile(
       {required String userId});
   Future<Either<Failure, List<PostEntity>>> getAdvertisement(
       {required TwitterFeedParams params});
@@ -72,6 +79,22 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
       {required TwitterFeedParams params}) async {
     final response = await _apiConsumer.get(EndPoints.getFeedPosts(params),
         data: {'subCategory': '66b77e77bb35968b535dc944'});
+
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data']['posts'] as List)
+          .map((e) => PostModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<PostEntity>>> getGlobalFeed(
+      {required TwitterFeedParams params}) async {
+    final response = await _apiConsumer.get(EndPoints.getGlobalFeed(params),
+        );
 
     return response.fold((l) {
       return Left(l);
@@ -292,10 +315,34 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   }
 
   @override
+  Future<Either<Failure, bool>> viewProfile(
+      {required String userId}) async {
+    final response = await _apiConsumer.put(
+      EndPoints.viewProfile(userId),
+    );
+    return response.fold((l) => Left(l),
+        (data) => Right(data['status']));
+  }
+
+  @override
   Future<Either<Failure, bool>> editComment(
       {required PostCommentParams params}) async {
     final response = await _apiConsumer
         .put(EndPoints.editComment(params), data: {'content': params.content});
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> acceptRejectFriendRequest({required AcceptRejectFriendRequestParams params}) async{
+    final response = await _apiConsumer
+        .put(EndPoints.acceptRejectFriendRequest(params), data: {'status': params.status});
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteFriend({required String userId}) async{
+    final response = await _apiConsumer
+        .delete(EndPoints.deleteFriend(userId),);
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 }

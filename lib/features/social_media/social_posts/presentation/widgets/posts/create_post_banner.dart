@@ -22,7 +22,7 @@ class CreatePostBanner extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          context.read<UserCubit>().state.data != null
+          context.read<UserCubit>().isLoggedIn
               ? UserProfileImage(
                   userId: context.read<UserCubit>().state.data!.id,
                   imageURL:
@@ -30,14 +30,16 @@ class CreatePostBanner extends StatelessWidget {
                   accountId: 0,
                 )
               : const ProfileImage(
-                  accountId: 0,
+                  accountId: 0, userId: '',
                 ),
           const Sizer(
             width: 10,
           ),
           Expanded(
               child: InkWell(
-            onTap: () => context.push(Routes.CREATEPOST, extra: 'facebook'),
+            onTap: () {
+              !context.read<UserCubit>().isLoggedIn?context.push(Routes.LOGIN):context.push(Routes.CREATEPOST, extra: 'facebook');
+            },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
               decoration: BoxDecoration(

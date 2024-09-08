@@ -30,64 +30,59 @@ class _UserReelsState extends State<UserReels> {
           showErrorMessage(
             context,
             getFailureMessage(
-              state.failure ?? const UnknownFailure(),
+              state.failure ??  UnknownFailure(''),
               context,
             ),
           );
         }
       }, builder: (context, state) {
         final controller = context.read<InstagramCubit>();
-        return RefreshIndicator(
-          onRefresh: () async => controller.refreshUserReels(),
-          child: PagedListView<int, PostEntity>(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
-            pagingController: controller.userReelsPagingController,
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
-            builderDelegate: PagedChildBuilderDelegate<PostEntity>(
-                noItemsFoundIndicatorBuilder: (context) {
-                  print(controller.userReelsPagingController.itemList?.length);
-                  return const Padding(
-                      padding: EdgeInsets.only(top: 200),
-                      child: Center(
-                        child: Text(
-                          "No Reels",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ));
-                },
-                itemBuilder: (context, item, index) {
-                  final post =
-                      controller.userReelsPagingController.itemList![index];
-                  print(post.videoMedia);
-                  return state.status == StateStatus.success
-                      ? Container(
-                          color: Colors.black,
-                          width: double.infinity,
-                          height: 400,
-                          child: InstagramReelCard(
-                            item: post,
-                            playVideo: false,
-                          ))
-                      : Center(
-                          child: Label(
-                              text: getFailureMessage(
-                            state.failure ?? const UnknownFailure(),
-                            context,
-                          )),
-                        );
-                },
-                noMoreItemsIndicatorBuilder: (context) => Container(),
-                firstPageProgressIndicatorBuilder: (context) => Container(
-                    margin: const EdgeInsets.only(top: 150),
-                    child: const CupertinoActivityIndicator()),
-                newPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator()),
-          ),
+        return PagedSliverList<int, PostEntity>(
+          // padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+          pagingController: controller.userReelsPagingController,
+          // shrinkWrap: true,
+          // physics: const BouncingScrollPhysics(
+          //     parent: AlwaysScrollableScrollPhysics()),
+          builderDelegate: PagedChildBuilderDelegate<PostEntity>(
+              noItemsFoundIndicatorBuilder: (context) {
+                print(controller.userReelsPagingController.itemList?.length);
+                return Center(
+                  child: Text(
+                    "No Reels",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                    ),
+                  ),
+                );
+              },
+              itemBuilder: (context, item, index) {
+                final post =
+                    controller.userReelsPagingController.itemList![index];
+                print(post.videoMedia);
+                return state.status == StateStatus.success
+                    ? Container(
+                        color: Colors.black,
+                        width: double.infinity,
+                        height: 400,
+                        child: InstagramReelCard(
+                          item: post,
+                          playVideo: false,
+                        ))
+                    : Center(
+                        child: Label(
+                            text: getFailureMessage(
+                          state.failure ??  UnknownFailure(''),
+                          context,
+                        )),
+                      );
+              },
+              noMoreItemsIndicatorBuilder: (context) => Container(),
+              firstPageProgressIndicatorBuilder: (context) => Container(
+                  margin: const EdgeInsets.only(top: 150),
+                  child: const CupertinoActivityIndicator()),
+              newPageProgressIndicatorBuilder: (context) =>
+                  const CupertinoActivityIndicator()),
         );
       }),
     );
