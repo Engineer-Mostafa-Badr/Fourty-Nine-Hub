@@ -19,17 +19,11 @@ class MessagesListView extends StatelessWidget {
               addAutomaticKeepAlives: true,
               itemCount: state.messages?.length ?? 0,
               controller: chatRoomCubit.scrollController,
-              itemBuilder: (context, index) => SwipeTo(
-                    onLeftSwipe: (details) {
-                      chatRoomCubit
-                          .selectMessageForReplaying(state.messages![index]);
-                    },
-                    child: MessageCard(
-                      messageEntity: state.messages![index],
-                      anotherUserName: 'Anonymous',
-                      // state.chatData?.chat?.contact?.name ?? LocaleKeys.anonymous.tr(),
-                    ),
-                  ),
+              itemBuilder: (context, index) => MessageCard(
+                messageEntity: state.messages![index],
+                anotherUserName: 'Anonymous',
+                // state.chatData?.chat?.contact?.name ?? LocaleKeys.anonymous.tr(),
+              ),
               separatorBuilder: (context, index) => const Sizer(
                     height: 3,
                   ));
