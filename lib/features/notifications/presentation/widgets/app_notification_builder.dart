@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/all_notifications_seen/all_notfications_seen_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/no_notifications_widget.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_card.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_card_loading.dart';
@@ -48,8 +50,7 @@ class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
         }
       },
       builder: (context, state) {
-        if (state is GetAppNotificationsSuccess &&
-            getAppNotificationsCubit.notifications.isEmpty) {
+        if (state is GetAppNotificationsSuccess && getAppNotificationsCubit.notifications.isEmpty) {
           return const NoNotificationsWidget();
         }
         return ListView.builder(
@@ -58,19 +59,22 @@ class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
           itemBuilder: (context, index) {
             if (index == 0) {
               return SeeAndClearButtons(
-                seeAllCallback: () {},
+                seeAllCallback: () async {
+                  context.read<AllNotficationsSeenCubit>().allNotificationSeen(type: 'services').then(
+                        (value) => context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount(),
+                      );
+                  context.read<GetAppNotificationsCubit>().notifications.forEach((element) {
+                    element.read = true;
+                  });
+                },
                 clearAllCallback: () {},
               );
             }
             index--;
             if (index < getAppNotificationsCubit.notifications.length) {
-              return NotificationCard(
-                  notificationEntity:
-                      getAppNotificationsCubit.notifications[index]);
+              return NotificationCard(notificationEntity: getAppNotificationsCubit.notifications[index]);
             }
-            return state is GetAppNotificationsLoading
-                ? const NotificationCardLoadingList()
-                : const SizedBox();
+            return state is GetAppNotificationsLoading ? const NotificationCardLoadingList() : const SizedBox();
           },
         );
       },
@@ -83,12 +87,9 @@ class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
       scrollPosition = scrollController.position.pixels;
       scrollMaxExtent = scrollController.position.maxScrollExtent;
       if (scrollPosition >= 0.7 * scrollMaxExtent) {
-        if (!isLoading &&
-            (getAppNotificationsCubit.notifications.last.hasNextPage ??
-                false)) {
+        if (!isLoading && (getAppNotificationsCubit.notifications.last.hasNextPage ?? false)) {
           isLoading = true;
-          getAppNotificationsCubit.page =
-              getAppNotificationsCubit.notifications.last.nextPageNumber!;
+          getAppNotificationsCubit.page = getAppNotificationsCubit.notifications.last.nextPageNumber!;
           await getAppNotificationsCubit.getAppNotifications();
           nextPage++;
           isLoading = false;

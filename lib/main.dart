@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<GetUnreadNotificationsCountCubit>(
           create: (context) => GetUnreadNotificationsCountCubit(
             getUnreadNotificationsCountUseCase: serviceLocator(),
-          ),
+          )..getUnreadNotificationsCount(),
         ),
         BlocProvider<GetAppNotificationsCubit>(
           create: (context) => GetAppNotificationsCubit(

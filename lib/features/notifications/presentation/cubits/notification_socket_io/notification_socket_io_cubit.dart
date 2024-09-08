@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/notifications/domain/usecases/notificaito
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_services_notifications/get_services_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 
 part 'notification_socket_io_state.dart';
 
@@ -32,8 +33,11 @@ class NotificationSocketIoCubit extends Cubit<NotificationSocketIoState> {
         if (type == 'services') {
           getAppNotificationsCubit.notifications = [];
           getAppNotificationsCubit.page = 1;
+          pr('===========');
           await getAppNotificationsCubit.getAppNotifications();
           if (getAppNotificationsCubit.notifications.isNotEmpty) {
+            pr(getAppNotificationsCubit.notifications.first.id);
+            pr(getAppNotificationsCubit.notifications.first.read);
             emit(NotificationSocketIoNewNotification(getAppNotificationsCubit.notifications.first));
           }
           return;

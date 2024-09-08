@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../res/style/styles.dart';
@@ -13,22 +14,18 @@ class IconWithViewCount extends StatelessWidget {
   final int unreadCount;
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 5, right: 15),
-          child: Tab(
-            icon: icon,
-          ),
+        Tab(
+          icon: icon,
         ),
-        Positioned(
-          top: 0,
-          right: 0,
-          child: Text(
-            unreadCount == 0 ? '   ' : '($unreadCount)',
-            style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
-          ),
-        )
+        const Sizer(width: 5),
+        Text(
+          unreadCount == 0 ? '   ' : '($unreadCount)',
+          style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
+        ),
       ],
     );
   }

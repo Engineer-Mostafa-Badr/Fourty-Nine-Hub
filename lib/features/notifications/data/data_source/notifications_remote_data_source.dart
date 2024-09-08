@@ -22,6 +22,8 @@ abstract class NotificationsRemoteDataSource {
   Future<void> notificationListener({required Function(Map<String, dynamic> data) notificationCallback});
 
   Future<Either<Failure, UnreadNotificationsCountEntity>> getUnreadNotificationsCount();
+  Future<Either<Failure, bool>> notificationSeen({required String id});
+  Future<Either<Failure, bool>> allNotificationSeen({required String type});
 }
 
 class NotificationsRemoteDataSourceImp implements NotificationsRemoteDataSource {
@@ -97,6 +99,35 @@ class NotificationsRemoteDataSourceImp implements NotificationsRemoteDataSource 
             UnreadNotificationsCountModel.fromJson(data['data']);
         pr(unreadNotificationsCountModel);
         return Right(unreadNotificationsCountModel);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> notificationSeen({required String id}) async {
+    final response = await apiConsumer.put(EndPoints.notificationsSeen(id));
+
+    return response.fold(
+      (failure) => Left(pr(failure)),
+      (data) {
+        pr('Notification marked as seen');
+        return const Right(true);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> allNotificationSeen({required String type}) async {
+    final response = await apiConsumer.put(
+      EndPoints.notifications,
+      queryParameters: {'type': type},
+    );
+
+    return response.fold(
+      (failure) => Left(pr(failure)),
+      (data) {
+        pr('All Notification marked as seen');
+        return const Right(true);
       },
     );
   }

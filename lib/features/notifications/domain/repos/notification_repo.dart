@@ -19,4 +19,7 @@ abstract class NotificationRepo {
   Future<void> notificationListener({required Function(Map<String, dynamic> data) notificationCallback});
 
   Future<Either<Failure, UnreadNotificationsCountEntity>> getUnreadNotificationsCount();
+
+  Future<Either<Failure, bool>> notificationSeen({required String id});
+  Future<Either<Failure, bool>> allNotificationSeen({required String type});
 }

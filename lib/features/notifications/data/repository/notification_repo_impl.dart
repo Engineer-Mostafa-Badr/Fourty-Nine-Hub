@@ -43,4 +43,14 @@ class NotificationRepoImpl implements NotificationRepo {
   Future<Either<Failure, UnreadNotificationsCountEntity>> getUnreadNotificationsCount() {
     return notificationRemoteDataSource.getUnreadNotificationsCount();
   }
+
+  @override
+  Future<Either<Failure, bool>> notificationSeen({required String id}) {
+    return notificationRemoteDataSource.notificationSeen(id: id);
+  }
+
+  @override
+  Future<Either<Failure, bool>> allNotificationSeen({required String type}) {
+    return notificationRemoteDataSource.allNotificationSeen(type: type);
+  }
 }
