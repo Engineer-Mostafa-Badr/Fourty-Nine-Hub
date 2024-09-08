@@ -10,6 +10,7 @@ class UserProfileEntity {
   final String country;
   final String job;
   final String phone;
+  final String maritalStatus;
   final int? totalView;
   final int? posts;
   final String? profilePicture;
@@ -40,6 +41,7 @@ class UserProfileEntity {
     required this.profilePicture,
     required this.profileCover,
     required this.friendsCount,
+    required this.maritalStatus,
     required this.followersCount,
     required this.followingCount,
     required this.posts,

@@ -375,22 +375,19 @@ class _InstagramProfileState extends State<InstagramProfile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Sizer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Label(
-                              text: "${user.firstName} ${user.lastName}",
-                              style:
-                                  Styles.headerText(fontWeight: FontWeight.w600)),
-                          const Sizer(
-                            width: 5,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                  RichText(
+                    maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      text: TextSpan(children: [
+                        TextSpan(
+                            text:
+                            "${user.firstName} ${user.lastName}",
+                            style: Styles.headerText(fontWeight: FontWeight.w600,color: Colors.black)),
+                        if(user.job.isNotEmpty)TextSpan(
+                            text: '\t(${user.job})',
+                            style: Styles.headerText(
+                                color: Colors.black, fontSize: 26)),
+                      ])),
                   const Sizer(
                     height: 4,
                   ),
@@ -417,19 +414,12 @@ class _InstagramProfileState extends State<InstagramProfile> {
                         if (user.city.isNotEmpty || user.country.isNotEmpty) ...[
                           Row(
                             children: [
-                              Label(
-                                  text: 'From',
-                                  style: Styles.headerText(
-                                      color: Colors.grey, fontSize: 30)),
-                              const Sizer(
-                                height: 5,
-                              ),
                               Expanded(
                                 child: Label(
                                   text:
                                       '${user.country}${user.city.isNotEmpty ? ',' : ''} ${user.city}',
                                   style: Styles.headerText(
-                                      color: Colors.black, fontSize: 30),
+                                      color: Colors.black, fontSize: 26),
                                   maxLines: 1,
                                 ),
                               ),
@@ -442,16 +432,11 @@ class _InstagramProfileState extends State<InstagramProfile> {
                         if (user.phone.isNotEmpty) ...[
                           Row(
                             children: [
-                              Label(
-                                  text: 'Phone',
-                                  style: Styles.headerText(
-                                      color: Colors.grey, fontSize: 30)),
-                              const Sizer(),
                               Expanded(
                                 child: Label(
                                   text: user.phone,
                                   style: Styles.headerText(
-                                      color: Colors.black, fontSize: 30),
+                                      color: Colors.black, fontSize: 26),
                                   maxLines: 1,
                                 ),
                               ),
@@ -464,16 +449,11 @@ class _InstagramProfileState extends State<InstagramProfile> {
                         if (user.job.isNotEmpty)
                           Row(
                             children: [
-                              Label(
-                                  text: 'Work',
-                                  style: Styles.headerText(
-                                      color: Colors.grey, fontSize: 30)),
-                              const Sizer(),
                               Expanded(
                                 child: Label(
                                   text: user.job,
                                   style: Styles.headerText(
-                                      color: Colors.black, fontSize: 30),
+                                      color: Colors.black, fontSize: 26),
                                   maxLines: 1,
                                 ),
                               ),
