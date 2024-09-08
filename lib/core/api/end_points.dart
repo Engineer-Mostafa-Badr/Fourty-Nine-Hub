@@ -59,6 +59,7 @@ class EndPoints {
   static const transferFiveBalance= '/main-wallet/transfer-five-years';
   static const transferTenBalance= '/main-wallet/transfer-ten-years';
   static const requestWithdrawBalance= '/main-wallet/request-withdrawal-balance';
+  static const checkRequestWithdrawBalance= '/main-wallet/check-request-withdrawal';
 
   
   static const getWheel = '/wheels/random';

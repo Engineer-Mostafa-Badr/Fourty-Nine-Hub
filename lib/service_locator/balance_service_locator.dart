@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_b
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_cubit.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/account_taps/wallet/domain/usecases/check_withdraw_balance_use_cse.dart';
 import '../features/account_taps/wallet/domain/usecases/get_balance_history_use_case.dart';
 import '../features/account_taps/wallet/domain/usecases/transfer_balance_use_cse.dart';
 import '../features/account_taps/wallet/domain/usecases/transfer_ten_balance_use_cse.dart';
@@ -42,9 +43,14 @@ class BalanceServiceLocator {
         () => RequestWithdrawBalanceUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<CheckRequestWithdrawUseCase>(
+        () => CheckRequestWithdrawUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerFactory<BalanceCubit>(
         () => BalanceCubit(
+            serviceLocator(),
             serviceLocator(),
             serviceLocator(),
             serviceLocator(),

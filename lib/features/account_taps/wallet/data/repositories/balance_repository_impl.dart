@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/datasources/balance/balance_remote_data_source.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/balance/balance_data_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/balance/balance_history_entity.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/balance/request_withdraw_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/balance_repository.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_balance_history_use_case.dart';
 
@@ -34,6 +35,11 @@ class BalanceRepositoryImpl extends BalanceRepository{
   @override
   Future<Either<Failure, bool>> requestWithdrawBalance() {
     return _balanceRemoteDataSource.requestWithdrawBalance();
+  }
+
+  @override
+  Future<Either<Failure, RequestWithdrawEntity>> checkRequestWithdrawBalance() {
+    return _balanceRemoteDataSource.checkRequestWithdrawBalance();
   }
 
 }

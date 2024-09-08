@@ -1,9 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/api/api_consumer.dart';
 import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/data/models/balance/request_withdraw_model.dart';
 
 import '../../../../../../core/error/failure.dart';
 import '../../../domain/entities/balance/balance_history_entity.dart';
+import '../../../domain/entities/balance/request_withdraw_entity.dart';
 import '../../../domain/usecases/get_balance_history_use_case.dart';
 import '../../models/balance/balance_data_model.dart';
 import '../../models/balance/balance_history_model.dart';
@@ -19,6 +21,8 @@ abstract class BalanceRemoteDataSource {
   Future<Either<Failure, bool>> transferBalanceTenYears();
 
   Future<Either<Failure, bool>> requestWithdrawBalance();
+
+  Future<Either<Failure, RequestWithdrawEntity>> checkRequestWithdrawBalance();
 }
 
 class BalanceRemoteDataSourceImpl extends BalanceRemoteDataSource {
@@ -80,6 +84,18 @@ class BalanceRemoteDataSourceImpl extends BalanceRemoteDataSource {
     return response.fold(
       (failure) => Left(failure),
       (response) => Right(response['status']),
+    );
+  }
+
+  @override
+  Future<Either<Failure, RequestWithdrawEntity>>
+      checkRequestWithdrawBalance() async {
+    final response =
+        await _apiConsumer.get(EndPoints.checkRequestWithdrawBalance);
+
+  return response.fold(
+      (failure)=>Left(failure),
+      (response)=>Right(RequestWithdrawModel.fromJson(response)),
     );
   }
 }

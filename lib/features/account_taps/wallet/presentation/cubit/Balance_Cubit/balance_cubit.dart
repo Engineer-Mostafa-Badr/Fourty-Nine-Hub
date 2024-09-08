@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/check_withdraw_balance_use_cse.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_balance_use_case.dart';
 
 import '../../../../../../common/models/public/pagination_params.dart';
@@ -16,14 +17,16 @@ class BalanceCubit extends Cubit<BalanceState> {
   final TransferFiveBalanceUseCase _transferFiveBalanceUseCase;
   final TransferTenBalanceUseCase _transferTenBalanceUseCase;
   final RequestWithdrawBalanceUseCase _withdrawBalanceUseCase;
+  final CheckRequestWithdrawUseCase _checkRequestWithdrawUseCase;
 
   BalanceCubit(
     this._balanceUseCases,
-    this._balanceHistoryUseCase, this._transferFiveBalanceUseCase, this._transferTenBalanceUseCase, this._withdrawBalanceUseCase,
+    this._balanceHistoryUseCase, this._transferFiveBalanceUseCase, this._transferTenBalanceUseCase, this._withdrawBalanceUseCase, this._checkRequestWithdrawUseCase,
   ) : super(const BalanceState());
 
   void loadData() async {
     await fetchBalanceWallet();
+    await checkRequestWithdrawBalance();
    // await fetchBalanceHistory();
   }
 
@@ -81,6 +84,15 @@ class BalanceCubit extends Cubit<BalanceState> {
      }, (data) {
        emit(state.copyWith(status: BalanceStates.initial));
      });
+  }
+
+   checkRequestWithdrawBalance() async {
+  final response=   await _checkRequestWithdrawUseCase.call(const NoParams());
+     return  response.fold((l) {
+      emit(state.copyWith(failure: l, status: BalanceStates.error));
+    }, (data) {
+      emit(state.copyWith(withdraw: data,status: BalanceStates.initial));
+    });
   }
 
 

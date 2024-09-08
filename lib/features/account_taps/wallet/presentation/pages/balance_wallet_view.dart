@@ -107,6 +107,30 @@ class BalanceWalletView extends StatelessWidget {
                               onPressed: () {},
                               margin: 10,
                             ),
+                      if(state.withdraw?.data ==false)
+                        const Label(text: 'Please wait to check request'),
+                      state.withdraw?.data == true
+                          ? AppButton(
+                        backColor: AppColors.SECONDARY_COLOR,
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        label: 'Withdraw',
+                        onPressed: () {
+                          context
+                              .read<BalanceCubit>()
+                              .requestWithdrawBalance();
+                          //Your request withdrawal sent successfully waiting for administration approval
+                        },
+                        margin: 10,
+                      )
+                          : AppButton(
+                        backColor: Colors.red.withOpacity(.5),
+                        label: 'Withdraw',
+                        onPressed: () {},
+                        margin: 10,
+                      ),
+                      // if(state.withdraw?.data ==true)
+                      //   const Label(text: 'Please wait to check request'),
+
                       _buildWalletActionItem(
                         label:
                             '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',
