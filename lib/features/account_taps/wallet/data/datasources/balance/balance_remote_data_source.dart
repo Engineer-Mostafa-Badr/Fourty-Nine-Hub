@@ -15,8 +15,10 @@ abstract class BalanceRemoteDataSource {
       BalanceHistoryParams params);
 
   Future<Either<Failure, bool>> transferBalanceFiveYears();
+
   Future<Either<Failure, bool>> transferBalanceTenYears();
-  Future<Either<Failure,bool>>requestWithdrawBalance();
+
+  Future<Either<Failure, bool>> requestWithdrawBalance();
 }
 
 class BalanceRemoteDataSourceImpl extends BalanceRemoteDataSource {
@@ -37,8 +39,10 @@ class BalanceRemoteDataSourceImpl extends BalanceRemoteDataSource {
   @override
   Future<Either<Failure, List<BalanceHistoryModel>>> fetchHistoryBalance(
       BalanceHistoryParams params) async {
-    final response =
-        await _apiConsumer.get(EndPoints.getHistoryBalance(params));
+    final response = await _apiConsumer.get(
+      EndPoints.getHistoryBalance(),
+      queryParameters: params.paginationParams.toJson(),
+    );
     return response.fold((l) {
       return Left(l);
     }, (data) {
@@ -54,8 +58,8 @@ class BalanceRemoteDataSourceImpl extends BalanceRemoteDataSource {
     final response = await _apiConsumer.post(EndPoints.transferFiveBalance);
 
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right(response['status']),
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
     );
   }
 
@@ -64,18 +68,18 @@ class BalanceRemoteDataSourceImpl extends BalanceRemoteDataSource {
     final response = await _apiConsumer.post(EndPoints.transferTenBalance);
 
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right(response['status']),
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
     );
   }
 
   @override
-  Future<Either<Failure, bool>> requestWithdrawBalance() async{
+  Future<Either<Failure, bool>> requestWithdrawBalance() async {
     final response = await _apiConsumer.post(EndPoints.requestWithdrawBalance);
 
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right(response['status']),
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/balance/balance_history_entity.dart';
 
+import '../../../../../common/models/public/pagination_params.dart';
 import '../repositories/balance_repository.dart';
 
 class GetBalanceHistoryUseCase extends UseCase<List<BalanceHistoryEntity>, BalanceHistoryParams>{
@@ -18,14 +19,8 @@ class GetBalanceHistoryUseCase extends UseCase<List<BalanceHistoryEntity>, Balan
 
 
 class BalanceHistoryParams {
-  final int page;
-  final int limit;
-  BalanceHistoryParams({
-    required this.page,
-    required this.limit,
-  });
-  Map<String, dynamic> toJson() => {
-    'page': page,
-    'limit': limit,
-  };
+  PaginationParams paginationParams;
+
+  BalanceHistoryParams({required this.paginationParams});
+
 }

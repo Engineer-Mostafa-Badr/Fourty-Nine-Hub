@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateful/dynamic/list_view_pagination.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -13,10 +14,12 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/style/styles.dart';
+import '../../domain/entities/balance/balance_history_entity.dart';
 import '../widgets/wallet_history_card.dart';
 
 class BalanceWalletView extends StatelessWidget {
@@ -105,74 +108,98 @@ class BalanceWalletView extends StatelessWidget {
                               margin: 10,
                             ),
                       _buildWalletActionItem(
-                          label:
-                              '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',
-                          subTitle:
-                              '${state.balance?.fiveYears ?? ''} . ${state.balance?.fiveYearsLeft ?? ''} years last',
-                          ontap: state.balance?.fiveYearsComplete == true
-                              ? () {}
-                              : state.balance?.fiveYearsTransfer == true
-                                  ? () {
-                                      context
-                                          .read<BalanceCubit>()
-                                          .transferFiveBalance();
-                                    }
-                                  : () {},
-                          color: state.balance?.fiveYearsTransfer == true
-                              ? AppColors.SECONDARY_COLOR
-                              : AppColors.SECONDARY_COLOR.withOpacity(.5),
-                          transfer: state.balance?.fiveYearsComplete == true
-                              ? 'Complete'
-                              : 'Transfer'),
+                        label:
+                            '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',
+                        subTitle:
+                            '${state.balance?.fiveYears ?? ''} . ${state.balance?.fiveYearsLeft ?? ''} years last',
+                        ontap: state.balance?.fiveYearsComplete == true
+                            ? () {}
+                            : state.balance?.fiveYearsTransfer == true
+                                ? () {
+                                    context
+                                        .read<BalanceCubit>()
+                                        .transferFiveBalance();
+                                  }
+                                : () {},
+                        color: state.balance?.fiveYearsComplete == true
+                            ? Theme.of(context).primaryColor
+                            : state.balance?.fiveYearsTransfer == true
+                                ? AppColors.SECONDARY_COLOR
+                                : AppColors.SECONDARY_COLOR.withOpacity(.5),
+                        transfer: state.balance?.fiveYearsComplete == true
+                            ? 'Complete'
+                            : 'Transfer',
+                      ),
                       _buildWalletActionItem(
-                          label:
-                              '${LocaleKeys.gift.localize} / 10 ${LocaleKeys.years.localize}',
-                          subTitle:
-                              '${state.balance?.tenYears ?? ''} . ${state.balance?.tenYearsLeft ?? ''} years last',
-                          ontap: state.balance!.tenYearsTransfer == true
-                              ? () {}
-                              : state.balance?.tenYearsTransfer == true
-                                  ? () {
-                                      context
-                                          .read<BalanceCubit>()
-                                          .transferFiveBalance();
-                                    }
-                                  : () {},
-                          color: state.balance?.tenYearsTransfer == true
-                              ? AppColors.SECONDARY_COLOR
-                              : AppColors.SECONDARY_COLOR.withOpacity(.5),
-                          transfer: state.balance?.tenYearsComplete == true
-                              ? 'Complete'
-                              : 'Transfer'),
+                        label:
+                            '${LocaleKeys.gift.localize} / 10 ${LocaleKeys.years.localize}',
+                        subTitle:
+                            '${state.balance?.tenYears ?? ''} . ${state.balance?.tenYearsLeft ?? ''} years last',
+                        ontap: state.balance?.tenYearsTransfer == true
+                            ? () {}
+                            : state.balance?.tenYearsTransfer == true
+                                ? () {
+                                    context
+                                        .read<BalanceCubit>()
+                                        .transferFiveBalance();
+                                  }
+                                : () {},
+                        color: state.balance?.tenYearsComplete == true
+                            ? Theme.of(context).primaryColor
+                            : state.balance?.tenYearsTransfer == true
+                                ? AppColors.SECONDARY_COLOR
+                                : AppColors.SECONDARY_COLOR.withOpacity(.5),
+                        transfer: state.balance?.tenYearsComplete == true
+                            ? 'Complete'
+                            : 'Transfer',
+                      ),
                       const Sizer(),
                       Label(
                         text: LocaleKeys.history.localize,
                         style: Styles.headerText(),
                       ),
-                      ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            final item = state.history![index];
-                            final DateTime createdAt =
-                                DateTime.parse(item.createdAt);
-                            final DateTime egyptTime =
-                                createdAt.toUtc().add(const Duration(hours: 3));
-                            final String formattedDateTime =
-                                DateFormat('dd/MM/yyyy, h:mm a')
-                                    .format(egyptTime);
+                      PaginationView<BalanceHistoryEntity>(
+                        loadingWidget: const SizedBox.shrink(),
+                        build: (ScrollController scrollController,
+                            List<BalanceHistoryEntity> data) {
+                          return data.isNotEmpty
+                              ? ListView.separated(
+                                  controller: scrollController,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    //  final item = state.history![index];
+                                    final DateTime createdAt =
+                                        DateTime.parse(data[index].createdAt);
+                                    final DateTime egyptTime = createdAt
+                                        .toUtc()
+                                        .add(const Duration(hours: 3));
+                                    final String formattedDateTime =
+                                        DateFormat('dd/MM/yyyy, h:mm a')
+                                            .format(egyptTime);
 
-                            return WalletHistoryCard(
-                                title: '${item.transactionAmount}',
-                                subTitle: formattedDateTime,
-                                onTap: () {},
-                                //amount: item.amount,
-                                icon: FontAwesomeIcons.check);
-                          },
-                          separatorBuilder: (context, index) {
-                            return const SizedBox();
-                          },
-                          itemCount: state.history?.length ?? 0)
+                                    return WalletHistoryCard(
+                                        title:
+                                            '${data[index].transactionAmount}',
+                                        subTitle: formattedDateTime,
+                                        onTap: () {},
+                                        //amount: item.amount,
+                                        icon: FontAwesomeIcons.check);
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return const SizedBox();
+                                  },
+                                  itemCount: data.length)
+                              : const Center(
+                                  child: Label(text: 'No History Available'));
+                        },
+                        fetchData: (PaginationParams paginationParams) {
+                          return context
+                              .read<BalanceCubit>()
+                              .fetchBalanceHistory(
+                                  paginationParams: paginationParams);
+                        },
+                      )
                     ],
                   ),
                 ),

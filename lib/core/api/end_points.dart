@@ -8,7 +8,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 
-import '../../features/account_taps/wallet/domain/usecases/get_balance_history_use_case.dart';
 import '../../features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 
 class EndPoints {
@@ -37,8 +36,8 @@ class EndPoints {
 
   static const getGift= '/subscriber/competitions';
   static const getBalance= '/main-wallet/user-balance';
-  static String getHistoryBalance(BalanceHistoryParams params) {
-    return '/user-transactions/balance?limit=${params.limit}&page=${params.page}';
+  static String getHistoryBalance() {
+    return '/user-transactions/balance';
   }static String getHistoryWallet(WalletHistoryParams params) {
     return '/user-transactions/mainWallet?limit=${params.limit}&page=${params.page}';
   }static String geMainCategoryWallet() {
