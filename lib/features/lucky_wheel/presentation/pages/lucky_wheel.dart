@@ -15,7 +15,7 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
 
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 import '../../../../core/enums/wheel.dart';
 import '../../../../res/style/styles.dart';
 import '../../domain/entities/wheel_item_entity.dart';
