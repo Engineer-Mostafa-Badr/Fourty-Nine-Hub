@@ -200,6 +200,7 @@
 // }
 
 // Nasr
+
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -253,87 +254,185 @@ class MessageCard extends StatelessWidget {
           : (details) {
               chatRoomCubit.selectMessageForReplaying(messageEntity);
             },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          IntrinsicWidth(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: width * 0.85),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                margin: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: AppColors.MESSAGE_COLOR,
-                  borderRadius: BorderRadius.only(
-                    topLeft: const Radius.circular(12),
-                    topRight: const Radius.circular(12),
-                    bottomLeft: isArabic
-                        ? const Radius.circular(12)
-                        : const Radius.circular(0),
-                    bottomRight: isArabic
-                        ? const Radius.circular(0)
-                        : const Radius.circular(12),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26.withOpacity(0.2),
-                      blurRadius: 4,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: messageEntity.isDeleted!
-                          ? Row(
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Icon(
-                                    Icons.not_interested,
-                                    color: Colors.black54,
+      child: GestureDetector(
+        onTap: () {
+          log(messageEntity.isReply.toString());
+          log(messageEntity.replyMessage!.text!);
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IntrinsicWidth(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: width * 0.85),
+                  child: Column(
+                    children: [
+                      messageEntity.isReply!
+                          ? Container(
+                              decoration: const BoxDecoration(
+                                color: AppColors.MESSAGE_COLOR,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                ),
+                              ),
+                              height: 60,
+                              padding: const EdgeInsets.all(0),
+                              margin: const EdgeInsets.all(0),
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                  top: 8,
+                                  left: 8,
+                                  right: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.DARK_GRAY_COLOR
+                                      .withOpacity(0.4),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(12),
+                                    topRight: Radius.circular(12),
+                                    bottomLeft: Radius.circular(12),
+                                    bottomRight: Radius.circular(12),
                                   ),
                                 ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.all(0),
+                                      padding: const EdgeInsets.all(0),
+                                      width: 3,
+                                      color: AppColors.PRIMARY_COLOR,
+                                      height: 30,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 4,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ConstrainedBox(
+                                            constraints: BoxConstraints(
+                                              maxWidth: width * 0.7,
+                                            ),
+                                            child: Text(
+                                              "replyed message sender",
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Styles.mediumText(
+                                                  color:
+                                                      AppColors.PRIMARY_COLOR,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ),
+                                          ConstrainedBox(
+                                            constraints: BoxConstraints(
+                                              maxWidth: width * 0.7,
+                                            ),
+                                            child: Text(
+                                              "This is the replyed message",
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Styles.mediumText(
+                                                color:
+                                                    AppColors.DARK_GRAY_COLOR,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
+                          : const SizedBox(),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        // margin: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: AppColors.MESSAGE_COLOR,
+                          borderRadius: BorderRadius.only(
+                            topLeft: messageEntity.isReply!
+                                ? const Radius.circular(0)
+                                : const Radius.circular(12),
+                            topRight: messageEntity.isReply!
+                                ? const Radius.circular(0)
+                                : const Radius.circular(12),
+                            bottomLeft: isArabic
+                                ? const Radius.circular(12)
+                                : const Radius.circular(0),
+                            bottomRight: isArabic
+                                ? const Radius.circular(0)
+                                : const Radius.circular(12),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26.withOpacity(0.2),
+                              blurRadius: 4,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: messageEntity.isDeleted!
+                                  ? Row(
+                                      children: [
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Icon(
+                                            Icons.not_interested,
+                                            color: Colors.black54,
+                                          ),
+                                        ),
+                                        Label(
+                                          text: "This message is deleted",
+                                          style: Styles.mediumText(
+                                              color: Colors.black54),
+                                        ),
+                                      ],
+                                    )
+                                  : ReadMoreLabel(
+                                      trimLines: 5,
+                                      text: messageEntity.text!,
+                                      style: Styles.mediumText(
+                                          color: AppColors.PRIMARY_COLOR),
+                                      textAlign: TextAlign.left,
+                                    ),
+                            ),
+                            const SizedBox(width: 8),
+                            Row(
+                              children: [
                                 Label(
-                                  text: "This message is deleted",
-                                  style:
-                                      Styles.mediumText(color: Colors.black54),
+                                  text: '${messageEntity.formattedCreatedAt}',
+                                  style: Styles.smallText(
+                                      color: AppColors.PRIMARY_COLOR),
+                                ),
+                                const SizedBox(width: 4),
+                                Icon(
+                                  _getMessageIcon(messageEntity),
+                                  color: _getMessageIconColor(messageEntity),
+                                  size: 12,
                                 ),
                               ],
-                            )
-                          : ReadMoreLabel(
-                              trimLines: 5,
-                              text: messageEntity.text!,
-                              style: Styles.mediumText(
-                                  color: AppColors.PRIMARY_COLOR),
-                              textAlign: TextAlign.left,
                             ),
-                    ),
-                    const SizedBox(width: 8),
-                    Row(
-                      children: [
-                        Label(
-                          text: '${messageEntity.formattedCreatedAt}',
-                          style:
-                              Styles.smallText(color: AppColors.PRIMARY_COLOR),
+                          ],
                         ),
-                        const SizedBox(width: 4),
-                        Icon(
-                          _getMessageIcon(messageEntity),
-                          color: _getMessageIconColor(messageEntity),
-                          size: 12,
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -376,67 +475,158 @@ class MessageCard extends StatelessWidget {
           : (details) {
               chatRoomCubit.selectMessageForReplaying(messageEntity);
             },
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          const CircleAvatar(
-            radius: 15,
-            backgroundColor: Colors.white,
-            backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
-          ),
-          const Sizer(width: 5),
-          IntrinsicWidth(
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              margin: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(12),
-                  topRight: const Radius.circular(12),
-                  bottomLeft: isArabic
-                      ? const Radius.circular(0)
-                      : const Radius.circular(12),
-                  bottomRight: isArabic
-                      ? const Radius.circular(12)
-                      : const Radius.circular(0),
-                ),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 8,
-                    offset: Offset(0, 4),
-                  ),
-                ],
-              ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            const CircleAvatar(
+              radius: 15,
+              backgroundColor: Colors.white,
+              backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+            ),
+            const Sizer(width: 5),
+            IntrinsicWidth(
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: width * 0.65,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                constraints: BoxConstraints(maxWidth: width * 0.65),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: ReadMoreLabel(
-                        trimLines: 5,
-                        text: messageEntity.text!,
-                        style:
-                            Styles.mediumText(color: AppColors.PRIMARY_COLOR),
-                        textAlign: TextAlign.left,
+                    messageEntity.isReply!
+                        ? Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(12),
+                                topRight: Radius.circular(12),
+                              ),
+                            ),
+                            height: 60,
+                            padding: const EdgeInsets.all(0),
+                            margin: const EdgeInsets.all(0),
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                top: 8,
+                                left: 8,
+                                right: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color:
+                                    AppColors.DARK_GRAY_COLOR.withOpacity(0.4),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                  bottomLeft: Radius.circular(12),
+                                  bottomRight: Radius.circular(12),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.all(0),
+                                    padding: const EdgeInsets.all(0),
+                                    width: 3,
+                                    color: AppColors.PRIMARY_COLOR,
+                                    height: 30,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            maxWidth: width * 0.55,
+                                          ),
+                                          child: Text(
+                                            "replyed message sender",
+                                            overflow: TextOverflow.ellipsis,
+                                            style: Styles.mediumText(
+                                                color: AppColors.PRIMARY_COLOR,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ),
+                                        ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            maxWidth: width * 0.55,
+                                          ),
+                                          child: Text(
+                                            "This is the replyed message",
+                                            overflow: TextOverflow.ellipsis,
+                                            style: Styles.mediumText(
+                                              color: AppColors.DARK_GRAY_COLOR,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                        : const SizedBox(),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.all(0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: messageEntity.isReply!
+                              ? const Radius.circular(0)
+                              : const Radius.circular(12),
+                          topRight: messageEntity.isReply!
+                              ? const Radius.circular(0)
+                              : const Radius.circular(12),
+                          bottomLeft: isArabic
+                              ? const Radius.circular(0)
+                              : const Radius.circular(12),
+                          bottomRight: isArabic
+                              ? const Radius.circular(12)
+                              : const Radius.circular(0),
+                        ),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 8,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Label(
-                      text: '${messageEntity.formattedCreatedAt}',
-                      style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            child: ReadMoreLabel(
+                              trimLines: 5,
+                              text: messageEntity.text!,
+                              style: Styles.mediumText(
+                                color: AppColors.PRIMARY_COLOR,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Label(
+                            text: '${messageEntity.formattedCreatedAt}',
+                            style: Styles.smallText(
+                                color: AppColors.PRIMARY_COLOR),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
