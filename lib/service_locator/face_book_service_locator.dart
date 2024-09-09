@@ -29,6 +29,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/follow_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/friend_request_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_feed_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_global_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comment_replies_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_usecase.dart';
@@ -38,11 +39,13 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/remove_friend_request_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/remove_suggest_user_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/search_users_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/send_greet_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/share_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/un_follow_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/user_profile_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/view_profile_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:get_it/get_it.dart';
 
@@ -136,11 +139,19 @@ class FaceBookServiceLocator {
       serviceLocator(),
     ));
 
+    serviceLocator.registerLazySingleton<SearchUsersUsecase>(() => SearchUsersUsecase(
+      serviceLocator(),
+    ));
+
     serviceLocator.registerLazySingleton<DeleteCommentUseCase>(() => DeleteCommentUseCase(
       serviceLocator(),
     ));
 
     serviceLocator.registerLazySingleton<UserProfileUseCase>(() => UserProfileUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator.registerLazySingleton<ViewProfileUseCase>(() => ViewProfileUseCase(
       serviceLocator(),
     ));
 
@@ -157,6 +168,10 @@ class FaceBookServiceLocator {
     ));
 
     serviceLocator.registerLazySingleton<EditCommentUseCase>(() => EditCommentUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator.registerLazySingleton<GetGlobalFeedUseCase>(() => GetGlobalFeedUseCase(
       serviceLocator(),
     ));
 
@@ -194,6 +209,9 @@ class FaceBookServiceLocator {
     ));
 
     serviceLocator.registerFactory<SocialPostsCubit>(() => SocialPostsCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),

@@ -43,7 +43,7 @@
   "price": "Price",
   "youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval": "You have submitted your registration successfully, waiting for administration approval",
   "photoForMeal": "Photo For Meal",
-  "mneu": "Menu",
+  "menu": "Menu",
   "submit": "Submit",
   "needToLogin": "Need To Login",
   "completeAllFields": "Complete All Fields",
@@ -175,7 +175,6 @@
   "clearNotification": "Are you sure you want to clear all notifications?",
   "clearNoti": "Are you sure you want to clear notifications?",
   "ok": "Ok",
-  "cancel": "Cancel",
   "winners": "Winners",
   "competition": "Competitions",
   "count": "Count: ",
@@ -224,5 +223,10 @@
   "requestWithdraw": "Request Withdraw",
   "requestTransaction": "request for personal transaction",
   "years": "Years",
-  "transfer": "Transfer"
+  "transfer": "Transfer",
+  "cancel": "Cancel",
+  "save": "Save",
+  "suscessfullySaved": "Successfully Saved",
+  "anonymous": "Anonymous",
+  "noData": "No Data"
 }

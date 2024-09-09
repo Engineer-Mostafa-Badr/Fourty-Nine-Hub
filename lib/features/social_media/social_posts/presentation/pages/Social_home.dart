@@ -5,7 +5,8 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_facebook_body.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_global_facebook_body.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
@@ -25,12 +26,6 @@ class SocialHomeView extends StatefulWidget {
 
 class _SocialHomeViewState extends State<SocialHomeView>
     with SingleTickerProviderStateMixin {
-
-  @override
-  void dispose() {
-    scrollController.dispose();
-    super.dispose();
-  }
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
@@ -55,6 +50,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
     });
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -104,37 +100,29 @@ class _SocialHomeViewState extends State<SocialHomeView>
                     body: FacebookBody(
                       scrollController: scrollController,
                     ))
-                : Center(
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    child: GestureDetector(
-                      onTap: () => context.push(Routes.LOGIN),
-                      child: Container(
-                        padding: const EdgeInsets.all(12),
-                        width: 300,
-                        height: 300,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Theme.of(context).primaryColor,
-                            width: 4, // Width of the border
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Please Login, Register to enjoy the app',
-                            style: Styles.headerText(
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    )
-                    ,
+                : NestedAppbar(
+                scrollController: ScrollController(),
+                appBars: [
+                  SliverAppBar(
+                    backgroundColor:
+                    Theme.of(context).scaffoldBackgroundColor,
+                    automaticallyImplyLeading: false,
+                    floating: true,
+                    // pinned: true,
+                    flexibleSpace: const CreatePostBanner(),
                   ),
-                );
+                  SliverAppBar(
+                    backgroundColor:
+                    Theme.of(context).scaffoldBackgroundColor,
+                    automaticallyImplyLeading: false,
+                    // floating: true,
+                    pinned: true,
+                    flexibleSpace: _buildTabBar(),
+                  )
+                ],
+                body: FacebookGlobalBody(
+                  scrollController: scrollController,
+                ));
           })),
     );
   }
@@ -150,19 +138,19 @@ class _SocialHomeViewState extends State<SocialHomeView>
             (i) => GestureDetector(
               onTap: () {
                 if (i == 1) {
-                  context.push(Routes.OTHERSACCOUNT, extra: user?.id);
+                  context.read<UserCubit>().isLoggedIn?context.push(Routes.OTHERSACCOUNT, extra: user?.id):context.push(Routes.LOGIN);
                 }
               },
               child: Container(
                   decoration: i == 0
                       ? const BoxDecoration(
                           border: Border(
-                              bottom: BorderSide(color: Colors.blue, width: 2)))
+                              bottom: BorderSide(color: AppColors.PRIMARY_COLOR, width: 2)))
                       : null,
                   child: Icon(
                     i == 0 ? Icons.home : Icons.person,
                     color:
-                        i == 0 ? Colors.blue : Theme.of(context).primaryColor,
+                        i == 0 ? AppColors.PRIMARY_COLOR : Colors.grey,
                   )),
             ),
           ),

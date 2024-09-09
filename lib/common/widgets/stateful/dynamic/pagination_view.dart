@@ -74,11 +74,8 @@ class _PaginationViewState<T> extends State<PaginationView<T>> {
     if(_isLoading){
       return widget.loadingWidget ?? const Center(child: CircularProgressIndicator.adaptive());
     }else if(_isEmpty){
-<<<<<<< HEAD:lib/common/widgets/stateful/dynamic/list_view_pagination.dart
       return widget.emptyWidget ??  const Center(child: Text('No Data'),);
-=======
 return widget.emptyWidget ??  Center(child: Text(LocaleKeys.noData.tr()),);
->>>>>>> origin/Merg:lib/common/widgets/stateful/dynamic/pagination_view.dart
     }else{
       return widget.build(_scrollController, _data);
     }

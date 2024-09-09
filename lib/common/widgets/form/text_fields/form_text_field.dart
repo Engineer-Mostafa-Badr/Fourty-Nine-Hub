@@ -87,7 +87,8 @@ class _FormTextFieldState extends State<FormTextField> {
                   ? (widget.height ?? 100.zH) * 1.5.zH
                   : widget.height ?? 100.zH,
           child: TextFormField(
-            style: widget.textStyle ?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
+            style: widget.textStyle ??
+                Styles.mediumText(color: AppColors.QUANTITY_COLOR),
             textAlignVertical: widget.textAlignVertical,
             maxLines: widget.maxLines ?? 1,
             maxLength: widget.maxLength,
@@ -102,11 +103,13 @@ class _FormTextFieldState extends State<FormTextField> {
                   final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
 
                   setState(() {});
-                  if ((value == null || value.isEmpty) && (widget.required ?? true)) {
+                  if ((value == null || value.isEmpty) &&
+                      (widget.required ?? true)) {
                     return LocaleKeys.required.localize;
                   } else if (widget.extraValidation ?? false) {
                     return widget.extraValidationMessage ?? '';
-                  } else if (!emailRegExp.hasMatch(value!.trim()) && (widget.isEmail ?? false)) {
+                  } else if (!emailRegExp.hasMatch(value!.trim()) &&
+                      (widget.isEmail ?? false)) {
                     return LocaleKeys.emailFormat.localize;
                   } else {
                     validate = false;
@@ -132,8 +135,10 @@ class _FormTextFieldState extends State<FormTextField> {
               filled: true,
               fillColor: widget.fillColor ?? Colors.transparent,
               labelText: widget.label,
-              hintStyle: widget.style ?? TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
-              labelStyle: widget.style ?? TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
+              hintStyle: widget.style ??
+                  TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
+              labelStyle: widget.style ??
+                  TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
               prefixIcon: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.zW),
                 child: widget.prefix,
@@ -145,7 +150,8 @@ class _FormTextFieldState extends State<FormTextField> {
                       borderSide: const BorderSide(
                         color: AppColors.LIGHT_GRAY_COLOR,
                       ),
-                      borderRadius: widget.borderRadius ?? BorderRadius.circular(10),
+                      borderRadius:
+                          widget.borderRadius ?? BorderRadius.circular(10),
                     ),
               focusedBorder: widget.noBorder
                   ? InputBorder.none
@@ -153,7 +159,8 @@ class _FormTextFieldState extends State<FormTextField> {
                       borderSide: const BorderSide(
                         color: AppColors.PRIMARY_COLOR,
                       ),
-                      borderRadius: widget.borderRadius ?? BorderRadius.circular(10),
+                      borderRadius:
+                          widget.borderRadius ?? BorderRadius.circular(10),
                     ),
               errorBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
@@ -167,7 +174,8 @@ class _FormTextFieldState extends State<FormTextField> {
                       borderSide: const BorderSide(
                         color: Colors.red,
                       ),
-                      borderRadius: widget.borderRadius ?? BorderRadius.circular(10),
+                      borderRadius:
+                          widget.borderRadius ?? BorderRadius.circular(10),
                     ),
             ),
           ),

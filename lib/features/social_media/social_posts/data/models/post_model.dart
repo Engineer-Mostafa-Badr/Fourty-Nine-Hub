@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/features/social_media/create_post/data/models/activity_model.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/models/feeling_model.dart';
+import 'package:fourtyninehub/features/social_media/instagram/data/models/instagram_post_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/location_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/main_post_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
@@ -35,6 +36,7 @@ class PostModel extends PostEntity {
       super.feeling,
       super.backgroundColor,
       super.comments,
+      super.firstComment,
       super.love,
       super.isReact,
       super.shares,
@@ -108,8 +110,14 @@ class PostModel extends PostEntity {
             : null,
         shares: json['shares'] != null ? List<String>.from(json['shares']) : [],
         commentsCount: json['commentsCount'] ?? 0,
-        comments:
-            json['comments'] != null ? List<String>.from(json['comments']) : [],
+        comments: json['comments'] == null
+            ? null
+            : json['comments'] is List<String>
+            ? json['comments'] as List<String>
+            : (json['comments'] as List).map((e) => e is String
+            ? e
+            : InstagramPostModel.fromJson(e)).toList(),
+        firstComment:json['firstComment']!=null?InstagramPostModel.fromJson(json['firstComment']):null,
         love: json['love'] == null
             ? null
             : (json['love'] as List)

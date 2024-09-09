@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/club_house/data/model/club_voice_room_model.dart';
 import 'package:fourtyninehub/features/social_media/club_house/data/model/create_voice_room_model.dart';
@@ -7,8 +8,8 @@ import 'package:fourtyninehub/features/social_media/club_house/domain/entities/c
 import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/add_club_voice_use_case.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/join_club_voice_use_case.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/search_club_voice_use_case.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 
-import '../../../../../core/api/api_consumer.dart';
 
 abstract class ClubVoiceDataSource {
   Future<Either<Failure, ZegoResponseModel>> addRoom(AddRoomParams params);
@@ -51,7 +52,9 @@ class ClubVoiceDataSourceImpl extends ClubVoiceDataSource {
       // print('list is  ${rooms.toString()}');
       return result.fold((l) => Left(l), (r) => Right(_returnListOfRooms(r)));
     } catch (e) {
-      return const Left(UnknownFailure());
+      CliLogger.error('failure  $e');
+
+      return Left(UnknownFailure(e.toString()));
     }
   }
 
@@ -78,7 +81,7 @@ class ClubVoiceDataSourceImpl extends ClubVoiceDataSource {
   }
 
   List<ClubVoiceRoomModel> _returnListOfRooms(Map<String, dynamic> r) {
-    var list = List.from(r['data']['docs'] as List)
+    var list = List.from(r['data'] as List)
         .map((e) => ClubVoiceRoomModel.fromJson(e))
         .toList();
     return list;

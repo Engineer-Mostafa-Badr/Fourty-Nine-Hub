@@ -47,27 +47,24 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
           appBar: const BackAppBar(),
           bottomSheet: SizedBox(
             child: DefaultButton(
-              margin:  EdgeInsets.all(30.zW),
+              margin: EdgeInsets.all(30.zW),
               width: double.infinity,
-
               label: LocaleKeys.verify.localize,
               labelStyle: TextStyle(
-                fontSize: 35.zW,
-                color: AppColors.AUTH_CONTAINER_COLOR
-              ),
+                  fontSize: 35.zW, color: AppColors.AUTH_CONTAINER_COLOR),
               onPressed: () => cubit.verifyOtp(email),
             ),
           ),
           body: Column(
             children: [
-               Label(
+              Label(
                 text: LocaleKeys.emailOtp.localize,
-              ), Label(
+              ),
+              Label(
                 text: LocaleKeys.verification.localize,
               ),
               Label(
-                text:
-                    '${LocaleKeys.checkVerification.localize} ($email)',
+                text: '${LocaleKeys.checkVerification.localize} ($email)',
               ),
               const Sizer(),
               PinCodeTextField(

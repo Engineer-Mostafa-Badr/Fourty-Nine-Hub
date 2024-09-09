@@ -1,8 +1,13 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/change_react.dart';
+import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/react_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
@@ -19,19 +24,23 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_tweet_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/follow_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/friend_request_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_global_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comment_replies_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/hide_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/remove_friend_request_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/remove_suggest_user_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/search_users_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/send_greet_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/share_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/un_follow_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/user_profile_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/view_profile_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../domain/entities/post_entity.dart';
@@ -45,6 +54,7 @@ part 'social_posts_state.dart';
 
 class SocialPostsCubit extends Cubit<SocialPostsState> {
   final GetFeedUseCase _getFeedUseCase;
+  final GetGlobalFeedUseCase _getGlobalFeedUseCase;
   final GetUserPostsUseCase _getUserPostsUseCase;
   final PostReactUseCase _postReactUseCase;
   final GetPostCommentsUseCase _getPostCommentsUseCase;
@@ -66,11 +76,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final FaceAdvertisementUseCase _advertisementUseCase;
   final GetPostUseCase _getPostUseCase;
   final UserProfileUseCase _userProfileUseCase;
+  final ViewProfileUseCase _viewProfileUseCase;
   final RemoveFriedRequestUseCase _removeFriedRequestUseCase;
   final BlocUserUseCase _blocUserUseCase;
   final EditCommentUseCase _editCommentUseCase;
   final AcceptRejectFriendRequestUseCase _acceptRejectFriendRequestUseCase;
   final DeleteFriendUseCase _deleteFriendUseCase;
+  final SearchUsersUsecase _searchUsersUsecase;
 
   SocialPostsCubit(
     this._getFeedUseCase,
@@ -97,7 +109,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._unFollowUserUseCase,
     this._removeFriedRequestUseCase,
     this._blocUserUseCase,
-    this._editCommentUseCase, this._acceptRejectFriendRequestUseCase, this._deleteFriendUseCase,
+    this._editCommentUseCase, this._acceptRejectFriendRequestUseCase, this._deleteFriendUseCase, this._getGlobalFeedUseCase, this._viewProfileUseCase, this._searchUsersUsecase,
   ) : super(const SocialPostsState());
 
   void loadData() async {
@@ -106,6 +118,26 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       print("initStatePageKey : $pageKey");
       getFeed(pageKey);
     });
+    await getSuggestedFriends(1);
+    suggestUserPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getSuggestedFriends(pageKey);
+    });
+  }
+
+  void loadGlobalData() async {
+    await getGlobalFeed(1);
+    globalFeedPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getGlobalFeed(pageKey);
+    });
+  }
+
+  void refreshGlobalPosts(){
+    globalFeedPagingController.refresh();
+  }
+
+  loadInstaSuggestedPeople()async{
     await getSuggestedFriends(1);
     suggestUserPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
@@ -166,6 +198,41 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     userPostsPagingController.refresh();
   }
 
+  void loadSearchUsers(String search) async {
+    searchUsers(1,search);
+    usersPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      searchUsers(pageKey,search);
+    });
+  }
+
+  void refreshUsers() {
+    usersPagingController.refresh();
+  }
+
+  final PagingController<int, UserFriendEntity> usersPagingController =
+  PagingController(firstPageKey: 1);
+  Future<void> searchUsers(int page,String search) async {
+    final response = await _searchUsersUsecase.call(TwitterFeedParams(page: page, limit: pageSize,search: search));
+    response.fold(
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (data) {
+          final isLastPage = data.length < pageSize;
+          if (page == 1) {
+            print("page == 1 $page");
+            usersPagingController.itemList = [];
+          }
+          if (isLastPage) {
+            print("isLastPage = $isLastPage");
+            usersPagingController.appendLastPage(data);
+          } else {
+            print("isNotLastPage = $isLastPage");
+            final nextPageKey = page + 1;
+            usersPagingController.appendPage(data, nextPageKey);
+          }
+          emit(state.copyWith(status: StateStatus.success));
+        });
+  }
 // get feed posts
   Future<void> getFeed(int page) async {
     final response =
@@ -183,7 +250,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       totalPosts.addAll(data);
       totalPosts.addAll(tweets);
       totalPosts.addAll(advertisements);
-      final isLastPage = totalPosts.length < (4);
+      final isLastPage = totalPosts.length < (3);
       if (page == 1) {
         print("page == 1 $page");
         feedPagingController.itemList = [];
@@ -198,6 +265,30 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       }
       emit(state.copyWith(posts: totalPosts, status: StateStatus.initial));
     });
+  }
+
+  // get global feed posts
+  getGlobalFeed(int page) async {
+    final response =
+    await _getGlobalFeedUseCase(TwitterFeedParams(limit: 10, page: page));
+    response.fold(
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (data) async {
+          final isLastPage = data.length < 10;
+          if (page == 1) {
+            print("page == 1 $page");
+            globalFeedPagingController.itemList = [];
+          }
+          if (isLastPage) {
+            print("isLastPage = $isLastPage");
+            globalFeedPagingController.appendLastPage(data);
+          } else {
+            print("isNotLastPage = $isLastPage");
+            final nextPageKey = page + 1;
+            globalFeedPagingController.appendPage(data, nextPageKey);
+          }
+          emit(state.copyWith( status: StateStatus.success));
+        });
   }
 
 // get feed posts
@@ -249,6 +340,9 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       PagingController(firstPageKey: 1);
   final PagingController<int, PostEntity> feedPagingController =
       PagingController(firstPageKey: 1);
+
+  final PagingController<int, PostEntity> globalFeedPagingController =
+      PagingController(firstPageKey: 1);
   final PagingController<int, PostEntity> userPostsPagingController =
       PagingController(firstPageKey: 1);
   // get suggested friends
@@ -277,6 +371,64 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         print("suggestLength${state.suggestedFriends?.length}");
       });
     }
+  }
+
+
+  uploadPhoto({bool isGallery = true}) async {
+    final UploadFile upload = UploadFile();
+    print('=======>data Hiii');
+    UploadFileEntity? image;
+    await upload.uploadImage(
+        isGallery: isGallery,
+        subCategoryId: '66a3583454e6e337915514db',
+        onUploaded: (UploadFileEntity data) async {
+          image=data;
+          final response = await serviceLocator<ApiConsumer>().put(
+            '/users/profile-picture',
+            data: {'profilePictureId': data.mediaId},
+          );
+          return response.fold(
+                (failure) {
+              print('=======>data Fal}');
+
+              return Left(failure);
+
+            },
+                (data) {
+                  emit(state.copyWith(newImage: image));
+                  UserCubit.to.getUser();
+                  print("newImage====>${state.newImage?.mediaId}");
+              return const Right(true);
+            },
+          );
+        });
+  }
+  uploadCoverPhoto({bool isGallery = true}) async {
+    final UploadFile upload = UploadFile();
+    print('=======>data Hiii');
+    UploadFileEntity? cover;
+
+    await upload.uploadImage(
+        isGallery: isGallery,
+        subCategoryId: '66a3583454e6e337915514db',
+        onUploaded: (UploadFileEntity data) async {
+          final response = await serviceLocator<ApiConsumer>().put(
+            '/users/cover-picture',
+            data: {'coverPictureId': data.mediaId},
+          );
+          return response.fold(
+                (failure) {
+              print('=======>data Fal}');
+              return Left(failure);
+            },
+                (data) {
+                  emit(state.copyWith(newCover: cover));
+                  print("newCover====>${state.newCover?.mediaId}");
+
+              return const Right(true);
+            },
+          );
+        });
   }
 
   // get feed posts
@@ -310,8 +462,29 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     final response = await _userProfileUseCase(id);
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-        (data) => emit(
-            state.copyWith(profileData: data, status: StateStatus.success)));
+        (data) {
+          if(UserCubit.to.state.data!=null){
+            viewProfile(id:id);
+          }
+          loadInstaSuggestedPeople();
+          emit(
+            state.copyWith(profileData: data, status: StateStatus.success));
+        });
+  }
+
+  // get user profile
+  Future<bool> viewProfile({required String id}) async {
+    emit(state.copyWith(status: StateStatus.loading));
+    final response = await _viewProfileUseCase(id);
+    bool result = false;
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) {
+          result =data;
+          emit(
+            state.copyWith(status: StateStatus.success));
+        });
+    return result;
   }
 
   void changeUserPage(int page) {

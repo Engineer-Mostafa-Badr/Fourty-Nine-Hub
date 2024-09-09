@@ -9,6 +9,8 @@ class SocialPostsState {
   final List<TwitterPostEntity>? myTweets;
   final List<SuggestUserEntity>? suggestedFriends;
   final bool? friendRequest;
+  final UploadFileEntity? newImage;
+  final UploadFileEntity? newCover;
   final CommentEntity? newComment;
   final UserProfileEntity? profileData;
   final List<CommentEntity>? postComments;
@@ -22,6 +24,8 @@ class SocialPostsState {
     this.posts,
     this.myPosts,
     this.myTweets,
+    this.newImage,
+    this.newCover,
     this.suggestedFriends,
     this.newComment,
     this.postComments,
@@ -44,6 +48,8 @@ class SocialPostsState {
     int? profilePage,
     int? advertisementsPage,
     CommentEntity? newComment,
+    UploadFileEntity? newImage,
+    UploadFileEntity? newCover,
     PostEntity? postDetails,
     UserProfileEntity? profileData,
   }) {
@@ -62,6 +68,8 @@ class SocialPostsState {
       postDetails: postDetails ?? this.postDetails,
       profileData: profileData ?? this.profileData,
       profilePage: profilePage ?? this.profilePage,
+      newImage: newImage ?? this.newImage,
+      newCover: newCover ?? this.newCover,
     );
   }
 }

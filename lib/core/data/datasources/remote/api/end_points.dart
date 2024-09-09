@@ -9,8 +9,9 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 
-import '../../features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
-import '../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
+import '../../../../../features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
+import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
+
 
 class EndPoints {
   static const pageSize = 20;
@@ -622,14 +623,11 @@ class EndPoints {
   }
 
   static String buttonAvailable = '/global/click';
-<<<<<<< HEAD:lib/core/api/end_points.dart
 
   static String getSubscriptionPlans(String subcategoryId) =>
       '/subscription/plans/$subcategoryId';
 
-=======
   static String getSubscriptionPlans(String subcategoryId) => '/subscription/plans/$subcategoryId';
->>>>>>> origin/Merg:lib/core/data/datasources/remote/api/end_points.dart
   static String checkUserSubscription(String id) {
     return '/subscription/subcategory/$id';
   }

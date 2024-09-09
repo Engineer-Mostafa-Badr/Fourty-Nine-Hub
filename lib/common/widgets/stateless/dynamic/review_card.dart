@@ -22,6 +22,8 @@ class ReviewCard extends StatelessWidget {
         Row(
           children: [
             ProfileImage(
+              userId: '',
+              
               accountId: 0,
               imageURL: review.image ?? UIConst.profilePlaceHolder,
             ),

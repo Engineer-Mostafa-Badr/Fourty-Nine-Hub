@@ -72,6 +72,8 @@ class _CustomPhoneTextFormFieldState extends State<CustomPhoneTextFormField> {
                   color: AppColors.QUANTITY_COLOR,
                 ),
                 isExpanded: true,
+                dropdownColor: Colors.blue.withOpacity(0.5),
+
                 onChanged: (String? newValue) {
                   setState(() {
                     _selectedCountryCode = newValue!;
@@ -92,6 +94,7 @@ class _CustomPhoneTextFormFieldState extends State<CustomPhoneTextFormField> {
               ),
             ),
           ),
+
           const SizedBox(width: 8.0),
           // Phone Number Text Field
           Expanded(

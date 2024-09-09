@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
@@ -14,6 +15,18 @@ class InstagramRepoImpl implements InstagramRepo {
   Future<Either<Failure, List<PostEntity>>> getFeed(
       {required TwitterFeedParams params}) {
     return _remoteDataSource.getFeed(params: params);
+  }
+
+ @override
+  Future<Either<Failure, List<PostEntity>>> getUserMedia(
+      {required InstagramUserMediaParams params}) {
+    return _remoteDataSource.getUserMedia(params: params);
+  }
+
+ @override
+  Future<Either<Failure, List<PostEntity>>> getGlobalFeed(
+      {required TwitterFeedParams params}) {
+    return _remoteDataSource.getGlobalFeed(params: params);
   }
 
   @override

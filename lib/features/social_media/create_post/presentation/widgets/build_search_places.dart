@@ -10,7 +10,8 @@ import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class BuildSearchPlaces extends StatefulWidget {
-  const BuildSearchPlaces({super.key, required this.onSelectPlace, required this.controller});
+  const BuildSearchPlaces(
+      {super.key, required this.onSelectPlace, required this.controller});
   final Function(PlaceEntity) onSelectPlace;
   final CreatePostCubit controller;
 
@@ -30,7 +31,9 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
             SliverToBoxAdapter(
               child: Row(
                 children: [
-                  InkWell(onTap: () => context.pop(), child: const Icon(Icons.arrow_back)),
+                  InkWell(
+                      onTap: () => context.pop(),
+                      child: const Icon(Icons.arrow_back)),
                   const SizedBox(
                     width: 10,
                   ),
@@ -61,7 +64,8 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
                   itemBuilder: (context, item, index) {
                     return GestureDetector(
                       onTap: () {
-                        widget.onSelectPlace(widget.controller.placesPagingController.itemList![index]);
+                        widget.onSelectPlace(widget.controller
+                            .placesPagingController.itemList![index]);
                       },
                       child: Container(
                         padding: const EdgeInsets.all(15),
@@ -76,7 +80,9 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
                             ),
                             Expanded(
                               child: Label(
-                                text: widget.controller.placesPagingController.itemList?[index].name ?? '',
+                                text: widget.controller.placesPagingController
+                                        .itemList?[index].name ??
+                                    '',
                                 style: Styles.headerText(),
                                 maxLines: 1,
                               ),
@@ -87,8 +93,10 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
                     );
                   },
                   noMoreItemsIndicatorBuilder: (context) => Container(),
-                  firstPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator(),
-                  newPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator(),
+                  firstPageProgressIndicatorBuilder: (context) =>
+                      const CupertinoActivityIndicator(),
+                  newPageProgressIndicatorBuilder: (context) =>
+                      const CupertinoActivityIndicator(),
                 ),
               ),
           ],

@@ -1,13 +1,10 @@
-import 'dart:convert';
-
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 // ignore: unused_import
 import 'package:fourtyninehub/core/data/models/meeting_error_message_model.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/zoom/data/model/room_response_error_model.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/zoom/data/model/schedule_meeting_model.dart';
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
@@ -16,8 +13,8 @@ import 'package:fourtyninehub/routes/pages.dart';
 import '../../../../core/error/failure.dart';
 
 abstract class MeetingDataSource {
-  Future<Either<Failure, void>> addRoom(MeetingParams params);
-  Future<Response?> joinRoom(MeetingParams params);
+  Future<Either<Failure, bool>> addRoom(MeetingParams params);
+  Future<Either<Failure, bool>> joinRoom(MeetingParams params);
   Future<Either<Failure, void>> endRoom(MeetingParams params);
   Future<Either<Failure, List<ScheduledMeeting>>> getScheduledMeetings(
       MeetingParams params);
@@ -25,55 +22,29 @@ abstract class MeetingDataSource {
 
 class MeetingDataSourceImpl extends MeetingDataSource {
   final ApiConsumer apiConsumer;
-  final Dio _dio;
 
-  MeetingDataSourceImpl(this.apiConsumer, this._dio);
+  MeetingDataSourceImpl(this.apiConsumer);
   @override
-  Future<Either<Failure, void>> addRoom(MeetingParams params) async {
+  Future<Either<Failure, bool>> addRoom(MeetingParams params) async {
     final result =
         await apiConsumer.post(EndPoints.createMeeting, data: params.toJson());
+    // if(params.title!=null){
+    //   getScheduledMeetings();
+    // }
     return result.fold((l) {
-      // throw MeetingErrorMessageModel.fromJson(l);
       return Left(l);
     }, (r) {
-      return Right(r);
+      return Right(r['status']);
     });
   }
 
   @override
   Future<Either<Failure, void>> endRoom(MeetingParams params) async {
+    // print('deleted');
     final result =
         await apiConsumer.put(EndPoints.endMeeting(params.meetingId));
     return result.fold((l) => Left(l), (r) => Right(r));
-  }
-
-  @override
-  Future<Response?> joinRoom(MeetingParams params) async {
-    final url = EndPoints.joinMeeting(params.meetingId);
-
-    try {
-      final response = await _dio.put(url);
-
-      if (response.statusCode == 200) {
-        print('stata is ok');
-        return response;
-        // Handle success
-      } else {
-        // Handle other status codes
-        return response;
-      }
-    } on DioException catch (e) {
-      // Handle network error
-      if (e.response != null && e.response?.statusCode == 404) {
-        return e.response;
-      } else if (e.response != null) {
-        return e.response;
-      } else {
-        // Handle cases where no response was returned (e.g., network error)
-
-        return null;
-      }
-    }
+    // throw Exception('UnImplemented Finish Func');
   }
 
   @override
@@ -91,4 +62,23 @@ class MeetingDataSourceImpl extends MeetingDataSource {
       return Right(rooms);
     });
   }
+
+  @override
+  Future<Either<Failure, bool>> joinRoom(MeetingParams params) async {
+    final result = await apiConsumer
+        .put(EndPoints.joinMeeting(params.meetingId), headers: {
+      'lang':
+          AppPages.router.configuration.navigatorKey.currentContext!.isArabic
+              ? 'ar'
+              : 'en',
+    });
+    return result.fold((l) {
+      return Left(l);
+    }, (r) {
+      return Right(_idEquality(r));
+    });
+  }
+
+  bool _idEquality(Map<String, dynamic> r) =>
+      r['data']['userId'] == UserCubit.to.state.data!.id;
 }

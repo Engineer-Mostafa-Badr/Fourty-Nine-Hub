@@ -61,7 +61,7 @@ class CodegenLoader extends AssetLoader{
   "creatingRestaurant": "جاري انشاء المطعم...",
   "youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove": "يمكنك الاستمتاع بخدمة عملائك باستخدام مطعمك بالضغط على زر التسجيل بالأعلى.",
   "photoForMeal": "صور للوجبة",
-  "mneu": "القائمة",
+  "menu": "القائمة",
   "submit": "ارسال",
   "needToLogin": "يجب عليك تسجيل الدخول",
   "completeAllFields": "يرجى تحديد جميع الحقول",
@@ -76,8 +76,7 @@ class CodegenLoader extends AssetLoader{
   "lang": "E",
   "search": "بحث",
   "ad": "اعلان",
-  "Ads": "اعلانات",
-  "ads": "اعلان",
+  "ads": "اعلانات",
   "wallet": "محفظه",
   "gift": "هدايا",
   "balance": "رصيد",
@@ -240,7 +239,12 @@ class CodegenLoader extends AssetLoader{
   "requestWithdraw": "طلب سحب",
   "requestTransaction": "طلب للمعاملات الشخصية",
   "years": "سنوات",
-  "transfer": "تحويل"
+  "transfer": "تحويل",
+  "cancel": "الغاء",
+  "save": "حفظ",
+  "suscessfullySaved": "تم حفظ البيانات بنجاح",
+  "anonymous": "مجهول",
+  "noData": "لا يوجد بيانات"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -287,7 +291,7 @@ static const Map<String,dynamic> en = {
   "price": "Price",
   "youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval": "You have submitted your registration successfully, waiting for administration approval",
   "photoForMeal": "Photo For Meal",
-  "mneu": "Menu",
+  "menu": "Menu",
   "submit": "Submit",
   "needToLogin": "Need To Login",
   "completeAllFields": "Complete All Fields",
@@ -468,7 +472,12 @@ static const Map<String,dynamic> en = {
   "requestWithdraw": "Request Withdraw",
   "requestTransaction": "request for personal transaction",
   "years": "Years",
-  "transfer": "Transfer"
+  "transfer": "Transfer",
+  "cancel": "Cancel",
+  "save": "Save",
+  "suscessfullySaved": "Successfully Saved",
+  "anonymous": "Anonymous",
+  "noData": "No Data"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
@@ -50,10 +51,12 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                 ? const ProfileImage(
                     accountId: 0,
                     withBorder: false,
+                    userId: '',
                   )
                 : ProfileImage(
                     accountId: 0,
                     imageURL: widget.reply.user.image,
+                    userId: '',
                   ),
             const Sizer(),
             Expanded(
@@ -69,43 +72,22 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                     style: Styles.mediumText(color: widget.textColor)),
               ],
             )),
-            IconButton(
-                onPressed: () {
-                  bottomSheet(
-                      context: context,
-                      widget: ReportView(
-                        id: widget.reply.id,
-                        categoryId: '66a3583454e6e337915514db',
-                      ));
-                },
-                icon: Icon(
-                  Icons.more_vert,
-                  color: widget.textColor,
-                )),
-            if (user?.id == widget.reply.user.id) ...[
-              // const Sizer(),
-              GestureDetector(
-                  onTap: () {
-                    widget.reply.edit = !widget.reply.edit!;
-                    editTextController.text = widget.reply.content ?? '';
-                    setState(() {});
-                  },
-                  child: Icon(
-                    Icons.edit,
-                    color: widget.textColor,
-                    size: 20,
-                  )),
-              const Sizer()
-            ],
             GestureDetector(
-                onTap: () {
-                  widget.onDeleteReply(widget.reply.id);
-                },
-                child: Icon(
-                  Icons.close,
-                  color: widget.textColor,
-                  size: 20,
-                ))
+              onTap: () {
+                bottomSheet(
+                  context: context,
+                  widget: _buildPostOptions(
+                    isMyComment: widget.reply.user.id == user?.id,
+                    post: widget.reply,
+                  ),
+                );
+              },
+              child: Icon(
+                Icons.more_horiz_outlined,
+                color: widget.textColor,
+                size: 20,
+              ),
+            ),
           ],
         ),
         const Sizer(),
@@ -118,12 +100,20 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
           Row(
             children: [
               Expanded(
-                  child: FormTextField(
-                      hint: 'Type your reply ....',
-                      action: (v) {
-                        setState(() {});
-                      },
-                      controller: editTextController)),
+                  child: TextFormField(
+                maxLines: null,
+                controller: editTextController,
+                onChanged: (v) {
+                  setState(() {});
+                },
+                style: Styles.headerText(fontSize: 26),
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.all(5),
+                  hintText: 'Type your reply ....',
+                  hintStyle: Styles.mediumText(),
+                ),
+              )),
               const Sizer(),
               if (editTextController.text.isNotEmpty)
                 IconAppButton(
@@ -142,8 +132,9 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                     })
             ],
           ),
+        const Sizer(height: 5,),
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             InkWell(
               onTap: () {
@@ -172,7 +163,77 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
             ),
           ],
         ),
+        const Sizer(height: 5,),
       ],
+    );
+  }
+
+  Widget _buildPostOptions(
+      {required bool isMyComment, required TwitterCommentReplyEntity post}) {
+    return SizedBox(
+      height: isMyComment ? 150 : 80,
+      child: Column(
+        children: [
+          if (!isMyComment)
+            listTile(
+                icon: Icons.report,
+                iconColor: Colors.red,
+                title: 'Report post',
+                subTitle: 'Your well reports this post.',
+                onTap: () async {
+                  Future.delayed(const Duration(milliseconds: 200), () {
+                    bottomSheet(
+                        context: context,
+                        widget: ReportView(
+                          id: post.id,
+                          categoryId: '66a3583454e6e337915514db',
+                        ));
+                  });
+                }),
+          if (isMyComment)
+            listTile(
+                icon: Icons.delete,
+                title: 'Delete Post',
+                subTitle:
+                'Your comment will be deleted, and you cannot get it again',
+                onTap: () {
+                  widget.onDeleteReply(widget.reply.id);
+                }),
+          if (isMyComment)
+            listTile(
+                icon: Icons.visibility_off,
+                title: 'Edit Comment',
+                subTitle: 'Your Will Edit Your Comment.',
+                onTap: () {
+                  widget.reply.edit = !widget.reply.edit!;
+                  editTextController.text = widget.reply.content??'';
+                  setState(() {});
+                }),
+        ],
+      ),
+    );
+  }
+
+  Widget listTile(
+      {required IconData icon,
+        Color? iconColor,
+        required String title,
+        required String subTitle,
+        required Function onTap}) {
+    return ListTile(
+      title: Label(text: title),
+      onTap: () {
+        onTap();
+        context.pop();
+      },
+      leading: Icon(
+        icon,
+        color: iconColor ?? Colors.black,
+      ),
+      subtitle: Label(
+        text: subTitle,
+        style: Styles.mediumText(color: Colors.grey),
+      ),
     );
   }
 }

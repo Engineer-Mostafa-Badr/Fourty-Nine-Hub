@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -90,7 +89,7 @@ class _UserPostCardState extends State<UserPostCard> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ?? const UnknownFailure(),
+            state.failure ??  UnknownFailure(''),
             context,
           ),
         );
@@ -234,7 +233,12 @@ class _UserPostCardState extends State<UserPostCard> {
                     value: myPost.angryCount!, image: Assets.angry),
               const Spacer(),
               InkWell(
-                onTap: () => widget.showPostComments(myPost.id),
+                onTap: () {
+                  if(context.read<UserCubit>().isLoggedIn){
+                  widget.showPostComments(myPost.id);}else{
+                    context.push(Routes.LOGIN);
+                  }
+                },
                 child: Row(
                   children: [
                     Label(
@@ -261,21 +265,37 @@ class _UserPostCardState extends State<UserPostCard> {
             child: Row(
               children: [
                 Expanded(
-                  child: BuildReactionsButtons(
-                      post: widget.post, from: 'userPosts'),
+                  child: context.read<UserCubit>().isLoggedIn?BuildReactionsButtons(
+                      post: widget.post, from: 'userPosts'):_buildReactionPlaceHolder(
+                      icon: Icons.thumb_up_alt_outlined,
+                      label: 'Like',
+                      onTap: () {
+                        if(context.read<UserCubit>().isLoggedIn) {
+                          return widget.showPostComments(myPost.id);
+                        }else{
+                          context.push(Routes.LOGIN);
+                        }
+                      }),
                 ),
                 if (widget.from == 'posts')
                   Expanded(
                     child: _buildReactionPlaceHolder(
                         icon: FontAwesomeIcons.message,
                         label: 'Comment',
-                        onTap: () => widget.showPostComments(myPost.id)),
+                        onTap: () {
+                          if(context.read<UserCubit>().isLoggedIn) {
+                            return widget.showPostComments(myPost.id);
+                          }else{
+                            context.push(Routes.LOGIN);
+                          }
+                        }),
                   ),
                 Expanded(
                   child: _buildReactionPlaceHolder(
                       icon: FontAwesomeIcons.share,
                       label: 'Share',
                       onTap: () async {
+                        if(context.read<UserCubit>().isLoggedIn){
                         var result = await controller.onShare(
                             postId: myPost.isShared == true
                                 ? myPost.mainPost!.id
@@ -284,7 +304,10 @@ class _UserPostCardState extends State<UserPostCard> {
                           showSuccessMessage(
                               context, 'Post shared successfully');
                         }
-                      }),
+                      }else{
+                          context.push(Routes.LOGIN);
+                        }
+      }),
                 ),
               ],
             ),
@@ -382,15 +405,15 @@ class _UserPostCardState extends State<UserPostCard> {
           children: [
             InkWell(
               onTap: () {
-                if (widget.fromProfile == false) {
+                if (user?.id!=post.user.id) {
                   context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                 }
               },
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                backgroundImage: NetworkImage((post.user.image.isNotEmpty)
-                    ? post.user.image
-                    : UIConst.profilePlaceHolder),
+              child:ImageFromInternet(
+              image: post.user.image ?? UIConst.profilePlaceHolder,
+              height: 40,
+              width: 40,
+              isCircle: true,
               ),
             ),
             const Sizer(),
@@ -400,7 +423,7 @@ class _UserPostCardState extends State<UserPostCard> {
                 children: [
                   InkWell(
                     onTap: () {
-                      if (widget.fromProfile == false) {
+                      if (user?.id!=post.user.id) {
                         context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                       }
                     },
@@ -410,9 +433,8 @@ class _UserPostCardState extends State<UserPostCard> {
                         TextAppButton(
                             label: post.user.firstName,
                             onPressed: () {
-                              if (widget.fromProfile == false) {
-                                context.push(Routes.OTHERSACCOUNT,
-                                    extra: post.user.id);
+                              if (user?.id!=post.user.id) {
+                                context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                               }
                             }),
                         RichText(
@@ -434,7 +456,7 @@ class _UserPostCardState extends State<UserPostCard> {
                 ],
               ),
             ),
-            if (post.user.id == user?.id)
+            if (post.user.id != user?.id&&context.read<UserCubit>().isLoggedIn)
               IconAppButton(
                 onPressed: () {
                   bottomSheet(
@@ -485,19 +507,20 @@ class _UserPostCardState extends State<UserPostCard> {
     required BuildContext context,
     required MainPostEntity post,
   }) {
+    final user = context.read<UserCubit>().state.data;
     return Row(
       children: [
         InkWell(
           onTap: () {
-            if (widget.fromProfile == false) {
+            if (user?.id!=post.user.id) {
               context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
             }
           },
-          child: CircleAvatar(
-            backgroundColor: Colors.white,
-            backgroundImage: NetworkImage((post.user.image.isNotEmpty)
-                ? post.user.image
-                : UIConst.profilePlaceHolder),
+          child: ImageFromInternet(
+          image: post.user.image ?? UIConst.profilePlaceHolder,
+          height: 40,
+          width: 40,
+          isCircle: true,
           ),
         ),
         const Sizer(),
@@ -506,7 +529,7 @@ class _UserPostCardState extends State<UserPostCard> {
           children: [
             InkWell(
               onTap: () {
-                if (widget.fromProfile == false) {
+                if (user?.id!=post.user.id) {
                   context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                 }
               },
@@ -516,9 +539,8 @@ class _UserPostCardState extends State<UserPostCard> {
                   TextAppButton(
                       label: post.user.firstName,
                       onPressed: () {
-                        if (widget.fromProfile == false) {
-                          context.push(Routes.OTHERSACCOUNT,
-                              extra: post.user.id);
+                        if (user?.id!=post.user.id) {
+                          context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                         }
                       }),
                   RichText(
@@ -551,7 +573,7 @@ class _UserPostCardState extends State<UserPostCard> {
             images!.isEmpty
         ? Container(
             width: double.infinity,
-            height: 220,
+            height: 160,
             alignment: Alignment.center,
             margin: const EdgeInsets.symmetric(vertical: 10),
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),

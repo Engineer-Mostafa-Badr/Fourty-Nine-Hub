@@ -4,7 +4,7 @@ class TwitterUserEntity {
   final String id;
   final String firstName;
   final String lastName;
-  final String image;
+  final String? image;
   final String email;
   final bool isDocumented;
   final DateTime createdAt;
@@ -17,7 +17,7 @@ class TwitterUserEntity {
     required this.firstName,
     required this.lastName,
     required this.createdAt,
-    required this.image,
+    this.image,
     required this.email,
     required this.isDocumented,
   });

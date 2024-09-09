@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'dart:io';
 
 part 'camera_picker_state.dart';
 
@@ -12,10 +13,10 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
 
   CameraController? _controller;
   int _selectedCamera = 0;
-  final List<XFile> _mediaList = [];
+  final List<File> _mediaList = [];
   final Duration _maxVideoLength = const Duration(minutes: 2);
   late List<CameraDescription> _cameras;
-  Completer<void>? _recordingCompleter;
+  Completer<void>? _recordingManualCompleter;
 
   Future<void> init() async {
     try {
@@ -69,7 +70,7 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
       CliLogger.info(
           'Picture taken : ${image?.path}\nimage.mimeType: ${image?.mimeType}');
       if (image != null) {
-        _mediaList.add(image);
+        _mediaList.add(File(image.path));
       }
       emit(state.copyWith(
           status: CameraPickerStatus.updateMediaList, mediaList: _mediaList));
@@ -80,22 +81,22 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
 
   Future<void> startVideoRecording() async {
     try {
-      _recordingCompleter = Completer<void>();
+      _recordingManualCompleter = Completer<void>();
       await _controller?.startVideoRecording();
       emit(state.copyWith(status: CameraPickerStatus.startVideo));
       CliLogger.info('Video recording started');
 
       await Future.any([
         Future.delayed(_maxVideoLength),
-        _recordingCompleter!.future,
+        _recordingManualCompleter!.future,
       ]);
 
-      if (!_recordingCompleter!.isCompleted) {
+      if (!(_recordingManualCompleter!.isCompleted)) {
         CliLogger.info('Video recording stopped automatically');
         stopVideoRecording();
       }
 
-      _recordingCompleter = null;
+      _recordingManualCompleter = null;
     } catch (e) {
       CliLogger.error("Error while starting video recording: $e");
     }
@@ -103,17 +104,18 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
 
   Future<void> stopVideoRecording() async {
     try {
-      if (_recordingCompleter != null && !_recordingCompleter!.isCompleted) {
-        _recordingCompleter!
+      if (_recordingManualCompleter != null && !_recordingManualCompleter!.isCompleted) {
+        _recordingManualCompleter!
             .complete(); // Signal that the recording has been stopped
       }
 
-      final XFile? video = await _controller?.stopVideoRecording();
-      CliLogger.info(
-          'Video recording stopped : ${video?.path}\nvideo.mimeType: ${video?.mimeType}');
+      final XFile? tmpVideo = await _controller?.stopVideoRecording();
+
       emit(state.copyWith(status: CameraPickerStatus.endVideo));
 
-      if (video != null) {
+      if (tmpVideo != null) {
+        final File video = await _renameVideoFile(File(tmpVideo.path), '.mp4');
+        CliLogger.info('Video recording stopped : ${video.path}}');
         _mediaList.add(video);
         emit(state.copyWith(
             status: CameraPickerStatus.updateMediaList, mediaList: _mediaList));
@@ -131,8 +133,25 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
     emit(state.copyWith(pickMode: PickMode.video));
   }
 
-  void refreshMediaList(){
-    emit(state.copyWith(status: CameraPickerStatus.updateMediaList, mediaList: _mediaList));
+  void refreshMediaList({List<File>? media}) {
+    emit(state.copyWith(
+        status: CameraPickerStatus.updateMediaList,
+        mediaList: media ?? _mediaList));
+  }
+
+  Future<File> _renameVideoFile(File originalFile, String newExtension) async {
+    final originalPath = originalFile.path;
+
+    // Create a new path with the desired extension
+    final newPath = originalPath.replaceAll('.temp', newExtension);
+
+    // Copy the file to the new path
+    final newFile = await originalFile.copy(newPath);
+
+    // Optionally, delete the old file
+    await originalFile.delete();
+
+    return newFile;
   }
 
   Duration get maxVideoLength => _maxVideoLength;

@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/subscripe/data/models/subscribtion_plans_model.dart';
 import 'package:fourtyninehub/features/subscripe/data/models/subscription_amount_model.dart';
 import 'package:fourtyninehub/features/subscripe/domain/entities/subscription_amount_entity.dart';
 import 'package:fourtyninehub/features/subscripe/domain/entities/subscription_plans_entity.dart';
 import 'package:fourtyninehub/features/subscripe/domain/usecases/subscribe_usecase.dart';
 
-import '../../../../core/api/end_points.dart';
 import '../../../../core/error/failure.dart';
 
 abstract class SubscribeRemoteDataSource {

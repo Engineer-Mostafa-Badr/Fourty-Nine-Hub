@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_comment_reply_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_post_comment_model.dart';
@@ -19,6 +19,8 @@ import '../../../../../core/error/failure.dart';
 
 abstract class TwitterRemoteDataSource {
   Future<Either<Failure, List<TwitterPostEntity>>> getFeed(
+      {required TwitterFeedParams params});
+  Future<Either<Failure, List<TwitterPostEntity>>> getGlobalFeed(
       {required TwitterFeedParams params});
   Future<Either<Failure, TwitterPostEntity>> getTwitterPost(
       {required String postId});
@@ -56,6 +58,23 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
       {required TwitterFeedParams params}) async {
     final response = await _apiConsumer.get(
         "${EndPoints.getTwitterFeedPosts}?page=${params.page}&limit=${params.limit}&subCategory=66a3583454e6e337915514db");
+
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data']['posts'] as List)
+          .map((e) => TwitterPostModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<TwitterPostEntity>>> getGlobalFeed(
+      {required TwitterFeedParams params}) async {
+    final response = await _apiConsumer.get(
+        "${EndPoints.getTwitterFeedPosts}/general?page=${params.page}&limit=${params.limit}&subCategory=66a3583454e6e337915514db",
+    );
 
     return response.fold((l) {
       return Left(l);

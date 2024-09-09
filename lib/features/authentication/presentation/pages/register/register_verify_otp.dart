@@ -46,8 +46,10 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
         } else if (state is ResendOtpSuccess) {
           showSuccessMessage(context, 'resend otp success');
         } else if (state is VerifyOtpSuccess) {
-          await TokenManager.saveAccessToken(state.userTokensEntity.accessToken);
-          await TokenManager.saveRefreshToken(state.userTokensEntity.refreshToken);
+          await TokenManager.saveAccessToken(
+              state.userTokensEntity.accessToken);
+          await TokenManager.saveRefreshToken(
+              state.userTokensEntity.refreshToken);
 
           serviceLocator<UserCubit>()
             ..setLogin(true)
@@ -79,7 +81,8 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                     context: context,
                     builder: (BuildContext context) {
                       return Dialog(
-                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24.0.zR),
                         ),
@@ -90,7 +93,9 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                             children: <Widget>[
                               Text(
                                 LocaleKeys.congratulations.localize,
-                                style: Styles.headerText(color: AppColors.SECONDARY_COLOR, fontSize: 45),
+                                style: Styles.headerText(
+                                    color: AppColors.SECONDARY_COLOR,
+                                    fontSize: 45),
                               ),
                               SizedBox(height: 16.0.zH),
                               Text(
@@ -101,12 +106,15 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                               SizedBox(height: 40.0.zH),
                               ElevatedButton(
                                 onPressed: () {
-                                  Navigator.of(context).pop(); // Close the dialog
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Theme.of(context).primaryColor,
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.0.zR),
+                                    borderRadius:
+                                        BorderRadius.circular(16.0.zR),
                                   ),
                                 ),
                                 child: Padding(
@@ -116,7 +124,9 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                                   ),
                                   child: Text(
                                     LocaleKeys.close.localize,
-                                    style:  TextStyle(color: Theme.of(context).scaffoldBackgroundColor),
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .scaffoldBackgroundColor),
                                   ),
                                 ),
                               ),

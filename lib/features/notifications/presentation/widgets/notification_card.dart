@@ -53,12 +53,12 @@ class NotificationCard extends StatelessWidget {
           ),
           BlocProvider(
             create: (BuildContext context) =>
-            NotificationsCubit(NotificationRepoImpl(ApiService(Dio()))),
-            child: BlocConsumer<NotificationsCubit,NotificationsState>(
+                NotificationsCubit(NotificationRepoImpl(ApiService(Dio()))),
+            child: BlocConsumer<NotificationsCubit, NotificationsState>(
               listener: (BuildContext context, NotificationsState state) {
-                if(state is DeleteNotificationsSuccessState){
+                if (state is DeleteNotificationsSuccessState) {
                   var snackBar = SnackBar(
-                    content:  const Text('Delete Successfully'),
+                    content: const Text('Delete Successfully'),
                     backgroundColor: Theme.of(context).primaryColor,
                   );
 
@@ -68,18 +68,21 @@ class NotificationCard extends StatelessWidget {
               builder: (BuildContext context, state) {
                 return Column(
                   children: [
-                   state is! DeleteNotificationsLoadingState? IconAppButton(
-                        icon: Icons.clear,
-                        onPressed: () {
-                          showAreYouSure(
-                              title: LocaleKeys.alert.localize,
-                              subTitle: LocaleKeys.clearNoti.localize,
-                              action: () {
-                                NotificationsCubit.get(context)
-                                    .deleteNotification(id: notificationDoc.id!);
-                              },
-                              context: context);
-                        }):IconAppButton(icon: Icons.clear, onPressed: (){}),
+                    state is! DeleteNotificationsLoadingState
+                        ? IconAppButton(
+                            icon: Icons.clear,
+                            onPressed: () {
+                              showAreYouSure(
+                                  title: LocaleKeys.alert.localize,
+                                  subTitle: LocaleKeys.clearNoti.localize,
+                                  action: () {
+                                    NotificationsCubit.get(context)
+                                        .deleteNotification(
+                                            id: notificationDoc.id!);
+                                  },
+                                  context: context);
+                            })
+                        : IconAppButton(icon: Icons.clear, onPressed: () {}),
                     Label(
                       text: formattedTime,
                       style: Styles.mediumText(color: Colors.grey),

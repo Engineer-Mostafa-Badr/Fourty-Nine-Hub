@@ -667,6 +667,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.1"
+  flutter_credit_card:
+    dependency: "direct main"
+    description:
+      name: flutter_credit_card
+      sha256: dffaee369b0e64fb81e63e78d6410762f73b67346692bd2ae7bdcc6d911452e3
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.1"
   flutter_facebook_auth:
     dependency: "direct main"
     description:
@@ -1275,7 +1283,7 @@ packages:
     source: hosted
     version: "1.0.4"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       sha256: d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf
@@ -1798,10 +1806,10 @@ packages:
     dependency: "direct main"
     description:
       name: rxdart
-      sha256: "5c3004a4a8dbb94bd4bf5412a4def4acdaa12e12f269737a5751369e12d1a962"
+      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
       url: "https://pub.dev"
     source: hosted
-    version: "0.28.0"
+    version: "0.27.7"
   sanitize_html:
     dependency: transitive
     description:
@@ -1927,6 +1935,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.12"
+  snapping_bottom_sheet:
+    dependency: "direct main"
+    description:
+      name: snapping_bottom_sheet
+      sha256: "32da031444fb97c3c2c7fc1ccad1fe50fc09a57bb9dea12070e8baf27f075553"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   social_media_recorder:
     dependency: "direct main"
     description:
@@ -1984,7 +2000,7 @@ packages:
     source: hosted
     version: "7.0.0"
   sqflite:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: sqflite
       sha256: a43e5a27235518c03ca238e7b4732cf35eabe863a369ceba6cbefa537a66f16d
@@ -2015,6 +2031,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
+  story_view:
+    dependency: "direct main"
+    description:
+      name: story_view
+      sha256: ab64063569178e405b643ab11bdc28d6e85333191e3c8b5556e864fe6c5b2a5a
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.16.5"
   stream_channel:
     dependency: transitive
     description:
@@ -2103,6 +2127,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
+  uni_links:
+    dependency: "direct main"
+    description:
+      name: uni_links
+      sha256: "051098acfc9e26a9fde03b487bef5d3d228ca8f67693480c6f33fd4fbb8e2b6e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.1"
+  uni_links_platform_interface:
+    dependency: transitive
+    description:
+      name: uni_links_platform_interface
+      sha256: "929cf1a71b59e3b7c2d8a2605a9cf7e0b125b13bc858e55083d88c62722d4507"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  uni_links_web:
+    dependency: transitive
+    description:
+      name: uni_links_web
+      sha256: "7539db908e25f67de2438e33cc1020b30ab94e66720b5677ba6763b25f6394df"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   universal_io:
     dependency: transitive
     description:
@@ -2279,6 +2327,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.3"
+  video_trimmer:
+    dependency: "direct main"
+    description:
+      name: video_trimmer
+      sha256: "9f25516d21788a91c5448e9a57e0c876509aaf735686b007862ff124ab6aff9e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   visibility_detector:
     dependency: "direct main"
     description:
