@@ -18,6 +18,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
+import '../../../features/competition/presentation/view/special_ads_view.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/const.dart';
@@ -214,8 +215,13 @@ class DrawerWidget extends StatelessWidget {
             counterItem(
                 icon: Icons.ads_click,
                 label: LocaleKeys.specialAds.localize,
-                value: '+8',
-                onTap: () {},
+                value: '13',
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SpecialAdsView()));
+                },
                 context: context),
             counterItem(
                 icon: Icons.person_add,
@@ -443,7 +449,7 @@ class DrawerWidget extends StatelessWidget {
               children: [
                 Positioned.fill(
                   child: BlocConsumer<UserCubit, BasicState>(
-                    listener: (context, state) {
+                    listener: (context,state){
                       // if(state.isSuccess){
                       //   context.pop();
                       //   showSuccessMessage(context, 'Picture Uploaded Successfully');
@@ -459,7 +465,7 @@ class DrawerWidget extends StatelessWidget {
                         Shimmer.fromColors(
                           baseColor: Colors.amber,
                           highlightColor: Colors.black,
-                          child: CircleAvatar(
+                          child:  CircleAvatar(
                             child: Container(
                               color: Colors.red,
                             ),

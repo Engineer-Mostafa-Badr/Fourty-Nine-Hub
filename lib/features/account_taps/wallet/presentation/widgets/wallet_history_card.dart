@@ -6,28 +6,33 @@ import '../../../../../res/style/styles.dart';
 
 class WalletHistoryCard extends StatelessWidget {
   final String title, subTitle;
-  final num amount;
-  final Function onTap;
+  final bool? amount;
+  final Function? onTap;
   final IconData icon;
+
   const WalletHistoryCard(
       {super.key,
       required this.title,
       required this.subTitle,
-      this.amount = 0,
+      this.amount = false,
       required this.icon,
-      required this.onTap});
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Label(text: title, style: Styles.mediumText(fontSize: 12)),
+      title: Label(
+        text: amount! ? title:'- $title',
+        style: Styles.mediumText(),
+      ),
       subtitle: Label(
         text: subTitle,
-        style: Styles.mediumText(fontSize: 10),
+        style:
+            Styles.mediumText(fontSize: 24, color: AppColors.GREY_NORMAL_COLOR),
       ),
       trailing: Icon(
         Icons.line_axis,
-        color: amount < 0 ? Colors.red : Colors.green,
+        color: amount! ? AppColors.WHATS_APP_COLOR : AppColors.SECONDARY_COLOR,
       ),
       leading: Container(
           height: kToolbarHeight * .7,
@@ -41,7 +46,7 @@ class WalletHistoryCard extends StatelessWidget {
             color: Colors.white,
             size: 14,
           )),
-      onTap: () => onTap(),
+      onTap: () => onTap!(),
     );
   }
 }

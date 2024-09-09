@@ -7,15 +7,20 @@ class ApiService {
 
   ApiService(this.dio);
 
-  Future<Map<String, dynamic>> get({
+  Future<dynamic> get({
     required String url,
     String? token,
+    Map<String,dynamic>? params,
   }) async {
     var response = await dio.get(
       '$_baseUrl$url',
-      options: Options(
-        headers: {'Authorization': 'Bearer $token'},
+      options: Options  (
+        headers: {
+          'Authorization': 'Bearer $token'
+        },
       ),
+      queryParameters: params,
+
     );
     // Check if the response is a Map or a List
     if (response.data is Map<String, dynamic>) {
@@ -30,14 +35,36 @@ class ApiService {
     }
   }
 
-  Future<Map<String, dynamic>> delete({
+  post({
+    required String url,
+    dynamic data,
+    dynamic query,
+    String? token,
+  }) async {
+    var response = await dio.post(
+      '$_baseUrl$url',
+      data: data,
+      queryParameters: query,
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token'
+        },
+      ),
+    );
+    return response.data;
+  }
+
+
+  Future<Map<String,dynamic>> delete({
     required String url,
     String? token,
   }) async {
     var response = await dio.delete(
       '$_baseUrl$url',
       options: Options(
-        headers: {'Authorization': 'Bearer $token'},
+        headers: {
+          'Authorization': 'Bearer $token'
+        },
       ),
     );
     // Check if the response is a Map or a List

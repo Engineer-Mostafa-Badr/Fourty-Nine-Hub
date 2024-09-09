@@ -1,120 +1,262 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/file_picker_helper.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/entities/company_ad_entity.dart';
-
-import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../res/strings/labels.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/custom_container.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/show_post_company_advertise.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../cubit/create_company_ad_cubit.dart';
+import 'create_posts_company.dart';
 
-class CreateCompanyAdView extends StatelessWidget {
+class CreateCompanyAdView extends StatefulWidget {
   const CreateCompanyAdView({super.key});
+
+  @override
+  State<CreateCompanyAdView> createState() => _CreateCompanyAdViewState();
+}
+
+class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
+  int _totalPrice = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context
+          .read<CreateCompanyAdCubit>()
+          .getCompanyAdPosts('written');
+      context
+          .read<CreateCompanyAdCubit>()
+          .getCompanyAdPosts('photo');
+      context
+          .read<CreateCompanyAdCubit>()
+          .getCompanyAdPosts('photo_written');
+      context
+          .read<CreateCompanyAdCubit>()
+          .getCompanyAdPosts('reel');
+    });
+  }
+
+  void _updateTotalPrice(int price) {
+    setState(() {
+      _totalPrice += price;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(
-        label: 'Advertise Your Company',
-      ),
-      body: BlocConsumer<CreateCompanyAdCubit, CreateCompanyAdState>(
-          listener: (context, state) {},
-          builder: (context, state) {
-            final controller = context.read<CreateCompanyAdCubit>();
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  FormTextField(
-                    fillColor: AppColors.AUTH_CONTAINER_COLOR,
-                    style: const TextStyle(color: AppColors.QUANTITY_COLOR),
-                    label: 'Slogan',
-                    hint: 'Type your slogan (Not more 100 letter)',
+      appBar: BackAppBar(
+        centerTitle: false,
+        label: LocaleKeys.companyAdvertise.localize,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ShowPostCompanyAdvertise(),
                   ),
-                  const Sizer(),
-                  Expanded(
-                      child: ListView.separated(
-                          itemBuilder: (context, index) {
-                            return _buildOptionWidget(
-                                adOption: state.adOptions![index]);
-                          },
-                          separatorBuilder: (context, index) {
-                            return const Sizer();
-                          },
-                          itemCount: state.adOptions?.length ?? 0)),
-                  AppButton(
-                      style: const TextStyle(
-                          color: AppColors.AUTH_CONTAINER_COLOR),
-                      label:
-                          'Proceed to Payment (${controller.totalPrice()} ${Labels.currency})',
-                      backColor: (state.selectedOptions?.isEmpty ?? true)
-                          ? AppColors.SECONDARY_COLOR.withAlpha(150)
-                          : AppColors.SECONDARY_COLOR,
-                      onPressed: () {})
-                ],
-              ),
-            );
-          }),
-    );
-  }
-
-  Widget _buildOptionWidget({required CompanyAdEntity adOption}) {
-    return BlocBuilder<CreateCompanyAdCubit, CreateCompanyAdState>(
-        builder: (context, state) {
-      final controller = context.read<CreateCompanyAdCubit>();
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Label(
-                  text: adOption.title,
-                  style: Styles.headerText(),
-                ),
-              ),
-              IconAppButton(
-                  icon: Icons.upload,
-                  isCircle: true,
-                  onPressed: () async => FilePickerHelper().pickMedia()),
-            ],
-          ),
-          ListView.builder(
-              itemCount: adOption.options.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                final option = adOption.options[index];
-                return Row(
-                  children: [
-                    Checkbox(
-                        value: controller.optionSelected(option),
-                        onChanged: (v) => controller.onSelection(option)),
-                    Expanded(
-                        child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                );
+              },
+              icon: Icon(
+                Icons.access_time_outlined,
+                color: Theme.of(context).primaryColor,
+              ))
+        ],
+      ),
+      body: context.read<UserCubit>().isLoggedIn
+          ? BlocProvider<CreateCompanyAdCubit>(
+            create: (_)=>serviceLocator()..loadData(),
+            child: BlocBuilder<CreateCompanyAdCubit, CreateCompanyAdState>(
+                builder: (context, state) {
+                return  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
                       children: [
-                        Label(
-                          text: option.title,
-                          style: Styles.mediumText(fontWeight: FontWeight.w400),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              CustomContainerAdvertise(
+                                filter: 'written',
+                                title: LocaleKeys.textOnly.localize,
+                                price: state.price?.postPrice as int? ?? 0 ,
+                                context: context,
+                                function: () {
+                                  _updateTotalPrice(state.price?.postPrice as int? ?? 0 );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CreatePostCompany(
+                                          picture: false,
+                                          title: LocaleKeys
+                                              .createTextPost.localize,
+                                          type: 'written',
+                                          totalPrice: state.price?.postPrice as int? ?? 0 ,
+                                        )),
+                                  );
+                                }, numberOfAdvertises: state.posts?.length ??0,
+                              ),
+                              CustomContainerAdvertise(
+                                filter: 'photo',
+                                title: LocaleKeys.pictureOnly.localize,
+                                price: state.price?.photoPrice as int? ?? 0 ,
+                                numberOfAdvertises: state.posts?.length ??0,
+                                context: context,
+                                function: () {
+                                  _updateTotalPrice(state.price?.photoPrice as int? ?? 0 );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CreatePostCompany(
+                                          text: false,
+                                          title: LocaleKeys
+                                              .createPicturePost.localize,
+                                          type: 'photo',
+                                          totalPrice: state.price?.photoPrice as int? ?? 0
+                                        )),
+                                  );
+                                },
+                              ),
+                              CustomContainerAdvertise(
+                                filter: 'photo_written',
+                                title: LocaleKeys.textWithPictures.localize,
+                                numberOfAdvertises: state.posts?.length ??0,
+                                price: state.price?.postAndPhotoPrice as int? ?? 0 ,
+                                context: context,
+                                function: () {
+                                  _updateTotalPrice(state.price?.postAndPhotoPrice as int? ?? 0);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CreatePostCompany(
+                                          title: LocaleKeys
+                                              .createPost.localize,
+                                          type: 'photo_written',
+                                          totalPrice: state.price?.postAndPhotoPrice as int? ?? 0
+                                        )),
+                                  );
+                                },
+                              ),
+                              CustomContainerAdvertise(
+                                filter: 'reel',
+                                numberOfAdvertises: state.posts?.length ??0,
+                                title: LocaleKeys.reel.localize,
+                                price: state.price?.reelPrice as int? ?? 0,
+                                context: context,
+                                function: () {
+                                  _updateTotalPrice(state.price?.reelPrice as int? ?? 0);
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                        const ReelsRecordingScreen(
+
+                                          voiceUrl: '',
+                                        )),
+                                  );
+                                  // Handle reel creation logic here
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                        Label(
-                          text: option.subTitle,
-                          style: Styles.mediumText(fontWeight: FontWeight.w300),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsetsDirectional.symmetric(
+                                    vertical: 10, horizontal: 14),
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      LocaleKeys.total.localize,
+                                      style: Styles.headerText(
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      '$_totalPrice',
+                                      style: Styles.mediumText(
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsetsDirectional.symmetric(
+                                    vertical: 10, horizontal: 10),
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: AppColors.SECONDARY_COLOR,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    LocaleKeys.pay.localize,
+                                    style: Styles.headerText(
+                                      color: AppColors.AUTH_CONTAINER_COLOR,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
-                    )),
-                  ],
-                );
-              })
-        ],
-      );
-    });
+                    ),
+                  );
+                },
+              ),
+          )
+          : Center(
+              child: SingleChildScrollView(
+                child: GestureDetector(
+                  onTap: () => context.push(Routes.LOGIN),
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    width: 300,
+                    height: 300,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Theme.of(context).primaryColor,
+                        width: 4, // Width of the border
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Please Login, Register to enjoy the app',
+                        style: Styles.headerText(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+    );
   }
 }

@@ -9,6 +9,9 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 
+import '../../../../../features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
+import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
+
 class EndPoints {
   static const pageSize = 20;
   static const developmentBaseUrl = 'https://49dev.com/api/v1';
@@ -29,13 +32,59 @@ class EndPoints {
   static String followersList (TwitterFeedParams params) => '/follow/followers?search=${params.search}&page=${params.page}&limit=${params.limit}';
   static const getParentMainCategories = '/category/parent';
   static const getMainCategories = '/category/parent/get-all-main';
+
   static String getBannerByID({required String id}) => '/categories/main/$id';
   static const getMainCategoriesWithoutSubcategories = '/categories/main';
+
   static String getMainCategoryDetails(String id) => '/categories/main/$id';
+
   static String addMainCategoryToFavorite(String id) =>
       '/favorite-category/$id';
+
   static String deleteMainCategoryFromFavorite(String id) =>
       '/favorite-category/$id';
+
+  static const getGift = '/subscriber/competitions';
+  static const getBalance = '/main-wallet/user-balance';
+
+  static String getHistoryBalance() {
+    return '/user-transactions/balance';
+  }
+
+  static String getHistoryWallet(WalletHistoryParams params) {
+    return '/user-transactions/mainWallet?limit=${params.limit}&page=${params.page}';
+  }
+
+  static String geMainCategoryWallet() {
+    return '/categories/main';
+  }
+
+  static String geSubCategoryWallet(String id) {
+    return '/categories/subcategories/$id';
+  }
+
+  static String deleteSubscription(String id) {
+    return '/subscription/cancel-subscription/$id';
+  }
+
+  static String deleteCompanyAd(String id) {
+    return '/advertisementCompany/$id';
+  }
+
+  static String getPostsCompanyAd(FetchPostCompanyAdvertiseParams params) {
+    return '/advertisementCompany/my-advertisement?page=${params.paginationParams.page}&filter=${params.filter}&limit=${params.paginationParams.limit}';
+  }
+
+  static const getWallet = '/main-wallet/user-wallet';
+  static const getPrice = '/advertisementCompany/price';
+  static const postCompanyAd = '/advertisementCompany';
+  static const getSubscription = '/subscription';
+  static const transferFiveBalance = '/main-wallet/transfer-five-years';
+  static const transferTenBalance = '/main-wallet/transfer-ten-years';
+  static const requestWithdrawBalance =
+      '/main-wallet/request-withdrawal-balance';
+  static const checkRequestWithdrawBalance =
+      '/main-wallet/check-request-withdrawal';
 
   static const getWheel = '/wheels/random';
   static const spinWheel = '/wheels/spin/';
@@ -44,6 +93,7 @@ class EndPoints {
   static const verifyForgetPasswordOTP = '/auth/verify/otp';
   static const createNewForgetPassword = '/auth/reset-password';
   static const notifications = '/api/v1/notifications';
+
   // static const report = '/report?subCategory=66a3583454e6e337915514db';
   static String report({required String subCategoryId}) =>
       '/report?subCategory=$subCategoryId';
@@ -67,6 +117,7 @@ class EndPoints {
   static const successDocuments = '$developmentBaseUrl/ride/info/documents';
   static const successCarImages =
       '$developmentBaseUrl/ride/info/success-car-images';
+
   // health
   static String getCities({required String governorateId}) =>
       '/health/cities/$governorateId';
@@ -74,14 +125,19 @@ class EndPoints {
   static const createDoctor = '/health/doctor';
   static const doctorSearch = '/health/doctor-search';
   static const bookEmergency = '/health/book-emergency';
+
   static String bookRegularAppointment(String appointmentId) =>
       '/health/book-appointment/$appointmentId';
+
   static String toggleFavoriteSubcategory(String subCategoryId) =>
       '/favorite-sub-category/$subCategoryId';
+
   static String bookPremiumAppointment(String appointmentId) =>
       '/health/book-appointment-premium/$appointmentId';
+
   static String getDoctorReviewsForUsers(String doctorId) =>
       '/health/doctor/rate/$doctorId';
+
   static String getDoctorDetails(String doctorId) =>
       '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
   static String toggleFavoriteCategory(String subCategoryId) => '/favorite-category/$subCategoryId';
@@ -113,8 +169,10 @@ class EndPoints {
   static const isDoctor = '/health/check-doctor-or-not';
   static const getDoctorTotalEarnedMoney =
       '/health/dashboard/total-earned-money';
+
   static String doctorAcceptAppointment(String appointmentId) =>
       '/health/book-appointment/approve/$appointmentId';
+
   static String doctorRejectAppointment(String appointmentId) =>
       '/health/book-appointment/reject/$appointmentId';
   static const getAllDoctorReservations =
@@ -125,6 +183,7 @@ class EndPoints {
   static const updateDoctorPractcing =
       '/health/doctor-upload-license-practicing';
   static const updateDoctorID = '/health/doctor-upload-license-id';
+
   static String deleteDoctor(String doctorId) => '/health/doctor/$doctorId';
 
   // reels
@@ -133,6 +192,7 @@ class EndPoints {
   // ride request
   static const expectedPrice = '/ride/trips/expected/price';
   static const carTypes = '/cars';
+
   static String subCategories({required String mainCategoryId}) {
     return '/categories/subcategories/$mainCategoryId';
   }
@@ -140,6 +200,7 @@ class EndPoints {
   static const riderInfoRegister = '/ride/riders/register';
   static const sendComeWithYou = '/ride/come-with-you';
   static const sendPickMe = '/ride/pick-me';
+
   static String acceptPickMeRequest(String id) {
     return '/ride/pick-me/$id/accept';
   }
@@ -161,6 +222,7 @@ class EndPoints {
   static const getAllComeWithMeAds = '/ride/come-with-you/get-all';
   static const getAllPickMeAds = '/ride/pick-me/get-all';
   static const getRideThumbnails = '/ride/come-with-me/get-thumbnails';
+
   static String deletePickMeTrips(String id) {
     return '/ride/pick-me/Delete/$id';
   }
@@ -179,15 +241,18 @@ class EndPoints {
 
   static const getMyComeWithYouTrips = '/ride/come-with-you/trip/requests';
   static const getRiderNewTrips = '/ride/trips/rider/newTrip';
+
   // social
 
   static const createFacebookPost = '/facebook/post';
   static const createTwitterPost = '/twitter/post';
+
   // static const getFeedPosts = '/facebook/feed';
   static const activities = '/facebook/post/activities';
   static const feelings = '/facebook/post/feelings';
   static const getTwitterFeedPosts = '/twitter/feed';
   static const editProfile = '/users/profile-data';
+
   static String userPosts(UserPostsParams params) {
     return '/facebook/post/user/${params.userId}?limit=${params.limit}&page=${params.page}&type=1&subCategory=66b77e77bb35968b535dc944';
   }
@@ -325,7 +390,8 @@ class EndPoints {
     return '/facebook/comment/update-comment/${params.postId}?subCategory=66b77e77bb35968b535dc944';
   }
 
-  static String acceptRejectFriendRequest(AcceptRejectFriendRequestParams params) {
+  static String acceptRejectFriendRequest(
+      AcceptRejectFriendRequestParams params) {
     return '/friends/acceptOrRejectrequest/${params.userId}?subCategory=62ef7cf658c90d4a7ed48120';
   }
 
@@ -417,12 +483,16 @@ class EndPoints {
   static String getNumOfResturants = '/restaurants/num-of-restaurants';
   static String isResturant = '/restaurants/check-user-have-restaurant';
   static String createRestaurant = '/restaurants/create-restaurant';
+
   static String getMealsWithCountRestaurant({PostCommentsParams? params}) =>
       '/restaurants/subcategories-count-restaurant${params?.page != null || params?.userId != null ? "?page=${params?.page}&userId=${params?.userId}" : ""}';
+
   static String getAllRestaurantWithMenu({PostCommentsParams? params}) =>
       '/restaurants/all-restaurants${params?.page != null ? "?page=${params?.page}" : ""}';
+
   static String searchRestaurants({PostCommentsParams? params}) =>
       '/restaurants/search-restaurants${params?.page != null ? "?page=${params?.page ?? "1"}&limit=${params?.limit ?? "20"}" : ""}';
+
 //?page=1&userId=
   static String restaurantDetails(String id) {
     return '/restaurants/$id';
@@ -440,6 +510,7 @@ class EndPoints {
   static const myAds = '/ads/allMyAds';
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const favouriteAds = '/ads-favourites/allFavouriteAds';
+
   static String deleteAd(String id) {
     return '/ads/deleteAd/$id';
   }
@@ -454,6 +525,7 @@ class EndPoints {
 
   static const auctionsList = '/auction';
   static const myAuctions = '/auction/my-auction';
+
   static String auctionDetails(String id) {
     return '/auction/$id';
   }
@@ -484,6 +556,7 @@ class EndPoints {
 
   // /installment
   static String installment = '/installment';
+
   // static String installment = '/installment';
   static String createInstallment(String id) {
     return '/installment/$id';
@@ -505,12 +578,14 @@ class EndPoints {
   // contact us
   static const helpMessages = '/help';
   static String mediaUrl = '/media/signed-url';
+
   static String confirmUpload(String mediaId) {
     return '/media/confirm/$mediaId';
   }
 
   // chat_room
   static String getChats = '/chat/get-chats';
+
   static String getChatMessages(String chatId) {
     return '/chat/get-chat/$chatId';
   }
@@ -518,18 +593,26 @@ class EndPoints {
   //club voice
   static String allClubVoiceRooms = '/clubvoice';
   static String createClubVoiceRoom = '/clubvoice';
+
   static String joinVoiceRoom(String id) => '/clubvoice/join/$id';
+
   static String endVoiceRoom(String id) => '/clubvoice/$id';
+
   static String leaveVoiceRoom(String id) => '/clubvoice/leave/$id';
+
   static String searchVoiceRooms(String subject) =>
       '/clubvoice?search=$subject';
 
   //meeting
   static String createMeeting = '/room-id';
+
   static String joinMeeting(String id) => '/room-id/join/$id';
+
   static String endMeeting(String id) => '/room-id/finish/$id';
+
   static String getScheduledMeetings(String id) => '/room-id/$id';
   static String deleteChatMessage = '/chat/message';
+
   static String changeChatMuteState(String chatId) {
     return '/chat/mute-chat/$chatId';
   }
@@ -539,6 +622,7 @@ class EndPoints {
   }
 
   static String buttonAvailable = '/global/click';
+
   static String getSubscriptionPlans(String subcategoryId) => '/subscription/plans/$subcategoryId';
   static String checkUserSubscription(String id) {
     return '/subscription/subcategory/$id';
@@ -561,6 +645,7 @@ class EndPoints {
   }
 
   static String getChatGroups = '/chat/group/get-groups/';
+
   static String seenHistoryEndpoint(String chatId) {
     return '/chat/last-seen-logs/$chatId';
   }
@@ -568,6 +653,7 @@ class EndPoints {
   // gecoding google api url
   static String geocodingUrl =
       'https://maps.googleapis.com/maps/api/geocode/json';
+
   // trip join
   static String tripJoinExpectedPrice =
       "/ride/come-with-you/trip/expectedPrice";
