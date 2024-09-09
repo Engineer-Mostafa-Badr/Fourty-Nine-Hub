@@ -26,7 +26,7 @@ class GiftWalletView extends StatelessWidget {
           label: LocaleKeys.gift.localize,
         ),
         body: BlocProvider<GiftCubit>(
-          create:(_)=>serviceLocator()..loadData(),
+          create:(_)=>serviceLocator(),
           child: BlocBuilder<GiftCubit, GiftState>(builder: (context, state) {
             return SingleChildScrollView(
               child: Padding(

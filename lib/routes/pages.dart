@@ -273,7 +273,7 @@ class AppPages {
                         name: Routes.CREATECOMPANYAD,
                         builder: (context, state) =>
                             BlocProvider<CreateCompanyAdCubit>(
-                                create: (_) => serviceLocator(),
+                                create: (_) => serviceLocator()..loadData(),
                                 child: const CreateCompanyAdView()),
                       ),
                     ]),
@@ -296,9 +296,9 @@ class AppPages {
                   create: (_) => serviceLocator<RegisterCubit>(),
                 ),
                 BlocProvider(
-                  create: (_) => serviceLocator<WalletCubit>(),
+                  create: (_) => serviceLocator<WalletCubit>()..loadData(),
                 ),BlocProvider(
-                  create: (_) => serviceLocator<GiftCubit>(),
+                  create: (_) => serviceLocator<GiftCubit>()..loadData(),
                 ),
               ],
               child: LoginView(

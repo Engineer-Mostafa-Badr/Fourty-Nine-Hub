@@ -39,14 +39,14 @@ class BalanceWalletView extends StatelessWidget {
                 showSuccessMessage(context,
                     'Your request withdrawal sent successfully waiting for administration approval');
               }
-              if (state.status == BalanceStates.successFive) {
-                showSuccessMessage(
-                    context, 'Transfer five_years balance done to gift wallet');
-              }
-              if (state.status == BalanceStates.successTen) {
-                showSuccessMessage(
-                    context, 'Transfer ten_years balance done to gift wallet');
-              }
+              // if (state.status == BalanceStates.successFive) {
+              //   showSuccessMessage(
+              //       context, 'Transfer five_years balance done to gift wallet');
+              // }
+              // if (state.status == BalanceStates.successTen) {
+              //   showSuccessMessage(
+              //       context, 'Transfer ten_years balance done to gift wallet');
+              // }
             },
             builder: (context, state) {
               return SingleChildScrollView(

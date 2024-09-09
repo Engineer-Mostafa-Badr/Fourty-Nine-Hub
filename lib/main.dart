@@ -58,7 +58,8 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               CompetitionCubit(serviceLocator.get<CompetitionRepoImpl>())
                 ..fetchCompetition(context)
-        ),BlocProvider(
+        ),
+        BlocProvider(
           create: (BuildContext context) =>serviceLocator<WalletCubit>(),
 
         ),
