@@ -492,7 +492,7 @@ class MessageCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    !messageEntity.isReply!
+                    messageEntity.isReply!
                         ? Container(
                             decoration: const BoxDecoration(
                               color: Colors.white,
