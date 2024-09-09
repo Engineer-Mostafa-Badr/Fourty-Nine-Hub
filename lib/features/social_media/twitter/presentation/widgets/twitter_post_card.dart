@@ -300,6 +300,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                     children: [
                       ImageFromInternet(
                         image: myImages?[index] ?? '',
+                        defaultLogo: true,
                       ),
                       if (index == 3 && myImages!.length > 4)
                         Container(

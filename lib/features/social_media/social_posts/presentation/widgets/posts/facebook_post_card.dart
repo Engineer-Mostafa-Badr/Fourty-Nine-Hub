@@ -660,7 +660,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               text: content,
               style: Styles.headerText(
                   color: Colors.black,
-                  fontSize: 24,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold),
             ),
           )
