@@ -405,15 +405,15 @@ class _UserPostCardState extends State<UserPostCard> {
           children: [
             InkWell(
               onTap: () {
-                if (widget.fromProfile == false) {
+                if (user?.id!=post.user.id) {
                   context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                 }
               },
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                backgroundImage: NetworkImage((post.user.image.isNotEmpty)
-                    ? post.user.image
-                    : UIConst.profilePlaceHolder),
+              child:ImageFromInternet(
+              image: post.user.image ?? UIConst.profilePlaceHolder,
+              height: 40,
+              width: 40,
+              isCircle: true,
               ),
             ),
             const Sizer(),
@@ -423,7 +423,7 @@ class _UserPostCardState extends State<UserPostCard> {
                 children: [
                   InkWell(
                     onTap: () {
-                      if (widget.fromProfile == false) {
+                      if (user?.id!=post.user.id) {
                         context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                       }
                     },
@@ -433,9 +433,8 @@ class _UserPostCardState extends State<UserPostCard> {
                         TextAppButton(
                             label: post.user.firstName,
                             onPressed: () {
-                              if (widget.fromProfile == false) {
-                                context.push(Routes.OTHERSACCOUNT,
-                                    extra: post.user.id);
+                              if (user?.id!=post.user.id) {
+                                context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                               }
                             }),
                         RichText(
@@ -508,19 +507,20 @@ class _UserPostCardState extends State<UserPostCard> {
     required BuildContext context,
     required MainPostEntity post,
   }) {
+    final user = context.read<UserCubit>().state.data;
     return Row(
       children: [
         InkWell(
           onTap: () {
-            if (widget.fromProfile == false) {
+            if (user?.id!=post.user.id) {
               context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
             }
           },
-          child: CircleAvatar(
-            backgroundColor: Colors.white,
-            backgroundImage: NetworkImage((post.user.image.isNotEmpty)
-                ? post.user.image
-                : UIConst.profilePlaceHolder),
+          child: ImageFromInternet(
+          image: post.user.image ?? UIConst.profilePlaceHolder,
+          height: 40,
+          width: 40,
+          isCircle: true,
           ),
         ),
         const Sizer(),
@@ -529,7 +529,7 @@ class _UserPostCardState extends State<UserPostCard> {
           children: [
             InkWell(
               onTap: () {
-                if (widget.fromProfile == false) {
+                if (user?.id!=post.user.id) {
                   context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                 }
               },
@@ -539,9 +539,8 @@ class _UserPostCardState extends State<UserPostCard> {
                   TextAppButton(
                       label: post.user.firstName,
                       onPressed: () {
-                        if (widget.fromProfile == false) {
-                          context.push(Routes.OTHERSACCOUNT,
-                              extra: post.user.id);
+                        if (user?.id!=post.user.id) {
+                          context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                         }
                       }),
                   RichText(

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +8,7 @@ import 'package:go_router/go_router.dart';
 class ShowAllImages extends StatefulWidget {
   const ShowAllImages(
       {super.key, required this.images, required this.onRemoveImage});
-  final List<UploadFileEntity> images;
+  final List<dynamic> images;
   final Function onRemoveImage;
 
   @override

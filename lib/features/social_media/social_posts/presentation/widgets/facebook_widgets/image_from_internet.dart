@@ -26,7 +26,7 @@ class ImageFromInternet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      imageUrl: image??UIConst.profilePlaceHolder,
+      imageUrl: image,
       imageBuilder: (context, imageProvider) => Container(
         height: height,
         width: width,
@@ -51,11 +51,11 @@ class ImageFromInternet extends StatelessWidget {
           image: fromFile == true
               ? DecorationImage(
                   image: FileImage(File(image)),
-                  fit: BoxFit.contain,
+                  fit: BoxFit.fill,
                 )
               : const DecorationImage(
                   image: NetworkImage(UIConst.profilePlaceHolder),
-                  fit: BoxFit.contain,
+                  fit: BoxFit.fill,
                 ),
         ),
       ),

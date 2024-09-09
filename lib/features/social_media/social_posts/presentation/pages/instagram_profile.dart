@@ -339,206 +339,187 @@ class _InstagramProfileState extends State<InstagramProfile> {
                               color: Colors.white,
                             )),
                       )
-                  ],
-                ),
-                const Sizer(
-                  width: 20,
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildCounter(
-                        value: '${user.instagramPosts ?? 0} ',
-                        label: 'Post',
-                      ),
-                      const Sizer(),
-                      _buildCounter(
-                        value: '${user.friendsCount} ',
-                        label: 'Friend',
-                      ),
-                      const Sizer(),
-                      _buildCounter(
-                        value: '${user.followersCount} ',
-                        label: 'Follower',
-                      ),
-                      const Sizer(
-                        width: 5,
-                      ),
-                      _buildCounter(
-                        value: '${user.totalView} ',
-                        label: 'View',
-                      ),
-                      const Sizer(
-                        width: 5,
-                      ),
                     ],
                   ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Sizer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
+                  const Sizer(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Label(
-                            text: "${user.firstName} ${user.lastName}",
-                            style:
-                                Styles.headerText(fontWeight: FontWeight.w600)),
+                        _buildCounter(
+                          value: '${user.instagramPosts ?? 0} ',
+                          label: 'Post',
+                        ),
+                        const Sizer(),
+                        _buildCounter(
+                          value: '${user.friendsCount} ',
+                          label: 'Friend',
+                        ),
+                        const Sizer(),
+                        _buildCounter(
+                          value: '${user.followersCount} ',
+                          label: 'Follower',
+                        ),
+                        const Sizer(
+                          width: 5,
+                        ),
+                        _buildCounter(
+                          value: '${user.totalView} ',
+                          label: 'View',
+                        ),
                         const Sizer(
                           width: 5,
                         ),
                       ],
                     ),
-                  ],
-                ),
-                const Sizer(
-                  height: 4,
-                ),
-                Label(
-                    text: '@ ${user.email.split('@')[0]}',
-                    style: Styles.mediumText(color: Colors.grey)),
-                const Sizer(
-                  height: 4,
-                ),
-                if (user.bio.isNotEmpty)
-                  Label(
-                      text: user.bio,
-                      style: Styles.mediumText(color: Colors.black)),
-                const Sizer(
-                  height: 5,
-                ),
-                if (user.city.isNotEmpty ||
-                    user.job.isNotEmpty ||
-                    user.country.isNotEmpty ||
-                    user.phone.isNotEmpty)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (user.city.isNotEmpty || user.country.isNotEmpty) ...[
-                        Row(
-                          children: [
-                            Label(
-                                text: 'From',
-                                style: Styles.headerText(
-                                    color: Colors.grey, fontSize: 30)),
-                            const Sizer(
-                              height: 5,
-                            ),
-                            Expanded(
-                              child: Label(
-                                text:
-                                    '${user.country}${user.city.isNotEmpty ? ',' : ''} ${user.city}',
-                                style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30),
-                                maxLines: 1,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Sizer(
-                          height: 5,
-                        ),
-                      ],
-                      if (user.phone.isNotEmpty) ...[
-                        Row(
-                          children: [
-                            Label(
-                                text: 'Phone',
-                                style: Styles.headerText(
-                                    color: Colors.grey, fontSize: 30)),
-                            const Sizer(),
-                            Expanded(
-                              child: Label(
-                                text: user.phone,
-                                style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30),
-                                maxLines: 1,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Sizer(
-                          height: 5,
-                        ),
-                      ],
-                      if (user.job.isNotEmpty)
-                        Row(
-                          children: [
-                            Label(
-                                text: 'Work',
-                                style: Styles.headerText(
-                                    color: Colors.grey, fontSize: 30)),
-                            const Sizer(),
-                            Expanded(
-                              child: Label(
-                                text: user.job,
-                                style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30),
-                                maxLines: 1,
-                              ),
-                            ),
-                          ],
-                        ),
-                    ],
                   ),
-              ],
+                ],
+              ),
             ),
-          ),
-          if (user.followers != null && user.followers!.isNotEmpty)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-              child: Row(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: user.followers!.length == 1
-                        ? 25
-                        : user.followers!.length == 2
-                            ? 40
-                            : 60,
-                    height: 32,
-                    child: Stack(
-                      children: List.generate(
-                        user.followers!.length < 3 ? user.followers!.length : 3,
-                        (index) => Positioned(
-                            top: 0,
-                            left: index == 0
-                                ? 0
-                                : index == 1
-                                    ? 16
-                                    : 32,
-                            child: const ProfileImage(
-                              userId: '',
-                              accountId: 0,
-                              imageURL: UIConst.profilePlaceHolder,
-                              withBorder: false,
-                            )),
+                  const Sizer(),
+                  RichText(
+                    maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      text: TextSpan(children: [
+                        TextSpan(
+                            text:
+                            "${user.firstName} ${user.lastName}",
+                            style: Styles.headerText(fontWeight: FontWeight.w600,color: Colors.black)),
+                        if(user.job.isNotEmpty)TextSpan(
+                            text: '\t(${user.job})',
+                            style: Styles.headerText(
+                                color: Colors.black, fontSize: 26)),
+                      ])),
+                  const Sizer(
+                    height: 4,
+                  ),
+                  Label(
+                      text: '@ ${user.email.split('@')[0]}',
+                      style: Styles.mediumText(color: Colors.grey)),
+                  const Sizer(
+                    height: 4,
+                  ),
+                  if (user.bio.isNotEmpty)
+                    Label(
+                        text: user.bio,
+                        style: Styles.mediumText(color: Colors.black)),
+                  const Sizer(
+                    height: 5,
+                  ),
+                  if (user.city.isNotEmpty ||
+                      user.job.isNotEmpty ||
+                      user.country.isNotEmpty ||
+                      user.phone.isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (user.city.isNotEmpty || user.country.isNotEmpty) ...[
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Label(
+                                  text:
+                                      '${user.country}${user.city.isNotEmpty ? ',' : ''} ${user.city}',
+                                  style: Styles.headerText(
+                                      color: Colors.black, fontSize: 26),
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Sizer(
+                            height: 5,
+                          ),
+                        ],
+                        if (user.phone.isNotEmpty) ...[
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Label(
+                                  text: user.phone,
+                                  style: Styles.headerText(
+                                      color: Colors.black, fontSize: 26),
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Sizer(
+                            height: 5,
+                          ),
+                        ],
+                        if (user.job.isNotEmpty)
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Label(
+                                  text: user.job,
+                                  style: Styles.headerText(
+                                      color: Colors.black, fontSize: 26),
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
+                ],
+              ),
+            ),
+            if (user.followers != null && user.followers!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 4
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: user.followers!.length == 1
+                          ? 25
+                          : user.followers!.length == 2
+                              ? 40
+                              : 60,
+                      height: 32,
+                      child: Stack(
+                        children: List.generate(
+                          user.followers!.length < 3 ? user.followers!.length : 3,
+                          (index) => Positioned(
+                              top: 0,
+                              left: index == 0
+                                  ? 0
+                                  : index == 1
+                                      ? 16
+                                      : 32,
+                              child: const ProfileImage(
+                                userId: '',
+                                accountId: 0,
+                                imageURL: UIConst.profilePlaceHolder,
+                                withBorder: false,
+                              )),
+                        ),
                       ),
                     ),
-                  ),
-                  const Sizer(),
-                  Expanded(
-                      child: Row(
-                    children: [
-                      Expanded(
-                        child: RichText(
-                            text: TextSpan(children: [
-                          TextSpan(
-                              text:
-                                  '${user.followers!.isNotEmpty ? '${user.followers![0].firstName} ${user.followers![0].lastName}' : ''} ${user.followers!.length > 1 ? '${user.followers![1].firstName} ${user.followers![1].lastName}' : ''}',
-                              style: Styles.mediumText(color: Colors.black)),
-                          if (user.followers!.length > 2)
+                    const Sizer(),
+                    Expanded(
+                        child: Row(
+                      children: [
+                        Expanded(
+                          child: RichText(
+                              text: TextSpan(children: [
                             TextSpan(
                                 text:
-                                    '\tand ${user.followers!.length - 2} others',
+                                    '${user.followers!.isNotEmpty ? '${user.followers![0].firstName} ${user.followers![0].lastName}' : ''} ${user.followers!.length > 1 ? '${user.followers![1].firstName} ${user.followers![1].lastName}' : ''}',
+                                style: Styles.mediumText(color: Colors.black)),
+                            if(user.followers!.length>2)TextSpan(
+                                text: '\tand ${user.followers!.length-2} others',
                                 style: Styles.mediumText(color: Colors.grey)),
                         ])),
                       ),

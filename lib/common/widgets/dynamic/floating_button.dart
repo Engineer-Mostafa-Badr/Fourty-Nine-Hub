@@ -29,14 +29,15 @@ class FloatingButton extends StatelessWidget {
         onPressed: onTap != null
             ? () => onTap!()
             : () {
-                if (changeView == 1) {
-                  context.push(Routes.SOCIAL);
-                } else if (changeView == 2) {
-                  context.push(Routes.INSTAGRAM);
-                }
-              },
-        backgroundColor:
-            changeView == 2 ? AppColors.PRIMARY_COLOR : Colors.white,
+          if (changeView == 1) {
+            context.push(Routes.SOCIAL);
+          } else if (changeView == 2) {
+            context.push(Routes.INSTAGRAM);
+          }else{
+            context.push(Routes.HOME);
+          }
+        },
+        backgroundColor: changeView == 2 ? AppColors.PRIMARY_COLOR : Colors.white,
         child: icon != null
             ? Icon(
                 icon,

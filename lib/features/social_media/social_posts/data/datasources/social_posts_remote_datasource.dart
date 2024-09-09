@@ -1,6 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/features/account_taps/lists/data/models/user_friend_model.dart';
+import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/post_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/suggest_user_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/user_profile_model.dart';
@@ -26,6 +28,8 @@ abstract class SocialPostsRemoteDataSource {
   Future<Either<Failure, List<PostEntity>>> getGlobalFeed(
       {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getTweet(
+      {required TwitterFeedParams params});
+  Future<Either<Failure, List<UserFriendEntity>>> searchUsers(
       {required TwitterFeedParams params});
   Future<Either<Failure, PostEntity>> getPost({required String postId});
   Future<Either<Failure, bool>> deleteFriend({required String userId});
@@ -344,5 +348,20 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
     final response = await _apiConsumer
         .delete(EndPoints.deleteFriend(userId),);
     return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, List<UserFriendEntity>>> searchUsers({required TwitterFeedParams params}) async{
+    final response = await _apiConsumer.get(
+        EndPoints.searchUsers(params));
+
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data'] as List)
+          .map((e) => UserFriendModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
   }
 }

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
@@ -25,6 +26,12 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   Future<Either<Failure, List<PostEntity>>> getFeed(
       {required TwitterFeedParams params}) {
     return _remoteDataSource.getFeed(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<UserFriendEntity>>> searchUsers(
+      {required TwitterFeedParams params}) {
+    return _remoteDataSource.searchUsers(params: params);
   }
 
   @override
