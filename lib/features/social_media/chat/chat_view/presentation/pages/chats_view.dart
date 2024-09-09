@@ -340,17 +340,19 @@ class _ChatViewState extends State<ChatView> {
       length: ChatCategories.values.length,
       initialIndex: widget.initialTabIndex,
       child: SharedScaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            context.push(Routes.CONTACTSVIEW);
-          },
-          tooltip: 'Contacts',
-          backgroundColor: AppColors.PRIMARY_COLOR,
-          child: const Icon(
-            Icons.contacts,
-            color: Colors.white,
-          ),
-        ),
+        floatingActionButton: context.read<UserCubit>().isLoggedIn
+            ? FloatingActionButton(
+                onPressed: () {
+                  context.push(Routes.CONTACTSVIEW);
+                },
+                tooltip: 'Contacts',
+                backgroundColor: AppColors.PRIMARY_COLOR,
+                child: const Icon(
+                  Icons.contacts,
+                  color: Colors.white,
+                ),
+              )
+            : null,
         mainCategoryId: 2,
         body: NestedAppbar(
           scrollController: ScrollController(),

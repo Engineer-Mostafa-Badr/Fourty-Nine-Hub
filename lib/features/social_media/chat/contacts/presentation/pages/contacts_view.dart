@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,7 +15,7 @@ class ContactsView extends StatefulWidget {
 
 class ContactsViewState extends State<ContactsView> {
   bool _permissionDenied = false;
-  List? _contacts;
+  List<Contact>? _contacts;
   @override
   void initState() {
     super.initState();
@@ -59,13 +61,51 @@ class ContactsViewState extends State<ContactsView> {
     if (_contacts == null) {
       return const Center(child: CircularProgressIndicator());
     }
-    return ListView.builder(
-        itemCount: _contacts!.length,
-        itemBuilder: (context, i) => ListTile(
-            title: Text(_contacts![i].displayName),
-            onTap: () async {
-              final fullContact =
-                  await FlutterContacts.getContact(_contacts![i].id);
-            }));
+    return ListView.separated(
+      itemCount: _contacts!.length,
+      separatorBuilder: (context, index) => const Divider(
+        height: 1,
+      ),
+      itemBuilder: (context, i) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          color: AppColors.BACKGROUND_COLOR,
+          child: Row(
+            children: [
+              const SizedBox(
+                width: 16,
+              ),
+              const CircleAvatar(
+                backgroundImage: CachedNetworkImageProvider(
+                  UIConst.profilePlaceHolder,
+                ),
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.75,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _contacts![i].displayName,
+                      overflow: TextOverflow.ellipsis,
+                      style: Styles.mediumText(fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      "A bird in the hand is better than two on the tree.",
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          Styles.smallText(color: AppColors.LIGHT_GRAY_COLOR2),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
