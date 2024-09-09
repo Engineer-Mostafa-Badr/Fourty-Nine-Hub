@@ -475,158 +475,67 @@ class MessageCard extends StatelessWidget {
           : (details) {
               chatRoomCubit.selectMessageForReplaying(messageEntity);
             },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            const CircleAvatar(
-              radius: 15,
-              backgroundColor: Colors.white,
-              backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
-            ),
-            const Sizer(width: 5),
-            IntrinsicWidth(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const CircleAvatar(
+            radius: 15,
+            backgroundColor: Colors.white,
+            backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+          ),
+          const Sizer(width: 5),
+          IntrinsicWidth(
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              margin: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: const Radius.circular(12),
+                  topRight: const Radius.circular(12),
+                  bottomLeft: isArabic
+                      ? const Radius.circular(0)
+                      : const Radius.circular(12),
+                  bottomRight: isArabic
+                      ? const Radius.circular(12)
+                      : const Radius.circular(0),
+                ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 8,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: width * 0.65),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                constraints: BoxConstraints(
+                  maxWidth: width * 0.65,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    messageEntity.isReply!
-                        ? Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(12),
-                                topRight: Radius.circular(12),
-                              ),
-                            ),
-                            height: 60,
-                            padding: const EdgeInsets.all(0),
-                            margin: const EdgeInsets.all(0),
-                            child: Container(
-                              margin: const EdgeInsets.only(
-                                top: 8,
-                                left: 8,
-                                right: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                color:
-                                    AppColors.DARK_GRAY_COLOR.withOpacity(0.4),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(12),
-                                  topRight: Radius.circular(12),
-                                  bottomLeft: Radius.circular(12),
-                                  bottomRight: Radius.circular(12),
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.all(0),
-                                    padding: const EdgeInsets.all(0),
-                                    width: 3,
-                                    color: AppColors.PRIMARY_COLOR,
-                                    height: 30,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        ConstrainedBox(
-                                          constraints: BoxConstraints(
-                                            maxWidth: width * 0.55,
-                                          ),
-                                          child: Text(
-                                            "replyed message sender",
-                                            overflow: TextOverflow.ellipsis,
-                                            style: Styles.mediumText(
-                                                color: AppColors.PRIMARY_COLOR,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                        ConstrainedBox(
-                                          constraints: BoxConstraints(
-                                            maxWidth: width * 0.55,
-                                          ),
-                                          child: Text(
-                                            "This is the replyed message",
-                                            overflow: TextOverflow.ellipsis,
-                                            style: Styles.mediumText(
-                                              color: AppColors.DARK_GRAY_COLOR,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
-                        : const SizedBox(),
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      margin: const EdgeInsets.all(0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: messageEntity.isReply!
-                              ? const Radius.circular(0)
-                              : const Radius.circular(12),
-                          topRight: messageEntity.isReply!
-                              ? const Radius.circular(0)
-                              : const Radius.circular(12),
-                          bottomLeft: isArabic
-                              ? const Radius.circular(0)
-                              : const Radius.circular(12),
-                          bottomRight: isArabic
-                              ? const Radius.circular(12)
-                              : const Radius.circular(0),
-                        ),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 8,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
+                    Expanded(
+                      child: ReadMoreLabel(
+                        trimLines: 5,
+                        text: messageEntity.text!,
+                        style:
+                            Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+                        textAlign: TextAlign.left,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: ReadMoreLabel(
-                              trimLines: 5,
-                              text: messageEntity.text!,
-                              style: Styles.mediumText(
-                                color: AppColors.PRIMARY_COLOR,
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Label(
-                            text: '${messageEntity.formattedCreatedAt}',
-                            style: Styles.smallText(
-                                color: AppColors.PRIMARY_COLOR),
-                          ),
-                        ],
-                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Label(
+                      text: '${messageEntity.formattedCreatedAt}',
+                      style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
                     ),
                   ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
