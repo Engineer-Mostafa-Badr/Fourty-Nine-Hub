@@ -223,5 +223,9 @@
   "archive": "Archive",
   "lockChat": "Lock Chat",
   "unread": "Unread",
-  "broadcast": "Broadcast"
+  "broadcast": "Broadcast",
+  "newGroup": "New Group",
+  "newBroadcast": "New Broadcast",
+  "linkedDevice": "Linked Device",
+  "starredMessages" : "Starred Messages"
 }

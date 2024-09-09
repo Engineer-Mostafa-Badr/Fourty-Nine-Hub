@@ -299,8 +299,8 @@ class MessageCard extends StatelessWidget {
                                 ),
                                 Label(
                                   text: "This message is deleted",
-                                  style: Styles.mediumText(
-                                      color: Colors.black54),
+                                  style:
+                                      Styles.mediumText(color: Colors.black54),
                                 ),
                               ],
                             )
@@ -317,8 +317,8 @@ class MessageCard extends StatelessWidget {
                       children: [
                         Label(
                           text: '${messageEntity.formattedCreatedAt}',
-                          style: Styles.smallText(
-                              color: AppColors.PRIMARY_COLOR),
+                          style:
+                              Styles.smallText(color: AppColors.PRIMARY_COLOR),
                         ),
                         const SizedBox(width: 4),
                         Icon(

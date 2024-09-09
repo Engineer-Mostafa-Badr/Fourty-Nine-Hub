@@ -20,7 +20,7 @@ class ChatStories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: kToolbarHeight * 1.5,
+      height: kToolbarHeight * 1.3,
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
       ),
@@ -30,7 +30,7 @@ class ChatStories extends StatelessWidget {
           _createMyStory(context),
           const Sizer(),
           SizedBox(
-            height: kToolbarHeight * 1.5,
+            height: kToolbarHeight * 1.3,
             child: BlocBuilder<StoryCubit, StoryState>(
               builder: (context, state) {
                 return ListView.separated(
@@ -58,44 +58,47 @@ class ChatStories extends StatelessWidget {
           builder: (context) => const CameraScreen(),
         ),
       ),
-      child: SizedBox(
-        height: kToolbarHeight * 1.5,
-        width: kToolbarHeight,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 50,
-              width: 50,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: CircleAvatar(
-                      backgroundColor: AppColors.PRIMARY_COLOR,
-                      child: Label(
-                          text: 'FS',
-                          style: Styles.headerText(color: Colors.white)),
-                    ),
-                  ),
-                  const Positioned(
-                      bottom: 0,
-                      right: 0,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 16.0),
+        child: SizedBox(
+          height: kToolbarHeight * 1.5,
+          width: kToolbarHeight,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 50,
+                width: 50,
+                child: Stack(
+                  children: [
+                    Positioned.fill(
                       child: CircleAvatar(
-                        radius: 10,
-                        backgroundColor: Colors.white,
-                        child: Icon(
-                          Icons.add,
-                          size: 16,
-                          color: AppColors.PRIMARY_COLOR,
-                        ),
-                      ))
-                ],
+                        backgroundColor: AppColors.PRIMARY_COLOR,
+                        child: Label(
+                            text: 'FS',
+                            style: Styles.headerText(color: Colors.white)),
+                      ),
+                    ),
+                    const Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: CircleAvatar(
+                          radius: 10,
+                          backgroundColor: Colors.white,
+                          child: Icon(
+                            Icons.add,
+                            size: 16,
+                            color: AppColors.PRIMARY_COLOR,
+                          ),
+                        ))
+                  ],
+                ),
               ),
-            ),
-            Label(
-                text: 'My Story',
-                style: Styles.mediumText(fontWeight: FontWeight.w400))
-          ],
+              Label(
+                  text: 'My Story',
+                  style: Styles.mediumText(fontWeight: FontWeight.w400))
+            ],
+          ),
         ),
       ),
     );

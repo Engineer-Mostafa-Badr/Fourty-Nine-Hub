@@ -271,6 +271,7 @@
 //after add index to navigate
 import 'dart:math';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -280,6 +281,7 @@ import 'package:fourtyninehub/common/widgets/stateless/appbar/nested_appbar.dart
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/chat_categories.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -338,27 +340,73 @@ class _ChatViewState extends State<ChatView> {
       length: ChatCategories.values.length,
       initialIndex: widget.initialTabIndex,
       child: SharedScaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            context.push(Routes.CONTACTSVIEW);
+          },
+          tooltip: 'Contacts',
+          backgroundColor: AppColors.PRIMARY_COLOR,
+          child: const Icon(
+            Icons.contacts,
+            color: Colors.white,
+          ),
+        ),
         mainCategoryId: 2,
         body: NestedAppbar(
           scrollController: ScrollController(),
-          appBars: [
-            SliverAppBar(
-              expandedHeight: kToolbarHeight * 1.5,
-              automaticallyImplyLeading: false,
-              floating: true,
-              flexibleSpace: BlocProvider.value(
-                value: serviceLocator<StoryCubit>()..fetchStories(),
-                child: const ChatStories(),
-              ),
-            ),
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              floating: true,
-              pinned: true,
-              titleSpacing: 0,
-              title: _buildCategoriesLabels(),
-            )
-          ],
+          appBars: context.read<UserCubit>().isLoggedIn
+              ? [
+                  SliverAppBar(
+                    expandedHeight: kToolbarHeight * 1.9,
+                    automaticallyImplyLeading: false,
+                    floating: true,
+                    flexibleSpace: BlocProvider.value(
+                      value: serviceLocator<StoryCubit>()..fetchStories(),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            height: 30,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                PopupMenuButton(
+                                  icon: const Icon(
+                                    Icons.more_vert,
+                                    color: AppColors.PRIMARY_COLOR,
+                                  ),
+                                  color: AppColors.BACKGROUND_COLOR,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(16.0)),
+                                  ),
+                                  offset: const Offset(0, 50),
+                                  onSelected: (int value) async {
+                                    if (value == 0) {
+                                      context.push(Routes.VIEWCONTACT);
+                                    }
+                                  },
+                                  itemBuilder: (context) {
+                                    return _mainMenuBuilder();
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          const ChatStories(),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SliverAppBar(
+                    automaticallyImplyLeading: false,
+                    floating: true,
+                    pinned: true,
+                    titleSpacing: 0,
+                    title: _buildCategoriesLabels(),
+                  )
+                ]
+              : [],
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
             builder: (context, state) {
               return context.read<UserCubit>().isLoggedIn
@@ -368,9 +416,13 @@ class _ChatViewState extends State<ChatView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         GestureDetector(
-                            onTap: () => context.push(Routes.LOGIN),
-                            child: Label(
-                                text: 'Login', style: Styles.headerText())),
+                          onTap: () => context.push(Routes.LOGIN),
+                          child: Label(
+                            text: 'Login',
+                            style: Styles.headerText(
+                                color: AppColors.PRIMARY_COLOR_DARK),
+                          ),
+                        ),
                         Label(
                             text: ', To continue in using chat services',
                             style: Styles.headerText()),
@@ -383,13 +435,55 @@ class _ChatViewState extends State<ChatView> {
     );
   }
 
+  List<PopupMenuEntry<int>> _mainMenuBuilder() {
+    return [
+      PopupMenuItem<int>(
+        value: 0,
+        child: Text(
+          LocaleKeys.newGroup.tr(),
+          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+        ),
+      ),
+      PopupMenuItem<int>(
+        value: 1,
+        child: Text(
+          LocaleKeys.newBroadcast.tr(),
+          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+        ),
+      ),
+      PopupMenuItem<int>(
+        value: 2,
+        child: Text(
+          LocaleKeys.linkedDevice.tr(),
+          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+        ),
+      ),
+      PopupMenuItem<int>(
+        value: 3,
+        child: Text(
+          LocaleKeys.starredMessages.tr(),
+          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+        ),
+      ),
+      PopupMenuItem<int>(
+        value: 4,
+        child: Text(
+          LocaleKeys.settings.tr(),
+          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+        ),
+      ),
+    ];
+  }
+
   Widget _buildCategoriesLabels() {
     return TabBar(
         labelColor: AppColors.PRIMARY_COLOR,
         indicatorColor: Colors.red,
         onTap: (index) {
           if (context.read<UserCubit>().isLoggedIn) {
-            context.read<ChatsCubit>().getChats(category: ChatCategories.values[index]);
+            context
+                .read<ChatsCubit>()
+                .getChats(category: ChatCategories.values[index]);
 
             // if this locked chat we request password
             if (ChatCategories.values[index] == ChatCategories.locked) {
@@ -403,7 +497,6 @@ class _ChatViewState extends State<ChatView> {
           return Tab(text: e.name);
         }).toList());
   }
-
 
   Widget _buildCategoriesViews() {
     return TabBarView(children: [
@@ -537,7 +630,8 @@ class _ChatViewState extends State<ChatView> {
               TextButton(
                   onPressed: () async {
                     chatCubit.getChats(
-                        category: ChatCategories.locked, password: passwordController.text.trim());
+                        category: ChatCategories.locked,
+                        password: passwordController.text.trim());
                     Navigator.of(context).pop(false);
                   },
                   child: const Text('Confirm password')),

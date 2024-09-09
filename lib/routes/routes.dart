@@ -43,6 +43,7 @@ abstract class Routes {
   static const MEDIASLIDER = '/ChatRoom/MediaSlider';
   static const VIEWCONTACT = '/ChatRoom/ViewContact';
   static const ATTACHMENTSVIEW = '/ChatRoom/AttachmentsView';
+  static const CONTACTSVIEW = '/ContactsView';
   static const MAZADAT = '/Mazadat';
   static const VISITA = '/Visita';
   static const VISITAEMERGENCY = '/Visita/VisitaEmergency';
@@ -203,6 +204,7 @@ abstract class Paths {
   static const SearchMeals = 'SearchMeals';
   static const SHIPPING = 'Shipping';
   static const SHIPPING_REGISTER = 'shippingRegister';
+  static const CONTACTS_VIEW = 'ContactsView';
 
   static const RIDE = 'Ride';
   static const CONTACTUS = 'ContactUs';

@@ -223,5 +223,9 @@ abstract class  LocaleKeys {
   static const lockChat = 'lockChat';
   static const unread = 'unread';
   static const broadcast = 'broadcast';
+  static const newGroup = 'newGroup';
+  static const newBroadcast = 'newBroadcast';
+  static const linkedDevice = 'linkedDevice';
+  static const starredMessages = 'starredMessages';
 
 }

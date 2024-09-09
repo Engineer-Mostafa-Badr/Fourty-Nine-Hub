@@ -238,7 +238,11 @@ class CodegenLoader extends AssetLoader{
   "archive": "أرشيف",
   "lockChat": "قفل الدردشة",
   "unread": "غير مقروءة",
-  "broadcast": "اذاعة"
+  "broadcast": "اذاعة",
+  "newGroup": "مجموعة جديدة",
+  "newBroadcast": "رسالة جماعية جديدة",
+  "linkedDevice": "الاجهزة المرتبطة",
+  "starredMessages": "الرسائل المميزة بنجمة"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -465,7 +469,11 @@ static const Map<String,dynamic> en = {
   "archive": "Archive",
   "lockChat": "Lock Chat",
   "unread": "Unread",
-  "broadcast": "Broadcast"
+  "broadcast": "Broadcast",
+  "newGroup": "New Group",
+  "newBroadcast": "New Broadcast",
+  "linkedDevice": "Linked Device",
+  "starredMessages": "Starred Messages"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

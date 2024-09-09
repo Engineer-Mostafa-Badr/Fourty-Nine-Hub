@@ -222,5 +222,9 @@
   "archive": "أرشيف",
   "lockChat": "قفل الدردشة",
   "unread": "غير مقروءة",
-  "broadcast": "اذاعة"
+  "broadcast": "اذاعة",
+  "newGroup": "مجموعة جديدة",
+  "newBroadcast": "رسالة جماعية جديدة",
+  "linkedDevice": "الاجهزة المرتبطة",
+  "starredMessages" : "الرسائل المميزة بنجمة"
 }
