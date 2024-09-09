@@ -224,10 +224,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
       builder: (BuildContext context, Widget? child) {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 400),
-          height: scrollController.position.userScrollDirection ==
-                  ScrollDirection.reverse
-              ? 0
-              : 90.zH,
+          height: 90.zH,
           child: CustomPaint(
             painter: BottomBarPainter(
               color: Colors.black,

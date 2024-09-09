@@ -184,7 +184,7 @@ class _ReportViewState extends State<ReportView> {
       children: [
         Expanded(
           child: TextField(
-            style: Styles.headerText(
+            style: TextStyle(
               fontSize: screenWidth * 0.04,
               fontWeight: FontWeight.bold,
               color: AppColors.PRIMARY_COLOR_LIGHT,
@@ -247,8 +247,7 @@ class _ReportViewState extends State<ReportView> {
                         showErrorMessage(
                           context,
                           getFailureMessage(
-                              state.failure ??  UnknownFailure(''),
-                              context),
+                              state.failure ?? UnknownFailure(''), context),
                         );
                         context.pop();
                       }
