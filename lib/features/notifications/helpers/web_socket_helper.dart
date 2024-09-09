@@ -12,11 +12,9 @@ class WebSocketHelper {
   final Socket socket;
 
   WebSocketHelper({required this.socket});
-  Future<void> notificationListener(
-      Function(Map<String, dynamic> data) notificationCallback) async {
+  Future<void> notificationListener(Function(Map<String, dynamic> data) notificationCallback) async {
     try {
-      socket.io.options?['extraHeaders']?['authorization'] =
-          await getUserToken();
+      socket.io.options?['extraHeaders']?['authorization'] = await getUserToken();
       socket.connect();
       socket.onConnect((_) {
         pr('Connect To Socket successfully');

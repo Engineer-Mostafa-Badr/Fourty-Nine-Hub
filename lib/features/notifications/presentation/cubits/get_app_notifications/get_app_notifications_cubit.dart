@@ -26,7 +26,7 @@ class GetAppNotificationsCubit extends Cubit<GetAppNotificationsState> {
     pr('pages: $page');
     pr('notifications: $notifications');
     emit(GetAppNotificationsLoading());
-    final response = await getNotficationsUseCase.call(type: 'services', page: page);
+    final response = await getNotficationsUseCase.call(type: 'app', page: page);
     response.fold(
       (Failure failure) {
         emit(GetAppNotificationsFailed(Labels.errorHappened));

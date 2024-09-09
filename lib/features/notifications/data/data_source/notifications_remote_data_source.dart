@@ -24,6 +24,8 @@ abstract class NotificationsRemoteDataSource {
   Future<Either<Failure, UnreadNotificationsCountEntity>> getUnreadNotificationsCount();
   Future<Either<Failure, bool>> notificationSeen({required String id});
   Future<Either<Failure, bool>> allNotificationSeen({required String type});
+  Future<Either<Failure, bool>> deleteNotification({required String id});
+  Future<Either<Failure, bool>> deleteAllNotifications({required String type});
 }
 
 class NotificationsRemoteDataSourceImp implements NotificationsRemoteDataSource {
@@ -127,6 +129,39 @@ class NotificationsRemoteDataSourceImp implements NotificationsRemoteDataSource 
       (failure) => Left(pr(failure)),
       (data) {
         pr('All Notification marked as seen');
+        return const Right(true);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteNotification({required String id}) async {
+    final response = await apiConsumer.delete(
+      EndPoints.deleteNotification(id),
+    );
+
+    return response.fold(
+      (failure) => Left(pr(failure)),
+      (data) {
+        pr('Notificiation Deleted Successfully');
+        return const Right(true);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteAllNotifications({required String type}) async {
+    final response = await apiConsumer.delete(
+      EndPoints.deleteAllNotification,
+      queryParameters: {
+        'type': type,
+      },
+    );
+
+    return response.fold(
+      (failure) => Left(pr(failure)),
+      (data) {
+        pr('All Notificiations Deleted Successfully');
         return const Right(true);
       },
     );

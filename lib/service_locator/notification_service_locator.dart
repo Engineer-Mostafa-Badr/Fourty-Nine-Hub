@@ -2,6 +2,8 @@ import 'package:fourtyninehub/features/notifications/data/data_source/notificati
 import 'package:fourtyninehub/features/notifications/data/repository/notification_repo_impl.dart';
 import 'package:fourtyninehub/features/notifications/domain/repos/notification_repo.dart';
 import 'package:fourtyninehub/features/notifications/domain/usecases/all_notifications_seen_usecase.dart';
+import 'package:fourtyninehub/features/notifications/domain/usecases/delete_all_notifications_usecase.dart';
+import 'package:fourtyninehub/features/notifications/domain/usecases/delete_notification_usecase.dart';
 import 'package:fourtyninehub/features/notifications/domain/usecases/get_notifications_usecase.dart';
 import 'package:fourtyninehub/features/notifications/domain/usecases/get_unread_notifications_usecase.dart';
 import 'package:fourtyninehub/features/notifications/domain/usecases/notificaiton_listener_usecase.dart';
@@ -53,6 +55,12 @@ class NotificationsServiceLocator {
     );
     serviceLocator.registerLazySingleton<AllNotificationSeenUseCase>(
       () => AllNotificationSeenUseCase(notificationRepo: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<DeleteNotificationUseCase>(
+      () => DeleteNotificationUseCase(notificationRepo: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<DeleteAllNotificationsUseCase>(
+      () => DeleteAllNotificationsUseCase(notificationRepo: serviceLocator()),
     );
   }
 }

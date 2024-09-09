@@ -1,16 +1,24 @@
+import 'dart:math';
+
 import 'package:elegant_notification/elegant_notification.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/notifications/domain/entities/notification_entity.dart';
+import 'package:go_router/go_router.dart';
 
 notificationSnackBar({
   required BuildContext context,
-  required String title,
-  required String body,
+  required NotificationEntity notificationEntity,
 }) {
+  String trimmedBody = notificationEntity.body ?? '';
+  trimmedBody = trimmedBody.substring(0, min(trimmedBody.length, 30));
   ElegantNotification.success(
-    title: Text(title),
-    description: Text(body),
+    title: Text(notificationEntity.title ?? ''),
+    description: Text(trimmedBody),
     onDismiss: () {},
-    onNotificationPressed: () {},
+    onNotificationPressed: () {
+      context.push(notificationEntity.path ?? '', extra: notificationEntity.payload);
+    },
     onCloseButtonPressed: () {},
+    toastDuration: const Duration(seconds: 7),
   ).show(context);
 }

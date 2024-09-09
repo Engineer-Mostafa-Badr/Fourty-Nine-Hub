@@ -6,7 +6,6 @@ import 'package:fourtyninehub/features/notifications/domain/entities/notificatio
 import 'package:fourtyninehub/features/notifications/domain/entities/unread_notifications_count_entity.dart';
 
 import '../../domain/repos/notification_repo.dart';
-import '../models/delete_notification_model.dart';
 
 class NotificationRepoImpl implements NotificationRepo {
   final NotificationsRemoteDataSource notificationRemoteDataSource;
@@ -20,11 +19,6 @@ class NotificationRepoImpl implements NotificationRepo {
     int limit = 10,
   }) async {
     return notificationRemoteDataSource.fetchNotifications(type: type, page: page, limit: limit);
-  }
-
-  @override
-  Future<Either<Failure, DeleteNotificationModel>> deleteItemNotifications(String id) async {
-    throw UnimplementedError();
   }
 
   @override
@@ -52,5 +46,15 @@ class NotificationRepoImpl implements NotificationRepo {
   @override
   Future<Either<Failure, bool>> allNotificationSeen({required String type}) {
     return notificationRemoteDataSource.allNotificationSeen(type: type);
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteNotification({required String id}) {
+    return notificationRemoteDataSource.deleteNotification(id: id);
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteAllNotifications({required String type}) {
+    return notificationRemoteDataSource.deleteAllNotifications(type: type);
   }
 }

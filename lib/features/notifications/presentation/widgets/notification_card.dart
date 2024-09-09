@@ -7,19 +7,24 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/notification_entity.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/all_notifications_seen/all_notfications_seen_cubit.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_seen/notification_seen_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../res/assets/assets.dart';
 
 class NotificationCard extends StatefulWidget {
   final NotificationEntity notificationEntity;
-
-  const NotificationCard({super.key, required this.notificationEntity});
+  final int index;
+  final Function() notificationSeenCallback;
+  final Function() notificationDeleteCallback;
+  const NotificationCard({
+    super.key,
+    required this.notificationEntity,
+    required this.index,
+    required this.notificationSeenCallback,
+    required this.notificationDeleteCallback,
+  });
 
   @override
   State<NotificationCard> createState() => _NotificationCardState();
@@ -32,12 +37,8 @@ class _NotificationCardState extends State<NotificationCard> {
       builder: (context, state) {
         return InkWell(
           onTap: () {
-            widget.notificationEntity.read = true;
+            widget.notificationSeenCallback();
             setState(() {});
-            context.read<NotificationSeenCubit>().notificationSeen(id: widget.notificationEntity.id ?? '').then(
-                  (value) => context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount(),
-                );
-            context.push(widget.notificationEntity.path ?? '', extra: widget.notificationEntity.payload);
           },
           child: Container(
             padding: const EdgeInsets.all(5),
@@ -46,7 +47,7 @@ class _NotificationCardState extends State<NotificationCard> {
               direction: DismissDirection.startToEnd,
               behavior: HitTestBehavior.translucent,
               confirmDismiss: (direction) async {
-                bool result = false;
+                bool confirmDelete = false;
                 await showModalBottomSheet(
                   context: context,
                   builder: (context) {
@@ -56,13 +57,16 @@ class _NotificationCardState extends State<NotificationCard> {
                         title: LocaleKeys.alert.localize,
                         subTitle: LocaleKeys.clearNoti.localize,
                         action: () {
-                          result = true;
+                          confirmDelete = true;
                         },
                       ),
                     );
                   },
                 );
-                return result;
+                if (confirmDelete) {
+                  widget.notificationDeleteCallback();
+                }
+                return confirmDelete;
               },
               background: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20),

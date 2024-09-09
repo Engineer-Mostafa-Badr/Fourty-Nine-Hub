@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/notification_entity.dart';
 import 'package:fourtyninehub/features/notifications/domain/usecases/get_notifications_usecase.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 
 part 'get_social_notifications_state.dart';
@@ -21,7 +22,10 @@ class GetSocialNotificationsCubit extends Cubit<GetSocialNotificationsState> {
     final getUnreadNotificationsCountCubit = context.read<GetUnreadNotificationsCountCubit>();
     getUnreadNotificationsCountCubit.getUnreadNotificationsCount();
     emit(GetSocialNotificationsLoading());
-    final response = await getNotficationsUseCase.call(type: 'app', page: page);
+    pr('getSocialNotifications is called');
+    pr('pages: $page');
+    pr('notifications: $notifications');
+    final response = await getNotficationsUseCase.call(type: 'social', page: page);
     response.fold(
       (Failure failure) {
         emit(GetSocialNotificationsFailed(Labels.errorHappened));

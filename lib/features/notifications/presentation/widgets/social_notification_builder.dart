@@ -5,7 +5,7 @@ import 'package:fourtyninehub/features/notifications/domain/entities/notificatio
 import 'package:fourtyninehub/features/notifications/presentation/cubits/all_notifications_seen/all_notfications_seen_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/delete_all_notifications/delete_all_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/delete_notification/delete_notification_cubit.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_seen/notification_seen_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/no_notifications_widget.dart';
@@ -14,30 +14,30 @@ import 'package:fourtyninehub/features/notifications/presentation/widgets/notifi
 import 'package:fourtyninehub/features/notifications/presentation/widgets/see_and_clear_buttons.dart';
 import 'package:go_router/go_router.dart';
 
-class AppNotificationBuilder extends StatefulWidget {
-  const AppNotificationBuilder({
+class SocialNotificationBuilder extends StatefulWidget {
+  const SocialNotificationBuilder({
     super.key,
   });
 
   @override
-  State<AppNotificationBuilder> createState() => _AppNotificationBuilderState();
+  State<SocialNotificationBuilder> createState() => _SocialNotificationBuilderState();
 }
 
-class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
+class _SocialNotificationBuilderState extends State<SocialNotificationBuilder> {
   late final ScrollController scrollController;
   late double scrollPosition;
   late double scrollMaxExtent;
   int nextPage = 1;
   bool isLoading = false;
 
-  late GetAppNotificationsCubit getAppNotificationsCubit;
+  late GetSocialNotificationsCubit getSocialNotificationsCubit;
   late final NotificationSeenCubit notificationSeenCubit;
   late final GetUnreadNotificationsCountCubit getUnreadNotificationsCountCubit;
   late final DeleteNotificationCubit deleteNotificationCubit;
   late final DeleteAllNotificationsCubit deleteAllNotificationsCubit;
   @override
   void initState() {
-    getAppNotificationsCubit = context.read<GetAppNotificationsCubit>();
+    getSocialNotificationsCubit = context.read<GetSocialNotificationsCubit>();
     notificationSeenCubit = context.read<NotificationSeenCubit>();
     getUnreadNotificationsCountCubit = context.read<GetUnreadNotificationsCountCubit>();
     deleteNotificationCubit = context.read<DeleteNotificationCubit>();
@@ -55,42 +55,42 @@ class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<GetAppNotificationsCubit, GetAppNotificationsState>(
+    return BlocConsumer<GetSocialNotificationsCubit, GetSocialNotificationsState>(
       listener: (context, state) {
-        if (state is GetAppNotificationsFailed) {
+        if (state is GetSocialNotificationsFailed) {
           showErrorMessage(context, state.message);
         }
       },
       builder: (context, state) {
-        if (state is GetAppNotificationsSuccess && getAppNotificationsCubit.notifications.isEmpty) {
+        if (state is GetSocialNotificationsSuccess && getSocialNotificationsCubit.notifications.isEmpty) {
           return const NoNotificationsWidget();
         }
         return ListView.builder(
           controller: scrollController,
-          itemCount: getAppNotificationsCubit.notifications.length + 2,
+          itemCount: getSocialNotificationsCubit.notifications.length + 2,
           itemBuilder: (context, index) {
             if (index == 0) {
               return SeeAndClearButtons(
                 seeAllCallback: () async {
-                  context.read<AllNotficationsSeenCubit>().allNotificationSeen(type: 'app').then(
+                  context.read<AllNotficationsSeenCubit>().allNotificationSeen(type: 'social').then(
                         (value) => context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount(),
                       );
-                  context.read<GetAppNotificationsCubit>().notifications.forEach((element) {
+                  context.read<GetSocialNotificationsCubit>().notifications.forEach((element) {
                     element.read = true;
                   });
                 },
                 clearAllCallback: () async {
-                  await deleteAllNotificationsCubit.deleteAllNotifications(type: 'app');
-                  getAppNotificationsCubit.notifications = [];
-                  getAppNotificationsCubit.page = 1;
-                  await getAppNotificationsCubit.getAppNotifications();
+                  await deleteAllNotificationsCubit.deleteAllNotifications(type: 'social');
+                  getSocialNotificationsCubit.notifications = [];
+                  getSocialNotificationsCubit.page = 1;
+                  await getSocialNotificationsCubit.getSocialNotifications();
                   await getUnreadNotificationsCountCubit.getUnreadNotificationsCount();
                 },
               );
             }
             index--;
-            if (index < getAppNotificationsCubit.notifications.length) {
-              final NotificationEntity notificationEntity = getAppNotificationsCubit.notifications[index];
+            if (index < getSocialNotificationsCubit.notifications.length) {
+              final NotificationEntity notificationEntity = getSocialNotificationsCubit.notifications[index];
               return NotificationCard(
                 notificationEntity: notificationEntity,
                 index: index,
@@ -103,11 +103,11 @@ class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
                 },
                 notificationDeleteCallback: () {
                   deleteNotificationCubit.deleteNotification(id: notificationEntity.id ?? '');
-                  getAppNotificationsCubit.notifications.removeAt(index);
+                  getSocialNotificationsCubit.notifications.removeAt(index);
                 },
               );
             }
-            return state is GetAppNotificationsLoading ? const NotificationCardLoadingList() : const SizedBox();
+            return state is GetSocialNotificationsLoading ? const NotificationCardLoadingList() : const SizedBox();
           },
         );
       },
@@ -120,10 +120,10 @@ class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
       scrollPosition = scrollController.position.pixels;
       scrollMaxExtent = scrollController.position.maxScrollExtent;
       if (scrollPosition >= 0.7 * scrollMaxExtent) {
-        if (!isLoading && (getAppNotificationsCubit.notifications.last.hasNextPage ?? false)) {
+        if (!isLoading && (getSocialNotificationsCubit.notifications.last.hasNextPage ?? false)) {
           isLoading = true;
-          getAppNotificationsCubit.page = getAppNotificationsCubit.notifications.last.nextPageNumber!;
-          await getAppNotificationsCubit.getAppNotifications();
+          getSocialNotificationsCubit.page = getSocialNotificationsCubit.notifications.last.nextPageNumber!;
+          await getSocialNotificationsCubit.getSocialNotifications();
           nextPage++;
           isLoading = false;
         }
@@ -132,9 +132,9 @@ class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
   }
 
   void _fetchNotificationsIfEmpty() {
-    if (getAppNotificationsCubit.notifications.isEmpty) {
-      getAppNotificationsCubit.page = 1;
-      getAppNotificationsCubit.getAppNotifications();
+    if (getSocialNotificationsCubit.notifications.isEmpty) {
+      getSocialNotificationsCubit.page = 1;
+      getSocialNotificationsCubit.getSocialNotifications();
     }
   }
 }

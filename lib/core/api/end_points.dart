@@ -39,6 +39,8 @@ class EndPoints {
   static const notifications = '/notifications';
   static const unreadNotificationsCount = '/notifications/unread/count';
   static String notificationsSeen(String id) => '/notifications/$id';
+  static String deleteNotification(String id) => '/notifications/$id';
+  static const deleteAllNotification = '/notifications/all';
   // static const report = '/report?subCategory=66a3583454e6e337915514db';
   static String report({required String subCategoryId}) => '/report?subCategory=$subCategoryId';
   static const documentRequest = '/twitter/document-request?subCategory=66a3583454e6e337915514db';

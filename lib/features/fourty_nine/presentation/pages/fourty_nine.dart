@@ -51,8 +51,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   void initState() {
     scrollController;
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
         if (!_isScrollingDown) {
           setState(() {
             _isScrollingDown = true;
@@ -66,9 +65,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         }
       }
     });
-    context
-        .read<FirebaseNotficationsCubit>()
-        .setupInterceptedMessage(context: context);
+    context.read<FirebaseNotficationsCubit>().setupInterceptedMessage(context: context);
     super.initState();
   }
 
@@ -87,8 +84,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           // pr(state.notificationEntity);
           notificationSnackBar(
             context: context,
-            title: state.notificationEntity.title ?? '',
-            body: state.notificationEntity.body ?? '',
+            notificationEntity: state.notificationEntity,
           );
         } else if (state is NotificationSocketIoFailed) {
           // pr('Failed to recieve the new notfication ');
@@ -136,8 +132,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             _buildMainCategoriesViews(),
             const Sizer(),
             //main cats
-            BlocBuilder<MainCategoriesCubit,
-                BasicState<List<MainCategoryEntity>>>(
+            BlocBuilder<MainCategoriesCubit, BasicState<List<MainCategoryEntity>>>(
               builder: (context, state) {
                 if (state.isLoading) {
                   return Shimmer.fromColors(
@@ -149,13 +144,10 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                           (index) => Padding(
                                 padding: EdgeInsets.only(bottom: 15.zH),
                                 child: Container(
-                                  height: MediaQuery.of(context).size.height *
-                                      .15.zH,
+                                  height: MediaQuery.of(context).size.height * .15.zH,
                                   width: double.infinity,
-                                  margin:
-                                      EdgeInsets.symmetric(horizontal: 10.zW),
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 10.zW),
+                                  margin: EdgeInsets.symmetric(horizontal: 10.zW),
+                                  padding: EdgeInsets.symmetric(horizontal: 10.zW),
                                   decoration: BoxDecoration(
                                     color: AppColors.AUTH_CONTAINER_COLOR,
                                     borderRadius: BorderRadius.circular(20.zR),
@@ -174,14 +166,12 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          context.push(Routes.SUBCATEGORIES,
-                              extra: state.data![index]);
+                          context.push(Routes.SUBCATEGORIES, extra: state.data![index]);
                         },
                         child: MainCategoryBanner(category: state.data![index]),
                       );
                     },
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const Sizer(),
+                    separatorBuilder: (BuildContext context, int index) => const Sizer(),
                   );
                 } else {
                   return const SizedBox.shrink();
@@ -247,8 +237,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     );
   }
 
-  BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-      _pickMeAndComeWithUWidget() {
+  BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>> _pickMeAndComeWithUWidget() {
     return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
       builder: (context, state) {
         if (state.status == StateStatus.loading) {
@@ -310,17 +299,15 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   Row _auctionAndInstallmentWidget() {
     return Row(
       children: [
-        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
-            () => context.push(Routes.MAZADAT), Icons.group),
+        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize, () => context.push(Routes.MAZADAT), Icons.group),
         const Sizer(),
-        itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize,
-            () => context.push(Routes.INSTALLMENT), Icons.list),
+        itemAuctionAndInstallmentWidget(
+            LocaleKeys.installments.localize, () => context.push(Routes.INSTALLMENT), Icons.list),
       ],
     );
   }
 
-  Widget itemAuctionAndInstallmentWidget(
-      String label, Function function, IconData icon) {
+  Widget itemAuctionAndInstallmentWidget(String label, Function function, IconData icon) {
     return Expanded(
       child: InkWell(
         onTap: () => context.go(Routes.MAZADAT),
@@ -408,8 +395,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                       url: image,
                     ),
                     Container(
-                      color: Colors.black
-                          .withOpacity(0.3), // Darken the background
+                      color: Colors.black.withOpacity(0.3), // Darken the background
                     ),
                   ],
                 ),
