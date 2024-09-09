@@ -45,6 +45,15 @@ class ContactsViewState extends State<ContactsView> {
             color: Colors.white,
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
+          )
+        ],
         title: Text(
           "Contacts",
           style: Styles.headerText(color: Colors.white),
