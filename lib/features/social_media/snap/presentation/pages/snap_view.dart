@@ -1,12 +1,31 @@
+import 'package:css_filter/css_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:image_filter_pro/named_color_filter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'dart:io';
 import 'package:path/path.dart' show join;
 import 'package:video_player/video_player.dart';
+import 'package:image/image.dart' as img; // For image manipulation
+import 'package:css_filter/css_filter.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:gallery_saver/gallery_saver.dart';
+import 'dart:ui' as ui;
+import 'package:flutter/material.dart';
+import 'package:css_filter/css_filter.dart';
+import 'dart:io';
+import 'dart:ui' as ui;
+import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' show join;
+import 'package:css_filter/css_filter.dart';
+import 'package:flutter/rendering.dart';
+import 'package:image_filter_pro/photo_filter.dart';
 
 class SnapView extends StatelessWidget {
   const SnapView({super.key});
@@ -15,159 +34,325 @@ class SnapView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: CameraScreen(),
+      body: FilteredImageWidget(),
     );
   }
 }
 
+class FilteredImageWidget extends StatefulWidget {
+  const FilteredImageWidget({Key? key}) : super(key: key);
 
-
-class CameraScreen extends StatefulWidget {
   @override
-  _CameraScreenState createState() => _CameraScreenState();
+  _FilteredImageWidgetState createState() => _FilteredImageWidgetState();
 }
 
-class _CameraScreenState extends State<CameraScreen> {
-  CameraController? _controller;
-  Future<void>? _initializeControllerFuture;
-  List<CameraDescription>? cameras;
-  bool isRecordingVideo = false;
-  bool isVideoMode = false;
+class _FilteredImageWidgetState extends State<FilteredImageWidget> {
+  final ImagePicker _imagePicker = ImagePicker();
+  File? _selectedImage;
 
-  @override
-  void initState() {
-    super.initState();
-    initializeCamera();
-  }
+  Future<void> _pickAndFilterImage() async {
+    final XFile? pickedFile =
+        await _imagePicker.pickImage(source: ImageSource.gallery);
 
-  // Initialize the camera
-  Future<void> initializeCamera() async {
-    cameras = await availableCameras();
-    _controller = CameraController(cameras![0], ResolutionPreset.high);
-    _initializeControllerFuture = _controller?.initialize();
-    setState(() {});
-  }
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
 
-  @override
-  void dispose() {
-    _controller?.dispose();
-    super.dispose();
-  }
-
-  // Capture image and navigate to preview screen
-  Future<void> _captureImage() async {
-    try {
-      await _initializeControllerFuture;
-      final image = await _controller?.takePicture();
-      if (image != null) {
-        final directory = await getApplicationDocumentsDirectory();
-        final imagePath = join(directory.path, '${DateTime.now()}.png');
-        await image.saveTo(imagePath);
-        _navigateToPreviewScreen(imagePath, 'image');
-      }
-    } catch (e) {
-      print(e);
+      await _applyFilterToImage();
     }
   }
 
-  // Start or stop video recording and navigate to preview screen
-  Future<void> _toggleVideoRecording() async {
-    if (isRecordingVideo) {
-      XFile? videoFile = await _controller?.stopVideoRecording();
-      setState(() {
-        isRecordingVideo = false;
-      });
+  Future<void> _applyFilterToImage() async {
+    if (_selectedImage == null) return;
 
-      if (videoFile != null) {
-        final directory = await getApplicationDocumentsDirectory();
-        final videoPath = join(directory.path, '${DateTime.now()}.mp4');
-        File(videoFile.path).copy(videoPath);
-        _navigateToPreviewScreen(videoPath, 'video');
-      }
-    } else {
-      await _controller?.startVideoRecording();
-      setState(() {
-        isRecordingVideo = true;
-      });
-    }
-  }
-
-  // Navigate to preview screen after capturing media
-  void _navigateToPreviewScreen(String filePath, String mediaType) {
-    Navigator.push(
-      context,
+    final filteredImage = await Navigator.of(context).push<File>(
       MaterialPageRoute(
-        builder: (context) => MediaPreviewScreen(filePath: filePath, mediaType: mediaType),
+        builder: (context) => PhotoFilter(
+          image: _selectedImage!,
+          presets: defaultColorFilters,
+          cancelIcon: Icons.cancel,
+          applyIcon: Icons.check,
+          backgroundColor: Colors.black,
+          sliderColor: Colors.blue,
+          sliderLabelStyle: const TextStyle(color: Colors.white),
+          bottomButtonsTextStyle: const TextStyle(color: Colors.white),
+          presetsLabelTextStyle: const TextStyle(color: Colors.white),
+          applyingTextStyle: const TextStyle(color: Colors.white),
+          compressImage: true,
+          onFinishApplyingFilter: (p0) async {
+            if (p0 != null) {
+              await GallerySaver.saveImage(p0.path);
+              _selectedImage = p0;
+              setState(() {});
+            }
+          },
+        ),
       ),
     );
+
+    if (filteredImage != null) {
+      setState(() {
+        _selectedImage = filteredImage;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<void>(
-        future: _initializeControllerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Stack(
-              children: [
-                CameraPreview(_controller!),
-                Positioned(
-                  bottom: 50,
-                  left: 0,
-                  right: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.cancel, color: Colors.white, size: 40),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          if (isVideoMode) {
-                            _toggleVideoRecording();
-                          } else {
-                            _captureImage();
-                          }
-                        },
-                        child: Icon(
-                          isVideoMode
-                              ? (isRecordingVideo
-                              ? Icons.stop
-                              : Icons.videocam)
-                              : Icons.camera_alt,
-                          color: Colors.white,
-                          size: 60,
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          isVideoMode ? Icons.photo_camera : Icons.videocam,
-                          color: Colors.white,
-                          size: 40,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            isVideoMode = !isVideoMode;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
+      appBar: AppBar(
+        title: const Text('Image Filter App'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: _pickAndFilterImage,
+              child: const Text('Pick and Filter Image'),
+            ),
+            const SizedBox(height: 20),
+            if (_selectedImage != null)
+              Image.file(
+                _selectedImage!,
+                height: 300,
+                fit: BoxFit.cover,
+              ),
+          ],
+        ),
       ),
     );
   }
 }
+// class CameraScreen extends StatefulWidget {
+//   @override
+//   _CameraScreenState createState() => _CameraScreenState();
+// }
+//
+// class _CameraScreenState extends State<CameraScreen> {
+//   CameraController? _controller;
+//   Future<void>? _initializeControllerFuture;
+//   List<CameraDescription>? cameras;
+//   bool isRecordingVideo = false;
+//   bool isVideoMode = false;
+//   int selectedCameraIndex = 0;
+//
+//   // Track the selected filter
+//   String selectedFilter = "none";
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     initializeCamera(selectedCameraIndex); // Initialize with the first camera
+//   }
+//
+//   // Initialize the camera with the provided index
+//   Future<void> initializeCamera(int cameraIndex) async {
+//     cameras = await availableCameras();
+//     if (cameras != null && cameras!.isNotEmpty) {
+//       _controller = CameraController(cameras![cameraIndex], ResolutionPreset.high);
+//       _initializeControllerFuture = _controller?.initialize();
+//       setState(() {});
+//     }
+//   }
+//
+//   @override
+//   void dispose() {
+//     _controller?.dispose();
+//     super.dispose();
+//   }
+//
+//   // Capture image and navigate to preview screen
+//   Future<void> _captureImage() async {
+//     try {
+//       await _initializeControllerFuture;
+//       final image = await _controller?.takePicture();
+//       if (image != null) {
+//         final directory = await getApplicationDocumentsDirectory();
+//         final imagePath = join(directory.path, '${DateTime.now()}.png');
+//         await image.saveTo(imagePath);
+//         _navigateToPreviewScreen(imagePath, 'image');
+//       }
+//     } catch (e) {
+//       print(e);
+//     }
+//   }
+//
+//   // Start or stop video recording and navigate to preview screen
+//   Future<void> _toggleVideoRecording() async {
+//     if (isRecordingVideo) {
+//       XFile? videoFile = await _controller?.stopVideoRecording();
+//       setState(() {
+//         isRecordingVideo = false;
+//       });
+//
+//       if (videoFile != null) {
+//         final directory = await getApplicationDocumentsDirectory();
+//         final videoPath = join(directory.path, '${DateTime.now()}.mp4');
+//         File(videoFile.path).copy(videoPath);
+//         _navigateToPreviewScreen(videoPath, 'video');
+//       }
+//     } else {
+//       await _controller?.startVideoRecording();
+//       setState(() {
+//         isRecordingVideo = true;
+//       });
+//     }
+//   }
+//
+//   // Switch between front and back cameras
+//   void _switchCamera() {
+//     if (cameras != null && cameras!.length > 1) {
+//       // Toggle between front and back camera
+//       selectedCameraIndex = selectedCameraIndex == 0 ? 1 : 0;
+//       initializeCamera(selectedCameraIndex);
+//     }
+//   }
+//
+//   // Navigate to preview screen after capturing media
+//   void _navigateToPreviewScreen(String filePath, String mediaType) {
+//     Navigator.push(
+//       context,
+//       MaterialPageRoute(
+//         builder: (context) => MediaPreviewScreen(filePath: filePath, mediaType: mediaType),
+//       ),
+//     );
+//   }
+//
+//   // Apply filters to the camera preview using CSSFilter
+//   Widget _buildFilteredCameraPreview() {
+//     return CSSFilter.apply(
+//       value: _getCSSFilterMatrix(),
+//       child: CameraPreview(_controller!),
+//     );
+//   }
+//
+//   // Define different CSS filters using CSSFilterMatrix
+//   CSSFilterMatrix _getCSSFilterMatrix() {
+//     switch (selectedFilter) {
+//       case "sepia":
+//         return CSSFilterMatrix().sepia(0.8);
+//       case "grayscale":
+//         return CSSFilterMatrix().grayscale(1.0);
+//       case "brightness":
+//         return CSSFilterMatrix().brightness(1.3);
+//       case "contrast":
+//         return CSSFilterMatrix().contrast(1.5);
+//       case "hueRotate":
+//         return CSSFilterMatrix().hueRotate(90);
+//       default:
+//         return CSSFilterMatrix();
+//     }
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: FutureBuilder<void>(
+//         future: _initializeControllerFuture,
+//         builder: (context, snapshot) {
+//           if (snapshot.connectionState == ConnectionState.done) {
+//             return Stack(
+//               children: [
+//                 // Filtered Camera Preview
+//                 _buildFilteredCameraPreview(),
+//
+//                 // Filter Selection Buttons
+//                 Positioned(
+//                   top: 50,
+//                   left: 20,
+//                   right: 20,
+//                   child: Row(
+//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                     children: [
+//                       _buildFilterButton("None", "none"),
+//                       _buildFilterButton("Sepia", "sepia"),
+//                       _buildFilterButton("Grayscale", "grayscale"),
+//                       _buildFilterButton("Brightness", "brightness"),
+//                       _buildFilterButton("Contrast", "contrast"),
+//                       _buildFilterButton("Hue", "hueRotate"),
+//                     ],
+//                   ),
+//                 ),
+//
+//                 // Camera control buttons
+//                 Positioned(
+//                   bottom: 50,
+//                   left: 0,
+//                   right: 0,
+//                   child: Row(
+//                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                     children: [
+//                       // Switch between front and back camera
+//                       IconButton(
+//                         icon: Icon(Icons.switch_camera, color: Colors.white, size: 40),
+//                         onPressed: () {
+//                           _switchCamera();
+//                         },
+//                       ),
+//                       GestureDetector(
+//                         onTap: () {
+//                           if (isVideoMode) {
+//                             _toggleVideoRecording();
+//                           } else {
+//                             _captureImage();
+//                           }
+//                         },
+//                         child: Icon(
+//                           isVideoMode
+//                               ? (isRecordingVideo
+//                               ? Icons.stop
+//                               : Icons.videocam)
+//                               : Icons.camera_alt,
+//                           color: Colors.white,
+//                           size: 60,
+//                         ),
+//                       ),
+//                       IconButton(
+//                         icon: Icon(
+//                           isVideoMode ? Icons.photo_camera : Icons.videocam,
+//                           color: Colors.white,
+//                           size: 40,
+//                         ),
+//                         onPressed: () {
+//                           setState(() {
+//                             isVideoMode = !isVideoMode;
+//                           });
+//                         },
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             );
+//           } else {
+//             return Center(child: CircularProgressIndicator());
+//           }
+//         },
+//       ),
+//     );
+//   }
+//
+//   // Helper widget for filter buttons
+//   Widget _buildFilterButton(String label, String filter) {
+//     return ElevatedButton(
+//       style: ElevatedButton.styleFrom(
+//         backgroundColor: selectedFilter == filter ? Colors.yellow[700] : Colors.grey[800],
+//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+//         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+//       ),
+//       onPressed: () {
+//         setState(() {
+//           selectedFilter = filter;
+//         });
+//       },
+//       child: Text(label, style: TextStyle(color: Colors.white)),
+//     );
+//   }
+// }
+//
+//
 
 class MediaPreviewScreen extends StatelessWidget {
   final String filePath;
@@ -180,12 +365,12 @@ class MediaPreviewScreen extends StatelessWidget {
     if (mediaType == 'image') {
       await GallerySaver.saveImage(filePath);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Image saved to gallery!')),
+        const SnackBar(content: Text('Image saved to gallery!')),
       );
     } else if (mediaType == 'video') {
       await GallerySaver.saveVideo(filePath);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Video saved to gallery!')),
+        const SnackBar(content: Text('Video saved to gallery!')),
       );
     }
   }
@@ -197,13 +382,14 @@ class MediaPreviewScreen extends StatelessWidget {
       barrierDismissible: false, // Force user to choose an option
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Are you sure you want to abandon your Snapsterpiece?'),
+          title: const Text(
+              'Are you sure you want to abandon your Snapsterpiece?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close dialog
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
@@ -214,7 +400,7 @@ class MediaPreviewScreen extends StatelessWidget {
                 Navigator.of(context).pop(); // Close dialog
                 Navigator.of(context).pop(); // Return to the previous screen
               },
-              child: Text('Abandon'),
+              child: const Text('Abandon'),
             ),
           ],
         );
@@ -232,9 +418,9 @@ class MediaPreviewScreen extends StatelessWidget {
           Positioned.fill(
             child: mediaType == 'image'
                 ? Image.file(
-              File(filePath),
-              fit: BoxFit.cover,
-            )
+                    File(filePath),
+                    fit: BoxFit.cover,
+                  )
                 : VideoPlayerWidget(filePath: filePath),
           ),
 
@@ -248,13 +434,14 @@ class MediaPreviewScreen extends StatelessWidget {
               children: [
                 // Save button (download icon)
                 Container(
-                  margin: EdgeInsets.only(left: 20),
+                  margin: const EdgeInsets.only(left: 20),
                   decoration: BoxDecoration(
                     color: Colors.grey[800],
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
-                    icon: Icon(Icons.download_rounded, size: 30, color: Colors.white),
+                    icon: const Icon(Icons.download_rounded,
+                        size: 30, color: Colors.white),
                     onPressed: () => _saveMedia(context),
                   ),
                 ),
@@ -263,31 +450,36 @@ class MediaPreviewScreen extends StatelessWidget {
                   onPressed: () {
                     // Handle Story action
                   },
-                  icon: CircleAvatar(
-                    backgroundImage: AssetImage('assets/avatar.png'), // Replace with actual avatar
+                  icon: const CircleAvatar(
+                    backgroundImage: AssetImage('assets/avatar.png'),
+                    // Replace with actual avatar
                     radius: 15,
                   ),
-                  label: Text('Story', style: TextStyle(color: Colors.white)),
+                  label: const Text('Story',
+                      style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey[800],
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
                   ),
                 ),
                 // Send To button (right)
                 Container(
-                  margin: EdgeInsets.only(right: 20),
+                  margin: const EdgeInsets.only(right: 20),
                   child: ElevatedButton.icon(
                     onPressed: () {
                       // Handle Send action
                     },
-                    icon: Icon(Icons.send, color: Colors.black),
-                    label: Text('Send To', style: TextStyle(color: Colors.black)),
+                    icon: const Icon(Icons.send, color: Colors.black),
+                    label: const Text('Send To',
+                        style: TextStyle(color: Colors.black)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.yellow[700],
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -306,6 +498,7 @@ class MediaPreviewScreen extends StatelessWidget {
 // VideoPlayerWidget for video preview
 class VideoPlayerWidget extends StatefulWidget {
   final String filePath;
+
   VideoPlayerWidget({required this.filePath});
 
   @override
@@ -335,6 +528,6 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   Widget build(BuildContext context) {
     return _controller != null && _controller!.value.isInitialized
         ? VideoPlayer(_controller!)
-        : Center(child: CircularProgressIndicator());
+        : const Center(child: CircularProgressIndicator());
   }
 }
