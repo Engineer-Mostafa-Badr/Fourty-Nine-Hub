@@ -4,19 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
-import 'package:fourtyninehub/features/authentication/domain/use_cases/get_user_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/deleteMessage_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 part 'chat_room_state.dart';
@@ -24,30 +19,30 @@ part 'chat_room_state.dart';
 class ChatRoomCubit extends Cubit<ChatRoomState> {
   final GetMessagesUseCase _getMessagesUseCase;
   final DeleteChatMessageUseCase _deleteChatMessageUseCase;
-  final ListenToNewMessageUseCase _listenToNewMessageUseCase;
+  late Stream<MessageEntity> _messagesStream;
   final SendMessageUseCase _sendMessageUseCase;
-  final StopListenToMessagesUseCase _stopListenToMessagesUseCase;
   List<MessageEntity> chatMessages = [];
 
   final ScrollController scrollController = ScrollController();
-  // final StreamController<MessageEntity> messagesStreamController =
-  //     StreamController<MessageEntity>.broadcast();
-  String? chatId;
+
+  late String _chatId;
   final FilePicker _filePicker = FilePicker.platform;
 
   ChatRoomCubit(
-    this._listenToNewMessageUseCase,
     this._getMessagesUseCase,
     this._deleteChatMessageUseCase,
     this._sendMessageUseCase,
-    this._stopListenToMessagesUseCase,
   ) : super(const ChatRoomState());
 
-  Future<void> getMessages(String chatID) async {
+  void init({required String chatId, required Stream<MessageEntity> messagesStream}) {
+    _chatId = chatId;
+    _messagesStream = messagesStream;
+  }
+
+  Future<void> getMessages() async {
     emit(state.copyWith(status: ChatRoomStates.loading));
-    chatId = chatID;
     final response = await _getMessagesUseCase(GetMessagesParams(
-        chatId: chatID, pagination: PaginationParams.basic()));
+        chatId: _chatId, pagination: PaginationParams.basic()));
     response.fold(
         (failure) => emit(
             state.copyWith(failure: failure, status: ChatRoomStates.error)),
@@ -65,37 +60,29 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   Future<void> sendMessage(
       {required String message, String? replyMessageId}) async {
-    if (chatId != null) {
+
       _sendMessageUseCase(SendMessageParams(
-          message: message, chatId: chatId!, mediaIds: [], oneTimeView: false));
-    } else {
-      CliLogger.error("Error chat id not found");
-    }
+          message: message, chatId: _chatId, mediaIds: [], oneTimeView: false));
+
   }
 
   typingMessage() {}
 
   listenToNewMessages() {
-    // messagesStreamController.stream.listen((message) {
-    //   if (!isClosed) {
-    //     chatMessages.add(message);
-    //     emit(state.copyWith(
-    //         // chatData: chatMessagesModel,
-    //         messages: chatMessages,
-    //         status: ChatRoomStates.success));
-    //     _scrollDown();
-    //   }
-    // });
-
-    _listenToNewMessageUseCase(
-      (message) {
-        chatMessages.add(message);
-        emit(state.copyWith(
-            messages: chatMessages,
-            status: ChatRoomStates.success));
-        _scrollDown();
-      },
-    );
+    if (!isClosed) {
+      _messagesStream.listen(
+        (message) {
+          if (message.chatId == _chatId) {
+            chatMessages.add(message);
+            emit(state.copyWith(
+                messages: chatMessages, status: ChatRoomStates.success));
+            _scrollDown();
+          }
+        },
+      );
+    }else{
+      CliLogger.error("Cubit closed");
+    }
   }
 
   listenToMessageTyping() {
@@ -116,7 +103,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     DeleteMessageParams deleteMessageParams =
         DeleteMessageParams(chatId: chatId, messageId: messageId);
     await _deleteChatMessageUseCase.call(deleteMessageParams);
-    getMessages(chatId);
+    // getMessages();
   }
 
   void selectMessageForReplaying(MessageEntity message) {
@@ -196,10 +183,4 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   void _scrollDown() => Timer(const Duration(milliseconds: 200),
       () => scrollController.jumpTo(scrollController.position.maxScrollExtent));
-
-  @override
-  Future<void> close() async {
-    // _stopListenToMessagesUseCase(const NoParams());
-    super.close();
-  }
 }

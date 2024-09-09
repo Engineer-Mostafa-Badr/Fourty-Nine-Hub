@@ -747,9 +747,8 @@ class AppPages {
           GoRoute(
               path: Paths.CHATROOM,
               name: Routes.CHATROOM,
-              builder: (context, state) => ChatRoomView(
-                    chatId: state.extra as String,
-                  ),
+              builder: (context, state) =>
+                  ChatRoomView(chatsCubit: state.extra as ChatsCubit),
               routes: [
                 GoRoute(
                   path: Paths.CHATROOMCAMERAPICKER,

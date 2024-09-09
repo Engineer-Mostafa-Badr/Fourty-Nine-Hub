@@ -12,6 +12,9 @@ import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_so
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/typing_and_online_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatMuteState_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatToArchiveNormal_usecase.dart';
@@ -36,6 +39,9 @@ class ChatsCubit extends Cubit<ChatsState> {
   final UnLockChatUseCase _unLockChatUseCase;
   final GroupsChatsUseCase _groupsChatsUseCase;
   final GetSeenHistoryUseCase _getSeenHistoryUseCase;
+  final ListenToNewMessageUseCase _listenToNewMessageUseCase;
+  final StopListenToMessagesUseCase _stopListenToMessagesUseCase;
+  final StreamController<MessageEntity> messageStreamController = StreamController.broadcast();
   int unReadMessage = 0;
 
   String? userToken;
@@ -55,18 +61,16 @@ class ChatsCubit extends Cubit<ChatsState> {
     this._unLockChatUseCase,
     this._groupsChatsUseCase,
     this._getSeenHistoryUseCase,
+    this._listenToNewMessageUseCase,
+    this._stopListenToMessagesUseCase,
   ) : super(const ChatsState());
 
   initSocketConnection() async {
-    String? userToken = await getUserToken();
-    // SocketIODataSource.instance.connect();
-    // listen to new messages
     listenToNewMessages();
     listenToMessageTyping();
   }
 
-  _joinRoom(String chatId) async {
-  }
+  _joinRoom(String chatId) async {}
 
   Future<String?> getUserToken() async {
     return _getTokensUseCase(const NoParams()).then((value) {
@@ -129,6 +133,9 @@ class ChatsCubit extends Cubit<ChatsState> {
   }
 
   listenToNewMessages() {
+    _listenToNewMessageUseCase((message){
+      messageStreamController.add(message);
+    });
   }
 
   //   listenToNewMessages() {
@@ -268,19 +275,17 @@ class ChatsCubit extends Cubit<ChatsState> {
     });
   }
 
-  listenToMessageTyping() {
-  }
+  listenToMessageTyping() {}
 
   sendUserStatus(List<UserStatusParams> params) {
     Timer? timer;
-    timer = Timer.periodic(const Duration(seconds: 5), (Timer t) {
-    });
+    timer = Timer.periodic(const Duration(seconds: 5), (Timer t) {});
   }
 
   @override
   Future<void> close() {
-    // print("Close Socket");
-    // SocketIODataSource.instance.close();
+    _stopListenToMessagesUseCase(const NoParams());
+    messageStreamController.close();
     return super.close();
   }
 

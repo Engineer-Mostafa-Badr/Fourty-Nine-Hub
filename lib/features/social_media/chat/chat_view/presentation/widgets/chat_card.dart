@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -29,8 +31,13 @@ class _ChatCardState extends State<ChatCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () =>
-          context.push(Routes.CHATROOM, extra: widget.chatItemModel?.sId),
+      onTap: () {
+        context.read<ChatRoomCubit>().init(
+              chatId: widget.chatItemModel!.sId!,
+              messagesStream: widget.chatsCubit!.messageStreamController.stream,
+            );
+        context.push(Routes.CHATROOM,extra: context.read<ChatRoomCubit>());
+      },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

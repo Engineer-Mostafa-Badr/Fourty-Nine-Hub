@@ -1148,7 +1148,7 @@ class ChatAlertDialogue extends StatelessWidget {
             BlocProvider.value(value: chatRoomCubit),
             BlocProvider.value(value: chatsCubit),
           ],
-          child: ChatRoomView(chatId: chatId),
+          child: ChatRoomView(chatsCubit: chatsCubit),
         ),
       ),
     );
