@@ -11,7 +11,6 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/styles.dart';
 import '../widgets/competition_card.dart';
 import '../widgets/wallet_card_widget.dart';

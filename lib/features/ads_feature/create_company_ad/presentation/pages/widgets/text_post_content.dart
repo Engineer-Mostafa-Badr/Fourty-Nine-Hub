@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/build_item_text_post.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../../common/models/public/pagination_params.dart';
 import '../../../../../../common/widgets/stateful/dynamic/pagination_view.dart';
 import '../../../domain/entities/company_ad_entity.dart';
 import '../../cubit/create_company_ad_cubit.dart';
@@ -35,10 +36,10 @@ class TextPostContent extends StatelessWidget {
                 itemCount: data.length,
               );
             },
-            fetchData: (paginationParams) {
+            fetchData: (PaginationParams paginationParams) {
               return context
-                  .read<CreateCompanyAdCubit>()
-                  .getCompanyAdPosts('written', );
+                    .read<CreateCompanyAdCubit>()
+                     .getCompanyAdPosts('written', params: paginationParams, );
             },
           ),
         );

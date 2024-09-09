@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../../common/widgets/stateful/dynamic/pagination_view.dart';
@@ -35,10 +36,10 @@ class PhotoAndTextPostContent extends StatelessWidget {
                 itemCount: data.length,
               );
             },
-            fetchData: (paginationParams) {
+            fetchData: (PaginationParams paginationParams) {
               return context
                   .read<CreateCompanyAdCubit>()
-                  .getCompanyAdPosts('photo_written',);
+                  .getCompanyAdPosts('photo_written', params: paginationParams,);
             },
           ),
         );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
@@ -43,10 +44,10 @@ class PhotoPostContent extends StatelessWidget {
                 itemCount:data.length,
               );
             },
-            fetchData: (paginationParams) {
+            fetchData: (PaginationParams paginationParams) {
               return context
                   .read<CreateCompanyAdCubit>()
-                  .getCompanyAdPosts('photo', );
+                  .getCompanyAdPosts('photo', params: paginationParams, );
             },
           ),
         );

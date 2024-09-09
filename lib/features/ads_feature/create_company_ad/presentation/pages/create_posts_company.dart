@@ -33,7 +33,7 @@ class CreatePostCompany extends StatefulWidget {
   final bool picture;
   final String title;
   final String type;
-  final int totalPrice;
+  final num totalPrice;
 
   @override
   State<CreatePostCompany> createState() => _CreatePostViewState();

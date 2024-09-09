@@ -36,10 +36,10 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
   }
 
   List<CompanyAdEntity> company = [];
-  Future<List<CompanyAdEntity>> getCompanyAdPosts(String filter) async {
+  Future<List<CompanyAdEntity>> getCompanyAdPosts(String filter,{required PaginationParams params}) async {
 
     final response = await _getPostsCompanyAdUseCase(
-        FetchPostCompanyAdvertiseParams(filter: filter, paginationParams: PaginationParams(page: 1,limit: 10))
+        FetchPostCompanyAdvertiseParams(filter: filter, paginationParams:params)
     );
     response.fold(
             (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
@@ -80,13 +80,29 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
 
   }
 
-  deleteCompanyAd({
+  Future<void> deleteCompanyAd({
     required String id,
-    required String filter
-  })async{
-    await _deleteCompanyAddUseCases(
-        DeleteCompanyAdParams(id: id)
+    required String filter,
+  }) async {
+    emit(state.copyWith(status: StateStatus.loading)); // Start loading state
+
+    final response = await _deleteCompanyAddUseCases(
+      DeleteCompanyAdParams(id: id),
     );
-    getCompanyAdPosts(filter);
+
+    response.fold(
+          (failure) {
+        // If the deletion fails, show an error message
+        emit(state.copyWith(failure: failure, status: StateStatus.error));
+      },
+          (success) {
+        // Filter out the deleted ad from the current list of posts
+        final updatedPosts = (state.posts ?? []).where((ad) => ad.sId != id).toList();
+
+        // Emit the new state with the updated posts list
+        emit(state.copyWith(posts: updatedPosts, status: StateStatus.success));
+      },
+    );
   }
+
 }
