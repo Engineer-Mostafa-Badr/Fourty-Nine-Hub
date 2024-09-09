@@ -5,7 +5,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class ReplayMessageWidget extends StatelessWidget { 
   final MessageEntity? messageEntity;
-  final ReplyMessage? replyMessage;
+  final ReplyMessageEntity? replyMessage;
   final VoidCallback? onCancelReplay;
   final String? anotherUserName;
 

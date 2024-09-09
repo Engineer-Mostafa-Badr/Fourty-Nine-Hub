@@ -243,12 +243,12 @@ class MessageCard extends StatelessWidget {
     final chatRoomCubit = context.read<ChatRoomCubit>();
     final isArabic = LocaleKeys.more.tr() == "More";
     return SwipeTo(
-      onRightSwipe: isArabic
+      onRightSwipe: !isArabic
           ? null
           : (details) {
               chatRoomCubit.selectMessageForReplaying(messageEntity);
             },
-      onLeftSwipe: !isArabic
+      onLeftSwipe: isArabic
           ? null
           : (details) {
               chatRoomCubit.selectMessageForReplaying(messageEntity);
@@ -366,12 +366,12 @@ class MessageCard extends StatelessWidget {
     final chatRoomCubit = context.read<ChatRoomCubit>();
     final isArabic = LocaleKeys.more.tr() == "More";
     return SwipeTo(
-      onRightSwipe: isArabic
+      onRightSwipe: !isArabic
           ? null
           : (details) {
               chatRoomCubit.selectMessageForReplaying(messageEntity);
             },
-      onLeftSwipe: !isArabic
+      onLeftSwipe: isArabic
           ? null
           : (details) {
               chatRoomCubit.selectMessageForReplaying(messageEntity);

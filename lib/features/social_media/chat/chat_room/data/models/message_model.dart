@@ -21,7 +21,7 @@ class MessageModel extends MessageEntity {
     super.updatedAt,
     super.byMe,
     super.formattedCreatedAt,
-    super.replyMessageId,
+    super.replyMessage,
   });
 
   factory MessageModel.fromEntity(MessageEntity entity) {
@@ -45,7 +45,7 @@ class MessageModel extends MessageEntity {
       updatedAt: entity.updatedAt,
       formattedCreatedAt: entity.formattedCreatedAt,
       byMe: entity.byMe,
-      replyMessageId: entity.replyMessageId,
+      replyMessage: entity.replyMessage,
     );
   }
 
@@ -99,7 +99,7 @@ class MessageModel extends MessageEntity {
       updatedAt: map['updatedAt'],
       formattedCreatedAt: map['formattedCreatedAt'],
       byMe: (map['byMe'] != null && map['byMe'] == 1) ? true : false,
-      replyMessageId: ReplyMessageModel(
+      replyMessage: ReplyMessageModel(
           id: map['replyMessageId'], text: map['replyMessageText']),
     );
   }
@@ -125,14 +125,14 @@ class MessageModel extends MessageEntity {
     data['updatedAt'] = updatedAt;
     data['formattedCreatedAt'] = formattedCreatedAt;
     data['byMe'] = (byMe ?? false) ? 1 : 0;
-    data['replyMessageId'] = replyMessageId?.id;
-    data['replyMessageText'] = replyMessageId?.text;
+    data['replyMessageId'] = replyMessage?.id;
+    data['replyMessageText'] = replyMessage?.text;
 
     return data;
   }
 }
 
-class ReplyMessageModel extends ReplyMessage {
+class ReplyMessageModel extends ReplyMessageEntity {
   ReplyMessageModel({super.id, super.text});
 
   factory ReplyMessageModel.fromJson(Map<String, dynamic> json) {

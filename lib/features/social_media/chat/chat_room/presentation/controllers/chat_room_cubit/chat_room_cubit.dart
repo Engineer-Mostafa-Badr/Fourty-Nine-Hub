@@ -21,7 +21,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   final SendMessageUseCase _sendMessageUseCase;
 
   final ScrollController scrollController = ScrollController();
-
+  MessageEntity? _replayMessage;
   late String _chatId;
   final FilePicker _filePicker = FilePicker.platform;
 
@@ -35,10 +35,13 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   }
 
   Future<void> sendMessage(
-      {required String message, String? replyMessageId}) async {
+      {required String message}) async {
     _sendMessageUseCase(SendMessageParams(
-
-        message: message, chatId: _chatId, mediaIds: [], oneTimeView: false));
+        replyMessageId: _replayMessage?.id,
+        message: message,
+        chatId: _chatId,
+        mediaIds: [],
+        oneTimeView: false));
   }
 
   typingMessage() {}
@@ -65,11 +68,13 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   }
 
   void selectMessageForReplaying(MessageEntity message) {
-    emit(state.copyWith(replayedMessage: message));
+    _replayMessage = message;
+    emit(state.copyWith(replayedMessage: _replayMessage));
   }
 
   void cancelReplay() {
-    emit(state.copyWith(replayedMessage: null));
+    _replayMessage = null;
+    emit(state.copyWith(replayedMessage: _replayMessage));
   }
 
   Future<void> pickDocuments() async {
