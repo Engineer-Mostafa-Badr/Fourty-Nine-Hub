@@ -48,7 +48,7 @@ class _InstagramViewState extends State<InstagramView> {
 
   @override
   void dispose() {
-    scrollController.dispose();
+    // scrollController.dispose();
     super.dispose();
   }
 

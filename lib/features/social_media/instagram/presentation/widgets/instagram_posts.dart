@@ -13,6 +13,7 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_comments.dart';
@@ -24,6 +25,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -91,13 +93,17 @@ class _InstagramPostsState extends State<InstagramPosts> {
           }
         }, builder: (context, state) {
       final controller = context.read<InstagramCubit>();
-      print(controller.feedPagingController
-              .itemList![5].comments);
       return RefreshIndicator(
         onRefresh: () async => controller.onRefresh(),
         child: CustomScrollView(
           controller: widget.scrollController,
           slivers: [
+            SliverToBoxAdapter(
+              child: BlocProvider<StoryCubit>(
+                create: (_)=>serviceLocator()..fetchStories(),
+                child: const ChatStories(),
+              ),
+            ),
             SliverToBoxAdapter(
               child: BlocProvider<InstagramCubit>(
                   create: (_)=>serviceLocator()..loadInstaSuggestedPeople(),
