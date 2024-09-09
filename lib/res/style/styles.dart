@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 abstract class Styles {

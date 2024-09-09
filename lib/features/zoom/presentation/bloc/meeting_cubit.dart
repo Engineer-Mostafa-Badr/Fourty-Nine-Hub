@@ -3,7 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/end_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/get_scheuled_rooms_use_case.dart';
@@ -62,7 +62,8 @@ class MeetingCubit extends Cubit<MeetingState> {
     // print(isAdd);
     return isAdd;
   }
-bool isHost = false;
+
+  bool isHost = false;
   Future<bool> joinNewMeeting(String roomId) async {
     emit(state.copyWith(status: MeetingStates.loading));
     final response = await joinRoomUseCase(MeetingParams(meetingId: roomId));

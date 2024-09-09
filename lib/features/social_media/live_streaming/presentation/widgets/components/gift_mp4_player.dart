@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
-import 'package:zego_uikit/zego_uikit.dart';
 
-class GiftMp4Player with ZegoUIKitMediaEventInterface {
+import 'zego_uikit/src/services/defines/media.event.dart';
+import 'zego_uikit/src/services/uikit_service.dart';
+
+///put an extension
+class GiftMp4Player extends ZegoUIKitMediaEventInterface {
   static final GiftMp4Player _instance = GiftMp4Player._internal();
   factory GiftMp4Player() => _instance;
   GiftMp4Player._internal();
