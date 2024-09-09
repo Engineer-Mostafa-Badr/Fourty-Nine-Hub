@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/social_media/edit_profile/domain/entities
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/widgets/privact_icon.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -286,22 +287,22 @@ class _EditProfileViewState extends State<EditProfileView> {
                               CustomSheetModel(
                                 text: "Single",
                                 value: MaritalStatus.single,
-                                iconData: Icons.language,
+                                image: Assets.single
                               ),
                               CustomSheetModel(
                                 text: "Married",
                                 value: MaritalStatus.married,
-                                iconData: Icons.family_restroom,
+                                  image: Assets.married
                               ),
                               CustomSheetModel(
                                 text: "Divorced",
                                 value: MaritalStatus.divorced,
-                                iconData: Icons.accessibility_sharp,
+                                  image: Assets.divorced
                               ),
                               CustomSheetModel(
                                 text: "Widowed",
                                 value: MaritalStatus.widowed,
-                                iconData: Icons.supervised_user_circle_outlined,
+                                  image: Assets.widowed
                               ),
                             ]);
                             print(res?.name);

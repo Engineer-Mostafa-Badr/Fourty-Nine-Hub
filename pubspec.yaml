@@ -81,7 +81,7 @@ dependencies:
   url_launcher: 6.2.6
   video_player: ^2.9.1
   video_thumbnail: null
-  video_trimmer: ^3.0.1
+#  video_trimmer: ^3.0.1
   visibility_detector: ^0.3.3
   webview_flutter: ^4.8.0
   win32: ^5.4.0
