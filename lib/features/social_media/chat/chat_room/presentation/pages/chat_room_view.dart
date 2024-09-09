@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/masseges_list_view.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/masseges_list_view.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import '../widgets/chat_room_app_bar.dart';
-import '../widgets/send_message_widget.dart';
+import '../widgets/chat_room_widgets/chat_room_app_bar.dart';
+import '../widgets/chat_room_widgets/send_message_widget.dart';
 
 class ChatRoomView extends StatefulWidget {
   final ChatsCubit chatsCubit;
@@ -26,8 +27,8 @@ class _ChatRoomViewState extends State<ChatRoomView> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: widget.chatsCubit),
-        BlocProvider(create: (context) => serviceLocator<ChatRoomCubit>()),
+        BlocProvider.value(value: widget.chatsCubit..getMessages()),
+        BlocProvider(create: (context) => serviceLocator<ChatRoomCubit>()..init(chatId: widget.chatsCubit.selectedChat.id)),
       ],
       child: Scaffold(
         backgroundColor: AppColors.BACKGROUND_COLOR,
@@ -37,7 +38,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
             // Background image
             Positioned.fill(
               child: Image.asset(
-                'assets/images/background.png',
+                Assets.chatRoomBackground,
                 scale: 7,
                 // fit: BoxFit.cover,
                 repeat: ImageRepeat.repeat,

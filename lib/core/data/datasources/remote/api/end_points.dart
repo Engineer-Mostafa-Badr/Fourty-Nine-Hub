@@ -511,7 +511,7 @@ class EndPoints {
 
   // chat_room
   static String getChats = '/chat/get-chats';
-  static String getChatMessages(String chatId) {
+    static String getChatMessages(String chatId) {
     return '/chat/get-chat/$chatId';
   }
 

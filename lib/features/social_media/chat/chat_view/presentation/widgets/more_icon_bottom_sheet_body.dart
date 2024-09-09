@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class MoreIconBottomSheet extends StatefulWidget {
@@ -28,12 +28,12 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
         children: [
           GestureDetector(
             onTap: () {
-              widget.chatsCubit.changeChatMuteState(widget.chatItemModel.sId!);
+              widget.chatsCubit.changeChatMuteState(widget.chatItemModel.id);
             },
             child: bottomSheetItem(
               context: context,
-              title: widget.chatItemModel.muted! ? 'Unmute' : 'Mute',
-              icon: widget.chatItemModel.muted!
+              title: widget.chatItemModel.muted ? 'Unmute' : 'Mute',
+              icon: widget.chatItemModel.muted
                   ? Icons.volume_down
                   : Icons.volume_off,
             ),
@@ -44,7 +44,7 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
             },
             child: bottomSheetItem(
               context: context,
-              title: widget.chatItemModel.locked! ? "Unlock chat" : "Lock chat",
+              title: widget.chatItemModel.locked ? "Unlock chat" : "Lock chat",
               icon: Icons.lock,
             ),
           ),
@@ -164,13 +164,13 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
             actions: [
               TextButton(
                   onPressed: () async {
-                    if (widget.chatItemModel.locked!) {
+                    if (widget.chatItemModel.locked) {
                       await widget.chatsCubit.unLockChat(
-                          chatId: widget.chatItemModel.sId!,
+                          chatId: widget.chatItemModel.id,
                           lockChatPassword: passwordController.text.trim());
                     } else {
                       await widget.chatsCubit.lockChat(
-                          chatId: widget.chatItemModel.sId!,
+                          chatId: widget.chatItemModel.id,
                           lockChatPassword: passwordController.text.trim());
                     }
 

@@ -200,15 +200,22 @@
 // }
 
 // Nasr
+import 'dart:developer';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:swipe_to/swipe_to.dart';
 
 class MessageCard extends StatelessWidget {
   final MessageEntity messageEntity;
@@ -222,7 +229,8 @@ class MessageCard extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
 
     return messageEntity.byMe!
-        ? _buildMineMessage(width: width, messageEntity: messageEntity)
+        ? _buildMineMessage(
+            width: width, messageEntity: messageEntity, context: context)
         : _buildOtherMessage(
             width: width, messageEntity: messageEntity, context: context);
   }
@@ -230,85 +238,124 @@ class MessageCard extends StatelessWidget {
   Widget _buildMineMessage({
     required double width,
     required MessageEntity messageEntity,
+    required BuildContext context,
   }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        IntrinsicWidth(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: width * 0.9),
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              margin: const EdgeInsets.all(10),
-              decoration: const BoxDecoration(
-                color: AppColors.MESSAGE_COLOR,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
-                  bottomLeft: Radius.circular(12),
+    final chatRoomCubit = context.read<ChatRoomCubit>();
+    final isArabic = LocaleKeys.more.tr() == "More";
+    return SwipeTo(
+      onRightSwipe: isArabic
+          ? null
+          : (details) {
+              chatRoomCubit.selectMessageForReplaying(messageEntity);
+            },
+      onLeftSwipe: !isArabic
+          ? null
+          : (details) {
+              chatRoomCubit.selectMessageForReplaying(messageEntity);
+            },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          IntrinsicWidth(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: width * 0.85),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                margin: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColors.MESSAGE_COLOR,
+                  borderRadius: BorderRadius.only(
+                    topLeft: const Radius.circular(12),
+                    topRight: const Radius.circular(12),
+                    bottomLeft: isArabic
+                        ? const Radius.circular(12)
+                        : const Radius.circular(0),
+                    bottomRight: isArabic
+                        ? const Radius.circular(0)
+                        : const Radius.circular(12),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26.withOpacity(0.2),
+                      blurRadius: 4,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 8,
-                    offset: Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: messageEntity.isDeleted!
-                        ? Row(
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.not_interested,
-                                  color: Colors.black54,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: messageEntity.isDeleted!
+                          ? Row(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    Icons.not_interested,
+                                    color: Colors.black54,
+                                  ),
                                 ),
-                              ),
-                              Label(
-                                text: "This message is deleted",
-                                style: Styles.mediumText(color: Colors.black54),
-                              ),
-                            ],
-                          )
-                        : ReadMoreLabel(
-                            trimLines: 5,
-                            text: messageEntity.text!,
-                            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
-                            textAlign: TextAlign.left,
-                          ),
-                  ),
-                  const SizedBox(width: 8),
-                  Row(
-                    children: [
-                      Label(
-                        text: '${messageEntity.formattedCreatedAt}',
-                        style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
-                      ),
-                      const SizedBox(width: 4),
-                      Icon(
-                        messageEntity.seen!
-                            ? FontAwesomeIcons.checkDouble
-                            : messageEntity.delivered!
-                                ? FontAwesomeIcons.checkDouble
-                                : FontAwesomeIcons.check,
-                        color: Colors.red,
-                        size: 12,
-                      ),
-                    ],
-                  ),
-                ],
+                                Label(
+                                  text: "This message is deleted",
+                                  style: Styles.mediumText(
+                                      color: Colors.black54),
+                                ),
+                              ],
+                            )
+                          : ReadMoreLabel(
+                              trimLines: 5,
+                              text: messageEntity.text!,
+                              style: Styles.mediumText(
+                                  color: AppColors.PRIMARY_COLOR),
+                              textAlign: TextAlign.left,
+                            ),
+                    ),
+                    const SizedBox(width: 8),
+                    Row(
+                      children: [
+                        Label(
+                          text: '${messageEntity.formattedCreatedAt}',
+                          style: Styles.smallText(
+                              color: AppColors.PRIMARY_COLOR),
+                        ),
+                        const SizedBox(width: 4),
+                        Icon(
+                          _getMessageIcon(messageEntity),
+                          color: _getMessageIconColor(messageEntity),
+                          size: 12,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
+  }
+
+  IconData _getMessageIcon(MessageEntity messageEntity) {
+    if (messageEntity.seen!) {
+      return FontAwesomeIcons.checkDouble;
+    } else if (messageEntity.delivered!) {
+      return FontAwesomeIcons.checkDouble;
+    } else {
+      return FontAwesomeIcons.check;
+    }
+  }
+
+  Color _getMessageIconColor(MessageEntity messageEntity) {
+    if (messageEntity.seen!) {
+      return Colors.red;
+    } else if (messageEntity.delivered!) {
+      return Colors.grey;
+    } else {
+      return Colors.grey;
+    }
   }
 
   Widget _buildOtherMessage({
@@ -316,70 +363,81 @@ class MessageCard extends StatelessWidget {
     required MessageEntity messageEntity,
     required BuildContext context,
   }) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        const CircleAvatar(
-          radius: 15,
-          backgroundColor: Colors.white,
-          backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
-        ),
-        const Sizer(width: 5),
-        IntrinsicWidth(
-          child: Container(
-            padding: const EdgeInsets.all(12),
-            margin: const EdgeInsets.all(10),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(12),
-                topRight: Radius.circular(12),
-                bottomRight: Radius.circular(12),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 8,
-                  offset: Offset(0, 4),
+    final chatRoomCubit = context.read<ChatRoomCubit>();
+    final isArabic = LocaleKeys.more.tr() == "More";
+    return SwipeTo(
+      onRightSwipe: isArabic
+          ? null
+          : (details) {
+              chatRoomCubit.selectMessageForReplaying(messageEntity);
+            },
+      onLeftSwipe: !isArabic
+          ? null
+          : (details) {
+              chatRoomCubit.selectMessageForReplaying(messageEntity);
+            },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const CircleAvatar(
+            radius: 15,
+            backgroundColor: Colors.white,
+            backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+          ),
+          const Sizer(width: 5),
+          IntrinsicWidth(
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              margin: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: const Radius.circular(12),
+                  topRight: const Radius.circular(12),
+                  bottomLeft: isArabic
+                      ? const Radius.circular(0)
+                      : const Radius.circular(12),
+                  bottomRight: isArabic
+                      ? const Radius.circular(12)
+                      : const Radius.circular(0),
                 ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: ReadMoreLabel(
-                    trimLines: 5,
-                    text: messageEntity.text!,
-                    style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
-                    textAlign: TextAlign.left,
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 8,
+                    offset: Offset(0, 4),
                   ),
+                ],
+              ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: width * 0.65,
                 ),
-                const SizedBox(width: 8),
-                Row(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    Expanded(
+                      child: ReadMoreLabel(
+                        trimLines: 5,
+                        text: messageEntity.text!,
+                        style:
+                            Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
                     Label(
                       text: '${messageEntity.formattedCreatedAt}',
                       style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
                     ),
-                    const SizedBox(width: 4),
-                    Icon(
-                      messageEntity.seen!
-                          ? FontAwesomeIcons.checkDouble
-                          : messageEntity.delivered!
-                              ? FontAwesomeIcons.checkDouble
-                              : FontAwesomeIcons.check,
-                      color: Colors.red,
-                      size: 10,
-                    ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -6,7 +6,8 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -15,11 +16,11 @@ import 'package:go_router/go_router.dart';
 
 class ChatCard extends StatefulWidget {
   final bool isSecret;
-  final ChatModel? chatItemModel;
+  final ChatEntity? chat;
   final ChatsCubit? chatsCubit;
 
   const ChatCard(
-      {super.key, this.isSecret = false, this.chatItemModel, this.chatsCubit});
+      {super.key, this.isSecret = false, this.chat, this.chatsCubit});
 
   @override
   State<ChatCard> createState() => _ChatCardState();
@@ -32,11 +33,8 @@ class _ChatCardState extends State<ChatCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.read<ChatRoomCubit>().init(
-              chatId: widget.chatItemModel!.sId!,
-              messagesStream: widget.chatsCubit!.messageStreamController.stream,
-            );
-        context.push(Routes.CHATROOM,extra: context.read<ChatRoomCubit>());
+        context.read<ChatsCubit>().selectChat(widget.chat!);
+        context.push(Routes.CHATROOM, extra: widget.chatsCubit);
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,7 +73,7 @@ class _ChatCardState extends State<ChatCard> {
                                 right: 0,
                                 child: CircleAvatar(
                                   radius: 5,
-                                  backgroundColor: widget.chatItemModel!.online!
+                                  backgroundColor: widget.chat!.online
                                       ? Colors.green
                                       : Colors.transparent,
                                 ))
@@ -94,7 +92,7 @@ class _ChatCardState extends State<ChatCard> {
                         child: Label(
                           text: widget.isSecret
                               ? 'Mxxx xxxl'
-                              : '${widget.chatItemModel?.name}',
+                              : '${widget.chat?.name}',
                           style: Styles.mediumText(fontWeight: FontWeight.bold),
                           maxLines: 1,
                         ),
@@ -105,9 +103,9 @@ class _ChatCardState extends State<ChatCard> {
                             width: 10,
                           ),
 
-                          widget.chatItemModel!.typing!
+                          widget.chat!.typing
                               ? const SizedBox()
-                              : widget.chatItemModel!.seen!
+                              : widget.chat!.seen
                                   ? const Icon(
                                       FontAwesomeIcons.checkDouble,
                                       color: AppColors.GREY_DARK_COLOR,
@@ -115,7 +113,7 @@ class _ChatCardState extends State<ChatCard> {
                                     )
                                   : const SizedBox(),
 
-                          if (widget.chatItemModel!.seen!)
+                          if (widget.chat!.seen)
                             const SizedBox(
                               width: 10,
                             ),
@@ -123,15 +121,14 @@ class _ChatCardState extends State<ChatCard> {
                           // last message or typing
                           Expanded(
                             child: Label(
-                                text: widget.chatItemModel!.typing!
+                                text: widget.chat!.typing
                                     ? "Typing now..."
-                                    : widget.chatItemModel?.lastMessageText ==
-                                            null
+                                    : widget.chat?.lastMessageText == null
                                         ? "No messages until now"
-                                        : '${widget.chatItemModel?.lastMessageText}',
+                                        : '${widget.chat?.lastMessageText}',
                                 style: Styles.mediumText(
                                   fontSize: 14,
-                                  color: widget.chatItemModel!.typing!
+                                  color: widget.chat!.typing
                                       ? AppColors.SPLASH_BLACK_COLOR
                                       : AppColors.DARK_GRAY_COLOR,
                                 )),
@@ -140,7 +137,7 @@ class _ChatCardState extends State<ChatCard> {
                           const SizedBox(
                             height: 10,
                           ),
-                          widget.chatItemModel!.muted!
+                          widget.chat!.muted
                               ? const Icon(
                                   Icons.volume_off,
                                   color: Colors.grey,
@@ -154,13 +151,13 @@ class _ChatCardState extends State<ChatCard> {
                 ),
 
                 // number of reads
-                widget.chatItemModel?.unreadCount == 0
+                widget.chat?.unreadCount == 0
                     ? const SizedBox()
                     : CircleAvatar(
                         maxRadius: 15,
                         backgroundColor: AppColors.PRIMARY_COLOR,
                         child: Label(
-                            text: '${widget.chatItemModel?.unreadCount}',
+                            text: '${widget.chat?.unreadCount}',
                             style: Styles.mediumText(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -173,19 +170,18 @@ class _ChatCardState extends State<ChatCard> {
                 Column(
                   children: [
                     Label(
-                        text: '${widget.chatItemModel?.formattedUpdatedAt}',
+                        text: '${widget.chat?.formattedUpdatedAt}',
                         style: Styles.mediumText(color: Colors.grey)),
-                    widget.chatItemModel?.lastSeenCount == null
+                    widget.chat?.lastSeenCount == null
                         ? const SizedBox()
                         : GestureDetector(
                             onTap: () {
-                              getSeenHistory(widget.chatItemModel!.sId!);
+                              getSeenHistory(widget.chat!.id);
                             },
                             child: Row(
                               children: [
                                 Label(
-                                    text:
-                                        '${widget.chatItemModel?.lastSeenCount}',
+                                    text: '${widget.chat?.lastSeenCount}',
                                     style:
                                         Styles.mediumText(color: Colors.grey)),
                                 const SizedBox(

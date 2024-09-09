@@ -17,11 +17,8 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 part 'chat_room_state.dart';
 
 class ChatRoomCubit extends Cubit<ChatRoomState> {
-  final GetMessagesUseCase _getMessagesUseCase;
   final DeleteChatMessageUseCase _deleteChatMessageUseCase;
-  late Stream<MessageEntity> _messagesStream;
   final SendMessageUseCase _sendMessageUseCase;
-  List<MessageEntity> chatMessages = [];
 
   final ScrollController scrollController = ScrollController();
 
@@ -29,61 +26,22 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   final FilePicker _filePicker = FilePicker.platform;
 
   ChatRoomCubit(
-    this._getMessagesUseCase,
     this._deleteChatMessageUseCase,
     this._sendMessageUseCase,
   ) : super(const ChatRoomState());
 
-  void init({required String chatId, required Stream<MessageEntity> messagesStream}) {
+  void init({required String chatId}) {
     _chatId = chatId;
-    _messagesStream = messagesStream;
-  }
-
-  Future<void> getMessages() async {
-    emit(state.copyWith(status: ChatRoomStates.loading));
-    final response = await _getMessagesUseCase(GetMessagesParams(
-        chatId: _chatId, pagination: PaginationParams.basic()));
-    response.fold(
-        (failure) => emit(
-            state.copyWith(failure: failure, status: ChatRoomStates.error)),
-        (data) {
-      chatMessages = data;
-
-      emit(state.copyWith(
-          messages: chatMessages, status: ChatRoomStates.success));
-      if (chatMessages.isNotEmpty) {
-        _scrollDown();
-      }
-      listenToNewMessages();
-    });
   }
 
   Future<void> sendMessage(
       {required String message, String? replyMessageId}) async {
+    _sendMessageUseCase(SendMessageParams(
 
-      _sendMessageUseCase(SendMessageParams(
-          message: message, chatId: _chatId, mediaIds: [], oneTimeView: false));
-
+        message: message, chatId: _chatId, mediaIds: [], oneTimeView: false));
   }
 
   typingMessage() {}
-
-  listenToNewMessages() {
-    if (!isClosed) {
-      _messagesStream.listen(
-        (message) {
-          if (message.chatId == _chatId) {
-            chatMessages.add(message);
-            emit(state.copyWith(
-                messages: chatMessages, status: ChatRoomStates.success));
-            _scrollDown();
-          }
-        },
-      );
-    }else{
-      CliLogger.error("Cubit closed");
-    }
-  }
 
   listenToMessageTyping() {
     // _socketService.socketChatTypingStream.listen((event) {

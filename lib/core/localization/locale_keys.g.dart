@@ -60,7 +60,6 @@ abstract class  LocaleKeys {
   static const ship = 'ship';
   static const ride = 'ride';
   static const lang = 'lang';
-  static const search = 'search';
   static const ad = 'ad';
   static const ads = 'ads';
   static const wallet = 'wallet';
@@ -147,7 +146,6 @@ abstract class  LocaleKeys {
   static const delete = 'delete';
   static const specialAds = 'specialAds';
   static const friends = 'friends';
-  static const more = 'more';
   static const Doctor = 'Doctor';
   static const loadingDriver = 'loadingDriver';
   static const Restaurant = 'Restaurant';
@@ -179,5 +177,41 @@ abstract class  LocaleKeys {
   static const suscessfullySaved = 'suscessfullySaved';
   static const anonymous = 'anonymous';
   static const noData = 'noData';
+  static const viewContact = 'viewContact';
+  static const mediaLinksAndDocs = 'mediaLinksAndDocs';
+  static const search = 'search';
+  static const muteNotifications = 'muteNotifications';
+  static const wallpaper = 'wallpaper';
+  static const disappearingMessages = 'disappearingMessages';
+  static const more = 'more';
+  static const edit = 'edit';
+  static const share = 'share';
+  static const report = 'report';
+  static const block = 'block';
+  static const clearChat = 'clearChat';
+  static const exportChat = 'exportChat';
+  static const addShortcut = 'addShortcut';
+  static const encryption = 'encryption';
+  static const chatEncryptionMessage = 'chatEncryptionMessage';
+  static const chatLock = 'chatLock';
+  static const chatLockMessage = 'chatLockMessage';
+  static const createGroupWith = 'createGroupWith';
+  static const createGroup = 'createGroup';
+  static const attachments  = 'attachments ';
+  static const docs = 'docs';
+  static const links = 'links';
+  static const media = 'media';
+  static const january = 'january';
+  static const february = 'february';
+  static const march = 'march';
+  static const april = 'april';
+  static const may = 'may';
+  static const june = 'june';
+  static const july = 'july';
+  static const august = 'august';
+  static const september = 'september';
+  static const october = 'october';
+  static const november = 'november';
+  static const december = 'december';
 
 }

@@ -11,7 +11,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+import 'features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'routes/pages.dart';
 
 void main() async {
@@ -30,10 +30,6 @@ void main() async {
 
   runApp(
     LocalizationService.rootWidget(
-      // child: DevicePreview(
-      //   enabled: !kReleaseMode,
-      //   builder: (context) => const MyApp(),
-      // ),
       child: const MyApp(),
     ),
   );

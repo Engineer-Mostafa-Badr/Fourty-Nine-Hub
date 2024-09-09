@@ -28,7 +28,7 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   @override
   Future<Either<Failure, List<MessageEntity>>> getMessages(
       GetMessagesParams params) {
-    return _chatLocalDataSource.getMessages(params);
+    return _chatRemoteDataSource.getMessages(params);
   }
 
   @override
@@ -38,16 +38,11 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
 
   @override
   void listenToNewMessages(Function(MessageEntity message) params) {
-    return _chatRemoteDataSource.listenToNewMessages((message) {
-        _chatLocalDataSource.saveMessage(message);
-      params(message);
-    });
+    return _chatRemoteDataSource.listenToNewMessages(params);
   }
 
   @override
   void stopListenToMessages() {
     _chatRemoteDataSource.stopListenToMessages();
   }
-
-
 }

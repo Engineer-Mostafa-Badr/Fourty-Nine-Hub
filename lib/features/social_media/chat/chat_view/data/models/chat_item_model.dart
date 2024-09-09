@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
+
 class ChatItemModel {
   List<ChatModel>? chats;
   int? totalUnread;
@@ -20,58 +22,46 @@ class ChatItemModel {
   }
 }
 
-class ChatModel {
-  String? sId;
-  String? lastMessageText;
-  String? name;
-  String? avatar;
-  bool? muted;
-  bool? seen;
-  bool? archived;
-  bool? locked;
-  bool? typing;
-  bool? online;
-  int? lastSeenCount;
-  int? unreadCount;
-  String? userId;
-  String? formattedUpdatedAt;
-  String? userAvatar;
-  String? backgroundImage;
+class ChatModel extends ChatEntity {
+  ChatModel(
+      {required super.id,
+      required super.categoryId,
+      required super.archived,
+      required super.locked,
+      required super.muted,
+      required super.updatedAt,
+      required super.isLastMessageByMe,
+      required super.seen,
+      required super.delivered,
+      required super.lastMessageText,
+      required super.name,
+      required super.lastSeenCount,
+      required super.unreadCount,
+      required super.formattedUpdatedAt,
+      required super.userId,
+      required super.typing,
+      required super.avatar,
+      required super.online,
+      });
 
-  ChatModel({
-    this.sId,
-    this.lastMessageText,
-    this.muted,
-    this.archived,
-    this.seen,
-    this.name,
-    this.locked,
-    this.avatar,
-    this.online,
-    this.lastSeenCount,
-    this.unreadCount,
-    this.userId,
-    this.userAvatar,
-    this.formattedUpdatedAt,
-    this.backgroundImage,
-  });
-
-  ChatModel.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    muted = json['muted'];
-    archived = json['archived'];
-    seen = json['seen'];
-    name = json['name'];
-    avatar = json['avatar'];
-    lastMessageText = json['lastMessageText'];
-    lastSeenCount = json['lastSeenCount'];
-    locked = json['locked'];
-    unreadCount = json['unreadCount'];
-    userId = json['userId'];
-    formattedUpdatedAt = json['formattedUpdatedAt'];
-    userAvatar = json['avatar'];
-    backgroundImage = json['backgroundImage'];
-    typing = false;
-    online = false;
-  }
+  factory ChatModel.fromJson(Map<String, dynamic> json) => ChatModel(
+        id: json['_id'],
+        categoryId: json['categoryId'],
+        archived: json['archived'],
+        locked: json['locked'],
+        muted: json['muted'],
+        updatedAt: json['updatedAt'],
+        isLastMessageByMe: json['isLastMessageByMe'],
+        seen: json['seen'],
+        delivered: json['delivered'],
+        lastMessageText: json['lastMessageText'],
+        name: json['name'],
+        lastSeenCount: json['lastSeenCount'],
+        unreadCount: json['unreadCount'],
+        formattedUpdatedAt: json['formattedUpdatedAt'],
+        userId: json['userId'],
+        avatar: json['avatar'],
+        typing: false,
+        online: false,
+      );
 }

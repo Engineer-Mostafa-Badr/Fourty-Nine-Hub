@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_so
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -23,6 +24,9 @@ abstract class MessagesRemoteDataSource {
   });
 
   void stopListenToMessages();
+
+  Future<Either<Failure, List<MessageEntity>>> getMessages(
+      GetMessagesParams params);
 }
 
 class MessagesRemoteDataSourceImplementation
@@ -93,5 +97,21 @@ class MessagesRemoteDataSourceImplementation
   void stopListenToMessages() {
     _socket.off(SocketIOListeners.newMessageFromOther);
     _socket.off(SocketIOListeners.newMessageFromMe);
+  }
+
+  @override
+  Future<Either<Failure, List<MessageEntity>>> getMessages(
+      GetMessagesParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.getChatMessages(params.chatId));
+    return response.fold((failure) => Left(failure), (data) {
+      List<MessageModel> messageModels = [];
+
+      for (var element in data['data']) {
+        messageModels.add(MessageModel.fromJson(element));
+      }
+
+      return Right(messageModels);
+    });
   }
 }

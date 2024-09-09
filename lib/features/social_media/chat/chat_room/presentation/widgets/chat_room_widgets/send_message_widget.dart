@@ -421,9 +421,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/Attachment_types.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/emoji_keyboard.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/Attachment_types.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/emoji_keyboard.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:social_media_recorder/screen/social_media_recorder.dart';
@@ -442,7 +443,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   late final FocusNode _messageFocusNode;
   late bool _showMicButton;
   late bool _showEmojiKeyboard;
-  final Radius radius = const Radius.circular(25);
+  final Radius radius = const Radius.circular(8);
 
   @override
   void initState() {
@@ -470,6 +471,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
                 flex: 6,
@@ -535,15 +537,33 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
         if (state.replayedMessage != null) {
           return Container(
             padding: const EdgeInsets.all(8),
-            decoration:
-                BoxDecoration(borderRadius: BorderRadius.vertical(top: radius)),
-            child: ReplayMessageWidget(
-              messageEntity: state.replayedMessage!,
-              onCancelReplay: () =>
-                  context.read<ChatRoomCubit>().cancelReplay(),
-              anotherUserName: 'Anonymous',
-              // state.chatData?.chat?.contact?.name ??
-              //     LocaleKeys.anonymous.tr(),
+            decoration: BoxDecoration(
+              boxShadow: const [
+                BoxShadow(
+                  color: AppColors.PRIMARY_COLOR,
+                  blurRadius: 7,
+                  spreadRadius: -5,
+                )
+              ],
+              borderRadius: BorderRadius.vertical(top: radius),
+              color: AppColors.BACKGROUND_COLOR,
+            ),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.vertical(top: radius),
+                color: AppColors.GRAY_LIGHT_COLOR3,
+              ),
+              child: ReplayMessageWidget(
+                messageEntity: state.replayedMessage!,
+                onCancelReplay: () =>
+                    context.read<ChatRoomCubit>().cancelReplay(),
+                anotherUserName: state.replayedMessage!.byMe == true
+                    ? 'From me'
+                    : 'From other',
+                // state.chatData?.chat?.contact?.name ??
+                //     LocaleKeys.anonymous.tr(),
+              ),
             ),
           );
         } else {

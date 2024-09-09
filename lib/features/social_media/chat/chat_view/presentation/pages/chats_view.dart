@@ -11,7 +11,7 @@
 // import 'package:fourtyninehub/core/states/basic_state.dart';
 // import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 // import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+// import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 // import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/more_icon_bottom_sheet_body.dart';
 // import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -282,7 +282,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/more_icon_bottom_sheet_body.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -471,12 +471,12 @@ class _ChatViewState extends State<ChatView> {
                         SlidableAction(
                           onPressed: (value) async {
                             chatCubit.changeChatToArchiveOrNormalUseCase(
-                                state.chats![index].sId!);
+                                state.chats![index].id);
                           },
                           backgroundColor: AppColors.PRIMARY_COLOR,
                           foregroundColor: Colors.white,
                           icon: Icons.delete_outlined,
-                          label: state.chats![index].archived!
+                          label: state.chats![index].archived
                               ? 'Unarchive'
                               : 'Archive',
                           padding: EdgeInsets.zero,
@@ -485,7 +485,7 @@ class _ChatViewState extends State<ChatView> {
                     ),
                     child: ChatCard(
                       isSecret: isSecret,
-                      chatItemModel: state.chats?[index],
+                      chat: state.chats?[index],
                       chatsCubit: chatCubit,
                     ),
                   ),
