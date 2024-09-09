@@ -2,16 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class MoreIconBottomSheet extends StatefulWidget {
-  final ChatModel chatItemModel;
+  final ChatModel ChatCategoryEntity;
   final ChatsCubit chatsCubit;
 
   const MoreIconBottomSheet(
-      {super.key, required this.chatItemModel, required this.chatsCubit});
+      {super.key, required this.ChatCategoryEntity, required this.chatsCubit});
 
   @override
   State<MoreIconBottomSheet> createState() => _MoreIconBottomSheetState();
@@ -28,12 +28,12 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
         children: [
           GestureDetector(
             onTap: () {
-              widget.chatsCubit.changeChatMuteState(widget.chatItemModel.id);
+              widget.chatsCubit.changeChatMuteState(widget.ChatCategoryEntity.id);
             },
             child: bottomSheetItem(
               context: context,
-              title: widget.chatItemModel.muted ? 'Unmute' : 'Mute',
-              icon: widget.chatItemModel.muted
+              title: widget.ChatCategoryEntity.muted ? 'Unmute' : 'Mute',
+              icon: widget.ChatCategoryEntity.muted
                   ? Icons.volume_down
                   : Icons.volume_off,
             ),
@@ -44,7 +44,7 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
             },
             child: bottomSheetItem(
               context: context,
-              title: widget.chatItemModel.locked ? "Unlock chat" : "Lock chat",
+              title: widget.ChatCategoryEntity.locked ? "Unlock chat" : "Lock chat",
               icon: Icons.lock,
             ),
           ),
@@ -164,13 +164,13 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
             actions: [
               TextButton(
                   onPressed: () async {
-                    if (widget.chatItemModel.locked) {
+                    if (widget.ChatCategoryEntity.locked) {
                       await widget.chatsCubit.unLockChat(
-                          chatId: widget.chatItemModel.id,
+                          chatId: widget.ChatCategoryEntity.id,
                           lockChatPassword: passwordController.text.trim());
                     } else {
                       await widget.chatsCubit.lockChat(
-                          chatId: widget.chatItemModel.id,
+                          chatId: widget.ChatCategoryEntity.id,
                           lockChatPassword: passwordController.text.trim());
                     }
 

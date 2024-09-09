@@ -102,15 +102,15 @@ class MessagesRemoteDataSourceImplementation
   @override
   Future<Either<Failure, List<MessageEntity>>> getMessages(
       GetMessagesParams params) async {
-    final response =
-        await _apiConsumer.get(EndPoints.getChatMessages(params.chatId));
+    final response = await _apiConsumer.get(
+        EndPoints.getChatMessages(params.chatId),
+        queryParameters: params.pagination.toJson());
     return response.fold((failure) => Left(failure), (data) {
       List<MessageModel> messageModels = [];
 
       for (var element in data['data']) {
         messageModels.add(MessageModel.fromJson(element));
       }
-
       return Right(messageModels);
     });
   }

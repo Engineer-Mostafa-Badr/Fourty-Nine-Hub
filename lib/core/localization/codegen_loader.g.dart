@@ -228,7 +228,17 @@ class CodegenLoader extends AssetLoader{
   "september": "سبتمبر",
   "october": "أكتوبر",
   "november": "نوفمبر",
-  "december": "ديسمبر"
+  "december": "ديسمبر",
+  "social": "تواصل",
+  "services": "الخدمات",
+  "socialCalls": "الاتصال والفيديو (الاجتماعي)",
+  "servicesCalls": "الاتصال والفيديو(الخدمات)",
+  "greet": "تحية",
+  "groups": "مجموعات",
+  "archive": "أرشيف",
+  "lockChat": "قفل الدردشة",
+  "unread": "غير مقروءة",
+  "broadcast": "اذاعة"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -445,7 +455,17 @@ static const Map<String,dynamic> en = {
   "september": "september",
   "october": "october",
   "november": "november",
-  "december": "december"
+  "december": "december",
+  "social": "Social",
+  "services": "Services",
+  "socialCalls": "Call & Video(Social)",
+  "servicesCalls": "Call & Video(Services)",
+  "greet": "Greet",
+  "groups": "Groups",
+  "archive": "Archive",
+  "lockChat": "Lock Chat",
+  "unread": "Unread",
+  "broadcast": "Broadcast"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

@@ -171,7 +171,7 @@
 //                                 context: context,
 //                                 isScrollControlled: true,
 //                                 widget: MoreIconBottomSheet(
-//                                   chatItemModel: state.chats![index],
+//                                   ChatCategoryEntity: state.chats![index],
 //                                   chatsCubit: chatCubit,
 //                                 ));
 //                           },
@@ -201,7 +201,7 @@
 //                     // onDismissed: ,
 //                     child: ChatCard(
 //                       isSecret: isSecret,
-//                       chatItemModel: state.chats?[index],
+//                       ChatCategoryEntity: state.chats?[index],
 //                       chatsCubit: chatCubit,
 //                     ),
 //                   ),
@@ -279,6 +279,7 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.da
 import 'package:fourtyninehub/common/widgets/stateless/appbar/nested_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/enums/chat_categories.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -317,24 +318,24 @@ class _ChatViewState extends State<ChatView> {
     chatCubit.initChat();
   }
 
-  final List<String> groups = [
-    'Social',
-    'Services',
-    'Call & Video(Social)',
-    'Call & Video(Services)',
-    'Greet',
-    'Groups',
-    'Anonymous',
-    'Archive',
-    'Lock Chat',
-    'Unread',
-    'Broadcast',
-  ];
+  // final List<String> groups = [
+  //   'Social',                     0
+  //   'Services',                   1
+  //   'Call & Video(Social)',       2
+  //   'Call & Video(Services)',     3
+  //   'Greet',                      4
+  //   'Groups',                     5
+  //   'Anonymous',                  6
+  //   'Archive',                    7
+  //   'Lock Chat',                  8
+  //   'Unread',                     9
+  //   'Broadcast',                  10
+  // ];
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: groups.length,
+      length: ChatCategories.values.length,
       initialIndex: widget.initialTabIndex,
       child: SharedScaffold(
         mainCategoryId: 2,
@@ -388,27 +389,21 @@ class _ChatViewState extends State<ChatView> {
         indicatorColor: Colors.red,
         onTap: (index) {
           if (context.read<UserCubit>().isLoggedIn) {
-            context.read<ChatsCubit>().getChats(index: index);
+            context.read<ChatsCubit>().getChats(category: ChatCategories.values[index]);
 
             // if this locked chat we request password
-            if (index == 8) {
+            if (ChatCategories.values[index] == ChatCategories.locked) {
               showDialogToConfirmChatLockPassword(context);
             }
           }
         },
         tabAlignment: TabAlignment.start,
         isScrollable: true,
-        tabs: groups.map((e) {
-          return Tab(
-              // text: 'there was error here look at code and solve it',
-              // text: chatCubit.selectedTabIndex == groups.indexOf(e)
-              //     ? unReadMessages == 0
-              //         ? e
-              //         : "$e($unReadMessages)"
-              //     : error,
-              text: e);
+        tabs: ChatCategories.values.map((e) {
+          return Tab(text: e.name);
         }).toList());
   }
+
 
   Widget _buildCategoriesViews() {
     return TabBarView(children: [
@@ -457,7 +452,7 @@ class _ChatViewState extends State<ChatView> {
                                 context: context,
                                 isScrollControlled: true,
                                 widget: MoreIconBottomSheet(
-                                  chatItemModel: state.chats![index],
+                                  ChatCategoryEntity: state.chats![index],
                                   chatsCubit: chatCubit,
                                 ));
                           },
@@ -542,7 +537,7 @@ class _ChatViewState extends State<ChatView> {
               TextButton(
                   onPressed: () async {
                     chatCubit.getChats(
-                        index: 8, password: passwordController.text.trim());
+                        category: ChatCategories.locked, password: passwordController.text.trim());
                     Navigator.of(context).pop(false);
                   },
                   child: const Text('Confirm password')),

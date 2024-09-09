@@ -1,13 +1,11 @@
 import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/enums/chat_categories.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
@@ -16,18 +14,16 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entiti
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatMuteState_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatToArchiveNormal_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/chats_request.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getChats_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getGroupsChats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getSeenHistoryUseCase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unlock_chat_usecase.dart';
-import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 part 'chats_state.dart';
@@ -47,9 +43,8 @@ class ChatsCubit extends Cubit<ChatsState> {
   int unReadMessage = 0;
 
   String? userToken;
-  late int selectedTabIndex;
+  late ChatCategories selectedChatCategory;
   late String lockChatPassword;
-  final messageTextController = TextEditingController();
   final Map<String, ChatModel> _chats = {};
   List<UserStatusParams> userStatusParams = [];
   List<SeenHistoryModel> seenHistoryList = [];
@@ -98,27 +93,29 @@ class ChatsCubit extends Cubit<ChatsState> {
   }
 
   initChat() async {
-    await getChats(index: 0);
+    await getChats(category: ChatCategories.social);
   }
 
-  getChats({required int index, String? password}) async {
-    selectedTabIndex = index;
+  getChats({required ChatCategories category, String? password}) async {
+    selectedChatCategory = category;
 
     // if this locked chat tab & password null return empty list
-    if (index == 8 && password == null) {
+    if (category == ChatCategories.locked && password == null) {
       return emit
           .call(state.copyWith(chats: [], status: ChatsStates.initState));
     }
-    ChatsRequestParams chatsRequestParams =
-        getTabParams(index: index, password: password);
+    GetChatsParams chatsRequestParams = GetChatsParams(
+        categoryId: ChatCategoriesIds.social, privacy: ChatPrivacy.normal);
+    // getTabParams(category: category, password: password);
 
-    if (chatsRequestParams.categoryId == null && index != 5) {
+    if (chatsRequestParams.categoryId == null &&
+        category != ChatCategories.groups) {
       return emit
           .call(state.copyWith(chats: [], status: ChatsStates.initState));
     } else {
       _chats.clear();
       var response;
-      if (index == 5) {
+      if (category == ChatCategories.groups) {
         response = await _groupsChatsUseCase.call(const NoParams());
       } else {
         response = await _getChatsUseCase.call(
@@ -143,7 +140,7 @@ class ChatsCubit extends Cubit<ChatsState> {
 
         await Future.delayed(const Duration(seconds: 1));
         sendUserStatus(userStatusParams);
-        unReadMessage = data.totalUnread ?? 0;
+        unReadMessage =  0;
 
         return emit.call(
             state.copyWith(chats: data.chats, status: ChatsStates.initState));
@@ -189,78 +186,79 @@ class ChatsCubit extends Cubit<ChatsState> {
         (failure) => emit
             .call(state.copyWith(failure: failure, status: ChatsStates.error)),
         (data) {
-      getChats(index: selectedTabIndex);
+      getChats(category: selectedChatCategory);
       return;
     });
   }
 
-  ChatsRequestParams getTabParams({required int index, String? password}) {
-    // 0 => Normal
-    // 1 => Services
-    // 4 => Greets
-    // 5 => Groups
-    // 7 => Archived
-    // 8 => Locked
-    // 9 => unRead
-
-    if (index == 0) {
-      return ChatsRequestParams(
-        privacyId: 'normal',
-        categoryId: UIConst.chatNormalId,
-        isLocked: false,
-        isUnread: false,
-        archived: false,
-        isServices: false,
-      );
-    } else if (index == 1) {
-      return ChatsRequestParams(
-        privacyId: 'normal',
-        categoryId: UIConst.chatNormalId,
-        isLocked: false,
-        isUnread: false,
-        archived: false,
-        isServices: true,
-      );
-    } else if (index == 4) {
-      return ChatsRequestParams(
-        privacyId: 'normal',
-        categoryId: UIConst.chatGreetId,
-        isLocked: false,
-        isUnread: false,
-        archived: false,
-        isServices: false,
-      );
-    } else if (index == 7) {
-      return ChatsRequestParams(
-        privacyId: 'normal',
-        categoryId: UIConst.chatNormalId,
-        isLocked: false,
-        isUnread: false,
-        archived: true,
-        isServices: false,
-      );
-    } else if (index == 8) {
-      return ChatsRequestParams(
-          privacyId: 'normal',
-          categoryId: UIConst.chatNormalId,
-          isLocked: true,
-          archived: false,
-          isUnread: false,
-          isServices: false,
-          lockChatPassword: password);
-    } else if (index == 9) {
-      return ChatsRequestParams(
-          privacyId: 'normal',
-          categoryId: UIConst.chatNormalId,
-          isLocked: false,
-          archived: false,
-          isServices: false,
-          isUnread: true,
-          lockChatPassword: password);
-    } else {
-      return ChatsRequestParams();
-    }
-  }
+  // ChatsRequestParams getTabParams(
+  //     {required ChatCategories category, String? password}) {
+  //   // 0 => Normal
+  //   // 1 => Services
+  //   // 4 => Greets
+  //   // 5 => Groups
+  //   // 7 => Archived
+  //   // 8 => Locked
+  //   // 9 => unRead
+  //
+  //   if (category == ChatCategories.social) {
+  //     return ChatsRequestParams(
+  //       privacyId: 'normal',
+  //       categoryId: UIConst.chatNormalId,
+  //       isLocked: false,
+  //       isUnread: false,
+  //       archived: false,
+  //       isServices: false,
+  //     );
+  //   } else if (category == ChatCategories.service) {
+  //     return ChatsRequestParams(
+  //       privacyId: 'normal',
+  //       categoryId: UIConst.chatNormalId,
+  //       isLocked: false,
+  //       isUnread: false,
+  //       archived: false,
+  //       isServices: true,
+  //     );
+  //   } else if (category == ChatCategories.greet) {
+  //     return ChatsRequestParams(
+  //       privacyId: 'normal',
+  //       categoryId: UIConst.chatGreetId,
+  //       isLocked: false,
+  //       isUnread: false,
+  //       archived: false,
+  //       isServices: false,
+  //     );
+  //   } else if (category == ChatCategories.groups) {
+  //     return ChatsRequestParams(
+  //       privacyId: 'normal',
+  //       categoryId: UIConst.chatNormalId,
+  //       isLocked: false,
+  //       isUnread: false,
+  //       archived: true,
+  //       isServices: false,
+  //     );
+  //   } else if (category == ChatCategories.locked) {
+  //     return ChatsRequestParams(
+  //         privacyId: 'normal',
+  //         categoryId: UIConst.chatNormalId,
+  //         isLocked: true,
+  //         archived: false,
+  //         isUnread: false,
+  //         isServices: false,
+  //         lockChatPassword: password);
+  //   } else if (category == ChatCategories.unread) {
+  //     return ChatsRequestParams(
+  //         privacyId: 'normal',
+  //         categoryId: UIConst.chatNormalId,
+  //         isLocked: false,
+  //         archived: false,
+  //         isServices: false,
+  //         isUnread: true,
+  //         lockChatPassword: password);
+  //   } else {
+  //     return ChatsRequestParams();
+  //   }
+  // }
 
   Future<bool> lockChat(
       {required String chatId, String? lockChatPassword}) async {
@@ -280,7 +278,7 @@ class ChatsCubit extends Cubit<ChatsState> {
         result = true;
       }
     }, (data) {
-      getChats(index: selectedTabIndex);
+      getChats(category: selectedChatCategory);
       result = true;
     });
     return result;
@@ -294,7 +292,7 @@ class ChatsCubit extends Cubit<ChatsState> {
         (failure) => emit
             .call(state.copyWith(failure: failure, status: ChatsStates.error)),
         (data) {
-      getChats(index: selectedTabIndex, password: lockChatPassword);
+      getChats(category: selectedChatCategory, password: lockChatPassword);
     });
   }
 

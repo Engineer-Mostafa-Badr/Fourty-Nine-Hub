@@ -213,5 +213,15 @@
   "september": "september",
   "october": "october",
   "november": "november",
-  "december": "december"
+  "december": "december",
+  "social": "Social",
+  "services": "Services",
+  "socialCalls": "Call & Video(Social)",
+  "servicesCalls": "Call & Video(Services)",
+  "greet": "Greet",
+  "groups": "Groups",
+  "archive": "Archive",
+  "lockChat": "Lock Chat",
+  "unread": "Unread",
+  "broadcast": "Broadcast"
 }

@@ -212,5 +212,15 @@
   "september": "سبتمبر",
   "october": "أكتوبر",
   "november": "نوفمبر",
-  "december": "ديسمبر"
+  "december": "ديسمبر",
+  "social": "تواصل",
+  "services": "الخدمات",
+  "socialCalls": "الاتصال والفيديو (الاجتماعي)",
+  "servicesCalls": "الاتصال والفيديو(الخدمات)",
+  "greet": "تحية",
+  "groups": "مجموعات",
+  "archive": "أرشيف",
+  "lockChat": "قفل الدردشة",
+  "unread": "غير مقروءة",
+  "broadcast": "اذاعة"
 }

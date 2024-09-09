@@ -213,5 +213,15 @@ abstract class  LocaleKeys {
   static const october = 'october';
   static const november = 'november';
   static const december = 'december';
+  static const social = 'social';
+  static const services = 'services';
+  static const socialCalls = 'socialCalls';
+  static const servicesCalls = 'servicesCalls';
+  static const greet = 'greet';
+  static const groups = 'groups';
+  static const archive = 'archive';
+  static const lockChat = 'lockChat';
+  static const unread = 'unread';
+  static const broadcast = 'broadcast';
 
 }

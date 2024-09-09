@@ -5,7 +5,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';

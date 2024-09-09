@@ -3,19 +3,13 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
-import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_category_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_category_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 
 abstract class ChatsRemoteDataSource {
-  Future<Either<Failure, ChatItemModel>> getChats({
-    required String privacy,
-    required String categoryId,
-    required bool archived,
-    required bool isLocked,
-    required bool unRead,
-    required bool isServices,
-    String? password,
-  });
+  Future<Either<Failure, ChatCategoryEntity>> getChats(GetChatsParams params);
 
   Future<Either<Failure, bool>> changeChatMuteState({
     required String chatId,
@@ -39,7 +33,7 @@ abstract class ChatsRemoteDataSource {
     required String password,
   });
 
-  Future<Either<Failure, ChatItemModel>> getGroups();
+  Future<Either<Failure, ChatCategoryEntity>> getGroups();
 
   Future<Either<Failure, List<SeenHistoryModel>>> getSeenHistoryList(
       {required String chatId});
@@ -51,27 +45,13 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
   ChatsRemoteDataSourceImplementation(this._apiConsumer);
 
   @override
-  Future<Either<Failure, ChatItemModel>> getChats(
-      {required String privacy,
-      required String categoryId,
-      required bool archived,
-      required bool isLocked,
-      required bool unRead,
-      required bool isServices,
-      String? password}) async {
-    var data = {
-      "privacy": "normal",
-      "categoryId": categoryId,
-      "archived": archived,
-      "isLocked": isLocked,
-      "isServices": isServices,
-      "isUnread": unRead,
-      if (password != null) "password": password
-    };
-    final response = await _apiConsumer.post(EndPoints.getChats, data: data);
+  Future<Either<Failure, ChatCategoryEntity>> getChats(
+     GetChatsParams params) async {
+
+    final response = await _apiConsumer.post(EndPoints.getChats, data: params.toJson());
     return response.fold(
       (failure) => Left(failure),
-      (data) => Right(ChatItemModel.fromJson(data['data'])),
+      (data) => Right(ChatCategoryModel.fromJson(data['data'])),
     );
   }
 
@@ -134,10 +114,10 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, ChatItemModel>> getGroups() async {
+  Future<Either<Failure, ChatCategoryEntity>> getGroups() async {
     final response = await _apiConsumer.get(EndPoints.getChatGroups);
     return response.fold((failure) => Left(failure),
-        (data) => Right(ChatItemModel.fromJson(data['data'])));
+        (data) => Right(ChatCategoryModel.fromJson(data['data'])));
   }
 
   @override
