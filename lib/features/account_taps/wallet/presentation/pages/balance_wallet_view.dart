@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateful/dynamic/list_view_pagination.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -15,6 +14,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../common/widgets/stateful/dynamic/pagination_view.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';

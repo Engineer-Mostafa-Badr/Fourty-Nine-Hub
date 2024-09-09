@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateful/dynamic/list_view_pagination.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../../common/widgets/stateful/dynamic/pagination_view.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/company_ad_entity.dart';
 import 'build_item_photo_post.dart';

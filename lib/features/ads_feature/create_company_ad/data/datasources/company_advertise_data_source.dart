@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/models/company_ad_model.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/models/price_model.dart';
 
+import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../domain/entities/company_ad_entity.dart';
 import '../../domain/entities/company_ad_option_entity.dart';
 import '../../domain/usecases/delete_company_ad_use_case.dart';

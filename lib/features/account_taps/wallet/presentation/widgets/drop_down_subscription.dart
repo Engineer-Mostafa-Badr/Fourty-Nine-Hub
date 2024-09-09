@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateful/dynamic/list_view_pagination.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/main_category_entity.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../common/widgets/stateful/dynamic/pagination_view.dart';
 import '../../../../../core/localization/locales.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';

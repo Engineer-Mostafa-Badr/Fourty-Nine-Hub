@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/models/balance/request_withdraw_model.dart';
 
+import '../../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../../../../../core/error/failure.dart';
 import '../../../domain/entities/balance/balance_history_entity.dart';
 import '../../../domain/entities/balance/request_withdraw_entity.dart';

@@ -12,7 +12,6 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import '../../../../../features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
 
-
 class EndPoints {
   static const pageSize = 20;
   static const developmentBaseUrl = 'https://49dev.com/api/v1';
@@ -623,9 +622,6 @@ class EndPoints {
   }
 
   static String buttonAvailable = '/global/click';
-
-  static String getSubscriptionPlans(String subcategoryId) =>
-      '/subscription/plans/$subcategoryId';
 
   static String getSubscriptionPlans(String subcategoryId) => '/subscription/plans/$subcategoryId';
   static String checkUserSubscription(String id) {

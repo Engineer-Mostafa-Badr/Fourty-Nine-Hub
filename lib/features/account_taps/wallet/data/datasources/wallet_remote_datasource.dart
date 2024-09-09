@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../domain/entities/wallet/main_category_entity.dart';
 import '../../domain/entities/wallet/wallet_history_entity.dart';
 import '../../domain/entities/wallet/wallet_subscription_entity.dart';

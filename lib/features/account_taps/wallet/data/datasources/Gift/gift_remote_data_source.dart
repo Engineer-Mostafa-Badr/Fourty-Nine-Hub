@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/models/Gift/gift_model.dart';
-import '../../../../../../core/api/api_consumer.dart';
-import '../../../../../../core/api/end_points.dart';
+import '../../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../../../../../core/error/failure.dart';
-import '../../../domain/entities/gift_entities.dart';
 
 abstract class GiftRemoteDataSource{
   Future<Either<Failure,GiftModelModel>> fetchGiftWallet();
