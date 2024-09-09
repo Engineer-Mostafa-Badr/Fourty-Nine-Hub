@@ -13,7 +13,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -155,7 +155,10 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         context.push(Routes.SUBCATEGORIES,
                             extra: state.data![index]);
                       },
-                      child: MainCategoryBanner(category: state.data![index], onFavorite: () {  },),
+                      child: MainCategoryBanner(
+                        category: state.data![index],
+                        onFavorite: () {},
+                      ),
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) =>
