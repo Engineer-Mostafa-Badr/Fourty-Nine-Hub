@@ -1,7 +1,5 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 class PaginationView<T> extends StatefulWidget {
   final PaginationParams intialPagination;
@@ -44,7 +42,7 @@ class _PaginationViewState<T> extends State<PaginationView<T>> {
     _fetchData();
     _scrollController.addListener(() async {
       if (_scrollController.offset ==
-              _scrollController.position.maxScrollExtent &&
+          _scrollController.position.maxScrollExtent &&
           !_lastPage) {
         await _fetchData();
       }
@@ -74,7 +72,8 @@ class _PaginationViewState<T> extends State<PaginationView<T>> {
     if(_isLoading){
       return widget.loadingWidget ?? const Center(child: CircularProgressIndicator.adaptive());
     }else if(_isEmpty){
-return widget.emptyWidget ??  Center(child: Text(LocaleKeys.noData.tr()),);
+      return widget.emptyWidget ??  const Center(child: Text('No Data'),);
+ //return widget.emptyWidget ??  Center(child: Text(LocaleKeys.noData.tr()),);
     }else{
       return widget.build(_scrollController, _data);
     }

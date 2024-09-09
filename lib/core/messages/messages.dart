@@ -53,7 +53,10 @@ void showErrorMessage(BuildContext context, String message) {
   );
 }
 
-void showSuccessMessage(BuildContext context, String message) {
+ showSuccessMessage(BuildContext context, String message,{
+  Color color=Colors.green,
+  IconData icon=Icons.check_circle,
+}) {
   WidgetsBinding.instance.addPostFrameCallback(
     (_) => ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -73,9 +76,9 @@ void showSuccessMessage(BuildContext context, String message) {
               ),
             ),
             const SizedBox(width: 10),
-            const Icon(
-              Icons.check_circle,
-              color: Colors.green,
+             Icon(
+              icon,
+              color: color,
             ),
           ],
         ),

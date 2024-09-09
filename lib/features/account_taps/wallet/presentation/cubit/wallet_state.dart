@@ -5,29 +5,34 @@ enum WalletStates { loading, initial, error }
 class WalletState {
   final WalletStates status;
   final Failure? failure;
-  final List<WalletHistoryEntity>? balanceHistory;
-  final List<WalletHistoryEntity>? walletHistory;
-  final List<CompetitionEntity>? competitions;
+  final WalletEntity? wallet;
+  final List<WalletHistoryEntity>? history;
+  final List<WalletSubscriptionEntity>? subscription;
+  final List<MainCategoryWalletEntity>? mainCategory;
+
   const WalletState({
     this.status = WalletStates.loading,
     this.failure,
-    this.balanceHistory,
-    this.walletHistory,
-    this.competitions,
+    this.history,
+    this.wallet,
+    this.subscription,
+    this.mainCategory,
   });
   WalletState copyWith({
     WalletStates? status,
     Failure? failure,
-    List<WalletHistoryEntity>? balanceHistory,
-    List<WalletHistoryEntity>? walletHistory,
-    List<CompetitionEntity>? competitions,
+    List<WalletHistoryEntity>? history,
+    WalletEntity? wallet,
+    List<WalletSubscriptionEntity>? subscription,
+    List<MainCategoryWalletEntity>? mainCategory
   }) {
     return WalletState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
-      balanceHistory: balanceHistory ?? this.balanceHistory,
-      walletHistory: walletHistory ?? this.walletHistory,
-      competitions: competitions ?? this.competitions,
+      history: history ?? this.history,
+      wallet: wallet ?? this.wallet,
+      subscription: subscription ?? this.subscription,
+      mainCategory: mainCategory ?? this.mainCategory,
     );
   }
 }

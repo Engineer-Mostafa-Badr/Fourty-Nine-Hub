@@ -122,6 +122,7 @@ import '../features/account_taps/my_adds/presentation/pages/my_adds.dart';
 import '../features/account_taps/policies/presentation/pages/policy_view.dart';
 import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
 import '../features/account_taps/transfer_money/presentation/pages/transfer_money_view.dart';
+import '../features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
 import '../features/account_taps/wallet/presentation/pages/wallet_history.dart';
 import '../features/account_taps/wallet/presentation/pages/wallet_view.dart';
 import '../features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
@@ -296,6 +297,8 @@ class AppPages {
                 ),
                 BlocProvider(
                   create: (_) => serviceLocator<WalletCubit>(),
+                ),BlocProvider(
+                  create: (_) => serviceLocator<GiftCubit>(),
                 ),
               ],
               child: LoginView(
