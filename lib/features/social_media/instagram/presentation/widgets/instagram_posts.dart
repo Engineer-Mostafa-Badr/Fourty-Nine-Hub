@@ -75,7 +75,11 @@ class _InstagramPostsState extends State<InstagramPosts> {
 
     print(result); // This is the result.
   }
-
+@override
+  void dispose() {
+    widget.scrollController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<InstagramCubit, InstagramState>(
@@ -91,8 +95,8 @@ class _InstagramPostsState extends State<InstagramPosts> {
           }
         }, builder: (context, state) {
       final controller = context.read<InstagramCubit>();
-      print(controller.feedPagingController
-              .itemList![5].comments);
+      // print(controller.feedPagingController
+      //         .itemList![5].comments);
       return RefreshIndicator(
         onRefresh: () async => controller.onRefresh(),
         child: CustomScrollView(
