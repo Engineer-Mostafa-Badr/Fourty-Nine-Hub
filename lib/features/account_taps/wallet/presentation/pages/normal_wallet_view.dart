@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/subscription_widget.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -37,8 +39,8 @@ class _NormalWalletViewState extends State<NormalWalletView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BackAppBar(
-          label: Labels.normalWallet,
+        appBar:  BackAppBar(
+          label: LocaleKeys.wallet.localize,
         ),
         bottomNavigationBar: Container(
           margin: const EdgeInsets.all(10),
@@ -56,7 +58,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                 const Icon(Icons.send_to_mobile_rounded),
                 const Sizer(),
                 Label(
-                    text: Labels.transferMoney,
+                    text: LocaleKeys.transferMoney.localize,
                     style: Styles.mediumText(color: Colors.white)),
               ],
             ),
@@ -94,7 +96,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                           child: Row(
                             children: [
                               Label(
-                                text: 'Minimum ',
+                                text: LocaleKeys.minimum.localize,
                                 style: Styles.mediumText(color: Colors.grey),
                               ),
                               Label(
@@ -102,7 +104,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                                 style: Styles.mediumText(color: Colors.grey),
                               ),
                               Label(
-                                text: 'for personal transaction',
+                                text: LocaleKeys.transaction.localize,
                                 style: Styles.mediumText(color: Colors.grey),
                               ),
                             ],
@@ -114,20 +116,20 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                     state.wallet?.realAmount != null &&
                             state.wallet!.realAmount! >= 500
                         ? AppButton(
-                            label: 'Withdraw',
+                            label: LocaleKeys.withdraw.localize,
                             color: AppColors.AUTH_CONTAINER_COLOR,
                             backColor: AppColors.SECONDARY_COLOR,
                             onPressed: () => context.push(Routes.PAYMENT),
                           )
                         : AppButton(
-                            label: 'Withdraw',
+                            label: LocaleKeys.withdraw.localize,
                             backColor:
                                 AppColors.SECONDARY_COLOR.withOpacity(.5),
                             onPressed: () {}, // Disable button if less than 500
                           ),
                     const Sizer(),
                     Label(
-                      text: 'Subscriptions',
+                      text: LocaleKeys.subscriptions.localize,
                       style: Styles.headerText(),
                     ),
                     Column(
@@ -147,7 +149,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                               ? Icons.arrow_drop_down_rounded
                               : Icons.arrow_drop_up_rounded),
                           Label(
-                            text: showMore ? 'Show Less' : 'Show More',
+                            text: showMore ? LocaleKeys.showLess.localize : LocaleKeys.showMore.localize,
                             style: Styles.smallText(
                                 color: Theme.of(context).primaryColor),
                           ),
@@ -158,7 +160,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                     DropDownSubscription(),
                     const Sizer(),
                     Label(
-                      text: 'History',
+                      text: LocaleKeys.history.localize,
                       style: Styles.headerText(),
                     ),
                     PaginationView<WalletHistoryEntity>(

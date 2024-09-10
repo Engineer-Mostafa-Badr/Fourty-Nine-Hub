@@ -228,5 +228,22 @@
   "save": "Save",
   "suscessfullySaved": "Successfully Saved",
   "anonymous": "Anonymous",
-  "noData": "No Data"
+  "noData": "No Data",
+  "notSubscription": "Not Subscription",
+  "regular": "Regular",
+  "areYouSure": "Are you sure?",
+  "sureUnsubscribe": "Are you sure you want to unsubscribe?",
+  "renewal": "Renewal",
+  "showLess": "Show Less",
+  "noHistoryAvailable": "No History Available",
+  "addSubcategoryToSubscribe": "Add Subcategory To Subscribe",
+  "selectCategory": "Select Category",
+  "noCategoriesAvailable": "No categories available",
+  "selectSubCategory": "Select SubCategory",
+  "daily": "Daily",
+  "weekly": "Weekly",
+  "monthly": "Monthly",
+  "yearly": "Yearly",
+  "noSubscriptionPlans": "No subscription plans available",
+  "premiumPackage": "The Premium Package gives you the opportunity to be seen more and get more cashback."
 }
