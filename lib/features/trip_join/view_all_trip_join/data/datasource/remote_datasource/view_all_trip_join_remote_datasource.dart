@@ -4,8 +4,8 @@ import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/core/api/api_consumer.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/data/models/trip_join_card_model/trip_join_card_model.dart';
@@ -22,8 +22,7 @@ abstract class ViewAllTripJoinRemoteDataSource {
   });
 }
 
-class ViewAllTripJoinRemoteDataSourceImp
-    implements ViewAllTripJoinRemoteDataSource {
+class ViewAllTripJoinRemoteDataSourceImp implements ViewAllTripJoinRemoteDataSource {
   final ApiConsumer apiConsumer;
 
   ViewAllTripJoinRemoteDataSourceImp({required this.apiConsumer});
@@ -52,9 +51,8 @@ class ViewAllTripJoinRemoteDataSourceImp
           // pr('No data found');
           return const Right([]);
         }
-        List<TripJoinCardEntity> allCards = rawData
-            .map<TripJoinCardEntity>((e) => TripJoinCardModel.fromJson(e))
-            .toList();
+        List<TripJoinCardEntity> allCards =
+            rawData.map<TripJoinCardEntity>((e) => TripJoinCardModel.fromJson(e)).toList();
         // pr(allCards[0]);
         return Right(allCards);
       },

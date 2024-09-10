@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/icon_with_view_count.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
 class UnreadNotificationsBuilder extends StatelessWidget {
@@ -19,8 +18,8 @@ class UnreadNotificationsBuilder extends StatelessWidget {
         return IconWithViewCount(
           icon: Image.asset(
             Assets.notification,
-            width: 30.zW,
-            height: 35.zH,
+            width: 20,
+            height: 20,
             fit: BoxFit.cover,
           ),
           unreadCount: getUnreadNotificationsCountCubit.unreadNotificationsCountEntity?.total ?? 0,
