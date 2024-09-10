@@ -33,7 +33,7 @@ class _ChatCardState extends State<ChatCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.read<ChatsCubit>().selectChat(widget.chat!);
+        context.read<ChatsCubit>().selectChat = widget.chat!;
         context.push(Routes.CHATROOM, extra: widget.chatsCubit);
       },
       child: Column(

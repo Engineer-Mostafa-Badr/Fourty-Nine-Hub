@@ -518,11 +518,11 @@ class _ChatViewState extends State<ChatView> {
 
   Widget _buildCategoryChats({bool isSecret = false}) {
     return BlocBuilder<ChatsCubit, ChatsState>(builder: (context, state) {
-      return state.chats == null || state.isLoading
+      return state.chats == null
           ? const Center(
               child: CircularProgressIndicator.adaptive(),
             )
-          : state.chats?.length == 0
+          : state.chats!.isEmpty
               ? Center(
                   child: Label(
                       text: 'No Chats until now',

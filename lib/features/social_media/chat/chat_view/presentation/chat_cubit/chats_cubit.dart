@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/chat_categories.dart';
@@ -11,7 +10,6 @@ import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_so
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_model.dart';
@@ -39,7 +37,6 @@ class ChatsCubit extends Cubit<ChatsState> {
   final GetSeenHistoryUseCase _getSeenHistoryUseCase;
   final ListenToNewMessageUseCase _listenToNewMessageUseCase;
   final StopListenToMessagesUseCase _stopListenToMessagesUseCase;
-  final GetMessagesUseCase _getMessagesUseCase;
   int unReadMessage = 0;
 
   String? userToken;
@@ -48,7 +45,6 @@ class ChatsCubit extends Cubit<ChatsState> {
   final Map<String, ChatModel> _chats = {};
   List<UserStatusParams> userStatusParams = [];
   List<SeenHistoryModel> seenHistoryList = [];
-  List<MessageEntity> _messages = [];
   late ChatEntity _selectedChat;
 
   ChatsCubit(
@@ -62,7 +58,6 @@ class ChatsCubit extends Cubit<ChatsState> {
     this._getSeenHistoryUseCase,
     this._listenToNewMessageUseCase,
     this._stopListenToMessagesUseCase,
-    this._getMessagesUseCase,
   ) : super(const ChatsState());
 
   initSocketConnection() async {
@@ -78,19 +73,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     });
   }
 
-  Future<void> getMessages() async {
-    _messages.clear();
-    final response = await _getMessagesUseCase(GetMessagesParams(
-        chatId: _selectedChat.id, pagination: PaginationParams.basic()));
 
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: ChatsStates.error)),
-        (data) {
-      _messages = data;
-      emit(state.copyWith(messages: _messages));
-    });
-  }
 
   initChat() async {
     await getChats(category: ChatCategories.social);
@@ -102,7 +85,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     // if this locked chat tab & password null return empty list
     if (category == ChatCategories.locked && password == null) {
       return emit
-          .call(state.copyWith(chats: [], status: ChatsStates.initState));
+          .call(state.copyWith(chats: [], status: ChatsStates.success));
     }
     GetChatsParams chatsRequestParams = GetChatsParams(
         categoryId: ChatCategoriesIds.social, privacy: ChatPrivacy.normal);
@@ -111,7 +94,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     if (chatsRequestParams.categoryId == null &&
         category != ChatCategories.groups) {
       return emit
-          .call(state.copyWith(chats: [], status: ChatsStates.initState));
+          .call(state.copyWith(chats: [], status: ChatsStates.success));
     } else {
       _chats.clear();
       var response;
@@ -143,7 +126,7 @@ class ChatsCubit extends Cubit<ChatsState> {
         unReadMessage =  0;
 
         return emit.call(
-            state.copyWith(chats: data.chats, status: ChatsStates.initState));
+            state.copyWith(chats: data.chats, status: ChatsStates.success));
       });
     }
   }
@@ -152,8 +135,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     _listenToNewMessageUseCase((message) {
       _chats;
       if (_selectedChat.id == message.chatId) {
-        _messages.add(message);
-        emit(state.copyWith(messages: _messages));
+        emit(state.copyWith(newMessage: message,status: ChatsStates.newMessage));
       }
     });
   }
@@ -176,7 +158,7 @@ class ChatsCubit extends Cubit<ChatsState> {
         (data) {
       _chats[chatId]?.muted = !_chats[chatId]!.muted;
       return emit.call(state.copyWith(
-          chats: _chats.values.toList(), status: ChatsStates.initState));
+          chats: _chats.values.toList(), status: ChatsStates.success));
     });
   }
 
@@ -387,7 +369,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     );
   }
 
-  void selectChat(ChatEntity chat) {
+   set selectChat(ChatEntity chat) {
     _selectedChat = chat;
   }
 

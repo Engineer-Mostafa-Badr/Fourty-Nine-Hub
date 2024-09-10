@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 part 'chat_room_state.dart';
@@ -19,27 +20,43 @@ part 'chat_room_state.dart';
 class ChatRoomCubit extends Cubit<ChatRoomState> {
   final DeleteChatMessageUseCase _deleteChatMessageUseCase;
   final SendMessageUseCase _sendMessageUseCase;
-
+  final GetMessagesUseCase _getMessagesUseCase;
   final ScrollController scrollController = ScrollController();
   MessageEntity? _replayMessage;
-  late String _chatId;
+  late ChatEntity _chat;
   final FilePicker _filePicker = FilePicker.platform;
+  List<MessageEntity> _messages = [];
 
   ChatRoomCubit(
     this._deleteChatMessageUseCase,
     this._sendMessageUseCase,
+    this._getMessagesUseCase,
   ) : super(const ChatRoomState());
 
-  void init({required String chatId}) {
-    _chatId = chatId;
+  void init({required ChatEntity chat}) {
+    _chat = chat;
+    _getMessages();
   }
 
-  Future<void> sendMessage(
-      {required String message}) async {
+  Future<void> _getMessages() async {
+    _messages.clear();
+    final response = await _getMessagesUseCase(GetMessagesParams(
+        chatId: _chat.id, pagination: PaginationParams.basic()));
+
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: ChatRoomStates.error)),
+        (data) {
+      _messages = data;
+      emit(state.copyWith(messages: _messages));
+    });
+  }
+
+  Future<void> sendMessage({required String message}) async {
     _sendMessageUseCase(SendMessageParams(
         replyMessageId: _replayMessage?.id,
         message: message,
-        chatId: _chatId,
+        chatId: _chat.id,
         mediaIds: [],
         oneTimeView: false));
   }
