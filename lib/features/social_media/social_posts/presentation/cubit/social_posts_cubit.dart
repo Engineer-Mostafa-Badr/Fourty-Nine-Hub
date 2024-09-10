@@ -413,8 +413,8 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) async {
           final response = await serviceLocator<ApiConsumer>().put(
-            '/users/cover-picture',
-            data: {'coverPictureId': data.mediaId},
+            '/users/profile-data',
+            queryParameters: {'coverPictureId': data.mediaId},
           );
           return response.fold(
                 (failure) {

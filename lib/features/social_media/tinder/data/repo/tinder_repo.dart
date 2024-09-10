@@ -322,6 +322,7 @@ class TinderRepository {
         return response;
       } else {
         log('Failed to post data: ${response.statusCode} ${response.body}');
+        return response;
       }
     } catch (e) {
       log('Error posting data: $e');
@@ -385,9 +386,11 @@ class TinderRepository {
     }
     return null;
   }
+
   Future<CategoryFavoritesResponse?> fetchFavoritesCategory() async {
     const url = 'https://49dev.com/api/v1/favorite-category';
-    final response = await _makeGetRequest(url: url, fromMethod: 'fetchFavorites');
+    final response =
+        await _makeGetRequest(url: url, fromMethod: 'fetchFavorites');
     if (response != null) {
       final data = json.decode(response.body);
       return CategoryFavoritesResponse.fromJson(data);
@@ -413,7 +416,7 @@ class TinderRepository {
     return null;
   }
 
-  Future<String?> sendGift(
+  Future<dynamic> sendGift(
       String receiverId, String giftId, String subCategoryId) async {
     const url =
         'https://49dev.com/api/v1/tinder/sendGifts?subCategory=66af974f8bf69f9469944746';
@@ -422,7 +425,10 @@ class TinderRepository {
       "giftId": giftId,
     });
     final response = await _makePostRequest(url: url, body: data);
-    return response?.body;
+    final s = await json.decode(response!.body);
+
+    log('-------->${s["success"]}');
+    return s;
   }
 
   Future<List<GiftData>?> fetchGifts() async {

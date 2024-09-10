@@ -234,7 +234,7 @@ class _TrimmerView extends StatefulWidget {
 }
 
 class _TrimmerViewState extends State<_TrimmerView> {
-//  final Trimmer _trimmer = Trimmer();
+  // final Trimmer _trimmer = Trimmer();
 
   double _startValue = 0.0;
   double _endValue = 0.0;
@@ -263,7 +263,7 @@ class _TrimmerViewState extends State<_TrimmerView> {
   }
 
   void _loadVideo() {
-  //  _trimmer.loadVideo(videoFile: widget.file);
+    // _trimmer.loadVideo(videoFile: widget.file);
   }
 
   @override
@@ -289,19 +289,20 @@ class _TrimmerViewState extends State<_TrimmerView> {
             ),
           ),
 
-          // Expanded(
-          //   child: InkWell(
-          //       onTap: () async {
-          //         bool playbackState = await _trimmer.videoPlaybackControl(
-          //           startValue: _startValue,
-          //           endValue: _endValue,
-          //         );
-          //         setState(() {
-          //           _isPlaying = playbackState;
-          //         });
-          //       },
-          //       child: VideoViewer(trimmer: _trimmer)),
-          // ),
+          Expanded(
+            child: InkWell(
+                onTap: () async {
+                  // bool playbackState = await _trimmer.videoPlaybackControl(
+                  //   startValue: _startValue,
+                  //   endValue: _endValue,
+                  // );
+                  // setState(() {
+                  //   _isPlaying = playbackState;
+                  // });
+                },
+                // child: VideoViewer(trimmer: _trimmer)
+            ),
+          ),
           Row(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,

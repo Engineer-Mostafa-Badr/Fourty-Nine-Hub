@@ -2,9 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
@@ -22,6 +20,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_reels.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -205,11 +204,11 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                       controller.changeUserPage(i);
                                     },
                                     tabs: [
-                                      const Tab(
-                                        icon: Icon(Icons.menu),
+                                      Tab(
+                                        icon: Image.asset(Assets.userMedia,width: 30,),
                                       ),
-                                      const Tab(
-                                        icon: FaIcon(FontAwesomeIcons.youtube),
+                                      Tab(
+                                        icon: Image.asset(Assets.userReels,width: 30,),
                                       ),
                                       if (context
                                               .read<UserCubit>()
@@ -217,9 +216,8 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                               .data
                                               ?.id ==
                                           widget.userId)
-                                        const Tab(
-                                          icon: FaIcon(
-                                              FontAwesomeIcons.solidSave),
+                                        Tab(
+                                          icon: Image.asset(Assets.savedReels,width: 30,),
                                         ),
                                     ]),
                                 // _buildAccountPages(state.profileData!),

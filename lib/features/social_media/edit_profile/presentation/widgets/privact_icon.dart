@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
 import 'package:fourtyninehub/common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/privacy_status_enum.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class PrivacyIcon extends StatelessWidget {
   const PrivacyIcon({super.key, required this.selectPrivacy});
@@ -44,7 +45,7 @@ class PrivacyIcon extends StatelessWidget {
         },
         icon: const Icon(
           Icons.privacy_tip,
-          color: Colors.grey,
+          color: AppColors.PRIMARY_COLOR,
           size: 30,
         ));
   }
