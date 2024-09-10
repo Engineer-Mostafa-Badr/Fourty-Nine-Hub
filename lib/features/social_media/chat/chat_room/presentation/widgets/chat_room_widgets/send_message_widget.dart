@@ -447,7 +447,8 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
 
   @override
   void initState() {
-    _messageTextController = context.read<ChatRoomCubit>().messageTextController;
+    _messageTextController =
+        context.read<ChatRoomCubit>().messageTextController;
     _messageFocusNode = FocusNode();
     _showMicButton = true;
     _showEmojiKeyboard = false;
@@ -659,9 +660,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
     return LayoutBuilder(builder: (context, constraints) {
       return InkWell(
         onTap: () {
-          context
-              .read<ChatRoomCubit>()
-              .sendMessage(message: _messageTextController.text);
+          context.read<ChatRoomCubit>().sendMessage();
         },
         child: CircleAvatar(
           backgroundColor: AppColors.PRIMARY_COLOR,

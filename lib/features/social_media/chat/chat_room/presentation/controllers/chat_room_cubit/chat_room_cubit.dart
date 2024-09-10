@@ -22,11 +22,11 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   final SendMessageUseCase _sendMessageUseCase;
   final GetMessagesUseCase _getMessagesUseCase;
   final ScrollController scrollController = ScrollController();
-  MessageEntity? _replayMessage;
-  late ChatEntity _chat;
+  final TextEditingController messageTextController = TextEditingController();
   final FilePicker _filePicker = FilePicker.platform;
   List<MessageEntity> _messages = [];
-  final TextEditingController messageTextController = TextEditingController();
+  MessageEntity? _replayMessage;
+  late ChatEntity _chat;
 
   ChatRoomCubit(
     this._deleteChatMessageUseCase,
@@ -39,6 +39,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     _getMessages();
   }
 
+// =========================================== get messages ===========================================
   Future<void> _getMessages() async {
     _messages.clear();
     final response = await _getMessagesUseCase(GetMessagesParams(
@@ -54,16 +55,6 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     });
   }
 
-  Future<void> sendMessage({required String message}) async {
-    _sendMessageUseCase(SendMessageParams(
-        replyMessageId: _replayMessage?.id,
-        message: message,
-        chatId: _chat.id,
-        mediaIds: [],
-        oneTimeView: false));
-    messageTextController.text = '';
-  }
-
   void addMessage(MessageEntity message) {
     if (message.chatId == _chat.id) {
       _messages.add(message);
@@ -72,27 +63,16 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     }
   }
 
-  typingMessage() {}
+  // =========================================== send message ===========================================
 
-  listenToMessageTyping() {
-    // _socketService.socketChatTypingStream.listen((event) {
-    //   debugPrint("chatListen $event");
-    //
-    //   List<TypingAndOnlineModel> chatsIds = event ?? [];
-    //   chatsIds.map((e) {}).toList();
-    //
-    //   emit.call(state.copyWith(
-    //       chatData: chatMessagesModel,
-    //       messages: chatMessages,
-    //       status: ChatRoomStates.typing));
-    // });
-  }
-
-  deleteMessage({required String chatId, required String messageId}) async {
-    DeleteMessageParams deleteMessageParams =
-        DeleteMessageParams(chatId: chatId, messageId: messageId);
-    await _deleteChatMessageUseCase.call(deleteMessageParams);
-    // getMessages();
+  Future<void> sendMessage() async {
+    _sendMessageUseCase(SendMessageParams(
+        replyMessageId: _replayMessage?.id,
+        message: messageTextController.text,
+        chatId: _chat.id,
+        mediaIds: [],
+        oneTimeView: false));
+    messageTextController.text = '';
   }
 
   void selectMessageForReplaying(MessageEntity message) {
@@ -105,6 +85,16 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     emit(state.copyWith(replayedMessage: _replayMessage));
   }
 
+  // =========================================== delete message ===========================================
+
+  deleteMessage({required String chatId, required String messageId}) async {
+    DeleteMessageParams deleteMessageParams =
+        DeleteMessageParams(chatId: chatId, messageId: messageId);
+    await _deleteChatMessageUseCase.call(deleteMessageParams);
+    // getMessages();
+  }
+
+  // =========================================== pick attachments ===========================================
   Future<void> pickDocuments() async {
     try {
       FilePickerResult? result = await _filePicker.pickFiles(
@@ -171,6 +161,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       }
     }
   }
+
+  // =========================================================================================================
 
   void _scrollDown() => Timer(const Duration(milliseconds: 200),
       () => scrollController.jumpTo(scrollController.position.maxScrollExtent));
