@@ -67,6 +67,7 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
 import 'package:fourtyninehub/features/social_media/chat/attachments/presentation/pages/attachments_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_profile/presentation/pages/chat_profile_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
@@ -228,6 +229,11 @@ class AppPages {
             path: Paths.CONTACTS_VIEW,
             name: Routes.CONTACTSVIEW,
             builder: (context, state) => const ContactsView(),
+          ),
+          GoRoute(
+            path: Paths.CHATPROFILEVIEW,
+            name: Routes.CHATPROFILEVIEW,
+            builder: (context, state) => const ChatProfileView(),
           ),
           //GRID VIEW
           GoRoute(

@@ -242,7 +242,12 @@ class CodegenLoader extends AssetLoader{
   "newGroup": "مجموعة جديدة",
   "newBroadcast": "رسالة جماعية جديدة",
   "linkedDevice": "الاجهزة المرتبطة",
-  "starredMessages": "الرسائل المميزة بنجمة"
+  "starredMessages": "الرسائل المميزة بنجمة",
+  "profile": "الملف الشخصي",
+  "about": "الاخبار",
+  "phone": "الهاتف",
+  "name": "الاسم",
+  "nameMessage": "هذا ليس اسم المستخدم أو الرقم السري الخاص بك. سيكون هذا الاسم مرئيًا لجهات اتصال FortyNine الخاصة بك."
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -473,7 +478,12 @@ static const Map<String,dynamic> en = {
   "newGroup": "New Group",
   "newBroadcast": "New Broadcast",
   "linkedDevice": "Linked Device",
-  "starredMessages": "Starred Messages"
+  "starredMessages": "Starred Messages",
+  "profile": "Profile",
+  "about": "About",
+  "phone": "Phone",
+  "name": "Name",
+  "nameMessage": "This is not your username or pin. This name will be visible to your FortyNine contacts."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

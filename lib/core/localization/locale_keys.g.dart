@@ -227,5 +227,10 @@ abstract class  LocaleKeys {
   static const newBroadcast = 'newBroadcast';
   static const linkedDevice = 'linkedDevice';
   static const starredMessages = 'starredMessages';
+  static const profile = 'profile';
+  static const about = 'about';
+  static const phone = 'phone';
+  static const name = 'name';
+  static const nameMessage = 'nameMessage';
 
 }

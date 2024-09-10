@@ -356,18 +356,18 @@ class _ChatViewState extends State<ChatView> {
         mainCategoryId: 2,
         body: NestedAppbar(
           scrollController: ScrollController(),
-          appBars: context.read<UserCubit>().isLoggedIn
-              ? [
-                  SliverAppBar(
-                    expandedHeight: kToolbarHeight * 1.9,
-                    automaticallyImplyLeading: false,
-                    floating: true,
-                    flexibleSpace: BlocProvider.value(
-                      value: serviceLocator<StoryCubit>()..fetchStories(),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
+          appBars: [
+            SliverAppBar(
+              expandedHeight: kToolbarHeight * 1.9,
+              automaticallyImplyLeading: false,
+              floating: true,
+              flexibleSpace: BlocProvider.value(
+                value: serviceLocator<StoryCubit>()..fetchStories(),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    context.read<UserCubit>().isLoggedIn
+                        ? SizedBox(
                             height: 30,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -384,8 +384,8 @@ class _ChatViewState extends State<ChatView> {
                                   ),
                                   offset: const Offset(0, 50),
                                   onSelected: (int value) async {
-                                    if (value == 0) {
-                                      context.push(Routes.VIEWCONTACT);
+                                    if (value == 4) {
+                                      context.push(Routes.CHATPROFILEVIEW);
                                     }
                                   },
                                   itemBuilder: (context) {
@@ -394,21 +394,21 @@ class _ChatViewState extends State<ChatView> {
                                 ),
                               ],
                             ),
-                          ),
-                          const ChatStories(),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SliverAppBar(
-                    automaticallyImplyLeading: false,
-                    floating: true,
-                    pinned: true,
-                    titleSpacing: 0,
-                    title: _buildCategoriesLabels(),
-                  )
-                ]
-              : [],
+                          )
+                        : const SizedBox(),
+                    const ChatStories(),
+                  ],
+                ),
+              ),
+            ),
+            SliverAppBar(
+              automaticallyImplyLeading: false,
+              floating: true,
+              pinned: true,
+              titleSpacing: 0,
+              title: _buildCategoriesLabels(),
+            )
+          ],
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
             builder: (context, state) {
               return context.read<UserCubit>().isLoggedIn
@@ -470,7 +470,7 @@ class _ChatViewState extends State<ChatView> {
       PopupMenuItem<int>(
         value: 4,
         child: Text(
-          LocaleKeys.settings.tr(),
+          LocaleKeys.profile.tr(),
           style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
         ),
       ),
