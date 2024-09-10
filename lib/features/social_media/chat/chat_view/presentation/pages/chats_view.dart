@@ -395,22 +395,53 @@ class _ChatViewState extends State<ChatView> {
               return context.read<UserCubit>().isLoggedIn
                   ? _buildCategoriesViews()
                   : Center(
-                      child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
+                      child: SingleChildScrollView(
+                        child: GestureDetector(
                           onTap: () => context.push(Routes.LOGIN),
-                          child: Label(
-                            text: 'Login',
-                            style: Styles.headerText(
-                                color: AppColors.PRIMARY_COLOR_DARK),
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            width: 300,
+                            height: 300,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Theme.of(context).primaryColor,
+                                width: 4,
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Please Login, Register to enjoy the app',
+                                style: Styles.headerText(
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                           ),
                         ),
-                        Label(
-                            text: ', To continue in using chat services',
-                            style: Styles.headerText()),
-                      ],
-                    ));
+                      ),
+                    );
+              // Center(
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         GestureDetector(
+              //           onTap: () => context.push(Routes.LOGIN),
+              //           child: Label(
+              //             text: 'Login',
+              //             style: Styles.headerText(
+              //                 color: AppColors.PRIMARY_COLOR_DARK),
+              //           ),
+              //         ),
+              //         Label(
+              //             text: ', To continue in using chat services',
+              //             style: Styles.headerText()),
+              //       ],
+              //     ),
+              //   );
             },
           ),
         ),

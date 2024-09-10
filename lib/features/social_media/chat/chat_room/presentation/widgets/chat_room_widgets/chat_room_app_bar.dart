@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -30,37 +31,33 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       title: BlocBuilder<ChatRoomCubit, ChatRoomState>(
         builder: (context, state) {
-          return 'state.chatData?.chat?.contact?.name' == null
-              ? const SizedBox()
-              : GestureDetector(
-                  onTap: () => context.push(Routes.VIEWCONTACT),
-                  child: Row(
-                    children: [
-                      const CircleAvatar(
-                        backgroundColor: Colors.white,
-                        backgroundImage:
-                            NetworkImage(UIConst.profilePlaceHolder),
+          return GestureDetector(
+            onTap: () => context.push(Routes.VIEWCONTACT),
+            child: Row(
+              children: [
+                const CircleAvatar(
+                  backgroundColor: Colors.white,
+                  backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+                ),
+                const SizedBox(width: 12), // Spacing between avatar and text
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      context.read<ChatsCubit>().selectedChat.name,
+                      // 'state.chatData?.chat?.contact?.name',
+                      overflow: TextOverflow.ellipsis,
+                      style: Styles.headerText(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
                       ),
-                      const SizedBox(
-                          width: 12), // Spacing between avatar and text
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Ahmed Nasr",
-                            // 'state.chatData?.chat?.contact?.name',
-                            overflow: TextOverflow.ellipsis,
-                            style: Styles.headerText(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
         },
       ),
       actions: [

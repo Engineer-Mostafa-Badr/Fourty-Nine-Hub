@@ -414,6 +414,8 @@
 // ========================================================================================================================================================================================
 // ========================================================================================================================================================================================
 
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -425,6 +427,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/Attachment_types.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/emoji_keyboard.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:social_media_recorder/screen/social_media_recorder.dart';
@@ -443,7 +446,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   late final FocusNode _messageFocusNode;
   late bool _showMicButton;
   late bool _showEmojiKeyboard;
-  final Radius radius = const Radius.circular(8);
+  final Radius radius = const Radius.circular(32);
 
   @override
   void initState() {
@@ -500,33 +503,70 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
     return BlocBuilder<ChatRoomCubit, ChatRoomState>(
       builder: (context, state) {
         Radius topRadius = state.replayedMessage == null ? radius : Radius.zero;
-        return TextFormField(
-          controller: _messageTextController,
-          focusNode: _messageFocusNode,
-          onTap: () {
-            _closeEmojiKeyboard();
-            _openTextKeyboard();
+
+        return WillPopScope(
+          onWillPop: () async {
+            if (_showEmojiKeyboard) {
+              _closeEmojiKeyboard();
+              _openTextKeyboard();
+              return Future.value(false);
+            }
+            return Future.value(true);
           },
-          decoration: InputDecoration(
-            fillColor: Colors.white,
-            filled: true,
-            hintText: LocaleKeys.message.tr(),
-            hintStyle: const TextStyle(color: Colors.grey),
-            contentPadding: const EdgeInsets.symmetric(vertical: 10),
-            border: OutlineInputBorder(
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: state.replayedMessage == null
+                  ? [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5), // Shadow color
+                        spreadRadius: 1, // Spread the shadow
+                        blurRadius: 5,
+                        offset: const Offset(0, 3),
+                      ),
+                    ]
+                  : [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5), // Shadow color
+                        spreadRadius: 1, // Spread the shadow
+                        blurRadius: 1,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
               borderRadius: BorderRadius.vertical(
                 top: topRadius,
                 bottom: radius,
               ),
-              borderSide: BorderSide.none,
             ),
-            prefixIcon: _showEmojiKeyboard ? _keyboardButton() : _emojiButton(),
-            suffixIcon: _attachmentButton(),
+            child: TextFormField(
+              controller: _messageTextController,
+              focusNode: _messageFocusNode,
+              onTap: () {
+                _closeEmojiKeyboard();
+                _openTextKeyboard();
+              },
+              decoration: InputDecoration(
+                fillColor: Colors.white,
+                filled: true,
+                hintText: LocaleKeys.message.tr(),
+                hintStyle: const TextStyle(color: Colors.grey),
+                contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: topRadius,
+                    bottom: radius,
+                  ),
+                  borderSide: BorderSide.none,
+                ),
+                prefixIcon:
+                    _showEmojiKeyboard ? _keyboardButton() : _emojiButton(),
+                suffixIcon: _attachmentButton(),
+              ),
+              style: const TextStyle(color: Colors.black),
+              keyboardType: TextInputType.multiline,
+              maxLines: 3,
+              minLines: 1,
+            ),
           ),
-          style: const TextStyle(color: Colors.black),
-          keyboardType: TextInputType.multiline,
-          maxLines: 3,
-          minLines: 1,
         );
       },
     );
@@ -560,8 +600,8 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                 onCancelReplay: () =>
                     context.read<ChatRoomCubit>().cancelReplay(),
                 anotherUserName: state.replayedMessage!.byMe == true
-                    ? 'From me'
-                    : 'From other',
+                    ? 'You'
+                    : context.read<ChatsCubit>().selectedChat.name,
                 // state.chatData?.chat?.contact?.name ??
                 //     LocaleKeys.anonymous.tr(),
               ),

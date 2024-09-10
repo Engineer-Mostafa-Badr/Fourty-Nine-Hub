@@ -331,6 +331,7 @@ class MessageCard extends StatelessWidget {
                                           ConstrainedBox(
                                             constraints: BoxConstraints(
                                               maxWidth: width * 0.7,
+                                              maxHeight: 20,
                                             ),
                                             child: Text(
                                               messageEntity.reply!.text,
@@ -553,6 +554,7 @@ class MessageCard extends StatelessWidget {
                                         ConstrainedBox(
                                           constraints: BoxConstraints(
                                             maxWidth: width * 0.55,
+                                            maxHeight: 20,
                                           ),
                                           child: Text(
                                             messageEntity.reply!.text,
