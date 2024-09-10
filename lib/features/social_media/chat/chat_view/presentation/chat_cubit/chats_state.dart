@@ -20,7 +20,7 @@ extension ChatMessagesStateX on ChatsState {
 class ChatsState {
   final ChatsStates status;
   final Failure? failure;
-  final List<ChatModel>? chats;
+  final List<ChatEntity>? chats;
   final MessageEntity? newMessage;
 
   const ChatsState({
@@ -33,7 +33,7 @@ class ChatsState {
   ChatsState copyWith({
     ChatsStates? status,
     Failure? failure,
-    List<ChatModel>? chats,
+    List<ChatEntity>? chats,
     MessageEntity? newMessage,
   }) {
     return ChatsState(

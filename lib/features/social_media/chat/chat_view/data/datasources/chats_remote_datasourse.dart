@@ -6,10 +6,11 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/s
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_category_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_category_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 
 abstract class ChatsRemoteDataSource {
-  Future<Either<Failure, ChatCategoryEntity>> getChats(GetChatsParams params);
+  Future<Either<Failure, List<ChatEntity>>> getChats(GetChatsParams params);
 
   Future<Either<Failure, bool>> changeChatMuteState({
     required String chatId,
@@ -45,13 +46,15 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
   ChatsRemoteDataSourceImplementation(this._apiConsumer);
 
   @override
-  Future<Either<Failure, ChatCategoryEntity>> getChats(
-     GetChatsParams params) async {
-
-    final response = await _apiConsumer.post(EndPoints.getChats, data: params.toJson());
+  Future<Either<Failure, List<ChatEntity>>> getChats(
+      GetChatsParams params) async {
+    final response =
+        await _apiConsumer.post(EndPoints.getChats, data: params.toJson());
     return response.fold(
       (failure) => Left(failure),
-      (data) => Right(ChatCategoryModel.fromJson(data['data'])),
+      (data) => Right((data['data']['chats'] as List)
+          .map((e) => ChatModel.fromJson(e))
+          .toList()),
     );
   }
 
