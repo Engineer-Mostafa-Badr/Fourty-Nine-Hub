@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+// import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
@@ -84,8 +84,8 @@ class _FormTextFieldState extends State<FormTextField> {
           height: widget.maxLines != null
               ? null
               : validate
-                  ? (widget.height ?? 100.zH) * 1.5.zH
-                  : widget.height ?? 100.zH,
+                  ? (widget.height ?? 100) * 1.5
+                  : widget.height ?? 100,
           child: TextFormField(
             style: widget.textStyle ??
                 Styles.mediumText(color: AppColors.QUANTITY_COLOR),
@@ -136,11 +136,11 @@ class _FormTextFieldState extends State<FormTextField> {
               fillColor: widget.fillColor ?? Colors.transparent,
               labelText: widget.label,
               hintStyle: widget.style ??
-                  TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
+                  TextStyle(fontSize: 30, color: AppColors.QUANTITY_COLOR),
               labelStyle: widget.style ??
-                  TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
+                  TextStyle(fontSize: 30, color: AppColors.QUANTITY_COLOR),
               prefixIcon: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.zW),
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: widget.prefix,
               ),
               suffixIcon: widget.suffix,
