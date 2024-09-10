@@ -60,27 +60,27 @@ class WalletView extends StatelessWidget {
           ],
         ));
   }
-
-  Widget _buildWalletActionItem({
-    required String label,
-    required String subTitle,
-    required Function ontap,
-  }) {
-    return ListTile(
-      title: Label(text: label),
-      subtitle: Label(text: subTitle),
-      trailing: MaterialButton(
-        onPressed: () {},
-        color: Colors.red,
-        textColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Label(
-            text: 'Transfer', style: Styles.mediumText(color: Colors.white)),
-      ),
-    );
-  }
+  //
+  // Widget _buildWalletActionItem({
+  //   required String label,
+  //   required String subTitle,
+  //   required Function ontap,
+  // }) {
+  //   return ListTile(
+  //     title: Label(text: label),
+  //     subtitle: Label(text: subTitle),
+  //     trailing: MaterialButton(
+  //       onPressed: () {},
+  //       color: Colors.red,
+  //       textColor: Colors.white,
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(10),
+  //       ),
+  //       child: Label(
+  //           text: 'Transfer', style: Styles.mediumText(color: Colors.white)),
+  //     ),
+  //   );
+  // }
 
   Widget walletInfoCell(
       {required IconData icon,

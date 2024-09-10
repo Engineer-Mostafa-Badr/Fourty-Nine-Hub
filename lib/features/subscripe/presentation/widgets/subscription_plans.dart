@@ -181,7 +181,6 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
 
   int _groupValue = 1;
 
-  @override
   Widget _buildList() {
     List<num> list = _isPremium ? widget.subscribePlans.premiumPlans : widget.subscribePlans.regularPlans;
 
