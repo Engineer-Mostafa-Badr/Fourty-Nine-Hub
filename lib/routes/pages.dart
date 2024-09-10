@@ -70,6 +70,7 @@ import 'package:fourtyninehub/features/social_media/chat/attachments/presentatio
 import 'package:fourtyninehub/features/social_media/chat/chat_profile/presentation/pages/chat_profile_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/select_contacts_to_share_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/viewcontact_view.dart';
@@ -783,8 +784,12 @@ class AppPages {
                   name: Routes.ATTACHMENTSVIEW,
                   builder: (context, state) => const AttachementsView(),
                 ),
+                GoRoute(
+                  path: Paths.SELECTCONTACTSTOSHARE,
+                  name: Routes.SELECTCONTACTSTOSHARE,
+                  builder: (context, state) => const SelectContactsToShareView(),
+                ),
               ]),
-
           // Snap
 
           GoRoute(

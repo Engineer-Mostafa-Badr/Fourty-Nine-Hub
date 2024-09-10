@@ -44,6 +44,7 @@ abstract class Routes {
   static const VIEWCONTACT = '/ChatRoom/ViewContact';
   static const CHATPROFILEVIEW = '/ChatProfileView';
   static const ATTACHMENTSVIEW = '/ChatRoom/AttachmentsView';
+  static const SELECTCONTACTSTOSHARE = '/ChatRoom/SelectContactsToShareView';
   static const CONTACTSVIEW = '/ContactsView';
   static const MAZADAT = '/Mazadat';
   static const VISITA = '/Visita';
@@ -259,5 +260,5 @@ abstract class Paths {
   static const SPOTLIGHT = 'Spotlight';
   static const SNAP = 'Snap';
 
-
+  static const SELECTCONTACTSTOSHARE = 'SelectContactsToShareView';
 }
