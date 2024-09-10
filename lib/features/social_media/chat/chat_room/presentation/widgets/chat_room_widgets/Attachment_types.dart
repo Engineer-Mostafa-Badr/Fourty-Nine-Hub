@@ -6,7 +6,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-
 class AttachmentTypes extends StatelessWidget {
   final ChatRoomCubit chatRoomCubit;
 
@@ -52,7 +51,10 @@ class AttachmentTypes extends StatelessWidget {
         _buildAttachmentTypeItem(
             color: Colors.lightBlue,
             label: LocaleKeys.contact,
-            icon: Icons.person),
+            icon: Icons.person,
+            onTap: () {
+              context.push(Routes.SELECTCONTACTSTOSHARE);
+            }),
       ],
     );
   }
