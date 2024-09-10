@@ -5,8 +5,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
 
-import '../../../../core/utils/fcm.dart';
-
 class LoginUseCase extends UseCase<UserTokensEntity, LoginParams> {
   final AuthRepository _repository;
 
