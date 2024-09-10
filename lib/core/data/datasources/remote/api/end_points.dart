@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 
-import '../../../../../features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
 
 class EndPoints {
@@ -51,8 +50,8 @@ class EndPoints {
     return '/user-transactions/balance';
   }
 
-  static String getHistoryWallet(WalletHistoryParams params) {
-    return '/user-transactions/mainWallet?limit=${params.limit}&page=${params.page}';
+  static String getHistoryWallet() {
+    return '/user-transactions/mainWallet';
   }
 
   static String geMainCategoryWallet() {
@@ -66,6 +65,11 @@ class EndPoints {
   static String deleteSubscription(String id) {
     return '/subscription/cancel-subscription/$id';
   }
+
+  static String addSubscription() {
+    return '/subscription/subscribe';
+  }
+
 
   static String deleteCompanyAd(String id) {
     return '/advertisementCompany/$id';

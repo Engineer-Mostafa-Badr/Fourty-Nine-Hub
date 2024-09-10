@@ -9,6 +9,7 @@ import '../../../../../common/models/public/pagination_params.dart';
 import '../../domain/entities/wallet/wallet_entity.dart';
 import '../../domain/entities/wallet/wallet_history_entity.dart';
 import '../../domain/entities/wallet/wallet_subscription_entity.dart';
+import '../../domain/usecases/add_subscribe_use_case.dart';
 import '../../domain/usecases/get_subscription_use_case.dart';
 import '../../domain/usecases/main_category_use_case.dart';
 import '../../domain/usecases/sub_category_use_case.dart';
@@ -22,15 +23,16 @@ class WalletCubit extends Cubit<WalletState> {
   final MainCategoryUseCase _mainCategoryUseCase;
   final SubCategoryUseCase _subCategoryUseCase;
   final DeleteSubscriptionUseCase _deleteSubscriptionUseCase;
+  final AddSubscriptionUseCase _addSubscriptionUseCase;
 
 
   WalletCubit(this._getWalletUseCase, this._walletHistoryUseCase,
-      this._subscriptionWalletUseCase, this._mainCategoryUseCase, this._subCategoryUseCase, this._deleteSubscriptionUseCase)
+      this._subscriptionWalletUseCase, this._mainCategoryUseCase, this._subCategoryUseCase, this._deleteSubscriptionUseCase, this._addSubscriptionUseCase)
       : super(const WalletState());
 
   void loadData() async {
     await getWallet();
-    await fetchWalletHistory();
+   // await fetchWalletHistory();
     await fetchWalletSubscription();
   }
 
@@ -43,21 +45,18 @@ class WalletCubit extends Cubit<WalletState> {
     });
   }
 
-  Future<void> fetchWalletHistory() async {
+  Future<List<WalletHistoryEntity>> fetchWalletHistory({required PaginationParams paginationParams}) async {
     final response = await _walletHistoryUseCase(
-      WalletHistoryParams(
-        page: 1,
-        limit: 20,
-      ),
+      WalletHistoryParams(paginationParams: paginationParams),
     );
+    List<WalletHistoryEntity> category = [];
     response.fold((l) {
       emit(state.copyWith(failure: l, status: WalletStates.error));
     }, (data) {
-      // print('///////////////////////////////////////');
-      // print(data.giftWallet.userId);
-      // print('///////////////////////////////////////');
+      category=data;
       emit(state.copyWith(history: data));
     });
+    return category;
   }
 
   Future<void> fetchWalletSubscription() async {
@@ -112,4 +111,18 @@ class WalletCubit extends Cubit<WalletState> {
     );
      fetchWalletSubscription();
 }
+
+  Future<void> addSubscription({
+  required  AddSubscriptionParams params
+  }) async {
+    var response = await _addSubscriptionUseCase(params);
+    return response.fold(
+            (l) => emit(state.copyWith(failure: l, status: WalletStates.error)),
+            (data) {
+          emit(state.copyWith(status: WalletStates.initial));
+          fetchWalletSubscription();
+        }
+    );
+
+  }
 }

@@ -5,6 +5,7 @@ import '../../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../domain/entities/wallet/main_category_entity.dart';
 import '../../domain/entities/wallet/wallet_history_entity.dart';
 import '../../domain/entities/wallet/wallet_subscription_entity.dart';
+import '../../domain/usecases/add_subscribe_use_case.dart';
 import '../../domain/usecases/delete_subscription_use_case.dart';
 import '../../domain/usecases/get_wallet_history_use_case.dart';
 import '../../domain/usecases/main_category_use_case.dart';
@@ -30,6 +31,8 @@ abstract class WalletRemoteDataSource {
 
   Future<Either<Failure, bool>> deleteSubscription(
       DeleteSubscriptionParams params);
+
+  Future<Either<Failure, bool>>addSubscription(AddSubscriptionParams params);
 }
 
 class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
@@ -60,7 +63,10 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
   @override
   Future<Either<Failure, List<WalletHistoryEntity>>> fetchHistoryWallet(
       WalletHistoryParams params) async {
-    final response = await _apiConsumer.get(EndPoints.getHistoryWallet(params));
+    final response = await _apiConsumer.get(
+        EndPoints.getHistoryWallet(),
+        queryParameters: params.paginationParams.toJson()
+    );
     return response.fold((l) {
       return Left(l);
     }, (data) {
@@ -134,6 +140,23 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
     return response.fold(
       (failure)=>Left(failure),
       (response)=>Right(response['status']),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> addSubscription(AddSubscriptionParams params)async {
+    final response = await _apiConsumer.post(
+      EndPoints.addSubscription(),
+      data: {
+        'subCategoryId': params.subCategoryId,
+        'paymentMethodType': params.paymentMethod,
+        'isPremium': params.isPremium,
+        'period': params.period,
+        'periodType': params.periodType,
+      });
+    return response.fold(
+          (failure)=>Left(failure),
+          (response)=>Right(response['status']),
     );
   }
 }

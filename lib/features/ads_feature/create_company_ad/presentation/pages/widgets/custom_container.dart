@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
-import '../../../../../../service_locator/service_locator.dart';
-import '../../cubit/create_company_ad_cubit.dart';
 
 class CustomContainerAdvertise extends StatelessWidget {
   const CustomContainerAdvertise({
@@ -56,7 +52,7 @@ class CustomContainerAdvertise extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {},
-              icon: Icon(
+              icon: const Icon(
                 Icons.check_circle,
                 color: AppColors.SECONDARY_COLOR,
               ),

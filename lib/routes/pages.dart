@@ -435,9 +435,9 @@ class AppPages {
                   // );
                 },
                 child: PaymentView(
-                  amountId: args.amountId,
+                  amountId: args.amountId ?? '',
                   // providerId: args.providerId,
-                  amount: args.amount,
+                  amount: args.amount ??0,
                 ),
               );
             },
