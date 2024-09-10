@@ -24,6 +24,7 @@ class RegisterParams extends Equatable {
   final String email;
   final String password;
   final String confirmPassword;
+  final String token;
   final bool isMale;
 
   const RegisterParams({
@@ -32,6 +33,7 @@ class RegisterParams extends Equatable {
     required this.email,
     required this.password,
     required this.confirmPassword,
+    required this.token,
     required this.isMale,
   });
 
@@ -42,7 +44,7 @@ class RegisterParams extends Equatable {
         'password': password,
         'confirmPassword': confirmPassword,
         'gender': isMale ? 'male' : 'female',
-        'fcm': await getFcmToken(),
+        'fcm': token,
         'deviceId': await getDeviceId(),
       };
 

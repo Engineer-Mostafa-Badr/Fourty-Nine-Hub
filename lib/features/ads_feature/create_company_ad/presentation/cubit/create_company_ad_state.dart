@@ -24,6 +24,7 @@ class CreateCompanyAdState {
     return CreateCompanyAdState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
+      price: price ?? this.price,
       advertise: advertise ?? this.advertise,
       posts: posts ?? this.posts,
     );

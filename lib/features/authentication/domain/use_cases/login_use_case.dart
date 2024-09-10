@@ -21,16 +21,18 @@ class LoginUseCase extends UseCase<UserTokensEntity, LoginParams> {
 class LoginParams extends Equatable {
   final String email;
   final String password;
+  final String token;
 
   const LoginParams({
     required this.email,
     required this.password,
+    required this.token,
   });
 
   Future<Map<String, dynamic>> toJson() async => {
         'email': email,
         'password': password,
-        'fcmToken': await getFcmToken(),
+        'fcmToken': token,
         // 'fcmToken': 'fcmToken',
       };
 
