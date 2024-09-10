@@ -103,7 +103,7 @@ class _WeekWidgetState extends State<_WeekWidget> {
                 style: Styles.mediumText(),
                 children: [
                   TextSpan(
-                    text: time.from.display,
+                    text: time.from.formattedIn12Hour,
                     style: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR),
                   ),
                 ],
@@ -135,7 +135,7 @@ class _WeekWidgetState extends State<_WeekWidget> {
                 style: Styles.mediumText(),
                 children: [
                   TextSpan(
-                    text: time.to.display,
+                    text: time.to.formattedIn12Hour,
                     style: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR),
                   ),
                 ],

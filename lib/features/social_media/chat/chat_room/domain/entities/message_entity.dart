@@ -1,53 +1,46 @@
+import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/date_time_picker_v2.dart';
+
+import 'message_sender_entity.dart';
+import 'reply_message_entity.dart';
+
 class MessageEntity {
-  String? id;
-  String? text;
+  String id;
   String? chatId;
   String? groupId;
-  bool? seen;
-  bool? delivered;
-  bool? isDeleted;
-  bool? isReply;
-  int? type;
-  int? sharesCount;
-  int? likesCount;
-  int? loveCount;
-  int? wowCount;
-  int? sadCount;
-  int? angryCount;
-  String? createdAt;
-  String? updatedAt;
-  bool? byMe;
-  ReplyMessageEntity? replyMessage;
-  String? formattedCreatedAt;
+  String text;
+  List<String> media;
+  MessageSenderEntity sender;
+  ReplyMessageEntity? reply;
+  DateTime createdAt;
+  DateTime updateAt;
+  String time;
+  bool byMe;
+  bool isUpdated;
+  bool seen;
+  bool delivered;
+  bool hasReply;
+  bool isDeleted;
 
 
   MessageEntity({
-    this.id,
-    this.text,
+    required this.id,
+    required this.text,
+    required this.media,
+    required this.sender,
+    required this.reply,
+    required this.createdAt,
+    required this.updateAt,
+    required this.byMe,
+    required this.isUpdated,
+    required this.seen,
+    required this.delivered,
+    required this.hasReply,
     this.chatId,
     this.groupId,
-    this.seen,
-    this.delivered,
-    this.isDeleted,
-    this.isReply,
-    this.type,
-    this.sharesCount,
-    this.likesCount,
-    this.loveCount,
-    this.wowCount,
-    this.sadCount,
-    this.angryCount,
-    this.createdAt,
-    this.updatedAt,
-    this.byMe,
-    this.formattedCreatedAt,
-    this.replyMessage,
+    required this.time,
+    required this.isDeleted
   });
-}
 
-class ReplyMessageEntity {
-  String? id;
-  String? text;
 
-  ReplyMessageEntity({this.id, this.text});
 }

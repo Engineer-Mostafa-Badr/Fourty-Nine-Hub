@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/data/datasources/local/database/local_database_data_source.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -40,7 +39,7 @@ class SQFLiteMessagesLocalDataSourceImplementation
       );
 
       for (var element in result) {
-        messages.add(MessageModel.fromDatabase(element));
+        // messages.add(MessageModel.fromDatabase(element));
       }
 
       return Right(messages);
@@ -59,9 +58,10 @@ class SQFLiteMessagesLocalDataSourceImplementation
   @override
   Future<Either<Failure, bool>> saveMessage(MessageEntity message) async {
     try {
-      final result = await _database.insert(DatabaseTables.messages,
-          MessageModel.fromEntity(message).toDatabase());
-      return Right(result > 0);
+      // final result = await _database.insert(DatabaseTables.messages,
+      //     MessageModel.fromEntity(message).toDatabase());
+      // return Right(result > 0);
+      return const Right(false);
     } catch (e) {
       CliLogger.error("error while saving message to database ${e.toString()}");
       return const Left(CacheFailure());

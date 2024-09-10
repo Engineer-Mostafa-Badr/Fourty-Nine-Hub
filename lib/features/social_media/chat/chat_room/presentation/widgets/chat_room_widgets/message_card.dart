@@ -229,7 +229,7 @@ class MessageCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    return messageEntity.byMe!
+    return messageEntity.byMe
         ? _buildMineMessage(
             width: width, messageEntity: messageEntity, context: context)
         : _buildOtherMessage(
@@ -256,8 +256,8 @@ class MessageCard extends StatelessWidget {
             },
       child: GestureDetector(
         onTap: () {
-          log(messageEntity.isReply.toString());
-          log(messageEntity.replyMessage!.text!);
+          log(messageEntity.hasReply.toString());
+          log(messageEntity.reply?.text??"no reply");
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -269,7 +269,7 @@ class MessageCard extends StatelessWidget {
                   constraints: BoxConstraints(maxWidth: width * 0.85),
                   child: Column(
                     children: [
-                      messageEntity.isReply!
+                      messageEntity.hasReply
                           ? Container(
                               decoration: const BoxDecoration(
                                 color: AppColors.MESSAGE_COLOR,
@@ -356,10 +356,10 @@ class MessageCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: AppColors.MESSAGE_COLOR,
                           borderRadius: BorderRadius.only(
-                            topLeft: messageEntity.isReply!
+                            topLeft: messageEntity.hasReply
                                 ? const Radius.circular(0)
                                 : const Radius.circular(12),
-                            topRight: messageEntity.isReply!
+                            topRight: messageEntity.hasReply
                                 ? const Radius.circular(0)
                                 : const Radius.circular(12),
                             bottomLeft: isArabic
@@ -382,7 +382,7 @@ class MessageCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Expanded(
-                              child: messageEntity.isDeleted!
+                              child: messageEntity.isDeleted
                                   ? Row(
                                       children: [
                                         const Padding(
@@ -401,7 +401,7 @@ class MessageCard extends StatelessWidget {
                                     )
                                   : ReadMoreLabel(
                                       trimLines: 5,
-                                      text: messageEntity.text!,
+                                      text: messageEntity.text,
                                       style: Styles.mediumText(
                                           color: AppColors.PRIMARY_COLOR),
                                       textAlign: TextAlign.left,
@@ -411,7 +411,7 @@ class MessageCard extends StatelessWidget {
                             Row(
                               children: [
                                 Label(
-                                  text: '${messageEntity.formattedCreatedAt}',
+                                  text: messageEntity.time,
                                   style: Styles.smallText(
                                       color: AppColors.PRIMARY_COLOR),
                                 ),
@@ -438,9 +438,9 @@ class MessageCard extends StatelessWidget {
   }
 
   IconData _getMessageIcon(MessageEntity messageEntity) {
-    if (messageEntity.seen!) {
+    if (messageEntity.seen) {
       return FontAwesomeIcons.checkDouble;
-    } else if (messageEntity.delivered!) {
+    } else if (messageEntity.delivered) {
       return FontAwesomeIcons.checkDouble;
     } else {
       return FontAwesomeIcons.check;
@@ -448,9 +448,9 @@ class MessageCard extends StatelessWidget {
   }
 
   Color _getMessageIconColor(MessageEntity messageEntity) {
-    if (messageEntity.seen!) {
+    if (messageEntity.seen) {
       return Colors.red;
-    } else if (messageEntity.delivered!) {
+    } else if (messageEntity.delivered) {
       return Colors.grey;
     } else {
       return Colors.grey;
@@ -492,7 +492,7 @@ class MessageCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    messageEntity.isReply!
+                    messageEntity.hasReply
                         ? Container(
                             decoration: const BoxDecoration(
                               color: Colors.white,
@@ -577,10 +577,10 @@ class MessageCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
-                          topLeft: messageEntity.isReply!
+                          topLeft: messageEntity.hasReply
                               ? const Radius.circular(0)
                               : const Radius.circular(12),
-                          topRight: messageEntity.isReply!
+                          topRight: messageEntity.hasReply
                               ? const Radius.circular(0)
                               : const Radius.circular(12),
                           bottomLeft: isArabic
@@ -605,7 +605,7 @@ class MessageCard extends StatelessWidget {
                           Expanded(
                             child: ReadMoreLabel(
                               trimLines: 5,
-                              text: messageEntity.text!,
+                              text: messageEntity.text,
                               style: Styles.mediumText(
                                 color: AppColors.PRIMARY_COLOR,
                               ),
@@ -614,7 +614,7 @@ class MessageCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 8),
                           Label(
-                            text: '${messageEntity.formattedCreatedAt}',
+                            text: messageEntity.time,
                             style: Styles.smallText(
                                 color: AppColors.PRIMARY_COLOR),
                           ),
