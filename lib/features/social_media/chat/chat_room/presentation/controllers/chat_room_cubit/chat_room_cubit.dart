@@ -26,6 +26,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   late ChatEntity _chat;
   final FilePicker _filePicker = FilePicker.platform;
   List<MessageEntity> _messages = [];
+  final TextEditingController messageTextController = TextEditingController();
 
   ChatRoomCubit(
     this._deleteChatMessageUseCase,
@@ -41,14 +42,15 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   Future<void> _getMessages() async {
     _messages.clear();
     final response = await _getMessagesUseCase(GetMessagesParams(
-        chatId: _chat.id, pagination: PaginationParams.basic()));
+        chatId: _chat.id, pagination: PaginationParams(limit: 20, page: 1)));
 
     response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: ChatRoomStates.error)),
+        (failure) => emit(
+            state.copyWith(failure: failure, status: ChatRoomStates.error)),
         (data) {
-      _messages = data;
+      _messages = data.reversed.toList();
       emit(state.copyWith(messages: _messages));
+      _scrollDown();
     });
   }
 
@@ -59,6 +61,15 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         chatId: _chat.id,
         mediaIds: [],
         oneTimeView: false));
+    messageTextController.text = '';
+  }
+
+  void addMessage(MessageEntity message) {
+    if (message.chatId == _chat.id) {
+      _messages.add(message);
+      emit(state.copyWith(messages: _messages, status: ChatRoomStates.success));
+      _scrollDown();
+    }
   }
 
   typingMessage() {}

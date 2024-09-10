@@ -40,7 +40,7 @@ class ChatsState {
       status: status ?? this.status,
       failure: failure ?? this.failure,
       chats: chats ?? this.chats,
-      newMessage: newMessage ?? this.newMessage,
+      newMessage: newMessage,
     );
   }
 }

@@ -12,6 +12,8 @@ class MessageModel extends MessageEntity {
       required super.createdAt,
       required super.updateAt,
       required super.byMe,
+      super.chatId,
+      super.groupId,
       required super.isUpdated,
       required super.seen,
       required super.delivered,
@@ -45,6 +47,8 @@ class MessageModel extends MessageEntity {
       hasReply: json['isReply'],
       time: json['formattedCreatedAt'],
       isDeleted: json['isDeleted'],
+      chatId: json['chatId'],
+      groupId: json['groupId'],
     );
   }
 }

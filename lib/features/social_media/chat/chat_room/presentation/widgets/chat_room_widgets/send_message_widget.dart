@@ -447,7 +447,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
 
   @override
   void initState() {
-    _messageTextController = TextEditingController();
+    _messageTextController = context.read<ChatRoomCubit>().messageTextController;
     _messageFocusNode = FocusNode();
     _showMicButton = true;
     _showEmojiKeyboard = false;

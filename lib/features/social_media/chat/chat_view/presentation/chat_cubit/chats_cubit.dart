@@ -23,6 +23,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unlock_chat_usecase.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 
 part 'chats_state.dart';
 
@@ -73,8 +74,6 @@ class ChatsCubit extends Cubit<ChatsState> {
     });
   }
 
-
-
   initChat() async {
     await getChats(category: ChatCategories.social);
   }
@@ -84,8 +83,7 @@ class ChatsCubit extends Cubit<ChatsState> {
 
     // if this locked chat tab & password null return empty list
     if (category == ChatCategories.locked && password == null) {
-      return emit
-          .call(state.copyWith(chats: [], status: ChatsStates.success));
+      return emit.call(state.copyWith(chats: [], status: ChatsStates.success));
     }
     GetChatsParams chatsRequestParams = GetChatsParams(
         categoryId: ChatCategoriesIds.social, privacy: ChatPrivacy.normal);
@@ -93,8 +91,7 @@ class ChatsCubit extends Cubit<ChatsState> {
 
     if (chatsRequestParams.categoryId == null &&
         category != ChatCategories.groups) {
-      return emit
-          .call(state.copyWith(chats: [], status: ChatsStates.success));
+      return emit.call(state.copyWith(chats: [], status: ChatsStates.success));
     } else {
       _chats.clear();
       var response;
@@ -123,7 +120,7 @@ class ChatsCubit extends Cubit<ChatsState> {
 
         await Future.delayed(const Duration(seconds: 1));
         sendUserStatus(userStatusParams);
-        unReadMessage =  0;
+        unReadMessage = 0;
 
         return emit.call(
             state.copyWith(chats: data.chats, status: ChatsStates.success));
@@ -133,10 +130,8 @@ class ChatsCubit extends Cubit<ChatsState> {
 
   listenToNewMessages() {
     _listenToNewMessageUseCase((message) {
-      _chats;
-      if (_selectedChat.id == message.chatId) {
-        emit(state.copyWith(newMessage: message,status: ChatsStates.newMessage));
-      }
+      // _chats;
+      emit(state.copyWith(newMessage: message, status: ChatsStates.newMessage));
     });
   }
 
@@ -369,7 +364,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     );
   }
 
-   set selectChat(ChatEntity chat) {
+  set selectChat(ChatEntity chat) {
     _selectedChat = chat;
   }
 

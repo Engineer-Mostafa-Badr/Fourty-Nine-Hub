@@ -1,4 +1,3 @@
-
 import 'message_sender_entity.dart';
 import 'reply_message_entity.dart';
 
@@ -20,25 +19,26 @@ class MessageEntity {
   bool hasReply;
   bool isDeleted;
 
+  MessageEntity(
+      {required this.id,
+      required this.text,
+      required this.media,
+      required this.sender,
+      required this.reply,
+      required this.createdAt,
+      required this.updateAt,
+      required this.byMe,
+      required this.isUpdated,
+      required this.seen,
+      required this.delivered,
+      required this.hasReply,
+      this.chatId,
+      this.groupId,
+      required this.time,
+      required this.isDeleted});
 
-  MessageEntity({
-    required this.id,
-    required this.text,
-    required this.media,
-    required this.sender,
-    required this.reply,
-    required this.createdAt,
-    required this.updateAt,
-    required this.byMe,
-    required this.isUpdated,
-    required this.seen,
-    required this.delivered,
-    required this.hasReply,
-    this.chatId,
-    this.groupId,
-    required this.time,
-    required this.isDeleted
-  });
-
-
+  @override
+  String toString() {
+    return "MessageEntity: { text: $text, sender: $sender, id: $id,chatId: $chatId, reply: $reply, time: $time, byMe: $byMe, isUpdated: $isUpdated, seen: $seen, delivered: $delivered, hasReply: $hasReply, media: $media }";
+  }
 }
