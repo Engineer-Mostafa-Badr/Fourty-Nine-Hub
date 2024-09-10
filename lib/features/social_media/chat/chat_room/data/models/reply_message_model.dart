@@ -11,9 +11,9 @@ class ReplyMessageModel extends ReplyMessageEntity {
   factory ReplyMessageModel.fromJson(Map<String, dynamic> json) {
     return ReplyMessageModel(
       sender: MessageSenderEntity(
-        name: json['userId'],
-        avatar: json['username'],
-        id: json['avatar'],
+        name: json['username'],
+        avatar: json['avatar'],
+        id: json['userId'],
       ),
       text: json['text'],
       id: json['_id'],

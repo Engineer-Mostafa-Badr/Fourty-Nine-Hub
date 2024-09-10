@@ -42,6 +42,7 @@ abstract class Routes {
   static const CHATROOMCAMERAPICKER = '/ChatRoom/CameraPicker';
   static const MEDIASLIDER = '/ChatRoom/MediaSlider';
   static const VIEWCONTACT = '/ChatRoom/ViewContact';
+  static const CHATPROFILEVIEW = '/ChatProfileView';
   static const ATTACHMENTSVIEW = '/ChatRoom/AttachmentsView';
   static const CONTACTSVIEW = '/ContactsView';
   static const MAZADAT = '/Mazadat';
@@ -164,6 +165,7 @@ abstract class Paths {
   static const CHATROOM = 'ChatRoom';
   static const VIEWCONTACT = 'ViewContact';
   static const ATTACHMENTSVIEW = 'AttachmentsView';
+  static const CHATPROFILEVIEW = 'ChatProfileView';
   static const CHATROOMCAMERAPICKER = 'CameraPicker';
   static const MEDIASLIDER = 'MediaSlider';
   static const REELS = 'Reels';

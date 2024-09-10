@@ -227,5 +227,10 @@
   "newGroup": "New Group",
   "newBroadcast": "New Broadcast",
   "linkedDevice": "Linked Device",
-  "starredMessages" : "Starred Messages"
+  "starredMessages" : "Starred Messages",
+  "profile": "Profile",
+  "about": "About",
+  "phone": "Phone",
+  "name": "Name",
+  "nameMessage": "This is not your username or pin. This name will be visible to your FortyNine contacts."
 }
