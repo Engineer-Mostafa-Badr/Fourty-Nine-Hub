@@ -14,12 +14,12 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 part 'chats_state.dart';
 
 class ChatsCubit extends Cubit<ChatsState> {
-  final GetChatsUseCase _getChatsUseCase;
   final ListenToNewMessageUseCase _listenToNewMessageUseCase;
   final StopListenToMessagesUseCase _stopListenToMessagesUseCase;
+  final GetChatsUseCase _getChatsUseCase;
+  final Map<String, ChatEntity> _chats = {};
   late ChatCategories selectedChatCategory;
   late String lockChatPassword;
-  final Map<String, ChatEntity> _chats = {};
   late ChatEntity _selectedChat;
 
   ChatsCubit(
@@ -30,10 +30,33 @@ class ChatsCubit extends Cubit<ChatsState> {
 
   init() async {
     _listenToNewMessages();
-    getSocialChats();
+    getChats(ChatCategories.values.first);
   }
 
-  Future<void> getSocialChats() async {
+  // ======================================= get chats =======================================
+
+  Future<void> getChats(ChatCategories chatCategories) async {
+    switch (chatCategories) {
+      case ChatCategories.social:
+        return _getServicesChats();
+      case ChatCategories.greet:
+        return _getGreetChats();
+      case ChatCategories.service:
+        return _getServicesChats();
+      case ChatCategories.anonymous:
+        return _getAnonymousChats();
+      case ChatCategories.locked:
+        return _getLockedChats();
+      case ChatCategories.unread:
+        return _getUnreadChats();
+      case ChatCategories.archived:
+        return _getArchivedChats();
+      default:
+        return _getSocialChats();
+    }
+  }
+
+  Future<void> _getSocialChats() async {
     final result = await _getChatsUseCase(
         GetChatsParams(categoryId: ChatCategoriesIds.social));
     result.fold(
@@ -46,6 +69,81 @@ class ChatsCubit extends Cubit<ChatsState> {
     });
   }
 
+  Future<void> _getServicesChats() async {
+    final result = await _getChatsUseCase(GetChatsParams(isServices: true));
+    result.fold(
+        (l) => emit(state.copyWith(status: ChatsStates.error, failure: l)),
+        (chats) {
+      for (final chat in chats) {
+        _chats[chat.id] = chat;
+      }
+      emit(state.copyWith(chats: chats, status: ChatsStates.success));
+    });
+  }
+
+  Future<void> _getGreetChats() async {
+    final result = await _getChatsUseCase(
+        GetChatsParams(categoryId: ChatCategoriesIds.greet));
+    result.fold(
+        (l) => emit(state.copyWith(status: ChatsStates.error, failure: l)),
+        (chats) {
+      for (final chat in chats) {
+        _chats[chat.id] = chat;
+      }
+      emit(state.copyWith(chats: chats, status: ChatsStates.success));
+    });
+  }
+
+  Future<void> _getAnonymousChats() async {
+    final result =
+        await _getChatsUseCase(GetChatsParams(privacy: ChatPrivacy.anonymous));
+    result.fold(
+        (l) => emit(state.copyWith(status: ChatsStates.error, failure: l)),
+        (chats) {
+      for (final chat in chats) {
+        _chats[chat.id] = chat;
+      }
+      emit(state.copyWith(chats: chats, status: ChatsStates.success));
+    });
+  }
+
+  Future<void> _getLockedChats() async {
+    final result = await _getChatsUseCase(GetChatsParams(isLocked: true));
+    result.fold(
+        (l) => emit(state.copyWith(status: ChatsStates.error, failure: l)),
+        (chats) {
+      for (final chat in chats) {
+        _chats[chat.id] = chat;
+      }
+      emit(state.copyWith(chats: chats, status: ChatsStates.success));
+    });
+  }
+
+  Future<void> _getUnreadChats() async {
+    final result = await _getChatsUseCase(GetChatsParams(isUnread: true));
+    result.fold(
+        (l) => emit(state.copyWith(status: ChatsStates.error, failure: l)),
+        (chats) {
+      for (final chat in chats) {
+        _chats[chat.id] = chat;
+      }
+      emit(state.copyWith(chats: chats, status: ChatsStates.success));
+    });
+  }
+
+  Future<void> _getArchivedChats() async {
+    final result = await _getChatsUseCase(GetChatsParams(archived: true));
+    result.fold(
+        (l) => emit(state.copyWith(status: ChatsStates.error, failure: l)),
+        (chats) {
+      for (final chat in chats) {
+        _chats[chat.id] = chat;
+      }
+      emit(state.copyWith(chats: chats, status: ChatsStates.success));
+    });
+  }
+
+  // ======================================= listening ========================================
   _listenToNewMessages() {
     _listenToNewMessageUseCase((message) {
       emit(state.copyWith(newMessage: message, status: ChatsStates.newMessage));

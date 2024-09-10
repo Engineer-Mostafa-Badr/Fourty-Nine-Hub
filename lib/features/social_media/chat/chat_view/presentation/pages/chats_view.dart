@@ -493,18 +493,9 @@ class _ChatViewState extends State<ChatView> {
     return TabBar(
         labelColor: AppColors.PRIMARY_COLOR,
         indicatorColor: Colors.red,
-        // onTap: (index) {
-        //   if (context.read<UserCubit>().isLoggedIn) {
-        //     context
-        //         .read<ChatsCubit>()
-        //         .getChats(category: ChatCategories.values[index]);
-        //
-        //     // if this locked chat we request password
-        //     if (ChatCategories.values[index] == ChatCategories.locked) {
-        //       showDialogToConfirmChatLockPassword(context);
-        //     }
-        //   }
-        // },
+        onTap: (index) {
+         chatCubit.getChats(ChatCategories.values[index]);
+        },
         tabAlignment: TabAlignment.start,
         isScrollable: true,
         tabs: ChatCategories.values.map((e) {
