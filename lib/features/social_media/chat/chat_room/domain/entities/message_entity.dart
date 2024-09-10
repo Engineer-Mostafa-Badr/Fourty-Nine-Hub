@@ -20,6 +20,7 @@ class MessageEntity {
   ReplyMessageEntity? replyMessage;
   String? formattedCreatedAt;
 
+
   MessageEntity({
     this.id,
     this.text,

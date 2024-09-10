@@ -496,7 +496,7 @@ class _ChatViewState extends State<ChatView> {
         tabAlignment: TabAlignment.start,
         isScrollable: true,
         tabs: ChatCategories.values.map((e) {
-          return Tab(text: e.name);
+          return Tab(text: e.name.tr());
         }).toList());
   }
 

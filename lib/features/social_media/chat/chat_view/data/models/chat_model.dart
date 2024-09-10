@@ -35,7 +35,7 @@ class ChatModel extends ChatEntity {
         isLastMessageByMe: json['isLastMessageByMe'],
         seen: json['seen'],
         delivered: json['delivered'],
-        lastMessageText: json['lastMessageText'],
+        lastMessageText: json['lastMessageText']??'',
         name: json['name'],
         lastSeenCount: json['lastSeenCount'],
         unreadCount: json['unreadCount'],
